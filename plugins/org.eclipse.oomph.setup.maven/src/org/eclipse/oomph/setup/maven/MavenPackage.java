@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-user-doc -->
  * @see org.eclipse.oomph.setup.maven.MavenFactory
  * @model kind="package"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Maven.ecore'"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore'"
  * @generated
  */
 public interface MavenPackage extends EPackage

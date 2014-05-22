@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="predicates" nsURI="http://www.eclipse.org/oomph/predicates/1.0"
     nsPrefix="predicates">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore"/>
+    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Predicate" abstract="true" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eOperations name="matches" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

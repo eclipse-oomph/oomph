@@ -233,7 +233,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Resources.ecore");
+    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -249,7 +249,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Resources.ecore" });
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore" });
   }
 
 } // ResourcesPackageImpl

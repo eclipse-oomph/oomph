@@ -606,7 +606,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     initEDataType(projectEDataType, IProject.class, "Project", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore");
+    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -622,7 +622,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore" });
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore" });
   }
 
 } // PredicatesPackageImpl

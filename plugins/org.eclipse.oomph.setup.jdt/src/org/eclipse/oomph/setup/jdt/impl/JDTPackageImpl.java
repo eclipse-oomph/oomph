@@ -217,7 +217,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/JDT.ecore");
+    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -237,7 +237,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/JDT.ecore" });
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore" });
   }
 
   /**

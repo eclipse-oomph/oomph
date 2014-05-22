@@ -207,7 +207,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Maven.ecore");
+    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -227,7 +227,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Maven.ecore" });
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore" });
   }
 
   /**

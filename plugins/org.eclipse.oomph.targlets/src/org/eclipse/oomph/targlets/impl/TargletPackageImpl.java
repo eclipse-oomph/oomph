@@ -386,7 +386,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore");
+    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -404,7 +404,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore" });
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore" });
   }
 
   /**

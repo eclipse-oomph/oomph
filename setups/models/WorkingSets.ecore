@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="workingsets" nsURI="http://www.eclipse.org/oomph/workingsets/1.0"
     nsPrefix="workingsets">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"/>
+    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="WorkingSet" eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
     <eOperations name="matches" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -11,7 +11,7 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"
-        eType="ecore:EClass http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Predicate"
+        eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Predicate"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -27,11 +27,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="workingSets" upperBound="-1"
         eType="#//WorkingSet" containment="true" eKeys="#//WorkingSet/name"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InclusionPredicate" eSuperTypes="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Predicate">
+  <eClassifiers xsi:type="ecore:EClass" name="InclusionPredicate" eSuperTypes="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Predicate">
     <eStructuralFeatures xsi:type="ecore:EReference" name="includedWorkingSets" upperBound="-1"
         eType="#//WorkingSet"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExclusionPredicate" eSuperTypes="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Predicate">
+  <eClassifiers xsi:type="ecore:EClass" name="ExclusionPredicate" eSuperTypes="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Predicate">
     <eStructuralFeatures xsi:type="ecore:EReference" name="excludedWorkingSets" upperBound="-1"
         eType="#//WorkingSet"/>
   </eClassifiers>

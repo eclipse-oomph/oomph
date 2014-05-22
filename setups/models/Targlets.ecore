@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="targlets" nsURI="http://www.eclipse.org/oomph/targlets/1.0"
     nsPrefix="targlets">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore"/>
+    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Targlet" eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -11,7 +11,7 @@
         upperBound="-1" eType="ecore:EClass http://www.eclipse.org/oomph/p2/1.0#//Requirement"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" upperBound="-1"
-        eType="ecore:EClass http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Resources.ecore#//SourceLocator"
+        eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore#//SourceLocator"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositoryLists" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/oomph/p2/1.0#//RepositoryList"

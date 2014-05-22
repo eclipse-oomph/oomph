@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mylyn" nsURI="http://www.eclipse.org/oomph/setup/mylyn/1.0"
     nsPrefix="mylyn">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore"/>
+    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="MylynQueriesTask" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">

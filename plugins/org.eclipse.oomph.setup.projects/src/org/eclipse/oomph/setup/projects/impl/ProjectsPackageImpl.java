@@ -208,7 +208,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
         IS_ORDERED);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Projects.ecore");
+    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -228,7 +228,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Projects.ecore" });
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore" });
   }
 
   /**

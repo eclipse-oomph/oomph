@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="targlets" nsURI="http://www.eclipse.org/oomph/setup/targlets/1.0"
     nsPrefix="setup.targlets">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"/>
+    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TargletTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
@@ -13,12 +13,12 @@
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
-      <contents xsi:type="ecore:EReference" name="targlets" upperBound="-1" eType="ecore:EClass http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#//Targlet"
+      <contents xsi:type="ecore:EReference" name="targlets" upperBound="-1" eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#//Targlet"
           containment="true"/>
       <contents xsi:type="ecore:EAttribute" name="targletURIs" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targlets" upperBound="-1"
-        eType="ecore:EClass http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#//Targlet"
+        eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#//Targlet"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targletURIs" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
