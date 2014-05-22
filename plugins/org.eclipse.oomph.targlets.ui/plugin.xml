@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.oomph.targlets.internal.core.TargletContainer"
+            class="org.eclipse.oomph.targlets.internal.ui.TargletContainerUI">
+         <adapter
+               type="org.eclipse.jface.viewers.ILabelProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ITreeContentProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.pde.ui.target.ITargetLocationEditor">
+         </adapter>
+         <adapter
+               type="org.eclipse.pde.ui.target.ITargetLocationUpdater">
+         </adapter>
+      </factory>
+   </extension>
+
+   <extension
+         point="org.eclipse.pde.ui.targetLocationProvisioners">
+      <locationProvider
+            class="org.eclipse.oomph.targlets.internal.ui.NewTargletWizard"
+            icon="icons/targlet_container.gif"
+            id="org.eclipse.oomph.targlets.TargletProvisioner"
+            name="Targlet Container">
+         <description>
+            Download plug-ins from a software site such as a p2 repository or update site.
+         </description>
+      </locationProvider>
+   </extension>
+   
+   <extension
+         point="org.eclipse.oomph.p2.ui.profileTypes">
+      <profileType
+            icon="icons/Targlet.gif"
+            label="Targlet Container Profile"
+            name="Targlet">
+      </profileType>
+   </extension>
+
+</plugin>

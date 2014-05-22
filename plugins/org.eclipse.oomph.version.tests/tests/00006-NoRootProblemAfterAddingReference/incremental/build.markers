@@ -1,0 +1,23 @@
+Marker
+  <resource>  = com.foo.project1-feature/feature.xml
+  <charStart> = (5,17)
+  <charEnd>   = (5,22)
+  <severity>  = ERROR
+  <message>   = Version must be increased to 1.1.0 because the feature's references have changed
+  problemType = component.version
+  quickFixConfigureOption = ignore.feature.content.changes
+  quickFixPattern = feature.*?version\s*=\s*["'](\d+(\.\d+(\.\d+)?)?)
+  quickFixReplacement = 1.1.0
+  FIX = Change the version (Change the version to 1.1.0)
+  FIX = Configure the project to ignore the problem (Set ignore.feature.content.changes = true in '/com.foo.project1-feature/.project')
+Marker
+  <resource>  = com.foo.project1-feature/feature.xml
+  <charStart> = (26,15)
+  <charEnd>   = (26,31)
+  <severity>  = WARNING
+  <message>   = Plug-in reference 'com.foo.project1' has been added with 1.0.0
+  problemType = component.version
+  quickFixPattern = [ \t\x0B\f]*<plugin\s+[^<]*id\s*=\s*["'](com\.foo\.project1)["'].*?/>([ \t\x0B\f]*[\n\r])*
+  quickFixReference = com.foo.project1
+  FIX = Remove the reference ()
+  FIX = Mark as ignored reference (Add 'com.foo.project1' to the ignored.references property of /com.foo.releng/release.properties)

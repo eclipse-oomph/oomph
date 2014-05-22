@@ -1,0 +1,89 @@
+Declaring Version Builder Tests
+===============================
+
+This plug-in contains a declarative test framework that supports efficient specification
+of test cases and automatic execution of the test suite. The dynamic test suite can be
+executed by starting the supplied "VersionBuilderTests" JUnit Plug-in launch configuration.
+
+The test suite inspects the "tests" folder in this plug-in. Each child folder
+is a test case. The test cases are executed in alphabetical order.
+
+Each test case is made of one or several phases that are declared by child
+folders within the test case folder. The phases are executed in alphabetical order.
+
+Each phase modifies the projects, folders and files in the runtime workspace. The
+modifications are specified by the folders and files in the phase folder. Top-level
+folders (those directly contained by the phase folder) represent the projects in the
+runtime workspace. To delete folders or files from the runtime workspace the suffix
+"-DELETE" must be added to the respective folder or file in the phase folder. All other
+folders and files in the phase folder lead to an addition or modification (overwrite).
+
+When the runtime workspace has been updated as outlined above the entire runtime workspace
+is built. Only the first build of a test case is a clean build. Possible subsequent builds
+(see below) are incremental builds. This can be overridden (for example PDE sometimes fails
+to remove feature problem markers without a clean build) by placing an empty "build.clean"
+file in the phase folder or just letting the phase name start with "clean".
+
+If a build results in problem markers they are serialized to a string and this string is
+compared to the contents of the file "build.markers" in the phase folder. If they are not
+identical the test case fails. If the "build.markers" file does not exist it is created
+and initialized with the serialized string.
+
+                   The "*.markers" files must be verified manually!
+
+The content of this file could look like this:
+
+	Marker
+	  <resource>  = com.foo.project1/META-INF/MANIFEST.MF
+	  <charStart> = (4,18)
+	  <charEnd>   = (4,23)
+	  <severity>  = ERROR
+	  <message>   = Version must be increased to 1.0.100 because the project's contents have changed
+	  problemType = component.version
+	  quickFixPattern = Bundle-Version: *(\d+(\.\d+(\.\d+)?)?)
+	  quickFixReplacement = 1.0.100
+	  FIX = Change the version (Change the version to 1.0.100)
+
+If the build resulted in one or more problem markers that have quick fixes associated then
+a second file named "build.resolutions" is written to the phase folder. You can now select
+one or more of the quick fixes by adding an asterisk (*) at the beginning of the respective
+"FIX..." line. Example:
+
+	Marker
+	  <resource>  = com.foo.project1/META-INF/MANIFEST.MF
+	  <charStart> = (4,18)
+	  <charEnd>   = (4,23)
+	  <severity>  = ERROR
+	  <message>   = Version must be increased to 1.0.100 because the project's contents have changed
+	  problemType = component.version
+	  quickFixPattern = Bundle-Version: *(\d+(\.\d+(\.\d+)?)?)
+	  quickFixReplacement = 1.0.100
+	  *FIX = Change the version (Change the version to 1.0.100)
+
+If one or more quick fixes are marked in the way outlined above a new build cycle is triggered.
+This cycle is basically the same as for the initial workspace updates of the phase. It checks or
+creates new files in the phase folder. These files are named "fix1.markers" and "fix1.resolutions".
+The number is increased by 1 per fix/build/check cycle until no markers are left or the remaining
+markers are accepted (i.e. no quick fixes are selected).
+
+---
+
+Specifying the test cases is an iterative process. It comprises
+
+1) the specification of workspace contents,
+2) the execution of the test case(s),
+3) the verification of the resulting "*.markers" files,
+4) the selection of quick fixes to apply and
+5) the repetition from 2).
+
+Unfortunately the reflective nature of JUnit prevents the re-execution of selected dynamic test cases.
+In the process of specifying a test case it may be handy to execute that specific test case without
+its entire suite. This can be achieved by just moving the test case folder from the "tests" folder
+into the "test" folder. Later it should be moved back.
+
+---
+
+Open issues:
+
+- The framework does currently not capture the actual files or changes that result from applying the
+  quick fixes. Nor is there currently a means to verify these files or changes.

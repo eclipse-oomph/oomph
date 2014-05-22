@@ -1,0 +1,10 @@
+/workspace
+bin/
+target/
+state/
+*.local.launch
+Copy of *.launch
+*~
+~*.docx
+~*.pptx
+com.chronon.sb.browser.launcher.prefs

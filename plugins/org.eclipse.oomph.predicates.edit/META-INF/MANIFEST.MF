@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.oomph.predicates.edit;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: org.eclipse.oomph.predicates.provider.PredicatesEditPlugin$Implementation
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.eclipse.oomph.predicates.provider;version="1.0.0"
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)";resolution:=optional,
+ org.eclipse.oomph.predicates;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
+ org.eclipse.emf.edit;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
+ org.eclipse.oomph.base;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.base.edit;bundle-version="[1.0.0,2.0.0)";visibility:=reexport
+Bundle-ActivationPolicy: lazy

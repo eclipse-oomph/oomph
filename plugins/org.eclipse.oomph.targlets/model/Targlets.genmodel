@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.targlets/src" creationIcons="false"
+    modelPluginID="org.eclipse.oomph.targlets" modelName="Targlet" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
+    copyrightFields="false" optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.p2/model/P2.genmodel#//p2 ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources"
+    operationReflection="true" decoration="Live" cleanup="true">
+  <foreignModel>Targlets.ecore</foreignModel>
+  <genPackages prefix="Targlet" basePackage="org.eclipse.oomph" resource="XMI" disposableProviderFactory="true"
+      multipleEditorPages="false" extensibleProviderFactory="true" childCreationExtenders="true"
+      fileExtensions="targlet,def,ext" ecorePackage="Targlets.ecore#/" publicationLocation="/setups/models/Targlets.ecore">
+    <genClasses ecoreClass="Targlets.ecore#//Targlet">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/requirements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/sourceLocators"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/repositoryLists"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/activeRepositoryList"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/activeRepositories"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeSources"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllPlatforms"/>
+    </genClasses>
+    <genClasses ecoreClass="Targlets.ecore#//ComponentExtension">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//ComponentExtension/requirements"/>
+    </genClasses>
+    <genClasses ecoreClass="Targlets.ecore#//ComponentDefinition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//ComponentDefinition/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//ComponentDefinition/version"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

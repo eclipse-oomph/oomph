@@ -1,0 +1,8 @@
+Marker
+  <resource>  = com.foo.project1/META-INF/MANIFEST.MF
+  <charStart> = (3,23)
+  <charEnd>   = (4,1)
+  <severity>  = ERROR
+  <message>   = Plug-in 'com.foo.project1' is not referenced by any other feature
+  problemType = unreferenced.element
+  FIX = Mark as root project (Add 'com.foo.project1' to the root.projects property of /com.foo.releng/release.properties)

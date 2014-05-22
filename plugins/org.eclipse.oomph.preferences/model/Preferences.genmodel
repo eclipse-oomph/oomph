@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.preferences/src" creationIcons="false"
+    modelPluginID="org.eclipse.oomph.preferences" modelName="Preferences" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
+    copyrightFields="false" operationReflection="true" cleanup="true">
+  <foreignModel>Preferences.ecore</foreignModel>
+  <genPackages prefix="Preferences" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
+      dataTypeConverters="true" multipleEditorPages="false" ecorePackage="Preferences.ecore#/">
+    <genDataTypes ecoreDataType="Preferences.ecore#//EscapedString"/>
+    <genDataTypes ecoreDataType="Preferences.ecore#//URI"/>
+    <genClasses image="false" ecoreClass="Preferences.ecore#//PreferenceItem">
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Preferences.ecore#//PreferenceItem/root"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Preferences.ecore#//PreferenceItem/scope"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//PreferenceItem/absolutePath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//PreferenceItem/name"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//PreferenceItem/relativePath"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Preferences.ecore#//PreferenceItem/ancestor"/>
+      <genOperations ecoreOperation="Preferences.ecore#//PreferenceItem/getParent"/>
+    </genClasses>
+    <genClasses ecoreClass="Preferences.ecore#//PreferenceNode">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Preferences.ecore#//PreferenceNode/parent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Preferences.ecore#//PreferenceNode/children"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Preferences.ecore#//PreferenceNode/properties"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//PreferenceNode/location"/>
+      <genOperations ecoreOperation="Preferences.ecore#//PreferenceNode/getNode">
+        <genParameters ecoreParameter="Preferences.ecore#//PreferenceNode/getNode/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="Preferences.ecore#//PreferenceNode/getNode.1">
+        <genParameters ecoreParameter="Preferences.ecore#//PreferenceNode/getNode.1/path"/>
+      </genOperations>
+      <genOperations ecoreOperation="Preferences.ecore#//PreferenceNode/getProperty">
+        <genParameters ecoreParameter="Preferences.ecore#//PreferenceNode/getProperty/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="Preferences.ecore#//PreferenceNode/getProperty.1">
+        <genParameters ecoreParameter="Preferences.ecore#//PreferenceNode/getProperty.1/path"/>
+      </genOperations>
+      <genOperations ecoreOperation="Preferences.ecore#//PreferenceNode/getAncestor"/>
+    </genClasses>
+    <genClasses ecoreClass="Preferences.ecore#//Property">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Preferences.ecore#//Property/parent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/value"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/nonDefault"/>
+      <genOperations ecoreOperation="Preferences.ecore#//Property/getAncestor"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

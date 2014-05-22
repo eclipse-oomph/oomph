@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+   <extension-point id="profileTypes" name="Profile Types" schema="schema/profileTypes.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
+            id="org.eclipse.oomph.p2.ui.AgentManagerPreferencePage"
+            class="org.eclipse.oomph.p2.internal.ui.AgentManagerPreferencePage"
+            name="Bundle Pool Management">
+      </page>
+   </extension>
+   
+   <extension
+         point="org.eclipse.oomph.p2.ui.profileTypes">
+      <profileType
+            icon="icons/obj16/profileEclipse.gif"
+            label="Installation Profile"
+            name="Installation">
+      </profileType>
+   </extension>
+
+  <!--
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.eclipse.oomph.p2.ui.actionSet"
+            label="Sample Action Set"
+            visible="true">
+         <menu
+               id="sampleMenu"
+               label="Sample &amp;Menu">
+            <separator
+                  name="sampleGroup">
+            </separator>
+         </menu>
+         <action
+               class="org.eclipse.oomph.p2.internal.ui.TestAgentManagerAction"
+               icon="icons/obj16/agent.gif"
+               id="org.eclipse.oomph.p2.ui.tests.AgentManagerAction"
+               label="&amp;Agent Manager"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Agent Manager">
+         </action>
+         <action
+               class="org.eclipse.oomph.p2.internal.ui.TestInstallAction"
+               icon="icons/sample.gif"
+               id="org.eclipse.oomph.p2.ui.tests.TestAction"
+               label="&amp;Test Install"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Test Install">
+         </action>
+      </actionSet>
+   </extension>
+   -->
+   
+</plugin>

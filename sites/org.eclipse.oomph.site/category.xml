@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.oomph.launches_1.0.0.qualifier.jar" id="org.eclipse.oomph.launches" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.manifests_1.0.0.qualifier.jar" id="org.eclipse.oomph.manifests" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.p2_1.0.0.qualifier.jar" id="org.eclipse.oomph.p2" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.preferences_1.0.0.qualifier.jar" id="org.eclipse.oomph.preferences" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.projectconfig_1.0.0.qualifier.jar" id="org.eclipse.oomph.projectconfig" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.projectcopy_1.0.0.qualifier.jar" id="org.eclipse.oomph.projectcopy" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.git_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.git" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.targlets_1.0.0.qualifier.jar" id="org.eclipse.oomph.targlets" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.version_1.0.0.qualifier.jar" id="org.eclipse.oomph.version" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.version.headless_1.0.0.qualifier.jar" id="org.eclipse.oomph.version.headless" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.winexplorer_1.0.0.qualifier.jar" id="org.eclipse.oomph.winexplorer" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.workingsets_1.0.0.qualifier.jar" id="org.eclipse.oomph.workingsets" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature id="org.eclipse.oomph.all" version="0.0.0"/>
+   <feature url="features/org.eclipse.oomph.gitbash_1.0.0.qualifier.jar" id="org.eclipse.oomph.gitbash" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.workingsets_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.workingsets" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.projectset_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.projectset" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.targlets_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.targlets" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.maven_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.maven" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.projects_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.projects" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.mylyn_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.mylyn" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.pde_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.pde" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.jdt_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.jdt" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <feature url="features/org.eclipse.oomph.setup.workbench_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.workbench" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
+   <category-def name="org.eclipse.oomph.setup.category" label="Oomph Setup"/>
+   <category-def name="org.eclipse.oomph.tools.category" label="Oomph Tools"/>
+</site>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
+            class="org.eclipse.oomph.preferences.presentation.AllPreferencesPreferencePage"
+            id="org.eclipse.oomph.preferences.presentation.AllPreferencesPreferencePage"
+            name="All Preferences">
+      </page>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated preferences not -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <category
+            id="org.eclipse.oomph"
+            name="%_UI_OomphWizard_category"/>
+      <wizard
+            id="org.eclipse.oomph.preferences.presentation.PreferencesModelWizardID"
+            name="%_UI_PreferencesModelWizard_label"
+            class="org.eclipse.oomph.preferences.presentation.PreferencesModelWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/PreferencesModelFile.gif">
+         <description>%_UI_PreferencesModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated preferences -->
+      <editor
+            id="org.eclipse.oomph.preferences.presentation.PreferencesEditorID"
+            name="%_UI_PreferencesEditor_label"
+            icon="icons/full/obj16/PreferencesModelFile.gif"
+            extensions="preferences"
+            class="org.eclipse.oomph.preferences.presentation.PreferencesEditor"
+            contributorClass="org.eclipse.oomph.preferences.presentation.PreferencesActionBarContributor">
+      </editor>
+   </extension>
+
+
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.oomph.preferences.action.OpenEditor"
+            objectClass="org.eclipse.oomph.preferences.PreferenceNode">
+         <action
+               id="org.eclipse.oomph.preferences.action.OpenEditorAction"
+               label="Open Editor"
+               menubarPath="additions"
+               class="org.eclipse.oomph.preferences.presentation.actions.OpenEditorAction"
+               enablesFor="1"/>
+      </objectContribution>
+   </extension>
+
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.oomph.preferences.action.ShowInExplorer"
+            objectClass="org.eclipse.oomph.preferences.PreferenceNode">
+         <action
+               id="org.eclipse.oomph.preferences.action.ShowInExplorerAction"
+               label="Show in Package Explorer"
+               menubarPath="additions"
+               class="org.eclipse.oomph.preferences.presentation.actions.ShowInExplorerAction"
+               enablesFor="1"/>
+      </objectContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.oomph.preferences.presentation.handlers.NavigateHandler"
+            commandId="org.eclipse.oomph.preferences.editor.commands.Navigate">
+      </handler>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.eclipse.oomph.preferences.editor.commands.category"
+            name="Project Preference Management">
+      </category>
+      <command
+            categoryId="org.eclipse.oomph.preferences.editor.commands.category"
+            id="org.eclipse.oomph.preferences.editor.commands.Navigate"
+            name="Navigate">
+      </command>
+   </extension>
+
+   <extension point="org.eclipse.ui.contexts">
+      <context
+         description="Editing Project Configuration Preferences"
+         id="org.eclipse.oomph.preferences.editor.context"
+         name="Editing Project Configuration Preferences"
+         parentId="org.eclipse.ui.contexts.window">
+      </context>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.oomph.preferences.editor.commands.Navigate"
+            contextId="org.eclipse.oomph.preferences.editor.context"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F3">
+      </key>
+   </extension>
+
+</plugin>

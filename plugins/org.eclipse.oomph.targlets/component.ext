@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<targlets:ComponentExtension xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:targlets="http://www.eclipse.org/oomph/targlets/1.0">
+  <requirements id="org.eclipse.emf.sdk.feature.group"/>
+  <requirements id="org.eclipse.sdk.feature.group"/>
+</targlets:ComponentExtension>

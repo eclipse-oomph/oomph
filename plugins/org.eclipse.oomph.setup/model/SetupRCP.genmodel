@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="" creationIcons="false" editDirectory="" editorDirectory="/org.eclipse.oomph.setup.installer.editor/src"
+    modelPluginID="org.eclipse.oomph.setup" modelName="Setup" editorPluginClass="org.eclipse.oomph.setup.installer.editor.SetupEditorPlugin"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    editorPluginID="org.eclipse.oomph.setup.installer.editor" optimizedHasChildren="true"
+    runtimeVersion="2.9" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
+    runtimePlatform="RCP" importOrganizing="true" decoration="Live" cleanup="true">
+  <foreignModel>Setup.ecore</foreignModel>
+  <genPackages prefix="Setup" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
+      presentationPackageSuffix="installer.editor" multipleEditorPages="false" generateModelWizard="false"
+      ecorePackage="Setup.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//ScopeType">
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/None"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/ProductCatalog"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Product"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/ProductVersion"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/ProjectCatalog"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Project"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Stream"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Installation"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Workspace"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/User"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//Trigger">
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//Trigger/BOOTSTRAP"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//Trigger/STARTUP"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//Trigger/MANUAL"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//VariableType">
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/STRING"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/TEXT"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/PASSWORD"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/PATTERN"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/URI"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/FILE"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/FOLDER"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/RESOURCE"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/CONTAINER"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/PROJECT"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/BOOLEAN"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/INTEGER"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/FLOAT"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="Setup.ecore#//TriggerSet"/>
+    <genDataTypes ecoreDataType="Setup.ecore#//LicenseInfo"/>
+    <genClasses image="false" ecoreClass="Setup.ecore#//SetupTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/description"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/scopeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/excludedTriggers"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/disabled"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/predecessors"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/successors"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/restrictions"/>
+      <genOperations ecoreOperation="Setup.ecore#//SetupTask/getScope"/>
+      <genOperations ecoreOperation="Setup.ecore#//SetupTask/requires">
+        <genParameters ecoreParameter="Setup.ecore#//SetupTask/requires/setupTask"/>
+      </genOperations>
+      <genOperations ecoreOperation="Setup.ecore#//SetupTask/getValidTriggers"/>
+      <genOperations ecoreOperation="Setup.ecore#//SetupTask/getTriggers"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Setup.ecore#//SetupTaskContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTaskContainer/setupTasks"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Setup.ecore#//Scope">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/description"/>
+      <genOperations ecoreOperation="Setup.ecore#//Scope/getParentScope"/>
+      <genOperations ecoreOperation="Setup.ecore#//Scope/getType"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Index">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Index/productCatalogs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Index/projectCatalogs"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//CatalogSelection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/productCatalogs"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/projectCatalogs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/defaultProductVersions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/defaultStreams"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//ProductCatalog">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//ProductCatalog/index"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//ProductCatalog/products"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Product">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//Product/productCatalog"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Product/versions"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//ProductVersion">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//ProductVersion/product"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Setup.ecore#//ProjectContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectContainer/projects"/>
+      <genOperations ecoreOperation="Setup.ecore#//ProjectContainer/getProjectContainer"/>
+      <genOperations ecoreOperation="Setup.ecore#//ProjectContainer/getProjectCatalog"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//ProjectCatalog">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//ProjectCatalog/index"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Project">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Project/streams"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//Project/projectContainer"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Project/logicalProjectContainer"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//Project/parentProject"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//Project/projectCatalog"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Stream">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//Stream/project"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//User">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//User/attributeRules"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/acceptedLicenses"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//AttributeRule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//AttributeRule/attributeURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//AttributeRule/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Installation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Installation/productVersion"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//InstallationTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//InstallationTask/location"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Workspace">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Workspace/streams"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//WorkspaceTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//WorkspaceTask/location"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//CompoundTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//CompoundTask/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//VariableTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/storePromptedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/label"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//VariableTask/choices"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//VariableChoice">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableChoice/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableChoice/label"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//StringSubstitutionTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//StringSubstitutionTask/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//StringSubstitutionTask/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//RedirectionTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//RedirectionTask/sourceURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//RedirectionTask/targetURL"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//EclipseIniTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/option"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/vm"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//LinkLocationTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//LinkLocationTask/path"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//LinkLocationTask/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//PreferenceTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//PreferenceTask/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//PreferenceTask/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//ResourceCopyTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCopyTask/sourceURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCopyTask/targetURL"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//ResourceCreationTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/content"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/targetURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/encoding"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//TextModifyTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModifyTask/uRL"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//TextModifyTask/modifications"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModifyTask/encoding"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//TextModification">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModification/pattern"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModification/substitutions"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//ProductToProductVersionMapEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProductToProductVersionMapEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProductToProductVersionMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//ProjectToStreamMapEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectToStreamMapEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectToStreamMapEntry/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated setup not -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <category
+            id="org.eclipse.oomph"
+            name="%_UI_OomphWizard_category"/>
+      <wizard
+            id="org.eclipse.oomph.setup.presentation.SetupModelWizardID"
+            name="%_UI_SetupModelWizard_label"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/SetupModelFile.gif">
+         <description>%_UI_SetupModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated setup not -->
+      <editor
+            id="org.eclipse.oomph.setup.presentation.SetupEditorID"
+            name="%_UI_SetupEditor_label"
+            icon="icons/full/obj16/SetupModelFile.gif"
+            extensions="setup"
+            class="org.eclipse.oomph.setup.presentation.SetupEditor"
+            contributorClass="org.eclipse.oomph.setup.presentation.SetupActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.oomph.setup.editor.contribution1"
+            objectClass="org.eclipse.egit.ui.internal.repository.tree.RepositoryNode">
+         <action
+               class="org.eclipse.oomph.setup.presentation.actions.PushDirectAction"
+               enablesFor="1"
+               icon="icons/push_directly.gif"
+               id="org.eclipse.oomph.setup.editor.PushDirectAction"
+               label="Push Directly"
+               menubarPath="additions"
+               state="true"
+               style="push"/>
+      </objectContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.eclipse.oomph.setup.category"
+            name="Oomph Setup">
+      </category>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenEditorDropdownHandler"
+            id="org.eclipse.oomph.setup.editor.openEditorDropdown"
+            name="Open Setup Editor">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.PerformDropdownHandler"
+            id="org.eclipse.oomph.setup.editor.performDropdown"
+            name="Perform Dropdown">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.PerformHandler"
+            id="org.eclipse.oomph.setup.editor.perform"
+            name="Perform Setup Tasks">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenLogHandler"
+            id="org.eclipse.oomph.setup.editor.openLog"
+            name="Open Log File">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ChangeProductHandler"
+            id="org.eclipse.oomph.setup.editor.changeProduct"
+            name="Change Product">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ImportProjectsHandler"
+            id="org.eclipse.oomph.setup.editor.importProjects"
+            name="Import Projects">
+      </command>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="org.eclipse.oomph.setup.toolbar">
+            <command
+                  commandId="org.eclipse.oomph.setup.editor.performDropdown"
+                  icon="icons/update.gif"
+                  id="org.eclipse.oomph.setup.perform.menu"
+                  style="pulldown"
+                  tooltip="Perform Setup Tasks...">
+            </command>
+            <command
+                  commandId="org.eclipse.oomph.setup.editor.openEditorDropdown"
+                  icon="icons/prefs.gif"
+                  id="org.eclipse.oomph.setup.editor.menu"
+                  style="pulldown"
+                  tooltip="Open User">
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:org.eclipse.oomph.setup.editor.menu">
+         <dynamic
+               class="org.eclipse.oomph.setup.presentation.handlers.OpenEditorDropdownFactory"
+               id="org.eclipse.oomph.setup.editor.menu.dynamic">
+         </dynamic>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:org.eclipse.oomph.setup.perform.menu">
+         <command
+               commandId="org.eclipse.oomph.setup.editor.perform"
+               icon="icons/update.gif"
+               label="Perform Setup Tasks..."
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.oomph.setup.editor.openLog"
+               icon="icons/Log.gif"
+               label="Open Log File"
+               style="push">
+         </command>
+         <separator
+               name="org.eclipse.oomph.setup.perform.menu.separator"
+               visible="true">
+         </separator>
+         <command
+               commandId="org.eclipse.oomph.setup.editor.changeProduct"
+               icon="icons/Product.gif"
+               label="Change Product..."
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.oomph.setup.editor.importProjects"
+               icon="icons/Project.gif"
+               label="Import Projects..."
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+
+</plugin>

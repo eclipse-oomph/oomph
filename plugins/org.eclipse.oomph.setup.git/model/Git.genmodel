@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.setup.git/src" creationIcons="false"
+    editorDirectory="" modelPluginID="org.eclipse.oomph.setup.git" modelName="Git"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    importOrganizing="true" decoration="Live" cleanup="true">
+  <foreignModel>Git.ecore</foreignModel>
+  <genPackages prefix="Git" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="Git.ecore#/" publicationLocation="/setups/models/Git.ecore">
+    <genClasses ecoreClass="Git.ecore#//GitCloneTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/remoteName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/remoteURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/pushURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/userID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/checkoutBranch"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

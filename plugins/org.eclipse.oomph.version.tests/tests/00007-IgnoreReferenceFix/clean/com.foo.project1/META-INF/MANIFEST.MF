@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.foo.project1
+Bundle-Version: 1.0.0.qualifier
+Bundle-Name: Some name
+Bundle-Vendor: Foo.com

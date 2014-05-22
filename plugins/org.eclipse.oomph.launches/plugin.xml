@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="org.eclipse.oomph.launches.LaunchConfigLabelDecorator"
+            icon="icons/local_deco.gif"
+            id="org.eclipse.oomph.LaunchConfigLabelDecorator"
+            label="Unshared Launch Configs"
+            lightweight="false"
+            location="TOP_LEFT"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="org.eclipse.debug.core.ILaunchConfiguration">
+            </objectClass>
+         </enablement>
+      </decorator>
+      <decorator
+            adaptable="true"
+            class="org.eclipse.oomph.launches.TestElementLabelDecorator"
+            id="org.eclipse.oomph.TestElementLabelDecorator"
+            label="JUnit Average Times"
+            lightweight="false"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="org.eclipse.jdt.junit.model.ITestElementContainer">
+            </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
+
+</plugin>

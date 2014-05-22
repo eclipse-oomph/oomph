@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.oomph.setup.ui.bundle.EarlyStartup">
+      </startup>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
+            id="org.eclipse.oomph.setup.SetupPreferencePage"
+            class="org.eclipse.oomph.setup.ui.SetupPreferencePage"
+            name="Development Environment Setup">
+      </page>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.oomph.setup.contribution1"
+            objectClass="org.eclipse.oomph.setup.SetupTask">
+         <action
+               class="org.eclipse.oomph.setup.ui.actions.ToggleDisabledAction"
+               enablesFor="multiple"
+               id="org.eclipse.oomph.setup.ToggleDisabledAction"
+               label="Disabled"
+               state="false"
+               style="toggle"
+               tooltip="Changes the enablement of the task">
+         </action>
+      </objectContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <wizard
+            category="org.eclipse.oomph.importWizards"
+            class="org.eclipse.oomph.setup.ui.wizards.SetupWizard$Importer"
+            icon="icons/import_wiz.gif"
+            id="org.eclipse.oomph.setup.ui.ImportWizard"
+            name="Projects into Workspace">
+         <description>
+            Import projects from the Oomph catalogs into the workspace.
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.foo.project2"
+      label="Some name"
+      version="1.0.0.qualifier"
+      provider-name="Foo.com">
+
+   <description>
+      Some description
+   </description>
+
+   <copyright url="%copyrightURL">
+      Some copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      Some license
+   </license>
+
+   <url>
+      <update label="Some update site name" url="http://www.foo.com"/>
+      <discovery label="Some update site name" url="http://www.foo.com"/>
+   </url>
+
+   <includes
+         id="com.foo.project1"
+         version="0.0.0"/>
+
+</feature>

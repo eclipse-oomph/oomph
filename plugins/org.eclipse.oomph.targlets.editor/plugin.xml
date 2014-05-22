@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated targlets not -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="org.eclipse.oomph.targlets.presentation.TargletModelWizardID"
+            name="%_UI_TargletModelWizard_label"
+            class="org.eclipse.oomph.targlets.presentation.TargletModelWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/TargletModelFile.gif">
+         <description>%_UI_TargletModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+      <wizard
+            id="org.eclipse.oomph.targlets.presentation.CDefModelWizardID"
+            name="%_UI_CDef_ModelName"
+            class="org.eclipse.oomph.targlets.presentation.ComponentModelWizard$CDef"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/cdef_file.gif">
+         <description>%_UI_CDef_ModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IProject"/>
+      </wizard>
+      <wizard
+            id="org.eclipse.oomph.targlets.presentation.CExtModelWizardID"
+            name="%_UI_CExt_ModelName"
+            class="org.eclipse.oomph.targlets.presentation.ComponentModelWizard$CExt"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/cext_file.gif">
+         <description>%_UI_CExt_ModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IProject"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated targlets not -->
+      <editor
+            id="org.eclipse.oomph.targlets.presentation.TargletEditorID"
+            name="%_UI_TargletEditor_label"
+            icon="icons/full/obj16/TargletModelFile.gif"
+            extensions="targlet"
+            class="org.eclipse.oomph.targlets.presentation.TargletEditor"
+            contributorClass="org.eclipse.oomph.targlets.presentation.TargletActionBarContributor">
+      </editor>
+   </extension>
+   
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="org.eclipse.oomph.targlets.presentation.CDefEditorID"
+            name="%_UI_CDef_Editor_label"
+            icon="icons/full/obj16/cdef_file.gif"
+            extensions="def"
+            class="org.eclipse.oomph.targlets.presentation.TargletEditor"
+            contributorClass="org.eclipse.oomph.targlets.presentation.TargletActionBarContributor">
+      </editor>
+      <editor
+            id="org.eclipse.oomph.targlets.presentation.CExtEditorID"
+            name="%_UI_CExt_Editor_label"
+            icon="icons/full/obj16/cext_file.gif"
+            extensions="ext"
+            class="org.eclipse.oomph.targlets.presentation.TargletEditor"
+            contributorClass="org.eclipse.oomph.targlets.presentation.TargletActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

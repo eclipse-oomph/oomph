@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.eclipse.oomph.setup.ui.actionSet"
+            label="Sample Action Set"
+            visible="true">
+         <menu
+               id="sampleMenu"
+               label="Sample &amp;Menu">
+            <separator
+                  name="sampleGroup">
+            </separator>
+         </menu>
+         <!--
+         <action
+               class="org.eclipse.oomph.setup.tests.ManualAction"
+               id="org.eclipse.oomph.setup.tests.ManualAction"
+               label="&amp;Manual"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Manual">
+         </action>
+         <action
+               class="org.eclipse.oomph.setup.tests.StartupAction"
+               id="org.eclipse.oomph.setup.tests.StartupAction"
+               label="&amp;Startup"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Startup">
+         </action>
+         <action
+               class="org.eclipse.oomph.setup.tests.ImporterAction"
+               id="org.eclipse.oomph.setup.tests.ImporterAction"
+               label="&amp;Importer"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Importer">
+         </action>
+         <action
+               class="org.eclipse.oomph.setup.tests.InstallerAction"
+               id="org.eclipse.oomph.setup.tests.InstallerAction"
+               label="&amp;Installer"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Installer">
+         </action>
+         -->
+         <action
+               class="org.eclipse.oomph.setup.tests.GenerateAction"
+               id="org.eclipse.oomph.setup.tests.GenerateAction"
+               label="&amp;Generator"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Generator">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>

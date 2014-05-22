@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.oomph.version.ui.contribution1"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.eclipse.oomph.version.ui.actions.AddNatureAction"
+               enablesFor="*"
+               id="org.eclipse.oomph.AddNatureAction"
+               label="Add Version Management..."
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
+               state="true"
+               style="push"
+               tooltip="Add the Version Management builder to the selected project(s)">
+         </action>
+         <visibility>
+            <not>
+		            <objectState
+		                  name="projectNature"
+		                  value="org.eclipse.oomph.version.VersionNature">
+		            </objectState>
+            </not>
+         </visibility>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.oomph.version.ui.contribution2"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.eclipse.oomph.version.ui.actions.ConfigureBuilderAction"
+               enablesFor="*"
+               id="org.eclipse.oomph.ConfigureBuilderAction"
+               label="Configure Version Management..."
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
+               state="true"
+               style="push"
+               tooltip="Configure the Version Management builder of the selected project(s)">
+         </action>
+         <visibility>
+	            <objectState
+	                  name="projectNature"
+	                  value="org.eclipse.oomph.version.VersionNature">
+	            </objectState>
+         </visibility>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.oomph.version.ui.contribution3"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.eclipse.oomph.version.ui.actions.RemoveNatureAction"
+               enablesFor="*"
+               id="org.eclipse.oomph.RemoveNatureAction"
+               label="Remove Version Management"
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
+               state="true"
+               style="push"
+               tooltip="Remove the Version Management builder from the selected project(s)">
+         </action>
+         <visibility>
+	            <objectState
+	                  name="projectNature"
+	                  value="org.eclipse.oomph.version.VersionNature">
+	            </objectState>
+         </visibility>
+      </objectContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="org.eclipse.oomph.version.ui.quickfixes.VersionResolutionGenerator"
+            markerType="org.eclipse.oomph.version.VersionProblem">
+      </markerResolutionGenerator>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
+            class="org.eclipse.oomph.version.ui.preferences.VersionBuilderPreferencePage"
+            id="org.eclipse.oomph.version.ui.preferences.VersionBuilderPreferencePage"
+            name="Version Management">
+      </page>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.eclipse.oomph.version.ui.actions"
+            label="Version Management"
+            visible="true">
+         <action
+               class="org.eclipse.oomph.version.ui.actions.ToggleApiBuilderAction"
+               icon="icons/ApiBaseline.gif"
+               id="org.eclipse.oomph.version.ui.ToggleApiBuilderAction"
+               label="Disable API Builder"
+               style="toggle"
+               toolbarPath="versionManagementGroup"
+               tooltip="Disable the API Analysis builder">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>

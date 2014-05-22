@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Index
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name="index"
+    label="index">
+  <productCatalog
+      href="catalog:/self-hosted-product-catalog.setup#/"/>
+  <productCatalog
+      href="product-catalog.setup#/"/>
+  <projectCatalog
+      href="project-catalog.setup#/"/>
+</setup:Index>

@@ -1,0 +1,12 @@
+Marker
+  <resource>  = com.foo.project1/META-INF/MANIFEST.MF
+  <charStart> = (9,44)
+  <charEnd>   = (9,49)
+  <severity>  = ERROR
+  <message>   = Export of package 'com.foo.project1' should have the version 1.0.100
+  problemType = export.version
+  quickFixConfigureOption = ignore.missing.export.versions
+  quickFixPattern = com\.foo\.project1;version="([0123456789\.]*)"
+  quickFixReplacement = 1.0.100
+  FIX = Change the version (Change the version to 1.0.100)
+  FIX = Configure the project to ignore the problem (Set ignore.missing.export.versions = true in '/com.foo.project1/.project')

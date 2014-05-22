@@ -1,0 +1,10 @@
+Marker
+  <resource>  = com.foo.project1-feature/feature.xml
+  <charStart> = (5,17)
+  <charEnd>   = (5,22)
+  <severity>  = ERROR
+  <message>   = Version must be increased to 1.0.100 because the project's contents have changed
+  problemType = component.version
+  quickFixPattern = feature.*?version\s*=\s*["'](\d+(\.\d+(\.\d+)?)?)
+  quickFixReplacement = 1.0.100
+  FIX = Change the version (Change the version to 1.0.100)

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.foo.project1"
+      label="Some name"
+      version="1.0.0.qualifier"
+      provider-name="Foo.com"
+      license-feature="com.foo.license"
+      license-feature-version="1.0.0.qualifier">
+
+   <description>
+      Some description
+   </description>
+
+   <copyright url="%copyrightURL">
+      Some copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      Some license
+   </license>
+
+   <url>
+      <update label="Some update site name" url="http://www.foo.com"/>
+      <discovery label="Some update site name" url="http://www.foo.com"/>
+   </url>
+
+   <plugin
+         id="com.foo.project1"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

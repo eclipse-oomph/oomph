@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.oomph.workingsets.presentation.EarlyStartup">
+      </startup>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
+            class="org.eclipse.oomph.workingsets.presentation.WorkingSetsPreferencePage"
+            id="org.eclipse.oomph.workingsets.presentation.VersionBuilderPreferencePage"
+            name="Dynamic Working Sets">
+      </page>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated workingsets not -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <category
+            id="org.eclipse.oomph"
+            name="%_UI_OomphWizard_category"/>
+      <wizard
+            id="org.eclipse.oomph.workingsets.presentation.WorkingSetsModelWizardID"
+            name="%_UI_WorkingSetsModelWizard_label"
+            class="org.eclipse.oomph.workingsets.presentation.WorkingSetsModelWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/WorkingSetsModelFile.gif">
+         <description>%_UI_WorkingSetsModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated workingsets -->
+      <editor
+            id="org.eclipse.oomph.workingsets.presentation.WorkingSetsEditorID"
+            name="%_UI_WorkingSetsEditor_label"
+            icon="icons/full/obj16/WorkingSetsModelFile.gif"
+            extensions="workingsets"
+            class="org.eclipse.oomph.workingsets.presentation.WorkingSetsEditor"
+            contributorClass="org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

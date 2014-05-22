@@ -1,0 +1,927 @@
+/*
+ * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
+ */
+package org.eclipse.oomph.setup.p2.impl;
+
+import org.eclipse.oomph.p2.LicenseConfirmation;
+import org.eclipse.oomph.p2.LicensePrompter;
+import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.AgentManager;
+import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.p2.core.ProfileCreator;
+import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.setup.LicenseInfo;
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.SetupTaskContainer;
+import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.impl.SetupTaskImpl;
+import org.eclipse.oomph.setup.internal.p2.bundle.SetupP2Plugin;
+import org.eclipse.oomph.setup.log.ProgressLogMonitor;
+import org.eclipse.oomph.setup.p2.P2Task;
+import org.eclipse.oomph.setup.p2.SetupP2Factory;
+import org.eclipse.oomph.setup.p2.SetupP2Package;
+import org.eclipse.oomph.setup.util.DownloadUtil;
+import org.eclipse.oomph.setup.util.OS;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.Pair;
+import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProfileRegistry;
+import org.eclipse.equinox.p2.engine.IProvisioningPlan;
+import org.eclipse.equinox.p2.internal.repository.tools.MirrorApplication;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.ILicense;
+import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.query.IQueryResult;
+import org.eclipse.equinox.p2.query.IQueryable;
+import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.IRepositoryManager;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Install Task</b></em>'.
+ * <!-- end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getRequirements <em>Requirements</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getRepositories <em>Repositories</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#isLicenseConfirmationDisabled <em>License Confirmation Disabled</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#isMergeDisabled <em>Merge Disabled</em>}</li>
+ * </ul>
+ * </p>
+ *
+ * @generated
+ */
+public class P2TaskImpl extends SetupTaskImpl implements P2Task
+{
+  private static final boolean SKIP = "true".equals(PropertiesUtil.getProperty(PROP_SKIP));
+
+  private static final Object FIRST_CALL_DETECTION_KEY = new Object();
+
+  @SuppressWarnings("unused")
+  private static final Class<MirrorApplication> MIRROR_CLASS = MirrorApplication.class;
+
+  /**
+   * The cached value of the '{@link #getRequirements() <em>Requirements</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRequirements()
+   * @generated
+   * @ordered
+   */
+  protected EList<Requirement> requirements;
+
+  /**
+   * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRepositories()
+   * @generated
+   * @ordered
+   */
+  protected EList<Repository> repositories;
+
+  /**
+   * The default value of the '{@link #isLicenseConfirmationDisabled() <em>License Confirmation Disabled</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isLicenseConfirmationDisabled()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean LICENSE_CONFIRMATION_DISABLED_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isLicenseConfirmationDisabled() <em>License Confirmation Disabled</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isLicenseConfirmationDisabled()
+   * @generated
+   * @ordered
+   */
+  protected boolean licenseConfirmationDisabled = LICENSE_CONFIRMATION_DISABLED_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isMergeDisabled() <em>Merge Disabled</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isMergeDisabled()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean MERGE_DISABLED_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isMergeDisabled() <em>Merge Disabled</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isMergeDisabled()
+   * @generated
+   * @ordered
+   */
+  protected boolean mergeDisabled = MERGE_DISABLED_EDEFAULT;
+
+  private transient EList<Requirement> neededRequirements;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected P2TaskImpl()
+  {
+    super();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass()
+  {
+    return SetupP2Package.Literals.P2_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<Requirement> getRequirements()
+  {
+    if (requirements == null)
+    {
+      requirements = new EObjectContainmentEList<Requirement>(Requirement.class, this, SetupP2Package.P2_TASK__REQUIREMENTS);
+    }
+    return requirements;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<Repository> getRepositories()
+  {
+    if (repositories == null)
+    {
+      repositories = new EObjectContainmentEList<Repository>(Repository.class, this, SetupP2Package.P2_TASK__REPOSITORIES);
+    }
+    return repositories;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isLicenseConfirmationDisabled()
+  {
+    return licenseConfirmationDisabled;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLicenseConfirmationDisabled(boolean newLicenseConfirmationDisabled)
+  {
+    boolean oldLicenseConfirmationDisabled = licenseConfirmationDisabled;
+    licenseConfirmationDisabled = newLicenseConfirmationDisabled;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupP2Package.P2_TASK__LICENSE_CONFIRMATION_DISABLED, oldLicenseConfirmationDisabled,
+          licenseConfirmationDisabled));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isMergeDisabled()
+  {
+    return mergeDisabled;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMergeDisabled(boolean newMergeDisabled)
+  {
+    boolean oldMergeDisabled = mergeDisabled;
+    mergeDisabled = newMergeDisabled;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupP2Package.P2_TASK__MERGE_DISABLED, oldMergeDisabled, mergeDisabled));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SetupP2Package.P2_TASK__REQUIREMENTS:
+        return ((InternalEList<?>)getRequirements()).basicRemove(otherEnd, msgs);
+      case SetupP2Package.P2_TASK__REPOSITORIES:
+        return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
+      case SetupP2Package.P2_TASK__REQUIREMENTS:
+        return getRequirements();
+      case SetupP2Package.P2_TASK__REPOSITORIES:
+        return getRepositories();
+      case SetupP2Package.P2_TASK__LICENSE_CONFIRMATION_DISABLED:
+        return isLicenseConfirmationDisabled();
+      case SetupP2Package.P2_TASK__MERGE_DISABLED:
+        return isMergeDisabled();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
+      case SetupP2Package.P2_TASK__REQUIREMENTS:
+        getRequirements().clear();
+        getRequirements().addAll((Collection<? extends Requirement>)newValue);
+        return;
+      case SetupP2Package.P2_TASK__REPOSITORIES:
+        getRepositories().clear();
+        getRepositories().addAll((Collection<? extends Repository>)newValue);
+        return;
+      case SetupP2Package.P2_TASK__LICENSE_CONFIRMATION_DISABLED:
+        setLicenseConfirmationDisabled((Boolean)newValue);
+        return;
+      case SetupP2Package.P2_TASK__MERGE_DISABLED:
+        setMergeDisabled((Boolean)newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
+      case SetupP2Package.P2_TASK__REQUIREMENTS:
+        getRequirements().clear();
+        return;
+      case SetupP2Package.P2_TASK__REPOSITORIES:
+        getRepositories().clear();
+        return;
+      case SetupP2Package.P2_TASK__LICENSE_CONFIRMATION_DISABLED:
+        setLicenseConfirmationDisabled(LICENSE_CONFIRMATION_DISABLED_EDEFAULT);
+        return;
+      case SetupP2Package.P2_TASK__MERGE_DISABLED:
+        setMergeDisabled(MERGE_DISABLED_EDEFAULT);
+        return;
+    }
+    super.eUnset(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case SetupP2Package.P2_TASK__REQUIREMENTS:
+        return requirements != null && !requirements.isEmpty();
+      case SetupP2Package.P2_TASK__REPOSITORIES:
+        return repositories != null && !repositories.isEmpty();
+      case SetupP2Package.P2_TASK__LICENSE_CONFIRMATION_DISABLED:
+        return licenseConfirmationDisabled != LICENSE_CONFIRMATION_DISABLED_EDEFAULT;
+      case SetupP2Package.P2_TASK__MERGE_DISABLED:
+        return mergeDisabled != MERGE_DISABLED_EDEFAULT;
+    }
+    return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (licenseConfirmationDisabled: ");
+    result.append(licenseConfirmationDisabled);
+    result.append(", mergeDisabled: ");
+    result.append(mergeDisabled);
+    result.append(')');
+    return result.toString();
+  }
+
+  @Override
+  public int getPriority()
+  {
+    return PRIORITY_INSTALLATION;
+  }
+
+  private static Set<IInstallableUnit> getInstalledUnits()
+  {
+    Set<IInstallableUnit> result = new HashSet<IInstallableUnit>();
+
+    IProfileRegistry profileRegistry = P2Util.getAgentManager().getCurrentAgent().getProfileRegistry();
+    IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+    if (profile != null)
+    {
+      IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUAnyQuery(), null);
+      for (IInstallableUnit requirement : queryResult)
+      {
+        result.add(requirement);
+      }
+    }
+
+    return result;
+  }
+
+  private static Set<String> getKnownRepositories()
+  {
+    Set<String> result = new HashSet<String>();
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    for (java.net.URI knownRepository : agent.getMetadataRepositoryManager().getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM))
+    {
+      result.add(knownRepository.toString());
+    }
+
+    return result;
+  }
+
+  @Override
+  public Object getOverrideToken()
+  {
+    if (isMergeDisabled())
+    {
+      return super.getOverrideToken();
+    }
+
+    return getClass();
+  }
+
+  @Override
+  public void overrideFor(SetupTask overriddenSetupTask)
+  {
+    super.overrideFor(overriddenSetupTask);
+
+    P2Task overriddenP2Task = (P2Task)overriddenSetupTask;
+    getRequirements().addAll(overriddenP2Task.getRequirements());
+    getRepositories().addAll(overriddenP2Task.getRepositories());
+  }
+
+  @Override
+  public void consolidate()
+  {
+    Set<String> installableUnitKeys = new HashSet<String>();
+    for (Iterator<Requirement> it = getRequirements().iterator(); it.hasNext();)
+    {
+      Requirement requirement = it.next();
+      if (!installableUnitKeys.add(requirement.getID() + "->" + requirement.getVersionRange().toString()))
+      {
+        it.remove();
+      }
+    }
+
+    Set<String> repositoryKeys = new HashSet<String>();
+    for (Iterator<Repository> it = getRepositories().iterator(); it.hasNext();)
+    {
+      Repository repository = it.next();
+      if (!repositoryKeys.add(repository.getURL()))
+      {
+        it.remove();
+      }
+    }
+  }
+
+  @Override
+  public boolean needsBundlePool()
+  {
+    return true;
+  }
+
+  public boolean isNeeded(SetupTaskContext context) throws Exception
+  {
+    if (SKIP)
+    {
+      return false;
+    }
+
+    if (context.getTrigger() == Trigger.BOOTSTRAP)
+    {
+      neededRequirements = getRequirements();
+      return true;
+    }
+
+    Trigger trigger = context.getTrigger();
+
+    Set<IInstallableUnit> installedUnits = getInstalledUnits();
+    for (Requirement requirement : getRequirements())
+    {
+      String id = requirement.getID();
+      VersionRange versionRange = requirement.getVersionRange();
+      if (versionRange == null)
+      {
+        versionRange = VersionRange.emptyRange;
+      }
+
+      if (trigger != Trigger.MANUAL && isInstalled(installedUnits, id, versionRange))
+      {
+        continue;
+      }
+
+      if (neededRequirements == null)
+      {
+        neededRequirements = new BasicEList<Requirement>();
+      }
+
+      neededRequirements.add(requirement);
+    }
+
+    Set<String> knownRepositories = getKnownRepositories();
+    for (Repository repository : getRepositories())
+    {
+      String url = context.redirect(repository.getURL());
+      if (!knownRepositories.contains(url))
+      {
+        return true;
+      }
+    }
+
+    return neededRequirements != null;
+  }
+
+  private boolean isInstalled(Set<IInstallableUnit> installedUnits, String id, VersionRange versionRange)
+  {
+    for (IInstallableUnit installedUnit : installedUnits)
+    {
+      if (id.equals(installedUnit.getId()) && versionRange.isIncluded(installedUnit.getVersion()))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public void perform(final SetupTaskContext context) throws Exception
+  {
+    final IProgressMonitor monitor = new ProgressLogMonitor(context);
+
+    File eclipseDir = context.getProductLocation();
+    String profileID = StringUtil.encodePath(eclipseDir.toString());
+
+    EList<Repository> repositories = getRepositories();
+    if (neededRequirements == null)
+    {
+      context.log("Adding " + repositories.size() + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
+
+      int xxx;
+      return;
+    }
+    else
+    {
+      context.log("Calling director to install " + neededRequirements.size() + (neededRequirements.size() == 1 ? " unit" : " units") + " from "
+          + repositories.size() + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
+    }
+
+    ProfileTransaction transaction = openProfileTransaction(context, profileID, eclipseDir);
+    transaction.getProfileDefinition().setRequirements(neededRequirements);
+    transaction.getProfileDefinition().setRepositories(repositories);
+
+    transaction.commit(new ProfileTransaction.CommitContext()
+    {
+      @Override
+      public void handleProvisioningPlan(IProvisioningPlan provisioningPlan) throws CoreException
+      {
+        try
+        {
+          processLicenses(context, provisioningPlan, monitor);
+        }
+        catch (Exception ex)
+        {
+          SetupP2Plugin.INSTANCE.coreException(ex);
+        }
+      }
+    }, monitor);
+  }
+
+  private ProfileTransaction openProfileTransaction(final SetupTaskContext context, String profileID, File eclipseDir)
+  {
+    if (context.getTrigger() == Trigger.BOOTSTRAP)
+    {
+      BundlePool bundlePool;
+
+      String bundlePoolLocation = (String)context.get(AgentManager.PROP_BUNDLE_POOL_LOCATION);
+      if (bundlePoolLocation != null)
+      {
+        bundlePool = P2Util.getAgentManager().getBundlePool(new File(bundlePoolLocation));
+      }
+      else
+      {
+        Agent agent = P2Util.createAgent(new File(eclipseDir, "p2"));
+        bundlePool = agent.addBundlePool(eclipseDir);
+      }
+
+      Profile profile = bundlePool.getProfile(profileID);
+      if (profile == null)
+      {
+        OS os = context.getOS();
+
+        ProfileCreator profileCreator = bundlePool.addProfile(profileID, Profile.TYPE_INSTALLATION);
+        profileCreator.setInstallFeatures(true);
+        profileCreator.setInstallFolder(eclipseDir);
+        profileCreator.addOS(os.getOsgiOS());
+        profileCreator.addWS(os.getOsgiWS());
+        profileCreator.addArch(os.getOsgiArch());
+
+        profile = profileCreator.create();
+      }
+
+      return profile.change();
+    }
+
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    Profile profile = agent.getCurrentProfile();
+    return profile.change();
+  }
+
+  private void processLicenses(final SetupTaskContext context, IProvisioningPlan provisioningPlan, IProgressMonitor monitor) throws Exception
+  {
+    if (isLicenseConfirmationDisabled())
+    {
+      return;
+    }
+
+    final User user = context.getUser();
+    Set<LicenseInfo> acceptedLicenses = new HashSet<LicenseInfo>(user.getAcceptedLicenses());
+
+    final Map<ILicense, List<IInstallableUnit>> licensesToIUs = new HashMap<ILicense, List<IInstallableUnit>>();
+    Set<Pair<ILicense, String>> set = new HashSet<Pair<ILicense, String>>();
+
+    IQueryable<IInstallableUnit> queryable = provisioningPlan.getAdditions();
+    IQueryResult<IInstallableUnit> result = queryable.query(QueryUtil.ALL_UNITS, monitor);
+    for (IInstallableUnit iu : result)
+    {
+      Collection<ILicense> licenses = iu.getLicenses(null);
+      for (ILicense license : licenses)
+      {
+        String uuid = license.getUUID();
+        if (acceptedLicenses.contains(new LicenseInfo(uuid, null)))
+        {
+          continue;
+        }
+
+        String name = iu.getProperty(IInstallableUnit.PROP_NAME, null);
+        if (name == null)
+        {
+          name = iu.getId();
+        }
+
+        if (!set.add(Pair.create(license, name)))
+        {
+          continue;
+        }
+
+        List<IInstallableUnit> ius = licensesToIUs.get(license);
+        if (ius == null)
+        {
+          ius = new ArrayList<IInstallableUnit>();
+          licensesToIUs.put(license, ius);
+        }
+
+        ius.add(iu);
+      }
+    }
+
+    if (!licensesToIUs.isEmpty())
+    {
+      LicensePrompter prompter = (LicensePrompter)context.get(LicensePrompter.class);
+      if (prompter == null)
+      {
+        prompter = LicensePrompter.DECLINE;
+      }
+
+      LicenseConfirmation confirmation = prompter.promptLicenses(licensesToIUs);
+      if (confirmation == LicenseConfirmation.DECLINE)
+      {
+        throw new UnsupportedOperationException("Licenses have been declined");
+      }
+
+      if (confirmation == LicenseConfirmation.ACCEPT_AND_REMEMBER)
+      {
+        for (ILicense license : licensesToIUs.keySet())
+        {
+          String uuid = license.getUUID();
+          String name = LicenseInfo.getFirstLine(license.getBody());
+
+          LicenseInfo licenseInfo = new LicenseInfo(uuid, name);
+          user.getAcceptedLicenses().add(licenseInfo);
+        }
+      }
+    }
+  }
+
+  private static void checkForDuplicateIniValues(final SetupTaskContext context, File iniFile)
+  {
+    FileOutputStream out = null;
+
+    try
+    {
+      String contents = DownloadUtil.load(context.getURIConverter(), URI.createFileURI(iniFile.toString()), null);
+      Pattern section = Pattern.compile("^(-vmargs)([\n\r]+.*)\\z|^(-[^\\n\\r]*[\\n\\r]*)((?:^[^-][^\\n\\r]*)*[\\n\\r]*)", Pattern.MULTILINE | Pattern.DOTALL);
+      Map<String, String> map = new LinkedHashMap<String, String>();
+      for (Matcher matcher = section.matcher(contents); matcher.find();)
+      {
+        String argument = matcher.group(3);
+        String extension;
+        if (argument == null)
+        {
+          argument = matcher.group(1);
+          extension = matcher.group(2);
+        }
+        else
+        {
+          extension = matcher.group(4);
+        }
+
+        if (!argument.startsWith("--launcher.XXMaxPermSize") || !map.containsKey(argument))
+        {
+          map.put(argument, extension);
+        }
+      }
+
+      StringBuilder newContents = new StringBuilder();
+      for (Map.Entry<String, String> entry : map.entrySet())
+      {
+        newContents.append(entry.getKey());
+        newContents.append(entry.getValue());
+      }
+
+      out = new FileOutputStream(iniFile);
+      out.write(newContents.toString().getBytes());
+    }
+    catch (IOException ex)
+    {
+      // Ignore.
+    }
+    finally
+    {
+      IOUtil.close(out);
+    }
+  }
+
+  @Override
+  public MirrorRunnable mirror(final MirrorContext context, final File mirrorsDir, boolean includingLocals) throws Exception
+  {
+    throw new UnsupportedOperationException();
+
+    // // There's no longer a predefined bundle pool location for Buckminster
+    // return new MirrorRunnable()
+    // {
+    // public void run(IProgressMonitor monitor) throws Exception
+    // {
+    // String targetURL = URI.createFileURI(context.getP2PoolTPDir().toString()).toString();
+    //
+    // SlicingOptions slicingOptions = new SlicingOptions();
+    // slicingOptions.latestVersionOnly(true);
+    // slicingOptions.everythingGreedy(false);
+    //
+    // MirrorApplication app = new MirrorApplication()
+    // {
+    // @Override
+    // public IStatus run(IProgressMonitor monitor) throws ProvisionException
+    // {
+    // IStatus mirrorStatus = Status.OK_STATUS;
+    // monitor.beginTask("", 1 + 100 + 1000 + 100);
+    //
+    // try
+    // {
+    // initializeRepos(new SubProgressMonitor(monitor, 1));
+    // initializeIUs();
+    //
+    // IQueryable<IInstallableUnit> slice = slice(new SubProgressMonitor(monitor, 100));
+    //
+    // mirrorStatus = mirrorArtifacts(slice, new SubProgressMonitor(monitor, 1000));
+    // mirrorMetadata(slice, new SubProgressMonitor(monitor, 100));
+    // }
+    // finally
+    // {
+    // finalizeRepositories();
+    // }
+    //
+    // if (mirrorStatus.isOK())
+    // {
+    // return Status.OK_STATUS;
+    // }
+    //
+    // return mirrorStatus;
+    // }
+    //
+    // private void initializeIUs()
+    // {
+    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "initializeIUs");
+    // ReflectUtil.invokeMethod(method, this);
+    // }
+    //
+    // @SuppressWarnings("unchecked")
+    // private IQueryable<IInstallableUnit> slice(IProgressMonitor monitor)
+    // {
+    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "slice", IProgressMonitor.class);
+    // return (IQueryable<IInstallableUnit>)ReflectUtil.invokeMethod(method, this, monitor);
+    // }
+    //
+    // private IStatus mirrorArtifacts(IQueryable<IInstallableUnit> slice, IProgressMonitor monitor)
+    // {
+    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "mirrorArtifacts", IQueryable.class,
+    // IProgressMonitor.class);
+    // return (IStatus)ReflectUtil.invokeMethod(method, this, slice, monitor);
+    // }
+    //
+    // private void mirrorMetadata(IQueryable<IInstallableUnit> slice, IProgressMonitor monitor)
+    // {
+    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "mirrorMetadata", IQueryable.class,
+    // IProgressMonitor.class);
+    // ReflectUtil.invokeMethod(method, this, slice, monitor);
+    // }
+    // };
+    //
+    // app.setIncludePacked(false);
+    // app.setVerbose(true);
+    // app.setSlicingOptions(slicingOptions);
+    //
+    // RepositoryDescriptor destination = new RepositoryDescriptor();
+    // destination.setLocation(new java.net.URI(targetURL));
+    // destination.setAppend(true);
+    // app.addDestination(destination);
+    //
+    // initSourceRepos(app, context, targetURL);
+    // initRootIUs(app);
+    //
+    // app.run(monitor);
+    // }
+    //
+    // private void initSourceRepos(MirrorApplication app, final MirrorContext context, String targetURL)
+    // throws URISyntaxException
+    // {
+    // for (P2Repository p2Repository : getP2Repositories())
+    // {
+    // String sourceURL = context.redirect(URI.createURI(p2Repository.getURL())).toString();
+    //
+    // RepositoryDescriptor descriptor = new RepositoryDescriptor();
+    // descriptor.setLocation(new java.net.URI(sourceURL));
+    // app.addSource(descriptor);
+    //
+    // context.addRedirection(sourceURL, targetURL);
+    // }
+    // }
+    //
+    // private void initRootIUs(MirrorApplication app)
+    // {
+    // EList<Requirement> installableUnits = getRequirements();
+    // String[] rootIUs = new String[installableUnits.size()];
+    // for (int i = 0; i < rootIUs.length; i++)
+    // {
+    // Requirement requirement = installableUnits.get(i);
+    // rootIUs[i] = requirement.getID();
+    //
+    // VersionRange range = requirement.getVersionRange();
+    // if (!VersionRange.emptyRange.equals(range))
+    // {
+    // rootIUs[i] += "/" + range;
+    // }
+    // }
+    //
+    // Field field = ReflectUtil.getField(MIRROR_CLASS, "rootIUs");
+    // ReflectUtil.setValue(field, app, rootIUs);
+    // }
+    // };
+  }
+
+  @Override
+  public void collectSniffers(List<Sniffer> sniffers)
+  {
+    sniffers.add(new BasicSniffer(this, "Creates a task to install the current software.")
+    {
+      public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception
+      {
+        Set<IInstallableUnit> installedUnits = getInstalledUnits();
+        Set<String> knownRepositories = getKnownRepositories();
+        if (installedUnits.isEmpty() && knownRepositories.isEmpty())
+        {
+          return;
+        }
+
+        P2Task task = SetupP2Factory.eINSTANCE.createP2Task();
+        container.getSetupTasks().add(task);
+
+        for (IInstallableUnit iu : installedUnits)
+        {
+          Requirement requirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
+          task.getRequirements().add(requirement);
+        }
+
+        for (String url : knownRepositories)
+        {
+          Repository repository = P2Factory.eINSTANCE.createRepository(url);
+          task.getRepositories().add(repository);
+        }
+      }
+    });
+  }
+
+} // InstallTaskImpl

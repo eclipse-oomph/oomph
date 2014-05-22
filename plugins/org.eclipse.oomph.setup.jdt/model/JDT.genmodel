@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.setup.jdt/src" creationIcons="false"
+    editorDirectory="" modelPluginID="org.eclipse.oomph.setup.jdt" modelName="JDT"
+ rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
+    copyrightFields="false" optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    importOrganizing="true" decoration="Live" cleanup="true">
+  <foreignModel>JDT.ecore</foreignModel>
+  <genPackages prefix="JDT" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="JDT.ecore#/" publicationLocation="/setups/models/JDT.ecore">
+  </genPackages>
+</genmodel:GenModel>

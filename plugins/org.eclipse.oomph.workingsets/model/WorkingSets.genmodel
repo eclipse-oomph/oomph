@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.workingsets/src" creationIcons="false"
+    modelPluginID="org.eclipse.oomph.workingsets" modelName="Workingsets" editPluginClass="org.eclipse.oomph.workingsets.provider.WorkingSetsEditPlugin"
+    editorPluginClass="org.eclipse.oomph.workingsets.presentation.WorkingSetsEditorPlugin"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.base/model/Base.genmodel#//base"
+    operationReflection="true" decoration="Live" cleanup="true">
+  <foreignModel>WorkingSets.ecore</foreignModel>
+  <genPackages prefix="WorkingSets" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
+      multipleEditorPages="false" childCreationExtenders="true" ecorePackage="WorkingSets.ecore#/"
+      publicationLocation="/setups/models/WorkingSets.ecore">
+    <genDataTypes ecoreDataType="WorkingSets.ecore#//Project"/>
+    <genClasses ecoreClass="WorkingSets.ecore#//WorkingSet">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//WorkingSet/predicates"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/iD"/>
+      <genOperations ecoreOperation="WorkingSets.ecore#//WorkingSet/matches">
+        <genParameters ecoreParameter="WorkingSets.ecore#//WorkingSet/matches/project"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="WorkingSets.ecore#//WorkingSetGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//WorkingSetGroup/workingSets"/>
+      <genOperations ecoreOperation="WorkingSets.ecore#//WorkingSetGroup/getWorkingSet">
+        <genParameters ecoreParameter="WorkingSets.ecore#//WorkingSetGroup/getWorkingSet/name"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="WorkingSets.ecore#//InclusionPredicate">
+      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//InclusionPredicate/includedWorkingSets"/>
+    </genClasses>
+    <genClasses ecoreClass="WorkingSets.ecore#//ExclusionPredicate">
+      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//ExclusionPredicate/excludedWorkingSets"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

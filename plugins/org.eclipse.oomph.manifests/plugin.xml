@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Oomph"
+            id="org.eclipse.oomph">
+      </category>
+      <command
+            name="Open Project Manifest"
+            categoryId="org.eclipse.oomph"
+            id="org.eclipse.oomph.OpenManifest">
+      </command>
+      <command
+            name="Open Project Properties"
+            categoryId="org.eclipse.oomph"
+            id="org.eclipse.oomph.OpenProperties">
+      </command>
+      <command
+            categoryId="org.eclipse.ui.category.project"
+            description="Clean and build the selected project"
+            id="org.eclipse.oomph.buildClean"
+            name="Build Clean">
+      </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.eclipse.oomph.OpenManifest"
+            class="org.eclipse.oomph.manifests.OpenManifestHandler">
+      </handler>
+      <handler
+            class="org.eclipse.oomph.manifests.handlers.CleanBuildHandler"
+            commandId="org.eclipse.oomph.buildClean">
+      </handler>
+      <handler
+            class="org.eclipse.oomph.manifests.OpenPropertiesHandler"
+            commandId="org.eclipse.oomph.OpenProperties">
+      </handler>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.oomph.OpenManifest"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="F6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenManifest"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenManifest"
+            contextId="org.eclipse.jdt.ui.javaEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenManifest"
+            contextId="org.eclipse.jdt.ui.breadcrumbEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenManifest"
+            contextId="org.eclipse.ant.ui.AntEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenManifest"
+            contextId="org.eclipse.jdt.ui.propertiesEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F6">
+      </key>
+
+      <key
+            commandId="org.eclipse.oomph.OpenProperties"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M2+F6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenProperties"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenProperties"
+            contextId="org.eclipse.jdt.ui.javaEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenProperties"
+            contextId="org.eclipse.jdt.ui.breadcrumbEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenProperties"
+            contextId="org.eclipse.ant.ui.AntEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.OpenProperties"
+            contextId="org.eclipse.jdt.ui.propertiesEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+F6">
+      </key>
+      <key
+            commandId="org.eclipse.oomph.buildClean"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+F5">
+      </key>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any">
+         <command
+               commandId="org.eclipse.oomph.buildClean"
+               icon="icons/build.gif"
+               label="Build Clean"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+			            <iterate
+			                  ifEmpty="false"
+			                  operator="or">
+			               <or>
+			                  <adapt
+			                        type="org.eclipse.core.resources.IResource">
+			                  </adapt>
+			                  <adapt
+			                        type="org.eclipse.core.resources.IMarker">
+			                  </adapt>
+			               </or>
+			            </iterate>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
+</plugin>

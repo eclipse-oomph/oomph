@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipse.oomph.setup.internal.installer.InstallerApplication">
+         </run>
+      </application>
+   </extension>
+
+   	<extension id="product" point="org.eclipse.core.runtime.products">
+      	<product
+        	name="%product.name"
+          description="%product.description"
+          application="org.eclipse.oomph.setup.installer.application">
+        		<property name="appName" value="%application.name"/>
+         		<property name="windowImages" value="icons/window_16.gif,icons/window_32.gif,icons/window_48.gif,icons/window_64.gif,icons/window_256.gif"/>
+      	</product>
+   	</extension>
+
+</plugin>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.setup.maven/src" creationIcons="false"
+    editorDirectory="" modelPluginID="org.eclipse.oomph.setup.maven" modelName="Maven"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    importOrganizing="true" decoration="Live" cleanup="true">
+  <foreignModel>Maven.ecore</foreignModel>
+  <genPackages prefix="Maven" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="Maven.ecore#/" publicationLocation="/setups/models/Maven.ecore">
+    <genClasses ecoreClass="Maven.ecore#//MavenImportTask">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Maven.ecore#//MavenImportTask/sourceLocators"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

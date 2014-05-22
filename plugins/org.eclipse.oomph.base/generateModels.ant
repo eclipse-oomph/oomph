@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+	Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+	All rights reserved. This program and the accompanying materials
+	are made available under the terms of the Eclipse Public License v1.0
+	which accompanies this distribution, and is available at
+	http://www.eclipse.org/legal/epl-v10.html
+
+	Contributors:
+	  Eike Stepper - initial API and implementation
+-->
+<project name="generateTestModels" default="main">
+
+	<dirname property="antfile.dir" file="${ant.file}"/>
+	<property name="main.directory" location="${antfile.dir}/.."/>
+
+	<macrodef name="generate">
+		<attribute name="base"/>
+		<attribute name="model"/>
+		<sequential>
+			<emf.Ecore2Java model="${main.directory}/@{base}.@{model}/model/@{model}.ecore"
+				genModel="${main.directory}/@{base}.@{model}/model/@{model}.genmodel"
+				reconcileGenModel="reload" />
+		</sequential>
+	</macrodef>
+
+	<target name="main">
+		<generate base="org.eclipse.oomph" model="base"/>
+		<generate base="org.eclipse.oomph" model="p2"/>
+		<generate base="org.eclipse.oomph" model="resources"/>
+		<generate base="org.eclipse.oomph" model="predicates"/>
+		<generate base="org.eclipse.oomph" model="preferences"/>
+		<generate base="org.eclipse.oomph" model="projectconfig"/>
+		<generate base="org.eclipse.oomph" model="workingsets"/>
+		<generate base="org.eclipse.oomph" model="targlets"/>
+		<generate base="org.eclipse.oomph" model="setup"/>
+
+		<emf.Ecore2Java model="${main.directory}/org.eclipse.oomph.setup/model/setup.rcp.ecore"
+			genModel="${main.directory}/org.eclipse.oomph.setup/model/SetupRCP.genmodel"
+			reconcileGenModel="reload" generatemodelproject="false"  />
+	</target>
+
+</project>

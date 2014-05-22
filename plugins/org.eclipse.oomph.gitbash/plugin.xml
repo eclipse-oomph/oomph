@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.oomph.gitbash.contribution1"
+            objectClass="org.eclipse.egit.ui.internal.repository.tree.RepositoryNode">
+            <!--
+         <action
+               class="org.eclipse.oomph.gitbash.repository.ListFilesAction"
+               enablesFor="1"
+               id="org.eclipse.oomph.gitbash.ListFilesAction"
+               label="List Files"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="List all files ever committed"/>
+               -->
+         <action
+               class="org.eclipse.oomph.gitbash.repository.CheckCopyrightsAction"
+               enablesFor="1"
+               icon="icons/Copyrights.gif"
+               id="org.eclipse.oomph.gitbash.CheckCopyrightsAction"
+               label="Check Copyrights"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Search for files with missing copyrights"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.UpdateCopyrightsAction"
+               enablesFor="1"
+               icon="icons/Copyrights.gif"
+               id="org.eclipse.oomph.gitbash.UpdateCopyrightsAction"
+               label="Update Copyrights"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Update copyrights with years from git log"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.GitCleanAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.GitCleanAction"
+               label="Git Clean"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Execute git clean -f -d"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.GitResetHardAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.GitResetHardAction"
+               label="Git Reset Hard"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Execute git reset --hard"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.GitAddAllAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.GitAddAllAction"
+               label="Git Add All"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Execute git add --all"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.GitPullAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.repository.GitPullAction"
+               label="Git Pull"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Execute git pull"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.GitStatusAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.GitStatusAction"
+               label="Git Status"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Execute git status"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.GitBashAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.GitAction"
+               label="Git Bash"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Open Git Bash"/>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.eclipse.oomph.gitbash.contribution2"
+            objectClass="org.eclipse.jgit.revwalk.RevObject">
+         <action
+               class="org.eclipse.oomph.gitbash.revision.GitRebaseAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.GitRebaseAction"
+               label="Git Rebase"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Execute git rebase"/>
+         <action
+               class="org.eclipse.oomph.gitbash.revision.GitCherryPickAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.revision.GitCherryPickAction"
+               label="Git Cherry-Pick"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Execute git cherry-pick -n"/>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.eclipse.oomph.gitbash.contribution3"
+            objectClass="org.eclipse.mylyn.tasks.core.ITaskAttachment">
+         <action
+               class="org.eclipse.oomph.gitbash.GitApplyAction"
+               enablesFor="1"
+               icon="icons/apply-patch.gif"
+               id="org.eclipse.oomph.gitbash.GitApplyAction"
+               label="Apply Patch To Git"
+               menubarPath="actions"
+               style="pulldown"
+               tooltip="Apply patch to a Git repository"/>
+      </objectContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.eclipse.oomph.gitbash.decorators.BranchDecorator"
+            id="org.eclipse.oomph.gitbash.BranchDecorator"
+            label="Git Upstream Infos"
+            lightweight="false"
+            state="true">
+        <enablement>
+           <objectClass
+                 name="org.eclipse.egit.ui.internal.repository.tree.RefNode">
+           </objectClass>
+        </enablement>
+      </decorator>
+   </extension>
+
+</plugin>

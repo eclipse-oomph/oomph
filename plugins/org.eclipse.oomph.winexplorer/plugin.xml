@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="org.eclipse.oomph.winexplorer.folderProvider">
+         <or>
+            <adapt
+                  type="org.eclipse.core.resources.IResource">
+            </adapt>
+            <adapt
+                  type="java.io.File">
+            </adapt>
+            <adapt
+                  type="org.eclipse.jgit.lib.Repository">
+            </adapt>
+            <adapt
+                  type="org.eclipse.egit.ui.internal.repository.tree.RepositoryTreeNode">
+            </adapt>
+         </or>
+      </definition>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.oomph.winexplorer.ExplorerHandler"
+            id="org.eclipse.oomph.winexplorer.commands.Explorer"
+            name="Windows Explorer">
+      </command>
+      <command
+            defaultHandler="org.eclipse.oomph.winexplorer.PromptHandler"
+            id="org.eclipse.oomph.winexplorer.commands.Prompt"
+            name="Command Prompt">
+      </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="org.eclipse.oomph.winexplorer.commands.Explorer"
+               icon="icons/explorer.gif"
+               label="Windows Explorer"
+               style="push"
+               tooltip="Open Windows Explorer">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <reference
+                           definitionId="org.eclipse.oomph.winexplorer.folderProvider">
+                     </reference>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.oomph.winexplorer.commands.Prompt"
+               icon="icons/prompt.gif"
+               label="Command Prompt"
+               style="push"
+               tooltip="Open Command Prompt">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <reference
+                           definitionId="org.eclipse.oomph.winexplorer.folderProvider">
+                     </reference>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
+
+
+</plugin>

@@ -1,0 +1,2 @@
+Move a single test case into this folder to execute it separately from the other test cases.
+The runtime workspace folder will be opened for manual inspection after the test execution.

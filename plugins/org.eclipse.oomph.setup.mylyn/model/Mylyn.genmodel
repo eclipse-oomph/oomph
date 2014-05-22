@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.setup.mylyn/src" creationIcons="false"
+    editorDirectory="" modelPluginID="org.eclipse.oomph.setup.mylyn" modelName="Mylyn"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    importOrganizing="true" decoration="Live" cleanup="true">
+  <foreignModel>Mylyn.ecore</foreignModel>
+  <genPackages prefix="Mylyn" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="Mylyn.ecore#/" publicationLocation="/setups/models/Mylyn.ecore">
+    <genClasses ecoreClass="Mylyn.ecore#//MylynQueriesTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynQueriesTask/connectorKind"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynQueriesTask/repositoryURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynQueriesTask/userID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynQueriesTask/password"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mylyn.ecore#//MylynQueriesTask/queries"/>
+    </genClasses>
+    <genClasses ecoreClass="Mylyn.ecore#//MylynBuildsTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynBuildsTask/connectorKind"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynBuildsTask/serverURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynBuildsTask/userID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//MylynBuildsTask/password"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mylyn.ecore#//MylynBuildsTask/buildPlans"/>
+    </genClasses>
+    <genClasses ecoreClass="Mylyn.ecore#//BuildPlan">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//BuildPlan/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Mylyn.ecore#//Query">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Mylyn.ecore#//Query/task"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//Query/summary"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//Query/uRL"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mylyn.ecore#//Query/attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="Mylyn.ecore#//QueryAttribute">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//QueryAttribute/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mylyn.ecore#//QueryAttribute/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

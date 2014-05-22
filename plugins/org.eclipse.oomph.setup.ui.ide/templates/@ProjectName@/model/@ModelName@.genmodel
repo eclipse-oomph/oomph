@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/@ProjectName@/src" 
+    creationIcons="false"
+    editorDirectory="" 
+    modelPluginID="@ProjectName@"
+    modelName="@TaskName@" 
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" 
+    complianceLevel="5.0" 
+    copyrightFields="false" 
+    optimizedHasChildren="true"
+    usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.p2/model/P2.genmodel#//p2 ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup ../../org.eclipse.oomph.targlets/model/Targlets.genmodel#//targlets ../../org.eclipse.oomph.workingsets/model/WorkingSets.genmodel#//workingsets"
+    testsDirectory="" 
+    importOrganizing="true" 
+    cleanup="true">
+  <foreignModel>@ModelName@.ecore</foreignModel>
+  <genPackages 
+      prefix="@ModelName@" 
+      basePackage="@BasePackage@" 
+      disposableProviderFactory="true"
+      multipleEditorPages="false" 
+      generateModelWizard="false" 
+      extensibleProviderFactory="true"
+      childCreationExtenders="true" 
+      fileExtensions="setup" 
+      publicationLocation="@PublicationLocation@"
+      ecorePackage="@ModelName@.ecore#/">
+    <genClasses ecoreClass="@ModelName@.ecore#//@TaskName@Task"/>
+  </genPackages>
+</genmodel:GenModel>

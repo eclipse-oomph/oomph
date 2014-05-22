@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="git" nsURI="http://www.eclipse.org/oomph/setup/git/1.0" nsPrefix="git">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="schemaLocation" value="http://git.eclipse.org/c/cdo/org.eclipse.oomph.git/plain/setups/models/Git.ecore"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="GitCloneTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
+      <details key="variableName" value="setup.git.p2"/>
+      <details key="repository" value="${releng.url}"/>
+      <details key="installableUnits" value="org.eclipse.oomph.setup.git.feature.group"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
+      <details key="variableName" value="setup.egit.p2"/>
+      <details key="repository" value="http://download.eclipse.org/egit/updates"/>
+      <details key="installableUnits" value="org.eclipse.egit.feature.group"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/EcoreXXX">
+      <details key="constraints" value="IDRequired LocationOptional"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
+      <details key="triggers" value="STARTUP MANUAL"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
+        <eAnnotations source="Choice">
+          <details key="value" value="${user.home/git/}${@id.remoteURI|uriLastSegment}-${@id.checkoutBranch}"/>
+          <details key="label" value="Located in the user home folder named git/&lt;repo>-&lt;branch>"/>
+        </eAnnotations>
+        <eAnnotations source="Choice">
+          <details key="value" value="${user.home/git/}${@id.remoteURI|uriLastSegment/}${@id.checkoutBranch}"/>
+          <details key="label" value="Located in the user home folder named git/&lt;repo>/&lt;branch>"/>
+        </eAnnotations>
+        <eAnnotations source="Choice">
+          <details key="value" value="${installation.location/git/}${@id.remoteURI|uriLastSegment}"/>
+          <details key="label" value="Located in installation location folder named git/&lt;repo>"/>
+        </eAnnotations>
+        <details key="type" value="STRING"/>
+        <details key="label" value="Git clone location"/>
+        <details key="description" value="Git clone location"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="origin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteURI" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/RemoteResource"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pushURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkoutBranch" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>
