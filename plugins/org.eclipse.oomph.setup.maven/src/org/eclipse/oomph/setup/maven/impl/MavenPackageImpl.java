@@ -239,7 +239,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(mavenImportTaskEClass, source, new String[] { "variableName", "setup.maven.p2", "repository", "${releng.url}", "installableUnits",
+    addAnnotation(mavenImportTaskEClass, source, new String[] { "variableName", "setup.maven.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.maven.feature.group" });
   }
 

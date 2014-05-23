@@ -1779,8 +1779,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
-      performEclipseIniTask(true, "-D" + SetupProperties.PROP_SETUP_IDE, "=true");
-      performEclipseIniTask(true, "-D" + SetupProperties.PROP_RELENG_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_RELENG_URL))));
+      performEclipseIniTask(true, "-D" + SetupProperties.PROP_SETUP, "=true");
+      performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))));
 
       URI indexURI = SetupContext.INDEX_SETUP_URI;
       URI redirectedURI = redirect(indexURI);

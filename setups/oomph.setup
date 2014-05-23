@@ -59,7 +59,7 @@
     <repositories
         url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
     <repositories
-        url="${releng.url}"/>
+        url="${oomph.update.url}"/>
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
@@ -99,7 +99,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
-      option="-Dsetup.redirection.oomph"
+      option="-Doomph.redirection.oomph"
       value="=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/oomph.setup->${git.clone.oomph.location|uri}/setups/oomph.setup"
       vm="true"
       documentation="Redirect to the development version of the releng setup model."/>

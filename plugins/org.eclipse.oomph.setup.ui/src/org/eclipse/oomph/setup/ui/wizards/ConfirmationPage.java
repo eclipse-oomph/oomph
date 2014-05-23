@@ -67,7 +67,7 @@ public class ConfirmationPage extends SetupWizardPage
 
   private static final Object ROOT_ELEMENT = new Object();
 
-  private static final boolean SKIP_CONFIRM = PropertiesUtil.isProperty(SetupProperties.PROP_SKIP_CONFIRM);
+  private static final boolean SKIP_CONFIRM = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
 
   private CheckboxTreeViewer viewer;
 

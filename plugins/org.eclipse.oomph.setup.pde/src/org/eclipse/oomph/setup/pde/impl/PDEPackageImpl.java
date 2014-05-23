@@ -298,9 +298,9 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(targetPlatformTaskEClass, source, new String[] { "variableName", "setup.pde.p2", "repository", "${releng.url}", "installableUnits",
+    addAnnotation(targetPlatformTaskEClass, source, new String[] { "variableName", "setup.pde.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.pde.feature.group" });
-    addAnnotation(apiBaselineTaskEClass, source, new String[] { "variableName", "setup.pde.p2", "repository", "${releng.url}", "installableUnits",
+    addAnnotation(apiBaselineTaskEClass, source, new String[] { "variableName", "setup.pde.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.pde.feature.group" });
   }
 

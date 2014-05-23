@@ -88,7 +88,7 @@ public class EclipseProductGenerator
       productCatalog.getSetupTasks().add(installationTask);
 
       Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
-      Repository relengRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_RELENG_URL + "}");
+      Repository relengRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
 
       P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
       p2Task.getRequirements().add(oomphRequirement);
@@ -96,7 +96,7 @@ public class EclipseProductGenerator
       productCatalog.getSetupTasks().add(p2Task);
 
       EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
-      eclipseIniTask.setOption("-D" + SetupProperties.PROP_SETUP_IDE);
+      eclipseIniTask.setOption("-D" + SetupProperties.PROP_SETUP);
       eclipseIniTask.setValue("=true");
       eclipseIniTask.setVm(true);
       productCatalog.getSetupTasks().add(eclipseIniTask);

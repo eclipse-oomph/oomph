@@ -282,7 +282,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(gitCloneTaskEClass, source, new String[] { "variableName", "setup.git.p2", "repository", "${releng.url}", "installableUnits",
+    addAnnotation(gitCloneTaskEClass, source, new String[] { "variableName", "setup.git.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.git.feature.group" });
     addAnnotation(gitCloneTaskEClass, source, new String[] { "variableName", "setup.egit.p2", "repository", "http://download.eclipse.org/egit/updates",
         "installableUnits", "org.eclipse.egit.feature.group" });

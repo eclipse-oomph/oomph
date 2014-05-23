@@ -15,13 +15,13 @@
     <requirements
         id="org.eclipse.oomph.setup.feature.group"/>
     <repositories
-        url="${releng.url}"/>
+        url="${oomph.update.url}"/>
     <repositories
         url="http://download.eclipse.org/modeling/emf/emf/updates/2.10milestones/core/S201404280403"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
-      option="-Dorg.eclipse.oomph.setup.ide"
+      option="-Doomph.setup"
       value="=true"
       vm="true"/>
   <product name="epp.package.dsl"

@@ -25,7 +25,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  *
  * @see org.eclipse.oomph.setup.projectset.ProjectSetPackage#getProjectSetImportTask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.projectset.p2' repository='${releng.url}' installableUnits='org.eclipse.oomph.setup.projectset.feature.group'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.projectset.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.projectset.feature.group'"
  *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */

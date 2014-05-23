@@ -26,7 +26,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -76,9 +75,9 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
   {
     setSetupContext(setupContext);
 
-    put(PROP_OS, Platform.getOS());
-    put(PROP_OS_ARCH, Platform.getOSArch());
-    put(PROP_OS_WS, Platform.getWS());
+    // put("os", Platform.getOS());
+    // put("os.arch", Platform.getOSArch());
+    // put("ws", Platform.getWS());
 
     for (Map.Entry<String, String> entry : System.getenv().entrySet())
     {
@@ -91,7 +90,7 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
     }
 
     // Do this late because \ is replaced by / when looking at this property.
-    put(PROP_RELENG_URL, UpdateUtil.RELENG_URL);
+    put(PROP_UPDATE_URL, UpdateUtil.UPDATE_URL);
   }
 
   public Map<Object, Object> getMap()

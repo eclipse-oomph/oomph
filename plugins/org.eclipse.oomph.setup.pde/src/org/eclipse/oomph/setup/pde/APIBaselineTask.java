@@ -27,7 +27,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  *
  * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.pde.p2' repository='${releng.url}' installableUnits='org.eclipse.oomph.setup.pde.feature.group'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.pde.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.pde.feature.group'"
  *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */

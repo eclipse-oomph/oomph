@@ -52,9 +52,9 @@ public final class UpdateUtil extends Plugin
 
   public static final IStatus UPDATE_FOUND_STATUS = new Status(IStatus.OK, SetupCorePlugin.INSTANCE.getSymbolicName(), "Updates found");
 
-  private static final String DEFAULT_RELENG_URL = "http://download.eclipse.org/oomph/updates";
+  private static final String DEFAULT_UPDATE_URL = "http://download.eclipse.org/oomph/updates";
 
-  public static final String RELENG_URL = PropertiesUtil.getProperty(SetupProperties.PROP_RELENG_URL, DEFAULT_RELENG_URL).replace('\\', '/');
+  public static final String UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_UPDATE_URL, DEFAULT_UPDATE_URL).replace('\\', '/');
 
   public static final String PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
@@ -260,7 +260,7 @@ public final class UpdateUtil extends Plugin
     int xxx;
 
     addRepository(agent, "http://download.eclipse.org/releases/luna", metadata, sub.newChild(200));
-    addRepository(agent, RELENG_URL, metadata, sub.newChild(200));
+    addRepository(agent, UPDATE_URL, metadata, sub.newChild(200));
   }
 
   private static void addRepository(IProvisioningAgent agent, String location, boolean metadata, IProgressMonitor monitor) throws CoreException

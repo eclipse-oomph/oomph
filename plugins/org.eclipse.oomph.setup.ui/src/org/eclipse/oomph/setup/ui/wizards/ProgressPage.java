@@ -530,7 +530,7 @@ public class ProgressPage extends SetupWizardPage
       }
 
       command.add("-vmargs");
-      command.add("-D" + SetupProperties.PROP_SKIP_CONFIRM + "=true");
+      command.add("-D" + SetupProperties.PROP_SETUP_CONFIRM_SKIP + "=true");
 
       ProcessBuilder builder = new ProcessBuilder(command);
       builder.start();

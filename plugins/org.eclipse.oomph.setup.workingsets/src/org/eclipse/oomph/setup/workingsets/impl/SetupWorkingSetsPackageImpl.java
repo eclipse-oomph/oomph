@@ -252,7 +252,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(workingSetTaskEClass, source, new String[] { "variableName", "setup.workingsets.p2", "repository", "${releng.url}", "installableUnits",
+    addAnnotation(workingSetTaskEClass, source, new String[] { "variableName", "setup.workingsets.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.workingsets.feature.group" });
   }
 

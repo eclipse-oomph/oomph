@@ -26,7 +26,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  *
  * @see org.eclipse.oomph.setup.jdt.JDTPackage#getJRETask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.jdt.p2' repository='${releng.url}' installableUnits='org.eclipse.oomph.setup.jdt.feature.group'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.jdt.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.jdt.feature.group'"
  *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */

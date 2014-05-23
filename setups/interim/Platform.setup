@@ -19,7 +19,7 @@
       <installableUnits id="org.eclipse.oomph.projectcopy.feature.group"/>
       <installableUnits id="org.eclipse.oomph.workingsets.feature.group"/>
       <p2Repositories url="${train.url}"/>
-      <p2Repositories url="${releng.url}"/>
+      <p2Repositories url="${oomph.update.url}"/>
       <p2Repositories url="${egit.url}"/>
     </setupTasks>
     <setupTasks xsi:type="setup:CompoundTask" name="Equinox Git Clones">

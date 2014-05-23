@@ -236,7 +236,7 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(projectSetImportTaskEClass, source, new String[] { "variableName", "setup.projectset.p2", "repository", "${releng.url}", "installableUnits",
+    addAnnotation(projectSetImportTaskEClass, source, new String[] { "variableName", "setup.projectset.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.projectset.feature.group" });
   }
 

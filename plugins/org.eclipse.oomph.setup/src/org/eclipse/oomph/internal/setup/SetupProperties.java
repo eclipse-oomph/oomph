@@ -15,23 +15,15 @@ package org.eclipse.oomph.internal.setup;
  */
 public interface SetupProperties
 {
-  public static final String PROP_SETUP_IDE = "org.eclipse.oomph.setup.ide";
+  public static final String PROP_SETUP = "oomph.setup";
 
-  public static final String PROP_SETUP_SKIP = "org.eclipse.oomph.setup.skip";
+  public static final String PROP_SETUP_SKIP = "oomph.setup.skip";
 
-  public static final String PROP_SKIP_CONFIRM = "org.eclipse.oomph.setup.skip.confirm";
+  public static final String PROP_SETUP_CONFIRM_SKIP = "oomph.setup.confirm.skip";
 
-  public static final String PROP_SETUP_REMOTE_DEBUG = "org.eclipse.oomph.setup.remote.debug";
+  public static final String PROP_SETUP_REMOTE_DEBUG = "oomph.setup.remote.debug";
 
-  public static final String PROP_REDIRECTION_BASE = "setup.redirection.";
+  public static final String PROP_REDIRECTION_BASE = "oomph.redirection.";
 
-  public static final String PROP_RELENG_URL = "releng.url";
-
-  public static final String PROP_OS = "os";
-
-  public static final String PROP_OS_ARCH = "os.arch";
-
-  public static final String PROP_OS_WS = "ws";
-
-  public static final String PROP_ECLIPSE_PRODUCT = "eclipse.product";
+  public static final String PROP_UPDATE_URL = "oomph.update.url";
 }

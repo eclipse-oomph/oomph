@@ -16,6 +16,7 @@ import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
+import org.eclipse.oomph.internal.setup.core.util.UpdateUtil;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
@@ -53,7 +54,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
 
-  public static final boolean SETUP_IDE = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_IDE);
+  public static final boolean SETUP_IDE = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP);
 
   private static final boolean SETUP_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SKIP);
 
@@ -88,8 +89,8 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
     {
       public void run()
       {
-        String productID = PropertiesUtil.getProperty(SetupProperties.PROP_ECLIPSE_PRODUCT);
-        if (!"org.eclipse.oomph.setup.installer.product".equals(productID))
+        String productID = PropertiesUtil.getProperty("eclipse.product");
+        if (!UpdateUtil.PRODUCT_ID.equals(productID))
         {
           final IWorkbench workbench = PlatformUI.getWorkbench();
           IExtensionTracker extensionTracker = workbench.getExtensionTracker();
