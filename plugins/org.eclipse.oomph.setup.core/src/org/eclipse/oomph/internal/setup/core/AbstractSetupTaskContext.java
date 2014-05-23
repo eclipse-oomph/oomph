@@ -7,7 +7,8 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
- *    Julian Enoch - Add support for secure context variables
+ *    Ericsson AB (Julian Enoch) - Bug 425815 - Add support for secure context variables
+ *    Ericsson AB (Julian Enoch) - Bug 434512 - Disable prompt for master password recovery information
  */
 package org.eclipse.oomph.internal.setup.core;
 
@@ -29,8 +30,10 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.equinox.security.storage.provider.IProviderHints;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -65,6 +68,8 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
   private URIConverter uriConverter;
 
   private Map<Object, Object> map = new LinkedHashMap<Object, Object>();
+
+  private ISecurePreferences securePreferences;
 
   protected AbstractSetupTaskContext(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext)
   {
@@ -268,10 +273,10 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
 
     if (EMFPlugin.IS_ECLIPSE_RUNNING)
     {
-      ISecurePreferences securePreferences = getSecurePreferences();
-      if (securePreferences.nodeExists(SECURE_STORAGE_NODE))
+      ISecurePreferences prefs = getSecurePreferences();
+      if (prefs != null && prefs.nodeExists(SECURE_STORAGE_NODE))
       {
-        ISecurePreferences node = securePreferences.node(SECURE_STORAGE_NODE);
+        ISecurePreferences node = prefs.node(SECURE_STORAGE_NODE);
 
         try
         {
@@ -289,22 +294,40 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
 
   protected void saveSecurePreference(String name, String value)
   {
-    ISecurePreferences securePreferences = getSecurePreferences();
-    ISecurePreferences node = securePreferences.node(SECURE_STORAGE_NODE);
+    ISecurePreferences prefs = getSecurePreferences();
+    if (prefs != null)
+    {
+      ISecurePreferences node = prefs.node(SECURE_STORAGE_NODE);
 
-    try
-    {
-      node.put(name, value, true);
-    }
-    catch (StorageException ex)
-    {
-      log(ex);
+      try
+      {
+        node.put(name, value, true);
+      }
+      catch (StorageException ex)
+      {
+        log(ex);
+      }
     }
   }
 
   protected ISecurePreferences getSecurePreferences()
   {
-    return SecurePreferencesFactory.getDefault();
+    if (securePreferences == null)
+    {
+      Map<Object, Object> options = new HashMap<Object, Object>();
+      options.put(IProviderHints.PROMPT_USER, Boolean.FALSE);
+
+      try
+      {
+        securePreferences = SecurePreferencesFactory.open(null, options);
+      }
+      catch (IOException ex)
+      {
+        log(ex);
+      }
+    }
+
+    return securePreferences;
   }
 
   protected String filter(String value, String filterName)
