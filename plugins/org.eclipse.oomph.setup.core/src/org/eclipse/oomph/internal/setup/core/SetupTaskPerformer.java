@@ -334,7 +334,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 if (getAttributeRule(eAttribute, true) == null)
                 {
                   // Determine if there exists an actual instance that really needs the rule.
-                  String attributeName = eAttribute.getName();
+                  String attributeName = ExtendedMetaData.INSTANCE.getName(eAttribute);
                   for (SetupTask setupTask : instances.get(eAttribute.getEContainingClass()))
                   {
                     // If there is an instance with an empty value.
@@ -507,9 +507,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             EClass eClass = setupTask.eClass();
             for (EAttribute eAttribute : eClass.getEAllAttributes())
             {
-              if (eAttribute.getEType().getInstanceClass() == String.class)
+              if (eAttribute != SetupPackage.Literals.SETUP_TASK__ID && !eAttribute.isMany() && eAttribute.getEType().getInstanceClass() == String.class)
               {
-                String variableName = id + "." + eAttribute.getName();
+                String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute);
                 String value = (String)setupTask.eGet(eAttribute);
                 if (explicitKeys.contains(variableName))
                 {
