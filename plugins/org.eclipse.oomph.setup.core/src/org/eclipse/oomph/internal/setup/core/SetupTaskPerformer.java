@@ -13,7 +13,6 @@ package org.eclipse.oomph.internal.setup.core;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.bundle.SetupCorePlugin;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;

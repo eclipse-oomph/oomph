@@ -10,19 +10,21 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.internal.setup.core.util.UpdateUtil;
-import org.eclipse.oomph.setup.internal.installer.bundle.SetupInstallerPlugin;
+import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
 import org.eclipse.oomph.ui.UICallback;
-import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.operations.ProvisioningSession;
+import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,8 +37,6 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
-import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -145,7 +145,7 @@ public final class InstallerDialog extends SetupWizardDialog
     };
 
     UICallback callback = new UICallback(getShell(), AbstractSetupDialog.SHELL_TEXT);
-    return UpdateUtil.update(callback, null, needsEarlyConfirmation, true, postInstall, restartHandler);
+    return UpdateUtil.update(callback, needsEarlyConfirmation, true, postInstall, restartHandler);
   }
 
   private void initUpdateSearch()
@@ -196,7 +196,7 @@ public final class InstallerDialog extends SetupWizardDialog
 
           try
           {
-            IStatus status = UpdateUtil.checkForUpdates(agent, null, true, null, SubMonitor.convert(null));
+            IStatus status = UpdateUtil.checkForUpdates(agent, true, null, SubMonitor.convert(null));
             if (status == UpdateUtil.UPDATE_FOUND_STATUS)
             {
               updateSearchState = InstallerUpdateSearchState.FOUND;
@@ -263,30 +263,20 @@ public final class InstallerDialog extends SetupWizardDialog
 
   private String getProductVersion()
   {
-    IProvisioningAgent agent = SetupInstallerPlugin.INSTANCE.getService(IProvisioningAgent.class);
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
 
-    try
+    IProfile profile = agent.getProfileRegistry().getProfile(IProfileRegistry.SELF);
+    if (profile == null)
     {
-      ProvisioningSession session = new ProvisioningSession(agent);
-      Pair<String, List<IInstallableUnit>> profileAndIUs = UpdateUtil.getInstalledUnits(session, UpdateUtil.PRODUCT_ID);
-      if (UpdateUtil.SELF_HOSTING_PROFILE.equals(profileAndIUs.getElement1()))
-      {
-        return "Self Hosting";
-      }
-
-      List<IInstallableUnit> installedUnits = profileAndIUs.getElement2();
-      if (installedUnits.isEmpty())
-      {
-        return null;
-      }
-
-      IInstallableUnit product = installedUnits.iterator().next();
-      return product.getVersion().toString();
+      return "Self Hosting";
     }
-    finally
+
+    for (IInstallableUnit iu : profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null))
     {
-      SetupInstallerPlugin.INSTANCE.ungetService(agent);
+      return iu.getVersion().toString();
     }
+
+    return null;
   }
 
   private void setProductVersionLink(Composite parent)

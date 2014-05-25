@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
-import org.eclipse.oomph.setup.ui.bundle.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.core.runtime.FileLocator;

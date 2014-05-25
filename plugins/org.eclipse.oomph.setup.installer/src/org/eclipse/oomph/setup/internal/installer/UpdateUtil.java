@@ -8,13 +8,10 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.core.util;
+package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.bundle.SetupCorePlugin;
+import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
 import org.eclipse.oomph.util.IRunnable;
-import org.eclipse.oomph.util.Pair;
-import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.core.runtime.CoreException;
@@ -48,24 +45,14 @@ import java.util.List;
  */
 public final class UpdateUtil extends Plugin
 {
-  public static final String SELF_HOSTING_PROFILE = "SelfHostingProfile";
-
   public static final IStatus UPDATE_FOUND_STATUS = new Status(IStatus.OK, SetupCorePlugin.INSTANCE.getSymbolicName(), "Updates found");
-
-  private static final String DEFAULT_UPDATE_URL = "http://download.eclipse.org/oomph/updates";
-
-  public static final String UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_UPDATE_URL, DEFAULT_UPDATE_URL).replace('\\', '/');
-
-  public static final String PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
-
-  private static final String[] PRODUCT_PREFIXES = { "org.eclipse.oomph" };
 
   private UpdateUtil()
   {
   }
 
-  public static boolean update(final UserCallback callback, final String[] iuPrefixes, final boolean needsEarlyConfirmation, final boolean async,
-      final Runnable postInstall, final Runnable restartHandler)
+  public static boolean update(final UserCallback callback, final boolean needsEarlyConfirmation, final boolean async, final Runnable postInstall,
+      final Runnable restartHandler)
   {
     if (needsEarlyConfirmation)
     {
@@ -87,7 +74,7 @@ public final class UpdateUtil extends Plugin
         {
           SubMonitor sub = SubMonitor.convert(monitor, needsEarlyConfirmation ? "Updating..." : "Checking for updates...", 1000);
 
-          IStatus updateStatus = checkForUpdates(agent, iuPrefixes, false, postInstall, sub);
+          IStatus updateStatus = checkForUpdates(agent, false, postInstall, sub);
           if (updateStatus.getCode() == UpdateOperation.STATUS_NOTHING_TO_UPDATE)
           {
             callback.information(async, "No updates were found.");
@@ -126,7 +113,7 @@ public final class UpdateUtil extends Plugin
     return true;
   }
 
-  public static IStatus checkForUpdates(IProvisioningAgent agent, String[] iuPrefixes, boolean resolveOnly, Runnable postInstall, SubMonitor sub)
+  public static IStatus checkForUpdates(IProvisioningAgent agent, boolean resolveOnly, Runnable postInstall, SubMonitor sub)
   {
     try
     {
@@ -139,13 +126,8 @@ public final class UpdateUtil extends Plugin
         return ex.getStatus();
       }
 
-      if (iuPrefixes == null)
-      {
-        iuPrefixes = UpdateUtil.PRODUCT_PREFIXES;
-      }
-
       ProvisioningSession session = new ProvisioningSession(agent);
-      List<IInstallableUnit> ius = getInstalledUnits(session, iuPrefixes).getElement2();
+      List<IInstallableUnit> ius = getInstalledUnits(session);
 
       UpdateOperation operation = new UpdateOperation(session, ius);
       IStatus status = operation.resolveModal(sub.newChild(300));
@@ -202,15 +184,14 @@ public final class UpdateUtil extends Plugin
     }
   }
 
-  public static Pair<String, List<IInstallableUnit>> getInstalledUnits(ProvisioningSession session, String... iuPrefixes)
+  private static List<IInstallableUnit> getInstalledUnits(ProvisioningSession session)
   {
     IProvisioningAgent agent = session.getProvisioningAgent();
     IProfileRegistry profileRegistry = (IProfileRegistry)agent.getService(IProfileRegistry.class.getName());
     IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
     if (profile == null)
     {
-      List<IInstallableUnit> none = Collections.emptyList();
-      return Pair.create(SELF_HOSTING_PROFILE, none);
+      return Collections.emptyList();
     }
 
     IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUAnyQuery(), null);
@@ -220,39 +201,13 @@ public final class UpdateUtil extends Plugin
     {
       String id = installableUnit.getId();
 
-      if (iuPrefixes.length == 0)
+      if (id.startsWith("org.eclipse.oomph"))
       {
         ius.add(installableUnit);
       }
-      else
-      {
-        if (hasPrefix(id, iuPrefixes))
-        {
-          ius.add(installableUnit);
-        }
-      }
     }
 
-    return Pair.create(profile.getProfileId(), ius);
-  }
-
-  public static boolean hasPrefix(String id)
-  {
-    return hasPrefix(id, PRODUCT_PREFIXES);
-  }
-
-  private static boolean hasPrefix(String id, String[] iuPrefixes)
-  {
-    for (int i = 0; i < iuPrefixes.length; i++)
-    {
-      String iuPrefix = iuPrefixes[i];
-      if (id.startsWith(iuPrefix))
-      {
-        return true;
-      }
-    }
-
-    return false;
+    return ius;
   }
 
   private static void addRepositories(IProvisioningAgent agent, boolean metadata, SubMonitor sub) throws CoreException
@@ -260,7 +215,7 @@ public final class UpdateUtil extends Plugin
     int xxx;
 
     addRepository(agent, "http://download.eclipse.org/releases/luna", metadata, sub.newChild(200));
-    addRepository(agent, UPDATE_URL, metadata, sub.newChild(200));
+    addRepository(agent, SetupCorePlugin.UPDATE_URL, metadata, sub.newChild(200));
   }
 
   private static void addRepository(IProvisioningAgent agent, String location, boolean metadata, IProgressMonitor monitor) throws CoreException

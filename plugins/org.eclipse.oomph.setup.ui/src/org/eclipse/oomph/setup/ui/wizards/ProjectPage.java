@@ -27,7 +27,7 @@ import org.eclipse.oomph.setup.provider.ProjectCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProjectItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
-import org.eclipse.oomph.setup.ui.bundle.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.util.SetupResource;
 import org.eclipse.oomph.ui.UIUtil;
 

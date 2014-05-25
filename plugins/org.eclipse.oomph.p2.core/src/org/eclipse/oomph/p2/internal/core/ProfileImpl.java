@@ -56,7 +56,7 @@ import java.util.Map;
  * @author Eike Stepper
  */
 @SuppressWarnings("restriction")
-public class ProfileImpl extends AgentManagerElementImpl implements Profile, PersistentMap.ExtraInfoProvider, IProfile
+public class ProfileImpl extends AgentManagerElementImpl implements Profile, PersistentMap.ExtraInfoProvider
 {
   private static final Map<Object, Object> XML_OPTIONS;
 

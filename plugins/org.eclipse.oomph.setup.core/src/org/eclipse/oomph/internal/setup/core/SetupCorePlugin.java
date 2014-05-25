@@ -8,25 +8,28 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal.installer.bundle;
+package org.eclipse.oomph.internal.setup.core;
 
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.PropertiesUtil;
 
-import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.osgi.framework.BundleContext;
 
 /**
  * @author Eike Stepper
  */
-public final class SetupInstallerPlugin extends AbstractOomphUIPlugin
+public final class SetupCorePlugin extends AbstractOomphPlugin
 {
-  public static final SetupInstallerPlugin INSTANCE = new SetupInstallerPlugin();
+  private static final String DEFAULT_UPDATE_URL = "http://download.eclipse.org/oomph/updates";
+
+  public static final String UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_UPDATE_URL, DEFAULT_UPDATE_URL).replace('\\', '/');
+
+  public static final SetupCorePlugin INSTANCE = new SetupCorePlugin();
 
   private static Implementation plugin;
 
-  public SetupInstallerPlugin()
+  public SetupCorePlugin()
   {
     super(new ResourceLocator[] {});
   }
@@ -40,17 +43,11 @@ public final class SetupInstallerPlugin extends AbstractOomphUIPlugin
   /**
    * @author Eike Stepper
    */
-  public static class Implementation extends EclipseUIPlugin
+  public static class Implementation extends EclipsePlugin
   {
     public Implementation()
     {
       plugin = this;
-    }
-
-    @Override
-    public void start(BundleContext context) throws Exception
-    {
-      super.start(context);
     }
   }
 }

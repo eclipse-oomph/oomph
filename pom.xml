@@ -19,7 +19,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <tycho.scmUrl>scm:git:https://git.eclipse.org/r/p/cdo/org.eclipse.oomph.git</tycho.scmUrl>
+    <tycho.scmUrl>scm:git:https://git.eclipse.org/r/p/oomph/org.eclipse.oomph.git</tycho.scmUrl>
     <tycho-version>0.20.0</tycho-version>
   </properties>
 

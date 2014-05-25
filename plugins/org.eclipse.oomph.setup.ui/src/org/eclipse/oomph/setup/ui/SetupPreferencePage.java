@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.setup.ui;
 
-import org.eclipse.oomph.setup.ui.bundle.SetupUIPlugin;
-
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;

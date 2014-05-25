@@ -16,7 +16,7 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.bundle.SetupCorePlugin;
+import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.util.SetupResource;
 import org.eclipse.oomph.setup.util.SetupResourceFactoryImpl;
 import org.eclipse.oomph.util.IORuntimeException;

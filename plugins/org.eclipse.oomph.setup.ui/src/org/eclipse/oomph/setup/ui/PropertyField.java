@@ -12,7 +12,6 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.setup.VariableChoice;
-import org.eclipse.oomph.setup.ui.bundle.SetupUIPlugin;
 import org.eclipse.oomph.util.ConcurrentArray;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;

@@ -12,15 +12,15 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
-import org.eclipse.oomph.internal.setup.core.util.UpdateUtil;
-import org.eclipse.oomph.setup.internal.installer.bundle.SetupInstallerPlugin;
+import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 
 import org.eclipse.emf.common.util.URI;
 
-import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.operations.ProvisioningSession;
+import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
@@ -36,8 +36,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -48,10 +46,10 @@ public final class AboutDialog extends AbstractSetupDialog
 
   private final String version;
 
-  public AboutDialog(Shell parentShell, String version)
+  public AboutDialog(Shell parentShell, String theVersion)
   {
-    super(parentShell, "About Development Environment Installer", 700, 500, SetupInstallerPlugin.INSTANCE, null);
-    this.version = version;
+    super(parentShell, "About " + SHELL_TEXT, 700, 500, SetupInstallerPlugin.INSTANCE, null);
+    version = theVersion;
   }
 
   @Override
@@ -80,41 +78,27 @@ public final class AboutDialog extends AbstractSetupDialog
     versionColumn.setResizable(false);
     versionColumn.setMoveable(false);
 
-    IProvisioningAgent agent = SetupInstallerPlugin.INSTANCE.getService(IProvisioningAgent.class);
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    Profile profile = agent.getCurrentProfile();
 
     try
     {
-      ProvisioningSession session = new ProvisioningSession(agent);
-      List<IInstallableUnit> installedUnits = UpdateUtil.getInstalledUnits(session).getElement2();
-
-      String[][] rows = new String[installedUnits.size()][];
-      for (int i = 0; i < rows.length; i++)
-      {
-        IInstallableUnit installableUnit = installedUnits.get(i);
-        rows[i] = new String[] { installableUnit.getId(), installableUnit.getVersion().toString() };
-      }
-
-      Arrays.sort(rows, new Comparator<String[]>()
-      {
-        public int compare(String[] o1, String[] o2)
-        {
-          return o1[0].compareTo(o2[0]);
-        }
-      });
+      IInstallableUnit[] installedUnits = profile.query(QueryUtil.createIUAnyQuery(), null).toArray(IInstallableUnit.class);
+      Arrays.sort(installedUnits);
 
       Color blue = getShell().getDisplay().getSystemColor(SWT.COLOR_BLUE);
 
-      for (int i = 0; i < rows.length; i++)
+      for (int i = 0; i < installedUnits.length; i++)
       {
         TableItem item = new TableItem(table, SWT.NONE);
 
-        String id = rows[i][0];
+        String id = installedUnits[i].getId();
         item.setText(0, id);
 
-        String version = rows[i][ECLIPSE_VERSION_COLUMN_INDEX];
+        String version = installedUnits[i].getVersion().toString();
         item.setText(ECLIPSE_VERSION_COLUMN_INDEX, version);
 
-        if (UpdateUtil.hasPrefix(id))
+        if (id.startsWith("org.eclipse.oomph"))
         {
           item.setForeground(blue);
         }

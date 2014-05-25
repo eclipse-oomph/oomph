@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.bundle;
+package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.ui.IStartup;
 

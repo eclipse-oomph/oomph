@@ -13,7 +13,6 @@ package org.eclipse.oomph.internal.setup.core;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.util.UpdateUtil;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -90,7 +89,7 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
     }
 
     // Do this late because \ is replaced by / when looking at this property.
-    put(PROP_UPDATE_URL, UpdateUtil.UPDATE_URL);
+    put(PROP_UPDATE_URL, SetupCorePlugin.UPDATE_URL);
   }
 
   public Map<Object, Object> getMap()

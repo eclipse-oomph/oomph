@@ -13,7 +13,7 @@ package org.eclipse.oomph.base.util;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
-import org.eclipse.oomph.internal.base.bundle.BasePlugin;
+import org.eclipse.oomph.internal.base.BasePlugin;
 
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;

@@ -29,7 +29,7 @@ import org.eclipse.oomph.setup.provider.InstallationItemProvider;
 import org.eclipse.oomph.setup.provider.ProductCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProductItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
-import org.eclipse.oomph.setup.ui.bundle.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.Adapter;

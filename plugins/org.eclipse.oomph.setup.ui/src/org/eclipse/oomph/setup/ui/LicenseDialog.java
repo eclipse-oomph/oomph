@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.setup.LicenseInfo;
-import org.eclipse.oomph.setup.ui.bundle.SetupUIPlugin;
 
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;

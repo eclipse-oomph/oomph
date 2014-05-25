@@ -8,22 +8,25 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.core.bundle;
+package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
 
+import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import org.osgi.framework.BundleContext;
 
 /**
  * @author Eike Stepper
  */
-public final class SetupCorePlugin extends AbstractOomphPlugin
+public final class SetupInstallerPlugin extends AbstractOomphUIPlugin
 {
-  public static final SetupCorePlugin INSTANCE = new SetupCorePlugin();
+  public static final SetupInstallerPlugin INSTANCE = new SetupInstallerPlugin();
 
   private static Implementation plugin;
 
-  public SetupCorePlugin()
+  public SetupInstallerPlugin()
   {
     super(new ResourceLocator[] {});
   }
@@ -37,11 +40,17 @@ public final class SetupCorePlugin extends AbstractOomphPlugin
   /**
    * @author Eike Stepper
    */
-  public static class Implementation extends EclipsePlugin
+  public static class Implementation extends EclipseUIPlugin
   {
     public Implementation()
     {
       plugin = this;
+    }
+
+    @Override
+    public void start(BundleContext context) throws Exception
+    {
+      super.start(context);
     }
   }
 }

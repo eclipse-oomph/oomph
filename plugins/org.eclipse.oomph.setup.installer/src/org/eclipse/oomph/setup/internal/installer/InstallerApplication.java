@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.setup.installer.editor.SetupEditorAdvisor;
-import org.eclipse.oomph.setup.internal.installer.bundle.SetupInstallerPlugin;
 import org.eclipse.oomph.setup.ui.actions.PreferenceRecorderAction;
 import org.eclipse.oomph.ui.ErrorDialog;
 

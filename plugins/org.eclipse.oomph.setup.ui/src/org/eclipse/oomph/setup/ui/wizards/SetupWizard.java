@@ -23,7 +23,7 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
-import org.eclipse.oomph.setup.ui.bundle.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.util.EList;

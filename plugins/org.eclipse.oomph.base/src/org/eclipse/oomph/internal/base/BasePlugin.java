@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.base.bundle;
+package org.eclipse.oomph.internal.base;
 
 import org.eclipse.oomph.util.AbstractOomphPlugin;
 

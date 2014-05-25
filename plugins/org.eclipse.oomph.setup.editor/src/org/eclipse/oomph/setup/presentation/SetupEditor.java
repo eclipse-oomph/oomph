@@ -11,7 +11,7 @@
 package org.eclipse.oomph.setup.presentation;
 
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
-import org.eclipse.oomph.internal.base.bundle.BasePlugin;
+import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;

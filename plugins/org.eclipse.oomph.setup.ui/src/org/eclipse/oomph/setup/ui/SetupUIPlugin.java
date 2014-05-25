@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.bundle;
+package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
@@ -16,7 +16,6 @@ import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
-import org.eclipse.oomph.internal.setup.core.util.UpdateUtil;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
@@ -51,6 +50,8 @@ import java.util.Arrays;
 public final class SetupUIPlugin extends AbstractOomphUIPlugin
 {
   public static final SetupUIPlugin INSTANCE = new SetupUIPlugin();
+
+  public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
 
@@ -90,7 +91,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
       public void run()
       {
         String productID = PropertiesUtil.getProperty("eclipse.product");
-        if (!UpdateUtil.PRODUCT_ID.equals(productID))
+        if (!INSTALLER_PRODUCT_ID.equals(productID))
         {
           final IWorkbench workbench = PlatformUI.getWorkbench();
           IExtensionTracker extensionTracker = workbench.getExtensionTracker();

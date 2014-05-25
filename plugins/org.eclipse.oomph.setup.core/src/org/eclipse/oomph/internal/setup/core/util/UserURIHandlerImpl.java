@@ -11,7 +11,7 @@
 package org.eclipse.oomph.internal.setup.core.util;
 
 import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.bundle.SetupCorePlugin;
+import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.SetupFactory;
 
