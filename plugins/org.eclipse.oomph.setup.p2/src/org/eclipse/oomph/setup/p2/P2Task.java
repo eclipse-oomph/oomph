@@ -37,7 +37,7 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface P2Task extends SetupTask
 {
-  public static final String PROP_SKIP = "org.eclipse.oomph.setup.p2.skip";
+  public static final String PROP_SKIP = "oomph.setup.p2.skip";
 
   /**
    * Returns the value of the '<em><b>Requirements</b></em>' containment reference list.

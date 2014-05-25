@@ -593,16 +593,6 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     // TODO Move all these framework hooks out of the public API
   }
 
-  public boolean needsBundlePool()
-  {
-    return false;
-  }
-
-  public boolean needsBundlePoolTP()
-  {
-    return false;
-  }
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

@@ -488,12 +488,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
-  @Override
-  public boolean needsBundlePool()
-  {
-    return true;
-  }
-
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (SKIP)

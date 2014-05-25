@@ -272,10 +272,6 @@ public interface SetupTask extends ModelElement
 
   void consolidate();
 
-  boolean needsBundlePool();
-
-  boolean needsBundlePoolTP();
-
   boolean isNeeded(SetupTaskContext context) throws Exception;
 
   void perform(SetupTaskContext context) throws Exception;
