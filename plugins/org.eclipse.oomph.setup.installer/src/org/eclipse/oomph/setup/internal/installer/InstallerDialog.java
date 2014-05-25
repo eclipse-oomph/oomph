@@ -299,10 +299,8 @@ public final class InstallerDialog extends SetupWizardDialog
     versionLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER));
     versionLink.setToolTipText("About");
 
-    int xxxXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX;
-    // Thread thread = new ProductVersionSetter();
-    // thread.start();
-    versionLink.setText("<a>1.0.0.v20141905-1207</a>"); //$NON-NLS-1$
+    Thread thread = new ProductVersionSetter();
+    thread.start();
   }
 
   /**
