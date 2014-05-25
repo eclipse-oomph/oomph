@@ -28,4 +28,6 @@ public interface AgentManagerElement
   public boolean isUsed();
 
   public void delete();
+
+  public void delete(boolean force);
 }

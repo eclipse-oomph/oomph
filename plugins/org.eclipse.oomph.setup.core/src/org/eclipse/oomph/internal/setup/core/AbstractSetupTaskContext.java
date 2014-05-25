@@ -171,12 +171,6 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
     return OS.INSTANCE;
   }
 
-  @Deprecated
-  public File getEclipseDir()
-  {
-    return getProductLocation();
-  }
-
   public File getProductLocation()
   {
     return new File(getInstallationLocation(), getOS().getEclipseDir());

@@ -13,7 +13,6 @@ package org.eclipse.oomph.p2.core;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
-import org.eclipse.equinox.p2.operations.ProvisioningSession;
 import org.eclipse.equinox.p2.planner.IPlanner;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
@@ -42,9 +41,6 @@ public interface Agent extends AgentManagerElement, ProfileContainer
   public Profile getCurrentProfile();
 
   public IProvisioningAgent getProvisioningAgent();
-
-  @Deprecated
-  public ProvisioningSession getProvisioningSession();
 
   public IMetadataRepositoryManager getMetadataRepositoryManager();
 

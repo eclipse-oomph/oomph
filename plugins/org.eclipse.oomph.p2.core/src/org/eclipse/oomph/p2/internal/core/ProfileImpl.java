@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -54,6 +55,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("restriction")
 public class ProfileImpl extends AgentManagerElementImpl implements Profile, PersistentMap.ExtraInfoProvider, IProfile
 {
   private static final Map<Object, Object> XML_OPTIONS;
@@ -125,12 +127,9 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
   public File getLocation()
   {
-    if (bundlePool != null)
-    {
-      return bundlePool.getLocation();
-    }
-
-    return getInstallFolder();
+    File engineLocation = new File(agent.getLocation(), AgentImpl.ENGINE_PATH);
+    File registryLocation = new File(engineLocation, SimpleProfileRegistry.DEFAULT_STORAGE_DIR);
+    return new File(registryLocation, id + ".profile");
   }
 
   public File getInstallFolder()
@@ -205,10 +204,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
   public boolean isValid()
   {
-    File engineLocation = new File(agent.getLocation(), AgentImpl.ENGINE_PATH);
-    File registryLocation = new File(engineLocation, "profileRegistry");
-    File profileLocation = new File(registryLocation, id + ".profile");
-    return profileLocation.isDirectory();
+    return getLocation().isDirectory();
   }
 
   public boolean isCurrent()

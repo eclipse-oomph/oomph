@@ -27,7 +27,12 @@ public abstract class AgentManagerElementImpl implements AgentManagerElement
 
   public final void delete()
   {
-    if (isUsed())
+    delete(false);
+  }
+
+  public final void delete(boolean force)
+  {
+    if (isUsed() && !force)
     {
       throw new P2Exception(StringUtil.cap(getElementType()) + " is used: " + this);
     }

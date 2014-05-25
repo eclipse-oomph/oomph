@@ -113,25 +113,25 @@ public final class IOUtil
 
   public static boolean deleteBestEffort(File file)
   {
-    boolean leftOvers = false;
+    boolean deleted = true;
     if (file != null)
     {
       if (file.isDirectory())
       {
         for (File child : file.listFiles())
         {
-          leftOvers |= deleteBestEffort(child);
+          deleted &= deleteBestEffort(child);
         }
       }
 
       if (!file.delete())
       {
         file.deleteOnExit();
-        leftOvers = true;
+        deleted = false;
       }
     }
 
-    return leftOvers;
+    return deleted;
   }
 
   public static void copyTree(File source, File target) throws IORuntimeException

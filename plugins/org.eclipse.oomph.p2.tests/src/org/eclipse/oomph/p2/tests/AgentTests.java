@@ -26,6 +26,7 @@ import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
 import org.eclipse.oomph.p2.internal.core.ProfileImpl;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -43,6 +44,7 @@ import java.util.Arrays;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("restriction")
 public class AgentTests
 {
   @Rule
@@ -194,6 +196,45 @@ public class AgentTests
     profile.change().removeProfileProperty("test2").commit();
     assertThat(profile.getProperties().size(), is(4)); // type, environments, nl, test
     assertThat(profile.getProperty("test2"), nullValue());
+  }
+
+  @Test
+  public void testDeleteProfile() throws Exception
+  {
+    Agent agent = getAgent();
+
+    Profile profile = agent.addProfile("profile1", "Test").create();
+    assertThat(agent.getProfile("profile1"), sameInstance(profile));
+    assertThat(profile.getLocation().isDirectory(), is(true));
+
+    profile.delete(true);
+    assertThat(agent.getProfile("profile1"), nullValue());
+    assertThat(profile.getLocation().exists(), is(false));
+  }
+
+  @Test
+  public void testUseDeletedProfile() throws Exception
+  {
+    Agent agent = getAgent();
+
+    Profile profile = agent.addProfile("profile1", "Test1").create();
+    File location = profile.getLocation();
+
+    boolean deleted = IOUtil.deleteBestEffort(location);
+    assertThat(deleted, is(true));
+    assertThat(location.exists(), is(false));
+
+    profile = agent.getProfile("profile1");
+    assertThat(profile, nullValue());
+    assertThat(agent.getProfiles().size(), is(0));
+    assertThat(agent.getProfileRegistry().getProfiles().length, is(0));
+
+    profile = agent.addProfile("profile1", "Test2").create();
+    assertThat(profile.getProfileId(), is("profile1"));
+    assertThat(profile.getType(), is("Test2"));
+    assertThat(agent.getProfiles().size(), is(1));
+    assertThat(agent.getProfileRegistry().getProfiles().length, is(1));
+    assertThat(location.isDirectory(), is(true));
   }
 
   @Test

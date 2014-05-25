@@ -26,7 +26,6 @@ import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
-import org.eclipse.equinox.p2.operations.ProvisioningSession;
 import org.eclipse.equinox.p2.planner.IPlanner;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
@@ -62,8 +61,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   private IProvisioningAgent provisioningAgent;
 
   private LazyProfileRegistry profileRegistry;
-
-  private ProvisioningSession provisioningSession;
 
   private IMetadataRepositoryManager metadataRepositoryManager;
 
@@ -309,6 +306,15 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         profile = profileMap.getElement(id);
       }
     }
+    else
+    {
+      if (!profile.isValid())
+      {
+        profileMap.removeElement(id);
+        getProfileRegistry().removeProfile(id);
+        profile = null;
+      }
+    }
 
     return profile;
   }
@@ -384,16 +390,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
 
     return provisioningAgent;
-  }
-
-  public synchronized ProvisioningSession getProvisioningSession()
-  {
-    if (provisioningSession == null)
-    {
-      provisioningSession = new ProvisioningSession(getProvisioningAgent());
-    }
-
-    return provisioningSession;
   }
 
   public synchronized IMetadataRepositoryManager getMetadataRepositoryManager()

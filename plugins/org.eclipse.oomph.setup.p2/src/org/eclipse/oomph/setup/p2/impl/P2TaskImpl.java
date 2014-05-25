@@ -35,6 +35,7 @@ import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.util.DownloadUtil;
+import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.Pair;
@@ -43,7 +44,6 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -165,8 +165,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * @ordered
    */
   protected boolean mergeDisabled = MERGE_DISABLED_EDEFAULT;
-
-  private transient EList<Requirement> neededRequirements;
 
   /**
    * <!-- begin-user-doc -->
@@ -495,13 +493,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       return false;
     }
 
-    if (context.getTrigger() == Trigger.BOOTSTRAP)
+    Trigger trigger = context.getTrigger();
+    if (trigger == Trigger.BOOTSTRAP || trigger == Trigger.MANUAL)
     {
-      neededRequirements = getRequirements();
       return true;
     }
-
-    Trigger trigger = context.getTrigger();
 
     Set<IInstallableUnit> installedUnits = getInstalledUnits();
     for (Requirement requirement : getRequirements())
@@ -513,30 +509,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         versionRange = VersionRange.emptyRange;
       }
 
-      if (trigger != Trigger.MANUAL && isInstalled(installedUnits, id, versionRange))
-      {
-        continue;
-      }
-
-      if (neededRequirements == null)
-      {
-        neededRequirements = new BasicEList<Requirement>();
-      }
-
-      neededRequirements.add(requirement);
-    }
-
-    Set<String> knownRepositories = getKnownRepositories();
-    for (Repository repository : getRepositories())
-    {
-      String url = context.redirect(repository.getURL());
-      if (!knownRepositories.contains(url))
+      if (!isInstalled(installedUnits, id, versionRange))
       {
         return true;
       }
     }
 
-    return neededRequirements != null;
+    return false;
   }
 
   private boolean isInstalled(Set<IInstallableUnit> installedUnits, String id, VersionRange versionRange)
@@ -557,24 +536,31 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     final IProgressMonitor monitor = new ProgressLogMonitor(context);
 
     File eclipseDir = context.getProductLocation();
+    File eclipseIni = new File(eclipseDir, "eclipse.ini");
+    boolean eclipseIniExisted = eclipseIni.exists();
+
+    EList<Requirement> requirements = getRequirements();
+    EList<Repository> repositories = getRepositories();
+
+    context.log("Installing " + requirements.size() + (requirements.size() == 1 ? " unit" : " units") + " from " + repositories.size()
+        + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
+
+    for (Requirement requirement : requirements)
+    {
+      context.log("Installing " + requirement);
+    }
+
+    for (Repository repository : repositories)
+    {
+      String url = context.redirect(repository.getURL());
+      context.log("From " + url);
+      repository.setURL(url);
+    }
+
     String profileID = StringUtil.encodePath(eclipseDir.toString());
 
-    EList<Repository> repositories = getRepositories();
-    if (neededRequirements == null)
-    {
-      context.log("Adding " + repositories.size() + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
-
-      int xxx;
-      return;
-    }
-    else
-    {
-      context.log("Calling director to install " + neededRequirements.size() + (neededRequirements.size() == 1 ? " unit" : " units") + " from "
-          + repositories.size() + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
-    }
-
     ProfileTransaction transaction = openProfileTransaction(context, profileID, eclipseDir);
-    transaction.getProfileDefinition().setRequirements(neededRequirements);
+    transaction.getProfileDefinition().setRequirements(requirements);
     transaction.getProfileDefinition().setRepositories(repositories);
 
     transaction.commit(new ProfileTransaction.CommitContext()
@@ -592,12 +578,29 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         }
       }
     }, monitor);
+
+    if (eclipseIniExisted)
+    {
+      checkEclipseIniForDuplicates(context, eclipseIni);
+    }
   }
 
-  private ProfileTransaction openProfileTransaction(final SetupTaskContext context, String profileID, File eclipseDir)
+  private ProfileTransaction openProfileTransaction(final SetupTaskContext context, String profileID, File eclipseDir) throws Exception
   {
+    Profile profile;
     if (context.getTrigger() == Trigger.BOOTSTRAP)
     {
+      boolean firstP2Task = context.put(FIRST_CALL_DETECTION_KEY, Boolean.TRUE) == null;
+      if (firstP2Task)
+      {
+        int xxx; // TODO Determine configuration location
+        File bundlesInfo = new File(eclipseDir, "configuration/org.eclipse.equinox.simpleconfigurator/bundles.info");
+        if (bundlesInfo.exists())
+        {
+          FileUtil.delete(bundlesInfo, new ProgressLogMonitor(context));
+        }
+      }
+
       BundlePool bundlePool;
 
       String bundlePoolLocation = (String)context.get(AgentManager.PROP_BUNDLE_POOL_LOCATION);
@@ -611,7 +614,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         bundlePool = agent.addBundlePool(eclipseDir);
       }
 
-      Profile profile = bundlePool.getProfile(profileID);
+      profile = bundlePool.getProfile(profileID);
+      if (profile != null && firstP2Task)
+      {
+        profile.delete(true);
+        profile = null;
+      }
+
       if (profile == null)
       {
         OS os = context.getOS();
@@ -628,9 +637,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
       return profile.change();
     }
+    else
+    {
+      Agent agent = P2Util.getAgentManager().getCurrentAgent();
+      profile = agent.getCurrentProfile();
+    }
 
-    Agent agent = P2Util.getAgentManager().getCurrentAgent();
-    Profile profile = agent.getCurrentProfile();
     return profile.change();
   }
 
@@ -710,7 +722,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
-  private static void checkForDuplicateIniValues(final SetupTaskContext context, File iniFile)
+  private static void checkEclipseIniForDuplicates(final SetupTaskContext context, File iniFile)
   {
     FileOutputStream out = null;
 

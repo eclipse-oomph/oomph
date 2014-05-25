@@ -228,7 +228,7 @@ public class ProgressPage extends SetupWizardPage
 
     GridLayout buttonLayout = new GridLayout(2, false);
     buttonLayout.marginHeight = 0;
-    buttonLayout.marginBottom = 0;
+    buttonLayout.marginWidth = 0;
 
     Composite buttonComposite = new Composite(mainComposite, SWT.NONE);
     buttonComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
