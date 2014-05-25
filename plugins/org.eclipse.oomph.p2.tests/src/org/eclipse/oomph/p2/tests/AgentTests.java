@@ -44,7 +44,6 @@ import java.util.Arrays;
 /**
  * @author Eike Stepper
  */
-@SuppressWarnings("restriction")
 public class AgentTests
 {
   @Rule
