@@ -240,9 +240,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   public boolean isDirty()
   {
-    if (profile == null)
+    if (removeAll)
     {
-      // New profile
       return true;
     }
 
@@ -324,7 +323,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
       provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
 
       IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
-      Map<Requirement, IInstallableUnit> iuMap = collectInstallableUnits(metadata, monitor);
 
       Agent agent = profile.getAgent();
       IPlanner planner = agent.getPlanner();
@@ -334,7 +332,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       IProfile delegate = profileImpl.getDelegate();
 
       IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
-      adjustProfileChangeRequest(profileChangeRequest, iuMap);
+      adjustProfileChangeRequest(profileChangeRequest, metadata, monitor);
 
       IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, monitor);
       P2CorePlugin.INSTANCE.coreException(provisioningPlan.getStatus());
@@ -578,54 +576,68 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return metadataURIs;
   }
 
-  private Map<Requirement, IInstallableUnit> collectInstallableUnits(IQueryable<IInstallableUnit> metadata, IProgressMonitor monitor) throws CoreException
+  private void adjustProfileChangeRequest(final IProfileChangeRequest request, IQueryable<IInstallableUnit> metadata, IProgressMonitor monitor)
+      throws CoreException
   {
-    Map<Requirement, IInstallableUnit> iusToInstall = new HashMap<Requirement, IInstallableUnit>();
+    Map<String, IInstallableUnit> rootIUs = new HashMap<String, IInstallableUnit>();
+    for (IInstallableUnit rootIU : profile.query(new UserVisibleRootQuery(), null))
+    {
+      if (removeAll)
+      {
+        request.remove(rootIU);
+      }
+      else
+      {
+        String id = rootIU.getId();
+        rootIUs.put(id, rootIU);
+      }
+    }
+
     MultiStatus status = new MultiStatus(P2CorePlugin.INSTANCE.getSymbolicName(), 0, "Profile could not be changed", null);
 
     for (Requirement requirement : profileDefinition.getRequirements())
     {
       P2CorePlugin.checkCancelation(monitor);
 
-      IInstallableUnit iu = queryInstallableUnit(metadata, requirement.getID(), requirement.getVersionRange(), monitor);
+      String id = requirement.getID();
+      VersionRange versionRange = requirement.getVersionRange();
+      boolean optional = requirement.isOptional();
+
+      IInstallableUnit iu = queryInstallableUnit(metadata, id, versionRange, monitor);
       if (iu != null)
       {
-        iusToInstall.put(requirement, iu);
+        if (!removeAll)
+        {
+          // Check if existing rootIU needs to be removed to not violate "singleton" constraints
+          IInstallableUnit rootIU = rootIUs.get(id);
+          if (rootIU != null && !rootIU.getVersion().equals(iu.getVersion()))
+          {
+            if (rootIU.isSingleton() || iu.isSingleton())
+            {
+              // TODO Check IU locks
+              request.remove(rootIU);
+            }
+          }
+        }
+
+        request.add(iu);
+        request.setInstallableUnitProfileProperty(iu, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
+
+        if (optional)
+        {
+          request.setInstallableUnitProfileProperty(iu, INCLUSION_RULES, ProfileInclusionRules.createOptionalInclusionRule(iu));
+        }
       }
-      else if (!requirement.isOptional())
+      else
       {
-        status.add(new Status(IStatus.ERROR, status.getPlugin(), "Requirement cannot be satisfied: " + requirement));
+        if (!optional)
+        {
+          status.add(new Status(IStatus.ERROR, status.getPlugin(), "Unsatisfiable requirement " + requirement));
+        }
       }
     }
 
     P2CorePlugin.INSTANCE.coreException(status);
-    return iusToInstall;
-  }
-
-  private void adjustProfileChangeRequest(final IProfileChangeRequest request, Map<Requirement, IInstallableUnit> iusToInstall)
-  {
-    if (removeAll)
-    {
-      // Remove all existing root IUs
-      for (IInstallableUnit iu : profile.query(new UserVisibleRootQuery(), null))
-      {
-        request.remove(iu);
-      }
-    }
-
-    for (Map.Entry<Requirement, IInstallableUnit> entry : iusToInstall.entrySet())
-    {
-      Requirement requirement = entry.getKey();
-      IInstallableUnit iu = entry.getValue();
-
-      request.add(iu);
-      request.setInstallableUnitProfileProperty(iu, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
-
-      if (requirement.isOptional())
-      {
-        request.setInstallableUnitProfileProperty(iu, INCLUSION_RULES, ProfileInclusionRules.createOptionalInclusionRule(iu));
-      }
-    }
 
     if (isProfileDefinitionChanged())
     {

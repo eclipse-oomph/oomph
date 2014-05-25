@@ -25,17 +25,17 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
-import org.eclipse.oomph.p2.internal.core.P2CorePlugin;
 import org.eclipse.oomph.p2.internal.core.ProfileImpl;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.engine.IProfile;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 
 import java.io.File;
 import java.util.Arrays;
@@ -45,13 +45,16 @@ import java.util.Arrays;
  */
 public class AgentTests
 {
+  @Rule
+  public TestName testName = new TestName();
+
   private File userHome;
 
   @Before
   public void setUp() throws Exception
   {
     userHome = File.createTempFile("p2-tests-", "");
-    System.out.println(userHome);
+    System.out.println(testName.getMethodName() + " --> " + userHome);
 
     userHome.delete();
     userHome.mkdirs();
@@ -210,14 +213,57 @@ public class AgentTests
     }
     catch (CoreException expected)
     {
-      IStatus status = expected.getStatus();
-      System.out.println(P2CorePlugin.toString(status));
       // Success
     }
   }
 
   @Test
-  public void testInstallAndUpdate() throws Exception
+  public void testInstallAndUpdateSingleton() throws Exception
+  {
+    Agent agent = getAgent();
+    File installFolder = new File(userHome, "app1");
+
+    String oldVersion = "org.eclipse.net4j.util_3.3.0.v20130601-1611.jar";
+    String newVersion = "org.eclipse.net4j.util_3.3.1.v20140218-1709.jar";
+
+    ProfileCreator creator = agent.addProfile("profile-app1", "Installation");
+    Profile profile = creator.setCacheFolder(installFolder).setInstallFolder(installFolder).create();
+
+    // Install
+    ProfileTransaction transaction1 = profile.change();
+    ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
+    profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("org.eclipse.net4j.util"));
+    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029"));
+
+    transaction1.commit();
+    assertThat(installFolder.isDirectory(), is(true));
+    assertThat(new File(installFolder, "artifacts.xml").isFile(), is(true));
+    assertThat(new File(installFolder, "p2").exists(), is(false));
+    assertThat(new File(installFolder, "features").isDirectory(), is(false));
+
+    File plugins = new File(installFolder, "plugins");
+    assertThat(plugins.list().length, is(1));
+    assertThat(new File(plugins, oldVersion).isFile(), is(true));
+
+    // Update (replace old version)
+    ProfileTransaction transaction2 = profile.change();
+    transaction2.getProfileDefinition().getRepositories()
+        .add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655"));
+
+    transaction2.commit();
+    assertThat(plugins.list().length, is(1));
+    assertThat(new File(plugins, oldVersion).isFile(), is(false));
+    assertThat(new File(plugins, newVersion).isFile(), is(true));
+
+    // No update (keep new version)
+    ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
+    transaction3.commit();
+    assertThat(plugins.list().length, is(1));
+    assertThat(new File(plugins, newVersion).isFile(), is(true));
+  }
+
+  @Test
+  public void testInstallAndUpdateNonSingleton() throws Exception
   {
     Agent agent = getAgent();
     File installFolder = new File(userHome, "app1");
