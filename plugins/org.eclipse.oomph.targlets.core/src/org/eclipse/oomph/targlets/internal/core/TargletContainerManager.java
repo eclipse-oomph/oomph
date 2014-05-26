@@ -33,6 +33,7 @@ import org.eclipse.equinox.internal.p2.engine.PhaseSet;
 import org.eclipse.equinox.internal.p2.engine.phases.Collect;
 import org.eclipse.equinox.internal.p2.engine.phases.Install;
 import org.eclipse.equinox.internal.p2.engine.phases.Property;
+import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IEngine;
@@ -391,10 +392,7 @@ public final class TargletContainerManager
     List<Phase> phases = new ArrayList<Phase>(4);
     phases.add(new Collect(100));
     phases.add(new Property(1));
-
-    // TODO This causes major problems (in targlet the source bundle install removes the real IUs every 2. time)
-    // phases.add(new Uninstall(50, true));
-
+    phases.add(new Uninstall(50, true));
     phases.add(new Install(50));
     phases.add(new CollectNativesPhase(bundlePool, 100));
 
@@ -404,11 +402,12 @@ public final class TargletContainerManager
   public static File getDefaultPoolLocation()
   {
     AgentManager agentManager = P2Util.getAgentManager();
+    String client = TargletsCorePlugin.INSTANCE.getSymbolicName();
 
-    BundlePool bundlePool = agentManager.getDefaultBundlePool(TargletsCorePlugin.INSTANCE.getSymbolicName());
+    BundlePool bundlePool = agentManager.getDefaultBundlePool(client);
     if (bundlePool == null)
     {
-      throw new P2Exception("No default bundle pool configured for " + TargletsCorePlugin.INSTANCE.getSymbolicName());
+      throw new P2Exception("No default bundle pool configured for " + client);
     }
 
     return bundlePool.getLocation();
