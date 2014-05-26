@@ -310,16 +310,17 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Scope feature.
+   * This adds a property descriptor for the Scope Type feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   protected void addScopeTypePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_SetupTask_scope_feature"), getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_scope_feature", "_UI_SetupTask_type"),
-        SetupPackage.Literals.SETUP_TASK__SCOPE_TYPE, false, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, PropertiesUtil.EXPERT_FILTER));
+        getString("_UI_SetupTask_scopeType_feature"), getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_scopeType_feature", "_UI_SetupTask_type"),
+        SetupPackage.Literals.SETUP_TASK__SCOPE_TYPE, false, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**
@@ -391,13 +392,14 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
    * This adds a property descriptor for the Disabled feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   protected void addDisabledPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_SetupTask_disabled_feature"), getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_disabled_feature", "_UI_SetupTask_type"),
-        SetupPackage.Literals.SETUP_TASK__DISABLED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, PropertiesUtil.EXPERT_FILTER));
+        SetupPackage.Literals.SETUP_TASK__DISABLED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**

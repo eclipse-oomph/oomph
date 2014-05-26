@@ -47,12 +47,24 @@
     <genClasses image="false" ecoreClass="Setup.ecore#//SetupTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/iD"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/description"/>
-      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/scopeType"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/excludedTriggers"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/disabled"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/predecessors"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/successors"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/restrictions"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/scopeType">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/excludedTriggers">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/disabled">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/predecessors">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/successors">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/restrictions">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
       <genOperations ecoreOperation="Setup.ecore#//SetupTask/getScope"/>
       <genOperations ecoreOperation="Setup.ecore#//SetupTask/requires">
         <genParameters ecoreParameter="Setup.ecore#//SetupTask/requires/setupTask"/>
