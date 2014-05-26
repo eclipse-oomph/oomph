@@ -16,7 +16,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 /**
  * @author Eike Stepper
@@ -35,7 +34,7 @@ public abstract class AbstractDropdownItemHandler extends AbstractHandler implem
 
   public ImageDescriptor getImageDescriptor()
   {
-    return AbstractUIPlugin.imageDescriptorFromPlugin(SetupEditorPlugin.PLUGIN_ID, imageKey);
+    return SetupEditorPlugin.INSTANCE.getImageDescriptor(imageKey);
   }
 
   public String getText()

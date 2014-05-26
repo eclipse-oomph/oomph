@@ -57,7 +57,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.keys.IBindingService;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -589,7 +588,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public PreferenceRecorderToolbarAction(boolean withDialog)
     {
       super(withDialog);
-      setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(SetupEditorPlugin.PLUGIN_ID, "recorder"));
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("recorder"));
     }
   }
 
@@ -604,7 +603,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public TestInstallAction()
     {
       super("Test Install", AS_PUSH_BUTTON);
-      setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(SetupEditorPlugin.PLUGIN_ID, "run"));
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("run"));
       setToolTipText("Launch the installer with the current project");
     }
 
@@ -659,7 +658,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public CommandTableAction()
     {
       super("Command Table");
-      setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(SetupEditorPlugin.PLUGIN_ID, "commands"));
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("commands"));
       setToolTipText("Show a table of all available commands");
     }
 
@@ -773,7 +772,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public EditorTableAction()
     {
       super("Editor Table");
-      setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(SetupEditorPlugin.PLUGIN_ID, "FileEditor"));
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("FileEditor"));
       setToolTipText("Show a table of all available editors");
     }
 

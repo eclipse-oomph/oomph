@@ -125,7 +125,9 @@
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//User">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//User/attributeRules"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/acceptedLicenses"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/acceptedLicenses">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//AttributeRule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//AttributeRule/attributeURI"/>

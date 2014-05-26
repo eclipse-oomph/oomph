@@ -13,7 +13,6 @@ package org.eclipse.oomph.setup.provider;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.User;
-import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -67,14 +66,14 @@ public class UserItemProvider extends ScopeItemProvider
    * This adds a property descriptor for the Accepted Licenses feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   protected void addAcceptedLicensesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Preferences_acceptedLicenses_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Preferences_acceptedLicenses_feature", "_UI_Preferences_type"),
-        SetupPackage.Literals.USER__ACCEPTED_LICENSES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, PropertiesUtil.EXPERT_FILTER));
+        getString("_UI_User_acceptedLicenses_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_acceptedLicenses_feature", "_UI_User_type"),
+        SetupPackage.Literals.USER__ACCEPTED_LICENSES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**

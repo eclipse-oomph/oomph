@@ -62,7 +62,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class SniffAction extends AbstractContainerAction
   {
     super(TITLE);
     setToolTipText("Imports tasks from the running IDE into the selected setup task container");
-    setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(SetupEditorPlugin.PLUGIN_ID, "sniff"));
+    setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("sniff"));
   }
 
   @Override
