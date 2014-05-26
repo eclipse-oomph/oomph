@@ -34,9 +34,7 @@ import org.eclipse.equinox.p2.engine.IProfile;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
 
 import java.io.File;
 import java.util.Arrays;
@@ -44,29 +42,22 @@ import java.util.Arrays;
 /**
  * @author Eike Stepper
  */
-public class AgentTests
+public class AgentTests extends AbstractTests
 {
-  @Rule
-  public TestName testName = new TestName();
-
-  private File userHome;
-
+  @Override
   @Before
   public void setUp() throws Exception
   {
-    userHome = File.createTempFile("p2-tests-", "");
-    System.out.println(testName.getMethodName() + " --> " + userHome);
-
-    userHome.delete();
-    userHome.mkdirs();
-
-    getFreshAgent();
+    super.setUp();
+    AgentManagerImpl.instance = new AgentManagerImpl(userHome);
   }
 
+  @Override
   @After
   public void tearDown() throws Exception
   {
     AgentManagerImpl.instance = null;
+    super.tearDown();
   }
 
   private Agent getAgent()
@@ -156,7 +147,7 @@ public class AgentTests
     {
       try
       {
-        profile.change().setProfileProperty(key, "some value").commit();
+        profile.change().setProfileProperty(key, "some value").commit(LOGGER);
         Assert.fail("IllegalArgumentException expected");
       }
       catch (IllegalArgumentException expected)
@@ -178,7 +169,7 @@ public class AgentTests
     assertThat(profile.getProperty("test"), is("Test Value"));
 
     // Change
-    profile.change().setProfileProperty("test", "Changed Value").commit();
+    profile.change().setProfileProperty("test", "Changed Value").commit(LOGGER);
     assertThat(profile.getProperties().size(), is(4)); // type, environments, nl, test
     assertThat(profile.getProperty("test"), is("Changed Value"));
 
@@ -187,12 +178,12 @@ public class AgentTests
     assertThat(((ProfileImpl)p).getDelegate(false), sameInstance(delegate));
 
     // Add
-    profile.change().setProfileProperty("test2", "New Property").commit();
+    profile.change().setProfileProperty("test2", "New Property").commit(LOGGER);
     assertThat(profile.getProperties().size(), is(5)); // type, environments, nl, test, test2
     assertThat(profile.getProperty("test2"), is("New Property"));
 
     // Remove
-    profile.change().removeProfileProperty("test2").commit();
+    profile.change().removeProfileProperty("test2").commit(LOGGER);
     assertThat(profile.getProperties().size(), is(4)); // type, environments, nl, test
     assertThat(profile.getProperty("test2"), nullValue());
   }
@@ -248,13 +239,58 @@ public class AgentTests
 
     try
     {
-      transaction.commit();
+      transaction.commit(LOGGER);
       Assert.fail("CoreException expected");
     }
     catch (CoreException expected)
     {
       // Success
     }
+  }
+
+  @Test
+  public void testInstallAndUpdateFeature() throws Exception
+  {
+    Agent agent = getAgent();
+    File installFolder = new File(userHome, "app1");
+
+    String oldVersion = "org.eclipse.net4j.util_4.2.0.v20130601-1611";
+    String newVersion = "org.eclipse.net4j.util_4.2.1.v20140218-1709";
+
+    ProfileCreator creator = agent.addProfile("profile-app1", "Installation");
+    Profile profile = creator.setCacheFolder(installFolder).setInstallFolder(installFolder).setInstallFeatures(true).create();
+
+    // Install
+    ProfileTransaction transaction1 = profile.change();
+    ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
+    profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("org.eclipse.net4j.util.feature.group"));
+    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029"));
+
+    transaction1.commit(LOGGER);
+    assertThat(installFolder.isDirectory(), is(true));
+    assertThat(new File(installFolder, "artifacts.xml").isFile(), is(true));
+    assertThat(new File(installFolder, "p2").exists(), is(false));
+
+    File features = new File(installFolder, "features");
+    assertThat(features.isDirectory(), is(true));
+    assertThat(features.list().length, is(1));
+    assertThat(new File(features, oldVersion).isDirectory(), is(true));
+
+    // Update (replace old version)
+    ProfileTransaction transaction2 = profile.change();
+    transaction2.getProfileDefinition().getRepositories()
+        .add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655"));
+
+    transaction2.commit(LOGGER);
+    assertThat(features.list().length, is(1));
+    assertThat(new File(features, oldVersion).exists(), is(false));
+    assertThat(new File(features, newVersion).isDirectory(), is(true));
+
+    // No update (keep new version)
+    ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
+    transaction3.commit(LOGGER);
+    assertThat(features.list().length, is(1));
+    assertThat(new File(features, newVersion).isDirectory(), is(true));
   }
 
   @Test
@@ -275,13 +311,14 @@ public class AgentTests
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("org.eclipse.net4j.util"));
     profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029"));
 
-    transaction1.commit();
+    transaction1.commit(LOGGER);
     assertThat(installFolder.isDirectory(), is(true));
     assertThat(new File(installFolder, "artifacts.xml").isFile(), is(true));
     assertThat(new File(installFolder, "p2").exists(), is(false));
     assertThat(new File(installFolder, "features").isDirectory(), is(false));
 
     File plugins = new File(installFolder, "plugins");
+    assertThat(plugins.isDirectory(), is(true));
     assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, oldVersion).isFile(), is(true));
 
@@ -290,14 +327,14 @@ public class AgentTests
     transaction2.getProfileDefinition().getRepositories()
         .add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655"));
 
-    transaction2.commit();
+    transaction2.commit(LOGGER);
     assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, oldVersion).isFile(), is(false));
     assertThat(new File(plugins, newVersion).isFile(), is(true));
 
     // No update (keep new version)
     ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
-    transaction3.commit();
+    transaction3.commit(LOGGER);
     assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, newVersion).isFile(), is(true));
   }
@@ -320,7 +357,7 @@ public class AgentTests
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch"));
     profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000"));
 
-    transaction1.commit();
+    transaction1.commit(LOGGER);
     assertThat(installFolder.isDirectory(), is(true));
     assertThat(new File(installFolder, "artifacts.xml").isFile(), is(true));
     assertThat(new File(installFolder, "p2").exists(), is(false));
@@ -335,14 +372,14 @@ public class AgentTests
     transaction2.getProfileDefinition().getRepositories()
         .add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"));
 
-    transaction2.commit();
+    transaction2.commit(LOGGER);
     assertThat(plugins.list().length, is(2));
     assertThat(new File(plugins, oldVersion).isFile(), is(true));
     assertThat(new File(plugins, newVersion).isFile(), is(true));
 
     // Update (remove old version)
     ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
-    transaction3.commit();
+    transaction3.commit(LOGGER);
     assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, newVersion).isFile(), is(true));
   }
@@ -361,7 +398,7 @@ public class AgentTests
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("org.eclipse.sdk.ide"));
     profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"));
 
-    transaction.commit();
+    transaction.commit(LOGGER);
     assertThat(installFolder.isDirectory(), is(true));
     assertThat(new File(installFolder, "p2").exists(), is(false));
 
