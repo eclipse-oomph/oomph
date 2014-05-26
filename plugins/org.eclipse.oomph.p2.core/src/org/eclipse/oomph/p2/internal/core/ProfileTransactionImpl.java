@@ -279,21 +279,21 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return false;
   }
 
-  public void commit() throws CoreException
+  public boolean commit() throws CoreException
   {
-    commit(null, null);
+    return commit(null, null);
   }
 
-  public void commit(IProgressMonitor monitor) throws CoreException
+  public boolean commit(IProgressMonitor monitor) throws CoreException
   {
-    commit(null, monitor);
+    return commit(null, monitor);
   }
 
-  public void commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
+  public boolean commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
   {
     if (committed)
     {
-      return;
+      return false;
     }
 
     committed = true;
@@ -330,6 +330,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       ProfileImpl profileImpl = (ProfileImpl)profile;
       IProfile delegate = profileImpl.getDelegate();
+      long timestamp = delegate.getTimestamp();
 
       IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
       adjustProfileChangeRequest(profileChangeRequest, metadata, monitor);
@@ -350,8 +351,10 @@ public class ProfileTransactionImpl implements ProfileTransaction
       IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
       P2CorePlugin.INSTANCE.coreException(status);
 
-      profileImpl.setDelegate(delegate);
       profileImpl.setDefinition(profileDefinition);
+      profileImpl.setDelegate(delegate); // TODO Seems redundant
+
+      return delegate.getTimestamp() != timestamp;
     }
     finally
     {
@@ -606,26 +609,30 @@ public class ProfileTransactionImpl implements ProfileTransaction
       IInstallableUnit iu = queryInstallableUnit(metadata, id, versionRange, monitor);
       if (iu != null)
       {
-        if (!removeAll)
+        IInstallableUnit rootIU = rootIUs.get(id);
+        if (rootIU == null || !rootIU.getVersion().equals(iu.getVersion()))
         {
-          // Check if existing rootIU needs to be removed to not violate "singleton" constraints
-          IInstallableUnit rootIU = rootIUs.get(id);
-          if (rootIU != null && !rootIU.getVersion().equals(iu.getVersion()))
+          if (!removeAll)
           {
-            if (isSingleton(rootIU) || isSingleton(iu))
+            // Check if existing rootIU needs to be removed to not violate "singleton" constraints
+            if (rootIU != null && !rootIU.getVersion().equals(iu.getVersion()))
             {
-              // TODO Check IU locks
-              request.remove(rootIU);
+              if (isSingleton(rootIU) || isSingleton(iu))
+              {
+                // TODO Check IU locks
+                request.remove(rootIU);
+              }
             }
           }
-        }
 
-        request.add(iu);
-        request.setInstallableUnitProfileProperty(iu, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
+          request.add(iu);
+          request.setInstallableUnitProfileProperty(iu, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
 
-        if (optional)
-        {
-          request.setInstallableUnitProfileProperty(iu, INCLUSION_RULES, ProfileInclusionRules.createOptionalInclusionRule(iu));
+          if (optional)
+          {
+            // TODO Change exclusion rule even for existig (unchanged) IU?
+            request.setInstallableUnitProfileProperty(iu, INCLUSION_RULES, ProfileInclusionRules.createOptionalInclusionRule(iu));
+          }
         }
       }
       else

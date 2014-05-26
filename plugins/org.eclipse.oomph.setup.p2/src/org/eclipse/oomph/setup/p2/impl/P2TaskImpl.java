@@ -563,7 +563,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     transaction.getProfileDefinition().setRequirements(requirements);
     transaction.getProfileDefinition().setRepositories(repositories);
 
-    transaction.commit(new ProfileTransaction.CommitContext()
+    ProfileTransaction.CommitContext commitContext = new ProfileTransaction.CommitContext()
     {
       @Override
       public void handleProvisioningPlan(IProvisioningPlan provisioningPlan) throws CoreException
@@ -577,7 +577,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
           SetupP2Plugin.INSTANCE.coreException(ex);
         }
       }
-    }, monitor);
+    };
+
+    boolean profileChanged = transaction.commit(commitContext, monitor);
+    if (profileChanged && context.getTrigger() != Trigger.BOOTSTRAP)
+    {
+      context.setRestartNeeded("New software has been installed.");
+    }
 
     if (eclipseIniExisted)
     {

@@ -53,11 +53,11 @@ public interface ProfileTransaction
 
   public boolean isDirty();
 
-  public void commit() throws CoreException;
+  public boolean commit() throws CoreException;
 
-  public void commit(IProgressMonitor monitor) throws CoreException;
+  public boolean commit(IProgressMonitor monitor) throws CoreException;
 
-  public void commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException;
+  public boolean commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException;
 
   /**
    * @author Eike Stepper
