@@ -60,7 +60,7 @@ public class AgentTests
     userHome.delete();
     userHome.mkdirs();
 
-    AgentManagerImpl.instance = new AgentManagerImpl(userHome);
+    getFreshAgent();
   }
 
   @After
