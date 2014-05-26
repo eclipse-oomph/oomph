@@ -612,7 +612,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
           IInstallableUnit rootIU = rootIUs.get(id);
           if (rootIU != null && !rootIU.getVersion().equals(iu.getVersion()))
           {
-            if (rootIU.isSingleton() || iu.isSingleton())
+            if (isSingleton(rootIU) || isSingleton(iu))
             {
               // TODO Check IU locks
               request.remove(rootIU);
@@ -675,6 +675,21 @@ public class ProfileTransactionImpl implements ProfileTransaction
         request.removeInstallableUnitProfileProperty(key.getInstallableUnit(), key.getPropertyKey());
       }
     });
+  }
+
+  private static boolean isSingleton(IInstallableUnit iu)
+  {
+    if (iu.isSingleton())
+    {
+      return true;
+    }
+
+    if (Boolean.TRUE.toString().equals(iu.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
+    {
+      return true;
+    }
+
+    return false;
   }
 
   private IInstallableUnit generateSourceContainerIU(IProvisioningPlan provisioningPlan, IQueryable<IInstallableUnit> metadata, IProgressMonitor monitor)
