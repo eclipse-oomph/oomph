@@ -12,17 +12,25 @@ package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
+import org.eclipse.oomph.p2.internal.core.P2CorePlugin;
 import org.eclipse.oomph.p2.internal.core.ProfileReferencerImpl;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.URIUtil;
+import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
-import org.eclipse.equinox.p2.core.ProvisionException;
+import org.eclipse.equinox.p2.internal.repository.mirroring.Mirroring;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.query.IQueryResult;
+import org.eclipse.equinox.p2.metadata.IVersionedId;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepository;
+import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
@@ -34,8 +42,13 @@ import java.util.List;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("restriction")
 public final class P2Util
 {
+  private static final String SIMPLE_METADATA_REPOSITORY = IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY;
+
+  private static final String SIMPLE_ARTIFACT_REPOSITORY = IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY;
+
   private P2Util()
   {
   }
@@ -71,40 +84,112 @@ public final class P2Util
     return new ProfileReferencerImpl(file, directory);
   }
 
-  public static void mirrorMetadataRepository(URI sourceURI, URI targetURI, IProgressMonitor monitor) throws ProvisionException
+  public static void mirrorRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
+  {
+    mirrorMetadataRepository(sourceURI, targetURI, filter, monitor);
+    mirrorArtifactRepository(sourceURI, targetURI, filter, monitor);
+  }
+
+  public static void mirrorMetadataRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
   {
     List<URI> repositoriesToRemove = new ArrayList<URI>();
     repositoriesToRemove.add(targetURI);
 
-    IMetadataRepositoryManager metadataRepositoryManager = getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
-    if (!metadataRepositoryManager.contains(sourceURI))
+    IMetadataRepositoryManager manager = getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
+    if (!manager.contains(sourceURI))
     {
       repositoriesToRemove.add(sourceURI);
     }
 
     try
     {
-      IMetadataRepository sourceRepository = metadataRepositoryManager.loadRepository(sourceURI, 0, monitor);
-
+      IMetadataRepository sourceRepository = manager.loadRepository(sourceURI, 0, monitor);
       String name = sourceRepository.getName();
       if (name == null)
       {
         name = sourceURI.toString();
       }
 
-      IMetadataRepository targetRepository = metadataRepositoryManager.createRepository(targetURI, name, IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY,
-          sourceRepository.getProperties());
+      IMetadataRepository targetRepository = manager.createRepository(targetURI, name, SIMPLE_METADATA_REPOSITORY, sourceRepository.getProperties());
       targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
 
-      IQueryResult<IInstallableUnit> ius = sourceRepository.query(QueryUtil.createIUAnyQuery(), null);
-      targetRepository.addInstallableUnits(ius.toUnmodifiableSet());
+      List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
+      for (IInstallableUnit iu : sourceRepository.query(QueryUtil.createIUAnyQuery(), null))
+      {
+        if (filter == null || filter.matches(iu))
+        {
+          ius.add(iu);
+        }
+      }
+
+      targetRepository.addInstallableUnits(ius);
     }
     finally
     {
       for (URI uri : repositoriesToRemove)
       {
-        metadataRepositoryManager.removeRepository(uri);
+        manager.removeRepository(uri);
       }
     }
+  }
+
+  public static void mirrorArtifactRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
+  {
+    List<URI> repositoriesToRemove = new ArrayList<URI>();
+    repositoriesToRemove.add(targetURI);
+
+    Agent agent = getAgentManager().getCurrentAgent();
+    IArtifactRepositoryManager manager = agent.getArtifactRepositoryManager();
+    if (!manager.contains(sourceURI))
+    {
+      repositoriesToRemove.add(sourceURI);
+    }
+
+    try
+    {
+      IArtifactRepository sourceRepository = manager.loadRepository(sourceURI, 0, monitor);
+      String name = sourceRepository.getName();
+      if (name == null)
+      {
+        name = sourceURI.toString();
+      }
+
+      IArtifactRepository targetRepository = manager.createRepository(targetURI, name, SIMPLE_ARTIFACT_REPOSITORY, sourceRepository.getProperties());
+      targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
+
+      List<IArtifactKey> keys = new ArrayList<IArtifactKey>();
+      for (IArtifactKey key : sourceRepository.query(ArtifactKeyQuery.ALL_KEYS, null))
+      {
+        if (filter == null || filter.matches(key))
+        {
+          keys.add(key);
+        }
+      }
+
+      Transport transport = (Transport)agent.getProvisioningAgent().getService(Transport.SERVICE_NAME);
+
+      Mirroring mirror = new Mirroring(sourceRepository, targetRepository, true);
+      mirror.setCompare(false);
+      mirror.setTransport(transport);
+      mirror.setArtifactKeys(keys.toArray(new IArtifactKey[keys.size()]));
+
+      IStatus result = mirror.run(true, false);
+      P2CorePlugin.INSTANCE.coreException(result);
+    }
+    finally
+    {
+      for (URI uri : repositoriesToRemove)
+      {
+        manager.removeRepository(uri);
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface VersionedIdFilter
+  {
+    public boolean matches(IVersionedId versionedId);
   }
 }

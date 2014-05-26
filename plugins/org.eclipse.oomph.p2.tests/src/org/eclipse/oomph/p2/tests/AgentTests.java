@@ -21,22 +21,27 @@ import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.P2Util.VersionedIdFilter;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
 import org.eclipse.oomph.p2.internal.core.ProfileImpl;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.metadata.IVersionedId;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Arrays;
 
 /**
@@ -44,6 +49,53 @@ import java.util.Arrays;
  */
 public class AgentTests extends AbstractTests
 {
+  private static final String TMP = PropertiesUtil.getProperty("java.io.tmpdir");
+
+  private static final File CDO_OLD = new File(TMP, "p2-test-mirror-001-cdo-old");
+
+  private static final File CDO_NEW = new File(TMP, "p2-test-mirror-001-cdo-new");
+
+  private static final VersionedIdFilter CDO_FILTER = new VersionedIdFilter()
+  {
+    public boolean matches(IVersionedId versionedId)
+    {
+      String id = versionedId.getId();
+      return id.startsWith("org.eclipse.net4j.util") || id.startsWith("org.apache");
+    }
+  };
+
+  private static final File PLATFORM_OLD = new File(TMP, "p2-test-mirror-001-platform-old");
+
+  private static final File PLATFORM_NEW = new File(TMP, "p2-test-mirror-001-platform-new");
+
+  private static final VersionedIdFilter PLATFORM_FILTER = new VersionedIdFilter()
+  {
+    public boolean matches(IVersionedId versionedId)
+    {
+      String id = versionedId.getId();
+      return id.startsWith("com.jcraft.jsch") || id.startsWith("org.apache") || id.startsWith("a.jre");
+    }
+  };
+
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception
+  {
+    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
+    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
+    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000", PLATFORM_OLD, PLATFORM_FILTER);
+    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700", PLATFORM_NEW, PLATFORM_FILTER);
+  }
+
+  private static void mirror(String repo, File local, VersionedIdFilter filter) throws Exception
+  {
+    if (!local.isDirectory())
+    {
+      LOGGER.setTaskName("Creating test mirror of " + repo + " under " + local);
+      P2Util.mirrorRepository(new URI(repo), local.toURI(), filter, LOGGER);
+      LOGGER.setTaskName(null);
+    }
+  }
+
   @Override
   @Before
   public void setUp() throws Exception
@@ -264,7 +316,7 @@ public class AgentTests extends AbstractTests
     ProfileTransaction transaction1 = profile.change();
     ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("org.eclipse.net4j.util.feature.group"));
-    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029"));
+    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository(CDO_OLD.toURI().toString()));
 
     commitProfileTransaction(transaction1, true);
     assertThat(installFolder.isDirectory(), is(true));
@@ -278,8 +330,7 @@ public class AgentTests extends AbstractTests
 
     // Update (replace old version)
     ProfileTransaction transaction2 = profile.change();
-    transaction2.getProfileDefinition().getRepositories()
-        .add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655"));
+    transaction2.getProfileDefinition().getRepositories().add(P2Factory.eINSTANCE.createRepository(CDO_NEW.toURI().toString()));
 
     commitProfileTransaction(transaction2, true);
     assertThat(features.list().length, is(1));
@@ -288,7 +339,7 @@ public class AgentTests extends AbstractTests
 
     // No update (keep new version)
     ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
-    commitProfileTransaction(transaction3, false);
+    commitProfileTransaction(transaction3, true);
     assertThat(features.list().length, is(1));
     assertThat(new File(features, newVersion).isDirectory(), is(true));
   }
@@ -309,7 +360,7 @@ public class AgentTests extends AbstractTests
     ProfileTransaction transaction1 = profile.change();
     ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("org.eclipse.net4j.util"));
-    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029"));
+    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository(CDO_OLD.toURI().toString()));
 
     commitProfileTransaction(transaction1, true);
     assertThat(installFolder.isDirectory(), is(true));
@@ -324,8 +375,7 @@ public class AgentTests extends AbstractTests
 
     // Update (replace old version)
     ProfileTransaction transaction2 = profile.change();
-    transaction2.getProfileDefinition().getRepositories()
-        .add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655"));
+    transaction2.getProfileDefinition().getRepositories().add(P2Factory.eINSTANCE.createRepository(CDO_NEW.toURI().toString()));
 
     commitProfileTransaction(transaction2, true);
     assertThat(plugins.list().length, is(1));
@@ -334,7 +384,7 @@ public class AgentTests extends AbstractTests
 
     // No update (keep new version)
     ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
-    commitProfileTransaction(transaction3, false);
+    commitProfileTransaction(transaction3, true);
     assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, newVersion).isFile(), is(true));
   }
@@ -355,7 +405,7 @@ public class AgentTests extends AbstractTests
     ProfileTransaction transaction1 = profile.change();
     ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch"));
-    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000"));
+    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository(PLATFORM_OLD.toURI().toString()));
 
     commitProfileTransaction(transaction1, true);
     assertThat(installFolder.isDirectory(), is(true));
@@ -369,8 +419,7 @@ public class AgentTests extends AbstractTests
 
     // Update (add new version)
     ProfileTransaction transaction2 = profile.change();
-    transaction2.getProfileDefinition().getRepositories()
-        .add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"));
+    transaction2.getProfileDefinition().getRepositories().add(P2Factory.eINSTANCE.createRepository(PLATFORM_NEW.toURI().toString()));
 
     commitProfileTransaction(transaction2, true);
     assertThat(plugins.list().length, is(2));
@@ -399,7 +448,7 @@ public class AgentTests extends AbstractTests
     ProfileTransaction transaction1 = profile.change();
     ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch"));
-    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000"));
+    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository(PLATFORM_OLD.toURI().toString()));
 
     commitProfileTransaction(transaction1, true);
     assertThat(installFolder.isDirectory(), is(true));
@@ -436,7 +485,7 @@ public class AgentTests extends AbstractTests
     ProfileTransaction transaction = profile.change();
     ProfileDefinition profileDefinition = transaction.getProfileDefinition();
     profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("org.eclipse.sdk.ide"));
-    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"));
+    profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository(PLATFORM_NEW.toURI().toString()));
 
     commitProfileTransaction(transaction, true);
     assertThat(installFolder.isDirectory(), is(true));
