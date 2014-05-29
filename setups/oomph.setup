@@ -187,7 +187,7 @@
           <repositories
               url="http://download.eclipse.org/eclipse/updates/4.4milestones"/>
           <repositories
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
           <repositories
               url="http://download.eclipse.org/tools/gef/updates/milestones"/>
           <repositories
