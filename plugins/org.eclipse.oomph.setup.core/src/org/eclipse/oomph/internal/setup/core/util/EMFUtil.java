@@ -907,6 +907,18 @@ public final class EMFUtil
     }
   }
 
+  public static void deleteFile(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
+  {
+    try
+    {
+      uriConverter.delete(uri, options);
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
+  }
+
   /**
    * @author Eike Stepper
    */

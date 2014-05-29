@@ -33,6 +33,8 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMISaveImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLString;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.IOException;
@@ -100,6 +102,21 @@ public class SetupResourceImpl extends XMIResourceImpl implements org.eclipse.oo
       {
         return new SAXXMIHandler(resource, helper, options)
         {
+          @Override
+          public InputSource resolveEntity(String publicId, String systemId) throws SAXException
+          {
+            URI uri = getURI();
+            String message = "Unexpected entity: publicId=" + publicId + ", systemId=" + systemId + ", uri=" + uri;
+
+            URI normalizedURI = getURIConverter().normalize(uri);
+            if (!normalizedURI.equals(uri))
+            {
+              message += ", normalizedURI=" + normalizedURI;
+            }
+
+            throw new SAXException(message);
+          }
+
           @Override
           protected void setFeatureValue(EObject object, EStructuralFeature feature, Object value)
           {

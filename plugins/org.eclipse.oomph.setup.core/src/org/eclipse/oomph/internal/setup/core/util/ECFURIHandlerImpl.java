@@ -235,12 +235,16 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       try
       {
         EMFUtil.writeFile(uriConverter, options, cacheURI, bytes);
-        setETag(uriConverter, cacheURI, transferListener.eTag);
       }
       catch (IORuntimeException ex)
       {
         // Ignore attempts to write out to the cache file.
         // This may collide with another JVM doing exactly the same thing.
+        transferListener.eTag = null;
+      }
+      finally
+      {
+        setETag(uriConverter, cacheURI, transferListener.eTag);
       }
 
       setExpectedETag(uri, transferListener.eTag);
@@ -297,7 +301,14 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   {
     try
     {
-      EMFUtil.writeFile(uriConverter, null, file.appendFileExtension("etag"), eTag.getBytes("UTF-8"));
+      if (eTag != null)
+      {
+        EMFUtil.writeFile(uriConverter, null, file.appendFileExtension("etag"), eTag.getBytes("UTF-8"));
+      }
+      else
+      {
+        EMFUtil.deleteFile(uriConverter, null, file);
+      }
     }
     catch (IORuntimeException ex)
     {
