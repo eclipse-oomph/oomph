@@ -45,7 +45,6 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -65,10 +64,13 @@ import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -411,36 +413,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     return PRIORITY_INSTALLATION;
   }
 
-  private static Set<IInstallableUnit> getInstalledUnits()
-  {
-    Set<IInstallableUnit> result = new HashSet<IInstallableUnit>();
-
-    IProfileRegistry profileRegistry = P2Util.getAgentManager().getCurrentAgent().getProfileRegistry();
-    IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
-    if (profile != null)
-    {
-      IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUAnyQuery(), null);
-      for (IInstallableUnit requirement : queryResult)
-      {
-        result.add(requirement);
-      }
-    }
-
-    return result;
-  }
-
-  private static Set<String> getKnownRepositories()
-  {
-    Set<String> result = new HashSet<String>();
-    Agent agent = P2Util.getAgentManager().getCurrentAgent();
-    for (java.net.URI knownRepository : agent.getMetadataRepositoryManager().getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM))
-    {
-      result.add(knownRepository.toString());
-    }
-
-    return result;
-  }
-
   @Override
   public Object getOverrideToken()
   {
@@ -486,6 +458,19 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
+  private boolean isInstalled(Set<IInstallableUnit> installedUnits, String id, VersionRange versionRange)
+  {
+    for (IInstallableUnit installedUnit : installedUnits)
+    {
+      if (id.equals(installedUnit.getId()) && versionRange.isIncluded(installedUnit.getVersion()))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (SKIP)
@@ -494,12 +479,41 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     Trigger trigger = context.getTrigger();
-    if (trigger == Trigger.BOOTSTRAP || trigger == Trigger.MANUAL)
+    if (trigger == Trigger.BOOTSTRAP)
     {
       return true;
     }
 
-    Set<IInstallableUnit> installedUnits = getInstalledUnits();
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
+    IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
+
+    Set<String> knownMetadataRepositories = getKnownRepositories(metadataRepositoryManager);
+    Set<String> knownArtifactRepositories = getKnownRepositories(artifactRepositoryManager);
+
+    for (Repository repository : getRepositories())
+    {
+      String url = context.redirect(repository.getURL());
+      repository.setURL(url);
+
+      URI uri = new URI(url);
+      if (!knownMetadataRepositories.contains(url))
+      {
+        metadataRepositoryManager.addRepository(uri);
+      }
+
+      if (!knownArtifactRepositories.contains(url))
+      {
+        artifactRepositoryManager.addRepository(uri);
+      }
+    }
+
+    if (trigger == Trigger.MANUAL)
+    {
+      return true;
+    }
+
+    Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
     for (Requirement requirement : getRequirements())
     {
       String id = requirement.getID();
@@ -510,19 +524,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
 
       if (!isInstalled(installedUnits, id, versionRange))
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private boolean isInstalled(Set<IInstallableUnit> installedUnits, String id, VersionRange versionRange)
-  {
-    for (IInstallableUnit installedUnit : installedUnits)
-    {
-      if (id.equals(installedUnit.getId()) && versionRange.isIncluded(installedUnit.getVersion()))
       {
         return true;
       }
@@ -552,9 +553,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     for (Repository repository : repositories)
     {
-      String url = context.redirect(repository.getURL());
-      context.log("From " + url);
-      repository.setURL(url);
+      context.log("From " + repository.getURL());
     }
 
     String profileID = StringUtil.encodePath(eclipseDir.toString());
@@ -734,7 +733,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     try
     {
-      String contents = DownloadUtil.load(context.getURIConverter(), URI.createFileURI(iniFile.toString()), null);
+      org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createFileURI(iniFile.toString());
+      String contents = DownloadUtil.load(context.getURIConverter(), uri, null);
       Pattern section = Pattern.compile("^(-vmargs)([\n\r]+.*)\\z|^(-[^\\n\\r]*[\\n\\r]*)((?:^[^-][^\\n\\r]*)*[\\n\\r]*)", Pattern.MULTILINE | Pattern.DOTALL);
       Map<String, String> map = new LinkedHashMap<String, String>();
       for (Matcher matcher = section.matcher(contents); matcher.find();)
@@ -775,6 +775,36 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     {
       IOUtil.close(out);
     }
+  }
+
+  private static Set<String> getKnownRepositories(IRepositoryManager<?> manager)
+  {
+    Set<String> result = new HashSet<String>();
+
+    for (URI knownRepository : manager.getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM))
+    {
+      result.add(knownRepository.toString());
+    }
+
+    return result;
+  }
+
+  private static Set<IInstallableUnit> getInstalledUnits(Agent agent)
+  {
+    Set<IInstallableUnit> result = new HashSet<IInstallableUnit>();
+
+    IProfileRegistry profileRegistry = agent.getProfileRegistry();
+    IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+    if (profile != null)
+    {
+      IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUAnyQuery(), null);
+      for (IInstallableUnit requirement : queryResult)
+      {
+        result.add(requirement);
+      }
+    }
+
+    return result;
   }
 
   @Override
@@ -857,7 +887,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     // app.setSlicingOptions(slicingOptions);
     //
     // RepositoryDescriptor destination = new RepositoryDescriptor();
-    // destination.setLocation(new java.net.URI(targetURL));
+    // destination.setLocation(new URI(targetURL));
     // destination.setAppend(true);
     // app.addDestination(destination);
     //
@@ -875,7 +905,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     // String sourceURL = context.redirect(URI.createURI(p2Repository.getURL())).toString();
     //
     // RepositoryDescriptor descriptor = new RepositoryDescriptor();
-    // descriptor.setLocation(new java.net.URI(sourceURL));
+    // descriptor.setLocation(new URI(sourceURL));
     // app.addSource(descriptor);
     //
     // context.addRedirection(sourceURL, targetURL);
@@ -911,8 +941,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     {
       public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception
       {
-        Set<IInstallableUnit> installedUnits = getInstalledUnits();
-        Set<String> knownRepositories = getKnownRepositories();
+        Agent agent = P2Util.getAgentManager().getCurrentAgent();
+        Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
+
+        IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
+        Set<String> knownRepositories = getKnownRepositories(manager);
         if (installedUnits.isEmpty() && knownRepositories.isEmpty())
         {
           return;
