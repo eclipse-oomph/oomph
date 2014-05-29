@@ -349,8 +349,10 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
           resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, resourceHandler);
           resourceMirror.mirror(uris);
-
           resourceSet.getLoadOptions().remove(XMLResource.OPTION_RESOURCE_HANDLER);
+
+          resourceMirror.dispose();
+
           if (mirrorCanceled.get())
           {
             getShell().getDisplay().asyncExec(new Runnable()

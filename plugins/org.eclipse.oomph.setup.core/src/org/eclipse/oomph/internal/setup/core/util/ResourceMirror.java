@@ -68,6 +68,8 @@ public class ResourceMirror
 
   private boolean isCanceled;
 
+  private DelegatingResourceLocator resourceLocator;
+
   public ResourceMirror()
   {
     this(EMFUtil.createResourceSet());
@@ -76,19 +78,18 @@ public class ResourceMirror
   public ResourceMirror(ResourceSet resourceSet)
   {
     this.resourceSet = resourceSet;
-    new ResourceSetImpl.ResourceLocator((ResourceSetImpl)resourceSet)
-    {
-      @Override
-      public Resource getResource(URI uri, boolean loadOnDemand)
-      {
-        return basicGetResource(uri, loadOnDemand);
-      }
-    };
+    resourceLocator = new DelegatingResourceLocator((ResourceSetImpl)resourceSet);
   }
 
   public ResourceSet getResourceSet()
   {
     return resourceSet;
+  }
+
+  public void dispose()
+  {
+    resourceSet = null;
+    resourceLocator.dispose();
   }
 
   public synchronized void cancel()
@@ -104,6 +105,11 @@ public class ResourceMirror
     pendingLoadJobs.clear();
   }
 
+  public boolean isCanceled()
+  {
+    return isCanceled;
+  }
+
   public void mirror(Collection<? extends URI> uris)
   {
     if (latch == null)
@@ -111,15 +117,16 @@ public class ResourceMirror
       latch = new CountDownLatch(1);
     }
 
-    schedule(uris);
-
-    try
+    if (schedule(uris))
     {
-      latch.await();
-    }
-    catch (InterruptedException ex)
-    {
-      throw new RuntimeException(ex);
+      try
+      {
+        latch.await();
+      }
+      catch (InterruptedException ex)
+      {
+        throw new RuntimeException(ex);
+      }
     }
 
     latch = null;
@@ -132,15 +139,16 @@ public class ResourceMirror
       latch = new CountDownLatch(1);
     }
 
-    schedule(uris);
-
-    try
+    if (schedule(uris))
     {
-      latch.await();
-    }
-    catch (InterruptedException ex)
-    {
-      throw new RuntimeException(ex);
+      try
+      {
+        latch.await();
+      }
+      catch (InterruptedException ex)
+      {
+        throw new RuntimeException(ex);
+      }
     }
 
     latch = null;
@@ -153,86 +161,103 @@ public class ResourceMirror
       latch = new CountDownLatch(1);
     }
 
-    schedule(uri);
-
-    try
+    if (schedule(uri))
     {
-      latch.await();
-    }
-    catch (InterruptedException ex)
-    {
-      throw new RuntimeException(ex);
+      try
+      {
+        latch.await();
+      }
+      catch (InterruptedException ex)
+      {
+        throw new RuntimeException(ex);
+      }
     }
 
     latch = null;
   }
 
-  public void schedule(Collection<? extends URI> uris)
+  public boolean schedule(Collection<? extends URI> uris)
   {
+    boolean result = false;
     for (URI uri : uris)
     {
-      schedule(uri);
-    }
-  }
-
-  public void schedule(URI... uris)
-  {
-    for (URI uri : uris)
-    {
-      schedule(uri);
-    }
-  }
-
-  public void schedule(URI uri)
-  {
-    schedule(uri, false);
-  }
-
-  private synchronized void schedule(URI uri, boolean secondary)
-  {
-    if (!isCanceled)
-    {
-      synchronized (resourceSet)
+      if (schedule(uri))
       {
-        Resource resource = resourceSet.getResource(uri, false);
-        if (resource != null && resource.isLoaded())
-        {
-          return;
-        }
+        result = true;
       }
+    }
 
-      LoadJob loadJob = loadJobs.get(uri);
-      if (loadJob != null)
+    return result;
+  }
+
+  public boolean schedule(URI... uris)
+  {
+    boolean result = false;
+    for (URI uri : uris)
+    {
+      if (schedule(uri))
       {
-        if (!secondary && loadJob.secondary && pendingLoadJobs.contains(loadJob))
-        {
-          loadJob.secondary = false;
-          Collections.sort(pendingLoadJobs, COMPARATOR);
-        }
+        result = true;
+      }
+    }
+
+    return result;
+  }
+
+  public boolean schedule(URI uri)
+  {
+    return schedule(uri, false);
+  }
+
+  private synchronized boolean schedule(URI uri, boolean secondary)
+  {
+    if (isCanceled())
+    {
+      return false;
+    }
+
+    synchronized (resourceSet)
+    {
+      Resource resource = resourceSet.getResource(uri, false);
+      if (resource != null && resource.isLoaded())
+      {
+        return false;
+      }
+    }
+
+    LoadJob loadJob = loadJobs.get(uri);
+    if (loadJob != null)
+    {
+      if (!secondary && loadJob.secondary && pendingLoadJobs.contains(loadJob))
+      {
+        loadJob.secondary = false;
+        Collections.sort(pendingLoadJobs, COMPARATOR);
+      }
+    }
+    else
+    {
+      loadJob = new LoadJob(uri, ++nextJobID, secondary);
+      loadJobs.put(loadJob.uri, loadJob);
+
+      if (isLoadPossible())
+      {
+        loadJob.schedule();
       }
       else
       {
-        loadJob = new LoadJob(uri, ++nextJobID, secondary);
-        loadJobs.put(loadJob.uri, loadJob);
-
-        if (isLoadPossible())
-        {
-          loadJob.schedule();
-        }
-        else
-        {
-          pendingLoadJobs.add(loadJob);
-          Collections.sort(pendingLoadJobs, COMPARATOR);
-        }
+        pendingLoadJobs.add(loadJob);
+        Collections.sort(pendingLoadJobs, COMPARATOR);
       }
     }
+
+    return true;
   }
 
   private synchronized void deschedule(URI uri)
   {
     loadJobs.remove(uri);
 
-    if (!isCanceled && !pendingLoadJobs.isEmpty())
+    if (!isCanceled() && !pendingLoadJobs.isEmpty())
     {
       LoadJob loadJob = pendingLoadJobs.remove(0);
       loadJob.schedule();
@@ -250,6 +275,34 @@ public class ResourceMirror
     int pending = pendingLoadJobs.size();
     int running = all - pending;
     return running < maxJobs;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class DelegatingResourceLocator extends ResourceSetImpl.ResourceLocator
+  {
+    private DelegatingResourceLocator(ResourceSetImpl resourceSet)
+    {
+      super(resourceSet);
+    }
+
+    @Override
+    public Resource getResource(URI uri, boolean loadOnDemand)
+    {
+      if (loadOnDemand && "setup".equals(uri.fileExtension()))
+      {
+        return null;
+      }
+
+      return basicGetResource(uri, loadOnDemand);
+    }
+
+    @Override
+    public void dispose()
+    {
+      super.dispose();
+    }
   }
 
   /**
@@ -314,11 +367,25 @@ public class ResourceMirror
       return Status.OK_STATUS;
     }
 
+    private void delay()
+    {
+      // try
+      // {
+      // Thread.sleep(100);
+      // }
+      // catch (InterruptedException ex)
+      // {
+      // ex.printStackTrace();
+      // }
+    }
+
     private void visit(Resource resource)
     {
       for (Iterator<EObject> it = EcoreUtil.getAllContents(resource, false); it.hasNext();)
       {
-        if (isCanceled)
+        delay();
+
+        if (isCanceled())
         {
           break;
         }
@@ -333,7 +400,9 @@ public class ResourceMirror
         {
           for (Iterator<EObject> it2 = ((InternalEList<EObject>)eObject.eCrossReferences()).basicListIterator(); it2.hasNext();)
           {
-            if (isCanceled)
+            delay();
+
+            if (isCanceled())
             {
               break;
             }

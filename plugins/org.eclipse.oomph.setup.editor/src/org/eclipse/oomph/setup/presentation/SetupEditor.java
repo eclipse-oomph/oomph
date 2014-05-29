@@ -15,7 +15,9 @@ import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
+import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
@@ -58,6 +60,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.BasicResourceHandler;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -98,7 +102,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -174,6 +181,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This is an example of a Setup model editor.
@@ -589,6 +598,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
   };
 
+  private ResourceMirror resourceMirror;
+
   /**
    * Handles activation of the editor or it's associated views.
    * <!-- begin-user-doc -->
@@ -871,7 +882,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         if (contentOutlinePage != null)
         {
-          contentOutlinePage.update();
+          contentOutlinePage.update(2);
         }
       }
     });
@@ -1085,75 +1096,71 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * This is the method called to load a resource into the editing domain's resource set based on the editor's input.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  public void createModelGen()
-  {
-    URI resourceURI = EditUIUtil.getURI(getEditorInput());
-    Exception exception = null;
-    Resource resource = null;
-    try
-    {
-      // Load the resource through the editing domain.
-      //
-      resource = editingDomain.getResourceSet().getResource(resourceURI, true);
-    }
-    catch (Exception e)
-    {
-      exception = e;
-      resource = editingDomain.getResourceSet().getResource(resourceURI, false);
-    }
-
-    Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
-    if (diagnostic.getSeverity() != Diagnostic.OK)
-    {
-      resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
-    }
-    editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
-  }
-
   public void createModel()
   {
-    createModelGen();
-
+    URI resourceURI = EditUIUtil.getURI(getEditorInput());
     ResourceSet resourceSet = editingDomain.getResourceSet();
-    Resource mainResource = resourceSet.getResources().get(0);
-    EObject rootObject = mainResource.getContents().get(0);
-    if (!(rootObject instanceof Index))
+
+    resourceMirror.mirror(resourceURI);
+
+    Resource mainResource = editingDomain.getResourceSet().getResource(resourceURI, false);
+    EList<EObject> contents = mainResource.getContents();
+    EObject rootObject = null;
+    if (!contents.isEmpty())
     {
-      EMFUtil.loadResourceSafely(resourceSet, SetupContext.INDEX_SETUP_URI);
+      rootObject = contents.get(0);
+      if (!(rootObject instanceof Index))
+      {
+        resourceMirror.mirror(SetupContext.INDEX_SETUP_URI);
+      }
     }
 
-    EPackage ePackage = rootObject.eClass().getEPackage();
-    URI ePackageResourceURI = ePackage.eResource().getURI();
-    if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
+    for (Resource resource : resourceSet.getResources())
     {
-      List<EObject> migratedContents = new ArrayList<EObject>();
-      try
+      Diagnostic diagnostic = analyzeResourceProblems(resource, null);
+      if (diagnostic.getSeverity() != Diagnostic.OK)
       {
-        EMFUtil.migrate(mainResource, migratedContents);
-        CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
-        command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
-        command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-        editingDomain.getCommandStack().execute(command);
+        resourceToDiagnosticMap.put(resource, diagnostic);
       }
-      catch (RuntimeException ex)
-      {
-        CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
-        command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-        editingDomain.getCommandStack().execute(command);
+    }
 
-        SetupEditorPlugin.INSTANCE.log(ex);
-      }
+    editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
 
-      EcoreUtil.resolveAll(mainResource);
-      for (Resource resource : resourceSet.getResources())
+    if (!resourceMirror.isCanceled() && rootObject != null)
+    {
+      EPackage ePackage = rootObject.eClass().getEPackage();
+      URI ePackageResourceURI = ePackage.eResource().getURI();
+      if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
       {
-        URI uri = resource.getURI();
-        if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+        List<EObject> migratedContents = new ArrayList<EObject>();
+        try
         {
-          resource.getErrors().clear();
-          resource.getWarnings().clear();
+          EMFUtil.migrate(mainResource, migratedContents);
+          CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
+          command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
+          command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+          editingDomain.getCommandStack().execute(command);
+        }
+        catch (RuntimeException ex)
+        {
+          CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
+          command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+          editingDomain.getCommandStack().execute(command);
+
+          SetupEditorPlugin.INSTANCE.log(ex);
+        }
+
+        EcoreUtil.resolveAll(mainResource);
+        for (Resource resource : resourceSet.getResources())
+        {
+          URI uri = resource.getURI();
+          if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+          {
+            resource.getErrors().clear();
+            resource.getWarnings().clear();
+          }
         }
       }
     }
@@ -1195,82 +1202,57 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   @Override
   public void createPages()
   {
-    // Creates the model from the editor input
+    // Create a page for the selection tree view.
     //
-    createModel();
+    Tree tree = new Tree(getContainer(), SWT.MULTI);
+    selectionViewer = new TreeViewer(tree);
+    setCurrentViewer(selectionViewer);
 
-    // Only creates the other pages if there is something that can be edited
-    //
-    if (!getEditingDomain().getResourceSet().getResources().isEmpty())
+    selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+    selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer), new DiagnosticDecorator(
+        editingDomain, selectionViewer, SetupEditorPlugin.getPlugin().getDialogSettings())));
+
+    selectionViewer.setInput(new ItemProvider(Collections.singleton(new ItemProvider("Loading..."))));
+
+    getViewer().getControl().addMouseListener(new MouseListener()
     {
-      // Create a page for the selection tree view.
-      //
-      Tree tree = new Tree(getContainer(), SWT.MULTI);
-      selectionViewer = new TreeViewer(tree);
-      setCurrentViewer(selectionViewer);
-
-      selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-      selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer), new DiagnosticDecorator(
-          editingDomain, selectionViewer, SetupEditorPlugin.getPlugin().getDialogSettings())));
-
-      Resource resource = editingDomain.getResourceSet().getResources().get(0);
-      selectionViewer.setInput(resource);
-
-      EObject rootObject = resource.getContents().get(0);
-      if (rootObject instanceof Project)
+      public void mouseDoubleClick(MouseEvent e)
       {
-        for (Stream branch : ((Project)rootObject).getStreams())
+        try
         {
-          selectionViewer.expandToLevel(branch, 1);
+          getSite().getPage().showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
+        }
+        catch (PartInitException ex)
+        {
+          SetupEditorPlugin.INSTANCE.log(ex);
         }
       }
-      else
+
+      public void mouseDown(MouseEvent e)
       {
-        selectionViewer.expandToLevel(2);
+        // Do nothing
       }
 
-      selectionViewer.setSelection(new StructuredSelection(rootObject), true);
-
-      getViewer().getControl().addMouseListener(new MouseListener()
+      public void mouseUp(MouseEvent e)
       {
-        public void mouseDoubleClick(MouseEvent e)
-        {
-          try
-          {
-            getSite().getPage().showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
-          }
-          catch (PartInitException ex)
-          {
-            SetupEditorPlugin.INSTANCE.log(ex);
-          }
-        }
+        // Do nothing
+      }
+    });
 
-        public void mouseDown(MouseEvent e)
-        {
-          // Do nothing
-        }
+    new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
+    new ColumnViewerInformationControlToolTipSupport(selectionViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, selectionViewer));
 
-        public void mouseUp(MouseEvent e)
-        {
-          // Do nothing
-        }
-      });
+    createContextMenuFor(selectionViewer);
+    int pageIndex = addPage(tree);
+    setPageText(pageIndex, getString("_UI_SelectionPage_label"));
 
-      new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
-      new ColumnViewerInformationControlToolTipSupport(selectionViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, selectionViewer));
-
-      createContextMenuFor(selectionViewer);
-      int pageIndex = addPage(tree);
-      setPageText(pageIndex, getString("_UI_SelectionPage_label"));
-
-      getSite().getShell().getDisplay().asyncExec(new Runnable()
+    getSite().getShell().getDisplay().asyncExec(new Runnable()
+    {
+      public void run()
       {
-        public void run()
-        {
-          setActivePage(0);
-        }
-      });
-    }
+        setActivePage(0);
+      }
+    });
 
     // Ensures that this editor will only display the page's tab
     // area if there are more than one page
@@ -1291,13 +1273,108 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
-    getSite().getShell().getDisplay().asyncExec(new Runnable()
+    Job job = new Job("Loading Model")
     {
-      public void run()
+      @Override
+      protected IStatus run(final IProgressMonitor monitor)
       {
-        updateProblemIndication();
+        final ResourceSet resourceSet = editingDomain.getResourceSet();
+        final AtomicBoolean mirrorCanceled = new AtomicBoolean();
+        resourceMirror = new ResourceMirror(resourceSet)
+        {
+          @Override
+          public boolean isCanceled()
+          {
+            if (monitor.isCanceled() && !mirrorCanceled.getAndSet(true))
+            {
+              resourceMirror.cancel();
+            }
+
+            return super.isCanceled();
+          }
+        };
+
+        final String taskName = resourceSet.getLoadOptions().get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
+            : "Loading from internet ";
+        final AtomicInteger counter = new AtomicInteger(1);
+
+        // Remove the adapters that do the live validation while loading in the background job.
+        final List<Adapter> diagnosticDecorators = new ArrayList<Adapter>();
+        final EList<Adapter> resourceSetAdapters = resourceSet.eAdapters();
+        for (Iterator<Adapter> it = resourceSetAdapters.iterator(); it.hasNext();)
+        {
+          Adapter adapter = it.next();
+          if (adapter instanceof DiagnosticDecorator.DiagnosticAdapter)
+          {
+            diagnosticDecorators.add(adapter);
+            it.remove();
+          }
+        }
+
+        XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
+        {
+          @Override
+          public synchronized void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options)
+          {
+            synchronized (resourceSet)
+            {
+              monitor.subTask("Loading " + resource.getURI());
+              monitor.worked(1);
+              monitor.setTaskName(taskName + counter.getAndIncrement() + " of " + resourceSet.getResources().size());
+            }
+          }
+        };
+
+        resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, resourceHandler);
+        createModel();
+        resourceSet.getLoadOptions().remove(XMLResource.OPTION_RESOURCE_HANDLER);
+        resourceMirror.dispose();
+
+        final Resource resource = resourceSet.getResources().get(0);
+        final EList<EObject> contents = resource.getContents();
+        if (!contents.isEmpty())
+        {
+          getSite().getShell().getDisplay().asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              selectionViewer.setInput(resource);
+              EObject rootObject = contents.get(0);
+              selectionViewer.setSelection(new StructuredSelection(rootObject), true);
+
+              if (!resourceMirror.isCanceled())
+              {
+                if (rootObject instanceof Project)
+                {
+                  for (Stream branch : ((Project)rootObject).getStreams())
+                  {
+                    selectionViewer.expandToLevel(branch, 1);
+                  }
+                }
+                else
+                {
+                  selectionViewer.expandToLevel(2);
+                }
+
+                if (contentOutlinePage != null)
+                {
+                  contentOutlinePage.update(2);
+                }
+
+                resourceSetAdapters.addAll(diagnosticDecorators);
+              }
+
+              updateProblemIndication();
+            }
+          });
+        }
+
+        return Status.OK_STATUS;
       }
-    });
+    };
+
+    job.schedule();
+    getSite().getWorkbenchWindow().getWorkbench().getProgressService().showInDialog(null, job);
   }
 
   /**
@@ -1395,10 +1472,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     private ILabelProvider labelProvider;
 
     private Trigger trigger;
-
-    private int xxx;// TODO Remove productVersion
-
-    private ProductVersion productVersion;
 
     private Map<Object, Object> copyMap = new HashMap<Object, Object>();
 
@@ -1599,8 +1672,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       });
 
-      update();
-
       contentOutlineViewer.expandToLevel(2);
     }
 
@@ -1615,48 +1686,24 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       return copyMap.get(object);
     }
 
-    public void update()
+    public void update(int expandLevel)
     {
       copyMap.clear();
 
       try
       {
         ResourceSet resourceSet = editingDomain.getResourceSet();
-        Resource resource = resourceSet.getResources().get(0);
-        EObject eObject = resource.getContents().get(0);
-        if (productVersion == null)
+        EList<Resource> resources = resourceSet.getResources();
+        if (!resources.isEmpty())
         {
+          Resource resource = resources.get(0);
+          EObject eObject = resource.getContents().get(0);
           if (eObject instanceof Project)
           {
             Project project = (Project)eObject;
-            ProjectCatalog projectCatalog = project.getProjectCatalog();
-            if (projectCatalog != null)
-            {
-              EObject rootContainer = EcoreUtil.getRootContainer(projectCatalog);
-              if (rootContainer instanceof Index)
-              {
-                Index index = (Index)rootContainer;
-                LOOP: for (ProductCatalog productCatalog : index.getProductCatalogs())
-                {
-                  for (Product product : productCatalog.getProducts())
-                  {
-                    for (ProductVersion productVersion : product.getVersions())
-                    {
-                      this.productVersion = productVersion;
-                      break LOOP;
-                    }
-                  }
-                }
-              }
-            }
+            ItemProvider input = getTriggeredTasks(project);
+            getTreeViewer().setInput(input);
           }
-        }
-
-        if (productVersion != null)
-        {
-          Project project = (Project)eObject;
-          ItemProvider input = getTriggeredTasks(project);
-          getTreeViewer().setInput(input);
         }
       }
       catch (Exception ex)
@@ -1675,6 +1722,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
         eObjects.add(entry.getKey());
       }
+
+      getTreeViewer().expandToLevel(expandLevel);
     }
 
     private ItemProvider getTriggeredTasks(Project project)
@@ -1688,75 +1737,99 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         final ItemProvider branchItem = new ItemProvider(labelProvider.getText(stream), labelProvider.getImage(stream));
         projectItemChildren.add(branchItem);
 
-        // String installFolder = "/${" + "FIXME" + '}';
-        SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(getEditingDomain().getResourceSet().getURIConverter(), SetupPrompter.CANCEL, trigger,
-            SetupContext.create(productVersion, stream), stream);
-        List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
-
-        if (!triggeredSetupTasks.isEmpty())
+        ProductVersion version = null;
+        ProjectCatalog projectCatalog = project.getProjectCatalog();
+        if (projectCatalog != null)
         {
-          for (EObject eObject : setupTaskPerformer.getCopyMap().values())
+          EObject rootContainer = EcoreUtil.getRootContainer(projectCatalog);
+          if (rootContainer instanceof Index)
           {
-            Resource resource = ((InternalEObject)eObject).eDirectResource();
-            if (resource != null && !resource.eAdapters().contains(editingDomainProvider))
+            Index index = (Index)rootContainer;
+            LOOP: for (ProductCatalog productCatalog : index.getProductCatalogs())
             {
-              resource.eAdapters().add(editingDomainProvider);
+              for (Product product : productCatalog.getProducts())
+              {
+                for (ProductVersion productVersion : product.getVersions())
+                {
+                  version = productVersion;
+                  break LOOP;
+                }
+              }
             }
           }
+        }
 
-          ItemProvider undeclaredVariablesItem = new VariableContainer(setupTaskPerformer, "Undeclared Variables", UNDECLARED_VARIABLE_GROUP_IMAGE);
-          EList<Object> undeclaredVariablesItemChildren = undeclaredVariablesItem.getChildren();
-          Set<String> undeclaredVariables = setupTaskPerformer.getUndeclaredVariables();
-          for (String key : undeclaredVariables)
+        if (version != null)
+        {
+          SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(getEditingDomain().getResourceSet().getURIConverter(), SetupPrompter.CANCEL, trigger,
+              SetupContext.create(version, stream), stream);
+          List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
+
+          if (!triggeredSetupTasks.isEmpty())
           {
-            VariableTask contextVariableTask = SetupFactory.eINSTANCE.createVariableTask();
-            contextVariableTask.setName(key);
-            undeclaredVariablesItemChildren.add(contextVariableTask);
-            parents.put(contextVariableTask, undeclaredVariablesItem);
+            for (EObject eObject : setupTaskPerformer.getCopyMap().values())
+            {
+              Resource resource = ((InternalEObject)eObject).eDirectResource();
+              if (resource != null && !resource.eAdapters().contains(editingDomainProvider))
+              {
+                resource.eAdapters().add(editingDomainProvider);
+              }
+            }
+
+            ItemProvider undeclaredVariablesItem = new VariableContainer(setupTaskPerformer, "Undeclared Variables", UNDECLARED_VARIABLE_GROUP_IMAGE);
+            EList<Object> undeclaredVariablesItemChildren = undeclaredVariablesItem.getChildren();
+            Set<String> undeclaredVariables = setupTaskPerformer.getUndeclaredVariables();
+            for (String key : undeclaredVariables)
+            {
+              VariableTask contextVariableTask = SetupFactory.eINSTANCE.createVariableTask();
+              contextVariableTask.setName(key);
+              undeclaredVariablesItemChildren.add(contextVariableTask);
+              parents.put(contextVariableTask, undeclaredVariablesItem);
+            }
+
+            if (!undeclaredVariablesItemChildren.isEmpty())
+            {
+              branchItem.getChildren().add(undeclaredVariablesItem);
+            }
+
+            ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Unresolved Variables", VARIABLE_GROUP_IMAGE);
+            EList<Object> unresolvedVariablesItemChildren = unresolvedVariablesItem.getChildren();
+            List<VariableTask> unresolvedVariables = setupTaskPerformer.getUnresolvedVariables();
+            for (VariableTask contextVariableTask : unresolvedVariables)
+            {
+              unresolvedVariablesItemChildren.add(contextVariableTask);
+              parents.put(contextVariableTask, unresolvedVariablesItem);
+            }
+
+            if (!unresolvedVariablesItemChildren.isEmpty())
+            {
+              branchItem.getChildren().add(unresolvedVariablesItem);
+            }
+
+            ItemProvider resolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Resolved Variables", VARIABLE_GROUP_IMAGE);
+            EList<Object> resolvedVariablesItemChildren = resolvedVariablesItem.getChildren();
+            List<VariableTask> resolvedVariables = setupTaskPerformer.getResolvedVariables();
+            for (VariableTask contextVariableTask : resolvedVariables)
+            {
+              resolvedVariablesItemChildren.add(contextVariableTask);
+              parents.put(contextVariableTask, resolvedVariablesItem);
+            }
+
+            if (!resolvedVariablesItemChildren.isEmpty())
+            {
+              branchItem.getChildren().add(resolvedVariablesItem);
+            }
+
+            branchItem.getChildren().addAll(triggeredSetupTasks);
+
+            for (SetupTask setupTask : triggeredSetupTasks)
+            {
+              parents.put(setupTask, branchItem);
+            }
+
+            copyMap.putAll(setupTaskPerformer.getCopyMap());
+            copyMap.put(stream, branchItem);
           }
-
-          if (!undeclaredVariablesItemChildren.isEmpty())
-          {
-            branchItem.getChildren().add(undeclaredVariablesItem);
-          }
-
-          ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Unresolved Variables", VARIABLE_GROUP_IMAGE);
-          EList<Object> unresolvedVariablesItemChildren = unresolvedVariablesItem.getChildren();
-          List<VariableTask> unresolvedVariables = setupTaskPerformer.getUnresolvedVariables();
-          for (VariableTask contextVariableTask : unresolvedVariables)
-          {
-            unresolvedVariablesItemChildren.add(contextVariableTask);
-            parents.put(contextVariableTask, unresolvedVariablesItem);
-          }
-
-          if (!unresolvedVariablesItemChildren.isEmpty())
-          {
-            branchItem.getChildren().add(unresolvedVariablesItem);
-          }
-
-          ItemProvider resolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Resolved Variables", VARIABLE_GROUP_IMAGE);
-          EList<Object> resolvedVariablesItemChildren = resolvedVariablesItem.getChildren();
-          List<VariableTask> resolvedVariables = setupTaskPerformer.getResolvedVariables();
-          for (VariableTask contextVariableTask : resolvedVariables)
-          {
-            resolvedVariablesItemChildren.add(contextVariableTask);
-            parents.put(contextVariableTask, resolvedVariablesItem);
-          }
-
-          if (!resolvedVariablesItemChildren.isEmpty())
-          {
-            branchItem.getChildren().add(resolvedVariablesItem);
-          }
-
-          branchItem.getChildren().addAll(triggeredSetupTasks);
-
-          for (SetupTask setupTask : triggeredSetupTasks)
-          {
-            parents.put(setupTask, branchItem);
-          }
-
-          copyMap.putAll(setupTaskPerformer.getCopyMap());
-          copyMap.put(stream, branchItem);
         }
 
         copyMap.put(project, projectItem);
@@ -1788,8 +1861,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         public void run()
         {
           trigger = null;
-          update();
-          getTreeViewer().expandToLevel(2);
+          update(2);
         }
       });
 
@@ -1807,8 +1879,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           {
             OutlinePreviewPage.this.trigger = trigger;
             super.run();
-            update();
-            getTreeViewer().expandToLevel(2);
+            update(2);
           }
         });
       }
@@ -2330,9 +2401,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   protected boolean showOutlineView()
   {
-    EObject eObject = getEditingDomain().getResourceSet().getResources().get(0).getContents().get(0);
-
-    return eObject instanceof ProjectCatalog || eObject instanceof Project;
+    return true;
   }
 
   public static void open(final IWorkbenchPage page, URI uri)

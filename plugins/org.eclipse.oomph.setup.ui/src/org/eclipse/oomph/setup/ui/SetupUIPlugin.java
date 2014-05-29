@@ -129,7 +129,10 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
                   resourceMirror.mirror(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
                       SetupContext.USER_SETUP_URI }));
 
-                  SetupContext.setSelf(SetupContext.createSelf(resourceMirror.getResourceSet()));
+                  ResourceSet resourceSet = resourceMirror.getResourceSet();
+                  resourceMirror.dispose();
+
+                  SetupContext.setSelf(SetupContext.createSelf(resourceSet));
 
                   return Status.OK_STATUS;
                 }
