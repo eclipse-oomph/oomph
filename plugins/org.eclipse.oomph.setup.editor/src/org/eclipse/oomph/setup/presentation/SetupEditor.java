@@ -15,7 +15,6 @@ import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -60,8 +59,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.BasicResourceHandler;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -181,8 +178,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This is an example of a Setup model editor.
@@ -1279,24 +1274,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       protected IStatus run(final IProgressMonitor monitor)
       {
         final ResourceSet resourceSet = editingDomain.getResourceSet();
-        final AtomicBoolean mirrorCanceled = new AtomicBoolean();
-        resourceMirror = new ResourceMirror(resourceSet)
-        {
-          @Override
-          public boolean isCanceled()
-          {
-            if (monitor.isCanceled() && !mirrorCanceled.getAndSet(true))
-            {
-              resourceMirror.cancel();
-            }
-
-            return super.isCanceled();
-          }
-        };
-
-        final String taskName = resourceSet.getLoadOptions().get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
-            : "Loading from internet ";
-        final AtomicInteger counter = new AtomicInteger(1);
 
         // Remove the adapters that do the live validation while loading in the background job.
         final List<Adapter> diagnosticDecorators = new ArrayList<Adapter>();
@@ -1311,24 +1288,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
         }
 
-        XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
+        new ResourceMirror.WithProgress(resourceSet, monitor)
         {
           @Override
-          public synchronized void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options)
+          public void run()
           {
-            synchronized (resourceSet)
-            {
-              monitor.subTask("Loading " + resource.getURI());
-              monitor.worked(1);
-              monitor.setTaskName(taskName + counter.getAndIncrement() + " of " + resourceSet.getResources().size());
-            }
+            resourceMirror = this;
+            createModel();
           }
         };
-
-        resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, resourceHandler);
-        createModel();
-        resourceSet.getLoadOptions().remove(XMLResource.OPTION_RESOURCE_HANDLER);
-        resourceMirror.dispose();
 
         final Resource resource = resourceSet.getResources().get(0);
         final EList<EObject> contents = resource.getContents();

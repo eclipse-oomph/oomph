@@ -31,8 +31,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.BasicResourceHandler;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,14 +48,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Eike Stepper
@@ -286,11 +281,19 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     excludedResources.add(user.eResource());
 
     EList<Resource> resources = resourceSet.getResources();
-    for (Resource resource : resources)
+    for (Iterator<Resource> it = resources.iterator(); it.hasNext();)
     {
+      Resource resource = it.next();
       if (!excludedResources.contains(resource))
       {
-        resource.unload();
+        if ("ecore".equals(resource.getURI().fileExtension()))
+        {
+          it.remove();
+        }
+        else
+        {
+          resource.unload();
+        }
       }
     }
 
@@ -316,42 +319,16 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       {
         public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
-          final EList<Resource> resources = resourceSet.getResources();
-
-          final String taskName = resourceSet.getLoadOptions().get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
-              : "Loading from internet ";
-          monitor.beginTask(taskName, resources.size() < 3 ? IProgressMonitor.UNKNOWN : resources.size());
-
-          final AtomicInteger counter = new AtomicInteger(1);
-          final AtomicBoolean mirrorCanceled = new AtomicBoolean();
-          final ResourceMirror resourceMirror = new ResourceMirror(resourceSet);
-
-          XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
+          ResourceMirror resourceMirror = new ResourceMirror.WithProgress(resourceSet, monitor)
           {
             @Override
-            public synchronized void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options)
+            public void run()
             {
-              synchronized (resourceSet)
-              {
-                monitor.subTask("Loading " + resource.getURI());
-                monitor.worked(1);
-                monitor.setTaskName(taskName + counter.getAndIncrement() + " of " + resources.size());
-                if (monitor.isCanceled() && !mirrorCanceled.get())
-                {
-                  mirrorCanceled.set(true);
-                  resourceMirror.cancel();
-                }
-              }
+              mirror(uris);
             }
           };
 
-          resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, resourceHandler);
-          resourceMirror.mirror(uris);
-          resourceSet.getLoadOptions().remove(XMLResource.OPTION_RESOURCE_HANDLER);
-
-          resourceMirror.dispose();
-
-          if (mirrorCanceled.get())
+          if (resourceMirror.isCanceled())
           {
             getShell().getDisplay().asyncExec(new Runnable()
             {
@@ -359,9 +336,13 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
               {
                 resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
                 Set<URI> uris = new LinkedHashSet<URI>();
-                for (Resource resource : resources)
+                for (Resource resource : resourceSet.getResources())
                 {
-                  uris.add(resource.getURI());
+                  URI uri = resource.getURI();
+                  if (!"ecore".equals(uri.fileExtension()))
+                  {
+                    uris.add(resource.getURI());
+                  }
                 }
 
                 loadIndex(uris.toArray(new URI[uris.size()]));

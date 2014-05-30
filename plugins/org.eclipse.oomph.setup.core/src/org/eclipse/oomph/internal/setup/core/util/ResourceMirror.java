@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.setup.core.util;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -18,6 +19,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.BasicResourceHandler;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,7 +28,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +39,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Eike Stepper
@@ -110,6 +117,16 @@ public class ResourceMirror
     return isCanceled;
   }
 
+  public final void mirror(URI uri)
+  {
+    mirror(Collections.singleton(uri));
+  }
+
+  public final void mirror(URI... uris)
+  {
+    mirror(Arrays.asList(uris));
+  }
+
   public void mirror(Collection<? extends URI> uris)
   {
     if (latch == null)
@@ -132,48 +149,14 @@ public class ResourceMirror
     latch = null;
   }
 
-  public void mirror(URI... uris)
+  public final boolean schedule(URI uri)
   {
-    if (latch == null)
-    {
-      latch = new CountDownLatch(1);
-    }
-
-    if (schedule(uris))
-    {
-      try
-      {
-        latch.await();
-      }
-      catch (InterruptedException ex)
-      {
-        throw new RuntimeException(ex);
-      }
-    }
-
-    latch = null;
+    return schedule(Collections.singleton(uri));
   }
 
-  public void mirror(URI uri)
+  public final boolean schedule(URI... uris)
   {
-    if (latch == null)
-    {
-      latch = new CountDownLatch(1);
-    }
-
-    if (schedule(uri))
-    {
-      try
-      {
-        latch.await();
-      }
-      catch (InterruptedException ex)
-      {
-        throw new RuntimeException(ex);
-      }
-    }
-
-    latch = null;
+    return schedule(Arrays.asList(uris));
   }
 
   public boolean schedule(Collection<? extends URI> uris)
@@ -181,32 +164,13 @@ public class ResourceMirror
     boolean result = false;
     for (URI uri : uris)
     {
-      if (schedule(uri))
+      if (schedule(uri, false))
       {
         result = true;
       }
     }
 
     return result;
-  }
-
-  public boolean schedule(URI... uris)
-  {
-    boolean result = false;
-    for (URI uri : uris)
-    {
-      if (schedule(uri))
-      {
-        result = true;
-      }
-    }
-
-    return result;
-  }
-
-  public boolean schedule(URI uri)
-  {
-    return schedule(uri, false);
   }
 
   private synchronized boolean schedule(URI uri, boolean secondary)
@@ -327,44 +291,49 @@ public class ResourceMirror
     @Override
     protected IStatus run(IProgressMonitor monitor)
     {
-      Resource resource;
-      synchronized (resourceSet)
-      {
-        resource = resourceSet.getResource(uri, false);
-        if (resource == null)
-        {
-          resource = resourceSet.createResource(uri);
-        }
-      }
-
       try
       {
-        resource.load(resourceSet.getLoadOptions());
-      }
-      catch (IOException ex)
-      {
-        new ResourceSetImpl()
+        Resource resource;
+        synchronized (resourceSet)
         {
-          @Override
-          public void handleDemandLoadException(Resource resource, IOException exception) throws RuntimeException
+          resource = resourceSet.getResource(uri, false);
+          if (resource == null)
           {
-            try
-            {
-              super.handleDemandLoadException(resource, exception);
-            }
-            catch (RuntimeException ex)
-            {
-              // Ignore
-            }
+            resource = resourceSet.createResource(uri);
           }
-        }.handleDemandLoadException(resource, ex);
+        }
+
+        try
+        {
+          resource.load(resourceSet.getLoadOptions());
+        }
+        catch (IOException ex)
+        {
+          new ResourceSetImpl()
+          {
+            @Override
+            public void handleDemandLoadException(Resource resource, IOException exception) throws RuntimeException
+            {
+              try
+              {
+                super.handleDemandLoadException(resource, exception);
+              }
+              catch (RuntimeException ex)
+              {
+                // Ignore
+              }
+            }
+          }.handleDemandLoadException(resource, ex);
+        }
+
+        visit(resource);
+
+        return Status.OK_STATUS;
       }
-
-      visit(resource);
-
-      deschedule(uri);
-
-      return Status.OK_STATUS;
+      finally
+      {
+        deschedule(uri);
+      }
     }
 
     private void delay()
@@ -422,6 +391,76 @@ public class ResourceMirror
     public String toString()
     {
       return "uri=" + uri + ", secondary=" + secondary + ", id=" + id;
+    }
+  }
+
+  public static abstract class WithProgress extends ResourceMirror
+  {
+    private final IProgressMonitor monitor;
+
+    private final String taskName;
+
+    private final AtomicBoolean mirrorCanceled = new AtomicBoolean();
+
+    private final XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
+    {
+      private final AtomicInteger counter = new AtomicInteger(1);
+
+      @Override
+      public synchronized void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options)
+      {
+        ResourceSet resourceSet = getResourceSet();
+        monitor.subTask("Loading " + resource.getURI());
+        monitor.worked(1);
+        monitor.setTaskName(taskName + counter.getAndIncrement() + " of " + resourceSet.getResources().size());
+      }
+    };
+
+    public WithProgress(IProgressMonitor monitor)
+    {
+      this(EMFUtil.createResourceSet(), monitor);
+    }
+
+    public WithProgress(ResourceSet resourceSet, IProgressMonitor monitor)
+    {
+      super(resourceSet);
+      this.monitor = monitor;
+      taskName = begin(monitor);
+
+      resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, resourceHandler);
+      run();
+      dispose();
+    }
+
+    public abstract void run();
+
+    @Override
+    public boolean isCanceled()
+    {
+      if (monitor.isCanceled() && !mirrorCanceled.getAndSet(true))
+      {
+        cancel();
+      }
+
+      return super.isCanceled();
+    }
+
+    protected String begin(IProgressMonitor monitor)
+    {
+      ResourceSet resourceSet = getResourceSet();
+      EList<Resource> resources = resourceSet.getResources();
+      final String taskName = resourceSet.getLoadOptions().get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
+          : "Loading from internet ";
+      monitor.beginTask(taskName, resources.size() < 3 ? IProgressMonitor.UNKNOWN : resources.size());
+      return taskName;
+    }
+
+    @Override
+    public void dispose()
+    {
+      getResourceSet().getLoadOptions().remove(XMLResource.OPTION_RESOURCE_HANDLER);
+
+      super.dispose();
     }
   }
 }
