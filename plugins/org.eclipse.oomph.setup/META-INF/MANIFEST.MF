@@ -27,9 +27,8 @@ Export-Package: org.eclipse.oomph.internal.setup;version="1.0.0";
    org.eclipse.oomph.setup.ui,
    org.eclipse.oomph.setup.ui.ide,
    org.eclipse.oomph.setup.mylyn",
- org.eclipse.oomph.internal.setup.bundle;version="1.0.0";x-internal:=true,
  org.eclipse.oomph.setup;version="1.0.0",
  org.eclipse.oomph.setup.impl;version="1.0.0",
  org.eclipse.oomph.setup.log;version="1.0.0",
  org.eclipse.oomph.setup.util;version="1.0.0"
-Bundle-Activator: org.eclipse.oomph.internal.setup.bundle.SetupPlugin$Implementation
+Bundle-Activator: org.eclipse.oomph.internal.setup.SetupPlugin$Implementation

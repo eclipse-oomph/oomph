@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.ui.internal.ide;
 
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
-import org.eclipse.oomph.setup.ui.internal.ide.bundle.SetupUIIDEPlugin;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.codegen.util.CodeGenUtil;

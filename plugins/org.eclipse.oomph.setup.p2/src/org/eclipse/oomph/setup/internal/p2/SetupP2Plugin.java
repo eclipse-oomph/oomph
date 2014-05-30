@@ -8,19 +8,19 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.bundle;
+package org.eclipse.oomph.setup.internal.p2;
 
 import org.eclipse.oomph.util.AbstractOomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
- * This is the central singleton for the Setup model plugin.
+ * This is the central singleton for the SetupP2 model plugin.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated not
  */
-public final class SetupPlugin extends AbstractOomphPlugin
+public final class SetupP2Plugin extends AbstractOomphPlugin
 {
   /**
    * Keep track of the singleton.
@@ -28,7 +28,7 @@ public final class SetupPlugin extends AbstractOomphPlugin
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final SetupPlugin INSTANCE = new SetupPlugin();
+  public static final SetupP2Plugin INSTANCE = new SetupP2Plugin();
 
   /**
    * Keep track of the singleton.
@@ -44,7 +44,7 @@ public final class SetupPlugin extends AbstractOomphPlugin
    * <!-- end-user-doc -->
    * @generated
    */
-  public SetupPlugin()
+  public SetupP2Plugin()
   {
     super(new ResourceLocator[] {});
   }

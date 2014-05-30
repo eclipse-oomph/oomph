@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.resources;
 
-import org.eclipse.oomph.internal.resources.bundle.ResourcesPlugin;
+import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.predicates.Predicate;
 import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.XMLUtil;

@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.util;
 
-import org.eclipse.oomph.internal.util.bundle.UtilPlugin;
+import org.eclipse.oomph.internal.util.UtilPlugin;
 import org.eclipse.oomph.internal.util.table.Cell;
 import org.eclipse.oomph.internal.util.table.Dumper;
 import org.eclipse.oomph.internal.util.table.Formula;

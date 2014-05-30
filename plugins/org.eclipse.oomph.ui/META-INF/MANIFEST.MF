@@ -6,7 +6,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.oomph.internal.ui.bundle.UIPlugin$Implementation
+Bundle-Activator: org.eclipse.oomph.internal.ui.UIPlugin$Implementation
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
@@ -16,6 +16,5 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.oomph.util;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
  org.eclipse.emf.edit.ui;bundle-version="[2.10.0,3.0.0)";visibility:=reexport
 Export-Package: org.eclipse.oomph.internal.ui;version="1.0.0";x-internal:=true,
- org.eclipse.oomph.internal.ui.bundle;version="1.0.0";x-internal:=true,
  org.eclipse.oomph.ui;version="1.0.0"
 Eclipse-BuddyPolicy: dependent

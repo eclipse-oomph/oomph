@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.ui.internal.ide;
 
 import org.eclipse.oomph.resources.ResourcesUtil;
-import org.eclipse.oomph.setup.ui.internal.ide.bundle.SetupUIIDEPlugin;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.SubMonitor;

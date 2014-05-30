@@ -8,19 +8,19 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal.targlets.bundle;
+package org.eclipse.oomph.internal.predicates;
 
 import org.eclipse.oomph.util.AbstractOomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
- * This is the central singleton for the SetupTarglets model plugin.
+ * This is the central singleton for the Predicates model plugin.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated not
  */
-public final class SetupTargletsPlugin extends AbstractOomphPlugin
+public final class PredicatesPlugin extends AbstractOomphPlugin
 {
   /**
    * Keep track of the singleton.
@@ -28,7 +28,7 @@ public final class SetupTargletsPlugin extends AbstractOomphPlugin
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final SetupTargletsPlugin INSTANCE = new SetupTargletsPlugin();
+  public static final PredicatesPlugin INSTANCE = new PredicatesPlugin();
 
   /**
    * Keep track of the singleton.
@@ -44,7 +44,7 @@ public final class SetupTargletsPlugin extends AbstractOomphPlugin
    * <!-- end-user-doc -->
    * @generated
    */
-  public SetupTargletsPlugin()
+  public PredicatesPlugin()
   {
     super(new ResourceLocator[] {});
   }

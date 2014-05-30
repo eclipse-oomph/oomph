@@ -11,7 +11,7 @@
  */
 package org.eclipse.oomph.util;
 
-import org.eclipse.oomph.internal.util.bundle.UtilPlugin;
+import org.eclipse.oomph.internal.util.UtilPlugin;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

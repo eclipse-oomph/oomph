@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.util;
 
-import org.eclipse.oomph.internal.setup.bundle.SetupPlugin;
+import org.eclipse.oomph.internal.setup.SetupPlugin;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

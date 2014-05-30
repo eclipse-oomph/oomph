@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.predicates.impl;
 
-import org.eclipse.oomph.internal.predicates.bundle.PredicatesPlugin;
+import org.eclipse.oomph.internal.predicates.PredicatesPlugin;
 import org.eclipse.oomph.predicates.CommentPredicate;
 import org.eclipse.oomph.predicates.PredicatesPackage;
 

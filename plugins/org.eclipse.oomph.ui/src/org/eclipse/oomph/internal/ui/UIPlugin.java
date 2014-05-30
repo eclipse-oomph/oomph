@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.internal.ide.bundle;
+package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
 
@@ -18,13 +18,13 @@ import org.eclipse.emf.common.util.ResourceLocator;
 /**
  * @author Eike Stepper
  */
-public final class SetupUIIDEPlugin extends AbstractOomphUIPlugin
+public final class UIPlugin extends AbstractOomphUIPlugin
 {
-  public static final SetupUIIDEPlugin INSTANCE = new SetupUIIDEPlugin();
+  public static final UIPlugin INSTANCE = new UIPlugin();
 
   private static Implementation plugin;
 
-  public SetupUIIDEPlugin()
+  public UIPlugin()
   {
     super(new ResourceLocator[] {});
   }

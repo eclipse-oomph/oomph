@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.ui;
 
-import org.eclipse.oomph.internal.ui.bundle.UIPlugin;
+import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.core.runtime.FileLocator;
