@@ -129,7 +129,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="bugzilla.version"
-        value="1.0"/>
+        value="1.0.0"/>
     <setupTask
         xsi:type="jdt:JRETask"
         version="JavaSE-1.7"
@@ -311,13 +311,16 @@
         password="${eclipse.user.password}">
       <queries
           summary="Bugs in ${bugzilla.version}"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?classification=Tools&amp;product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
       <queries
           summary="Features in ${bugzilla.version}"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?classification=Tools&amp;product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=enhancement"/>
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=enhancement"/>
       <queries
           summary="Resolved in ${bugzilla.version}"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?classification=Tools&amp;product=Oomph&amp;bug_status=RESOLVED&amp;resolution=FIXED&amp;version=${bugzilla.version}"/>
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;resolution=FIXED&amp;version=${bugzilla.version}"/>
+      <queries
+          summary="Unspecified Version"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;version=unspecified"/>
     </setupTask>
     <setupTask
         xsi:type="mylyn:MylynQueriesTask"
@@ -326,7 +329,7 @@
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <queries
-          summary="Reviews in ${bugzilla.version}">
+          summary="Reviews in ${git.clone.oomph.checkoutBranch}">
         <attributes
             key="gerrit query type"
             value="custom"/>
@@ -335,7 +338,7 @@
             value="oomph/oomph"/>
         <attributes
             key="gerrit query string"
-            value="project:oomph/oomph status:open branch:master"/>
+            value="project:oomph/oomph status:open branch:${git.clone.oomph.checkoutBranch}"/>
       </queries>
     </setupTask>
     <setupTask
