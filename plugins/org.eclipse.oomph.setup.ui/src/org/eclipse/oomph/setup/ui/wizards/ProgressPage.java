@@ -526,7 +526,7 @@ public class ProgressPage extends SetupWizardPage
       if (ws != null)
       {
         command.add("-data");
-        command.add("\"" + ws + "\"");
+        command.add(ws.toString());
       }
 
       command.add("-vmargs");
