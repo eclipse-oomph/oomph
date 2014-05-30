@@ -242,7 +242,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
     return convertException((Exception)instanceValue);
   }
 
-  private static final String LINE_SEPARATOR = System.lineSeparator();
+  private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
   private static final Pattern OS_SPECIFIC_LINE_SEPARATOR_PATTERN = Pattern.compile(LINE_SEPARATOR);
 
