@@ -63,6 +63,7 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
@@ -457,6 +458,21 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
+  private void addUnknownRepository(IRepositoryManager<?> repositoryManager, Set<String> knownRepositories, String url)
+  {
+    if (!knownRepositories.contains(url))
+    {
+      try
+      {
+        repositoryManager.addRepository(new URI(url));
+      }
+      catch (Exception ex)
+      {
+        SetupP2Plugin.INSTANCE.log(ex);
+      }
+    }
+  }
+
   private boolean isInstalled(Set<IInstallableUnit> installedUnits, String id, VersionRange versionRange)
   {
     for (IInstallableUnit installedUnit : installedUnits)
@@ -495,16 +511,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       String url = context.redirect(repository.getURL());
       repository.setURL(url);
 
-      URI uri = new URI(url);
-      if (!knownMetadataRepositories.contains(url))
-      {
-        metadataRepositoryManager.addRepository(uri);
-      }
-
-      if (!knownArtifactRepositories.contains(url))
-      {
-        artifactRepositoryManager.addRepository(uri);
-      }
+      addUnknownRepository(metadataRepositoryManager, knownMetadataRepositories, url);
+      addUnknownRepository(artifactRepositoryManager, knownArtifactRepositories, url);
     }
 
     if (trigger == Trigger.MANUAL)
