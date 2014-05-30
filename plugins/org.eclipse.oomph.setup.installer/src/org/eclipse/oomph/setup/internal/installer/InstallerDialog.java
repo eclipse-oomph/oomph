@@ -293,7 +293,12 @@ public final class InstallerDialog extends SetupWizardDialog
         final String version = getProductVersion();
         if (version != null)
         {
-          if (!selfHosting)
+          if (selfHosting)
+          {
+            updateSearchState = InstallerUpdateSearchState.DONE;
+            setUpdateIcon(0);
+          }
+          else
           {
             initUpdateSearch();
           }
@@ -335,7 +340,7 @@ public final class InstallerDialog extends SetupWizardDialog
       Agent agent = P2Util.getAgentManager().getCurrentAgent();
 
       IProfile profile = agent.getProfileRegistry().getProfile(IProfileRegistry.SELF);
-      if (profile == null)
+      if (profile == null || "SelfHostingProfile".equals(profile.getProfileId()))
       {
         selfHosting = true;
         return "Self Hosting";
