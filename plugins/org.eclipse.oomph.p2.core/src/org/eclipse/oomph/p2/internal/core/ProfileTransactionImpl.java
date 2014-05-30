@@ -16,6 +16,7 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.IOUtil;
@@ -312,11 +313,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
     // File cacheFile = new File("/develop/cache.info");
     // final Transport oldTransport = registerTransport(provisioningAgent, cacheFile);
 
+    List<Runnable> cleanupRunnables = new ArrayList<Runnable>();
+
     try
     {
       List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
       Set<URI> artifactURIs = new HashSet<URI>();
-      URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, monitor);
+      URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanupRunnables, monitor);
 
       ProvisioningContext provisioningContext = commitContext.createProvisioningContext(this);
       provisioningContext.setMetadataRepositories(metadataURIs);
@@ -358,6 +361,18 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
     finally
     {
+      for (Runnable runnable : cleanupRunnables)
+      {
+        try
+        {
+          runnable.run();
+        }
+        catch (Exception ex)
+        {
+          P2CorePlugin.INSTANCE.log(ex);
+        }
+      }
+
       // unregisterTransport(provisioningAgent, cacheFile, oldTransport);
     }
   }
@@ -533,10 +548,12 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
   }
 
-  private URI[] collectRepositories(List<IMetadataRepository> metadataRepositories, Set<URI> artifactURIs, IProgressMonitor monitor) throws CoreException
+  private URI[] collectRepositories(List<IMetadataRepository> metadataRepositories, Set<URI> artifactURIs, List<Runnable> cleanupRunnables,
+      IProgressMonitor monitor) throws CoreException
   {
     Agent agent = profile.getAgent();
-    IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
+    final IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
+    Set<String> knownRepositories = P2Util.getKnownRepositories(manager);
 
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
@@ -548,7 +565,19 @@ public class ProfileTransactionImpl implements ProfileTransaction
       try
       {
         Repository repository = repositories.get(i);
-        URI uri = new URI(repository.getURL());
+        String url = repository.getURL();
+        final URI uri = new URI(url);
+
+        if (!knownRepositories.contains(url))
+        {
+          cleanupRunnables.add(new Runnable()
+          {
+            public void run()
+            {
+              manager.removeRepository(uri);
+            }
+          });
+        }
 
         IMetadataRepository metadataRepository = manager.loadRepository(uri, monitor);
         metadataRepositories.add(metadataRepository);

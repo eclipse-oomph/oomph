@@ -104,8 +104,6 @@ public final class InstallerDialog extends SetupWizardDialog
         update(false);
       }
     });
-
-    initUpdateSearch();
   }
 
   protected final ToolItem createToolItem(ToolBar toolBar, String iconPath, String toolTip)
@@ -261,24 +259,6 @@ public final class InstallerDialog extends SetupWizardDialog
     });
   }
 
-  private String getProductVersion()
-  {
-    Agent agent = P2Util.getAgentManager().getCurrentAgent();
-
-    IProfile profile = agent.getProfileRegistry().getProfile(IProfileRegistry.SELF);
-    if (profile == null)
-    {
-      return "Self Hosting";
-    }
-
-    for (IInstallableUnit iu : profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null))
-    {
-      return iu.getVersion().toString();
-    }
-
-    return null;
-  }
-
   private void setProductVersionLink(Composite parent)
   {
     GridLayout parentLayout = (GridLayout)parent.getLayout();
@@ -298,7 +278,9 @@ public final class InstallerDialog extends SetupWizardDialog
    */
   private final class ProductVersionSetter extends Thread
   {
-    private ProductVersionSetter()
+    private boolean selfHosting;
+
+    public ProductVersionSetter()
     {
       super("Product Version Setter");
     }
@@ -311,6 +293,11 @@ public final class InstallerDialog extends SetupWizardDialog
         final String version = getProductVersion();
         if (version != null)
         {
+          if (!selfHosting)
+          {
+            initUpdateSearch();
+          }
+
           versionLink.getDisplay().asyncExec(new Runnable()
           {
             public void run()
@@ -341,6 +328,25 @@ public final class InstallerDialog extends SetupWizardDialog
       {
         SetupInstallerPlugin.INSTANCE.log(ex);
       }
+    }
+
+    private String getProductVersion()
+    {
+      Agent agent = P2Util.getAgentManager().getCurrentAgent();
+
+      IProfile profile = agent.getProfileRegistry().getProfile(IProfileRegistry.SELF);
+      if (profile == null)
+      {
+        selfHosting = true;
+        return "Self Hosting";
+      }
+
+      for (IInstallableUnit iu : profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null))
+      {
+        return iu.getVersion().toString();
+      }
+
+      return null;
     }
   }
 }

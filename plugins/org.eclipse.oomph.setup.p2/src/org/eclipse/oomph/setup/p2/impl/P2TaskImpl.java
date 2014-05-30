@@ -63,7 +63,6 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
-import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
@@ -488,8 +487,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
     IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
 
-    Set<String> knownMetadataRepositories = getKnownRepositories(metadataRepositoryManager);
-    Set<String> knownArtifactRepositories = getKnownRepositories(artifactRepositoryManager);
+    Set<String> knownMetadataRepositories = P2Util.getKnownRepositories(metadataRepositoryManager);
+    Set<String> knownArtifactRepositories = P2Util.getKnownRepositories(artifactRepositoryManager);
 
     for (Repository repository : getRepositories())
     {
@@ -777,18 +776,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
-  private static Set<String> getKnownRepositories(IRepositoryManager<?> manager)
-  {
-    Set<String> result = new HashSet<String>();
-
-    for (URI knownRepository : manager.getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM))
-    {
-      result.add(knownRepository.toString());
-    }
-
-    return result;
-  }
-
   private static Set<IInstallableUnit> getInstalledUnits(Agent agent)
   {
     Set<IInstallableUnit> result = new HashSet<IInstallableUnit>();
@@ -945,7 +932,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
 
         IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
-        Set<String> knownRepositories = getKnownRepositories(manager);
+        Set<String> knownRepositories = P2Util.getKnownRepositories(manager);
         if (installedUnits.isEmpty() && knownRepositories.isEmpty())
         {
           return;

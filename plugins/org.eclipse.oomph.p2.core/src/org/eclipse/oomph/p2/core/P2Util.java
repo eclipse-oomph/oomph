@@ -28,6 +28,7 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepository;
+import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
@@ -37,7 +38,9 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -82,6 +85,17 @@ public final class P2Util
   public static ProfileReferencer createProfileReferencer(File file, boolean directory)
   {
     return new ProfileReferencerImpl(file, directory);
+  }
+
+  public static Set<String> getKnownRepositories(IRepositoryManager<?> manager)
+  {
+    Set<String> result = new HashSet<String>();
+    for (URI uri : manager.getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM))
+    {
+      result.add(uri.toString());
+    }
+
+    return result;
   }
 
   public static void mirrorRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
