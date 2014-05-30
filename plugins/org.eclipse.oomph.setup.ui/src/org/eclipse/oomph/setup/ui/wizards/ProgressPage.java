@@ -532,6 +532,11 @@ public class ProgressPage extends SetupWizardPage
       command.add("-vmargs");
       command.add("-D" + SetupProperties.PROP_SETUP_CONFIRM_SKIP + "=true");
 
+      if (performer.isOffline())
+      {
+        command.add("-D" + SetupProperties.PROP_SETUP_OFFLINE_STARTUP + "=true");
+      }
+
       ProcessBuilder builder = new ProcessBuilder(command);
       builder.start();
     }

@@ -57,7 +57,7 @@ public class AgentManagerImpl implements AgentManager
 
   public AgentManagerImpl(final File userHome)
   {
-    File folder = new File(userHome, ".eclipse/" + P2CorePlugin.INSTANCE.getSymbolicName());
+    File folder = P2CorePlugin.getUserStateFolder(userHome);
     File infoFile = new File(folder, "agents.info");
     defaultsFile = new File(folder, "defaults.info");
 

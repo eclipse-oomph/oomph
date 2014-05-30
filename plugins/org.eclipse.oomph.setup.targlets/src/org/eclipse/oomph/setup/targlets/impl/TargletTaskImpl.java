@@ -429,9 +429,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       }
 
       IProgressMonitor monitor = new ProgressLogMonitor(context);
+      boolean offline = context.isOffline();
 
       targletContainer.setTarglets(targlets);
-      targletContainer.forceUpdate(monitor);
+      targletContainer.forceUpdate(offline, monitor);
 
       String containerID = targletContainer.getID();
       TargletContainerManager manager = TargletContainerManager.getInstance();

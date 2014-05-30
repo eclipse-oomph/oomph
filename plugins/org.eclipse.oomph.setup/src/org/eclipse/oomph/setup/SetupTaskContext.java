@@ -33,6 +33,8 @@ public interface SetupTaskContext extends ProgressLog, StringExpander
 
   public boolean isPerforming();
 
+  public boolean isOffline();
+
   public boolean isRestartNeeded();
 
   public void setRestartNeeded(String reason);

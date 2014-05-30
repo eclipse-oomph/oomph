@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
@@ -81,7 +82,7 @@ public class ConfirmationPage extends SetupWizardPage
   {
     super("ConfirmationPage");
     setTitle("Confirmation");
-    setDescription("Review the tasks to be executed and optionally deselect unwanted tasks.");
+    setDescription("Review the tasks to be executed and optionally uncheck unwanted tasks.");
   }
 
   @Override
@@ -181,9 +182,15 @@ public class ConfirmationPage extends SetupWizardPage
     {
       try
       {
+        SetupTaskPerformer performer = getPerformer();
+        if (offlineButton.getSelection() || PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP))
+        {
+          performer.setOffline(true);
+        }
+
         Set<SetupTask> checkedTasks = getCheckedTasks();
 
-        EList<SetupTask> neededSetupTasks = getPerformer().initNeededSetupTasks();
+        EList<SetupTask> neededSetupTasks = performer.initNeededSetupTasks();
         neededSetupTasks.retainAll(checkedTasks);
       }
       catch (Exception ex)

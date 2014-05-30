@@ -51,6 +51,10 @@ public interface ProfileTransaction
 
   public ProfileTransaction setRemoveExistingInstallableUnits(boolean removeAll);
 
+  public boolean isOffline();
+
+  public ProfileTransaction setOffline(boolean offline);
+
   public boolean isDirty();
 
   public boolean commit() throws CoreException;
@@ -68,12 +72,6 @@ public interface ProfileTransaction
     {
       return new ProvisioningContext(transaction.getProfile().getAgent().getProvisioningAgent());
     }
-
-    // public InstallOperation createInstallOperation(ProfileTransaction transaction, Collection<IInstallableUnit> iusToInstall)
-    // {
-    // ProvisioningSession provisioningSession = transaction.getProfile().getAgent().getProvisioningSession();
-    // return new InstallOperation(provisioningSession, iusToInstall);
-    // }
 
     public void handleProvisioningPlan(IProvisioningPlan provisioningPlan) throws CoreException
     {
