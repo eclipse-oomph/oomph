@@ -53,7 +53,6 @@ import org.eclipse.ui.IWorkbench;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -287,13 +286,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     excludedResources.add(user.eResource());
 
     EList<Resource> resources = resourceSet.getResources();
-    for (Iterator<Resource> it = resources.iterator(); it.hasNext();)
+    for (Resource resource : resources)
     {
-      Resource resource = it.next();
       if (!excludedResources.contains(resource))
       {
         resource.unload();
-        // it.remove();
       }
     }
 
@@ -301,6 +298,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     ECFURIHandlerImpl.clearExpectedETags();
     resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
+    resourceSet.getPackageRegistry().clear();
     loadIndex();
   }
 

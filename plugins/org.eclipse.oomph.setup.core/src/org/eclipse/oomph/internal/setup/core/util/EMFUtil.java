@@ -601,8 +601,6 @@ public final class EMFUtil
     {
       private EPackage redirectedEPackage;
 
-      private boolean initializing = true;
-
       public ModelResourceSet()
       {
         uriConverter = resourceSet.getURIConverter();
@@ -612,7 +610,7 @@ public final class EMFUtil
       }
 
       @Override
-      public synchronized Resource getResource(URI uri, boolean loadOnDemand)
+      public Resource getResource(URI uri, boolean loadOnDemand)
       {
         try
         {
@@ -622,7 +620,7 @@ public final class EMFUtil
             return null;
           }
 
-          if (!initializing && resource.getResourceSet() == this)
+          if (resource.getResourceSet() == this)
           {
             synchronized (resourceSet)
             {
@@ -685,8 +683,6 @@ public final class EMFUtil
 
     final ModelResourceSet modelResourceSet = new ModelResourceSet();
 
-    modelResourceSet.initializing = false;
-
     new ResourceSetImpl.MappedResourceLocator((ResourceSetImpl)resourceSet)
     {
       @Override
@@ -694,19 +690,29 @@ public final class EMFUtil
       {
         if ("ecore".equals(uri.fileExtension()))
         {
-          if (loadOnDemand)
+          Resource resource = null;
+          synchronized (modelResourceSet)
           {
-            Resource resource = super.getResource(uri, false);
+            synchronized (resourceSet)
+            {
+              resource = super.getResource(uri, false);
+            }
+
+            if (resource != null)
+            {
+              if (!resource.isLoaded())
+              {
+                demandLoadHelper(resource);
+              }
+
+              return resource;
+            }
+
+            resource = modelResourceSet.getResource(uri, loadOnDemand);
             if (resource != null)
             {
               return resource;
             }
-          }
-
-          Resource resource = modelResourceSet.getResource(uri, loadOnDemand);
-          if (resource != null)
-          {
-            return resource;
           }
         }
 
