@@ -14,7 +14,6 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
@@ -28,7 +27,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -42,8 +40,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -115,17 +111,6 @@ public class ConfirmationPage extends SetupWizardPage
     offlineButton = new Button(mainComposite, SWT.CHECK);
     offlineButton.setText("Offline");
     offlineButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
-    offlineButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        if (offlineButton.getSelection())
-        {
-          MessageDialog.openInformation(getShell(), AbstractSetupDialog.SHELL_TEXT, "Offline installation will be implemented soon. Stay tuned...");
-        }
-      }
-    });
 
     setPageComplete(true);
     return mainComposite;

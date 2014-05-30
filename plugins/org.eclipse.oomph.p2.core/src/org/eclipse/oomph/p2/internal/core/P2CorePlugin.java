@@ -43,6 +43,7 @@ public final class P2CorePlugin extends AbstractOomphPlugin
 
     try
     {
+      // TODO Remove this legacy migration for 1.0 release
       if (!folder.exists())
       {
         File oldFolder = new File(folder.getAbsolutePath() + ".core");
