@@ -46,6 +46,9 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -58,6 +61,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -68,7 +72,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.progress.ProgressManager;
@@ -95,7 +98,7 @@ public class ProgressPage extends SetupWizardPage
 
   private final ProgressLogFilter logFilter = new ProgressLogFilter();
 
-  private final ScrollBarListener scrollBarListener = new ScrollBarListener();
+  private final Document logDocument = new Document();
 
   private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
 
@@ -161,7 +164,7 @@ public class ProgressPage extends SetupWizardPage
 
   private TreeViewer treeViewer;
 
-  private Text logText;
+  private StyledText logText;
 
   private SetupTask currentTask;
 
@@ -219,12 +222,14 @@ public class ProgressPage extends SetupWizardPage
     tree.setLayoutData(new GridData(GridData.FILL_BOTH));
     tree.setBackground(getShell().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-    logText = new Text(sashForm, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-    logText.setBackground(logText.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+    TextViewer logTextViewer = new TextViewer(sashForm, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+    logTextViewer.setDocument(logDocument);
+
+    logText = logTextViewer.getTextWidget();
+    logText.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
     logText.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
     logText.setEditable(false);
     logText.setLayoutData(new GridData(GridData.FILL_BOTH));
-    logText.getVerticalBar().addSelectionListener(scrollBarListener);
 
     GridLayout buttonLayout = new GridLayout(2, false);
     buttonLayout.marginHeight = 0;
@@ -273,7 +278,7 @@ public class ProgressPage extends SetupWizardPage
     if (forward)
     {
       progressPageLog = new ProgressPageLog();
-      logText.setText("");
+      logDocument.set(""); // TODO Needed?
 
       final SetupTaskPerformer performer = getPerformer();
       performer.setProgress(progressPageLog);
@@ -331,21 +336,24 @@ public class ProgressPage extends SetupWizardPage
 
   private void appendText(String string)
   {
-    Rectangle clientArea = logText.getClientArea();
-    int visibleLines = clientArea.height / logText.getLineHeight();
-    int topVisibleLine = logText.getLineCount() - visibleLines;
-    int topIndex = logText.getTopIndex();
-    int delta = topVisibleLine - topIndex;
-    if (delta <= 2)
+    try
     {
-      logText.append(string);
+      logDocument.replace(logDocument.getLength(), 0, string);
+
+      Rectangle clientArea = logText.getClientArea();
+      int visibleLines = clientArea.height / logText.getLineHeight();
+      int lineCount = logText.getLineCount();
+      int topVisibleLine = lineCount - visibleLines;
+      int topIndex = logText.getTopIndex();
+      int delta = topVisibleLine - topIndex;
+      if (delta <= 2)
+      {
+        logText.setTopIndex(lineCount - 1);
+      }
     }
-    else
+    catch (BadLocationException ex)
     {
-      logText.setRedraw(false);
-      logText.setText(logText.getText().trim() + logText.getLineDelimiter() + string);
-      logText.setTopIndex(topIndex);
-      logText.setRedraw(true);
+      SetupUIPlugin.INSTANCE.log(ex);
     }
   }
 
@@ -604,51 +612,6 @@ public class ProgressPage extends SetupWizardPage
     }
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  protected class ScrollBarListener extends SelectionAdapter
-  {
-    private boolean isDragging;
-
-    private String pendingLines;
-
-    @Override
-    public void widgetSelected(SelectionEvent event)
-    {
-      if (event.detail == SWT.NONE)
-      {
-        isDragging = false;
-        if (pendingLines != null)
-        {
-          ProgressPage.this.appendText(pendingLines);
-          pendingLines = null;
-        }
-      }
-      else if (event.detail == SWT.DRAG)
-      {
-        isDragging = true;
-      }
-    }
-
-    public boolean isDragging()
-    {
-      return isDragging;
-    }
-
-    public void appendText(String line)
-    {
-      if (pendingLines == null)
-      {
-        pendingLines = line;
-      }
-      else
-      {
-        pendingLines = pendingLines.trim() + logText.getLineDelimiter() + line;
-      }
-    }
-  }
-
   private class ProgressPageLog implements ProgressLog
   {
     private boolean canceled;
@@ -692,14 +655,7 @@ public class ProgressPage extends SetupWizardPage
         {
           if (!getWizard().canFinish())
           {
-            if (scrollBarListener.isDragging())
-            {
-              scrollBarListener.appendText(message);
-            }
-            else
-            {
-              appendText(message);
-            }
+            appendText(message);
           }
         }
       });
@@ -747,6 +703,5 @@ public class ProgressPage extends SetupWizardPage
         }
       });
     }
-
   }
 }
