@@ -13,6 +13,7 @@ package org.eclipse.oomph.base.impl;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -242,13 +243,11 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
     return convertException((Exception)instanceValue);
   }
 
-  private static final String LINE_SEPARATOR = System.getProperty("line.separator");
-
-  private static final Pattern OS_SPECIFIC_LINE_SEPARATOR_PATTERN = Pattern.compile(LINE_SEPARATOR);
+  private static final Pattern OS_SPECIFIC_LINE_SEPARATOR_PATTERN = Pattern.compile(StringUtil.NL);
 
   private static final Pattern NORMALIZED_LINE_SEPARATOR_PATTERN = Pattern.compile("\n");
 
-  private static final boolean NEEDS_CONVERSION = !"\n".equals(LINE_SEPARATOR);
+  private static final boolean NEEDS_CONVERSION = !"\n".equals(StringUtil.NL);
 
   /**
    * <!-- begin-user-doc -->
@@ -277,8 +276,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    */
   public String convertText(String instanceValue)
   {
-    return instanceValue == null ? null : NEEDS_CONVERSION ? NORMALIZED_LINE_SEPARATOR_PATTERN.matcher(instanceValue).replaceAll(LINE_SEPARATOR)
-        : instanceValue;
+    return instanceValue == null ? null : NEEDS_CONVERSION ? NORMALIZED_LINE_SEPARATOR_PATTERN.matcher(instanceValue).replaceAll(StringUtil.NL) : instanceValue;
   }
 
   /**

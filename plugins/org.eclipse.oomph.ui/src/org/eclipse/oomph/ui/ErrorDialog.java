@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.ui;
 
-import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -39,8 +39,8 @@ public class ErrorDialog extends MessageDialog
 
   private ErrorDialog(String title, Throwable detail)
   {
-    super(null, title, null, "Internal error" + PropertiesUtil.getProperty("line.separator") + detail.getMessage(), MessageDialog.ERROR, new String[] {
-        IDialogConstants.OK_LABEL, IDialogConstants.SHOW_DETAILS_LABEL }, 0);
+    super(null, title, null, "Internal error" + StringUtil.NL + detail.getMessage(), MessageDialog.ERROR, new String[] { IDialogConstants.OK_LABEL,
+        IDialogConstants.SHOW_DETAILS_LABEL }, 0);
     throwable = detail;
     setShellStyle(SWT.SHELL_TRIM | SWT.BORDER | SWT.APPLICATION_MODAL);
   }

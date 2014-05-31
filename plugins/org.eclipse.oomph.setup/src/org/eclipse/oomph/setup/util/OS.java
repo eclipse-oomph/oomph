@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.util;
 
-import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.Platform;
 
@@ -106,7 +106,6 @@ public abstract class OS
 
   public void writeText(File file, List<String> lines)
   {
-    String nl = PropertiesUtil.getProperty("line.separator");
     FileOutputStream out = null;
 
     try
@@ -121,7 +120,7 @@ public abstract class OS
       for (String line : lines)
       {
         bufferedWriter.write(line);
-        bufferedWriter.write(nl);
+        bufferedWriter.write(StringUtil.NL);
       }
 
       bufferedWriter.flush();
