@@ -335,10 +335,10 @@
             value="custom"/>
         <attributes
             key="gerrit query project"
-            value="oomph/oomph"/>
+            value="oomph/org.eclipse.oomph"/>
         <attributes
             key="gerrit query string"
-            value="project:oomph/oomph status:open branch:${git.clone.oomph.checkoutBranch}"/>
+            value="project:oomph/org.eclipse.oomph status:open branch:${git.clone.oomph.checkoutBranch}"/>
       </queries>
     </setupTask>
     <setupTask
@@ -348,6 +348,8 @@
         password="${eclipse.user.password}">
       <buildPlans
           name="integration"/>
+      <buildPlans
+          name="promotion"/>
     </setupTask>
   </stream>
   <logicalProjectContainer
