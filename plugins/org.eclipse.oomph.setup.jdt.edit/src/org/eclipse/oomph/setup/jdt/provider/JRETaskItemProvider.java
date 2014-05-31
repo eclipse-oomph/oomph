@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.jdt.provider;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
 import org.eclipse.oomph.setup.jdt.JRETask;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -116,13 +117,34 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    String label = ((JRETask)object).getID();
-    return label == null || label.length() == 0 ? getString("_UI_JRETask_type") : getString("_UI_JRETask_type") + " " + label;
+    JRETask jre = (JRETask)object;
+    String version = jre.getVersion();
+    String location = jre.getLocation();
+
+    if (StringUtil.isEmpty(version))
+    {
+      return getString("_UI_JRETask_type");
+    }
+
+    String label = "" + version;
+    if (location != null)
+    {
+      if (location.length() == 0)
+      {
+        label += " = \"\"";
+      }
+      else
+      {
+        label += " = " + location;
+      }
+    }
+
+    return label;
   }
 
   /**

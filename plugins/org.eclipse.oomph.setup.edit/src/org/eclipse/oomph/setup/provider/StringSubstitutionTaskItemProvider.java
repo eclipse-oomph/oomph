@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.StringSubstitutionTask;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -116,13 +117,34 @@ public class StringSubstitutionTaskItemProvider extends SetupTaskItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    String label = ((StringSubstitutionTask)object).getName();
-    return label == null || label.length() == 0 ? getString("_UI_StringSubstitutionTask_type") : getString("_UI_StringSubstitutionTask_type") + " " + label;
+    StringSubstitutionTask stringSubstitution = (StringSubstitutionTask)object;
+    String name = stringSubstitution.getName();
+    String value = stringSubstitution.getValue();
+
+    if (StringUtil.isEmpty(name))
+    {
+      return getString("_UI_StringSubstitutionTask_type");
+    }
+
+    String label = "" + name;
+    if (value != null)
+    {
+      if (value.length() == 0)
+      {
+        label += " = \"\"";
+      }
+      else
+      {
+        label += " = " + value;
+      }
+    }
+
+    return label;
   }
 
   /**

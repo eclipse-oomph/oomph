@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -137,14 +138,35 @@ public class AttributeRuleItemProvider extends ItemProviderAdapter implements IE
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    URI labelValue = ((AttributeRule)object).getAttributeURI();
-    String label = labelValue == null ? null : labelValue.toString();
-    return label == null || label.length() == 0 ? getString("_UI_AttributeRule_type") : getString("_UI_AttributeRule_type") + " " + label;
+    AttributeRule attributeRule = (AttributeRule)object;
+    URI attributeURI = attributeRule.getAttributeURI();
+    String name = attributeURI.fragment().substring(2).replace('/', '.');
+    String value = attributeRule.getValue();
+
+    if (StringUtil.isEmpty(name))
+    {
+      return getString("_UI_AttributeRule_type");
+    }
+
+    String label = "" + name;
+    if (value != null)
+    {
+      if (value.length() == 0)
+      {
+        label += " = \"\"";
+      }
+      else
+      {
+        label += " = " + value;
+      }
+    }
+
+    return label;
   }
 
   /**

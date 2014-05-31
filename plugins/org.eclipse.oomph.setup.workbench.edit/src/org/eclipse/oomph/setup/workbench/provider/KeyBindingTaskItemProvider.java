@@ -205,7 +205,7 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     KeyBindingTask keyBindingTask = (KeyBindingTask)object;
-    return "" + keyBindingTask.getKeys() + " --> " + keyBindingTask.getCommand();
+    return "" + keyBindingTask.getKeys() + " = " + keyBindingTask.getCommand();
   }
 
   /**

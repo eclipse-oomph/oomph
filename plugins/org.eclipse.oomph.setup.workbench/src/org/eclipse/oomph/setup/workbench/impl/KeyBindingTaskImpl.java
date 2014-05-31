@@ -561,7 +561,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
       if (binding instanceof KeyBinding)
       {
         KeyBinding keyBinding = (KeyBinding)binding;
-        if (!isNeeded(keyBindingContext, keyBinding))
+        if (isEqual(keyBindingContext, keyBinding))
         {
           return false;
         }
@@ -571,46 +571,46 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
     return true;
   }
 
-  private boolean isNeeded(KeyBindingContext keyBindingContext, KeyBinding keyBinding) throws Exception
+  private boolean isEqual(KeyBindingContext keyBindingContext, KeyBinding keyBinding) throws Exception
   {
     if (!ObjectUtil.equals(keyBinding.getSchemeId(), getScheme()))
     {
-      return true;
+      return false;
     }
 
     if (!ObjectUtil.equals(keyBinding.getContextId(), keyBindingContext.getID()))
     {
-      return true;
+      return false;
     }
 
     if (!ObjectUtil.equals(keyBinding.getPlatform(), getPlatform()))
     {
-      return true;
+      return false;
     }
 
     if (!ObjectUtil.equals(keyBinding.getLocale(), getLocale()))
     {
-      return true;
+      return false;
     }
 
     KeySequence keySequence = KeySequence.getInstance(getKeys());
     if (!ObjectUtil.equals(keyBinding.getKeySequence(), keySequence))
     {
-      return true;
+      return false;
     }
 
     ParameterizedCommand parameterizedCommand = keyBinding.getParameterizedCommand();
     if (parameterizedCommand == null || !ObjectUtil.equals(parameterizedCommand.getId(), getCommand()))
     {
-      return true;
+      return false;
     }
 
     if (!ObjectUtil.equals(parameterizedCommand.getParameterMap(), getCommandParameterMap()))
     {
-      return true;
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   public void perform(SetupTaskContext context) throws Exception
