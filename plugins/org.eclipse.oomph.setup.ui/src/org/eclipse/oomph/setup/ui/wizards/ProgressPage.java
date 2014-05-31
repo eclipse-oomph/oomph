@@ -275,9 +275,9 @@ public class ProgressPage extends SetupWizardPage
       progressPageLog = new ProgressPageLog();
       logText.setText("");
 
-      SetupTaskPerformer.setProgress(progressPageLog);
-
       final SetupTaskPerformer performer = getPerformer();
+      performer.setProgress(progressPageLog);
+
       treeViewer.setInput(new ItemProvider(performer.getNeededTasks()));
 
       run(new ProgressLogRunnable()
@@ -309,7 +309,6 @@ public class ProgressPage extends SetupWizardPage
   {
     if (forward)
     {
-      SetupTaskPerformer.setProgress(null);
       setPageComplete(false);
     }
     else

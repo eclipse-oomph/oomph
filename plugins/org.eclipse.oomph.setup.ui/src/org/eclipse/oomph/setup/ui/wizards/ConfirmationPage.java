@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -165,6 +166,8 @@ public class ConfirmationPage extends SetupWizardPage
   {
     if (forward)
     {
+      EList<SetupTask> neededSetupTasks = null;
+
       try
       {
         SetupTaskPerformer performer = getPerformer();
@@ -175,12 +178,18 @@ public class ConfirmationPage extends SetupWizardPage
 
         Set<SetupTask> checkedTasks = getCheckedTasks();
 
-        EList<SetupTask> neededSetupTasks = performer.initNeededSetupTasks();
+        neededSetupTasks = performer.initNeededSetupTasks();
         neededSetupTasks.retainAll(checkedTasks);
       }
       catch (Exception ex)
       {
+        if (neededSetupTasks != null)
+        {
+          neededSetupTasks.clear();
+        }
+
         SetupUIPlugin.INSTANCE.log(ex);
+        ErrorDialog.open(ex);
       }
     }
   }

@@ -137,7 +137,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|]+)(\\|([^}]+))?}|\\$)");
 
-  private static ProgressLog progress;
+  private ProgressLog progress;
 
   private boolean canceled;
 
@@ -933,6 +933,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         for (Iterator<SetupTask> it = triggeredSetupTasks.iterator(); it.hasNext();)
         {
           SetupTask setupTask = it.next();
+          checkCancelation();
 
           try
           {
@@ -2415,14 +2416,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return composedPerformer;
   }
 
-  public static ProgressLog getProgress()
+  public void setProgress(ProgressLog progress)
   {
-    return progress;
-  }
-
-  public static void setProgress(ProgressLog progress)
-  {
-    SetupTaskPerformer.progress = progress;
+    this.progress = progress;
   }
 
   public static boolean disableAutoBuilding() throws CoreException
