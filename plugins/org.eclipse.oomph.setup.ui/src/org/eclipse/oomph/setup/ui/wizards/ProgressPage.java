@@ -612,6 +612,9 @@ public class ProgressPage extends SetupWizardPage
     }
   }
 
+  /**
+   * @author Eike Stepper
+   */
   private class ProgressPageLog implements ProgressLog
   {
     private boolean canceled;

@@ -1226,7 +1226,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       try
       {
-        File logFile = new File(SetupContext.SETUP_LOG_URI.toFileString());
+        File productLocation = getProductLocation();
+
+        File logFile = new File(productLocation, "configuration/" + SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME);
         logFile.getParentFile().mkdirs();
 
         FileOutputStream out = new FileOutputStream(logFile, true);

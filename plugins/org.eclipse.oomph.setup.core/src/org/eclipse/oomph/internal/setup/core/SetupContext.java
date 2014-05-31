@@ -52,7 +52,9 @@ import java.util.Map;
  */
 public class SetupContext
 {
-  private static final String OOMPH_NODE = "org.eclipse.oomph.setup";
+  public static final String OOMPH_NODE = "org.eclipse.oomph.setup";
+
+  public static final String LOG_FILE_NAME = "setup.log";
 
   // Basic locations
 
@@ -77,7 +79,7 @@ public class SetupContext
 
   // Resoure locations
 
-  public static final URI SETUP_LOG_URI = CONFIGURATION_STATE_LOCATION_URI.appendSegment("setup.log");
+  public static final URI SETUP_LOG_URI = CONFIGURATION_STATE_LOCATION_URI.appendSegment(LOG_FILE_NAME);
 
   public static final URI INDEX_SETUP_URI = URI.createURI("index:/org.eclipse.setup");
 
