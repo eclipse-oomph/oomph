@@ -1,65 +1,161 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<setup:Project setup:toolVersion="8" xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0" xmlns:setup="http://www.eclipse.org/oomph/setup/1.0" xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0" name="EGit" label="Eclipse Git Team Provider">
-  <setupTasks xsi:type="setup:P2Task">
-    <installableUnits id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
-    <p2Repositories url="${train.url}"/>
-  </setupTasks>
-  <setupTasks xsi:type="setup:EclipseIniTask" option="-Xmx" value="1g" vm="true"/>
-  <setupTasks xsi:type="setup:ResourceCreationTask" excludedTriggers="STARTUP MANUAL" content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;section name=&quot;Workbench&quot;>&#xD;&#xA;&#x9;&lt;section name=&quot;org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart&quot;>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;true&quot; key=&quot;group_libraries&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;false&quot; key=&quot;linkWithEditor&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;2&quot; key=&quot;layout&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;2&quot; key=&quot;rootMode&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;packageExplorer configured=&amp;quot;true&amp;quot; group_libraries=&amp;quot;1&amp;quot; layout=&amp;quot;2&amp;quot; linkWithEditor=&amp;quot;0&amp;quot; rootMode=&amp;quot;2&amp;quot; sortWorkingSets=&amp;quot;false&amp;quot; workingSetName=&amp;quot;&amp;quot;&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;localWorkingSetManager&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;workingSet editPageId=&amp;quot;org.eclipse.jdt.internal.ui.OthersWorkingSet&amp;quot; factoryID=&amp;quot;org.eclipse.ui.internal.WorkingSetFactory&amp;quot; id=&amp;quot;1382792884467_1&amp;quot; label=&amp;quot;Other Projects&amp;quot; name=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;/localWorkingSetManager&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;activeWorkingSet workingSetName=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;allWorkingSets workingSetName=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;/packageExplorer&amp;gt;&quot; key=&quot;memento&quot;/>&#xD;&#xA;&#x9;&lt;/section>&#xD;&#xA;&lt;/section>&#xD;&#xA;" targetURL="${setup.ws.dir|uri}/.metadata/.plugins/org.eclipse.jdt.ui/dialog_settings.xml" encoding="UTF-8"/>
-  <setupTasks xsi:type="setup:CompoundTask" name="org.eclipse.pde.api.tools">
-    <setupTasks xsi:type="setup:PreferenceTask" key="/instance/org.eclipse.pde.api.tools/missing_default_api_profile" value="Warning"/>
-  </setupTasks>
-  <streams name="master">
-    <setupTasks xsi:type="setup:GitCloneTask" location="${setup.branch.dir/git/jgit}" remoteURI="ssh://git.eclipse.org:29418/jgit/jgit" checkoutBranch="master"/>
-    <setupTasks xsi:type="setup:GitCloneTask" location="${setup.branch.dir/git/egit}" remoteURI="ssh://git.eclipse.org:29418/egit/egit" checkoutBranch="master"/>
-    <setupTasks xsi:type="setup:TargletTask" name="EGit">
-      <roots id="org.eclipse.jgit.ant"/>
-      <roots id="org.eclipse.jgit.ant.test"/>
-      <roots id="org.eclipse.jgit.console"/>
-      <roots id="org.eclipse.jgit.http.test"/>
-      <roots id="org.eclipse.jgit.java7.feature.group"/>
-      <roots id="org.eclipse.jgit.java7.test"/>
-      <roots id="org.eclipse.jgit.junit.feature.group"/>
-      <roots id="org.eclipse.jgit.pgm.feature.group"/>
-      <roots id="org.eclipse.jgit.pgm.test"/>
-      <roots id="org.eclipse.jgit.target"/>
-      <roots id="org.eclipse.jgit.test"/>
-      <roots id="org.eclipse.egit.feature.group"/>
-      <roots id="org.eclipse.egit.core.test"/>
-      <roots id="org.eclipse.egit.mylyn.feature.group"/>
-      <roots id="org.eclipse.egit.mylyn.ui.test"/>
-      <roots id="org.eclipse.egit.target"/>
-      <roots id="org.eclipse.egit.ui.test"/>
-      <roots id="org.eclipse.sdk.feature.group"/>
-      <sourceLocators rootFolder="${setup.branch.dir/git/jgit}"/>
-      <sourceLocators rootFolder="${setup.branch.dir/git/egit}"/>
-      <repositoryLists name="Luna Dependencies">
-        <p2Repositories url="http://download.eclipse.org/releases/luna"/>
-        <p2Repositories url="http://download.eclipse.org/releases/juno"/>
-        <p2Repositories url="http://download.eclipse.org/technology/swtbot/releases/2.1.0"/>
-        <p2Repositories url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
-        <p2Repositories url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
-      </repositoryLists>
-    </setupTasks>
-    <setupTasks xsi:type="setup:WorkingSetTask">
-      <workingSets name="EGit">
-        <predicates xsi:type="predicates:AndPredicate">
-          <operands xsi:type="predicates:NamePredicate" pattern="org\.eclipse\.egit.*"/>
-          <operands xsi:type="workingsets:ExclusionPredicate" excludedWorkingSets="//@streams[name='master']/@setupTasks.3/@workingSets.2 //@streams[name='master']/@setupTasks.3/@workingSets.3"/>
+<setup:Project
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:git="http://www.eclipse.org/oomph/setup/git/1.0"
+    xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
+    xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
+    xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
+    name="EGit"
+    label="Eclipse Git Team Provider"
+    setup:toolVersion="8">
+  <setupTask
+      xsi:type="setup.p2:P2Task">
+    <requirements
+        id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+    <repositories
+        url="${train.url}"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Xmx"
+      value="1g"
+      vm="true"/>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="STARTUP MANUAL"
+      content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;section name=&quot;Workbench&quot;>&#xD;&#xA;&#x9;&lt;section name=&quot;org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart&quot;>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;true&quot; key=&quot;group_libraries&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;false&quot; key=&quot;linkWithEditor&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;2&quot; key=&quot;layout&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;2&quot; key=&quot;rootMode&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;packageExplorer configured=&amp;quot;true&amp;quot; group_libraries=&amp;quot;1&amp;quot; layout=&amp;quot;2&amp;quot; linkWithEditor=&amp;quot;0&amp;quot; rootMode=&amp;quot;2&amp;quot; sortWorkingSets=&amp;quot;false&amp;quot; workingSetName=&amp;quot;&amp;quot;&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;localWorkingSetManager&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;workingSet editPageId=&amp;quot;org.eclipse.jdt.internal.ui.OthersWorkingSet&amp;quot; factoryID=&amp;quot;org.eclipse.ui.internal.WorkingSetFactory&amp;quot; id=&amp;quot;1382792884467_1&amp;quot; label=&amp;quot;Other Projects&amp;quot; name=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;/localWorkingSetManager&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;activeWorkingSet workingSetName=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;allWorkingSets workingSetName=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;/packageExplorer&amp;gt;&quot; key=&quot;memento&quot;/>&#xD;&#xA;&#x9;&lt;/section>&#xD;&#xA;&lt;/section>&#xD;&#xA;"
+      targetURL="${setup.ws.dir|uri}/.metadata/.plugins/org.eclipse.jdt.ui/dialog_settings.xml"
+      encoding="UTF-8"/>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="org.eclipse.pde.api.tools">
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.pde.api.tools/missing_default_api_profile"
+        value="Warning"/>
+  </setupTask>
+  <stream name="master">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        location="${setup.branch.dir/git/jgit}"
+        remoteURI="ssh://git.eclipse.org:29418/jgit/jgit"
+        checkoutBranch="master"/>
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        location="${setup.branch.dir/git/egit}"
+        remoteURI="ssh://git.eclipse.org:29418/egit/egit"
+        checkoutBranch="master"/>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlets
+          name="EGit">
+        <requirements
+            id="org.eclipse.jgit.ant"/>
+        <requirements
+            id="org.eclipse.jgit.ant.test"/>
+        <requirements
+            id="org.eclipse.jgit.console"/>
+        <requirements
+            id="org.eclipse.jgit.http.test"/>
+        <requirements
+            id="org.eclipse.jgit.java7.feature.group"/>
+        <requirements
+            id="org.eclipse.jgit.java7.test"/>
+        <requirements
+            id="org.eclipse.jgit.junit.feature.group"/>
+        <requirements
+            id="org.eclipse.jgit.pgm.feature.group"/>
+        <requirements
+            id="org.eclipse.jgit.pgm.test"/>
+        <requirements
+            id="org.eclipse.jgit.target"/>
+        <requirements
+            id="org.eclipse.jgit.test"/>
+        <requirements
+            id="org.eclipse.egit.feature.group"/>
+        <requirements
+            id="org.eclipse.egit.core.test"/>
+        <requirements
+            id="org.eclipse.egit.mylyn.feature.group"/>
+        <requirements
+            id="org.eclipse.egit.mylyn.ui.test"/>
+        <requirements
+            id="org.eclipse.egit.target"/>
+        <requirements
+            id="org.eclipse.egit.ui.test"/>
+        <requirements
+            id="org.eclipse.sdk.feature.group"/>
+        <sourceLocators
+            rootFolder="${setup.branch.dir/git/jgit}"/>
+        <sourceLocators
+            rootFolder="${setup.branch.dir/git/egit}"/>
+        <repositoryLists
+            name="Luna Dependencies">
+          <repositories
+              url="http://download.eclipse.org/releases/luna"/>
+          <repositories
+              url="http://download.eclipse.org/releases/juno"/>
+          <repositories
+              url="http://download.eclipse.org/technology/swtbot/releases/2.1.0"/>
+          <repositories
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
+          <repositories
+              url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
+        </repositoryLists>
+      </targlets>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSets
+          name="EGit">
+        <predicates
+            xsi:type="predicates:AndPredicate">
+          <operands
+              xsi:type="predicates:NamePredicate"
+              pattern="org\.eclipse\.egit.*"/>
+          <operands
+              xsi:type="workingsets:ExclusionPredicate"
+              excludedWorkingSets="//@streams[name='master']/@setupTasks.3/@workingSets.2 //@streams[name='master']/@setupTasks.3/@workingSets.3"/>
         </predicates>
       </workingSets>
-      <workingSets name="JGit">
-        <predicates xsi:type="predicates:AndPredicate">
-          <operands xsi:type="predicates:NamePredicate" pattern="org\.eclipse\.jgit.*"/>
-          <operands xsi:type="workingsets:ExclusionPredicate" excludedWorkingSets="//@streams[name='master']/@setupTasks.3/@workingSets.2 //@streams[name='master']/@setupTasks.3/@workingSets.3"/>
+      <workingSets
+          name="JGit">
+        <predicates
+            xsi:type="predicates:AndPredicate">
+          <operands
+              xsi:type="predicates:NamePredicate"
+              pattern="org\.eclipse\.jgit.*"/>
+          <operands
+              xsi:type="workingsets:ExclusionPredicate"
+              excludedWorkingSets="//@streams[name='master']/@setupTasks.3/@workingSets.2 //@streams[name='master']/@setupTasks.3/@workingSets.3"/>
         </predicates>
       </workingSets>
-      <workingSets name="Tests">
-        <predicates xsi:type="predicates:FilePredicate" filePattern="META-INF/MANIFEST.MF" contentPattern="org\.junit"/>
+      <workingSets
+          name="Tests">
+        <predicates
+            xsi:type="predicates:FilePredicate"
+            filePattern="META-INF/MANIFEST.MF"
+            contentPattern="org\.junit"/>
       </workingSets>
-      <workingSets name="Features">
-        <predicates xsi:type="predicates:NaturePredicate" nature="org.eclipse.pde.FeatureNature"/>
+      <workingSets
+          name="Features">
+        <predicates
+            xsi:type="predicates:NaturePredicate"
+            nature="org.eclipse.pde.FeatureNature"/>
       </workingSets>
-    </setupTasks>
-  </streams>
+    </setupTask>
+  </stream>
+  <setupTask
+      xsi:type="setup:P2Task">
+    <installableUnits
+        id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+    <p2Repositories
+        url="${train.url}"/>
+  </setupTask>
 </setup:Project>

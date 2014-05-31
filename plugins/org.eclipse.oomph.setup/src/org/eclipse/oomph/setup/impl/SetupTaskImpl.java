@@ -11,7 +11,7 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
-import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
@@ -461,7 +461,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     Set<Trigger> result = TRIGGERS.get(eClass);
     if (result == null)
     {
-      String triggers = EcoreUtil.getAnnotation(eClass, AnnotationConstants.ANNOTATION_VALID_TRIGGERS, AnnotationConstants.KEY_TRIGGERS);
+      String triggers = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_VALID_TRIGGERS, EAnnotationConstants.KEY_TRIGGERS);
       if (triggers != null)
       {
         String[] triggerValueLiterals = triggers.split("\\s");

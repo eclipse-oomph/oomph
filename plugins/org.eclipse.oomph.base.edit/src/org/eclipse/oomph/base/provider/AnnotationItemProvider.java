@@ -16,6 +16,7 @@ import org.eclipse.oomph.base.BasePackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -151,13 +152,24 @@ public class AnnotationItemProvider extends ModelElementItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    String label = ((Annotation)object).getSource();
-    return label == null || label.length() == 0 ? getString("_UI_Annotation_type") : getString("_UI_Annotation_type") + " " + label;
+    Annotation annotation = (Annotation)object;
+    if (annotation.getSource() != null)
+    {
+      int index = getParent(annotation) instanceof EAnnotation ? -1 : annotation.getSource().lastIndexOf("/");
+      if (index == -1)
+      {
+        return annotation.getSource();
+      }
+
+      return annotation.getSource().substring(index + 1);
+    }
+
+    return getString("_UI_Annotation_type");
   }
 
   /**

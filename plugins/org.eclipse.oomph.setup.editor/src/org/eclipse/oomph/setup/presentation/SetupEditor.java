@@ -1096,11 +1096,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   public void createModel()
   {
     URI resourceURI = EditUIUtil.getURI(getEditorInput());
-    ResourceSet resourceSet = editingDomain.getResourceSet();
+    final ResourceSet resourceSet = editingDomain.getResourceSet();
 
     resourceMirror.mirror(resourceURI);
 
-    Resource mainResource = editingDomain.getResourceSet().getResource(resourceURI, false);
+    final Resource mainResource = editingDomain.getResourceSet().getResource(resourceURI, false);
     EList<EObject> contents = mainResource.getContents();
     EObject rootObject = null;
     if (!contents.isEmpty())
@@ -1125,39 +1125,53 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     if (!resourceMirror.isCanceled() && rootObject != null)
     {
-      EPackage ePackage = rootObject.eClass().getEPackage();
-      URI ePackageResourceURI = ePackage.eResource().getURI();
-      if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
+      getSite().getShell().getDisplay().asyncExec(new Runnable()
       {
-        List<EObject> migratedContents = new ArrayList<EObject>();
-        try
+        public void run()
         {
-          EMFUtil.migrate(mainResource, migratedContents);
-          CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
-          command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
-          command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-          editingDomain.getCommandStack().execute(command);
-        }
-        catch (RuntimeException ex)
-        {
-          CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
-          command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-          editingDomain.getCommandStack().execute(command);
-
-          SetupEditorPlugin.INSTANCE.log(ex);
-        }
-
-        EcoreUtil.resolveAll(mainResource);
-        for (Resource resource : resourceSet.getResources())
-        {
-          URI uri = resource.getURI();
-          if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+          EPackage ePackage = mainResource.getContents().get(0).eClass().getEPackage();
+          URI ePackageResourceURI = ePackage.eResource().getURI();
+          if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
           {
-            resource.getErrors().clear();
-            resource.getWarnings().clear();
+            List<EObject> migratedContents = new ArrayList<EObject>();
+            try
+            {
+              EMFUtil.migrate(mainResource, migratedContents);
+              CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
+              command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
+              command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+              editingDomain.getCommandStack().execute(command);
+              try
+              {
+                mainResource.save(System.err, null);
+              }
+              catch (IOException ex)
+              {
+                ex.printStackTrace();
+              }
+            }
+            catch (RuntimeException ex)
+            {
+              CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
+              command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+              editingDomain.getCommandStack().execute(command);
+
+              SetupEditorPlugin.INSTANCE.log(ex);
+            }
+
+            EcoreUtil.resolveAll(mainResource);
+            for (Resource resource : resourceSet.getResources())
+            {
+              URI uri = resource.getURI();
+              if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+              {
+                resource.getErrors().clear();
+                resource.getWarnings().clear();
+              }
+            }
           }
         }
-      }
+      });
     }
   }
 
@@ -1267,6 +1281,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       }
     });
+
+    getContentOutlinePage();
 
     Job job = new Job("Loading Model")
     {
@@ -1441,7 +1457,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private Trigger trigger;
 
-    private Map<Object, Object> copyMap = new HashMap<Object, Object>();
+    private Map<Object, Set<Object>> copyMap = new HashMap<Object, Set<Object>>();
 
     private Map<Object, Set<Object>> inverseCopyMap = new HashMap<Object, Set<Object>>();
 
@@ -1549,6 +1565,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               }
             }
 
+            variableUsages.addAll(contextVariableTask.getChoices());
             for (EObject eObject : variableUsages)
             {
               parents.put(eObject, object);
@@ -1631,10 +1648,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
           else
           {
-            Object copy = contentOutlinePage.getCopy(object);
-            if (copy != null)
+            Set<Object> copies = contentOutlinePage.getCopies(object);
+            if (copies != null)
             {
-              selection.add(copy);
+              selection.addAll(copies);
             }
           }
         }
@@ -1649,7 +1666,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       return result == null ? Collections.singleton(object) : result;
     }
 
-    public Object getCopy(Object object)
+    public Set<Object> getCopies(Object object)
     {
       return copyMap.get(object);
     }
@@ -1679,16 +1696,20 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         SetupEditorPlugin.INSTANCE.log(ex);
       }
 
-      for (Map.Entry<Object, Object> entry : copyMap.entrySet())
+      for (Map.Entry<Object, Set<Object>> entry : copyMap.entrySet())
       {
-        Object value = entry.getValue();
-        Set<Object> eObjects = inverseCopyMap.get(value);
-        if (eObjects == null)
+        Set<Object> values = entry.getValue();
+        for (Object value : values)
         {
-          eObjects = new HashSet<Object>();
-          inverseCopyMap.put(value, eObjects);
+          Set<Object> eObjects = inverseCopyMap.get(value);
+          if (eObjects == null)
+          {
+            eObjects = new HashSet<Object>();
+            inverseCopyMap.put(value, eObjects);
+          }
+
+          eObjects.add(entry.getKey());
         }
-        eObjects.add(entry.getKey());
       }
 
       getTreeViewer().expandToLevel(expandLevel);
@@ -1795,15 +1816,35 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               parents.put(setupTask, branchItem);
             }
 
-            copyMap.putAll(setupTaskPerformer.getCopyMap());
-            copyMap.put(stream, branchItem);
+            for (Map.Entry<EObject, EObject> entry : setupTaskPerformer.getCopyMap().entrySet())
+            {
+              add(copyMap, entry.getKey(), entry.getValue());
+            }
+
+            add(copyMap, stream, branchItem);
           }
         }
 
-        copyMap.put(project, projectItem);
+        add(copyMap, project, projectItem);
+      }
+
+      for (Project subproject : project.getProjects())
+      {
+        projectItemChildren.add(getTriggeredTasks(subproject));
       }
 
       return projectItem;
+    }
+
+    private <K, V> void add(Map<K, Set<V>> map, K key, V value)
+    {
+      Set<V> set = map.get(key);
+      if (set == null)
+      {
+        set = new HashSet<V>();
+        map.put(key, set);
+      }
+      set.add(value);
     }
 
     @Override

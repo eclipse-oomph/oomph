@@ -65,6 +65,45 @@
         name="eclipse.user.password"
         label="Eclipse password for Bugzilla/Hudson"
         documentation="The Eclipse password for Bugzilla/Hudson.  Leave empty if you don't have an account or don't plan to submit bugs."/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.gerrit.remoteURIs"
+        label="Oomph Git Repository">
+      <choice
+          value="ssh://${git.user.id}@git.eclipse.org:29418/@{remoteURI}"
+          label="SSH (read-write, Gerrit)"/>
+      <choice
+          value="https://${git.user.id}@git.eclipse.org/r/@{remoteURI}"
+          label="HTTPS (read-write, Gerrit)"/>
+      <choice
+          value="https://git.eclipse.org/r/@{remoteURI}"
+          label="HTTPS (read-only, anonymous, Gerrit)"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.git.remoteURIs"
+        label="Oomph Git Repository">
+      <choice
+          value="ssh://git.eclipse.org/gitroot/@{remoteURI}.git"
+          label="SSH (read-only, direct)"/>
+      <choice
+          value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
+          label="HTTP (read-only, anonymous, direct)"/>
+      <choice
+          value="git://git.eclipse.org/gitroot/@{remoteURI}"
+          label="Git (read-only, anonymous, direct)"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.git.gerrit.remoteURIs">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InheritedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.gerrit.remoteURIs eclipse.git.remoteURIs</value>
+        </detail>
+      </annotation>
+    </setupTask>
   </setupTask>
   <setupTask
       xsi:type="setup:WorkspaceTask"
@@ -83,6 +122,6 @@
   </setupTask>
   <project href="user:/org.eclipse.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Eclipse.org project catalog'#/"/>
   <project href="oomph.setup#/"/>
-  <project href="interim/emf.core.setup#/"/>
+  <project href="interim/emf.setup#/"/>
   <description>All the projects at Eclipse.org that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>

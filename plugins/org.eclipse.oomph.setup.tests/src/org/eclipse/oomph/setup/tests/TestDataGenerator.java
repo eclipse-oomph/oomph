@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.tests;
 
+import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Product;
@@ -81,7 +82,7 @@ public class TestDataGenerator
     ResourceSet resourceSet = createResourceSet();
 
     Index index = SetupFactory.eINSTANCE.createIndex();
-    Resource indexResource = resourceSet.createResource(URI.createFileURI(new File(DATA, "index.setup").toString()));
+    Resource indexResource = resourceSet.createResource(URI.createFileURI(new File(DATA, SetupContext.INDEX_SETUP_LOCATION_URI.lastSegment()).toString()));
     indexResource.getContents().add(index);
 
     EList<ProjectCatalog> projectCatalogs = createProjectCatalogs();

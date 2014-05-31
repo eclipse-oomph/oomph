@@ -4,39 +4,39 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0">
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='BIRT']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='BIRT']"
       name="BIRT"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='DataTools']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='DataTools']"
       name="DataTools"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='Eclipse']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='Eclipse']"
       name="Eclipse"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='Eclipse%20Foundation']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='Eclipse%20Foundation']"
       name="Eclipse Foundation"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='Modeling']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='Modeling']"
       name="Modeling"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='Mylyn']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='Mylyn']"
       name="Mylyn"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='RT']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='RT']"
       name="RT"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='SOA']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='SOA']"
       name="SOA"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='STP']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='STP']"
       name="STP"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='Technology']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='Technology']"
       name="Technology"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='Tools']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='Tools']"
       name="Tools"/>
   <projectCatalog
-      href="data/index.setup#//@projectCatalogs[name='WebTools']"
+      href="data/org.eclipse.setup#//@projectCatalogs[name='WebTools']"
       name="WebTools"/>
 </setup:CatalogSelection>

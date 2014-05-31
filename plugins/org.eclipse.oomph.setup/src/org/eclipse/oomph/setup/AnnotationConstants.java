@@ -19,15 +19,11 @@ public final class AnnotationConstants
   {
   }
 
-  public static final String ANNOTATION_VALID_TRIGGERS = "http://www.eclipse.org/oomph/setup/ValidTriggers";
+  public static final String ANNOTATION_INHERITED_CHOICES = "http://www.eclipse.org/oomph/setup/InheritedChoices";
 
-  public static final String KEY_TRIGGERS = "triggers";
+  public static final String ANNOTATION_INDUCED_CHOICES = "http://www.eclipse.org/oomph/setup/InducedChoices";
 
-  public static final String ANNOTATION_ENABLEMENT = "http://www.eclipse.org/oomph/setup/Enablement";
+  public static final String KEY_INHERIT = "inherit";
 
-  public static final String KEY_VARIABLE_NAME = "variableName";
-
-  public static final String KEY_REPOSITORY = "repository";
-
-  public static final String KEY_INSTALLABLE_UNITS = "installableUnits";
+  public static final String KEY_TARGET = "target";
 }

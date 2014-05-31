@@ -46,6 +46,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
@@ -721,8 +722,8 @@ public final class EMFUtil
       }
     };
 
-    uriMap.put(SetupContext.INDEX_SETUP_URI.trimSegments(1).appendSegment(""), SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
-    uriMap.put(SetupContext.INDEX_SETUP_URI, SetupContext.INDEX_SETUP_LOCATION_URI);
+    uriMap.put(SetupContext.INDEX_SETUP_URI.trimSegments(1), SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
+    uriMap.put(SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment("index.setup"), SetupContext.INDEX_SETUP_LOCATION_URI);
 
     for (Map.Entry<Object, Object> entry : System.getProperties().entrySet())
     {
@@ -834,6 +835,19 @@ public final class EMFUtil
 
       return uri;
     }
+  }
+
+  public static EStructuralFeature getFeature(EClass eClass, String xmlName)
+  {
+    for (EStructuralFeature eStructuralFeature : eClass.getEAllStructuralFeatures())
+    {
+      if (xmlName.equals(ExtendedMetaData.INSTANCE.getName(eStructuralFeature)))
+      {
+        return eStructuralFeature;
+      }
+    }
+
+    return null;
   }
 
   private static InputStream openInputStream(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException

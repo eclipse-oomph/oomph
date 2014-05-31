@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.internal.setup.core;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
@@ -20,6 +21,7 @@ import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
@@ -48,6 +50,7 @@ import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -283,10 +286,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         for (EAnnotation eAnnotation : eClass.getEAnnotations())
         {
           String source = eAnnotation.getSource();
-          if (AnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
+          if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
           {
-            String variableName = eAnnotation.getDetails().get(AnnotationConstants.KEY_VARIABLE_NAME);
-            String p2RepositoryLocation = eAnnotation.getDetails().get(AnnotationConstants.KEY_REPOSITORY);
+            String variableName = eAnnotation.getDetails().get(EAnnotationConstants.KEY_VARIABLE_NAME);
+            String p2RepositoryLocation = eAnnotation.getDetails().get(EAnnotationConstants.KEY_REPOSITORY);
 
             VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
             variable.setName(variableName);
@@ -295,7 +298,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
             P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
             EList<Requirement> requirements = p2Task.getRequirements();
-            for (String requirementSpecification : eAnnotation.getDetails().get(AnnotationConstants.KEY_INSTALLABLE_UNITS).split("\\s"))
+            for (String requirementSpecification : eAnnotation.getDetails().get(EAnnotationConstants.KEY_INSTALLABLE_UNITS).split("\\s"))
             {
               Matcher matcher = INSTALLABLE_UNIT_WITH_RANGE_PATTERN.matcher(requirementSpecification);
               if (matcher.matches())
@@ -483,15 +486,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         copySetup(stream, setupTasks, substitutions, directSubstitutions);
 
         // 2.4. Build variable map in the context
-        Set<String> explicitKeys = new HashSet<String>();
+        Map<String, VariableTask> explicitKeys = new HashMap<String, VariableTask>();
         for (SetupTask setupTask : setupTasks)
         {
           if (setupTask instanceof VariableTask)
           {
-            VariableTask contextVariableTask = (VariableTask)setupTask;
+            VariableTask variableTask = (VariableTask)setupTask;
 
-            String name = contextVariableTask.getName();
-            explicitKeys.add(name);
+            String name = variableTask.getName();
+            explicitKeys.put(name, variableTask);
           }
         }
 
@@ -510,7 +513,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               {
                 String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute);
                 String value = (String)setupTask.eGet(eAttribute);
-                if (explicitKeys.contains(variableName))
+                if (explicitKeys.containsKey(variableName))
                 {
                   if (StringUtil.isEmpty(value))
                   {
@@ -553,6 +556,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   }
 
                   it.add(variable);
+                  explicitKeys.put(variableName, variable);
 
                   for (EAnnotation ruleVariableAnnotation : eAttribute.getEAnnotations())
                   {
@@ -566,12 +570,18 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
                       createImpliedVariable(setupTask, null, ruleVariableAnnotation, ruleVariable);
                       it.add(ruleVariable);
+                      explicitKeys.put(ruleVariable.getName(), ruleVariable);
                     }
                   }
                 }
               }
             }
           }
+        }
+
+        for (SetupTask setupTask : setupTasks)
+        {
+          handleActiveAnnotations(setupTask, explicitKeys);
         }
 
         // 2.4. Build variable map in the context
@@ -593,7 +603,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         expandVariableKeys(keys);
 
-        // 2.8. Expand task attributes in sito
+        // 2.8. Expand task attributes in situ
         expandStrings(setupTasks);
 
         flattenPredecessorsAndSuccessors(setupTasks);
@@ -627,6 +637,159 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
 
           it.remove();
+        }
+      }
+    }
+  }
+
+  private void handleActiveAnnotations(SetupTask setupTask, Map<String, VariableTask> explicitKeys)
+  {
+    for (Annotation annotation : setupTask.getAnnotations())
+    {
+      String source = annotation.getSource();
+      if (AnnotationConstants.ANNOTATION_INHERITED_CHOICES.equals(source) && setupTask instanceof VariableTask)
+      {
+        VariableTask variableTask = (VariableTask)setupTask;
+        EList<VariableChoice> choices = variableTask.getChoices();
+
+        EMap<String, String> details = annotation.getDetails();
+        String inherit = details.get(AnnotationConstants.KEY_INHERIT);
+        if (inherit != null)
+        {
+          for (String variableName : inherit.trim().split("\\s"))
+          {
+            VariableTask referencedVariableTask = explicitKeys.get(variableName);
+            if (referencedVariableTask != null)
+            {
+              for (VariableChoice variableChoice : referencedVariableTask.getChoices())
+              {
+                String value = variableChoice.getValue();
+                String label = variableChoice.getLabel();
+                for (Map.Entry<String, String> detail : annotation.getDetails().entrySet())
+                {
+                  String detailKey = detail.getKey();
+                  String detailValue = detail.getValue();
+                  if (detailKey != null && !AnnotationConstants.KEY_INHERIT.equals(detailKey) && detailValue != null)
+                  {
+                    String target = "@{" + detailKey + "}";
+                    if (value != null)
+                    {
+                      value = value.replace(target, detailValue);
+                    }
+
+                    if (label != null)
+                    {
+                      label = label.replace(target, detailValue);
+                    }
+                  }
+                }
+
+                VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+                choice.setValue(value);
+                choice.setLabel(label);
+                choices.add(choice);
+              }
+            }
+          }
+        }
+      }
+      else if (AnnotationConstants.ANNOTATION_INDUCED_CHOICES.equals(source))
+      {
+        String id = setupTask.getID();
+        if (id != null)
+        {
+          EMap<String, String> details = annotation.getDetails();
+          String inherit = details.get(AnnotationConstants.KEY_INHERIT);
+          String target = details.get(AnnotationConstants.KEY_TARGET);
+          if (target != null && inherit != null)
+          {
+            EStructuralFeature eStructuralFeature = EMFUtil.getFeature(setupTask.eClass(), target);
+            if (eStructuralFeature.getEType().getInstanceClass() == String.class)
+            {
+              VariableTask variableTask = explicitKeys.get(id + "." + target);
+              if (variableTask != null)
+              {
+                EList<VariableChoice> choices = variableTask.getChoices();
+                Map<String, String> substitutions = new LinkedHashMap<String, String>();
+                for (Map.Entry<String, String> detail : annotation.getDetails().entrySet())
+                {
+                  String detailKey = detail.getKey();
+                  String detailValue = detail.getValue();
+                  if (detailKey != null && !AnnotationConstants.KEY_INHERIT.equals(detailKey) && !AnnotationConstants.KEY_TARGET.equals(detailKey)
+                      && detailValue != null)
+                  {
+                    if (detailValue.startsWith("@"))
+                    {
+                      String featureName = detailValue.substring(1);
+                      EStructuralFeature referencedEStructuralFeature = EMFUtil.getFeature(setupTask.eClass(), featureName);
+                      if (referencedEStructuralFeature != null && referencedEStructuralFeature.getEType().getInstanceClass() == String.class
+                          && !referencedEStructuralFeature.isMany())
+                      {
+                        Object value = setupTask.eGet(referencedEStructuralFeature);
+                        if (value != null)
+                        {
+                          detailValue = value.toString();
+                        }
+                      }
+                    }
+
+                    substitutions.put("@{" + detailKey + "}", detailValue);
+                  }
+                }
+
+                for (EAttribute eAttribute : setupTask.eClass().getEAllAttributes())
+                {
+                  if (eAttribute.getEType().getInstanceClass() == String.class && !eAttribute.isMany())
+                  {
+                    String value = (String)setupTask.eGet(eAttribute);
+                    if (!StringUtil.isEmpty(value))
+                    {
+                      substitutions.put("@{" + ExtendedMetaData.INSTANCE.getName(eAttribute) + "}", value);
+                    }
+                  }
+                }
+
+                for (String variableName : inherit.trim().split("\\s"))
+                {
+                  VariableTask referencedVariableTask = explicitKeys.get(variableName);
+                  if (referencedVariableTask != null)
+                  {
+                    for (VariableChoice variableChoice : referencedVariableTask.getChoices())
+                    {
+                      String value = variableChoice.getValue();
+                      String label = variableChoice.getLabel();
+                      for (Map.Entry<String, String> detail : substitutions.entrySet())
+                      {
+                        String detailKey = detail.getKey();
+                        String detailValue = detail.getValue();
+                        if (value != null)
+                        {
+                          value = value.replace(detailKey, detailValue);
+                        }
+
+                        if (label != null)
+                        {
+                          label = label.replace(detailKey, detailValue);
+                        }
+                      }
+
+                      VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+                      choice.setValue(value);
+                      choice.setLabel(label);
+                      choices.add(choice);
+                    }
+                  }
+                }
+
+                if (ObjectUtil.equals(setupTask.eGet(eStructuralFeature), variableTask.getValue()))
+                {
+                  variableTask.setValue(null);
+                }
+
+                setupTask.eSet(eStructuralFeature, "${" + variableTask.getName() + "}");
+              }
+            }
+          }
         }
       }
     }
@@ -734,7 +897,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       EStructuralFeature feature = eClass.getEStructuralFeature(key);
       if (feature == null)
       {
-        feature = ExtendedMetaData.INSTANCE.getAttribute(eClass, null, key);
+        feature = EMFUtil.getFeature(eClass, key);
         if (feature == null)
         {
           throw new IllegalStateException("Attribute reference can not be resolved: " + key);
