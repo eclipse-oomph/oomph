@@ -308,7 +308,7 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
     {
       public String filter(String value)
       {
-        return URI.decode(URI.createFileURI(value).toString());
+        return URI.createFileURI(value).toString();
       }
     });
 
