@@ -214,7 +214,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private void initTriggeredSetupTasks(Stream stream, boolean firstPhase)
   {
     Trigger trigger = getTrigger();
-
     User user = getUser();
 
     // Gather all possible tasks.
@@ -223,17 +222,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     if (firstPhase)
     {
       triggeredSetupTasks = new BasicEList<SetupTask>(getSetupTasks(stream, null));
-    }
 
-    EList<SetupTask> setupTasks = triggeredSetupTasks; // Debug help: ensure that the field is visible on the local stack frame
-
-    if (firstPhase)
-    {
       // 1. Collect and flatten all tasks
       Set<EClass> eClasses = new LinkedHashSet<EClass>();
       Map<EClass, Set<SetupTask>> instances = new HashMap<EClass, Set<SetupTask>>();
       Set<String> keys = new HashSet<String>();
-      for (SetupTask setupTask : setupTasks)
+      for (SetupTask setupTask : triggeredSetupTasks)
       {
         EClass eClass = setupTask.eClass();
         add(instances, eClass, setupTask);
@@ -294,7 +288,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
             variable.setName(variableName);
             variable.setValue(p2RepositoryLocation);
-            setupTasks.add(0, variable);
+            triggeredSetupTasks.add(0, variable);
 
             P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
             EList<Requirement> requirements = p2Task.getRequirements();
@@ -319,7 +313,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
             // Ensure that these are first so that these are the targets for merging rather than the sources.
             // The latter causes problems in the copier.
-            setupTasks.add(0, p2Task);
+            triggeredSetupTasks.add(0, p2Task);
           }
         }
 
@@ -400,9 +394,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    if (!setupTasks.isEmpty())
+    if (!triggeredSetupTasks.isEmpty())
     {
-      Map<SetupTask, SetupTask> substitutions = getSubstitutions(setupTasks);
+      Map<SetupTask, SetupTask> substitutions = getSubstitutions(triggeredSetupTasks);
 
       // Shorten the paths through the substitutions map
       Map<SetupTask, SetupTask> directSubstitutions = new HashMap<SetupTask, SetupTask>(substitutions);
@@ -436,12 +430,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           overridingSetupTask.overrideFor(overriddenSetupTask);
         }
 
-        for (int i = 0, size = setupTasks.size(); i < size; ++i)
+        for (int i = 0, size = triggeredSetupTasks.size(); i < size; ++i)
         {
-          SetupTask setupTask = setupTasks.get(i);
+          SetupTask setupTask = triggeredSetupTasks.get(i);
           for (int j = i + 1; j < size; ++j)
           {
-            SetupTask otherSetupTask = setupTasks.get(j);
+            SetupTask otherSetupTask = triggeredSetupTasks.get(j);
             if (EcoreUtil.equals(setupTask, otherSetupTask))
             {
               directSubstitutions.put(otherSetupTask, setupTask);
@@ -451,7 +445,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        for (ListIterator<SetupTask> it = setupTasks.listIterator(); it.hasNext();)
+        for (ListIterator<SetupTask> it = triggeredSetupTasks.listIterator(); it.hasNext();)
         {
           SetupTask setupTask = it.next();
           if (directSubstitutions.containsKey(setupTask))
@@ -483,11 +477,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       else
       {
         // 2.2. Create copy based on overrides
-        copySetup(stream, setupTasks, substitutions, directSubstitutions);
+        copySetup(stream, triggeredSetupTasks, substitutions, directSubstitutions);
 
         // 2.4. Build variable map in the context
         Map<String, VariableTask> explicitKeys = new HashMap<String, VariableTask>();
-        for (SetupTask setupTask : setupTasks)
+        for (SetupTask setupTask : triggeredSetupTasks)
         {
           if (setupTask instanceof VariableTask)
           {
@@ -499,7 +493,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
 
         // 2.3. Create implied variables for annotated task attributes
-        for (ListIterator<SetupTask> it = setupTasks.listIterator(); it.hasNext();)
+        for (ListIterator<SetupTask> it = triggeredSetupTasks.listIterator(); it.hasNext();)
         {
           SetupTask setupTask = it.next();
 
@@ -579,14 +573,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        for (SetupTask setupTask : setupTasks)
+        for (SetupTask setupTask : triggeredSetupTasks)
         {
           handleActiveAnnotations(setupTask, explicitKeys);
         }
 
         // 2.4. Build variable map in the context
         Set<String> keys = new HashSet<String>();
-        for (SetupTask setupTask : setupTasks)
+        for (SetupTask setupTask : triggeredSetupTasks)
         {
           if (setupTask instanceof VariableTask)
           {
@@ -604,18 +598,18 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         expandVariableKeys(keys);
 
         // 2.8. Expand task attributes in situ
-        expandStrings(setupTasks);
+        expandStrings(triggeredSetupTasks);
 
-        flattenPredecessorsAndSuccessors(setupTasks);
-        propagateRestrictionsAndFollows(setupTasks);
+        flattenPredecessorsAndSuccessors(triggeredSetupTasks);
+        propagateRestrictionsAndFollows(triggeredSetupTasks);
       }
 
-      reorderSetupTasks(setupTasks);
+      reorderSetupTasks(triggeredSetupTasks);
 
       // Filter out the tasks that aren't triggered.
       if (trigger != null)
       {
-        for (Iterator<SetupTask> it = setupTasks.iterator(); it.hasNext();)
+        for (Iterator<SetupTask> it = triggeredSetupTasks.iterator(); it.hasNext();)
         {
           if (!it.next().getTriggers().contains(trigger))
           {
@@ -624,7 +618,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       }
 
-      for (Iterator<SetupTask> it = setupTasks.iterator(); it.hasNext();)
+      for (Iterator<SetupTask> it = triggeredSetupTasks.iterator(); it.hasNext();)
       {
         SetupTask setupTask = it.next();
         setupTask.consolidate();

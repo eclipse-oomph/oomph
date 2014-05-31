@@ -46,7 +46,6 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -93,8 +92,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ProgressPage extends SetupWizardPage
 {
   private static final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm:ss");
-
-  private static final String JOB_NAME = "Setting up IDE";
 
   private final ProgressLogFilter logFilter = new ProgressLogFilter();
 
@@ -278,7 +275,7 @@ public class ProgressPage extends SetupWizardPage
     if (forward)
     {
       progressPageLog = new ProgressPageLog();
-      logDocument.set(""); // TODO Needed?
+      logDocument.set("");
 
       final SetupTaskPerformer performer = getPerformer();
       performer.setProgress(progressPageLog);
@@ -351,7 +348,7 @@ public class ProgressPage extends SetupWizardPage
         logText.setTopIndex(lineCount - 1);
       }
     }
-    catch (BadLocationException ex)
+    catch (Exception ex)
     {
       SetupUIPlugin.INSTANCE.log(ex);
     }
@@ -385,7 +382,8 @@ public class ProgressPage extends SetupWizardPage
       {
         public void run()
         {
-          final Job job = new Job(JOB_NAME)
+          final String jobName = "Executing " + getTrigger().toString().toLowerCase() + " tasks";
+          final Job job = new Job(jobName)
           {
             @Override
             protected IStatus run(IProgressMonitor monitor)
@@ -396,7 +394,7 @@ public class ProgressPage extends SetupWizardPage
 
               try
               {
-                progressLog.log(JOB_NAME);
+                progressLog.log(jobName);
 
                 restartReasons = runnable.run(progressLog);
 
@@ -449,7 +447,7 @@ public class ProgressPage extends SetupWizardPage
                     return Status.OK_STATUS;
                   }
 
-                  progressLog.log("Press Finish to restart now or Cancel to restart later...");
+                  progressLog.log("Press Finish to restart now or Cancel to restart later.");
                   disableCancelButton.set(false);
                 }
                 else
@@ -473,7 +471,7 @@ public class ProgressPage extends SetupWizardPage
                     return Status.OK_STATUS;
                   }
 
-                  progressLog.log("Press Finish to close the dialog...");
+                  progressLog.log("Press Finish to close the dialog.");
                 }
 
                 UIUtil.asyncExec(new Runnable()
