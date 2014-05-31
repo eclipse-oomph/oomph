@@ -335,11 +335,12 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     String source = "http://www.eclipse.org/oomph/setup/Variable";
     addAnnotation(getGitCloneTask_Location(), source, new String[] { "type", "STRING", "label", "Git clone location", "description", "Git clone location" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
+        "${installation.location/git/}${@id.remoteURI|uriLastSegment}", "label", "Located in installation location folder named git/<repo>" });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
         "${user.home/git/}${@id.remoteURI|uriLastSegment}-${@id.checkoutBranch}", "label", "Located in the user home folder named git/<repo>-<branch>" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${user.home/git/}${@id.remoteURI|uriLastSegment/}${@id.checkoutBranch}", "label", "Located in the user home folder named git/<repo>/<branch>" });
-    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${installation.location/git/}${@id.remoteURI|uriLastSegment}", "label", "Located in installation location folder named git/<repo>" });
+        "${user.home/git/}${@id.remoteURI|uriLastSegment}${file.separator}${@id.checkoutBranch}", "label",
+        "Located in the user home folder named git/<repo>/<branch>" });
   }
 
   /**

@@ -25,16 +25,16 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
         <eAnnotations source="Choice">
+          <details key="value" value="${installation.location/git/}${@id.remoteURI|uriLastSegment}"/>
+          <details key="label" value="Located in installation location folder named git/&lt;repo>"/>
+        </eAnnotations>
+        <eAnnotations source="Choice">
           <details key="value" value="${user.home/git/}${@id.remoteURI|uriLastSegment}-${@id.checkoutBranch}"/>
           <details key="label" value="Located in the user home folder named git/&lt;repo>-&lt;branch>"/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${user.home/git/}${@id.remoteURI|uriLastSegment/}${@id.checkoutBranch}"/>
+          <details key="value" value="${user.home/git/}${@id.remoteURI|uriLastSegment}${file.separator}${@id.checkoutBranch}"/>
           <details key="label" value="Located in the user home folder named git/&lt;repo>/&lt;branch>"/>
-        </eAnnotations>
-        <eAnnotations source="Choice">
-          <details key="value" value="${installation.location/git/}${@id.remoteURI|uriLastSegment}"/>
-          <details key="label" value="Located in installation location folder named git/&lt;repo>"/>
         </eAnnotations>
         <details key="type" value="STRING"/>
         <details key="label" value="Git clone location"/>

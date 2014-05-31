@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
@@ -253,18 +254,21 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
   {
     String newValue = null;
 
-    ISecurePreferences securePreferences = getSecurePreferences();
-    if (securePreferences.nodeExists(SECURE_STORAGE_NODE))
+    if (EMFPlugin.IS_ECLIPSE_RUNNING)
     {
-      ISecurePreferences node = securePreferences.node(SECURE_STORAGE_NODE);
+      ISecurePreferences securePreferences = getSecurePreferences();
+      if (securePreferences.nodeExists(SECURE_STORAGE_NODE))
+      {
+        ISecurePreferences node = securePreferences.node(SECURE_STORAGE_NODE);
 
-      try
-      {
-        newValue = node.get(key, null);
-      }
-      catch (StorageException ex)
-      {
-        log(ex);
+        try
+        {
+          newValue = node.get(key, null);
+        }
+        catch (StorageException ex)
+        {
+          log(ex);
+        }
       }
     }
 
