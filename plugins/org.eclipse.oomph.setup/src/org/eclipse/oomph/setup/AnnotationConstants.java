@@ -26,4 +26,8 @@ public final class AnnotationConstants
   public static final String KEY_INHERIT = "inherit";
 
   public static final String KEY_TARGET = "target";
+
+  public static final String KEY_LABEL = "label";
+
+  public static final String KEY_DESCRIPTION = "description";
 }

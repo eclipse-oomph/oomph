@@ -711,7 +711,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   String detailKey = detail.getKey();
                   String detailValue = detail.getValue();
                   if (detailKey != null && !AnnotationConstants.KEY_INHERIT.equals(detailKey) && !AnnotationConstants.KEY_TARGET.equals(detailKey)
-                      && detailValue != null)
+                      && !AnnotationConstants.KEY_LABEL.equals(detailKey) && !AnnotationConstants.KEY_DESCRIPTION.equals(detailKey) && detailValue != null)
                   {
                     if (detailValue.startsWith("@"))
                     {
@@ -744,11 +744,24 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   }
                 }
 
+                String inheritedLabel = null;
+                String inheritedDescription = null;
+
                 for (String variableName : inherit.trim().split("\\s"))
                 {
                   VariableTask referencedVariableTask = explicitKeys.get(variableName);
                   if (referencedVariableTask != null)
                   {
+                    if (inheritedLabel == null)
+                    {
+                      inheritedLabel = referencedVariableTask.getLabel();
+                    }
+
+                    if (inheritedDescription == null)
+                    {
+                      inheritedDescription = referencedVariableTask.getDescription();
+                    }
+
                     for (VariableChoice variableChoice : referencedVariableTask.getChoices())
                     {
                       String value = variableChoice.getValue();
@@ -778,7 +791,21 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
                 if (ObjectUtil.equals(setupTask.eGet(eStructuralFeature), variableTask.getValue()))
                 {
+                  String explicitLabel = details.get(AnnotationConstants.KEY_LABEL);
+                  if (explicitLabel == null)
+                  {
+                    explicitLabel = inheritedLabel;
+                  }
+
+                  String explicitDescription = details.get(AnnotationConstants.KEY_DESCRIPTION);
+                  if (explicitDescription == null)
+                  {
+                    explicitDescription = inheritedDescription;
+                  }
+
                   variableTask.setValue(null);
+                  variableTask.setLabel(explicitLabel);
+                  variableTask.setDescription(explicitDescription);
                 }
 
                 setupTask.eSet(eStructuralFeature, "${" + variableTask.getName() + "}");

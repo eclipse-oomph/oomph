@@ -68,7 +68,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.gerrit.remoteURIs"
-        label="Oomph Git Repository">
+        label="Eclipse Gerrit Repository">
       <choice
           value="ssh://${git.user.id}@git.eclipse.org:29418/@{remoteURI}"
           label="SSH (read-write, Gerrit)"/>
@@ -78,11 +78,12 @@
       <choice
           value="https://git.eclipse.org/r/@{remoteURI}"
           label="HTTPS (read-only, anonymous, Gerrit)"/>
+      <description>Choose from the available remote Gerrit URIs</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.git.remoteURIs"
-        label="Oomph Git Repository">
+        label="Eclipse Git Repository">
       <choice
           value="ssh://${git.user.id}@git.eclipse.org/gitroot/@{remoteURI}.git"
           label="SSH (read-only, direct)"/>
@@ -92,10 +93,12 @@
       <choice
           value="git://git.eclipse.org/gitroot/@{remoteURI}"
           label="Git (read-only, anonymous, direct)"/>
+      <description>Choose from the available Git URIs</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
-        name="eclipse.git.gerrit.remoteURIs">
+        name="eclipse.git.gerrit.remoteURIs"
+        label="Eclipse Gerrit or Git Repository">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InheritedChoices">
         <detail
@@ -103,6 +106,7 @@
           <value>eclipse.gerrit.remoteURIs eclipse.git.remoteURIs</value>
         </detail>
       </annotation>
+      <description>Choose from the available Gerrit or Git URIs</description>
     </setupTask>
   </setupTask>
   <setupTask

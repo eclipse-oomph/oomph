@@ -85,6 +85,10 @@
         <value>eclipse.git.gerrit.remoteURIs</value>
       </detail>
       <detail
+          key="label">
+        <value>EMF Git or Gerrit Repository</value>
+      </detail>
+      <detail
           key="target">
         <value>remoteURI</value>
       </detail>
@@ -114,6 +118,10 @@
         <detail
             key="inherit">
           <value>eclipse.git.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>XSD Git or Gerrit Repository</value>
         </detail>
         <detail
             key="target">
