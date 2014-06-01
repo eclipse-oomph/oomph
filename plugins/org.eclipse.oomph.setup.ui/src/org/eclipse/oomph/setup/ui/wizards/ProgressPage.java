@@ -508,7 +508,6 @@ public class ProgressPage extends SetupWizardPage
         }
       };
 
-      // jobRunnable.run();
       UIUtil.asyncExec(jobRunnable);
     }
     catch (Throwable ex)
@@ -763,17 +762,6 @@ public class ProgressPage extends SetupWizardPage
           int lineCount = logText.getLineCount();
           logText.setTopIndex(lineCount - 1);
         }
-
-        // Rectangle clientArea = logText.getClientArea();
-        // int visibleLines = clientArea.height / logText.getLineHeight();
-        // int lineCount = logText.getLineCount();
-        // int topVisibleLine = lineCount - visibleLines;
-        // int topIndex = logText.getTopIndex();
-        // int delta = topVisibleLine - topIndex;
-        // if (delta <= 2)
-        // {
-        // logText.setTopIndex(lineCount - 1);
-        // }
       }
       catch (Exception ex)
       {
