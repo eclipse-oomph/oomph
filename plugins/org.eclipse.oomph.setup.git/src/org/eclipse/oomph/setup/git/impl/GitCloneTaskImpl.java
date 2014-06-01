@@ -170,7 +170,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @generated
    * @ordered
    */
-  protected static final String CHECKOUT_BRANCH_EDEFAULT = null;
+  protected static final String CHECKOUT_BRANCH_EDEFAULT = "${scope.project.stream.name}";
 
   /**
    * The cached value of the '{@link #getCheckoutBranch() <em>Checkout Branch</em>}' attribute.

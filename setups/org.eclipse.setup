@@ -6,7 +6,7 @@
     name="index"
     label="index">
   <productCatalog
-      href="catalog:/self-hosted-product-catalog.setup#/"/>
+      href="catalog:/self-product-catalog.setup#/"/>
   <productCatalog
       href="product-catalog.setup#/"/>
   <projectCatalog

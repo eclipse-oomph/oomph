@@ -4,8 +4,8 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
-    name="org.eclipse.projects"
-    label="Eclipse.org Projects">
+    name="org.eclipse"
+    label="Eclipse.org">
   <setupTask
       xsi:type="setup:CompoundTask"
       name="Global Variables">
@@ -84,7 +84,7 @@
         name="eclipse.git.remoteURIs"
         label="Oomph Git Repository">
       <choice
-          value="ssh://git.eclipse.org/gitroot/@{remoteURI}.git"
+          value="ssh://${git.user.id}@git.eclipse.org/gitroot/@{remoteURI}.git"
           label="SSH (read-only, direct)"/>
       <choice
           value="http://git.eclipse.org/gitroot/@{remoteURI}.git"

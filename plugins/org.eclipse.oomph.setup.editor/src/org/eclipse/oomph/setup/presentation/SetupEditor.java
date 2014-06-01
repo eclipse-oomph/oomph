@@ -32,8 +32,10 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -48,8 +50,10 @@ import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -170,6 +174,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1715,6 +1720,72 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       getTreeViewer().expandToLevel(expandLevel);
     }
 
+    private List<String> sortStrings(Collection<? extends String> strings)
+    {
+      EList<Pair<SegmentSequence, String>> pairs = new BasicEList<Pair<SegmentSequence, String>>();
+      for (String string : strings)
+      {
+        pairs.add(new Pair<SegmentSequence, String>(SegmentSequence.create(".", string), string));
+      }
+
+      @SuppressWarnings("unchecked")
+      Pair<SegmentSequence, String>[] array = pairs.toArray(new Pair[pairs.size()]);
+      return sort(array);
+    }
+
+    private List<VariableTask> sortVariables(Collection<? extends VariableTask> variables)
+    {
+      EList<Pair<SegmentSequence, VariableTask>> pairs = new BasicEList<Pair<SegmentSequence, VariableTask>>();
+      for (VariableTask variable : variables)
+      {
+        pairs.add(new Pair<SegmentSequence, VariableTask>(SegmentSequence.create(".", variable.getName()), variable));
+      }
+
+      @SuppressWarnings("unchecked")
+      Pair<SegmentSequence, VariableTask>[] array = pairs.toArray(new Pair[pairs.size()]);
+      return sort(array);
+    }
+
+    private <T> List<T> sort(Pair<SegmentSequence, T>[] pairs)
+    {
+      Arrays.sort(pairs, new Comparator<Pair<SegmentSequence, T>>()
+      {
+        private final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
+
+        public int compare(Pair<SegmentSequence, T> o1, Pair<SegmentSequence, T> o2)
+        {
+          SegmentSequence s1 = o1.getElement1();
+          SegmentSequence s2 = o2.getElement1();
+          int length1 = s1.segmentCount();
+          int length2 = s2.segmentCount();
+
+          int length = Math.min(length1, length2);
+
+          for (int i = 0; i < length; ++i)
+          {
+            String e1 = s1.segment(i);
+            String e2 = s2.segment(i);
+
+            int result = comparator.compare(e1, e2);
+            if (result != 0)
+            {
+              return result;
+            }
+          }
+
+          return length1 - length2;
+        }
+      });
+
+      List<T> result = new ArrayList<T>(pairs.length);
+      for (Pair<SegmentSequence, T> pair : pairs)
+      {
+        result.add(pair.getElement2());
+      }
+
+      return result;
+    }
+
     private ItemProvider getTriggeredTasks(Project project)
     {
       final ItemProvider projectItem = new ItemProvider(labelProvider.getText(project), labelProvider.getImage(project));
@@ -1768,7 +1839,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             ItemProvider undeclaredVariablesItem = new VariableContainer(setupTaskPerformer, "Undeclared Variables", UNDECLARED_VARIABLE_GROUP_IMAGE);
             EList<Object> undeclaredVariablesItemChildren = undeclaredVariablesItem.getChildren();
             Set<String> undeclaredVariables = setupTaskPerformer.getUndeclaredVariables();
-            for (String key : undeclaredVariables)
+            for (String key : sortStrings(undeclaredVariables))
             {
               VariableTask contextVariableTask = SetupFactory.eINSTANCE.createVariableTask();
               contextVariableTask.setName(key);
@@ -1784,7 +1855,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Unresolved Variables", VARIABLE_GROUP_IMAGE);
             EList<Object> unresolvedVariablesItemChildren = unresolvedVariablesItem.getChildren();
             List<VariableTask> unresolvedVariables = setupTaskPerformer.getUnresolvedVariables();
-            for (VariableTask contextVariableTask : unresolvedVariables)
+            for (VariableTask contextVariableTask : sortVariables(unresolvedVariables))
             {
               unresolvedVariablesItemChildren.add(contextVariableTask);
               parents.put(contextVariableTask, unresolvedVariablesItem);
@@ -1798,7 +1869,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             ItemProvider resolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Resolved Variables", VARIABLE_GROUP_IMAGE);
             EList<Object> resolvedVariablesItemChildren = resolvedVariablesItem.getChildren();
             List<VariableTask> resolvedVariables = setupTaskPerformer.getResolvedVariables();
-            for (VariableTask contextVariableTask : resolvedVariables)
+            for (VariableTask contextVariableTask : sortVariables(resolvedVariables))
             {
               resolvedVariablesItemChildren.add(contextVariableTask);
               parents.put(contextVariableTask, resolvedVariablesItem);

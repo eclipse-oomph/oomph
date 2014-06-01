@@ -32,6 +32,7 @@ import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.ResourceCopyTask;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
@@ -983,18 +984,18 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     if (!productVersion.eIsProxy())
     {
       List<Scope> configurableItems = new ArrayList<Scope>();
-      List<SetupTaskContainer> setupTaskContainers = new ArrayList<SetupTaskContainer>();
+      List<Scope> scopes = new ArrayList<Scope>();
 
       Product product = productVersion.getProduct();
       configurableItems.add(product);
-      setupTaskContainers.add(product);
+      scopes.add(product);
 
       ProductCatalog productCatalog = product.getProductCatalog();
       configurableItems.add(productCatalog);
-      setupTaskContainers.add(0, productCatalog);
+      scopes.add(0, productCatalog);
 
       configurableItems.add(productVersion);
-      setupTaskContainers.add(productVersion);
+      scopes.add(productVersion);
 
       if (stream != null)
       {
@@ -1004,37 +1005,130 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         for (; project != null; project = project.getParentProject())
         {
           configurableItems.add(project);
-          setupTaskContainers.add(3, project);
+          scopes.add(3, project);
         }
 
         if (projectCatalog != null)
         {
           configurableItems.add(projectCatalog);
-          setupTaskContainers.add(3, projectCatalog);
+          scopes.add(3, projectCatalog);
         }
 
         configurableItems.add(stream);
-        setupTaskContainers.add(stream);
+        scopes.add(stream);
       }
 
       configurableItems.add(installation);
-      setupTaskContainers.add(installation);
+      scopes.add(installation);
 
       if (workspace != null)
       {
         configurableItems.add(workspace);
-        setupTaskContainers.add(workspace);
+        scopes.add(workspace);
       }
 
-      setupTaskContainers.add(user);
+      scopes.add(user);
 
-      for (SetupTaskContainer setupTaskContainer : setupTaskContainers)
+      String qualifier = null;
+
+      for (Scope scope : scopes)
       {
-        getSetupTasks(trigger, result, configurableItems, setupTaskContainer);
+        ScopeType type = scope.getType();
+        String name = scope.getName();
+        String label = scope.getLabel();
+        if (label == null)
+        {
+          label = name;
+        }
+
+        String description = scope.getDescription();
+        if (description == null)
+        {
+          description = label;
+        }
+
+        switch (type)
+        {
+          case PRODUCT_CATALOG:
+          {
+            generateScopeVariables(result, "product.catalog", qualifier, name, label, description);
+            qualifier = name;
+            break;
+          }
+          case PRODUCT:
+          {
+            generateScopeVariables(result, "product", qualifier, name, label, description);
+            qualifier += "." + name;
+            break;
+          }
+          case PRODUCT_VERSION:
+          {
+            generateScopeVariables(result, "product.version", qualifier, name, label, description);
+            qualifier = null;
+            break;
+          }
+          case PROJECT_CATALOG:
+          {
+            generateScopeVariables(result, "project.catalog", qualifier, name, label, description);
+            qualifier = name;
+            break;
+          }
+          case PROJECT:
+          {
+            generateScopeVariables(result, "project", qualifier, name, label, description);
+            qualifier += "." + name;
+            break;
+          }
+          case STREAM:
+          {
+            generateScopeVariables(result, "project.stream", qualifier, name, label, description);
+            qualifier = null;
+            break;
+          }
+          case INSTALLATION:
+          {
+            generateScopeVariables(result, "installation", qualifier, name, label, description);
+            break;
+          }
+          case WORKSPACE:
+          {
+            generateScopeVariables(result, "workspace", qualifier, name, label, description);
+            break;
+          }
+          case USER:
+          {
+            generateScopeVariables(result, "user", qualifier, name, label, description);
+            break;
+          }
+        }
+
+        getSetupTasks(trigger, result, configurableItems, scope);
       }
     }
 
     return result;
+  }
+
+  private void generateScopeVariables(EList<SetupTask> setupTasks, String type, String qualifier, String name, String label, String description)
+  {
+    setupTasks.add(createVariable(setupTasks, "scope." + type + ".name", name, null));
+
+    if (qualifier != null)
+    {
+      setupTasks.add(createVariable(setupTasks, "scope." + type + ".name.qualified", qualifier + "." + name, null));
+    }
+
+    setupTasks.add(createVariable(setupTasks, "scope." + type + ".label", label, null));
+    setupTasks.add(createVariable(setupTasks, "scope." + type + ".description", description, null));
+  }
+
+  private VariableTask createVariable(EList<SetupTask> setupTasks, String name, String value, String description)
+  {
+    VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+    variable.setName(name);
+    variable.setValue(value);
+    variable.setDescription(description);
+    return variable;
   }
 
   private void getSetupTasks(Trigger trigger, EList<SetupTask> setupTasks, List<Scope> configurableItems, SetupTaskContainer setupTaskContainer)
@@ -1698,7 +1792,31 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     recordRules(user.getAttributeRules(), true);
 
-    AdapterFactoryItemDelegator itemDelegator = new AdapterFactoryItemDelegator(adapterFactory);
+    AdapterFactoryItemDelegator itemDelegator = new AdapterFactoryItemDelegator(adapterFactory)
+    {
+      @Override
+      public String getText(Object object)
+      {
+        String result = super.getText(object);
+        if (object instanceof ProjectCatalog)
+        {
+          if (!result.endsWith("Projects"))
+          {
+            result += " Projects";
+          }
+        }
+        else if (object instanceof ProductCatalog)
+        {
+          if (!result.endsWith("Products"))
+          {
+            result += " Products";
+          }
+        }
+
+        return result;
+      }
+    };
+
     EList<SetupTask> userSetupTasks = user.getSetupTasks();
     if (!unresolvedVariables.isEmpty())
     {

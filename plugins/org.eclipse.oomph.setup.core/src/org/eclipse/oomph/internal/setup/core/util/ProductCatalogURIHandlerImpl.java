@@ -59,7 +59,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
 {
   private static final Date NOW = new Date();
 
-  private static final URI SELF_HOSTED_PRODUCT_CATALOG_URI = URI.createURI("catalog:/self-hosted-product-catalog.setup");
+  private static final URI SELF_PRODUCT_CATALOG_URI = URI.createURI("catalog:/self-product-catalog.setup");
 
   @Override
   public boolean canHandle(URI uri)
@@ -70,7 +70,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
   @Override
   public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
   {
-    if (SELF_HOSTED_PRODUCT_CATALOG_URI.equals(uri))
+    if (SELF_PRODUCT_CATALOG_URI.equals(uri))
     {
       class ProductCatalogInput extends InputStream implements URIConverter.Loadable
       {
@@ -87,7 +87,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
           if (in == null)
           {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Resource resource = Resource.Factory.Registry.INSTANCE.getFactory(SELF_HOSTED_PRODUCT_CATALOG_URI).createResource(SELF_HOSTED_PRODUCT_CATALOG_URI);
+            Resource resource = Resource.Factory.Registry.INSTANCE.getFactory(SELF_PRODUCT_CATALOG_URI).createResource(SELF_PRODUCT_CATALOG_URI);
             resource.getContents().add(create());
             resource.save(out, null);
             in = new ByteArrayInputStream(out.toByteArray());
@@ -108,34 +108,34 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
   private ProductCatalog create()
   {
     ProductCatalog productCatalog = SetupFactory.eINSTANCE.createProductCatalog();
-    productCatalog.setName("self.hosted.product.catalog");
-    productCatalog.setLabel("Self-hosted Products");
-    productCatalog.setDescription("The product catalog for the self hosted product and the empty product");
+    productCatalog.setName("self");
+    productCatalog.setLabel("Self Products");
+    productCatalog.setDescription("The product catalog for the self product and the empty product");
 
     InstallationTask installationTask = SetupFactory.eINSTANCE.createInstallationTask();
     installationTask.setID("installation");
     productCatalog.getSetupTasks().add(installationTask);
 
     {
-      Product selfHostedProduct = SetupFactory.eINSTANCE.createProduct();
-      selfHostedProduct.setName("self.hosted.product");
-      selfHostedProduct.setLabel("Self-hosted Product");
-      selfHostedProduct.setDescription("The self-hosted product");
-      productCatalog.getProducts().add(selfHostedProduct);
+      Product selfProduct = SetupFactory.eINSTANCE.createProduct();
+      selfProduct.setName("product");
+      selfProduct.setLabel("Self Product");
+      selfProduct.setDescription("The self product");
+      productCatalog.getProducts().add(selfProduct);
 
       VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
       variable.setName("installation.location");
       variable.setValue(SetupContext.PRODUCT_ROOT_LOCATION.toFileString());
-      selfHostedProduct.getSetupTasks().add(variable);
+      selfProduct.getSetupTasks().add(variable);
 
-      ProductVersion selfHostedProductVersion = SetupFactory.eINSTANCE.createProductVersion();
-      selfHostedProductVersion.setName("self.hosted.product.version");
-      selfHostedProductVersion.setLabel("Self-hosted Product Version");
-      selfHostedProductVersion.setDescription("The self-hosted product version");
-      selfHostedProduct.getVersions().add(selfHostedProductVersion);
+      ProductVersion selfProductVersion = SetupFactory.eINSTANCE.createProductVersion();
+      selfProductVersion.setName("version");
+      selfProductVersion.setLabel("Self Product Version");
+      selfProductVersion.setDescription("The self product version");
+      selfProduct.getVersions().add(selfProductVersion);
 
-      P2Task selfHostedP2Task = SetupP2Factory.eINSTANCE.createP2Task();
-      selfHostedProductVersion.getSetupTasks().add(selfHostedP2Task);
+      P2Task selfP2Task = SetupP2Factory.eINSTANCE.createP2Task();
+      selfProductVersion.getSetupTasks().add(selfP2Task);
 
       IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
       IProfileRegistry profileRegistry = (IProfileRegistry)agent.getService(IProfileRegistry.class.getName());
@@ -144,7 +144,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
       {
         int xxx; // TODO Use AgentManager
 
-        EList<Requirement> requirements = selfHostedP2Task.getRequirements();
+        EList<Requirement> requirements = selfP2Task.getRequirements();
         IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
         for (IInstallableUnit iu : query)
         {
@@ -171,7 +171,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
       java.net.URI[] knownRepositories = metadataRepositoryManager.getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM);
       if (knownRepositories.length > 0)
       {
-        EList<Repository> repositories = selfHostedP2Task.getRepositories();
+        EList<Repository> repositories = selfP2Task.getRepositories();
         for (java.net.URI knownRepository : knownRepositories)
         {
           Repository repository = P2Factory.eINSTANCE.createRepository(knownRepository.toString());
@@ -182,7 +182,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
 
     {
       Product emptyProduct = SetupFactory.eINSTANCE.createProduct();
-      emptyProduct.setName("self.hosted.empty.product");
+      emptyProduct.setName("empty.product");
       emptyProduct.setLabel("Empty Product");
       emptyProduct.setDescription("The empty product");
       productCatalog.getProducts().add(emptyProduct);
@@ -193,9 +193,9 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
       emptyProduct.getSetupTasks().add(variable);
 
       ProductVersion emptyProductVersion = SetupFactory.eINSTANCE.createProductVersion();
-      emptyProductVersion.setName("self.hosted.empty.product.version");
-      emptyProductVersion.setLabel("Self-hosted Empty Product Version");
-      emptyProductVersion.setDescription("The self-hosted empty product version");
+      emptyProductVersion.setName("version");
+      emptyProductVersion.setLabel("Self Empty Product Version");
+      emptyProductVersion.setDescription("The self empty product version");
       emptyProduct.getVersions().add(emptyProductVersion);
 
       P2Task emptyP2Task = SetupP2Factory.eINSTANCE.createP2Task();

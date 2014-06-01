@@ -146,6 +146,7 @@ public interface GitCloneTask extends SetupTask
 
   /**
    * Returns the value of the '<em><b>Checkout Branch</b></em>' attribute.
+   * The default value is <code>"${scope.project.stream.name}"</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Checkout Branch</em>' attribute isn't clear,
@@ -155,7 +156,7 @@ public interface GitCloneTask extends SetupTask
    * @return the value of the '<em>Checkout Branch</em>' attribute.
    * @see #setCheckoutBranch(String)
    * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_CheckoutBranch()
-   * @model required="true"
+   * @model default="${scope.project.stream.name}" required="true"
    * @generated
    */
   String getCheckoutBranch();

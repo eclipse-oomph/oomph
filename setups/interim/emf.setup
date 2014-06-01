@@ -12,7 +12,7 @@
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
     xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
     xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
-    name="org.eclipse.emf"
+    name="emf"
     label="EMF">
   <setupTask
       xsi:type="jdt:JRETask"
@@ -75,14 +75,9 @@
     <description>The release train repository location that will be used to materialize a target platform.  EMF and XSD are built and tested with Eclipse 3.5, i.e., Galileo.</description>
   </setupTask>
   <setupTask
-      xsi:type="setup:VariableTask"
-      name="branch.name"
-      value="master"/>
-  <setupTask
       xsi:type="git:GitCloneTask"
       id="emf.git.clone"
-      remoteURI="emf/org.eclipse.emf"
-      checkoutBranch="${branch.name}">
+      remoteURI="emf/org.eclipse.emf">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
       <detail
@@ -113,8 +108,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="xsd.git.clone"
-        remoteURI="xsd/org.eclipse.xsd"
-        checkoutBranch="${branch.name}">
+        remoteURI="xsd/org.eclipse.xsd">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -386,16 +380,17 @@
     <stream
         name="master"/>
     <stream
-        name="2.9">
+        name="R2_9_maintenance"
+        label="2.9">
       <setupTask
           xsi:type="setup:VariableTask"
           name="branch.name"
           value="R2_9_maintenance"/>
     </stream>
-    <description>The setup environment for the EMF Core and XSD SDK</description>
+    <description>The development environment for the EMF Core and XSD SDK</description>
   </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse.projects']"/>
-  <description>The setup environments for EMF</description>
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
+  <description>The development environments for EMF</description>
 </setup:Project>
