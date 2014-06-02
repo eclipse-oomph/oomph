@@ -20,10 +20,10 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.p2.ui.AgentManagerPreferencePage"
             class="org.eclipse.oomph.p2.internal.ui.AgentManagerPreferencePage"
-            name="Bundle Pool Management">
+            name="Bundle Pools">
       </page>
    </extension>
-   
+
    <extension
          point="org.eclipse.oomph.p2.ui.profileTypes">
       <profileType
@@ -68,5 +68,5 @@
       </actionSet>
    </extension>
    -->
-   
+
 </plugin>

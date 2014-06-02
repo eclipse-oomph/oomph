@@ -26,7 +26,7 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.setup.SetupPreferencePage"
             class="org.eclipse.oomph.setup.ui.SetupPreferencePage"
-            name="Development Environment Setup">
+            name="Setup">
       </page>
    </extension>
 
