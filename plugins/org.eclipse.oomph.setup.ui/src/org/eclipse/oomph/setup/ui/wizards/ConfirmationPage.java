@@ -41,6 +41,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -119,6 +121,15 @@ public class ConfirmationPage extends SetupWizardPage
   protected void createCheckButtons()
   {
     showAllButton = addCheckButton("showAll", false, "Show all triggered tasks", "Show unneeded tasks in addition to the needed tasks");
+    showAllButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        viewer.refresh();
+      }
+    });
+
     offlineButton = addCheckButton("offline", false, "Offline", "Avoid unnecessary network requests during the installation process");
   }
 
