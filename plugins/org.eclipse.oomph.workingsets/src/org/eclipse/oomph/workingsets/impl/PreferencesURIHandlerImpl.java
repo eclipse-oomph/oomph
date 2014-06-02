@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.workingsets.impl;
 
+import org.eclipse.oomph.util.IOExceptionWithCause;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
@@ -83,7 +85,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
       }
       catch (BackingStoreException ex)
       {
-        throw new IOException(ex);
+        throw new IOExceptionWithCause(ex);
       }
     }
   }

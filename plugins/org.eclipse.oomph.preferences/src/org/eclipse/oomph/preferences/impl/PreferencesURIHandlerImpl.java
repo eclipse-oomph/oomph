@@ -12,6 +12,7 @@ package org.eclipse.oomph.preferences.impl;
 
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.util.IOExceptionWithCause;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -88,7 +89,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
       }
       catch (BackingStoreException ex)
       {
-        throw new IOException(ex);
+        throw new IOExceptionWithCause(ex);
       }
     }
   }

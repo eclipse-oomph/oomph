@@ -11,6 +11,7 @@
 package org.eclipse.oomph.internal.setup.core.util;
 
 import org.eclipse.oomph.internal.setup.core.SetupContext;
+import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 
@@ -199,11 +200,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       }
       catch (URISyntaxException ex)
       {
-        throw new IOException(ex);
+        throw new IOExceptionWithCause(ex);
       }
       catch (IncomingFileTransferException ex)
       {
-        throw new IOException(ex);
+        throw new IOExceptionWithCause(ex);
       }
 
       try
@@ -212,7 +213,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       }
       catch (InterruptedException ex)
       {
-        throw new IOException(ex);
+        throw new IOExceptionWithCause(ex);
       }
 
       if (transferListener.exception != null)
@@ -224,7 +225,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             return uriConverter.createInputStream(cacheURI, options);
           }
 
-          throw new IOException(transferListener.exception);
+          throw new IOExceptionWithCause(transferListener.exception);
         }
 
         continue;
@@ -266,7 +267,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
     catch (ContainerCreateException ex)
     {
-      throw new IOException(ex);
+      throw new IOExceptionWithCause(ex);
     }
   }
 
