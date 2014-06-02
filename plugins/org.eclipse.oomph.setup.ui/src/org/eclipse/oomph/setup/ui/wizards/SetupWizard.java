@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -191,6 +192,9 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public void addPages()
   {
+    IDialogSettings wizardSection = SetupUIPlugin.INSTANCE.getDialogSettings(getClass().getSimpleName());
+    setDialogSettings(wizardSection);
+
     addPage(new VariablePage());
     addPage(new ConfirmationPage());
     addPage(new ProgressPage());

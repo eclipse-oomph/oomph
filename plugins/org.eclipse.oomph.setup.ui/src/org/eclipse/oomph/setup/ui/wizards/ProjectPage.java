@@ -97,7 +97,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
@@ -319,19 +318,12 @@ public class ProjectPage extends SetupWizardPage
     final Tree projectTree = projectViewer.getTree();
     projectTree.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-    GridLayout bucketCompositeLayout = new GridLayout(3, true);
+    GridLayout bucketCompositeLayout = new GridLayout();
     bucketCompositeLayout.marginWidth = 0;
     bucketCompositeLayout.marginHeight = 0;
 
-    Composite bucketComposite = new Composite(upperComposite, SWT.NONE);
-    bucketComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    bucketComposite.setLayout(bucketCompositeLayout);
-
-    skipButton = new Button(bucketComposite, SWT.CHECK);
-    skipButton.setText("Skip Project Selection");
-
-    ToolBar bucketToolBar = new ToolBar(bucketComposite, SWT.FLAT | SWT.CENTER);
-    bucketToolBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false));
+    ToolBar bucketToolBar = new ToolBar(upperComposite, SWT.FLAT | SWT.CENTER);
+    bucketToolBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
     bucketToolBar.setSize(46, 22);
 
     ToolItem addButton = new ToolItem(bucketToolBar, SWT.PUSH);
@@ -359,8 +351,6 @@ public class ProjectPage extends SetupWizardPage
         removeSelectedStreams();
       }
     });
-
-    new Label(bucketComposite, SWT.NONE);
 
     Composite lowerComposite = new Composite(sashForm, SWT.NONE);
     GridLayout lowerLayout = new GridLayout();
@@ -452,6 +442,13 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
+    return sashForm;
+  }
+
+  @Override
+  protected void createCheckButtons()
+  {
+    skipButton = addCheckButton("skipButton", false, "Skip Project Selection", "Enable the Next button to proceed without provisioning projects");
     skipButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -475,7 +472,7 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
-    return sashForm;
+    setPageComplete(skipButton.getSelection());
   }
 
   @Override

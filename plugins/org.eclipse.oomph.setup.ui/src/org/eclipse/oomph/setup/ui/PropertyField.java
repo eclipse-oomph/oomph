@@ -80,6 +80,12 @@ public abstract class PropertyField<CONTROL extends Control>
     setValue(null);
   }
 
+  @Override
+  public String toString()
+  {
+    return getClass().getSimpleName() + "[label=" + labelText + ", value=" + value + "]";
+  }
+
   public final String getLabelText()
   {
     return labelText;

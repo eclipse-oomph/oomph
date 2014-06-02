@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.provider.ProductCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProductItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -44,6 +45,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -77,6 +79,8 @@ import java.util.Collection;
  */
 public class ProductPage extends SetupWizardPage
 {
+  private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null;
+
   private static final Product NO_PRODUCT = createNoProduct();
 
   private ComposedAdapterFactory adapterFactory;
@@ -261,7 +265,7 @@ public class ProductPage extends SetupWizardPage
     Combo versionCombo = versionComboViewer.getCombo();
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-    if (PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null)
+    if (SHOW_BUNDLE_POOL_UI)
     {
       BundlePool pool = P2Util.getAgentManager().getDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName());
       setCurrentBundlePool(pool);
@@ -269,7 +273,10 @@ public class ProductPage extends SetupWizardPage
       poolButton = new Button(installationPane, SWT.CHECK);
       poolButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       poolButton.setText("Bundle Pool:");
-      poolButton.setSelection(true);
+
+      IDialogSettings settings = getDialogSettings();
+      UIUtil.rememberSelection(settings, "useBundlePool", true, poolButton);
+
       poolButton.addSelectionListener(new SelectionAdapter()
       {
         @Override

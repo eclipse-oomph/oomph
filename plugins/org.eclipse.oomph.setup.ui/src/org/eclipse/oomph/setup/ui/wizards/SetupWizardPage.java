@@ -16,16 +16,20 @@ import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -34,6 +38,8 @@ import org.eclipse.swt.widgets.Control;
  */
 public abstract class SetupWizardPage extends WizardPage
 {
+  private Composite checkComposite;
+
   public SetupWizardPage(String pageName)
   {
     super(pageName);
@@ -43,6 +49,14 @@ public abstract class SetupWizardPage extends WizardPage
   public SetupWizard getWizard()
   {
     return (SetupWizard)super.getWizard();
+  }
+
+  @Override
+  protected IDialogSettings getDialogSettings()
+  {
+    IDialogSettings settings = super.getDialogSettings();
+    String sectionName = getName();
+    return UIUtil.getOrCreateSection(settings, sectionName);
   }
 
   public ComposedAdapterFactory getAdapterFactory()
@@ -127,6 +141,45 @@ public abstract class SetupWizardPage extends WizardPage
 
     final Control ui = createUI(pageControl);
     ui.setLayoutData(layoutData);
+
+    createCheckButtons();
+  }
+
+  protected void createCheckButtons()
+  {
+  }
+
+  protected final Button addCheckButton(String key, boolean defaultValue, String text, String toolTip)
+  {
+    if (checkComposite == null)
+    {
+      GridLayout checkLayout = new GridLayout();
+      checkLayout.marginWidth = 5;
+      checkLayout.marginHeight = 0;
+
+      checkComposite = new Composite((Composite)getControl(), SWT.NONE);
+      checkComposite.setLayout(checkLayout);
+      checkComposite.setLayoutData(new GridData());
+    }
+    else
+    {
+      GridLayout checkLayout = (GridLayout)checkComposite.getLayout();
+      ++checkLayout.numColumns;
+    }
+
+    Button button = new Button(checkComposite, SWT.CHECK);
+
+    button.setLayoutData(new GridData());
+    button.setText(text);
+    if (!StringUtil.isEmpty(toolTip))
+    {
+      button.setToolTipText(toolTip);
+    }
+
+    IDialogSettings settings = getDialogSettings();
+    UIUtil.rememberSelection(settings, key, defaultValue, button);
+
+    return button;
   }
 
   @Override

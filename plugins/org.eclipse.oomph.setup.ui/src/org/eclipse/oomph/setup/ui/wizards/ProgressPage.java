@@ -170,7 +170,7 @@ public class ProgressPage extends SetupWizardPage
 
   private boolean dismissAutomatically;
 
-  private boolean launchAutomatically = true;
+  private boolean launchAutomatically;
 
   private Button scrollLockButton;
 
@@ -243,18 +243,14 @@ public class ProgressPage extends SetupWizardPage
       }
     });
 
-    GridLayout buttonLayout = new GridLayout(3, false);
-    buttonLayout.marginHeight = 0;
-    buttonLayout.marginWidth = 0;
+    return mainComposite;
+  }
 
-    Composite buttonComposite = new Composite(mainComposite, SWT.NONE);
-    buttonComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    buttonComposite.setLayout(buttonLayout);
-
-    scrollLockButton = new Button(buttonComposite, SWT.CHECK);
-    scrollLockButton.setText("Scroll Lock");
-    scrollLockButton.setToolTipText("Keep the log from scrolling to the end when new messages are added");
-    scrollLockButton.setLayoutData(new GridData());
+  @Override
+  protected void createCheckButtons()
+  {
+    scrollLockButton = addCheckButton("scrollLock", false, "Scroll Lock", "Keep the log from scrolling to the end when new messages are added");
+    scrollLock = scrollLockButton.getSelection();
     scrollLockButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -264,10 +260,9 @@ public class ProgressPage extends SetupWizardPage
       }
     });
 
-    dismissButton = new Button(buttonComposite, SWT.CHECK);
-    dismissButton.setText("Dismiss automatically");
-    dismissButton.setToolTipText("Dismiss this wizard when all setup tasks have performed successfully");
-    dismissButton.setLayoutData(new GridData());
+    dismissButton = addCheckButton("dismissAutomatically", false, "Dismiss automatically",
+        "Dismiss this wizard when all setup tasks have performed successfully");
+    dismissAutomatically = dismissButton.getSelection();
     dismissButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -279,11 +274,9 @@ public class ProgressPage extends SetupWizardPage
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
-      launchButton = new Button(buttonComposite, SWT.CHECK);
-      launchButton.setText("Launch automatically");
-      launchButton.setToolTipText("Launch the installed product when all setup tasks have performed successfully");
-      launchButton.setLayoutData(new GridData());
-      launchButton.setSelection(true);
+      launchButton = addCheckButton("launchAutomatically", true, "Launch automatically",
+          "Launch the installed product when all setup tasks have performed successfully");
+      launchAutomatically = launchButton.getSelection();
       launchButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -293,8 +286,6 @@ public class ProgressPage extends SetupWizardPage
         }
       });
     }
-
-    return mainComposite;
   }
 
   @Override

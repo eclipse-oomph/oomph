@@ -255,6 +255,7 @@ public class LicenseDialog extends AbstractSetupDialog
     {
       buf.append(iu.getId());
     }
+
     buf.append(" "); //$NON-NLS-1$
     buf.append(iu.getVersion().toString());
     return buf.toString();

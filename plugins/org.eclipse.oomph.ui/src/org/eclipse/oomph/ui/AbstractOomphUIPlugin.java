@@ -56,6 +56,12 @@ public abstract class AbstractOomphUIPlugin extends AbstractOomphPlugin
     return getEclipsePlugin().getDialogSettings();
   }
 
+  public final IDialogSettings getDialogSettings(String sectionName)
+  {
+    IDialogSettings settings = getDialogSettings();
+    return UIUtil.getOrCreateSection(settings, sectionName);
+  }
+
   public final Image getSWTImage(ImageDescriptor descriptor)
   {
     return ExtendedImageRegistry.INSTANCE.getImage(descriptor);

@@ -38,6 +38,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -135,20 +136,24 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     composite.addControlListener(resizeListener);
     composite.notifyListeners(SWT.Resize, new Event());
 
-    final Button fullPromptButton = new Button(mainComposite, SWT.CHECK);
-    fullPromptButton.setText("Show all variables");
-    fullPromptButton.setLayoutData(new GridData());
+    return mainComposite;
+  }
+
+  @Override
+  protected void createCheckButtons()
+  {
+    final Button fullPromptButton = addCheckButton("fullPrompt", false, "Show all variables", "");
+    fullPrompt = fullPromptButton.getSelection();
     fullPromptButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
+        focusSet = false;
         fullPrompt = fullPromptButton.getSelection();
         validate();
       }
     });
-
-    return mainComposite;
   }
 
   private URI getURI(VariableTask variable)
@@ -264,12 +269,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
           fieldHolder = createFieldHolder(ruleVariable);
           fieldHolder.add(variable);
         }
-
-        if (!focusSet)
-        {
-          fieldHolder.getField().setFocus();
-          focusSet = true;
-        }
       }
     }
 
@@ -304,6 +303,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     }
 
     // Garbage collect any unused fields.
+    PropertyField<?> firstField = null;
+    PropertyField<?> firstEmptyField = null;
+
     for (Iterator<Map.Entry<URI, FieldHolder>> it = fieldHolders.entrySet().iterator(); it.hasNext();)
     {
       Entry<URI, FieldHolder> entry = it.next();
@@ -312,6 +314,34 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       {
         fieldHolder.dispose();
         it.remove();
+      }
+      else
+      {
+        PropertyField<?> field = fieldHolder.getField();
+        if (firstField == null)
+        {
+          firstField = field;
+        }
+
+        if (firstEmptyField == null && StringUtil.isEmpty(field.getValue()))
+        {
+          firstEmptyField = field;
+        }
+      }
+    }
+
+    if (!focusSet)
+    {
+      PropertyField<?> field = firstEmptyField;
+      if (field == null)
+      {
+        field = firstField;
+      }
+
+      if (field != null)
+      {
+        field.setFocus();
+        focusSet = true;
       }
     }
 
@@ -342,8 +372,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
         Installation installation = getInstallation();
         Workspace workspace = getWorkspace();
 
-        performer = SetupTaskPerformer
-            .create(getResourceSet().getURIConverter(), this, trigger, SetupContext.create(installation, workspace, user), fullPrompt);
+        URIConverter uriConverter = getResourceSet().getURIConverter();
+        SetupContext context = SetupContext.create(installation, workspace, user);
+
+        performer = SetupTaskPerformer.create(uriConverter, this, trigger, context, fullPrompt);
         if (performer != null)
         {
           performer.put(LicensePrompter.class, this);
@@ -567,15 +599,14 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
    */
   private final class FieldHolder implements ValueListener
   {
-    private Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
+    private final Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
 
-    private PropertyField<?> field;
+    private final PropertyField<?> field;
 
     private String initialValue;
 
     public FieldHolder(PropertyField<?> field, VariableTask variable)
     {
-      super();
       this.field = field;
       field.addValueListener(this);
       variables.add(variable);
@@ -634,6 +665,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     public void dispose()
     {
       field.dispose();
+    }
+
+    @Override
+    public String toString()
+    {
+      return field.toString();
     }
   }
 }

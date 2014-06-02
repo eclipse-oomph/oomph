@@ -109,12 +109,14 @@ public class ConfirmationPage extends SetupWizardPage
 
     horizontalSash.setWeights(new int[] { 3, 2 });
 
-    offlineButton = new Button(mainComposite, SWT.CHECK);
-    offlineButton.setText("Offline");
-    offlineButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
-
     setPageComplete(true);
     return mainComposite;
+  }
+
+  @Override
+  protected void createCheckButtons()
+  {
+    offlineButton = addCheckButton("offline", false, "Offline", "Avoid unnecessary network requests during the installation process");
   }
 
   @Override
