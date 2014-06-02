@@ -377,10 +377,20 @@ public class ProductPage extends SetupWizardPage
     {
       public void doubleClick(DoubleClickEvent event)
       {
-        if (isPageComplete())
+        IStructuredSelection selection = (IStructuredSelection)productViewer.getSelection();
+        Object element = selection.getFirstElement();
+        if (element instanceof Product)
         {
-          advanceToNextPage();
+          if (isPageComplete())
+          {
+            advanceToNextPage();
+          }
+
+          return;
         }
+
+        boolean expanded = productViewer.getExpandedState(element);
+        productViewer.setExpandedState(element, !expanded);
       }
     });
 

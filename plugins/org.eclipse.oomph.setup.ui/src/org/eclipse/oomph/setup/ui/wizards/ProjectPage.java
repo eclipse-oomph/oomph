@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.util.SetupResource;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -430,7 +431,35 @@ public class ProjectPage extends SetupWizardPage
     {
       public void doubleClick(DoubleClickEvent event)
       {
-        addSelectedProjects();
+        IStructuredSelection selection = (IStructuredSelection)projectViewer.getSelection();
+        Object element = selection.getFirstElement();
+        if (element instanceof Project)
+        {
+          Project project = (Project)element;
+
+          Workspace workspace = getWorkspace();
+          if (workspace != null)
+          {
+            for (Stream stream : workspace.getStreams())
+            {
+              if (stream.getProject() == project)
+              {
+                streamViewer.setSelection(new StructuredSelection(stream));
+                removeSelectedStreams();
+                return;
+              }
+            }
+          }
+
+          if (!project.getStreams().isEmpty())
+          {
+            addSelectedProjects();
+            return;
+          }
+        }
+
+        boolean expanded = projectViewer.getExpandedState(element);
+        projectViewer.setExpandedState(element, !expanded);
       }
     });
 
@@ -693,10 +722,15 @@ public class ProjectPage extends SetupWizardPage
 
   private static String getLabel(Scope scope)
   {
-    String label = scope.getLabel();
-    if (label == null)
+    if (scope == null)
     {
-      label = scope.getName();
+      return "";
+    }
+
+    String label = scope.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = StringUtil.safe(scope.getName());
     }
 
     return label;
@@ -1027,7 +1061,7 @@ public class ProjectPage extends SetupWizardPage
     {
       Stream stream = (Stream)element;
       ProjectCatalog catalog = stream.getProject().getProjectCatalog();
-      return catalog == null ? "" : catalog.getName();
+      return getLabel(catalog);
     }
 
     @Override
