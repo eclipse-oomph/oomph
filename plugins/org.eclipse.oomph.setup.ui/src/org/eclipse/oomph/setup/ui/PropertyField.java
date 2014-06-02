@@ -112,6 +112,12 @@ public abstract class PropertyField<CONTROL extends Control>
 
   public final void setValue(String value)
   {
+    setValue(value, true);
+
+  }
+
+  public final void setValue(String value, boolean notify)
+  {
     if (value == null)
     {
       value = EMPTY;
@@ -131,7 +137,10 @@ public abstract class PropertyField<CONTROL extends Control>
         }
       }
 
-      notifyValueListeners(oldValue, value);
+      if (notify)
+      {
+        notifyValueListeners(oldValue, value);
+      }
     }
   }
 

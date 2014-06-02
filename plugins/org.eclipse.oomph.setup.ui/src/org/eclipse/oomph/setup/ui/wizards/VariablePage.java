@@ -27,8 +27,8 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.LicenseDialog;
 import org.eclipse.oomph.setup.ui.PropertyField;
-import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -282,9 +282,15 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
         String value = variable.getValue();
         if (!StringUtil.isEmpty(value))
         {
-          fieldHolder.getField().setValue(value);
+          fieldHolder.getField().setValue(value, false);
+          break;
         }
       }
+    }
+
+    for (FieldHolder fieldHolder : fieldHolders.values())
+    {
+      fieldHolder.recordInitialValue();
     }
 
     // Determine the URIs of all the variables actually being used.
@@ -302,7 +308,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     {
       Entry<URI, FieldHolder> entry = it.next();
       FieldHolder fieldHolder = entry.getValue();
-      if (!uris.contains(entry.getKey()) && fieldHolder.getVariables().isEmpty())
+      if (!uris.contains(entry.getKey()) && fieldHolder.getVariables().isEmpty() && !fieldHolder.isDirty())
       {
         fieldHolder.dispose();
         it.remove();
@@ -348,17 +354,17 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
         //$FALL-THROUGH$
       }
 
+      UIUtil.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          updateFields();
+        }
+      });
+
       if (performer == null)
       {
         setPageComplete(false);
-
-        UIUtil.asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            updateFields();
-          }
-        });
       }
       else
       {
@@ -565,6 +571,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
     private PropertyField<?> field;
 
+    private String initialValue;
+
     public FieldHolder(PropertyField<?> field, VariableTask variable)
     {
       super();
@@ -608,6 +616,19 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       }
 
       validate();
+    }
+
+    public void recordInitialValue()
+    {
+      if (initialValue == null)
+      {
+        initialValue = field.getValue();
+      }
+    }
+
+    public boolean isDirty()
+    {
+      return initialValue != null && (!initialValue.equals(field.getValue()) || initialValue.length() == 0);
     }
 
     public void dispose()

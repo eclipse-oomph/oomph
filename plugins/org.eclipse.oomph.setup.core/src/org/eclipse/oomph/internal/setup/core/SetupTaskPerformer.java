@@ -1933,10 +1933,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (unspecifiedVariable.isStorePromptedValue())
       {
-        String name = unspecifiedVariable.getName();
         String value = unspecifiedVariable.getValue();
         if (value != null)
         {
+          String name = unspecifiedVariable.getName();
+
           // Save passwords to the secure storage
           if (unspecifiedVariable.getType() == VariableType.PASSWORD)
           {
@@ -1971,10 +1972,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               }
             }
 
-            VariableTask userPreference = SetupFactory.eINSTANCE.createVariableTask();
-            userPreference.setName(name);
-            userPreference.setValue(value); // Unexpanded value!
-
+            VariableTask userPreference = EcoreUtil.copy(unspecifiedVariable);
             targetSetupTasks.add(userPreference);
           }
         }
@@ -2595,8 +2593,28 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         if (fullPrompt)
         {
-          final SetupTaskPerformer partialPromptPerformer = performer;
           SetupContext fullPromptContext = SetupContext.create(setupContext.getInstallation(), setupContext.getWorkspace());
+
+          Set<VariableTask> variables = new HashSet<VariableTask>();
+          final SetupTaskPerformer partialPromptPerformer = performer;
+          User user = EcoreUtil.copy(setupContext.getUser());
+          for (Iterator<EObject> it = user.eAllContents(); it.hasNext();)
+          {
+            EObject eObject = it.next();
+            if (eObject instanceof VariableTask)
+            {
+              VariableTask variableTask = (VariableTask)eObject;
+              variables.add(variableTask);
+              variableTask.setValue(null);
+            }
+          }
+
+          user.getAttributeRules().clear();
+
+          fullPromptContext.getUser().eResource().getContents().set(0, user);
+
+          fullPromptContext = SetupContext.create(fullPromptContext.getInstallation(), fullPromptContext.getWorkspace(), user);
+
           SetupPrompter fullPrompter = new SetupPrompter()
           {
             private boolean first = true;
