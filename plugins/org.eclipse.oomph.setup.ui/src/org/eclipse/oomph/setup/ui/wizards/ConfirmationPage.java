@@ -73,6 +73,8 @@ public class ConfirmationPage extends SetupWizardPage
 
   private PropertiesViewer propertiesViewer;
 
+  private Button showAllButton;
+
   private Button offlineButton;
 
   public ConfirmationPage()
@@ -116,6 +118,7 @@ public class ConfirmationPage extends SetupWizardPage
   @Override
   protected void createCheckButtons()
   {
+    showAllButton = addCheckButton("showAll", false, "Show all triggered tasks", "Show unneeded tasks in addition to the needed tasks");
     offlineButton = addCheckButton("offline", false, "Offline", "Avoid unnecessary network requests during the installation process");
   }
 
@@ -173,7 +176,7 @@ public class ConfirmationPage extends SetupWizardPage
       try
       {
         SetupTaskPerformer performer = getPerformer();
-        if (offlineButton.getSelection() || PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP))
+        if (isOffline() || PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP))
         {
           performer.setOffline(true);
         }
@@ -383,5 +386,15 @@ public class ConfirmationPage extends SetupWizardPage
 
     viewer.setChecked(ROOT_ELEMENT, size == getPerformer().getTriggeredSetupTasks().size());
     setPageComplete(size != 0);
+  }
+
+  private boolean isShowAll()
+  {
+    return showAllButton.getSelection();
+  }
+
+  private boolean isOffline()
+  {
+    return offlineButton.getSelection();
   }
 }

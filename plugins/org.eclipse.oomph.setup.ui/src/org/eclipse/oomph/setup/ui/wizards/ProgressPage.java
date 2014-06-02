@@ -249,7 +249,7 @@ public class ProgressPage extends SetupWizardPage
   @Override
   protected void createCheckButtons()
   {
-    scrollLockButton = addCheckButton("scrollLock", false, "Scroll Lock", "Keep the log from scrolling to the end when new messages are added");
+    scrollLockButton = addCheckButton("scrollLock", false, "Scroll lock", "Keep the log from scrolling to the end when new messages are added");
     scrollLock = scrollLockButton.getSelection();
     scrollLockButton.addSelectionListener(new SelectionAdapter()
     {
