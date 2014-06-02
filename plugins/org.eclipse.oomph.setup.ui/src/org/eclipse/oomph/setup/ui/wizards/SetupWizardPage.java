@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -149,7 +150,7 @@ public abstract class SetupWizardPage extends WizardPage
   {
   }
 
-  protected final Button addCheckButton(String key, boolean defaultValue, String text, String toolTip)
+  protected final Button addCheckButton(String key, boolean defaultSelection, String text, String toolTip)
   {
     if (checkComposite == null)
     {
@@ -167,17 +168,13 @@ public abstract class SetupWizardPage extends WizardPage
       ++checkLayout.numColumns;
     }
 
-    Button button = new Button(checkComposite, SWT.CHECK);
-
+    Button button = new PersistentButton(checkComposite, SWT.CHECK, getDialogSettings(), key, defaultSelection);
     button.setLayoutData(new GridData());
     button.setText(text);
     if (!StringUtil.isEmpty(toolTip))
     {
       button.setToolTipText(toolTip);
     }
-
-    IDialogSettings settings = getDialogSettings();
-    UIUtil.rememberSelection(settings, key, defaultValue, button);
 
     return button;
   }

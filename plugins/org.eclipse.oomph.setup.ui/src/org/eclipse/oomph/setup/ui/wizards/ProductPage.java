@@ -30,7 +30,7 @@ import org.eclipse.oomph.setup.provider.ProductCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProductItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -270,12 +270,9 @@ public class ProductPage extends SetupWizardPage
       BundlePool pool = P2Util.getAgentManager().getDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName());
       setCurrentBundlePool(pool);
 
-      poolButton = new Button(installationPane, SWT.CHECK);
+      poolButton = new PersistentButton(installationPane, SWT.CHECK, getDialogSettings(), "useBundlePool", true);
       poolButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       poolButton.setText("Bundle Pool:");
-
-      IDialogSettings settings = getDialogSettings();
-      UIUtil.rememberSelection(settings, "useBundlePool", true, poolButton);
 
       poolButton.addSelectionListener(new SelectionAdapter()
       {

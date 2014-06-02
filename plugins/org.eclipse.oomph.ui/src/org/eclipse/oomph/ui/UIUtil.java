@@ -17,11 +17,8 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -232,30 +229,5 @@ public final class UIUtil
     }
 
     return section;
-  }
-
-  public static void rememberSelection(final IDialogSettings settings, final String key, boolean defaultSelection, final Button button)
-  {
-    boolean selection;
-    String value = settings.get(key);
-    if (value == null)
-    {
-      selection = defaultSelection;
-    }
-    else
-    {
-      selection = Boolean.parseBoolean(value);
-    }
-
-    button.setSelection(selection);
-    button.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        boolean selection = button.getSelection();
-        settings.put(key, selection);
-      }
-    });
   }
 }
