@@ -83,14 +83,21 @@ public final class FileUtil
   private static void delete(File file, IProgressMonitor monitor, boolean verbose) throws IOException, InterruptedException
   {
     List<File> files = listAllFiles(file);
-    if (files.isEmpty())
+    int size = files.size();
+    if (size == 0)
     {
       return;
     }
 
     if (verbose)
     {
-      monitor.beginTask("Deleting files in " + file.getAbsolutePath(), files.size());
+      String message = "";
+      if (file.isDirectory() && size > 1)
+      {
+        message = "Deleting files in " + file.getAbsolutePath();
+      }
+
+      monitor.beginTask(message, size);
     }
 
     try
@@ -98,10 +105,9 @@ public final class FileUtil
       Collections.reverse(files);
       for (File child : files)
       {
-        String childPath = child.getAbsolutePath();
-
         if (verbose)
         {
+          String childPath = child.getAbsolutePath();
           monitor.setTaskName("Deleting file " + childPath);
         }
 
@@ -116,7 +122,10 @@ public final class FileUtil
     }
     finally
     {
-      monitor.done();
+      if (verbose)
+      {
+        monitor.done();
+      }
     }
   }
 
