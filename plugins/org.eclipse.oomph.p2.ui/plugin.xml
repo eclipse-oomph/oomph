@@ -33,40 +33,4 @@
       </profileType>
    </extension>
 
-  <!--
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.eclipse.oomph.p2.ui.actionSet"
-            label="Sample Action Set"
-            visible="true">
-         <menu
-               id="sampleMenu"
-               label="Sample &amp;Menu">
-            <separator
-                  name="sampleGroup">
-            </separator>
-         </menu>
-         <action
-               class="org.eclipse.oomph.p2.internal.ui.TestAgentManagerAction"
-               icon="icons/obj16/agent.gif"
-               id="org.eclipse.oomph.p2.ui.tests.AgentManagerAction"
-               label="&amp;Agent Manager"
-               menubarPath="sampleMenu/sampleGroup"
-               toolbarPath="sampleGroup"
-               tooltip="Agent Manager">
-         </action>
-         <action
-               class="org.eclipse.oomph.p2.internal.ui.TestInstallAction"
-               icon="icons/sample.gif"
-               id="org.eclipse.oomph.p2.ui.tests.TestAction"
-               label="&amp;Test Install"
-               menubarPath="sampleMenu/sampleGroup"
-               toolbarPath="sampleGroup"
-               tooltip="Test Install">
-         </action>
-      </actionSet>
-   </extension>
-   -->
-
 </plugin>
