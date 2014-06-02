@@ -266,8 +266,7 @@ public class ProductPage extends SetupWizardPage
 
     if (SHOW_BUNDLE_POOL_UI)
     {
-      BundlePool pool = P2Util.getAgentManager().getDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName());
-      setCurrentBundlePool(pool);
+      initBundlePool();
 
       poolButton = new PersistentButton(installationPane, SWT.CHECK, getDialogSettings(), "useBundlePool", true);
       poolButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
@@ -282,7 +281,14 @@ public class ProductPage extends SetupWizardPage
           {
             IStructuredSelection selection = (IStructuredSelection)poolComboViewer.getSelection();
             BundlePool pool = (BundlePool)selection.getFirstElement();
-            setCurrentBundlePool(pool);
+            if (pool != null)
+            {
+              setCurrentBundlePool(pool);
+            }
+            else
+            {
+              initBundlePool();
+            }
           }
           else
           {
@@ -519,6 +525,12 @@ public class ProductPage extends SetupWizardPage
     }
 
     currentBundlePool = pool;
+  }
+
+  private void initBundlePool()
+  {
+    BundlePool pool = P2Util.getAgentManager().getDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName());
+    setCurrentBundlePool(pool);
   }
 
   private void manageBundlePools()
