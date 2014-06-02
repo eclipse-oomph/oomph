@@ -11,36 +11,6 @@
       name="Global Variables">
     <setupTask
         xsi:type="setup:VariableTask"
-        type="FOLDER"
-        name="jre.1.4.location"
-        label="JDK/JRE 1.4 Location"
-        documentation="The folder containing a 1.4 compatible JDK/JRE for architecture ${os.arch}."/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="FOLDER"
-        name="jre.1.5.location"
-        label="JDK/JRE 1.5 Location"
-        documentation="The folder containing a 1.5 compatible JDK/JRE for architecture ${os.arch}."/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="FOLDER"
-        name="jre.1.6.location"
-        label="JDK/JRE 1.6 Location"
-        documentation="The folder containing a 1.6 compatible JDK/JRE for architecture ${os.arch}."/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="FOLDER"
-        name="jre.1.7.location"
-        label="JDK/JRE 1.7 Location"
-        documentation="The folder containing a 1.7 compatible JDK/JRE for architecture ${os.arch}."/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="FOLDER"
-        name="jre.1.8.location"
-        label="JDK/JRE 1.8 Location"
-        documentation="The folder containing a 1.8 compatible JDK/JRE for architecture ${os.arch}."/>
-    <setupTask
-        xsi:type="setup:VariableTask"
         name="git.user.id"
         label="Eclipse Git/Gerrit user"
         documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID."/>

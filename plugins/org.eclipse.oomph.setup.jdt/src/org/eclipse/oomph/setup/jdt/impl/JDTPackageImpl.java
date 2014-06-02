@@ -226,6 +226,8 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     createEnablementAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http://www.eclipse.org/oomph/setup/Variable
+    createVariableAnnotations();
   }
 
   /**
@@ -238,6 +240,61 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
     addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Variable</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createVariableAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Variable";
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.1", "type", "FOLDER", "label", "JRE 1.1 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.1." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.2}", "label", "JRE 1.2 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.3}", "label", "JRE 1.3 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.4}", "label", "JRE 1.4 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.2", "type", "FOLDER", "label", "JRE 1.2 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.2." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.3}", "label", "JRE 1.3 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.4}", "label", "JRE 1.4 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.3", "type", "FOLDER", "label", "JRE 1.3 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.3." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.4}", "label", "JRE 1.4 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.4", "type", "FOLDER", "label", "JRE 1.4 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.4." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.5", "type", "FOLDER", "label", "JRE 1.5 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.5." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.6", "type", "FOLDER", "label", "JRE 1.6 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.6." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.7", "type", "FOLDER", "label", "JRE 1.7 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.7." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.8", "type", "FOLDER", "label", "JRE 1.8 Location", "description",
+        "The location of a JDK or JRE compatible with Java 1.8." });
   }
 
   /**

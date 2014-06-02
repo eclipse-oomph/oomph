@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
@@ -43,7 +44,7 @@ import java.util.List;
 /**
  * @author Eike Stepper
  */
-public abstract class PropertyField<CONTROL extends Control>
+public abstract class PropertyField
 {
   private static final String EMPTY = "";
 
@@ -62,8 +63,6 @@ public abstract class PropertyField<CONTROL extends Control>
   private String toolTip;
 
   private Label label;
-
-  private CONTROL control;
 
   private Control helper;
 
@@ -134,13 +133,10 @@ public abstract class PropertyField<CONTROL extends Control>
     {
       this.value = value;
 
-      if (control != null)
+      String controlValue = getControlValue();
+      if (!controlValue.equals(value))
       {
-        String controlValue = getControlValue(control);
-        if (!controlValue.equals(value))
-        {
-          transferValueToControl(value, control);
-        }
+        transferValueToControl(value);
       }
 
       if (notify)
@@ -181,7 +177,7 @@ public abstract class PropertyField<CONTROL extends Control>
       label.setText(labelText + ":");
     }
 
-    control = createControl(parent);
+    Control control = createControl(parent);
     getMainControl().setLayoutData(controlGridData);
 
     if (toolTip != null && toolTip.length() != 0)
@@ -203,7 +199,7 @@ public abstract class PropertyField<CONTROL extends Control>
 
     helper.setLayoutData(helperGridData);
     setEnabled(enabled);
-    transferValueToControl(value, control);
+    transferValueToControl(value);
   }
 
   public final Label getLabel()
@@ -214,11 +210,6 @@ public abstract class PropertyField<CONTROL extends Control>
   public final GridData getLabelGridData()
   {
     return labelGridData;
-  }
-
-  public final CONTROL getControl()
-  {
-    return control;
   }
 
   public final GridData getControlGridData()
@@ -238,6 +229,7 @@ public abstract class PropertyField<CONTROL extends Control>
 
   public final void setFocus()
   {
+    Control control = getControl();
     if (control != null)
     {
       control.setFocus();
@@ -278,7 +270,7 @@ public abstract class PropertyField<CONTROL extends Control>
 
   protected Control getMainControl()
   {
-    return control;
+    return getControl();
   }
 
   protected Control getMainHelper()
@@ -286,11 +278,13 @@ public abstract class PropertyField<CONTROL extends Control>
     return helper;
   }
 
-  protected abstract String getControlValue(CONTROL control);
+  public abstract Control getControl();
 
-  protected abstract void transferValueToControl(String value, CONTROL control);
+  protected abstract String getControlValue();
 
-  protected abstract CONTROL createControl(Composite parent);
+  protected abstract void transferValueToControl(String value);
+
+  protected abstract Control createControl(Composite parent);
 
   protected Control createHelper(Composite parent)
   {
@@ -356,17 +350,23 @@ public abstract class PropertyField<CONTROL extends Control>
   /**
    * @author Eike Stepper
    */
-  public static class TextField<H extends Control> extends PropertyField<Text>
+  public static class TextField extends PropertyField
   {
     private final boolean secret;
 
-    private PropertyField<?> linkField;
+    private PropertyField linkField;
 
     private Composite mainControl;
+
+    private Text text;
+
+    private ComboViewer comboViewer;
 
     private ToolItem linkButton;
 
     private boolean linked = true;
+
+    private List<VariableChoice> choices;
 
     public TextField()
     {
@@ -385,16 +385,32 @@ public abstract class PropertyField<CONTROL extends Control>
 
     public TextField(String labelText, boolean secret)
     {
-      super(labelText);
-      this.secret = secret;
+      this(labelText, secret, null);
     }
 
-    public final PropertyField<?> getLinkField()
+    public TextField(List<VariableChoice> choices)
+    {
+      this(null, choices);
+    }
+
+    public TextField(String labelText, List<VariableChoice> choices)
+    {
+      this(labelText, false, choices);
+    }
+
+    private TextField(String labelText, boolean secret, List<VariableChoice> choices)
+    {
+      super(labelText);
+      this.secret = secret;
+      this.choices = choices;
+    }
+
+    public final PropertyField getLinkField()
     {
       return linkField;
     }
 
-    public final void setLinkField(PropertyField<?> field)
+    public final void setLinkField(PropertyField field)
     {
       linkField = field;
     }
@@ -442,23 +458,36 @@ public abstract class PropertyField<CONTROL extends Control>
     }
 
     @Override
-    protected String getControlValue(Text text)
+    public Control getControl()
     {
-      return text.getText();
+      return text != null ? text : comboViewer.getCombo();
     }
 
     @Override
-    protected void transferValueToControl(String value, Text text)
+    protected String getControlValue()
     {
-      text.setText(value);
+      return text != null ? text.getText() : comboViewer.getCombo().getText();
     }
 
     @Override
-    protected Text createControl(Composite parent)
+    protected void transferValueToControl(String value)
+    {
+      if (text != null)
+      {
+        text.setText(value);
+      }
+      else
+      {
+        comboViewer.getCombo().setText(value);
+      }
+    }
+
+    @Override
+    protected Control createControl(Composite parent)
     {
       if (linkField == null)
       {
-        return createText(parent);
+        return createControlHelper(parent);
       }
 
       GridLayout mainLayout = new GridLayout(2, false);
@@ -466,28 +495,32 @@ public abstract class PropertyField<CONTROL extends Control>
       mainLayout.marginHeight = 0;
       mainLayout.horizontalSpacing = 0;
 
-      final Text[] text = { null };
       mainControl = new Composite(parent, SWT.NULL)
       {
         @Override
         public void setEnabled(boolean enabled)
         {
-          text[0].setEnabled(enabled);
+          if (text != null)
+          {
+            text.setEnabled(enabled);
+          }
+          else
+          {
+            super.setEnabled(enabled);
 
-          // super.setEnabled(enabled);
-          //
-          // Control[] children = getChildren();
-          // for (int i = 0; i < children.length; i++)
-          // {
-          // Control child = children[i];
-          // child.setEnabled(enabled);
-          // }
+            Control[] children = getChildren();
+            for (int i = 0; i < children.length; i++)
+            {
+              Control child = children[i];
+              child.setEnabled(enabled);
+            }
+          }
         }
       };
       mainControl.setLayout(mainLayout);
 
-      text[0] = createText(mainControl);
-      text[0].setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      Control control = createControlHelper(mainControl);
+      control.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
       ToolBar toolBar = new ToolBar(mainControl, SWT.FLAT | SWT.NO_FOCUS);
       toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
@@ -516,7 +549,7 @@ public abstract class PropertyField<CONTROL extends Control>
 
       setLinkedFromValue();
 
-      return text[0];
+      return control;
     }
 
     protected String computeLinkedValue(String thisValue, String linkValue)
@@ -531,6 +564,11 @@ public abstract class PropertyField<CONTROL extends Control>
       setValue(value);
     }
 
+    private Control createControlHelper(Composite parent)
+    {
+      return choices == null || choices.isEmpty() ? createText(parent) : createCombo(parent);
+    }
+
     private Text createText(Composite parent)
     {
       int style = SWT.BORDER;
@@ -539,7 +577,7 @@ public abstract class PropertyField<CONTROL extends Control>
         style |= SWT.PASSWORD;
       }
 
-      final Text text = new Text(parent, style);
+      text = new Text(parent, style);
 
       String toolTip = getToolTip();
       if (toolTip != null)
@@ -566,12 +604,58 @@ public abstract class PropertyField<CONTROL extends Control>
 
       return text;
     }
+
+    protected Combo createCombo(Composite parent)
+    {
+      comboViewer = new ComboViewer(parent, SWT.BORDER);
+      comboViewer.setLabelProvider(new LabelProvider()
+      {
+        @Override
+        public String getText(Object element)
+        {
+          return ((VariableChoice)element).getLabel();
+        }
+      });
+
+      comboViewer.setContentProvider(new ArrayContentProvider());
+      comboViewer.setInput(choices);
+      comboViewer.getCombo().addModifyListener(new ModifyListener()
+      {
+        public void modifyText(ModifyEvent e)
+        {
+          setValue(comboViewer.getCombo().getText());
+        }
+      });
+
+      comboViewer.getCombo().addVerifyListener(new VerifyListener()
+      {
+        public void verifyText(VerifyEvent e)
+        {
+          if (e.character == 0)
+          {
+            for (VariableChoice choice : choices)
+            {
+              if (choice.getLabel().equals(e.text))
+              {
+                e.text = choice.getValue();
+                break;
+              }
+            }
+          }
+        }
+      });
+
+      Combo control = comboViewer.getCombo();
+      control.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      return control;
+    }
+
   }
 
   /**
    * @author Eike Stepper
    */
-  public static class TextButtonField extends TextField<Button>
+  public static class TextButtonField extends TextField
   {
     private String buttonText;
 
@@ -592,6 +676,11 @@ public abstract class PropertyField<CONTROL extends Control>
     public TextButtonField(String labelText, boolean secret)
     {
       super(labelText, secret);
+    }
+
+    public TextButtonField(String labelText, List<VariableChoice> choices)
+    {
+      super(labelText, choices);
     }
 
     public final String getButtonText()
@@ -641,12 +730,22 @@ public abstract class PropertyField<CONTROL extends Control>
 
     public FileField()
     {
-      this(null);
+      this(null, null);
     }
 
     public FileField(String labelText)
     {
-      super(labelText);
+      this(labelText, null);
+    }
+
+    public FileField(List<VariableChoice> choices)
+    {
+      this(null, choices);
+    }
+
+    public FileField(String labelText, List<VariableChoice> choices)
+    {
+      super(labelText, choices);
       setButtonText("Browse...");
     }
 
@@ -694,118 +793,8 @@ public abstract class PropertyField<CONTROL extends Control>
       String dir = dialog.open();
       if (dir != null)
       {
-        Text control = getControl();
-        control.setText(dir);
+        transferValueToControl(dir);
       }
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class ChoiceField<H extends Control> extends PropertyField<Control>
-  {
-    private Composite mainControl;
-
-    private ComboViewer comboViewer;
-
-    private List<VariableChoice> choices;
-
-    public ChoiceField(List<VariableChoice> choices)
-    {
-      this.choices = choices;
-    }
-
-    @Override
-    protected Control getMainControl()
-    {
-      if (mainControl != null)
-      {
-        return mainControl;
-      }
-
-      return super.getMainControl();
-    }
-
-    @Override
-    protected String getControlValue(Control control)
-    {
-      return comboViewer.getCombo().getText();
-    }
-
-    @Override
-    protected void transferValueToControl(String value, Control control)
-    {
-      comboViewer.getCombo().setText(value);
-    }
-
-    @Override
-    protected Control createControl(Composite parent)
-    {
-      GridLayout mainLayout = new GridLayout(2, false);
-      mainLayout.marginWidth = 0;
-      mainLayout.marginHeight = 0;
-      mainLayout.horizontalSpacing = 0;
-
-      mainControl = new Composite(parent, SWT.NULL)
-      {
-        @Override
-        public void setEnabled(boolean enabled)
-        {
-          super.setEnabled(enabled);
-
-          Control[] children = getChildren();
-          for (int i = 0; i < children.length; i++)
-          {
-            Control child = children[i];
-            child.setEnabled(enabled);
-          }
-        }
-      };
-
-      mainControl.setLayout(mainLayout);
-
-      comboViewer = new ComboViewer(mainControl, SWT.BORDER);
-      comboViewer.setLabelProvider(new LabelProvider()
-      {
-        @Override
-        public String getText(Object element)
-        {
-          return ((VariableChoice)element).getLabel();
-        }
-      });
-
-      comboViewer.setContentProvider(new ArrayContentProvider());
-      comboViewer.setInput(choices);
-      comboViewer.getCombo().addModifyListener(new ModifyListener()
-      {
-        public void modifyText(ModifyEvent e)
-        {
-          setValue(comboViewer.getCombo().getText());
-        }
-      });
-
-      comboViewer.getCombo().addVerifyListener(new VerifyListener()
-      {
-        public void verifyText(VerifyEvent e)
-        {
-          if (e.character == 0)
-          {
-            for (VariableChoice choice : choices)
-            {
-              if (choice.getLabel().equals(e.text))
-              {
-                e.text = choice.getValue();
-                break;
-              }
-            }
-          }
-        }
-      });
-
-      Control control = comboViewer.getControl();
-      control.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-      return control;
     }
   }
 

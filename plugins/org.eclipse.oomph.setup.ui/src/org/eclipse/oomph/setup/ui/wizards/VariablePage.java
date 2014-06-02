@@ -61,9 +61,9 @@ import org.eclipse.swt.widgets.Event;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +79,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
   private ScrolledComposite scrolledComposite;
 
-  private Map<URI, FieldHolder> fieldHolders = new HashMap<URI, FieldHolder>();
+  private Map<URI, FieldHolder> fieldHolders = new LinkedHashMap<URI, FieldHolder>();
 
   private boolean focusSet;
 
@@ -175,7 +175,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     FieldHolder fieldHolder = fieldHolders.get(uri);
     if (fieldHolder == null)
     {
-      PropertyField<?> field = createField(variable);
+      PropertyField field = createField(variable);
       field.fill(composite);
 
       fieldHolder = new FieldHolder(field, variable);
@@ -189,19 +189,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     return fieldHolder;
   }
 
-  private PropertyField<?> createField(final VariableTask variable)
+  private PropertyField createField(final VariableTask variable)
   {
-    PropertyField<?> field;
-
-    EList<VariableChoice> choices = variable.getChoices();
-    if (!choices.isEmpty())
-    {
-      field = new PropertyField.ChoiceField<Control>(choices);
-    }
-    else
-    {
-      field = createField(variable.getType());
-    }
+    PropertyField field = createField(variable.getType(), variable.getChoices());
 
     String label = variable.getLabel();
     if (StringUtil.isEmpty(label))
@@ -227,27 +217,27 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     return field;
   }
 
-  private PropertyField<?> createField(VariableType type)
+  private PropertyField createField(VariableType type, List<VariableChoice> choices)
   {
     switch (type)
     {
       case FOLDER:
-        PropertyField.FileField fileField = new PropertyField.FileField();
+        PropertyField.FileField fileField = new PropertyField.FileField(choices);
         fileField.setDialogText("Folder Selection");
         fileField.setDialogMessage("Select a folder.");
         return fileField;
 
       case PASSWORD:
-        return new PropertyField.TextField<Control>(true);
+        return new PropertyField.TextField(true);
     }
 
-    return new PropertyField.TextField<Control>();
+    return new PropertyField.TextField(choices);
   }
 
   private void updateFields()
   {
     // Clear out the variables from any of the fields previous created.
-    for (FieldHolder fieldHolder : fieldHolders.values())
+    for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
     {
       fieldHolder.clear();
     }
@@ -268,14 +258,15 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
         {
           fieldHolder = createFieldHolder(ruleVariable);
           fieldHolder.add(variable);
+
+          // Put it into the map under the original variable's key as well.
+          fieldHolders.put(getURI(variable), fieldHolder);
         }
       }
     }
 
-    for (Iterator<Map.Entry<URI, FieldHolder>> it = fieldHolders.entrySet().iterator(); it.hasNext();)
+    for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
     {
-      Entry<URI, FieldHolder> entry = it.next();
-      FieldHolder fieldHolder = entry.getValue();
       for (VariableTask variable : fieldHolder.getVariables())
       {
         String value = variable.getValue();
@@ -287,7 +278,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       }
     }
 
-    for (FieldHolder fieldHolder : fieldHolders.values())
+    for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
     {
       fieldHolder.recordInitialValue();
     }
@@ -299,12 +290,17 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       for (VariableTask variable : performer.getUnresolvedVariables())
       {
         uris.add(getURI(variable));
+        VariableTask ruleVariable = performer.getRuleVariable(variable);
+        if (ruleVariable != null)
+        {
+          uris.add(getURI(ruleVariable));
+        }
       }
     }
 
     // Garbage collect any unused fields.
-    PropertyField<?> firstField = null;
-    PropertyField<?> firstEmptyField = null;
+    PropertyField firstField = null;
+    PropertyField firstEmptyField = null;
 
     for (Iterator<Map.Entry<URI, FieldHolder>> it = fieldHolders.entrySet().iterator(); it.hasNext();)
     {
@@ -317,7 +313,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       }
       else
       {
-        PropertyField<?> field = fieldHolder.getField();
+        PropertyField field = fieldHolder.getField();
         if (firstField == null)
         {
           firstField = field;
@@ -332,7 +328,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
     if (!focusSet)
     {
-      PropertyField<?> field = firstEmptyField;
+      PropertyField field = firstEmptyField;
       if (field == null)
       {
         field = firstField;
@@ -438,12 +434,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     if (forward)
     {
       List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
-      for (FieldHolder fieldHolder : fieldHolders.values())
+      for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
       {
-        for (VariableTask variable : fieldHolder.getVariables())
-        {
-          unresolvedVariables.add(variable);
-        }
+        unresolvedVariables.addAll(fieldHolder.getVariables());
       }
 
       User user = getUser();
@@ -601,18 +594,18 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
   {
     private final Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
 
-    private final PropertyField<?> field;
+    private final PropertyField field;
 
     private String initialValue;
 
-    public FieldHolder(PropertyField<?> field, VariableTask variable)
+    public FieldHolder(PropertyField field, VariableTask variable)
     {
       this.field = field;
       field.addValueListener(this);
       variables.add(variable);
     }
 
-    public PropertyField<?> getField()
+    public PropertyField getField()
     {
       return field;
     }
@@ -659,7 +652,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
     public boolean isDirty()
     {
-      return initialValue != null && (!initialValue.equals(field.getValue()) || initialValue.length() == 0);
+      // return initialValue != null && (!initialValue.equals(field.getValue()) || initialValue.length() == 0);
+      return initialValue != null && !initialValue.equals(field.getValue());
     }
 
     public void dispose()

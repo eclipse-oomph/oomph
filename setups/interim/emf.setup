@@ -16,8 +16,8 @@
     label="EMF">
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-1.6"
-      location="${jre.1.6.location}"/>
+      version="J2SE-1.5"
+      location="${jre.location-1.5}"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
@@ -98,6 +98,10 @@
           href="emf.xcore.setup#//@setupTasks.10"/>
     </annotation>
   </setupTask>
+  <setupTask
+      xsi:type="jdt:JRETask"
+      version="J2SE-1.5"
+      location="${jre.location-1.5}"/>
   <project name="core"
       label="Core SDK">
     <setupTask

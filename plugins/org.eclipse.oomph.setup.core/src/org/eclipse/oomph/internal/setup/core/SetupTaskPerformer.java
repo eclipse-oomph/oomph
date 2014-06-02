@@ -131,15 +131,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static final SimpleDateFormat DATE_TIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-  private static final String VARIABLE_ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/setup/Variable";
-
-  private static final String RULE_VARIABLE_ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/setup/RuleVariable";
-
   private static final Pattern INSTALLABLE_UNIT_WITH_RANGE_PATTERN = Pattern.compile("([^\\[\\(]*)(.*)");
 
   private static boolean NEEDS_PATH_SEPARATOR_CONVERSION = File.separatorChar == '\\';
 
   private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|]+)(\\|([^}]+))?}|\\$)");
+
+  private static Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
 
   private ProgressLog progress;
 
@@ -316,6 +314,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             // The latter causes problems in the copier.
             triggeredSetupTasks.add(0, p2Task);
           }
+          else if (EAnnotationConstants.ANNOTATION_VARIABLE.equals(source))
+          {
+            triggeredSetupTasks.add(0, createImpliedVariable(eAnnotation));
+          }
         }
 
         if (user.eResource() != null)
@@ -325,7 +327,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           {
             if (eAttribute.getEType().getInstanceClass() == String.class)
             {
-              EAnnotation eAnnotation = eAttribute.getEAnnotation(VARIABLE_ANNOTATION_SOURCE);
+              EAnnotation eAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
               if (eAnnotation != null)
               {
                 if (getAttributeRule(eAttribute, true) == null)
@@ -512,7 +514,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 {
                   if (StringUtil.isEmpty(value))
                   {
-                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(VARIABLE_ANNOTATION_SOURCE);
+                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                     if (variableAnnotation != null)
                     {
                       setupTask.eSet(eAttribute, "${" + variableName + "}");
@@ -533,11 +535,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
                   if (StringUtil.isEmpty(value))
                   {
-                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(VARIABLE_ANNOTATION_SOURCE);
+                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                     if (variableAnnotation != null)
                     {
                       ruleBasedAttributes.put(variable, eAttribute);
-                      createImpliedVariable(setupTask, eAttribute, variableAnnotation, variable);
+                      populateImpliedVariable(setupTask, eAttribute, variableAnnotation, variable);
                       setupTask.eSet(eAttribute, "${" + variableName + "}");
                     }
                     else
@@ -555,15 +557,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
                   for (EAnnotation ruleVariableAnnotation : eAttribute.getEAnnotations())
                   {
-                    if (RULE_VARIABLE_ANNOTATION_SOURCE.equals(ruleVariableAnnotation.getSource()))
+                    if (EAnnotationConstants.ANNOTATION_RULE_VARIABLE.equals(ruleVariableAnnotation.getSource()))
                     {
                       EMap<String, String> details = ruleVariableAnnotation.getDetails();
 
                       VariableTask ruleVariable = SetupFactory.eINSTANCE.createVariableTask();
-                      ruleVariable.setName(details.get("name"));
-                      ruleVariable.setStorePromptedValue("true".equals(details.get("storePromptedValue")));
+                      ruleVariable.setName(details.get(EAnnotationConstants.KEY_NAME));
+                      ruleVariable.setStorePromptedValue("true".equals(details.get(EAnnotationConstants.KEY_STORE_PROMPTED_VALUE)));
 
-                      createImpliedVariable(setupTask, null, ruleVariableAnnotation, ruleVariable);
+                      populateImpliedVariable(setupTask, null, ruleVariableAnnotation, ruleVariable);
                       it.add(ruleVariable);
                       explicitKeys.put(ruleVariable.getName(), ruleVariable);
                     }
@@ -862,13 +864,25 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  private void createImpliedVariable(SetupTask setupTask, EAttribute eAttribute, EAnnotation eAnnotation, VariableTask variable)
+  private VariableTask createImpliedVariable(EAnnotation eAnnotation)
   {
     EMap<String, String> details = eAnnotation.getDetails();
 
-    variable.setType(VariableType.get(details.get("type")));
-    variable.setLabel(details.get("label"));
-    variable.setDescription(details.get("description"));
+    VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+    variable.setName(details.get(EAnnotationConstants.KEY_NAME));
+    variable.setStorePromptedValue(!"false".equals(details.get(EAnnotationConstants.KEY_STORE_PROMPTED_VALUE)));
+    populateImpliedVariable(null, null, eAnnotation, variable);
+
+    return variable;
+  }
+
+  private void populateImpliedVariable(SetupTask setupTask, EAttribute eAttribute, EAnnotation eAnnotation, VariableTask variable)
+  {
+    EMap<String, String> details = eAnnotation.getDetails();
+
+    variable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_TYPE)));
+    variable.setLabel(details.get(EAnnotationConstants.KEY_LABEL));
+    variable.setDescription(details.get(EAnnotationConstants.KEY_DESCRIPTION));
 
     if (eAttribute != null)
     {
@@ -888,16 +902,19 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // Handle variable choices
     for (EAnnotation subAnnotation : eAnnotation.getEAnnotations())
     {
-      if ("Choice".equals(subAnnotation.getSource()))
+      if (EAnnotationConstants.NESTED_ANNOTATION_CHOICE.equals(subAnnotation.getSource()))
       {
         EMap<String, String> subDetails = subAnnotation.getDetails();
 
         VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-        String subValue = subDetails.get("value");
-        subValue = expandAttributeReferences(setupTask, subValue);
+        String subValue = subDetails.get(EAnnotationConstants.KEY_VALUE);
+        if (setupTask != null)
+        {
+          subValue = expandAttributeReferences(setupTask, subValue);
+        }
 
         choice.setValue(subValue);
-        choice.setLabel(subDetails.get("label"));
+        choice.setLabel(subDetails.get(EAnnotationConstants.KEY_LABEL));
 
         variable.getChoices().add(choice);
       }
@@ -907,8 +924,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private String expandAttributeReferences(SetupTask setupTask, String value)
   {
     EClass eClass = setupTask.eClass();
-    Pattern pattern = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
-    Matcher matcher = pattern.matcher(value);
+    Matcher matcher = ATTRIBUTE_REFERENCE_PATTERN.matcher(value);
 
     StringBuilder builder = new StringBuilder();
     int index = 0;
@@ -1929,54 +1945,73 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void applyUnresolvedVariables(User user, Collection<VariableTask> variables, EList<SetupTask> rootTasks, AdapterFactoryItemDelegator itemDelegator)
   {
-    LOOP: for (VariableTask unspecifiedVariable : variables)
+    Resource userResource = user.eResource();
+    List<VariableTask> unspecifiedVariables = new ArrayList<VariableTask>();
+    for (VariableTask variable : variables)
     {
-      if (unspecifiedVariable.isStorePromptedValue())
+      if (variable.isStorePromptedValue())
       {
-        String value = unspecifiedVariable.getValue();
+        String value = variable.getValue();
         if (value != null)
         {
-          String name = unspecifiedVariable.getName();
-
-          // Save passwords to the secure storage
-          if (unspecifiedVariable.getType() == VariableType.PASSWORD)
+          if (variable.getType() == VariableType.PASSWORD)
           {
+            String name = variable.getName();
             saveSecurePreference(name, value);
           }
           else
           {
-            EList<SetupTask> targetSetupTasks = rootTasks;
-            if (unspecifiedVariable.eContainer() != null)
+            Scope scope = variable.getScope();
+            if (scope instanceof User)
             {
-              for (EObject container = unspecifiedVariable.eContainer(); container != null; container = container.eContainer())
+              String uriFragment = scope.eResource().getURIFragment(variable);
+              EObject eObject = userResource.getEObject(uriFragment);
+              if (eObject instanceof VariableTask)
               {
-                if (container instanceof Scope)
+                VariableTask targetVariable = (VariableTask)eObject;
+                if (variable.getName().equals(targetVariable.getName()))
                 {
-                  targetSetupTasks = findOrCreate(itemDelegator, (Scope)container, rootTasks).getSetupTasks();
-                  break;
+                  targetVariable.setValue(value);
                 }
               }
             }
-
-            // This happens in the multi-stream case where each perform wants to add setup-restricted tasks for the same variable.
-            for (SetupTask setupTask : targetSetupTasks)
+            else
             {
-              if (setupTask instanceof VariableTask)
-              {
-                VariableTask variable = (VariableTask)setupTask;
-                if (name.equals(variable.getName()))
-                {
-                  variable.setValue(value);
-                  continue LOOP;
-                }
-              }
+              unspecifiedVariables.add(variable);
             }
-
-            VariableTask userPreference = EcoreUtil.copy(unspecifiedVariable);
-            targetSetupTasks.add(userPreference);
           }
         }
       }
+    }
+
+    LOOP: for (VariableTask unspecifiedVariable : unspecifiedVariables)
+    {
+      String name = unspecifiedVariable.getName();
+      String value = unspecifiedVariable.getValue();
+
+      EList<SetupTask> targetSetupTasks = rootTasks;
+      Scope scope = unspecifiedVariable.getScope();
+      if (scope != null)
+      {
+        targetSetupTasks = findOrCreate(itemDelegator, scope, rootTasks).getSetupTasks();
+      }
+
+      // This happens in the multi-stream case where each perform wants to add setup-restricted tasks for the same variable.
+      for (SetupTask setupTask : targetSetupTasks)
+      {
+        if (setupTask instanceof VariableTask)
+        {
+          VariableTask variable = (VariableTask)setupTask;
+          if (name.equals(variable.getName()))
+          {
+            variable.setValue(value);
+            continue LOOP;
+          }
+        }
+      }
+
+      VariableTask userPreference = EcoreUtil.copy(unspecifiedVariable);
+      targetSetupTasks.add(userPreference);
     }
   }
 
@@ -2671,6 +2706,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
           SetupTaskPerformer fullPromptPerformer = new SetupTaskPerformer(uriConverter, fullPrompter, null, fullPromptContext, stream);
           fullPrompter.promptVariables(Collections.singletonList(fullPromptPerformer));
+          // fullPromptPerformer.getUnresolvedVariables().addAll(0, performer.getUnresolvedVariables());
           performer = fullPromptPerformer;
         }
 

@@ -15,6 +15,7 @@ package org.eclipse.oomph.setup;
  */
 public final class EAnnotationConstants
 {
+
   private EAnnotationConstants()
   {
   }
@@ -30,4 +31,22 @@ public final class EAnnotationConstants
   public static final String KEY_REPOSITORY = "repository";
 
   public static final String KEY_INSTALLABLE_UNITS = "installableUnits";
+
+  public static final String ANNOTATION_VARIABLE = "http://www.eclipse.org/oomph/setup/Variable";
+
+  public static final String ANNOTATION_RULE_VARIABLE = "http://www.eclipse.org/oomph/setup/RuleVariable";
+
+  public static final String KEY_TYPE = "type";
+
+  public static final String KEY_NAME = "name";
+
+  public static final String KEY_LABEL = "label";
+
+  public static final String KEY_DESCRIPTION = "description";
+
+  public static final String KEY_VALUE = "value";
+
+  public static final String KEY_STORE_PROMPTED_VALUE = "storePromptedValue";
+
+  public static final String NESTED_ANNOTATION_CHOICE = "Choice";
 }

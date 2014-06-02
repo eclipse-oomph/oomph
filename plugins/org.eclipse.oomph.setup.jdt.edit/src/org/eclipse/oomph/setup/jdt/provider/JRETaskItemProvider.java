@@ -15,16 +15,23 @@ import org.eclipse.oomph.setup.jdt.JRETask;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.oomph.setup.jdt.JRETask} object.
@@ -34,6 +41,19 @@ import java.util.List;
  */
 public class JRETaskItemProvider extends SetupTaskItemProvider
 {
+  private static Map<String, String> VERSION_VARIABLES = new LinkedHashMap<String, String>();
+  static
+  {
+    VERSION_VARIABLES.put("JRE-1.1", "${jre.location-1.1}");
+    VERSION_VARIABLES.put("J2SE-1.2", "${jre.location-1.2}");
+    VERSION_VARIABLES.put("J2SE-1.3", "${jre.location-1.3}");
+    VERSION_VARIABLES.put("J2SE-1.4", "${jre.location-1.4}");
+    VERSION_VARIABLES.put("J2SE-1.5", "${jre.location-1.5}");
+    VERSION_VARIABLES.put("JavaSE-1.6", "${jre.location-1.6}");
+    VERSION_VARIABLES.put("JavaSE-1.7", "${jre.location-1.7}");
+    VERSION_VARIABLES.put("JavaSE-1.8", "${jre.location-1.8}");
+  }
+
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -68,13 +88,35 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
    * This adds a property descriptor for the Version feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected void addVersionPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_JRETask_version_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_version_feature", "_UI_JRETask_type"),
-        JDTPackage.Literals.JRE_TASK__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        JDTPackage.Literals.JRE_TASK__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+    {
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        return VERSION_VARIABLES.keySet();
+      }
+    });
+  }
+
+  @Override
+  protected Command createSetCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Object value)
+  {
+    Command result = super.createSetCommand(domain, owner, feature, value);
+    if (feature == JDTPackage.Literals.JRE_TASK__VERSION)
+    {
+      CompoundCommand compoundCommand = new CompoundCommand(0);
+      compoundCommand.append(result);
+      compoundCommand.append(createSetCommand(domain, owner, JDTPackage.Literals.JRE_TASK__LOCATION, VERSION_VARIABLES.get(value)));
+      result = compoundCommand;
+    }
+
+    return result;
   }
 
   /**

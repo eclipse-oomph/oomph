@@ -132,8 +132,8 @@
         value="1.0.0"/>
     <setupTask
         xsi:type="jdt:JRETask"
-        version="JavaSE-1.7"
-        location="${jre.1.7.location}"/>
+        version="J2SE-1.5"
+        location="${jre.location-1.5}"/>
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.clone.remoteURI"
