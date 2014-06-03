@@ -301,7 +301,10 @@ public class ProgressPage extends SetupWizardPage
 
       treeViewer.setInput(new ItemProvider(performer.getNeededTasks()));
 
-      run(new ProgressLogRunnable()
+      String jobName = "Executing " + getTrigger().toString().toLowerCase() + " tasks";
+      performer.log(jobName);
+
+      run(jobName, new ProgressLogRunnable()
       {
         public Set<String> run(ProgressLog log) throws Exception
         {
@@ -367,7 +370,7 @@ public class ProgressPage extends SetupWizardPage
     };
   }
 
-  private void run(final ProgressLogRunnable runnable)
+  private void run(final String jobName, final ProgressLogRunnable runnable)
   {
     try
     {
@@ -378,7 +381,6 @@ public class ProgressPage extends SetupWizardPage
       {
         public void run()
         {
-          final String jobName = "Executing " + getTrigger().toString().toLowerCase() + " tasks";
           final Job job = new Job(jobName)
           {
             @Override
@@ -390,8 +392,6 @@ public class ProgressPage extends SetupWizardPage
 
               try
               {
-                progressLog.log(jobName);
-
                 restartReasons = runnable.run(progressLog);
 
                 SetupTaskPerformer performer = getPerformer();
