@@ -35,9 +35,4 @@ public class P2Exception extends RuntimeException
   {
     super(message, cause);
   }
-
-  public P2Exception(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
-  {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
 }
