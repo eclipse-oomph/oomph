@@ -1756,6 +1756,21 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           SegmentSequence s1 = o1.getElement1();
           SegmentSequence s2 = o2.getElement1();
+          if (s1 == null)
+          {
+            if (s2 == null)
+            {
+              return 0;
+            }
+
+            return -1;
+          }
+
+          if (s2 == null)
+          {
+            return 1;
+          }
+
           int length1 = s1.segmentCount();
           int length2 = s2.segmentCount();
 
