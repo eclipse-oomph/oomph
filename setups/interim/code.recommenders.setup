@@ -1294,13 +1294,33 @@
           value="true"/>
     </setupTask>
   </setupTask>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="train.url"
+      value="http://download.eclipse.org/releases/luna"/>
   <stream name="master">
     <setupTask
         xsi:type="git:GitCloneTask"
-        location="/${setup.branch.dir/git/org.eclipse.recommenders}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders/org.eclipse.recommenders.git"
+        id="git.clone.recommenders"
+        remoteURI="recommenders/org.eclipse.recommenders"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
       <workingSets
@@ -1358,14 +1378,12 @@
       <requirements
           id="org.eclipse.mylyn.git.feature.group"/>
       <repositories
-          url="${train.url}"/>
-      <repositories
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
       <sourceLocators
-          rootFolder="/${setup.branch.dir/git/org.eclipse.recommenders}"
+          rootFolder="${git.clone.recommenders.location}"
           locateNestedProjects="true"/>
     </setupTask>
     <setupTask
@@ -1374,7 +1392,7 @@
     <setupTask
         xsi:type="mylyn:MylynQueriesTask"
         repositoryURL="https://bugs.eclipse.org/bugs"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <queries
           summary="Open for ---"
@@ -1393,7 +1411,7 @@
         xsi:type="mylyn:MylynQueriesTask"
         connectorKind="org.eclipse.mylyn.gerrit"
         repositoryURL="https://git.eclipse.org/r"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <queries
           summary="Reviews">
@@ -1411,7 +1429,7 @@
     <setupTask
         xsi:type="mylyn:MylynBuildsTask"
         serverURL="https://hudson.eclipse.org/recommenders"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <buildPlans
           name="origin.master.kepler"/>
@@ -1522,10 +1540,25 @@
     </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
-        location="${setup.branch.dir/git/examples}"
-        remoteURI="http://git.eclipse.org/gitroot/recommenders/org.eclipse.recommenders.examples.git"
-        pushURI="ssh://git.eclipse.org/gitroot/recommenders/org.eclipse.recommenders.examples.git"
-        checkoutBranch="master"/>
+        id="git.clone.recommenders.examples"
+        remoteURI="recommenders/org.eclipse.recommenders.examples"
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Example Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirements
@@ -1562,8 +1595,6 @@
           url="http://download.eclipse.org/recommenders.incubator/updates/milestones/"/>
       <repositories
           url="http://download.codetrails.com/updates/connect/head/"/>
-      <repositories
-          url="${train.url}"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
@@ -1574,7 +1605,7 @@
         <requirements
             id="com.example"/>
         <sourceLocators
-            rootFolder="${setup.branch.dir/git/examples}"/>
+            rootFolder="${git.clone.recommenders.examples.location}"/>
         <repositoryLists
             name="Repositories">
           <repositories
@@ -1588,28 +1619,88 @@
   <stream name="incubators-master">
     <setupTask
         xsi:type="git:GitCloneTask"
-        location="${setup.branch.dir/git/codesearch}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders.incubator/org.eclipse.recommenders.codesearch.git"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.codesearch"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Code Search Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
-        location="/${setup.branch.dir/git/livedoc}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders.incubator/org.eclipse.recommenders.livedoc.git"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.livedoc"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Livedoc Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
-        location="/${setup.branch.dir/git/snipmatch}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders.incubator/org.eclipse.recommenders.snipmatch.git"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.snipmatch"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Snip Match Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
-        location="/${setup.branch.dir/git/stats}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders.incubator/org.eclipse.recommenders.stats.git"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.stats"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Stats Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirements
@@ -1643,22 +1734,31 @@
       <repositories
           url="http://download.codetrails.com/updates/connect/"/>
       <repositories
-          url="${train.url}"/>
-      <repositories
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
   </stream>
   <stream name="incubators-codesearch">
     <setupTask
-        xsi:type="setup:VariableTask"
-        name="git.root.dir"
-        value="${setup.branch.dir/git}"/>
-    <setupTask
         xsi:type="git:GitCloneTask"
-        location="${git.root.dir}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders.incubator/org.eclipse.recommenders.codesearch.git"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.codesearch"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Code Search Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirements
@@ -1682,8 +1782,6 @@
       <requirements
           id="org.eclipse.mylyn.git.feature.group"/>
       <repositories
-          url="${train.url}"/>
-      <repositories
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
@@ -1710,7 +1808,7 @@
     <setupTask
         xsi:type="mylyn:MylynQueriesTask"
         repositoryURL="https://bugs.eclipse.org/bugs"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <queries
           summary="Bugs"
@@ -1719,7 +1817,7 @@
     <setupTask
         xsi:type="mylyn:MylynBuildsTask"
         serverURL="https://hudson.eclipse.org/recommenders"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <buildPlans
           name="codesearch.gerrit.master"/>
@@ -1729,15 +1827,27 @@
   </stream>
   <stream name="incubators-logging">
     <setupTask
-        xsi:type="setup:VariableTask"
-        name="git.root.dir"
-        value="${setup.branch.dir/git}"/>
-    <setupTask
         xsi:type="git:GitCloneTask"
-        location="${git.root.dir}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders.incubator/org.eclipse.recommenders.logging.git"
+        id="git.clone.recommenders.logging"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.logging"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Logging Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirements
@@ -1759,14 +1869,12 @@
       <requirements
           id="org.eclipse.mylyn.git.feature.group"/>
       <repositories
-          url="${train.url}"/>
-      <repositories
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
       <sourceLocators
-          rootFolder="${git.root.dir}">
+          rootFolder="${git.clone.recommenders.logging.location}">
         <predicates
             xsi:type="predicates:LocationPredicate"
             pattern=".*/plugins/.*"/>
@@ -1787,7 +1895,7 @@
     <setupTask
         xsi:type="mylyn:MylynQueriesTask"
         repositoryURL="https://bugs.eclipse.org/bugs"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <queries
           summary="Bugs"
@@ -1796,7 +1904,7 @@
     <setupTask
         xsi:type="mylyn:MylynBuildsTask"
         serverURL="https://hudson.eclipse.org/recommenders"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <buildPlans
           name="logging.gerrit.master"/>
@@ -1806,15 +1914,27 @@
   </stream>
   <stream name="incubators-privacy">
     <setupTask
-        xsi:type="setup:VariableTask"
-        name="git.root.dir"
-        value="${setup.branch.dir/git}"/>
-    <setupTask
         xsi:type="git:GitCloneTask"
-        location="${git.root.dir}"
-        remoteURI="ssh://git.eclipse.org:29418/recommenders.incubator/org.eclipse.recommenders.privacy.git"
+        id="git.clone.recommenders.privacy"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.privacy"
         pushURI=""
-        checkoutBranch="master"/>
+        checkoutBranch="master">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Privacy Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirements
@@ -1836,14 +1956,12 @@
       <requirements
           id="org.eclipse.mylyn.git.feature.group"/>
       <repositories
-          url="${train.url}"/>
-      <repositories
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
       <sourceLocators
-          rootFolder="${git.root.dir}">
+          rootFolder="${git.clone.recommenders.privacy}">
         <predicates
             xsi:type="predicates:LocationPredicate"
             pattern=".*/plugins/.*"/>
@@ -1864,7 +1982,7 @@
     <setupTask
         xsi:type="mylyn:MylynQueriesTask"
         repositoryURL="https://bugs.eclipse.org/bugs"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <queries
           summary="Bugs"
@@ -1873,7 +1991,7 @@
     <setupTask
         xsi:type="mylyn:MylynBuildsTask"
         serverURL="https://hudson.eclipse.org/recommenders"
-        userID="${eclipse.user.id}"
+        userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <buildPlans
           name="privacy.gerrit.master"/>
@@ -1881,4 +1999,7 @@
           name="privacy.origin.master"/>
     </setupTask>
   </stream>
+  <logicalProjectContainer
+      xsi:type="setup:ProjectCatalog"
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
 </setup:Project>

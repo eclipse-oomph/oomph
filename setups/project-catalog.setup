@@ -97,5 +97,7 @@
   <project href="user:/org.eclipse.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Eclipse.org project catalog'#/"/>
   <project href="oomph.setup#/"/>
   <project href="interim/emf.setup#/"/>
+  <project href="interim/code.recommenders.setup#/"/>
+    <project href="interim/xtext.setup#/"/>
   <description>All the projects at Eclipse.org that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>

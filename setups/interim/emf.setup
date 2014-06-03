@@ -92,10 +92,6 @@
           key="target">
         <value>remoteURI</value>
       </detail>
-      <reference
-          href="emf.xcore.setup#//@setupTasks.9"/>
-      <reference
-          href="emf.xcore.setup#//@setupTasks.10"/>
     </annotation>
   </setupTask>
   <setupTask
@@ -131,10 +127,6 @@
             key="target">
           <value>remoteURI</value>
         </detail>
-        <reference
-            href="emf.xcore.setup#//@setupTasks.9"/>
-        <reference
-            href="emf.xcore.setup#//@setupTasks.10"/>
       </annotation>
     </setupTask>
     <setupTask
