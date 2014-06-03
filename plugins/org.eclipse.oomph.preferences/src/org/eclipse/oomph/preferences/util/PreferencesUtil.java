@@ -326,7 +326,10 @@ public final class PreferencesUtil
       {
         remove();
       }
-      node.put(property, value);
+      else
+      {
+        node.put(property, value);
+      }
     }
 
     public String get(String defaultValue)
