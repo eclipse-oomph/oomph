@@ -60,7 +60,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -87,7 +86,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
   private boolean fullPrompt;
 
-  private List<SetupTaskPerformer> promptedPerformers = new ArrayList<SetupTaskPerformer>();
+  private Set<SetupTaskPerformer> promptedPerformers = new LinkedHashSet<SetupTaskPerformer>();
 
   private SetupTaskPerformer performer;
 
@@ -270,7 +269,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       for (VariableTask variable : fieldHolder.getVariables())
       {
         String value = variable.getValue();
-        if (!StringUtil.isEmpty(value))
+        if (!StringUtil.isEmpty(value) && StringUtil.isEmpty(fieldHolder.getField().getValue()))
         {
           fieldHolder.getField().setValue(value, false);
           break;
@@ -579,7 +578,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       }
     }
 
-    return promptedPerformers.isEmpty();
+    boolean isComplete = promptedPerformers.isEmpty();
+    promptedPerformers.addAll(performers);
+    return isComplete;
   }
 
   public UserCallback getUserCallback()

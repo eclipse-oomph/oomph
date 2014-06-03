@@ -704,7 +704,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             if (eStructuralFeature.getEType().getInstanceClass() == String.class)
             {
               VariableTask variableTask = explicitKeys.get(id + "." + target);
-              if (variableTask != null)
+              if (variableTask != null && variableTask.getChoices().isEmpty())
               {
                 EList<VariableChoice> choices = variableTask.getChoices();
                 Map<String, String> substitutions = new LinkedHashMap<String, String>();
