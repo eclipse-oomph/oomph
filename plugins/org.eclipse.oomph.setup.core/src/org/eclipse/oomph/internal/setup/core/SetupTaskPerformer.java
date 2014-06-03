@@ -704,113 +704,123 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             if (eStructuralFeature.getEType().getInstanceClass() == String.class)
             {
               VariableTask variableTask = explicitKeys.get(id + "." + target);
-              if (variableTask != null && variableTask.getChoices().isEmpty())
+              if (variableTask != null)
               {
-                EList<VariableChoice> choices = variableTask.getChoices();
-                Map<String, String> substitutions = new LinkedHashMap<String, String>();
-                for (Map.Entry<String, String> detail : annotation.getDetails().entrySet())
+                EList<VariableChoice> targetChoices = variableTask.getChoices();
+                if (!targetChoices.isEmpty())
                 {
-                  String detailKey = detail.getKey();
-                  String detailValue = detail.getValue();
-                  if (detailKey != null && !AnnotationConstants.KEY_INHERIT.equals(detailKey) && !AnnotationConstants.KEY_TARGET.equals(detailKey)
-                      && !AnnotationConstants.KEY_LABEL.equals(detailKey) && !AnnotationConstants.KEY_DESCRIPTION.equals(detailKey) && detailValue != null)
+                  if (!StringUtil.isEmpty(variableTask.getValue()))
                   {
-                    if (detailValue.startsWith("@"))
-                    {
-                      String featureName = detailValue.substring(1);
-                      EStructuralFeature referencedEStructuralFeature = EMFUtil.getFeature(setupTask.eClass(), featureName);
-                      if (referencedEStructuralFeature != null && referencedEStructuralFeature.getEType().getInstanceClass() == String.class
-                          && !referencedEStructuralFeature.isMany())
-                      {
-                        Object value = setupTask.eGet(referencedEStructuralFeature);
-                        if (value != null)
-                        {
-                          detailValue = value.toString();
-                        }
-                      }
-                    }
-
-                    substitutions.put("@{" + detailKey + "}", detailValue);
+                    setupTask.eSet(eStructuralFeature, "${" + variableTask.getName() + "}");
                   }
                 }
-
-                for (EAttribute eAttribute : setupTask.eClass().getEAllAttributes())
+                else
                 {
-                  if (eAttribute.getEType().getInstanceClass() == String.class && !eAttribute.isMany())
+                  EList<VariableChoice> choices = targetChoices;
+                  Map<String, String> substitutions = new LinkedHashMap<String, String>();
+                  for (Map.Entry<String, String> detail : annotation.getDetails().entrySet())
                   {
-                    String value = (String)setupTask.eGet(eAttribute);
-                    if (!StringUtil.isEmpty(value))
+                    String detailKey = detail.getKey();
+                    String detailValue = detail.getValue();
+                    if (detailKey != null && !AnnotationConstants.KEY_INHERIT.equals(detailKey) && !AnnotationConstants.KEY_TARGET.equals(detailKey)
+                        && !AnnotationConstants.KEY_LABEL.equals(detailKey) && !AnnotationConstants.KEY_DESCRIPTION.equals(detailKey) && detailValue != null)
                     {
-                      substitutions.put("@{" + ExtendedMetaData.INSTANCE.getName(eAttribute) + "}", value);
-                    }
-                  }
-                }
-
-                String inheritedLabel = null;
-                String inheritedDescription = null;
-
-                for (String variableName : inherit.trim().split("\\s"))
-                {
-                  VariableTask referencedVariableTask = explicitKeys.get(variableName);
-                  if (referencedVariableTask != null)
-                  {
-                    if (inheritedLabel == null)
-                    {
-                      inheritedLabel = referencedVariableTask.getLabel();
-                    }
-
-                    if (inheritedDescription == null)
-                    {
-                      inheritedDescription = referencedVariableTask.getDescription();
-                    }
-
-                    for (VariableChoice variableChoice : referencedVariableTask.getChoices())
-                    {
-                      String value = variableChoice.getValue();
-                      String label = variableChoice.getLabel();
-                      for (Map.Entry<String, String> detail : substitutions.entrySet())
+                      if (detailValue.startsWith("@"))
                       {
-                        String detailKey = detail.getKey();
-                        String detailValue = detail.getValue();
-                        if (value != null)
+                        String featureName = detailValue.substring(1);
+                        EStructuralFeature referencedEStructuralFeature = EMFUtil.getFeature(setupTask.eClass(), featureName);
+                        if (referencedEStructuralFeature != null && referencedEStructuralFeature.getEType().getInstanceClass() == String.class
+                            && !referencedEStructuralFeature.isMany())
                         {
-                          value = value.replace(detailKey, detailValue);
-                        }
-
-                        if (label != null)
-                        {
-                          label = label.replace(detailKey, detailValue);
+                          Object value = setupTask.eGet(referencedEStructuralFeature);
+                          if (value != null)
+                          {
+                            detailValue = value.toString();
+                          }
                         }
                       }
 
-                      VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-                      choice.setValue(value);
-                      choice.setLabel(label);
-                      choices.add(choice);
+                      substitutions.put("@{" + detailKey + "}", detailValue);
                     }
                   }
-                }
 
-                if (ObjectUtil.equals(setupTask.eGet(eStructuralFeature), variableTask.getValue()))
-                {
-                  String explicitLabel = details.get(AnnotationConstants.KEY_LABEL);
-                  if (explicitLabel == null)
+                  for (EAttribute eAttribute : setupTask.eClass().getEAllAttributes())
                   {
-                    explicitLabel = inheritedLabel;
+                    if (eAttribute.getEType().getInstanceClass() == String.class && !eAttribute.isMany())
+                    {
+                      String value = (String)setupTask.eGet(eAttribute);
+                      if (!StringUtil.isEmpty(value))
+                      {
+                        substitutions.put("@{" + ExtendedMetaData.INSTANCE.getName(eAttribute) + "}", value);
+                      }
+                    }
                   }
 
-                  String explicitDescription = details.get(AnnotationConstants.KEY_DESCRIPTION);
-                  if (explicitDescription == null)
+                  String inheritedLabel = null;
+                  String inheritedDescription = null;
+
+                  for (String variableName : inherit.trim().split("\\s"))
                   {
-                    explicitDescription = inheritedDescription;
+                    VariableTask referencedVariableTask = explicitKeys.get(variableName);
+                    if (referencedVariableTask != null)
+                    {
+                      if (inheritedLabel == null)
+                      {
+                        inheritedLabel = referencedVariableTask.getLabel();
+                      }
+
+                      if (inheritedDescription == null)
+                      {
+                        inheritedDescription = referencedVariableTask.getDescription();
+                      }
+
+                      for (VariableChoice variableChoice : referencedVariableTask.getChoices())
+                      {
+                        String value = variableChoice.getValue();
+                        String label = variableChoice.getLabel();
+                        for (Map.Entry<String, String> detail : substitutions.entrySet())
+                        {
+                          String detailKey = detail.getKey();
+                          String detailValue = detail.getValue();
+                          if (value != null)
+                          {
+                            value = value.replace(detailKey, detailValue);
+                          }
+
+                          if (label != null)
+                          {
+                            label = label.replace(detailKey, detailValue);
+                          }
+                        }
+
+                        VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+                        choice.setValue(value);
+                        choice.setLabel(label);
+                        choices.add(choice);
+                      }
+                    }
                   }
 
-                  variableTask.setValue(null);
-                  variableTask.setLabel(explicitLabel);
-                  variableTask.setDescription(explicitDescription);
-                }
+                  if (ObjectUtil.equals(setupTask.eGet(eStructuralFeature), variableTask.getValue()))
+                  {
+                    String explicitLabel = details.get(AnnotationConstants.KEY_LABEL);
+                    if (explicitLabel == null)
+                    {
+                      explicitLabel = inheritedLabel;
+                    }
 
-                setupTask.eSet(eStructuralFeature, "${" + variableTask.getName() + "}");
+                    String explicitDescription = details.get(AnnotationConstants.KEY_DESCRIPTION);
+                    if (explicitDescription == null)
+                    {
+                      explicitDescription = inheritedDescription;
+                    }
+
+                    variableTask.setValue(null);
+                    variableTask.setLabel(explicitLabel);
+                    variableTask.setDescription(explicitDescription);
+                  }
+                  setupTask.eSet(eStructuralFeature, "${" + variableTask.getName() + "}");
+                }
               }
             }
           }
