@@ -141,7 +141,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
   @Override
   protected void createCheckButtons()
   {
-    final Button fullPromptButton = addCheckButton("fullPrompt", false, "Show all variables", "");
+    final Button fullPromptButton = addCheckButton("Show all variables", "", false, "fullPrompt");
     fullPrompt = fullPromptButton.getSelection();
     fullPromptButton.addSelectionListener(new SelectionAdapter()
     {

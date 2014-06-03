@@ -477,7 +477,7 @@ public class ProjectPage extends SetupWizardPage
   @Override
   protected void createCheckButtons()
   {
-    skipButton = addCheckButton("skipButton", false, "Skip Project Selection", "Enable the Next button to proceed without provisioning projects");
+    skipButton = addCheckButton("Skip Project Selection", "Enable the Next button to proceed without provisioning projects", false, "skipButton");
     skipButton.addSelectionListener(new SelectionAdapter()
     {
       @Override

@@ -150,7 +150,7 @@ public abstract class SetupWizardPage extends WizardPage
   {
   }
 
-  protected final Button addCheckButton(String key, boolean defaultSelection, String text, String toolTip)
+  protected final Button addCheckButton(String text, String toolTip, boolean defaultSelection, String persistenceKey)
   {
     if (checkComposite == null)
     {
@@ -168,7 +168,17 @@ public abstract class SetupWizardPage extends WizardPage
       ++checkLayout.numColumns;
     }
 
-    Button button = new PersistentButton(checkComposite, SWT.CHECK, getDialogSettings(), key, defaultSelection);
+    Button button;
+    if (persistenceKey != null)
+    {
+      button = new PersistentButton(checkComposite, SWT.CHECK, getDialogSettings(), persistenceKey, defaultSelection);
+    }
+    else
+    {
+      button = new Button(checkComposite, SWT.CHECK);
+      button.setSelection(defaultSelection);
+    }
+
     button.setLayoutData(new GridData());
     button.setText(text);
     if (!StringUtil.isEmpty(toolTip))
@@ -177,6 +187,11 @@ public abstract class SetupWizardPage extends WizardPage
     }
 
     return button;
+  }
+
+  protected final Composite getCheckComposite()
+  {
+    return checkComposite;
   }
 
   @Override

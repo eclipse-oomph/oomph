@@ -120,7 +120,7 @@ public class ConfirmationPage extends SetupWizardPage
   @Override
   protected void createCheckButtons()
   {
-    showAllButton = addCheckButton("showAll", false, "Show all triggered tasks", "Show unneeded tasks in addition to the needed tasks");
+    showAllButton = addCheckButton("Show all triggered tasks", "Show unneeded tasks in addition to the needed tasks", false, "showAll");
     showAllButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -130,7 +130,7 @@ public class ConfirmationPage extends SetupWizardPage
       }
     });
 
-    offlineButton = addCheckButton("offline", false, "Offline", "Avoid unnecessary network requests during the installation process");
+    offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false, "offline");
   }
 
   @Override

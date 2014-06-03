@@ -249,7 +249,7 @@ public class ProgressPage extends SetupWizardPage
   @Override
   protected void createCheckButtons()
   {
-    scrollLockButton = addCheckButton("scrollLock", false, "Scroll lock", "Keep the log from scrolling to the end when new messages are added");
+    scrollLockButton = addCheckButton("Scroll lock", "Keep the log from scrolling to the end when new messages are added", false, null);
     scrollLock = scrollLockButton.getSelection();
     scrollLockButton.addSelectionListener(new SelectionAdapter()
     {
@@ -260,8 +260,8 @@ public class ProgressPage extends SetupWizardPage
       }
     });
 
-    dismissButton = addCheckButton("dismissAutomatically", false, "Dismiss automatically",
-        "Dismiss this wizard when all setup tasks have performed successfully");
+    dismissButton = addCheckButton("Dismiss automatically", "Dismiss this wizard when all setup tasks have performed successfully", false,
+        "dismissAutomatically");
     dismissAutomatically = dismissButton.getSelection();
     dismissButton.addSelectionListener(new SelectionAdapter()
     {
@@ -274,8 +274,8 @@ public class ProgressPage extends SetupWizardPage
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
-      launchButton = addCheckButton("launchAutomatically", true, "Launch automatically",
-          "Launch the installed product when all setup tasks have performed successfully");
+      launchButton = addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
+          "launchAutomatically");
       launchAutomatically = launchButton.getSelection();
       launchButton.addSelectionListener(new SelectionAdapter()
       {
