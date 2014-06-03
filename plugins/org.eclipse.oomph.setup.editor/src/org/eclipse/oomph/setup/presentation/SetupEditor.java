@@ -1146,14 +1146,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
               command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
               editingDomain.getCommandStack().execute(command);
-              try
-              {
-                mainResource.save(System.err, null);
-              }
-              catch (IOException ex)
-              {
-                ex.printStackTrace();
-              }
             }
             catch (RuntimeException ex)
             {
@@ -1678,46 +1670,50 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     public void update(int expandLevel)
     {
-      copyMap.clear();
-
-      try
+      if (labelProvider != null)
       {
-        ResourceSet resourceSet = editingDomain.getResourceSet();
-        EList<Resource> resources = resourceSet.getResources();
-        if (!resources.isEmpty())
+
+        copyMap.clear();
+
+        try
         {
-          Resource resource = resources.get(0);
-          EObject eObject = resource.getContents().get(0);
-          if (eObject instanceof Project)
+          ResourceSet resourceSet = editingDomain.getResourceSet();
+          EList<Resource> resources = resourceSet.getResources();
+          if (!resources.isEmpty())
           {
-            Project project = (Project)eObject;
-            ItemProvider input = getTriggeredTasks(project);
-            getTreeViewer().setInput(input);
+            Resource resource = resources.get(0);
+            EObject eObject = resource.getContents().get(0);
+            if (eObject instanceof Project)
+            {
+              Project project = (Project)eObject;
+              ItemProvider input = getTriggeredTasks(project);
+              getTreeViewer().setInput(input);
+            }
           }
         }
-      }
-      catch (Exception ex)
-      {
-        SetupEditorPlugin.INSTANCE.log(ex);
-      }
-
-      for (Map.Entry<Object, Set<Object>> entry : copyMap.entrySet())
-      {
-        Set<Object> values = entry.getValue();
-        for (Object value : values)
+        catch (Exception ex)
         {
-          Set<Object> eObjects = inverseCopyMap.get(value);
-          if (eObjects == null)
-          {
-            eObjects = new HashSet<Object>();
-            inverseCopyMap.put(value, eObjects);
-          }
-
-          eObjects.add(entry.getKey());
+          SetupEditorPlugin.INSTANCE.log(ex);
         }
-      }
 
-      getTreeViewer().expandToLevel(expandLevel);
+        for (Map.Entry<Object, Set<Object>> entry : copyMap.entrySet())
+        {
+          Set<Object> values = entry.getValue();
+          for (Object value : values)
+          {
+            Set<Object> eObjects = inverseCopyMap.get(value);
+            if (eObjects == null)
+            {
+              eObjects = new HashSet<Object>();
+              inverseCopyMap.put(value, eObjects);
+            }
+
+            eObjects.add(entry.getKey());
+          }
+        }
+
+        getTreeViewer().expandToLevel(expandLevel);
+      }
     }
 
     private List<String> sortStrings(Collection<? extends String> strings)

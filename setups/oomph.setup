@@ -135,31 +135,27 @@
         version="J2SE-1.5"
         location="${jre.location-1.5}"/>
     <setupTask
-        xsi:type="setup:VariableTask"
-        name="git.clone.remoteURI"
-        label="Oomph Git Repository">
-      <choice
-          value="ssh://${git.user.id}@git.eclipse.org:29418/oomph/org.eclipse.oomph"
-          label="SSH (read-write, through Gerrit)"/>
-      <choice
-          value="https://${git.user.id}@git.eclipse.org/r/oomph/org.eclipse.oomph"
-          label="HTTPS (read-write, through Gerrit)"/>
-      <choice
-          value="ssh://git.eclipse.org/gitroot/oomph/org.eclipse.oomph.git"
-          label="SSH (read-only)"/>
-      <choice
-          value="http://git.eclipse.org/gitroot/oomph/org.eclipse.oomph.git"
-          label="HTTP (read-only, anonymous)"/>
-      <choice
-          value="git://git.eclipse.org/gitroot/oomph/org.eclipse.oomph"
-          label="Git (read-only, anonymous)"/>
-    </setupTask>
-    <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.oomph"
-        remoteURI="${git.clone.remoteURI}"
+        remoteURI="oomph/org.eclipse.oomph"
         checkoutBranch="master"
-        userID=""/>
+        userID="">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Oomph Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlets

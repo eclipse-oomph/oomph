@@ -269,6 +269,8 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     createValidTriggersAnnotations();
     // http://www.eclipse.org/oomph/setup/Variable
     createVariableAnnotations();
+    // http://www.eclipse.org/oomph/setup/RuleVariable
+    createRuleVariableAnnotations();
     // http://www.eclipse.org/oomph/setup/RemoteResource
     createRemoteResourceAnnotations();
   }
@@ -333,14 +335,31 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
   protected void createVariableAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(getGitCloneTask_Location(), source, new String[] { "type", "STRING", "label", "Git clone location", "description", "Git clone location" });
+    addAnnotation(getGitCloneTask_Location(), source, new String[] { "type", "STRING", "label", "Git clone location rule", "description",
+        "The rule for the absolute folder location where the Git clone is located" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${installation.location/git/}${@id.remoteURI|uriLastSegment}", "label", "Located in installation location folder named git/<repo>" });
+        "${installation.location/git/}${@id.remoteURI|uriLastSegment}", "label", "Located in a folder named \'git/<repo>\' within the installation folder" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${user.home/git/}${@id.remoteURI|uriLastSegment}-${@id.checkoutBranch}", "label", "Located in the user home folder named git/<repo>-<branch>" });
+        "${workspace.location/.git/}${@id.remoteURI|uriLastSegment}", "label", "Located in a folder named \'.git/<repo>\' within the workspace folder" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${user.home/git/}${@id.remoteURI|uriLastSegment}${file.separator}${@id.checkoutBranch}", "label",
-        "Located in the user home folder named git/<repo>/<branch>" });
+        "${git.container.root/}${@id.remoteURI|uriLastSegment}-${@id.checkoutBranch}", "label",
+        "Located in a folder named \'<repo>-<branch>\' within the root Git-container folder " });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
+        "${git.container.root/}${@id.remoteURI|uriLastSegment/}${@id.checkoutBranch}", "label",
+        "Located in a folder named \'<repo>/<branch>\' within the root Git-container folder " });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/RuleVariable</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRuleVariableAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
+    addAnnotation(getGitCloneTask_Location(), source, new String[] { "name", "git.container.root", "type", "FOLDER", "label", "Root Git-container folder",
+        "description", "The root Git-container folder where all the Git clones are located", "storePromptedValue", "true" });
   }
 
   /**

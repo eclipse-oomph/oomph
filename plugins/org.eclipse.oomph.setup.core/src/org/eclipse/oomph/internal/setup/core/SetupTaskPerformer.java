@@ -135,7 +135,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static boolean NEEDS_PATH_SEPARATOR_CONVERSION = File.separatorChar == '\\';
 
-  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|]+)(\\|([^}]+))?}|\\$)");
+  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
 
   private static Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
 
@@ -1034,7 +1034,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     ProductVersion productVersion = installation.getProductVersion();
 
     EList<SetupTask> result = new BasicEList<SetupTask>();
-    if (!productVersion.eIsProxy())
+    if (productVersion != null && !productVersion.eIsProxy())
     {
       List<Scope> configurableItems = new ArrayList<Scope>();
       List<Scope> scopes = new ArrayList<Scope>();
@@ -1511,17 +1511,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       else
       {
         key = matcher.group(2);
-        String suffix = "";
-
-        int prefixIndex = key.indexOf('/');
-        if (prefixIndex != -1)
+        String suffix = matcher.group(5);
+        if (NEEDS_PATH_SEPARATOR_CONVERSION)
         {
-          suffix = key.substring(prefixIndex);
-          key = key.substring(0, prefixIndex);
-          if (NEEDS_PATH_SEPARATOR_CONVERSION)
-          {
-            suffix = suffix.replace('/', File.separatorChar);
-          }
+          suffix = suffix.replace('/', File.separatorChar);
         }
 
         boolean isUnexpanded = false;
@@ -1610,11 +1603,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       if (!"$".equals(key))
       {
         key = matcher.group(2);
-        int prefixIndex = key.indexOf('/');
-        if (prefixIndex != -1)
-        {
-          key = key.substring(0, prefixIndex);
-        }
       }
 
       result.add(key);
@@ -2693,7 +2681,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     AttributeRule attributeRule = partialPromptPerformer.getAttributeRule(eAttribute, true);
                     if (attributeRule != null)
                     {
-                      variable.setValue(attributeRule.getValue());
+                      String value = prompter.getValue(variable);
+                      variable.setValue(value == null ? attributeRule.getValue() : value);
                     }
                   }
                   else

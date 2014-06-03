@@ -41,7 +41,10 @@ public interface WorkspaceTask extends SetupTask
    * @see #setLocation(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getWorkspaceTask_Location()
    * @model default="" required="true"
-   *        annotation="http://www.eclipse.org/oomph/setup/Variable type='STRING' label='Workspace location' description='Workspace location'"
+   *        annotation="http://www.eclipse.org/oomph/setup/Variable type='STRING' label='Workspace location rule' description='The rule for the absolute folder location where the workspace is located'"
+   *        annotation="http://www.eclipse.org/oomph/setup/RuleVariable name='workspace.id' type='STRING' label='Workspace folder name' description='The name of the workspace folder within the root workspace-container folder where the workspaces are located'"
+   *        annotation="http://www.eclipse.org/oomph/setup/RuleVariable name='workspace.container.root' type='FOLDER' label='Root workspace-container folder' description='The root workspace-container folder where all the workspaces are located' storePromptedValue='true'"
+   *        annotation="http://www.eclipse.org/oomph/setup/RuleVariable name='absolute.workspace.location' type='FOLDER' label='Workspace location' description='The absolute folder location of the workspace'"
    * @generated
    */
   String getLocation();

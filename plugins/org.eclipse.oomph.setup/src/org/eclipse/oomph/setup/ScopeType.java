@@ -110,178 +110,178 @@ public enum ScopeType implements Enumerator
   USER(9, "User", "User");
 
   /**
-     * The '<em><b>None</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>None</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>None</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #NONE
-     * @model name="None"
-     * @generated
-     * @ordered
-     */
+   * @see #NONE
+   * @model name="None"
+   * @generated
+   * @ordered
+   */
   public static final int NONE_VALUE = 0;
 
   /**
-     * The '<em><b>Product Catalog</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Product Catalog</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Product Catalog</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #PRODUCT_CATALOG
-     * @model name="ProductCatalog"
-     * @generated
-     * @ordered
-     */
+   * @see #PRODUCT_CATALOG
+   * @model name="ProductCatalog"
+   * @generated
+   * @ordered
+   */
   public static final int PRODUCT_CATALOG_VALUE = 1;
 
   /**
-     * The '<em><b>Product</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Product</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Product</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #PRODUCT
-     * @model name="Product" literal="Eclipse"
-     * @generated
-     * @ordered
-     */
+   * @see #PRODUCT
+   * @model name="Product" literal="Eclipse"
+   * @generated
+   * @ordered
+   */
   public static final int PRODUCT_VALUE = 2;
 
   /**
-     * The '<em><b>Product Version</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Product Version</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Product Version</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #PRODUCT_VERSION
-     * @model name="ProductVersion"
-     * @generated
-     * @ordered
-     */
+   * @see #PRODUCT_VERSION
+   * @model name="ProductVersion"
+   * @generated
+   * @ordered
+   */
   public static final int PRODUCT_VERSION_VALUE = 3;
 
   /**
-     * The '<em><b>Project Catalog</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Project Catalog</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Project Catalog</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #PROJECT_CATALOG
-     * @model name="ProjectCatalog"
-     * @generated
-     * @ordered
-     */
+   * @see #PROJECT_CATALOG
+   * @model name="ProjectCatalog"
+   * @generated
+   * @ordered
+   */
   public static final int PROJECT_CATALOG_VALUE = 4;
 
   /**
-     * The '<em><b>Project</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Project</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Project</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #PROJECT
-     * @model name="Project"
-     * @generated
-     * @ordered
-     */
+   * @see #PROJECT
+   * @model name="Project"
+   * @generated
+   * @ordered
+   */
   public static final int PROJECT_VALUE = 5;
 
   /**
-     * The '<em><b>Stream</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Stream</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Stream</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #STREAM
-     * @model name="Stream"
-     * @generated
-     * @ordered
-     */
+   * @see #STREAM
+   * @model name="Stream"
+   * @generated
+   * @ordered
+   */
   public static final int STREAM_VALUE = 6;
 
   /**
-     * The '<em><b>Installation</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Installation</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Installation</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #INSTALLATION
-     * @model name="Installation"
-     * @generated
-     * @ordered
-     */
+   * @see #INSTALLATION
+   * @model name="Installation"
+   * @generated
+   * @ordered
+   */
   public static final int INSTALLATION_VALUE = 7;
 
   /**
-     * The '<em><b>Workspace</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>Workspace</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>Workspace</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #WORKSPACE
-     * @model name="Workspace"
-     * @generated
-     * @ordered
-     */
+   * @see #WORKSPACE
+   * @model name="Workspace"
+   * @generated
+   * @ordered
+   */
   public static final int WORKSPACE_VALUE = 8;
 
   /**
-     * The '<em><b>User</b></em>' literal value.
-     * <!-- begin-user-doc -->
+   * The '<em><b>User</b></em>' literal value.
+   * <!-- begin-user-doc -->
      * <p>
      * If the meaning of '<em><b>User</b></em>' literal object isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @see #USER
-     * @model name="User"
-     * @generated
-     * @ordered
-     */
+   * @see #USER
+   * @model name="User"
+   * @generated
+   * @ordered
+   */
   public static final int USER_VALUE = 9;
 
   /**
-     * An array of all the '<em><b>Scope Type</b></em>' enumerators.
-     * <!-- begin-user-doc -->
+   * An array of all the '<em><b>Scope Type</b></em>' enumerators.
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   private static final ScopeType[] VALUES_ARRAY = new ScopeType[] { NONE, PRODUCT_CATALOG, PRODUCT, PRODUCT_VERSION, PROJECT_CATALOG, PROJECT, STREAM,
       INSTALLATION, WORKSPACE, USER, };
 
   /**
-     * A public read-only list of all the '<em><b>Scope Type</b></em>' enumerators.
-     * <!-- begin-user-doc -->
+   * A public read-only list of all the '<em><b>Scope Type</b></em>' enumerators.
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   public static final List<ScopeType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
   /**
-     * Returns the '<em><b>Scope Type</b></em>' literal with the specified literal value.
-     * <!-- begin-user-doc -->
+   * Returns the '<em><b>Scope Type</b></em>' literal with the specified literal value.
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   public static ScopeType get(String literal)
   {
     for (int i = 0; i < VALUES_ARRAY.length; ++i)
@@ -296,11 +296,11 @@ public enum ScopeType implements Enumerator
   }
 
   /**
-     * Returns the '<em><b>Scope Type</b></em>' literal with the specified name.
-     * <!-- begin-user-doc -->
+   * Returns the '<em><b>Scope Type</b></em>' literal with the specified name.
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   public static ScopeType getByName(String name)
   {
     for (int i = 0; i < VALUES_ARRAY.length; ++i)
@@ -315,11 +315,11 @@ public enum ScopeType implements Enumerator
   }
 
   /**
-     * Returns the '<em><b>Scope Type</b></em>' literal with the specified integer value.
-     * <!-- begin-user-doc -->
+   * Returns the '<em><b>Scope Type</b></em>' literal with the specified integer value.
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   public static ScopeType get(int value)
   {
     switch (value)
@@ -349,32 +349,32 @@ public enum ScopeType implements Enumerator
   }
 
   /**
-     * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   private final int value;
 
   /**
-     * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   private final String name;
 
   /**
-     * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   private final String literal;
 
   /**
-     * Only this class can construct instances.
-     * <!-- begin-user-doc -->
+   * Only this class can construct instances.
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   private ScopeType(int value, String name, String literal)
   {
     this.value = value;
@@ -383,41 +383,41 @@ public enum ScopeType implements Enumerator
   }
 
   /**
-     * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   public int getValue()
   {
     return value;
   }
 
   /**
-     * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   public String getName()
   {
     return name;
   }
 
   /**
-     * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   public String getLiteral()
   {
     return literal;
   }
 
   /**
-     * Returns the literal value of the enumerator, which is its string representation.
-     * <!-- begin-user-doc -->
+   * Returns the literal value of the enumerator, which is its string representation.
+   * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+   * @generated
+   */
   @Override
   public String toString()
   {

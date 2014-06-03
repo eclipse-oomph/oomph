@@ -50,7 +50,8 @@ public interface GitCloneTask extends SetupTask
    * @see #setLocation(String)
    * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_Location()
    * @model default="" required="true"
-   *        annotation="http://www.eclipse.org/oomph/setup/Variable type='STRING' label='Git clone location' description='Git clone location'"
+   *        annotation="http://www.eclipse.org/oomph/setup/Variable type='STRING' label='Git clone location rule' description='The rule for the absolute folder location where the Git clone is located'"
+   *        annotation="http://www.eclipse.org/oomph/setup/RuleVariable name='git.container.root' type='FOLDER' label='Root Git-container folder' description='The root Git-container folder where all the Git clones are located' storePromptedValue='true'"
    * @generated
    */
   String getLocation();

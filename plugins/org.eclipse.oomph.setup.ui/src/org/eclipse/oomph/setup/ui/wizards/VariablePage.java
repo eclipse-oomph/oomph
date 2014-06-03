@@ -15,7 +15,6 @@ import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.p2.LicenseConfirmation;
 import org.eclipse.oomph.p2.LicensePrompter;
-import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -34,8 +33,6 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -85,6 +82,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
   private boolean prompted;
 
   private boolean fullPrompt;
+
+  private boolean recursiveValidate;
 
   private Set<SetupTaskPerformer> promptedPerformers = new LinkedHashSet<SetupTaskPerformer>();
 
@@ -196,15 +195,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     if (StringUtil.isEmpty(label))
     {
       label = variable.getName();
-    }
-
-    for (Adapter adapter : variable.eAdapters())
-    {
-      if (adapter == SetupTaskPerformer.RULE_VARIABLE_ADAPTER)
-      {
-        label += " (rule)";
-        break;
-      }
     }
 
     field.setLabelText(label);
@@ -345,6 +335,21 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     parent.pack();
     parent.getParent().layout();
     parent.setRedraw(true);
+
+    if (!isPageComplete() && firstEmptyField == null)
+    {
+      // If the page isn't complete but there are no empty fields, then the last change introduced a new field.
+      // So we should validate again to be sure there really needs to be more information prompted from the user.
+      if (!recursiveValidate)
+      {
+        recursiveValidate = true;
+        validate();
+      }
+    }
+    else
+    {
+      recursiveValidate = false;
+    }
   }
 
   private void validate()
@@ -463,26 +468,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       }
 
       performer.recordVariables(copiedUser);
-
-      EList<AttributeRule> copiedAttributeRules = copiedUser.getAttributeRules();
-      for (AttributeRule attributeRule : performer.getUser().getAttributeRules())
-      {
-        boolean set = false;
-        for (AttributeRule copiedAttributeRule : copiedAttributeRules)
-        {
-          if (copiedAttributeRule.getAttributeURI().equals(attributeRule.getAttributeURI()))
-          {
-            copiedAttributeRule.setValue(attributeRule.getValue());
-            set = true;
-            break;
-          }
-        }
-
-        if (!set)
-        {
-          copiedAttributeRules.add(EcoreUtil.copy(attributeRule));
-        }
-      }
 
       installationResource.setURI(installationResourceURI);
       if (workspaceResource != null)

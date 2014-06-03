@@ -11,8 +11,8 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
-import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
