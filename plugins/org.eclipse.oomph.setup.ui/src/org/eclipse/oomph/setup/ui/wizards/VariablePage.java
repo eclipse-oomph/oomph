@@ -30,10 +30,12 @@ import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.CollectionsUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -57,6 +59,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -75,7 +80,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
   private ScrolledComposite scrolledComposite;
 
-  private Map<URI, FieldHolder> fieldHolders = new LinkedHashMap<URI, FieldHolder>();
+  private final Map<URI, FieldHolder> fieldHolders = new LinkedHashMap<URI, FieldHolder>();
+
+  private Map<FieldHolder, Set<FieldHolder>> ruleUses = new LinkedHashMap<FieldHolder, Set<FieldHolder>>();
 
   private boolean focusSet;
 
@@ -225,12 +232,14 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
   private void updateFields()
   {
-    // Clear out the variables from any of the fields previous created.
-    for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
+    // Clear out the variables from any of the fields previously created.
+    Set<FieldHolder> fieldHolderSet = new LinkedHashSet<FieldHolder>(fieldHolders.values());
+    for (FieldHolder fieldHolder : fieldHolderSet)
     {
       fieldHolder.clear();
     }
 
+    Set<FieldHolder> fieldHolderVariableOrder = new LinkedHashSet<FieldHolder>();
     for (SetupTaskPerformer setupTaskPerformer : promptedPerformers)
     {
       List<VariableTask> variables = setupTaskPerformer.getUnresolvedVariables();
@@ -251,10 +260,16 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
           // Put it into the map under the original variable's key as well.
           fieldHolders.put(getURI(variable), fieldHolder);
         }
+
+        // Ensure that the variables that are visited again are ordered accordingly.
+        fieldHolderVariableOrder.remove(fieldHolder);
+        fieldHolderVariableOrder.add(fieldHolder);
       }
     }
 
-    for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
+    // Build a new one because there can be new holders created.
+    fieldHolderSet = new LinkedHashSet<FieldHolder>(fieldHolders.values());
+    for (FieldHolder fieldHolder : fieldHolderSet)
     {
       for (VariableTask variable : fieldHolder.getVariables())
       {
@@ -267,7 +282,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       }
     }
 
-    for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
+    for (FieldHolder fieldHolder : fieldHolderSet)
     {
       fieldHolder.recordInitialValue();
     }
@@ -288,9 +303,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     }
 
     // Garbage collect any unused fields.
-    PropertyField firstField = null;
-    PropertyField firstEmptyField = null;
-
     for (Iterator<Map.Entry<URI, FieldHolder>> it = fieldHolders.entrySet().iterator(); it.hasNext();)
     {
       Entry<URI, FieldHolder> entry = it.next();
@@ -299,19 +311,194 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       {
         fieldHolder.dispose();
         it.remove();
-      }
-      else
-      {
-        PropertyField field = fieldHolder.getField();
-        if (firstField == null)
+
+        for (Set<FieldHolder> set : ruleUses.values())
         {
-          firstField = field;
+          set.remove(fieldHolder);
+        }
+      }
+    }
+
+    Composite parent = composite.getParent();
+    parent.setRedraw(false);
+
+    // Determine an appropriate field order.
+
+    List<SetupTaskPerformer> allPerformers = new ArrayList<SetupTaskPerformer>(promptedPerformers);
+    if (performer != null)
+    {
+      allPerformers.add(0, performer);
+    }
+
+    List<Control> controls = new ArrayList<Control>();
+    fieldHolderSet = new LinkedHashSet<FieldHolder>(fieldHolders.values());
+    fieldHolderVariableOrder.addAll(fieldHolderSet);
+    Map<FieldHolder, Set<FieldHolder>> newRuleUses = new LinkedHashMap<FieldHolder, Set<FieldHolder>>();
+    LOOP: for (FieldHolder fieldHolder : fieldHolderVariableOrder)
+    {
+      controls.add(getMainControl(fieldHolder.getField().getControl()));
+      for (VariableTask variable : fieldHolder.getVariables())
+      {
+        for (SetupTaskPerformer performer : allPerformers)
+        {
+          EAttribute eAttribute = performer.getAttributeRuleVariableData(variable);
+          if (eAttribute != null)
+          {
+            CollectionsUtil.addAll(newRuleUses, fieldHolder, Collections.<FieldHolder> emptySet());
+            continue LOOP;
+          }
+        }
+      }
+
+      // for (VariableTask variable : fieldHolder.getVariables())
+      // {
+      // for (SetupTaskPerformer performer : allPerformers)
+      // {
+      // EStructuralFeature.Setting setting = performer.getImpliedVariableData(variable);
+      // if (setting != null)
+      // {
+      // continue LOOP;
+      // }
+      // }
+      // }
+
+      for (VariableTask variable : fieldHolder.getVariables())
+      {
+        for (SetupTaskPerformer performer : allPerformers)
+        {
+          VariableTask dependantVariable = performer.getRuleVariableData(variable);
+          if (dependantVariable != null)
+          {
+            VariableTask ruleVariable = performer.getRuleVariable(dependantVariable);
+            if (ruleVariable != null)
+            {
+              FieldHolder dependentFieldHolder = getFieldHolder(ruleVariable);
+              if (dependentFieldHolder != null)
+              {
+                CollectionsUtil.add(newRuleUses, dependentFieldHolder, fieldHolder);
+                continue LOOP;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    Map<FieldHolder, Set<FieldHolder>> consolidatedRuleUses = new LinkedHashMap<FieldHolder, Set<FieldHolder>>();
+    CollectionsUtil.addAll(newRuleUses, ruleUses);
+    LOOP: for (Map.Entry<FieldHolder, Set<FieldHolder>> entry : newRuleUses.entrySet())
+    {
+      FieldHolder fieldHolder = entry.getKey();
+      if (fieldHolder.getField().getControl().isDisposed())
+      {
+        for (Map.Entry<FieldHolder, Set<FieldHolder>> otherEntry : newRuleUses.entrySet())
+        {
+          if (otherEntry != entry)
+          {
+            for (FieldHolder usedFieldHolder : entry.getValue())
+            {
+              if (otherEntry.getValue().contains(usedFieldHolder))
+              {
+                CollectionsUtil.addAll(consolidatedRuleUses, entry.getKey(), otherEntry.getValue());
+                CollectionsUtil.addAll(consolidatedRuleUses, entry.getKey(), entry.getValue());
+                continue LOOP;
+              }
+            }
+          }
+        }
+      }
+
+      CollectionsUtil.addAll(consolidatedRuleUses, entry.getKey(), entry.getValue());
+    }
+
+    ruleUses = consolidatedRuleUses;
+
+    int size = controls.size();
+    Set<FieldHolder> orderedFieldHolders = new LinkedHashSet<FieldHolder>();
+    if (size <= 1)
+    {
+      orderedFieldHolders.addAll(fieldHolderSet);
+    }
+    else
+    {
+      List<Control> children = Arrays.asList(composite.getChildren());
+
+      int controlOffset = -1;
+      int columnCount = -1;
+      for (int i = 0, childrenSize = children.size(); i < childrenSize; ++i)
+      {
+        if (controls.contains(children.get(i)))
+        {
+          if (controlOffset == -1)
+          {
+            controlOffset = i;
+          }
+          else
+          {
+            columnCount = i - controlOffset;
+            break;
+          }
+        }
+      }
+
+      for (Map.Entry<FieldHolder, Set<FieldHolder>> entry : ruleUses.entrySet())
+      {
+        FieldHolder key = entry.getKey();
+        if (!key.getField().getControl().isDisposed())
+        {
+          orderedFieldHolders.add(key);
         }
 
-        if (firstEmptyField == null && StringUtil.isEmpty(field.getValue()))
+        for (FieldHolder value : entry.getValue())
         {
-          firstEmptyField = field;
+          if (!value.getField().getControl().isDisposed())
+          {
+            orderedFieldHolders.add(value);
+          }
         }
+      }
+
+      orderedFieldHolders.addAll(fieldHolderSet);
+
+      Control target = children.get(columnCount - 1);
+      for (FieldHolder fieldHolder : orderedFieldHolders)
+      {
+        Control mainControl = getMainControl(fieldHolder.getField().getControl());
+        int index = children.indexOf(mainControl) - controlOffset;
+        Control newTarget = null;
+        for (int j = columnCount - 1; j >= 0; --j)
+        {
+          Control child = children.get(index + j);
+          if (newTarget == null)
+          {
+            newTarget = child;
+          }
+
+          if (target == child)
+          {
+            break;
+          }
+
+          child.moveBelow(target);
+        }
+
+        target = newTarget;
+      }
+    }
+
+    PropertyField firstField = null;
+    PropertyField firstEmptyField = null;
+    for (FieldHolder fieldHolder : orderedFieldHolders)
+    {
+      PropertyField field = fieldHolder.getField();
+      if (firstField == null)
+      {
+        firstField = field;
+      }
+
+      if (firstEmptyField == null && StringUtil.isEmpty(field.getValue()))
+      {
+        firstEmptyField = field;
       }
     }
 
@@ -330,8 +517,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
       }
     }
 
-    Composite parent = composite.getParent();
-    parent.setRedraw(false);
     parent.pack();
     parent.getParent().layout();
     parent.setRedraw(true);
@@ -350,6 +535,17 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     {
       recursiveValidate = false;
     }
+  }
+
+  private Control getMainControl(Control control)
+  {
+    Control parent = control.getParent();
+    if (parent == composite)
+    {
+      return control;
+    }
+
+    return null;
   }
 
   private void validate()
@@ -438,7 +634,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     if (forward)
     {
       List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
-      for (FieldHolder fieldHolder : new HashSet<FieldHolder>(fieldHolders.values()))
+      for (FieldHolder fieldHolder : new LinkedHashSet<FieldHolder>(fieldHolders.values()))
       {
         unresolvedVariables.addAll(fieldHolder.getVariables());
       }

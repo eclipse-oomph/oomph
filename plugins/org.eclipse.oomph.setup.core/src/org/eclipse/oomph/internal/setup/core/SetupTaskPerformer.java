@@ -12,6 +12,8 @@
 package org.eclipse.oomph.internal.setup.core;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
@@ -50,6 +52,7 @@ import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
+import org.eclipse.oomph.util.CollectionsUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -104,12 +107,12 @@ import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -163,13 +166,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private List<VariableTask> appliedRuleVariables = new ArrayList<VariableTask>();
 
-  private Map<String, VariableTask> allVariables = new HashMap<String, VariableTask>();
+  private Map<String, VariableTask> allVariables = new LinkedHashMap<String, VariableTask>();
 
-  private Set<String> undeclaredVariables = new HashSet<String>();
+  private Set<String> undeclaredVariables = new LinkedHashSet<String>();
 
-  private Map<VariableTask, EAttribute> ruleAttributes = new HashMap<VariableTask, EAttribute>();
+  private Map<VariableTask, EAttribute> ruleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
-  private Map<VariableTask, EAttribute> ruleBasedAttributes = new HashMap<VariableTask, EAttribute>();
+  private Map<VariableTask, EAttribute> ruleBasedAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
   private List<AttributeRule> attributeRules = new ArrayList<AttributeRule>();
 
@@ -188,28 +191,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     initTriggeredSetupTasks(null, false);
   }
 
-  private <K, V> void add(Map<K, Set<V>> map, K key, V value)
-  {
-    Set<V> set = map.get(key);
-    if (set == null)
-    {
-      set = new HashSet<V>();
-      map.put(key, set);
-    }
-    set.add(value);
-  }
-
-  private <K, V> void addAll(Map<K, Set<V>> map, K key, Collection<? extends V> values)
-  {
-    Set<V> set = map.get(key);
-    if (set == null)
-    {
-      set = new HashSet<V>();
-      map.put(key, set);
-    }
-    set.addAll(values);
-  }
-
   private void initTriggeredSetupTasks(Stream stream, boolean firstPhase)
   {
     Trigger trigger = getTrigger();
@@ -224,19 +205,19 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       // 1. Collect and flatten all tasks
       Set<EClass> eClasses = new LinkedHashSet<EClass>();
-      Map<EClass, Set<SetupTask>> instances = new HashMap<EClass, Set<SetupTask>>();
-      Set<String> keys = new HashSet<String>();
+      Map<EClass, Set<SetupTask>> instances = new LinkedHashMap<EClass, Set<SetupTask>>();
+      Set<String> keys = new LinkedHashSet<String>();
       for (SetupTask setupTask : triggeredSetupTasks)
       {
         EClass eClass = setupTask.eClass();
-        add(instances, eClass, setupTask);
+        CollectionsUtil.add(instances, eClass, setupTask);
         eClasses.add(eClass);
         for (EClass eSuperType : eClass.getEAllSuperTypes())
         {
           if (SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eSuperType))
           {
             eClasses.add(eSuperType);
-            add(instances, eSuperType, setupTask);
+            CollectionsUtil.add(instances, eSuperType, setupTask);
           }
         }
 
@@ -322,6 +303,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         if (user.eResource() != null)
         {
+          SetupPrompter prompter = getPrompter();
           // 1.2. Determine whether new rules need to be created
           for (EAttribute eAttribute : eClass.getEAttributes())
           {
@@ -330,53 +312,69 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               EAnnotation eAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
               if (eAnnotation != null)
               {
-                if (getAttributeRule(eAttribute, true) == null)
+                // Determine if there exists an actual instance that really needs the rule.
+                String attributeName = ExtendedMetaData.INSTANCE.getName(eAttribute);
+                for (SetupTask setupTask : instances.get(eAttribute.getEContainingClass()))
                 {
-                  // Determine if there exists an actual instance that really needs the rule.
-                  String attributeName = ExtendedMetaData.INSTANCE.getName(eAttribute);
-                  for (SetupTask setupTask : instances.get(eAttribute.getEContainingClass()))
+                  // If there is an instance with an empty value.
+                  Object value = setupTask.eGet(eAttribute);
+                  if (value == null || "".equals(value))
                   {
-                    // If there is an instance with an empty value.
-                    Object value = setupTask.eGet(eAttribute);
-                    if (value == null || "".equals(value))
+                    // If that instance has an ID and hence will create an implied variable and that variable name isn't already defined by an existing
+                    // context variable.
+                    String id = setupTask.getID();
+                    if (!StringUtil.isEmpty(id) && !keys.contains(id + "." + attributeName))
                     {
-                      // If that instance has an ID and hence will create an implied variable and that variable name isn't already defined by an existing
-                      // context variable.
-                      String id = setupTask.getID();
-                      if (!StringUtil.isEmpty(id) && !keys.contains(id + "." + attributeName))
+                      EMap<String, String> details = eAnnotation.getDetails();
+
+                      // TODO class name/attribute name pairs might not be unique.
+                      String variableName = "@<id>." + eClass.getName() + "." + attributeName;
+
+                      VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+                      annotateAttributeRuleVariable(variable, eAttribute);
+                      variable.setName(variableName);
+                      variable.setType(VariableType.get(details.get("type")));
+                      variable.setLabel(details.get("label"));
+                      variable.setDescription(details.get("description"));
+                      variable.eAdapters().add(RULE_VARIABLE_ADAPTER);
+                      for (EAnnotation subAnnotation : eAnnotation.getEAnnotations())
                       {
-                        EMap<String, String> details = eAnnotation.getDetails();
-
-                        // TODO class name/attribute name pairs might not be unique.
-                        String variableName = "@<id>." + eClass.getName() + "." + attributeName;
-
-                        VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-                        variable.setName(variableName);
-                        variable.setType(VariableType.get(details.get("type")));
-                        variable.setLabel(details.get("label"));
-                        variable.setDescription(details.get("description"));
-                        variable.eAdapters().add(RULE_VARIABLE_ADAPTER);
-                        for (EAnnotation subAnnotation : eAnnotation.getEAnnotations())
+                        if ("Choice".equals(subAnnotation.getSource()))
                         {
-                          if ("Choice".equals(subAnnotation.getSource()))
-                          {
-                            EMap<String, String> subDetails = subAnnotation.getDetails();
+                          EMap<String, String> subDetails = subAnnotation.getDetails();
 
-                            VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-                            choice.setValue(subDetails.get("value"));
-                            choice.setLabel(subDetails.get("label"));
+                          VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+                          choice.setValue(subDetails.get("value"));
+                          choice.setLabel(subDetails.get("label"));
 
-                            variable.getChoices().add(choice);
-                          }
+                          variable.getChoices().add(choice);
                         }
-
-                        unresolvedVariables.add(variable);
-                        ruleAttributes.put(variable, eAttribute);
                       }
-                    }
 
-                    break;
+                      String promptedValue = prompter.getValue(variable);
+                      if (StringUtil.isEmpty(promptedValue))
+                      {
+                        AttributeRule attributeRule = getAttributeRule(eAttribute, true);
+                        if (attributeRule != null)
+                        {
+                          promptedValue = attributeRule.getValue();
+                        }
+                      }
+
+                      if (StringUtil.isEmpty(promptedValue))
+                      {
+                        unresolvedVariables.add(variable);
+                      }
+                      else
+                      {
+                        variable.setValue(promptedValue);
+                      }
+
+                      ruleAttributes.put(variable, eAttribute);
+                    }
                   }
+
+                  break;
                 }
               }
             }
@@ -524,6 +522,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 else
                 {
                   VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+                  annotateImpliedVariable(variable, setupTask, eAttribute);
                   variable.setName(variableName);
 
                   EObject eContainer = setupTask.eContainer();
@@ -562,6 +561,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                       EMap<String, String> details = ruleVariableAnnotation.getDetails();
 
                       VariableTask ruleVariable = SetupFactory.eINSTANCE.createVariableTask();
+                      annotateRuleVariable(ruleVariable, variable);
                       ruleVariable.setName(details.get(EAnnotationConstants.KEY_NAME));
                       ruleVariable.setStorePromptedValue("true".equals(details.get(EAnnotationConstants.KEY_STORE_PROMPTED_VALUE)));
 
@@ -582,7 +582,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
 
         // 2.4. Build variable map in the context
-        Set<String> keys = new HashSet<String>();
+        Set<String> keys = new LinkedHashSet<String>();
         for (SetupTask setupTask : triggeredSetupTasks)
         {
           if (setupTask instanceof VariableTask)
@@ -874,6 +874,64 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
+  private void annotateAttributeRuleVariable(VariableTask variable, EAttribute eAttribute)
+  {
+    annotate(variable, "AttributeRuleVariable", eAttribute);
+  }
+
+  public EAttribute getAttributeRuleVariableData(VariableTask variable)
+  {
+    Annotation annotation = variable.getAnnotation("AttributeRuleVariable");
+    if (annotation != null)
+    {
+      return (EAttribute)annotation.getReferences().get(0);
+    }
+
+    return null;
+  }
+
+  private void annotateImpliedVariable(VariableTask variable, SetupTask setupTask, EAttribute eAttribute)
+  {
+    annotate(variable, "ImpliedVariable", setupTask, eAttribute);
+  }
+
+  public EStructuralFeature.Setting getImpliedVariableData(VariableTask variable)
+  {
+    Annotation annotation = variable.getAnnotation("ImpliedVariable");
+    if (annotation != null)
+    {
+      EList<EObject> references = annotation.getReferences();
+      InternalEObject setupTask = (InternalEObject)references.get(0);
+      return setupTask.eSetting((EStructuralFeature)references.get(1));
+    }
+
+    return null;
+  }
+
+  private void annotateRuleVariable(VariableTask variable, VariableTask dependentVariable)
+  {
+    annotate(variable, "RuleVariable", dependentVariable);
+  }
+
+  public VariableTask getRuleVariableData(VariableTask variable)
+  {
+    Annotation annotation = variable.getAnnotation("RuleVariable");
+    if (annotation != null)
+    {
+      return (VariableTask)annotation.getReferences().get(0);
+    }
+
+    return null;
+  }
+
+  private void annotate(ModelElement modelElement, String source, EObject... references)
+  {
+    Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
+    annotation.setSource(source);
+    annotation.getReferences().addAll(Arrays.asList(references));
+    modelElement.getAnnotations().add(annotation);
+  }
+
   private VariableTask createImpliedVariable(EAnnotation eAnnotation)
   {
     EMap<String, String> details = eAnnotation.getDetails();
@@ -899,7 +957,18 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       AttributeRule attributeRule = getAttributeRule(eAttribute, false);
       if (attributeRule != null)
       {
-        String attributeExpandedValue = expandAttributeReferences(setupTask, attributeRule.getValue());
+        String value = attributeRule.getValue();
+        VariableTask ruleVariable = getRuleVariable(variable);
+        if (ruleVariable != null)
+        {
+          String promptedValue = getPrompter().getValue(ruleVariable);
+          if (promptedValue != null)
+          {
+            value = promptedValue;
+          }
+        }
+
+        String attributeExpandedValue = expandAttributeReferences(setupTask, value);
         variable.setValue(attributeExpandedValue);
 
         // We must remember this applied rule in the preferences restricted to this workspace.
@@ -1596,7 +1665,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       return null;
     }
 
-    Set<String> result = new HashSet<String>();
+    Set<String> result = new LinkedHashSet<String>();
     for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
     {
       String key = matcher.group(1);
@@ -1727,7 +1796,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // Do this before expanding any more strings.
     List<Setting> unresolvedSettings = new ArrayList<EStructuralFeature.Setting>(this.unresolvedSettings);
     this.unresolvedSettings.clear();
-    Set<String> keys = new HashSet<String>();
+    Set<String> keys = new LinkedHashSet<String>();
     for (VariableTask unspecifiedVariable : unresolvedVariables)
     {
       String name = unspecifiedVariable.getName();
@@ -1779,7 +1848,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void expandVariableKeys(Set<String> keys)
   {
-    Map<String, Set<String>> variables = new HashMap<String, Set<String>>();
+    Map<String, Set<String>> variables = new LinkedHashMap<String, Set<String>>();
     for (Map.Entry<Object, Object> entry : getMap().entrySet())
     {
       Object entryKey = entry.getKey();
@@ -2009,6 +2078,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
 
       VariableTask userPreference = EcoreUtil.copy(unspecifiedVariable);
+      userPreference.getAnnotations().clear();
       targetSetupTasks.add(userPreference);
     }
   }
@@ -2259,7 +2329,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private Map<SetupTask, SetupTask> getSubstitutions(EList<SetupTask> setupTasks)
   {
-    Map<Object, SetupTask> overrides = new HashMap<Object, SetupTask>();
+    Map<Object, SetupTask> overrides = new LinkedHashMap<Object, SetupTask>();
     Map<SetupTask, SetupTask> substitutions = new LinkedHashMap<SetupTask, SetupTask>();
 
     for (SetupTask setupTask : setupTasks)
@@ -2371,7 +2441,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     // Determine all the copied objects for which the original object is directly contained in a resource.
     // For each such resource, create a copy of that resource.
-    Map<Resource, Resource> resourceCopies = new HashMap<Resource, Resource>();
+    Map<Resource, Resource> resourceCopies = new LinkedHashMap<Resource, Resource>();
 
     @SuppressWarnings("unchecked")
     Set<InternalEObject> originals = (Set<InternalEObject>)(Set<?>)copier.keySet();
@@ -2413,7 +2483,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     // Must determine mapping from original setup's references (ProductVersion and Streams) to their copies currently in the copier.
 
-    Map<URI, EObject> originalCrossReferences = new HashMap<URI, EObject>();
+    Map<URI, EObject> originalCrossReferences = new LinkedHashMap<URI, EObject>();
     if (originalWorkspace != null)
     {
       for (EObject eObject : originalWorkspace.eCrossReferences())
@@ -2432,7 +2502,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    HashMap<EObject, EObject> originalCopier = new HashMap<EObject, EObject>(copier);
+    Map<EObject, EObject> originalCopier = new LinkedHashMap<EObject, EObject>(copier);
     for (Map.Entry<SetupTask, SetupTask> entry : directSubstitutions.entrySet())
     {
       SetupTask overriddenTask = entry.getKey();
@@ -2523,14 +2593,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     });
 
-    final Map<SetupTask, Set<SetupTask>> dependencies = new HashMap<SetupTask, Set<SetupTask>>();
+    final Map<SetupTask, Set<SetupTask>> dependencies = new LinkedHashMap<SetupTask, Set<SetupTask>>();
     for (SetupTask setupTask : setupTasks)
     {
-      addAll(dependencies, setupTask, setupTask.getPredecessors());
+      CollectionsUtil.addAll(dependencies, setupTask, setupTask.getPredecessors());
 
       for (SetupTask successor : setupTask.getSuccessors())
       {
-        add(dependencies, successor, setupTask);
+        CollectionsUtil.add(dependencies, successor, setupTask);
       }
     }
 
@@ -2582,7 +2652,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     List<VariableTask> allAppliedRuleVariables = new ArrayList<VariableTask>();
     List<VariableTask> allUnresolvedVariables = new ArrayList<VariableTask>();
-    Map<VariableTask, EAttribute> allRuleAttributes = new HashMap<VariableTask, EAttribute>();
+    Map<VariableTask, EAttribute> allRuleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
     Workspace workspace = setupContext.getWorkspace();
     if (workspace == null || workspace.getStreams().isEmpty())
@@ -2628,7 +2698,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           SetupContext fullPromptContext = SetupContext.create(setupContext.getInstallation(), setupContext.getWorkspace());
 
-          Set<VariableTask> variables = new HashSet<VariableTask>();
+          Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
           final SetupTaskPerformer partialPromptPerformer = performer;
           User user = EcoreUtil.copy(setupContext.getUser());
           for (Iterator<EObject> it = user.eAllContents(); it.hasNext();)
