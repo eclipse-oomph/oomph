@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.preferences.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.preferences.PreferenceItem;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesFactory;
@@ -118,6 +119,9 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
         .get(eNS_URI) : new PreferencesPackageImpl());
 
     isInited = true;
+
+    // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
 
     // Create package meta-data objects
     thePreferencesPackage.createPackageContents();
@@ -474,11 +478,15 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
     setNsPrefix(eNS_PREFIX);
     setNsURI(eNS_URI);
 
+    // Obtain other dependent packages
+    BasePackage theBasePackage = (BasePackage)EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI);
+
     // Create type parameters
 
     // Set bounds for type parameters
 
     // Add supertypes to classes
+    preferenceItemEClass.getESuperTypes().add(theBasePackage.getModelElement());
     preferenceNodeEClass.getESuperTypes().add(getPreferenceItem());
     propertyEClass.getESuperTypes().add(getPreferenceItem());
 

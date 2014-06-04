@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.workbench.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.workbench.FileEditor;
 import org.eclipse.oomph.setup.workbench.FileMapping;
 import org.eclipse.oomph.setup.workbench.WorkbenchPackage;
@@ -20,7 +21,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -41,7 +41,7 @@ import java.util.Collection;
  *
  * @generated
  */
-public class FileMappingImpl extends MinimalEObjectImpl.Container implements FileMapping
+public class FileMappingImpl extends ModelElementImpl implements FileMapping
 {
   /**
    * The default value of the '{@link #getFilePattern() <em>File Pattern</em>}' attribute.

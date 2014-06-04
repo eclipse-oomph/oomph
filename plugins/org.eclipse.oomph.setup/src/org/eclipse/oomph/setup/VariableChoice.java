@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.oomph.base.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface VariableChoice extends EObject
+public interface VariableChoice extends ModelElement
 {
   /**
    * Returns the value of the '<em><b>Value</b></em>' attribute.

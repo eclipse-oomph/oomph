@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.workbench.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.workbench.CommandParameter;
 import org.eclipse.oomph.setup.workbench.FileAssociationsTask;
@@ -445,6 +446,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
 
     // Obtain other dependent packages
     SetupPackage theSetupPackage = (SetupPackage)EPackage.Registry.INSTANCE.getEPackage(SetupPackage.eNS_URI);
+    BasePackage theBasePackage = (BasePackage)EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI);
 
     // Create type parameters
 
@@ -452,7 +454,11 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
 
     // Add supertypes to classes
     fileAssociationsTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    fileMappingEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    fileEditorEClass.getESuperTypes().add(theBasePackage.getModelElement());
     keyBindingTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    keyBindingContextEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    commandParameterEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(fileAssociationsTaskEClass, FileAssociationsTask.class, "FileAssociationsTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -532,8 +538,8 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(fileAssociationsTaskEClass, source, new String[] { "variableName", "setup.workbench.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.workbench.feature.group" });
+    addAnnotation(fileAssociationsTaskEClass, source, new String[] { "variableName", "setup.workbench.p2", "repository", "${oomph.update.url}",
+        "installableUnits", "org.eclipse.oomph.setup.workbench.feature.group" });
     addAnnotation(keyBindingTaskEClass, source, new String[] { "variableName", "setup.workbench.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.workbench.feature.group" });
   }

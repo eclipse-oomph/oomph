@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
@@ -18,7 +19,6 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -37,7 +37,7 @@ import java.util.Collection;
  *
  * @generated
  */
-public abstract class SetupTaskContainerImpl extends MinimalEObjectImpl.Container implements SetupTaskContainer
+public abstract class SetupTaskContainerImpl extends ModelElementImpl implements SetupTaskContainer
 {
   /**
    * The cached value of the '{@link #getSetupTasks() <em>Setup Tasks</em>}' containment reference list.

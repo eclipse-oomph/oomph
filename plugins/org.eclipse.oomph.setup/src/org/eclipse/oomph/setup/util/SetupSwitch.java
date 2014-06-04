@@ -132,6 +132,10 @@ public class SetupSwitch<T> extends Switch<T>
         T result = caseSetupTaskContainer(setupTaskContainer);
         if (result == null)
         {
+          result = caseModelElement(setupTaskContainer);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -146,6 +150,10 @@ public class SetupSwitch<T> extends Switch<T>
         }
         if (result == null)
         {
+          result = caseModelElement(scope);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -156,6 +164,10 @@ public class SetupSwitch<T> extends Switch<T>
         T result = caseIndex(index);
         if (result == null)
         {
+          result = caseModelElement(index);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -164,6 +176,10 @@ public class SetupSwitch<T> extends Switch<T>
       {
         CatalogSelection catalogSelection = (CatalogSelection)theEObject;
         T result = caseCatalogSelection(catalogSelection);
+        if (result == null)
+        {
+          result = caseModelElement(catalogSelection);
+        }
         if (result == null)
         {
           result = defaultCase(theEObject);
@@ -181,6 +197,10 @@ public class SetupSwitch<T> extends Switch<T>
         if (result == null)
         {
           result = caseSetupTaskContainer(productCatalog);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(productCatalog);
         }
         if (result == null)
         {
@@ -202,6 +222,10 @@ public class SetupSwitch<T> extends Switch<T>
         }
         if (result == null)
         {
+          result = caseModelElement(product);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -220,6 +244,10 @@ public class SetupSwitch<T> extends Switch<T>
         }
         if (result == null)
         {
+          result = caseModelElement(productVersion);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -235,6 +263,10 @@ public class SetupSwitch<T> extends Switch<T>
         if (result == null)
         {
           result = caseSetupTaskContainer(projectContainer);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(projectContainer);
         }
         if (result == null)
         {
@@ -260,6 +292,10 @@ public class SetupSwitch<T> extends Switch<T>
         }
         if (result == null)
         {
+          result = caseModelElement(projectCatalog);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -282,6 +318,10 @@ public class SetupSwitch<T> extends Switch<T>
         }
         if (result == null)
         {
+          result = caseModelElement(project);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -297,6 +337,10 @@ public class SetupSwitch<T> extends Switch<T>
         if (result == null)
         {
           result = caseSetupTaskContainer(stream);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(stream);
         }
         if (result == null)
         {
@@ -318,6 +362,10 @@ public class SetupSwitch<T> extends Switch<T>
         }
         if (result == null)
         {
+          result = caseModelElement(user);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -326,6 +374,10 @@ public class SetupSwitch<T> extends Switch<T>
       {
         AttributeRule attributeRule = (AttributeRule)theEObject;
         T result = caseAttributeRule(attributeRule);
+        if (result == null)
+        {
+          result = caseModelElement(attributeRule);
+        }
         if (result == null)
         {
           result = defaultCase(theEObject);
@@ -343,6 +395,10 @@ public class SetupSwitch<T> extends Switch<T>
         if (result == null)
         {
           result = caseSetupTaskContainer(installation);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(installation);
         }
         if (result == null)
         {
@@ -379,6 +435,10 @@ public class SetupSwitch<T> extends Switch<T>
         if (result == null)
         {
           result = caseSetupTaskContainer(workspace);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(workspace);
         }
         if (result == null)
         {
@@ -448,6 +508,10 @@ public class SetupSwitch<T> extends Switch<T>
       {
         VariableChoice variableChoice = (VariableChoice)theEObject;
         T result = caseVariableChoice(variableChoice);
+        if (result == null)
+        {
+          result = caseModelElement(variableChoice);
+        }
         if (result == null)
         {
           result = defaultCase(theEObject);
@@ -602,6 +666,10 @@ public class SetupSwitch<T> extends Switch<T>
       {
         TextModification textModification = (TextModification)theEObject;
         T result = caseTextModification(textModification);
+        if (result == null)
+        {
+          result = caseModelElement(textModification);
+        }
         if (result == null)
         {
           result = defaultCase(theEObject);

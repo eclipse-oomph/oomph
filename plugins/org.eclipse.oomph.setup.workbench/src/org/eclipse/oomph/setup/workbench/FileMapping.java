@@ -10,8 +10,9 @@
  */
 package org.eclipse.oomph.setup.workbench;
 
+import org.eclipse.oomph.base.ModelElement;
+
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +32,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface FileMapping extends EObject
+public interface FileMapping extends ModelElement
 {
   /**
    * Returns the value of the '<em><b>File Pattern</b></em>' attribute.

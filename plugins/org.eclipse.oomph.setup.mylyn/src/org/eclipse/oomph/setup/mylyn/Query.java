@@ -10,8 +10,9 @@
  */
 package org.eclipse.oomph.setup.mylyn;
 
+import org.eclipse.oomph.base.ModelElement;
+
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Query extends EObject
+public interface Query extends ModelElement
 {
   /**
    * Returns the value of the '<em><b>Task</b></em>' container reference.

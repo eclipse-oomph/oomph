@@ -111,6 +111,10 @@ public class WorkbenchSwitch<T> extends Switch<T>
         T result = caseFileMapping(fileMapping);
         if (result == null)
         {
+          result = caseModelElement(fileMapping);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -119,6 +123,10 @@ public class WorkbenchSwitch<T> extends Switch<T>
       {
         FileEditor fileEditor = (FileEditor)theEObject;
         T result = caseFileEditor(fileEditor);
+        if (result == null)
+        {
+          result = caseModelElement(fileEditor);
+        }
         if (result == null)
         {
           result = defaultCase(theEObject);
@@ -149,6 +157,10 @@ public class WorkbenchSwitch<T> extends Switch<T>
         T result = caseKeyBindingContext(keyBindingContext);
         if (result == null)
         {
+          result = caseModelElement(keyBindingContext);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -157,6 +169,10 @@ public class WorkbenchSwitch<T> extends Switch<T>
       {
         CommandParameter commandParameter = (CommandParameter)theEObject;
         T result = caseCommandParameter(commandParameter);
+        if (result == null)
+        {
+          result = caseModelElement(commandParameter);
+        }
         if (result == null)
         {
           result = defaultCase(theEObject);

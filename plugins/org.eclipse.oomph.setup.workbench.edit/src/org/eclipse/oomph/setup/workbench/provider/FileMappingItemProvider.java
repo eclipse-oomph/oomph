@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.workbench.provider;
 
+import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.setup.workbench.FileMapping;
 import org.eclipse.oomph.setup.workbench.WorkbenchFactory;
 import org.eclipse.oomph.setup.workbench.WorkbenchPackage;
@@ -19,14 +20,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
@@ -38,8 +33,7 @@ import java.util.List;
  * <!-- end-user-doc -->
  * @generated
  */
-public class FileMappingItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-    ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+public class FileMappingItemProvider extends ModelElementItemProvider
 {
   /**
    * This constructs an instance from a factory and a notifier.
@@ -130,17 +124,6 @@ public class FileMappingItemProvider extends ItemProviderAdapter implements IEdi
     // adding (see {@link AddCommand}) it as a child.
 
     return super.getChildFeature(object, child);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public boolean hasChildren(Object object)
-  {
-    return hasChildren(object, true);
   }
 
   /**

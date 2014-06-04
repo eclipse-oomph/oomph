@@ -10,8 +10,9 @@
  */
 package org.eclipse.oomph.setup;
 
+import org.eclipse.oomph.base.ModelElement;
+
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model abstract="true"
  * @generated
  */
-public interface SetupTaskContainer extends EObject
+public interface SetupTaskContainer extends ModelElement
 {
   /**
    * Returns the value of the '<em><b>Setup Tasks</b></em>' containment reference list.

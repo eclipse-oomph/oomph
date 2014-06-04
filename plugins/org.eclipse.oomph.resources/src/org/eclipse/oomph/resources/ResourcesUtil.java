@@ -53,7 +53,7 @@ public final class ResourcesUtil
   {
     DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
     Element rootElement = XMLUtil.loadRootElement(documentBuilder, new File(folder, ".project"));
-  
+
     final AtomicReference<String> projectName = new AtomicReference<String>();
     XMLUtil.handleChildElements(rootElement, new ElementHandler()
     {
@@ -65,7 +65,7 @@ public final class ResourcesUtil
         }
       }
     });
-  
+
     return projectName.get();
   }
 
@@ -75,14 +75,14 @@ public final class ResourcesUtil
     {
       return 0;
     }
-  
+
     final AtomicInteger count = new AtomicInteger();
     org.eclipse.core.resources.ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
     {
       public void run(IProgressMonitor monitor) throws CoreException
       {
         SubMonitor progress = SubMonitor.convert(monitor, projectLocations.size()).detectCancelation();
-  
+
         try
         {
           for (File folder : projectLocations)
@@ -103,7 +103,7 @@ public final class ResourcesUtil
         }
       }
     }, monitor);
-  
+
     return count.get();
   }
 
@@ -113,7 +113,7 @@ public final class ResourcesUtil
     if (name != null && name.length() != 0)
     {
       File location = folder.getCanonicalFile();
-  
+
       IWorkspace workspace = org.eclipse.core.resources.ResourcesPlugin.getWorkspace();
       IProject project = workspace.getRoot().getProject(name);
       if (project.exists())
@@ -128,25 +128,25 @@ public final class ResourcesUtil
       else
       {
         monitor.setTaskName("Importing project " + name);
-  
+
         Path locationPath = new Path(location.getAbsolutePath());
         if (Platform.getLocation().isPrefixOf(locationPath))
         {
           locationPath = null;
         }
-  
+
         IProjectDescription projectDescription = workspace.newProjectDescription(name);
         projectDescription.setLocation(locationPath);
-  
+
         project.create(projectDescription, monitor);
       }
-  
+
       if (!project.isOpen())
       {
         project.open(monitor);
       }
     }
-  
+
     return true;
   }
 
@@ -164,18 +164,18 @@ public final class ResourcesUtil
     {
       throw new OperationCanceledException();
     }
-  
+
     IProject project = ResourcesFactory.eINSTANCE.loadProject(folder);
     if (matchesPredicates(project, predicates))
     {
       results.put(project, folder);
-  
+
       if (!locateNestedProjects)
       {
         return;
       }
     }
-  
+
     File[] listFiles = folder.listFiles();
     if (listFiles != null)
     {

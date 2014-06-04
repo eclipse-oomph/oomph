@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.TextModification;
 
@@ -17,7 +18,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 import java.util.Collection;
@@ -36,7 +36,7 @@ import java.util.Collection;
  *
  * @generated
  */
-public class TextModificationImpl extends MinimalEObjectImpl.Container implements TextModification
+public class TextModificationImpl extends ModelElementImpl implements TextModification
 {
   /**
    * The default value of the '{@link #getPattern() <em>Pattern</em>}' attribute.

@@ -146,12 +146,12 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
       {
         throw new OperationCanceledException();
       }
-  
+
       if (severity == IStatus.ERROR)
       {
         throw new CoreException(status);
       }
-  
+
       if (!status.isOK())
       {
         log(status);

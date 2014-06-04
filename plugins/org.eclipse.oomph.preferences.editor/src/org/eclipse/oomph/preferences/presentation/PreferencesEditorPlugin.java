@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.preferences.presentation;
 
+import org.eclipse.oomph.base.provider.BaseEditPlugin;
+
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -46,7 +48,7 @@ public final class PreferencesEditorPlugin extends EMFPlugin
    */
   public PreferencesEditorPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { BaseEditPlugin.INSTANCE, });
   }
 
   /**

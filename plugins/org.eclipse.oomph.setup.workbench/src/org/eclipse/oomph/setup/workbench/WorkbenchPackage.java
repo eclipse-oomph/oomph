@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.workbench;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -187,13 +188,22 @@ public interface WorkbenchPackage extends EPackage
   int FILE_MAPPING = 1;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FILE_MAPPING__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>File Pattern</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FILE_MAPPING__FILE_PATTERN = 0;
+  int FILE_MAPPING__FILE_PATTERN = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Default Editor ID</b></em>' attribute.
@@ -202,7 +212,7 @@ public interface WorkbenchPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FILE_MAPPING__DEFAULT_EDITOR_ID = 1;
+  int FILE_MAPPING__DEFAULT_EDITOR_ID = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Editors</b></em>' containment reference list.
@@ -211,7 +221,7 @@ public interface WorkbenchPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FILE_MAPPING__EDITORS = 2;
+  int FILE_MAPPING__EDITORS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>File Mapping</em>' class.
@@ -220,7 +230,7 @@ public interface WorkbenchPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FILE_MAPPING_FEATURE_COUNT = 3;
+  int FILE_MAPPING_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.workbench.impl.FileEditorImpl <em>File Editor</em>}' class.
@@ -233,13 +243,22 @@ public interface WorkbenchPackage extends EPackage
   int FILE_EDITOR = 2;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FILE_EDITOR__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FILE_EDITOR__ID = 0;
+  int FILE_EDITOR__ID = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>File Editor</em>' class.
@@ -248,7 +267,7 @@ public interface WorkbenchPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FILE_EDITOR_FEATURE_COUNT = 1;
+  int FILE_EDITOR_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.workbench.impl.KeyBindingTaskImpl <em>Key Binding Task</em>}' class.
@@ -424,13 +443,22 @@ public interface WorkbenchPackage extends EPackage
   int KEY_BINDING_CONTEXT = 4;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int KEY_BINDING_CONTEXT__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int KEY_BINDING_CONTEXT__ID = 0;
+  int KEY_BINDING_CONTEXT__ID = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Key Binding Context</em>' class.
@@ -439,7 +467,7 @@ public interface WorkbenchPackage extends EPackage
    * @generated
    * @ordered
    */
-  int KEY_BINDING_CONTEXT_FEATURE_COUNT = 1;
+  int KEY_BINDING_CONTEXT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.workbench.impl.CommandParameterImpl <em>Command Parameter</em>}' class.
@@ -452,13 +480,22 @@ public interface WorkbenchPackage extends EPackage
   int COMMAND_PARAMETER = 5;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMMAND_PARAMETER__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COMMAND_PARAMETER__ID = 0;
+  int COMMAND_PARAMETER__ID = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -467,7 +504,7 @@ public interface WorkbenchPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMMAND_PARAMETER__VALUE = 1;
+  int COMMAND_PARAMETER__VALUE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Command Parameter</em>' class.
@@ -476,7 +513,7 @@ public interface WorkbenchPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMMAND_PARAMETER_FEATURE_COUNT = 2;
+  int COMMAND_PARAMETER_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.workbench.FileAssociationsTask <em>File Associations Task</em>}'.

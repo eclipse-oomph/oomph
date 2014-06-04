@@ -29,7 +29,7 @@ public final class HexUtil
     {
       return null;
     }
-  
+
     return bytesToHex(bs, 0, bs.length);
   }
 

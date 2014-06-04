@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.preferences.provider;
 
+import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.preferences.PreferenceItem;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.PreferencesPackage;
@@ -20,14 +21,8 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
@@ -39,8 +34,7 @@ import java.util.List;
  * <!-- end-user-doc -->
  * @generated
  */
-public class PreferenceItemItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-    ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+public class PreferenceItemItemProvider extends ModelElementItemProvider
 {
   /**
    * This constructs an instance from a factory and a notifier.
@@ -178,6 +172,17 @@ public class PreferenceItemItemProvider extends ItemProviderAdapter implements I
         getString("_UI_PreferenceItem_ancestor_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_ancestor_feature", "_UI_PreferenceItem_type"),
         PreferencesPackage.Literals.PREFERENCE_ITEM__ANCESTOR, false, false, false, null, null, null));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean hasChildren(Object object)
+  {
+    return hasChildren(object, false);
   }
 
   /**

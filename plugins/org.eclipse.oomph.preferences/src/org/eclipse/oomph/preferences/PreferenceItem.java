@@ -10,8 +10,9 @@
  */
 package org.eclipse.oomph.preferences;
 
+import org.eclipse.oomph.base.ModelElement;
+
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +35,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model abstract="true"
  * @generated
  */
-public interface PreferenceItem extends EObject
+public interface PreferenceItem extends ModelElement
 {
   /**
    * Returns the value of the '<em><b>Root</b></em>' reference.

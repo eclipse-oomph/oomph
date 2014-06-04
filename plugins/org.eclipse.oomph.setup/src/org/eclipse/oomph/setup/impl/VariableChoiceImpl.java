@@ -10,13 +10,13 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.VariableChoice;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class VariableChoiceImpl extends MinimalEObjectImpl.Container implements VariableChoice
+public class VariableChoiceImpl extends ModelElementImpl implements VariableChoice
 {
   /**
    * The default value of the '{@link #getValue() <em>Value</em>}' attribute.

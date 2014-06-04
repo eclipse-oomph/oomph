@@ -96,7 +96,9 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
     String oldPattern = pattern;
     pattern = newPattern;
     if (eNotificationRequired())
+    {
       eNotify(new ENotificationImpl(this, Notification.SET, PredicatesPackage.COMMENT_PREDICATE__PATTERN, oldPattern, pattern));
+    }
   }
 
   /**
@@ -173,7 +175,10 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
   @Override
   public String toString()
   {
-    if (eIsProxy()) return super.toString();
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (pattern: ");

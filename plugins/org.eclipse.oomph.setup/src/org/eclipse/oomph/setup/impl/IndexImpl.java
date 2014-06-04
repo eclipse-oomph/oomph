@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProjectCatalog;
@@ -19,7 +20,6 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -39,7 +39,7 @@ import java.util.Collection;
  *
  * @generated
  */
-public class IndexImpl extends MinimalEObjectImpl.Container implements Index
+public class IndexImpl extends ModelElementImpl implements Index
 {
   /**
    * The cached value of the '{@link #getProductCatalogs() <em>Product Catalogs</em>}' containment reference list.

@@ -17,14 +17,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" lowerBound="1"
         upperBound="-1" eType="#//FileMapping" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FileMapping">
+  <eClassifiers xsi:type="ecore:EClass" name="FileMapping" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePattern" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultEditorID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="editors" upperBound="-1"
         eType="#//FileEditor" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FileEditor">
+  <eClassifiers xsi:type="ecore:EClass" name="FileEditor" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
@@ -53,7 +53,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandParameters" upperBound="-1"
         eType="#//CommandParameter" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="KeyBindingContext">
+  <eClassifiers xsi:type="ecore:EClass" name="KeyBindingContext" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="org.eclipse.ui.contexts.window">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -62,7 +62,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommandParameter">
+  <eClassifiers xsi:type="ecore:EClass" name="CommandParameter" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>

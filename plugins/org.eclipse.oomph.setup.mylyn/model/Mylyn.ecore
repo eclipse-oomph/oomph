@@ -51,10 +51,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="buildPlans" lowerBound="1"
         upperBound="-1" eType="#//BuildPlan" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BuildPlan">
+  <eClassifiers xsi:type="ecore:EClass" name="BuildPlan" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Query">
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="task" eType="#//MylynQueriesTask"
         eOpposite="#//MylynQueriesTask/queries"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="summary" lowerBound="1"

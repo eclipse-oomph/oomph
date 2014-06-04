@@ -10,13 +10,13 @@
  */
 package org.eclipse.oomph.setup.workbench.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.workbench.KeyBindingContext;
 import org.eclipse.oomph.setup.workbench.WorkbenchPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class KeyBindingContextImpl extends MinimalEObjectImpl.Container implements KeyBindingContext
+public class KeyBindingContextImpl extends ModelElementImpl implements KeyBindingContext
 {
   /**
    * The default value of the '{@link #getID() <em>ID</em>}' attribute.

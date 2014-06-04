@@ -310,13 +310,22 @@ public interface SetupPackage extends EPackage
   int SETUP_TASK_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SETUP_TASK_CONTAINER__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SETUP_TASK_CONTAINER__SETUP_TASKS = 0;
+  int SETUP_TASK_CONTAINER__SETUP_TASKS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Task Container</em>' class.
@@ -325,7 +334,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SETUP_TASK_CONTAINER_FEATURE_COUNT = 1;
+  int SETUP_TASK_CONTAINER_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ScopeImpl <em>Scope</em>}' class.
@@ -336,6 +345,15 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   int SCOPE = 2;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCOPE__ANNOTATIONS = SETUP_TASK_CONTAINER__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -381,6 +399,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int SCOPE_FEATURE_COUNT = SETUP_TASK_CONTAINER_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.UserImpl <em>User</em>}' class.
@@ -479,7 +506,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX__PRODUCT_CATALOGS = 0;
+  int INDEX__PRODUCT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Project Catalogs</b></em>' containment reference list.
@@ -488,7 +515,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX__PROJECT_CATALOGS = 1;
+  int INDEX__PROJECT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Index</em>' class.
@@ -497,7 +524,16 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX_FEATURE_COUNT = 2;
+  int INDEX_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATALOG_SELECTION__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Product Catalogs</b></em>' reference list.
@@ -506,7 +542,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CATALOG_SELECTION__PRODUCT_CATALOGS = 0;
+  int CATALOG_SELECTION__PRODUCT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Project Catalogs</b></em>' reference list.
@@ -515,7 +551,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CATALOG_SELECTION__PROJECT_CATALOGS = 1;
+  int CATALOG_SELECTION__PROJECT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Default Product Versions</b></em>' map.
@@ -524,7 +560,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CATALOG_SELECTION__DEFAULT_PRODUCT_VERSIONS = 2;
+  int CATALOG_SELECTION__DEFAULT_PRODUCT_VERSIONS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Default Streams</b></em>' map.
@@ -533,7 +569,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CATALOG_SELECTION__DEFAULT_STREAMS = 3;
+  int CATALOG_SELECTION__DEFAULT_STREAMS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Catalog Selection</em>' class.
@@ -542,7 +578,16 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CATALOG_SELECTION_FEATURE_COUNT = 4;
+  int CATALOG_SELECTION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_CATALOG__ANNOTATIONS = SCOPE__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -608,6 +653,15 @@ public interface SetupPackage extends EPackage
   int PRODUCT_CATALOG_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT__ANNOTATIONS = SCOPE__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -669,6 +723,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int PRODUCT_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_VERSION__ANNOTATIONS = SCOPE__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -735,6 +798,15 @@ public interface SetupPackage extends EPackage
   int PROJECT_CONTAINER = 8;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_CONTAINER__ANNOTATIONS = SCOPE__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -787,6 +859,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int PROJECT_CONTAINER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_CATALOG__ANNOTATIONS = PROJECT_CONTAINER__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -850,6 +931,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int PROJECT_CATALOG_FEATURE_COUNT = PROJECT_CONTAINER_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT__ANNOTATIONS = PROJECT_CONTAINER__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -951,6 +1041,15 @@ public interface SetupPackage extends EPackage
   int PROJECT_FEATURE_COUNT = PROJECT_CONTAINER_FEATURE_COUNT + 5;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STREAM__ANNOTATIONS = SCOPE__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1003,6 +1102,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int STREAM_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int USER__ANNOTATIONS = SCOPE__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -1068,13 +1176,22 @@ public interface SetupPackage extends EPackage
   int USER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ATTRIBUTE_RULE__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Attribute URI</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_RULE__ATTRIBUTE_URI = 0;
+  int ATTRIBUTE_RULE__ATTRIBUTE_URI = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1083,7 +1200,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_RULE__VALUE = 1;
+  int ATTRIBUTE_RULE__VALUE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Attribute Rule</em>' class.
@@ -1092,7 +1209,16 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_RULE_FEATURE_COUNT = 2;
+  int ATTRIBUTE_RULE_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTALLATION__ANNOTATIONS = SCOPE__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -1246,6 +1372,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int INSTALLATION_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORKSPACE__ANNOTATIONS = SCOPE__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -1673,13 +1808,22 @@ public interface SetupPackage extends EPackage
   int VARIABLE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_CHOICE__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_CHOICE__VALUE = 0;
+  int VARIABLE_CHOICE__VALUE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -1688,7 +1832,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_CHOICE__LABEL = 1;
+  int VARIABLE_CHOICE__LABEL = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Variable Choice</em>' class.
@@ -1697,7 +1841,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_CHOICE_FEATURE_COUNT = 2;
+  int VARIABLE_CHOICE_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.StringSubstitutionTaskImpl <em>String Substitution Task</em>}' class.
@@ -2611,13 +2755,22 @@ public interface SetupPackage extends EPackage
   int TEXT_MODIFY_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEXT_MODIFICATION__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Pattern</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TEXT_MODIFICATION__PATTERN = 0;
+  int TEXT_MODIFICATION__PATTERN = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Substitutions</b></em>' attribute list.
@@ -2626,7 +2779,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TEXT_MODIFICATION__SUBSTITUTIONS = 1;
+  int TEXT_MODIFICATION__SUBSTITUTIONS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Text Modification</em>' class.
@@ -2635,7 +2788,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TEXT_MODIFICATION_FEATURE_COUNT = 2;
+  int TEXT_MODIFICATION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ProductToProductVersionMapEntryImpl <em>Product To Product Version Map Entry</em>}' class.

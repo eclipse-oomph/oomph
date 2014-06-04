@@ -3,7 +3,8 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.preferences/src" creationIcons="false"
     modelPluginID="org.eclipse.oomph.preferences" modelName="Preferences" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
-    copyrightFields="false" operationReflection="true" cleanup="true">
+    copyrightFields="false" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
+    operationReflection="true" cleanup="true">
   <foreignModel>Preferences.ecore</foreignModel>
   <genPackages prefix="Preferences" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       dataTypeConverters="true" multipleEditorPages="false" ecorePackage="Preferences.ecore#/">

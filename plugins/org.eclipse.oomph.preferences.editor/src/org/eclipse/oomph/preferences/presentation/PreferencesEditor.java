@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.preferences.presentation;
 
+import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.PreferencesPackage;
@@ -700,6 +701,7 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
 
     adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new PreferencesItemProviderAdapterFactory());
+    adapterFactory.addAdapterFactory(new BaseItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
     // Create the command stack that will notify this editor as commands are executed.

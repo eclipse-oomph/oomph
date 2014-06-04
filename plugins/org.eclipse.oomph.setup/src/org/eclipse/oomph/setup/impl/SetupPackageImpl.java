@@ -1712,7 +1712,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
 
     // Add supertypes to classes
     setupTaskEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    setupTaskContainerEClass.getESuperTypes().add(theBasePackage.getModelElement());
     scopeEClass.getESuperTypes().add(getSetupTaskContainer());
+    indexEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    catalogSelectionEClass.getESuperTypes().add(theBasePackage.getModelElement());
     productCatalogEClass.getESuperTypes().add(getScope());
     productEClass.getESuperTypes().add(getScope());
     productVersionEClass.getESuperTypes().add(getScope());
@@ -1721,6 +1724,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     projectEClass.getESuperTypes().add(getProjectContainer());
     streamEClass.getESuperTypes().add(getScope());
     userEClass.getESuperTypes().add(getScope());
+    attributeRuleEClass.getESuperTypes().add(theBasePackage.getModelElement());
     installationEClass.getESuperTypes().add(getScope());
     installationTaskEClass.getESuperTypes().add(getSetupTask());
     workspaceEClass.getESuperTypes().add(getScope());
@@ -1728,6 +1732,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     compoundTaskEClass.getESuperTypes().add(getSetupTask());
     compoundTaskEClass.getESuperTypes().add(getSetupTaskContainer());
     variableTaskEClass.getESuperTypes().add(getSetupTask());
+    variableChoiceEClass.getESuperTypes().add(theBasePackage.getModelElement());
     stringSubstitutionTaskEClass.getESuperTypes().add(getSetupTask());
     redirectionTaskEClass.getESuperTypes().add(getSetupTask());
     eclipseIniTaskEClass.getESuperTypes().add(getSetupTask());
@@ -1736,6 +1741,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     resourceCopyTaskEClass.getESuperTypes().add(getSetupTask());
     resourceCreationTaskEClass.getESuperTypes().add(getSetupTask());
     textModifyTaskEClass.getESuperTypes().add(getSetupTask());
+    textModificationEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(setupTaskEClass, SetupTask.class, "SetupTask", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2142,7 +2148,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${absolute.workspace.location}", "label",
         "Located in the specified absolute folder location" });
     addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${installation.location/ws}", "label",
-        "Located in the installation location folder with the name \'ws\'" });
+        "Located in a folder named \'ws\' within the installation folder" });
   }
 
 } // SetupPackageImpl

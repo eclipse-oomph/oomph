@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.preferences.util;
 
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.preferences.PreferenceItem;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesPackage;
@@ -101,6 +102,12 @@ public class PreferencesAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseModelElement(ModelElement object)
+    {
+      return createModelElementAdapter();
+    }
+
+    @Override
     public Adapter defaultCase(EObject object)
     {
       return createEObjectAdapter();
@@ -162,6 +169,21 @@ public class PreferencesAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createPropertyAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.base.ModelElement <em>Model Element</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.base.ModelElement
+   * @generated
+   */
+  public Adapter createModelElementAdapter()
   {
     return null;
   }

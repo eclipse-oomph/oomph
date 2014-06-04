@@ -11,8 +11,8 @@
 package org.eclipse.oomph.setup.maven.impl;
 
 import org.eclipse.oomph.resources.ResourcesFactory;
-import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.ResourcesFactory.ProjectDescriptionFactory;
+import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;

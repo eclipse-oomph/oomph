@@ -129,6 +129,10 @@ public class MylynSwitch<T> extends Switch<T>
         T result = caseBuildPlan(buildPlan);
         if (result == null)
         {
+          result = caseModelElement(buildPlan);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -137,6 +141,10 @@ public class MylynSwitch<T> extends Switch<T>
       {
         Query query = (Query)theEObject;
         T result = caseQuery(query);
+        if (result == null)
+        {
+          result = caseModelElement(query);
+        }
         if (result == null)
         {
           result = defaultCase(theEObject);

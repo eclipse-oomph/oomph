@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.preferences.util;
 
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.preferences.PreferenceItem;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesPackage;
@@ -88,6 +89,10 @@ public class PreferencesSwitch<T> extends Switch<T>
         T result = casePreferenceItem(preferenceItem);
         if (result == null)
         {
+          result = caseModelElement(preferenceItem);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -102,6 +107,10 @@ public class PreferencesSwitch<T> extends Switch<T>
         }
         if (result == null)
         {
+          result = caseModelElement(preferenceNode);
+        }
+        if (result == null)
+        {
           result = defaultCase(theEObject);
         }
         return result;
@@ -113,6 +122,10 @@ public class PreferencesSwitch<T> extends Switch<T>
         if (result == null)
         {
           result = casePreferenceItem(property);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(property);
         }
         if (result == null)
         {
@@ -169,6 +182,22 @@ public class PreferencesSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseProperty(Property object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Model Element</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Model Element</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseModelElement(ModelElement object)
   {
     return null;
   }

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.mylyn;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -368,13 +369,22 @@ public interface MylynPackage extends EPackage
   int BUILD_PLAN = 2;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BUILD_PLAN__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BUILD_PLAN__NAME = 0;
+  int BUILD_PLAN__NAME = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Build Plan</em>' class.
@@ -383,7 +393,7 @@ public interface MylynPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BUILD_PLAN_FEATURE_COUNT = 1;
+  int BUILD_PLAN_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.mylyn.impl.QueryImpl <em>Query</em>}' class.
@@ -396,13 +406,22 @@ public interface MylynPackage extends EPackage
   int QUERY = 3;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int QUERY__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Task</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int QUERY__TASK = 0;
+  int QUERY__TASK = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Summary</b></em>' attribute.
@@ -411,7 +430,7 @@ public interface MylynPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUERY__SUMMARY = 1;
+  int QUERY__SUMMARY = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>URL</b></em>' attribute.
@@ -420,7 +439,7 @@ public interface MylynPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUERY__URL = 2;
+  int QUERY__URL = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Attributes</b></em>' map.
@@ -429,7 +448,7 @@ public interface MylynPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUERY__ATTRIBUTES = 3;
+  int QUERY__ATTRIBUTES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Query</em>' class.
@@ -438,7 +457,7 @@ public interface MylynPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUERY_FEATURE_COUNT = 4;
+  int QUERY_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.mylyn.impl.QueryAttributeImpl <em>Query Attribute</em>}' class.

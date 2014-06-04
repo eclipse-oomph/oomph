@@ -10,13 +10,13 @@
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.mylyn.BuildPlan;
 import org.eclipse.oomph.setup.mylyn.MylynPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class BuildPlanImpl extends MinimalEObjectImpl.Container implements BuildPlan
+public class BuildPlanImpl extends ModelElementImpl implements BuildPlan
 {
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -25,7 +26,6 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -48,7 +48,7 @@ import java.util.Collection;
  *
  * @generated
  */
-public class CatalogSelectionImpl extends MinimalEObjectImpl.Container implements CatalogSelection
+public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSelection
 {
   /**
    * The cached value of the '{@link #getProductCatalogs() <em>Product Catalogs</em>}' reference list.

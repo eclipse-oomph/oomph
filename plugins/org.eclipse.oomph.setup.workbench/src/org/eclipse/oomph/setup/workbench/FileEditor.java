@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.workbench;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.oomph.base.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface FileEditor extends EObject
+public interface FileEditor extends ModelElement
 {
   /**
    * Returns the value of the '<em><b>ID</b></em>' attribute.

@@ -10,8 +10,9 @@
  */
 package org.eclipse.oomph.setup;
 
+import org.eclipse.oomph.base.ModelElement;
+
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface AttributeRule extends EObject
+public interface AttributeRule extends ModelElement
 {
   /**
    * Returns the value of the '<em><b>Attribute URI</b></em>' attribute.

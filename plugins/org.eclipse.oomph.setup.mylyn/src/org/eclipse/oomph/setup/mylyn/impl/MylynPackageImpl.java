@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.mylyn.BuildPlan;
 import org.eclipse.oomph.setup.mylyn.MylynBuildsTask;
@@ -448,6 +449,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
 
     // Obtain other dependent packages
     SetupPackage theSetupPackage = (SetupPackage)EPackage.Registry.INSTANCE.getEPackage(SetupPackage.eNS_URI);
+    BasePackage theBasePackage = (BasePackage)EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI);
 
     // Create type parameters
 
@@ -456,6 +458,8 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     // Add supertypes to classes
     mylynQueriesTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
     mylynBuildsTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    buildPlanEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    queryEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(mylynQueriesTaskEClass, MylynQueriesTask.class, "MylynQueriesTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

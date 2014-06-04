@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.setup.mylyn.MylynPackage;
 import org.eclipse.oomph.setup.mylyn.MylynQueriesTask;
 import org.eclipse.oomph.setup.mylyn.Query;
@@ -21,7 +22,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -42,7 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class QueryImpl extends MinimalEObjectImpl.Container implements Query
+public class QueryImpl extends ModelElementImpl implements Query
 {
   /**
    * The default value of the '{@link #getSummary() <em>Summary</em>}' attribute.

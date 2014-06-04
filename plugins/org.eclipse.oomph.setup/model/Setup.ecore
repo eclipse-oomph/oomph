@@ -45,7 +45,8 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SetupTaskContainer" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="SetupTaskContainer" abstract="true"
+      eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="setupTasks" upperBound="-1"
         eType="#//SetupTask" containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -64,7 +65,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Index">
+  <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="productCatalogs" upperBound="-1"
         eType="#//ProductCatalog" containment="true" eOpposite="#//ProductCatalog/index"
         eKeys="#//Scope/name">
@@ -80,7 +81,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CatalogSelection">
+  <eClassifiers xsi:type="ecore:EClass" name="CatalogSelection" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="productCatalogs" upperBound="-1"
         eType="#//ProductCatalog" eKeys="#//Scope/name">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -182,7 +183,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeRule">
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeRule" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeURI" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -296,7 +297,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VariableChoice">
+  <eClassifiers xsi:type="ecore:EClass" name="VariableChoice" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
     </eStructuralFeatures>
@@ -360,7 +361,7 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="encoding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TextModification">
+  <eClassifiers xsi:type="ecore:EClass" name="TextModification" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="substitutions" upperBound="-1"

@@ -54,7 +54,6 @@
       </editor>
    </extension>
 
-
    <extension point="org.eclipse.ui.popupMenus">
       <objectContribution
             id="org.eclipse.oomph.preferences.action.OpenEditor"

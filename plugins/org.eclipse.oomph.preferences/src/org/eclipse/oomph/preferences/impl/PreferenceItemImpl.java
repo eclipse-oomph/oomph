@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.preferences.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.preferences.PreferenceItem;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesPackage;
@@ -19,7 +20,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -41,7 +41,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @generated
  */
-public abstract class PreferenceItemImpl extends MinimalEObjectImpl.Container implements PreferenceItem
+public abstract class PreferenceItemImpl extends ModelElementImpl implements PreferenceItem
 {
   /**
    * The default value of the '{@link #getAbsolutePath() <em>Absolute Path</em>}' attribute.

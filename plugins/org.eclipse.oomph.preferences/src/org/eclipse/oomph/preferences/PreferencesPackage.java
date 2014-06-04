@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.preferences;
 
+import org.eclipse.oomph.base.BasePackage;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -78,13 +80,22 @@ public interface PreferencesPackage extends EPackage
   int PREFERENCE_ITEM = 0;
 
   /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREFERENCE_ITEM__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
    * The feature id for the '<em><b>Root</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM__ROOT = 0;
+  int PREFERENCE_ITEM__ROOT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Scope</b></em>' reference.
@@ -93,7 +104,7 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM__SCOPE = 1;
+  int PREFERENCE_ITEM__SCOPE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Absolute Path</b></em>' attribute.
@@ -102,7 +113,7 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM__ABSOLUTE_PATH = 2;
+  int PREFERENCE_ITEM__ABSOLUTE_PATH = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -111,7 +122,7 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM__NAME = 3;
+  int PREFERENCE_ITEM__NAME = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Relative Path</b></em>' attribute.
@@ -120,7 +131,7 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM__RELATIVE_PATH = 4;
+  int PREFERENCE_ITEM__RELATIVE_PATH = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Ancestor</b></em>' reference.
@@ -129,7 +140,7 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM__ANCESTOR = 5;
+  int PREFERENCE_ITEM__ANCESTOR = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Preference Item</em>' class.
@@ -138,7 +149,16 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM_FEATURE_COUNT = 6;
+  int PREFERENCE_ITEM_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREFERENCE_ITEM___GET_ANNOTATION__STRING = BasePackage.MODEL_ELEMENT___GET_ANNOTATION__STRING;
 
   /**
    * The operation id for the '<em>Get Parent</em>' operation.
@@ -147,7 +167,7 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM___GET_PARENT = 0;
+  int PREFERENCE_ITEM___GET_PARENT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
   /**
    * The number of operations of the '<em>Preference Item</em>' class.
@@ -156,7 +176,7 @@ public interface PreferencesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREFERENCE_ITEM_OPERATION_COUNT = 1;
+  int PREFERENCE_ITEM_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.preferences.impl.PreferenceNodeImpl <em>Preference Node</em>}' class.
@@ -167,6 +187,15 @@ public interface PreferencesPackage extends EPackage
    * @generated
    */
   int PREFERENCE_NODE = 1;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREFERENCE_NODE__ANNOTATIONS = PREFERENCE_ITEM__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Root</b></em>' reference.
@@ -268,6 +297,15 @@ public interface PreferencesPackage extends EPackage
   int PREFERENCE_NODE_FEATURE_COUNT = PREFERENCE_ITEM_FEATURE_COUNT + 4;
 
   /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREFERENCE_NODE___GET_ANNOTATION__STRING = PREFERENCE_ITEM___GET_ANNOTATION__STRING;
+
+  /**
    * The operation id for the '<em>Get Parent</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -339,6 +377,15 @@ public interface PreferencesPackage extends EPackage
    * @generated
    */
   int PROPERTY = 2;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPERTY__ANNOTATIONS = PREFERENCE_ITEM__ANNOTATIONS;
 
   /**
    * The feature id for the '<em><b>Root</b></em>' reference.
@@ -429,6 +476,15 @@ public interface PreferencesPackage extends EPackage
    * @ordered
    */
   int PROPERTY_FEATURE_COUNT = PREFERENCE_ITEM_FEATURE_COUNT + 3;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPERTY___GET_ANNOTATION__STRING = PREFERENCE_ITEM___GET_ANNOTATION__STRING;
 
   /**
    * The operation id for the '<em>Get Parent</em>' operation.
