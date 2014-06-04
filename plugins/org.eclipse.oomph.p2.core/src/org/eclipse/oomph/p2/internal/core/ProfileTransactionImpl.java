@@ -22,6 +22,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -35,6 +36,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.repository.AuthenticationFailedException;
 import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
@@ -73,6 +75,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,6 +121,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   private boolean offline;
 
+  private boolean mirrors;
+
   private boolean committed;
 
   public ProfileTransactionImpl(Profile profile)
@@ -148,6 +153,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
 
     iuProperties.putAll(cleanIUProperties);
+
+    mirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
   }
 
   public Profile getProfile()
@@ -253,6 +260,17 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return this;
   }
 
+  public boolean isMirrors()
+  {
+    return mirrors;
+  }
+
+  public ProfileTransaction setMirrors(boolean mirrors)
+  {
+    this.mirrors = mirrors;
+    return this;
+  }
+
   public boolean isDirty()
   {
     if (removeAll)
@@ -323,18 +341,47 @@ public class ProfileTransactionImpl implements ProfileTransaction
       monitor = new NullProgressMonitor();
     }
 
-    List<Runnable> cleanupRunnables = new ArrayList<Runnable>();
+    List<Runnable> cleanup = new ArrayList<Runnable>();
 
-    if (isOffline())
+    if (offline)
     {
-      registerCachingTransport(cleanupRunnables);
+      registerCachingTransport(cleanup);
+    }
+
+    final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
+    if (mirrors != wasMirrors)
+    {
+      try
+      {
+        final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED");
+        ReflectUtil.setValue(mirrorsEnabledField, null, mirrors, true);
+
+        cleanup.add(new Runnable()
+        {
+          public void run()
+          {
+            try
+            {
+              ReflectUtil.setValue(mirrorsEnabledField, null, wasMirrors, true);
+            }
+            catch (Throwable ex)
+            {
+              // Ignore
+            }
+          }
+        });
+      }
+      catch (Throwable ex)
+      {
+        // Ignore
+      }
     }
 
     try
     {
       List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
       Set<URI> artifactURIs = new HashSet<URI>();
-      URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanupRunnables, monitor);
+      URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, monitor);
 
       ProvisioningContext provisioningContext = commitContext.createProvisioningContext(this);
       provisioningContext.setMetadataRepositories(metadataURIs);
@@ -376,7 +423,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
     finally
     {
-      for (Runnable runnable : cleanupRunnables)
+      for (Runnable runnable : cleanup)
       {
         try
         {
@@ -390,7 +437,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
   }
 
-  private Transport registerCachingTransport(List<Runnable> cleanupRunnables)
+  private Transport registerCachingTransport(List<Runnable> cleanup)
   {
     final IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
     final Transport oldTransport = (Transport)provisioningAgent.getService(Transport.SERVICE_NAME);
@@ -398,7 +445,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     final CachingTransport cachingTransport = new CachingTransport(oldTransport);
     provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
 
-    cleanupRunnables.add(new Runnable()
+    cleanup.add(new Runnable()
     {
       public void run()
       {
@@ -410,8 +457,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return oldTransport;
   }
 
-  private URI[] collectRepositories(List<IMetadataRepository> metadataRepositories, Set<URI> artifactURIs, List<Runnable> cleanupRunnables,
-      IProgressMonitor monitor) throws CoreException
+  private URI[] collectRepositories(List<IMetadataRepository> metadataRepositories, Set<URI> artifactURIs, List<Runnable> cleanup, IProgressMonitor monitor)
+      throws CoreException
   {
     Agent agent = profile.getAgent();
     final IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
@@ -432,7 +479,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
         if (!knownRepositories.contains(url))
         {
-          cleanupRunnables.add(new Runnable()
+          cleanup.add(new Runnable()
           {
             public void run()
             {

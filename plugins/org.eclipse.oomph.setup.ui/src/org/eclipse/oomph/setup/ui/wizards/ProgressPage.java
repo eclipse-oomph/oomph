@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
-import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.setup.Installation;
@@ -90,6 +89,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ProgressPage extends SetupWizardPage
 {
+  public static final String PROP_SETUP_CONFIRM_SKIP = "oomph.setup.confirm.skip";
+
+  public static final String PROP_SETUP_OFFLINE_STARTUP = "oomph.setup.offline.startup";
+
+  public static final String PROP_SETUP_MIRRORS_STARTUP = "oomph.setup.mirrors.startup";
+
   private static final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm:ss");
 
   private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
@@ -530,12 +535,9 @@ public class ProgressPage extends SetupWizardPage
       }
 
       command.add("-vmargs");
-      command.add("-D" + SetupProperties.PROP_SETUP_CONFIRM_SKIP + "=true");
-
-      if (performer.isOffline())
-      {
-        command.add("-D" + SetupProperties.PROP_SETUP_OFFLINE_STARTUP + "=true");
-      }
+      command.add("-D" + PROP_SETUP_CONFIRM_SKIP + "=true");
+      command.add("-D" + PROP_SETUP_OFFLINE_STARTUP + "=" + performer.isOffline());
+      command.add("-D" + PROP_SETUP_MIRRORS_STARTUP + "=" + performer.isMirrors());
 
       ProcessBuilder builder = new ProcessBuilder(command);
       builder.start();

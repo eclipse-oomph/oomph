@@ -58,6 +58,8 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
 
   private boolean offline;
 
+  private boolean mirrors;
+
   private Set<String> restartReasons = new LinkedHashSet<String>();
 
   private URIConverter uriConverter;
@@ -128,14 +130,24 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
     return offline;
   }
 
-  public boolean isPerforming()
-  {
-    return performing;
-  }
-
   public void setOffline(boolean offline)
   {
     this.offline = offline;
+  }
+
+  public boolean isMirrors()
+  {
+    return mirrors;
+  }
+
+  public void setMirrors(boolean mirrors)
+  {
+    this.mirrors = mirrors;
+  }
+
+  public boolean isPerforming()
+  {
+    return performing;
   }
 
   public boolean isRestartNeeded()

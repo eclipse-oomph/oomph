@@ -585,10 +585,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
     };
 
-    if (context.isOffline())
-    {
-      transaction.setOffline(true);
-    }
+    transaction.setOffline(context.isOffline());
+    transaction.setMirrors(context.isMirrors());
 
     boolean profileChanged = transaction.commit(commitContext, monitor);
     if (profileChanged && context.getTrigger() != Trigger.BOOTSTRAP)

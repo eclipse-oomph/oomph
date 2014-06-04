@@ -36,6 +36,17 @@ public final class PropertiesUtil
   {
   }
 
+  public static Boolean getBoolean(String key)
+  {
+    String property = getProperty(key);
+    if (property != null)
+    {
+      return "true".equalsIgnoreCase(property);
+    }
+
+    return null;
+  }
+
   public static boolean isProperty(String key)
   {
     String property = getProperty(key);

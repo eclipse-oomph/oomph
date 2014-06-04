@@ -136,6 +136,8 @@ public class TargletContainer extends AbstractBundleContainer
 
   private static final ThreadLocal<Boolean> OFFLINE = new ThreadLocal<Boolean>();
 
+  private static final ThreadLocal<Boolean> MIRRORS = new ThreadLocal<Boolean>();
+
   private static final String FOLLOW_ARTIFACT_REPOSITORY_REFERENCES = "org.eclipse.equinox.p2.director.followArtifactRepositoryReferences";
 
   private static final String FEATURE_SUFFIX = ".feature.group";
@@ -571,12 +573,13 @@ public class TargletContainer extends AbstractBundleContainer
     }
   }
 
-  public void forceUpdate(boolean offline, IProgressMonitor monitor) throws CoreException
+  public void forceUpdate(boolean offline, boolean mirrors, IProgressMonitor monitor) throws CoreException
   {
     try
     {
       FORCE_UPDATE.set(Boolean.TRUE);
       OFFLINE.set(offline ? Boolean.TRUE : false);
+      MIRRORS.set(mirrors ? Boolean.TRUE : false);
 
       IStatus status = target.resolve(monitor);
       if (!status.isOK())
@@ -586,6 +589,7 @@ public class TargletContainer extends AbstractBundleContainer
     }
     finally
     {
+      MIRRORS.remove();
       OFFLINE.remove();
       FORCE_UPDATE.remove();
     }
@@ -616,12 +620,10 @@ public class TargletContainer extends AbstractBundleContainer
     TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild());
 
     final Profile profile = descriptor.startUpdateTransaction(environmentProperties, nlProperty, digest, progress.newChild());
-    ProfileTransaction transaction = profile.change().setRemoveExistingInstallableUnits(true);
 
-    if (OFFLINE.get() == Boolean.TRUE)
-    {
-      transaction.setOffline(true);
-    }
+    ProfileTransaction transaction = profile.change().setRemoveExistingInstallableUnits(true);
+    transaction.setOffline(OFFLINE.get() == Boolean.TRUE);
+    transaction.setMirrors(MIRRORS.get() == Boolean.TRUE);
 
     try
     {

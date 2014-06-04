@@ -55,6 +55,10 @@ public interface ProfileTransaction
 
   public ProfileTransaction setOffline(boolean offline);
 
+  public boolean isMirrors();
+
+  public ProfileTransaction setMirrors(boolean mirrors);
+
   public boolean isDirty();
 
   public boolean commit() throws CoreException;

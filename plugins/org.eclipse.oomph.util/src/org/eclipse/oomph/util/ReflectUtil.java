@@ -14,6 +14,7 @@ package org.eclipse.oomph.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * Various static helper methods for dealing with Java reflection.
@@ -181,14 +182,73 @@ public final class ReflectUtil
 
   public static void setValue(Field field, Object target, Object value)
   {
+    setValue(field, target, value, false);
+  }
+
+  public static void setValue(Field field, Object target, Object value, boolean force)
+  {
     if (!field.isAccessible())
     {
       field.setAccessible(true);
     }
 
+    Field modifiersField = null;
+    boolean[] finalModified = { false };
+
     try
     {
-      field.set(target, value);
+      if ((field.getModifiers() & Modifier.FINAL) != 0 && force)
+      {
+        modifiersField = Field.class.getDeclaredField("modifiers");
+        if (!modifiersField.isAccessible())
+        {
+          modifiersField.setAccessible(true);
+        }
+
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        finalModified[0] = true;
+      }
+
+      Class<?> type = field.getType();
+      if (type.isPrimitive())
+      {
+        if (boolean.class == type)
+        {
+          field.setBoolean(target, (Boolean)value);
+        }
+        else if (char.class == type)
+        {
+          field.setChar(target, (Character)value);
+        }
+        else if (byte.class == type)
+        {
+          field.setByte(target, (Byte)value);
+        }
+        else if (short.class == type)
+        {
+          field.setShort(target, (Short)value);
+        }
+        else if (int.class == type)
+        {
+          field.setInt(target, (Integer)value);
+        }
+        else if (long.class == type)
+        {
+          field.setLong(target, (Long)value);
+        }
+        else if (float.class == type)
+        {
+          field.setFloat(target, (Float)value);
+        }
+        else if (double.class == type)
+        {
+          field.setDouble(target, (Double)value);
+        }
+      }
+      else
+      {
+        field.set(target, value);
+      }
     }
     catch (RuntimeException ex)
     {
@@ -197,6 +257,20 @@ public final class ReflectUtil
     catch (Exception ex)
     {
       throw new ReflectionException(ex);
+    }
+    finally
+    {
+      if (finalModified[0])
+      {
+        try
+        {
+          modifiersField.setInt(field, field.getModifiers() | Modifier.FINAL);
+        }
+        catch (IllegalAccessException ex)
+        {
+          throw new ReflectionException(ex);
+        }
+      }
     }
   }
 

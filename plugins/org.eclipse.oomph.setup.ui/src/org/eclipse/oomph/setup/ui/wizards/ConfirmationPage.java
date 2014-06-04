@@ -67,8 +67,6 @@ public class ConfirmationPage extends SetupWizardPage
 
   private static final Object ROOT_ELEMENT = new Object();
 
-  private static final boolean SKIP_CONFIRM = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
-
   private CheckboxTreeViewer viewer;
 
   private TreeViewer childrenViewer;
@@ -78,6 +76,12 @@ public class ConfirmationPage extends SetupWizardPage
   private Button showAllButton;
 
   private Button offlineButton;
+
+  private Button mirrorsButton;
+
+  private Boolean globalOffline;
+
+  private Boolean globalMirrors;
 
   public ConfirmationPage()
   {
@@ -130,7 +134,17 @@ public class ConfirmationPage extends SetupWizardPage
       }
     });
 
-    offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false, "offline");
+    globalOffline = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
+    if (globalOffline == null)
+    {
+      offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false, "offline");
+    }
+
+    globalMirrors = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);
+    if (globalMirrors == null)
+    {
+      mirrorsButton = addCheckButton("Mirrors", "Make use of p2 mirrors during the installation process", true, "mirrors");
+    }
   }
 
   @Override
@@ -141,7 +155,7 @@ public class ConfirmationPage extends SetupWizardPage
       viewer.setInput(INPUT);
       viewer.setSubtreeChecked(ROOT_ELEMENT, true);
 
-      if (getTrigger() == Trigger.STARTUP && SKIP_CONFIRM)
+      if (getTrigger() == Trigger.STARTUP && PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP))
       {
         advanceToNextPage();
       }
@@ -187,10 +201,8 @@ public class ConfirmationPage extends SetupWizardPage
       try
       {
         SetupTaskPerformer performer = getPerformer();
-        if (isOffline() || PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP))
-        {
-          performer.setOffline(true);
-        }
+        performer.setOffline(isOffline());
+        performer.setMirrors(isMirrors());
 
         Set<SetupTask> checkedTasks = getCheckedTasks();
 
@@ -406,6 +418,31 @@ public class ConfirmationPage extends SetupWizardPage
 
   private boolean isOffline()
   {
+    if (PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_OFFLINE_STARTUP))
+    {
+      return true;
+    }
+
+    if (globalOffline != null)
+    {
+      return globalOffline;
+    }
+
     return offlineButton.getSelection();
+  }
+
+  private boolean isMirrors()
+  {
+    if (PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_MIRRORS_STARTUP))
+    {
+      return true;
+    }
+
+    if (globalMirrors != null)
+    {
+      return globalMirrors;
+    }
+
+    return mirrorsButton.getSelection();
   }
 }
