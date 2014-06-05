@@ -39,6 +39,8 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -63,6 +65,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +76,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -96,9 +98,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private ScrolledComposite scrolledComposite;
 
-  private final Map<URI, FieldHolder> fieldHolders = new LinkedHashMap<URI, FieldHolder>();
-
-  private Map<FieldHolder, Set<FieldHolder>> ruleUses = new LinkedHashMap<FieldHolder, Set<FieldHolder>>();
+  private final FieldHolderManager manager = new FieldHolderManager();
 
   private boolean focusSet;
 
@@ -108,7 +108,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private boolean recursiveValidate;
 
-  private Set<SetupTaskPerformer> promptedPerformers = new LinkedHashSet<SetupTaskPerformer>();
+  private Set<SetupTaskPerformer> incompletePerformers = new LinkedHashSet<SetupTaskPerformer>();
+
+  private Set<SetupTaskPerformer> allPromptedPerfomers = new LinkedHashSet<SetupTaskPerformer>();
 
   private SetupTaskPerformer performer;
 
@@ -177,128 +179,46 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     });
   }
 
-  private URI getURI(VariableTask variable)
-  {
-    String name = variable.getName();
-    URI uri = variable.eResource() == null ? URI.createURI("#") : EcoreUtil.getURI(variable);
-    uri = uri.appendFragment(uri.fragment() + "~" + name);
-    return uri;
-  }
-
-  private FieldHolder getFieldHolder(VariableTask variable)
-  {
-    return fieldHolders.get(getURI(variable));
-  }
-
-  private FieldHolder createFieldHolder(VariableTask variable)
-  {
-    URI uri = getURI(variable);
-    FieldHolder fieldHolder = fieldHolders.get(uri);
-    if (fieldHolder == null)
-    {
-      PropertyField field = createField(variable);
-      field.fill(composite);
-
-      fieldHolder = new FieldHolder(field, variable);
-      fieldHolders.put(uri, fieldHolder);
-    }
-    else
-    {
-      fieldHolder.add(variable);
-    }
-
-    return fieldHolder;
-  }
-
-  private PropertyField createField(final VariableTask variable)
-  {
-    PropertyField field = createField(variable.getType(), variable.getChoices());
-
-    String label = variable.getLabel();
-    if (StringUtil.isEmpty(label))
-    {
-      label = variable.getName();
-    }
-
-    field.setLabelText(label);
-    field.setToolTip(variable.getDescription());
-
-    GridData gridData = field.getLabelGridData();
-    gridData.widthHint = 150;
-
-    return field;
-  }
-
-  private PropertyField createField(VariableType type, List<VariableChoice> choices)
-  {
-    switch (type)
-    {
-      case FOLDER:
-        PropertyField.FileField fileField = new PropertyField.FileField(choices);
-        fileField.setDialogText("Folder Selection");
-        fileField.setDialogMessage("Select a folder.");
-        return fileField;
-
-      case PASSWORD:
-        return new PropertyField.TextField(true);
-    }
-
-    return new PropertyField.TextField(choices);
-  }
-
   private void updateFields()
   {
-    // Clear out the variables from any of the fields previously created.
-    Set<FieldHolder> fieldHolderSet = new LinkedHashSet<FieldHolder>(fieldHolders.values());
-    for (FieldHolder fieldHolder : fieldHolderSet)
+    for (FieldHolder fieldHolder : manager)
     {
       fieldHolder.clear();
     }
 
-    Set<FieldHolder> fieldHolderVariableOrder = new LinkedHashSet<FieldHolder>();
-    for (SetupTaskPerformer setupTaskPerformer : promptedPerformers)
+    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers)
     {
       List<VariableTask> variables = setupTaskPerformer.getUnresolvedVariables();
       for (VariableTask variable : variables)
       {
-        FieldHolder fieldHolder;
-
         VariableTask ruleVariable = setupTaskPerformer.getRuleVariable(variable);
         if (ruleVariable == null)
         {
-          fieldHolder = createFieldHolder(variable);
+          manager.getFieldHolder(variable, true);
         }
         else
         {
-          fieldHolder = createFieldHolder(ruleVariable);
+          FieldHolder fieldHolder = manager.getFieldHolder(ruleVariable, true);
           fieldHolder.add(variable);
-
-          // Put it into the map under the original variable's key as well.
-          fieldHolders.put(getURI(variable), fieldHolder);
+          manager.associate(variable, fieldHolder);
         }
-
-        // Ensure that the variables that are visited again are ordered accordingly.
-        fieldHolderVariableOrder.remove(fieldHolder);
-        fieldHolderVariableOrder.add(fieldHolder);
       }
     }
 
-    // Build a new one because there can be new holders created.
-    fieldHolderSet = new LinkedHashSet<FieldHolder>(fieldHolders.values());
-    for (FieldHolder fieldHolder : fieldHolderSet)
+    for (FieldHolder fieldHolder : manager)
     {
       for (VariableTask variable : fieldHolder.getVariables())
       {
         String value = variable.getValue();
-        if (!StringUtil.isEmpty(value) && StringUtil.isEmpty(fieldHolder.getField().getValue()))
+        if (!StringUtil.isEmpty(value) && StringUtil.isEmpty(fieldHolder.getValue()))
         {
-          fieldHolder.getField().setValue(value, false);
+          fieldHolder.setValue(value);
           break;
         }
       }
     }
 
-    for (FieldHolder fieldHolder : fieldHolderSet)
+    for (FieldHolder fieldHolder : manager)
     {
       fieldHolder.recordInitialValue();
     }
@@ -309,218 +229,51 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       for (VariableTask variable : performer.getUnresolvedVariables())
       {
-        uris.add(getURI(variable));
+        uris.add(manager.getURI(variable));
         VariableTask ruleVariable = performer.getRuleVariable(variable);
         if (ruleVariable != null)
         {
-          uris.add(getURI(ruleVariable));
+          uris.add(manager.getURI(ruleVariable));
         }
       }
     }
 
-    // Garbage collect any unused fields.
-    for (Iterator<Map.Entry<URI, FieldHolder>> it = fieldHolders.entrySet().iterator(); it.hasNext();)
-    {
-      Entry<URI, FieldHolder> entry = it.next();
-      FieldHolder fieldHolder = entry.getValue();
-      if (!uris.contains(entry.getKey()) && fieldHolder.getVariables().isEmpty() && !fieldHolder.isDirty())
-      {
-        fieldHolder.dispose();
-        it.remove();
-
-        for (Set<FieldHolder> set : ruleUses.values())
-        {
-          set.remove(fieldHolder);
-        }
-      }
-    }
+    manager.cleanup(uris);
 
     Composite parent = composite.getParent();
     parent.setRedraw(false);
 
     // Determine an appropriate field order.
 
-    List<SetupTaskPerformer> allPerformers = new ArrayList<SetupTaskPerformer>(promptedPerformers);
+    List<SetupTaskPerformer> allPerformers = new ArrayList<SetupTaskPerformer>(allPromptedPerfomers);
     if (performer != null)
     {
       allPerformers.add(0, performer);
     }
 
-    List<Control> controls = new ArrayList<Control>();
-    fieldHolderSet = new LinkedHashSet<FieldHolder>(fieldHolders.values());
-    fieldHolderVariableOrder.addAll(fieldHolderSet);
-    Map<FieldHolder, Set<FieldHolder>> newRuleUses = new LinkedHashMap<FieldHolder, Set<FieldHolder>>();
-    LOOP: for (FieldHolder fieldHolder : fieldHolderVariableOrder)
+    manager.reorder(allPerformers);
+
+    FieldHolder firstField = null;
+    FieldHolder firstEmptyField = null;
+    for (FieldHolder fieldHolder : manager)
     {
-      controls.add(getMainControl(fieldHolder.getField().getControl()));
-      for (VariableTask variable : fieldHolder.getVariables())
+      if (!fieldHolder.isDisposed())
       {
-        for (SetupTaskPerformer performer : allPerformers)
+        if (firstField == null)
         {
-          EAttribute eAttribute = performer.getAttributeRuleVariableData(variable);
-          if (eAttribute != null)
-          {
-            CollectionsUtil.addAll(newRuleUses, fieldHolder, Collections.<FieldHolder> emptySet());
-            continue LOOP;
-          }
-        }
-      }
-
-      // for (VariableTask variable : fieldHolder.getVariables())
-      // {
-      // for (SetupTaskPerformer performer : allPerformers)
-      // {
-      // EStructuralFeature.Setting setting = performer.getImpliedVariableData(variable);
-      // if (setting != null)
-      // {
-      // continue LOOP;
-      // }
-      // }
-      // }
-
-      for (VariableTask variable : fieldHolder.getVariables())
-      {
-        for (SetupTaskPerformer performer : allPerformers)
-        {
-          VariableTask dependantVariable = performer.getRuleVariableData(variable);
-          if (dependantVariable != null)
-          {
-            VariableTask ruleVariable = performer.getRuleVariable(dependantVariable);
-            if (ruleVariable != null)
-            {
-              FieldHolder dependentFieldHolder = getFieldHolder(ruleVariable);
-              if (dependentFieldHolder != null)
-              {
-                CollectionsUtil.add(newRuleUses, dependentFieldHolder, fieldHolder);
-                continue LOOP;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    Map<FieldHolder, Set<FieldHolder>> consolidatedRuleUses = new LinkedHashMap<FieldHolder, Set<FieldHolder>>();
-    CollectionsUtil.addAll(newRuleUses, ruleUses);
-    LOOP: for (Map.Entry<FieldHolder, Set<FieldHolder>> entry : newRuleUses.entrySet())
-    {
-      FieldHolder fieldHolder = entry.getKey();
-      if (fieldHolder.getField().getControl().isDisposed())
-      {
-        for (Map.Entry<FieldHolder, Set<FieldHolder>> otherEntry : newRuleUses.entrySet())
-        {
-          if (otherEntry != entry)
-          {
-            for (FieldHolder usedFieldHolder : entry.getValue())
-            {
-              if (otherEntry.getValue().contains(usedFieldHolder))
-              {
-                CollectionsUtil.addAll(consolidatedRuleUses, entry.getKey(), otherEntry.getValue());
-                CollectionsUtil.addAll(consolidatedRuleUses, entry.getKey(), entry.getValue());
-                continue LOOP;
-              }
-            }
-          }
-        }
-      }
-
-      CollectionsUtil.addAll(consolidatedRuleUses, entry.getKey(), entry.getValue());
-    }
-
-    ruleUses = consolidatedRuleUses;
-
-    int size = controls.size();
-    Set<FieldHolder> orderedFieldHolders = new LinkedHashSet<FieldHolder>();
-    if (size <= 1)
-    {
-      orderedFieldHolders.addAll(fieldHolderSet);
-    }
-    else
-    {
-      List<Control> children = Arrays.asList(composite.getChildren());
-
-      int controlOffset = -1;
-      int columnCount = -1;
-      for (int i = 0, childrenSize = children.size(); i < childrenSize; ++i)
-      {
-        if (controls.contains(children.get(i)))
-        {
-          if (controlOffset == -1)
-          {
-            controlOffset = i;
-          }
-          else
-          {
-            columnCount = i - controlOffset;
-            break;
-          }
-        }
-      }
-
-      for (Map.Entry<FieldHolder, Set<FieldHolder>> entry : ruleUses.entrySet())
-      {
-        FieldHolder key = entry.getKey();
-        if (!key.getField().getControl().isDisposed())
-        {
-          orderedFieldHolders.add(key);
+          firstField = fieldHolder;
         }
 
-        for (FieldHolder value : entry.getValue())
+        if (firstEmptyField == null && StringUtil.isEmpty(fieldHolder.getValue()))
         {
-          if (!value.getField().getControl().isDisposed())
-          {
-            orderedFieldHolders.add(value);
-          }
+          firstEmptyField = fieldHolder;
         }
-      }
-
-      orderedFieldHolders.addAll(fieldHolderSet);
-
-      Control target = children.get(columnCount - 1);
-      for (FieldHolder fieldHolder : orderedFieldHolders)
-      {
-        Control mainControl = getMainControl(fieldHolder.getField().getControl());
-        int index = children.indexOf(mainControl) - controlOffset;
-        Control newTarget = null;
-        for (int j = columnCount - 1; j >= 0; --j)
-        {
-          Control child = children.get(index + j);
-          if (newTarget == null)
-          {
-            newTarget = child;
-          }
-
-          if (target == child)
-          {
-            break;
-          }
-
-          child.moveBelow(target);
-        }
-
-        target = newTarget;
-      }
-    }
-
-    PropertyField firstField = null;
-    PropertyField firstEmptyField = null;
-    for (FieldHolder fieldHolder : orderedFieldHolders)
-    {
-      PropertyField field = fieldHolder.getField();
-      if (firstField == null)
-      {
-        firstField = field;
-      }
-
-      if (firstEmptyField == null && StringUtil.isEmpty(field.getValue()))
-      {
-        firstEmptyField = field;
       }
     }
 
     if (!focusSet)
     {
-      PropertyField field = firstEmptyField;
+      FieldHolder field = firstEmptyField;
       if (field == null)
       {
         field = firstField;
@@ -551,17 +304,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       recursiveValidate = false;
     }
-  }
-
-  private Control getMainControl(Control control)
-  {
-    Control parent = control.getParent();
-    if (parent == composite)
-    {
-      return control;
-    }
-
-    return null;
   }
 
   private Confirmer createUnsignedContentConfirmer(final User user)
@@ -615,7 +357,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
       try
       {
-        promptedPerformers.clear();
+        incompletePerformers.clear();
+        allPromptedPerfomers.clear();
 
         User originalUser = getUser();
         URI uri = originalUser.eResource().getURI();
@@ -694,7 +437,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     if (forward)
     {
       List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
-      for (FieldHolder fieldHolder : new LinkedHashSet<FieldHolder>(fieldHolders.values()))
+      for (FieldHolder fieldHolder : manager)
       {
         unresolvedVariables.addAll(fieldHolder.getVariables());
       }
@@ -731,6 +474,15 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         workspaceResource.setURI(workspaceResourceURI);
       }
 
+      try
+      {
+        copiedUser.eResource().save(System.err, null);
+      }
+      catch (IOException ex)
+      {
+        ex.printStackTrace();
+      }
+
       unresolvedVariables.clear();
 
       getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), copiedUser));
@@ -744,10 +496,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   public String getValue(VariableTask variable)
   {
-    FieldHolder fieldHolder = getFieldHolder(variable);
+    FieldHolder fieldHolder = manager.getFieldHolder(variable, false);
     if (fieldHolder != null)
     {
-      String value = fieldHolder.getField().getValue();
+      String value = fieldHolder.getValue();
       if (!"".equals(value))
       {
         return value;
@@ -763,15 +515,17 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     @SuppressWarnings("unchecked")
     List<SetupTaskPerformer> performers = (List<SetupTaskPerformer>)contexts;
+    allPromptedPerfomers.addAll(performers);
     for (SetupTaskPerformer performer : performers)
     {
       boolean resolvedAll = true;
-      for (VariableTask variable : performer.getUnresolvedVariables())
+      List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
+      for (VariableTask variable : unresolvedVariables)
       {
-        FieldHolder fieldHolder = getFieldHolder(variable);
+        FieldHolder fieldHolder = manager.getFieldHolder(variable, false);
         if (fieldHolder != null)
         {
-          String value = fieldHolder.getField().getValue();
+          String value = fieldHolder.getValue();
           if (!"".equals(value))
           {
             variable.setValue(value);
@@ -789,12 +543,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
       if (!resolvedAll)
       {
-        promptedPerformers.add(performer);
+        incompletePerformers.add(performer);
       }
     }
 
-    boolean isComplete = promptedPerformers.isEmpty();
-    promptedPerformers.addAll(performers);
+    boolean isComplete = incompletePerformers.isEmpty();
     return isComplete;
   }
 
@@ -810,7 +563,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   {
     private final Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
 
-    private final PropertyField field;
+    private PropertyField field;
 
     private String initialValue;
 
@@ -821,9 +574,51 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       variables.add(variable);
     }
 
-    public PropertyField getField()
+    public boolean isDisposed()
     {
-      return field;
+      return field == null;
+    }
+
+    private Control getControl()
+    {
+      if (field == null)
+      {
+        return null;
+      }
+
+      Control control = field.getControl();
+      Control parent = control.getParent();
+      if (parent == composite)
+      {
+        return control;
+      }
+
+      return null;
+    }
+
+    public void setFocus()
+    {
+      if (field == null)
+      {
+        throw new IllegalStateException("Can't set the value of a disposed field");
+      }
+
+      field.setFocus();
+    }
+
+    public String getValue()
+    {
+      return field == null ? "" : field.getValue();
+    }
+
+    public void setValue(String value)
+    {
+      if (field == null)
+      {
+        throw new IllegalStateException("Can't set the value of a disposed field");
+      }
+
+      field.setValue(value, false);
     }
 
     public Set<VariableTask> getVariables()
@@ -868,19 +663,352 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public boolean isDirty()
     {
-      // return initialValue != null && (!initialValue.equals(field.getValue()) || initialValue.length() == 0);
-      return initialValue != null && !initialValue.equals(field.getValue());
+      return field != null && initialValue != null && !initialValue.equals(field.getValue());
     }
 
     public void dispose()
     {
-      field.dispose();
+      if (field != null)
+      {
+        field.dispose();
+        field = null;
+      }
     }
 
     @Override
     public String toString()
     {
-      return field.toString();
+      return field == null ? "<disposed>" : field.toString();
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class FieldHolderRecord
+  {
+    private FieldHolder fieldHolder;
+
+    private final Set<URI> variableURIs = new HashSet<URI>();
+
+    public FieldHolderRecord()
+    {
+    }
+
+    public FieldHolder getFieldHolder()
+    {
+      return fieldHolder;
+    }
+
+    public void setFieldHolder(FieldHolder fieldHolder)
+    {
+      this.fieldHolder = fieldHolder;
+    }
+
+    public Set<URI> getVariableURIs()
+    {
+      return variableURIs;
+    }
+
+    @Override
+    public String toString()
+    {
+      return variableURIs.toString();
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private class FieldHolderManager implements Iterable<FieldHolder>
+  {
+    private final EList<FieldHolderRecord> fields = new BasicEList<FieldHolderRecord>();
+
+    public Iterator<FieldHolder> iterator()
+    {
+      final Iterator<FieldHolderRecord> iterator = fields.iterator();
+      return new Iterator<FieldHolder>()
+      {
+        public boolean hasNext()
+        {
+          return iterator.hasNext();
+        }
+
+        public FieldHolder next()
+        {
+          return iterator.next().getFieldHolder();
+        }
+
+        public void remove()
+        {
+          throw new UnsupportedOperationException();
+        }
+      };
+    }
+
+    public void reorder(List<SetupTaskPerformer> allPerformers)
+    {
+      List<Control> controls = new ArrayList<Control>();
+      Map<FieldHolderRecord, Set<FieldHolderRecord>> ruleUses = new LinkedHashMap<FieldHolderRecord, Set<FieldHolderRecord>>();
+      LOOP: for (FieldHolderRecord fieldHolderRecord : fields)
+      {
+        FieldHolder fieldHolder = fieldHolderRecord.getFieldHolder();
+        Control control = fieldHolder.getControl();
+        if (control != null)
+        {
+          controls.add(control);
+          for (VariableTask variable : fieldHolder.getVariables())
+          {
+            for (SetupTaskPerformer performer : allPerformers)
+            {
+              EAttribute eAttribute = performer.getAttributeRuleVariableData(variable);
+              if (eAttribute != null)
+              {
+                CollectionsUtil.addAll(ruleUses, fieldHolderRecord, Collections.<FieldHolderRecord> emptySet());
+                continue LOOP;
+              }
+            }
+          }
+
+          // for (VariableTask variable : fieldHolder.getVariables())
+          // {
+          // for (SetupTaskPerformer performer : allPerformers)
+          // {
+          // EStructuralFeature.Setting setting = performer.getImpliedVariableData(variable);
+          // if (setting != null)
+          // {
+          // continue LOOP;
+          // }
+          // }
+          // }
+
+          for (VariableTask variable : fieldHolder.getVariables())
+          {
+            for (SetupTaskPerformer performer : allPerformers)
+            {
+              VariableTask dependantVariable = performer.getRuleVariableData(variable);
+              if (dependantVariable != null)
+              {
+                VariableTask ruleVariable = performer.getRuleVariable(dependantVariable);
+                if (ruleVariable != null)
+                {
+                  FieldHolderRecord dependantFieldHolderRecord = getFieldHolderRecord(getURI(ruleVariable));
+                  if (dependantFieldHolderRecord != null)
+                  {
+                    CollectionsUtil.add(ruleUses, dependantFieldHolderRecord, fieldHolderRecord);
+                    continue LOOP;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      for (Map.Entry<FieldHolderRecord, Set<FieldHolderRecord>> entry : ruleUses.entrySet())
+      {
+        FieldHolderRecord fieldHolderRecord = entry.getKey();
+        int index = fields.indexOf(fieldHolderRecord);
+        Set<FieldHolderRecord> fieldHolderRecords = entry.getValue();
+        for (FieldHolderRecord dependantFieldHolderRecord : fieldHolderRecords)
+        {
+          fields.move(++index, dependantFieldHolderRecord);
+        }
+      }
+
+      int size = controls.size();
+      if (size > 1)
+      {
+        List<Control> children = Arrays.asList(composite.getChildren());
+
+        int controlOffset = -1;
+        int columnCount = -1;
+        for (int i = 0, childrenSize = children.size(); i < childrenSize; ++i)
+        {
+          if (controls.contains(children.get(i)))
+          {
+            if (controlOffset == -1)
+            {
+              controlOffset = i;
+            }
+            else
+            {
+              columnCount = i - controlOffset;
+              break;
+            }
+          }
+        }
+
+        Control target = children.get(columnCount - 1);
+        for (FieldHolder fieldHolder : this)
+        {
+          Control control = fieldHolder.getControl();
+          if (control != null)
+          {
+            int index = children.indexOf(control) - controlOffset;
+            Control newTarget = null;
+            for (int j = columnCount - 1; j >= 0; --j)
+            {
+              Control child = children.get(index + j);
+              if (newTarget == null)
+              {
+                newTarget = child;
+              }
+
+              if (target == child)
+              {
+                break;
+              }
+
+              child.moveBelow(target);
+            }
+
+            target = newTarget;
+          }
+        }
+      }
+    }
+
+    public void cleanup(Set<URI> uris)
+    {
+      LOOP: for (FieldHolderRecord fieldHolderRecord : fields)
+      {
+        for (URI uri : fieldHolderRecord.getVariableURIs())
+        {
+          if (uris.contains(uri))
+          {
+            continue LOOP;
+          }
+        }
+
+        FieldHolder fieldHolder = fieldHolderRecord.getFieldHolder();
+        if (fieldHolder.getVariables().isEmpty() && !fieldHolder.isDirty())
+        {
+          fieldHolder.dispose();
+        }
+      }
+    }
+
+    public URI getURI(VariableTask variable)
+    {
+      String name = variable.getName();
+      URI uri = variable.eResource() == null ? URI.createURI("#") : EcoreUtil.getURI(variable);
+      uri = uri.appendFragment(uri.fragment() + "~" + name);
+      return uri;
+    }
+
+    private FieldHolderRecord getFieldHolderRecord(URI uri)
+    {
+      for (FieldHolderRecord fieldHolderRecord : fields)
+      {
+        if (fieldHolderRecord.getVariableURIs().contains(uri))
+        {
+          return fieldHolderRecord;
+        }
+      }
+
+      return null;
+    }
+
+    public void associate(VariableTask variable, FieldHolder fieldHolder)
+    {
+      URI uri = getURI(variable);
+      for (FieldHolderRecord fieldHolderRecord : fields)
+      {
+        if (fieldHolderRecord.getFieldHolder() == fieldHolder)
+        {
+          fieldHolderRecord.getVariableURIs().add(uri);
+          break;
+        }
+      }
+    }
+
+    public FieldHolder getFieldHolder(VariableTask variable, boolean demandCreate)
+    {
+      URI uri = getURI(variable);
+      FieldHolderRecord fieldHolderRecord = getFieldHolderRecord(uri);
+      FieldHolder fieldHolder = null;
+      if (fieldHolderRecord == null)
+      {
+        if (!demandCreate)
+        {
+          return null;
+        }
+
+        fieldHolderRecord = new FieldHolderRecord();
+        fieldHolderRecord.getVariableURIs().add(uri);
+        fields.add(fieldHolderRecord);
+      }
+      else
+      {
+        fieldHolder = fieldHolderRecord.getFieldHolder();
+        if (fieldHolder.isDisposed())
+        {
+          if (!demandCreate)
+          {
+            return null;
+          }
+
+          fieldHolder = null;
+        }
+      }
+
+      if (fieldHolder == null)
+      {
+        PropertyField field = createField(variable);
+        field.fill(composite);
+
+        fieldHolder = new FieldHolder(field, variable);
+        fieldHolderRecord.setFieldHolder(fieldHolder);
+      }
+      else
+      {
+        fieldHolder.add(variable);
+      }
+
+      return fieldHolder;
+    }
+
+    private PropertyField createField(final VariableTask variable)
+    {
+      PropertyField field = createField(variable.getType(), variable.getChoices());
+
+      String label = variable.getLabel();
+      if (StringUtil.isEmpty(label))
+      {
+        label = variable.getName();
+      }
+
+      field.setLabelText(label);
+      field.setToolTip(variable.getDescription());
+
+      GridData gridData = field.getLabelGridData();
+      gridData.widthHint = 150;
+
+      return field;
+    }
+
+    private PropertyField createField(VariableType type, List<VariableChoice> choices)
+    {
+      switch (type)
+      {
+        case FOLDER:
+          PropertyField.FileField fileField = new PropertyField.FileField(choices);
+          fileField.setDialogText("Folder Selection");
+          fileField.setDialogMessage("Select a folder.");
+          return fileField;
+
+        case PASSWORD:
+          return new PropertyField.TextField(true);
+      }
+
+      return new PropertyField.TextField(choices);
+    }
+
+    @Override
+    public String toString()
+    {
+      return fields.toString();
     }
   }
 }

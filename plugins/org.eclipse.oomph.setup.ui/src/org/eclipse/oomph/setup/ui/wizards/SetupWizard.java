@@ -91,6 +91,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     if (performer == null)
     {
       resourceSet = EMFUtil.createResourceSet();
+      setSetupContext(SetupContext.create(resourceSet));
       setTrigger(Trigger.STARTUP);
     }
     else

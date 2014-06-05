@@ -97,7 +97,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
 import java.io.File;
@@ -303,7 +302,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         if (user.eResource() != null)
         {
-          SetupPrompter prompter = getPrompter();
           // 1.2. Determine whether new rules need to be created
           for (EAttribute eAttribute : eClass.getEAttributes())
           {
@@ -312,69 +310,55 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               EAnnotation eAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
               if (eAnnotation != null)
               {
-                // Determine if there exists an actual instance that really needs the rule.
-                String attributeName = ExtendedMetaData.INSTANCE.getName(eAttribute);
-                for (SetupTask setupTask : instances.get(eAttribute.getEContainingClass()))
+                AttributeRule attributeRule = getAttributeRule(eAttribute, true);
+                if (attributeRule == null)
                 {
-                  // If there is an instance with an empty value.
-                  Object value = setupTask.eGet(eAttribute);
-                  if (value == null || "".equals(value))
+                  // Determine if there exists an actual instance that really needs the rule.
+                  String attributeName = ExtendedMetaData.INSTANCE.getName(eAttribute);
+                  for (SetupTask setupTask : instances.get(eAttribute.getEContainingClass()))
                   {
-                    // If that instance has an ID and hence will create an implied variable and that variable name isn't already defined by an existing
-                    // context variable.
-                    String id = setupTask.getID();
-                    if (!StringUtil.isEmpty(id) && !keys.contains(id + "." + attributeName))
+                    // If there is an instance with an empty value.
+                    Object value = setupTask.eGet(eAttribute);
+                    if (value == null || "".equals(value))
                     {
-                      EMap<String, String> details = eAnnotation.getDetails();
-
-                      // TODO class name/attribute name pairs might not be unique.
-                      String variableName = "@<id>." + eClass.getName() + "." + attributeName;
-
-                      VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-                      annotateAttributeRuleVariable(variable, eAttribute);
-                      variable.setName(variableName);
-                      variable.setType(VariableType.get(details.get("type")));
-                      variable.setLabel(details.get("label"));
-                      variable.setDescription(details.get("description"));
-                      variable.eAdapters().add(RULE_VARIABLE_ADAPTER);
-                      for (EAnnotation subAnnotation : eAnnotation.getEAnnotations())
+                      // If that instance has an ID and hence will create an implied variable and that variable name isn't already defined by an existing
+                      // context variable.
+                      String id = setupTask.getID();
+                      if (!StringUtil.isEmpty(id) && !keys.contains(id + "." + attributeName))
                       {
-                        if ("Choice".equals(subAnnotation.getSource()))
+                        EMap<String, String> details = eAnnotation.getDetails();
+
+                        // TODO class name/attribute name pairs might not be unique.
+                        String variableName = "@<id>." + eClass.getName() + "." + attributeName;
+
+                        VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+                        annotateAttributeRuleVariable(variable, eAttribute);
+                        variable.setName(variableName);
+                        variable.setType(VariableType.get(details.get("type")));
+                        variable.setLabel(details.get("label"));
+                        variable.setDescription(details.get("description"));
+                        variable.eAdapters().add(RULE_VARIABLE_ADAPTER);
+                        for (EAnnotation subAnnotation : eAnnotation.getEAnnotations())
                         {
-                          EMap<String, String> subDetails = subAnnotation.getDetails();
+                          if ("Choice".equals(subAnnotation.getSource()))
+                          {
+                            EMap<String, String> subDetails = subAnnotation.getDetails();
 
-                          VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-                          choice.setValue(subDetails.get("value"));
-                          choice.setLabel(subDetails.get("label"));
+                            VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+                            choice.setValue(subDetails.get("value"));
+                            choice.setLabel(subDetails.get("label"));
 
-                          variable.getChoices().add(choice);
+                            variable.getChoices().add(choice);
+                          }
                         }
-                      }
 
-                      String promptedValue = prompter.getValue(variable);
-                      if (StringUtil.isEmpty(promptedValue))
-                      {
-                        AttributeRule attributeRule = getAttributeRule(eAttribute, true);
-                        if (attributeRule != null)
-                        {
-                          promptedValue = attributeRule.getValue();
-                        }
-                      }
-
-                      if (StringUtil.isEmpty(promptedValue))
-                      {
                         unresolvedVariables.add(variable);
+                        ruleAttributes.put(variable, eAttribute);
                       }
-                      else
-                      {
-                        variable.setValue(promptedValue);
-                      }
-
-                      ruleAttributes.put(variable, eAttribute);
                     }
-                  }
 
-                  break;
+                    break;
+                  }
                 }
               }
             }
@@ -382,17 +366,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       }
 
-      if (!unresolvedVariables.isEmpty())
-      {
-        // 1.2.1. Prompt new rules and store them in User scope
-        SetupPrompter prompter = getPrompter();
-        if (!prompter.promptVariables(Collections.singletonList(this)))
-        {
-          throw new OperationCanceledException();
-        }
-
-        recordRules(attributeRules, false);
-      }
+      // 1.2.1. Prompt new rules and store them in User scope
+      SetupPrompter prompter = getPrompter();
+      prompter.promptVariables(Collections.singletonList(this));
+      recordRules(attributeRules, false);
     }
 
     if (!triggeredSetupTasks.isEmpty())
@@ -2748,7 +2725,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   EAttribute eAttribute = ruleAttributes.get(variable);
                   if (ruleAttributes.keySet().contains(variable))
                   {
-                    AttributeRule attributeRule = partialPromptPerformer.getAttributeRule(eAttribute, true);
+                    AttributeRule attributeRule = partialPromptPerformer.getAttributeRule(eAttribute, false);
                     if (attributeRule != null)
                     {
                       String value = prompter.getValue(variable);

@@ -460,7 +460,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String toString()
@@ -470,18 +470,15 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (type: ");
-    result.append(type);
-    result.append(", name: ");
+    StringBuffer result = new StringBuffer();
     result.append(name);
-    result.append(", value: ");
-    result.append(value);
-    result.append(", storePromptedValue: ");
-    result.append(storePromptedValue);
-    result.append(", label: ");
-    result.append(label);
-    result.append(')');
+    if (value != null)
+    {
+      result.append("=\"");
+      result.append(value);
+      result.append('"');
+    }
+
     return result.toString();
   }
 
