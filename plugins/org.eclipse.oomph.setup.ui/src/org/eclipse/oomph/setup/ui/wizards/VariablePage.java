@@ -860,12 +860,23 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
                 break;
               }
 
-              child.moveBelow(target);
+              moveChildBelow(child, target);
             }
 
             target = newTarget;
           }
         }
+      }
+    }
+
+    private void moveChildBelow(Control child, Control target)
+    {
+      boolean focusedWidget = child.isFocusControl();
+
+      child.moveBelow(target);
+      if (focusedWidget)
+      {
+        child.setFocus();
       }
     }
 
