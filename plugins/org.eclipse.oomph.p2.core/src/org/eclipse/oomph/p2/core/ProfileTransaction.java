@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.ProfileDefinition;
+import org.eclipse.oomph.util.Confirmer;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -84,6 +85,11 @@ public interface ProfileTransaction
     public IPhaseSet getPhaseSet(ProfileTransaction transaction) throws CoreException
     {
       return PhaseSetFactory.createDefaultPhaseSet();
+    }
+
+    public Confirmer getUnsignedContentConfirmer()
+    {
+      return null;
     }
   }
 }

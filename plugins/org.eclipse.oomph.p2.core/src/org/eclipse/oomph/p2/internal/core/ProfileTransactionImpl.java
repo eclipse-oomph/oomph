@@ -19,6 +19,8 @@ import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -42,6 +44,7 @@ import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -77,6 +80,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -412,6 +416,89 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       commitContext.handleProvisioningPlan(provisioningPlan);
       IPhaseSet phaseSet = commitContext.getPhaseSet(this);
+
+      final Confirmer unsignedContentConfirmer = commitContext.getUnsignedContentConfirmer();
+      if (unsignedContentConfirmer != null)
+      {
+        final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
+        final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
+        final UIServices newUIServices = new UIServices()
+        {
+          @Override
+          public AuthenticationInfo getUsernamePassword(String location)
+          {
+            if (oldUIServices != null)
+            {
+              return oldUIServices.getUsernamePassword(location);
+            }
+
+            return null;
+          }
+
+          @Override
+          public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
+          {
+            if (oldUIServices != null)
+            {
+              return oldUIServices.getUsernamePassword(location, previousInfo);
+            }
+
+            return null;
+          }
+
+          @Override
+          public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
+          {
+            if (unsignedDetail != null && unsignedDetail.length != 0)
+            {
+              Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
+              if (!confirmation.isConfirmed())
+              {
+                return new TrustInfo(new Certificate[0], false, false);
+              }
+
+              // We've checked trust already; prevent oldUIServices to check it again.
+              unsignedDetail = null;
+            }
+
+            if (oldUIServices != null)
+            {
+              return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
+            }
+
+            // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
+            final Certificate[] trusted;
+            if (untrustedChains == null)
+            {
+              trusted = null;
+            }
+            else
+            {
+              trusted = new Certificate[untrustedChains.length];
+              for (int i = 0; i < untrustedChains.length; i++)
+              {
+                trusted[i] = untrustedChains[i][0];
+              }
+            }
+
+            return new TrustInfo(trusted, false, true);
+          }
+        };
+
+        provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
+
+        cleanup.add(new Runnable()
+        {
+          public void run()
+          {
+            provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
+            if (oldUIServices != null)
+            {
+              provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
+            }
+          }
+        });
+      }
 
       IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
       P2CorePlugin.INSTANCE.coreException(status);

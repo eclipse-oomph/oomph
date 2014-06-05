@@ -23,6 +23,8 @@ public interface SetupProperties
 
   public static final String PROP_SETUP_MIRRORS = "eclipse.p2.mirrors";
 
+  public static final String PROP_SETUP_UNSIGNED_POLICY = "eclipse.p2.unsignedPolicy";
+
   public static final String PROP_SETUP_REMOTE_DEBUG = "oomph.setup.remote.debug";
 
   public static final String PROP_REDIRECTION_BASE = "oomph.redirection.";

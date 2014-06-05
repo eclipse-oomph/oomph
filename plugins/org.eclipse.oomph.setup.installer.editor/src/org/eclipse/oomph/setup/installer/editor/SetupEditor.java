@@ -44,14 +44,14 @@ import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+//import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 
-import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
+//import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IMenuListener;
@@ -130,7 +130,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(Arrays.asList(SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").split("\\s*,\\s*")), "*.");
+  public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(
+      Arrays.asList(SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").split("\\s*,\\s*")), "*.");
 
   /**
    * Returns a new unmodifiable list containing prefixed versions of the extensions in the given list.
@@ -244,48 +245,52 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * @generated
    */
   protected IPartListener partListener = new IPartListener()
+  {
+    public void partActivated(IWorkbenchPart p)
     {
-      public void partActivated(IWorkbenchPart p)
+      if (p instanceof ContentOutline)
       {
-        if (p instanceof ContentOutline)
+        if (((ContentOutline)p).getCurrentPage() == contentOutlinePage)
         {
-          if (((ContentOutline)p).getCurrentPage() == contentOutlinePage)
-          {
-            getActionBarContributor().setActiveEditor(SetupEditor.this);
+          getActionBarContributor().setActiveEditor(SetupEditor.this);
 
-            setCurrentViewer(contentOutlineViewer);
-          }
+          setCurrentViewer(contentOutlineViewer);
         }
-        else if (p instanceof PropertySheet)
+      }
+      else if (p instanceof PropertySheet)
+      {
+        if (propertySheetPages.contains(((PropertySheet)p).getCurrentPage()))
         {
-          if (propertySheetPages.contains(((PropertySheet)p).getCurrentPage()))
-          {
-            getActionBarContributor().setActiveEditor(SetupEditor.this);
-            handleActivate();
-          }
-        }
-        else if (p == SetupEditor.this)
-        {
+          getActionBarContributor().setActiveEditor(SetupEditor.this);
           handleActivate();
         }
       }
-      public void partBroughtToTop(IWorkbenchPart p)
+      else if (p == SetupEditor.this)
       {
-        // Ignore.
+        handleActivate();
       }
-      public void partClosed(IWorkbenchPart p)
-      {
-        // Ignore.
-      }
-      public void partDeactivated(IWorkbenchPart p)
-      {
-        // Ignore.
-      }
-      public void partOpened(IWorkbenchPart p)
-      {
-        // Ignore.
-      }
-    };
+    }
+
+    public void partBroughtToTop(IWorkbenchPart p)
+    {
+      // Ignore.
+    }
+
+    public void partClosed(IWorkbenchPart p)
+    {
+      // Ignore.
+    }
+
+    public void partDeactivated(IWorkbenchPart p)
+    {
+      // Ignore.
+    }
+
+    public void partOpened(IWorkbenchPart p)
+    {
+      // Ignore.
+    }
+  };
 
   /**
    * Resources that have been removed since last activation.
@@ -334,74 +339,72 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * @generated
    */
   protected EContentAdapter problemIndicationAdapter = new EContentAdapter()
+  {
+    @Override
+    public void notifyChanged(Notification notification)
     {
-      @Override
-      public void notifyChanged(Notification notification)
+      if (notification.getNotifier() instanceof Resource)
       {
-        if (notification.getNotifier() instanceof Resource)
+        switch (notification.getFeatureID(Resource.class))
         {
-          switch (notification.getFeatureID(Resource.class))
+          case Resource.RESOURCE__IS_LOADED:
+          case Resource.RESOURCE__ERRORS:
+          case Resource.RESOURCE__WARNINGS:
           {
-            case Resource.RESOURCE__IS_LOADED:
-            case Resource.RESOURCE__ERRORS:
-            case Resource.RESOURCE__WARNINGS:
+            Resource resource = (Resource)notification.getNotifier();
+            Diagnostic diagnostic = analyzeResourceProblems(resource, null);
+            if (diagnostic.getSeverity() != Diagnostic.OK)
             {
-              Resource resource = (Resource)notification.getNotifier();
-              Diagnostic diagnostic = analyzeResourceProblems(resource, null);
-              if (diagnostic.getSeverity() != Diagnostic.OK)
-              {
-                resourceToDiagnosticMap.put(resource, diagnostic);
-              }
-              else
-              {
-                resourceToDiagnosticMap.remove(resource);
-              }
-
-              if (updateProblemIndication)
-              {
-                getSite().getShell().getDisplay().asyncExec
-                  (new Runnable()
-                   {
-                     public void run()
-                     {
-                       updateProblemIndication();
-                     }
-                   });
-              }
-              break;
+              resourceToDiagnosticMap.put(resource, diagnostic);
             }
+            else
+            {
+              resourceToDiagnosticMap.remove(resource);
+            }
+
+            if (updateProblemIndication)
+            {
+              getSite().getShell().getDisplay().asyncExec(new Runnable()
+              {
+                public void run()
+                {
+                  updateProblemIndication();
+                }
+              });
+            }
+            break;
           }
         }
-        else
-        {
-          super.notifyChanged(notification);
-        }
       }
-
-      @Override
-      protected void setTarget(Resource target)
+      else
       {
-        basicSetTarget(target);
+        super.notifyChanged(notification);
       }
+    }
 
-      @Override
-      protected void unsetTarget(Resource target)
+    @Override
+    protected void setTarget(Resource target)
+    {
+      basicSetTarget(target);
+    }
+
+    @Override
+    protected void unsetTarget(Resource target)
+    {
+      basicUnsetTarget(target);
+      resourceToDiagnosticMap.remove(target);
+      if (updateProblemIndication)
       {
-        basicUnsetTarget(target);
-        resourceToDiagnosticMap.remove(target);
-        if (updateProblemIndication)
+        getSite().getShell().getDisplay().asyncExec(new Runnable()
         {
-          getSite().getShell().getDisplay().asyncExec
-            (new Runnable()
-             {
-               public void run()
-               {
-                 updateProblemIndication();
-               }
-             });
-        }
+          public void run()
+          {
+            updateProblemIndication();
+          }
+        });
       }
-    };
+    }
+  };
 
   /**
    * Handles activation of the editor or it's associated views.
@@ -500,13 +503,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     if (updateProblemIndication)
     {
-      BasicDiagnostic diagnostic =
-        new BasicDiagnostic
-          (Diagnostic.OK,
-           "org.eclipse.oomph.setup.installer.editor",
-           0,
-           null,
-           new Object [] { editingDomain.getResourceSet() });
+      BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "org.eclipse.oomph.setup.installer.editor", 0, null,
+          new Object[] { editingDomain.getResourceSet() });
       for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values())
       {
         if (childDiagnostic.getSeverity() != Diagnostic.OK)
@@ -551,11 +549,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   protected boolean handleDirtyConflict()
   {
-    return
-      MessageDialog.openQuestion
-        (getSite().getShell(),
-         getString("_UI_FileConflict_label"),
-         getString("_WARN_FileConflict"));
+    return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), getString("_WARN_FileConflict"));
   }
 
   /**
@@ -592,41 +586,39 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
     //
-    commandStack.addCommandStackListener
-      (new CommandStackListener()
-       {
-         public void commandStackChanged(final EventObject event)
-         {
-           getContainer().getDisplay().asyncExec
-             (new Runnable()
-              {
-                public void run()
-                {
-                  firePropertyChange(IEditorPart.PROP_DIRTY);
+    commandStack.addCommandStackListener(new CommandStackListener()
+    {
+      public void commandStackChanged(final EventObject event)
+      {
+        getContainer().getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            firePropertyChange(IEditorPart.PROP_DIRTY);
 
-                  // Try to select the affected objects.
-                  //
-                  Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
-                  if (mostRecentCommand != null)
-                  {
-                    setSelectionToViewer(mostRecentCommand.getAffectedObjects());
-                  }
-                  for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext(); )
-                  {
-                    PropertySheetPage propertySheetPage = i.next();
-                    if (propertySheetPage.getControl().isDisposed())
-                    {
-                      i.remove();
-                    }
-                    else
-                    {
-                      propertySheetPage.refresh();
-                    }
-                  }
-                }
-              });
-         }
-       });
+            // Try to select the affected objects.
+            //
+            Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
+            if (mostRecentCommand != null)
+            {
+              setSelectionToViewer(mostRecentCommand.getAffectedObjects());
+            }
+            for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext();)
+            {
+              PropertySheetPage propertySheetPage = i.next();
+              if (propertySheetPage.getControl().isDisposed())
+              {
+                i.remove();
+              }
+              else
+              {
+                propertySheetPage.refresh();
+              }
+            }
+          }
+        });
+      }
+    });
 
     // Create the editing domain with a special command stack.
     //
@@ -664,19 +656,18 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     //
     if (theSelection != null && !theSelection.isEmpty())
     {
-      Runnable runnable =
-        new Runnable()
+      Runnable runnable = new Runnable()
+      {
+        public void run()
         {
-          public void run()
+          // Try to select the items in the current content viewer of the editor.
+          //
+          if (currentViewer != null)
           {
-            // Try to select the items in the current content viewer of the editor.
-            //
-            if (currentViewer != null)
-            {
-              currentViewer.setSelection(new StructuredSelection(theSelection.toArray()), true);
-            }
+            currentViewer.setSelection(new StructuredSelection(theSelection.toArray()), true);
           }
-        };
+        }
+      };
       getSite().getShell().getDisplay().asyncExec(runnable);
     }
   }
@@ -717,7 +708,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
      * @generated
      */
     @Override
-    public Object [] getElements(Object object)
+    public Object[] getElements(Object object)
     {
       Object parent = super.getParent(object);
       return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
@@ -729,7 +720,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
      * @generated
      */
     @Override
-    public Object [] getChildren(Object object)
+    public Object[] getChildren(Object object)
     {
       Object parent = super.getParent(object);
       return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
@@ -776,16 +767,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         // Create the listener on demand.
         //
-        selectionChangedListener =
-          new ISelectionChangedListener()
+        selectionChangedListener = new ISelectionChangedListener()
+        {
+          // This just notifies those things that are affected by the section.
+          //
+          public void selectionChanged(SelectionChangedEvent selectionChangedEvent)
           {
-            // This just notifies those things that are affected by the section.
-            //
-            public void selectionChanged(SelectionChangedEvent selectionChangedEvent)
-            {
-              setSelection(selectionChangedEvent.getSelection());
-            }
-          };
+            setSelection(selectionChangedEvent.getSelection());
+          }
+        };
       }
 
       // Stop listening to the old one.
@@ -835,7 +825,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     contextMenu.add(new Separator("additions"));
     contextMenu.setRemoveAllWhenShown(true);
     contextMenu.addMenuListener(this);
-    Menu menu= contextMenu.createContextMenu(viewer.getControl());
+    Menu menu = contextMenu.createContextMenu(viewer.getControl());
     viewer.getControl().setMenu(menu);
     getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 
@@ -871,7 +861,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
     if (diagnostic.getSeverity() != Diagnostic.OK)
     {
-      resourceToDiagnosticMap.put(resource,  analyzeResourceProblems(resource, exception));
+      resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
     }
     editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
   }
@@ -893,25 +883,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty())
     {
-      BasicDiagnostic basicDiagnostic =
-        new BasicDiagnostic
-          (Diagnostic.ERROR,
-           "org.eclipse.oomph.setup.installer.editor",
-           0,
-           getString("_UI_CreateModelError_message", resource.getURI()),
-           new Object [] { exception == null ? (Object)resource : exception });
+      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.setup.installer.editor", 0, getString(
+          "_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
       basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
       return basicDiagnostic;
     }
     else if (exception != null)
     {
-      return
-        new BasicDiagnostic
-          (Diagnostic.ERROR,
-           "org.eclipse.oomph.setup.installer.editor",
-           0,
-           getString("_UI_CreateModelError_message", resource.getURI()),
-           new Object[] { exception });
+      return new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.setup.installer.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()),
+          new Object[] { exception });
     }
     else
     {
@@ -1279,38 +1259,37 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // Do the work within an operation because this is a long running activity that modifies the workbench.
     //
-    IRunnableWithProgress operation =
-      new IRunnableWithProgress()
+    IRunnableWithProgress operation = new IRunnableWithProgress()
+    {
+      // This is the method that gets invoked when the operation runs.
+      //
+      public void run(IProgressMonitor monitor)
       {
-        // This is the method that gets invoked when the operation runs.
+        // Save the resources to the file system.
         //
-        public void run(IProgressMonitor monitor)
+        boolean first = true;
+        for (Resource resource : editingDomain.getResourceSet().getResources())
         {
-          // Save the resources to the file system.
-          //
-          boolean first = true;
-          for (Resource resource : editingDomain.getResourceSet().getResources())
+          if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource))
           {
-            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource))
+            try
             {
-              try
+              long timeStamp = resource.getTimeStamp();
+              resource.save(saveOptions);
+              if (resource.getTimeStamp() != timeStamp)
               {
-                long timeStamp = resource.getTimeStamp();
-                resource.save(saveOptions);
-                if (resource.getTimeStamp() != timeStamp)
-                {
-                  savedResources.add(resource);
-                }
+                savedResources.add(resource);
               }
-              catch (Exception exception)
-              {
-                resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
-              }
-              first = false;
             }
+            catch (Exception exception)
+            {
+              resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
+            }
+            first = false;
           }
         }
-      };
+      }
+    };
 
     updateProblemIndication = false;
     try
@@ -1397,13 +1376,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   protected void doSaveAs(URI uri, IEditorInput editorInput)
   {
-    (editingDomain.getResourceSet().getResources().get(0)).setURI(uri);
+    editingDomain.getResourceSet().getResources().get(0).setURI(uri);
     setInputWithNotify(editorInput);
     setPartName(editorInput.getName());
-    IProgressMonitor progressMonitor =
-      getActionBars().getStatusLineManager() != null ?
-        getActionBars().getStatusLineManager().getProgressMonitor() :
-        new NullProgressMonitor();
+    IProgressMonitor progressMonitor = getActionBars().getStatusLineManager() != null ? getActionBars().getStatusLineManager().getProgressMonitor()
+        : new NullProgressMonitor();
     doSave(progressMonitor);
   }
 
@@ -1492,8 +1469,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   public void setStatusLineManager(ISelection selection)
   {
-    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ?
-      contentOutlineStatusLineManager : getActionBars().getStatusLineManager();
+    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager : getActionBars()
+        .getStatusLineManager();
 
     if (statusLineManager != null)
     {
@@ -1546,7 +1523,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   private static String getString(String key, Object s1)
   {
-    return SetupEditorPlugin.INSTANCE.getString(key, new Object [] { s1 });
+    return SetupEditorPlugin.INSTANCE.getString(key, new Object[] { s1 });
   }
 
   /**

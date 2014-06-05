@@ -1167,13 +1167,22 @@ public interface SetupPackage extends EPackage
   int USER__ACCEPTED_LICENSES = SCOPE_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Unsigned Policy</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int USER__UNSIGNED_POLICY = SCOPE_FEATURE_COUNT + 2;
+
+  /**
    * The number of structural features of the '<em>User</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int USER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 2;
+  int USER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -2895,6 +2904,16 @@ public interface SetupPackage extends EPackage
   int VARIABLE_TYPE = 34;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.UnsignedPolicy <em>Unsigned Policy</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.UnsignedPolicy
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getUnsignedPolicy()
+   * @generated
+   */
+  int UNSIGNED_POLICY = 35;
+
+  /**
    * The meta object id for the '<em>License Info</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2902,7 +2921,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLicenseInfo()
    * @generated
    */
-  int LICENSE_INFO = 36;
+  int LICENSE_INFO = 37;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Index <em>Index</em>}'.
@@ -2998,7 +3017,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTriggerSet()
    * @generated
    */
-  int TRIGGER_SET = 35;
+  int TRIGGER_SET = 36;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Project <em>Project</em>}'.
@@ -3895,6 +3914,16 @@ public interface SetupPackage extends EPackage
   EEnum getVariableType();
 
   /**
+   * Returns the meta object for enum '{@link org.eclipse.oomph.setup.UnsignedPolicy <em>Unsigned Policy</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>Unsigned Policy</em>'.
+   * @see org.eclipse.oomph.setup.UnsignedPolicy
+   * @generated
+   */
+  EEnum getUnsignedPolicy();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.User <em>User</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3925,6 +3954,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EAttribute getUser_AcceptedLicenses();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.User#getUnsignedPolicy <em>Unsigned Policy</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Unsigned Policy</em>'.
+   * @see org.eclipse.oomph.setup.User#getUnsignedPolicy()
+   * @see #getUser()
+   * @generated
+   */
+  EAttribute getUser_UnsignedPolicy();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Workspace <em>Workspace</em>}'.
@@ -4908,6 +4948,16 @@ public interface SetupPackage extends EPackage
     EEnum VARIABLE_TYPE = eINSTANCE.getVariableType();
 
     /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.UnsignedPolicy <em>Unsigned Policy</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.UnsignedPolicy
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getUnsignedPolicy()
+     * @generated
+     */
+    EEnum UNSIGNED_POLICY = eINSTANCE.getUnsignedPolicy();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.UserImpl <em>User</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4932,6 +4982,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute USER__ACCEPTED_LICENSES = eINSTANCE.getUser_AcceptedLicenses();
+
+    /**
+     * The meta object literal for the '<em><b>Unsigned Policy</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute USER__UNSIGNED_POLICY = eINSTANCE.getUser_UnsignedPolicy();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.WorkspaceImpl <em>Workspace</em>}' class.

@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.User#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.User#getUnsignedPolicy <em>Unsigned Policy</em>}</li>
  * </ul>
  * </p>
  *
@@ -47,6 +48,36 @@ public interface User extends Scope
    * @generated
    */
   EList<LicenseInfo> getAcceptedLicenses();
+
+  /**
+   * Returns the value of the '<em><b>Unsigned Policy</b></em>' attribute.
+   * The default value is <code>"PROMPT"</code>.
+   * The literals are from the enumeration {@link org.eclipse.oomph.setup.UnsignedPolicy}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Unsigned Policy</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Unsigned Policy</em>' attribute.
+   * @see org.eclipse.oomph.setup.UnsignedPolicy
+   * @see #setUnsignedPolicy(UnsignedPolicy)
+   * @see org.eclipse.oomph.setup.SetupPackage#getUser_UnsignedPolicy()
+   * @model default="PROMPT"
+   * @generated
+   */
+  UnsignedPolicy getUnsignedPolicy();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.User#getUnsignedPolicy <em>Unsigned Policy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Unsigned Policy</em>' attribute.
+   * @see org.eclipse.oomph.setup.UnsignedPolicy
+   * @see #getUnsignedPolicy()
+   * @generated
+   */
+  void setUnsignedPolicy(UnsignedPolicy value);
 
   /**
    * Returns the value of the '<em><b>Attribute Rules</b></em>' containment reference list.

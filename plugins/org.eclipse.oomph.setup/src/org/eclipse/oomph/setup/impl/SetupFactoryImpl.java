@@ -37,6 +37,7 @@ import org.eclipse.oomph.setup.StringSubstitutionTask;
 import org.eclipse.oomph.setup.TextModification;
 import org.eclipse.oomph.setup.TextModifyTask;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
@@ -204,6 +205,8 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return createTriggerFromString(eDataType, initialValue);
       case SetupPackage.VARIABLE_TYPE:
         return createVariableTypeFromString(eDataType, initialValue);
+      case SetupPackage.UNSIGNED_POLICY:
+        return createUnsignedPolicyFromString(eDataType, initialValue);
       case SetupPackage.TRIGGER_SET:
         return createTriggerSetFromString(eDataType, initialValue);
       case SetupPackage.LICENSE_INFO:
@@ -229,6 +232,8 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return convertTriggerToString(eDataType, instanceValue);
       case SetupPackage.VARIABLE_TYPE:
         return convertVariableTypeToString(eDataType, instanceValue);
+      case SetupPackage.UNSIGNED_POLICY:
+        return convertUnsignedPolicyToString(eDataType, instanceValue);
       case SetupPackage.TRIGGER_SET:
         return convertTriggerSetToString(eDataType, instanceValue);
       case SetupPackage.LICENSE_INFO:
@@ -584,6 +589,31 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * @generated
    */
   public String convertVariableTypeToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnsignedPolicy createUnsignedPolicyFromString(EDataType eDataType, String initialValue)
+  {
+    UnsignedPolicy result = UnsignedPolicy.get(initialValue);
+    if (result == null)
+    {
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    }
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertUnsignedPolicyToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }

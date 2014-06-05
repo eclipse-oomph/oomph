@@ -15,7 +15,6 @@ import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -27,22 +26,18 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class LicenseDialog extends AbstractSetupDialog
+public class LicenseDialog extends AbstractConfirmDialog
 {
   private static final String LIST_WEIGHT = "ListSashWeight"; //$NON-NLS-1$
 
@@ -54,7 +49,7 @@ public class LicenseDialog extends AbstractSetupDialog
 
   private static final int TABLE_HEIGHT = 10;
 
-  private Map<ILicense, List<IInstallableUnit>> licensesToIUs;
+  private final Map<ILicense, List<IInstallableUnit>> licensesToIUs;
 
   private SashForm sashForm;
 
@@ -62,17 +57,10 @@ public class LicenseDialog extends AbstractSetupDialog
 
   private Text licenseTextBox;
 
-  private boolean rememberAcceptedLicenses;
-
-  public LicenseDialog(Shell parentShell, Map<ILicense, List<IInstallableUnit>> licensesToIUs)
+  public LicenseDialog(Map<ILicense, List<IInstallableUnit>> licensesToIUs)
   {
-    super(parentShell, "Licenses", 1000, 600, SetupUIPlugin.INSTANCE, null);
+    super("Licenses", 1000, 600, "Remember accepted licenses");
     this.licensesToIUs = licensesToIUs;
-  }
-
-  public boolean isRememberAcceptedLicenses()
-  {
-    return rememberAcceptedLicenses;
   }
 
   @Override
@@ -108,23 +96,6 @@ public class LicenseDialog extends AbstractSetupDialog
     }
 
     Dialog.applyDialogFont(control);
-  }
-
-  @Override
-  protected void createButtonsForButtonBar(Composite parent)
-  {
-    final Button checkbox = createCheckbox(parent, "Remember accepted licenses");
-    checkbox.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        rememberAcceptedLicenses = checkbox.getSelection();
-      }
-    });
-
-    createButton(parent, IDialogConstants.OK_ID, "Accept", false);
-    createButton(parent, IDialogConstants.CANCEL_ID, "Decline", true);
   }
 
   private void createLicenseListSection(Composite parent)

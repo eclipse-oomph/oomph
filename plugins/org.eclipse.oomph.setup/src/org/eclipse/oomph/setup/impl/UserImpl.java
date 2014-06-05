@@ -14,12 +14,15 @@ import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -35,6 +38,7 @@ import java.util.Collection;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getUnsignedPolicy <em>Unsigned Policy</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,6 +65,26 @@ public class UserImpl extends ScopeImpl implements User
    * @ordered
    */
   protected EList<LicenseInfo> acceptedLicenses;
+
+  /**
+   * The default value of the '{@link #getUnsignedPolicy() <em>Unsigned Policy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getUnsignedPolicy()
+   * @generated
+   * @ordered
+   */
+  protected static final UnsignedPolicy UNSIGNED_POLICY_EDEFAULT = UnsignedPolicy.PROMPT;
+
+  /**
+   * The cached value of the '{@link #getUnsignedPolicy() <em>Unsigned Policy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getUnsignedPolicy()
+   * @generated
+   * @ordered
+   */
+  protected UnsignedPolicy unsignedPolicy = UNSIGNED_POLICY_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -95,6 +119,31 @@ public class UserImpl extends ScopeImpl implements User
       acceptedLicenses = new EDataTypeUniqueEList<LicenseInfo>(LicenseInfo.class, this, SetupPackage.USER__ACCEPTED_LICENSES);
     }
     return acceptedLicenses;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnsignedPolicy getUnsignedPolicy()
+  {
+    return unsignedPolicy;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setUnsignedPolicy(UnsignedPolicy newUnsignedPolicy)
+  {
+    UnsignedPolicy oldUnsignedPolicy = unsignedPolicy;
+    unsignedPolicy = newUnsignedPolicy == null ? UNSIGNED_POLICY_EDEFAULT : newUnsignedPolicy;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.USER__UNSIGNED_POLICY, oldUnsignedPolicy, unsignedPolicy));
+    }
   }
 
   /**
@@ -152,6 +201,8 @@ public class UserImpl extends ScopeImpl implements User
         return getAttributeRules();
       case SetupPackage.USER__ACCEPTED_LICENSES:
         return getAcceptedLicenses();
+      case SetupPackage.USER__UNSIGNED_POLICY:
+        return getUnsignedPolicy();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -175,6 +226,9 @@ public class UserImpl extends ScopeImpl implements User
         getAcceptedLicenses().clear();
         getAcceptedLicenses().addAll((Collection<? extends LicenseInfo>)newValue);
         return;
+      case SetupPackage.USER__UNSIGNED_POLICY:
+        setUnsignedPolicy((UnsignedPolicy)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -195,6 +249,9 @@ public class UserImpl extends ScopeImpl implements User
       case SetupPackage.USER__ACCEPTED_LICENSES:
         getAcceptedLicenses().clear();
         return;
+      case SetupPackage.USER__UNSIGNED_POLICY:
+        setUnsignedPolicy(UNSIGNED_POLICY_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -213,6 +270,8 @@ public class UserImpl extends ScopeImpl implements User
         return attributeRules != null && !attributeRules.isEmpty();
       case SetupPackage.USER__ACCEPTED_LICENSES:
         return acceptedLicenses != null && !acceptedLicenses.isEmpty();
+      case SetupPackage.USER__UNSIGNED_POLICY:
+        return unsignedPolicy != UNSIGNED_POLICY_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -233,6 +292,8 @@ public class UserImpl extends ScopeImpl implements User
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (acceptedLicenses: ");
     result.append(acceptedLicenses);
+    result.append(", unsignedPolicy: ");
+    result.append(unsignedPolicy);
     result.append(')');
     return result.toString();
   }

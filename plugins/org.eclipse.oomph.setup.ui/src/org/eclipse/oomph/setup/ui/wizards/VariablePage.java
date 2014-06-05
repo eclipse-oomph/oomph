@@ -11,26 +11,31 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.p2.LicenseConfirmation;
-import org.eclipse.oomph.p2.LicensePrompter;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.ui.AbstractConfirmDialog;
+import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.LicenseDialog;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionsUtil;
+import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
@@ -55,10 +60,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 import java.io.File;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,8 +79,19 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class VariablePage extends SetupWizardPage implements SetupPrompter, LicensePrompter
+public class VariablePage extends SetupWizardPage implements SetupPrompter
 {
+  private static final Confirmer LICENSE_CONFIRMER = new AbstractDialogConfirmer()
+  {
+    @Override
+    protected AbstractConfirmDialog createDialog(boolean defaultConfirmed, Object info)
+    {
+      @SuppressWarnings("unchecked")
+      Map<ILicense, List<IInstallableUnit>> licensesToIUs = (Map<ILicense, List<IInstallableUnit>>)info;
+      return new LicenseDialog(licensesToIUs);
+    }
+  };
+
   private Composite composite;
 
   private ScrolledComposite scrolledComposite;
@@ -548,6 +564,49 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     return null;
   }
 
+  private Confirmer createUnsignedContentConfirmer(final User user)
+  {
+    Boolean propPolicy = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_UNSIGNED_POLICY);
+    if (propPolicy != null)
+    {
+      return propPolicy ? Confirmer.ACCEPT : Confirmer.DECLINE;
+    }
+
+    UnsignedPolicy userPolicy = user.getUnsignedPolicy();
+    if (userPolicy == UnsignedPolicy.ACCEPT)
+    {
+      return Confirmer.ACCEPT;
+    }
+
+    if (userPolicy == UnsignedPolicy.DECLINE)
+    {
+      return Confirmer.DECLINE;
+    }
+
+    return new AbstractDialogConfirmer()
+    {
+      @Override
+      public Confirmation confirm(boolean defaultConfirmed, Object info)
+      {
+        Confirmation confirmation = super.confirm(defaultConfirmed, info);
+        if (confirmation.isRemember())
+        {
+          UnsignedPolicy unsignedPolicy = confirmation.isConfirmed() ? UnsignedPolicy.ACCEPT : UnsignedPolicy.DECLINE;
+          user.setUnsignedPolicy(unsignedPolicy);
+        }
+
+        return confirmation;
+      }
+
+      @Override
+      protected AbstractConfirmDialog createDialog(boolean defaultConfirmed, Object info)
+      {
+        String[] unsignedContent = (String[])info;
+        return new UnsignedContentDialog(unsignedContent);
+      }
+    };
+  }
+
   private void validate()
   {
     try
@@ -560,7 +619,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
 
         User originalUser = getUser();
         URI uri = originalUser.eResource().getURI();
-        User user = EcoreUtil.copy(originalUser);
+        final User user = EcoreUtil.copy(originalUser);
         Resource userResource = Resource.Factory.Registry.INSTANCE.getFactory(uri).createResource(uri);
         userResource.getContents().add(user);
 
@@ -574,7 +633,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
         performer = SetupTaskPerformer.create(uriConverter, this, trigger, context, fullPrompt);
         if (performer != null)
         {
-          performer.put(LicensePrompter.class, this);
+          performer.put(ILicense.class, LICENSE_CONFIRMER);
+          performer.put(Certificate.class, createUnsignedContentConfirmer(user));
         }
       }
       catch (OperationCanceledException ex)
@@ -680,32 +740,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter, Lice
     {
       setPerformer(null);
     }
-  }
-
-  public LicenseConfirmation promptLicenses(final Map<ILicense, List<IInstallableUnit>> licensesToIUs)
-  {
-    final LicenseConfirmation[] result = { LicenseConfirmation.DECLINE };
-
-    Display.getDefault().syncExec(new Runnable()
-    {
-      public void run()
-      {
-        LicenseDialog dialog = new LicenseDialog(null, licensesToIUs);
-        if (dialog.open() == LicenseDialog.OK)
-        {
-          if (dialog.isRememberAcceptedLicenses())
-          {
-            result[0] = LicenseConfirmation.ACCEPT_AND_REMEMBER;
-          }
-          else
-          {
-            result[0] = LicenseConfirmation.ACCEPT;
-          }
-        }
-      }
-    });
-
-    return result[0];
   }
 
   public String getValue(VariableTask variable)

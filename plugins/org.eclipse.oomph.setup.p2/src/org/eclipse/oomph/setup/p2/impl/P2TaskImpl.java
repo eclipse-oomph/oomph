@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.setup.p2.impl;
 
-import org.eclipse.oomph.p2.LicenseConfirmation;
-import org.eclipse.oomph.p2.LicensePrompter;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
@@ -37,6 +35,8 @@ import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.util.DownloadUtil;
 import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.setup.util.OS;
+import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -71,6 +71,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -550,17 +551,17 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     EList<Requirement> requirements = getRequirements();
     EList<Repository> repositories = getRepositories();
 
-    context.log("Installing " + requirements.size() + (requirements.size() == 1 ? " unit" : " units") + " from " + repositories.size()
+    context.log("Resolving " + requirements.size() + (requirements.size() == 1 ? " requirement" : " requirements") + " from " + repositories.size()
         + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
 
     for (Requirement requirement : requirements)
     {
-      context.log("Installing " + requirement);
+      context.log("Requirement " + requirement);
     }
 
     for (Repository repository : repositories)
     {
-      context.log("From " + repository.getURL());
+      context.log("Repository " + repository.getURL());
     }
 
     String profileID = StringUtil.encodePath(eclipseDir.toString());
@@ -582,6 +583,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         {
           SetupP2Plugin.INSTANCE.coreException(ex);
         }
+      }
+
+      @Override
+      public Confirmer getUnsignedContentConfirmer()
+      {
+        return (Confirmer)context.get(Certificate.class);
       }
     };
 
@@ -711,19 +718,19 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     if (!licensesToIUs.isEmpty())
     {
-      LicensePrompter prompter = (LicensePrompter)context.get(LicensePrompter.class);
-      if (prompter == null)
+      Confirmer licenseConfirmer = (Confirmer)context.get(ILicense.class);
+      if (licenseConfirmer == null)
       {
-        prompter = LicensePrompter.DECLINE;
+        licenseConfirmer = Confirmer.DECLINE;
       }
 
-      LicenseConfirmation confirmation = prompter.promptLicenses(licensesToIUs);
-      if (confirmation == LicenseConfirmation.DECLINE)
+      Confirmation confirmation = licenseConfirmer.confirm(false, licensesToIUs);
+      if (!confirmation.isConfirmed())
       {
         throw new UnsupportedOperationException("Licenses have been declined");
       }
 
-      if (confirmation == LicenseConfirmation.ACCEPT_AND_REMEMBER)
+      if (confirmation.isRemember())
       {
         for (ILicense license : licensesToIUs.keySet())
         {

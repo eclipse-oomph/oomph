@@ -41,6 +41,7 @@ import org.eclipse.oomph.setup.StringSubstitutionTask;
 import org.eclipse.oomph.setup.TextModification;
 import org.eclipse.oomph.setup.TextModifyTask;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
@@ -270,6 +271,13 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   private EEnum variableTypeEEnum = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EEnum unsignedPolicyEEnum = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1311,6 +1319,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EEnum getUnsignedPolicy()
+  {
+    return unsignedPolicyEEnum;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getUser()
   {
     return userEClass;
@@ -1334,6 +1352,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   public EAttribute getUser_AcceptedLicenses()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getUser_UnsignedPolicy()
+  {
+    return (EAttribute)userEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1587,6 +1615,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     userEClass = createEClass(USER);
     createEReference(userEClass, USER__ATTRIBUTE_RULES);
     createEAttribute(userEClass, USER__ACCEPTED_LICENSES);
+    createEAttribute(userEClass, USER__UNSIGNED_POLICY);
 
     attributeRuleEClass = createEClass(ATTRIBUTE_RULE);
     createEAttribute(attributeRuleEClass, ATTRIBUTE_RULE__ATTRIBUTE_URI);
@@ -1670,6 +1699,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     scopeTypeEEnum = createEEnum(SCOPE_TYPE);
     triggerEEnum = createEEnum(TRIGGER);
     variableTypeEEnum = createEEnum(VARIABLE_TYPE);
+    unsignedPolicyEEnum = createEEnum(UNSIGNED_POLICY);
 
     // Create data types
     triggerSetEDataType = createEDataType(TRIGGER_SET);
@@ -1863,6 +1893,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     getUser_AttributeRules().getEKeys().add(getAttributeRule_AttributeURI());
     initEAttribute(getUser_AcceptedLicenses(), getLicenseInfo(), "acceptedLicenses", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getUser_UnsignedPolicy(), getUnsignedPolicy(), "unsignedPolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(attributeRuleEClass, AttributeRule.class, "AttributeRule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getAttributeRule_AttributeURI(), theBasePackage.getURI(), "attributeURI", null, 0, 1, AttributeRule.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -2015,6 +2047,11 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEEnumLiteral(variableTypeEEnum, VariableType.BOOLEAN);
     addEEnumLiteral(variableTypeEEnum, VariableType.INTEGER);
     addEEnumLiteral(variableTypeEEnum, VariableType.FLOAT);
+
+    initEEnum(unsignedPolicyEEnum, UnsignedPolicy.class, "UnsignedPolicy");
+    addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.PROMPT);
+    addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.ACCEPT);
+    addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.DECLINE);
 
     // Initialize data types
     initEDataType(triggerSetEDataType, Set.class, "TriggerSet", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, "java.util.Set<org.eclipse.oomph.setup.Trigger>");

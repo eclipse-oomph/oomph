@@ -182,6 +182,8 @@
         <details key="name" value="acceptedLicense"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unsignedPolicy" eType="#//UnsignedPolicy"
+        defaultValueLiteral="PROMPT"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeRule" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeURI" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"/>
@@ -430,4 +432,9 @@
     <eLiterals name="FLOAT" value="12"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="LicenseInfo" instanceClassName="org.eclipse.oomph.setup.LicenseInfo"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="UnsignedPolicy">
+    <eLiterals name="PROMPT"/>
+    <eLiterals name="ACCEPT" value="1"/>
+    <eLiterals name="DECLINE" value="2"/>
+  </eClassifiers>
 </ecore:EPackage>

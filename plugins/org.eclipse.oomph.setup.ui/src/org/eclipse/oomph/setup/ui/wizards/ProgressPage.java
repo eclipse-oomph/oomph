@@ -567,8 +567,10 @@ public class ProgressPage extends SetupWizardPage
           .toString()));
     }
 
+    User performerUser = performer.getUser();
     User user = getUser();
-    user.getAcceptedLicenses().addAll(performer.getUser().getAcceptedLicenses());
+    user.getAcceptedLicenses().addAll(performerUser.getAcceptedLicenses());
+    user.setUnsignedPolicy(performerUser.getUnsignedPolicy());
 
     EMFUtil.saveEObject(installation);
     if (workspace != null)
