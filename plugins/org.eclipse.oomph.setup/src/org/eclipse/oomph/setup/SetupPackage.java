@@ -1781,13 +1781,22 @@ public interface SetupPackage extends EPackage
   int VARIABLE_TASK__VALUE = SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Default Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_TASK__DEFAULT_VALUE = SETUP_TASK_FEATURE_COUNT + 3;
+
+  /**
    * The feature id for the '<em><b>Store Prompted Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK__STORE_PROMPTED_VALUE = SETUP_TASK_FEATURE_COUNT + 3;
+  int VARIABLE_TASK__STORE_PROMPTED_VALUE = SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -1796,7 +1805,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK__LABEL = SETUP_TASK_FEATURE_COUNT + 4;
+  int VARIABLE_TASK__LABEL = SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Choices</b></em>' containment reference list.
@@ -1805,7 +1814,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK__CHOICES = SETUP_TASK_FEATURE_COUNT + 5;
+  int VARIABLE_TASK__CHOICES = SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * The number of structural features of the '<em>Variable Task</em>' class.
@@ -1814,7 +1823,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 6;
+  int VARIABLE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -3339,6 +3348,17 @@ public interface SetupPackage extends EPackage
   EAttribute getVariableTask_Value();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.VariableTask#getDefaultValue <em>Default Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Default Value</em>'.
+   * @see org.eclipse.oomph.setup.VariableTask#getDefaultValue()
+   * @see #getVariableTask()
+   * @generated
+   */
+  EAttribute getVariableTask_DefaultValue();
+
+  /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.VariableTask#isStorePromptedValue <em>Store Prompted Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4490,6 +4510,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute VARIABLE_TASK__VALUE = eINSTANCE.getVariableTask_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Default Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VARIABLE_TASK__DEFAULT_VALUE = eINSTANCE.getVariableTask_DefaultValue();
 
     /**
      * The meta object literal for the '<em><b>Store Prompted Value</b></em>' attribute feature.

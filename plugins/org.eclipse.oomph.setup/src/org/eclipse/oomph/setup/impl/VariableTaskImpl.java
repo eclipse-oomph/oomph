@@ -43,6 +43,7 @@ import java.util.List;
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getDefaultValue <em>Default Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#isStorePromptedValue <em>Store Prompted Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getChoices <em>Choices</em>}</li>
@@ -116,6 +117,26 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * @ordered
    */
   protected String value = VALUE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDefaultValue()
+   * @generated
+   * @ordered
+   */
+  protected static final String DEFAULT_VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDefaultValue()
+   * @generated
+   * @ordered
+   */
+  protected String defaultValue = DEFAULT_VALUE_EDEFAULT;
 
   /**
    * The default value of the '{@link #isStorePromptedValue() <em>Store Prompted Value</em>}' attribute.
@@ -268,6 +289,31 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getDefaultValue()
+  {
+    return defaultValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDefaultValue(String newDefaultValue)
+  {
+    String oldDefaultValue = defaultValue;
+    defaultValue = newDefaultValue;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.VARIABLE_TASK__DEFAULT_VALUE, oldDefaultValue, defaultValue));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getLabel()
   {
     return label;
@@ -359,6 +405,8 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         return getName();
       case SetupPackage.VARIABLE_TASK__VALUE:
         return getValue();
+      case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
+        return getDefaultValue();
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
         return isStorePromptedValue();
       case SetupPackage.VARIABLE_TASK__LABEL:
@@ -388,6 +436,9 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         return;
       case SetupPackage.VARIABLE_TASK__VALUE:
         setValue((String)newValue);
+        return;
+      case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
+        setDefaultValue((String)newValue);
         return;
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
         setStorePromptedValue((Boolean)newValue);
@@ -422,6 +473,9 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
       case SetupPackage.VARIABLE_TASK__VALUE:
         setValue(VALUE_EDEFAULT);
         return;
+      case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
+        setDefaultValue(DEFAULT_VALUE_EDEFAULT);
+        return;
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
         setStorePromptedValue(STORE_PROMPTED_VALUE_EDEFAULT);
         return;
@@ -451,6 +505,8 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case SetupPackage.VARIABLE_TASK__VALUE:
         return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+      case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
+        return DEFAULT_VALUE_EDEFAULT == null ? defaultValue != null : !DEFAULT_VALUE_EDEFAULT.equals(defaultValue);
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
         return storePromptedValue != STORE_PROMPTED_VALUE_EDEFAULT;
       case SetupPackage.VARIABLE_TASK__LABEL:

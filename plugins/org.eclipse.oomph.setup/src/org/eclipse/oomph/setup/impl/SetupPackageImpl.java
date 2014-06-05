@@ -789,7 +789,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getVariableTask_StorePromptedValue()
+  public EAttribute getVariableTask_DefaultValue()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(3);
   }
@@ -799,7 +799,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getVariableTask_Label()
+  public EAttribute getVariableTask_StorePromptedValue()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(4);
   }
@@ -809,9 +809,19 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getVariableTask_Label()
+  {
+    return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getVariableTask_Choices()
   {
-    return (EReference)variableTaskEClass.getEStructuralFeatures().get(5);
+    return (EReference)variableTaskEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -1640,6 +1650,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(variableTaskEClass, VARIABLE_TASK__TYPE);
     createEAttribute(variableTaskEClass, VARIABLE_TASK__NAME);
     createEAttribute(variableTaskEClass, VARIABLE_TASK__VALUE);
+    createEAttribute(variableTaskEClass, VARIABLE_TASK__DEFAULT_VALUE);
     createEAttribute(variableTaskEClass, VARIABLE_TASK__STORE_PROMPTED_VALUE);
     createEAttribute(variableTaskEClass, VARIABLE_TASK__LABEL);
     createEReference(variableTaskEClass, VARIABLE_TASK__CHOICES);
@@ -1929,6 +1940,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVariableTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getVariableTask_DefaultValue(), ecorePackage.getEString(), "defaultValue", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVariableTask_StorePromptedValue(), ecorePackage.getEBoolean(), "storePromptedValue", "true", 0, 1, VariableTask.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVariableTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,

@@ -61,6 +61,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
       addTypePropertyDescriptor(object);
       addNamePropertyDescriptor(object);
       addValuePropertyDescriptor(object);
+      addDefaultValuePropertyDescriptor(object);
       addStorePromptedValuePropertyDescriptor(object);
       addLabelPropertyDescriptor(object);
     }
@@ -117,6 +118,20 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_VariableTask_value_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_value_feature", "_UI_VariableTask_type"), SetupPackage.Literals.VARIABLE_TASK__VALUE,
         true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Default Value feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addDefaultValuePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_VariableTask_defaultValue_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_defaultValue_feature", "_UI_VariableTask_type"),
+        SetupPackage.Literals.VARIABLE_TASK__DEFAULT_VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -254,6 +269,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
       case SetupPackage.VARIABLE_TASK__TYPE:
       case SetupPackage.VARIABLE_TASK__NAME:
       case SetupPackage.VARIABLE_TASK__VALUE:
+      case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
       case SetupPackage.VARIABLE_TASK__LABEL:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

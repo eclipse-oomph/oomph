@@ -42,6 +42,11 @@
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/INTEGER"/>
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/FLOAT"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//UnsignedPolicy">
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//UnsignedPolicy/PROMPT"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//UnsignedPolicy/ACCEPT"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//UnsignedPolicy/DECLINE"/>
+    </genEnums>
     <genDataTypes ecoreDataType="Setup.ecore#//TriggerSet"/>
     <genDataTypes ecoreDataType="Setup.ecore#//LicenseInfo"/>
     <genClasses image="false" ecoreClass="Setup.ecore#//SetupTask">
@@ -128,6 +133,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/acceptedLicenses">
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
       </genFeatures>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/unsignedPolicy"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//AttributeRule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//AttributeRule/attributeURI"/>
@@ -152,6 +158,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/defaultValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/storePromptedValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/label"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//VariableTask/choices"/>

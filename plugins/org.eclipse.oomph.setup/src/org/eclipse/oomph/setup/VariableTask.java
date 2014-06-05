@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.VariableTask#getDefaultValue <em>Default Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#isStorePromptedValue <em>Store Prompted Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getChoices <em>Choices</em>}</li>
@@ -116,6 +117,32 @@ public interface VariableTask extends SetupTask
    * @generated
    */
   void setValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>Default Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Default Value</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Default Value</em>' attribute.
+   * @see #setDefaultValue(String)
+   * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_DefaultValue()
+   * @model
+   * @generated
+   */
+  String getDefaultValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.VariableTask#getDefaultValue <em>Default Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Default Value</em>' attribute.
+   * @see #getDefaultValue()
+   * @generated
+   */
+  void setDefaultValue(String value);
 
   /**
    * Returns the value of the '<em><b>Label</b></em>' attribute.
