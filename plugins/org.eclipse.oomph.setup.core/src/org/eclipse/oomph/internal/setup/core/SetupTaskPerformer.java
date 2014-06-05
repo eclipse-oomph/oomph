@@ -287,7 +287,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               }
             }
 
-            Repository repository = P2Factory.eINSTANCE.createRepository("${" + variableName + "}");
+            Repository repository = P2Factory.eINSTANCE.createRepository(getVariableReference(variableName));
             p2Task.getRepositories().add(repository);
 
             // Ensure that these are first so that these are the targets for merging rather than the sources.
@@ -485,6 +485,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               {
                 String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute);
                 String value = (String)setupTask.eGet(eAttribute);
+                String variableReference = getVariableReference(variableName);
                 if (explicitKeys.containsKey(variableName))
                 {
                   if (StringUtil.isEmpty(value))
@@ -492,7 +493,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                     if (variableAnnotation != null)
                     {
-                      setupTask.eSet(eAttribute, "${" + variableName + "}");
+                      setupTask.eSet(eAttribute, variableReference);
                     }
                   }
                 }
@@ -516,7 +517,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     {
                       ruleBasedAttributes.put(variable, eAttribute);
                       populateImpliedVariable(setupTask, eAttribute, variableAnnotation, variable);
-                      setupTask.eSet(eAttribute, "${" + variableName + "}");
+                      setupTask.eSet(eAttribute, variableReference);
                     }
                     else
                     {
@@ -539,13 +540,33 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
                       VariableTask ruleVariable = SetupFactory.eINSTANCE.createVariableTask();
                       annotateRuleVariable(ruleVariable, variable);
-                      ruleVariable.setName(details.get(EAnnotationConstants.KEY_NAME));
+                      String ruleVariableName = details.get(EAnnotationConstants.KEY_NAME);
+                      ruleVariable.setName(ruleVariableName);
                       ruleVariable.setStorePromptedValue("true".equals(details.get(EAnnotationConstants.KEY_STORE_PROMPTED_VALUE)));
 
                       populateImpliedVariable(setupTask, null, ruleVariableAnnotation, ruleVariable);
                       it.add(ruleVariable);
-                      explicitKeys.put(ruleVariable.getName(), ruleVariable);
+                      explicitKeys.put(ruleVariableName, ruleVariable);
                     }
+                  }
+
+                  // If the variable is a self reference.
+                  EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
+                  if (variableAnnotation != null && variableReference.equals(variable.getValue()))
+                  {
+                    EMap<String, String> details = variableAnnotation.getDetails();
+                    VariableTask explicitVariable = SetupFactory.eINSTANCE.createVariableTask();
+                    String explicitVariableName = variableName + ".explicit";
+                    explicitVariable.setName(explicitVariableName);
+                    explicitVariable.setStorePromptedValue(false);
+                    explicitVariable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_EXPLICIT_TYPE)));
+                    explicitVariable.setLabel(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_LABEL)));
+                    explicitVariable.setDescription(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_DESCRIPTION)));
+                    it.add(explicitVariable);
+                    explicitKeys.put(explicitVariableName, explicitVariable);
+                    annotateRuleVariable(explicitVariable, variable);
+
+                    variable.setValue(getVariableReference(explicitVariableName));
                   }
                 }
               }
@@ -614,6 +635,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       }
     }
+  }
+
+  private String getVariableReference(String variableName)
+  {
+    return "${" + variableName + "}";
   }
 
   private void handleActiveAnnotations(SetupTask setupTask, Map<String, VariableTask> explicitKeys)
@@ -688,7 +714,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 {
                   if (!StringUtil.isEmpty(variableTask.getValue()))
                   {
-                    setupTask.eSet(eStructuralFeature, "${" + variableTask.getName() + "}");
+                    setupTask.eSet(eStructuralFeature, getVariableReference(variableTask.getName()));
                   }
                 }
                 else
@@ -796,7 +822,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     variableTask.setLabel(explicitLabel);
                     variableTask.setDescription(explicitDescription);
                   }
-                  setupTask.eSet(eStructuralFeature, "${" + variableTask.getName() + "}");
+                  setupTask.eSet(eStructuralFeature, getVariableReference(variableTask.getName()));
                 }
               }
             }
@@ -984,7 +1010,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     StringBuilder builder = new StringBuilder();
     int index = 0;
-    while (matcher.find())
+    for (; matcher.find(); index = matcher.end())
     {
       builder.append(value, index, matcher.start());
       String key = matcher.group().substring(1);
@@ -994,13 +1020,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         feature = EMFUtil.getFeature(eClass, key);
         if (feature == null)
         {
-          throw new IllegalStateException("Attribute reference can not be resolved: " + key);
+          builder.append('@');
+          builder.append(key);
+
+          continue;
         }
       }
 
       Object featureValue = setupTask.eGet(feature);
       builder.append(featureValue);
-      index = matcher.end();
     }
 
     builder.append(value, index, value.length());

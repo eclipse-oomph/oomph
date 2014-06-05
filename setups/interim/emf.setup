@@ -93,6 +93,7 @@
         <value>remoteURI</value>
       </detail>
     </annotation>
+    <description>EMF</description>
   </setupTask>
   <setupTask
       xsi:type="jdt:JRETask"
@@ -128,6 +129,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>XSD</description>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask"

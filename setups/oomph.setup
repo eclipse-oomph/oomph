@@ -155,6 +155,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Oomph</description>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">

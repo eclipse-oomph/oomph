@@ -40,9 +40,16 @@
           <details key="value" value="${git.container.root/}${@id.remoteURI|uriLastSegment/}${@id.checkoutBranch}"/>
           <details key="label" value="Located in a folder named '&lt;repo>/&lt;branch>' within the root Git-container folder "/>
         </eAnnotations>
+        <eAnnotations source="Choice">
+          <details key="value" value="${@id.location}"/>
+          <details key="label" value="Located in the specified absolute folder location"/>
+        </eAnnotations>
         <details key="type" value="STRING"/>
         <details key="label" value="Git clone location rule"/>
         <details key="description" value="The rule for the absolute folder location where the Git clone is located"/>
+        <details key="explicitType" value="FOLDER"/>
+        <details key="explicitLabel" value="${@id.description} Git clone location"/>
+        <details key="explicitDescription" value="The absolute folder location where the ${@id.description} Git clone is located"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/oomph/setup/RuleVariable">
         <details key="name" value="git.container.root"/>

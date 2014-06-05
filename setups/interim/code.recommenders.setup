@@ -1320,6 +1320,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders</description>
     </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
@@ -1637,6 +1638,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Code Search</description>
     </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
@@ -1658,6 +1660,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Live Doc</description>
     </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
@@ -1679,6 +1682,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Snip Match</description>
     </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
@@ -1700,6 +1704,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Stats</description>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
@@ -1847,6 +1852,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Logging</description>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
@@ -1934,6 +1940,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Privacy</description>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">

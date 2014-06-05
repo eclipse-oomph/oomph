@@ -93,6 +93,7 @@
         <value>remoteURI</value>
       </detail>
     </annotation>
+    <description>Xtext</description>
   </setupTask>
   <setupTask
       xsi:type="git:GitCloneTask"
@@ -114,6 +115,7 @@
         <value>remoteURI</value>
       </detail>
     </annotation>
+    <description>EMF</description>
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"

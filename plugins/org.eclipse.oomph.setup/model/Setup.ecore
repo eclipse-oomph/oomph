@@ -202,12 +202,15 @@
           <details key="label" value="Installed in a uniquely-named folder within the root install folder"/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${absolute.installation.location}"/>
+          <details key="value" value="${@id.location}"/>
           <details key="label" value="Installed in the specified absolute folder location"/>
         </eAnnotations>
         <details key="type" value="STRING"/>
         <details key="label" value="Installation location rule"/>
         <details key="description" value="The rule for the absolute folder location where the product is installed"/>
+        <details key="explicitType" value="FOLDER"/>
+        <details key="explicitLabel" value="Installation location"/>
+        <details key="explicitDescription" value="The absolute folder location where the product is installed"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/oomph/setup/RuleVariable">
         <details key="name" value="install.root"/>
@@ -221,12 +224,6 @@
         <details key="type" value="STRING"/>
         <details key="label" value="Installation folder name"/>
         <details key="description" value="The name of the folder within the root install folder where the product is installed"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.eclipse.org/oomph/setup/RuleVariable">
-        <details key="name" value="absolute.installation.location"/>
-        <details key="type" value="FOLDER"/>
-        <details key="label" value="Installation location"/>
-        <details key="description" value="The absolute folder location where the product is installed"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -247,16 +244,19 @@
           <details key="label" value="Located in a uniquely-named folder within the root workspace-container folder"/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${absolute.workspace.location}"/>
-          <details key="label" value="Located in the specified absolute folder location"/>
-        </eAnnotations>
-        <eAnnotations source="Choice">
           <details key="value" value="${installation.location/ws}"/>
           <details key="label" value="Located in a folder named 'ws' within the installation folder"/>
+        </eAnnotations>
+        <eAnnotations source="Choice">
+          <details key="value" value="${@id.location}"/>
+          <details key="label" value="Located in the specified absolute folder location"/>
         </eAnnotations>
         <details key="type" value="STRING"/>
         <details key="label" value="Workspace location rule"/>
         <details key="description" value="The rule for the absolute folder location where the workspace is located"/>
+        <details key="explicitType" value="FOLDER"/>
+        <details key="explicitLabel" value="Workspace location"/>
+        <details key="explicitDescription" value="The absolute folder location where the workspace is located"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/oomph/setup/RuleVariable">
         <details key="name" value="workspace.id"/>
@@ -270,12 +270,6 @@
         <details key="label" value="Root workspace-container folder"/>
         <details key="description" value="The root workspace-container folder where all the workspaces are located"/>
         <details key="storePromptedValue" value="true"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.eclipse.org/oomph/setup/RuleVariable">
-        <details key="name" value="absolute.workspace.location"/>
-        <details key="type" value="FOLDER"/>
-        <details key="label" value="Workspace location"/>
-        <details key="description" value="The absolute folder location of the workspace"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

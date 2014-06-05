@@ -46,6 +46,8 @@ import java.util.List;
  */
 public abstract class PropertyField
 {
+  public static final int NUM_COLUMNS = 3;
+
   private static final String EMPTY = "";
 
   private final GridData labelGridData = new GridData(SWT.RIGHT, SWT.TOP, false, false);
@@ -297,7 +299,7 @@ public abstract class PropertyField
     if (layout instanceof GridLayout)
     {
       GridLayout gridLayout = (GridLayout)layout;
-      if (gridLayout.numColumns == 3)
+      if (gridLayout.numColumns == NUM_COLUMNS)
       {
         return;
       }

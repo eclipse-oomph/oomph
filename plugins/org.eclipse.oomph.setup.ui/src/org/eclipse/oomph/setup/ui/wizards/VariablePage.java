@@ -65,7 +65,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 
 import java.io.File;
-import java.io.IOException;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -474,14 +473,14 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         workspaceResource.setURI(workspaceResourceURI);
       }
 
-      try
-      {
-        copiedUser.eResource().save(System.err, null);
-      }
-      catch (IOException ex)
-      {
-        ex.printStackTrace();
-      }
+      // try
+      // {
+      // copiedUser.eResource().save(System.err, null);
+      // }
+      // catch (IOException ex)
+      // {
+      // ex.printStackTrace();
+      // }
 
       unresolvedVariables.clear();
 
@@ -567,11 +566,48 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     private String initialValue;
 
-    public FieldHolder(PropertyField field, VariableTask variable)
+    public FieldHolder(VariableTask variable)
     {
-      this.field = field;
+      field = createField(variable);
+      field.fill(composite);
       field.addValueListener(this);
       variables.add(variable);
+    }
+
+    private PropertyField createField(final VariableTask variable)
+    {
+      PropertyField field = createField(variable.getType(), variable.getChoices());
+
+      String label = variable.getLabel();
+      if (StringUtil.isEmpty(label))
+      {
+        label = variable.getName();
+      }
+
+      field.setLabelText(label);
+      field.setToolTip(variable.getDescription());
+
+      GridData gridData = field.getLabelGridData();
+      gridData.widthHint = 150;
+
+      return field;
+    }
+
+    private PropertyField createField(VariableType type, List<VariableChoice> choices)
+    {
+      switch (type)
+      {
+        case FOLDER:
+          PropertyField.FileField fileField = new PropertyField.FileField(choices);
+          fileField.setDialogText("Folder Selection");
+          fileField.setDialogMessage("Select a folder.");
+          return fileField;
+
+        case PASSWORD:
+          return new PropertyField.TextField(true);
+      }
+
+      return new PropertyField.TextField(choices);
     }
 
     public boolean isDisposed()
@@ -821,25 +857,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       {
         List<Control> children = Arrays.asList(composite.getChildren());
 
-        int controlOffset = -1;
-        int columnCount = -1;
-        for (int i = 0, childrenSize = children.size(); i < childrenSize; ++i)
-        {
-          if (controls.contains(children.get(i)))
-          {
-            if (controlOffset == -1)
-            {
-              controlOffset = i;
-            }
-            else
-            {
-              columnCount = i - controlOffset;
-              break;
-            }
-          }
-        }
-
-        Control target = children.get(columnCount - 1);
+        int controlOffset = children.indexOf(controls.get(0));
+        Control target = children.get(PropertyField.NUM_COLUMNS - 1);
         for (FieldHolder fieldHolder : this)
         {
           Control control = fieldHolder.getControl();
@@ -847,7 +866,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           {
             int index = children.indexOf(control) - controlOffset;
             Control newTarget = null;
-            for (int j = columnCount - 1; j >= 0; --j)
+            for (int j = PropertyField.NUM_COLUMNS - 1; j >= 0; --j)
             {
               Control child = children.get(index + j);
               if (newTarget == null)
@@ -966,10 +985,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
       if (fieldHolder == null)
       {
-        PropertyField field = createField(variable);
-        field.fill(composite);
-
-        fieldHolder = new FieldHolder(field, variable);
+        fieldHolder = new FieldHolder(variable);
         fieldHolderRecord.setFieldHolder(fieldHolder);
       }
       else
@@ -978,42 +994,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
 
       return fieldHolder;
-    }
-
-    private PropertyField createField(final VariableTask variable)
-    {
-      PropertyField field = createField(variable.getType(), variable.getChoices());
-
-      String label = variable.getLabel();
-      if (StringUtil.isEmpty(label))
-      {
-        label = variable.getName();
-      }
-
-      field.setLabelText(label);
-      field.setToolTip(variable.getDescription());
-
-      GridData gridData = field.getLabelGridData();
-      gridData.widthHint = 150;
-
-      return field;
-    }
-
-    private PropertyField createField(VariableType type, List<VariableChoice> choices)
-    {
-      switch (type)
-      {
-        case FOLDER:
-          PropertyField.FileField fileField = new PropertyField.FileField(choices);
-          fileField.setDialogText("Folder Selection");
-          fileField.setDialogMessage("Select a folder.");
-          return fileField;
-
-        case PASSWORD:
-          return new PropertyField.TextField(true);
-      }
-
-      return new PropertyField.TextField(choices);
     }
 
     @Override

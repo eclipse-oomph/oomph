@@ -34,6 +34,12 @@ public final class EAnnotationConstants
 
   public static final String ANNOTATION_VARIABLE = "http://www.eclipse.org/oomph/setup/Variable";
 
+  public static final String KEY_EXPLICIT_TYPE = "explicitType";
+
+  public static final String KEY_EXPLICIT_LABEL = "explicitLabel";
+
+  public static final String KEY_EXPLICIT_DESCRIPTION = "explicitDescription";
+
   public static final String ANNOTATION_RULE_VARIABLE = "http://www.eclipse.org/oomph/setup/RuleVariable";
 
   public static final String KEY_TYPE = "type";
