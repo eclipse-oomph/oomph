@@ -25,6 +25,7 @@ import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,13 +44,9 @@ import org.eclipse.swt.widgets.ToolItem;
  */
 public final class InstallerDialog extends SetupWizardDialog
 {
-  public static final int RETURN_WORKBENCH_NETWORK_PREFERENCES = -2;
-
-  public static final int RETURN_WORKBENCH = -3;
-
   public static final int RETURN_RESTART = -4;
 
-  private final InstallerStartType startType;
+  private final boolean restarted;
 
   private ToolItem updateToolItem;
 
@@ -57,10 +54,10 @@ public final class InstallerDialog extends SetupWizardDialog
 
   private Link versionLink;
 
-  public InstallerDialog(Shell parentShell, InstallerStartType startType)
+  public InstallerDialog(Shell parentShell, boolean restarted)
   {
     super(parentShell, new SetupWizard.Installer());
-    this.startType = startType;
+    this.restarted = restarted;
   }
 
   @Override
@@ -74,23 +71,23 @@ public final class InstallerDialog extends SetupWizardDialog
   @Override
   protected void createToolItemsForToolBar(ToolBar toolBar)
   {
-    createToolItem(toolBar, "install_prefs", "Preferences").addSelectionListener(new SelectionAdapter()
+    createToolItem(toolBar, "install_prefs_proxy", "Network proxy settings").addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        close();
-        setReturnCode(RETURN_WORKBENCH);
+        Dialog dialog = new ProxyPreferenceDialog(getShell());
+        dialog.open();
       }
     });
 
-    createToolItem(toolBar, "install_network", "Network connection settings").addSelectionListener(new SelectionAdapter()
+    createToolItem(toolBar, "install_prefs_ssh2", "SSH2 settings").addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        close();
-        setReturnCode(RETURN_WORKBENCH_NETWORK_PREFERENCES);
+        Dialog dialog = new SSH2PreferenceDialog(getShell());
+        dialog.open();
       }
     });
 
@@ -148,11 +145,6 @@ public final class InstallerDialog extends SetupWizardDialog
 
   private void initUpdateSearch()
   {
-    if (startType != InstallerStartType.APPLICATION)
-    {
-      return;
-    }
-
     updateSearchState = InstallerUpdateSearchState.SEARCHING;
 
     new Thread("Update Icon Setter")
@@ -298,7 +290,7 @@ public final class InstallerDialog extends SetupWizardDialog
             updateSearchState = InstallerUpdateSearchState.DONE;
             setUpdateIcon(0);
           }
-          else
+          else if (!restarted)
           {
             initUpdateSearch();
           }

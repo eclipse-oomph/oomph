@@ -43,6 +43,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.oomph.targlets.internal.ui;version="1.0.0";
   x-friends:="org.eclipse.oomph.setup.editor,
    org.eclipse.oomph.setup.installer,
-   org.eclipse.oomph.setup.installer.editor,
    org.eclipse.oomph.setup.edit"
 Bundle-Activator: org.eclipse.oomph.targlets.internal.ui.TargletsUIPlugin$Implementation

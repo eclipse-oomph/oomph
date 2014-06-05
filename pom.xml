@@ -79,7 +79,6 @@
     <module>plugins/org.eclipse.oomph.setup.git</module>
     <module>plugins/org.eclipse.oomph.setup.git.edit</module>
     <module>plugins/org.eclipse.oomph.setup.installer</module>
-    <module>plugins/org.eclipse.oomph.setup.installer.editor</module>
     <module>plugins/org.eclipse.oomph.setup.jdt</module>
     <module>plugins/org.eclipse.oomph.setup.jdt.edit</module>
     <module>plugins/org.eclipse.oomph.setup.maven</module>
