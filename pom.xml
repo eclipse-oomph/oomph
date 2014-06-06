@@ -21,6 +21,7 @@
   <properties>
     <tycho.scmUrl>scm:git:https://git.eclipse.org/r/p/oomph/org.eclipse.oomph.git</tycho.scmUrl>
     <tycho-version>0.20.0</tycho-version>
+    <os-jvm-flags />
   </properties>
 
   <modules>
@@ -218,6 +219,18 @@
       </plugin>
       -->
     </plugins>
+    <pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<argLine>${os-jvm-flags}</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</pluginManagement>
   </build>
 
   <profiles>
@@ -411,6 +424,17 @@
         </plugins>
       </build>
     </profile>
+	<profile>
+		<id>macosx-jvm-flags</id>
+		<activation>
+			<os>
+				<family>mac</family>
+			</os>
+		</activation>
+		<properties>
+			<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
+		</properties>
+	</profile>
   </profiles>
 
 </project>
