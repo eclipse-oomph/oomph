@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -53,6 +54,7 @@ import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -77,11 +79,19 @@ public class ConfirmationPage extends SetupWizardPage
 
   private Button offlineButton;
 
+  private Boolean offlineProperty;
+
   private Button mirrorsButton;
 
-  private Boolean globalOffline;
+  private Boolean mirrorsProperty;
 
-  private Boolean globalMirrors;
+  private Button overwriteButton;
+
+  private File lastConfigurationLocation;
+
+  private boolean configurationLocationExists;
+
+  private boolean someTaskChecked;
 
   public ConfirmationPage()
   {
@@ -134,16 +144,29 @@ public class ConfirmationPage extends SetupWizardPage
       }
     });
 
-    globalOffline = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
-    if (globalOffline == null)
+    offlineProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
+    if (offlineProperty == null)
     {
       offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false, "offline");
     }
 
-    globalMirrors = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);
-    if (globalMirrors == null)
+    mirrorsProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);
+    if (mirrorsProperty == null)
     {
       mirrorsButton = addCheckButton("Mirrors", "Make use of p2 mirrors during the installation process", true, "mirrors");
+    }
+
+    if (getTrigger() == Trigger.BOOTSTRAP)
+    {
+      overwriteButton = addCheckButton("Overwrite", "Rename the existing configuration folder during the installation process", false, null);
+      overwriteButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          validate();
+        }
+      });
     }
   }
 
@@ -154,6 +177,22 @@ public class ConfirmationPage extends SetupWizardPage
     {
       viewer.setInput(INPUT);
       viewer.setSubtreeChecked(ROOT_ELEMENT, true);
+      someTaskChecked = true;
+
+      if (overwriteButton != null)
+      {
+        File configurationLocation = getPerformer().getProductConfigurationLocation();
+        if (!ObjectUtil.equals(configurationLocation, lastConfigurationLocation))
+        {
+          overwriteButton.setSelection(false);
+          lastConfigurationLocation = configurationLocation;
+        }
+
+        configurationLocationExists = configurationLocation.exists();
+        overwriteButton.setEnabled(configurationLocationExists);
+      }
+
+      validate();
 
       if (getTrigger() == Trigger.STARTUP && PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP))
       {
@@ -408,7 +447,32 @@ public class ConfirmationPage extends SetupWizardPage
     int size = checkedTasks.size();
 
     viewer.setChecked(ROOT_ELEMENT, size == getPerformer().getTriggeredSetupTasks().size());
-    setPageComplete(size != 0);
+
+    someTaskChecked = size != 0;
+    validate();
+  }
+
+  private void validate()
+  {
+    // setMessage(null);
+    setErrorMessage(null);
+    setPageComplete(false);
+
+    if (!someTaskChecked)
+    {
+      // setMessage("Please check one or more tasks to continue with the installation process.", IMessageProvider.WARNING);
+      setErrorMessage("Please check one or more tasks to continue with the installation process.");
+      return;
+    }
+
+    if (configurationLocationExists && !overwriteButton.getSelection())
+    {
+      setErrorMessage("The folder " + lastConfigurationLocation
+          + " exists.\n Please check the Overwrite button to rename it and continue with the installation process.");
+      return;
+    }
+
+    setPageComplete(true);
   }
 
   private boolean isShowAll()
@@ -423,9 +487,9 @@ public class ConfirmationPage extends SetupWizardPage
       return true;
     }
 
-    if (globalOffline != null)
+    if (offlineProperty != null)
     {
-      return globalOffline;
+      return offlineProperty;
     }
 
     return offlineButton.getSelection();
@@ -438,9 +502,9 @@ public class ConfirmationPage extends SetupWizardPage
       return true;
     }
 
-    if (globalMirrors != null)
+    if (mirrorsProperty != null)
     {
-      return globalMirrors;
+      return mirrorsProperty;
     }
 
     return mirrorsButton.getSelection();

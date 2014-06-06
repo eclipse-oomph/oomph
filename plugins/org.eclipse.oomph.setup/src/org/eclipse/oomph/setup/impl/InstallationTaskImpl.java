@@ -61,6 +61,8 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    */
   protected String location = LOCATION_EDEFAULT;
 
+  public static final String CONFIGURATION_FOLDER_NAME = "configuration";
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -206,8 +208,8 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
         .getURIMap()
         .put(
             URI.createURI("configuration:/"),
-            context.getTrigger() == Trigger.BOOTSTRAP ? URI.createFileURI(getLocation() + "/" + context.getOS().getEclipseDir() + "/configuration/")
-                : getStaticConfigurationLocation().appendSegment(""));
+            context.getTrigger() == Trigger.BOOTSTRAP ? URI.createFileURI(getLocation() + "/" + context.getOS().getEclipseDir() + "/"
+                + CONFIGURATION_FOLDER_NAME + "/") : getStaticConfigurationLocation().appendSegment(""));
 
     return false;
   }

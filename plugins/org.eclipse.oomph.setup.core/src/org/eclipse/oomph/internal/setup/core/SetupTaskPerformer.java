@@ -48,6 +48,7 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
+import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.p2.P2Task;
@@ -1442,8 +1443,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       try
       {
         File productLocation = getProductLocation();
+        String path = InstallationTaskImpl.CONFIGURATION_FOLDER_NAME + "/" + SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME;
 
-        File logFile = new File(productLocation, "configuration/" + SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME);
+        File logFile = new File(productLocation, path);
         logFile.getParentFile().mkdirs();
 
         FileOutputStream out = new FileOutputStream(logFile, true);
@@ -2228,7 +2230,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       URI sourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
       if (getURIConverter().exists(sourceLocation, null))
       {
-        URI targetURI = URI.createFileURI(new File(getProductLocation(), "configuration").toString()).appendSegments(networkPreferences);
+        URI targetURI = URI.createFileURI(getProductConfigurationLocation().toString()).appendSegments(networkPreferences);
 
         ResourceCopyTask resourceCopyTask = SetupFactory.eINSTANCE.createResourceCopyTask();
         resourceCopyTask.setSourceURL(sourceLocation.toString());
@@ -2834,10 +2836,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    File eclipseDir = composedPerformer.getProductLocation();
-    if (eclipseDir != null)
+    File configurationLocation = composedPerformer.getProductConfigurationLocation();
+    if (configurationLocation != null)
     {
-      File installationLocation = new File(eclipseDir, "configuration/org.eclipse.oomph.setup/installation.setup");
+      File installationLocation = new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup");
       URI installationURI = URI.createFileURI(installationLocation.toString());
       for (SetupTaskPerformer performer : performers)
       {

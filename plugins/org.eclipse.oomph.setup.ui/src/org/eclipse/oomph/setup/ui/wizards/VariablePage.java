@@ -471,7 +471,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       Installation installation = getInstallation();
       Resource installationResource = installation.eResource();
       URI installationResourceURI = installationResource.getURI();
-      installationResource.setURI(URI.createFileURI(new File(performer.getProductLocation(), "configuration/org.eclipse.oomph.setup/installation.setup")
+      installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
           .toString()));
 
       Workspace workspace = getWorkspace();

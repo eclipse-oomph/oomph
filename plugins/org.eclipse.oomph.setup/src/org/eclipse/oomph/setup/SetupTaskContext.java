@@ -51,6 +51,8 @@ public interface SetupTaskContext extends ProgressLog, StringExpander
 
   public File getProductLocation();
 
+  public File getProductConfigurationLocation();
+
   public File getWorkspaceLocation();
 
   public OS getOS();

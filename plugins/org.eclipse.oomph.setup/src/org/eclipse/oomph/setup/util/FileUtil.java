@@ -40,6 +40,8 @@ public final class FileUtil
   {
     if (from.exists())
     {
+      // Files.move(Paths.get(from.toString()), Paths.get(to.toString()));
+
       for (int i = 0; i < 1000; i++)
       {
         if (from.renameTo(to))

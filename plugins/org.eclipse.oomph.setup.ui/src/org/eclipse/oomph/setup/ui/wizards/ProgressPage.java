@@ -23,9 +23,11 @@ import org.eclipse.oomph.setup.log.ProgressLogProvider;
 import org.eclipse.oomph.setup.log.ProgressLogRunnable;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
+import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
@@ -304,10 +306,37 @@ public class ProgressPage extends SetupWizardPage
       final SetupTaskPerformer performer = getPerformer();
       performer.setProgress(progressPageLog);
 
+      File renamed = null;
+      if (getTrigger() == Trigger.BOOTSTRAP)
+      {
+        File configurationLocation = performer.getProductConfigurationLocation();
+        if (configurationLocation.exists())
+        {
+          try
+          {
+            // This must happen before the performer opens the logStream for the first logging!
+            renamed = FileUtil.rename(configurationLocation);
+          }
+          catch (RuntimeException ex)
+          {
+            throw ex;
+          }
+          catch (Exception ex)
+          {
+            throw new IORuntimeException(ex);
+          }
+        }
+      }
+
       treeViewer.setInput(new ItemProvider(performer.getNeededTasks()));
 
       String jobName = "Executing " + getTrigger().toString().toLowerCase() + " tasks";
       performer.log(jobName);
+
+      if (renamed != null)
+      {
+        performer.log("Renamed existing configuration folder to " + renamed);
+      }
 
       run(jobName, new ProgressLogRunnable()
       {
@@ -553,7 +582,7 @@ public class ProgressPage extends SetupWizardPage
     Installation installation = getInstallation();
     Resource installationResource = installation.eResource();
     URI installationResourceURI = installationResource.getURI();
-    installationResource.setURI(URI.createFileURI(new File(performer.getProductLocation(), "configuration/org.eclipse.oomph.setup/installation.setup")
+    installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
         .toString()));
 
     Workspace workspace = getWorkspace();

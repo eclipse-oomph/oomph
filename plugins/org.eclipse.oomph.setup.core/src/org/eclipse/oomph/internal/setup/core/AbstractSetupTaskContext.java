@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -202,7 +203,24 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
 
   public File getProductLocation()
   {
-    return new File(getInstallationLocation(), getOS().getEclipseDir());
+    File installationLocation = getInstallationLocation();
+    if (installationLocation == null)
+    {
+      return null;
+    }
+
+    return new File(installationLocation, getOS().getEclipseDir());
+  }
+
+  public File getProductConfigurationLocation()
+  {
+    File productLocation = getProductLocation();
+    if (productLocation == null)
+    {
+      return null;
+    }
+
+    return new File(productLocation, InstallationTaskImpl.CONFIGURATION_FOLDER_NAME);
   }
 
   public Workspace getWorkspace()

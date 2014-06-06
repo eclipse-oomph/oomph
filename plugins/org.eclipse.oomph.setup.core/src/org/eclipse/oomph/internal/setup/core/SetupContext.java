@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -256,7 +257,7 @@ public class SetupContext
     {
       if (!Platform.isRunning())
       {
-        return URI.createFileURI(File.createTempFile("configuration", "").toString());
+        return URI.createFileURI(File.createTempFile(InstallationTaskImpl.CONFIGURATION_FOLDER_NAME, "").toString());
       }
 
       Location location = Platform.getConfigurationLocation();

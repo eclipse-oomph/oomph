@@ -33,7 +33,6 @@ import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.util.DownloadUtil;
-import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
@@ -566,7 +565,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     String profileID = StringUtil.encodePath(eclipseDir.toString());
 
-    ProfileTransaction transaction = openProfileTransaction(context, profileID, eclipseDir);
+    ProfileTransaction transaction = openProfileTransaction(context, profileID);
     transaction.getProfileDefinition().setRequirements(requirements);
     transaction.getProfileDefinition().setRepositories(repositories);
 
@@ -607,22 +606,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
-  private ProfileTransaction openProfileTransaction(final SetupTaskContext context, String profileID, File eclipseDir) throws Exception
+  private ProfileTransaction openProfileTransaction(final SetupTaskContext context, String profileID) throws Exception
   {
     Profile profile;
     if (context.getTrigger() == Trigger.BOOTSTRAP)
     {
-      boolean firstP2Task = context.put(FIRST_CALL_DETECTION_KEY, Boolean.TRUE) == null;
-      if (firstP2Task)
-      {
-        int xxx; // TODO Determine configuration location
-        File bundlesInfo = new File(eclipseDir, "configuration/org.eclipse.equinox.simpleconfigurator/bundles.info");
-        if (bundlesInfo.exists())
-        {
-          FileUtil.delete(bundlesInfo, new ProgressLogMonitor(context));
-        }
-      }
-
       BundlePool bundlePool;
 
       String bundlePoolLocation = (String)context.get(AgentManager.PROP_BUNDLE_POOL_LOCATION);
@@ -632,12 +620,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
       else
       {
-        Agent agent = P2Util.createAgent(new File(eclipseDir, "p2"));
-        bundlePool = agent.addBundlePool(eclipseDir);
+        File agentLocation = new File(context.getProductLocation(), "p2");
+        Agent agent = P2Util.createAgent(agentLocation);
+        bundlePool = agent.addBundlePool(agentLocation.getParentFile());
       }
 
       profile = bundlePool.getProfile(profileID);
-      if (profile != null && firstP2Task)
+      if (profile != null && context.put(FIRST_CALL_DETECTION_KEY, Boolean.TRUE) == null)
       {
         profile.delete(true);
         profile = null;
@@ -649,7 +638,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
         ProfileCreator profileCreator = bundlePool.addProfile(profileID, Profile.TYPE_INSTALLATION);
         profileCreator.setInstallFeatures(true);
-        profileCreator.setInstallFolder(eclipseDir);
+        profileCreator.setInstallFolder(context.getProductLocation());
         profileCreator.addOS(os.getOsgiOS());
         profileCreator.addWS(os.getOsgiWS());
         profileCreator.addArch(os.getOsgiArch());
