@@ -54,6 +54,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -99,8 +102,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private final FieldHolderManager manager = new FieldHolderManager();
 
-  private boolean focusSet;
-
   private boolean prompted;
 
   private boolean fullPrompt;
@@ -112,6 +113,17 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   private Set<SetupTaskPerformer> allPromptedPerfomers = new LinkedHashSet<SetupTaskPerformer>();
 
   private SetupTaskPerformer performer;
+
+  private Control focusControl;
+
+  private FocusListener focusListener = new FocusAdapter()
+  {
+    @Override
+    public void focusGained(FocusEvent e)
+    {
+      focusControl = (Control)e.widget;
+    }
+  };
 
   protected VariablePage()
   {
@@ -171,9 +183,14 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        focusSet = false;
         fullPrompt = fullPromptButton.getSelection();
-        validate();
+        UIUtil.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            validate();
+          }
+        });
       }
     });
   }
@@ -270,7 +287,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
     }
 
-    if (!focusSet)
+    if (focusControl != null && !focusControl.isDisposed())
+    {
+      focusControl.setFocus();
+    }
+    else
     {
       FieldHolder field = firstEmptyField;
       if (field == null)
@@ -281,7 +302,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       if (field != null)
       {
         field.setFocus();
-        focusSet = true;
       }
     }
 
@@ -571,6 +591,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       field = createField(variable);
       field.fill(composite);
       field.addValueListener(this);
+      field.getControl().addFocusListener(focusListener);
       variables.add(variable);
     }
 
@@ -857,8 +878,19 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       {
         List<Control> children = Arrays.asList(composite.getChildren());
 
-        int controlOffset = children.indexOf(controls.get(0));
+        int controlOffset = 0;
+        for (Control child : children)
+        {
+          if (controls.contains(child))
+          {
+            break;
+          }
+
+          ++controlOffset;
+        }
+
         Control target = children.get(PropertyField.NUM_COLUMNS - 1);
+        int count = 0;
         for (FieldHolder fieldHolder : this)
         {
           Control control = fieldHolder.getControl();
@@ -872,30 +904,19 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
               if (newTarget == null)
               {
                 newTarget = child;
+                if (index == count)
+                {
+                  break;
+                }
               }
 
-              if (target == child)
-              {
-                break;
-              }
-
-              moveChildBelow(child, target);
+              child.moveBelow(target);
             }
 
             target = newTarget;
+            count += PropertyField.NUM_COLUMNS;
           }
         }
-      }
-    }
-
-    private void moveChildBelow(Control child, Control target)
-    {
-      boolean focusedWidget = child.isFocusControl();
-
-      child.moveBelow(target);
-      if (focusedWidget)
-      {
-        child.setFocus();
       }
     }
 
