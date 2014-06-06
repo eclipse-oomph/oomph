@@ -1298,13 +1298,13 @@
       xsi:type="setup:VariableTask"
       name="train.url"
       value="http://download.eclipse.org/releases/luna"/>
-  <stream name="master">
+  <project name="core"
+      label="Core">
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.recommenders"
         remoteURI="recommenders/org.eclipse.recommenders"
-        pushURI=""
-        checkoutBranch="master">
+        pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1441,8 +1441,11 @@
       <buildPlans
           name="gerrit.master.luna"/>
     </setupTask>
-  </stream>
-  <stream name="demo-master">
+    <stream
+        name="master"/>
+  </project>
+  <project name="demo"
+      label="Demo">
     <setupTask
         xsi:type="setup:CompoundTask"
         name="Demo Preferences">
@@ -1542,8 +1545,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.recommenders.examples"
-        remoteURI="recommenders/org.eclipse.recommenders.examples"
-        checkoutBranch="master">
+        remoteURI="recommenders/org.eclipse.recommenders.examples">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1559,6 +1561,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Demo</description>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
@@ -1616,13 +1619,15 @@
         </repositoryLists>
       </targlets>
     </setupTask>
-  </stream>
-  <stream name="incubators-master">
+    <stream
+        name="master"/>
+  </project>
+  <project name="incubators"
+      label="Incubators">
     <setupTask
         xsi:type="git:GitCloneTask"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.codesearch"
-        pushURI=""
-        checkoutBranch="master">
+        pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1643,8 +1648,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.livedoc"
-        pushURI=""
-        checkoutBranch="master">
+        pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1665,8 +1669,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.snipmatch"
-        pushURI=""
-        checkoutBranch="master">
+        pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1687,8 +1690,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.stats"
-        pushURI=""
-        checkoutBranch="master">
+        pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1741,13 +1743,15 @@
       <repositories
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
-  </stream>
-  <stream name="incubators-codesearch">
+    <stream
+        name="master"/>
+  </project>
+  <project name="codesearch"
+      label="Code Search">
     <setupTask
         xsi:type="git:GitCloneTask"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.codesearch"
-        pushURI=""
-        checkoutBranch="master">
+        pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1763,6 +1767,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <description>Recommenders Code Search</description>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
@@ -1829,14 +1834,16 @@
       <buildPlans
           name="codesearch.origin.master"/>
     </setupTask>
-  </stream>
-  <stream name="incubators-logging">
+    <stream
+        name="master"/>
+  </project>
+  <project name="logging"
+      label="Logging">
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.recommenders.logging"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.logging"
-        pushURI=""
-        checkoutBranch="master">
+        pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -1917,8 +1924,11 @@
       <buildPlans
           name="logging.origin.master"/>
     </setupTask>
-  </stream>
-  <stream name="incubators-privacy">
+    <stream
+        name="master"/>
+  </project>
+  <project name="privacy"
+      label="Privacy">
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.recommenders.privacy"
@@ -2005,7 +2015,9 @@
       <buildPlans
           name="privacy.origin.master"/>
     </setupTask>
-  </stream>
+    <stream
+        name="master"/>
+  </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
