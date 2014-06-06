@@ -77,7 +77,6 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProvider;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.EMFEditUIPlugin;
-import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
@@ -1279,27 +1278,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
-    getContentOutlinePage();
-
     Job job = new Job("Loading Model")
     {
       @Override
       protected IStatus run(final IProgressMonitor monitor)
       {
         final ResourceSet resourceSet = editingDomain.getResourceSet();
-
-        // Remove the adapters that do the live validation while loading in the background job.
-        final List<Adapter> diagnosticDecorators = new ArrayList<Adapter>();
-        final EList<Adapter> resourceSetAdapters = resourceSet.eAdapters();
-        for (Iterator<Adapter> it = resourceSetAdapters.iterator(); it.hasNext();)
-        {
-          Adapter adapter = it.next();
-          if (adapter instanceof DiagnosticDecorator.DiagnosticAdapter)
-          {
-            diagnosticDecorators.add(adapter);
-            it.remove();
-          }
-        }
 
         new ResourceMirror.WithProgress(resourceSet, monitor)
         {
@@ -1323,7 +1307,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               EObject rootObject = contents.get(0);
               selectionViewer.setSelection(new StructuredSelection(rootObject), true);
 
-              if (!resourceMirror.isCanceled())
+              boolean canceled = resourceMirror.isCanceled();
+              if (!canceled)
               {
                 if (rootObject instanceof Project)
                 {
@@ -1341,10 +1326,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                 {
                   contentOutlinePage.update(2);
                 }
-
-                resourceSetAdapters.addAll(diagnosticDecorators);
               }
 
+              getActionBarContributor().scheduleValidation(canceled);
               updateProblemIndication();
             }
           });
@@ -2423,11 +2407,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  public EditingDomainActionBarContributor getActionBarContributor()
+  public SetupActionBarContributor getActionBarContributor()
   {
-    return (EditingDomainActionBarContributor)getEditorSite().getActionBarContributor();
+    return (SetupActionBarContributor)getEditorSite().getActionBarContributor();
   }
 
   /**
