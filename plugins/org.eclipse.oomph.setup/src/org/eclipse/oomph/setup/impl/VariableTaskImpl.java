@@ -53,6 +53,10 @@ import java.util.List;
  */
 public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 {
+  private static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator";
+
+  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//ContextVariableTask/stringSubstitution";
+
   /**
    * The default value of the '{@link #getType() <em>Type</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -498,13 +502,11 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
     throw new UnsupportedOperationException("Context variable task can't be executed");
   }
 
-  private static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator";
-
-  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//ContextVariableTask/stringSubstitution";
-
   protected void eMigrate()
   {
-    int xxx; // The above ANNOTATION_SOURCE is not visible here.
+    // The above ANNOTATION_SOURCE is not visible here.
+    int xxx;
+
     Annotation annotation = getAnnotation(ANNOTATION_SOURCE);
     if (annotation != null)
     {

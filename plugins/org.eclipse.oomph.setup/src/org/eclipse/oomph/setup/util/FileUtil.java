@@ -42,14 +42,14 @@ public final class FileUtil
     {
       // Files.move(Paths.get(from.toString()), Paths.get(to.toString()));
 
-      for (int i = 0; i < 1000; i++)
+      for (int i = 0; i < 200; i++)
       {
         if (from.renameTo(to))
         {
           return;
         }
 
-        Thread.sleep(5);
+        Thread.sleep(10);
       }
     }
 

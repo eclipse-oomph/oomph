@@ -589,8 +589,8 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    */
   public void dispose()
   {
-    int xxx;
     // TODO Move all these framework hooks out of the public API
+    int xxx;
   }
 
   /**
