@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
 import org.eclipse.oomph.util.IRunnable;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.core.runtime.CoreException;
@@ -45,6 +46,14 @@ import java.util.List;
  */
 public final class UpdateUtil extends Plugin
 {
+  private static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
+
+  private static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url";
+
+  private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
+
+  private static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL).replace('\\', '/');
+
   public static final IStatus UPDATE_FOUND_STATUS = new Status(IStatus.OK, SetupCorePlugin.INSTANCE.getSymbolicName(), "Updates found");
 
   private UpdateUtil()
@@ -194,17 +203,12 @@ public final class UpdateUtil extends Plugin
       return Collections.emptyList();
     }
 
-    IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUAnyQuery(), null);
+    IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUQuery(INSTALLER_PRODUCT_ID), null);
 
     List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
     for (IInstallableUnit installableUnit : queryResult)
     {
-      String id = installableUnit.getId();
-
-      if (id.startsWith("org.eclipse.oomph"))
-      {
-        ius.add(installableUnit);
-      }
+      ius.add(installableUnit);
     }
 
     return ius;
@@ -212,10 +216,8 @@ public final class UpdateUtil extends Plugin
 
   private static void addRepositories(IProvisioningAgent agent, boolean metadata, SubMonitor sub) throws CoreException
   {
-    int xxx;
-
-    addRepository(agent, "http://download.eclipse.org/releases/luna", metadata, sub.newChild(200));
-    addRepository(agent, SetupCorePlugin.UPDATE_URL, metadata, sub.newChild(200));
+    // addRepository(agent, "http://download.eclipse.org/releases/luna", metadata, sub.newChild(200));
+    addRepository(agent, INSTALLER_UPDATE_URL, metadata, sub.newChild(200));
   }
 
   private static void addRepository(IProvisioningAgent agent, String location, boolean metadata, IProgressMonitor monitor) throws CoreException
