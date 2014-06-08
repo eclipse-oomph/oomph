@@ -26,8 +26,10 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -44,6 +46,7 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -175,6 +178,8 @@ public class ConfirmationPage extends SetupWizardPage
   {
     if (forward)
     {
+      initNeededSetupTasks();
+
       viewer.setInput(INPUT);
       viewer.setSubtreeChecked(ROOT_ELEMENT, true);
       someTaskChecked = true;
@@ -214,6 +219,8 @@ public class ConfirmationPage extends SetupWizardPage
       promptPage.enterPage(false);
       promptPage.leavePage(true);
 
+      initNeededSetupTasks();
+
       viewer.refresh();
 
       for (SetupTask setupTask : getPerformer().getTriggeredSetupTasks())
@@ -228,6 +235,24 @@ public class ConfirmationPage extends SetupWizardPage
     }
 
     viewer.expandAll();
+  }
+
+  private void initNeededSetupTasks()
+  {
+    try
+    {
+      getPerformer().initNeededSetupTasks();
+    }
+    catch (final Exception ex)
+    {
+      UIUtil.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          ErrorDialog.open(ex);
+        }
+      });
+    }
   }
 
   @Override
@@ -313,15 +338,18 @@ public class ConfirmationPage extends SetupWizardPage
         }
         else if (element == ROOT_ELEMENT)
         {
-          children.addAll(getPerformer().getTriggeredSetupTasks());
+          children.addAll(isShowAll() ? getPerformer().getTriggeredSetupTasks() : getPerformer().getNeededTasks());
         }
 
         return children.toArray();
       }
     });
 
+    final Color normalForeground = viewer.getControl().getForeground();
+    Color normalBackground = viewer.getControl().getBackground();
+    final Color disabledForeground = ExtendedColorRegistry.INSTANCE.getColor(normalForeground, normalBackground, IItemColorProvider.GRAYED_OUT_COLOR);
     AdapterFactory adapterFactory = getAdapterFactory();
-    viewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory)
+    viewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, normalForeground, normalBackground)
     {
       @Override
       public String getText(Object object)
@@ -333,6 +361,12 @@ public class ConfirmationPage extends SetupWizardPage
         }
 
         return super.getText(object);
+      }
+
+      @Override
+      public Color getForeground(Object object)
+      {
+        return !(object instanceof SetupTask) || getPerformer().getNeededTasks().contains(object) ? normalForeground : disabledForeground;
       }
     });
 
