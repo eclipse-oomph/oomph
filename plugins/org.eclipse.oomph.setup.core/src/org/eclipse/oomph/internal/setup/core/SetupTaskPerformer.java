@@ -330,7 +330,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                         EMap<String, String> details = eAnnotation.getDetails();
 
                         // TODO class name/attribute name pairs might not be unique.
-                        String variableName = "@<id>." + eClass.getName() + "." + attributeName;
+                        String variableName = getAttributeRuleVariableName(eAttribute);
 
                         VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
                         annotateAttributeRuleVariable(variable, eAttribute);
@@ -641,6 +641,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private String getVariableReference(String variableName)
   {
     return "${" + variableName + "}";
+  }
+
+  private String getAttributeRuleVariableName(EAttribute eAttribute)
+  {
+    String attributeName = ExtendedMetaData.INSTANCE.getName(eAttribute);
+    String variableName = "@<id>." + eAttribute.getEContainingClass() + "." + attributeName;
+    return variableName;
   }
 
   private void handleActiveAnnotations(SetupTask setupTask, Map<String, VariableTask> explicitKeys)
@@ -963,13 +970,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         String value = attributeRule.getValue();
         VariableTask ruleVariable = getRuleVariable(variable);
-        if (ruleVariable != null)
+        if (ruleVariable == null)
         {
-          String promptedValue = getPrompter().getValue(ruleVariable);
-          if (promptedValue != null)
-          {
-            value = promptedValue;
-          }
+          ruleVariable = SetupFactory.eINSTANCE.createVariableTask();
+          ruleVariable.setName(getAttributeRuleVariableName(eAttribute));
+        }
+
+        String promptedValue = getPrompter().getValue(ruleVariable);
+        if (promptedValue != null)
+        {
+          value = promptedValue;
         }
 
         String attributeExpandedValue = expandAttributeReferences(setupTask, value);
