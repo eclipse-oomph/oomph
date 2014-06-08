@@ -1816,8 +1816,23 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         if (version != null)
         {
+          // Clear out the self induced installation location.
+          for (SetupTask setupTask : version.getProduct().getSetupTasks())
+          {
+            if (setupTask instanceof VariableTask)
+            {
+              VariableTask variable = (VariableTask)setupTask;
+              if ("installation.location".equals(variable.getName()))
+              {
+                EcoreUtil.delete(variable);
+                break;
+              }
+            }
+          }
+
+          SetupContext setupContext = SetupContext.create(version, stream);
           SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(getEditingDomain().getResourceSet().getURIConverter(), SetupPrompter.CANCEL, trigger,
-              SetupContext.create(version, stream), stream);
+              setupContext, stream);
           List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
 
           if (!triggeredSetupTasks.isEmpty())
