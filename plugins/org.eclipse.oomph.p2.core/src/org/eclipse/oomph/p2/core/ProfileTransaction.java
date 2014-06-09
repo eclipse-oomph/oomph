@@ -92,4 +92,14 @@ public interface ProfileTransaction
       return null;
     }
   }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface Resolution
+  {
+    public IProvisioningPlan getProvisioningPlan();
+
+    public boolean execute(IProgressMonitor monitor) throws CoreException;
+  }
 }
