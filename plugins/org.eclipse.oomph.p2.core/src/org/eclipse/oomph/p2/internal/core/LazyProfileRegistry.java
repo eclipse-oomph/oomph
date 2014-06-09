@@ -48,6 +48,8 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
   private final String self;
 
+  private boolean updateSelfProfile;
+
   private final Map<String, ProfileLock> profileLocks;
 
   private Map<String, org.eclipse.equinox.internal.p2.engine.Profile> profileMap;
@@ -61,6 +63,9 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self");
     self = (String)ReflectUtil.getValue(selfField, this);
+
+    Field updateSelfProfileField = ReflectUtil.getField(SimpleProfileRegistry.class, "updateSelfProfile");
+    updateSelfProfile = (Boolean)ReflectUtil.getValue(updateSelfProfileField, this);
 
     Field profileLocksField = ReflectUtil.getField(SimpleProfileRegistry.class, "profileLocks");
     profileLocks = (Map<String, ProfileLock>)ReflectUtil.getValue(profileLocksField, this);
@@ -161,6 +166,13 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
         LazyProfile profile = new LazyProfile(this, profileId, profileDirectories[i]);
         profileMap.put(profileId, profile);
       }
+    }
+
+    if (updateSelfProfile)
+    {
+      Method updateSelfProfileMethod = ReflectUtil.getMethod(SimpleProfileRegistry.class, "updateSelfProfile", Map.class);
+      ReflectUtil.invokeMethod(updateSelfProfileMethod, this, profileMap);
+      updateSelfProfile = false;
     }
 
     return profileMap;
