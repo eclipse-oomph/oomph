@@ -33,6 +33,10 @@
       <discovery label="%updateSiteName" url="http://www.eclipse.org/modeling/updates/"/>
    </url>
 
+   <includes
+         id="org.eclipse.oomph.p2"
+         version="0.0.0"/>
+
    <plugin
          id="org.eclipse.oomph.setup"
          download-size="0"
@@ -142,14 +146,42 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.oomph.setup.p2"
+         id="org.eclipse.oomph.base"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.oomph.setup.p2.edit"
+         id="org.eclipse.oomph.base.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.preferences"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.setup.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.util"
          download-size="0"
          install-size="0"
          version="0.0.0"
