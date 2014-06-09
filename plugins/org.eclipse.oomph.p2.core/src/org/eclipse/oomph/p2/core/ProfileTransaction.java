@@ -100,6 +100,8 @@ public interface ProfileTransaction
   {
     public IProvisioningPlan getProvisioningPlan();
 
-    public boolean execute(IProgressMonitor monitor) throws CoreException;
+    public boolean commit(IProgressMonitor monitor) throws CoreException;
+
+    public void rollback();
   }
 }

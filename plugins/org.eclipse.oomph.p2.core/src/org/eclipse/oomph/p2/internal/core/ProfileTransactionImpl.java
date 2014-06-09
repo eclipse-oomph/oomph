@@ -335,199 +335,191 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     committed = true;
 
-    if (commitContext == null)
-    {
-      commitContext = new CommitContext();
-    }
+    Resolution resolution = resolve(commitContext, monitor);
+    return resolution.commit(monitor);
 
-    if (monitor == null)
-    {
-      monitor = new NullProgressMonitor();
-    }
-
-    List<Runnable> cleanup = new ArrayList<Runnable>();
-
-    if (offline)
-    {
-      registerCachingTransport(cleanup);
-    }
-
-    final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
-    if (mirrors != wasMirrors)
-    {
-      try
-      {
-        final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED");
-        ReflectUtil.setValue(mirrorsEnabledField, null, mirrors, true);
-
-        cleanup.add(new Runnable()
-        {
-          public void run()
-          {
-            try
-            {
-              ReflectUtil.setValue(mirrorsEnabledField, null, wasMirrors, true);
-            }
-            catch (Throwable ex)
-            {
-              // Ignore
-            }
-          }
-        });
-      }
-      catch (Throwable ex)
-      {
-        // Ignore
-      }
-    }
-
-    try
-    {
-      List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
-      Set<URI> artifactURIs = new HashSet<URI>();
-      URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, monitor);
-
-      ProvisioningContext provisioningContext = commitContext.createProvisioningContext(this);
-      provisioningContext.setMetadataRepositories(metadataURIs);
-      provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
-
-      IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
-
-      Agent agent = profile.getAgent();
-      IPlanner planner = agent.getPlanner();
-      IEngine engine = agent.getEngine();
-
-      ProfileImpl profileImpl = (ProfileImpl)profile;
-      IProfile delegate = profileImpl.getDelegate();
-      long timestamp = delegate.getTimestamp();
-
-      IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
-      adjustProfileChangeRequest(profileChangeRequest, metadata, monitor);
-
-      IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, monitor);
-      P2CorePlugin.INSTANCE.coreException(provisioningPlan.getStatus());
-
-      if (profileDefinition.isIncludeSourceBundles())
-      {
-        IInstallableUnit sourceContainerIU = generateSourceContainerIU(provisioningPlan, metadata, monitor);
-        provisioningPlan.addInstallableUnit(sourceContainerIU);
-        provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
-      }
-
-      commitContext.handleProvisioningPlan(provisioningPlan);
-      IPhaseSet phaseSet = commitContext.getPhaseSet(this);
-
-      final Confirmer unsignedContentConfirmer = commitContext.getUnsignedContentConfirmer();
-      if (unsignedContentConfirmer != null)
-      {
-        final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
-        final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
-        final UIServices newUIServices = new UIServices()
-        {
-          @Override
-          public AuthenticationInfo getUsernamePassword(String location)
-          {
-            if (oldUIServices != null)
-            {
-              return oldUIServices.getUsernamePassword(location);
-            }
-
-            return null;
-          }
-
-          @Override
-          public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
-          {
-            if (oldUIServices != null)
-            {
-              return oldUIServices.getUsernamePassword(location, previousInfo);
-            }
-
-            return null;
-          }
-
-          @Override
-          public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
-          {
-            if (unsignedDetail != null && unsignedDetail.length != 0)
-            {
-              Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
-              if (!confirmation.isConfirmed())
-              {
-                return new TrustInfo(new Certificate[0], false, false);
-              }
-
-              // We've checked trust already; prevent oldUIServices to check it again.
-              unsignedDetail = null;
-            }
-
-            if (oldUIServices != null)
-            {
-              return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
-            }
-
-            // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
-            final Certificate[] trusted;
-            if (untrustedChains == null)
-            {
-              trusted = null;
-            }
-            else
-            {
-              trusted = new Certificate[untrustedChains.length];
-              for (int i = 0; i < untrustedChains.length; i++)
-              {
-                trusted[i] = untrustedChains[i][0];
-              }
-            }
-
-            return new TrustInfo(trusted, false, true);
-          }
-        };
-
-        provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
-
-        cleanup.add(new Runnable()
-        {
-          public void run()
-          {
-            provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
-            if (oldUIServices != null)
-            {
-              provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
-            }
-          }
-        });
-      }
-
-      IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
-      P2CorePlugin.INSTANCE.coreException(status);
-
-      profileImpl.setDefinition(profileDefinition);
-      profileImpl.setDelegate(delegate); // TODO Seems redundant
-
-      return delegate.getTimestamp() != timestamp;
-    }
-    finally
-    {
-      for (Runnable runnable : cleanup)
-      {
-        try
-        {
-          runnable.run();
-        }
-        catch (Exception ex)
-        {
-          P2CorePlugin.INSTANCE.log(ex);
-        }
-      }
-    }
+    // if (commitContext == null)
+    // {
+    // commitContext = new CommitContext();
+    // }
+    //
+    // if (monitor == null)
+    // {
+    // monitor = new NullProgressMonitor();
+    // }
+    //
+    // List<Runnable> cleanup = new ArrayList<Runnable>();
+    //
+    // if (offline)
+    // {
+    // registerCachingTransport(cleanup);
+    // }
+    //
+    // final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
+    // if (mirrors != wasMirrors)
+    // {
+    // try
+    // {
+    // final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED");
+    // ReflectUtil.setValue(mirrorsEnabledField, null, mirrors, true);
+    //
+    // cleanup.add(new Runnable()
+    // {
+    // public void run()
+    // {
+    // try
+    // {
+    // ReflectUtil.setValue(mirrorsEnabledField, null, wasMirrors, true);
+    // }
+    // catch (Throwable ex)
+    // {
+    // // Ignore
+    // }
+    // }
+    // });
+    // }
+    // catch (Throwable ex)
+    // {
+    // // Ignore
+    // }
+    // }
+    //
+    // try
+    // {
+    // List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
+    // Set<URI> artifactURIs = new HashSet<URI>();
+    // URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, monitor);
+    //
+    // ProvisioningContext provisioningContext = commitContext.createProvisioningContext(this);
+    // provisioningContext.setMetadataRepositories(metadataURIs);
+    // provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
+    //
+    // IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
+    //
+    // Agent agent = profile.getAgent();
+    // IPlanner planner = agent.getPlanner();
+    // IEngine engine = agent.getEngine();
+    //
+    // ProfileImpl profileImpl = (ProfileImpl)profile;
+    // IProfile delegate = profileImpl.getDelegate();
+    // long timestamp = delegate.getTimestamp();
+    //
+    // IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
+    // adjustProfileChangeRequest(profileChangeRequest, metadata, monitor);
+    //
+    // IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, monitor);
+    // P2CorePlugin.INSTANCE.coreException(provisioningPlan.getStatus());
+    //
+    // if (profileDefinition.isIncludeSourceBundles())
+    // {
+    // IInstallableUnit sourceContainerIU = generateSourceContainerIU(provisioningPlan, metadata, monitor);
+    // provisioningPlan.addInstallableUnit(sourceContainerIU);
+    // provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
+    // }
+    //
+    // commitContext.handleProvisioningPlan(provisioningPlan);
+    // IPhaseSet phaseSet = commitContext.getPhaseSet(this);
+    //
+    // final Confirmer unsignedContentConfirmer = commitContext.getUnsignedContentConfirmer();
+    // if (unsignedContentConfirmer != null)
+    // {
+    // final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
+    // final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
+    // final UIServices newUIServices = new UIServices()
+    // {
+    // @Override
+    // public AuthenticationInfo getUsernamePassword(String location)
+    // {
+    // if (oldUIServices != null)
+    // {
+    // return oldUIServices.getUsernamePassword(location);
+    // }
+    //
+    // return null;
+    // }
+    //
+    // @Override
+    // public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
+    // {
+    // if (oldUIServices != null)
+    // {
+    // return oldUIServices.getUsernamePassword(location, previousInfo);
+    // }
+    //
+    // return null;
+    // }
+    //
+    // @Override
+    // public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
+    // {
+    // if (unsignedDetail != null && unsignedDetail.length != 0)
+    // {
+    // Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
+    // if (!confirmation.isConfirmed())
+    // {
+    // return new TrustInfo(new Certificate[0], false, false);
+    // }
+    //
+    // // We've checked trust already; prevent oldUIServices to check it again.
+    // unsignedDetail = null;
+    // }
+    //
+    // if (oldUIServices != null)
+    // {
+    // return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
+    // }
+    //
+    // // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
+    // final Certificate[] trusted;
+    // if (untrustedChains == null)
+    // {
+    // trusted = null;
+    // }
+    // else
+    // {
+    // trusted = new Certificate[untrustedChains.length];
+    // for (int i = 0; i < untrustedChains.length; i++)
+    // {
+    // trusted[i] = untrustedChains[i][0];
+    // }
+    // }
+    //
+    // return new TrustInfo(trusted, false, true);
+    // }
+    // };
+    //
+    // provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
+    //
+    // cleanup.add(new Runnable()
+    // {
+    // public void run()
+    // {
+    // provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
+    // if (oldUIServices != null)
+    // {
+    // provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
+    // }
+    // }
+    // });
+    // }
+    //
+    // IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
+    // P2CorePlugin.INSTANCE.coreException(status);
+    //
+    // profileImpl.setDefinition(profileDefinition);
+    // profileImpl.setDelegate(delegate); // TODO Seems redundant
+    //
+    // return delegate.getTimestamp() != timestamp;
+    // }
+    // finally
+    // {
+    // cleanup(cleanup);
+    // }
   }
 
-  public Resolution resolve(final CommitContext commitContext, IProgressMonitor monitor) throws CoreException
+  public Resolution resolve(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
   {
     final CommitContext context = commitContext == null ? new CommitContext() : commitContext;
-
     if (monitor == null)
     {
       monitor = new NullProgressMonitor();
@@ -611,117 +603,138 @@ public class ProfileTransactionImpl implements ProfileTransaction
           return provisioningPlan;
         }
 
-        public boolean execute(IProgressMonitor monitor) throws CoreException
+        public boolean commit(IProgressMonitor monitor) throws CoreException
         {
-          IPhaseSet phaseSet = context.getPhaseSet(ProfileTransactionImpl.this);
-
-          final Confirmer unsignedContentConfirmer = commitContext.getUnsignedContentConfirmer();
-          if (unsignedContentConfirmer != null)
+          try
           {
-            final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
-            final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
-            final UIServices newUIServices = new UIServices()
+            IPhaseSet phaseSet = context.getPhaseSet(ProfileTransactionImpl.this);
+
+            final Confirmer unsignedContentConfirmer = context.getUnsignedContentConfirmer();
+            if (unsignedContentConfirmer != null)
             {
-              @Override
-              public AuthenticationInfo getUsernamePassword(String location)
+              final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
+              final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
+              final UIServices newUIServices = new UIServices()
               {
-                if (oldUIServices != null)
+                @Override
+                public AuthenticationInfo getUsernamePassword(String location)
                 {
-                  return oldUIServices.getUsernamePassword(location);
-                }
-
-                return null;
-              }
-
-              @Override
-              public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
-              {
-                if (oldUIServices != null)
-                {
-                  return oldUIServices.getUsernamePassword(location, previousInfo);
-                }
-
-                return null;
-              }
-
-              @Override
-              public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
-              {
-                if (unsignedDetail != null && unsignedDetail.length != 0)
-                {
-                  Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
-                  if (!confirmation.isConfirmed())
+                  if (oldUIServices != null)
                   {
-                    return new TrustInfo(new Certificate[0], false, false);
+                    return oldUIServices.getUsernamePassword(location);
                   }
 
-                  // We've checked trust already; prevent oldUIServices to check it again.
-                  unsignedDetail = null;
+                  return null;
                 }
 
-                if (oldUIServices != null)
+                @Override
+                public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
                 {
-                  return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
-                }
-
-                // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
-                final Certificate[] trusted;
-                if (untrustedChains == null)
-                {
-                  trusted = null;
-                }
-                else
-                {
-                  trusted = new Certificate[untrustedChains.length];
-                  for (int i = 0; i < untrustedChains.length; i++)
+                  if (oldUIServices != null)
                   {
-                    trusted[i] = untrustedChains[i][0];
+                    return oldUIServices.getUsernamePassword(location, previousInfo);
+                  }
+
+                  return null;
+                }
+
+                @Override
+                public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
+                {
+                  if (unsignedDetail != null && unsignedDetail.length != 0)
+                  {
+                    Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
+                    if (!confirmation.isConfirmed())
+                    {
+                      return new TrustInfo(new Certificate[0], false, false);
+                    }
+
+                    // We've checked trust already; prevent oldUIServices to check it again.
+                    unsignedDetail = null;
+                  }
+
+                  if (oldUIServices != null)
+                  {
+                    return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
+                  }
+
+                  // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
+                  final Certificate[] trusted;
+                  if (untrustedChains == null)
+                  {
+                    trusted = null;
+                  }
+                  else
+                  {
+                    trusted = new Certificate[untrustedChains.length];
+                    for (int i = 0; i < untrustedChains.length; i++)
+                    {
+                      trusted[i] = untrustedChains[i][0];
+                    }
+                  }
+
+                  return new TrustInfo(trusted, false, true);
+                }
+              };
+
+              provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
+
+              cleanup.add(new Runnable()
+              {
+                public void run()
+                {
+                  provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
+                  if (oldUIServices != null)
+                  {
+                    provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
                   }
                 }
+              });
+            }
 
-                return new TrustInfo(trusted, false, true);
-              }
-            };
+            IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
+            P2CorePlugin.INSTANCE.coreException(status);
 
-            provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
+            profileImpl.setDefinition(profileDefinition);
+            profileImpl.setDelegate(delegate); // TODO Seems redundant
 
-            cleanup.add(new Runnable()
-            {
-              public void run()
-              {
-                provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
-                if (oldUIServices != null)
-                {
-                  provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
-                }
-              }
-            });
+            return delegate.getTimestamp() != timestamp;
           }
+          finally
+          {
+            cleanup(cleanup);
+          }
+        }
 
-          IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
-          P2CorePlugin.INSTANCE.coreException(status);
-
-          profileImpl.setDefinition(profileDefinition);
-          profileImpl.setDelegate(delegate); // TODO Seems redundant
-
-          return delegate.getTimestamp() != timestamp;
+        public void rollback()
+        {
+          cleanup(cleanup);
         }
       };
     }
-    finally
+    catch (Throwable t)
     {
-      for (Runnable runnable : cleanup)
+      cleanup(cleanup);
+      P2CorePlugin.INSTANCE.coreException(t);
+      return null;
+    }
+  }
+
+  private void cleanup(List<Runnable> cleanup)
+  {
+    for (Runnable runnable : cleanup)
+    {
+      try
       {
-        try
-        {
-          runnable.run();
-        }
-        catch (Exception ex)
-        {
-          P2CorePlugin.INSTANCE.log(ex);
-        }
+        runnable.run();
+      }
+      catch (Throwable t)
+      {
+        P2CorePlugin.INSTANCE.log(t);
       }
     }
+
+    cleanup.clear();
   }
 
   private Transport registerCachingTransport(List<Runnable> cleanup)
