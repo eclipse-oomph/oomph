@@ -583,7 +583,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
       }
 
-      context.handleProvisioningPlan(provisioningPlan);
+      context.handleProvisioningPlan(provisioningPlan, metadataRepositories);
 
       return new Resolution()
       {

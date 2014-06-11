@@ -20,8 +20,10 @@ import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.PhaseSetFactory;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -78,7 +80,7 @@ public interface ProfileTransaction
       return new ProvisioningContext(transaction.getProfile().getAgent().getProvisioningAgent());
     }
 
-    public void handleProvisioningPlan(IProvisioningPlan provisioningPlan) throws CoreException
+    public void handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
     {
     }
 

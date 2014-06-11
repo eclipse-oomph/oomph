@@ -67,6 +67,7 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -79,6 +80,7 @@ import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetLocation;
@@ -664,6 +666,9 @@ public class TargletContainer extends AbstractBundleContainer
         repositories.addAll(EcoreUtil.copyAll(targlet.getActiveRepositories()));
       }
 
+      final AtomicReference<IProvisioningPlan> provisioningPlanRef = new AtomicReference<IProvisioningPlan>();
+      final AtomicReference<List<IMetadataRepository>> metadataRepositoriesRef = new AtomicReference<List<IMetadataRepository>>();
+
       transaction.commit(new ProfileTransaction.CommitContext()
       {
         @Override
@@ -672,21 +677,19 @@ public class TargletContainer extends AbstractBundleContainer
           IProvisioningAgent provisioningAgent = transaction.getProfile().getAgent().getProvisioningAgent();
           ProvisioningContext provisioningContext = new ProvisioningContext(provisioningAgent)
           {
-            private CollectionResult<IInstallableUnit> result;
+            private CollectionResult<IInstallableUnit> metadata;
 
             @Override
             public IQueryable<IInstallableUnit> getMetadata(IProgressMonitor monitor)
             {
-              if (result == null)
+              if (metadata == null)
               {
                 Set<String> sourceIDs = analyzer.getIDs();
 
                 List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
                 prepareSources(ius, sourceIDs, monitor);
 
-                IQueryable<IInstallableUnit> metadata = super.getMetadata(monitor);
-                IQueryResult<IInstallableUnit> metadataResult = metadata.query(QueryUtil.createIUAnyQuery(), monitor);
-
+                IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
                 for (Iterator<IInstallableUnit> it = metadataResult.iterator(); it.hasNext();)
                 {
                   TargletsCorePlugin.checkCancelation(monitor);
@@ -698,10 +701,10 @@ public class TargletContainer extends AbstractBundleContainer
                   }
                 }
 
-                result = new CollectionResult<IInstallableUnit>(ius);
+                metadata = new CollectionResult<IInstallableUnit>(ius);
               }
 
-              return result;
+              return metadata;
             }
 
             private void prepareSources(List<IInstallableUnit> ius, Set<String> ids, IProgressMonitor monitor)
@@ -756,32 +759,29 @@ public class TargletContainer extends AbstractBundleContainer
         }
 
         @Override
+        public void handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
+        {
+          provisioningPlanRef.set(provisioningPlan);
+          metadataRepositoriesRef.set(metadataRepositories);
+        }
+
+        @Override
         public IPhaseSet getPhaseSet(ProfileTransaction transaction)
         {
           return TargletContainerManager.createPhaseSet(profile.getBundlePool());
         }
-
-        // @Override
-        // public InstallOperation createInstallOperation(ProfileTransaction transaction, Collection<IInstallableUnit> iusToInstall)
-        // {
-        // Profile profile = transaction.getProfile();
-        // final IPhaseSet phaseSet = TargletContainerManager.createPhaseSet(profile.getBundlePool());
-        //
-        // ProvisioningSession provisioningSession = new ProvisioningSession(profile.getAgent().getProvisioningAgent())
-        // {
-        // @Override
-        // public IStatus performProvisioningPlan(IProvisioningPlan plan, IPhaseSet xxx, ProvisioningContext context, IProgressMonitor monitor)
-        // {
-        // return super.performProvisioningPlan(plan, phaseSet, context, monitor);
-        // }
-        // };
-        //
-        // return new InstallOperation(provisioningSession, iusToInstall);
-        // }
       }, progress.newChild());
 
       Set<File> projectLocations = getProjectLocations(profile, sources, progress.newChild());
       descriptor.commitUpdateTransaction(digest, projectLocations, progress.newChild());
+
+      IProvisioningPlan provisioningPlan = provisioningPlanRef.get();
+      List<IMetadataRepository> metadataRepositories = metadataRepositoriesRef.get();
+
+      for (Targlet targlet : targlets)
+      {
+        TargletListenerRegistryImpl.INSTANCE.notifyProfileUpdate(targlet, profile, metadataRepositories, provisioningPlan, sources);
+      }
     }
     catch (Throwable t)
     {
@@ -911,8 +911,7 @@ public class TargletContainer extends AbstractBundleContainer
   private static Set<File> getProjectLocations(IProfile profile, Map<IInstallableUnit, File> sources, IProgressMonitor monitor)
   {
     Set<File> projectLocations = new HashSet<File>();
-    IQueryResult<IInstallableUnit> result = profile.query(QueryUtil.createIUAnyQuery(), monitor);
-    for (IInstallableUnit iu : result.toUnmodifiableSet())
+    for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), monitor))
     {
       File folder = sources.get(iu);
       if (folder != null)
@@ -1094,20 +1093,6 @@ public class TargletContainer extends AbstractBundleContainer
    */
   public static class Persistence implements ITargetLocationFactory
   {
-    private static final Map<Object, Object> XML_OPTIONS;
-
-    static
-    {
-      Map<Object, Object> options = new HashMap<Object, Object>();
-      options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
-      options.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
-      XMLOptions xmlOptions = new XMLOptionsImpl();
-      xmlOptions.setProcessAnyXML(true);
-      xmlOptions.setProcessSchemaLocations(true);
-      options.put(XMLResource.OPTION_XML_OPTIONS, xmlOptions);
-      XML_OPTIONS = Collections.unmodifiableMap(options);
-    }
-
     private static final String LOCATION = "location";
 
     private static final String LOCATION_ID = "id";
@@ -1115,6 +1100,23 @@ public class TargletContainer extends AbstractBundleContainer
     private static final String LOCATION_TYPE = "type";
 
     private static final String TARGLET = "targlet";
+
+    private static final Map<Object, Object> XML_OPTIONS;
+
+    static
+    {
+      XMLOptions xmlOptions = new XMLOptionsImpl();
+      xmlOptions.setProcessAnyXML(true);
+      xmlOptions.setProcessSchemaLocations(true);
+
+      Map<Object, Object> options = new HashMap<Object, Object>();
+      options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
+      options.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+      options.put(XMLResource.OPTION_LAX_FEATURE_PROCESSING, Boolean.TRUE);
+      options.put(XMLResource.OPTION_XML_OPTIONS, xmlOptions);
+
+      XML_OPTIONS = Collections.unmodifiableMap(options);
+    }
 
     public TargletContainer getTargetLocation(String type, String serializedXML) throws CoreException
     {

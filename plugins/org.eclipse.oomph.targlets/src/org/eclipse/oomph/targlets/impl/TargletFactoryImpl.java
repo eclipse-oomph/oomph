@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.impl;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.resources.SourceLocator;
@@ -117,6 +118,11 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     targlet.setActiveRepositoryList(activeRepositoryList);
     targlet.setIncludeSources(source.isIncludeSources());
     targlet.setIncludeAllPlatforms(source.isIncludeAllPlatforms());
+
+    for (Annotation annotation : source.getAnnotations())
+    {
+      targlet.getAnnotations().add(EcoreUtil.copy(annotation));
+    }
 
     for (Requirement requirement : source.getRequirements())
     {

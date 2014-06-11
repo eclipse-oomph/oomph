@@ -161,6 +161,39 @@
         xsi:type="setup.targlets:TargletTask">
       <targlets
           name="Oomph">
+        <annotation
+            source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
+          <detail
+              key="skipArtifactIDs">
+            <value>false</value>
+          </detail>
+          <detail
+              key="skipVersions">
+            <value>false</value>
+          </detail>
+        </annotation>
+        <annotation
+            source="http:/www.eclipse.org/oomph/targlets/PomModulesUpdater">
+          <detail
+              key="location">
+            <value>${git.clone.oomph.location/pom.xml}</value>
+          </detail>
+        </annotation>
+        <annotation
+            source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
+          <detail
+              key="location">
+            <value>${git.clone.oomph.location/plugins/org.eclipse.oomph.targlets.core/target.xml}</value>
+          </detail>
+          <detail
+              key="compatibility">
+            <value>minor</value>
+          </detail>
+          <detail
+              key="roots">
+            <value>true</value>
+          </detail>
+        </annotation>
         <requirements
             id="org.eclipse.oomph.all.feature.group"/>
         <requirements

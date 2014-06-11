@@ -14,6 +14,8 @@ import org.eclipse.oomph.util.AbstractOomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.osgi.framework.BundleContext;
+
 /**
  * @author Eike Stepper
  */
@@ -42,6 +44,20 @@ public final class TargletsCorePlugin extends AbstractOomphPlugin
     public Implementation()
     {
       plugin = this;
+    }
+
+    @Override
+    public void start(BundleContext context) throws Exception
+    {
+      super.start(context);
+      TargletListenerRegistryImpl.INSTANCE.start();
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception
+    {
+      TargletListenerRegistryImpl.INSTANCE.stop();
+      super.stop(context);
     }
   }
 }

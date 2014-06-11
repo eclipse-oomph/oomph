@@ -38,6 +38,8 @@ import java.util.List;
  */
 public interface IUGenerator
 {
+  public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source";
+
   public static final SimpleDateFormat QUALIFIER_FORMAT = new SimpleDateFormat("'v'yyyyMMdd-HHmmss");
 
   public IInstallableUnit generateIU(File location) throws Exception;
@@ -81,6 +83,7 @@ public interface IUGenerator
       if (iu instanceof InstallableUnit)
       {
         ((InstallableUnit)iu).setArtifacts(new IArtifactKey[0]);
+        ((InstallableUnit)iu).setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
       }
 
       return iu;
@@ -178,6 +181,7 @@ public interface IUGenerator
       }
 
       iu.setRequiredCapabilities(newRequirements);
+      iu.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
       return iu;
     }
 

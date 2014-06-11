@@ -104,6 +104,11 @@ public abstract class ConcurrentArray<E>
     return false;
   }
 
+  public synchronized void clear()
+  {
+    elements = null;
+  }
+
   /**
    * Synchronized through {@link #add(Object)}.
    */
