@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.tests;
+package org.eclipse.oomph.setup.tests.data;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
@@ -28,6 +28,8 @@ import org.eclipse.oomph.setup.util.SetupResourceFactoryImpl;
 
 import org.eclipse.emf.ecore.resource.Resource;
 
+import org.eclipse.equinox.app.IApplication;
+import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
@@ -50,11 +52,21 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class EclipseProductGenerator
+public class ProductCatalogGenerator implements IApplication
 {
   private static final String PACKAGES = "http://download.eclipse.org/technology/epp/packages";
 
   private static final String RELEASES = "http://download.eclipse.org/releases";
+
+  public Object start(IApplicationContext context) throws Exception
+  {
+    generate();
+    return null;
+  }
+
+  public void stop()
+  {
+  }
 
   private static String[] getTrains()
   {
@@ -101,7 +113,11 @@ public class EclipseProductGenerator
       eclipseIniTask.setVm(true);
       productCatalog.getSetupTasks().add(eclipseIniTask);
 
-      Agent agent = new AgentImpl(null, File.createTempFile("p2", "agent"));
+      File agentLocation = File.createTempFile("test-", "-agent");
+      agentLocation.delete();
+      agentLocation.mkdirs();
+
+      Agent agent = new AgentImpl(null, agentLocation);
       IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
 
       final Map<String, List<TrainAndVersion>> trainsAndVersions = new HashMap<String, List<TrainAndVersion>>();

@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.tests;
+package org.eclipse.oomph.setup.tests.data;
 
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.InstallationTask;
@@ -44,7 +44,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class TestDataGenerator
+public class ProjectCatalogGenerator
 {
   public static final URI DATA_WEB_URI = URI.createURI(PropertiesUtil.getProperty("oomph.setup.tests.data.root.uri",
       "http://download.eclipse.org/oomph/.tests/setup/data"));
@@ -73,7 +73,7 @@ public class TestDataGenerator
 
   public static void main(String[] args) throws IOException
   {
-    new TestDataGenerator().storeCatalogs();
+    new ProjectCatalogGenerator().storeCatalogs();
   }
 
   public void storeCatalogs() throws IOException
