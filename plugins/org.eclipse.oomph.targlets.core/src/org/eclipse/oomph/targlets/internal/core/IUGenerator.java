@@ -27,7 +27,9 @@ import org.eclipse.equinox.p2.publisher.eclipse.FeaturesAction;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.List;
 
@@ -36,6 +38,8 @@ import java.util.List;
  */
 public interface IUGenerator
 {
+  public static final SimpleDateFormat QUALIFIER_FORMAT = new SimpleDateFormat("'v'yyyyMMdd-HHmmss");
+
   public IInstallableUnit generateIU(File location) throws Exception;
 
   /**
@@ -62,7 +66,8 @@ public interface IUGenerator
       String version = manifest.get(org.osgi.framework.Constants.BUNDLE_VERSION);
       if (version.endsWith(".qualifier"))
       {
-        version = version.substring(0, version.length() - ".qualifier".length());
+        version = version.substring(0, version.length() - "qualifier".length());
+        version += QUALIFIER_FORMAT.format(new Date());
         manifest.put(org.osgi.framework.Constants.BUNDLE_VERSION, version);
       }
 
@@ -108,7 +113,8 @@ public interface IUGenerator
       String version = feature.getVersion();
       if (version.endsWith(".qualifier"))
       {
-        version = version.substring(0, version.length() - ".qualifier".length());
+        version = version.substring(0, version.length() - "qualifier".length());
+        version += QUALIFIER_FORMAT.format(new Date());
         feature.setVersion(version);
       }
 
