@@ -21,9 +21,7 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
-import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
-import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -39,9 +37,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
-import org.eclipse.equinox.internal.p2.repository.AuthenticationFailedException;
-import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
-import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
@@ -68,16 +63,7 @@ import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.security.cert.Certificate;
@@ -527,10 +513,16 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     final List<Runnable> cleanup = new ArrayList<Runnable>();
 
-    if (offline)
+    final Agent agent = profile.getAgent();
+    final boolean wasOffline = agent.isOffline();
+    agent.setOffline(offline);
+    cleanup.add(new Runnable()
     {
-      registerCachingTransport(cleanup);
-    }
+      public void run()
+      {
+        agent.setOffline(wasOffline);
+      }
+    });
 
     final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
     if (mirrors != wasMirrors)
@@ -573,14 +565,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
 
-      final Agent agent = profile.getAgent();
-      IPlanner planner = agent.getPlanner();
-      final IEngine engine = agent.getEngine();
-
       final ProfileImpl profileImpl = (ProfileImpl)profile;
       final IProfile delegate = profileImpl.getDelegate();
       final long timestamp = delegate.getTimestamp();
 
+      IPlanner planner = agent.getPlanner();
       IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
       adjustProfileChangeRequest(profileChangeRequest, metadata, monitor);
 
@@ -692,6 +681,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
               });
             }
 
+            IEngine engine = agent.getEngine();
             IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
             P2CorePlugin.INSTANCE.coreException(status);
 
@@ -735,26 +725,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
 
     cleanup.clear();
-  }
-
-  private Transport registerCachingTransport(List<Runnable> cleanup)
-  {
-    final IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
-    final Transport oldTransport = (Transport)provisioningAgent.getService(Transport.SERVICE_NAME);
-
-    final CachingTransport cachingTransport = new CachingTransport(oldTransport);
-    provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
-
-    cleanup.add(new Runnable()
-    {
-      public void run()
-      {
-        provisioningAgent.registerService(Transport.SERVICE_NAME, oldTransport);
-        cachingTransport.dispose();
-      }
-    });
-
-    return oldTransport;
   }
 
   private URI[] collectRepositories(List<IMetadataRepository> metadataRepositories, Set<URI> artifactURIs, List<Runnable> cleanup, IProgressMonitor monitor)
@@ -1137,177 +1107,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
     public String toString()
     {
       return iu.toString() + " / " + propertyKey;
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static final class CachingTransport extends Transport
-  {
-    private static final Long NOT_FOUND = Long.MIN_VALUE;
-
-    private final Transport delegate;
-
-    private final File cacheFile;
-
-    private Map<URI, Long> timeStamps;
-
-    private Map<URI, byte[]> bytes;
-
-    @SuppressWarnings("unchecked")
-    public CachingTransport(Transport delegate)
-    {
-      this.delegate = delegate;
-
-      File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.USER_HOME));
-      cacheFile = new File(folder, "metadata.cache");
-
-      FileInputStream fileInputStream = null;
-
-      try
-      {
-        fileInputStream = new FileInputStream(cacheFile);
-        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        timeStamps = (Map<URI, Long>)objectInputStream.readObject();
-        bytes = (Map<URI, byte[]>)objectInputStream.readObject();
-      }
-      catch (Throwable ex)
-      {
-        timeStamps = new HashMap<URI, Long>();
-        bytes = new HashMap<URI, byte[]>();
-      }
-      finally
-      {
-        IOUtil.close(fileInputStream);
-      }
-    }
-
-    @Override
-    public IStatus download(URI toDownload, OutputStream target, long startPos, IProgressMonitor monitor)
-    {
-      Long timeStamp = timeStamps.get(toDownload);
-      if (NOT_FOUND.equals(timeStamp))
-      {
-        return P2CorePlugin.INSTANCE.getStatus(new Exception());
-      }
-
-      byte[] b = bytes.get(toDownload);
-      if (b != null)
-      {
-        IOUtil.copy(new ByteArrayInputStream(b), target);
-        return Status.OK_STATUS;
-      }
-
-      OutputStream oldTarget = null;
-      if (toDownload.getPath().endsWith("/p2.index"))
-      {
-        oldTarget = target;
-        target = new ByteArrayOutputStream();
-      }
-
-      IStatus status = delegate.download(toDownload, target, startPos, monitor);
-      if (!status.isOK())
-      {
-        timeStamps.put(toDownload, NOT_FOUND);
-      }
-      else
-      {
-        if (status instanceof DownloadStatus)
-        {
-          DownloadStatus downloadStatus = (DownloadStatus)status;
-          long lastModified = downloadStatus.getLastModified();
-          timeStamps.put(toDownload, lastModified);
-        }
-
-        if (oldTarget != null)
-        {
-          byte[] content = ((ByteArrayOutputStream)target).toByteArray();
-          IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
-          bytes.put(toDownload, content);
-        }
-      }
-
-      return status;
-    }
-
-    @Override
-    public IStatus download(URI toDownload, OutputStream target, IProgressMonitor monitor)
-    {
-      return download(toDownload, target, 0, monitor);
-    }
-
-    @Override
-    public InputStream stream(URI toDownload, IProgressMonitor monitor) throws FileNotFoundException, CoreException, AuthenticationFailedException
-    {
-      return delegate.stream(toDownload, monitor);
-    }
-
-    @Override
-    public long getLastModified(URI toDownload, IProgressMonitor monitor) throws CoreException, FileNotFoundException, AuthenticationFailedException
-    {
-      Long timeStamp = timeStamps.get(toDownload);
-      if (timeStamp != null)
-      {
-        if (NOT_FOUND.equals(timeStamp))
-        {
-          throw new FileNotFoundException(toDownload.toString());
-        }
-
-        return timeStamp;
-      }
-
-      long lastModified;
-
-      try
-      {
-        lastModified = delegate.getLastModified(toDownload, monitor);
-        timeStamps.put(toDownload, lastModified);
-      }
-      catch (CoreException ex)
-      {
-        timeStamps.put(toDownload, NOT_FOUND);
-        throw ex;
-      }
-      catch (FileNotFoundException ex)
-      {
-        timeStamps.put(toDownload, NOT_FOUND);
-        throw ex;
-      }
-      catch (AuthenticationFailedException ex)
-      {
-        timeStamps.put(toDownload, NOT_FOUND);
-        throw ex;
-      }
-      catch (RuntimeException ex)
-      {
-        timeStamps.put(toDownload, NOT_FOUND);
-        throw ex;
-      }
-
-      return lastModified;
-    }
-
-    public void dispose()
-    {
-      FileOutputStream fileOutputStream = null;
-
-      try
-      {
-        fileOutputStream = new FileOutputStream(cacheFile);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(timeStamps);
-        objectOutputStream.writeObject(bytes);
-        objectOutputStream.close();
-      }
-      catch (Exception ex)
-      {
-        ex.printStackTrace();
-      }
-      finally
-      {
-        IOUtil.close(fileOutputStream);
-      }
     }
   }
 }

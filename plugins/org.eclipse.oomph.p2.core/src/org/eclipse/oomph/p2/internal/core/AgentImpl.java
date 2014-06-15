@@ -19,6 +19,7 @@ import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
@@ -69,6 +70,10 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   private IEngine engine;
 
   private IPlanner planner;
+
+  private CachingTransport cachingTransport;
+
+  private boolean offline;
 
   public AgentImpl(AgentManagerImpl agentManager, File location)
   {
@@ -367,6 +372,20 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     getProfileRegistry().removeProfile(profileID);
   }
 
+  public boolean isOffline()
+  {
+    return offline;
+  }
+
+  public void setOffline(boolean offline)
+  {
+    this.offline = offline;
+    if (cachingTransport != null)
+    {
+      cachingTransport.setOffline(true);
+    }
+  }
+
   public void initializeProvisioningAgent(IProvisioningAgent provisioningAgent)
   {
     if (this.provisioningAgent == null)
@@ -376,6 +395,10 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
       profileRegistry = new LazyProfileRegistry(provisioningAgent, directory);
       provisioningAgent.registerService(IProfileRegistry.SERVICE_NAME, profileRegistry);
+
+      cachingTransport = new CachingTransport((Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
+      cachingTransport.setOffline(offline);
+      provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
 
       this.provisioningAgent = provisioningAgent;
     }
