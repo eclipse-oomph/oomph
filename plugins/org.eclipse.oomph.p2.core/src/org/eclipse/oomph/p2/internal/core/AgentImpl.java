@@ -16,6 +16,7 @@ import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.Platform;
@@ -396,9 +397,12 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       profileRegistry = new LazyProfileRegistry(provisioningAgent, directory);
       provisioningAgent.registerService(IProfileRegistry.SERVICE_NAME, profileRegistry);
 
-      cachingTransport = new CachingTransport((Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
-      cachingTransport.setOffline(offline);
-      provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
+      if (!PropertiesUtil.isProperty("oomph.p2.disable.offline"))
+      {
+        cachingTransport = new CachingTransport((Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
+        cachingTransport.setOffline(offline);
+        provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
+      }
 
       this.provisioningAgent = provisioningAgent;
     }
