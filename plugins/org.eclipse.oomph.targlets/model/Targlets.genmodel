@@ -15,7 +15,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/sourceLocators"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/repositoryLists"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/activeRepositoryList"/>
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/activeRepositories"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/activeRepositories"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeSources"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllPlatforms"/>
     </genClasses>

@@ -61,7 +61,6 @@ public class TargletItemProvider extends ModelElementItemProvider
 
       addNamePropertyDescriptor(object);
       addActiveRepositoryListPropertyDescriptor(object);
-      addActiveRepositoriesPropertyDescriptor(object);
       addIncludeSourcesPropertyDescriptor(object);
       addIncludeAllPlatformsPropertyDescriptor(object);
     }
@@ -93,20 +92,6 @@ public class TargletItemProvider extends ModelElementItemProvider
         getString("_UI_Targlet_activeRepositoryList_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Targlet_activeRepositoryList_feature", "_UI_Targlet_type"),
         TargletPackage.Literals.TARGLET__ACTIVE_REPOSITORY_LIST, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-  }
-
-  /**
-   * This adds a property descriptor for the Active Repositories feature.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected void addActiveRepositoriesPropertyDescriptor(Object object)
-  {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_activeRepositories_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_activeRepositories_feature", "_UI_Targlet_type"),
-        TargletPackage.Literals.TARGLET__ACTIVE_REPOSITORIES, false, false, false, null, null, null));
   }
 
   /**
