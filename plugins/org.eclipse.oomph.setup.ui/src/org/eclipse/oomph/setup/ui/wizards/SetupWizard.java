@@ -86,7 +86,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public SetupWizard(SetupTaskPerformer performer)
   {
     setWindowTitle(AbstractSetupDialog.SHELL_TEXT);
-    setDefaultPageImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("install_wiz"));
+    setDefaultPageImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("install_wiz.png"));
     setNeedsProgressMonitor(false);
     if (performer == null)
     {

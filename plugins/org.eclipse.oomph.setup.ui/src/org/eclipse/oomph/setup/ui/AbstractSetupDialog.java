@@ -30,7 +30,7 @@ public abstract class AbstractSetupDialog extends AbstractDialog
   @Override
   protected String getImagePath()
   {
-    return "install_wiz";
+    return "install_wiz.png";
   }
 
   @Override
