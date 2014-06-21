@@ -913,7 +913,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     // related to bundle IUs in the profile
     List<IRequirement> requirements = new ArrayList<IRequirement>();
 
-    IQueryResult<IInstallableUnit> ius = provisioningPlan.getAdditions().query(QueryUtil.createIUAnyQuery(), monitor);
+    IQueryResult<IInstallableUnit> ius = provisioningPlan.getFutureState().query(QueryUtil.createIUAnyQuery(), monitor);
     for (IInstallableUnit iu : ius)
     {
       P2CorePlugin.checkCancelation(monitor);
