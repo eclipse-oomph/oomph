@@ -332,6 +332,9 @@
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.site"/>
         <predicates
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.releng.*"/>
+        <predicates
             xsi:type="predicates:FilePredicate"
             filePattern="user.setup"/>
       </workingSets>
