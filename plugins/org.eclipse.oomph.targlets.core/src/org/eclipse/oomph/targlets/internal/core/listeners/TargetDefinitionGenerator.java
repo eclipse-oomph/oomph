@@ -11,9 +11,7 @@
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
-import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
-import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.TargletEvent;
@@ -21,38 +19,19 @@ import org.eclipse.oomph.targlets.core.TargletEvent.ProfileUpdate;
 import org.eclipse.oomph.targlets.core.TargletListener;
 import org.eclipse.oomph.targlets.internal.core.IUGenerator;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
-import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
-import org.eclipse.equinox.p2.metadata.Version;
-import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -61,6 +40,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -71,9 +52,11 @@ public class TargetDefinitionGenerator implements TargletListener
 
   public static final String ANNOTATION_LOCATION = "location";
 
-  public static final String ANNOTATION_COMPATIBILITY = "compatibility";
-
   public static final String ANNOTATION_ROOTS = "roots";
+
+  public static final String ANNOTATION_VERSIONS = "versions";
+
+  private static final Pattern SEQUENCE_NUMBER_PATTERN = Pattern.compile("sequenceNumber=\"([0-9]+)\"");
 
   private static final String TRUE = Boolean.TRUE.toString();
 
@@ -100,139 +83,94 @@ public class TargetDefinitionGenerator implements TargletListener
     }
   }
 
-  private void generateTargetDefinition(Targlet targlet, Annotation annotation, Profile profile, List<IMetadataRepository> metadataRepositories,
+  private void generateTargetDefinition(final Targlet targlet, Annotation annotation, Profile profile, List<IMetadataRepository> metadataRepositories,
       IProvisioningPlan provisioningPlan) throws Exception
   {
     EMap<String, String> details = annotation.getDetails();
     String location = getLocation(details);
-    VersionSegment versionSegment = getVersionSegment(details);
     boolean roots = isRoots(details);
+    final boolean versions = isVersions(details);
 
-    Map<String, List<IInstallableUnit>> ius = analyzeProfile(targlet, roots, profile, metadataRepositories, provisioningPlan);
+    final Map<String, List<IInstallableUnit>> ius = analyzeProfile(targlet, roots, profile, metadataRepositories, provisioningPlan);
 
     File targetDefinition = new File(location);
-    IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(targetDefinition.toURI());
-
-    for (IFile file : files)
+    new FileUpdater()
     {
-      IProject project = file.getProject();
-      if (project.isOpen())
-      {
-        InputStream contents = generateContents(targlet, ius, versionSegment, project);
+      private int sequenceNumber;
 
-        if (file.exists())
+      @Override
+      protected String createNewContents(String oldContents, String nl)
+      {
+        Matcher matcher = SEQUENCE_NUMBER_PATTERN.matcher(oldContents);
+        if (matcher.find())
         {
-          file.setContents(contents, true, true, new NullProgressMonitor());
-        }
-        else
-        {
-          file.create(contents, true, new NullProgressMonitor());
+          sequenceNumber = Integer.parseInt(matcher.group(1));
         }
 
-        return;
-      }
-    }
+        StringBuilder builder = new StringBuilder();
+        builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+        builder.append(nl);
+        builder.append("<?pde version=\"3.8\"?>");
+        builder.append(nl);
+        builder.append("<target name=\"" + targlet.getName() + "\" sequenceNumber=\"" + sequenceNumber + "\">");
+        builder.append(nl);
+        builder.append("  <locations>");
+        builder.append(nl);
 
-    InputStream contents = generateContents(targlet, ius, versionSegment, null);
-    OutputStream stream = new FileOutputStream(targetDefinition);
-
-    try
-    {
-      IOUtil.copy(contents, stream);
-    }
-    finally
-    {
-      IOUtil.close(stream);
-    }
-  }
-
-  private InputStream generateContents(Targlet targlet, Map<String, List<IInstallableUnit>> ius, VersionSegment versionSegment, IProject project)
-      throws IOException
-  {
-    String nl = getLineSeparator(project);
-
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    Writer writer = new OutputStreamWriter(baos, "UTF-8");
-
-    try
-    {
-      writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-      writer.write(nl);
-      writer.write("<?pde version=\"3.8\"?>");
-      writer.write(nl);
-      writer.write("<target name=\"" + targlet.getName() + "\" sequenceNumber=\"1\">");
-      writer.write(nl);
-      writer.write("  <locations>");
-      writer.write(nl);
-
-      for (Map.Entry<String, List<IInstallableUnit>> entry : ius.entrySet())
-      {
-        List<IInstallableUnit> list = entry.getValue();
-        if (!list.isEmpty())
+        for (Map.Entry<String, List<IInstallableUnit>> entry : ius.entrySet())
         {
-          Collections.sort(list);
-
-          writer.write("    <location includeAllPlatforms=\"" + targlet.isIncludeAllPlatforms()
-              + "\" includeConfigurePhase=\"true\" includeMode=\"planner\" includeSource=\"" + targlet.isIncludeSources() + "\" type=\"InstallableUnit\">");
-          writer.write(nl);
-
-          Set<String> keys = new HashSet<String>();
-          for (IInstallableUnit iu : list)
+          List<IInstallableUnit> list = entry.getValue();
+          if (!list.isEmpty())
           {
-            String id = iu.getId();
-            Version version = iu.getVersion();
+            Collections.sort(list);
 
-            VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(version, versionSegment);
-            version = versionRange.getMinimum();
+            builder.append("    <location includeAllPlatforms=\"" + targlet.isIncludeAllPlatforms()
+                + "\" includeConfigurePhase=\"true\" includeMode=\"planner\" includeSource=\"" + targlet.isIncludeSources() + "\" type=\"InstallableUnit\">");
+            builder.append(nl);
 
-            String key = id + "_" + version;
-            if (keys.add(key))
+            Set<String> keys = new HashSet<String>();
+            for (IInstallableUnit iu : list)
             {
-              writer.write("      <unit id=\"" + id + "\" version=\"" + version + "\"/>");
-              writer.write(nl);
+              String id = iu.getId();
+              String key = id;
+
+              String version = "";
+              if (versions)
+              {
+                version = " version=\"" + iu.getVersion() + "\"";
+                key += "_" + version;
+              }
+
+              if (keys.add(key))
+              {
+                builder.append("      <unit id=\"" + id + version + "/>");
+                builder.append(nl);
+              }
             }
+
+            builder.append("      <repository location=\"" + entry.getKey() + "\"/>");
+            builder.append(nl);
+            builder.append("    </location>");
+            builder.append(nl);
           }
-
-          writer.write("      <repository location=\"" + entry.getKey() + "\"/>");
-          writer.write(nl);
-          writer.write("    </location>");
-          writer.write(nl);
         }
+
+        builder.append("  </locations>");
+        builder.append(nl);
+        builder.append("</target>");
+        builder.append(nl);
+
+        return builder.toString();
       }
 
-      writer.write("  </locations>");
-      writer.write(nl);
-      writer.write("</target>");
-      writer.write(nl);
-    }
-    finally
-    {
-      IOUtil.close(writer);
-    }
-
-    return new ByteArrayInputStream(baos.toByteArray());
-  }
-
-  private String getLineSeparator(IProject project)
-  {
-    try
-    {
-      Preferences node = Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
-      if (node.nodeExists(Platform.PI_RUNTIME))
+      @Override
+      protected void setContents(File file, IFile iFile, String contents) throws Exception
       {
-        String value = node.node(Platform.PI_RUNTIME).get(Platform.PREF_LINE_SEPARATOR, null);
-        if (value != null)
-        {
-          return value;
-        }
+        contents = contents.replace("sequenceNumber=\"" + sequenceNumber + "\"", "sequenceNumber=\"" + (sequenceNumber + 1) + "\"");
+        super.setContents(file, iFile, contents);
       }
-    }
-    catch (BackingStoreException e)
-    {
-      // Ignore
-    }
 
-    return PropertiesUtil.getProperty(Platform.PREF_LINE_SEPARATOR);
+    }.update(targetDefinition);
   }
 
   private String getLocation(EMap<String, String> details) throws IOException
@@ -247,31 +185,20 @@ public class TargetDefinitionGenerator implements TargletListener
     return location;
   }
 
-  private VersionSegment getVersionSegment(EMap<String, String> details)
-  {
-    String compatibility = details.get(ANNOTATION_COMPATIBILITY);
-    VersionSegment versionSegment = null;
-
-    try
-    {
-      versionSegment = VersionSegment.getByName(compatibility.toUpperCase());
-    }
-    catch (Exception ex)
-    {
-      //$FALL-THROUGH$
-    }
-
-    if (versionSegment == null)
-    {
-      versionSegment = VersionSegment.MICRO;
-    }
-
-    return versionSegment;
-  }
-
   private boolean isRoots(EMap<String, String> details)
   {
     String value = details.get(ANNOTATION_ROOTS);
+    if (value == null)
+    {
+      return false;
+    }
+
+    return TRUE.equalsIgnoreCase(value);
+  }
+
+  private boolean isVersions(EMap<String, String> details)
+  {
+    String value = details.get(ANNOTATION_VERSIONS);
     if (value == null)
     {
       return false;

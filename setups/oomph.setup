@@ -183,15 +183,15 @@
             source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
           <detail
               key="location">
-            <value>${git.clone.oomph.location/plugins/org.eclipse.oomph.targlets.core/target.xml}</value>
-          </detail>
-          <detail
-              key="compatibility">
-            <value>minor</value>
+            <value>${git.clone.oomph.location/releng/org.eclipse.oomph.releng/org.eclipse.oomph.releng.target}</value>
           </detail>
           <detail
               key="roots">
             <value>true</value>
+          </detail>
+          <detail
+              key="versions">
+            <value>false</value>
           </detail>
         </annotation>
         <requirements
@@ -207,6 +207,8 @@
         <requirements
             id="org.eclipse.oomph.license.feature.group"/>
         <requirements
+            id="org.eclipse.oomph.releng"/>
+        <requirements
             id="org.eclipse.oomph.site"/>
         <requirements
             id="setups"/>
@@ -215,7 +217,7 @@
         <repositoryLists
             name="Luna Dependencies">
           <repositories
-              url="http://download.eclipse.org/eclipse/updates/4.4milestones"/>
+              url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215"/>
           <repositories
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
           <repositories

@@ -98,7 +98,7 @@ public abstract class FileUpdater
     return PropertiesUtil.getProperty(Platform.PREF_LINE_SEPARATOR);
   }
 
-  private static String getContents(File file, IFile iFile) throws Exception
+  protected String getContents(File file, IFile iFile) throws Exception
   {
     InputStream inputStream = iFile == null ? new FileInputStream(file) : iFile.getContents();
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -115,7 +115,7 @@ public abstract class FileUpdater
     return new String(outputStream.toByteArray(), "UTF-8");
   }
 
-  private static void setContents(File file, IFile iFile, String contents) throws Exception
+  protected void setContents(File file, IFile iFile, String contents) throws Exception
   {
     InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
     if (iFile != null)

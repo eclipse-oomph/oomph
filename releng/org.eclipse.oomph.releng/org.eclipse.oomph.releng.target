@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="Oomph" sequenceNumber="3">
+  <locations>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.sdk.feature.group" version="4.4.0"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.egit.feature.group" version="3.3.2"/>
+      <repository location="http://download.eclipse.org/egit/updates"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.mylyn.builds.sdk.feature.group" version="1.4.0"/>
+      <unit id="org.eclipse.mylyn.sdk_feature.feature.group" version="3.12.0"/>
+      <repository location="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.m2e.feature.feature.group" version="1.5.0"/>
+      <repository location="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.emf.sdk.feature.group" version="2.10.0"/>
+      <repository location="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+    </location>
+  </locations>
+</target>
