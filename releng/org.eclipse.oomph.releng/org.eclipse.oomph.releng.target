@@ -21,7 +21,7 @@
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.emf.sdk.feature.group"/>
-      <repository location="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+      <repository location="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
     </location>
   </locations>
 </target>

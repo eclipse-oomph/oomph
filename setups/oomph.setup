@@ -233,7 +233,7 @@
           <repositories
               url="http://download.eclipse.org/webtools/repository/luna"/>
           <repositories
-              url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
         </repositoryLists>
       </targlets>
     </setupTask>
