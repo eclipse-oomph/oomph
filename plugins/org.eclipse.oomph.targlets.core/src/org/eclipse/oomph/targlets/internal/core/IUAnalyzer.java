@@ -180,9 +180,12 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
       Element rootElement = XMLUtil.loadRootElement(getDocumentBuilder(), cspexFile);
       handleBuckminsterDependencies(rootElement, componentExtension, monitor);
 
-      Resource resource = getResourceSet().createResource(URI.createFileURI(cextFile.getAbsolutePath()));
-      resource.getContents().add(componentExtension);
-      resource.save(null);
+      if (!componentExtension.getRequirements().isEmpty())
+      {
+        Resource resource = getResourceSet().createResource(URI.createFileURI(cextFile.getAbsolutePath()));
+        resource.getContents().add(componentExtension);
+        resource.save(null);
+      }
 
       visitComponentExtension(componentExtension, host, monitor);
     }

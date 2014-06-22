@@ -24,7 +24,9 @@ import org.eclipse.egit.core.project.GitProjectData;
 import org.eclipse.egit.core.project.RepositoryMapping;
 import org.eclipse.team.core.RepositoryProvider;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.net.URI;
 
 /**
  * <!-- begin-user-doc -->
@@ -112,7 +114,23 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     if (project != null)
     {
       RepositoryProvider provider = RepositoryProvider.getProvider(project);
-      if (provider != null)
+      if (provider == null)
+      {
+        URI locationURI = project.getLocationURI();
+        if (locationURI != null && "file".equals(locationURI.getScheme()))
+        {
+          org.eclipse.emf.common.util.URI emfURI = org.eclipse.emf.common.util.URI.createURI(locationURI.toString());
+          for (File parent = new File(emfURI.toFileString()).getParentFile(); parent != null && parent.isDirectory(); parent = parent.getParentFile())
+          {
+            File gitFolder = new File(parent, ".git");
+            if (new File(gitFolder, "index").exists())
+            {
+              return gitFolder.toString();
+            }
+          }
+        }
+      }
+      else
       {
         try
         {
@@ -122,7 +140,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
             GitProjectData data = gitProvider.getData();
             RepositoryMapping repositoryMapping = data.getRepositoryMapping(project);
             IPath gitDirAbsolutePath = repositoryMapping.getGitDirAbsolutePath();
-            return gitDirAbsolutePath == null ? null : gitDirAbsolutePath.toString();
+            return gitDirAbsolutePath == null ? null : gitDirAbsolutePath.toOSString();
           }
         }
         catch (NoClassDefFoundError ex)

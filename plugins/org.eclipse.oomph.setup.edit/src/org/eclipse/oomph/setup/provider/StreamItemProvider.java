@@ -86,7 +86,7 @@ public class StreamItemProvider extends ScopeItemProvider
   public String getText(Object object)
   {
     String label = getLabel(object);
-    return label == null || label.length() == 0 ? getString("_UI_Branch_type") : label;
+    return label == null || label.length() == 0 ? getString("_UI_Stream_type") : label;
   }
 
   /**
