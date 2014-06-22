@@ -43,7 +43,7 @@ public interface ExclusionPredicate extends Predicate
    * <!-- end-user-doc -->
    * @return the value of the '<em>Excluded Working Sets</em>' reference list.
    * @see org.eclipse.oomph.workingsets.WorkingSetsPackage#getExclusionPredicate_ExcludedWorkingSets()
-   * @model
+   * @model extendedMetaData="name='excludedWorkingSet'"
    * @generated
    */
   EList<WorkingSet> getExcludedWorkingSets();

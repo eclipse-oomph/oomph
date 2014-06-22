@@ -718,8 +718,25 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
     createResource(eNS_URI);
 
     // Create annotations
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
     // http://www.eclipse.org/emf/2002/Ecore
     createEcoreAnnotations();
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getWorkspaceConfiguration_Projects(), source, new String[] { "name", "project" });
+    addAnnotation(getProject_PreferenceProfiles(), source, new String[] { "name", "preferenceProfile" });
+    addAnnotation(getPreferenceProfile_PreferenceFilters(), source, new String[] { "name", "preferenceFilter" });
+    addAnnotation(getPreferenceProfile_Predicates(), source, new String[] { "name", "predicate" });
   }
 
   /**

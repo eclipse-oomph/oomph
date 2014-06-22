@@ -128,6 +128,7 @@ public interface Query extends ModelElement
    * @return the value of the '<em>Attributes</em>' map.
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getQuery_Attributes()
    * @model mapType="org.eclipse.oomph.setup.mylyn.QueryAttribute<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
+   *        extendedMetaData="name='attribute'"
    * @generated
    */
   EMap<String, String> getAttributes();

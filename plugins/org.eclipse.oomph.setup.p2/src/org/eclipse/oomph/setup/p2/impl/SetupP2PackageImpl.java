@@ -248,6 +248,23 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
 
     // Create resource
     createResource(eNS_URI);
+
+    // Create annotations
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getP2Task_Requirements(), source, new String[] { "name", "requirement" });
+    addAnnotation(getP2Task_Repositories(), source, new String[] { "name", "repository" });
   }
 
 } // SetupP2PackageImpl

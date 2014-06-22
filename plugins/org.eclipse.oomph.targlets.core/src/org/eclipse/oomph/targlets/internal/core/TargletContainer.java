@@ -10,20 +10,16 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
-import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
-import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.predicates.Predicate;
-import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.util.HexUtil;
-import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.SubMonitor;
@@ -35,10 +31,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
+import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.xmi.XMLOptions;
@@ -74,7 +68,6 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
-import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -91,22 +84,12 @@ import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
 import org.eclipse.pde.internal.core.target.AbstractBundleContainer;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -1093,15 +1076,37 @@ public class TargletContainer extends AbstractBundleContainer
    */
   public static class Persistence implements ITargetLocationFactory
   {
-    private static final String LOCATION = "location";
-
-    private static final String LOCATION_ID = "id";
-
-    private static final String LOCATION_TYPE = "type";
-
-    private static final String TARGLET = "targlet";
-
     private static final Map<Object, Object> XML_OPTIONS;
+
+    private static final BasicExtendedMetaData EXTENDED_META_DATA = new BasicExtendedMetaData()
+    {
+      @Override
+      public EStructuralFeature getElement(EClass eClass, String namespace, String name)
+      {
+        EStructuralFeature eStructuralFeature = super.getElement(eClass, namespace, name);
+        if (eStructuralFeature == null)
+        {
+          eStructuralFeature = super.getElement(eClass, namespace, name.substring(0, name.length() - 1));
+        }
+
+        if (eStructuralFeature == null)
+        {
+          eStructuralFeature = eClass.getEStructuralFeature(name);
+        }
+
+        return eStructuralFeature;
+      }
+    };
+
+    private static final EStructuralFeature LOCATION_TYPE_FEATURE = EXTENDED_META_DATA.demandFeature(null, "type", false);
+
+    private static final EStructuralFeature LOCATION_ID_FEATURE = EXTENDED_META_DATA.demandFeature(null, "id", false);
+
+    private static final EStructuralFeature LOCATION_FEATURE = EXTENDED_META_DATA.demandFeature(null, "location", true);
+
+    private static final EStructuralFeature TARGLET_FEATURE = EXTENDED_META_DATA.demandFeature(null, "targlet", true);
+
+    private static final EClass DOCUMENT_ROOT_CLASS = LOCATION_FEATURE.getEContainingClass();
 
     static
     {
@@ -1111,7 +1116,7 @@ public class TargletContainer extends AbstractBundleContainer
 
       Map<Object, Object> options = new HashMap<Object, Object>();
       options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
-      options.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+      options.put(XMLResource.OPTION_EXTENDED_META_DATA, EXTENDED_META_DATA);
       options.put(XMLResource.OPTION_LAX_FEATURE_PROCESSING, Boolean.TRUE);
       options.put(XMLResource.OPTION_XML_OPTIONS, xmlOptions);
 
@@ -1132,17 +1137,12 @@ public class TargletContainer extends AbstractBundleContainer
     {
       try
       {
-        if (!xml.contains("xmlns:xsi"))
-        {
-          return Compatibility.fromXML(xml);
-        }
-
         XMLResource resource = new XMLResourceImpl();
         resource.load(new InputSource(new StringReader(xml)), XML_OPTIONS);
 
         EObject documentRoot = resource.getContents().get(0);
         AnyType location = (AnyType)documentRoot.eContents().get(0);
-        String id = (String)location.eGet(ExtendedMetaData.INSTANCE.demandFeature(null, LOCATION_ID, false));
+        String id = (String)location.eGet(LOCATION_ID_FEATURE);
 
         EList<Targlet> targlets = new BasicEList<Targlet>();
         for (EObject eObject : location.eContents())
@@ -1162,16 +1162,12 @@ public class TargletContainer extends AbstractBundleContainer
 
     public static Writer toXML(String id, List<Targlet> targlets) throws Exception
     {
-      EStructuralFeature locationFeature = ExtendedMetaData.INSTANCE.demandFeature(null, LOCATION, true);
-      EStructuralFeature targletFeature = ExtendedMetaData.INSTANCE.demandFeature(null, TARGLET, true);
-
       AnyType location = XMLTypeFactory.eINSTANCE.createAnyType();
-      location.eSet(ExtendedMetaData.INSTANCE.demandFeature(null, LOCATION_ID, false), id);
-      location.eSet(ExtendedMetaData.INSTANCE.demandFeature(null, LOCATION_TYPE, false), TYPE);
+      location.eSet(LOCATION_ID_FEATURE, id);
+      location.eSet(LOCATION_TYPE_FEATURE, TYPE);
 
-      EClass documentRootClass = locationFeature.getEContainingClass();
-      EObject documentRoot = EcoreUtil.create(documentRootClass);
-      documentRoot.eSet(locationFeature, location);
+      EObject documentRoot = EcoreUtil.create(DOCUMENT_ROOT_CLASS);
+      documentRoot.eSet(LOCATION_FEATURE, location);
 
       FeatureMap targletFeatureMap = location.getAny();
       FeatureMapUtil.addText(targletFeatureMap, "\n  ");
@@ -1179,7 +1175,7 @@ public class TargletContainer extends AbstractBundleContainer
       EList<Targlet> copy = TargletFactory.eINSTANCE.copyTarglets(targlets);
       for (Targlet targlet : copy)
       {
-        targletFeatureMap.add(targletFeature, targlet);
+        targletFeatureMap.add(TARGLET_FEATURE, targlet);
       }
 
       StringWriter writer = new StringWriter();
@@ -1189,238 +1185,6 @@ public class TargletContainer extends AbstractBundleContainer
       resource.save(writer, XML_OPTIONS);
 
       return writer;
-    }
-
-    /**
-     * Reads and writes the old, DOM-based format.
-     *
-     * @deprecated Kept for backwards compatibility.
-     *
-     * @author Eike Stepper
-     */
-    @Deprecated
-    private static final class Compatibility
-    {
-      private static final String TARGLET_NAME = "name";
-
-      private static final String TARGLET_ACTIVE_REPOSITORY_LIST = "activeRepositoryList";
-
-      private static final String TARGLET_INCLUDE_SOURCES = "includeSources";
-
-      private static final String TARGLET_INCLUDE_ALL_PLATFORMS = "includeAllPlatforms";
-
-      private static final String REQUIREMENT = "root";
-
-      private static final String REQUIREMENT_ID = "id";
-
-      private static final String REQUIREMENT_VERSION_RANGE = "versionRange";
-
-      private static final String SOURCE_LOCATOR = "sourceLocator";
-
-      private static final String SOURCE_LOCATOR_ROOT_FOLDER = "rootFolder";
-
-      private static final String SOURCE_LOCATOR_LOCATE_NESTED_PROJECTS = "locateNestedProjects";
-
-      private static final String PREDICATE = "predicate";
-
-      private static final String PREDICATE_HEX = "hex";
-
-      private static final String REPOSITORY_LIST = "repositoryList";
-
-      private static final String REPOSITORY_LIST_NAME = "name";
-
-      private static final String REPOSITORY = "repository";
-
-      private static final String REPOSITORY_URL = "url";
-
-      public static TargletContainer fromXML(String xml) throws Exception
-      {
-        DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = docBuilder.parse(new ByteArrayInputStream(xml.getBytes("UTF-8")));
-
-        Element containerElement = document.getDocumentElement();
-        if (containerElement != null)
-        {
-          String locationType = containerElement.getAttribute(LOCATION_TYPE);
-          if (locationType.equals(TYPE))
-          {
-            String locationID = containerElement.getAttribute(LOCATION_ID);
-            final EList<Targlet> targlets = new BasicEList<Targlet>();
-
-            XMLUtil.handleChildElements(containerElement, new ElementHandler()
-            {
-              public void handleElement(Element targletElement) throws Exception
-              {
-                final Targlet targlet = TargletFactory.eINSTANCE.createTarglet();
-                targlet.setName(targletElement.getAttribute(TARGLET_NAME));
-                targlet.setActiveRepositoryList(targletElement.getAttribute(TARGLET_ACTIVE_REPOSITORY_LIST));
-                targlet.setIncludeSources(Boolean.valueOf(targletElement.getAttribute(TARGLET_INCLUDE_SOURCES)));
-                targlet.setIncludeAllPlatforms( //
-                    Boolean.valueOf(targletElement.getAttribute(TARGLET_INCLUDE_ALL_PLATFORMS)));
-                targlets.add(targlet);
-
-                XMLUtil.handleChildElements(targletElement, new ElementHandler()
-                {
-                  public void handleElement(Element childElement) throws Exception
-                  {
-                    String tag = childElement.getTagName();
-                    if (REQUIREMENT.equals(tag))
-                    {
-                      Requirement root = P2Factory.eINSTANCE.createRequirement(childElement.getAttribute(REQUIREMENT_ID),
-                          new VersionRange(childElement.getAttribute(REQUIREMENT_VERSION_RANGE)));
-                      targlet.getRequirements().add(root);
-                    }
-                    else if (SOURCE_LOCATOR.equals(tag))
-                    {
-                      final SourceLocator sourceLocator = ResourcesFactory.eINSTANCE.createSourceLocator();
-                      sourceLocator.setRootFolder(childElement.getAttribute(SOURCE_LOCATOR_ROOT_FOLDER));
-                      sourceLocator.setLocateNestedProjects(Boolean.valueOf(childElement.getAttribute(SOURCE_LOCATOR_LOCATE_NESTED_PROJECTS)));
-                      targlet.getSourceLocators().add(sourceLocator);
-
-                      XMLUtil.handleChildElements(childElement, new ElementHandler()
-                      {
-                        public void handleElement(Element predicateElement) throws Exception
-                        {
-                          String hex = predicateElement.getAttribute(PREDICATE_HEX);
-                          Predicate predicate = fromHex(hex);
-                          sourceLocator.getPredicates().add(predicate);
-                        }
-                      });
-                    }
-                    else if (REPOSITORY_LIST.equals(tag))
-                    {
-                      final RepositoryList repositoryList = P2Factory.eINSTANCE.createRepositoryList();
-                      repositoryList.setName(childElement.getAttribute(REPOSITORY_LIST_NAME));
-                      targlet.getRepositoryLists().add(repositoryList);
-
-                      XMLUtil.handleChildElements(childElement, new ElementHandler()
-                      {
-                        public void handleElement(Element repositoryElement) throws Exception
-                        {
-                          Repository repository = P2Factory.eINSTANCE.createRepository(repositoryElement.getAttribute(REPOSITORY_URL));
-                          repositoryList.getRepositories().add(repository);
-                        }
-                      });
-                    }
-                  }
-                });
-              }
-            });
-
-            return new TargletContainer(locationID, targlets);
-          }
-        }
-
-        return null;
-      }
-
-      private static <T extends EObject> T fromHex(String hex)
-      {
-        try
-        {
-          byte[] bytes = HexUtil.hexToBytes(hex);
-
-          Resource resource = new BinaryResourceImpl();
-          resource.load(new ByteArrayInputStream(bytes), null);
-
-          @SuppressWarnings("unchecked")
-          T root = (T)resource.getContents().get(0);
-          resource.getContents().clear();
-          return root;
-        }
-        catch (IOException ex)
-        {
-          throw new IORuntimeException(ex);
-        }
-      }
-
-      @SuppressWarnings("unused")
-      public static Writer toXML(String id, List<Targlet> targlets) throws ParserConfigurationException, TransformerException
-      {
-        DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = docBuilder.newDocument();
-
-        Element containerElement = document.createElement(LOCATION);
-        containerElement.setAttribute(LOCATION_TYPE, TYPE);
-        containerElement.setAttribute(LOCATION_ID, id);
-        document.appendChild(containerElement);
-
-        for (Targlet targlet : targlets)
-        {
-          Element targletElement = document.createElement(TARGLET);
-          targletElement.setAttribute(TARGLET_NAME, targlet.getName());
-          targletElement.setAttribute(TARGLET_ACTIVE_REPOSITORY_LIST, targlet.getActiveRepositoryList());
-          targletElement.setAttribute(TARGLET_INCLUDE_SOURCES, Boolean.toString(targlet.isIncludeSources()));
-          targletElement.setAttribute(TARGLET_INCLUDE_ALL_PLATFORMS, Boolean.toString(targlet.isIncludeAllPlatforms()));
-          containerElement.appendChild(targletElement);
-
-          for (Requirement requirement : targlet.getRequirements())
-          {
-            Element rootElement = document.createElement(REQUIREMENT);
-            rootElement.setAttribute(REQUIREMENT_ID, requirement.getID());
-            rootElement.setAttribute(REQUIREMENT_VERSION_RANGE, requirement.getVersionRange().toString());
-            targletElement.appendChild(rootElement);
-          }
-
-          for (SourceLocator sourceLocator : targlet.getSourceLocators())
-          {
-            Element sourceLocatorElement = document.createElement(SOURCE_LOCATOR);
-            sourceLocatorElement.setAttribute(SOURCE_LOCATOR_ROOT_FOLDER, sourceLocator.getRootFolder());
-            sourceLocatorElement.setAttribute(SOURCE_LOCATOR_LOCATE_NESTED_PROJECTS, Boolean.toString(sourceLocator.isLocateNestedProjects()));
-            targletElement.appendChild(sourceLocatorElement);
-
-            for (Predicate predicate : sourceLocator.getPredicates())
-            {
-              String hex = toHex(predicate);
-
-              Element predicateElement = document.createElement(PREDICATE);
-              predicateElement.setAttribute(PREDICATE_HEX, hex);
-              sourceLocatorElement.appendChild(predicateElement);
-            }
-          }
-
-          for (RepositoryList repositoryList : targlet.getRepositoryLists())
-          {
-            Element repositoryListElement = document.createElement(REPOSITORY_LIST);
-            repositoryListElement.setAttribute(REPOSITORY_LIST_NAME, repositoryList.getName());
-            targletElement.appendChild(repositoryListElement);
-
-            for (Repository repository : repositoryList.getRepositories())
-            {
-              Element repositoryElement = document.createElement(REPOSITORY);
-              repositoryElement.setAttribute(REPOSITORY_URL, repository.getURL());
-              repositoryListElement.appendChild(repositoryElement);
-            }
-          }
-        }
-
-        StringWriter writer = new StringWriter();
-
-        StreamResult result = new StreamResult(writer);
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        transformer.transform(new DOMSource(document), result);
-
-        return writer;
-      }
-
-      private static String toHex(EObject object)
-      {
-        try
-        {
-          ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-          Resource resource = new BinaryResourceImpl();
-          resource.getContents().add(EcoreUtil.copy(object));
-          resource.save(baos, null);
-
-          return HexUtil.bytesToHex(baos.toByteArray());
-        }
-        catch (IOException ex)
-        {
-          throw new IORuntimeException(ex);
-        }
-      }
     }
   }
 }

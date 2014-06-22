@@ -48,6 +48,7 @@ public interface TargletTask extends SetupTask
    * @return the value of the '<em>Targlets</em>' containment reference list.
    * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_Targlets()
    * @model containment="true"
+   *        extendedMetaData="name='targlet'"
    * @generated
    */
   EList<Targlet> getTarglets();
@@ -63,7 +64,7 @@ public interface TargletTask extends SetupTask
    * <!-- end-user-doc -->
    * @return the value of the '<em>Targlet UR Is</em>' attribute list.
    * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_TargletURIs()
-   * @model
+   * @model extendedMetaData="name='targletURI'"
    * @generated
    */
   EList<String> getTargletURIs();

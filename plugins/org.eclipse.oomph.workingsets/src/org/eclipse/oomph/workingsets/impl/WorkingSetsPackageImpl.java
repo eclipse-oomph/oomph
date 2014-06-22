@@ -427,7 +427,11 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getWorkingSet_Predicates(), source, new String[] { "name", "predicate" });
     addAnnotation(getWorkingSet_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    addAnnotation(getWorkingSetGroup_WorkingSets(), source, new String[] { "name", "workingSet" });
+    addAnnotation(getInclusionPredicate_IncludedWorkingSets(), source, new String[] { "name", "includedWorkingSet" });
+    addAnnotation(getExclusionPredicate_ExcludedWorkingSets(), source, new String[] { "name", "excludedWorkingSet" });
   }
 
 } // WorkingSetsPackageImpl

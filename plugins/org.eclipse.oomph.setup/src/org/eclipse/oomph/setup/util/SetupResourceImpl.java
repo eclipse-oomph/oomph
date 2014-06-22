@@ -83,6 +83,12 @@ public class SetupResourceImpl extends XMIResourceImpl implements org.eclipse.oo
               {
                 eStructuralFeature = super.getElement(eClass, namespace, name.substring(0, name.length() - 1));
               }
+
+              if (eStructuralFeature == null)
+              {
+                eStructuralFeature = eClass.getEStructuralFeature(name);
+              }
+
               return eStructuralFeature;
             }
           });

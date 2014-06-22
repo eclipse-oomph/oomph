@@ -217,6 +217,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     createEnablementAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
   }
 
   /**
@@ -254,6 +256,18 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(projectsImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getProjectsImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
   }
 
 } // ProjectsPackageImpl

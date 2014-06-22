@@ -45,6 +45,7 @@ public interface RepositoryList extends ModelElement
    * @return the value of the '<em>Repositories</em>' containment reference list.
    * @see org.eclipse.oomph.p2.P2Package#getRepositoryList_Repositories()
    * @model containment="true"
+   *        extendedMetaData="name='repository'"
    * @generated
    */
   EList<Repository> getRepositories();

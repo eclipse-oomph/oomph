@@ -45,6 +45,7 @@ public interface FileAssociationsTask extends SetupTask
    * @return the value of the '<em>Mappings</em>' containment reference list.
    * @see org.eclipse.oomph.setup.workbench.WorkbenchPackage#getFileAssociationsTask_Mappings()
    * @model containment="true" required="true"
+   *        extendedMetaData="name='mapping'"
    * @generated
    */
   EList<FileMapping> getMappings();

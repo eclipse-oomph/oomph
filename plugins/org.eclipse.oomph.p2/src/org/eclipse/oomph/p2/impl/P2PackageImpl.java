@@ -550,7 +550,10 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getProfileDefinition_Requirements(), source, new String[] { "name", "requirement" });
+    addAnnotation(getProfileDefinition_Repositories(), source, new String[] { "name", "repository" });
     addAnnotation(getRequirement_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    addAnnotation(getRepositoryList_Repositories(), source, new String[] { "name", "repository" });
     addAnnotation(getRepository_URL(), source, new String[] { "kind", "attribute", "name", "url" });
   }
 

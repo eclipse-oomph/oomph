@@ -105,6 +105,7 @@ public interface MylynQueriesTask extends SetupTask
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getMylynQueriesTask_Queries()
    * @see org.eclipse.oomph.setup.mylyn.Query#getTask
    * @model opposite="task" containment="true"
+   *        extendedMetaData="name='query'"
    * @generated
    */
   EList<Query> getQueries();

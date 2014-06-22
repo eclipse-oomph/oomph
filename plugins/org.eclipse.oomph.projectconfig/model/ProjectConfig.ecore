@@ -9,7 +9,11 @@
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
-        eType="#//Project" containment="true" eOpposite="#//Project/configuration"/>
+        eType="#//Project" containment="true" eOpposite="#//Project/configuration">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="project"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPreferenceNode"
         lowerBound="1" eType="ecore:EClass ../../org.eclipse.oomph.preferences/model/Preferences.ecore#//PreferenceNode"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instancePreferenceNode"
@@ -25,7 +29,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" lowerBound="1"
         eType="#//WorkspaceConfiguration" eOpposite="#//WorkspaceConfiguration/projects"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferenceProfiles" upperBound="-1"
-        eType="#//PreferenceProfile" containment="true" eOpposite="#//PreferenceProfile/project"/>
+        eType="#//PreferenceProfile" containment="true" eOpposite="#//PreferenceProfile/project">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="preferenceProfile"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferenceNode" lowerBound="1"
         eType="ecore:EClass ../../org.eclipse.oomph.preferences/model/Preferences.ecore#//PreferenceNode"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferenceProfileReferences"
@@ -39,7 +47,11 @@
       <eParameters name="path" eType="ecore:EDataType ../../org.eclipse.oomph.preferences/model/Preferences.ecore#//URI"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferenceFilters" upperBound="-1"
-        eType="#//PreferenceFilter" containment="true" eOpposite="#//PreferenceFilter/preferenceProfile"/>
+        eType="#//PreferenceFilter" containment="true" eOpposite="#//PreferenceFilter/preferenceProfile">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="preferenceFilter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referentProjects" upperBound="-1"
         eType="#//Project" eOpposite="#//Project/preferenceProfileReferences"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -47,7 +59,11 @@
         eOpposite="#//Project/preferenceProfiles"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"
         eType="ecore:EClass ../../org.eclipse.oomph.predicates/model/Predicates.ecore#//Predicate"
-        containment="true"/>
+        containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="predicate"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PreferenceFilter" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eOperations name="matches" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

@@ -566,7 +566,11 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getFileAssociationsTask_Mappings(), source, new String[] { "name", "mapping" });
+    addAnnotation(getFileMapping_Editors(), source, new String[] { "name", "editor" });
     addAnnotation(getFileEditor_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    addAnnotation(getKeyBindingTask_Contexts(), source, new String[] { "name", "context" });
+    addAnnotation(getKeyBindingTask_CommandParameters(), source, new String[] { "name", "commandParameter" });
     addAnnotation(getKeyBindingContext_ID(), source, new String[] { "kind", "attribute", "name", "id" });
     addAnnotation(getCommandParameter_ID(), source, new String[] { "kind", "attribute", "name", "id" });
   }

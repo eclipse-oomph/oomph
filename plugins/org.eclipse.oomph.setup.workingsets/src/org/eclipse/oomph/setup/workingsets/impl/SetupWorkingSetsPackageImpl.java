@@ -216,6 +216,8 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
     createValidTriggersAnnotations();
     // http://www.eclipse.org/oomph/setup/Enablement
     createEnablementAnnotations();
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
   }
 
   /**
@@ -254,6 +256,18 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
     addAnnotation(workingSetTaskEClass, source, new String[] { "variableName", "setup.workingsets.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.workingsets.feature.group" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getWorkingSetTask_WorkingSets(), source, new String[] { "name", "workingSet" });
   }
 
 } // SetupWorkingSetsPackageImpl

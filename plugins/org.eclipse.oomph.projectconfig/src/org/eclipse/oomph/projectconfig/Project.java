@@ -80,6 +80,7 @@ public interface Project extends ModelElement
    * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getProject_PreferenceProfiles()
    * @see org.eclipse.oomph.projectconfig.PreferenceProfile#getProject
    * @model opposite="project" containment="true"
+   *        extendedMetaData="name='preferenceProfile'"
    * @generated
    */
   EList<PreferenceProfile> getPreferenceProfiles();

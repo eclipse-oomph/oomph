@@ -416,6 +416,11 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getTarglet_Requirements(), source, new String[] { "name", "requirement" });
+    addAnnotation(getTarglet_SourceLocators(), source, new String[] { "name", "sourceLocator" });
+    addAnnotation(getTarglet_RepositoryLists(), source, new String[] { "name", "repositoryList" });
+    addAnnotation(getTarglet_ActiveRepositories(), source, new String[] { "name", "activeRepository" });
+    addAnnotation(getComponentExtension_Requirements(), source, new String[] { "name", "requirement" });
     addAnnotation(getComponentDefinition_ID(), source, new String[] { "kind", "attribute", "name", "id" });
   }
 

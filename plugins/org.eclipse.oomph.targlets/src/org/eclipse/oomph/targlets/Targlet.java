@@ -81,6 +81,7 @@ public interface Targlet extends ModelElement
    * @return the value of the '<em>Requirements</em>' containment reference list.
    * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_Requirements()
    * @model containment="true" required="true"
+   *        extendedMetaData="name='requirement'"
    * @generated
    */
   EList<Requirement> getRequirements();
@@ -97,6 +98,7 @@ public interface Targlet extends ModelElement
    * @return the value of the '<em>Source Locators</em>' containment reference list.
    * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_SourceLocators()
    * @model containment="true"
+   *        extendedMetaData="name='sourceLocator'"
    * @generated
    */
   EList<SourceLocator> getSourceLocators();
@@ -113,6 +115,7 @@ public interface Targlet extends ModelElement
    * @return the value of the '<em>Repository Lists</em>' containment reference list.
    * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_RepositoryLists()
    * @model containment="true"
+   *        extendedMetaData="name='repositoryList'"
    * @generated
    */
   EList<RepositoryList> getRepositoryLists();
@@ -155,6 +158,7 @@ public interface Targlet extends ModelElement
    * @return the value of the '<em>Active Repositories</em>' reference list.
    * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_ActiveRepositories()
    * @model resolveProxies="false" transient="true" changeable="false" volatile="true" derived="true"
+   *        extendedMetaData="name='activeRepository'"
    * @generated
    */
   EList<Repository> getActiveRepositories();

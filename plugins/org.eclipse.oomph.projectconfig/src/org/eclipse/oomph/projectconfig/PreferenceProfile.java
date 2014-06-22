@@ -55,6 +55,7 @@ public interface PreferenceProfile extends ModelElement
    * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getPreferenceProfile_PreferenceFilters()
    * @see org.eclipse.oomph.projectconfig.PreferenceFilter#getPreferenceProfile
    * @model opposite="preferenceProfile" containment="true"
+   *        extendedMetaData="name='preferenceFilter'"
    * @generated
    */
   EList<PreferenceFilter> getPreferenceFilters();
@@ -143,6 +144,7 @@ public interface PreferenceProfile extends ModelElement
    * @return the value of the '<em>Predicates</em>' containment reference list.
    * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getPreferenceProfile_Predicates()
    * @model containment="true"
+   *        extendedMetaData="name='predicate'"
    * @generated
    */
   EList<Predicate> getPredicates();

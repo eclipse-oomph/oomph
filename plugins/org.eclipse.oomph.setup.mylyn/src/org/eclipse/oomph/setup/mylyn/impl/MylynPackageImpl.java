@@ -573,7 +573,10 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getMylynQueriesTask_Queries(), source, new String[] { "name", "query" });
+    addAnnotation(getMylynBuildsTask_BuildPlans(), source, new String[] { "name", "buildPlan" });
     addAnnotation(getQuery_URL(), source, new String[] { "kind", "attribute", "name", "url" });
+    addAnnotation(getQuery_Attributes(), source, new String[] { "name", "attribute" });
   }
 
 } // MylynPackageImpl

@@ -99,6 +99,7 @@ public interface SourceLocator extends ModelElement
    * @return the value of the '<em>Predicates</em>' containment reference list.
    * @see org.eclipse.oomph.resources.ResourcesPackage#getSourceLocator_Predicates()
    * @model containment="true"
+   *        extendedMetaData="name='predicate'"
    * @generated
    */
   EList<Predicate> getPredicates();

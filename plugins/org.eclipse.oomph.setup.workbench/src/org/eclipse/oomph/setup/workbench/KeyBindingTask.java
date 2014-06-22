@@ -79,6 +79,7 @@ public interface KeyBindingTask extends SetupTask
    * @return the value of the '<em>Contexts</em>' containment reference list.
    * @see org.eclipse.oomph.setup.workbench.WorkbenchPackage#getKeyBindingTask_Contexts()
    * @model containment="true" required="true"
+   *        extendedMetaData="name='context'"
    * @generated
    */
   EList<KeyBindingContext> getContexts();
@@ -199,6 +200,7 @@ public interface KeyBindingTask extends SetupTask
    * @return the value of the '<em>Command Parameters</em>' containment reference list.
    * @see org.eclipse.oomph.setup.workbench.WorkbenchPackage#getKeyBindingTask_CommandParameters()
    * @model containment="true"
+   *        extendedMetaData="name='commandParameter'"
    * @generated
    */
   EList<CommandParameter> getCommandParameters();

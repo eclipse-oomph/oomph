@@ -25,6 +25,9 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
@@ -64,7 +67,31 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
   {
     Map<Object, Object> options = new HashMap<Object, Object>();
     options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
-    options.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+    options.put(XMLResource.OPTION_EXTENDED_META_DATA, new BasicExtendedMetaData()
+    {
+      @Override
+      public EStructuralFeature getElement(EClass eClass, String namespace, String name)
+      {
+        EStructuralFeature eStructuralFeature = super.getElement(eClass, namespace, name);
+        if (eStructuralFeature == null)
+        {
+          eStructuralFeature = super.getElement(eClass, namespace, name.substring(0, name.length() - 1));
+        }
+
+        if (eStructuralFeature == null)
+        {
+          eStructuralFeature = eClass.getEStructuralFeature(name);
+        }
+
+        return eStructuralFeature;
+      }
+
+      @Override
+      protected boolean isFeatureKindSpecific()
+      {
+        return false;
+      }
+    });
     XML_OPTIONS = Collections.unmodifiableMap(options);
   }
 

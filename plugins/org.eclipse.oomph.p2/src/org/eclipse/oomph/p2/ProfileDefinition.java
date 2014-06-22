@@ -46,6 +46,7 @@ public interface ProfileDefinition extends ModelElement
    * @return the value of the '<em>Requirements</em>' containment reference list.
    * @see org.eclipse.oomph.p2.P2Package#getProfileDefinition_Requirements()
    * @model containment="true"
+   *        extendedMetaData="name='requirement'"
    * @generated
    */
   EList<Requirement> getRequirements();
@@ -62,6 +63,7 @@ public interface ProfileDefinition extends ModelElement
    * @return the value of the '<em>Repositories</em>' containment reference list.
    * @see org.eclipse.oomph.p2.P2Package#getProfileDefinition_Repositories()
    * @model containment="true"
+   *        extendedMetaData="name='repository'"
    * @generated
    */
   EList<Repository> getRepositories();

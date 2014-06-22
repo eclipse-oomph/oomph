@@ -16,6 +16,10 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" lowerBound="1"
         upperBound="-1" eType="ecore:EClass ../../org.eclipse.oomph.resources/model/Resources.ecore#//SourceLocator"
-        containment="true"/>
+        containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="sourceLocator"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

@@ -16,6 +16,10 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="workingSets" upperBound="-1"
         eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore#//WorkingSet"
-        containment="true"/>
+        containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="workingSet"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

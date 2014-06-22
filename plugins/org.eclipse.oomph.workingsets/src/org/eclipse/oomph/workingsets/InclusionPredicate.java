@@ -43,7 +43,7 @@ public interface InclusionPredicate extends Predicate
    * <!-- end-user-doc -->
    * @return the value of the '<em>Included Working Sets</em>' reference list.
    * @see org.eclipse.oomph.workingsets.WorkingSetsPackage#getInclusionPredicate_IncludedWorkingSets()
-   * @model
+   * @model extendedMetaData="name='includedWorkingSet'"
    * @generated
    */
   EList<WorkingSet> getIncludedWorkingSets();

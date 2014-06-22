@@ -46,6 +46,7 @@ public interface MavenImportTask extends SetupTask
    * @return the value of the '<em>Source Locators</em>' containment reference list.
    * @see org.eclipse.oomph.setup.maven.MavenPackage#getMavenImportTask_SourceLocators()
    * @model containment="true" required="true"
+   *        extendedMetaData="name='sourceLocator'"
    * @generated
    */
   EList<SourceLocator> getSourceLocators();

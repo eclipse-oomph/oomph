@@ -44,6 +44,7 @@ public interface WorkingSetGroup extends ModelElement
    * @return the value of the '<em>Working Sets</em>' containment reference list.
    * @see org.eclipse.oomph.workingsets.WorkingSetsPackage#getWorkingSetGroup_WorkingSets()
    * @model containment="true" keys="name"
+   *        extendedMetaData="name='workingSet'"
    * @generated
    */
   EList<WorkingSet> getWorkingSets();

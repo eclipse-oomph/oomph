@@ -15,14 +15,22 @@
       <details key="triggers" value="STARTUP MANUAL"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" lowerBound="1"
-        upperBound="-1" eType="#//FileMapping" containment="true"/>
+        upperBound="-1" eType="#//FileMapping" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="mapping"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FileMapping" eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePattern" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultEditorID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="editors" upperBound="-1"
-        eType="#//FileEditor" containment="true"/>
+        eType="#//FileEditor" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="editor"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FileEditor" eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -44,14 +52,22 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="scheme" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="org.eclipse.ui.defaultAcceleratorConfiguration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contexts" lowerBound="1"
-        upperBound="-1" eType="#//KeyBindingContext" containment="true"/>
+        upperBound="-1" eType="#//KeyBindingContext" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="context"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="platform" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="locale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="keys" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="command" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandParameters" upperBound="-1"
-        eType="#//CommandParameter" containment="true"/>
+        eType="#//CommandParameter" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="commandParameter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="KeyBindingContext" eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"

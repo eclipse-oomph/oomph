@@ -216,6 +216,8 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     createEnablementAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
   }
 
   /**
@@ -253,6 +255,18 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(mavenImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getMavenImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
   }
 
 } // MavenPackageImpl

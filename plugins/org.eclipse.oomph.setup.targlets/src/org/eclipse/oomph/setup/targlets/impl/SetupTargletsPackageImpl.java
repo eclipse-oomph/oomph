@@ -230,6 +230,8 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     createEnablementAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
   }
 
   /**
@@ -268,6 +270,19 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(targletTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getTargletTask_Targlets(), source, new String[] { "name", "targlet" });
+    addAnnotation(getTargletTask_TargletURIs(), source, new String[] { "name", "targletURI" });
   }
 
 } // SetupTargletsPackageImpl

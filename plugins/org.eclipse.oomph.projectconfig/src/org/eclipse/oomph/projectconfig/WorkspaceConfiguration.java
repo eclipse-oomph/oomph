@@ -49,6 +49,7 @@ public interface WorkspaceConfiguration extends ModelElement
    * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getWorkspaceConfiguration_Projects()
    * @see org.eclipse.oomph.projectconfig.Project#getConfiguration
    * @model opposite="configuration" containment="true"
+   *        extendedMetaData="name='project'"
    * @generated
    */
   EList<Project> getProjects();

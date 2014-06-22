@@ -48,6 +48,7 @@ public interface PreferenceNode extends PreferenceItem
    * @see org.eclipse.oomph.preferences.PreferencesPackage#getPreferenceNode_Children()
    * @see org.eclipse.oomph.preferences.PreferenceNode#getParent
    * @model opposite="parent" containment="true"
+   *        extendedMetaData="name='child'"
    * @generated
    */
   EList<PreferenceNode> getChildren();
@@ -94,6 +95,7 @@ public interface PreferenceNode extends PreferenceItem
    * @see org.eclipse.oomph.preferences.PreferencesPackage#getPreferenceNode_Properties()
    * @see org.eclipse.oomph.preferences.Property#getParent
    * @model opposite="parent" containment="true" keys="name"
+   *        extendedMetaData="name='property'"
    * @generated
    */
   EList<Property> getProperties();

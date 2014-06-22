@@ -47,6 +47,7 @@ public interface ProjectsImportTask extends SetupTask
    * @return the value of the '<em>Source Locators</em>' containment reference list.
    * @see org.eclipse.oomph.setup.projects.ProjectsPackage#getProjectsImportTask_SourceLocators()
    * @model containment="true" required="true"
+   *        extendedMetaData="name='sourceLocator'"
    * @generated
    */
   EList<SourceLocator> getSourceLocators();

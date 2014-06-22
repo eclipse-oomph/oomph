@@ -103,6 +103,7 @@ public interface MylynBuildsTask extends SetupTask
    * @return the value of the '<em>Build Plans</em>' containment reference list.
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getMylynBuildsTask_BuildPlans()
    * @model containment="true" required="true"
+   *        extendedMetaData="name='buildPlan'"
    * @generated
    */
   EList<BuildPlan> getBuildPlans();

@@ -27,11 +27,19 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AndPredicate" eSuperTypes="#//Predicate">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-        eType="#//Predicate" containment="true"/>
+        eType="#//Predicate" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="operand"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrPredicate" eSuperTypes="#//Predicate">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-        eType="#//Predicate" containment="true"/>
+        eType="#//Predicate" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="operand"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NotPredicate" eSuperTypes="#//Predicate">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operand" eType="#//Predicate"

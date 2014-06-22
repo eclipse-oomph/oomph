@@ -46,6 +46,7 @@ public interface WorkingSetTask extends SetupTask
    * @return the value of the '<em>Working Sets</em>' containment reference list.
    * @see org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage#getWorkingSetTask_WorkingSets()
    * @model containment="true"
+   *        extendedMetaData="name='workingSet'"
    * @generated
    */
   EList<WorkingSet> getWorkingSets();

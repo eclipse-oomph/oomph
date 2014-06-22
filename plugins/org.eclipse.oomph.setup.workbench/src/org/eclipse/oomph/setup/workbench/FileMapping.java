@@ -98,6 +98,7 @@ public interface FileMapping extends ModelElement
    * @return the value of the '<em>Editors</em>' containment reference list.
    * @see org.eclipse.oomph.setup.workbench.WorkbenchPackage#getFileMapping_Editors()
    * @model containment="true"
+   *        extendedMetaData="name='editor'"
    * @generated
    */
   EList<FileEditor> getEditors();

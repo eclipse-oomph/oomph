@@ -42,6 +42,7 @@ public interface OrPredicate extends Predicate
    * @return the value of the '<em>Operands</em>' containment reference list.
    * @see org.eclipse.oomph.predicates.PredicatesPackage#getOrPredicate_Operands()
    * @model containment="true"
+   *        extendedMetaData="name='operand'"
    * @generated
    */
   EList<Predicate> getOperands();

@@ -51,6 +51,7 @@ public interface P2Task extends SetupTask
    * @return the value of the '<em>Requirements</em>' containment reference list.
    * @see org.eclipse.oomph.setup.p2.SetupP2Package#getP2Task_Requirements()
    * @model containment="true"
+   *        extendedMetaData="name='requirement'"
    * @generated
    */
   EList<Requirement> getRequirements();
@@ -67,6 +68,7 @@ public interface P2Task extends SetupTask
    * @return the value of the '<em>Repositories</em>' containment reference list.
    * @see org.eclipse.oomph.setup.p2.SetupP2Package#getP2Task_Repositories()
    * @model containment="true"
+   *        extendedMetaData="name='repository'"
    * @generated
    */
   EList<Repository> getRepositories();

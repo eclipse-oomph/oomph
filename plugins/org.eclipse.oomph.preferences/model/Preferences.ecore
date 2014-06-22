@@ -33,9 +33,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//PreferenceNode"
         eOpposite="#//PreferenceNode/children"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
-        eType="#//PreferenceNode" containment="true" eOpposite="#//PreferenceNode/parent"/>
+        eType="#//PreferenceNode" containment="true" eOpposite="#//PreferenceNode/parent">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="child"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
-        eType="#//Property" containment="true" eOpposite="#//Property/parent" eKeys="#//PreferenceItem/name"/>
+        eType="#//Property" containment="true" eOpposite="#//Property/parent" eKeys="#//PreferenceItem/name">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="property"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         changeable="false" volatile="true" transient="true" derived="true"/>
   </eClassifiers>
