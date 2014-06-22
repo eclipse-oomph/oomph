@@ -12,28 +12,12 @@
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
     xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
     xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
-    name="EMF.RAP"
-    label="EMF RAP SDK">
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="/org.eclipse.emf.common/release.xml">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.emf.cdo.releng.version///org.eclipse.emf.common/release.xml"
-        value="PARTIAL"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="compilers.p.unresolved-ex-points">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.pde/compilers.p.unresolved-ex-points"
-        value="2"/>
-  </setupTask>
+    name="xsd"
+    label="XSD">
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-1.6"
-      location="${jre.1.6.location}"/>
+      version="J2SE-1.5"
+      location="${jre.location-1.5}"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
@@ -47,87 +31,103 @@
       xsi:type="setup:ResourceCreationTask"
       excludedTriggers="STARTUP MANUAL"
       content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;section name=&quot;Workbench&quot;>&#xD;&#xA;&#x9;&lt;section name=&quot;org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart&quot;>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;true&quot; key=&quot;group_libraries&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;false&quot; key=&quot;linkWithEditor&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;2&quot; key=&quot;layout&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;2&quot; key=&quot;rootMode&quot;/>&#xD;&#xA;&#x9;&#x9;&lt;item value=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;packageExplorer configured=&amp;quot;true&amp;quot; group_libraries=&amp;quot;1&amp;quot; layout=&amp;quot;2&amp;quot; linkWithEditor=&amp;quot;0&amp;quot; rootMode=&amp;quot;2&amp;quot; sortWorkingSets=&amp;quot;false&amp;quot; workingSetName=&amp;quot;&amp;quot;&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;localWorkingSetManager&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;workingSet editPageId=&amp;quot;org.eclipse.jdt.internal.ui.OthersWorkingSet&amp;quot; factoryID=&amp;quot;org.eclipse.ui.internal.WorkingSetFactory&amp;quot; id=&amp;quot;1382792884467_1&amp;quot; label=&amp;quot;Other Projects&amp;quot; name=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;/localWorkingSetManager&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;activeWorkingSet workingSetName=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;allWorkingSets workingSetName=&amp;quot;Other Projects&amp;quot;/&amp;gt;&amp;#x0D;&amp;#x0A;&amp;lt;/packageExplorer&amp;gt;&quot; key=&quot;memento&quot;/>&#xD;&#xA;&#x9;&lt;/section>&#xD;&#xA;&lt;/section>&#xD;&#xA;"
-      targetURL="${setup.ws.dir|uri}/.metadata/.plugins/org.eclipse.jdt.ui/dialog_settings.xml"
+      targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.jdt.ui/dialog_settings.xml"
       encoding="UTF-8"/>
   <setupTask
-      xsi:type="setup:VariableTask"
-      name="egit.url"
-      value="http://download.eclipse.org/egit/updates-nightly"/>
-  <setupTask
-      xsi:type="setup.p2:P2Task"
-      predecessor="//@setupTasks.6">
+      xsi:type="setup.p2:P2Task">
     <requirements
         id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
     <requirements
-        id="org.eclipse.emf.cdo.releng.version.feature.group"/>
+        id="org.eclipse.oomph.version.feature.group"/>
     <requirements
-        id="org.eclipse.emf.cdo.releng.launches.feature.group"/>
+        id="org.eclipse.oomph.launches.feature.group"/>
     <requirements
-        id="org.eclipse.emf.cdo.releng.manifests.feature.group"/>
+        id="org.eclipse.oomph.manifests.feature.group"/>
     <requirements
-        id="org.eclipse.emf.cdo.releng.projectconfig.feature.group"/>
+        id="org.eclipse.oomph.projectconfig.feature.group"/>
     <requirements
-        id="org.eclipse.emf.cdo.releng.projectcopy.feature.group"/>
+        id="org.eclipse.oomph.projectcopy.feature.group"/>
     <requirements
-        id="org.eclipse.emf.cdo.releng.relativepaths.feature.group"/>
-    <requirements
-        id="org.eclipse.emf.cdo.releng.workingsets.feature.group"/>
-    <repositories
-        url="${train.url}"/>
-    <repositories
-        url="${releng.url}"/>
-    <repositories
-        url="${egit.url}"/>
+        id="org.eclipse.oomph.workingsets.feature.group"/>
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
-      name="tool.url"
-      value="${train.url}"/>
+      name="tp.materialization.url"
+      label="Target Platform">
+    <choice
+        value="http://download.eclipse.org/releases/galileo"
+        label="Galileo - 3.5"/>
+    <choice
+        value="http://download.eclipse.org/releases/helios"
+        label="Helios - 3.6"/>
+    <choice
+        value="http://download.eclipse.org/releases/indigo"
+        label="Indigo - 3.7"/>
+    <choice
+        value="http://download.eclipse.org/releases/juno"
+        label="Juno - 4.2"/>
+    <choice
+        value="http://download.eclipse.org/releases/kepler"
+        label="Kepler - 4.3"/>
+    <choice
+        value="http://download.eclipse.org/releases/luna"
+        label="Luna - 4.4"/>
+    <description>The release train repository location that will be used to materialize a target platform.  EMF and XSD are built and tested with Eclipse 3.5, i.e., Galileo.</description>
+  </setupTask>
+  <setupTask
+      xsi:type="jdt:JRETask"
+      version="J2SE-1.5"
+      location="${jre.location-1.5}"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirements
         id="org.eclipse.emf.sdk.feature.group"/>
     <requirements
         id="org.eclipse.emf.ecoretools.sdk.feature.group"/>
-    <requirements
-        id="org.eclipse.rap.tools.feature.feature.group"/>
     <repositories
-        url="${tool.url}"/>
+        url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
   </setupTask>
   <setupTask
-      xsi:type="setup:VariableTask"
-      name="branch.name"
-      value="master"/>
-  <setupTask
-      xsi:type="setup:VariableTask"
-      name="emf.git.location"
-      value="${setup.branch.dir/git/emf}"/>
-  <setupTask
-      xsi:type="setup:VariableTask"
-      name="emf.git.url"
-      value="ssh://git.eclipse.org:29418/emf/org.eclipse.emf"/>
-  <setupTask
       xsi:type="git:GitCloneTask"
-      predecessor="//@setupTasks.12"
-      location="${emf.git.location}"
-      remoteURI="${emf.git.url}"
-      checkoutBranch="${branch.name}"/>
+      id="xsd.git.clone"
+      remoteURI="xsd/org.eclipse.xsd">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/InducedChoices">
+      <detail
+          key="inherit">
+        <value>eclipse.git.remoteURIs</value>
+      </detail>
+      <detail
+          key="label">
+        <value>XSD Git or Gerrit Repository</value>
+      </detail>
+      <detail
+          key="target">
+        <value>remoteURI</value>
+      </detail>
+    </annotation>
+    <description>XSD</description>
+  </setupTask>
   <setupTask
-      xsi:type="setup:VariableTask"
-      name="tp.materialization.url"
-      value="${train.url}"/>
-  <setupTask
-      xsi:type="setup.targlets:TargletTask"
-      predecessor="//@setupTasks.13">
+      xsi:type="setup.targlets:TargletTask">
     <targlets
-        name="EMF RAP">
+        name="XSD">
       <requirements
-          id="org.eclipse.emf.rap.sdk.feature.group"/>
+          id="org.eclipse.xsd.sdk.feature.group"/>
       <requirements
-          id="org.eclipse.rap.sdk.feature.feature.group.feature.group"/>
+          id="org.eclipse.emf.ant"/>
+      <requirements
+          id="org.eclipse.equinox.executable.feature.group"/>
+      <requirements
+          id="org.eclipse.platform.feature.group"/>
+      <requirements
+          id="org.eclipse.jdt.feature.group"/>
+      <requirements
+          id="org.eclipse.pde.feature.group"/>
       <sourceLocators
-          rootFolder="${emf.git.location}"/>
-      <repositoryLists>
+          rootFolder="${xsd.git.clone.location}"/>
+      <repositoryLists
+          name="Dependencies">
         <repositories
             url="${tp.materialization.url}"/>
       </repositoryLists>
@@ -136,66 +136,81 @@
   <setupTask
       xsi:type="setup.workingsets:WorkingSetTask">
     <workingSets
-        name="EMF Core"
-        id="EMF EMF Core">
+        name="XSD"
+        id="EMF XSD">
       <predicates
           xsi:type="predicates:AndPredicate">
         <operands
             xsi:type="predicates:RepositoryPredicate"
-            project="org.eclipse.emf.common"/>
+            project="org.eclipse.xsd"/>
         <operands
             xsi:type="predicates:NaturePredicate"
             nature="org.eclipse.pde.PluginNature"/>
         <operands
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.16/@workingSets.1"/>
+            excludedWorkingSets="//@setupTasks.10/@workingSets.1"/>
+        <operands
+            xsi:type="workingsets:ExclusionPredicate"
+            excludedWorkingSets="//@setupTasks.10/@workingSets.3"/>
       </predicates>
     </workingSets>
     <workingSets
-        name="EMF RAP"
-        id="EMF EMF Core">
+        name="XSD Examples"
+        id="EMF XSD Examples">
       <predicates
           xsi:type="predicates:AndPredicate">
         <operands
             xsi:type="predicates:RepositoryPredicate"
-            project="org.eclipse.emf.rap"/>
+            project="org.eclipse.xsd"/>
         <operands
             xsi:type="predicates:NaturePredicate"
             nature="org.eclipse.pde.PluginNature"/>
         <operands
-            xsi:type="predicates:NamePredicate"
-            pattern=".*\.rap(\..*)?"/>
+            xsi:type="predicates:OrPredicate">
+          <operands
+              xsi:type="predicates:NamePredicate"
+              pattern="org\.eclipse\.xsd\.cheatsheets.*"/>
+          <operands
+              xsi:type="predicates:NamePredicate"
+              pattern="org\.eclipse\.xsd\.example.*"/>
+        </operands>
       </predicates>
     </workingSets>
     <workingSets
-        name="EMF Core and RAP Features"
-        id="EMF EMF Core Features">
+        name="XSD Features"
+        id="EMF XSD Features">
       <predicates
           xsi:type="predicates:AndPredicate">
         <operands
             xsi:type="predicates:RepositoryPredicate"
-            project="org.eclipse.emf.common"/>
+            project="org.eclipse.xsd"/>
         <operands
             xsi:type="predicates:NaturePredicate"
             nature="org.eclipse.pde.FeatureNature"/>
       </predicates>
     </workingSets>
+    <workingSets
+        name="XSD Documentation"
+        id="EMF XSD Documentation">
+      <predicates
+          xsi:type="predicates:AndPredicate">
+        <operands
+            xsi:type="predicates:RepositoryPredicate"
+            project="org.eclipse.xsd"/>
+        <operands
+            xsi:type="predicates:NaturePredicate"
+            nature="org.eclipse.pde.PluginNature"/>
+        <operands
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.xsd\.doc"/>
+      </predicates>
+    </workingSets>
   </setupTask>
-  <stream name="master">
-    <setupTask
-        xsi:type="setup:EclipseIniTask"
-        option="-Dsetup.branch.uri"
-        value="=${emf.git.location|uri}/features/org.eclipse.emf.rap.sdk-feature/RAP.setup"
-        vm="true"/>
-  </stream>
-  <stream name="2.9">
-    <setupTask
-        xsi:type="setup:VariableTask"
-        name="branch.name"
-        value="R2_9_maintenance"/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        name="tool.url"
-        value="http://download.eclipse.org/releases/kepler"/>
-  </stream>
+  <stream name="master"/>
+  <stream name="R2_10_maintenance"
+      label="2.10"/>
+  <logicalProjectContainer
+      xsi:type="setup:ProjectCatalog"
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
+  <description>The development environment for XSD</description>
 </setup:Project>
