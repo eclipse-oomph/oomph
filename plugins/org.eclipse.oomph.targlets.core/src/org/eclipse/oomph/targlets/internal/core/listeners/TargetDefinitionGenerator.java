@@ -143,7 +143,7 @@ public class TargetDefinitionGenerator implements TargletListener
 
               if (keys.add(key))
               {
-                builder.append("      <unit id=\"" + id + version + "/>");
+                builder.append("      <unit id=\"" + id + "\"" + version + "/>");
                 builder.append(nl);
               }
             }
