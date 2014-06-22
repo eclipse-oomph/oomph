@@ -92,7 +92,8 @@ public class CachingTransport extends Transport
     }
 
     OutputStream oldTarget = null;
-    if (uri.getPath().endsWith("/p2.index"))
+    String path = uri.getPath();
+    if (path != null && path.endsWith("/p2.index"))
     {
       oldTarget = target;
       target = new ByteArrayOutputStream();
