@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -40,14 +41,15 @@ public class CachingTransport extends Transport
 
   private static final String NOT_FOUND_TOKEN = "NOT FOUND";
 
+  private final Agent agent;
+
   private final Transport delegate;
 
   private final File cacheFolder;
 
-  private boolean offline;
-
-  public CachingTransport(Transport delegate)
+  public CachingTransport(Agent agent, Transport delegate)
   {
+    this.agent = agent;
     this.delegate = delegate;
 
     File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.USER_HOME));
@@ -64,12 +66,7 @@ public class CachingTransport extends Transport
 
   public boolean isOffline()
   {
-    return offline;
-  }
-
-  public void setOffline(boolean offline)
-  {
-    this.offline = offline;
+    return agent.isOffline();
   }
 
   @Override
@@ -78,7 +75,7 @@ public class CachingTransport extends Transport
     File modifiedFile = getModifiedFile(uri);
     File contentFile = getContentFile(uri);
 
-    if (offline)
+    if (isOffline())
     {
       Long modified = loadModified(modifiedFile);
       if (NOT_FOUND.equals(modified))
@@ -144,7 +141,7 @@ public class CachingTransport extends Transport
   {
     File modifiedFile = getModifiedFile(uri);
 
-    if (offline)
+    if (isOffline())
     {
       Long timeStamp = loadModified(modifiedFile);
       if (timeStamp != null)

@@ -381,10 +381,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   public void setOffline(boolean offline)
   {
     this.offline = offline;
-    if (cachingTransport != null)
-    {
-      cachingTransport.setOffline(true);
-    }
   }
 
   public void initializeProvisioningAgent(IProvisioningAgent provisioningAgent)
@@ -399,8 +395,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
       if (!PropertiesUtil.isProperty("oomph.p2.disable.offline"))
       {
-        cachingTransport = new CachingTransport((Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
-        cachingTransport.setOffline(offline);
+        cachingTransport = new CachingTransport(this, (Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
         provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
       }
 
