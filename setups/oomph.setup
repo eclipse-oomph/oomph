@@ -16,49 +16,49 @@
     label="Oomph">
   <setupTask
       xsi:type="setup.p2:P2Task">
-    <requirements
+    <requirement
         id="org.eclipse.emf.sdk.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.ide_feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.java_feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.pde_feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.team_feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn_feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.git.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.builds.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.mylyn.hudson.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.egit.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.egit.mylyn.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.projectcopy.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.version.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.emf.ecoretools.sdk.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
-    <repositories
+    <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
-    <repositories
+    <repository
         url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-    <repositories
+    <repository
         url="http://download.eclipse.org/modeling/emft/ecoretools/updates/1.2/201306071421"/>
-    <repositories
+    <repository
         url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
-    <repositories
+    <repository
         url="${oomph.update.url}"/>
   </setupTask>
   <setupTask
@@ -159,7 +159,7 @@
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
-      <targlets
+      <targlet
           name="Oomph">
         <annotation
             source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
@@ -186,174 +186,182 @@
             <value>${git.clone.oomph.location/releng/org.eclipse.oomph.releng/org.eclipse.oomph.releng.target}</value>
           </detail>
           <detail
-              key="roots">
-            <value>true</value>
+              key="includeAllPlatforms">
+            <value>false</value>
           </detail>
           <detail
-              key="versions">
+              key="includeSource">
             <value>false</value>
           </detail>
         </annotation>
-        <requirements
+        <requirement
             id="org.eclipse.oomph.all.feature.group"/>
-        <requirements
-            id="org.eclipse.oomph.setup.installer.feature.group"/>
-        <requirements
-            id="org.eclipse.oomph.setup.installer.product"/>
-        <requirements
-            id="org.eclipse.oomph.setup.tests"/>
-        <requirements
-            id="org.eclipse.oomph.version.tests"/>
-        <requirements
+        <requirement
             id="org.eclipse.oomph.license.feature.group"/>
-        <requirements
+        <requirement
+            id="org.eclipse.oomph.setup.installer.feature.group"/>
+        <requirement
+            id="org.eclipse.oomph.setup.installer.product"/>
+        <requirement
+            id="org.eclipse.oomph.setup.tests"/>
+        <requirement
+            id="org.eclipse.oomph.version.tests"/>
+        <requirement
             id="org.eclipse.oomph.releng"/>
-        <requirements
+        <requirement
             id="org.eclipse.oomph.site"/>
-        <requirements
+        <requirement
             id="setups"/>
-        <sourceLocators
+        <sourceLocator
             rootFolder="${git.clone.oomph.location}"/>
-        <repositoryLists
+        <repositoryList
             name="Luna Dependencies">
-          <repositories
-              url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215"/>
-          <repositories
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-          <repositories
-              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
-          <repositories
-              url="http://download.eclipse.org/egit/updates"/>
-          <repositories
-              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-          <repositories
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
-          <repositories
-              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
-          <repositories
-              url="http://download.eclipse.org/webtools/repository/luna"/>
-          <repositories
+          <repository
+              url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215">
+            <annotation
+                source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
+              <detail
+                  key="extraUnits">
+                <value>org.eclipse.equinox.executable.feature.group</value>
+              </detail>
+            </annotation>
+          </repository>
+          <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
-        </repositoryLists>
-      </targlets>
+          <repository
+              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+          <repository
+              url="http://download.eclipse.org/egit/updates"/>
+          <repository
+              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+          <repository
+              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+          <repository
+              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+          <repository
+              url="http://download.eclipse.org/webtools/repository/luna"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+        </repositoryList>
+      </targlet>
     </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
-      <workingSets
+      <workingSet
           name="Setup">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.setup.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="setups"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Targlets">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.targlets.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Project Configuration">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.projectconfig.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Version Management">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.version.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Dynamic Working Sets">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.workingsets.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Preferences Management">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.preferences.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="P2 Management">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.p2.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Utilities">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.util.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.ui.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.base.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.predicates.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.resources.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Tools">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.gitbash.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.launches.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.manifests.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.projectcopy.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.winexplorer.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Release Engineering">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.all-feature"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.license-feature"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.site"/>
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.releng.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:FilePredicate"
             filePattern="user.setup"/>
-      </workingSets>
+      </workingSet>
     </setupTask>
     <setupTask
         xsi:type="mylyn:MylynQueriesTask"
         repositoryURL="https://bugs.eclipse.org/bugs"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <queries
+      <query
           summary="Bugs in ${bugzilla.version}"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
-      <queries
+      <query
           summary="Features in ${bugzilla.version}"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=enhancement"/>
-      <queries
+      <query
           summary="Resolved in ${bugzilla.version}"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;resolution=FIXED&amp;version=${bugzilla.version}"/>
-      <queries
+      <query
           summary="Unspecified Version"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;version=unspecified"/>
     </setupTask>
@@ -363,27 +371,27 @@
         repositoryURL="https://git.eclipse.org/r"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <queries
+      <query
           summary="Reviews in ${git.clone.oomph.checkoutBranch}">
-        <attributes
+        <attribute
             key="gerrit query type"
             value="custom"/>
-        <attributes
+        <attribute
             key="gerrit query project"
             value="oomph/org.eclipse.oomph"/>
-        <attributes
+        <attribute
             key="gerrit query string"
             value="project:oomph/org.eclipse.oomph status:open branch:${git.clone.oomph.checkoutBranch}"/>
-      </queries>
+      </query>
     </setupTask>
     <setupTask
         xsi:type="mylyn:MylynBuildsTask"
         serverURL="https://hudson.eclipse.org/oomph"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <buildPlans
+      <buildPlan
           name="integration"/>
-      <buildPlans
+      <buildPlan
           name="promotion"/>
     </setupTask>
   </stream>

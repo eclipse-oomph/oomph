@@ -53,7 +53,7 @@ import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
-import org.eclipse.oomph.util.CollectionsUtil;
+import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -210,14 +210,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       for (SetupTask setupTask : triggeredSetupTasks)
       {
         EClass eClass = setupTask.eClass();
-        CollectionsUtil.add(instances, eClass, setupTask);
+        CollectionUtil.add(instances, eClass, setupTask);
         eClasses.add(eClass);
         for (EClass eSuperType : eClass.getEAllSuperTypes())
         {
           if (SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eSuperType))
           {
             eClasses.add(eSuperType);
-            CollectionsUtil.add(instances, eSuperType, setupTask);
+            CollectionUtil.add(instances, eSuperType, setupTask);
           }
         }
 
@@ -2613,11 +2613,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     final Map<SetupTask, Set<SetupTask>> dependencies = new LinkedHashMap<SetupTask, Set<SetupTask>>();
     for (SetupTask setupTask : setupTasks)
     {
-      CollectionsUtil.addAll(dependencies, setupTask, setupTask.getPredecessors());
+      CollectionUtil.addAll(dependencies, setupTask, setupTask.getPredecessors());
 
       for (SetupTask successor : setupTask.getSuccessors())
       {
-        CollectionsUtil.add(dependencies, successor, setupTask);
+        CollectionUtil.add(dependencies, successor, setupTask);
       }
     }
 

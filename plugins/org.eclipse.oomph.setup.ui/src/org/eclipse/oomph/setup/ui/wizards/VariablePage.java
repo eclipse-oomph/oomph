@@ -33,7 +33,7 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
-import org.eclipse.oomph.util.CollectionsUtil;
+import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -821,7 +821,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
               EAttribute eAttribute = performer.getAttributeRuleVariableData(variable);
               if (eAttribute != null)
               {
-                CollectionsUtil.addAll(ruleUses, fieldHolderRecord, Collections.<FieldHolderRecord> emptySet());
+                CollectionUtil.addAll(ruleUses, fieldHolderRecord, Collections.<FieldHolderRecord> emptySet());
                 continue LOOP;
               }
             }
@@ -852,7 +852,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
                   FieldHolderRecord dependantFieldHolderRecord = getFieldHolderRecord(getURI(ruleVariable));
                   if (dependantFieldHolderRecord != null)
                   {
-                    CollectionsUtil.add(ruleUses, dependantFieldHolderRecord, fieldHolderRecord);
+                    CollectionUtil.add(ruleUses, dependantFieldHolderRecord, fieldHolderRecord);
                     continue LOOP;
                   }
                 }

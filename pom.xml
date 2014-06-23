@@ -121,39 +121,6 @@
     <module>sites/org.eclipse.oomph.site</module>
   </modules>
 
-  <repositories>
-    <repository>
-      <id>platform-4.4</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/eclipse/updates/4.4milestones</url>
-    </repository>
-    <repository>
-      <id>emf</id>
-      <layout>p2</layout>
-      <url>https://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository</url>
-    </repository>
-    <repository>
-      <id>egit</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/egit/updates-nightly/</url>
-    </repository>
-    <repository>
-      <id>mylyn</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/mylyn/releases/latest/</url>
-    </repository>
-    <repository>
-      <id>m2e</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/technology/m2e/milestones/1.5</url>
-    </repository>
-    <repository>
-      <id>luna</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/releases/luna</url>
-    </repository>
-  </repositories>
-
   <build>
     <plugins>
       <plugin>
@@ -204,7 +171,6 @@
         </executions>
       </plugin>
 
-      <!--
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>target-platform-configuration</artifactId>
@@ -220,6 +186,7 @@
         </configuration>
       </plugin>
 
+      <!--
       <plugin>
         <groupId>org.eclipse.tycho.extras</groupId>
         <artifactId>tycho-source-feature-plugin</artifactId>

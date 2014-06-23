@@ -33,7 +33,9 @@ import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -383,6 +385,23 @@ public class ConfirmationPage extends SetupWizardPage
         }
 
         updateCheckStates();
+      }
+    });
+
+    viewer.addDoubleClickListener(new IDoubleClickListener()
+    {
+      public void doubleClick(DoubleClickEvent event)
+      {
+        Object element = ((IStructuredSelection)event.getSelection()).getFirstElement();
+        if (element == ROOT_ELEMENT)
+        {
+          viewer.setExpandedState(ROOT_ELEMENT, !viewer.getExpandedState(ROOT_ELEMENT));
+        }
+        else
+        {
+          viewer.setCheckedElements(new Object[] { element });
+          updateCheckStates();
+        }
       }
     });
   }

@@ -20,8 +20,10 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
@@ -75,21 +77,26 @@ public class TargletListenerRegistryImpl implements TargletListener.Registry
   }
 
   public void notifyProfileUpdate(Targlet targlet, Profile profile, List<IMetadataRepository> metadataRepositories, IProvisioningPlan provisioningPlan,
-      Map<IInstallableUnit, File> projectLocations)
+      Map<IInstallableUnit, File> projectLocations, IProgressMonitor monitor)
   {
     TargletEvent event = new TargletEvent.ProfileUpdate(targlet, profile, metadataRepositories, provisioningPlan, projectLocations);
+    TargletListener[] targletListeners = listeners.get();
 
-    for (TargletListener listener : listeners.get())
+    monitor.beginTask("", targletListeners.length);
+
+    for (TargletListener listener : targletListeners)
     {
       try
       {
-        listener.handleTargletEvent(event);
+        listener.handleTargletEvent(event, new SubProgressMonitor(monitor, 1));
       }
       catch (Exception ex)
       {
         TargletsCorePlugin.INSTANCE.log(ex);
       }
     }
+
+    monitor.done();
   }
 
   /**

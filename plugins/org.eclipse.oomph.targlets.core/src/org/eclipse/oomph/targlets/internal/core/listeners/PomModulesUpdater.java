@@ -20,6 +20,8 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 
@@ -46,7 +48,7 @@ public class PomModulesUpdater implements TargletListener
   {
   }
 
-  public void handleTargletEvent(TargletEvent event) throws Exception
+  public void handleTargletEvent(TargletEvent event, IProgressMonitor monitor) throws Exception
   {
     if (event instanceof ProfileUpdate)
     {
@@ -63,7 +65,7 @@ public class PomModulesUpdater implements TargletListener
           if (mainPom.isFile())
           {
             Map<IInstallableUnit, File> projectLocations = profileUpdate.getProjectLocations();
-            updatePomModules(mainPom, projectLocations);
+            updatePomModules(mainPom, projectLocations, monitor);
           }
           else
           {
@@ -74,8 +76,9 @@ public class PomModulesUpdater implements TargletListener
     }
   }
 
-  private void updatePomModules(final File mainPom, final Map<IInstallableUnit, File> projectLocations) throws Exception
+  private static void updatePomModules(final File mainPom, final Map<IInstallableUnit, File> projectLocations, final IProgressMonitor monitor) throws Exception
   {
+    monitor.subTask("Checking for POM modules updates");
     new FileUpdater()
     {
       @Override
@@ -94,7 +97,7 @@ public class PomModulesUpdater implements TargletListener
           builder.append("<modules>");
           builder.append(nl);
 
-          List<String> modules = analyzeProjects(mainPom, projectLocations);
+          List<String> modules = analyzeProjects(mainPom, projectLocations, monitor);
           for (String module : modules)
           {
             builder.append(indent);
@@ -114,16 +117,25 @@ public class PomModulesUpdater implements TargletListener
 
         return null;
       }
+
+      @Override
+      protected void setContents(File file, IFile iFile, String contents) throws Exception
+      {
+        monitor.subTask("Updating " + (iFile != null ? iFile.getFullPath() : file));
+        super.setContents(file, iFile, contents);
+      }
     }.update(mainPom);
   }
 
-  private List<String> analyzeProjects(File mainPom, Map<IInstallableUnit, File> projectLocations)
+  private static List<String> analyzeProjects(File mainPom, Map<IInstallableUnit, File> projectLocations, IProgressMonitor monitor)
   {
     URI mainURI = URI.createFileURI(mainPom.getAbsolutePath());
     List<String> modules = new ArrayList<String>();
 
     for (File folder : projectLocations.values())
     {
+      TargletsCorePlugin.checkCancelation(monitor);
+
       File pom = new File(folder, "pom.xml");
       if (pom.isFile())
       {

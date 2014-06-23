@@ -17,10 +17,13 @@ import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.TargletEvent;
 import org.eclipse.oomph.targlets.core.TargletEvent.ProfileUpdate;
 import org.eclipse.oomph.targlets.core.TargletListener;
+import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.XMLUtil;
 
 import org.eclipse.emf.common.util.EMap;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
@@ -46,7 +49,7 @@ public class PomArtifactUpdater implements TargletListener
   {
   }
 
-  public void handleTargletEvent(TargletEvent event) throws Exception
+  public void handleTargletEvent(TargletEvent event, IProgressMonitor monitor) throws Exception
   {
     if (event instanceof ProfileUpdate)
     {
@@ -63,18 +66,22 @@ public class PomArtifactUpdater implements TargletListener
         if (!skipArtifactIDs || !skipVersions)
         {
           Map<IInstallableUnit, File> projectLocations = profileUpdate.getProjectLocations();
-          updatePomArtifacts(skipArtifactIDs, skipVersions, projectLocations);
+          updatePomArtifacts(skipArtifactIDs, skipVersions, projectLocations, monitor);
         }
       }
     }
   }
 
-  private void updatePomArtifacts(final boolean skipArtifactIDs, final boolean skipVersions, Map<IInstallableUnit, File> projectLocations) throws Exception
+  private static void updatePomArtifacts(final boolean skipArtifactIDs, final boolean skipVersions, Map<IInstallableUnit, File> projectLocations,
+      final IProgressMonitor monitor) throws Exception
   {
     final DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+    monitor.subTask("Checking for POM artifact updates");
 
     for (Map.Entry<IInstallableUnit, File> entry : projectLocations.entrySet())
     {
+      TargletsCorePlugin.checkCancelation(monitor);
+
       final IInstallableUnit iu = entry.getKey();
       File folder = entry.getValue();
 
@@ -123,6 +130,14 @@ public class PomArtifactUpdater implements TargletListener
               throw new RuntimeException(ex);
             }
           }
+
+          @Override
+          protected void setContents(File file, IFile iFile, String contents) throws Exception
+          {
+            monitor.subTask("Updating " + (iFile != null ? iFile.getFullPath() : file));
+            super.setContents(file, iFile, contents);
+          }
+
         }.update(pom);
       }
     }

@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
@@ -91,6 +92,7 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
     }
 
     @Override
+    @SuppressWarnings("restriction")
     protected IInstallableUnit visitComponentDefinition(ComponentDefinition componentDefinition, IProgressMonitor monitor) throws Exception
     {
       String id = componentDefinition.getID();
@@ -99,7 +101,11 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
       InstallableUnitDescription description = new InstallableUnitDescription();
       description.setId(id);
       description.setVersion(version);
+      description.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, "true");
+      description.setProperty(IUGenerator.IU_PROPERTY_SOURCE, "true");
       description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, id, version)));
+      description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
+      description.setArtifacts(new IArtifactKey[0]);
 
       IInstallableUnit iu = MetadataFactory.createInstallableUnit(description);
       visitComponentExtension(componentDefinition, iu, monitor);

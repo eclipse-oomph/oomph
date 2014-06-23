@@ -12,12 +12,14 @@ package org.eclipse.oomph.targlets.core;
 
 import org.eclipse.oomph.targlets.internal.core.TargletListenerRegistryImpl;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 /**
  * @author Eike Stepper
  */
 public interface TargletListener
 {
-  public void handleTargletEvent(TargletEvent event) throws Exception;
+  public void handleTargletEvent(TargletEvent event, IProgressMonitor monitor) throws Exception;
 
   /**
    * @author Eike Stepper

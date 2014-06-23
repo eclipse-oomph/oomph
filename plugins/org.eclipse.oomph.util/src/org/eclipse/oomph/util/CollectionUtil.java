@@ -18,13 +18,13 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public final class CollectionsUtil
+public final class CollectionUtil
 {
-  private CollectionsUtil()
+  private CollectionUtil()
   {
   }
 
-  public static <K, V> void add(Map<K, Set<V>> map, K key, V value)
+  public static <K, V> Set<V> getSet(Map<K, Set<V>> map, K key)
   {
     Set<V> set = map.get(key);
     if (set == null)
@@ -33,18 +33,18 @@ public final class CollectionsUtil
       map.put(key, set);
     }
 
+    return set;
+  }
+
+  public static <K, V> void add(Map<K, Set<V>> map, K key, V value)
+  {
+    Set<V> set = getSet(map, key);
     set.add(value);
   }
 
   public static <K, V> void addAll(Map<K, Set<V>> map, K key, Collection<? extends V> values)
   {
-    Set<V> set = map.get(key);
-    if (set == null)
-    {
-      set = new LinkedHashSet<V>();
-      map.put(key, set);
-    }
-
+    Set<V> set = getSet(map, key);
     set.addAll(values);
   }
 
@@ -55,5 +55,4 @@ public final class CollectionsUtil
       addAll(map, entry.getKey(), entry.getValue());
     }
   }
-
 }

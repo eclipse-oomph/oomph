@@ -55,6 +55,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -761,10 +762,7 @@ public class TargletContainer extends AbstractBundleContainer
       IProvisioningPlan provisioningPlan = provisioningPlanRef.get();
       List<IMetadataRepository> metadataRepositories = metadataRepositoriesRef.get();
 
-      for (Targlet targlet : targlets)
-      {
-        TargletListenerRegistryImpl.INSTANCE.notifyProfileUpdate(targlet, profile, metadataRepositories, provisioningPlan, sources);
-      }
+      notifyUpdate(profile, sources, provisioningPlan, metadataRepositories, monitor);
     }
     catch (Throwable t)
     {
@@ -775,6 +773,21 @@ public class TargletContainer extends AbstractBundleContainer
 
     progress.done();
     return profile;
+  }
+
+  private void notifyUpdate(Profile profile, Map<IInstallableUnit, File> sources, IProvisioningPlan provisioningPlan,
+      List<IMetadataRepository> metadataRepositories, IProgressMonitor monitor)
+  {
+    monitor.beginTask("", targlets.size());
+
+    for (Targlet targlet : targlets)
+    {
+      monitor.subTask("Notifying listeners of targlet " + targlet.getName());
+      TargletListenerRegistryImpl.INSTANCE.notifyProfileUpdate(targlet, profile, metadataRepositories, provisioningPlan, sources, new SubProgressMonitor(
+          monitor, 1));
+    }
+
+    monitor.done();
   }
 
   private static String createDigest(String id, String environmentProperties, String nlProperty, EList<Targlet> targlets)
