@@ -60,8 +60,10 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -92,6 +94,7 @@ import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -170,6 +173,7 @@ import org.eclipse.ui.views.properties.PropertySheetSorter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -192,7 +196,6 @@ import java.util.Set;
  */
 public class SetupEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker
 {
-
   private static final URI LEGACY_MODELS = URI.createURI("platform:/plugin/" + BasePlugin.INSTANCE.getSymbolicName() + "/model/legacy");
 
   private static final URI LEGACY_EXAMPLE_URI = URI.createURI("file:/example.setup");
@@ -767,6 +770,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       if (input instanceof Resource || input == loadingResourceInput)
       {
         ToggleViewerInputAction toggleViewerInputAction = getActionBarContributor().toggleViewerInputAction;
+        toggleViewerInputAction.setActiveWorkbenchPart(this);
         toggleViewerInputAction.run();
         toggleViewerInputAction.setActiveWorkbenchPart(this);
       }
@@ -893,7 +897,31 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
-    EMFUtil.configureResourceSet(editingDomain.getResourceSet());
+    ResourceSet resourceSet = editingDomain.getResourceSet();
+    EMFUtil.configureResourceSet(resourceSet);
+
+    // If the index's folder is redirected to the location file system...
+    URIConverter uriConverter = resourceSet.getURIConverter();
+    URI redirectedRootURI = uriConverter.normalize(SetupContext.INDEX_SETUP_URI.trimSegments(1));
+    if (redirectedRootURI.isFile())
+    {
+      try
+      {
+        // Look to see if there is a corresponding container in the workspace for that folder.
+        java.net.URI locationURI = new java.net.URI(redirectedRootURI.toString());
+        for (IContainer container : EcorePlugin.getWorkspaceRoot().findContainersForLocationURI(locationURI))
+        {
+          // If there is, redirect the file system folder to the workspace folder.
+          URI redirectedWorkspaceRootURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
+          uriConverter.getURIMap().put(redirectedRootURI, redirectedWorkspaceRootURI);
+          break;
+        }
+      }
+      catch (URISyntaxException ex)
+      {
+        // Ignore.
+      }
+    }
 
     // Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
     //
@@ -1235,7 +1263,23 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     selectionViewer = new TreeViewer(tree);
     setCurrentViewer(selectionViewer);
 
-    selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+    selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+    {
+      @Override
+      public Object getParent(Object object)
+      {
+        // Return the direct resource as the parent so that selection find the object directly in its own resource.
+        if (object instanceof InternalEObject)
+        {
+          Resource resource = ((InternalEObject)object).eDirectResource();
+          if (resource != null)
+          {
+            return resource;
+          }
+        }
+        return super.getParent(object);
+      }
+    });
     selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer), new DiagnosticDecorator(
         editingDomain, selectionViewer, SetupEditorPlugin.getPlugin().getDialogSettings())));
 
@@ -1300,6 +1344,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
+    doLoad();
+  }
+
+  protected void doLoad()
+  {
     Job job = new Job("Loading Model")
     {
       @Override
@@ -1321,6 +1370,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           public void run()
           {
+            markReadOnlyResources();
+
             Resource resource = resourceSet.getResources().get(0);
             EList<EObject> contents = resource.getContents();
             EObject rootObject = contents.isEmpty() ? null : contents.get(0);
@@ -1337,14 +1388,22 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               if (rootObject instanceof Project)
               {
-                for (Stream branch : ((Project)rootObject).getStreams())
+                EList<Stream> streams = ((Project)rootObject).getStreams();
+                if (streams.isEmpty())
                 {
-                  selectionViewer.expandToLevel(branch, 1);
+                  selectionViewer.expandToLevel(rootObject, 1);
+                }
+                else
+                {
+                  for (Stream branch : streams)
+                  {
+                    selectionViewer.expandToLevel(branch, 1);
+                  }
                 }
               }
-              else
+              else if (rootObject != null)
               {
-                selectionViewer.expandToLevel(2);
+                selectionViewer.expandToLevel(rootObject, 1);
               }
 
               if (contentOutlinePage != null)
@@ -2114,6 +2173,24 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     return ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
   }
 
+  protected void doRevert()
+  {
+    Object input = selectionViewer.getInput();
+    selectionViewer.setInput(input instanceof Resource ? loadingResourceInput : loadingResourceSetInput);
+
+    EList<Resource> resources = editingDomain.getResourceSet().getResources();
+    for (Resource resource : resources)
+    {
+      resource.unload();
+    }
+
+    resources.clear();
+    resourceToDiagnosticMap.clear();
+    editingDomain.getCommandStack().flush();
+
+    doLoad();
+  }
+
   /**
    * This is for implementing {@link IEditorPart} and simply saves the model file.
    * <!-- begin-user-doc -->
@@ -2186,17 +2263,27 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   }
 
   @Override
-  public void doSave(IProgressMonitor monitor)
+  public void doSave(IProgressMonitor progressMonitor)
   {
     EList<Resource> resources = editingDomain.getResourceSet().getResources();
-    Map<Resource, Boolean> resourceToReadOnlyMap = editingDomain.getResourceToReadOnlyMap();
-    resourceToReadOnlyMap.remove(resources.get(0));
-    for (int i = 1, size = resources.size(); i < size; ++i)
+    for (int i = 1; i < resources.size();)
     {
-      resourceToReadOnlyMap.put(resources.get(i), Boolean.TRUE);
+      Resource resource = resources.get(i);
+      if (resource.getContents().isEmpty() && !resource.getErrors().isEmpty())
+      {
+        resourceToDiagnosticMap.remove(resource);
+        resource.unload();
+        resources.remove(i);
+      }
+      else
+      {
+        ++i;
+      }
     }
 
-    doSaveGen(monitor);
+    doSaveGen(progressMonitor);
+
+    getActionBarContributor().scheduleValidation(false);
   }
 
   /**
@@ -2313,6 +2400,17 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     selectionViewer.setExpandedElements(expandedElements);
     selectionViewer.setSelection(selection);
+  }
+
+  protected void markReadOnlyResources()
+  {
+    EList<Resource> resources = editingDomain.getResourceSet().getResources();
+    Map<Resource, Boolean> resourceToReadOnlyMap = editingDomain.getResourceToReadOnlyMap();
+    resourceToReadOnlyMap.remove(resources.get(0));
+    for (int i = 1, size = resources.size(); i < size; ++i)
+    {
+      resourceToReadOnlyMap.put(resources.get(i), Boolean.TRUE);
+    }
   }
 
   /**

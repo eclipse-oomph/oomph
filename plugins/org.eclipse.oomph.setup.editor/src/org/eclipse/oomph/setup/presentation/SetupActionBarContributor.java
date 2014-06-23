@@ -51,11 +51,13 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.keys.IBindingService;
 
@@ -192,6 +194,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
   private boolean liveValidation;
 
+  private RevertAction revertAction;
+
   /**
    * This creates an instance of the contributor.
    * <!-- begin-user-doc -->
@@ -205,6 +209,15 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     validateAction = new ValidateAction();
     liveValidationAction = new DiagnosticDecorator.LiveValidator.LiveValidationAction(SetupEditorPlugin.getPlugin().getDialogSettings());
     controlAction = new ControlAction();
+  }
+
+  @Override
+  public void init(IActionBars actionBars)
+  {
+    super.init(actionBars);
+
+    revertAction = new RevertAction();
+    actionBars.setGlobalActionHandler(ActionFactory.REVERT.getId(), revertAction);
   }
 
   public void scheduleValidation(boolean canceled)
@@ -291,10 +304,12 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   {
     super.setActiveEditor(part);
 
+    activeEditorPart = part;
+
     toggleViewerInputAction.setActiveWorkbenchPart(part);
     commandTableAction.setActivePart(part);
     editorTableAction.setActivePart(part);
-    activeEditorPart = part;
+    revertAction.setActiveWorkbenchPart(part);
 
     // Switch to the new selection provider.
     //
@@ -841,6 +856,32 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public void run()
     {
       setupEditor.toggleInput();
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)workbenchPart;
+        setEnabled(true);
+        setChecked(setupEditor.selectionViewer.getInput() instanceof ResourceSet);
+      }
+      else
+      {
+        setEnabled(false);
+        setupEditor = null;
+      }
+    }
+  }
+
+  private static final class RevertAction extends Action
+  {
+    private SetupEditor setupEditor;
+
+    @Override
+    public void run()
+    {
+      setupEditor.doRevert();
     }
 
     public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)

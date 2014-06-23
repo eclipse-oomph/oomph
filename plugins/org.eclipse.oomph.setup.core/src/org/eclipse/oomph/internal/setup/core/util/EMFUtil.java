@@ -723,7 +723,6 @@ public final class EMFUtil
     };
 
     uriMap.put(SetupContext.INDEX_SETUP_URI.trimSegments(1), SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
-    uriMap.put(SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment("index.setup"), SetupContext.INDEX_SETUP_LOCATION_URI);
 
     for (Map.Entry<Object, Object> entry : System.getProperties().entrySet())
     {
