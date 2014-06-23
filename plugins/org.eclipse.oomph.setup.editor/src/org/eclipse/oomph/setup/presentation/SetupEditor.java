@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleViewerInputAction;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.util.Pair;
@@ -191,6 +192,7 @@ import java.util.Set;
  */
 public class SetupEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker
 {
+
   private static final URI LEGACY_MODELS = URI.createURI("platform:/plugin/" + BasePlugin.INSTANCE.getSymbolicName() + "/model/legacy");
 
   private static final URI LEGACY_EXAMPLE_URI = URI.createURI("file:/example.setup");
@@ -599,6 +601,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   private ResourceMirror resourceMirror;
 
+  private final ItemProvider loadingResourceInput = new ItemProvider(Collections.singleton(new ItemProvider("Loading resource...")));
+
+  private final ItemProvider loadingResourceSetInput = new ItemProvider(Collections.singleton(new ItemProvider("Loading resource set...")));
+
   /**
    * Handles activation of the editor or it's associated views.
    * <!-- begin-user-doc -->
@@ -692,7 +698,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void updateProblemIndication()
+  protected void updateProblemIndicationGen()
   {
     if (updateProblemIndication)
     {
@@ -747,6 +753,22 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             SetupEditorPlugin.INSTANCE.log(exception);
           }
         }
+      }
+    }
+  }
+
+  protected void updateProblemIndication()
+  {
+    // Don't ever create or use the problem editor part.
+
+    if (!resourceToDiagnosticMap.isEmpty())
+    {
+      Object input = selectionViewer.getInput();
+      if (input instanceof Resource || input == loadingResourceInput)
+      {
+        ToggleViewerInputAction toggleViewerInputAction = getActionBarContributor().toggleViewerInputAction;
+        toggleViewerInputAction.run();
+        toggleViewerInputAction.setActiveWorkbenchPart(this);
       }
     }
   }
@@ -1217,7 +1239,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer), new DiagnosticDecorator(
         editingDomain, selectionViewer, SetupEditorPlugin.getPlugin().getDialogSettings())));
 
-    selectionViewer.setInput(new ItemProvider(Collections.singleton(new ItemProvider("Loading..."))));
+    selectionViewer.setInput(loadingResourceInput);
 
     getViewer().getControl().addMouseListener(new MouseListener()
     {
@@ -1295,44 +1317,46 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
         };
 
-        final Resource resource = resourceSet.getResources().get(0);
-        final EList<EObject> contents = resource.getContents();
-        if (!contents.isEmpty())
+        getSite().getShell().getDisplay().asyncExec(new Runnable()
         {
-          getSite().getShell().getDisplay().asyncExec(new Runnable()
+          public void run()
           {
-            public void run()
+            Resource resource = resourceSet.getResources().get(0);
+            EList<EObject> contents = resource.getContents();
+            EObject rootObject = contents.isEmpty() ? null : contents.get(0);
+
+            selectionViewer.setInput(selectionViewer.getInput() == loadingResourceInput ? resource : resourceSet);
+
+            if (rootObject != null)
             {
-              selectionViewer.setInput(resource);
-              EObject rootObject = contents.get(0);
               selectionViewer.setSelection(new StructuredSelection(rootObject), true);
+            }
 
-              boolean canceled = resourceMirror.isCanceled();
-              if (!canceled)
+            boolean canceled = resourceMirror.isCanceled();
+            if (!canceled)
+            {
+              if (rootObject instanceof Project)
               {
-                if (rootObject instanceof Project)
+                for (Stream branch : ((Project)rootObject).getStreams())
                 {
-                  for (Stream branch : ((Project)rootObject).getStreams())
-                  {
-                    selectionViewer.expandToLevel(branch, 1);
-                  }
-                }
-                else
-                {
-                  selectionViewer.expandToLevel(2);
-                }
-
-                if (contentOutlinePage != null)
-                {
-                  contentOutlinePage.update(2);
+                  selectionViewer.expandToLevel(branch, 1);
                 }
               }
+              else
+              {
+                selectionViewer.expandToLevel(2);
+              }
 
-              getActionBarContributor().scheduleValidation(canceled);
-              updateProblemIndication();
+              if (contentOutlinePage != null)
+              {
+                contentOutlinePage.update(2);
+              }
             }
-          });
-        }
+
+            getActionBarContributor().scheduleValidation(canceled);
+            updateProblemIndication();
+          }
+        });
 
         return Status.OK_STATUS;
       }
@@ -1656,7 +1680,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       if (labelProvider != null)
       {
-
         copyMap.clear();
 
         try
@@ -2263,6 +2286,33 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       setSelectionToViewer(targetObjects);
     }
+  }
+
+  public void toggleInput()
+  {
+    ISelection selection = selectionViewer.getSelection();
+    Object[] expandedElements = selectionViewer.getExpandedElements();
+    Object input = selectionViewer.getInput();
+    if (input instanceof ResourceSet)
+    {
+      Resource resource = editingDomain.getResourceSet().getResources().get(0);
+      selectionViewer.setInput(resource);
+    }
+    else if (input instanceof Resource)
+    {
+      selectionViewer.setInput(editingDomain.getResourceSet());
+    }
+    else if (input == loadingResourceInput)
+    {
+      selectionViewer.setInput(loadingResourceSetInput);
+    }
+    else if (input == loadingResourceSetInput)
+    {
+      selectionViewer.setInput(loadingResourceInput);
+    }
+
+    selectionViewer.setExpandedElements(expandedElements);
+    selectionViewer.setSelection(selection);
   }
 
   /**

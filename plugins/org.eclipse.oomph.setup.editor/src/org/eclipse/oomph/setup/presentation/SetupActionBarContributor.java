@@ -18,6 +18,7 @@ import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributo
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
@@ -177,6 +178,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
    */
   protected IMenuManager createSiblingMenuManager;
 
+  public ToggleViewerInputAction toggleViewerInputAction = new ToggleViewerInputAction();
+
   private PreferenceRecorderToolbarAction recordPreferencesAction = new PreferenceRecorderToolbarAction(true);
 
   private SniffAction sniffAction = new SniffAction(true);
@@ -231,6 +234,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     toolBarManager.add(commandTableAction);
     toolBarManager.add(editorTableAction);
     toolBarManager.add(testInstallAction);
+    toolBarManager.add(toggleViewerInputAction);
     toolBarManager.add(new Separator("setup-additions"));
   }
 
@@ -286,6 +290,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   public void setActiveEditor(IEditorPart part)
   {
     super.setActiveEditor(part);
+
+    toggleViewerInputAction.setActiveWorkbenchPart(part);
     commandTableAction.setActivePart(part);
     editorTableAction.setActivePart(part);
     activeEditorPart = part;
@@ -817,7 +823,39 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       {
         return "UTF-8 is unsupported";
       }
+    }
+  }
 
+  protected static final class ToggleViewerInputAction extends Action
+  {
+    private SetupEditor setupEditor;
+
+    public ToggleViewerInputAction()
+    {
+      super("Show Resources", IAction.AS_CHECK_BOX);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("ToggleInput"));
+      setToolTipText("Show all resources");
+    }
+
+    @Override
+    public void run()
+    {
+      setupEditor.toggleInput();
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)workbenchPart;
+        setEnabled(true);
+        setChecked(setupEditor.selectionViewer.getInput() instanceof ResourceSet);
+      }
+      else
+      {
+        setEnabled(false);
+        setupEditor = null;
+      }
     }
   }
 }
