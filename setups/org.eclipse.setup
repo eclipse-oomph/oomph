@@ -8,7 +8,9 @@
   <productCatalog
       href="catalog:/self-product-catalog.setup#/"/>
   <productCatalog
-      href="product-catalog.setup#/"/>
+      href="org.eclipse.products.setup#/"/>
   <projectCatalog
-      href="project-catalog.setup#/"/>
+      href="org.eclipse.projects.setup#/"/>
+  <projectCatalog
+      href="com.github.projects.setup#/"/>
 </setup:Index>

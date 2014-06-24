@@ -12,23 +12,31 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.user.id"
-        label="Eclipse Git/Gerrit user"
-        documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID."/>
+        label="Eclipse Git/Gerrit user ID"
+        documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID.">
+      <description>The user ID of the Eclipse Git/Gerrit account</description>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.author.name"
         label="Eclipse author name for Git/Gerrit"
-        documentation="The Eclipse author name for Git/Gerrit commits.  Use 'Anonymous' if you're not a registered Eclipse Git author or don't plan to commit to Git."/>
+        documentation="The Eclipse author name for Git/Gerrit commits.  Use 'Anonymous' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+      <description>The author name used for Git/Gerrit commits</description>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.author.email"
         label="Eclipse author email for Git/Gerrit"
-        documentation="The Eclipse author email for Git/Gerrit commits.  Use 'anonymous@example.com' if you're not a registered Eclipse Git author or don't plan to commit to Git."/>
+        documentation="The Eclipse author email for Git/Gerrit commits.  Use 'anonymous@example.com' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+      <description>The email address associated with Git/Gerrit commits</description>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="bugzilla.id"
-        label="Eclipse user ID for Bugzilla/Hudson (typically an email address)"
-        documentation="The Eclipse user ID for Bugzilla/Hudson.  Leave empty if you don't have an account or don't plan to submit bugs."/>
+        label="Eclipse user ID for Bugzilla/Hudson"
+        documentation="The Eclipse user ID for Bugzilla/Hudson.  Leave empty if you don't have an account or don't plan to submit bugs.">
+      <description>The email associated with the Eclipse Bugzilla/Hudson account</description>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         type="PASSWORD"
@@ -77,6 +85,39 @@
         </detail>
       </annotation>
       <description>Choose from the available Gerrit or Git URIs</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="Github">
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="github.user.id"
+          label="Github user ID">
+        <description>The Github user ID</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="github.author.name"
+          label="Github author name"/>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="github.author.email"
+          label="Github author email"/>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="github.remoteURIs"
+          label="Github repository">
+        <choice
+            value="git@github.com:@{remoteURI}.git"
+            label="Git (read-write)"/>
+        <choice
+            value="https://${git.user.id}@github.com/gitroot/@{remoteURI}.git"
+            label="HTTPS (read-write)"/>
+        <choice
+            value="http://github.com/@{remoteURI}.git"
+            label="HTTP (read-only, anonymous)"/>
+        <description>Choose from the available Github URIs</description>
+      </setupTask>
     </setupTask>
   </setupTask>
   <setupTask

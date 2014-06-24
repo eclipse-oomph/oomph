@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:ProjectCatalog
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name="com.github"
+    label="Github.com">
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="Global Variables">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="github.user.id"
+        label="Github user ID"
+        documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID."/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="github.author.name"
+        label="Github author name"
+        documentation="The Eclipse author name for Git/Gerrit commits.  Use 'Anonymous' if you're not a registered Eclipse Git author or don't plan to commit to Git."/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="github.author.email"
+        label="Github author email"
+        documentation="The Eclipse author email for Git/Gerrit commits.  Use 'anonymous@example.com' if you're not a registered Eclipse Git author or don't plan to commit to Git."/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="github.remoteURIs"
+        label="Github repository">
+      <choice
+          value="git@github.com:@{remoteURI}.git"
+          label="Git (read-write)"/>
+      <choice
+          value="https://${git.user.id}@github.com/gitroot/@{remoteURI}.git"
+          label="HTTPS (read-write)"/>
+      <choice
+          value="http://github.com/@{remoteURI}.git"
+          label="HTTP (read-only, anonymous)"/>
+      <description>Choose from the available Github URIs</description>
+    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:WorkspaceTask"
+      id="workspace"/>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      content="MAX_RECENT_WORKSPACES=5&#xD;&#xA;RECENT_WORKSPACES=${workspace.location|property}&#xD;&#xA;RECENT_WORKSPACES_PROTOCOL=3&#xD;&#xA;SHOW_WORKSPACE_SELECTION_DIALOG=true&#xD;&#xA;eclipse.preferences.version=1"
+      targetURL="configuration:/.settings/org.eclipse.ui.ide.prefs"/>
+  <setupTask
+      xsi:type="setup:TextModifyTask"
+      url="configuration:/config.ini">
+    <modification
+        pattern="osgi\.instance\.area\.default=(@user\.home/workspace)">
+      <substitution>${workspace.location|path}</substitution>
+    </modification>
+  </setupTask>
+  <project href="user:/com.github.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Github.com project catalog'#/"/>
+  <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
+</setup:ProjectCatalog>
