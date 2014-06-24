@@ -45,6 +45,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -200,15 +201,19 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
    * This creates an instance of the contributor.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public SetupActionBarContributor()
   {
     super(ADDITIONS_LAST_STYLE);
     loadResourceAction = new LoadResourceAction();
     validateAction = new ValidateAction();
-    liveValidationAction = new DiagnosticDecorator.LiveValidator.LiveValidationAction(SetupEditorPlugin.getPlugin().getDialogSettings());
+    IDialogSettings dialogSettings = SetupEditorPlugin.getPlugin().getDialogSettings();
+    liveValidationAction = new DiagnosticDecorator.LiveValidator.LiveValidationAction(dialogSettings);
     controlAction = new ControlAction();
+
+    liveValidation = dialogSettings.getBoolean(DiagnosticDecorator.LiveValidator.LiveValidationAction.LIVE_VALIDATOR_DIALOG_SETTINGS_KEY);
+    dialogSettings.put(DiagnosticDecorator.LiveValidator.LiveValidationAction.LIVE_VALIDATOR_DIALOG_SETTINGS_KEY, false);
   }
 
   @Override

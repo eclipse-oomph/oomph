@@ -902,26 +902,44 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // If the index's folder is redirected to the location file system...
     URIConverter uriConverter = resourceSet.getURIConverter();
-    URI redirectedRootURI = uriConverter.normalize(SetupContext.INDEX_SETUP_URI.trimSegments(1));
-    if (redirectedRootURI.isFile())
+    Map<URI, URI> uriMap = uriConverter.getURIMap();
+    Map<URI, URI> workspaceMappings = new HashMap<URI, URI>();
+    for (URI uri : uriMap.values())
     {
-      try
+      if (uri.isFile() && !uri.isRelative())
       {
-        // Look to see if there is a corresponding container in the workspace for that folder.
-        java.net.URI locationURI = new java.net.URI(redirectedRootURI.toString());
-        for (IContainer container : EcorePlugin.getWorkspaceRoot().findContainersForLocationURI(locationURI))
+        try
         {
-          // If there is, redirect the file system folder to the workspace folder.
-          URI redirectedWorkspaceRootURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
-          uriConverter.getURIMap().put(redirectedRootURI, redirectedWorkspaceRootURI);
-          break;
+          java.net.URI locationURI = new java.net.URI(uri.toString());
+          if (uri.hasTrailingPathSeparator())
+          {
+            for (IContainer container : EcorePlugin.getWorkspaceRoot().findContainersForLocationURI(locationURI))
+            {
+              // If there is, redirect the file system folder to the workspace folder.
+              URI redirectedWorkspaceURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
+              workspaceMappings.put(uri, redirectedWorkspaceURI);
+              break;
+            }
+          }
+          else
+          {
+            for (IFile file : EcorePlugin.getWorkspaceRoot().findFilesForLocationURI(locationURI))
+            {
+              // If there is, redirect the file system folder to the workspace folder.
+              URI redirectedWorkspaceURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+              workspaceMappings.put(uri, redirectedWorkspaceURI);
+              break;
+            }
+          }
+        }
+        catch (URISyntaxException ex)
+        {
+          // Ignore.
         }
       }
-      catch (URISyntaxException ex)
-      {
-        // Ignore.
-      }
     }
+
+    uriMap.putAll(workspaceMappings);
 
     // Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
     //
@@ -2280,6 +2298,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         ++i;
       }
     }
+
+    markReadOnlyResources();
 
     doSaveGen(progressMonitor);
 
