@@ -118,6 +118,7 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -173,6 +174,8 @@ import org.eclipse.ui.views.properties.PropertySheetSorter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -607,6 +610,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   private final ItemProvider loadingResourceInput = new ItemProvider(Collections.singleton(new ItemProvider("Loading resource...")));
 
   private final ItemProvider loadingResourceSetInput = new ItemProvider(Collections.singleton(new ItemProvider("Loading resource set...")));
+
+  private DelegatingDialogSettings dialogSettings = new DelegatingDialogSettings();
 
   /**
    * Handles activation of the editor or it's associated views.
@@ -1299,7 +1304,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
     selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer), new DiagnosticDecorator(
-        editingDomain, selectionViewer, SetupEditorPlugin.getPlugin().getDialogSettings())));
+        editingDomain, selectionViewer, dialogSettings)));
 
     selectionViewer.setInput(loadingResourceInput);
 
@@ -1374,13 +1379,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         final ResourceSet resourceSet = editingDomain.getResourceSet();
 
-        new ResourceMirror.WithProgress(resourceSet, monitor)
+        final ResourceMirror resourceMirror = new ResourceMirror.WithProgress(resourceSet, monitor)
         {
           @Override
           public void run()
           {
-            resourceMirror = this;
+            SetupEditor.this.resourceMirror = this;
             createModel();
+            dialogSettings.setLiveValidation(true);
+            SetupEditor.this.resourceMirror = null;
           }
         };
 
@@ -1428,9 +1435,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               {
                 contentOutlinePage.update(2);
               }
+
+              getActionBarContributor().scheduleValidation();
             }
 
-            getActionBarContributor().scheduleValidation(canceled);
             updateProblemIndication();
           }
         });
@@ -1669,7 +1677,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       final Font font = contentOutlineViewer.getControl().getFont();
       labelProvider = new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, contentOutlineViewer), new DiagnosticDecorator(editingDomain,
-          contentOutlineViewer, SetupEditorPlugin.getPlugin().getDialogSettings()))
+          contentOutlineViewer, dialogSettings))
       {
         @Override
         public Font getFont(Object object)
@@ -2196,6 +2204,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     Object input = selectionViewer.getInput();
     selectionViewer.setInput(input instanceof Resource ? loadingResourceInput : loadingResourceSetInput);
 
+    dialogSettings.setLiveValidation(false);
+
     EList<Resource> resources = editingDomain.getResourceSet().getResources();
     for (Resource resource : resources)
     {
@@ -2303,7 +2313,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     doSaveGen(progressMonitor);
 
-    getActionBarContributor().scheduleValidation(false);
+    getActionBarContributor().scheduleValidation();
   }
 
   /**
@@ -2712,5 +2722,137 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       }
     });
+  }
+
+  public static class DelegatingDialogSettings implements IDialogSettings
+  {
+    private final IDialogSettings dialogSettings = SetupEditorPlugin.INSTANCE.getDialogSettings();
+
+    private boolean liveValidation;
+
+    public void setLiveValidation(boolean liveValidation)
+    {
+      this.liveValidation = liveValidation;
+    }
+
+    public IDialogSettings addNewSection(String name)
+    {
+      return dialogSettings.addNewSection(name);
+    }
+
+    public void addSection(IDialogSettings section)
+    {
+      dialogSettings.addSection(section);
+    }
+
+    public String get(String key)
+    {
+      return dialogSettings.get(key);
+    }
+
+    public String[] getArray(String key)
+    {
+      return dialogSettings.getArray(key);
+    }
+
+    public boolean getBoolean(String key)
+    {
+      if (DiagnosticDecorator.LiveValidator.LiveValidationAction.LIVE_VALIDATOR_DIALOG_SETTINGS_KEY.equals(key) && !liveValidation)
+      {
+        return false;
+      }
+
+      return dialogSettings.getBoolean(key);
+    }
+
+    public double getDouble(String key) throws NumberFormatException
+    {
+      return dialogSettings.getDouble(key);
+    }
+
+    public float getFloat(String key) throws NumberFormatException
+    {
+      return dialogSettings.getFloat(key);
+    }
+
+    public int getInt(String key) throws NumberFormatException
+    {
+      return dialogSettings.getInt(key);
+    }
+
+    public long getLong(String key) throws NumberFormatException
+    {
+      return dialogSettings.getLong(key);
+    }
+
+    public String getName()
+    {
+      return dialogSettings.getName();
+    }
+
+    public IDialogSettings getSection(String sectionName)
+    {
+      return dialogSettings.getSection(sectionName);
+    }
+
+    public IDialogSettings[] getSections()
+    {
+      return dialogSettings.getSections();
+    }
+
+    public void load(Reader reader) throws IOException
+    {
+      dialogSettings.load(reader);
+    }
+
+    public void load(String fileName) throws IOException
+    {
+      dialogSettings.load(fileName);
+    }
+
+    public void put(String key, String[] value)
+    {
+      dialogSettings.put(key, value);
+    }
+
+    public void put(String key, double value)
+    {
+      dialogSettings.put(key, value);
+    }
+
+    public void put(String key, float value)
+    {
+      dialogSettings.put(key, value);
+    }
+
+    public void put(String key, int value)
+    {
+      dialogSettings.put(key, value);
+    }
+
+    public void put(String key, long value)
+    {
+      dialogSettings.put(key, value);
+    }
+
+    public void put(String key, String value)
+    {
+      dialogSettings.put(key, value);
+    }
+
+    public void put(String key, boolean value)
+    {
+      dialogSettings.put(key, value);
+    }
+
+    public void save(Writer writer) throws IOException
+    {
+      dialogSettings.save(writer);
+    }
+
+    public void save(String fileName) throws IOException
+    {
+      dialogSettings.save(fileName);
+    }
   }
 }
