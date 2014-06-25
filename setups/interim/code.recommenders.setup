@@ -1979,7 +1979,7 @@
     <setupTask
         xsi:type="maven:MavenImportTask">
       <sourceLocator
-          rootFolder="${git.clone.recommenders.privacy}">
+          rootFolder="${git.clone.recommenders.privacy.location}">
         <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/plugins/.*"/>
