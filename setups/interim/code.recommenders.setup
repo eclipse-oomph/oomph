@@ -1324,66 +1324,66 @@
     </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
-      <workingSets
+      <workingSet
           name="Tests">
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/tests/.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Features">
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/features/.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Plugins">
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/plugins/.*"/>
-      </workingSets>
-      <workingSets
+      </workingSet>
+      <workingSet
           name="Releng">
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/targets/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/repositories/.*"/>
-      </workingSets>
+      </workingSet>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtend.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.sonatype.tycho.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.emf.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.java_feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.hudson.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.git.feature.group"/>
-      <repositories
+      <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
-      <sourceLocators
+      <sourceLocator
           rootFolder="${git.clone.recommenders.location}"
           locateNestedProjects="true"/>
     </setupTask>
@@ -1395,16 +1395,16 @@
         repositoryURL="https://bugs.eclipse.org/bugs"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <queries
+      <query
           summary="Open for ---"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?short_desc_type=allwordssubstr&amp;short_desc=&amp;product=Recommenders&amp;target_milestone=---&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;status_whiteboard_type=allwordssubstr&amp;status_whiteboard=&amp;order=Importance"/>
-      <queries
+      <query
           summary="Open for v2.2"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.2.0"/>
-      <queries
+      <query
           summary="Open for v2.1"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.1.0"/>
-      <queries
+      <query
           summary="Help Wanted"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?short_desc_type=allwordssubstr&amp;short_desc=&amp;product=Recommenders&amp;product=Recommenders.Incubator&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;keywords_type=allwords&amp;keywords=helpwanted&amp;status_whiteboard_type=allwordssubstr&amp;status_whiteboard=&amp;order=Importance"/>
     </setupTask>
@@ -1414,31 +1414,31 @@
         repositoryURL="https://git.eclipse.org/r"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <queries
+      <query
           summary="Reviews">
-        <attributes
+        <attribute
             key="gerrit query type"
             value="custom"/>
-        <attributes
+        <attribute
             key="gerrit query project"
             value="recommenders/org.eclipse.recommenders"/>
-        <attributes
+        <attribute
             key="gerrit query string"
             value="project:recommenders/org.eclipse.recommenders status:open branch:master"/>
-      </queries>
+      </query>
     </setupTask>
     <setupTask
         xsi:type="mylyn:MylynBuildsTask"
         serverURL="https://hudson.eclipse.org/recommenders"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <buildPlans
+      <buildPlan
           name="origin.master.kepler"/>
-      <buildPlans
+      <buildPlan
           name="origin.master.luna"/>
-      <buildPlans
+      <buildPlan
           name="gerrit.master.kepler"/>
-      <buildPlans
+      <buildPlan
           name="gerrit.master.luna"/>
     </setupTask>
     <stream
@@ -1565,59 +1565,59 @@
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.codesearch.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.stats.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.stats.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.calls.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.hippie.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.hippie.superclass.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.snippets.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.tracker.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.tweaks.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.vaadin.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.java_feature.feature.group"/>
-      <repositories
+      <repository
           url="http://download.eclipse.org/recommenders/updates/head/"/>
-      <repositories
+      <repository
           url="http://download.eclipse.org/recommenders.incubator/updates/milestones/"/>
-      <repositories
+      <repository
           url="http://download.codetrails.com/updates/connect/head/"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
-      <targlets
+      <targlet
           name="Examples Targlet">
-        <requirements
+        <requirement
             id="org.eclipse.sdk.feature.group"/>
-        <requirements
+        <requirement
             id="com.example"/>
-        <sourceLocators
+        <sourceLocator
             rootFolder="${git.clone.recommenders.examples.location}"/>
-        <repositoryLists
+        <repositoryList
             name="Repositories">
-          <repositories
+          <repository
               url="http://download.eclipse.org/recommenders/updates/head/"/>
-          <repositories
+          <repository
               url="${train.url}"/>
-        </repositoryLists>
-      </targlets>
+        </repositoryList>
+      </targlet>
     </setupTask>
     <stream
         name="master"/>
@@ -1710,37 +1710,37 @@
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.hippie.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.tracker.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.tweaks.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.calls.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.codetrails.connect.snippets.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.java_feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtend.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
-      <requirements
+      <requirement
           id="org.sonatype.tycho.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtext.sdk.feature.group"/>
-      <repositories
+      <repository
           url="http://download.eclipse.org/recommenders/updates/head/"/>
-      <repositories
+      <repository
           url="http://download.codetrails.com/updates/connect/"/>
-      <repositories
+      <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <stream
@@ -1750,6 +1750,7 @@
       label="Code Search">
     <setupTask
         xsi:type="git:GitCloneTask"
+        id="git.clone.recommenders.codesearch"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.codesearch"
         pushURI="">
       <annotation
@@ -1771,46 +1772,46 @@
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtend.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.sonatype.tycho.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.hudson.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.git.feature.group"/>
-      <repositories
+      <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
-      <sourceLocators
-          rootFolder="${git.root.dir}">
-        <predicates
+      <sourceLocator
+          rootFolder="${git.clone.recommenders.codesearch.location}">
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/plugins/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/features/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/tests/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/targets/.*"/>
-      </sourceLocators>
+      </sourceLocator>
     </setupTask>
     <setupTask
         xsi:type="pde:TargetPlatformTask"
@@ -1820,7 +1821,7 @@
         repositoryURL="https://bugs.eclipse.org/bugs"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <queries
+      <query
           summary="Bugs"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;component=Codesearch&amp;list_id=8721722&amp;order=bug_id%20DESC&amp;product=Recommenders.Incubator&amp;query_based_on=&amp;query_format=advanced"/>
     </setupTask>
@@ -1829,9 +1830,9 @@
         serverURL="https://hudson.eclipse.org/recommenders"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <buildPlans
+      <buildPlan
           name="codesearch.gerrit.master"/>
-      <buildPlans
+      <buildPlan
           name="codesearch.origin.master"/>
     </setupTask>
     <stream
@@ -1863,44 +1864,44 @@
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.sonatype.tycho.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.hudson.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.git.feature.group"/>
-      <repositories
+      <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
-      <sourceLocators
+      <sourceLocator
           rootFolder="${git.clone.recommenders.logging.location}">
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/plugins/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/features/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/tests/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/targets/.*"/>
-      </sourceLocators>
+      </sourceLocator>
     </setupTask>
     <setupTask
         xsi:type="pde:TargetPlatformTask"
@@ -1910,7 +1911,7 @@
         repositoryURL="https://bugs.eclipse.org/bugs"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <queries
+      <query
           summary="Bugs"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;component=Logging&amp;list_id=8721722&amp;order=bug_id%20DESC&amp;product=Recommenders.Incubator&amp;query_based_on=&amp;query_format=advanced"/>
     </setupTask>
@@ -1919,9 +1920,9 @@
         serverURL="https://hudson.eclipse.org/recommenders"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <buildPlans
+      <buildPlan
           name="logging.gerrit.master"/>
-      <buildPlans
+      <buildPlan
           name="logging.origin.master"/>
     </setupTask>
     <stream
@@ -1954,44 +1955,44 @@
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.recommenders.rcp.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.sonatype.tycho.m2e.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.hudson.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.mylyn.git.feature.group"/>
-      <repositories
+      <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
-      <sourceLocators
+      <sourceLocator
           rootFolder="${git.clone.recommenders.privacy}">
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/plugins/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/features/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/tests/.*"/>
-        <predicates
+        <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/targets/.*"/>
-      </sourceLocators>
+      </sourceLocator>
     </setupTask>
     <setupTask
         xsi:type="pde:TargetPlatformTask"
@@ -2001,7 +2002,7 @@
         repositoryURL="https://bugs.eclipse.org/bugs"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <queries
+      <query
           summary="Bugs"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;component=Privacy&amp;list_id=9183614&amp;product=Recommenders.Incubator&amp;query_format=advanced"/>
     </setupTask>
@@ -2010,9 +2011,9 @@
         serverURL="https://hudson.eclipse.org/recommenders"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
-      <buildPlans
+      <buildPlan
           name="privacy.gerrit.master"/>
-      <buildPlans
+      <buildPlan
           name="privacy.origin.master"/>
     </setupTask>
     <stream

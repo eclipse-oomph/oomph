@@ -13,6 +13,7 @@ package org.eclipse.oomph.resources.impl;
 import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.predicates.Predicate;
 import org.eclipse.oomph.resources.ResourcesPackage;
+import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -24,6 +25,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.core.resources.IProject;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 /**
@@ -182,6 +186,16 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public boolean matches(IProject project)
+  {
+    return ResourcesUtil.matchesPredicates(project, predicates);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -281,6 +295,22 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
         return predicates != null && !predicates.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException
+  {
+    switch (operationID)
+    {
+      case ResourcesPackage.SOURCE_LOCATOR___MATCHES__IPROJECT:
+        return matches((IProject)arguments.get(0));
+    }
+    return super.eInvoke(operationID, arguments);
   }
 
   /**

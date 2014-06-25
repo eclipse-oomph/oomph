@@ -18,6 +18,7 @@ import org.eclipse.oomph.resources.SourceLocator;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -151,6 +152,16 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  public EOperation getSourceLocator__Matches__IProject()
+  {
+    return sourceLocatorEClass.getEOperations().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public ResourcesFactory getResourcesFactory()
   {
     return (ResourcesFactory)getEFactoryInstance();
@@ -183,6 +194,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__ROOT_FOLDER);
     createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS);
     createEReference(sourceLocatorEClass, SOURCE_LOCATOR__PREDICATES);
+    createEOperation(sourceLocatorEClass, SOURCE_LOCATOR___MATCHES__IPROJECT);
   }
 
   /**
@@ -231,6 +243,9 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSourceLocator_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    EOperation op = initEOperation(getSourceLocator__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore");

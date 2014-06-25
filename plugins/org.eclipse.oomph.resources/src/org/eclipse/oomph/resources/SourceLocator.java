@@ -15,6 +15,8 @@ import org.eclipse.oomph.predicates.Predicate;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.core.resources.IProject;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Source Locator</b></em>'.
@@ -103,5 +105,13 @@ public interface SourceLocator extends ModelElement
    * @generated
    */
   EList<Predicate> getPredicates();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model projectDataType="org.eclipse.oomph.predicates.Project"
+   * @generated
+   */
+  boolean matches(IProject project);
 
 } // SourceLocator

@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.maven.impl;
 
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.ResourcesFactory.ProjectDescriptionFactory;
-import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -42,11 +41,9 @@ import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -225,67 +222,47 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    MavenUtil.perform(context, this);
-  }
+    MavenModelManager modelManager = MavenPlugin.getMavenModelManager();
+    IProgressMonitor monitor = new ProgressLogMonitor(context);
 
-  /**
-   * @author Eike Stepper
-   */
-  private static final class MavenUtil
-  {
-    public static void perform(SetupTaskContext context, MavenImportTaskImpl impl) throws Exception
+    Set<MavenProjectInfo> projectInfos = new LinkedHashSet<MavenProjectInfo>();
+    for (SourceLocator sourceLocator : getSourceLocators())
     {
-      List<String> folders = new ArrayList<String>();
-      EList<SourceLocator> sourceLocators = impl.getSourceLocators();
-
-      for (SourceLocator sourceLocator : sourceLocators)
-      {
-        folders.add(sourceLocator.getRootFolder());
-      }
-
-      MavenModelManager modelManager = MavenPlugin.getMavenModelManager();
-      IProgressMonitor monitor = new ProgressLogMonitor(context);
-
-      LocalProjectScanner projectScanner = new LocalProjectScanner(null, folders, false, modelManager);
+      LocalProjectScanner projectScanner = new LocalProjectScanner(null, Collections.singletonList(sourceLocator.getRootFolder()), false, modelManager);
       projectScanner.run(monitor);
 
-      Set<MavenProjectInfo> projectInfos = new LinkedHashSet<MavenProjectInfo>();
-      for (Iterator<MavenProjectInfo> it = projectScanner.getProjects().iterator(); it.hasNext();)
+      for (MavenProjectInfo projectInfo : projectScanner.getProjects())
       {
-        MavenProjectInfo projectInfo = it.next();
-        processMavenProject(projectInfo, projectInfos, sourceLocators);
-      }
-
-      if (!projectInfos.isEmpty())
-      {
-        ProjectImportConfiguration configuration = new ProjectImportConfiguration();
-
-        IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
-        projectConfigurationManager.importProjects(projectInfos, configuration, monitor);
+        processMavenProject(projectInfo, projectInfos, sourceLocator);
       }
     }
 
-    private static void processMavenProject(MavenProjectInfo projectInfo, Set<MavenProjectInfo> projectInfos, EList<SourceLocator> sourceLocators)
+    if (!projectInfos.isEmpty())
     {
-      File folder = projectInfo.getPomFile().getParentFile();
+      IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+      projectConfigurationManager.importProjects(projectInfos, new ProjectImportConfiguration(), monitor);
+    }
+  }
 
-      IProject project = ResourcesFactory.eINSTANCE.loadProject(folder, ProjectDescriptionFactory.MAVEN);
-      if (project != null)
+  private static void processMavenProject(MavenProjectInfo projectInfo, Set<MavenProjectInfo> projectInfos, SourceLocator sourceLocator)
+  {
+    File folder = projectInfo.getPomFile().getParentFile();
+    IProject project = ResourcesFactory.eINSTANCE.loadProject(folder, ProjectDescriptionFactory.MAVEN);
+    if (project != null)
+    {
+      if (sourceLocator.matches(project))
       {
-        if (ResourcesUtil.matchesSourceLocators(project, sourceLocators))
+        String projectName = project.getName();
+        if (!ROOT.getProject(projectName).exists())
         {
-          String projectName = project.getName();
-          if (!ROOT.getProject(projectName).exists())
-          {
-            projectInfos.add(projectInfo);
-          }
+          projectInfos.add(projectInfo);
         }
       }
+    }
 
-      for (MavenProjectInfo childProjectInfo : projectInfo.getProjects())
-      {
-        processMavenProject(childProjectInfo, projectInfos, sourceLocators);
-      }
+    for (MavenProjectInfo childProjectInfo : projectInfo.getProjects())
+    {
+      processMavenProject(childProjectInfo, projectInfos, sourceLocator);
     }
   }
 

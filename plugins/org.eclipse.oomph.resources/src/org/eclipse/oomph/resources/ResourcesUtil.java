@@ -212,21 +212,4 @@ public final class ResourcesUtil
 
     return false;
   }
-
-  public static boolean matchesSourceLocators(IProject project, EList<SourceLocator> sourceLocators)
-  {
-    for (SourceLocator sourceLocator : sourceLocators)
-    {
-      EList<Predicate> predicates = sourceLocator.getPredicates();
-      if (!predicates.isEmpty())
-      {
-        if (!matchesPredicates(project, predicates))
-        {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  }
 }

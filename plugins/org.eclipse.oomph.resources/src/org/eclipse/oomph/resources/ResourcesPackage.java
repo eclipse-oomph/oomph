@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.BasePackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -133,13 +134,22 @@ public interface ResourcesPackage extends EPackage
   int SOURCE_LOCATOR___GET_ANNOTATION__STRING = BasePackage.MODEL_ELEMENT___GET_ANNOTATION__STRING;
 
   /**
+   * The operation id for the '<em>Matches</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SOURCE_LOCATOR___MATCHES__IPROJECT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+  /**
    * The number of operations of the '<em>Source Locator</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SOURCE_LOCATOR_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+  int SOURCE_LOCATOR_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.resources.SourceLocator <em>Source Locator</em>}'.
@@ -183,6 +193,16 @@ public interface ResourcesPackage extends EPackage
    * @generated
    */
   EReference getSourceLocator_Predicates();
+
+  /**
+   * Returns the meta object for the '{@link org.eclipse.oomph.resources.SourceLocator#matches(org.eclipse.core.resources.IProject) <em>Matches</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Matches</em>' operation.
+   * @see org.eclipse.oomph.resources.SourceLocator#matches(org.eclipse.core.resources.IProject)
+   * @generated
+   */
+  EOperation getSourceLocator__Matches__IProject();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -241,6 +261,14 @@ public interface ResourcesPackage extends EPackage
      * @generated
      */
     EReference SOURCE_LOCATOR__PREDICATES = eINSTANCE.getSourceLocator_Predicates();
+
+    /**
+     * The meta object literal for the '<em><b>Matches</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation SOURCE_LOCATOR___MATCHES__IPROJECT = eINSTANCE.getSourceLocator__Matches__IProject();
 
   }
 
