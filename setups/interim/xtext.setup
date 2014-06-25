@@ -4,7 +4,6 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:git="http://www.eclipse.org/oomph/setup/git/1.0"
-    xmlns:pde="http://www.eclipse.org/oomph/setup/pde/1.0"
     xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0"
     xmlns:projects="http://www.eclipse.org/oomph/setup/projects/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
@@ -12,7 +11,7 @@
     xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
     xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/pde/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/PDE.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projects/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projects/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
     name="Xtext"
     label="Xtext with Xtend and Xcore">
   <setupTask
@@ -44,33 +43,33 @@
       value="http://download.eclipse.org/modeling/emf/emf/updates/nightly"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
-    <requirements
+    <requirement
         id="org.eclipse.emf.sdk.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.xtext.sdk.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.emf.mwe2.language.sdk.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
-    <requirements
+    <requirement
         id="edu.umd.cs.findbugs.plugin.eclipse.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.epp.mpc.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.m2e.feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.b3.aggregator.editor.feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.jboss.tools.m2e.jdt.feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
-    <repositories
+    <repository
         url="${xtext.nightly.composite}"/>
-    <repositories
+    <repository
         url="http://findbugs.cs.umd.edu/eclipse"/>
-    <repositories
+    <repository
         url="http://download.eclipse.org/modeling/emft/b3/updates-4.3"/>
-    <repositories
+    <repository
         url="http://download.jboss.org/jbosstools/updates/m2e-extensions/m2e-jdt-compiler/"/>
   </setupTask>
   <setupTask
@@ -243,350 +242,350 @@
   </setupTask>
   <setupTask
       xsi:type="projects:ProjectsImportTask">
-    <sourceLocators
+    <sourceLocator
         rootFolder="${git.clone.xtext.location}/devtools/"/>
-    <sourceLocators
+    <sourceLocator
         rootFolder="${git.clone.xtext.location}/releng/"/>
-    <sourceLocators
+    <sourceLocator
         rootFolder="${git.clone.xtext.location}/maven/"/>
-    <sourceLocators
+    <sourceLocator
         rootFolder="${git.clone.xtext.location}/examples/org.eclipse.xtend.examples-container/contents"/>
     <description>Import all developer tools</description>
   </setupTask>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
-    <targlets
+    <targlet
         name="Eclipse TP"
         activeRepositoryList="galileo">
-      <requirements
+      <requirement
           id="org.eclipse.jdt.feature.group"
           versionRange="[3.5.0,3.6.0)"/>
-      <requirements
+      <requirement
           id="org.eclipse.pde.feature.group"
           versionRange="[3.5.0,3.6.0)"/>
-      <requirements
+      <requirement
           id="org.eclipse.platform.feature.group"
           versionRange="[3.5.0,3.6.0)"/>
-      <requirements
+      <requirement
           id="org.eclipse.emf.sdk.feature.group"
           versionRange="2.9.0"/>
-      <requirements
+      <requirement
           id="de.itemis.xtext.antlr.feature.feature.group"
           versionRange="2.0.0"/>
-      <requirements
+      <requirement
           id="org.eclipse.draw2d.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.m2e.core"
           versionRange="[1.0.0,1.0.100)"/>
-      <requirements
+      <requirement
           id="com.google.guava"
           versionRange="[10.0.1,11.0.0)"/>
-      <requirements
+      <requirement
           id="org.objectweb.asm"
           versionRange="5.0.1"/>
-      <requirements
+      <requirement
           id="org.junit"/>
-      <repositoryLists
+      <repositoryList
           name="galileo">
-        <repositories
+        <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
-        <repositories
+        <repository
             url="${xtext.nightly.composite}"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
-        <repositories
+        <repository
             url="http://download.itemis.com/updates/releases/2.1.0/"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/eclipse/updates/3.5/"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/tools/gef/updates/milestones"/>
-        <repositories
+        <repository
             url="${emf.update.site}"/>
-      </repositoryLists>
-    </targlets>
+      </repositoryList>
+    </targlet>
   </setupTask>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
-    <targlets
+    <targlet
         name="Jdt Annotation"
         activeRepositoryList="juno">
-      <requirements
+      <requirement
           id="org.eclipse.jdt.annotation"/>
-      <requirements
+      <requirement
           id="org.junit4"/>
-      <repositoryLists
+      <repositoryList
           name="juno">
-        <repositories
+        <repository
             url="http://download.eclipse.org/eclipse/updates/3.8/"/>
-      </repositoryLists>
-    </targlets>
+      </repositoryList>
+    </targlet>
   </setupTask>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
-    <targlets
+    <targlet
         name="Project Import"
         activeRepositoryList="galileo">
-      <requirements
+      <requirement
           id="org.eclipse.xtext.build.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtext.tests.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.emf.test.ecore.xcore.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtext.examples.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtend.tests.feature.group"/>
-      <sourceLocators
+      <sourceLocator
           rootFolder="${git.clone.emf.location}">
-        <predicates
+        <predicate
             xsi:type="predicates:NamePredicate"
             pattern=".*xcore.*|.*xtext.*"/>
-      </sourceLocators>
-      <sourceLocators
+      </sourceLocator>
+      <sourceLocator
           rootFolder="${git.clone.xtext.location}">
-        <predicates
+        <predicate
             xsi:type="predicates:NotPredicate">
           <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*swtbot.*"/>
-        </predicates>
-      </sourceLocators>
-      <sourceLocators
+        </predicate>
+      </sourceLocator>
+      <sourceLocator
           rootFolder="${git.clone.xtext.location}/examples"
           locateNestedProjects="true"/>
-    </targlets>
+    </targlet>
   </setupTask>
   <setupTask
       xsi:type="setup.workingsets:WorkingSetTask">
-    <workingSets
+    <workingSet
         name="Releng">
-      <predicates
+      <predicate
           xsi:type="predicates:OrPredicate">
-        <operands
+        <operand
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.xtext.releng"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*releng|.*bootstrap|.*contributor|.*build.feature|.*language-generator"/>
-        </operands>
-        <operands
+        </operand>
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern="org.eclipse.simrel.build"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xtext">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtend.core"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.8"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.8"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.5"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.5"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.2"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.2"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.4"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.4"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.3"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.3"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.6"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.6"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.0"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.0"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.7"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.7"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xbase">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtend.core"/>
-        <operands
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern=".*xbase.*"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.4"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.4"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.8"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.8"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xtend">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtend.core"/>
-        <operands
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern=".*xtend.*"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.6"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.6"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.8"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.8"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xbase Tests">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtend.core"/>
-        <operands
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern=".*xbase.*tests.*"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.8"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.8"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xtext Tests">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtext"/>
-        <operands
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern=".*tests.*"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.8"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.8"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.4"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.4"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.6"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.6"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xtend Tests">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtend.core"/>
-        <operands
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern=".*xtend.*tests.*"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.8"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.8"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xtext Examples">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern=".*example.*"/>
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtext.example.arithmetics"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xtext Features">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtext.sdk.feature"/>
-        <operands
+        <operand
             xsi:type="predicates:NaturePredicate"
             nature="org.eclipse.pde.FeatureNature"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xtext Maven">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.xtext"/>
-        <operands
+        <operand
             xsi:type="predicates:OrPredicate">
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*maven.*"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.m2e.core.maven2Nature"/>
-        </operands>
-      </predicates>
-    </workingSets>
-    <workingSets
+        </operand>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="Xcore">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.emf.ecore.xcore"/>
-        <operands
+        <operand
             xsi:type="predicates:NamePredicate"
             pattern=".*xcore.*|.*xtext.*"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.12"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.12"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="EMF">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.10"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.10"/>
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.emf.common"/>
-        <operands
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.12"/>
-        <operands
+            excludedWorkingSet="//@setupTasks.14/@workingSets.12"/>
+        <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSets="//@setupTasks.14/@workingSets.0"/>
-      </predicates>
-    </workingSets>
-    <workingSets
+            excludedWorkingSet="//@setupTasks.14/@workingSets.0"/>
+      </predicate>
+    </workingSet>
+    <workingSet
         name="EMF Features">
-      <predicates
+      <predicate
           xsi:type="predicates:AndPredicate">
-        <operands
+        <operand
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.emf.ecore.xcore"/>
-        <operands
+        <operand
             xsi:type="predicates:NaturePredicate"
             nature="org.eclipse.pde.FeatureNature"/>
-      </predicates>
-    </workingSets>
+      </predicate>
+    </workingSet>
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
@@ -613,23 +612,8 @@
         label="Luna - 4.4"/>
     <description>Not used ATM</description>
   </setupTask>
-  <stream name="master">
-    <setupTask
-        xsi:type="pde:APIBaselineTask"
-        version="2.6.0"
-        containerFolder="${workspace.location/.baselines}"
-        zipLocation="http://www.eclipse.org/downloads/download.php?file=/modeling/tmf/xtext/downloads/drops/2.6.0/R201405210727/tmf-xtext-SDK-2.6.0.zip&amp;r=1">
-      <description>Xtext 2.5 stream API</description>
-    </setupTask>
-  </stream>
+  <stream name="master"/>
   <stream name="maintenance">
-    <setupTask
-        xsi:type="pde:APIBaselineTask"
-        version="2.4.3"
-        containerFolder="${workspace.location/.baselines}"
-        zipLocation="http://www.eclipse.org/downloads/download.php?file=/modeling/tmf/xtext/downloads/drops/2.4.3/R201309030823/tmf-xtext-SDK-2.4.3.zip&amp;r=1">
-      <description>Xtext 2.4 stream API</description>
-    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="xtext.git.branch"
