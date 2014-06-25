@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -28,7 +29,7 @@ public final class SetupInstallerPlugin extends AbstractOomphUIPlugin
 
   public SetupInstallerPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { SetupUIPlugin.INSTANCE });
   }
 
   @Override
