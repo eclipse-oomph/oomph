@@ -17,7 +17,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import java.util.regex.Pattern;
 
@@ -207,9 +207,9 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
   }
 
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
-    return getCompiledPattern().matcher(project.getName()).matches();
+    return getCompiledPattern().matcher(resource.getName()).matches();
   }
 
 } // NamePredicateImpl

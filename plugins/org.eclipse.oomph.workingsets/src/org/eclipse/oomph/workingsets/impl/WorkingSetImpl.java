@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -161,11 +161,11 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
     for (Predicate predicate : getPredicates())
     {
-      if (predicate.matches(project))
+      if (predicate.matches(resource))
       {
         return true;
       }
@@ -313,8 +313,8 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
   {
     switch (operationID)
     {
-      case WorkingSetsPackage.WORKING_SET___MATCHES__IPROJECT:
-        return matches((IProject)arguments.get(0));
+      case WorkingSetsPackage.WORKING_SET___MATCHES__IRESOURCE:
+        return matches((IResource)arguments.get(0));
     }
     return super.eInvoke(operationID, arguments);
   }

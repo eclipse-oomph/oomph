@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.predicates.impl;
 
+import static org.eclipse.oomph.predicates.PredicatesPackage.RESOURCE;
+
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.predicates.AndPredicate;
 import org.eclipse.oomph.predicates.BuilderPredicate;
@@ -34,6 +36,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,6 +44,7 @@ import org.eclipse.core.resources.IProject;
  * <!-- end-user-doc -->
  * @generated
  */
+@SuppressWarnings("unused")
 public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPackage
 {
   /**
@@ -128,6 +132,13 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
   private EDataType projectEDataType = null;
 
   /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType resourceEDataType = null;
+
+  /**
    * Creates an instance of the model <b>Package</b>, registered with
    * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
    * package URI value.
@@ -211,7 +222,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getPredicate__Matches__IProject()
+  public EOperation getPredicate__Matches__IResource()
   {
     return predicateEClass.getEOperations().get(0);
   }
@@ -441,6 +452,16 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  public EDataType getResource()
+  {
+    return resourceEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public PredicatesFactory getPredicatesFactory()
   {
     return (PredicatesFactory)getEFactoryInstance();
@@ -470,7 +491,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
 
     // Create classes and their features
     predicateEClass = createEClass(PREDICATE);
-    createEOperation(predicateEClass, PREDICATE___MATCHES__IPROJECT);
+    createEOperation(predicateEClass, PREDICATE___MATCHES__IRESOURCE);
 
     namePredicateEClass = createEClass(NAME_PREDICATE);
     createEAttribute(namePredicateEClass, NAME_PREDICATE__PATTERN);
@@ -505,6 +526,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
 
     // Create data types
     projectEDataType = createEDataType(PROJECT);
+    resourceEDataType = createEDataType(RESOURCE);
   }
 
   /**
@@ -557,8 +579,8 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     // Initialize classes, features, and operations; add parameters
     initEClass(predicateEClass, Predicate.class, "Predicate", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    EOperation op = initEOperation(getPredicate__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getPredicate__Matches__IResource(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getResource(), "resource", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(namePredicateEClass, NamePredicate.class, "NamePredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getNamePredicate_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, NamePredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -604,6 +626,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
 
     // Initialize data types
     initEDataType(projectEDataType, IProject.class, "Project", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(resourceEDataType, IResource.class, "Resource", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore");

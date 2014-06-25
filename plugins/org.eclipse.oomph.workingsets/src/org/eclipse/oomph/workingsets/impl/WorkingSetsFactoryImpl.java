@@ -18,7 +18,6 @@ import org.eclipse.oomph.workingsets.WorkingSetsFactory;
 import org.eclipse.oomph.workingsets.WorkingSetsPackage;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
@@ -86,36 +85,6 @@ public class WorkingSetsFactoryImpl extends EFactoryImpl implements WorkingSetsF
         return createExclusionPredicate();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public Object createFromString(EDataType eDataType, String initialValue)
-  {
-    switch (eDataType.getClassifierID())
-    {
-      default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String convertToString(EDataType eDataType, Object instanceValue)
-  {
-    switch (eDataType.getClassifierID())
-    {
-      default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
   }
 

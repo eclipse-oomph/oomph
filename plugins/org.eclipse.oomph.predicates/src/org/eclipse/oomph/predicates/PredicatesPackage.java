@@ -114,7 +114,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PREDICATE___MATCHES__IPROJECT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+  int PREDICATE___MATCHES__IRESOURCE = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
   /**
    * The number of operations of the '<em>Predicate</em>' class.
@@ -178,7 +178,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int NAME_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int NAME_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Name Predicate</em>' class.
@@ -242,7 +242,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMMENT_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int COMMENT_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Comment Predicate</em>' class.
@@ -306,7 +306,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LOCATION_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int LOCATION_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Location Predicate</em>' class.
@@ -370,7 +370,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int REPOSITORY_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int REPOSITORY_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Repository Predicate</em>' class.
@@ -434,7 +434,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int AND_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int AND_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>And Predicate</em>' class.
@@ -498,7 +498,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OR_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int OR_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Or Predicate</em>' class.
@@ -562,7 +562,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int NOT_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int NOT_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Not Predicate</em>' class.
@@ -626,7 +626,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int NATURE_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int NATURE_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Nature Predicate</em>' class.
@@ -690,7 +690,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BUILDER_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int BUILDER_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Builder Predicate</em>' class.
@@ -763,7 +763,7 @@ public interface PredicatesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FILE_PREDICATE___MATCHES__IPROJECT = PREDICATE___MATCHES__IPROJECT;
+  int FILE_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>File Predicate</em>' class.
@@ -785,6 +785,16 @@ public interface PredicatesPackage extends EPackage
   int PROJECT = 11;
 
   /**
+   * The meta object id for the '<em>Resource</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.core.resources.IResource
+   * @see org.eclipse.oomph.predicates.impl.PredicatesPackageImpl#getResource()
+   * @generated
+   */
+  int RESOURCE = 12;
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.predicates.Predicate <em>Predicate</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -795,14 +805,14 @@ public interface PredicatesPackage extends EPackage
   EClass getPredicate();
 
   /**
-   * Returns the meta object for the '{@link org.eclipse.oomph.predicates.Predicate#matches(org.eclipse.core.resources.IProject) <em>Matches</em>}' operation.
+   * Returns the meta object for the '{@link org.eclipse.oomph.predicates.Predicate#matches(org.eclipse.core.resources.IResource) <em>Matches</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the '<em>Matches</em>' operation.
-   * @see org.eclipse.oomph.predicates.Predicate#matches(org.eclipse.core.resources.IProject)
+   * @see org.eclipse.oomph.predicates.Predicate#matches(org.eclipse.core.resources.IResource)
    * @generated
    */
-  EOperation getPredicate__Matches__IProject();
+  EOperation getPredicate__Matches__IResource();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.predicates.NamePredicate <em>Name Predicate</em>}'.
@@ -1037,6 +1047,17 @@ public interface PredicatesPackage extends EPackage
   EDataType getProject();
 
   /**
+   * Returns the meta object for data type '{@link org.eclipse.core.resources.IResource <em>Resource</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>Resource</em>'.
+   * @see org.eclipse.core.resources.IResource
+   * @model instanceClass="org.eclipse.core.resources.IResource"
+   * @generated
+   */
+  EDataType getResource();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1076,7 +1097,7 @@ public interface PredicatesPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EOperation PREDICATE___MATCHES__IPROJECT = eINSTANCE.getPredicate__Matches__IProject();
+    EOperation PREDICATE___MATCHES__IRESOURCE = eINSTANCE.getPredicate__Matches__IResource();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.predicates.impl.NamePredicateImpl <em>Name Predicate</em>}' class.
@@ -1275,6 +1296,16 @@ public interface PredicatesPackage extends EPackage
      * @generated
      */
     EDataType PROJECT = eINSTANCE.getProject();
+
+    /**
+     * The meta object literal for the '<em>Resource</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.core.resources.IResource
+     * @see org.eclipse.oomph.predicates.impl.PredicatesPackageImpl#getResource()
+     * @generated
+     */
+    EDataType RESOURCE = eINSTANCE.getResource();
 
   }
 

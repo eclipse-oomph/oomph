@@ -12,7 +12,7 @@ package org.eclipse.oomph.predicates;
 
 import org.eclipse.oomph.base.ModelElement;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,9 +29,9 @@ public interface Predicate extends ModelElement
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model projectDataType="org.eclipse.oomph.predicates.Project"
+   * @model resourceDataType="org.eclipse.oomph.predicates.Resource"
    * @generated
    */
-  boolean matches(IProject project);
+  boolean matches(IResource resource);
 
 } // Predicate

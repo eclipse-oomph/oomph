@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.egit.core.GitProvider;
 import org.eclipse.egit.core.project.GitProjectData;
@@ -196,10 +197,10 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
    * @generated NOT
    */
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
     String prototypeGitDirAbsolutePath = getGitDirAbsolutePath(getProject());
-    String gitDirAbsolutePath = getGitDirAbsolutePath(project);
+    String gitDirAbsolutePath = getGitDirAbsolutePath(resource.getProject());
     return prototypeGitDirAbsolutePath == null ? gitDirAbsolutePath == null : prototypeGitDirAbsolutePath.equals(gitDirAbsolutePath);
   }
 

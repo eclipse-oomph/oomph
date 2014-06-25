@@ -7,7 +7,7 @@
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Predicate" abstract="true" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eOperations name="matches" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eParameters name="project" eType="#//Project"/>
+      <eParameters name="resource" eType="#//Resource"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamePredicate" eSuperTypes="#//Predicate">
@@ -59,4 +59,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentPattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Project" instanceClassName="org.eclipse.core.resources.IProject"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Resource" instanceClassName="org.eclipse.core.resources.IResource"/>
 </ecore:EPackage>

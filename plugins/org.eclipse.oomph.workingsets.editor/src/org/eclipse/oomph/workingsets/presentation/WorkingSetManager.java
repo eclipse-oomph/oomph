@@ -433,6 +433,7 @@ public class WorkingSetManager
         result = true;
       }
     }
+
     return result;
   }
 

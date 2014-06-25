@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import java.util.Collection;
 
@@ -91,11 +91,11 @@ public class OrPredicateImpl extends PredicateImpl implements OrPredicate
    * @generated NOT
    */
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
     for (Predicate operand : getOperands())
     {
-      if (operand.matches(project))
+      if (operand.matches(resource))
       {
         return true;
       }

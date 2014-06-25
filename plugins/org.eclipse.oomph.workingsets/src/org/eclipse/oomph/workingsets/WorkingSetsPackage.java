@@ -15,7 +15,6 @@ import org.eclipse.oomph.predicates.PredicatesPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -142,7 +141,7 @@ public interface WorkingSetsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORKING_SET___MATCHES__IPROJECT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+  int WORKING_SET___MATCHES__IRESOURCE = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
   /**
    * The number of operations of the '<em>Working Set</em>' class.
@@ -280,7 +279,7 @@ public interface WorkingSetsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INCLUSION_PREDICATE___MATCHES__IPROJECT = PredicatesPackage.PREDICATE___MATCHES__IPROJECT;
+  int INCLUSION_PREDICATE___MATCHES__IRESOURCE = PredicatesPackage.PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Inclusion Predicate</em>' class.
@@ -334,7 +333,7 @@ public interface WorkingSetsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EXCLUSION_PREDICATE___MATCHES__IPROJECT = PredicatesPackage.PREDICATE___MATCHES__IPROJECT;
+  int EXCLUSION_PREDICATE___MATCHES__IRESOURCE = PredicatesPackage.PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Exclusion Predicate</em>' class.
@@ -344,16 +343,6 @@ public interface WorkingSetsPackage extends EPackage
    * @ordered
    */
   int EXCLUSION_PREDICATE_OPERATION_COUNT = PredicatesPackage.PREDICATE_OPERATION_COUNT + 0;
-
-  /**
-   * The meta object id for the '<em>Project</em>' data type.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.core.resources.IProject
-   * @see org.eclipse.oomph.workingsets.impl.WorkingSetsPackageImpl#getProject()
-   * @generated
-   */
-  int PROJECT = 4;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.workingsets.WorkingSet <em>Working Set</em>}'.
@@ -388,14 +377,14 @@ public interface WorkingSetsPackage extends EPackage
   EAttribute getWorkingSet_ID();
 
   /**
-   * Returns the meta object for the '{@link org.eclipse.oomph.workingsets.WorkingSet#matches(org.eclipse.core.resources.IProject) <em>Matches</em>}' operation.
+   * Returns the meta object for the '{@link org.eclipse.oomph.workingsets.WorkingSet#matches(org.eclipse.core.resources.IResource) <em>Matches</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the '<em>Matches</em>' operation.
-   * @see org.eclipse.oomph.workingsets.WorkingSet#matches(org.eclipse.core.resources.IProject)
+   * @see org.eclipse.oomph.workingsets.WorkingSet#matches(org.eclipse.core.resources.IResource)
    * @generated
    */
-  EOperation getWorkingSet__Matches__IProject();
+  EOperation getWorkingSet__Matches__IResource();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.workingsets.WorkingSet#getName <em>Name</em>}'.
@@ -482,17 +471,6 @@ public interface WorkingSetsPackage extends EPackage
   EReference getInclusionPredicate_IncludedWorkingSets();
 
   /**
-   * Returns the meta object for data type '{@link org.eclipse.core.resources.IProject <em>Project</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for data type '<em>Project</em>'.
-   * @see org.eclipse.core.resources.IProject
-   * @model instanceClass="org.eclipse.core.resources.IProject" serializeable="false"
-   * @generated
-   */
-  EDataType getProject();
-
-  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -548,7 +526,7 @@ public interface WorkingSetsPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EOperation WORKING_SET___MATCHES__IPROJECT = eINSTANCE.getWorkingSet__Matches__IProject();
+    EOperation WORKING_SET___MATCHES__IRESOURCE = eINSTANCE.getWorkingSet__Matches__IResource();
 
     /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -619,16 +597,6 @@ public interface WorkingSetsPackage extends EPackage
      * @generated
      */
     EReference INCLUSION_PREDICATE__INCLUDED_WORKING_SETS = eINSTANCE.getInclusionPredicate_IncludedWorkingSets();
-
-    /**
-     * The meta object literal for the '<em>Project</em>' data type.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.core.resources.IProject
-     * @see org.eclipse.oomph.workingsets.impl.WorkingSetsPackageImpl#getProject()
-     * @generated
-     */
-    EDataType PROJECT = eINSTANCE.getProject();
 
   }
 

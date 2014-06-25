@@ -15,7 +15,7 @@ import org.eclipse.oomph.predicates.Predicate;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
  * <!-- begin-user-doc -->
@@ -83,10 +83,10 @@ public interface WorkingSet extends ModelElement
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model projectDataType="org.eclipse.oomph.workingsets.Project"
+   * @model projectDataType="org.eclipse.oomph.predicates.Resource"
    * @generated
    */
-  boolean matches(IProject project);
+  boolean matches(IResource project);
 
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.

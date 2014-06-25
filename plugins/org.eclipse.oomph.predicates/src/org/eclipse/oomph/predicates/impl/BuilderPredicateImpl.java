@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -108,27 +109,32 @@ public class BuilderPredicateImpl extends PredicateImpl implements BuilderPredic
    * @generated NOT
    */
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
-    String builder = getBuilder();
-    if (builder != null)
+    if (resource != null)
     {
-      try
+      String builder = getBuilder();
+      if (builder != null)
       {
-        for (ICommand command : project.getDescription().getBuildSpec())
+        IProject project = resource.getProject();
+        try
         {
-          String name = command.getBuilderName();
-          if (builder.equals(name))
+          for (ICommand command : project.getDescription().getBuildSpec())
           {
-            return true;
+            String name = command.getBuilderName();
+            if (builder.equals(name))
+            {
+              return true;
+            }
           }
         }
-      }
-      catch (CoreException ex)
-      {
-        // Ignore
+        catch (CoreException ex)
+        {
+          // Ignore
+        }
       }
     }
+
     return false;
   }
 

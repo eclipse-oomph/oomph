@@ -11,7 +11,6 @@
   <genPackages prefix="WorkingSets" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       multipleEditorPages="false" childCreationExtenders="true" ecorePackage="WorkingSets.ecore#/"
       publicationLocation="/setups/models/WorkingSets.ecore">
-    <genDataTypes ecoreDataType="WorkingSets.ecore#//Project"/>
     <genClasses ecoreClass="WorkingSets.ecore#//WorkingSet">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//WorkingSet/predicates"/>

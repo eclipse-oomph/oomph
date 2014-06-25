@@ -21,13 +21,10 @@ import org.eclipse.oomph.workingsets.WorkingSetsPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import org.eclipse.core.resources.IProject;
 
 /**
  * <!-- begin-user-doc -->
@@ -64,13 +61,6 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * @generated
    */
   private EClass inclusionPredicateEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EDataType projectEDataType = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -176,7 +166,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getWorkingSet__Matches__IProject()
+  public EOperation getWorkingSet__Matches__IResource()
   {
     return workingSetEClass.getEOperations().get(0);
   }
@@ -266,16 +256,6 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EDataType getProject()
-  {
-    return projectEDataType;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public WorkingSetsFactory getWorkingSetsFactory()
   {
     return (WorkingSetsFactory)getEFactoryInstance();
@@ -308,7 +288,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
     createEAttribute(workingSetEClass, WORKING_SET__NAME);
     createEReference(workingSetEClass, WORKING_SET__PREDICATES);
     createEAttribute(workingSetEClass, WORKING_SET__ID);
-    createEOperation(workingSetEClass, WORKING_SET___MATCHES__IPROJECT);
+    createEOperation(workingSetEClass, WORKING_SET___MATCHES__IRESOURCE);
 
     workingSetGroupEClass = createEClass(WORKING_SET_GROUP);
     createEReference(workingSetGroupEClass, WORKING_SET_GROUP__WORKING_SETS);
@@ -319,9 +299,6 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
 
     exclusionPredicateEClass = createEClass(EXCLUSION_PREDICATE);
     createEReference(exclusionPredicateEClass, EXCLUSION_PREDICATE__EXCLUDED_WORKING_SETS);
-
-    // Create data types
-    projectEDataType = createEDataType(PROJECT);
   }
 
   /**
@@ -374,8 +351,8 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
     initEAttribute(getWorkingSet_ID(), ecorePackage.getEString(), "iD", null, 0, 1, WorkingSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    EOperation op = initEOperation(getWorkingSet__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getWorkingSet__Matches__IResource(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, thePredicatesPackage.getResource(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(workingSetGroupEClass, WorkingSetGroup.class, "WorkingSetGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getWorkingSetGroup_WorkingSets(), getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetGroup.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -392,9 +369,6 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
     initEClass(exclusionPredicateEClass, ExclusionPredicate.class, "ExclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getExclusionPredicate_ExcludedWorkingSets(), getWorkingSet(), null, "excludedWorkingSets", null, 0, -1, ExclusionPredicate.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    // Initialize data types
-    initEDataType(projectEDataType, IProject.class, "Project", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore");

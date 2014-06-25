@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
  * <!-- begin-user-doc -->
@@ -139,10 +139,10 @@ public class NotPredicateImpl extends PredicateImpl implements NotPredicate
    * @generated NOT
    */
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
     Predicate operand = getOperand();
-    return operand == null || !operand.matches(project);
+    return operand == null || !operand.matches(resource);
   }
 
   /**

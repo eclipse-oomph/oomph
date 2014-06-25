@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 import java.util.regex.Pattern;
@@ -209,12 +210,13 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
   }
 
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
-    if (project != null)
+    if (resource != null)
     {
       try
       {
+        IProject project = resource.getProject();
         IProjectDescription description = project.getDescription();
         if (description != null)
         {

@@ -17,7 +17,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
 import java.util.regex.Pattern;
@@ -208,11 +208,11 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
   }
 
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
-    if (project != null)
+    if (resource != null)
     {
-      IPath location = project.getLocation();
+      IPath location = resource.getLocation();
       if (location != null)
       {
         return getCompiledPattern().matcher(location.toPortableString()).matches();

@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -107,23 +108,28 @@ public class NaturePredicateImpl extends PredicateImpl implements NaturePredicat
    * @generated NOT
    */
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
-    try
+    if (resource != null)
     {
-      String[] natureIds = project.getDescription().getNatureIds();
-      for (String natureId : natureIds)
+      try
       {
-        if (natureId.equals(nature))
+        IProject project = resource.getProject();
+        String[] natureIds = project.getDescription().getNatureIds();
+        for (String natureId : natureIds)
         {
-          return true;
+          if (natureId.equals(nature))
+          {
+            return true;
+          }
         }
       }
+      catch (CoreException ex)
+      {
+        // Ignore
+      }
     }
-    catch (CoreException ex)
-    {
-      // Ignore
-    }
+
     return false;
   }
 

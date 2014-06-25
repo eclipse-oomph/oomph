@@ -17,7 +17,7 @@ import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.regex.Pattern;
@@ -62,7 +62,7 @@ public abstract class PredicateImpl extends ModelElementImpl implements Predicat
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public abstract boolean matches(IProject project);
+  public abstract boolean matches(IResource resource);
 
   protected Pattern getPattern(String pattern)
   {
@@ -91,8 +91,8 @@ public abstract class PredicateImpl extends ModelElementImpl implements Predicat
   {
     switch (operationID)
     {
-      case PredicatesPackage.PREDICATE___MATCHES__IPROJECT:
-        return matches((IProject)arguments.get(0));
+      case PredicatesPackage.PREDICATE___MATCHES__IRESOURCE:
+        return matches((IResource)arguments.get(0));
     }
     return super.eInvoke(operationID, arguments);
   }

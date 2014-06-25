@@ -32,7 +32,9 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 
 import java.io.File;
 import java.util.Arrays;
@@ -126,6 +128,8 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
     {
       case PredicatesPackage.PROJECT:
         return createProjectFromString(eDataType, initialValue);
+      case PredicatesPackage.RESOURCE:
+        return createResourceFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -143,6 +147,8 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
     {
       case PredicatesPackage.PROJECT:
         return convertProjectToString(eDataType, instanceValue);
+      case PredicatesPackage.RESOURCE:
+        return convertResourceToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -350,6 +356,47 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
 
     IProject project = (IProject)instanceValue;
     return project.getName();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public IResource createResourceFromString(EDataType eDataType, String initialValue)
+  {
+    if (initialValue == null)
+    {
+      return null;
+    }
+
+    if (initialValue.endsWith("/"))
+    {
+      return ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(initialValue));
+    }
+
+    return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(initialValue));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String convertResourceToString(EDataType eDataType, Object instanceValue)
+  {
+    if (instanceValue == null)
+    {
+      return null;
+    }
+
+    IResource resource = (IResource)instanceValue;
+    if (resource.getType() == IResource.FILE)
+    {
+      return resource.getFullPath().toString();
+    }
+
+    return resource.getFullPath() + "/";
   }
 
   /**

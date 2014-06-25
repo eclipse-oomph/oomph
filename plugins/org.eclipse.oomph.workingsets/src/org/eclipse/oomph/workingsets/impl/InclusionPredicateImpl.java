@@ -19,7 +19,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import java.util.Collection;
 
@@ -89,11 +89,11 @@ public class InclusionPredicateImpl extends PredicateImpl implements InclusionPr
    * @generated NOT
    */
   @Override
-  public boolean matches(IProject project)
+  public boolean matches(IResource resource)
   {
     for (WorkingSet workingSet : getIncludedWorkingSets())
     {
-      if (workingSet.matches(project))
+      if (workingSet.matches(resource))
       {
         return true;
       }
