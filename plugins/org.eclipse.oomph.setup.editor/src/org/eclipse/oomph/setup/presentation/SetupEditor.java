@@ -74,6 +74,8 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedImage;
+import org.eclipse.emf.edit.provider.DelegatingWrapperItemProvider;
+import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -876,14 +878,54 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       @Override
       public Adapter createResourceAdapter()
       {
-        return new ResourceItemProvider(this)
+        final ResourceItemProviderAdapterFactory resourceItemProviderAdapterFactory = this;
+        return new ResourceItemProvider(resourceItemProviderAdapterFactory)
         {
+          private List<DelegatingWrapperItemProvider> children;
+
+          @Override
+          protected boolean isWrappingNeeded(Object object)
+          {
+            return true;
+          }
+
           @Override
           public Collection<?> getChildren(Object object)
           {
             Resource resource = (Resource)object;
             Object[] contents = getContents(resource);
+
+            ResourceSet resourceSet = resource.getResourceSet();
+            if (resourceSet != null && resourceSet.getResources().get(0) != resource)
+            {
+              if (children == null)
+              {
+                children = new ArrayList<DelegatingWrapperItemProvider>();
+                int index = 0;
+                for (Object child : contents)
+                {
+                  children.add(new DelegatingWrapperItemProvider(child, resource, null, index++, resourceItemProviderAdapterFactory));
+                }
+              }
+
+              return children;
+            }
+
             return Arrays.asList(contents);
+          }
+
+          @Override
+          public void dispose()
+          {
+            super.dispose();
+
+            if (children != null)
+            {
+              for (IDisposable disposable : children)
+              {
+                disposable.dispose();
+              }
+            }
           }
         };
       }
@@ -1676,8 +1718,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       });
 
       final Font font = contentOutlineViewer.getControl().getFont();
-      labelProvider = new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, contentOutlineViewer), new DiagnosticDecorator(editingDomain,
-          contentOutlineViewer, dialogSettings))
+      labelProvider = new SetupLabelProvider(adapterFactory, contentOutlineViewer)
       {
         @Override
         public Font getFont(Object object)
@@ -1697,9 +1738,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       };
       contentOutlineViewer.setLabelProvider(labelProvider);
-
-      new ColumnViewerInformationControlToolTipSupport(contentOutlineViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain,
-          contentOutlineViewer));
 
       // Make sure our popups work.
       //
@@ -2124,7 +2162,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   public IPropertySheetPage getPropertySheetPage()
   {
-    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain)
+    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, dialogSettings)
     {
       {
         setSorter(new PropertySheetSorter()
