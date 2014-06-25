@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
- *    Julian Enoch - Add authentication to build server
+ *    Ericsson AB (Julian Enoch) - Bug 425815 - Add authentication to build server
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 

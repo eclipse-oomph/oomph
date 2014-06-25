@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
- *    Julian Enoch - Expand the functionality for PASSWORD variables
+ *    Ericsson AB (Julian Enoch) - Bug 425815 - Expand the functionality for PASSWORD variables
  */
 package org.eclipse.oomph.setup.ui;
 

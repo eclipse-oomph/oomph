@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
- *    Julian Enoch - Add authentication to the tasks repository
+ *    Ericsson AB (Julian Enoch) - Bug 425815 - Add authentication to the tasks repository
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
