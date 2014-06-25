@@ -19,6 +19,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.IProject;
 
+import java.util.regex.Pattern;
+
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Name Predicate</b></em>'.
@@ -53,6 +55,8 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
    * @ordered
    */
   protected String pattern = PATTERN_EDEFAULT;
+
+  private Pattern compiledPattern;
 
   /**
    * <!-- begin-user-doc -->
@@ -90,7 +94,7 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setPattern(String newPattern)
+  public void setPatternGen(String newPattern)
   {
     String oldPattern = pattern;
     pattern = newPattern;
@@ -98,6 +102,22 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
     {
       eNotify(new ENotificationImpl(this, Notification.SET, PredicatesPackage.NAME_PREDICATE__PATTERN, oldPattern, pattern));
     }
+  }
+
+  public void setPattern(String newPattern)
+  {
+    setPatternGen(newPattern);
+    compiledPattern = null;
+  }
+
+  private Pattern getCompiledPattern()
+  {
+    if (compiledPattern == null)
+    {
+      compiledPattern = getPattern(getPattern());
+    }
+
+    return compiledPattern;
   }
 
   /**
@@ -189,8 +209,7 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
   @Override
   public boolean matches(IProject project)
   {
-    String pattern = getPattern();
-    return pattern != null && project != null && project.getName().matches(pattern);
+    return getCompiledPattern().matcher(project.getName()).matches();
   }
 
 } // NamePredicateImpl

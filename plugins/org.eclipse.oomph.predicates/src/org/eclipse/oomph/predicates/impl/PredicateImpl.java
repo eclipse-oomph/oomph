@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.core.resources.IProject;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,6 +34,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 public abstract class PredicateImpl extends ModelElementImpl implements Predicate
 {
+  private static final Pattern MATCH_NOTHING_PATTERN = Pattern.compile("$^");
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -59,6 +63,23 @@ public abstract class PredicateImpl extends ModelElementImpl implements Predicat
    * @generated NOT
    */
   public abstract boolean matches(IProject project);
+
+  protected Pattern getPattern(String pattern)
+  {
+    if (pattern != null)
+    {
+      try
+      {
+        return Pattern.compile(pattern);
+      }
+      catch (PatternSyntaxException ex)
+      {
+        // Ignore.
+      }
+    }
+
+    return MATCH_NOTHING_PATTERN;
+  }
 
   /**
    * <!-- begin-user-doc -->

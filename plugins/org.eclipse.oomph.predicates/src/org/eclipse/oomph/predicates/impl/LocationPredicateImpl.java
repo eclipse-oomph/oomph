@@ -18,6 +18,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+
+import java.util.regex.Pattern;
 
 /**
  * <!-- begin-user-doc -->
@@ -53,6 +56,8 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
    * @ordered
    */
   protected String pattern = PATTERN_EDEFAULT;
+
+  private Pattern compiledPattern;
 
   /**
    * <!-- begin-user-doc -->
@@ -90,7 +95,7 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setPattern(String newPattern)
+  public void setPatternGen(String newPattern)
   {
     String oldPattern = pattern;
     pattern = newPattern;
@@ -98,6 +103,22 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
     {
       eNotify(new ENotificationImpl(this, Notification.SET, PredicatesPackage.LOCATION_PREDICATE__PATTERN, oldPattern, pattern));
     }
+  }
+
+  public void setPattern(String newPattern)
+  {
+    setPatternGen(newPattern);
+    compiledPattern = null;
+  }
+
+  private Pattern getCompiledPattern()
+  {
+    if (compiledPattern == null)
+    {
+      compiledPattern = getPattern(getPattern());
+    }
+
+    return compiledPattern;
   }
 
   /**
@@ -189,8 +210,16 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
   @Override
   public boolean matches(IProject project)
   {
-    String pattern = getPattern();
-    return pattern != null && project != null && project.getLocation().toPortableString().matches(pattern);
+    if (project != null)
+    {
+      IPath location = project.getLocation();
+      if (location != null)
+      {
+        return getCompiledPattern().matcher(location.toPortableString()).matches();
+      }
+    }
+
+    return false;
   }
 
 } // LocationPredicateImpl

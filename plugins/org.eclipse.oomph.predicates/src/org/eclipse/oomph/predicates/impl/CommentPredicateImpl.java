@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.predicates.impl;
 
-import org.eclipse.oomph.internal.predicates.PredicatesPlugin;
 import org.eclipse.oomph.predicates.CommentPredicate;
 import org.eclipse.oomph.predicates.PredicatesPackage;
 
@@ -19,6 +18,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.runtime.CoreException;
+
+import java.util.regex.Pattern;
 
 /**
  * <!-- begin-user-doc -->
@@ -54,6 +57,8 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
    * @ordered
    */
   protected String pattern = PATTERN_EDEFAULT;
+
+  private Pattern compiledPattern;
 
   /**
    * <!-- begin-user-doc -->
@@ -91,7 +96,7 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setPattern(String newPattern)
+  public void setPatternGen(String newPattern)
   {
     String oldPattern = pattern;
     pattern = newPattern;
@@ -99,6 +104,22 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
     {
       eNotify(new ENotificationImpl(this, Notification.SET, PredicatesPackage.COMMENT_PREDICATE__PATTERN, oldPattern, pattern));
     }
+  }
+
+  public void setPattern(String newPattern)
+  {
+    setPatternGen(newPattern);
+    compiledPattern = null;
+  }
+
+  private Pattern getCompiledPattern()
+  {
+    if (compiledPattern == null)
+    {
+      compiledPattern = getPattern(getPattern());
+    }
+
+    return compiledPattern;
   }
 
   /**
@@ -190,16 +211,23 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
   @Override
   public boolean matches(IProject project)
   {
-    String pattern = getPattern();
+    if (project != null)
+    {
+      try
+      {
+        IProjectDescription description = project.getDescription();
+        if (description != null)
+        {
+          String comment = description.getComment();
+          return comment != null && getCompiledPattern().matcher(comment).matches();
+        }
+      }
+      catch (CoreException ex)
+      {
+        // Ignore.
+      }
+    }
 
-    try
-    {
-      return pattern != null && project != null && project.getDescription().getComment().matches(pattern);
-    }
-    catch (Exception ex)
-    {
-      PredicatesPlugin.INSTANCE.log(ex);
-      return false;
-    }
+    return false;
   }
 } // CommentPredicateImpl
