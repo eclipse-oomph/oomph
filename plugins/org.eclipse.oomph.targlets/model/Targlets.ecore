@@ -7,8 +7,8 @@
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Targlet" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" lowerBound="1"
-        upperBound="-1" eType="ecore:EClass ../../org.eclipse.oomph.p2/model/P2.ecore#//Requirement"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.oomph.p2/model/P2.ecore#//Requirement"
         containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="requirement"/>

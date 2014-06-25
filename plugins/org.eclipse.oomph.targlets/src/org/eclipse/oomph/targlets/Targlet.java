@@ -80,7 +80,7 @@ public interface Targlet extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Requirements</em>' containment reference list.
    * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_Requirements()
-   * @model containment="true" required="true"
+   * @model containment="true"
    *        extendedMetaData="name='requirement'"
    * @generated
    */
