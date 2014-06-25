@@ -267,31 +267,40 @@ public interface PDEPackage extends EPackage
   int API_BASELINE_TASK__RESTRICTIONS = SetupPackage.SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int API_BASELINE_TASK__NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Version</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int API_BASELINE_TASK__VERSION = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int API_BASELINE_TASK__VERSION = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Container Folder</b></em>' attribute.
+   * The feature id for the '<em><b>Location</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int API_BASELINE_TASK__CONTAINER_FOLDER = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int API_BASELINE_TASK__LOCATION = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
-   * The feature id for the '<em><b>Zip Location</b></em>' attribute.
+   * The feature id for the '<em><b>Remote URI</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int API_BASELINE_TASK__ZIP_LOCATION = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int API_BASELINE_TASK__REMOTE_URI = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>API Baseline Task</em>' class.
@@ -300,7 +309,7 @@ public interface PDEPackage extends EPackage
    * @generated
    * @ordered
    */
-  int API_BASELINE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int API_BASELINE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.pde.TargetPlatformTask <em>Target Platform Task</em>}'.
@@ -334,6 +343,17 @@ public interface PDEPackage extends EPackage
   EClass getAPIBaselineTask();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.oomph.setup.pde.APIBaselineTask#getName()
+   * @see #getAPIBaselineTask()
+   * @generated
+   */
+  EAttribute getAPIBaselineTask_Name();
+
+  /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getVersion <em>Version</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -345,26 +365,26 @@ public interface PDEPackage extends EPackage
   EAttribute getAPIBaselineTask_Version();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getContainerFolder <em>Container Folder</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getLocation <em>Location</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Container Folder</em>'.
-   * @see org.eclipse.oomph.setup.pde.APIBaselineTask#getContainerFolder()
+   * @return the meta object for the attribute '<em>Location</em>'.
+   * @see org.eclipse.oomph.setup.pde.APIBaselineTask#getLocation()
    * @see #getAPIBaselineTask()
    * @generated
    */
-  EAttribute getAPIBaselineTask_ContainerFolder();
+  EAttribute getAPIBaselineTask_Location();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getZipLocation <em>Zip Location</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getRemoteURI <em>Remote URI</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Zip Location</em>'.
-   * @see org.eclipse.oomph.setup.pde.APIBaselineTask#getZipLocation()
+   * @return the meta object for the attribute '<em>Remote URI</em>'.
+   * @see org.eclipse.oomph.setup.pde.APIBaselineTask#getRemoteURI()
    * @see #getAPIBaselineTask()
    * @generated
    */
-  EAttribute getAPIBaselineTask_ZipLocation();
+  EAttribute getAPIBaselineTask_RemoteURI();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -418,6 +438,14 @@ public interface PDEPackage extends EPackage
     EClass API_BASELINE_TASK = eINSTANCE.getAPIBaselineTask();
 
     /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute API_BASELINE_TASK__NAME = eINSTANCE.getAPIBaselineTask_Name();
+
+    /**
      * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -426,20 +454,20 @@ public interface PDEPackage extends EPackage
     EAttribute API_BASELINE_TASK__VERSION = eINSTANCE.getAPIBaselineTask_Version();
 
     /**
-     * The meta object literal for the '<em><b>Container Folder</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute API_BASELINE_TASK__CONTAINER_FOLDER = eINSTANCE.getAPIBaselineTask_ContainerFolder();
+    EAttribute API_BASELINE_TASK__LOCATION = eINSTANCE.getAPIBaselineTask_Location();
 
     /**
-     * The meta object literal for the '<em><b>Zip Location</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Remote URI</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute API_BASELINE_TASK__ZIP_LOCATION = eINSTANCE.getAPIBaselineTask_ZipLocation();
+    EAttribute API_BASELINE_TASK__REMOTE_URI = eINSTANCE.getAPIBaselineTask_RemoteURI();
 
   }
 

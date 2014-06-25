@@ -20,9 +20,10 @@ import org.eclipse.oomph.setup.SetupTask;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getVersion <em>Version</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getContainerFolder <em>Container Folder</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getZipLocation <em>Zip Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getRemoteURI <em>Remote URI</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,6 +34,32 @@ import org.eclipse.oomph.setup.SetupTask;
  */
 public interface APIBaselineTask extends SetupTask
 {
+  /**
+   * Returns the value of the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Name</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Name</em>' attribute.
+   * @see #setName(String)
+   * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask_Name()
+   * @model required="true"
+   * @generated
+   */
+  String getName();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getName <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Name</em>' attribute.
+   * @see #getName()
+   * @generated
+   */
+  void setName(String value);
+
   /**
    * Returns the value of the '<em><b>Version</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -60,56 +87,58 @@ public interface APIBaselineTask extends SetupTask
   void setVersion(String value);
 
   /**
-   * Returns the value of the '<em><b>Container Folder</b></em>' attribute.
-   * The default value is <code>"${setup.project.dir/.baselines}"</code>.
+   * Returns the value of the '<em><b>Location</b></em>' attribute.
+   * The default value is <code>""</code>.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Container Folder</em>' attribute isn't clear,
+   * If the meaning of the '<em>Location</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Container Folder</em>' attribute.
-   * @see #setContainerFolder(String)
-   * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask_ContainerFolder()
-   * @model default="${setup.project.dir/.baselines}" required="true"
+   * @return the value of the '<em>Location</em>' attribute.
+   * @see #setLocation(String)
+   * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask_Location()
+   * @model default="" required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/Variable type='STRING' label='API baseline location rule' description='The rule for the absolute folder location where the API baseline is located' explicitType='FOLDER' explicitLabel='${@id.name}-${@id.version} API baseline location' explicitDescription='The absolute folder location where the ${@id.name}-${@id.version} API baseline is located'"
+   *        annotation="http://www.eclipse.org/oomph/setup/RuleVariable name='api.baselines.root' type='FOLDER' label='Root API baselines folder' description='The root API baselines folder where all the API baselines are located' storePromptedValue='true'"
    * @generated
    */
-  String getContainerFolder();
+  String getLocation();
 
   /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getContainerFolder <em>Container Folder</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getLocation <em>Location</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Container Folder</em>' attribute.
-   * @see #getContainerFolder()
+   * @param value the new value of the '<em>Location</em>' attribute.
+   * @see #getLocation()
    * @generated
    */
-  void setContainerFolder(String value);
+  void setLocation(String value);
 
   /**
-   * Returns the value of the '<em><b>Zip Location</b></em>' attribute.
+   * Returns the value of the '<em><b>Remote URI</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Zip Location</em>' attribute isn't clear,
+   * If the meaning of the '<em>Remote URI</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Zip Location</em>' attribute.
-   * @see #setZipLocation(String)
-   * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask_ZipLocation()
+   * @return the value of the '<em>Remote URI</em>' attribute.
+   * @see #setRemoteURI(String)
+   * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask_RemoteURI()
    * @model required="true"
    * @generated
    */
-  String getZipLocation();
+  String getRemoteURI();
 
   /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getZipLocation <em>Zip Location</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getRemoteURI <em>Remote URI</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Zip Location</em>' attribute.
-   * @see #getZipLocation()
+   * @param value the new value of the '<em>Remote URI</em>' attribute.
+   * @see #getRemoteURI()
    * @generated
    */
-  void setZipLocation(String value);
+  void setRemoteURI(String value);
 
 } // ApiBaselineTask

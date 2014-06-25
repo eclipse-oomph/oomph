@@ -25,7 +25,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.core.runtime.Path;
 import org.eclipse.pde.api.tools.internal.ApiBaselineManager;
 import org.eclipse.pde.api.tools.internal.model.ApiModelFactory;
 import org.eclipse.pde.api.tools.internal.provisional.ApiPlugin;
@@ -42,9 +41,10 @@ import java.io.InputStream;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getVersion <em>Version</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getContainerFolder <em>Container Folder</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getZipLocation <em>Zip Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getRemoteURI <em>Remote URI</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,6 +52,26 @@ import java.io.InputStream;
  */
 public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTask
 {
+  /**
+   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected static final String NAME_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected String name = NAME_EDEFAULT;
+
   /**
    * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -73,46 +93,54 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   protected String version = VERSION_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getContainerFolder() <em>Container Folder</em>}' attribute.
+   * The default value of the '{@link #getLocation() <em>Location</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getContainerFolder()
+   * @see #getLocation()
    * @generated
    * @ordered
    */
-  protected static final String CONTAINER_FOLDER_EDEFAULT = "${setup.project.dir/.baselines}";
+  protected static final String LOCATION_EDEFAULT = "";
 
   /**
-   * The cached value of the '{@link #getContainerFolder() <em>Container Folder</em>}' attribute.
+   * The cached value of the '{@link #getLocation() <em>Location</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getContainerFolder()
+   * @see #getLocation()
    * @generated
    * @ordered
    */
-  protected String containerFolder = CONTAINER_FOLDER_EDEFAULT;
+  protected String location = LOCATION_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getZipLocation() <em>Zip Location</em>}' attribute.
+   * The default value of the '{@link #getRemoteURI() <em>Remote URI</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getZipLocation()
+   * @see #getRemoteURI()
    * @generated
    * @ordered
    */
-  protected static final String ZIP_LOCATION_EDEFAULT = null;
+  protected static final String REMOTE_URI_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getZipLocation() <em>Zip Location</em>}' attribute.
+   * The cached value of the '{@link #getRemoteURI() <em>Remote URI</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getZipLocation()
+   * @see #getRemoteURI()
    * @generated
    * @ordered
    */
-  protected String zipLocation = ZIP_LOCATION_EDEFAULT;
+  protected String remoteURI = REMOTE_URI_EDEFAULT;
 
-  private transient APIBaselineHelper helper;
+  private transient String remoteURIRedirected;
+
+  private transient File remoteURIFile;
+
+  private transient String baselineName;
+
+  private transient File baselineDir;
+
+  private transient IApiBaseline baseline;
 
   /**
    * <!-- begin-user-doc -->
@@ -133,6 +161,31 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   protected EClass eStaticClass()
   {
     return PDEPackage.Literals.API_BASELINE_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(String newName)
+  {
+    String oldName = name;
+    name = newName;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__NAME, oldName, name));
+    }
   }
 
   /**
@@ -165,9 +218,9 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getContainerFolder()
+  public String getLocation()
   {
-    return containerFolder;
+    return location;
   }
 
   /**
@@ -175,13 +228,13 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setContainerFolder(String newContainerFolder)
+  public void setLocation(String newLocation)
   {
-    String oldContainerFolder = containerFolder;
-    containerFolder = newContainerFolder;
+    String oldLocation = location;
+    location = newLocation;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__CONTAINER_FOLDER, oldContainerFolder, containerFolder));
+      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__LOCATION, oldLocation, location));
     }
   }
 
@@ -190,9 +243,9 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getZipLocation()
+  public String getRemoteURI()
   {
-    return zipLocation;
+    return remoteURI;
   }
 
   /**
@@ -200,13 +253,13 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setZipLocation(String newZipLocation)
+  public void setRemoteURI(String newRemoteURI)
   {
-    String oldZipLocation = zipLocation;
-    zipLocation = newZipLocation;
+    String oldRemoteURI = remoteURI;
+    remoteURI = newRemoteURI;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__ZIP_LOCATION, oldZipLocation, zipLocation));
+      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__REMOTE_URI, oldRemoteURI, remoteURI));
     }
   }
 
@@ -220,12 +273,14 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__NAME:
+        return getName();
       case PDEPackage.API_BASELINE_TASK__VERSION:
         return getVersion();
-      case PDEPackage.API_BASELINE_TASK__CONTAINER_FOLDER:
-        return getContainerFolder();
-      case PDEPackage.API_BASELINE_TASK__ZIP_LOCATION:
-        return getZipLocation();
+      case PDEPackage.API_BASELINE_TASK__LOCATION:
+        return getLocation();
+      case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
+        return getRemoteURI();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -240,14 +295,17 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__NAME:
+        setName((String)newValue);
+        return;
       case PDEPackage.API_BASELINE_TASK__VERSION:
         setVersion((String)newValue);
         return;
-      case PDEPackage.API_BASELINE_TASK__CONTAINER_FOLDER:
-        setContainerFolder((String)newValue);
+      case PDEPackage.API_BASELINE_TASK__LOCATION:
+        setLocation((String)newValue);
         return;
-      case PDEPackage.API_BASELINE_TASK__ZIP_LOCATION:
-        setZipLocation((String)newValue);
+      case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
+        setRemoteURI((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -263,14 +321,17 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__NAME:
+        setName(NAME_EDEFAULT);
+        return;
       case PDEPackage.API_BASELINE_TASK__VERSION:
         setVersion(VERSION_EDEFAULT);
         return;
-      case PDEPackage.API_BASELINE_TASK__CONTAINER_FOLDER:
-        setContainerFolder(CONTAINER_FOLDER_EDEFAULT);
+      case PDEPackage.API_BASELINE_TASK__LOCATION:
+        setLocation(LOCATION_EDEFAULT);
         return;
-      case PDEPackage.API_BASELINE_TASK__ZIP_LOCATION:
-        setZipLocation(ZIP_LOCATION_EDEFAULT);
+      case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
+        setRemoteURI(REMOTE_URI_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -286,12 +347,14 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case PDEPackage.API_BASELINE_TASK__VERSION:
         return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
-      case PDEPackage.API_BASELINE_TASK__CONTAINER_FOLDER:
-        return CONTAINER_FOLDER_EDEFAULT == null ? containerFolder != null : !CONTAINER_FOLDER_EDEFAULT.equals(containerFolder);
-      case PDEPackage.API_BASELINE_TASK__ZIP_LOCATION:
-        return ZIP_LOCATION_EDEFAULT == null ? zipLocation != null : !ZIP_LOCATION_EDEFAULT.equals(zipLocation);
+      case PDEPackage.API_BASELINE_TASK__LOCATION:
+        return LOCATION_EDEFAULT == null ? location != null : !LOCATION_EDEFAULT.equals(location);
+      case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
+        return REMOTE_URI_EDEFAULT == null ? remoteURI != null : !REMOTE_URI_EDEFAULT.equals(remoteURI);
     }
     return super.eIsSet(featureID);
   }
@@ -310,186 +373,121 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (version: ");
+    result.append(" (name: ");
+    result.append(name);
+    result.append(", version: ");
     result.append(version);
-    result.append(", containerFolder: ");
-    result.append(containerFolder);
-    result.append(", zipLocation: ");
-    result.append(zipLocation);
+    result.append(", location: ");
+    result.append(location);
+    result.append(", remoteURI: ");
+    result.append(remoteURI);
     result.append(')');
     return result.toString();
   }
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
+    ApiPlugin apiPlugin = ApiPlugin.getDefault();
+    if (apiPlugin == null)
+    {
+      // Might be deactivated
+      return false;
+    }
+
+    baselineName = getName() + "-" + getVersion();
+    baselineDir = new File(getLocation());
+
+    remoteURIRedirected = context.redirect(getRemoteURI());
+    remoteURIFile = new File(baselineDir, "remoteURI.txt");
+
+    IApiBaselineManager baselineManager = apiPlugin.getApiBaselineManager();
+    IApiBaseline baseline = baselineManager.getApiBaseline(baselineName);
+    if (baseline == null)
+    {
+      return true;
+    }
+
+    ((ApiBaselineManager)baselineManager).loadBaselineInfos(baseline);
+
+    if (!baselineDir.isDirectory() || !new File(baseline.getLocation()).equals(baselineDir))
+    {
+      baselineManager.removeApiBaseline(baselineName);
+      baseline.setName(baselineName + " " + System.currentTimeMillis());
+      baselineManager.addApiBaseline(baseline);
+      return true;
+    }
+
+    if (baselineManager.getDefaultApiBaseline() != baseline)
+    {
+      this.baseline = baseline;
+      return true;
+    }
+
+    if (isDifferentRemoteURI())
+    {
+      return true;
+    }
+
     return false;
-    // String containerFolder = getContainerFolder();
-    // String version = getVersion();
-    // String zipLocation = context.redirect(getZipLocation());
-    //
-    // helper = new APIBaselineHelperImpl(containerFolder, version, zipLocation);
-    // return helper.isNeeded(context);
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    helper.perform(context);
+    IApiBaselineManager baselineManager = ApiPlugin.getDefault().getApiBaselineManager();
+    if (baseline == null)
+    {
+      if (isDifferentRemoteURI())
+      {
+        FileUtil.delete(baselineDir, new ProgressLogMonitor(context));
+      }
+
+      if (!baselineDir.exists())
+      {
+        downloadAndUnzip(context);
+      }
+
+      IOUtil.writeFile(remoteURIFile, remoteURIRedirected.getBytes("UTF-8"));
+
+      String location = baselineDir.toString();
+      context.log("Creating API baseline from " + location);
+
+      baseline = ApiModelFactory.newApiBaseline(baselineName, location);
+      ApiModelFactory.addComponents(baseline, location, new ProgressLogMonitor(context));
+      baselineManager.addApiBaseline(baseline);
+    }
+
+    context.log("Activating API baseline: " + baselineName);
+    baselineManager.setDefaultApiBaseline(baselineName);
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  private interface APIBaselineHelper
+  private boolean isDifferentRemoteURI() throws Exception
   {
-    public boolean isNeeded(SetupTaskContext context) throws Exception;
+    if (remoteURIFile.exists())
+    {
+      String zipLocationURL = new String(IOUtil.readFile(remoteURIFile), "UTF-8");
+      if (!ObjectUtil.equals(zipLocationURL, remoteURIRedirected))
+      {
+        return true;
+      }
+    }
 
-    public void perform(SetupTaskContext context) throws Exception;
+    return false;
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  @SuppressWarnings("unused")
-  private static class APIBaselineHelperImpl implements APIBaselineHelper
+  private void downloadAndUnzip(final SetupTaskContext context) throws Exception
   {
-    private String containerFolder;
+    File zipFile = DownloadUtil.downloadURL(remoteURIRedirected, context);
 
-    private String version;
-
-    private String zipLocation;
-
-    private transient File zipLocationFile;
-
-    private transient String baselineName;
-
-    private transient File baselineDir;
-
-    private transient IApiBaseline baseline;
-
-    public APIBaselineHelperImpl(String containerFolder, String version, String zipLocation)
+    baselineDir.mkdirs();
+    ZIPUtil.unzip(zipFile, new ZIPUtil.FileSystemUnzipHandler(baselineDir, ZIPUtil.DEFAULT_BUFFER_SIZE)
     {
-      this.containerFolder = containerFolder;
-      this.zipLocation = zipLocation;
-      this.version = version;
-    }
-
-    public boolean isNeeded(SetupTaskContext context) throws Exception
-    {
-      ApiPlugin apiPlugin = ApiPlugin.getDefault();
-      if (apiPlugin == null)
+      @Override
+      public void unzipFile(String name, InputStream zipStream)
       {
-        // Might be deactivated
-        return false;
+        context.log("Unzipping " + name);
+        super.unzipFile(name, zipStream);
       }
-
-      // if (StringUtil.isEmpty(containerFolder))
-      // {
-      // containerFolder = new File(context.getProjectDir(), ".baselines").getAbsolutePath();
-      // }
-
-      baselineName = context.getWorkspace().getStreams().get(0).getProject().getName() + " Baseline";
-      baselineDir = new File(containerFolder, version);
-      zipLocationFile = new File(baselineDir, "zip-location.txt");
-
-      IApiBaselineManager baselineManager = apiPlugin.getApiBaselineManager();
-      IApiBaseline baseline = baselineManager.getApiBaseline(baselineName);
-      if (baseline == null)
-      {
-        return true;
-      }
-
-      ((ApiBaselineManager)baselineManager).loadBaselineInfos(baseline);
-
-      if (!baselineDir.isDirectory() || !new File(baseline.getLocation()).equals(baselineDir))
-      {
-        baselineManager.removeApiBaseline(baselineName);
-        baseline.setName(baselineName + " " + System.currentTimeMillis());
-        baselineManager.addApiBaseline(baseline);
-        return true;
-      }
-
-      if (baselineManager.getDefaultApiBaseline() != baseline)
-      {
-        this.baseline = baseline;
-        return true;
-      }
-
-      if (isDifferentZipLocation())
-      {
-        return true;
-      }
-
-      return false;
-    }
-
-    public void perform(SetupTaskContext context) throws Exception
-    {
-      IApiBaselineManager baselineManager = ApiPlugin.getDefault().getApiBaselineManager();
-      if (baseline == null)
-      {
-        if (isDifferentZipLocation())
-        {
-          FileUtil.delete(baselineDir, new ProgressLogMonitor(context));
-        }
-
-        if (!baselineDir.exists())
-        {
-          downloadAndUnzip(context);
-        }
-
-        IOUtil.writeFile(zipLocationFile, zipLocation.getBytes("UTF-8"));
-
-        String location = baselineDir.toString();
-        context.log("Creating API baseline from " + location);
-
-        baseline = ApiModelFactory.newApiBaseline(baselineName, location);
-        ApiModelFactory.addComponents(baseline, location, new ProgressLogMonitor(context));
-        baselineManager.addApiBaseline(baseline);
-      }
-
-      context.log("Activating API baseline: " + baselineName);
-      baselineManager.setDefaultApiBaseline(baselineName);
-    }
-
-    private boolean isDifferentZipLocation() throws Exception
-    {
-      if (zipLocationFile.exists())
-      {
-        String zipLocationURL = new String(IOUtil.readFile(zipLocationFile), "UTF-8");
-        if (!ObjectUtil.equals(zipLocationURL, zipLocation))
-        {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    private void downloadAndUnzip(final SetupTaskContext context) throws Exception
-    {
-      final File baselinesDir = baselineDir.getParentFile();
-      baselinesDir.mkdirs();
-
-      File zipFile = DownloadUtil.downloadURL(zipLocation, context);
-
-      final File[] rootDir = { null };
-      ZIPUtil.unzip(zipFile, new ZIPUtil.FileSystemUnzipHandler(baselinesDir, ZIPUtil.DEFAULT_BUFFER_SIZE)
-      {
-        @Override
-        public void unzipFile(String name, InputStream zipStream)
-        {
-          if (rootDir[0] == null)
-          {
-            rootDir[0] = new File(baselinesDir, new Path(name).segment(0));
-          }
-
-          context.log("Unzipping " + name);
-          super.unzipFile(name, zipStream);
-        }
-      });
-
-      rootDir[0].renameTo(baselineDir);
-    }
+    });
   }
 
 } // ApiBaselineTaskImpl

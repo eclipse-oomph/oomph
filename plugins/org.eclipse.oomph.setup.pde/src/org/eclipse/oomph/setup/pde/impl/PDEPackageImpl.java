@@ -147,7 +147,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getAPIBaselineTask_Version()
+  public EAttribute getAPIBaselineTask_Name()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(0);
   }
@@ -157,7 +157,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getAPIBaselineTask_ContainerFolder()
+  public EAttribute getAPIBaselineTask_Version()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(1);
   }
@@ -167,9 +167,19 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getAPIBaselineTask_ZipLocation()
+  public EAttribute getAPIBaselineTask_Location()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAPIBaselineTask_RemoteURI()
+  {
+    return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -209,9 +219,10 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     createEAttribute(targetPlatformTaskEClass, TARGET_PLATFORM_TASK__NAME);
 
     apiBaselineTaskEClass = createEClass(API_BASELINE_TASK);
+    createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__NAME);
     createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__VERSION);
-    createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__CONTAINER_FOLDER);
-    createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__ZIP_LOCATION);
+    createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__LOCATION);
+    createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__REMOTE_URI);
   }
 
   /**
@@ -258,11 +269,13 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(apiBaselineTaskEClass, APIBaselineTask.class, "APIBaselineTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAPIBaselineTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAPIBaselineTask_Version(), ecorePackage.getEString(), "version", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAPIBaselineTask_ContainerFolder(), ecorePackage.getEString(), "containerFolder", "${setup.project.dir/.baselines}", 1, 1,
-        APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAPIBaselineTask_ZipLocation(), ecorePackage.getEString(), "zipLocation", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getAPIBaselineTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAPIBaselineTask_RemoteURI(), ecorePackage.getEString(), "remoteURI", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -275,6 +288,12 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     createEnablementAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http://www.eclipse.org/oomph/setup/Variable
+    createVariableAnnotations();
+    // http://www.eclipse.org/oomph/setup/RuleVariable
+    createRuleVariableAnnotations();
+    // http://www.eclipse.org/oomph/setup/RemoteResource
+    createRemoteResourceAnnotations();
   }
 
   /**
@@ -315,6 +334,57 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(targetPlatformTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
     addAnnotation(apiBaselineTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Variable</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createVariableAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Variable";
+    addAnnotation(getAPIBaselineTask_Location(), source, new String[] { "type", "STRING", "label", "API baseline location rule", "description",
+        "The rule for the absolute folder location where the API baseline is located", "explicitType", "FOLDER", "explicitLabel",
+        "${@id.name}-${@id.version} API baseline location", "explicitDescription",
+        "The absolute folder location where the ${@id.name}-${@id.version} API baseline is located" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
+        "${api.baselines.root/}${@id.name|lower}-${@id.version}", "label",
+        "Located in a folder named \'<name>-<version>\' within the root API baselines folder" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
+        "${installation.location/baselines/}${@id.name|lower}-${@id.version}", "label",
+        "Located in a folder named \'baselines/<name>-<version>\' within the installation folder" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
+        "${workspace.location/.baselines/}${@id.name|lower}-${@id.version}", "label",
+        "Located in a folder named \'.baselines/<name>-<version>\' within the workspace folder" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${@id.location}", "label",
+        "Located in the specified absolute folder location" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/RuleVariable</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRuleVariableAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
+    addAnnotation(getAPIBaselineTask_Location(), source, new String[] { "name", "api.baselines.root", "type", "FOLDER", "label", "Root API baselines folder",
+        "description", "The root API baselines folder where all the API baselines are located", "storePromptedValue", "true" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/RemoteResource</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRemoteResourceAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/RemoteResource";
+    addAnnotation(getAPIBaselineTask_RemoteURI(), source, new String[] {});
   }
 
 } // PDEPackageImpl

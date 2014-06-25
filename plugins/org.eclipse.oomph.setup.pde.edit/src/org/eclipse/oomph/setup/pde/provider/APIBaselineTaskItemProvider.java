@@ -57,11 +57,26 @@ public class APIBaselineTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addNamePropertyDescriptor(object);
       addVersionPropertyDescriptor(object);
-      addContainerFolderPropertyDescriptor(object);
-      addZipLocationPropertyDescriptor(object);
+      addLocationPropertyDescriptor(object);
+      addRemoteURIPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Name feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addNamePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_APIBaselineTask_name_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_name_feature", "_UI_APIBaselineTask_type"),
+        PDEPackage.Literals.API_BASELINE_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -79,31 +94,31 @@ public class APIBaselineTaskItemProvider extends SetupTaskItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Container Folder feature.
+   * This adds a property descriptor for the Location feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void addContainerFolderPropertyDescriptor(Object object)
+  protected void addLocationPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineTask_containerFolder_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_containerFolder_feature", "_UI_APIBaselineTask_type"),
-        PDEPackage.Literals.API_BASELINE_TASK__CONTAINER_FOLDER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_APIBaselineTask_location_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_location_feature", "_UI_APIBaselineTask_type"),
+        PDEPackage.Literals.API_BASELINE_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
-   * This adds a property descriptor for the Zip Location feature.
+   * This adds a property descriptor for the Remote URI feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void addZipLocationPropertyDescriptor(Object object)
+  protected void addRemoteURIPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineTask_zipLocation_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_zipLocation_feature", "_UI_APIBaselineTask_type"),
-        PDEPackage.Literals.API_BASELINE_TASK__ZIP_LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_APIBaselineTask_remoteURI_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_remoteURI_feature", "_UI_APIBaselineTask_type"),
+        PDEPackage.Literals.API_BASELINE_TASK__REMOTE_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -133,13 +148,36 @@ public class APIBaselineTaskItemProvider extends SetupTaskItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    String label = ((APIBaselineTask)object).getID();
-    return label == null || label.length() == 0 ? getString("_UI_APIBaselineTask_type") : getString("_UI_APIBaselineTask_type") + " " + label;
+    StringBuilder builder = new StringBuilder(getString("_UI_APIBaselineTask_type"));
+
+    String name = ((APIBaselineTask)object).getName();
+    if (name != null && name.length() != 0)
+    {
+      builder.append(' ');
+      builder.append(name);
+    }
+
+    String version = ((APIBaselineTask)object).getVersion();
+    if (version != null && version.length() != 0)
+    {
+      if (name != null && name.length() != 0)
+      {
+        builder.append('-');
+      }
+      else
+      {
+        builder.append(' ');
+      }
+
+      builder.append(version);
+    }
+
+    return builder.toString();
   }
 
   /**
@@ -156,9 +194,10 @@ public class APIBaselineTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(APIBaselineTask.class))
     {
+      case PDEPackage.API_BASELINE_TASK__NAME:
       case PDEPackage.API_BASELINE_TASK__VERSION:
-      case PDEPackage.API_BASELINE_TASK__CONTAINER_FOLDER:
-      case PDEPackage.API_BASELINE_TASK__ZIP_LOCATION:
+      case PDEPackage.API_BASELINE_TASK__LOCATION:
+      case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
