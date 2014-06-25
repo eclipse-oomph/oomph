@@ -12,6 +12,7 @@
 package org.eclipse.oomph.setup.git.impl;
 
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTask.Sniffer.SourcePathProvider;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
@@ -22,6 +23,7 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
@@ -525,6 +527,25 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       }
 
       throw new Exception(ex);
+    }
+  }
+
+  @Override
+  public Object getOverrideToken()
+  {
+    String location = getLocation();
+    return createToken(location);
+  }
+
+  @Override
+  public void overrideFor(SetupTask overriddenSetupTask)
+  {
+    // Just ignore the overrides for the same location as long as the checkout branch is identical
+    GitCloneTask gitCloneTask = (GitCloneTask)overriddenSetupTask;
+    if (!ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
+    {
+      throw new IllegalArgumentException("The two different branches " + gitCloneTask.getCheckoutBranch() + " and " + getCheckoutBranch()
+          + " cannot be cloned to the same location " + getLocation());
     }
   }
 
