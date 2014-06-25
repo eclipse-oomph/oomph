@@ -352,7 +352,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     EOperation op = initEOperation(getWorkingSet__Matches__IResource(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePredicatesPackage.getResource(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, thePredicatesPackage.getResource(), "resource", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(workingSetGroupEClass, WorkingSetGroup.class, "WorkingSetGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getWorkingSetGroup_WorkingSets(), getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetGroup.class, !IS_TRANSIENT, !IS_VOLATILE,

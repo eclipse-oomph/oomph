@@ -7,7 +7,7 @@
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="WorkingSet" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eOperations name="matches" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eParameters name="project" eType="ecore:EDataType ../../org.eclipse.oomph.predicates/model/Predicates.ecore#//Resource"/>
+      <eParameters name="resource" eType="ecore:EDataType ../../org.eclipse.oomph.predicates/model/Predicates.ecore#//Resource"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"

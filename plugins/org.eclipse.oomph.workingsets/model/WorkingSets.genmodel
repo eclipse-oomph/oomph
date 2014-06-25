@@ -16,7 +16,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//WorkingSet/predicates"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/iD"/>
       <genOperations ecoreOperation="WorkingSets.ecore#//WorkingSet/matches">
-        <genParameters ecoreParameter="WorkingSets.ecore#//WorkingSet/matches/project"/>
+        <genParameters ecoreParameter="WorkingSets.ecore#//WorkingSet/matches/resource"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="WorkingSets.ecore#//WorkingSetGroup">

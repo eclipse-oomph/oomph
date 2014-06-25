@@ -83,10 +83,10 @@ public interface WorkingSet extends ModelElement
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model projectDataType="org.eclipse.oomph.predicates.Resource"
+   * @model resourceDataType="org.eclipse.oomph.predicates.Resource"
    * @generated
    */
-  boolean matches(IResource project);
+  boolean matches(IResource resource);
 
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
