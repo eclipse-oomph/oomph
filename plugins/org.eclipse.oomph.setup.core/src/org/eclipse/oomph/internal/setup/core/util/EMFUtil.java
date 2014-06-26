@@ -772,7 +772,6 @@ public final class EMFUtil
     try
     {
       XMLResource xmlResource = (XMLResource)eObject.eResource();
-      xmlResource.getEObjectToExtensionMap().clear();
       xmlResource.save(null);
     }
     catch (IOException ex)
