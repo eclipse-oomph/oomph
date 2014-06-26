@@ -254,7 +254,7 @@
             pattern="org\.eclipse\.oomph\.setup.*"/>
         <predicate
             xsi:type="predicates:NamePredicate"
-            pattern="setups"/>
+            pattern="setups.*"/>
       </workingSet>
       <workingSet
           name="Targlets">
