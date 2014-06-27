@@ -19,7 +19,6 @@ import org.eclipse.oomph.setup.SetupTask.Sniffer;
 import org.eclipse.oomph.setup.SetupTask.Sniffer.ResourceHandler;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl.BasicSniffer;
-import org.eclipse.oomph.setup.presentation.templates.AutomaticProjectTemplate;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.actions.AbstractContainerAction;
 import org.eclipse.oomph.ui.UIUtil;
@@ -382,7 +381,7 @@ public class SniffAction extends AbstractContainerAction
     private IDialogSettings getSettings()
     {
       IDialogSettings dialogSettings = SetupEditorPlugin.getPlugin().getDialogSettings();
-      IDialogSettings section = dialogSettings.getSection(AutomaticProjectTemplate.class.getName());
+      IDialogSettings section = null; // dialogSettings.getSection(AutomaticProjectTemplate.class.getName());
       if (section == null)
       {
         section = dialogSettings.addNewSection(SelectSniffersDialog.class.getName());

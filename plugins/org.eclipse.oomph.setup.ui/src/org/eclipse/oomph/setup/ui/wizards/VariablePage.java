@@ -19,9 +19,7 @@ import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
-import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
-import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.ui.AbstractConfirmDialog;
 import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
@@ -588,47 +586,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public FieldHolder(VariableTask variable)
     {
-      field = createField(variable);
+      field = PropertyField.createField(variable);
       field.fill(composite);
       field.addValueListener(this);
       field.getControl().addFocusListener(focusListener);
       variables.add(variable);
-    }
-
-    private PropertyField createField(final VariableTask variable)
-    {
-      PropertyField field = createField(variable.getType(), variable.getChoices());
-
-      String label = variable.getLabel();
-      if (StringUtil.isEmpty(label))
-      {
-        label = variable.getName();
-      }
-
-      field.setLabelText(label);
-      field.setToolTip(variable.getDescription());
-
-      GridData gridData = field.getLabelGridData();
-      gridData.widthHint = 150;
-
-      return field;
-    }
-
-    private PropertyField createField(VariableType type, List<VariableChoice> choices)
-    {
-      switch (type)
-      {
-        case FOLDER:
-          PropertyField.FileField fileField = new PropertyField.FileField(choices);
-          fileField.setDialogText("Folder Selection");
-          fileField.setDialogMessage("Select a folder.");
-          return fileField;
-
-        case PASSWORD:
-          return new PropertyField.TextField(true);
-      }
-
-      return new PropertyField.TextField(choices);
     }
 
     public boolean isDisposed()

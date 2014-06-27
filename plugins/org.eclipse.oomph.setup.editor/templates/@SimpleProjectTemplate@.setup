@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Project
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name="${project.name}"
+    label="${project.label}">
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      id="template.variables"
+      name="@TemplateVariables@">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="project.label"
+        value="Cool Stuff"
+        label="Label">
+      <description>
+        The title case name of the project, including spaces.
+        This will be displayed in any tree view of this project.
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="project.name"
+        value="${project.label|qualifiedName}"
+        label="Name">
+      <description>
+        The lower case name of the project.
+        The project's qualified name will be prefixed by &quot;org.eclipse.'.
+
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="TEXT"
+        name="project.description"
+        value="${project.label} provides cool stuff"
+        label="Description">
+      <description>
+        An informative multi-line description of what the project does.
+        It will be displayed in the installer's hover for this project.
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="CONTAINER"
+        name="project.location"
+        label="Folder">
+      <description>The workspace folder of the new project setup model.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="project.filename"
+        value="${project.label|camel}.setup"
+        label="Filename">
+      <description>The camel case filename of the new project setup model.</description>
+    </setupTask>
+  </setupTask>
+  <stream name="master"/>
+  <logicalProjectContainer
+      xsi:type="setup:ProjectCatalog"
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
+  <description>${project.description}</description>
+</setup:Project>

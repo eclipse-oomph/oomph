@@ -48,6 +48,14 @@ public final class CollectionUtil
     set.addAll(values);
   }
 
+  public static <K, V> void addAll(Map<K, Set<V>> map, Collection<? extends K> keys, V value)
+  {
+    for (K key : keys)
+    {
+      add(map, key, value);
+    }
+  }
+
   public static <K, V> void addAll(Map<K, Set<V>> map, Map<? extends K, ? extends Collection<? extends V>> map2)
   {
     for (Map.Entry<? extends K, ? extends Collection<? extends V>> entry : map2.entrySet())

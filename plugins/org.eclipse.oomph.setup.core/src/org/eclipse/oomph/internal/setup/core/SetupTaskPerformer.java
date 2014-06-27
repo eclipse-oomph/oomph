@@ -132,13 +132,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static final Adapter RULE_VARIABLE_ADAPTER = new AdapterImpl();
 
+  public static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
+
   private static final SimpleDateFormat DATE_TIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   private static final Pattern INSTALLABLE_UNIT_WITH_RANGE_PATTERN = Pattern.compile("([^\\[\\(]*)(.*)");
 
   private static boolean NEEDS_PATH_SEPARATOR_CONVERSION = File.separatorChar == '\\';
-
-  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
 
   private static Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
 

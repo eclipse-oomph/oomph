@@ -20,11 +20,12 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 
 /**
  * @author Eike Stepper
  */
-public class SetupLabelProvider extends AdapterFactoryLabelProvider.ColorProvider
+public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColorProvider
 {
   private final Color DARK_GRAY;
 
@@ -72,5 +73,12 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.ColorProvide
     }
 
     return false;
+  }
+
+  @Override
+  public Font getFont(Object object)
+  {
+    Font font = super.getFont(object);
+    return font == null ? getDefaultFont() : font;
   }
 }

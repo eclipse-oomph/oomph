@@ -12,8 +12,17 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.setup.VariableChoice;
+import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.util.ConcurrentArray;
+import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -49,6 +58,60 @@ public abstract class PropertyField
   public static final int NUM_COLUMNS = 3;
 
   private static final String EMPTY = "";
+
+  public static PropertyField createField(final VariableTask variable)
+  {
+    PropertyField field = createField(variable.getType(), variable.getChoices());
+
+    String label = variable.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = variable.getName();
+    }
+
+    field.setLabelText(label);
+    field.setToolTip(variable.getDescription());
+
+    GridData gridData = field.getLabelGridData();
+    gridData.widthHint = 150;
+
+    return field;
+  }
+
+  public static PropertyField createField(VariableType type, List<VariableChoice> choices)
+  {
+    switch (type)
+    {
+      case FOLDER:
+        PropertyField.FileField fileField = new PropertyField.FileField(choices);
+        fileField.setDialogText("Folder Selection");
+        fileField.setDialogMessage("Select a folder.");
+        return fileField;
+
+      case CONTAINER:
+        PropertyField.ContainerField containerField = new PropertyField.ContainerField(choices);
+        containerField.setDialogText("Folder Selection");
+        containerField.setDialogMessage("Select a folder.");
+        return containerField;
+
+      case TEXT:
+        PropertyField.TextField textField = new PropertyField.TextField(choices)
+        {
+          @Override
+          protected Text createText(Composite parent, int style)
+          {
+            return super.createText(parent, style | SWT.MULTI | SWT.V_SCROLL);
+          }
+        };
+        textField.getControlGridData().heightHint = 50;
+        return textField;
+
+      case PASSWORD:
+        return new PropertyField.TextField(true);
+    }
+
+    return new PropertyField.TextField(choices);
+  }
 
   private final GridData labelGridData = new GridData(SWT.RIGHT, SWT.TOP, false, false);
 
@@ -579,7 +642,7 @@ public abstract class PropertyField
         style |= SWT.PASSWORD;
       }
 
-      text = new Text(parent, style);
+      text = createText(parent, style);
 
       String toolTip = getToolTip();
       if (toolTip != null)
@@ -605,6 +668,11 @@ public abstract class PropertyField
       });
 
       return text;
+    }
+
+    protected Text createText(Composite parent, int style)
+    {
+      return new Text(parent, style);
     }
 
     protected Combo createCombo(Composite parent)
@@ -800,6 +868,71 @@ public abstract class PropertyField
     }
   }
 
+  /**
+   * @author Ed Merks
+   */
+  public static class ContainerField extends TextButtonField
+  {
+    private String dialogText;
+
+    private String dialogMessage;
+
+    public ContainerField()
+    {
+      this(null, null);
+    }
+
+    public ContainerField(String labelText)
+    {
+      this(labelText, null);
+    }
+
+    public ContainerField(List<VariableChoice> choices)
+    {
+      this(null, choices);
+    }
+
+    public ContainerField(String labelText, List<VariableChoice> choices)
+    {
+      super(labelText, choices);
+      setButtonText("Browse...");
+    }
+
+    public final String getDialogText()
+    {
+      return dialogText;
+    }
+
+    public final void setDialogText(String dialogText)
+    {
+      this.dialogText = dialogText;
+    }
+
+    public final String getDialogMessage()
+    {
+      return dialogMessage;
+    }
+
+    public final void setDialogMessage(String dialogMessage)
+    {
+      this.dialogMessage = dialogMessage;
+    }
+
+    @Override
+    protected void helperButtonSelected(SelectionEvent e)
+    {
+      Shell shell = getHelper().getShell();
+      Path path = new Path(getValue());
+      IWorkspaceRoot root = EcorePlugin.getWorkspaceRoot();
+      IContainer container = path.segmentCount() == 1 ? root.getProject(path.segment(0)) : root.getFolder(path);
+      IContainer[] folders = WorkspaceResourceDialog.openFolderSelection(shell, getDialogText(), getDialogMessage(), false, new Object[] { container }, null);
+      if (folders.length > 0)
+      {
+        transferValueToControl(folders[0].getFullPath().toString());
+      }
+    }
+  }
+
   public void dispose()
   {
     Label label = getLabel();
@@ -819,6 +952,5 @@ public abstract class PropertyField
     {
       mainHelper.dispose();
     }
-
   }
 }

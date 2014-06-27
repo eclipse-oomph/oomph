@@ -10,17 +10,18 @@
  */
 package org.eclipse.oomph.setup.editor;
 
-import org.eclipse.oomph.setup.Project;
-import org.eclipse.oomph.setup.SetupFactory;
-import org.eclipse.oomph.setup.Stream;
+import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.setup.ui.LabelDecorator;
 import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.util.StringUtil;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
-import java.util.Collection;
 
 /**
  * @author Eike Stepper
@@ -33,21 +34,38 @@ public abstract class ProjectTemplate
 
   private final String description;
 
-  private final Project project;
+  private Resource resource;
 
   private Container container;
+
+  protected ProjectTemplate(String label)
+  {
+    this(label, null);
+  }
 
   protected ProjectTemplate(String label, String description)
   {
     this.label = label;
     this.description = StringUtil.safe(description);
-
-    project = SetupFactory.eINSTANCE.createProject();
   }
 
-  protected ProjectTemplate(String label)
+  public abstract Control createControl(Composite parent);
+
+  public abstract boolean isValid();
+
+  protected void init()
   {
-    this(label, null);
+    ResourceSet resourceSet = EMFUtil.createResourceSet();
+    resource = resourceSet.createResource(URI.createURI("*.setup"));
+  }
+
+  public void updatePreview()
+  {
+  }
+
+  public LabelDecorator getDecorator()
+  {
+    return null;
   }
 
   public final String getLabel()
@@ -60,28 +78,22 @@ public abstract class ProjectTemplate
     return description;
   }
 
-  public final Project getProject()
+  public final Resource getResource()
   {
-    return getProject(false);
-  }
-
-  public final Project getProject(boolean clear)
-  {
-    if (clear)
+    if (resource == null)
     {
-      project.getSetupTasks().clear();
-      project.getStreams().clear();
+      init();
     }
 
-    return project;
+    return resource;
   }
 
-  public Container getContainer()
+  public final Container getContainer()
   {
     return container;
   }
 
-  public void init(Container container)
+  public final void init(Container container)
   {
     this.container = container;
   }
@@ -92,76 +104,17 @@ public abstract class ProjectTemplate
     return getLabel();
   }
 
-  public boolean isValid(Project project)
-  {
-    return !project.getStreams().isEmpty();
-  }
-
-  public boolean isValid(Stream branch)
-  {
-    return !StringUtil.isEmpty(branch.getName());
-  }
-
-  public abstract Control createControl(Composite parent);
-
-  protected final Stream addBranch()
-  {
-    return addBranch(null);
-  }
-
-  protected final Stream addBranch(String name)
-  {
-    Stream branch = SetupFactory.eINSTANCE.createStream();
-    branch.setName(name);
-
-    project.getStreams().add(branch);
-    return branch;
-  }
-
-  public static boolean contains(Collection<?> collection, Class<?> type)
-  {
-    for (Object object : collection)
-    {
-      if (type.isInstance(object))
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   /**
    * @author Eike Stepper
    */
   public interface Container
   {
-    public TreeViewer getPreViewer();
+    public TreeViewer getPreviewer();
 
     public PropertiesViewer getPropertiesViewer();
 
     public void validate();
-  }
 
-  // /**
-  // * @author Eike Stepper
-  // */
-  // public static abstract class Factory extends org.eclipse.oomph.util.factory.Factory
-  // {
-  // public Factory(String type)
-  // {
-  // super(PRODUCT_GROUP, type);
-  // }
-  //
-  // /**
-  // * @deprecated Use {@link #createProjectTemplate()} instead.
-  // */
-  // @Deprecated
-  // public final Object create(String description) throws ProductCreationException
-  // {
-  // throw new ProductCreationException();
-  // }
-  //
-  // public abstract ProjectTemplate createProjectTemplate();
-  // }
+    public String getDefaultLocation();
+  }
 }
