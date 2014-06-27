@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,43 @@ public final class IOUtil
 {
   private static final int DEFAULT_BUFFER_SIZE = 8192;
 
+  private static final ObjectOutputStream DEV_NULL = createDevNull();
+
   private IOUtil()
   {
+  }
+
+  private static ObjectOutputStream createDevNull()
+  {
+    try
+    {
+      return new ObjectOutputStream(new OutputStream()
+      {
+        @Override
+        public void write(int b) throws IOException
+        {
+          // Do nothing.
+        }
+      });
+    }
+    catch (IOException ex)
+    {
+      // Can't happen.
+      return null;
+    }
+  }
+
+  public static boolean isSerializeable(Object object)
+  {
+    try
+    {
+      DEV_NULL.writeObject(object);
+      return true;
+    }
+    catch (Exception ex)
+    {
+      return false;
+    }
   }
 
   public static String encodeFileName(String name)
@@ -113,6 +149,11 @@ public final class IOUtil
 
   public static boolean deleteBestEffort(File file)
   {
+    return deleteBestEffort(file, true);
+  }
+
+  public static boolean deleteBestEffort(File file, boolean deleteOnExit)
+  {
     boolean deleted = true;
     if (file != null)
     {
@@ -120,14 +161,18 @@ public final class IOUtil
       {
         for (File child : file.listFiles())
         {
-          deleted &= deleteBestEffort(child);
+          deleted &= deleteBestEffort(child, deleteOnExit);
         }
       }
 
       if (!file.delete())
       {
-        file.deleteOnExit();
         deleted = false;
+
+        if (deleteOnExit)
+        {
+          file.deleteOnExit();
+        }
       }
     }
 

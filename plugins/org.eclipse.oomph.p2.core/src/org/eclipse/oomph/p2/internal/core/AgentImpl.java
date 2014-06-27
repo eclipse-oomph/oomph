@@ -375,7 +375,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   public boolean isOffline()
   {
-    return offline;
+     return offline;
   }
 
   public void setOffline(boolean offline)
@@ -397,6 +397,12 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       {
         cachingTransport = new CachingTransport(this, (Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
         provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
+
+        metadataRepositoryManager = new CachingRepositoryManager.Metadata(provisioningAgent, cachingTransport);
+        provisioningAgent.registerService(IMetadataRepositoryManager.SERVICE_NAME, metadataRepositoryManager);
+
+        artifactRepositoryManager = new CachingRepositoryManager.Artifact(provisioningAgent, cachingTransport);
+        provisioningAgent.registerService(IArtifactRepositoryManager.SERVICE_NAME, artifactRepositoryManager);
       }
 
       this.provisioningAgent = provisioningAgent;
@@ -416,29 +422,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   public synchronized IMetadataRepositoryManager getMetadataRepositoryManager()
   {
-    if (metadataRepositoryManager == null)
-    {
-      metadataRepositoryManager = (IMetadataRepositoryManager)getProvisioningAgent().getService(IMetadataRepositoryManager.SERVICE_NAME);
-      if (metadataRepositoryManager == null)
-      {
-        throw new IllegalStateException("Metadata respository manager could not be loaded");
-      }
-    }
-
+    getProvisioningAgent();
     return metadataRepositoryManager;
   }
 
   public synchronized IArtifactRepositoryManager getArtifactRepositoryManager()
   {
-    if (artifactRepositoryManager == null)
-    {
-      artifactRepositoryManager = (IArtifactRepositoryManager)getProvisioningAgent().getService(IArtifactRepositoryManager.SERVICE_NAME);
-      if (artifactRepositoryManager == null)
-      {
-        throw new IllegalStateException("Artifact respository manager could not be loaded");
-      }
-    }
-
+    getProvisioningAgent();
     return artifactRepositoryManager;
   }
 

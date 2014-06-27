@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -37,10 +36,6 @@ import java.util.List;
 @SuppressWarnings("restriction")
 public class CachingTransport extends Transport
 {
-  private static final Long NOT_FOUND = Long.MIN_VALUE;
-
-  private static final String NOT_FOUND_TOKEN = "NOT FOUND";
-
   private final Agent agent;
 
   private final Transport delegate;
@@ -55,70 +50,63 @@ public class CachingTransport extends Transport
     File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.USER_HOME));
     cacheFolder = new File(folder, "cache");
     cacheFolder.mkdirs();
-
-    // TODO Delete this legacy code for 1.0 release
-    File oldCacheFile = new File(folder, "metadata.cache");
-    if (oldCacheFile.exists())
-    {
-      IOUtil.deleteBestEffort(oldCacheFile);
-    }
   }
 
-  public boolean isOffline()
+  public File getCacheFile(URI uri)
   {
-    return agent.isOffline();
+    return new File(cacheFolder, IOUtil.encodeFileName(uri.toString()));
   }
 
   @Override
   public IStatus download(URI uri, OutputStream target, long startPos, IProgressMonitor monitor)
   {
-    File modifiedFile = getModifiedFile(uri);
-    File contentFile = getContentFile(uri);
-
-    if (isOffline())
+    if (agent.isOffline())
     {
-      Long modified = loadModified(modifiedFile);
-      if (NOT_FOUND.equals(modified))
+      File cacheFile = getCacheFile(uri);
+      if (cacheFile.exists())
       {
-        return P2CorePlugin.INSTANCE.getStatus(new Exception());
-      }
-
-      byte[] b = loadContent(contentFile);
-      if (b != null)
-      {
-        IOUtil.copy(new ByteArrayInputStream(b), target);
-        return Status.OK_STATUS;
+        try
+        {
+          byte[] content = IOUtil.readFile(cacheFile);
+          IOUtil.copy(new ByteArrayInputStream(content), target);
+          return Status.OK_STATUS;
+        }
+        catch (Exception ex)
+        {
+          //$FALL-THROUGH$
+        }
       }
     }
 
-    OutputStream oldTarget = null;
-    String path = uri.getPath();
-    if (path != null && path.endsWith("/p2.index"))
-    {
-      oldTarget = target;
-      target = new ByteArrayOutputStream();
-    }
+    OutputStream oldTarget = target;
+    target = new ByteArrayOutputStream();
 
-    IStatus status = delegate.download(uri, target, startPos, monitor);
-    if (!status.isOK())
-    {
-      saveModified(modifiedFile, NOT_FOUND);
-    }
-    else
-    {
-      long lastModified = NOT_FOUND;
-      if (status instanceof DownloadStatus)
-      {
-        DownloadStatus downloadStatus = (DownloadStatus)status;
-        lastModified = downloadStatus.getLastModified();
-        saveModified(modifiedFile, lastModified);
-      }
+    IStatus status = null;
+    byte[] content = null;
 
-      if (oldTarget != null)
+    try
+    {
+      status = delegate.download(uri, target, startPos, monitor);
+      if (status.isOK())
       {
-        byte[] content = ((ByteArrayOutputStream)target).toByteArray();
+        content = ((ByteArrayOutputStream)target).toByteArray();
         IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
-        saveContent(contentFile, content, lastModified);
+      }
+    }
+    finally
+    {
+      File cacheFile = getCacheFile(uri);
+      if (content == null)
+      {
+        IOUtil.deleteBestEffort(cacheFile, false); // The file could be created later; don't delete it on exit!
+      }
+      else
+      {
+        IOUtil.writeFile(cacheFile, content);
+
+        DownloadStatus downloadStatus = (DownloadStatus)status;
+        long lastModified = downloadStatus.getLastModified();
+        cacheFile.setLastModified(lastModified);
       }
     }
 
@@ -140,121 +128,15 @@ public class CachingTransport extends Transport
   @Override
   public long getLastModified(URI uri, IProgressMonitor monitor) throws CoreException, FileNotFoundException, AuthenticationFailedException
   {
-    File modifiedFile = getModifiedFile(uri);
-
-    if (isOffline())
+    if (agent.isOffline())
     {
-      Long timeStamp = loadModified(modifiedFile);
-      if (timeStamp != null)
+      File cacheFile = getCacheFile(uri);
+      if (cacheFile.exists())
       {
-        if (NOT_FOUND.equals(timeStamp))
-        {
-          throw new FileNotFoundException(uri.toString());
-        }
-
-        return timeStamp;
+        return cacheFile.lastModified();
       }
     }
 
-    long lastModified;
-
-    try
-    {
-      lastModified = delegate.getLastModified(uri, monitor);
-      saveModified(modifiedFile, lastModified);
-    }
-    catch (CoreException ex)
-    {
-      saveModified(modifiedFile, NOT_FOUND);
-      throw ex;
-    }
-    catch (FileNotFoundException ex)
-    {
-      saveModified(modifiedFile, NOT_FOUND);
-      throw ex;
-    }
-    catch (AuthenticationFailedException ex)
-    {
-      saveModified(modifiedFile, NOT_FOUND);
-      throw ex;
-    }
-    catch (RuntimeException ex)
-    {
-      saveModified(modifiedFile, NOT_FOUND);
-      throw ex;
-    }
-    catch (Error ex)
-    {
-      saveModified(modifiedFile, NOT_FOUND);
-      throw ex;
-    }
-
-    return lastModified;
-  }
-
-  private File getModifiedFile(URI uri)
-  {
-    return new File(cacheFolder, IOUtil.encodeFileName(uri.toString()) + ".txt");
-  }
-
-  private Long loadModified(File file)
-  {
-    if (!file.exists())
-    {
-      return null;
-    }
-
-    try
-    {
-      List<String> lines = IOUtil.readLines(file);
-      String line = lines.get(0);
-      if (!NOT_FOUND_TOKEN.equals(line))
-      {
-        return Long.parseLong(line);
-      }
-    }
-    catch (Exception ex)
-    {
-      //$FALL-THROUGH$
-    }
-
-    return NOT_FOUND;
-  }
-
-  private void saveModified(File file, long modified)
-  {
-    if (modified != NOT_FOUND)
-    {
-      IOUtil.writeFile(file, Long.toString(modified).getBytes());
-      file.setLastModified(modified);
-    }
-    else
-    {
-      IOUtil.writeFile(file, NOT_FOUND_TOKEN.getBytes());
-    }
-  }
-
-  private File getContentFile(URI uri)
-  {
-    return new File(cacheFolder, IOUtil.encodeFileName(uri.toString()));
-  }
-
-  private byte[] loadContent(File file)
-  {
-    if (!file.exists())
-    {
-      return null;
-    }
-
-    return IOUtil.readFile(file);
-  }
-
-  private void saveContent(File file, byte[] content, long modified)
-  {
-    IOUtil.writeFile(file, content);
-    if (modified != NOT_FOUND)
-    {
-      file.setLastModified(modified);
-    }
+    return delegate.getLastModified(uri, monitor);
   }
 }

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +84,7 @@ public final class PropertiesUtil
     return value;
   }
 
-  public static void saveProperties(File file, Map<String, String> properties)
+  public static void saveProperties(File file, Map<String, String> properties, boolean sort)
   {
     FileWriter fileWriter = null;
 
@@ -94,7 +94,10 @@ public final class PropertiesUtil
       BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
       List<String> keys = new ArrayList<String>(properties.keySet());
-      Collections.sort(keys);
+      if (sort)
+      {
+        Collections.sort(keys);
+      }
 
       for (String key : keys)
       {
@@ -125,7 +128,7 @@ public final class PropertiesUtil
       fileReader = new FileReader(file);
       BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-      Map<String, String> properties = new HashMap<String, String>();
+      Map<String, String> properties = new LinkedHashMap<String, String>();
 
       String line;
       while ((line = bufferedReader.readLine()) != null)

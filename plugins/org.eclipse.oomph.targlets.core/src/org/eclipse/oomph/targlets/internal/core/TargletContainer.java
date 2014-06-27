@@ -787,6 +787,7 @@ public class TargletContainer extends AbstractBundleContainer
           monitor, 1));
     }
 
+    monitor.subTask("Targlet container profile update completed");
     monitor.done();
   }
 

@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.CoreException;
@@ -24,7 +25,9 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.p2.core.ProvisionException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Set;
@@ -241,7 +244,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
    */
   public static final class UpdateProblem implements Serializable, IStatus
   {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     private static final UpdateProblem[] NO_CHILDREN = {};
 
@@ -272,7 +275,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
       message = status.getMessage();
       severity = status.getSeverity();
       code = status.getCode();
-      exception = status.getException();
+      exception = toSerializeableException(status.getException());
 
       IStatus[] statusChildren = status.getChildren();
       if (statusChildren != null && statusChildren.length != 0)
@@ -389,6 +392,29 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
 
       builder.append(message);
       builder.append(StringUtil.NL);
+    }
+
+    private Throwable toSerializeableException(Throwable exception)
+    {
+      if (exception != null && !IOUtil.isSerializeable(exception))
+      {
+        if (exception instanceof CoreException)
+        {
+          CoreException coreException = (CoreException)exception;
+          exception = new CoreException(new UpdateProblem(coreException.getStatus()));
+        }
+        else
+        {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          PrintWriter writer = new PrintWriter(baos);
+          exception.printStackTrace(writer);
+          writer.close();
+
+          exception = new RuntimeException(baos.toString());
+        }
+      }
+
+      return exception;
     }
   }
 }

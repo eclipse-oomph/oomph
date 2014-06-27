@@ -501,6 +501,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    Profile profile = agent.getCurrentProfile();
+    if (profile == null)
+    {
+      // We're most likely in self hosting mode, where software updates are not really well supported.
+      return false;
+    }
+
     IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
     IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
 
