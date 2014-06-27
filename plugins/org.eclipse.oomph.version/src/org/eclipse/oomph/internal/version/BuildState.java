@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.internal.version;
 
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.IBuildState;
-import org.eclipse.oomph.version.VersionUtil;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -171,7 +171,7 @@ public class BuildState implements IBuildState, Serializable
     {
       if (validatorBytes != null)
       {
-        validatorState = VersionUtil.deserialize(validatorBytes);
+        validatorState = IOUtil.deserialize(validatorBytes);
       }
     }
 
@@ -188,7 +188,7 @@ public class BuildState implements IBuildState, Serializable
   {
     if (validatorBytes == null && validatorState != null)
     {
-      validatorBytes = VersionUtil.serialize(validatorState);
+      validatorBytes = IOUtil.serialize(validatorState);
     }
   }
 }

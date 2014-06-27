@@ -12,6 +12,7 @@ package org.eclipse.oomph.version.ui.quickfixes;
 
 import org.eclipse.oomph.internal.version.VersionBuilder;
 import org.eclipse.oomph.internal.version.VersionBuilderArguments;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.Markers;
 import org.eclipse.oomph.version.VersionUtil;
 import org.eclipse.oomph.version.ui.Activator;
@@ -79,7 +80,7 @@ public class PropertiesResolution extends AbstractResolution
       }
       finally
       {
-        VersionUtil.close(contents);
+        IOUtil.closeSilent(contents);
       }
 
       ByteArrayOutputStream out = new ByteArrayOutputStream();

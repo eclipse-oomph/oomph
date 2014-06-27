@@ -11,6 +11,7 @@
 package org.eclipse.oomph.internal.version;
 
 import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.IElement;
 import org.eclipse.oomph.version.IElement.Type;
 import org.eclipse.oomph.version.IElementResolver;
@@ -712,7 +713,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       }
       finally
       {
-        VersionUtil.close(contents);
+        IOUtil.closeSilent(contents);
       }
     }
 

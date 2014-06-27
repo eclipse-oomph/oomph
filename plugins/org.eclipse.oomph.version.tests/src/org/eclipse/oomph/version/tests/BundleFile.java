@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.version.tests;
 
-import org.eclipse.oomph.version.VersionUtil;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -171,12 +171,12 @@ public class BundleFile implements Comparable<BundleFile>
     {
       in = url.openStream();
       out = new FileOutputStream(targetFile);
-      VersionUtil.copy(in, out);
+      IOUtil.copy(in, out);
     }
     finally
     {
-      VersionUtil.close(out);
-      VersionUtil.close(in);
+      IOUtil.closeSilent(out);
+      IOUtil.closeSilent(in);
     }
   }
 
@@ -192,7 +192,7 @@ public class BundleFile implements Comparable<BundleFile>
     {
       in = url.openStream();
       ByteArrayOutputStream out = new ByteArrayOutputStream();
-      VersionUtil.copy(in, out);
+      IOUtil.copy(in, out);
 
       return out.toString("UTF-8");
     }
@@ -206,7 +206,7 @@ public class BundleFile implements Comparable<BundleFile>
     }
     finally
     {
-      VersionUtil.close(in);
+      IOUtil.closeSilent(in);
     }
   }
 
@@ -221,7 +221,7 @@ public class BundleFile implements Comparable<BundleFile>
     {
       InputStream in = new ByteArrayInputStream(contents.getBytes("UTF-8"));
       out = new FileOutputStream(file);
-      VersionUtil.copy(in, out);
+      IOUtil.copy(in, out);
     }
     catch (RuntimeException ex)
     {
@@ -233,7 +233,7 @@ public class BundleFile implements Comparable<BundleFile>
     }
     finally
     {
-      VersionUtil.close(out);
+      IOUtil.closeSilent(out);
     }
   }
 

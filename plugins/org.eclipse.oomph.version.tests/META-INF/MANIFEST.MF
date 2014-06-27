@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.equinox.ds;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.oomph.version;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.oomph.version.digest;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.oomph.version.ui;bundle-version="[1.0.0,2.0.0)",
+ org.eclipse.oomph.util;bundle-version="[1.0.0,2.0.0)",
  org.junit;bundle-version="[4.0.0,5.0.0)"
 Export-Package: org.eclipse.oomph.version.tests;version="1.0.0"
 Bundle-Activator: org.eclipse.oomph.version.tests.Activator

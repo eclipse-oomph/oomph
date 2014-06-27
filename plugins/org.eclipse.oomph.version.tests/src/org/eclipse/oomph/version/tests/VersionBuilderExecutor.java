@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.version.tests;
 
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.Markers;
 import org.eclipse.oomph.version.VersionUtil;
 import org.eclipse.oomph.version.ui.quickfixes.VersionResolutionGenerator;
@@ -159,7 +160,7 @@ public class VersionBuilderExecutor extends TestCase
           if (file.isDirectory() && !".metadata".equals(file.getName()))
           {
             MSG.println("  Deleting location " + file);
-            VersionUtil.delete(file);
+            IOUtil.deleteBestEffort(file);
           }
         }
       }
@@ -231,7 +232,7 @@ public class VersionBuilderExecutor extends TestCase
     if (source.getName().endsWith(DELETE_SUFFIX))
     {
       msg("- " + relativePath.substring(0, relativePath.length() - DELETE_SUFFIX.length()));
-      VersionUtil.delete(target);
+      IOUtil.deleteBestEffort(target);
       return;
     }
 

@@ -21,10 +21,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +38,9 @@ import java.util.List;
  */
 public final class IOUtil
 {
-  private static final int DEFAULT_BUFFER_SIZE = 8192;
+  private static final int MAX_FILE_NAME_LENGTH = 250;
+
+  private static final byte[] BUFFER = new byte[8192];
 
   private static final ObjectOutputStream DEV_NULL = createDevNull();
 
@@ -74,9 +81,138 @@ public final class IOUtil
     }
   }
 
+  public static byte[] serialize(Serializable object)
+  {
+    try
+    {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+      ObjectOutputStream stream = new ObjectOutputStream(baos);
+      stream.writeObject(object);
+      stream.flush();
+
+      return baos.toByteArray();
+    }
+    catch (Exception ex)
+    {
+      UtilPlugin.INSTANCE.log(ex);
+      return null;
+    }
+  }
+
+  public static Serializable deserialize(byte[] bytes)
+  {
+    try
+    {
+      ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(bytes));
+      return (Serializable)stream.readObject();
+    }
+    catch (Exception ex)
+    {
+      UtilPlugin.INSTANCE.log(ex);
+      return null;
+    }
+  }
+
+  public static byte[] getSHA1(InputStream contents) throws NoSuchAlgorithmException, IOException
+  {
+    InputStream stream = null;
+
+    try
+    {
+      final MessageDigest digest = MessageDigest.getInstance("SHA-1");
+      stream = new FilterInputStream(contents)
+      {
+        @Override
+        public int read() throws IOException
+        {
+          for (;;)
+          {
+            int ch = super.read();
+            switch (ch)
+            {
+              case -1:
+                return -1;
+
+              case 10:
+              case 13:
+                continue;
+            }
+
+            digest.update((byte)ch);
+            return ch;
+          }
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException
+        {
+          int read = super.read(b, off, len);
+          if (read == -1)
+          {
+            return -1;
+          }
+
+          for (int i = off; i < off + read; i++)
+          {
+            byte c = b[i];
+            if (c == 10 || c == 13)
+            {
+              if (i + 1 < off + read)
+              {
+                System.arraycopy(b, i + 1, b, i, read - i - 1);
+                --i;
+              }
+
+              --read;
+            }
+          }
+
+          digest.update(b, off, read);
+          return read;
+        }
+      };
+
+      synchronized (BUFFER)
+      {
+        while (stream.read(BUFFER) != -1)
+        {
+          // Do nothing
+        }
+      }
+
+      return digest.digest();
+    }
+    finally
+    {
+      close(stream);
+    }
+  }
+
   public static String encodeFileName(String name)
   {
-    return name.replace(':', '_').replace('/', '_');
+    String result = name.replace(':', '_').replace('/', '_');
+
+    int length = result.length();
+    if (length > MAX_FILE_NAME_LENGTH)
+    {
+      String digest;
+
+      try
+      {
+        byte[] bytes = IOUtil.getSHA1(new ByteArrayInputStream(result.getBytes()));
+        digest = "-" + HexUtil.bytesToHex(bytes) + "-";
+      }
+      catch (Exception ex)
+      {
+        digest = "---" + result.hashCode() + "---";
+      }
+
+      int half = (MAX_FILE_NAME_LENGTH - digest.length() >> 1) - 1;
+      result = result.substring(0, half) + digest + result.substring(result.length() - half);
+    }
+
+    return result;
   }
 
   public static FileInputStream openInputStream(File file) throws IORuntimeException
@@ -213,14 +349,24 @@ public final class IOUtil
     }
   }
 
-  private static void copy(InputStream input, OutputStream output, int bufferSize) throws IORuntimeException
+  public static void copy(InputStream input, OutputStream output, int bufferSize) throws IORuntimeException
   {
-    copy(input, output, new byte[bufferSize]);
+    if (bufferSize == BUFFER.length)
+    {
+      copy(input, output);
+    }
+    else
+    {
+      copy(input, output, new byte[bufferSize]);
+    }
   }
 
   public static void copy(InputStream input, OutputStream output) throws IORuntimeException
   {
-    copy(input, output, DEFAULT_BUFFER_SIZE);
+    synchronized (BUFFER)
+    {
+      copy(input, output, BUFFER);
+    }
   }
 
   private static void copyFile(File source, File target) throws IORuntimeException

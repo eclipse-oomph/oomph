@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.version;
 
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.IElement;
 import org.eclipse.oomph.version.IRelease;
 import org.eclipse.oomph.version.Markers;
@@ -90,7 +91,7 @@ public class Release implements IRelease
     }
     finally
     {
-      VersionUtil.close(contents);
+      IOUtil.closeSilent(contents);
     }
   }
 

@@ -12,6 +12,7 @@ package org.eclipse.oomph.version;
 
 import org.eclipse.oomph.internal.version.Activator;
 import org.eclipse.oomph.internal.version.VersionBuilderArguments;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.ICommand;
@@ -40,21 +41,11 @@ import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.osgi.framework.Version;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Reader;
-import java.io.Serializable;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +63,6 @@ public final class VersionUtil
 
   private static final IWorkspace WORKSPACE = ResourcesPlugin.getWorkspace();
 
-  private static final byte[] BUFFER = new byte[8192];
-
   private VersionUtil()
   {
   }
@@ -86,39 +75,6 @@ public final class VersionUtil
     }
 
     return o1.equals(o2);
-  }
-
-  public static byte[] serialize(Serializable object)
-  {
-    try
-    {
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-      ObjectOutputStream stream = new ObjectOutputStream(baos);
-      stream.writeObject(object);
-      stream.flush();
-
-      return baos.toByteArray();
-    }
-    catch (Exception ex)
-    {
-      Activator.log(ex);
-      return null;
-    }
-  }
-
-  public static Serializable deserialize(byte[] bytes)
-  {
-    try
-    {
-      ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(bytes));
-      return (Serializable)stream.readObject();
-    }
-    catch (Exception ex)
-    {
-      Activator.log(ex);
-      return null;
-    }
   }
 
   public static Version normalize(Version version)
@@ -154,7 +110,7 @@ public final class VersionUtil
     }
     finally
     {
-      close(contents);
+      IOUtil.closeSilent(contents);
     }
   }
 
@@ -226,129 +182,8 @@ public final class VersionUtil
 
   public static synchronized byte[] getSHA1(IFile file) throws NoSuchAlgorithmException, CoreException, IOException
   {
-    InputStream stream = null;
-
-    try
-    {
-      final MessageDigest digest = MessageDigest.getInstance("SHA-1");
-      stream = new FilterInputStream(file.getContents())
-      {
-        @Override
-        public int read() throws IOException
-        {
-          for (;;)
-          {
-            int ch = super.read();
-            switch (ch)
-            {
-              case -1:
-                return -1;
-
-              case 10:
-              case 13:
-                continue;
-            }
-
-            digest.update((byte)ch);
-            return ch;
-          }
-        }
-
-        @Override
-        public int read(byte[] b, int off, int len) throws IOException
-        {
-          int read = super.read(b, off, len);
-          if (read == -1)
-          {
-            return -1;
-          }
-
-          for (int i = off; i < off + read; i++)
-          {
-            byte c = b[i];
-            if (c == 10 || c == 13)
-            {
-              if (i + 1 < off + read)
-              {
-                System.arraycopy(b, i + 1, b, i, read - i - 1);
-                --i;
-              }
-
-              --read;
-            }
-          }
-
-          digest.update(b, off, read);
-          return read;
-        }
-      };
-
-      synchronized (BUFFER)
-      {
-        while (stream.read(BUFFER) != -1)
-        {
-          // Do nothing
-        }
-      }
-
-      return digest.digest();
-    }
-    finally
-    {
-      close(stream);
-    }
-  }
-
-  public static void copy(InputStream in, OutputStream out) throws IOException
-  {
-    synchronized (BUFFER)
-    {
-      int n;
-      while ((n = in.read(BUFFER)) != -1)
-      {
-        out.write(BUFFER, 0, n);
-      }
-    }
-  }
-
-  public static void close(Closeable closeable)
-  {
-    if (closeable != null)
-    {
-      try
-      {
-        closeable.close();
-      }
-      catch (Exception ex)
-      {
-        Activator.log(ex);
-      }
-    }
-  }
-
-  public static int delete(File file)
-  {
-    if (file == null)
-    {
-      return 0;
-    }
-
-    int deleted = 0;
-    if (file.isDirectory())
-    {
-      for (File child : file.listFiles())
-      {
-        deleted += delete(child);
-      }
-    }
-
-    if (file.delete())
-    {
-      return deleted + 1;
-    }
-
-    file.deleteOnExit();
-    return deleted;
+    InputStream contents = file.getContents();
+    return IOUtil.getSHA1(contents);
   }
 
   public static IModel getComponentModel(IProject project)

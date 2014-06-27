@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.internal.version;
 
-import org.eclipse.oomph.version.VersionUtil;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -262,7 +262,7 @@ public class Activator extends Plugin
     }
     finally
     {
-      VersionUtil.close(stream);
+      IOUtil.closeSilent(stream);
     }
   }
 
@@ -282,7 +282,7 @@ public class Activator extends Plugin
     }
     finally
     {
-      VersionUtil.close(stream);
+      IOUtil.closeSilent(stream);
     }
   }
 
