@@ -184,8 +184,6 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
   private PreferenceRecorderToolbarAction recordPreferencesAction = new PreferenceRecorderToolbarAction(true);
 
-  private SniffAction sniffAction = new SniffAction(true);
-
   private CommandTableAction commandTableAction = new CommandTableAction();
 
   private EditorTableAction editorTableAction = new EditorTableAction();
@@ -234,10 +232,9 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   {
     toolBarManager.add(new Separator("setup-settings"));
     toolBarManager.add(recordPreferencesAction);
-    toolBarManager.add(sniffAction);
     toolBarManager.add(commandTableAction);
     toolBarManager.add(editorTableAction);
-    toolBarManager.add(testInstallAction);
+    // toolBarManager.add(testInstallAction);
     toolBarManager.add(toggleViewerInputAction);
     toolBarManager.add(new Separator("setup-additions"));
   }
@@ -384,8 +381,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   {
     selectionChangedGen(event);
     recordPreferencesAction.selectionChanged(event);
-    sniffAction.selectionChanged(event);
-    testInstallAction.selectionChanged(event);
+    // testInstallAction.selectionChanged(event);
   }
 
   /**
@@ -633,6 +629,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       setToolTipText("Launch the installer with the current project");
     }
 
+    @SuppressWarnings("unused")
     public void selectionChanged(SelectionChangedEvent event)
     {
       ISelection selection = event.getSelection();

@@ -380,14 +380,7 @@ public class SniffAction extends AbstractContainerAction
 
     private IDialogSettings getSettings()
     {
-      IDialogSettings dialogSettings = SetupEditorPlugin.getPlugin().getDialogSettings();
-      IDialogSettings section = null; // dialogSettings.getSection(AutomaticProjectTemplate.class.getName());
-      if (section == null)
-      {
-        section = dialogSettings.addNewSection(SelectSniffersDialog.class.getName());
-      }
-
-      return section;
+      return SetupEditorPlugin.INSTANCE.getDialogSettings(SelectSniffersDialog.class.getName());
     }
 
     /**
