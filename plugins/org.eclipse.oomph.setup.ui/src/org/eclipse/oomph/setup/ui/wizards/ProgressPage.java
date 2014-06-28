@@ -437,16 +437,9 @@ public class ProgressPage extends SetupWizardPage
                 SetupTaskPerformer performer = getPerformer();
                 saveLocalFiles(performer);
 
-                if (launchAutomatically)
+                if (launchAutomatically && getTrigger() == Trigger.BOOTSTRAP)
                 {
-                  if (getTrigger() == Trigger.BOOTSTRAP)
-                  {
-                    launchProduct(performer);
-                  }
-                  else
-                  {
-                    PlatformUI.getWorkbench().restart();
-                  }
+                  launchProduct(performer);
                 }
 
                 success = true;
@@ -476,13 +469,20 @@ public class ProgressPage extends SetupWizardPage
                     progressLog.log("  - " + reason);
                   }
 
-                  wizard.setFinishAction(new Runnable()
+                  if (launchAutomatically)
                   {
-                    public void run()
+                    PlatformUI.getWorkbench().restart();
+                  }
+                  else
+                  {
+                    wizard.setFinishAction(new Runnable()
                     {
-                      PlatformUI.getWorkbench().restart();
-                    }
-                  });
+                      public void run()
+                      {
+                        PlatformUI.getWorkbench().restart();
+                      }
+                    });
+                  }
 
                   if (success && dismissAutomatically)
                   {
