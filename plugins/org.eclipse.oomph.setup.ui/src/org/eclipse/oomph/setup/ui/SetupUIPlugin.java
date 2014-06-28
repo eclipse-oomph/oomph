@@ -53,8 +53,6 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
 {
   public static final SetupUIPlugin INSTANCE = new SetupUIPlugin();
 
-  public static final File RESTARTING_FILE = new File(INSTANCE.getStateLocation().toString(), "restarting");
-
   public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
@@ -80,6 +78,25 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
   public ResourceLocator getPluginResourceLocator()
   {
     return plugin;
+  }
+
+  public static void restart()
+  {
+    try
+    {
+      getRestartingFile().createNewFile();
+    }
+    catch (Exception ex)
+    {
+      // Ignore
+    }
+
+    PlatformUI.getWorkbench().restart();
+  }
+
+  private static File getRestartingFile()
+  {
+    return new File(INSTANCE.getStateLocation().toString(), "restarting");
   }
 
   public static boolean isSkipStartupTasks()
@@ -152,12 +169,13 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
   {
     try
     {
-      if (RESTARTING_FILE.exists())
+      File restartingFile = getRestartingFile();
+      if (restartingFile.exists())
       {
         System.setProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP, "true");
-        if (!RESTARTING_FILE.delete())
+        if (!restartingFile.delete())
         {
-          RESTARTING_FILE.deleteOnExit();
+          restartingFile.deleteOnExit();
         }
       }
     }

@@ -72,7 +72,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.progress.ProgressManager;
 
 import java.io.File;
@@ -469,31 +468,15 @@ public class ProgressPage extends SetupWizardPage
                     progressLog.log("  - " + reason);
                   }
 
-                  if (launchAutomatically)
+                  wizard.setFinishAction(new Runnable()
                   {
-                    try
+                    public void run()
                     {
-                      SetupUIPlugin.RESTARTING_FILE.createNewFile();
+                      SetupUIPlugin.restart();
                     }
-                    catch (Exception ex)
-                    {
-                      // Ignore
-                    }
+                  });
 
-                    PlatformUI.getWorkbench().restart();
-                  }
-                  else
-                  {
-                    wizard.setFinishAction(new Runnable()
-                    {
-                      public void run()
-                      {
-                        PlatformUI.getWorkbench().restart();
-                      }
-                    });
-                  }
-
-                  if (success && dismissAutomatically)
+                  if (success && launchAutomatically)
                   {
                     wizard.performFinish();
                     return Status.OK_STATUS;
