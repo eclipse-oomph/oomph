@@ -283,16 +283,22 @@ public class ProgressPage extends SetupWizardPage
     {
       launchButton = addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
           "launchAutomatically");
-      launchAutomatically = launchButton.getSelection();
-      launchButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          launchAutomatically = launchButton.getSelection();
-        }
-      });
     }
+    else
+    {
+      launchButton = addCheckButton("Restart if needed", "Restart the current product if the installation has been changed by setup tasks", false,
+          "restartIfNeeded");
+    }
+
+    launchAutomatically = launchButton.getSelection();
+    launchButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        launchAutomatically = launchButton.getSelection();
+      }
+    });
   }
 
   @Override
@@ -431,9 +437,16 @@ public class ProgressPage extends SetupWizardPage
                 SetupTaskPerformer performer = getPerformer();
                 saveLocalFiles(performer);
 
-                if (getTrigger() == Trigger.BOOTSTRAP && launchAutomatically)
+                if (launchAutomatically)
                 {
-                  launchProduct(performer);
+                  if (getTrigger() == Trigger.BOOTSTRAP)
+                  {
+                    launchProduct(performer);
+                  }
+                  else
+                  {
+                    PlatformUI.getWorkbench().restart();
+                  }
                 }
 
                 success = true;
