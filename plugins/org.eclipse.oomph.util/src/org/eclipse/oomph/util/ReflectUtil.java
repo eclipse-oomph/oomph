@@ -13,6 +13,7 @@ package org.eclipse.oomph.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -116,6 +117,10 @@ public final class ReflectUtil
     catch (RuntimeException ex)
     {
       throw ex;
+    }
+    catch (InvocationTargetException ex)
+    {
+      throw new ReflectionException(ex.getCause());
     }
     catch (Exception ex)
     {

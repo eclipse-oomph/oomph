@@ -12,6 +12,7 @@ package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -275,7 +276,20 @@ public class CachingRepositoryManager<T>
 
   private void fail(URI location, int code) throws ProvisionException
   {
-    ReflectUtil.invokeMethod(METHOD_fail, delegate, location, code);
+    try
+    {
+      ReflectUtil.invokeMethod(METHOD_fail, delegate, location, code);
+    }
+    catch (ReflectionException ex)
+    {
+      Throwable cause = ex.getCause();
+      if (cause instanceof ProvisionException)
+      {
+        throw (ProvisionException)cause;
+      }
+
+      throw ex;
+    }
   }
 
   private boolean addRepository(URI location, boolean isEnabled, boolean signalAdd)
@@ -306,7 +320,20 @@ public class CachingRepositoryManager<T>
   @SuppressWarnings("unchecked")
   private IRepository<T> loadRepository(URI location, String suffix, String type, int flags, SubMonitor monitor) throws ProvisionException
   {
-    return (IRepository<T>)ReflectUtil.invokeMethod(METHOD_loadRepository, delegate, location, suffix, type, flags, monitor);
+    try
+    {
+      return (IRepository<T>)ReflectUtil.invokeMethod(METHOD_loadRepository, delegate, location, suffix, type, flags, monitor);
+    }
+    catch (ReflectionException ex)
+    {
+      Throwable cause = ex.getCause();
+      if (cause instanceof ProvisionException)
+      {
+        throw (ProvisionException)cause;
+      }
+
+      throw ex;
+    }
   }
 
   protected void addRepository(IRepository<T> repository, boolean signalAdd, String suffix)
