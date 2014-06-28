@@ -290,7 +290,7 @@
       <setupTask
           xsi:type="setup.targlets:TargletTask">
         <targlet
-            name="Net4j DB Framework">
+            name="Net4j DB Framework (${scope.project.stream.label})">
           <repositoryList
               name="Dependencies">
             <repository
@@ -312,6 +312,19 @@
           xsi:type="setup:VariableTask"
           name="baseline.version"
           value="4.3"/>
+      <setupTask
+          xsi:type="setup.targlets:TargletTask">
+        <targlet
+            name="Net4j DB Framework (${scope.project.stream.label})">
+          <repositoryList
+              name="Dependencies">
+            <repository
+                url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215"/>
+            <repository
+                url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+          </repositoryList>
+        </targlet>
+      </setupTask>
     </stream>
     <description>A JDBC framework that provides simple and flexible abstractions for vendor-specific DDL.</description>
   </project>
