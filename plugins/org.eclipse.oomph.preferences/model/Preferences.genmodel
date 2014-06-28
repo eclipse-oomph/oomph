@@ -4,7 +4,7 @@
     modelPluginID="org.eclipse.oomph.preferences" modelName="Preferences" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
     copyrightFields="false" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
-    operationReflection="true" cleanup="true">
+    operationReflection="true" decoration="Live" cleanup="true">
   <foreignModel>Preferences.ecore</foreignModel>
   <genPackages prefix="Preferences" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       dataTypeConverters="true" multipleEditorPages="false" ecorePackage="Preferences.ecore#/">
@@ -42,6 +42,10 @@
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Preferences.ecore#//Property/parent"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/value"/>
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/nonDefault"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="Whether this is a secure property.  Setting this to false will show the property value.  Ensure that it's set back to true after editing the value."
+          ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/secure">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
       <genOperations ecoreOperation="Preferences.ecore#//Property/getAncestor"/>
     </genClasses>
   </genPackages>

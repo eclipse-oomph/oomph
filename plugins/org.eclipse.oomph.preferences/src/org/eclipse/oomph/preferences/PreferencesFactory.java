@@ -90,6 +90,26 @@ public interface PreferencesFactory extends EFactory
   String convertURI(URI instanceValue);
 
   /**
+   * Returns an instance of data type '<em>Preference Node Name</em>' corresponding the given literal.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param literal a literal of the data type.
+   * @return a new instance value of the data type.
+   * @generated
+   */
+  String createPreferenceNodeName(String literal);
+
+  /**
+   * Returns a literal representation of an instance of data type '<em>Preference Node Name</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param instanceValue an instance value of the data type.
+   * @return a literal representation of the instance value.
+   * @generated
+   */
+  String convertPreferenceNodeName(String instanceValue);
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

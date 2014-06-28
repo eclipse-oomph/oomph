@@ -35,6 +35,7 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#isNonDefault <em>Non Default</em>}</li>
+ *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#isSecure <em>Secure</em>}</li>
  * </ul>
  * </p>
  *
@@ -71,6 +72,26 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
    * @ordered
    */
   protected static final boolean NON_DEFAULT_EDEFAULT = false;
+
+  /**
+   * The default value of the '{@link #isSecure() <em>Secure</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSecure()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean SECURE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isSecure() <em>Secure</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSecure()
+   * @generated
+   * @ordered
+   */
+  protected boolean secure = SECURE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -199,6 +220,31 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isSecure()
+  {
+    return secure;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSecure(boolean newSecure)
+  {
+    boolean oldSecure = secure;
+    secure = newSecure;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, PreferencesPackage.PROPERTY__SECURE, oldSecure, secure));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated NOT
    */
   @Override
@@ -296,6 +342,8 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
         return getValue();
       case PreferencesPackage.PROPERTY__NON_DEFAULT:
         return isNonDefault();
+      case PreferencesPackage.PROPERTY__SECURE:
+        return isSecure();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -315,6 +363,9 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
         return;
       case PreferencesPackage.PROPERTY__VALUE:
         setValue((String)newValue);
+        return;
+      case PreferencesPackage.PROPERTY__SECURE:
+        setSecure((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -336,6 +387,9 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
       case PreferencesPackage.PROPERTY__VALUE:
         setValue(VALUE_EDEFAULT);
         return;
+      case PreferencesPackage.PROPERTY__SECURE:
+        setSecure(SECURE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -356,6 +410,8 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
         return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
       case PreferencesPackage.PROPERTY__NON_DEFAULT:
         return isNonDefault() != NON_DEFAULT_EDEFAULT;
+      case PreferencesPackage.PROPERTY__SECURE:
+        return secure != SECURE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -392,6 +448,8 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (value: ");
     result.append(value);
+    result.append(", secure: ");
+    result.append(secure);
     result.append(')');
     return result.toString();
   }

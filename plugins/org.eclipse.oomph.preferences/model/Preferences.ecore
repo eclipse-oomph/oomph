@@ -10,7 +10,8 @@
         changeable="false" volatile="true" transient="true" derived="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="absolutePath" lowerBound="1"
         eType="#//URI" changeable="false" volatile="true" transient="true" derived="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePath" lowerBound="1"
         eType="#//URI" changeable="false" volatile="true" transient="true" derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ancestor" eType="#//PreferenceItem"
@@ -33,7 +34,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//PreferenceNode"
         eOpposite="#//PreferenceNode/children"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
-        eType="#//PreferenceNode" containment="true" eOpposite="#//PreferenceNode/parent">
+        eType="#//PreferenceNode" containment="true" eOpposite="#//PreferenceNode/parent"
+        eKeys="#//PreferenceItem/name">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="child"/>
       </eAnnotations>
@@ -51,10 +53,17 @@
     <eOperations name="getAncestor" eType="#//Property"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//PreferenceNode"
         eOpposite="#//PreferenceNode/properties"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//EscapedString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="#//EscapedString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nonDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="EscapedString" instanceClassName="java.lang.String"/>
   <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="org.eclipse.emf.common.util.URI"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="PreferenceNodeName" instanceClassName="java.lang.String">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="pattern" value="[^/]+"/>
+    </eAnnotations>
+  </eClassifiers>
 </ecore:EPackage>

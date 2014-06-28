@@ -28,6 +28,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.MarkerHelper;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
+import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -54,6 +55,8 @@ import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
+import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
@@ -429,22 +432,32 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
 
           protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
-          public boolean visit(IResourceDelta delta)
+          public boolean visit(final IResourceDelta delta)
           {
             if (delta.getResource().getType() == IResource.FILE)
             {
-              if (delta.getKind() == IResourceDelta.REMOVED || delta.getKind() == IResourceDelta.CHANGED && delta.getFlags() != IResourceDelta.MARKERS)
+              if (delta.getKind() == IResourceDelta.REMOVED || delta.getKind() == IResourceDelta.CHANGED)
               {
-                Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
+                final Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
                 if (resource != null)
                 {
                   if (delta.getKind() == IResourceDelta.REMOVED)
                   {
                     removedResources.add(resource);
                   }
-                  else if (!savedResources.remove(resource))
+                  else
                   {
-                    changedResources.add(resource);
+                    if ((delta.getFlags() & IResourceDelta.MARKERS) != 0)
+                    {
+                      DiagnosticDecorator.DiagnosticAdapter.update(resource, markerHelper.getMarkerDiagnostics(resource, (IFile)delta.getResource()));
+                    }
+                    if ((delta.getFlags() & IResourceDelta.CONTENT) != 0)
+                    {
+                      if (!savedResources.remove(resource))
+                      {
+                        changedResources.add(resource);
+                      }
+                    }
                   }
                 }
               }
@@ -1130,11 +1143,13 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
       setCurrentViewer(selectionViewer);
 
       selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-      selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+      selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain,
+          selectionViewer, PreferencesEditorPlugin.getPlugin().getDialogSettings())));
       selectionViewer.setInput(editingDomain.getResourceSet());
       selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 
       new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
+      new ColumnViewerInformationControlToolTipSupport(selectionViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, selectionViewer));
 
       createContextMenuFor(selectionViewer);
       int pageIndex = addPage(tree);
@@ -1520,6 +1535,11 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
       for (PreferenceNode node : preferenceNode.getChildren())
       {
         String name = node.getName();
+        if (!URI.validSegment(name))
+        {
+          name = URI.encodeSegment(name, false);
+        }
+
         traverse(rootPreferenceNode, path.appendSegment(name), node);
       }
 
@@ -1592,7 +1612,8 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
    */
   public IPropertySheetPage getPropertySheetPage()
   {
-    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain)
+    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, PreferencesEditorPlugin
+        .getPlugin().getDialogSettings())
     {
       @Override
       public void setSelectionToViewer(List<?> selection)
@@ -1669,7 +1690,7 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
    * This is for implementing {@link IEditorPart} and simply saves the model file.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public void doSave(IProgressMonitor progressMonitor)
@@ -1677,8 +1698,11 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
     // Save only resources that have actually changed.
     //
     final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
-    saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
-    saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
+    if (!"preference".equals(editingDomain.getResourceSet().getResources().get(0).getURI().scheme()))
+    {
+      saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
+      saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
+    }
 
     // Do the work within an operation because this is a long running activity that modifies the workbench.
     //
@@ -2065,7 +2089,7 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
    * Returns whether the outline view should be presented to the user.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-  G   * @generated NOT
+   * @generated NOT
    */
   protected boolean showOutlineView()
   {

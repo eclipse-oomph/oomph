@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -30,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -138,6 +140,54 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
   @Override
   public OutputStream createOutputStream(URI uri, Map<?, ?> options) throws IOException
   {
+    if (uri.segmentCount() == 1)
+    {
+      class PreferencesOutput extends OutputStream implements URIConverter.Saveable
+      {
+        public void saveResource(Resource resource) throws IOException
+        {
+          PreferenceNode root = EcoreUtil.copy((PreferenceNode)resource.getContents().get(0));
+          Throwable throwable = null;
+          try
+          {
+            Collection<? extends IEclipsePreferences> flush = PreferencesUtil.reconcile(root);
+            for (IEclipsePreferences preferences : flush)
+            {
+              try
+              {
+                preferences.flush();
+              }
+              catch (Throwable ex)
+              {
+                throwable = ex;
+              }
+            }
+          }
+          catch (Throwable ex)
+          {
+            IOException ioException = new IOException();
+            ioException.initCause(ex);
+            throw ioException;
+          }
+
+          if (throwable != null)
+          {
+            IOException ioException = new IOException();
+            ioException.initCause(throwable);
+            throw ioException;
+          }
+        }
+
+        @Override
+        public void write(int b) throws IOException
+        {
+          throw new IOException("Streamed output not supported");
+        }
+      }
+
+      return new PreferencesOutput();
+    }
+
     final PreferenceAccessor accessor = new PreferenceAccessor(uri.trimSegments(1));
     return new ByteArrayOutputStream()
     {

@@ -16,6 +16,7 @@ import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.PreferencesPackage;
 import org.eclipse.oomph.preferences.Property;
+import org.eclipse.oomph.preferences.util.PreferencesValidator;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -67,6 +69,13 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * @generated
    */
   private EDataType uriEDataType = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType preferenceNodeNameEDataType = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -128,6 +137,15 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
 
     // Initialize created meta-data
     thePreferencesPackage.initializePackageContents();
+
+    // Register package validator
+    EValidator.Registry.INSTANCE.put(thePreferencesPackage, new EValidator.Descriptor()
+    {
+      public EValidator getEValidator()
+      {
+        return PreferencesValidator.INSTANCE;
+      }
+    });
 
     // Mark meta-data to indicate it can't be changed
     thePreferencesPackage.freeze();
@@ -362,6 +380,16 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getProperty_Secure()
+  {
+    return (EAttribute)propertyEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EOperation getProperty__GetAncestor()
   {
     return propertyEClass.getEOperations().get(0);
@@ -385,6 +413,16 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
   public EDataType getURI()
   {
     return uriEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EDataType getPreferenceNodeName()
+  {
+    return preferenceNodeNameEDataType;
   }
 
   /**
@@ -444,11 +482,13 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
     createEReference(propertyEClass, PROPERTY__PARENT);
     createEAttribute(propertyEClass, PROPERTY__VALUE);
     createEAttribute(propertyEClass, PROPERTY__NON_DEFAULT);
+    createEAttribute(propertyEClass, PROPERTY__SECURE);
     createEOperation(propertyEClass, PROPERTY___GET_ANCESTOR);
 
     // Create data types
     escapedStringEDataType = createEDataType(ESCAPED_STRING);
     uriEDataType = createEDataType(URI);
+    preferenceNodeNameEDataType = createEDataType(PREFERENCE_NODE_NAME);
   }
 
   /**
@@ -498,7 +538,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
         !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getPreferenceItem_AbsolutePath(), getURI(), "absolutePath", null, 1, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPreferenceItem_Name(), ecorePackage.getEString(), "name", null, 1, 1, PreferenceItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getPreferenceItem_Name(), ecorePackage.getEString(), "name", "", 1, 1, PreferenceItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getPreferenceItem_RelativePath(), getURI(), "relativePath", null, 1, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
@@ -512,6 +552,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPreferenceNode_Children(), getPreferenceNode(), getPreferenceNode_Parent(), "children", null, 0, -1, PreferenceNode.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    getPreferenceNode_Children().getEKeys().add(getPreferenceItem_Name());
     initEReference(getPreferenceNode_Properties(), getProperty(), getProperty_Parent(), "properties", null, 0, -1, PreferenceNode.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getPreferenceNode_Properties().getEKeys().add(getPreferenceItem_Name());
@@ -535,16 +576,19 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
     initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getProperty_Parent(), getPreferenceNode(), getPreferenceNode_Properties(), "parent", null, 0, 1, Property.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProperty_Value(), getEscapedString(), "value", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getProperty_Value(), getEscapedString(), "value", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getProperty_NonDefault(), ecorePackage.getEBoolean(), "nonDefault", null, 0, 1, Property.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProperty_Secure(), ecorePackage.getEBoolean(), "secure", null, 0, 1, Property.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEOperation(getProperty__GetAncestor(), getProperty(), "getAncestor", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     // Initialize data types
     initEDataType(escapedStringEDataType, String.class, "EscapedString", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
     initEDataType(uriEDataType, org.eclipse.emf.common.util.URI.class, "URI", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(preferenceNodeNameEDataType, String.class, "PreferenceNodeName", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource(eNS_URI);
@@ -565,6 +609,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getPreferenceNode_Children(), source, new String[] { "name", "child" });
     addAnnotation(getPreferenceNode_Properties(), source, new String[] { "name", "property" });
+    addAnnotation(preferenceNodeNameEDataType, source, new String[] { "pattern", "[^/]+" });
   }
 
 } // PreferencesPackageImpl

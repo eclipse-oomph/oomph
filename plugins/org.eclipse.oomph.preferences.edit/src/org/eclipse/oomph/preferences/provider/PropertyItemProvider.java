@@ -31,6 +31,10 @@ import java.util.List;
  */
 public class PropertyItemProvider extends PreferenceItemItemProvider
 {
+  protected List<IItemPropertyDescriptor> normalPropertyDescriptors;
+
+  protected List<IItemPropertyDescriptor> securePropertyDescriptors;
+
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -46,19 +50,42 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
    * This returns the property descriptors for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
   {
-    if (itemPropertyDescriptors == null)
+    Property property = (Property)object;
+    itemPropertyDescriptors = null;
+    if (property.isSecure())
+    {
+      if (securePropertyDescriptors == null)
+      {
+        super.getPropertyDescriptors(object);
+
+        addSecurePropertyDescriptor(object);
+        addNonDefaultPropertyDescriptor(object);
+
+        securePropertyDescriptors = itemPropertyDescriptors;
+        itemPropertyDescriptors = null;
+      }
+
+      return securePropertyDescriptors;
+    }
+
+    if (normalPropertyDescriptors == null)
     {
       super.getPropertyDescriptors(object);
 
       addValuePropertyDescriptor(object);
+      addSecurePropertyDescriptor(object);
       addNonDefaultPropertyDescriptor(object);
+
+      normalPropertyDescriptors = itemPropertyDescriptors;
+      itemPropertyDescriptors = null;
     }
-    return itemPropertyDescriptors;
+
+    return normalPropertyDescriptors;
   }
 
   /**
@@ -85,6 +112,19 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Property_nonDefault_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Property_nonDefault_feature", "_UI_Property_type"),
         PreferencesPackage.Literals.PROPERTY__NON_DEFAULT, false, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Secure feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addSecurePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Property_secure_feature"), getString("_UI_Property_secure_description"), PreferencesPackage.Literals.PROPERTY__SECURE, true, false,
+        false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**
@@ -119,9 +159,20 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
   @Override
   public String getText(Object object)
   {
-    String name = ((Property)object).getName();
-    String value = ((Property)object).getValue();
-    return (name == null ? "" : name) + (value == null ? "" : "=" + crop(value));
+    Property property = (Property)object;
+    String name = property.getName();
+    String value = property.getValue();
+    if (value == null)
+    {
+      value = "";
+    }
+
+    if (property.isSecure())
+    {
+      value = value.replaceAll(".", "*");
+    }
+
+    return (name == null ? "" : name) + "=" + crop(value);
   }
 
   /**
@@ -140,6 +191,7 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
     {
       case PreferencesPackage.PROPERTY__VALUE:
       case PreferencesPackage.PROPERTY__NON_DEFAULT:
+      case PreferencesPackage.PROPERTY__SECURE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

@@ -47,7 +47,7 @@ public interface PreferenceNode extends PreferenceItem
    * @return the value of the '<em>Children</em>' containment reference list.
    * @see org.eclipse.oomph.preferences.PreferencesPackage#getPreferenceNode_Children()
    * @see org.eclipse.oomph.preferences.PreferenceNode#getParent
-   * @model opposite="parent" containment="true"
+   * @model opposite="parent" containment="true" keys="name"
    *        extendedMetaData="name='child'"
    * @generated
    */

@@ -98,6 +98,8 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
         return createEscapedStringFromString(eDataType, initialValue);
       case PreferencesPackage.URI:
         return createURIFromString(eDataType, initialValue);
+      case PreferencesPackage.PREFERENCE_NODE_NAME:
+        return createPreferenceNodeNameFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -117,6 +119,8 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
         return convertEscapedStringToString(eDataType, instanceValue);
       case PreferencesPackage.URI:
         return convertURIToString(eDataType, instanceValue);
+      case PreferencesPackage.PREFERENCE_NODE_NAME:
+        return convertPreferenceNodeNameToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -399,6 +403,46 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
   public String convertURIToString(EDataType eDataType, Object instanceValue)
   {
     return convertURI((URI)instanceValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String createPreferenceNodeName(String literal)
+  {
+    return (String)super.createFromString(PreferencesPackage.Literals.PREFERENCE_NODE_NAME, literal);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String createPreferenceNodeNameFromString(EDataType eDataType, String initialValue)
+  {
+    return createPreferenceNodeName(initialValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertPreferenceNodeName(String instanceValue)
+  {
+    return super.convertToString(PreferencesPackage.Literals.PREFERENCE_NODE_NAME, instanceValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertPreferenceNodeNameToString(EDataType eDataType, Object instanceValue)
+  {
+    return convertPreferenceNodeName((String)instanceValue);
   }
 
   /**

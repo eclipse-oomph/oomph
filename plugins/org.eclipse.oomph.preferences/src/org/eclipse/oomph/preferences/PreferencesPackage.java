@@ -469,13 +469,22 @@ public interface PreferencesPackage extends EPackage
   int PROPERTY__NON_DEFAULT = PREFERENCE_ITEM_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Secure</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROPERTY__SECURE = PREFERENCE_ITEM_FEATURE_COUNT + 3;
+
+  /**
    * The number of structural features of the '<em>Property</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROPERTY_FEATURE_COUNT = PREFERENCE_ITEM_FEATURE_COUNT + 3;
+  int PROPERTY_FEATURE_COUNT = PREFERENCE_ITEM_FEATURE_COUNT + 4;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -532,6 +541,16 @@ public interface PreferencesPackage extends EPackage
    * @generated
    */
   int URI = 4;
+
+  /**
+   * The meta object id for the '<em>Preference Node Name</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see java.lang.String
+   * @see org.eclipse.oomph.preferences.impl.PreferencesPackageImpl#getPreferenceNodeName()
+   * @generated
+   */
+  int PREFERENCE_NODE_NAME = 5;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.preferences.PreferenceItem <em>Preference Item</em>}'.
@@ -767,6 +786,17 @@ public interface PreferencesPackage extends EPackage
   EAttribute getProperty_NonDefault();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.preferences.Property#isSecure <em>Secure</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Secure</em>'.
+   * @see org.eclipse.oomph.preferences.Property#isSecure()
+   * @see #getProperty()
+   * @generated
+   */
+  EAttribute getProperty_Secure();
+
+  /**
    * Returns the meta object for the '{@link org.eclipse.oomph.preferences.Property#getAncestor() <em>Get Ancestor</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -797,6 +827,18 @@ public interface PreferencesPackage extends EPackage
    * @generated
    */
   EDataType getURI();
+
+  /**
+   * Returns the meta object for data type '{@link java.lang.String <em>Preference Node Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>Preference Node Name</em>'.
+   * @see java.lang.String
+   * @model instanceClass="java.lang.String"
+   *        extendedMetaData="pattern='[^/]+'"
+   * @generated
+   */
+  EDataType getPreferenceNodeName();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -1005,6 +1047,14 @@ public interface PreferencesPackage extends EPackage
     EAttribute PROPERTY__NON_DEFAULT = eINSTANCE.getProperty_NonDefault();
 
     /**
+     * The meta object literal for the '<em><b>Secure</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROPERTY__SECURE = eINSTANCE.getProperty_Secure();
+
+    /**
      * The meta object literal for the '<em><b>Get Ancestor</b></em>' operation.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1031,6 +1081,16 @@ public interface PreferencesPackage extends EPackage
      * @generated
      */
     EDataType URI = eINSTANCE.getURI();
+
+    /**
+     * The meta object literal for the '<em>Preference Node Name</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see java.lang.String
+     * @see org.eclipse.oomph.preferences.impl.PreferencesPackageImpl#getPreferenceNodeName()
+     * @generated
+     */
+    EDataType PREFERENCE_NODE_NAME = eINSTANCE.getPreferenceNodeName();
 
   }
 

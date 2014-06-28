@@ -21,6 +21,7 @@ package org.eclipse.oomph.preferences;
  *   <li>{@link org.eclipse.oomph.preferences.Property#getParent <em>Parent</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.Property#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.Property#isNonDefault <em>Non Default</em>}</li>
+ *   <li>{@link org.eclipse.oomph.preferences.Property#isSecure <em>Secure</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,7 +70,7 @@ public interface Property extends PreferenceItem
    * @return the value of the '<em>Value</em>' attribute.
    * @see #setValue(String)
    * @see org.eclipse.oomph.preferences.PreferencesPackage#getProperty_Value()
-   * @model dataType="org.eclipse.oomph.preferences.EscapedString"
+   * @model dataType="org.eclipse.oomph.preferences.EscapedString" required="true"
    * @generated
    */
   String getValue();
@@ -98,6 +99,32 @@ public interface Property extends PreferenceItem
    * @generated
    */
   boolean isNonDefault();
+
+  /**
+   * Returns the value of the '<em><b>Secure</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Secure</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Secure</em>' attribute.
+   * @see #setSecure(boolean)
+   * @see org.eclipse.oomph.preferences.PreferencesPackage#getProperty_Secure()
+   * @model transient="true"
+   * @generated
+   */
+  boolean isSecure();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.preferences.Property#isSecure <em>Secure</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Secure</em>' attribute.
+   * @see #isSecure()
+   * @generated
+   */
+  void setSecure(boolean value);
 
   /**
    * <!-- begin-user-doc -->
