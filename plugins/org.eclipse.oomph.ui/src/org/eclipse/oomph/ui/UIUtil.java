@@ -100,10 +100,13 @@ public final class UIUtil
           }
         }
 
-        Shell[] shells = display.getShells();
-        if (shells.length > 0)
+        if (shell[0] == null)
         {
-          shell[0] = shells[0];
+          Shell[] shells = display.getShells();
+          if (shells.length > 0)
+          {
+            shell[0] = shells[0];
+          }
         }
       }
     });
