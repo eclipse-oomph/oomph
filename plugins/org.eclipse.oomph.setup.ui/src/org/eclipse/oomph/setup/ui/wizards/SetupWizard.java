@@ -16,6 +16,7 @@ import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
 import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
+import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -34,6 +35,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -403,6 +405,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
    */
   public static class Installer extends SetupWizard
   {
+    private static final P2ServiceUI UI_SERVICES = new P2ServiceUI();
+
     public Installer()
     {
       super();
@@ -431,6 +435,17 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     protected void indexLoaded(Index index)
     {
       getCatalogManager().indexLoaded(index);
+    }
+
+    @Override
+    public void setPerformer(SetupTaskPerformer performer)
+    {
+      super.setPerformer(performer);
+
+      if (performer != null)
+      {
+        performer.put(UIServices.class, UI_SERVICES);
+      }
     }
   }
 

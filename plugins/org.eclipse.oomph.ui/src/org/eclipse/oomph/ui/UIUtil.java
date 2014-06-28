@@ -99,6 +99,12 @@ public final class UIUtil
             //$FALL-THROUGH$
           }
         }
+
+        Shell[] shells = display.getShells();
+        if (shells.length > 0)
+        {
+          shell[0] = shells[0];
+        }
       }
     });
 

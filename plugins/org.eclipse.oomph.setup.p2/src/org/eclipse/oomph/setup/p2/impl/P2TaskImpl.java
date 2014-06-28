@@ -52,6 +52,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper;
+import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
@@ -652,6 +655,19 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         profileCreator.addArch(os.getOsgiArch());
 
         profile = profileCreator.create();
+      }
+
+      UIServices uiServices = (UIServices)context.get(UIServices.class);
+      if (uiServices != null)
+      {
+        IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
+        provisioningAgent.registerService(UIServices.SERVICE_NAME, uiServices);
+
+        P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, uiServices);
+
+        IProvisioningAgent agent = (IProvisioningAgent)ServiceHelper.getService(org.eclipse.equinox.internal.p2.repository.Activator.getContext(),
+            IProvisioningAgent.SERVICE_NAME);
+        agent.registerService(UIServices.SERVICE_NAME, uiServices);
       }
 
       return profile.change();
