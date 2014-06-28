@@ -471,6 +471,15 @@ public class ProgressPage extends SetupWizardPage
 
                   if (launchAutomatically)
                   {
+                    try
+                    {
+                      SetupUIPlugin.RESTARTING_FILE.createNewFile();
+                    }
+                    catch (Exception ex)
+                    {
+                      // Ignore
+                    }
+
                     PlatformUI.getWorkbench().restart();
                   }
                   else

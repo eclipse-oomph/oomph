@@ -18,6 +18,7 @@ import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
@@ -42,6 +43,7 @@ import org.eclipse.ui.PlatformUI;
 
 import org.osgi.framework.BundleContext;
 
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -50,6 +52,8 @@ import java.util.Arrays;
 public final class SetupUIPlugin extends AbstractOomphUIPlugin
 {
   public static final SetupUIPlugin INSTANCE = new SetupUIPlugin();
+
+  public static final File RESTARTING_FILE = new File(INSTANCE.getStateLocation().toString(), "restarting");
 
   public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
@@ -146,10 +150,26 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
 
   private static void performStartup(IWorkbench workbench)
   {
+    try
+    {
+      if (RESTARTING_FILE.exists())
+      {
+        System.setProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP, "true");
+        if (!RESTARTING_FILE.delete())
+        {
+          RESTARTING_FILE.deleteOnExit();
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      // Ignore
+    }
+
     // This performer is only used to detect a need to update or to open the setup wizard.
     SetupTaskPerformer performer = null;
-
     final ResourceSet resourceSet = EMFUtil.createResourceSet();
+
     try
     {
       performer = SetupTaskPerformer.createForIDE(resourceSet, SetupPrompter.CANCEL, Trigger.STARTUP);
