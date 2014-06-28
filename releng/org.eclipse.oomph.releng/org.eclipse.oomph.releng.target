@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="13">
+<target name="Generated from Oomph" sequenceNumber="14">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.equinox.executable.feature.group"/>
-      <unit id="org.eclipse.sdk.feature.group"/>
+      <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
       <repository location="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.emf.sdk.feature.group"/>
+      <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <repository location="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.egit.feature.group"/>
+      <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <repository location="http://download.eclipse.org/egit/updates"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.mylyn.builds.sdk.feature.group"/>
-      <unit id="org.eclipse.mylyn.sdk_feature.feature.group"/>
+      <unit id="org.eclipse.mylyn.builds.sdk.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.sdk_feature.feature.group" version="0.0.0"/>
       <repository location="http://download.eclipse.org/mylyn/snapshots/weekly"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.m2e.feature.feature.group"/>
+      <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
       <repository location="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.wst.xsd.core"/>
+      <unit id="org.eclipse.wst.xsd.core" version="0.0.0"/>
       <repository location="http://download.eclipse.org/webtools/repository/luna"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.slf4j.api"/>
+      <unit id="org.slf4j.api" version="0.0.0"/>
       <repository location="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
     </location>
   </locations>
