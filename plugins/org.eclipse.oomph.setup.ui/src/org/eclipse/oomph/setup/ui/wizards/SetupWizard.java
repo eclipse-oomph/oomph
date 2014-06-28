@@ -101,7 +101,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
     else
     {
-      SetupWizard.this.performer = performer;
+      this.performer = performer;
       setTrigger(performer.getTrigger());
       setSetupContext(performer.getSetupContext());
       resourceSet = performer.getUser().eResource().getResourceSet();
@@ -120,7 +120,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public void setTrigger(Trigger trigger)
   {
-    SetupWizard.this.trigger = trigger;
+    this.trigger = trigger;
   }
 
   public Trigger getTrigger()
@@ -130,7 +130,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public void setFinishAction(Runnable finishAction)
   {
-    SetupWizard.this.finishAction = finishAction;
+    this.finishAction = finishAction;
   }
 
   public ResourceSet getResourceSet()
@@ -150,7 +150,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public void setSetupContext(SetupContext setupContext)
   {
-    SetupWizard.this.setupContext = setupContext;
+    this.setupContext = setupContext;
   }
 
   public Installation getInstallation()
@@ -175,7 +175,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public void setPerformer(SetupTaskPerformer performer)
   {
-    SetupWizard.this.performer = performer;
+    this.performer = performer;
   }
 
   @Override

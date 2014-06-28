@@ -425,6 +425,7 @@ public class ProgressPage extends SetupWizardPage
             @Override
             protected IStatus run(IProgressMonitor monitor)
             {
+              final Trigger trigger = getTrigger();
               long start = System.currentTimeMillis();
               boolean success = false;
               Set<String> restartReasons = null;
@@ -436,7 +437,7 @@ public class ProgressPage extends SetupWizardPage
                 SetupTaskPerformer performer = getPerformer();
                 saveLocalFiles(performer);
 
-                if (launchAutomatically && getTrigger() == Trigger.BOOTSTRAP)
+                if (launchAutomatically && trigger == Trigger.BOOTSTRAP)
                 {
                   launchProduct(performer);
                 }
@@ -472,7 +473,7 @@ public class ProgressPage extends SetupWizardPage
                   {
                     public void run()
                     {
-                      SetupUIPlugin.restart();
+                      SetupUIPlugin.restart(trigger);
                     }
                   });
 

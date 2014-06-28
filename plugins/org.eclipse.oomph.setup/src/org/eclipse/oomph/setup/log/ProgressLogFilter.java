@@ -19,7 +19,8 @@ public class ProgressLogFilter
       "Configuring JRE System Library", "Invoking builder on ", "Invoking '", "Verifying ", "Updating ...", "Reading saved build state for project ",
       "Reading resource change information for ", "Cleaning output folder for ", "Copying resources to the output folder", " adding component ",
       "Preparing to build", "Compiling ", "Analyzing ", "Comparing ", "Checking ", "Build done", "Processing API deltas...", "Create.", "Reading plug-ins",
-      "Processing", "Querying repository", "Synchronizing query: ", "Receiving related tasks", "Updating repository state", "Processing Local" };
+      "Processing", "Querying repository", "Synchronizing query: ", "Receiving related tasks", "Receiving task ", "Updating repository state",
+      "Processing Local" };
 
   private String lastLine;
 

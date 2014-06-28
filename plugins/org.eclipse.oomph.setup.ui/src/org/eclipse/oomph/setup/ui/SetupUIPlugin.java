@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -45,6 +46,7 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * @author Eike Stepper
@@ -80,11 +82,11 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
     return plugin;
   }
 
-  public static void restart()
+  public static void restart(Trigger trigger)
   {
     try
     {
-      getRestartingFile().createNewFile();
+      IOUtil.writeFile(getRestartingFile(), trigger.toString().getBytes());
     }
     catch (Exception ex)
     {
@@ -167,16 +169,20 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
 
   private static void performStartup(IWorkbench workbench)
   {
+    Trigger trigger = Trigger.STARTUP;
+    boolean restarting = false;
+
     try
     {
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
+        byte[] bytes = IOUtil.readFile(restartingFile);
+        IOUtil.deleteBestEffort(restartingFile);
+        trigger = Trigger.valueOf(new String(bytes));
+
         System.setProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP, "true");
-        if (!restartingFile.delete())
-        {
-          restartingFile.deleteOnExit();
-        }
+        restarting = true;
       }
     }
     catch (Exception ex)
@@ -190,7 +196,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
 
     try
     {
-      performer = SetupTaskPerformer.createForIDE(resourceSet, SetupPrompter.CANCEL, Trigger.STARTUP);
+      performer = SetupTaskPerformer.createForIDE(resourceSet, SetupPrompter.CANCEL, trigger);
     }
     catch (OperationCanceledException ex)
     {
@@ -212,6 +218,18 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
       {
         // At this point we know that no prompt was needed.
         EList<SetupTask> neededTasks = performer.initNeededSetupTasks();
+        if (restarting)
+        {
+          for (Iterator<SetupTask> it = neededTasks.iterator(); it.hasNext();)
+          {
+            SetupTask setupTask = it.next();
+            if (setupTask.getPriority() == SetupTask.PRIORITY_INSTALLATION)
+            {
+              it.remove();
+            }
+          }
+        }
+
         if (neededTasks.isEmpty())
         {
           // No tasks are needed, either. Nothing to do.

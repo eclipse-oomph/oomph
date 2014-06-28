@@ -201,7 +201,7 @@ public class ConfirmationPage extends SetupWizardPage
 
       validate();
 
-      if (getTrigger() == Trigger.STARTUP && PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP))
+      if (PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP))
       {
         System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
         advanceToNextPage();
