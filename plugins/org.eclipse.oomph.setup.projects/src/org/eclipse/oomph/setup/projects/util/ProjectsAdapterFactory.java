@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.projects.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.projects.PathVariableTask;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 
@@ -89,6 +90,12 @@ public class ProjectsAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter casePathVariableTask(PathVariableTask object)
+    {
+      return createPathVariableTaskAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -132,6 +139,21 @@ public class ProjectsAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createProjectsImportTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.projects.PathVariableTask <em>Path Variable Task</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.projects.PathVariableTask
+   * @generated
+   */
+  public Adapter createPathVariableTaskAdapter()
   {
     return null;
   }

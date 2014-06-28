@@ -119,6 +119,31 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.projects.PathVariableTask} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected PathVariableTaskItemProvider pathVariableTaskItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.projects.PathVariableTask}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createPathVariableTaskAdapter()
+  {
+    if (pathVariableTaskItemProvider == null)
+    {
+      pathVariableTaskItemProvider = new PathVariableTaskItemProvider(this);
+    }
+
+    return pathVariableTaskItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -233,6 +258,10 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
     {
       projectsImportTaskItemProvider.dispose();
     }
+    if (pathVariableTaskItemProvider != null)
+    {
+      pathVariableTaskItemProvider.dispose();
+    }
   }
 
   /**
@@ -288,6 +317,8 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ProjectsFactory.eINSTANCE.createProjectsImportTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ProjectsFactory.eINSTANCE.createPathVariableTask()));
 
         return null;
       }
@@ -381,6 +412,9 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
       {
         newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
             ProjectsFactory.eINSTANCE.createProjectsImportTask()));
+
+        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
+            ProjectsFactory.eINSTANCE.createPathVariableTask()));
 
         return null;
       }

@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.projects.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.projects.PathVariableTask;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 
@@ -100,6 +101,24 @@ public class ProjectsSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case ProjectsPackage.PATH_VARIABLE_TASK:
+      {
+        PathVariableTask pathVariableTask = (PathVariableTask)theEObject;
+        T result = casePathVariableTask(pathVariableTask);
+        if (result == null)
+        {
+          result = caseSetupTask(pathVariableTask);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(pathVariableTask);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -117,6 +136,22 @@ public class ProjectsSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseProjectsImportTask(ProjectsImportTask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Path Variable Task</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Path Variable Task</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePathVariableTask(PathVariableTask object)
   {
     return null;
   }

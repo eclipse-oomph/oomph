@@ -12,10 +12,12 @@ package org.eclipse.oomph.setup.projects.impl;
 
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.projects.PathVariableTask;
 import org.eclipse.oomph.setup.projects.ProjectsFactory;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -35,6 +37,13 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * @generated
    */
   private EClass projectsImportTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass pathVariableTaskEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -131,6 +140,36 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getPathVariableTask()
+  {
+    return pathVariableTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPathVariableTask_Name()
+  {
+    return (EAttribute)pathVariableTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPathVariableTask_URI()
+  {
+    return (EAttribute)pathVariableTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public ProjectsFactory getProjectsFactory()
   {
     return (ProjectsFactory)getEFactoryInstance();
@@ -161,6 +200,10 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     // Create classes and their features
     projectsImportTaskEClass = createEClass(PROJECTS_IMPORT_TASK);
     createEReference(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__SOURCE_LOCATORS);
+
+    pathVariableTaskEClass = createEClass(PATH_VARIABLE_TASK);
+    createEAttribute(pathVariableTaskEClass, PATH_VARIABLE_TASK__NAME);
+    createEAttribute(pathVariableTaskEClass, PATH_VARIABLE_TASK__URI);
   }
 
   /**
@@ -200,12 +243,19 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
 
     // Add supertypes to classes
     projectsImportTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    pathVariableTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
     initEClass(projectsImportTaskEClass, ProjectsImportTask.class, "ProjectsImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getProjectsImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1,
         ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
+
+    initEClass(pathVariableTaskEClass, PathVariableTask.class, "PathVariableTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPathVariableTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPathVariableTask_URI(), ecorePackage.getEString(), "uRI", null, 0, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore");
@@ -244,6 +294,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
     addAnnotation(projectsImportTaskEClass, source, new String[] { "variableName", "setup.projects.p2", "repository", "${oomph.update.url}",
         "installableUnits", "org.eclipse.oomph.setup.projects.feature.group" });
+    addAnnotation(pathVariableTaskEClass, source, new String[] { "variableName", "setup.projects.p2", "repository", "${oomph.update.url}", "installableUnits",
+        "org.eclipse.oomph.setup.projects.feature.group" });
   }
 
   /**
@@ -256,6 +308,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(projectsImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    addAnnotation(pathVariableTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
   }
 
   /**
@@ -268,6 +321,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getProjectsImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
+    addAnnotation(getPathVariableTask_URI(), source, new String[] { "kind", "attribute", "name", "uri" });
   }
 
 } // ProjectsPackageImpl

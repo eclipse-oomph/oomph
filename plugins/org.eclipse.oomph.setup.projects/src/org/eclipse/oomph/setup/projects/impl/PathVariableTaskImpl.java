@@ -8,36 +8,38 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.impl;
+package org.eclipse.oomph.setup.projects.impl;
 
-import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.StringSubstitutionTask;
-import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.setup.impl.SetupTaskImpl;
+import org.eclipse.oomph.setup.projects.PathVariableTask;
+import org.eclipse.oomph.setup.projects.ProjectsPackage;
+import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.core.variables.IStringVariableManager;
-import org.eclipse.core.variables.IValueVariable;
-import org.eclipse.core.variables.VariablesPlugin;
+import org.eclipse.core.resources.IPathVariableManager;
+import org.eclipse.core.resources.ResourcesPlugin;
+
+import java.net.URI;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>String Substitution Task</b></em>'.
+ * An implementation of the model object '<em><b>Path Variable Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.oomph.setup.impl.StringSubstitutionTaskImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.impl.StringSubstitutionTaskImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.projects.impl.PathVariableTaskImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.projects.impl.PathVariableTaskImpl#getURI <em>URI</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringSubstitutionTask
+public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableTask
 {
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -60,33 +62,31 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * The default value of the '{@link #getURI() <em>URI</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getValue()
+   * @see #getURI()
    * @generated
    * @ordered
    */
-  protected static final String VALUE_EDEFAULT = null;
+  protected static final String URI_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * The cached value of the '{@link #getURI() <em>URI</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getValue()
+   * @see #getURI()
    * @generated
    * @ordered
    */
-  protected String value = VALUE_EDEFAULT;
-
-  private IValueVariable valueVariable;
+  protected String uRI = URI_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected StringSubstitutionTaskImpl()
+  protected PathVariableTaskImpl()
   {
     super();
   }
@@ -99,7 +99,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
   @Override
   protected EClass eStaticClass()
   {
-    return SetupPackage.Literals.STRING_SUBSTITUTION_TASK;
+    return ProjectsPackage.Literals.PATH_VARIABLE_TASK;
   }
 
   /**
@@ -123,7 +123,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
     name = newName;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.STRING_SUBSTITUTION_TASK__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, ProjectsPackage.PATH_VARIABLE_TASK__NAME, oldName, name));
     }
   }
 
@@ -132,9 +132,9 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getValue()
+  public String getURI()
   {
-    return value;
+    return uRI;
   }
 
   /**
@@ -142,13 +142,13 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(String newValue)
+  public void setURI(String newURI)
   {
-    String oldValue = value;
-    value = newValue;
+    String oldURI = uRI;
+    uRI = newURI;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.STRING_SUBSTITUTION_TASK__VALUE, oldValue, value));
+      eNotify(new ENotificationImpl(this, Notification.SET, ProjectsPackage.PATH_VARIABLE_TASK__URI, oldURI, uRI));
     }
   }
 
@@ -162,10 +162,10 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
   {
     switch (featureID)
     {
-      case SetupPackage.STRING_SUBSTITUTION_TASK__NAME:
+      case ProjectsPackage.PATH_VARIABLE_TASK__NAME:
         return getName();
-      case SetupPackage.STRING_SUBSTITUTION_TASK__VALUE:
-        return getValue();
+      case ProjectsPackage.PATH_VARIABLE_TASK__URI:
+        return getURI();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -180,11 +180,11 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
   {
     switch (featureID)
     {
-      case SetupPackage.STRING_SUBSTITUTION_TASK__NAME:
+      case ProjectsPackage.PATH_VARIABLE_TASK__NAME:
         setName((String)newValue);
         return;
-      case SetupPackage.STRING_SUBSTITUTION_TASK__VALUE:
-        setValue((String)newValue);
+      case ProjectsPackage.PATH_VARIABLE_TASK__URI:
+        setURI((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -200,11 +200,11 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
   {
     switch (featureID)
     {
-      case SetupPackage.STRING_SUBSTITUTION_TASK__NAME:
+      case ProjectsPackage.PATH_VARIABLE_TASK__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case SetupPackage.STRING_SUBSTITUTION_TASK__VALUE:
-        setValue(VALUE_EDEFAULT);
+      case ProjectsPackage.PATH_VARIABLE_TASK__URI:
+        setURI(URI_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -220,10 +220,10 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
   {
     switch (featureID)
     {
-      case SetupPackage.STRING_SUBSTITUTION_TASK__NAME:
+      case ProjectsPackage.PATH_VARIABLE_TASK__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case SetupPackage.STRING_SUBSTITUTION_TASK__VALUE:
-        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+      case ProjectsPackage.PATH_VARIABLE_TASK__URI:
+        return URI_EDEFAULT == null ? uRI != null : !URI_EDEFAULT.equals(uRI);
     }
     return super.eIsSet(featureID);
   }
@@ -244,8 +244,8 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");
     result.append(name);
-    result.append(", value: ");
-    result.append(value);
+    result.append(", uRI: ");
+    result.append(uRI);
     result.append(')');
     return result.toString();
   }
@@ -258,50 +258,20 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    IValueVariable variable = getValueVariable(false);
-    if (variable == null)
-    {
-      return true;
-    }
-
-    if (!getValue().equals(variable.getValue()))
-    {
-      return true;
-    }
-
-    if (!StringUtil.safe(getDescription()).equals(StringUtil.safe(variable.getDescription())))
-    {
-      return true;
-    }
-
-    return false;
+    IPathVariableManager pathVariableManager = ResourcesPlugin.getWorkspace().getPathVariableManager();
+    URI value = pathVariableManager.getURIValue(getName());
+    String uri = context.redirect(getURI());
+    return !ObjectUtil.equals(value == null ? null : value.toString(), uri);
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
     String name = getName();
-    String value = getValue();
-    context.log("Setting string substitution variable " + name + " = " + value);
+    String uri = context.redirect(getURI());
+    context.log("Setting path variable " + name + " = " + uri);
 
-    IValueVariable variable = getValueVariable(true);
-    variable.setDescription(getDescription());
-    variable.setValue(value);
+    IPathVariableManager pathVariableManager = ResourcesPlugin.getWorkspace().getPathVariableManager();
+    pathVariableManager.setURIValue(name, uri == null ? null : new URI(uri));
   }
 
-  private IValueVariable getValueVariable(boolean force) throws Exception
-  {
-    if (valueVariable == null)
-    {
-      IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
-      valueVariable = manager.getValueVariable(getName());
-      if (force && valueVariable == null)
-      {
-        valueVariable = manager.newValueVariable(getName(), null);
-        manager.addVariables(new IValueVariable[] { valueVariable });
-      }
-    }
-
-    return valueVariable;
-  }
-
-} // StringSubstitutionTaskImpl
+} // PathVariableTaskImpl
