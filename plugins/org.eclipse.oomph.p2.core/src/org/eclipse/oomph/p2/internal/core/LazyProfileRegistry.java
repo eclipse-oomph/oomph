@@ -12,22 +12,15 @@ package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.util.ReflectUtil;
 
-import org.eclipse.emf.common.CommonPlugin;
-
-import org.eclipse.equinox.internal.p2.engine.EngineActivator;
-import org.eclipse.equinox.internal.p2.engine.ProfileLock;
+import org.eclipse.equinox.internal.p2.engine.Profile;
 import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.osgi.util.NLS;
 
-import org.osgi.framework.BundleContext;
-
 import java.io.File;
 import java.io.FileFilter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,38 +35,35 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
   private static final String PROFILE_GZ_EXT = ".profile.gz"; //$NON-NLS-1$
 
-  private final IProvisioningAgent provisioningAgent;
-
-  private final File store;
-
-  private final String self;
-
-  private boolean updateSelfProfile;
-
-  private final Map<String, ProfileLock> profileLocks;
+  // private final File store;
+  //
+  // private final String self;
+  //
+  // private boolean updateSelfProfile;
+  //
+  // private final Map<String, ProfileLock> profileLocks;
 
   private Map<String, org.eclipse.equinox.internal.p2.engine.Profile> profileMap;
 
-  @SuppressWarnings("unchecked")
+  // @SuppressWarnings("unchecked")
   public LazyProfileRegistry(IProvisioningAgent provisioningAgent, File store)
   {
     super(provisioningAgent, store);
-    this.provisioningAgent = provisioningAgent;
     this.store = store;
 
-    Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self");
-    self = (String)ReflectUtil.getValue(selfField, this);
-
-    Field updateSelfProfileField = ReflectUtil.getField(SimpleProfileRegistry.class, "updateSelfProfile");
-    updateSelfProfile = (Boolean)ReflectUtil.getValue(updateSelfProfileField, this);
-
-    Field profileLocksField = ReflectUtil.getField(SimpleProfileRegistry.class, "profileLocks");
-    profileLocks = (Map<String, ProfileLock>)ReflectUtil.getValue(profileLocksField, this);
+    // Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self");
+    // self = (String)ReflectUtil.getValue(selfField, this);
+    //
+    // Field updateSelfProfileField = ReflectUtil.getField(SimpleProfileRegistry.class, "updateSelfProfile");
+    // updateSelfProfile = (Boolean)ReflectUtil.getValue(updateSelfProfileField, this);
+    //
+    // Field profileLocksField = ReflectUtil.getField(SimpleProfileRegistry.class, "profileLocks");
+    // profileLocks = (Map<String, ProfileLock>)ReflectUtil.getValue(profileLocksField, this);
   }
 
   public IProvisioningAgent getProvisioningAgent()
   {
-    return provisioningAgent;
+    return agent;
   }
 
   @Override
@@ -187,50 +177,51 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     try
     {
-      // TODO Ask p2 to expose what's needed here
-      Class<?> parserClass = CommonPlugin.loadClass(EngineActivator.ID, "org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry$Parser");
-      Constructor<?> constructor = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, BundleContext.class, String.class);
-      Method parseMethod = ReflectUtil.getMethod(parserClass, "parse", File.class);
-      Method getProfileMapMethod = ReflectUtil.getMethod(parserClass, "getProfileMap");
-      Method addProfilePlaceHolderMethod = ReflectUtil.getMethod(parserClass, "addProfilePlaceHolder", String.class);
+      Map<String, Profile> profileMap = parseProfile(profileDirectory, null);
 
-      Object parser = ReflectUtil.newInstance(constructor, this, EngineActivator.getContext(), EngineActivator.ID);
-
-      ProfileLock lock = profileLocks.get(profileId);
-      if (lock == null)
-      {
-        lock = new ProfileLock(this, profileDirectory);
-        profileLocks.put(profileId, lock);
-      }
-
-      boolean locked = false;
-      if (lock.processHoldsLock() || (locked = lock.lock()))
-      {
-        try
-        {
-          File profileFile = findLatestProfileFile(profileDirectory);
-          if (profileFile != null)
-          {
-            ReflectUtil.invokeMethod(parseMethod, parser, profileFile);
-          }
-        }
-        finally
-        {
-          if (locked)
-          {
-            lock.unlock();
-          }
-        }
-      }
-      else
-      {
-        // could not lock the profile, so add a place holder
-        ReflectUtil.invokeMethod(addProfilePlaceHolderMethod, parser, profileId);
-      }
-
-      @SuppressWarnings("unchecked")
-      Map<String, org.eclipse.equinox.internal.p2.engine.Profile> profileMap = //
-      (Map<String, org.eclipse.equinox.internal.p2.engine.Profile>)ReflectUtil.invokeMethod(getProfileMapMethod, parser);
+      // Class<?> parserClass = CommonPlugin.loadClass(EngineActivator.ID, "org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry$Parser");
+      // Constructor<?> constructor = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, BundleContext.class, String.class);
+      // Method parseMethod = ReflectUtil.getMethod(parserClass, "parse", File.class);
+      // Method getProfileMapMethod = ReflectUtil.getMethod(parserClass, "getProfileMap");
+      // Method addProfilePlaceHolderMethod = ReflectUtil.getMethod(parserClass, "addProfilePlaceHolder", String.class);
+      //
+      // Object parser = ReflectUtil.newInstance(constructor, this, EngineActivator.getContext(), EngineActivator.ID);
+      //
+      // ProfileLock lock = profileLocks.get(profileId);
+      // if (lock == null)
+      // {
+      // lock = new ProfileLock(this, profileDirectory);
+      // profileLocks.put(profileId, lock);
+      // }
+      //
+      // boolean locked = false;
+      // if (lock.processHoldsLock() || (locked = lock.lock()))
+      // {
+      // try
+      // {
+      // File profileFile = findLatestProfileFile(profileDirectory);
+      // if (profileFile != null)
+      // {
+      // ReflectUtil.invokeMethod(parseMethod, parser, profileFile);
+      // }
+      // }
+      // finally
+      // {
+      // if (locked)
+      // {
+      // lock.unlock();
+      // }
+      // }
+      // }
+      // else
+      // {
+      // // could not lock the profile, so add a place holder
+      // ReflectUtil.invokeMethod(addProfilePlaceHolderMethod, parser, profileId);
+      // }
+      //
+      // @SuppressWarnings("unchecked")
+      // Map<String, org.eclipse.equinox.internal.p2.engine.Profile> profileMap = //
+      // (Map<String, org.eclipse.equinox.internal.p2.engine.Profile>)ReflectUtil.invokeMethod(getProfileMapMethod, parser);
 
       return profileMap.get(profileId);
     }
@@ -244,40 +235,40 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     }
   }
 
-  private File findLatestProfileFile(File profileDirectory)
-  {
-    File latest = null;
-    long latestTimestamp = 0;
-    File[] profileFiles = profileDirectory.listFiles(new FileFilter()
-    {
-      public boolean accept(File pathname)
-      {
-        return (pathname.getName().endsWith(PROFILE_GZ_EXT) || pathname.getName().endsWith(PROFILE_EXT)) && !pathname.isDirectory();
-      }
-    });
-    // protect against NPE
-    if (profileFiles == null)
-    {
-      return null;
-    }
-    for (int i = 0; i < profileFiles.length; i++)
-    {
-      File profileFile = profileFiles[i];
-      String fileName = profileFile.getName();
-      try
-      {
-        long timestamp = Long.parseLong(fileName.substring(0, fileName.indexOf(PROFILE_EXT)));
-        if (timestamp > latestTimestamp)
-        {
-          latestTimestamp = timestamp;
-          latest = profileFile;
-        }
-      }
-      catch (NumberFormatException e)
-      {
-        // ignore
-      }
-    }
-    return latest;
-  }
+  // private File findLatestProfileFile(File profileDirectory)
+  // {
+  // File latest = null;
+  // long latestTimestamp = 0;
+  // File[] profileFiles = profileDirectory.listFiles(new FileFilter()
+  // {
+  // public boolean accept(File pathname)
+  // {
+  // return (pathname.getName().endsWith(PROFILE_GZ_EXT) || pathname.getName().endsWith(PROFILE_EXT)) && !pathname.isDirectory();
+  // }
+  // });
+  // // protect against NPE
+  // if (profileFiles == null)
+  // {
+  // return null;
+  // }
+  // for (int i = 0; i < profileFiles.length; i++)
+  // {
+  // File profileFile = profileFiles[i];
+  // String fileName = profileFile.getName();
+  // try
+  // {
+  // long timestamp = Long.parseLong(fileName.substring(0, fileName.indexOf(PROFILE_EXT)));
+  // if (timestamp > latestTimestamp)
+  // {
+  // latestTimestamp = timestamp;
+  // latest = profileFile;
+  // }
+  // }
+  // catch (NumberFormatException e)
+  // {
+  // // ignore
+  // }
+  // }
+  // return latest;
+  // }
 }
