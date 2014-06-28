@@ -503,9 +503,9 @@ public class TargetDefinitionGenerator implements TargletListener
     public final String formatElement(boolean withVersion)
     {
       Version version = getVersion();
-      if (!withVersion || Version.emptyVersion.equals(version))
+      if (!withVersion || version == null)
       {
-        return "<unit id=\"" + getID() + "\"/>";
+        version = Version.emptyVersion;
       }
 
       return "<unit id=\"" + getID() + "\" version=\"" + version + "\"/>";
