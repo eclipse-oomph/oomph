@@ -46,7 +46,7 @@ public interface Index extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Discoverable Packages</em>' reference list.
    * @see org.eclipse.oomph.setup.SetupPackage#getIndex_DiscoverablePackages()
-   * @model
+   * @model extendedMetaData="name='discoverablePackage'"
    * @generated
    */
   EList<EPackage> getDiscoverablePackages();

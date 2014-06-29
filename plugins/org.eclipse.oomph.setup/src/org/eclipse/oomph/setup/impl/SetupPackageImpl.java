@@ -2115,6 +2115,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getSetupTask_Restrictions(), source, new String[] { "name", "restriction" });
     addAnnotation(getSetupTaskContainer_SetupTasks(), source, new String[] { "name", "setupTask" });
     addAnnotation(getScope_Description(), source, new String[] { "kind", "element" });
+    addAnnotation(getIndex_DiscoverablePackages(), source, new String[] { "name", "discoverablePackage" });
     addAnnotation(getIndex_ProductCatalogs(), source, new String[] { "name", "productCatalog" });
     addAnnotation(getIndex_ProjectCatalogs(), source, new String[] { "name", "projectCatalog" });
     addAnnotation(getCatalogSelection_ProductCatalogs(), source, new String[] { "name", "productCatalog" });
