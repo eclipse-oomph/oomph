@@ -472,49 +472,52 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     SetupContext setupContext = SetupContext.getSelf();
     User user = setupContext.getUser();
     Resource userResource = user.eResource();
-    ResourceSet resourceSet = userResource.getResourceSet();
-    Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
-    Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
-
-    for (EPackage ePackage : index.getDiscoverablePackages())
+    if (userResource != null)
     {
-      for (EClassifier eClassifier : ePackage.getEClassifiers())
+      ResourceSet resourceSet = userResource.getResourceSet();
+      Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
+      Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
+
+      for (EPackage ePackage : index.getDiscoverablePackages())
       {
-        if (eClassifier instanceof EClass)
+        for (EClassifier eClassifier : ePackage.getEClassifiers())
         {
-          EClass eClass = (EClass)eClassifier;
-          if (!classes.add(eClass))
+          if (eClassifier instanceof EClass)
           {
-            continue;
-          }
-
-          if (eClass.isAbstract() || eClass.isInterface())
-          {
-            continue;
-          }
-
-          EObject eObject = EcoreUtil.create(eClass);
-          if (SetupTaskContainerItemProvider.isDeprecated(eObject))
-          {
-            continue;
-          }
-
-          EList<EAnnotation> eAnnotations = new BasicEList<EAnnotation>();
-          for (EAnnotation eAnnotation : eClass.getEAnnotations())
-          {
-            String source = eAnnotation.getSource();
-            if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
+            EClass eClass = (EClass)eClassifier;
+            if (!classes.add(eClass))
             {
-              eAnnotations.add(eAnnotation);
+              continue;
             }
-          }
 
-          if (eAnnotations.isEmpty())
-          {
-            continue;
-          }
+            if (eClass.isAbstract() || eClass.isInterface())
+            {
+              continue;
+            }
 
-          actions.add(new AdditionalTaskAction(eClass, eAnnotations));
+            EObject eObject = EcoreUtil.create(eClass);
+            if (SetupTaskContainerItemProvider.isDeprecated(eObject))
+            {
+              continue;
+            }
+
+            EList<EAnnotation> eAnnotations = new BasicEList<EAnnotation>();
+            for (EAnnotation eAnnotation : eClass.getEAnnotations())
+            {
+              String source = eAnnotation.getSource();
+              if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
+              {
+                eAnnotations.add(eAnnotation);
+              }
+            }
+
+            if (eAnnotations.isEmpty())
+            {
+              continue;
+            }
+
+            actions.add(new AdditionalTaskAction(eClass, eAnnotations));
+          }
         }
       }
     }
