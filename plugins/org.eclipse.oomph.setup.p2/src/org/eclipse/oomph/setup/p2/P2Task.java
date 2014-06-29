@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#getRequirements <em>Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#isLicenseConfirmationDisabled <em>License Confirmation Disabled</em>}</li>
@@ -37,6 +38,32 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface P2Task extends SetupTask
 {
+  /**
+   * Returns the value of the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Label</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Label</em>' attribute.
+   * @see #setLabel(String)
+   * @see org.eclipse.oomph.setup.p2.SetupP2Package#getP2Task_Label()
+   * @model
+   * @generated
+   */
+  String getLabel();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.p2.P2Task#getLabel <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Label</em>' attribute.
+   * @see #getLabel()
+   * @generated
+   */
+  void setLabel(String value);
+
   public static final String PROP_SKIP = "oomph.setup.p2.skip";
 
   /**

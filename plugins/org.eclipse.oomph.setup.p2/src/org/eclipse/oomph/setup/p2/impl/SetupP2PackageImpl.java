@@ -122,9 +122,9 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getP2Task_Requirements()
+  public EAttribute getP2Task_Label()
   {
-    return (EReference)p2TaskEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -132,7 +132,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getP2Task_Repositories()
+  public EReference getP2Task_Requirements()
   {
     return (EReference)p2TaskEClass.getEStructuralFeatures().get(1);
   }
@@ -142,9 +142,19 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getP2Task_Repositories()
+  {
+    return (EReference)p2TaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getP2Task_LicenseConfirmationDisabled()
   {
-    return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -154,7 +164,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    */
   public EAttribute getP2Task_MergeDisabled()
   {
-    return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -191,6 +201,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
 
     // Create classes and their features
     p2TaskEClass = createEClass(P2_TASK);
+    createEAttribute(p2TaskEClass, P2_TASK__LABEL);
     createEReference(p2TaskEClass, P2_TASK__REQUIREMENTS);
     createEReference(p2TaskEClass, P2_TASK__REPOSITORIES);
     createEAttribute(p2TaskEClass, P2_TASK__LICENSE_CONFIRMATION_DISABLED);
@@ -237,6 +248,8 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
 
     // Initialize classes and features; add operations and parameters
     initEClass(p2TaskEClass, P2Task.class, "P2Task", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getP2Task_Label(), ecorePackage.getEString(), "label", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getP2Task_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getP2Task_Repositories(), theP2Package.getRepository(), null, "repositories", null, 0, -1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE,

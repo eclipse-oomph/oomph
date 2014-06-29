@@ -59,10 +59,24 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addLabelPropertyDescriptor(object);
       addLicenseConfirmationDisabledPropertyDescriptor(object);
       addMergeDisabledPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Label feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLabelPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_P2Task_label_feature"), getString("_UI_PropertyDescriptor_description", "_UI_P2Task_label_feature", "_UI_P2Task_type"),
+        SetupP2Package.Literals.P2_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -153,12 +167,13 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_P2Task_type");
+    String label = ((P2Task)object).getLabel();
+    return label == null || label.length() == 0 ? getString("_UI_P2Task_type") : getString("_UI_P2Task_type") + " (" + label + ")";
   }
 
   /**
@@ -175,6 +190,7 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(P2Task.class))
     {
+      case SetupP2Package.P2_TASK__LABEL:
       case SetupP2Package.P2_TASK__LICENSE_CONFIRMATION_DISABLED:
       case SetupP2Package.P2_TASK__MERGE_DISABLED:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

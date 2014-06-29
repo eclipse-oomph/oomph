@@ -94,6 +94,7 @@ import java.util.regex.Pattern;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getRequirements <em>Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#isLicenseConfirmationDisabled <em>License Confirmation Disabled</em>}</li>
@@ -105,6 +106,26 @@ import java.util.regex.Pattern;
  */
 public class P2TaskImpl extends SetupTaskImpl implements P2Task
 {
+  /**
+   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected static final String LABEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected String label = LABEL_EDEFAULT;
+
   private static final boolean SKIP = "true".equals(PropertiesUtil.getProperty(PROP_SKIP));
 
   private static final Object FIRST_CALL_DETECTION_KEY = new Object();
@@ -191,6 +212,31 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   protected EClass eStaticClass()
   {
     return SetupP2Package.Literals.P2_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getLabel()
+  {
+    return label;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLabel(String newLabel)
+  {
+    String oldLabel = label;
+    label = newLabel;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupP2Package.P2_TASK__LABEL, oldLabel, label));
+    }
   }
 
   /**
@@ -300,6 +346,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   {
     switch (featureID)
     {
+      case SetupP2Package.P2_TASK__LABEL:
+        return getLabel();
       case SetupP2Package.P2_TASK__REQUIREMENTS:
         return getRequirements();
       case SetupP2Package.P2_TASK__REPOSITORIES:
@@ -323,6 +371,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   {
     switch (featureID)
     {
+      case SetupP2Package.P2_TASK__LABEL:
+        setLabel((String)newValue);
+        return;
       case SetupP2Package.P2_TASK__REQUIREMENTS:
         getRequirements().clear();
         getRequirements().addAll((Collection<? extends Requirement>)newValue);
@@ -351,6 +402,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   {
     switch (featureID)
     {
+      case SetupP2Package.P2_TASK__LABEL:
+        setLabel(LABEL_EDEFAULT);
+        return;
       case SetupP2Package.P2_TASK__REQUIREMENTS:
         getRequirements().clear();
         return;
@@ -377,6 +431,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   {
     switch (featureID)
     {
+      case SetupP2Package.P2_TASK__LABEL:
+        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case SetupP2Package.P2_TASK__REQUIREMENTS:
         return requirements != null && !requirements.isEmpty();
       case SetupP2Package.P2_TASK__REPOSITORIES:
@@ -403,7 +459,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (licenseConfirmationDisabled: ");
+    result.append(" (label: ");
+    result.append(label);
+    result.append(", licenseConfirmationDisabled: ");
     result.append(licenseConfirmationDisabled);
     result.append(", mergeDisabled: ");
     result.append(mergeDisabled);
@@ -436,6 +494,18 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     P2Task overriddenP2Task = (P2Task)overriddenSetupTask;
     getRequirements().addAll(overriddenP2Task.getRequirements());
     getRepositories().addAll(overriddenP2Task.getRepositories());
+
+    String overriddenLabel = overriddenP2Task.getLabel();
+    if (!StringUtil.isEmpty(overriddenLabel))
+    {
+      String label = getLabel();
+      if (!StringUtil.isEmpty(label))
+      {
+        overriddenLabel += " + " + label;
+      }
+
+      setLabel(overriddenLabel);
+    }
   }
 
   @Override

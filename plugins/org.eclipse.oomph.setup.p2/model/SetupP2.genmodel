@@ -9,7 +9,8 @@
   <foreignModel>SetupP2.ecore</foreignModel>
   <genPackages prefix="SetupP2" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="SetupP2.ecore#/">
-    <genClasses ecoreClass="SetupP2.ecore#//P2Task">
+    <genClasses ecoreClass="SetupP2.ecore#//P2Task" labelFeature="#//p2/P2Task/label">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupP2.ecore#//P2Task/label"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupP2.ecore#//P2Task/requirements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupP2.ecore#//P2Task/repositories"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupP2.ecore#//P2Task/licenseConfirmationDisabled"/>

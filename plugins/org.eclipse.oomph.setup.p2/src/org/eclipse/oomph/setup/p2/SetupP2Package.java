@@ -158,13 +158,22 @@ public interface SetupP2Package extends EPackage
   int P2_TASK__RESTRICTIONS = SetupPackage.SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int P2_TASK__LABEL = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Requirements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int P2_TASK__REQUIREMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int P2_TASK__REQUIREMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
@@ -173,7 +182,7 @@ public interface SetupP2Package extends EPackage
    * @generated
    * @ordered
    */
-  int P2_TASK__REPOSITORIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int P2_TASK__REPOSITORIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>License Confirmation Disabled</b></em>' attribute.
@@ -182,7 +191,7 @@ public interface SetupP2Package extends EPackage
    * @generated
    * @ordered
    */
-  int P2_TASK__LICENSE_CONFIRMATION_DISABLED = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int P2_TASK__LICENSE_CONFIRMATION_DISABLED = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Merge Disabled</b></em>' attribute.
@@ -191,7 +200,7 @@ public interface SetupP2Package extends EPackage
    * @generated
    * @ordered
    */
-  int P2_TASK__MERGE_DISABLED = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int P2_TASK__MERGE_DISABLED = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The number of structural features of the '<em>P2 Task</em>' class.
@@ -200,7 +209,7 @@ public interface SetupP2Package extends EPackage
    * @generated
    * @ordered
    */
-  int P2_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
+  int P2_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.p2.P2Task <em>P2 Task</em>}'.
@@ -211,6 +220,17 @@ public interface SetupP2Package extends EPackage
    * @generated
    */
   EClass getP2Task();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.p2.P2Task#getLabel <em>Label</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Label</em>'.
+   * @see org.eclipse.oomph.setup.p2.P2Task#getLabel()
+   * @see #getP2Task()
+   * @generated
+   */
+  EAttribute getP2Task_Label();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.p2.P2Task#getRequirements <em>Requirements</em>}'.
@@ -288,6 +308,14 @@ public interface SetupP2Package extends EPackage
      * @generated
      */
     EClass P2_TASK = eINSTANCE.getP2Task();
+
+    /**
+     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute P2_TASK__LABEL = eINSTANCE.getP2Task_Label();
 
     /**
      * The meta object literal for the '<em><b>Requirements</b></em>' containment reference list feature.
