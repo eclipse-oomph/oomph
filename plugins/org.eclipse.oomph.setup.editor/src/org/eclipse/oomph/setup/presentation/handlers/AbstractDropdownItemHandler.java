@@ -45,7 +45,7 @@ public abstract class AbstractDropdownItemHandler extends AbstractHandler implem
 
   public final Object execute(ExecutionEvent event) throws ExecutionException
   {
-    PerformDropdownHandler.setAction(PerformDropdownHandler.COMMAND_ID, getImageDescriptor(), text, this);
+    // PerformDropdownHandler.setAction(PerformDropdownHandler.COMMAND_ID, getImageDescriptor(), text, this);
 
     run();
     return null;

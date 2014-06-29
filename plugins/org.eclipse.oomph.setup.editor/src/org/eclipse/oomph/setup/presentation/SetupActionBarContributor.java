@@ -11,22 +11,36 @@
 package org.eclipse.oomph.setup.presentation;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.EAnnotationConstants;
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.RedirectionTask;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
+import org.eclipse.oomph.setup.provider.SetupTaskContainerItemProvider;
 import org.eclipse.oomph.setup.ui.actions.PreferenceRecorderAction;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog;
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -76,8 +90,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This is the action bar contributor for the Setup model editor.
@@ -407,7 +423,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<IAction> generateCreateChildActions(Collection<?> descriptors, ISelection selection)
+  protected Collection<IAction> generateCreateChildActionsGen(Collection<?> descriptors, ISelection selection)
   {
     Collection<IAction> actions = new ArrayList<IAction>();
     if (descriptors != null)
@@ -420,6 +436,87 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     return actions;
   }
 
+  protected Collection<IAction> generateCreateChildActions(Collection<?> descriptors, ISelection selection)
+  {
+    Collection<IAction> actions = generateCreateChildActionsGen(descriptors, selection);
+
+    if (selection instanceof IStructuredSelection && ((IStructuredSelection)selection).size() == 1)
+    {
+      Object object = ((IStructuredSelection)selection).getFirstElement();
+      if (object instanceof SetupTaskContainer)
+      {
+        actions = new ArrayList<IAction>(actions);
+        addAdditionalActions(descriptors, actions);
+      }
+    }
+
+    return actions;
+  }
+
+  protected void addAdditionalActions(Collection<?> descriptors, Collection<IAction> actions)
+  {
+    Set<EClass> classes = new HashSet<EClass>();
+    for (Object descriptor : descriptors)
+    {
+      if (descriptor instanceof CommandParameter)
+      {
+        Object value = ((CommandParameter)descriptor).getValue();
+        if (value instanceof EObject)
+        {
+          classes.add(((EObject)value).eClass());
+        }
+      }
+    }
+
+    SetupContext setupContext = SetupContext.getSelf();
+    ResourceSet resourceSet = setupContext.getUser().eResource().getResourceSet();
+    Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
+    Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
+
+    for (EPackage ePackage : index.getDiscoverablePackages())
+    {
+      for (EClassifier eClassifier : ePackage.getEClassifiers())
+      {
+        if (eClassifier instanceof EClass)
+        {
+          EClass eClass = (EClass)eClassifier;
+          if (!classes.add(eClass))
+          {
+            continue;
+          }
+
+          if (eClass.isAbstract() || eClass.isInterface())
+          {
+            continue;
+          }
+
+          EObject eObject = EcoreUtil.create(eClass);
+          if (SetupTaskContainerItemProvider.isDeprecated(eObject))
+          {
+            continue;
+          }
+
+          EList<EAnnotation> eAnnotations = new BasicEList<EAnnotation>();
+          for (EAnnotation eAnnotation : eClass.getEAnnotations())
+          {
+            String source = eAnnotation.getSource();
+            if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
+            {
+              eAnnotations.add(eAnnotation);
+            }
+          }
+
+          if (eAnnotations.isEmpty())
+          {
+            continue;
+          }
+
+          actions.add(new AdditionalTaskAction(eClass, eAnnotations));
+        }
+      }
+    }
+  }
+
   /**
    * This generates a {@link org.eclipse.emf.edit.ui.action.CreateSiblingAction} for each object in <code>descriptors</code>,
    * and returns the collection of these actions.
@@ -427,7 +524,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<IAction> generateCreateSiblingActions(Collection<?> descriptors, ISelection selection)
+  protected Collection<IAction> generateCreateSiblingActionsGen(Collection<?> descriptors, ISelection selection)
   {
     Collection<IAction> actions = new ArrayList<IAction>();
     if (descriptors != null)
@@ -438,6 +535,11 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       }
     }
     return actions;
+  }
+
+  protected Collection<IAction> generateCreateSiblingActions(Collection<?> descriptors, ISelection selection)
+  {
+    return generateCreateSiblingActionsGen(descriptors, selection);
   }
 
   /**
@@ -491,10 +593,17 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     List<IAction> tasks = new ArrayList<IAction>();
     List<IAction> annotations = new ArrayList<IAction>();
     List<IAction> additions = new ArrayList<IAction>();
+    List<AdditionalTaskAction> additionals = new ArrayList<AdditionalTaskAction>();
 
     for (IAction action : actions)
     {
       Object descriptor;
+      if (action instanceof AdditionalTaskAction)
+      {
+        additionals.add((AdditionalTaskAction)action);
+        continue;
+      }
+
       if (action instanceof CreateChildAction)
       {
         descriptor = ((CreateChildAction)action).getDescriptor();
@@ -552,6 +661,16 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     populateManagerGen(manager, defaults, "defaults-end");
     populateManagerGen(manager, installations, "installations-end");
     populateManagerGen(manager, tasks, "tasks-end");
+
+    if (!additionals.isEmpty())
+    {
+      Collections.sort(additionals, ACTION_COMPARATOR);
+
+      MenuManager submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalTasks_menu_item"));
+      populateManager(submenuManager, additionals, null);
+      manager.insertBefore("tasks-end", submenuManager);
+    }
+
     populateManagerGen(manager, annotations, "annotations-end");
     populateManagerGen(manager, additions, "additions-end");
   }
@@ -756,6 +875,56 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public Object getDescriptor()
     {
       return descriptor;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class AdditionalTaskAction extends Action
+  {
+    private final EClass eClass;
+
+    private final EList<EAnnotation> eAnnotations;
+
+    public AdditionalTaskAction(EClass eClass, EList<EAnnotation> eAnnotations)
+    {
+      super(eClass.getName());
+      this.eClass = eClass;
+      this.eAnnotations = eAnnotations;
+    }
+
+    @Override
+    public void run()
+    {
+      // String variableName = eAnnotation.getDetails().get(EAnnotationConstants.KEY_VARIABLE_NAME);
+      // String p2RepositoryLocation = eAnnotation.getDetails().get(EAnnotationConstants.KEY_REPOSITORY);
+      //
+      // VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+      // variable.setName(variableName);
+      // variable.setValue(p2RepositoryLocation);
+      // triggeredSetupTasks.add(0, variable);
+      //
+      // P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+      // EList<Requirement> requirements = p2Task.getRequirements();
+      // for (String requirementSpecification : eAnnotation.getDetails().get(EAnnotationConstants.KEY_INSTALLABLE_UNITS).split("\\s"))
+      // {
+      // Matcher matcher = INSTALLABLE_UNIT_WITH_RANGE_PATTERN.matcher(requirementSpecification);
+      // if (matcher.matches())
+      // {
+      // Requirement requirement = P2Factory.eINSTANCE.createRequirement(matcher.group(1));
+      // String versionRange = matcher.group(2);
+      // if (!StringUtil.isEmpty(versionRange))
+      // {
+      // requirement.setVersionRange(new VersionRange(versionRange));
+      // }
+      //
+      // requirements.add(requirement);
+      // }
+      // }
+      //
+      // Repository repository = P2Factory.eINSTANCE.createRepository(getVariableReference(variableName));
+      // p2Task.getRepositories().add(repository);
     }
   }
 

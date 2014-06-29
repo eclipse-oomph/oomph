@@ -206,7 +206,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
             }
           };
 
-          OpenEditorDropdownHandler.setAction(OpenEditorDropdownHandler.COMMAND_ID, imageDescriptor, text, runnable);
+          // OpenEditorDropdownHandler.setAction(OpenEditorDropdownHandler.COMMAND_ID, imageDescriptor, text, runnable);
           runnable.run();
         }
       });

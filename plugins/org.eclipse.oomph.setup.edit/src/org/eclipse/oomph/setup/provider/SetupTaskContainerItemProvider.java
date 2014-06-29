@@ -199,7 +199,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
     }
   }
 
-  private static boolean isDeprecated(Object value)
+  public static boolean isDeprecated(Object value)
   {
     if (value != null)
     {

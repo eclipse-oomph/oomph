@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -56,8 +57,23 @@ public class IndexItemProvider extends ModelElementItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addDiscoverablePackagesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Discoverable Packages feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addDiscoverablePackagesPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Index_discoverablePackages_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_Index_discoverablePackages_feature", "_UI_Index_type"),
+        SetupPackage.Literals.INDEX__DISCOVERABLE_PACKAGES, true, false, true, null, null, null));
   }
 
   /**

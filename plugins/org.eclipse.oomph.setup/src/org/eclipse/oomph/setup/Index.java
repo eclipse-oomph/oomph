@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup;
 import org.eclipse.oomph.base.ModelElement;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.Index#getDiscoverablePackages <em>Discoverable Packages</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Index#getProductCatalogs <em>Product Catalogs</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Index#getProjectCatalogs <em>Project Catalogs</em>}</li>
  * </ul>
@@ -33,6 +35,22 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface Index extends ModelElement
 {
+  /**
+   * Returns the value of the '<em><b>Discoverable Packages</b></em>' reference list.
+   * The list contents are of type {@link org.eclipse.emf.ecore.EPackage}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Discoverable Packages</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Discoverable Packages</em>' reference list.
+   * @see org.eclipse.oomph.setup.SetupPackage#getIndex_DiscoverablePackages()
+   * @model
+   * @generated
+   */
+  EList<EPackage> getDiscoverablePackages();
+
   /**
    * Returns the value of the '<em><b>Project Catalogs</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.oomph.setup.ProjectCatalog}.

@@ -419,9 +419,19 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getIndex_DiscoverablePackages()
+  {
+    return (EReference)indexEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getIndex_ProjectCatalogs()
   {
-    return (EReference)indexEClass.getEStructuralFeatures().get(1);
+    return (EReference)indexEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -481,7 +491,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   public EReference getIndex_ProductCatalogs()
   {
-    return (EReference)indexEClass.getEStructuralFeatures().get(0);
+    return (EReference)indexEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1586,6 +1596,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(scopeEClass, SCOPE__DESCRIPTION);
 
     indexEClass = createEClass(INDEX);
+    createEReference(indexEClass, INDEX__DISCOVERABLE_PACKAGES);
     createEReference(indexEClass, INDEX__PRODUCT_CATALOGS);
     createEReference(indexEClass, INDEX__PROJECT_CATALOGS);
 
@@ -1829,6 +1840,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEOperation(scopeEClass, getScopeType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(indexEClass, Index.class, "Index", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getIndex_DiscoverablePackages(), ecorePackage.getEPackage(), null, "discoverablePackages", null, 0, -1, Index.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getIndex_ProductCatalogs(), getProductCatalog(), getProductCatalog_Index(), "productCatalogs", null, 0, -1, Index.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getIndex_ProductCatalogs().getEKeys().add(getScope_Name());

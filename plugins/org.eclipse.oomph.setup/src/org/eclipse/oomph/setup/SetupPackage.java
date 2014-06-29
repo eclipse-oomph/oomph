@@ -410,6 +410,15 @@ public interface SetupPackage extends EPackage
   int INDEX__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Discoverable Packages</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX__DISCOVERABLE_PACKAGES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.UserImpl <em>User</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -506,7 +515,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX__PRODUCT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+  int INDEX__PRODUCT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Project Catalogs</b></em>' containment reference list.
@@ -515,7 +524,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX__PROJECT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+  int INDEX__PROJECT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Index</em>' class.
@@ -524,7 +533,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int INDEX_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -2943,6 +2952,17 @@ public interface SetupPackage extends EPackage
   EClass getIndex();
 
   /**
+   * Returns the meta object for the reference list '{@link org.eclipse.oomph.setup.Index#getDiscoverablePackages <em>Discoverable Packages</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Discoverable Packages</em>'.
+   * @see org.eclipse.oomph.setup.Index#getDiscoverablePackages()
+   * @see #getIndex()
+   * @generated
+   */
+  EReference getIndex_DiscoverablePackages();
+
+  /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.Index#getProjectCatalogs <em>Project Catalogs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4190,6 +4210,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EClass INDEX = eINSTANCE.getIndex();
+
+    /**
+     * The meta object literal for the '<em><b>Discoverable Packages</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INDEX__DISCOVERABLE_PACKAGES = eINSTANCE.getIndex_DiscoverablePackages();
 
     /**
      * The meta object literal for the '<em><b>Project Catalogs</b></em>' containment reference list feature.
