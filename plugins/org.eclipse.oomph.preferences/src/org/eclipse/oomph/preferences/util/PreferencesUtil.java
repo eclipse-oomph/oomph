@@ -302,7 +302,7 @@ public final class PreferencesUtil
     for (Property property : preferenceNode.getProperties())
     {
       String name = property.getName();
-      String value = property.getValue();
+      String value = property.getSecureValue();
       if (propertyNames.remove(name))
       {
         if (!ObjectUtil.equals(value, preferences.get(name, null)))
@@ -352,11 +352,26 @@ public final class PreferencesUtil
 
     for (Property property : preferenceNode.getProperties())
     {
-      String value = property.getValue();
+      String value = property.getSecureValue();
       if (value != null)
       {
         String name = property.getName();
-        childPreferences.put(name, value);
+        if (childPreferences instanceof ISecurePreferences)
+        {
+          ISecurePreferences securePreferences = (ISecurePreferences)childPreferences;
+          try
+          {
+            securePreferences.put(name, value, property.isSecure());
+          }
+          catch (StorageException ex)
+          {
+            throw new RuntimeException(ex);
+          }
+        }
+        else
+        {
+          childPreferences.put(name, value);
+        }
       }
     }
   }
@@ -414,8 +429,6 @@ public final class PreferencesUtil
       {
         Property property = PreferencesFactory.eINSTANCE.createProperty();
         property.setName(name);
-        String value = node.get(name, null);
-        property.setValue(value == null ? "" : value);
 
         if (node instanceof ISecurePreferences)
         {
@@ -430,6 +443,9 @@ public final class PreferencesUtil
             // Ignore.
           }
         }
+
+        String value = node.get(name, null);
+        property.setValue(value == null ? "" : value);
 
         properties.add(property);
       }

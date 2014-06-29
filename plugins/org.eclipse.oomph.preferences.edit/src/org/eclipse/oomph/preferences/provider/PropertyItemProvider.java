@@ -31,10 +31,6 @@ import java.util.List;
  */
 public class PropertyItemProvider extends PreferenceItemItemProvider
 {
-  protected List<IItemPropertyDescriptor> normalPropertyDescriptors;
-
-  protected List<IItemPropertyDescriptor> securePropertyDescriptors;
-
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -50,42 +46,20 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
    * This returns the property descriptors for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   @Override
   public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
   {
-    Property property = (Property)object;
-    itemPropertyDescriptors = null;
-    if (property.isSecure())
-    {
-      if (securePropertyDescriptors == null)
-      {
-        super.getPropertyDescriptors(object);
-
-        addSecurePropertyDescriptor(object);
-        addNonDefaultPropertyDescriptor(object);
-
-        securePropertyDescriptors = itemPropertyDescriptors;
-        itemPropertyDescriptors = null;
-      }
-
-      return securePropertyDescriptors;
-    }
-
-    if (normalPropertyDescriptors == null)
+    if (itemPropertyDescriptors == null)
     {
       super.getPropertyDescriptors(object);
 
       addValuePropertyDescriptor(object);
-      addSecurePropertyDescriptor(object);
       addNonDefaultPropertyDescriptor(object);
-
-      normalPropertyDescriptors = itemPropertyDescriptors;
-      itemPropertyDescriptors = null;
+      addSecurePropertyDescriptor(object);
     }
-
-    return normalPropertyDescriptors;
+    return itemPropertyDescriptors;
   }
 
   /**
@@ -162,16 +136,6 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
     Property property = (Property)object;
     String name = property.getName();
     String value = property.getValue();
-    if (value == null)
-    {
-      value = "";
-    }
-
-    if (property.isSecure())
-    {
-      value = value.replaceAll(".", "*");
-    }
-
     return (name == null ? "" : name) + "=" + crop(value);
   }
 

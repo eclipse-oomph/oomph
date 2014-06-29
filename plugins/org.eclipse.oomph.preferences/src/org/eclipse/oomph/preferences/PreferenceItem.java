@@ -119,7 +119,7 @@ public interface PreferenceItem extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ancestor</em>' reference.
    * @see org.eclipse.oomph.preferences.PreferencesPackage#getPreferenceItem_Ancestor()
-   * @model resolveProxies="false" changeable="false" volatile="true" derived="true"
+   * @model resolveProxies="false" transient="true" changeable="false" volatile="true" derived="true"
    * @generated
    */
   PreferenceItem getAncestor();

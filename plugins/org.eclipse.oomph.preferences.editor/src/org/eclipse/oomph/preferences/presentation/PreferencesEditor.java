@@ -1431,8 +1431,9 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
           propertyPresentation.getWrappedObjects().add(property);
         }
 
-        propertyPresentation.getChildren().add(
-            new PropertyPresentation(PreferencesFactory.eINSTANCE.convertURI(rootPreferenceNode.getAbsolutePath()) + "=" + property.getValue(), property));
+        URI absolutePath = rootPreferenceNode.getAbsolutePath();
+        String value = property.getValue();
+        propertyPresentation.getChildren().add(new PropertyPresentation(PreferencesFactory.eINSTANCE.convertURI(absolutePath) + "=" + value, property));
       }
 
       public List<PreferenceNode> getWrappedObjects()
@@ -1483,7 +1484,7 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
             }
           }
         }
-        else if ("bundle_defaults".equals(name) || "default".equals(name) || "configuration".equals(name) || "instance".equals(name))
+        else if ("bundle_defaults".equals(name) || "default".equals(name) || "configuration".equals(name) || "instance".equals(name) || "secure".equals(name))
         {
           for (PreferenceNode child : node.getChildren())
           {

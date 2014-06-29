@@ -542,7 +542,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getPreferenceItem_RelativePath(), getURI(), "relativePath", null, 1, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceItem_Ancestor(), getPreferenceItem(), null, "ancestor", null, 0, 1, PreferenceItem.class, !IS_TRANSIENT, IS_VOLATILE,
+    initEReference(getPreferenceItem_Ancestor(), getPreferenceItem(), null, "ancestor", null, 0, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE,
         !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     initEOperation(getPreferenceItem__GetParent(), getPreferenceNode(), "getParent", 0, 1, IS_UNIQUE, IS_ORDERED);

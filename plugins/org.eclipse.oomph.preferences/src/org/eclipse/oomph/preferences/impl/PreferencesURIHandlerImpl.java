@@ -11,14 +11,18 @@
 package org.eclipse.oomph.preferences.impl;
 
 import org.eclipse.oomph.preferences.PreferenceNode;
+import org.eclipse.oomph.preferences.PreferencesPackage;
+import org.eclipse.oomph.preferences.Property;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -146,7 +150,28 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
       {
         public void saveResource(Resource resource) throws IOException
         {
-          PreferenceNode root = EcoreUtil.copy((PreferenceNode)resource.getContents().get(0));
+          Copier copier = new Copier()
+          {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void copyAttribute(EAttribute eAttribute, EObject eObject, EObject copyEObject)
+            {
+              if (eAttribute == PreferencesPackage.Literals.PROPERTY__VALUE)
+              {
+                Property property = (Property)eObject;
+                Property copyProperty = (Property)copyEObject;
+                copyProperty.setValue(property.getSecureValue());
+              }
+              else
+              {
+                super.copyAttribute(eAttribute, eObject, copyEObject);
+              }
+            }
+          };
+          PreferenceNode root = (PreferenceNode)copier.copy(resource.getContents().get(0));
+          copier.copyReferences();
+
           Throwable throwable = null;
           try
           {

@@ -13,6 +13,8 @@ package org.eclipse.oomph.preferences.impl;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesPackage;
 import org.eclipse.oomph.preferences.Property;
+import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -21,8 +23,14 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.impl.DESCipherImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -43,6 +51,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class PropertyImpl extends PreferenceItemImpl implements Property
 {
+  private static final Cipher CIPHER = new Cipher();
+
   /**
    * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -184,15 +194,26 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
     return value;
   }
 
+  public String getSecureValue()
+  {
+    return isSecure() ? CIPHER.decrypt(getValue()) : getValue();
+  }
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public void setValue(String newValue)
   {
+    if (isSecure())
+    {
+      newValue = CIPHER.encrypt(newValue);
+    }
+
     String oldValue = value;
     value = newValue;
+
     if (eNotificationRequired())
     {
       eNotify(new ENotificationImpl(this, Notification.SET, PreferencesPackage.PROPERTY__VALUE, oldValue, value));
@@ -230,12 +251,23 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public void setSecure(boolean newSecure)
   {
     boolean oldSecure = secure;
     secure = newSecure;
+
+    if (oldSecure != newSecure)
+    {
+      String oldValue = value;
+      value = secure ? CIPHER.encrypt(oldValue) : CIPHER.decrypt(oldValue);
+      if (eNotificationRequired())
+      {
+        eNotify(new ENotificationImpl(this, Notification.SET, PreferencesPackage.PROPERTY__VALUE, oldValue, value));
+      }
+    }
+
     if (eNotificationRequired())
     {
       eNotify(new ENotificationImpl(this, Notification.SET, PreferencesPackage.PROPERTY__SECURE, oldSecure, secure));
@@ -508,4 +540,62 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
     return null;
   }
 
+  /**
+   * @author Ed Merks
+   */
+  private static class Cipher extends DESCipherImpl
+  {
+    public Cipher()
+    {
+      super(EcoreUtil.generateUUID());
+    }
+
+    @Override
+    public OutputStream encrypt(OutputStream outputStream) throws Exception
+    {
+      return super.encrypt(outputStream);
+    }
+
+    public String encrypt(String value)
+    {
+      if (value == null)
+      {
+        return null;
+      }
+
+      try
+      {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        OutputStream out = encrypt(bytes);
+        out.write(value.getBytes());
+        out.close();
+        return XMLTypeFactory.eINSTANCE.convertBase64Binary(bytes.toByteArray());
+      }
+      catch (Exception ex)
+      {
+        throw new IORuntimeException(ex);
+      }
+    }
+
+    public String decrypt(String value)
+    {
+      if (value == null)
+      {
+        return null;
+      }
+
+      ByteArrayInputStream byteValue = new ByteArrayInputStream(XMLTypeFactory.eINSTANCE.createBase64Binary(value));
+      try
+      {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        InputStream in = decrypt(byteValue);
+        IOUtil.copy(in, bytes);
+        return new String(bytes.toByteArray());
+      }
+      catch (Exception ex)
+      {
+        throw new IORuntimeException(ex);
+      }
+    }
+  }
 } // PropertyImpl

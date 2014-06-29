@@ -63,8 +63,8 @@ public interface Property extends PreferenceItem
    * Returns the value of the '<em><b>Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Value</em>' attribute isn't clear,
-   * there really should be more of a description here...
+   * If the property is {@link #isSecure() secure} this returns an obscured value.
+   * Use {@link #getSecureValue()} to get the actual secure value.
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value</em>' attribute.
@@ -74,6 +74,11 @@ public interface Property extends PreferenceItem
    * @generated
    */
   String getValue();
+
+  /**
+   * Normally
+   */
+  String getSecureValue();
 
   /**
    * Sets the value of the '{@link org.eclipse.oomph.preferences.Property#getValue <em>Value</em>}' attribute.

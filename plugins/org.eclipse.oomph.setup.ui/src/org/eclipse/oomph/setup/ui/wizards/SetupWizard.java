@@ -405,7 +405,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
    */
   public static class Installer extends SetupWizard
   {
-    private static final P2ServiceUI UI_SERVICES = new P2ServiceUI();
+    public static final P2ServiceUI SERVICE_UI = new P2ServiceUI();
 
     public Installer()
     {
@@ -444,7 +444,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
       if (performer != null)
       {
-        performer.put(UIServices.class, UI_SERVICES);
+        performer.put(UIServices.class, SERVICE_UI);
       }
     }
   }
