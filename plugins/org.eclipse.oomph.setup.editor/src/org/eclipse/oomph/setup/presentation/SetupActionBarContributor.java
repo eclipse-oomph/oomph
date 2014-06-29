@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
+import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.provider.SetupTaskContainerItemProvider;
@@ -469,7 +470,9 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     }
 
     SetupContext setupContext = SetupContext.getSelf();
-    ResourceSet resourceSet = setupContext.getUser().eResource().getResourceSet();
+    User user = setupContext.getUser();
+    Resource userResource = user.eResource();
+    ResourceSet resourceSet = userResource.getResourceSet();
     Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
     Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
 
