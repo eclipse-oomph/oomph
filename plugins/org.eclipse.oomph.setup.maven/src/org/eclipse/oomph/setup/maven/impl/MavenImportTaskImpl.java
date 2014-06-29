@@ -19,11 +19,14 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
+import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -54,6 +57,7 @@ import java.util.Set;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getSourceLocators <em>Source Locators</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getProjectNameTemplate <em>Project Name Template</em>}</li>
  * </ul>
  * </p>
  *
@@ -72,6 +76,26 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * @ordered
    */
   protected EList<SourceLocator> sourceLocators;
+
+  /**
+   * The default value of the '{@link #getProjectNameTemplate() <em>Project Name Template</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProjectNameTemplate()
+   * @generated
+   * @ordered
+   */
+  protected static final String PROJECT_NAME_TEMPLATE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getProjectNameTemplate() <em>Project Name Template</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProjectNameTemplate()
+   * @generated
+   * @ordered
+   */
+  protected String projectNameTemplate = PROJECT_NAME_TEMPLATE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -113,6 +137,31 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getProjectNameTemplate()
+  {
+    return projectNameTemplate;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setProjectNameTemplate(String newProjectNameTemplate)
+  {
+    String oldProjectNameTemplate = projectNameTemplate;
+    projectNameTemplate = newProjectNameTemplate;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE, oldProjectNameTemplate, projectNameTemplate));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -136,6 +185,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     {
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         return getSourceLocators();
+      case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
+        return getProjectNameTemplate();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -155,6 +206,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
         getSourceLocators().clear();
         getSourceLocators().addAll((Collection<? extends SourceLocator>)newValue);
         return;
+      case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
+        setProjectNameTemplate((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -172,6 +226,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         getSourceLocators().clear();
         return;
+      case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
+        setProjectNameTemplate(PROJECT_NAME_TEMPLATE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -188,8 +245,30 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     {
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         return sourceLocators != null && !sourceLocators.isEmpty();
+      case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
+        return PROJECT_NAME_TEMPLATE_EDEFAULT == null ? projectNameTemplate != null : !PROJECT_NAME_TEMPLATE_EDEFAULT.equals(projectNameTemplate);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (projectNameTemplate: ");
+    result.append(projectNameTemplate);
+    result.append(')');
+    return result.toString();
   }
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
@@ -240,7 +319,15 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     if (!projectInfos.isEmpty())
     {
       IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
-      projectConfigurationManager.importProjects(projectInfos, new ProjectImportConfiguration(), monitor);
+      ProjectImportConfiguration projectImportConfiguration = new ProjectImportConfiguration();
+
+      String projectNameTemplate = getProjectNameTemplate();
+      if (!StringUtil.isEmpty(projectNameTemplate))
+      {
+        projectImportConfiguration.setProjectNameTemplate(projectNameTemplate);
+      }
+
+      projectConfigurationManager.importProjects(projectInfos, projectImportConfiguration, monitor);
     }
   }
 

@@ -19,7 +19,9 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
@@ -57,8 +59,23 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addProjectNameTemplatePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Project Name Template feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addProjectNameTemplatePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_MavenImportTask_projectNameTemplate_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_projectNameTemplate_feature", "_UI_MavenImportTask_type"),
+        MavenPackage.Literals.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -143,6 +160,9 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(MavenImportTask.class))
     {
+      case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;

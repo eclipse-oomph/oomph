@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.maven.MavenFactory;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -131,6 +132,16 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getMavenImportTask_ProjectNameTemplate()
+  {
+    return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public MavenFactory getMavenFactory()
   {
     return (MavenFactory)getEFactoryInstance();
@@ -161,6 +172,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     // Create classes and their features
     mavenImportTaskEClass = createEClass(MAVEN_IMPORT_TASK);
     createEReference(mavenImportTaskEClass, MAVEN_IMPORT_TASK__SOURCE_LOCATORS);
+    createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE);
   }
 
   /**
@@ -205,6 +217,8 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     initEClass(mavenImportTaskEClass, MavenImportTask.class, "MavenImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMavenImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1, MavenImportTask.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMavenImportTask_ProjectNameTemplate(), ecorePackage.getEString(), "projectNameTemplate", null, 0, 1, MavenImportTask.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore");

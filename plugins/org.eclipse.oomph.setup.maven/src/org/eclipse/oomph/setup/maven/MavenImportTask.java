@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.maven.MavenImportTask#getSourceLocators <em>Source Locators</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.maven.MavenImportTask#getProjectNameTemplate <em>Project Name Template</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,5 +51,31 @@ public interface MavenImportTask extends SetupTask
    * @generated
    */
   EList<SourceLocator> getSourceLocators();
+
+  /**
+   * Returns the value of the '<em><b>Project Name Template</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Project Name Template</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Project Name Template</em>' attribute.
+   * @see #setProjectNameTemplate(String)
+   * @see org.eclipse.oomph.setup.maven.MavenPackage#getMavenImportTask_ProjectNameTemplate()
+   * @model
+   * @generated
+   */
+  String getProjectNameTemplate();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.maven.MavenImportTask#getProjectNameTemplate <em>Project Name Template</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Project Name Template</em>' attribute.
+   * @see #getProjectNameTemplate()
+   * @generated
+   */
+  void setProjectNameTemplate(String value);
 
 } // MavenImportTask

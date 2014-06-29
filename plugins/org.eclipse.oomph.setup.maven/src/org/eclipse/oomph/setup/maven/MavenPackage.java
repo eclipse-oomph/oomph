@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.maven;
 
 import org.eclipse.oomph.setup.SetupPackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -167,13 +168,22 @@ public interface MavenPackage extends EPackage
   int MAVEN_IMPORT_TASK__SOURCE_LOCATORS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Project Name Template</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Import Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MAVEN_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int MAVEN_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.maven.MavenImportTask <em>Import Task</em>}'.
@@ -195,6 +205,17 @@ public interface MavenPackage extends EPackage
    * @generated
    */
   EReference getMavenImportTask_SourceLocators();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.maven.MavenImportTask#getProjectNameTemplate <em>Project Name Template</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Project Name Template</em>'.
+   * @see org.eclipse.oomph.setup.maven.MavenImportTask#getProjectNameTemplate()
+   * @see #getMavenImportTask()
+   * @generated
+   */
+  EAttribute getMavenImportTask_ProjectNameTemplate();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -236,6 +257,14 @@ public interface MavenPackage extends EPackage
      * @generated
      */
     EReference MAVEN_IMPORT_TASK__SOURCE_LOCATORS = eINSTANCE.getMavenImportTask_SourceLocators();
+
+    /**
+     * The meta object literal for the '<em><b>Project Name Template</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE = eINSTANCE.getMavenImportTask_ProjectNameTemplate();
 
   }
 
