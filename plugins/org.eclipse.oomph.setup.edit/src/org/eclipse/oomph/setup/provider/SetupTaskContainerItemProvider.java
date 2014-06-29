@@ -11,9 +11,13 @@
 package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.ProductCatalog;
+import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContainer;
+import org.eclipse.oomph.setup.WorkspaceTask;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -180,11 +184,13 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     collectNewChildDescriptorsGen(newChildDescriptors, object);
-    removeDeprecatedChildren(newChildDescriptors);
+    removeUnwantedTasks(newChildDescriptors, object);
   }
 
-  public static void removeDeprecatedChildren(Collection<Object> newChildDescriptors)
+  public static void removeUnwantedTasks(Collection<Object> newChildDescriptors, Object object)
   {
+    boolean catalog = object instanceof ProductCatalog || object instanceof ProjectCatalog;
+
     for (Iterator<Object> it = newChildDescriptors.iterator(); it.hasNext();)
     {
       Object newChildDescriptor = it.next();
@@ -194,6 +200,13 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
         if (isDeprecated(value))
         {
           it.remove();
+        }
+        else if (!catalog)
+        {
+          if (value instanceof InstallationTask || value instanceof WorkspaceTask)
+          {
+            it.remove();
+          }
         }
       }
     }

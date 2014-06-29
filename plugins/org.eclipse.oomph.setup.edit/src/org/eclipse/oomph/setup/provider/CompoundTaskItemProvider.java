@@ -215,7 +215,7 @@ public class CompoundTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     collectNewChildDescriptorsGen(newChildDescriptors, object);
-    SetupTaskContainerItemProvider.removeDeprecatedChildren(newChildDescriptors);
+    SetupTaskContainerItemProvider.removeUnwantedTasks(newChildDescriptors, object);
   }
 
 }
