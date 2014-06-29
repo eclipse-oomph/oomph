@@ -10,7 +10,15 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Project;
+import org.eclipse.oomph.setup.RedirectionTask;
+import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.ui.actions.PreferenceRecorderAction;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
 import org.eclipse.oomph.workingsets.WorkingSet;
@@ -19,11 +27,10 @@ import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributo
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
-import org.eclipse.emf.edit.ui.action.CreateChildAction;
-import org.eclipse.emf.edit.ui.action.CreateSiblingAction;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.emf.edit.ui.action.LoadResourceAction;
 import org.eclipse.emf.edit.ui.action.ValidateAction;
@@ -67,6 +74,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +87,14 @@ import java.util.Map;
  */
 public class SetupActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener
 {
+  private static final Comparator<? super IAction> ACTION_COMPARATOR = new Comparator<IAction>()
+  {
+    public int compare(IAction a1, IAction a2)
+    {
+      return a1.getText().compareTo(a2.getText());
+    }
+  };
+
   /**
    * This keeps track of the active editor.
    * <!-- begin-user-doc -->
@@ -433,7 +449,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void populateManager(IContributionManager manager, Collection<? extends IAction> actions, String contributionID)
+  protected void populateManagerGen(IContributionManager manager, Collection<? extends IAction> actions, String contributionID)
   {
     if (actions != null)
     {
@@ -449,6 +465,95 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         }
       }
     }
+  }
+
+  protected void populateManager(IContributionManager manager, Collection<? extends IAction> actions, String contributionID)
+  {
+    manager.add(new Separator("elements"));
+    manager.add(new Separator("elements-end"));
+    manager.add(new Separator("scopes"));
+    manager.add(new Separator("scopes-end"));
+    manager.add(new Separator("defaults"));
+    manager.add(new Separator("defaults-end"));
+    manager.add(new Separator("installations"));
+    manager.add(new Separator("installations-end"));
+    manager.add(new Separator("tasks"));
+    manager.add(new Separator("tasks-end"));
+    manager.add(new Separator("annotations"));
+    manager.add(new Separator("annotations-end"));
+    manager.add(new Separator("additions"));
+    manager.add(new Separator("additions-end"));
+
+    List<IAction> elements = new ArrayList<IAction>();
+    List<IAction> scopes = new ArrayList<IAction>();
+    List<IAction> defaults = new ArrayList<IAction>();
+    List<IAction> installations = new ArrayList<IAction>();
+    List<IAction> tasks = new ArrayList<IAction>();
+    List<IAction> annotations = new ArrayList<IAction>();
+    List<IAction> additions = new ArrayList<IAction>();
+
+    for (IAction action : actions)
+    {
+      Object descriptor;
+      if (action instanceof CreateChildAction)
+      {
+        descriptor = ((CreateChildAction)action).getDescriptor();
+      }
+      else if (action instanceof CreateSiblingAction)
+      {
+        descriptor = ((CreateSiblingAction)action).getDescriptor();
+      }
+      else
+      {
+        additions.add(action);
+        continue;
+      }
+
+      if (descriptor instanceof CommandParameter)
+      {
+        CommandParameter parameter = (CommandParameter)descriptor;
+        Object value = parameter.getValue();
+        if (value instanceof Scope)
+        {
+          scopes.add(action);
+        }
+        else if (value instanceof CompoundTask || value instanceof VariableTask || value instanceof RedirectionTask)
+        {
+          defaults.add(action);
+        }
+        else if (value instanceof InstallationTask || value instanceof WorkspaceTask)
+        {
+          installations.add(action);
+        }
+        else if (value instanceof SetupTask)
+        {
+          tasks.add(action);
+        }
+        else if (value instanceof Annotation)
+        {
+          annotations.add(action);
+        }
+        else
+        {
+          elements.add(action);
+        }
+      }
+      else
+      {
+        additions.add(action);
+      }
+    }
+
+    Collections.sort(elements, ACTION_COMPARATOR);
+    Collections.sort(tasks, ACTION_COMPARATOR);
+
+    populateManagerGen(manager, elements, "elements-end");
+    populateManagerGen(manager, scopes, "scopes-end");
+    populateManagerGen(manager, defaults, "defaults-end");
+    populateManagerGen(manager, installations, "installations-end");
+    populateManagerGen(manager, tasks, "tasks-end");
+    populateManagerGen(manager, annotations, "annotations-end");
+    populateManagerGen(manager, additions, "additions-end");
   }
 
   /**
@@ -600,6 +705,58 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   protected boolean removeAllReferencesOnDelete()
   {
     return true;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class CreateChildAction extends org.eclipse.emf.edit.ui.action.CreateChildAction
+  {
+    public CreateChildAction(EditingDomain editingDomain, ISelection selection, Object descriptor)
+    {
+      super(editingDomain, selection, descriptor);
+    }
+
+    public CreateChildAction(IEditorPart editorPart, ISelection selection, Object descriptor)
+    {
+      super(editorPart, selection, descriptor);
+    }
+
+    public CreateChildAction(IWorkbenchPart workbenchPart, ISelection selection, Object descriptor)
+    {
+      super(workbenchPart, selection, descriptor);
+    }
+
+    public Object getDescriptor()
+    {
+      return descriptor;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class CreateSiblingAction extends org.eclipse.emf.edit.ui.action.CreateSiblingAction
+  {
+    public CreateSiblingAction(EditingDomain editingDomain, ISelection selection, Object descriptor)
+    {
+      super(editingDomain, selection, descriptor);
+    }
+
+    public CreateSiblingAction(IEditorPart editorPart, ISelection selection, Object descriptor)
+    {
+      super(editorPart, selection, descriptor);
+    }
+
+    public CreateSiblingAction(IWorkbenchPart workbenchPart, ISelection selection, Object descriptor)
+    {
+      super(workbenchPart, selection, descriptor);
+    }
+
+    public Object getDescriptor()
+    {
+      return descriptor;
+    }
   }
 
   /**
