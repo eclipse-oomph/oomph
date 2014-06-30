@@ -4,17 +4,17 @@
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
     <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore"/>
   </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
+    <details key="variableName" value="setup.git.p2"/>
+    <details key="repository" value="${oomph.update.url}"/>
+    <details key="installableUnits" value="org.eclipse.oomph.setup.git.feature.group"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
+    <details key="variableName" value="setup.egit.p2"/>
+    <details key="repository" value="http://download.eclipse.org/egit/updates"/>
+    <details key="installableUnits" value="org.eclipse.egit.feature.group"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="GitCloneTask" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
-    <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
-      <details key="variableName" value="setup.git.p2"/>
-      <details key="repository" value="${oomph.update.url}"/>
-      <details key="installableUnits" value="org.eclipse.oomph.setup.git.feature.group"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
-      <details key="variableName" value="setup.egit.p2"/>
-      <details key="repository" value="http://download.eclipse.org/egit/updates"/>
-      <details key="installableUnits" value="org.eclipse.egit.feature.group"/>
-    </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/EcoreXXX">
       <details key="constraints" value="IDRequired LocationOptional"/>
     </eAnnotations>

@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EPackage;
  * @see org.eclipse.oomph.setup.projectset.ProjectSetFactory
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/ProjectSet.ecore'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.projectset.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.projectset.feature.group'"
  * @generated
  */
 public interface ProjectSetPackage extends EPackage

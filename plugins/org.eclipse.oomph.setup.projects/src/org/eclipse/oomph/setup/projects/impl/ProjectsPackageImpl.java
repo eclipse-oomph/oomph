@@ -292,9 +292,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(projectsImportTaskEClass, source, new String[] { "variableName", "setup.projects.p2", "repository", "${oomph.update.url}",
-        "installableUnits", "org.eclipse.oomph.setup.projects.feature.group" });
-    addAnnotation(pathVariableTaskEClass, source, new String[] { "variableName", "setup.projects.p2", "repository", "${oomph.update.url}", "installableUnits",
+    addAnnotation(this, source, new String[] { "variableName", "setup.projects.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.projects.feature.group" });
   }
 

@@ -25,8 +25,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  *
  * @see org.eclipse.oomph.setup.pde.PDEPackage#getTargetPlatformTask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.pde.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.pde.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */
 public interface TargetPlatformTask extends SetupTask

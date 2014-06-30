@@ -26,8 +26,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  *
  * @see org.eclipse.oomph.setup.jdt.JDTPackage#getJRETask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.jdt.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.jdt.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.1' type='FOLDER' label='JRE 1.1 Location' description='The location of a JDK or JRE compatible with Java 1.1.'"
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.2' type='FOLDER' label='JRE 1.2 Location' description='The location of a JDK or JRE compatible with Java 1.2.'"
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.3' type='FOLDER' label='JRE 1.3 Location' description='The location of a JDK or JRE compatible with Java 1.3.'"

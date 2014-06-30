@@ -29,9 +29,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  *
  * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.git.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.git.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.egit.p2' repository='http://download.eclipse.org/egit/updates' installableUnits='org.eclipse.egit.feature.group'"
- *        annotation="http://www.eclipse.org/emf/2002/EcoreXXX constraints='IDRequired LocationOptional'"
+ * @model annotation="http://www.eclipse.org/emf/2002/EcoreXXX constraints='IDRequired LocationOptional'"
  *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */

@@ -212,10 +212,10 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
     createEcoreAnnotations();
-    // http://www.eclipse.org/oomph/setup/ValidTriggers
-    createValidTriggersAnnotations();
     // http://www.eclipse.org/oomph/setup/Enablement
     createEnablementAnnotations();
+    // http://www.eclipse.org/oomph/setup/ValidTriggers
+    createValidTriggersAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
   }
@@ -254,7 +254,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(workingSetTaskEClass, source, new String[] { "variableName", "setup.workingsets.p2", "repository", "${oomph.update.url}", "installableUnits",
+    addAnnotation(this, source, new String[] { "variableName", "setup.workingsets.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.workingsets.feature.group" });
   }
 

@@ -29,8 +29,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  *
  * @see org.eclipse.oomph.setup.maven.MavenPackage#getMavenImportTask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.maven.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.maven.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */
 public interface MavenImportTask extends SetupTask

@@ -29,8 +29,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  *
  * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.targlets.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.targlets.feature.group org.eclipse.oomph.setup.targlets.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */
 public interface TargletTask extends SetupTask

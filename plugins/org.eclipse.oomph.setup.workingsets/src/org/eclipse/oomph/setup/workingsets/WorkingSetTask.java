@@ -29,7 +29,6 @@ import org.eclipse.emf.common.util.EList;
  *
  * @see org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage#getWorkingSetTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
- *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.workingsets.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.workingsets.feature.group'"
  * @generated
  */
 public interface WorkingSetTask extends SetupTask

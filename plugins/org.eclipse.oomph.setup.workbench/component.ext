@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<setup:ComponentExtension xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:setup="http://www.eclipse.org/oomph/targlets/1.0">
-  <requirements id="org.eclipse.egit.feature.group"/>
-</setup:ComponentExtension>

@@ -541,14 +541,11 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "${oomph.update.url}", "installableUnits",
+    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.mylyn.feature.group" });
-    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "variableName", "setup.mylyn.p2", "repository",
-        "http://download.eclipse.org/mylyn/releases/latest", "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
-    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.mylyn.feature.group" });
-    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "variableName", "setup.mylyn.p2", "repository",
-        "http://download.eclipse.org/mylyn/releases/latest", "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
+    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "http://download.eclipse.org/mylyn/releases/latest" });
+    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
+    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
   }
 
   /**

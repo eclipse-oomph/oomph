@@ -256,7 +256,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(targletTaskEClass, source, new String[] { "variableName", "setup.targlets.p2", "repository", "${oomph.update.url}", "installableUnits",
+    addAnnotation(this, source, new String[] { "variableName", "setup.targlets.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.targlets.feature.group org.eclipse.oomph.setup.targlets.feature.group" });
   }
 

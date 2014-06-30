@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EReference;
  * @see org.eclipse.oomph.setup.workingsets.SetupWorkingSetsFactory
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.workingsets.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.workingsets.feature.group'"
  * @generated
  */
 public interface SetupWorkingSetsPackage extends EPackage

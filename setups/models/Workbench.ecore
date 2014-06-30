@@ -5,12 +5,12 @@
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
     <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore"/>
   </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
+    <details key="variableName" value="setup.workbench.p2"/>
+    <details key="repository" value="${oomph.update.url}"/>
+    <details key="installableUnits" value="org.eclipse.oomph.setup.workbench.feature.group"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="FileAssociationsTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
-    <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
-      <details key="variableName" value="setup.workbench.p2"/>
-      <details key="repository" value="${oomph.update.url}"/>
-      <details key="installableUnits" value="org.eclipse.oomph.setup.workbench.feature.group"/>
-    </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
     </eAnnotations>
@@ -41,11 +41,6 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="KeyBindingTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
-    <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
-      <details key="variableName" value="setup.workbench.p2"/>
-      <details key="repository" value="${oomph.update.url}"/>
-      <details key="installableUnits" value="org.eclipse.oomph.setup.workbench.feature.group"/>
-    </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
     </eAnnotations>

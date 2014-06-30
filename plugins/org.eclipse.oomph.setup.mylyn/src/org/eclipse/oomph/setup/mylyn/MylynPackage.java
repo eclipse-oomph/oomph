@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.EReference;
  * @see org.eclipse.oomph.setup.mylyn.MylynFactory
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.mylyn.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.mylyn.feature.group'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.mylyn.p2' repository='http://download.eclipse.org/mylyn/releases/latest'"
  * @generated
  */
 public interface MylynPackage extends EPackage

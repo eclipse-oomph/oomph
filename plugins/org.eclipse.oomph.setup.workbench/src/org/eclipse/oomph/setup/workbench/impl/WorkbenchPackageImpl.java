@@ -538,9 +538,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(fileAssociationsTaskEClass, source, new String[] { "variableName", "setup.workbench.p2", "repository", "${oomph.update.url}",
-        "installableUnits", "org.eclipse.oomph.setup.workbench.feature.group" });
-    addAnnotation(keyBindingTaskEClass, source, new String[] { "variableName", "setup.workbench.p2", "repository", "${oomph.update.url}", "installableUnits",
+    addAnnotation(this, source, new String[] { "variableName", "setup.workbench.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.workbench.feature.group" });
   }
 
