@@ -5,6 +5,34 @@
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     name="index"
     label="index">
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/PDE.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/ProjectSet.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore#/"/>
+  <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore#/"/>
   <productCatalog
       href="catalog:/self-product-catalog.setup#/"/>
   <productCatalog
