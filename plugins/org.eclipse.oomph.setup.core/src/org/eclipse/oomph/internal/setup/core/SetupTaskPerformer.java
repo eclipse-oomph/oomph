@@ -73,6 +73,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -258,45 +259,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       for (EClass eClass : eClasses)
       {
         // 1.1. Collect enablement info to synthesize P2Tasks that are placed at the head of the task list
+        EList<SetupTask> enablementTasks = createEnablementTasks(eClass, true);
+        if (enablementTasks != null)
+        {
+          triggeredSetupTasks.addAll(0, enablementTasks);
+        }
+
         for (EAnnotation eAnnotation : eClass.getEAnnotations())
         {
           String source = eAnnotation.getSource();
-          if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
-          {
-            String variableName = eAnnotation.getDetails().get(EAnnotationConstants.KEY_VARIABLE_NAME);
-            String p2RepositoryLocation = eAnnotation.getDetails().get(EAnnotationConstants.KEY_REPOSITORY);
-
-            VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-            variable.setName(variableName);
-            variable.setValue(p2RepositoryLocation);
-            triggeredSetupTasks.add(0, variable);
-
-            P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
-            EList<Requirement> requirements = p2Task.getRequirements();
-            for (String requirementSpecification : eAnnotation.getDetails().get(EAnnotationConstants.KEY_INSTALLABLE_UNITS).split("\\s"))
-            {
-              Matcher matcher = INSTALLABLE_UNIT_WITH_RANGE_PATTERN.matcher(requirementSpecification);
-              if (matcher.matches())
-              {
-                Requirement requirement = P2Factory.eINSTANCE.createRequirement(matcher.group(1));
-                String versionRange = matcher.group(2);
-                if (!StringUtil.isEmpty(versionRange))
-                {
-                  requirement.setVersionRange(new VersionRange(versionRange));
-                }
-
-                requirements.add(requirement);
-              }
-            }
-
-            Repository repository = P2Factory.eINSTANCE.createRepository(getVariableReference(variableName));
-            p2Task.getRepositories().add(repository);
-
-            // Ensure that these are first so that these are the targets for merging rather than the sources.
-            // The latter causes problems in the copier.
-            triggeredSetupTasks.add(0, p2Task);
-          }
-          else if (EAnnotationConstants.ANNOTATION_VARIABLE.equals(source))
+          if (EAnnotationConstants.ANNOTATION_VARIABLE.equals(source))
           {
             triggeredSetupTasks.add(0, createImpliedVariable(eAnnotation));
           }
@@ -637,11 +609,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       }
     }
-  }
-
-  private String getVariableReference(String variableName)
-  {
-    return "${" + variableName + "}";
   }
 
   private String getAttributeRuleVariableName(EAttribute eAttribute)
@@ -2887,6 +2854,88 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       WorkspaceUtil.restoreAutoBuilding(autoBuilding);
     }
+  }
+
+  public static EList<SetupTask> createEnablementTasks(EModelElement eModelElement, boolean withVariables)
+  {
+    EList<SetupTask> enablementTasks = null;
+
+    for (EAnnotation eAnnotation : eModelElement.getEAnnotations())
+    {
+      String source = eAnnotation.getSource();
+      if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
+      {
+        if (enablementTasks == null)
+        {
+          enablementTasks = new BasicEList<SetupTask>();
+        }
+
+        String repositoryLocation = eAnnotation.getDetails().get(EAnnotationConstants.KEY_REPOSITORY);
+
+        if (withVariables)
+        {
+          String variableName = eAnnotation.getDetails().get(EAnnotationConstants.KEY_VARIABLE_NAME);
+          if (!StringUtil.isEmpty(variableName))
+          {
+            VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+            variable.setName(variableName);
+            variable.setValue(repositoryLocation);
+            enablementTasks.add(0, variable);
+
+            repositoryLocation = getVariableReference(variableName);
+          }
+        }
+
+        P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+        EList<Requirement> requirements = p2Task.getRequirements();
+        for (String requirementSpecification : eAnnotation.getDetails().get(EAnnotationConstants.KEY_INSTALLABLE_UNITS).split("\\s"))
+        {
+          Matcher matcher = INSTALLABLE_UNIT_WITH_RANGE_PATTERN.matcher(requirementSpecification);
+          if (matcher.matches())
+          {
+            Requirement requirement = P2Factory.eINSTANCE.createRequirement(matcher.group(1));
+            String versionRange = matcher.group(2);
+            if (!StringUtil.isEmpty(versionRange))
+            {
+              requirement.setVersionRange(new VersionRange(versionRange));
+            }
+
+            requirements.add(requirement);
+          }
+        }
+
+        Repository repository = P2Factory.eINSTANCE.createRepository(repositoryLocation);
+        p2Task.getRepositories().add(repository);
+
+        // Ensure that these are first so that these are the targets for merging rather than the sources.
+        // The latter causes problems in the copier.
+        enablementTasks.add(0, p2Task);
+      }
+    }
+
+    EObject eContainer = eModelElement.eContainer();
+    if (eContainer instanceof EModelElement)
+    {
+      EList<SetupTask> containerEnablementTasks = createEnablementTasks((EModelElement)eContainer, withVariables);
+      if (containerEnablementTasks != null)
+      {
+        if (enablementTasks == null)
+        {
+          enablementTasks = containerEnablementTasks;
+        }
+        else
+        {
+          enablementTasks.addAll(containerEnablementTasks);
+        }
+      }
+    }
+
+    return enablementTasks;
+  }
+
+  private static String getVariableReference(String variableName)
+  {
+    return "${" + variableName + "}";
   }
 
   /**

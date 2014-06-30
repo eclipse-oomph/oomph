@@ -82,14 +82,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public SetupWizard()
   {
-    this(null);
+    this((SetupTaskPerformer)null);
   }
 
   public SetupWizard(SetupTaskPerformer performer)
   {
-    setWindowTitle(AbstractSetupDialog.SHELL_TEXT);
-    setDefaultPageImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("install_wiz.png"));
-    setNeedsProgressMonitor(false);
+    initUI();
     if (performer == null)
     {
       resourceSet = EMFUtil.createResourceSet();
@@ -106,6 +104,21 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       setSetupContext(performer.getSetupContext());
       resourceSet = performer.getUser().eResource().getResourceSet();
     }
+  }
+
+  public SetupWizard(SetupContext setupContext)
+  {
+    initUI();
+    setTrigger(Trigger.STARTUP);
+    setSetupContext(setupContext);
+    resourceSet = setupContext.getUser().eResource().getResourceSet();
+  }
+
+  private void initUI()
+  {
+    setWindowTitle(AbstractSetupDialog.SHELL_TEXT);
+    setDefaultPageImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("install_wiz.png"));
+    setNeedsProgressMonitor(false);
   }
 
   public ComposedAdapterFactory getAdapterFactory()
@@ -502,6 +515,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     public Updater(SetupTaskPerformer performer)
     {
       super(performer);
+    }
+
+    public Updater(SetupContext setupContext)
+    {
+      super(setupContext);
     }
   }
 }

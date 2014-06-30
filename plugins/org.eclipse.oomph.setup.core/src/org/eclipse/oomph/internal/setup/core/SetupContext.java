@@ -101,6 +101,53 @@ public class SetupContext
 
   private static volatile SetupContext self = new SetupContext();
 
+  // static creation methods
+
+  // private constructors
+
+  private final Installation installation;
+
+  private final Workspace workspace;
+
+  private final User user;
+
+  private SetupContext()
+  {
+    installation = createInstallation();
+    ((InternalEObject)installation).eSetProxyURI(INSTALLATION_SETUP_URI.appendFragment("/"));
+
+    workspace = createWorkspace();
+    if (WORKSPACE_SETUP_URI != null)
+    {
+      ((InternalEObject)workspace).eSetProxyURI(WORKSPACE_SETUP_URI.appendFragment("/"));
+    }
+
+    user = createUser();
+    ((InternalEObject)user).eSetProxyURI(USER_SETUP_URI.appendFragment("/"));
+  }
+
+  private SetupContext(Installation installation, Workspace workspace, User user)
+  {
+    this.installation = installation;
+    this.workspace = workspace;
+    this.user = user;
+  }
+
+  public Installation getInstallation()
+  {
+    return installation;
+  }
+
+  public Workspace getWorkspace()
+  {
+    return workspace;
+  }
+
+  public User getUser()
+  {
+    return user;
+  }
+
   /**
    * Returns a setup context consisting purely of proxy instances for the current self-hosted installation.
    */
@@ -127,6 +174,11 @@ public class SetupContext
     Workspace workspace = getWorkspace(resourceSet, true, false);
     User user = getUser(resourceSet, false);
     return createSelf(installation, workspace, user);
+  }
+
+  public static SetupContext createInstallationAndUser(ResourceSet resourceSet)
+  {
+    return new SetupContext(getInstallation(resourceSet, true, true), null, getUser(resourceSet, true));
   }
 
   public static SetupContext create(ResourceSet resourceSet)
@@ -185,51 +237,6 @@ public class SetupContext
     Resource userResource = installation.eResource().getResourceSet().getResourceFactoryRegistry().getFactory(USER_SETUP_URI).createResource(USER_SETUP_URI);
     userResource.getContents().add(user);
     return new SetupContext(installation, workspace, user);
-  }
-
-  // private constructors
-
-  private final Installation installation;
-
-  private final Workspace workspace;
-
-  private final User user;
-
-  private SetupContext()
-  {
-    installation = createInstallation();
-    ((InternalEObject)installation).eSetProxyURI(INSTALLATION_SETUP_URI.appendFragment("/"));
-
-    workspace = createWorkspace();
-    if (WORKSPACE_SETUP_URI != null)
-    {
-      ((InternalEObject)workspace).eSetProxyURI(WORKSPACE_SETUP_URI.appendFragment("/"));
-    }
-
-    user = createUser();
-    ((InternalEObject)user).eSetProxyURI(USER_SETUP_URI.appendFragment("/"));
-  }
-
-  private SetupContext(Installation installation, Workspace workspace, User user)
-  {
-    this.installation = installation;
-    this.workspace = workspace;
-    this.user = user;
-  }
-
-  public Installation getInstallation()
-  {
-    return installation;
-  }
-
-  public Workspace getWorkspace()
-  {
-    return workspace;
-  }
-
-  public User getUser()
-  {
-    return user;
   }
 
   private static URI getStaticInstallLocation()

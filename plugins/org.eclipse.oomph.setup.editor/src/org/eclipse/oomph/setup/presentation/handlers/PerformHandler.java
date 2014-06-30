@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Updater;
 import org.eclipse.oomph.ui.UIUtil;
 
 /**
@@ -26,7 +25,7 @@ public class PerformHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    Updater updater = new SetupWizard.Updater(true);
+    SetupWizard updater = new SetupWizard.Updater(true);
     updater.openDialog(UIUtil.getShell());
   }
 }

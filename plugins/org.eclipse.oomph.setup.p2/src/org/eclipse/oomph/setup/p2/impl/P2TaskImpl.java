@@ -106,6 +106,13 @@ import java.util.regex.Pattern;
  */
 public class P2TaskImpl extends SetupTaskImpl implements P2Task
 {
+  private static final boolean SKIP = "true".equals(PropertiesUtil.getProperty(PROP_SKIP));
+
+  private static final Object FIRST_CALL_DETECTION_KEY = new Object();
+
+  @SuppressWarnings("unused")
+  private static final Class<MirrorApplication> MIRROR_CLASS = MirrorApplication.class;
+
   /**
    * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -125,13 +132,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * @ordered
    */
   protected String label = LABEL_EDEFAULT;
-
-  private static final boolean SKIP = "true".equals(PropertiesUtil.getProperty(PROP_SKIP));
-
-  private static final Object FIRST_CALL_DETECTION_KEY = new Object();
-
-  @SuppressWarnings("unused")
-  private static final Class<MirrorApplication> MIRROR_CLASS = MirrorApplication.class;
 
   /**
    * The cached value of the '{@link #getRequirements() <em>Requirements</em>}' containment reference list.
