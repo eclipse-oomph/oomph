@@ -19,11 +19,14 @@ import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
+import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
+import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -38,6 +41,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -49,6 +53,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProvider;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
@@ -104,9 +110,52 @@ public final class EMFUtil
   {
   }
 
+  public static void replaceReflectiveItemProvider(ComposedAdapterFactory adapterFactory)
+  {
+    EClass dynamicClass = EcoreFactory.eINSTANCE.createEClass();
+    dynamicClass.setName("Dynamic");
+
+    EPackage dynamicPackage = EcoreFactory.eINSTANCE.createEPackage();
+    dynamicPackage.setName("dynamic");
+    dynamicPackage.setNsPrefix("dynamic");
+    dynamicPackage.setNsURI("http://dynamic");
+    dynamicPackage.getEClassifiers().add(dynamicClass);
+
+    AdapterFactory factory = adapterFactory.getFactoryForType(EcoreUtil.create(dynamicClass));
+    if (factory != null)
+    {
+      adapterFactory.removeAdapterFactory(factory);
+    }
+
+    adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory()
+    {
+      {
+        reflectiveItemProviderAdapter = new ReflectiveItemProvider(this)
+        {
+          @Override
+          public Object getImage(Object object)
+          {
+            EObject eObject = (EObject)object;
+            EClass eClass = eObject.eClass();
+
+            String uri = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_ICON, EAnnotationConstants.KEY_URI);
+            if (!StringUtil.isEmpty(uri))
+            {
+              return URI.createURI(uri);
+            }
+
+            return super.getImage(object);
+          }
+        };
+      }
+    });
+  }
+
   public static ComposedAdapterFactory createAdapterFactory()
   {
-    return new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+    ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+    replaceReflectiveItemProvider(adapterFactory);
+    return adapterFactory;
   }
 
   public static ResourceSet createResourceSet()
@@ -114,6 +163,372 @@ public final class EMFUtil
     ResourceSet resourceSet = new ResourceSetImpl();
     configureResourceSet(resourceSet);
     return resourceSet;
+  }
+
+  public static void configureResourceSet(final ResourceSet resourceSet)
+  {
+    Resource.Factory factory = new BaseResourceFactoryImpl();
+
+    Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
+    extensionToFactoryMap.put("targlet", factory);
+    extensionToFactoryMap.put("def", factory);
+    extensionToFactoryMap.put("ext", factory);
+
+    URIConverter uriConverter = resourceSet.getURIConverter();
+    Map<URI, URI> uriMap = uriConverter.getURIMap();
+
+    EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
+    uriHandlers.add(4, new UserURIHandlerImpl());
+    uriHandlers.add(5, new ProductCatalogURIHandlerImpl());
+    uriHandlers.add(6, new ECFURIHandlerImpl());
+
+    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_AUTHORIZATION_HANDLER, AUTHORIZATION_HANDLER);
+
+    class ModelResourceSet extends ResourceSetImpl
+    {
+      private EPackage redirectedEPackage;
+
+      public ModelResourceSet()
+      {
+        uriConverter = resourceSet.getURIConverter();
+        packageRegistry = resourceSet.getPackageRegistry();
+        resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
+        loadOptions = resourceSet.getLoadOptions();
+      }
+
+      @Override
+      public Resource getResource(URI uri, boolean loadOnDemand)
+      {
+        try
+        {
+          Resource resource = super.getResource(uri, true);
+          if (redirectedEPackage != null)
+          {
+            return null;
+          }
+
+          if (resource.getResourceSet() == this)
+          {
+            synchronized (resourceSet)
+            {
+              resourceSet.getResources().add(resource);
+            }
+          }
+
+          return resource;
+        }
+        catch (RuntimeException throwable)
+        {
+          if (loadOnDemand)
+          {
+            throw throwable;
+          }
+          else
+          {
+            return null;
+          }
+        }
+        finally
+        {
+          redirectedEPackage = null;
+        }
+      }
+
+      @Override
+      protected void demandLoad(Resource resource) throws IOException
+      {
+        super.demandLoad(resource);
+
+        EPackage ePackage = (EPackage)EcoreUtil.getObjectByType(resource.getContents(), EcorePackage.Literals.EPACKAGE);
+        if (ePackage != null)
+        {
+          String nsURI = ePackage.getNsURI();
+          redirectedEPackage = packageRegistry.getEPackage(nsURI);
+          if (redirectedEPackage != null)
+          {
+            packageRegistry.put(resource.getURI().toString(), redirectedEPackage);
+          }
+
+          for (EClassifier eClassifier : ePackage.getEClassifiers())
+          {
+            Class<?> instanceClass = eClassifier.getInstanceClass();
+            if (instanceClass != null)
+            {
+              if (eClassifier instanceof EDataType)
+              {
+                eClassifier.setInstanceClass(String.class);
+              }
+              else
+              {
+                eClassifier.setInstanceClass(null);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    final ModelResourceSet modelResourceSet = new ModelResourceSet();
+
+    new ResourceSetImpl.MappedResourceLocator((ResourceSetImpl)resourceSet)
+    {
+      @Override
+      public Resource getResource(URI uri, boolean loadOnDemand)
+      {
+        if ("ecore".equals(uri.fileExtension()))
+        {
+          Resource resource = null;
+          synchronized (resourceSet)
+          {
+            resource = super.getResource(uri, false);
+            if (resource != null)
+            {
+              if (!resource.isLoaded())
+              {
+                demandLoadHelper(resource);
+              }
+
+              return resource;
+            }
+
+            resource = modelResourceSet.getResource(uri, loadOnDemand);
+            if (resource != null)
+            {
+              return resource;
+            }
+          }
+        }
+
+        return super.getResource(uri, loadOnDemand);
+      }
+    };
+
+    uriMap.put(SetupContext.INDEX_SETUP_URI.trimSegments(1), SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
+
+    for (Map.Entry<Object, Object> entry : System.getProperties().entrySet())
+    {
+      Object key = entry.getKey();
+      if (key instanceof String)
+      {
+        if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
+        {
+          String[] mapping = ((String)entry.getValue()).split("->");
+          URI sourceURI = URI.createURI(mapping[0]);
+          URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
+
+          // Only include the mapping if the target exists.
+          // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
+          // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
+          //
+          if (targetURI.isFile())
+          {
+            File file = new File(targetURI.toFileString());
+            if (!file.exists())
+            {
+              continue;
+            }
+          }
+
+          uriMap.put(sourceURI, targetURI);
+        }
+      }
+    }
+  }
+
+  public static BaseResource loadResourceSafely(ResourceSet resourceSet, URI uri)
+  {
+    try
+    {
+      return (BaseResource)resourceSet.getResource(uri, true);
+    }
+    catch (Throwable ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+      return (BaseResource)resourceSet.getResource(uri, false);
+    }
+  }
+
+  public static void saveEObject(EObject eObject)
+  {
+    try
+    {
+      XMLResource xmlResource = (XMLResource)eObject.eResource();
+      xmlResource.save(null);
+    }
+    catch (IOException ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
+  }
+
+  public static <T> void reorder(EList<T> values, DependencyProvider<T> dependencyProvider)
+  {
+    for (int i = 0, size = values.size(), count = 0; i < size; ++i)
+    {
+      T value = values.get(i);
+      if (count == size)
+      {
+        throw new IllegalArgumentException("Circular dependencies " + value);
+      }
+
+      boolean changed = false;
+
+      // TODO Consider basing this on a provider that just returns a boolean based on "does v1 depend on v2".
+      for (T dependency : dependencyProvider.getDependencies(value))
+      {
+        int index = values.indexOf(dependency);
+        if (index > i)
+        {
+          values.move(i, index);
+          changed = true;
+        }
+      }
+
+      if (changed)
+      {
+        --i;
+        ++count;
+      }
+      else
+      {
+        count = 0;
+      }
+    }
+  }
+
+  public static URI getRootURI(EObject eObject)
+  {
+    if (eObject.eIsProxy())
+    {
+      return ((InternalEObject)eObject).eProxyURI();
+    }
+    else
+    {
+      EObject rootContainer = EcoreUtil.getRootContainer(eObject);
+      URI uri = EcoreUtil.getURI(rootContainer);
+      String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(rootContainer, eObject);
+      if (relativeURIFragmentPath.length() != 0)
+      {
+        uri = uri.trimFragment().appendFragment(uri.fragment() + "/" + relativeURIFragmentPath);
+      }
+
+      return uri;
+    }
+  }
+
+  public static EStructuralFeature getFeature(EClass eClass, String xmlName)
+  {
+    for (EStructuralFeature eStructuralFeature : eClass.getEAllStructuralFeatures())
+    {
+      if (xmlName.equals(ExtendedMetaData.INSTANCE.getName(eStructuralFeature)))
+      {
+        return eStructuralFeature;
+      }
+    }
+
+    return null;
+  }
+
+  private static InputStream openInputStream(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
+  {
+    try
+    {
+      return uriConverter.createInputStream(uri, options);
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException();
+    }
+  }
+
+  private static OutputStream openOutputStream(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
+  {
+    try
+    {
+      return uriConverter.createOutputStream(uri, options);
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException();
+    }
+  }
+
+  public static void copyFile(URIConverter uriConverter, Map<?, ?> options, URI source, URI target) throws IORuntimeException
+  {
+    InputStream input = null;
+    OutputStream output = null;
+
+    try
+    {
+      input = openInputStream(uriConverter, options, source);
+      output = openOutputStream(uriConverter, options, target);
+      IOUtil.copy(input, output);
+    }
+    finally
+    {
+      IOUtil.closeSilent(input);
+      IOUtil.closeSilent(output);
+    }
+  }
+
+  public static byte[] readFile(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
+  {
+    InputStream input = openInputStream(uriConverter, options, uri);
+
+    try
+    {
+      ByteArrayOutputStream output = new ByteArrayOutputStream(input.available());
+      IOUtil.copy(input, output);
+      return output.toByteArray();
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
+    finally
+    {
+      IOUtil.closeSilent(input);
+    }
+  }
+
+  public static void writeFile(URIConverter uriConverter, Map<?, ?> options, URI uri, byte[] bytes) throws IORuntimeException
+  {
+    OutputStream output = openOutputStream(uriConverter, options, uri);
+
+    try
+    {
+      ByteArrayInputStream input = new ByteArrayInputStream(bytes);
+      IOUtil.copy(input, output);
+    }
+    finally
+    {
+      IOUtil.closeSilent(output);
+    }
+  }
+
+  public static void deleteFile(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
+  {
+    try
+    {
+      uriConverter.delete(uri, options);
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
+  }
+
+  public static void migrate(Resource resource, Collection<EObject> result)
+  {
+    new Migrator(resource).migrate(result);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface DependencyProvider<T>
+  {
+    Collection<? extends T> getDependencies(T value);
   }
 
   public static class Migrator
@@ -605,371 +1020,5 @@ public final class EMFUtil
 
       return result;
     }
-  }
-
-  public static void migrate(Resource resource, Collection<EObject> result)
-  {
-    new Migrator(resource).migrate(result);
-  }
-
-  public static void configureResourceSet(final ResourceSet resourceSet)
-  {
-    Resource.Factory factory = new BaseResourceFactoryImpl();
-
-    Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
-    extensionToFactoryMap.put("targlet", factory);
-    extensionToFactoryMap.put("def", factory);
-    extensionToFactoryMap.put("ext", factory);
-
-    URIConverter uriConverter = resourceSet.getURIConverter();
-    Map<URI, URI> uriMap = uriConverter.getURIMap();
-
-    EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
-    uriHandlers.add(4, new UserURIHandlerImpl());
-    uriHandlers.add(5, new ProductCatalogURIHandlerImpl());
-    uriHandlers.add(6, new ECFURIHandlerImpl());
-
-    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_AUTHORIZATION_HANDLER, AUTHORIZATION_HANDLER);
-
-    class ModelResourceSet extends ResourceSetImpl
-    {
-      private EPackage redirectedEPackage;
-
-      public ModelResourceSet()
-      {
-        uriConverter = resourceSet.getURIConverter();
-        packageRegistry = resourceSet.getPackageRegistry();
-        resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
-        loadOptions = resourceSet.getLoadOptions();
-      }
-
-      @Override
-      public Resource getResource(URI uri, boolean loadOnDemand)
-      {
-        try
-        {
-          Resource resource = super.getResource(uri, true);
-          if (redirectedEPackage != null)
-          {
-            return null;
-          }
-
-          if (resource.getResourceSet() == this)
-          {
-            synchronized (resourceSet)
-            {
-              resourceSet.getResources().add(resource);
-            }
-          }
-
-          return resource;
-        }
-        catch (RuntimeException throwable)
-        {
-          if (loadOnDemand)
-          {
-            throw throwable;
-          }
-          else
-          {
-            return null;
-          }
-        }
-        finally
-        {
-          redirectedEPackage = null;
-        }
-      }
-
-      @Override
-      protected void demandLoad(Resource resource) throws IOException
-      {
-        super.demandLoad(resource);
-
-        EPackage ePackage = (EPackage)EcoreUtil.getObjectByType(resource.getContents(), EcorePackage.Literals.EPACKAGE);
-        if (ePackage != null)
-        {
-          String nsURI = ePackage.getNsURI();
-          redirectedEPackage = packageRegistry.getEPackage(nsURI);
-          if (redirectedEPackage != null)
-          {
-            packageRegistry.put(resource.getURI().toString(), redirectedEPackage);
-          }
-
-          for (EClassifier eClassifier : ePackage.getEClassifiers())
-          {
-            Class<?> instanceClass = eClassifier.getInstanceClass();
-            if (instanceClass != null)
-            {
-              if (eClassifier instanceof EDataType)
-              {
-                eClassifier.setInstanceClass(String.class);
-              }
-              else
-              {
-                eClassifier.setInstanceClass(null);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    final ModelResourceSet modelResourceSet = new ModelResourceSet();
-
-    new ResourceSetImpl.MappedResourceLocator((ResourceSetImpl)resourceSet)
-    {
-      @Override
-      public Resource getResource(URI uri, boolean loadOnDemand)
-      {
-        if ("ecore".equals(uri.fileExtension()))
-        {
-          Resource resource = null;
-          synchronized (resourceSet)
-          {
-            resource = super.getResource(uri, false);
-            if (resource != null)
-            {
-              if (!resource.isLoaded())
-              {
-                demandLoadHelper(resource);
-              }
-
-              return resource;
-            }
-
-            resource = modelResourceSet.getResource(uri, loadOnDemand);
-            if (resource != null)
-            {
-              return resource;
-            }
-          }
-        }
-
-        return super.getResource(uri, loadOnDemand);
-      }
-    };
-
-    uriMap.put(SetupContext.INDEX_SETUP_URI.trimSegments(1), SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
-
-    for (Map.Entry<Object, Object> entry : System.getProperties().entrySet())
-    {
-      Object key = entry.getKey();
-      if (key instanceof String)
-      {
-        if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
-        {
-          String[] mapping = ((String)entry.getValue()).split("->");
-          URI sourceURI = URI.createURI(mapping[0]);
-          URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
-
-          // Only include the mapping if the target exists.
-          // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
-          // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
-          //
-          if (targetURI.isFile())
-          {
-            File file = new File(targetURI.toFileString());
-            if (!file.exists())
-            {
-              continue;
-            }
-          }
-
-          uriMap.put(sourceURI, targetURI);
-        }
-      }
-    }
-  }
-
-  public static BaseResource loadResourceSafely(ResourceSet resourceSet, URI uri)
-  {
-    try
-    {
-      return (BaseResource)resourceSet.getResource(uri, true);
-    }
-    catch (Throwable ex)
-    {
-      SetupCorePlugin.INSTANCE.log(ex);
-      return (BaseResource)resourceSet.getResource(uri, false);
-    }
-  }
-
-  public static void saveEObject(EObject eObject)
-  {
-    try
-    {
-      XMLResource xmlResource = (XMLResource)eObject.eResource();
-      xmlResource.save(null);
-    }
-    catch (IOException ex)
-    {
-      SetupCorePlugin.INSTANCE.log(ex);
-    }
-  }
-
-  public static <T> void reorder(EList<T> values, DependencyProvider<T> dependencyProvider)
-  {
-    for (int i = 0, size = values.size(), count = 0; i < size; ++i)
-    {
-      T value = values.get(i);
-      if (count == size)
-      {
-        throw new IllegalArgumentException("Circular dependencies " + value);
-      }
-
-      boolean changed = false;
-
-      // TODO Consider basing this on a provider that just returns a boolean based on "does v1 depend on v2".
-      for (T dependency : dependencyProvider.getDependencies(value))
-      {
-        int index = values.indexOf(dependency);
-        if (index > i)
-        {
-          values.move(i, index);
-          changed = true;
-        }
-      }
-
-      if (changed)
-      {
-        --i;
-        ++count;
-      }
-      else
-      {
-        count = 0;
-      }
-    }
-  }
-
-  public static URI getRootURI(EObject eObject)
-  {
-    if (eObject.eIsProxy())
-    {
-      return ((InternalEObject)eObject).eProxyURI();
-    }
-    else
-    {
-      EObject rootContainer = EcoreUtil.getRootContainer(eObject);
-      URI uri = EcoreUtil.getURI(rootContainer);
-      String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(rootContainer, eObject);
-      if (relativeURIFragmentPath.length() != 0)
-      {
-        uri = uri.trimFragment().appendFragment(uri.fragment() + "/" + relativeURIFragmentPath);
-      }
-
-      return uri;
-    }
-  }
-
-  public static EStructuralFeature getFeature(EClass eClass, String xmlName)
-  {
-    for (EStructuralFeature eStructuralFeature : eClass.getEAllStructuralFeatures())
-    {
-      if (xmlName.equals(ExtendedMetaData.INSTANCE.getName(eStructuralFeature)))
-      {
-        return eStructuralFeature;
-      }
-    }
-
-    return null;
-  }
-
-  private static InputStream openInputStream(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    try
-    {
-      return uriConverter.createInputStream(uri, options);
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException();
-    }
-  }
-
-  private static OutputStream openOutputStream(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    try
-    {
-      return uriConverter.createOutputStream(uri, options);
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException();
-    }
-  }
-
-  public static void copyFile(URIConverter uriConverter, Map<?, ?> options, URI source, URI target) throws IORuntimeException
-  {
-    InputStream input = null;
-    OutputStream output = null;
-
-    try
-    {
-      input = openInputStream(uriConverter, options, source);
-      output = openOutputStream(uriConverter, options, target);
-      IOUtil.copy(input, output);
-    }
-    finally
-    {
-      IOUtil.closeSilent(input);
-      IOUtil.closeSilent(output);
-    }
-  }
-
-  public static byte[] readFile(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    InputStream input = openInputStream(uriConverter, options, uri);
-
-    try
-    {
-      ByteArrayOutputStream output = new ByteArrayOutputStream(input.available());
-      IOUtil.copy(input, output);
-      return output.toByteArray();
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
-    finally
-    {
-      IOUtil.closeSilent(input);
-    }
-  }
-
-  public static void writeFile(URIConverter uriConverter, Map<?, ?> options, URI uri, byte[] bytes) throws IORuntimeException
-  {
-    OutputStream output = openOutputStream(uriConverter, options, uri);
-
-    try
-    {
-      ByteArrayInputStream input = new ByteArrayInputStream(bytes);
-      IOUtil.copy(input, output);
-    }
-    finally
-    {
-      IOUtil.closeSilent(output);
-    }
-  }
-
-  public static void deleteFile(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    try
-    {
-      uriConverter.delete(uri, options);
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public interface DependencyProvider<T>
-  {
-    Collection<? extends T> getDependencies(T value);
   }
 }

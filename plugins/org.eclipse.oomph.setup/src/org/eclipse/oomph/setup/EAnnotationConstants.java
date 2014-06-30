@@ -55,4 +55,8 @@ public final class EAnnotationConstants
   public static final String KEY_STORE_PROMPTED_VALUE = "storePromptedValue";
 
   public static final String NESTED_ANNOTATION_CHOICE = "Choice";
+
+  public static final String ANNOTATION_ICON = "http://www.eclipse.org/oomph/setup/Icon";
+
+  public static final String KEY_URI = "uri";
 }

@@ -933,6 +933,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
+    EMFUtil.replaceReflectiveItemProvider(adapterFactory);
+
     // Create the editing domain with a special command stack.
     //
     editingDomain = new AdapterFactoryEditingDomain(adapterFactory, editingDomain.getCommandStack(), new HashMap<Resource, Boolean>()

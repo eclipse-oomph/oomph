@@ -149,6 +149,7 @@ public class ProjectPage extends SetupWizardPage
   {
     adapterFactory = new ComposedAdapterFactory(getAdapterFactory());
     adapterFactory.insertAdapterFactory(new ItemProviderAdapterFactory());
+    EMFUtil.replaceReflectiveItemProvider(adapterFactory);
 
     final Workspace workspace = getWorkspace();
     if (workspace != null)
