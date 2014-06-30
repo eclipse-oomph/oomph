@@ -21,7 +21,6 @@ import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -922,14 +921,39 @@ public abstract class PropertyField
     protected void helperButtonSelected(SelectionEvent e)
     {
       Shell shell = getHelper().getShell();
-      Path path = new Path(getValue());
-      IWorkspaceRoot root = EcorePlugin.getWorkspaceRoot();
-      IContainer container = path.segmentCount() == 1 ? root.getProject(path.segment(0)) : root.getFolder(path);
-      IContainer[] folders = WorkspaceResourceDialog.openFolderSelection(shell, getDialogText(), getDialogMessage(), false, new Object[] { container }, null);
+      Object[] initialSelection = getInitialSelection();
+      IContainer[] folders = WorkspaceResourceDialog.openFolderSelection(shell, getDialogText(), getDialogMessage(), false, initialSelection, null);
       if (folders.length > 0)
       {
         transferValueToControl(folders[0].getFullPath().toString());
       }
+    }
+
+    private Object[] getInitialSelection()
+    {
+      try
+      {
+        String value = getValue();
+        if (!StringUtil.isEmpty(value))
+        {
+          Path path = new Path(value);
+          if (!path.isEmpty())
+          {
+            if (path.segmentCount() == 1)
+            {
+              return new Object[] { EcorePlugin.getWorkspaceRoot().getProject(path.segment(0)) };
+            }
+
+            return new Object[] { EcorePlugin.getWorkspaceRoot().getFolder(path) };
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+
+      return null;
     }
   }
 
