@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.tests.data;
 
+import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
@@ -24,7 +25,6 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
-import org.eclipse.oomph.setup.util.SetupResourceFactoryImpl;
 
 import org.eclipse.emf.ecore.resource.Resource;
 
@@ -297,7 +297,7 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("#################################################################################################################");
       System.out.println();
 
-      Resource resource = new SetupResourceFactoryImpl().createResource(org.eclipse.emf.common.util.URI.createURI("catalog"));
+      Resource resource = new BaseResourceFactoryImpl().createResource(org.eclipse.emf.common.util.URI.createURI("catalog"));
       resource.getContents().add(productCatalog);
       resource.save(System.out, null);
     }

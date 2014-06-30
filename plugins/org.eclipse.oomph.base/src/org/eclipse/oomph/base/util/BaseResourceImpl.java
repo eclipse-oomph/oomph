@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.util;
+package org.eclipse.oomph.base.util;
 
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -48,10 +48,10 @@ import java.util.Map;
  * The <b>Resource </b> associated with the package.
  * @implements org.eclipse.oomph.setup.util.SetupResource
  * <!-- end-user-doc -->
- * @see org.eclipse.oomph.setup.util.SetupResourceFactoryImpl
+ * @see org.eclipse.oomph.base.util.BaseResourceFactoryImpl
  * @generated
  */
-public class SetupResourceImpl extends XMIResourceImpl implements org.eclipse.oomph.setup.util.SetupResource
+public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oomph.base.util.BaseResource
 {
   /**
    * Creates an instance of the resource.
@@ -60,7 +60,7 @@ public class SetupResourceImpl extends XMIResourceImpl implements org.eclipse.oo
    * @param uri the URI of the new resource.
    * @generated
    */
-  public SetupResourceImpl(URI uri)
+  public BaseResourceImpl(URI uri)
   {
     super(uri);
   }

@@ -15,5 +15,6 @@ Export-Package: org.eclipse.oomph.base;version="1.0.0",
   x-friends:="org.eclipse.oomph.setup.editor"
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.emf.ecore;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
  org.eclipse.oomph.util;bundle-version="[1.0.0,2.0.0)"
 Bundle-ActivationPolicy: lazy

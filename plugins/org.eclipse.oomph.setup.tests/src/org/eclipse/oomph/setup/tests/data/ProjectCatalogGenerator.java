@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.tests.data;
 
+import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Product;
@@ -22,7 +23,6 @@ import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.VariableTask;
-import org.eclipse.oomph.setup.util.SetupResourceFactoryImpl;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.BasicEList;
@@ -5358,7 +5358,7 @@ public class ProjectCatalogGenerator
   private static ResourceSet createResourceSet()
   {
     ResourceSet resourceSet = new ResourceSetImpl();
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("setup", new SetupResourceFactoryImpl());
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("setup", new BaseResourceFactoryImpl());
     return resourceSet;
   }
 

@@ -8,13 +8,13 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.util;
+package org.eclipse.oomph.base.util;
 
 import org.eclipse.emf.ecore.xmi.XMIResource;
 
 /**
  * @author Eike Stepper
  */
-public interface SetupResource extends XMIResource
+public interface BaseResource extends XMIResource
 {
 }

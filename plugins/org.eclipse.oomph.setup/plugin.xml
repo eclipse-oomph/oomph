@@ -22,10 +22,9 @@
    </extension>
 
    <extension point="org.eclipse.emf.ecore.extension_parser">
-      <!-- @generated setup -->
       <parser
             type="setup"
-            class="org.eclipse.oomph.setup.util.SetupResourceFactoryImpl"/>
+            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"/>
    </extension>
 
 </plugin>

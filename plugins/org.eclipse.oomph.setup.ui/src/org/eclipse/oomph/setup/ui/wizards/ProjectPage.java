@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.util.BaseResource;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
@@ -28,7 +29,6 @@ import org.eclipse.oomph.setup.provider.ProjectItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.setup.util.SetupResource;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -963,7 +963,7 @@ public class ProjectPage extends SetupWizardPage
                   if (value instanceof URI)
                   {
                     URI uri = (URI)value;
-                    SetupResource resource = EMFUtil.loadResourceSafely(resourceSet, uri);
+                    BaseResource resource = EMFUtil.loadResourceSafely(resourceSet, uri);
                     Project project = (Project)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.PROJECT);
                     if (project != null && project.getName() != null && (operation == DROP_COPY || project.eContainer() == null))
                     {

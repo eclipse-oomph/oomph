@@ -6,7 +6,7 @@
     copyrightFields="false" optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.p2/model/P2.genmodel#//p2 ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources"
     operationReflection="true" decoration="Live" cleanup="true">
   <foreignModel>Targlets.ecore</foreignModel>
-  <genPackages prefix="Targlet" basePackage="org.eclipse.oomph" resource="XMI" disposableProviderFactory="true"
+  <genPackages prefix="Targlet" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       multipleEditorPages="false" extensibleProviderFactory="true" childCreationExtenders="true"
       fileExtensions="targlet,def,ext" ecorePackage="Targlets.ecore#/" publicationLocation="/setups/models/Targlets.ecore">
     <genClasses ecoreClass="Targlets.ecore#//Targlet">

@@ -14,11 +14,11 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.base.util.BaseResource;
+import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
-import org.eclipse.oomph.setup.util.SetupResource;
-import org.eclipse.oomph.setup.util.SetupResourceFactoryImpl;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -614,7 +614,7 @@ public final class EMFUtil
 
   public static void configureResourceSet(final ResourceSet resourceSet)
   {
-    Resource.Factory factory = new SetupResourceFactoryImpl();
+    Resource.Factory factory = new BaseResourceFactoryImpl();
 
     Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
     extensionToFactoryMap.put("targlet", factory);
@@ -782,16 +782,16 @@ public final class EMFUtil
     }
   }
 
-  public static SetupResource loadResourceSafely(ResourceSet resourceSet, URI uri)
+  public static BaseResource loadResourceSafely(ResourceSet resourceSet, URI uri)
   {
     try
     {
-      return (SetupResource)resourceSet.getResource(uri, true);
+      return (BaseResource)resourceSet.getResource(uri, true);
     }
     catch (Throwable ex)
     {
       SetupCorePlugin.INSTANCE.log(ex);
-      return (SetupResource)resourceSet.getResource(uri, false);
+      return (BaseResource)resourceSet.getResource(uri, false);
     }
   }
 

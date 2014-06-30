@@ -7,7 +7,7 @@
     optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
     decoration="Live" cleanup="true">
   <foreignModel>Setup.ecore</foreignModel>
-  <genPackages prefix="Setup" basePackage="org.eclipse.oomph" resource="XMI" disposableProviderFactory="true"
+  <genPackages prefix="Setup" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       multipleEditorPages="false" extensibleProviderFactory="true" childCreationExtenders="true"
       ecorePackage="Setup.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//ScopeType">
@@ -88,6 +88,7 @@
       <genOperations ecoreOperation="Setup.ecore#//Scope/getType"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Index">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Index/discoverablePackages"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Index/productCatalogs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Index/projectCatalogs"/>
     </genClasses>

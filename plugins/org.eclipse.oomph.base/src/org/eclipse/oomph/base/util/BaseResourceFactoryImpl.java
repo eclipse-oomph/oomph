@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.util;
+package org.eclipse.oomph.base.util;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -21,10 +21,10 @@ import java.util.Map;
  * <!-- begin-user-doc -->
  * The <b>Resource Factory</b> associated with the package.
  * <!-- end-user-doc -->
- * @see org.eclipse.oomph.setup.util.SetupResourceImpl
+ * @see org.eclipse.oomph.base.util.BaseResourceImpl
  * @generated
  */
-public class SetupResourceFactoryImpl extends ResourceFactoryImpl
+public class BaseResourceFactoryImpl extends ResourceFactoryImpl
 {
   /**
    * Creates an instance of the resource factory.
@@ -32,7 +32,7 @@ public class SetupResourceFactoryImpl extends ResourceFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public SetupResourceFactoryImpl()
+  public BaseResourceFactoryImpl()
   {
     super();
   }
@@ -46,7 +46,7 @@ public class SetupResourceFactoryImpl extends ResourceFactoryImpl
   @Override
   public Resource createResource(URI uri)
   {
-    SetupResourceImpl result = new SetupResourceImpl(uri);
+    BaseResourceImpl result = new BaseResourceImpl(uri);
     result.setEncoding("UTF-8");
 
     Map<Object, Object> defaultLoadOptions = result.getDefaultLoadOptions();
