@@ -692,13 +692,9 @@ public final class EMFUtil
         if ("ecore".equals(uri.fileExtension()))
         {
           Resource resource = null;
-          synchronized (modelResourceSet)
+          synchronized (resourceSet)
           {
-            synchronized (resourceSet)
-            {
-              resource = super.getResource(uri, false);
-            }
-
+            resource = super.getResource(uri, false);
             if (resource != null)
             {
               if (!resource.isLoaded())
@@ -717,8 +713,7 @@ public final class EMFUtil
           }
         }
 
-        Resource resource = super.getResource(uri, loadOnDemand);
-        return resource;
+        return super.getResource(uri, loadOnDemand);
       }
     };
 

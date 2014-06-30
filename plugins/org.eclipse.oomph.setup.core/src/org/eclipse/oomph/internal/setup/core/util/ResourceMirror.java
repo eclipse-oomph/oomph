@@ -175,18 +175,9 @@ public class ResourceMirror
 
   private synchronized boolean schedule(URI uri, boolean secondary)
   {
-    if (isCanceled())
+    if (isCanceled() || isLoaded(uri))
     {
       return false;
-    }
-
-    synchronized (resourceSet)
-    {
-      Resource resource = resourceSet.getResource(uri, false);
-      if (resource != null && resource.isLoaded())
-      {
-        return false;
-      }
     }
 
     LoadJob loadJob = loadJobs.get(uri);
@@ -241,6 +232,34 @@ public class ResourceMirror
     return running < maxJobs;
   }
 
+  protected boolean isLoaded(URI uri)
+  {
+    synchronized (resourceSet)
+    {
+      Resource resource = resourceSet.getResource(uri, false);
+      if (resource != null && resource.isLoaded())
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  protected Resource createResource(URI uri)
+  {
+    Resource resource;
+    synchronized (resourceSet)
+    {
+      resource = resourceSet.getResource(uri, false);
+      if (resource == null)
+      {
+        resource = resourceSet.createResource(uri);
+      }
+    }
+    return resource;
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -293,15 +312,7 @@ public class ResourceMirror
     {
       try
       {
-        Resource resource;
-        synchronized (resourceSet)
-        {
-          resource = resourceSet.getResource(uri, false);
-          if (resource == null)
-          {
-            resource = resourceSet.createResource(uri);
-          }
-        }
+        Resource resource = createResource(uri);
 
         try
         {

@@ -2871,41 +2871,50 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
 
         String repositoryLocation = eAnnotation.getDetails().get(EAnnotationConstants.KEY_REPOSITORY);
-
-        if (withVariables)
+        if (!StringUtil.isEmpty(repositoryLocation))
         {
-          String variableName = eAnnotation.getDetails().get(EAnnotationConstants.KEY_VARIABLE_NAME);
-          if (!StringUtil.isEmpty(variableName))
+          if (withVariables)
           {
-            VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-            variable.setName(variableName);
-            variable.setValue(repositoryLocation);
-            enablementTasks.add(0, variable);
+            String variableName = eAnnotation.getDetails().get(EAnnotationConstants.KEY_VARIABLE_NAME);
+            if (!StringUtil.isEmpty(variableName))
+            {
+              VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+              variable.setName(variableName);
+              variable.setValue(repositoryLocation);
+              enablementTasks.add(0, variable);
 
-            repositoryLocation = getVariableReference(variableName);
+              repositoryLocation = getVariableReference(variableName);
+            }
           }
         }
 
         P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
         EList<Requirement> requirements = p2Task.getRequirements();
-        for (String requirementSpecification : eAnnotation.getDetails().get(EAnnotationConstants.KEY_INSTALLABLE_UNITS).split("\\s"))
+        String ius = eAnnotation.getDetails().get(EAnnotationConstants.KEY_INSTALLABLE_UNITS);
+        if (!StringUtil.isEmpty(ius))
         {
-          Matcher matcher = INSTALLABLE_UNIT_WITH_RANGE_PATTERN.matcher(requirementSpecification);
-          if (matcher.matches())
+          for (String requirementSpecification : ius.split("\\s"))
           {
-            Requirement requirement = P2Factory.eINSTANCE.createRequirement(matcher.group(1));
-            String versionRange = matcher.group(2);
-            if (!StringUtil.isEmpty(versionRange))
+            Matcher matcher = INSTALLABLE_UNIT_WITH_RANGE_PATTERN.matcher(requirementSpecification);
+            if (matcher.matches())
             {
-              requirement.setVersionRange(new VersionRange(versionRange));
-            }
+              Requirement requirement = P2Factory.eINSTANCE.createRequirement(matcher.group(1));
+              String versionRange = matcher.group(2);
+              if (!StringUtil.isEmpty(versionRange))
+              {
+                requirement.setVersionRange(new VersionRange(versionRange));
+              }
 
-            requirements.add(requirement);
+              requirements.add(requirement);
+            }
           }
         }
 
-        Repository repository = P2Factory.eINSTANCE.createRepository(repositoryLocation);
-        p2Task.getRepositories().add(repository);
+        if (!StringUtil.isEmpty(repositoryLocation))
+        {
+          Repository repository = P2Factory.eINSTANCE.createRepository(repositoryLocation);
+          p2Task.getRepositories().add(repository);
+        }
 
         // Ensure that these are first so that these are the targets for merging rather than the sources.
         // The latter causes problems in the copier.
