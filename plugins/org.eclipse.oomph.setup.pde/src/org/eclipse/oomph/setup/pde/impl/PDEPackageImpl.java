@@ -288,6 +288,8 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     createEnablementAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http://www.eclipse.org/oomph/setup/Icon
+    createIconAnnotations();
     // http://www.eclipse.org/oomph/setup/Variable
     createVariableAnnotations();
     // http://www.eclipse.org/oomph/setup/RuleVariable
@@ -332,6 +334,21 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(targetPlatformTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
     addAnnotation(apiBaselineTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Icon</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createIconAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Icon";
+    addAnnotation(targetPlatformTaskEClass, source, new String[] { "uri",
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.pde.edit/icons/full/obj16/TargetPlatformTask.gif" });
+    addAnnotation(apiBaselineTaskEClass, source, new String[] { "uri",
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.pde.edit/icons/full/obj16/APIBaselineTask.gif" });
   }
 
   /**
