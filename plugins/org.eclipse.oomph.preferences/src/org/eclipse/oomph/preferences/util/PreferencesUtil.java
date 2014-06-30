@@ -60,11 +60,9 @@ public final class PreferencesUtil
    */
   public static final String OPTION_SYNCHRONIZED_PREFERENCES = "SYNCHRONIZED_PREFERENCES";
 
-  private static final IEclipsePreferences ROOT = Platform.getPreferencesService().getRootNode();
-
-  private static final SecurePreferenceWapper SECURE_ROOT = SecurePreferenceWapper.create(getSecurePreferences());
-
   public static final URI ROOT_PREFERENCE_NODE_URI = URI.createURI("preference:/");
+
+  private static final IEclipsePreferences ROOT = Platform.getPreferencesService().getRootNode();
 
   public static ISecurePreferences getSecurePreferences()
   {
@@ -283,7 +281,7 @@ public final class PreferencesUtil
       }
       else if (preferences == ROOT && "secure".equals(name))
       {
-        result.addAll(reconcile(child, SECURE_ROOT));
+        result.addAll(reconcile(child, SecurePreferenceWapper.create(getSecurePreferences())));
       }
       else
       {
@@ -393,7 +391,7 @@ public final class PreferencesUtil
       }
       else if (parentPreferences == ROOT && "secure".equals(name))
       {
-        return SECURE_ROOT;
+        return SecurePreferenceWapper.create(getSecurePreferences());
       }
     }
 

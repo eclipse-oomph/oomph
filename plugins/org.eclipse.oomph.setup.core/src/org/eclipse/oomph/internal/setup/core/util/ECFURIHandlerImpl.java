@@ -11,6 +11,8 @@
 package org.eclipse.oomph.internal.setup.core.util;
 
 import org.eclipse.oomph.internal.setup.core.SetupContext;
+import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
+import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
@@ -18,6 +20,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.ContainerFactory;
@@ -35,6 +38,10 @@ import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveStartEven
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferID;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferNamespace;
 import org.eclipse.ecf.provider.filetransfer.util.ProxySetupHelper;
+import org.eclipse.equinox.p2.core.UIServices;
+import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.StorageException;
 
 import org.apache.http.impl.cookie.DateParseException;
 import org.apache.http.impl.cookie.DateUtils;
@@ -44,6 +51,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -63,6 +71,234 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   public enum CacheHandling
   {
     CACHE_ONLY, CACHE_WITHOUT_ETAG_CHECKING, CACHE_WITH_ETAG_CHECKING, CACHE_IGNORE
+  }
+
+  public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER";
+
+  public interface AuthorizationHandler
+  {
+    public final class Authorization
+    {
+      public static final Authorization UNAUTHORIZED = new Authorization("", "");
+
+      public static final Authorization UNAUTHORIZEABLE = new Authorization("", "");
+
+      private final String user;
+
+      private final String password;
+
+      public Authorization(String user, String password)
+      {
+        this.user = user == null ? "" : user;
+        this.password = obscure(password == null ? "" : password);
+      }
+
+      public String getUser()
+      {
+        return user;
+      }
+
+      public String getPassword()
+      {
+        return unobscure(password);
+      }
+
+      public String getAuthorization()
+      {
+        return "Basic " + obscure(user + ":" + getPassword());
+      }
+
+      public boolean isAuthorized()
+      {
+        return !"".equals(user) && !"".equals(password);
+      }
+
+      public boolean isUnauthorizeable()
+      {
+        return this == UNAUTHORIZEABLE;
+      }
+
+      private String obscure(String string)
+      {
+        return XMLTypeFactory.eINSTANCE.convertBase64Binary(string.getBytes());
+      }
+
+      private String unobscure(String string)
+      {
+        return new String(XMLTypeFactory.eINSTANCE.createBase64Binary(string));
+      }
+
+      @Override
+      public int hashCode()
+      {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (user == null ? 0 : user.hashCode());
+        result = prime * result + (password == null ? 0 : password.hashCode());
+        return result;
+      }
+
+      @Override
+      public boolean equals(Object obj)
+      {
+        if (this == obj)
+        {
+          return true;
+        }
+
+        if (obj == null)
+        {
+          return false;
+        }
+
+        if (getClass() != obj.getClass())
+        {
+          return false;
+        }
+
+        if (this == UNAUTHORIZEABLE)
+        {
+          return obj == UNAUTHORIZEABLE;
+        }
+
+        Authorization other = (Authorization)obj;
+        if (!user.equals(other.user))
+        {
+          return false;
+        }
+
+        if (!password.equals(other.password))
+        {
+          return false;
+        }
+
+        return true;
+      }
+
+      @Override
+      public String toString()
+      {
+        return this == UNAUTHORIZEABLE ? "Authorization [unauthorizeable]" : "Authorization [user=" + user + ", password=" + password + "]";
+      }
+    }
+
+    public Authorization authorize(URI uri);
+
+    public Authorization reauthorize(URI uri, Authorization authorization);
+  }
+
+  public static class AuthorizationHandlerImpl implements AuthorizationHandler
+  {
+    private final Map<String, Authorization> authorizations = new HashMap<String, Authorization>();
+
+    private final UIServices uiServices;
+
+    private ISecurePreferences securePreferences;
+
+    public AuthorizationHandlerImpl(UIServices uiServices, ISecurePreferences securePreferences)
+    {
+      this.uiServices = uiServices;
+      this.securePreferences = securePreferences;
+    }
+
+    public synchronized void clearCache()
+    {
+      authorizations.clear();
+    }
+
+    public synchronized Authorization authorize(URI uri)
+    {
+      String host = getHost(uri);
+      if (host != null)
+      {
+        Authorization cachedAuthorization = authorizations.get(host);
+        if (cachedAuthorization == Authorization.UNAUTHORIZEABLE)
+        {
+          return cachedAuthorization;
+        }
+
+        if (securePreferences != null)
+        {
+          try
+          {
+            ISecurePreferences node = securePreferences.node(host);
+            String user = node.get("user", "");
+            String password = node.get("password", "");
+
+            Authorization authorization = new Authorization(user, password);
+            if (authorization.isAuthorized())
+            {
+              authorizations.put(host, authorization);
+              return authorization;
+            }
+          }
+          catch (StorageException ex)
+          {
+            SetupCorePlugin.INSTANCE.log(ex);
+          }
+        }
+
+        if (cachedAuthorization != null)
+        {
+          return cachedAuthorization;
+        }
+      }
+
+      return Authorization.UNAUTHORIZED;
+    }
+
+    public synchronized Authorization reauthorize(URI uri, Authorization authorization)
+    {
+      // Double check that another thread hasn't already prompted and updated the secure store or has not already permanently failed to authorize.
+      Authorization currentAuthorization = authorize(uri);
+      if (!currentAuthorization.equals(authorization) || currentAuthorization == Authorization.UNAUTHORIZEABLE)
+      {
+        return currentAuthorization;
+      }
+
+      if (uiServices != null)
+      {
+        String host = getHost(uri);
+        if (host != null)
+        {
+          AuthenticationInfo authenticationInfo = uiServices.getUsernamePassword(uri.toString());
+          String user = authenticationInfo.getUserName();
+          String password = authenticationInfo.getPassword();
+          Authorization reauthorization = new Authorization(user, password);
+          if (reauthorization.isAuthorized())
+          {
+            if (authenticationInfo.saveResult() && securePreferences != null)
+            {
+              try
+              {
+                ISecurePreferences node = securePreferences.node(host);
+                node.put("user", user, false);
+                node.put("password", password, true);
+                node.flush();
+              }
+              catch (IOException ex)
+              {
+                SetupCorePlugin.INSTANCE.log(ex);
+              }
+              catch (StorageException ex)
+              {
+                SetupCorePlugin.INSTANCE.log(ex);
+              }
+            }
+
+            authorizations.put(host, reauthorization);
+            return reauthorization;
+          }
+          else
+          {
+            authorizations.put(host, Authorization.UNAUTHORIZEABLE);
+            return Authorization.UNAUTHORIZEABLE;
+          }
+        }
+      }
+
+      return currentAuthorization;
+    }
   }
 
   private static final URI CACHE_FOLDER = SetupContext.GLOBAL_STATE_LOCATION_URI.appendSegment("cache");
@@ -104,6 +340,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     return cacheHandling;
   }
 
+  private static AuthorizationHandler getAuthorizatonHandler(Map<?, ?> options)
+  {
+    return (AuthorizationHandler)options.get(OPTION_AUTHORIZATION_HANDLER);
+  }
+
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
@@ -134,7 +375,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     URIConverter uriConverter = getURIConverter(options);
     URI cacheURI = getCacheFile(uri);
     String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
-    String expectedETag = CacheHandling.CACHE_IGNORE == null ? null : getExpectedETag(uri);
+    String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
     if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
     {
       if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
@@ -169,6 +410,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
     IContainer container = createContainer();
 
+    AuthorizationHandler authorizatonHandler = getAuthorizatonHandler(options);
+    Authorization authorization = null;
+    int triedReauthorization = 0;
     for (int i = 0;; ++i)
     {
       IRetrieveFileTransferContainerAdapter fileTransfer = (IRetrieveFileTransferContainerAdapter)container
@@ -196,7 +440,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         Map<Object, Object> requestOptions = new HashMap<Object, Object>();
         requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, 10000);
         requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, 10000);
-        fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, Collections.emptyMap());
+        if (authorization != null && authorization.isAuthorized())
+        {
+          requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
+        }
+
+        fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
       }
       catch (URISyntaxException ex)
       {
@@ -218,17 +467,47 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
       if (transferListener.exception != null)
       {
-        if (transferListener.exception instanceof UserCancelledException || !(transferListener.exception.getCause() instanceof SocketTimeoutException) || i > 2)
+        if (!(transferListener.exception instanceof UserCancelledException))
         {
-          if (uriConverter.exists(cacheURI, options))
+          if (transferListener.exception.getCause() instanceof SocketTimeoutException && i <= 2)
           {
-            return uriConverter.createInputStream(cacheURI, options);
+            continue;
           }
 
-          throw new IOExceptionWithCause(transferListener.exception);
+          if (authorizatonHandler != null && transferListener.exception instanceof IncomingFileTransferException)
+          {
+            IncomingFileTransferException incomingFileTransferException = (IncomingFileTransferException)transferListener.exception;
+            if (incomingFileTransferException.getErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED)
+            {
+              if (authorization == null)
+              {
+                authorization = authorizatonHandler.authorize(uri);
+                if (authorization.isAuthorized())
+                {
+                  --i;
+                  continue;
+                }
+              }
+
+              if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
+              {
+                authorization = authorizatonHandler.reauthorize(uri, authorization);
+                if (authorization.isAuthorized())
+                {
+                  --i;
+                  continue;
+                }
+              }
+            }
+          }
         }
 
-        continue;
+        if (cacheHandling != CacheHandling.CACHE_IGNORE && uriConverter.exists(cacheURI, options))
+        {
+          return uriConverter.createInputStream(cacheURI, options);
+        }
+
+        throw new IOExceptionWithCause(transferListener.exception);
       }
 
       byte[] bytes = transferListener.out.toByteArray();
@@ -321,6 +600,19 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
   }
 
+  private static String getHost(URI uri)
+  {
+    String authority = uri.authority();
+    if (authority != null)
+    {
+      int i = authority.indexOf('@');
+      int j = authority.indexOf(':', i + 1);
+      return j < 0 ? authority.substring(i + 1) : authority.substring(i + 1, j);
+    }
+
+    return null;
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -379,6 +671,16 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             receiveStartEvent.cancel();
             return;
           }
+
+          boolean setCookie = responseHeaders.get("Set-Cookie") != null;
+          if (setCookie)
+          {
+            IncomingFileTransferException incomingFileTransferException = new IncomingFileTransferException(HttpURLConnection.HTTP_UNAUTHORIZED);
+            incomingFileTransferException.fillInStackTrace();
+            exception = incomingFileTransferException;
+            receiveStartEvent.cancel();
+            return;
+          }
         }
 
         try
@@ -394,7 +696,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       {
         IIncomingFileTransferReceiveDoneEvent done = (IIncomingFileTransferReceiveDoneEvent)event;
         Exception ex = done.getException();
-        if (ex != null)
+        if (ex != null && exception == null)
         {
           exception = ex;
         }

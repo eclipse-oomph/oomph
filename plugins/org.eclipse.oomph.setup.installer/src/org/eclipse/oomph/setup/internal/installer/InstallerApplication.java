@@ -10,10 +10,14 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.ErrorDialog;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.swt.widgets.Display;
 
 import java.io.File;
@@ -55,6 +59,13 @@ public class InstallerApplication implements IApplication
           context.applicationRunning();
         }
       });
+
+      P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
+
+      @SuppressWarnings("restriction")
+      IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper.getService(
+          org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
+      agent.registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
 
       InstallerDialog dialog = new InstallerDialog(null, restarted);
       final int retcode = dialog.open();

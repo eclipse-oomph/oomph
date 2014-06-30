@@ -50,6 +50,12 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
+import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.UIServices;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.provider.IProviderHints;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -57,6 +63,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -69,6 +76,30 @@ import java.util.Set;
  */
 public final class EMFUtil
 {
+  private static final ECFURIHandlerImpl.AuthorizationHandlerImpl AUTHORIZATION_HANDLER;
+  static
+  {
+    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper.getService(
+        org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
+    UIServices uiServices = (UIServices)agent.getService(UIServices.SERVICE_NAME);
+
+    Map<Object, Object> options = new HashMap<Object, Object>();
+    options.put(IProviderHints.PROMPT_USER, Boolean.FALSE);
+
+    ISecurePreferences securePreferences = null;
+    try
+    {
+      ISecurePreferences root = SecurePreferencesFactory.open(null, options);
+      securePreferences = root.node("org.eclipse.oomph").node("hosts");
+    }
+    catch (IOException ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
+
+    AUTHORIZATION_HANDLER = new ECFURIHandlerImpl.AuthorizationHandlerImpl(uiServices, securePreferences);
+  }
+
   private EMFUtil()
   {
   }
@@ -597,6 +628,8 @@ public final class EMFUtil
     uriHandlers.add(4, new UserURIHandlerImpl());
     uriHandlers.add(5, new ProductCatalogURIHandlerImpl());
     uriHandlers.add(6, new ECFURIHandlerImpl());
+
+    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_AUTHORIZATION_HANDLER, AUTHORIZATION_HANDLER);
 
     class ModelResourceSet extends ResourceSetImpl
     {
