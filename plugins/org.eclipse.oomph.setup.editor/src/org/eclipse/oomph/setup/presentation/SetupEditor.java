@@ -139,8 +139,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.URLTransfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -1188,7 +1190,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * This creates a context menu for the viewer and adds a listener as well registering the menu for extension.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected void createContextMenuFor(StructuredViewer viewer)
   {
@@ -1201,9 +1203,46 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 
     int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-    Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance() };
+    Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance(),
+        URLTransfer.getInstance() };
     viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
-    viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, viewer));
+    viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, viewer)
+    {
+      @Override
+      protected Collection<?> getDragSource(DropTargetEvent event)
+      {
+        // Check whether the current data type can be transfered locally.
+        //
+        URLTransfer urlTransfer = URLTransfer.getInstance();
+        if (urlTransfer.isSupportedType(event.currentDataType))
+        {
+          // Motif kludge: we would get something random instead of null.
+          //
+          if (IS_MOTIF)
+          {
+            return null;
+          }
+
+          // Transfer the data and, if non-null, extract it.
+          //
+          Object object = urlTransfer.nativeToJava(event.currentDataType);
+          return object == null ? null : extractDragSource(object);
+        }
+
+        return super.getDragSource(event);
+      }
+
+      @Override
+      protected Collection<?> extractDragSource(Object object)
+      {
+        if (object instanceof String)
+        {
+          return Collections.singleton(URI.createURI((String)object));
+        }
+
+        return super.extractDragSource(object);
+      }
+    });
   }
 
   /**

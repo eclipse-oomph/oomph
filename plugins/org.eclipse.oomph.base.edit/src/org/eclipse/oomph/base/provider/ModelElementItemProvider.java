@@ -14,10 +14,22 @@ import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandWrapper;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -169,6 +181,96 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
     newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
+  }
+
+  @Override
+  protected Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    return new DragAndDropCommand(domain, owner, location, operations, operation, collection)
+    {
+      @Override
+      protected boolean prepareDropLinkOn()
+      {
+        dragCommand = IdentityCommand.INSTANCE;
+        dropCommand = SetCommand.create(domain, owner, null, collection);
+
+        // If we can't set the collection, try setting use the single value of the collection.
+        //
+        if (!dropCommand.canExecute() && collection.size() == 1)
+        {
+          dropCommand.dispose();
+          dropCommand = SetCommand.create(domain, owner, null, collection.iterator().next());
+        }
+
+        if (!dropCommand.canExecute() || !analyzeForDropLinkEnablement(dropCommand))
+        {
+          dropCommand.dispose();
+          dropCommand = AddCommand.create(domain, owner, null, collection);
+          if (!analyzeForDropLinkEnablement(dropCommand))
+          {
+            dropCommand.dispose();
+            dropCommand = UnexecutableCommand.INSTANCE;
+          }
+        }
+
+        boolean result = dropCommand.canExecute();
+        return result;
+      }
+
+      protected boolean analyzeForDropLinkEnablement(Command command)
+      {
+        if (command instanceof AddCommand)
+        {
+          AddCommand addCommand = (AddCommand)command;
+          if (isNonContainment(addCommand.getFeature()))
+          {
+            return true;
+          }
+
+          // If it's an add command on a proxy resolving containment reference and the objects being added all have no container then we can link them.
+          EList<?> ownerList = addCommand.getOwnerList();
+          if (ownerList != null)
+          {
+            if (((EReference)addCommand.getFeature()).isResolveProxies())
+            {
+              for (Object value : addCommand.getCollection())
+              {
+                EObject eObject = (EObject)value;
+                if (eObject.eContainer() != null)
+                {
+                  return false;
+                }
+              }
+
+              return true;
+            }
+          }
+
+          return false;
+        }
+        else if (command instanceof SetCommand)
+        {
+          return isNonContainment(((SetCommand)command).getFeature());
+        }
+        else if (command instanceof CommandWrapper)
+        {
+          return analyzeForDropLinkEnablement(((CommandWrapper)command).getCommand());
+        }
+        else if (command instanceof CompoundCommand)
+        {
+          for (Command childCommand : ((CompoundCommand)command).getCommandList())
+          {
+            if (analyzeForDropLinkEnablement(childCommand))
+            {
+              return true;
+            }
+          }
+        }
+
+        return false;
+      }
+
+    };
   }
 
   /**
