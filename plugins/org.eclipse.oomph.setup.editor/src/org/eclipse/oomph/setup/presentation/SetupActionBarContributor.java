@@ -22,7 +22,6 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
-import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.provider.SetupTaskContainerItemProvider;
@@ -469,55 +468,50 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       }
     }
 
-    SetupContext setupContext = SetupContext.getSelf();
-    User user = setupContext.getUser();
-    Resource userResource = user.eResource();
-    if (userResource != null)
+    EditingDomain domain = ((IEditingDomainProvider)activeEditorPart).getEditingDomain();
+    ResourceSet resourceSet = domain.getResourceSet();
+    Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
+    Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
+
+    for (EPackage ePackage : index.getDiscoverablePackages())
     {
-      ResourceSet resourceSet = userResource.getResourceSet();
-      Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
-      Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
-
-      for (EPackage ePackage : index.getDiscoverablePackages())
+      for (EClassifier eClassifier : ePackage.getEClassifiers())
       {
-        for (EClassifier eClassifier : ePackage.getEClassifiers())
+        if (eClassifier instanceof EClass)
         {
-          if (eClassifier instanceof EClass)
+          EClass eClass = (EClass)eClassifier;
+          if (!classes.add(eClass))
           {
-            EClass eClass = (EClass)eClassifier;
-            if (!classes.add(eClass))
-            {
-              continue;
-            }
-
-            if (eClass.isAbstract() || eClass.isInterface())
-            {
-              continue;
-            }
-
-            EObject eObject = EcoreUtil.create(eClass);
-            if (SetupTaskContainerItemProvider.isDeprecated(eObject))
-            {
-              continue;
-            }
-
-            EList<EAnnotation> eAnnotations = new BasicEList<EAnnotation>();
-            for (EAnnotation eAnnotation : eClass.getEAnnotations())
-            {
-              String source = eAnnotation.getSource();
-              if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
-              {
-                eAnnotations.add(eAnnotation);
-              }
-            }
-
-            if (eAnnotations.isEmpty())
-            {
-              continue;
-            }
-
-            actions.add(new AdditionalTaskAction(eClass, eAnnotations));
+            continue;
           }
+
+          if (eClass.isAbstract() || eClass.isInterface())
+          {
+            continue;
+          }
+
+          EObject eObject = EcoreUtil.create(eClass);
+          if (SetupTaskContainerItemProvider.isDeprecated(eObject))
+          {
+            continue;
+          }
+
+          EList<EAnnotation> eAnnotations = new BasicEList<EAnnotation>();
+          for (EAnnotation eAnnotation : eClass.getEAnnotations())
+          {
+            String source = eAnnotation.getSource();
+            if (EAnnotationConstants.ANNOTATION_ENABLEMENT.equals(source))
+            {
+              eAnnotations.add(eAnnotation);
+            }
+          }
+
+          if (eAnnotations.isEmpty())
+          {
+            continue;
+          }
+
+          actions.add(new AdditionalTaskAction(eClass, eAnnotations));
         }
       }
     }
