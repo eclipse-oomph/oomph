@@ -263,7 +263,9 @@ public final class InstallerDialog extends SetupWizardDialog
               break;
 
             case ERROR:
-              updateToolItem.setToolTipText("Review update problems");
+              StringBuilder builder = new StringBuilder();
+              formatStatus(builder, "", updateSearchError);
+              updateToolItem.setToolTipText(builder.toString());
               updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error"));
               updateToolItem.setEnabled(true);
               break;
@@ -272,6 +274,22 @@ public final class InstallerDialog extends SetupWizardDialog
         catch (Exception ex)
         {
           // Ignore
+        }
+      }
+
+      private void formatStatus(StringBuilder builder, String indent, IStatus status)
+      {
+        if (builder.length() != 0)
+        {
+          builder.append('\n');
+        }
+
+        builder.append(indent);
+        builder.append(status.getMessage());
+
+        for (IStatus child : status.getChildren())
+        {
+          formatStatus(builder, indent + "   ", child);
         }
       }
     });
