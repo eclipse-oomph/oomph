@@ -317,13 +317,10 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
           IVMInstall[] compatibleVMs = executionEnvironment.getCompatibleVMs();
           for (IVMInstall vmInstall : compatibleVMs)
           {
-            if (executionEnvironment.isStrictlyCompatible(vmInstall))
+            File installLocation = vmInstall.getInstallLocation();
+            if (new File(location).equals(installLocation))
             {
-              File installLocation = vmInstall.getInstallLocation();
-              if (new File(location).equals(installLocation))
-              {
-                return false;
-              }
+              return false;
             }
           }
         }
