@@ -119,8 +119,7 @@
           rootFolder="${emf.git.clone.location/releng/org.eclipse.emf.releng.buckminster}"/>
     </setupTask>
     <setupTask
-        xsi:type="setup.targlets:TargletTask"
-        predecessor="emf.git.clone">
+        xsi:type="setup.targlets:TargletTask">
       <targlets
           name="EMF Core">
         <requirements

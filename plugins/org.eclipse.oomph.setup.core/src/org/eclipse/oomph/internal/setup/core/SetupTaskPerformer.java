@@ -406,21 +406,21 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
           else
           {
-            for (Iterator<SetupTask> it2 = setupTask.getPredecessors().iterator(); it2.hasNext();)
+            for (ListIterator<SetupTask> it2 = setupTask.getPredecessors().listIterator(); it2.hasNext();)
             {
               SetupTask predecessor = it2.next();
               if (directSubstitutions.containsKey(predecessor))
               {
-                it.set(overrides.get(predecessor));
+                it2.set(overrides.get(predecessor));
               }
             }
 
-            for (Iterator<SetupTask> it2 = setupTask.getSuccessors().iterator(); it2.hasNext();)
+            for (ListIterator<SetupTask> it2 = setupTask.getSuccessors().listIterator(); it2.hasNext();)
             {
               SetupTask successor = it2.next();
               if (directSubstitutions.containsKey(successor))
               {
-                it.set(overrides.get(successor));
+                it2.set(overrides.get(successor));
               }
             }
           }
