@@ -100,7 +100,7 @@ public final class InstallerDialog extends SetupWizardDialog
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        if (updateSearchError != null)
+        if (updateSearchError == null)
         {
           update(false);
         }
