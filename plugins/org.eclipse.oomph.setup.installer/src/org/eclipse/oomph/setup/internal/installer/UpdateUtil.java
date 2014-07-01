@@ -46,6 +46,8 @@ import java.util.List;
  */
 public final class UpdateUtil extends Plugin
 {
+  public static final IStatus UPDATE_FOUND_STATUS = new Status(IStatus.OK, SetupCorePlugin.INSTANCE.getSymbolicName(), "Updates found");
+
   private static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
   private static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url";
@@ -53,8 +55,6 @@ public final class UpdateUtil extends Plugin
   private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
 
   private static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL).replace('\\', '/');
-
-  public static final IStatus UPDATE_FOUND_STATUS = new Status(IStatus.OK, SetupCorePlugin.INSTANCE.getSymbolicName(), "Updates found");
 
   private UpdateUtil()
   {
