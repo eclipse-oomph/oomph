@@ -911,7 +911,10 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public EnablementAction(EObject eObject, EList<SetupTask> enablementTasks)
     {
       IconReflectiveItemProvider itemProvider = ((SetupEditor)activeEditor).getReflectiveItemProvider();
-      setText(itemProvider.getTypeText(eObject));
+      String typeText = itemProvider.getTypeText(eObject);
+
+      setText(typeText + "...");
+      setToolTipText("Install the " + typeText + " extension model");
       setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(itemProvider.getImage(eObject)));
 
       eClass = eObject.eClass();
