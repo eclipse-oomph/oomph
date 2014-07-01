@@ -114,6 +114,11 @@ public final class IOUtil
     }
   }
 
+  public static byte[] getSHA1(String contents) throws NoSuchAlgorithmException, IOException
+  {
+    return getSHA1(new ByteArrayInputStream(contents.getBytes()));
+  }
+
   public static byte[] getSHA1(InputStream contents) throws NoSuchAlgorithmException, IOException
   {
     InputStream stream = null;
@@ -200,7 +205,7 @@ public final class IOUtil
 
       try
       {
-        byte[] bytes = IOUtil.getSHA1(new ByteArrayInputStream(result.getBytes()));
+        byte[] bytes = getSHA1(result);
         digest = "-" + HexUtil.bytesToHex(bytes) + "-";
       }
       catch (Exception ex)

@@ -15,22 +15,25 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.projectset.ProjectSetImportTask;
 import org.eclipse.oomph.setup.projectset.ProjectSetPackage;
+import org.eclipse.oomph.setup.projectset.ProjectSetPlugin;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.XMLUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IWorkingSet;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Transformer;
@@ -38,8 +41,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -224,6 +233,10 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
 
   private static class Helper
   {
+    private static final IWorkspaceRoot ROOT = EcorePlugin.getWorkspaceRoot();
+
+    private static final File HISTORY = ProjectSetPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile();
+
     private URI uri;
 
     private String content;
@@ -235,39 +248,22 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
 
     public boolean isNeeded(SetupTaskContext context) throws Exception
     {
-      InputStream inputStream = null;
-      try
+      content = getXMLContent(context.getURIConverter());
+      if (content != null)
       {
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-
-        inputStream = context.getURIConverter().createInputStream(uri, null);
-        Document document = documentBuilder.parse(inputStream);
-        document.getDocumentElement();
-        NodeList nodeList = document.getDocumentElement().getElementsByTagName("project");
-        for (int i = 0, length = nodeList.getLength(); i < length; ++i)
+        IProject[] projects = getProjects(uri, content);
+        if (projects == null)
         {
-          Element element = (Element)nodeList.item(i);
-          String reference = element.getAttribute("reference");
-          String[] components = reference.split(",");
-          String projectName = components[components.length - 1];
-          if (!root.exists(new Path(new Path(projectName).lastSegment())))
-          {
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            StringWriter out = new StringWriter();
-            transformer.transform(new DOMSource(document), new StreamResult(out));
-            out.close();
-            content = out.toString();
+          return true;
+        }
 
+        for (IProject project : projects)
+        {
+          if (!project.exists())
+          {
             return true;
           }
         }
-      }
-      finally
-      {
-        IOUtil.close(inputStream);
       }
 
       return false;
@@ -276,10 +272,130 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
     @SuppressWarnings("restriction")
     public void perform(SetupTaskContext context) throws Exception
     {
-      org.eclipse.team.internal.ui.wizards.ImportProjectSetOperation importProjectSetOperation = new org.eclipse.team.internal.ui.wizards.ImportProjectSetOperation(
-          null, content, uri.toString(), new IWorkingSet[0]);
-      importProjectSetOperation.run(new ProgressLogMonitor(context));
+      IProject[] projects = new org.eclipse.team.internal.ui.wizards.ImportProjectSetOperation(null, content, uri.toString(), new IWorkingSet[0])
+      {
+        public IProject[] perform(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        {
+          return org.eclipse.team.internal.ui.ProjectSetImporter.importProjectSetFromString(content, uri.toString(), getShell(), monitor);
+        }
+      }.perform(new ProgressLogMonitor(context));
+
+      setProjects(uri, content, projects);
+    }
+
+    private String getXMLContent(URIConverter uriConverter) throws Exception
+    {
+      InputStream inputStream = null;
+      try
+      {
+        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+        inputStream = uriConverter.createInputStream(uri, null);
+        Document document = documentBuilder.parse(inputStream);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        StringWriter out = new StringWriter();
+        transformer.transform(new DOMSource(document), new StreamResult(out));
+        out.close();
+        return out.toString();
+      }
+      finally
+      {
+        IOUtil.close(inputStream);
+      }
+    }
+
+    private IProject[] getProjects(URI uri, String content)
+    {
+      Map<String, String> properties = loadProperties();
+      String key = uri.toString();
+      String value = properties.get(key);
+      if (value != null)
+      {
+        String digest = getDigest(content);
+        List<IProject> projects = new ArrayList<IProject>();
+        boolean confirm = true;
+        for (String element : XMLTypeFactory.eINSTANCE.createNMTOKENS(value))
+        {
+          if (confirm)
+          {
+            if (!digest.equals(element))
+            {
+              properties.remove(key);
+              saveProperties(properties);
+              return null;
+            }
+
+            confirm = false;
+          }
+          else
+          {
+            projects.add(ROOT.getProject(URI.decode(element)));
+          }
+        }
+
+        IProject[] result = projects.toArray(new IProject[projects.size()]);
+        setProjects(uri, content, result);
+        return result;
+      }
+
+      return null;
+    }
+
+    private String getDigest(String contents)
+    {
+      try
+      {
+        return XMLTypeFactory.eINSTANCE.convertBase64Binary(IOUtil.getSHA1(contents));
+      }
+      catch (Exception ex)
+      {
+        ProjectSetPlugin.INSTANCE.log(ex);
+        return null;
+      }
+    }
+
+    private void setProjects(URI uri, String content, IProject[] projects)
+    {
+      Map<String, String> properties = loadProperties();
+      String key = uri.toString();
+      StringBuilder value = new StringBuilder(getDigest(content));
+      for (IProject project : projects)
+      {
+        value.append(' ');
+        value.append(URI.encodeSegment(project.getName(), false));
+      }
+
+      properties.put(key, value.toString());
+      saveProperties(properties);
+    }
+
+    private Map<String, String> loadProperties()
+    {
+      try
+      {
+        if (HISTORY.exists())
+        {
+          return PropertiesUtil.loadProperties(HISTORY);
+        }
+      }
+      catch (RuntimeException ex)
+      {
+        // Ignore.
+      }
+
+      return new LinkedHashMap<String, String>();
+    }
+
+    private void saveProperties(Map<String, String> properties)
+    {
+      try
+      {
+        PropertiesUtil.saveProperties(HISTORY, properties, true);
+      }
+      catch (RuntimeException ex)
+      {
+        ProjectSetPlugin.INSTANCE.log(ex);
+      }
     }
   }
-
 } // ProjectSetImportTaskImpl
