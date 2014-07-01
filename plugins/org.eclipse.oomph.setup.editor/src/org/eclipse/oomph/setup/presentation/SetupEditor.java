@@ -16,6 +16,7 @@ import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.EMFUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Index;
@@ -617,6 +618,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   private DelegatingDialogSettings dialogSettings = new DelegatingDialogSettings();
 
+  private IconReflectiveItemProvider reflectiveItemProvider;
+
   /**
    * Handles activation of the editor or it's associated views.
    * <!-- begin-user-doc -->
@@ -933,7 +936,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
-    EMFUtil.replaceReflectiveItemProvider(adapterFactory);
+    reflectiveItemProvider = EMFUtil.replaceReflectiveItemProvider(adapterFactory);
 
     // Create the editing domain with a special command stack.
     //
@@ -1004,6 +1007,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       }
     });
+  }
+
+  public IconReflectiveItemProvider getReflectiveItemProvider()
+  {
+    return reflectiveItemProvider;
   }
 
   /**

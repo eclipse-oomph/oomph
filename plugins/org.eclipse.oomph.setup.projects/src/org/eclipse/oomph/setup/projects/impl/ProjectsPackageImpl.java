@@ -265,6 +265,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     createEcoreAnnotations();
     // http://www.eclipse.org/oomph/setup/Enablement
     createEnablementAnnotations();
+    // http://www.eclipse.org/oomph/setup/LabelProvider
+    createLabelProviderAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
@@ -294,6 +296,19 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
     addAnnotation(this, source, new String[] { "variableName", "setup.projects.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.projects.feature.group" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/LabelProvider</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createLabelProviderAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/LabelProvider";
+    addAnnotation(this, source, new String[] { "imageBaseURI",
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.projects.edit/icons/full/obj16" });
   }
 
   /**

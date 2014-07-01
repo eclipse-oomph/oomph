@@ -14,6 +14,9 @@
     <details key="variableName" value="setup.mylyn.p2"/>
     <details key="repository" value="http://download.eclipse.org/mylyn/releases/latest"/>
   </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/oomph/setup/LabelProvider">
+    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="MylynQueriesTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
       <details key="installableUnits" value="org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui"/>

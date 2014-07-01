@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-user-doc -->
  * @see org.eclipse.oomph.base.BaseFactory
  * @model kind="package"
+ *        annotation="http://www.eclipse.org/oomph/setup/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.base.edit/icons/full/obj16'"
  * @generated
  */
 public interface BasePackage extends EPackage

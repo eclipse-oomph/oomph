@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EReference;
  * @see org.eclipse.oomph.workingsets.WorkingSetsFactory
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore'"
+ *        annotation="http://www.eclipse.org/oomph/setup/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.workingsets.edit/icons/full/obj16'"
  * @generated
  */
 public interface WorkingSetsPackage extends EPackage

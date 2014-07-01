@@ -634,6 +634,8 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
     createEcoreAnnotations();
+    // http://www.eclipse.org/oomph/setup/LabelProvider
+    createLabelProviderAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
   }
@@ -648,6 +650,19 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
     addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/LabelProvider</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createLabelProviderAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/LabelProvider";
+    addAnnotation(this, source, new String[] { "imageBaseURI",
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.predicates.edit/icons/full/obj16" });
   }
 
   /**

@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-user-doc -->
  * @see org.eclipse.oomph.projectconfig.ProjectConfigFactory
  * @model kind="package"
+ *        annotation="http://www.eclipse.org/oomph/setup/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.projectconfig.edit/icons/full/obj16'"
  * @generated
  */
 public interface ProjectConfigPackage extends EPackage
@@ -526,6 +527,15 @@ public interface ProjectConfigPackage extends EPackage
   int INCLUSION_PREDICATE___GET_ANNOTATION__STRING = PredicatesPackage.PREDICATE___GET_ANNOTATION__STRING;
 
   /**
+   * The operation id for the '<em>Matches</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INCLUSION_PREDICATE___MATCHES__IRESOURCE = PredicatesPackage.PREDICATE___MATCHES__IRESOURCE;
+
+  /**
    * The number of operations of the '<em>Inclusion Predicate</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -579,6 +589,15 @@ public interface ProjectConfigPackage extends EPackage
    * @ordered
    */
   int EXCLUSION_PREDICATE___GET_ANNOTATION__STRING = PredicatesPackage.PREDICATE___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Matches</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXCLUSION_PREDICATE___MATCHES__IRESOURCE = PredicatesPackage.PREDICATE___MATCHES__IRESOURCE;
 
   /**
    * The number of operations of the '<em>Exclusion Predicate</em>' class.

@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.EMFUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
@@ -47,6 +48,7 @@ import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.emf.edit.ui.action.LoadResourceAction;
 import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ParameterizedCommand;
@@ -900,17 +902,18 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   /**
    * @author Eike Stepper
    */
-  private static final class EnablementAction extends Action
+  private final class EnablementAction extends Action
   {
-    private static final TypeTextProvider TYPE_TEXT_PROVIDER = new TypeTextProvider();
-
     private final EClass eClass;
 
     private final EList<SetupTask> enablementTasks;
 
     public EnablementAction(EObject eObject, EList<SetupTask> enablementTasks)
     {
-      super(TYPE_TEXT_PROVIDER.getTypeText(eObject));
+      IconReflectiveItemProvider itemProvider = ((SetupEditor)activeEditor).getReflectiveItemProvider();
+      setText(itemProvider.getTypeText(eObject));
+      setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(itemProvider.getImage(eObject)));
+
       eClass = eObject.eClass();
       this.enablementTasks = enablementTasks;
     }
@@ -931,31 +934,6 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
       SetupWizard updater = new SetupWizard.Updater(self);
       updater.openDialog(UIUtil.getShell());
-    }
-
-    /**
-     * @author Eike Stepper
-     */
-    private static final class TypeTextProvider extends ReflectiveItemProvider
-    {
-      private static final String TASK_SUFFIX = " Task"; // TODO Can this be made translatable?
-
-      public TypeTextProvider()
-      {
-        super(null);
-      }
-
-      @Override
-      public String getTypeText(Object object)
-      {
-        String typeText = super.getTypeText(object);
-        if (typeText.endsWith(TASK_SUFFIX))
-        {
-          typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
-        }
-
-        return typeText;
-      }
     }
   }
 

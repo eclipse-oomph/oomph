@@ -228,6 +228,8 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     createEcoreAnnotations();
     // http://www.eclipse.org/oomph/setup/Enablement
     createEnablementAnnotations();
+    // http://www.eclipse.org/oomph/setup/LabelProvider
+    createLabelProviderAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
@@ -260,6 +262,19 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     addAnnotation(this, source, new String[] { "variableName", "setup.m2e.p2", "repository", "http://download.eclipse.org/technology/m2e/milestones/1.5",
         "installableUnits", "org.eclipse.m2e.feature.feature.group" });
     addAnnotation(this, source, new String[] { "variableName", "setup.webtools.p2", "repository", "http://download.eclipse.org/webtools/repository/luna" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/LabelProvider</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createLabelProviderAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/LabelProvider";
+    addAnnotation(this, source, new String[] { "imageBaseURI",
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.maven.edit/icons/full/obj16" });
   }
 
   /**

@@ -514,6 +514,8 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     createEcoreAnnotations();
     // http://www.eclipse.org/oomph/setup/Enablement
     createEnablementAnnotations();
+    // http://www.eclipse.org/oomph/setup/LabelProvider
+    createLabelProviderAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
@@ -546,6 +548,19 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "http://download.eclipse.org/mylyn/releases/latest" });
     addAnnotation(mylynQueriesTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
     addAnnotation(mylynBuildsTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/LabelProvider</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createLabelProviderAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/LabelProvider";
+    addAnnotation(this, source, new String[] { "imageBaseURI",
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16" });
   }
 
   /**

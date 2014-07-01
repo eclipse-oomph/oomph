@@ -110,7 +110,7 @@ public final class EMFUtil
   {
   }
 
-  public static void replaceReflectiveItemProvider(ComposedAdapterFactory adapterFactory)
+  public static IconReflectiveItemProvider replaceReflectiveItemProvider(ComposedAdapterFactory adapterFactory)
   {
     EClass dynamicClass = EcoreFactory.eINSTANCE.createEClass();
     dynamicClass.setName("Dynamic");
@@ -127,28 +127,16 @@ public final class EMFUtil
       adapterFactory.removeAdapterFactory(factory);
     }
 
+    final IconReflectiveItemProvider[] itemProvider = { null };
     adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory()
     {
       {
-        reflectiveItemProviderAdapter = new ReflectiveItemProvider(this)
-        {
-          @Override
-          public Object getImage(Object object)
-          {
-            EObject eObject = (EObject)object;
-            EClass eClass = eObject.eClass();
-
-            String uri = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_ICON, EAnnotationConstants.KEY_URI);
-            if (!StringUtil.isEmpty(uri))
-            {
-              return URI.createURI(uri);
-            }
-
-            return super.getImage(object);
-          }
-        };
+        itemProvider[0] = new IconReflectiveItemProvider(this);
+        reflectiveItemProviderAdapter = itemProvider[0];
       }
     });
+
+    return itemProvider[0];
   }
 
   public static ComposedAdapterFactory createAdapterFactory()
@@ -529,6 +517,74 @@ public final class EMFUtil
   public interface DependencyProvider<T>
   {
     Collection<? extends T> getDependencies(T value);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class IconReflectiveItemProvider extends ReflectiveItemProvider
+  {
+    private static final String TASK_SUFFIX = " Task"; // TODO Can this be made translatable?
+
+    public IconReflectiveItemProvider(AdapterFactory adapterFactory)
+    {
+      super(adapterFactory);
+    }
+
+    @Override
+    public String getTypeText(Object object)
+    {
+      String typeText = super.getTypeText(object);
+      if (typeText.endsWith(TASK_SUFFIX))
+      {
+        typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
+      }
+
+      return typeText;
+    }
+
+    @Override
+    public Object getImage(Object object)
+    {
+      EObject eObject = (EObject)object;
+      EClass eClass = eObject.eClass();
+
+      String uri = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_LABEL_PROVIDER, EAnnotationConstants.KEY_IMAGE_URI);
+      if (!StringUtil.isEmpty(uri))
+      {
+        URI imageURI = URI.createURI(uri);
+        if (imageURI.isRelative())
+        {
+          URI imageBaseURI = getImageBaseURI(eClass);
+          if (imageBaseURI != null)
+          {
+            return imageURI.resolve(imageBaseURI);
+          }
+        }
+
+        return imageURI;
+      }
+
+      URI imageBaseURI = getImageBaseURI(eClass);
+      if (imageBaseURI != null)
+      {
+        return imageBaseURI.appendSegment(eClass.getName() + ".gif");
+      }
+
+      return super.getImage(object);
+    }
+
+    private URI getImageBaseURI(EClass eClass)
+    {
+      EPackage ePackage = eClass.getEPackage();
+      String uri = EcoreUtil.getAnnotation(ePackage, EAnnotationConstants.ANNOTATION_LABEL_PROVIDER, EAnnotationConstants.KEY_IMAGE_BASE_URI);
+      if (!StringUtil.isEmpty(uri))
+      {
+        return URI.createURI(uri);
+      }
+
+      return null;
+    }
   }
 
   public static class Migrator

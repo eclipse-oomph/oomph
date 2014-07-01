@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="base" nsURI="http://www.eclipse.org/oomph/base/1.0" nsPrefix="base">
+  <eAnnotations source="http://www.eclipse.org/oomph/setup/LabelProvider">
+    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.base.edit/icons/full/obj16"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true">
     <eOperations name="getAnnotation" eType="#//Annotation">
       <eParameters name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

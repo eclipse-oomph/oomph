@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EReference;
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.maven.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.maven.feature.group'"
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.m2e.p2' repository='http://download.eclipse.org/technology/m2e/milestones/1.5' installableUnits='org.eclipse.m2e.feature.feature.group'"
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.webtools.p2' repository='http://download.eclipse.org/webtools/repository/luna'"
+ *        annotation="http://www.eclipse.org/oomph/setup/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.maven.edit/icons/full/obj16'"
  * @generated
  */
 public interface MavenPackage extends EPackage

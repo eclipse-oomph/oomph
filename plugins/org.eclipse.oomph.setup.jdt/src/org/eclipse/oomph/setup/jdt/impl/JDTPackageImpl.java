@@ -224,6 +224,8 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     createEcoreAnnotations();
     // http://www.eclipse.org/oomph/setup/Enablement
     createEnablementAnnotations();
+    // http://www.eclipse.org/oomph/setup/LabelProvider
+    createLabelProviderAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
     // http://www.eclipse.org/oomph/setup/Variable
@@ -308,6 +310,19 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
     addAnnotation(this, source, new String[] { "variableName", "setup.jdt.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.jdt.feature.group" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/LabelProvider</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createLabelProviderAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/LabelProvider";
+    addAnnotation(this, source, new String[] { "imageBaseURI",
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.jdt.edit/icons/full/obj16" });
   }
 
   /**

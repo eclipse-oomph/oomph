@@ -15,11 +15,6 @@ package org.eclipse.oomph.setup;
  */
 public final class EAnnotationConstants
 {
-
-  private EAnnotationConstants()
-  {
-  }
-
   public static final String ANNOTATION_VALID_TRIGGERS = "http://www.eclipse.org/oomph/setup/ValidTriggers";
 
   public static final String KEY_TRIGGERS = "triggers";
@@ -56,7 +51,13 @@ public final class EAnnotationConstants
 
   public static final String NESTED_ANNOTATION_CHOICE = "Choice";
 
-  public static final String ANNOTATION_ICON = "http://www.eclipse.org/oomph/setup/Icon";
+  public static final String ANNOTATION_LABEL_PROVIDER = "http://www.eclipse.org/oomph/setup/LabelProvider";
 
-  public static final String KEY_URI = "uri";
+  public static final String KEY_IMAGE_BASE_URI = "imageBaseURI";
+
+  public static final String KEY_IMAGE_URI = "imageURI";
+
+  private EAnnotationConstants()
+  {
+  }
 }

@@ -10,6 +10,9 @@
     <details key="repository" value="${oomph.update.url}"/>
     <details key="installableUnits" value="org.eclipse.oomph.targlets.feature.group org.eclipse.oomph.setup.targlets.feature.group"/>
   </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/oomph/setup/LabelProvider">
+    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.targlets.edit/icons/full/obj16"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TargletTask" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
