@@ -3,6 +3,7 @@
 
 <product name="Oomph Setup Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
+
    <configIni use="">
    </configIni>
 
@@ -20,19 +21,20 @@ configuration
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.eclipse.oomph.setup.installer/icons/window_16.gif" i32="/org.eclipse.oomph.setup.installer/icons/window_32.gif" i48="/org.eclipse.oomph.setup.installer/icons/window_48.gif" i64="/org.eclipse.oomph.setup.installer/icons/window_64.gif" i256="/org.eclipse.oomph.setup.installer/icons/window_256.gif"/>
+   <windowImages/>
 
    <splash
       location="org.eclipse.oomph.setup.installer" />
    <launcher name="setup-eclipse">
-      <linux icon="icons/window.xpm"/>
-      <macosx icon="icons/window.icns"/>
+      <linux icon="icons/oomph.xpm"/>
+      <macosx icon="icons/oomph.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="icons/window.ico"/>
+         <ico path="icons/oomph.ico"/>
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>

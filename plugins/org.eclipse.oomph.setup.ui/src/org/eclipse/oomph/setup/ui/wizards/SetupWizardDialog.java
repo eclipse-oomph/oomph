@@ -47,13 +47,6 @@ public class SetupWizardDialog extends WizardDialog
   }
 
   @Override
-  protected Control createDialogArea(Composite parent)
-  {
-    getShell().setImage(SetupUIPlugin.INSTANCE.getSWTImage("import_wiz"));
-    return super.createDialogArea(parent);
-  }
-
-  @Override
   protected Control createHelpControl(Composite parent)
   {
     getShell().addHelpListener(new HelpListener()
