@@ -1538,6 +1538,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     };
 
+    job.setRule(ResourcesPlugin.getWorkspace().getRoot());
     job.schedule();
     getSite().getWorkbenchWindow().getWorkbench().getProgressService().showInDialog(null, job);
   }
