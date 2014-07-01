@@ -174,7 +174,10 @@ public final class InstallerDialog extends SetupWizardDialog
             sleep(80);
           }
 
-          setUpdateIcon(0);
+          if (updateSearchError == null)
+          {
+            setUpdateIcon(0);
+          }
         }
         catch (Exception ex)
         {
@@ -266,7 +269,7 @@ public final class InstallerDialog extends SetupWizardDialog
 
             case ERROR:
               updateToolItem.setToolTipText("Review update problems");
-              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error"));
+              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error"));
               updateToolItem.setEnabled(true);
               break;
           }
