@@ -36,19 +36,19 @@
       encoding="UTF-8"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
-    <requirements
+    <requirement
         id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.version.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.launches.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.manifests.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.projectconfig.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.projectcopy.feature.group"/>
-    <requirements
+    <requirement
         id="org.eclipse.oomph.workingsets.feature.group"/>
   </setupTask>
   <setupTask
@@ -100,219 +100,219 @@
       label="Core">
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.emf.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.emf.ecoretools.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xsd.sdk.feature.group"/>
-      <repositories
+      <repository
           url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
     </setupTask>
     <setupTask
         xsi:type="projects:ProjectsImportTask">
-      <sourceLocators
+      <sourceLocator
           rootFolder="${emf.git.clone.location/releng/org.eclipse.emf.build-feature}"/>
-      <sourceLocators
+      <sourceLocator
           rootFolder="${emf.git.clone.location/releng/org.eclipse.emf.releng}"/>
-      <sourceLocators
+      <sourceLocator
           rootFolder="${emf.git.clone.location/releng/org.eclipse.emf.releng.buckminster}"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
-      <targlets
+      <targlet
           name="EMF Core">
-        <requirements
+        <requirement
             id="org.eclipse.emf.all.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.emf.base.build.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.emf.tests.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.platform.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.jdt.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.pde.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.equinox.executable.feature.group"/>
-        <sourceLocators
+        <sourceLocator
             rootFolder="${emf.git.clone.location}"/>
-        <repositoryLists
+        <repositoryList
             name="Dependencies">
-          <repositories
+          <repository
               url="${tp.materialization.url}"/>
-          <repositories
+          <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-          <repositories
+          <repository
               url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
-        </repositoryLists>
-      </targlets>
+        </repositoryList>
+      </targlet>
     </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
-      <workingSets
+      <workingSet
           name="EMF Core">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NotPredicate">
             <operand
                 xsi:type="predicates:NamePredicate"
                 pattern=".*\.xcore.*|.*\.xtext.*|.*\.gwt.*|.*\.rap.*"/>
-          </operands>
-          <operands
+          </operand>
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='core']/@setupTasks.3/@workingSets.1"/>
-          <operands
+              excludedWorkingSet="//@projects[name='core']/@setupTasks.3/@workingSets.1"/>
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='core']/@setupTasks.3/@workingSets.2"/>
-          <operands
+              excludedWorkingSet="//@projects[name='core']/@setupTasks.3/@workingSets.2"/>
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='core']/@setupTasks.3/@workingSets.3"/>
-          <operands
+              excludedWorkingSet="//@projects[name='core']/@setupTasks.3/@workingSets.3"/>
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='core']/@setupTasks.3/@workingSets.6"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+              excludedWorkingSet="//@projects[name='core']/@setupTasks.3/@workingSets.6"/>
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF Tests">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern="org\.eclipse\.emf\.test.*"/>
-          <operands
+          <operand
               xsi:type="predicates:NotPredicate">
             <operand
                 xsi:type="predicates:NamePredicate"
                 pattern=".*\.xcore.*|.*\.xtext.*"/>
-          </operands>
-        </predicates>
-      </workingSets>
-      <workingSets
+          </operand>
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF Examples">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:OrPredicate">
-            <operands
+            <operand
                 xsi:type="predicates:NamePredicate"
                 pattern="org\.eclipse\.emf\.cheatsheets.*"/>
-            <operands
+            <operand
                 xsi:type="predicates:NamePredicate"
                 pattern="org\.eclipse\.emf\.example.*"/>
-            <operands
+            <operand
                 xsi:type="predicates:NamePredicate"
                 pattern="org\.eclipse\.emf\.exporter\.html"/>
-            <operands
+            <operand
                 xsi:type="predicates:NamePredicate"
                 pattern="org\.eclipse\.emf\.java.*"/>
-            <operands
+            <operand
                 xsi:type="predicates:NamePredicate"
                 pattern="org\.eclipse\.emf\.activities"/>
-          </operands>
-        </predicates>
-      </workingSets>
-      <workingSets
+          </operand>
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF Documentation">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern="org\.eclipse\.emf\.doc"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF Features">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.FeatureNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NotPredicate">
             <operand
                 xsi:type="predicates:NamePredicate"
                 pattern=".*\.xcore.*|.*\.xtext.*|.*\.gwt.*|.*\.rap.*"/>
-          </operands>
-          <operands
+          </operand>
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='core']/@setupTasks.3/@workingSets.7"/>
-          <operands
+              excludedWorkingSet="//@projects[name='core']/@setupTasks.3/@workingSets.7"/>
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='core']/@setupTasks.3/@workingSets.5"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+              excludedWorkingSet="//@projects[name='core']/@setupTasks.3/@workingSets.5"/>
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF Releng">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern="org\.eclipse\.emf\.releng.*"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF ODA">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.oda"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern="org\.eclipse\.emf\.oda.*"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF ODA Features">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.oda"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.FeatureNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern="org\.eclipse\.emf\.oda.*"/>
-        </predicates>
-      </workingSets>
+        </predicate>
+      </workingSet>
     </setupTask>
     <stream
         name="master"/>
@@ -341,122 +341,126 @@
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.emf.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtext.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xtend.sdk.feature.group"/>
-      <requirements
+      <requirement
           id="org.eclipse.xsd.sdk.feature.group"/>
-      <repositories
+      <repository
           url="http://download.eclipse.org/modeling/emf/updates/"/>
-      <repositories
+      <repository
           url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
-      <repositories
+      <repository
           url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
-      <repositories
+      <repository
           url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+      <repository
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
     </setupTask>
     <setupTask
         xsi:type="projects:ProjectsImportTask">
-      <sourceLocators
+      <sourceLocator
           rootFolder="${emf.git.clone.location/releng/org.eclipse.emf.xcore.releng}"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
-      <targlets
+      <targlet
           name="EMF Xcore">
-        <requirements
+        <requirement
             id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.emf.test.ecore.xcore.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.emf.xcore.build.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.xtext.sdk.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.xtend.sdk.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.sdk.feature.group"/>
-        <requirements
+        <requirement
             id="com.google.guava"/>
-        <sourceLocators
+        <sourceLocator
             rootFolder="${emf.git.clone.location}"/>
-        <repositoryLists>
-          <repositories
+        <repositoryList>
+          <repository
               url="${tp.materialization.url}"/>
-          <repositories
+          <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-          <repositories
+          <repository
               url="http://download.eclipse.org/tools/orbit/downloads/drops/S20131024145017/repository/"/>
-        </repositoryLists>
-      </targlets>
+          <repository
+              url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
+        </repositoryList>
+      </targlet>
     </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
-      <workingSets
+      <workingSet
           name="Xcore">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.ecore.xcore"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.xcore.*|.*\.xtext.*"/>
-          <operands
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='Xcore']/@setupTasks.5/@workingSets.1"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+              excludedWorkingSet="//@projects[name='Xcore']/@setupTasks.5/@workingSets.1"/>
+        </predicate>
+      </workingSet>
+      <workingSet
           name="Xcore Tests">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.ecore.xcore"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.test\..*\.xcore.*|.*\.test\..*\.xtext.*"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+        </predicate>
+      </workingSet>
+      <workingSet
           name="Xcore Features">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.ecore.xcore"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.FeatureNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.xcore.*|.*\.xtext.*"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+        </predicate>
+      </workingSet>
+      <workingSet
           name="Xcore Releng">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.ecore.xcore"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.xcore\.releng.*"/>
-        </predicates>
-      </workingSets>
+        </predicate>
+      </workingSet>
     </setupTask>
     <stream
         name="master"/>
@@ -473,7 +477,7 @@
         value="NONE"/>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.emf.sdk.feature.group"/>
     </setupTask>
     <setupTask
@@ -482,82 +486,82 @@
         value="https://dl.google.com/eclipse/plugin/4.3"/>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="com.google.gdt.eclipse.suite.e43.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.google.gwt.eclipse.sdkbundle.feature.feature.group"/>
-      <requirements
+      <requirement
           id="com.google.appengine.eclipse.sdkbundle.feature.feature.group"/>
-      <repositories
+      <repository
           url="${gwt.tool.url}"/>
     </setupTask>
     <setupTask
         xsi:type="projects:ProjectsImportTask">
-      <sourceLocators
+      <sourceLocator
           rootFolder="${emf.git.clone.location/releng/org.eclipse.emf.gwt.build.helper}"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
-      <targlets
+      <targlet
           name="EMF GWT">
-        <requirements
+        <requirement
             id="org.eclipse.emf.gwt.sdk.feature.group"/>
-        <sourceLocators
+        <sourceLocator
             rootFolder="${emf.git.clone.location}"/>
-        <repositoryLists
+        <repositoryList
             name="Dependencies">
-          <repositories
+          <repository
               url="${gwt.tool.url}"/>
-        </repositoryLists>
-      </targlets>
+        </repositoryList>
+      </targlet>
     </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
-      <workingSets
+      <workingSet
           name="EMF GWT">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.gwt"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.gwt.*"/>
-          <operands
+          <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSets="//@projects[name='gwt']/@setupTasks.6/@workingSets.2"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+              excludedWorkingSet="//@projects[name='gwt']/@setupTasks.6/@workingSets.2"/>
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF GWT Features">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.gwt"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.FeatureNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.gwt.*"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF GWT Releng">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.gwt"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.gwt\.build.*"/>
-        </predicates>
-      </workingSets>
+        </predicate>
+      </workingSet>
     </setupTask>
     <stream
         name="master"/>
@@ -586,67 +590,67 @@
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
-      <requirements
+      <requirement
           id="org.eclipse.rap.tools.feature.feature.group"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
-      <targlets
+      <targlet
           name="EMF RAP">
-        <requirements
+        <requirement
             id="org.eclipse.emf.rap.sdk.feature.group"/>
-        <requirements
+        <requirement
             id="org.eclipse.rap.sdk.feature.feature.group"
             optional="true"/>
-        <sourceLocators
+        <sourceLocator
             rootFolder="${emf.git.clone.location}">
-          <predicates
+          <predicate
               xsi:type="predicates:NamePredicate"
               pattern=".*\.rap.*"/>
-        </sourceLocators>
-        <repositoryLists
+        </sourceLocator>
+        <repositoryList
             name="Dependencies">
-          <repositories
+          <repository
               url="${tp.materialization.url}"/>
-          <repositories
+          <repository
               url="http://download.eclipse.org/rt/rap/2.2"/>
-          <repositories
+          <repository
               url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
-        </repositoryLists>
-      </targlets>
+        </repositoryList>
+      </targlet>
     </setupTask>
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
-      <workingSets
+      <workingSet
           name="EMF RAP">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.rap"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.PluginNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.rap(\..*)?"/>
-        </predicates>
-      </workingSets>
-      <workingSets
+        </predicate>
+      </workingSet>
+      <workingSet
           name="EMF RAP Features">
-        <predicates
+        <predicate
             xsi:type="predicates:AndPredicate">
-          <operands
+          <operand
               xsi:type="predicates:RepositoryPredicate"
               project="org.eclipse.emf.common"/>
-          <operands
+          <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.FeatureNature"/>
-          <operands
+          <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*\.rap.*"/>
-        </predicates>
-      </workingSets>
+        </predicate>
+      </workingSet>
     </setupTask>
     <stream
         name="master"/>
