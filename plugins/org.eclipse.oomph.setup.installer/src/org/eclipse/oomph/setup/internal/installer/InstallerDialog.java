@@ -24,6 +24,7 @@ import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.operations.UpdateOperation;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -174,10 +175,7 @@ public final class InstallerDialog extends SetupWizardDialog
             sleep(80);
           }
 
-          if (updateSearchError == null)
-          {
-            setUpdateIcon(0);
-          }
+          setUpdateIcon(0);
         }
         catch (Exception ex)
         {
@@ -207,18 +205,15 @@ public final class InstallerDialog extends SetupWizardDialog
             {
               updateSearchState = InstallerUpdateSearchState.FOUND;
             }
+            else if (status.getCode() == UpdateOperation.STATUS_NOTHING_TO_UPDATE)
+            {
+              updateSearchState = InstallerUpdateSearchState.DONE;
+            }
             else
             {
-              if (status.isOK())
-              {
-                updateSearchState = InstallerUpdateSearchState.DONE;
-              }
-              else
-              {
-                updateSearchState = InstallerUpdateSearchState.ERROR;
-                updateSearchError = status;
-                SetupInstallerPlugin.INSTANCE.log(status);
-              }
+              SetupInstallerPlugin.INSTANCE.log(status);
+              updateSearchError = status;
+              updateSearchState = InstallerUpdateSearchState.ERROR;
             }
           }
           finally
