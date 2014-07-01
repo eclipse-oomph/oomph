@@ -70,6 +70,7 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -377,35 +378,40 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           SetupTask overriddenSetupTask = entry.getKey();
           SetupTask overridingSetupTask = entry.getValue();
-          overrides.put(overriddenSetupTask, overriddenSetupTask);
-
+          overrides.put(overriddenSetupTask, overridingSetupTask);
           overridingSetupTask.overrideFor(overriddenSetupTask);
         }
 
-        for (int i = 0, size = triggeredSetupTasks.size(); i < size; ++i)
+        for (int i = triggeredSetupTasks.size(); --i >= 0;)
         {
           SetupTask setupTask = triggeredSetupTasks.get(i);
-          for (int j = i + 1; j < size; ++j)
+          if (!directSubstitutions.containsKey(setupTask))
           {
-            SetupTask otherSetupTask = triggeredSetupTasks.get(j);
-            if (EcoreUtil.equals(setupTask, otherSetupTask))
+            for (int j = i; --j >= 0;)
             {
-              directSubstitutions.put(otherSetupTask, setupTask);
-              overrides.put(setupTask, otherSetupTask);
-              setupTask.overrideFor(otherSetupTask);
+              SetupTask otherSetupTask = triggeredSetupTasks.get(j);
+              if (EcoreUtil.equals(setupTask, otherSetupTask))
+              {
+                directSubstitutions.put(otherSetupTask, setupTask);
+                overrides.put(setupTask, otherSetupTask);
+                setupTask.overrideFor(otherSetupTask);
+              }
             }
           }
         }
 
-        for (ListIterator<SetupTask> it = triggeredSetupTasks.listIterator(); it.hasNext();)
+        EList<SetupTask> remainingSetupTasks = new UniqueEList.FastCompare<SetupTask>();
+        for (SetupTask setupTask : triggeredSetupTasks)
         {
-          SetupTask setupTask = it.next();
-          if (directSubstitutions.containsKey(setupTask))
+          SetupTask overridingSetupTask = directSubstitutions.get(setupTask);
+          if (overridingSetupTask != null)
           {
-            it.remove();
+            remainingSetupTasks.add(overridingSetupTask);
           }
           else
           {
+            remainingSetupTasks.add(setupTask);
+
             for (ListIterator<SetupTask> it2 = setupTask.getPredecessors().listIterator(); it2.hasNext();)
             {
               SetupTask predecessor = it2.next();
@@ -425,6 +431,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             }
           }
         }
+
+        ECollections.setEList(triggeredSetupTasks, remainingSetupTasks);
       }
       else
       {
