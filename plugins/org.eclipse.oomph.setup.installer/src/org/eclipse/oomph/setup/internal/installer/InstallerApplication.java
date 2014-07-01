@@ -18,6 +18,8 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import java.io.File;
@@ -29,6 +31,16 @@ public class InstallerApplication implements IApplication
 {
   public Object start(final IApplicationContext context) throws Exception
   {
+    int[] sizes = { 16, 32, 48, 64, 128, 256 };
+    Image[] images = new Image[sizes.length];
+    for (int i = 0; i < sizes.length; i++)
+    {
+      int size = sizes[i];
+      images[i] = SetupInstallerPlugin.INSTANCE.getSWTImage("oomph" + size + ".png");
+    }
+
+    Window.setDefaultImages(images);
+
     boolean restarted = false;
     File restarting = new File(SetupInstallerPlugin.INSTANCE.getStateLocation().toString(), "restarting");
 

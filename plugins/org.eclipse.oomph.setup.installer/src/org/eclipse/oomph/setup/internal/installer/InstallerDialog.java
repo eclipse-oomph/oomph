@@ -61,22 +61,6 @@ public final class InstallerDialog extends SetupWizardDialog
   }
 
   @Override
-  protected void configureShell(Shell newShell)
-  {
-    super.configureShell(newShell);
-
-    int[] sizes = { 16, 32, 48, 64, 128, 256 };
-    Image[] images = new Image[sizes.length];
-    for (int i = 0; i < sizes.length; i++)
-    {
-      int size = sizes[i];
-      images[i] = SetupInstallerPlugin.INSTANCE.getSWTImage("oomph" + size + ".png");
-    }
-
-    newShell.setImages(images);
-  }
-
-  @Override
   protected Control createHelpControl(Composite parent)
   {
     Control helpControl = super.createHelpControl(parent);
