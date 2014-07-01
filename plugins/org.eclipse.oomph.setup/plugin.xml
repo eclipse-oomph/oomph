@@ -27,4 +27,14 @@
             class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"/>
    </extension>
 
+   <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            description="Converts a file system path to a file: URI. The argument itself can contain a variables that will be resolved recursively,e.g., ${file_uri:${project_loc:my project}}."
+            name="file_uri"
+            resolver="org.eclipse.oomph.internal.setup.URIVariableResolver"
+            supportsArgument="true">
+      </variable>
+   </extension>
+
 </plugin>

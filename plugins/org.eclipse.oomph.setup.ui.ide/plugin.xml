@@ -28,5 +28,13 @@
             project="true">
       </wizard>
    </extension>
+   
+   <extension
+         point="org.eclipse.debug.ui.stringVariablePresentations">
+      <variablePresentation
+            argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.URIArgumentSelector"
+            variableName="file_uri">
+      </variablePresentation>
+   </extension>
 
 </plugin>
