@@ -15,5 +15,5 @@ package org.eclipse.oomph.setup.internal.installer;
  */
 public enum InstallerUpdateSearchState
 {
-  SEARCHING, FOUND, DONE
+  SEARCHING, FOUND, DONE, ERROR
 }

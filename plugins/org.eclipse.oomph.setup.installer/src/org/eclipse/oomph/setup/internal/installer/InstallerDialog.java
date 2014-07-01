@@ -52,6 +52,8 @@ public final class InstallerDialog extends SetupWizardDialog
 
   private InstallerUpdateSearchState updateSearchState;
 
+  private IStatus updateSearchError;
+
   private Link versionLink;
 
   public InstallerDialog(Shell parentShell, boolean restarted)
@@ -98,7 +100,13 @@ public final class InstallerDialog extends SetupWizardDialog
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        update(false);
+        if (updateSearchError != null)
+        {
+          update(false);
+        }
+        else
+        {
+        }
       }
     });
   }
@@ -154,7 +162,7 @@ public final class InstallerDialog extends SetupWizardDialog
       {
         try
         {
-          for (int i = 0; updateSearchState != InstallerUpdateSearchState.DONE; i = ++i % 20)
+          for (int i = 0; isRunning(); i = ++i % 20)
           {
             if (updateToolItem == null || updateToolItem.isDisposed())
             {
@@ -172,6 +180,11 @@ public final class InstallerDialog extends SetupWizardDialog
         {
           SetupInstallerPlugin.INSTANCE.log(ex);
         }
+      }
+
+      private boolean isRunning()
+      {
+        return updateSearchState != InstallerUpdateSearchState.DONE && updateSearchState != InstallerUpdateSearchState.ERROR;
       }
     }.start();
 
@@ -193,7 +206,16 @@ public final class InstallerDialog extends SetupWizardDialog
             }
             else
             {
-              updateSearchState = InstallerUpdateSearchState.DONE;
+              if (status.isOK())
+              {
+                updateSearchState = InstallerUpdateSearchState.DONE;
+              }
+              else
+              {
+                updateSearchState = InstallerUpdateSearchState.ERROR;
+                updateSearchError = status;
+                SetupInstallerPlugin.INSTANCE.log(status);
+              }
             }
           }
           finally
@@ -240,6 +262,12 @@ public final class InstallerDialog extends SetupWizardDialog
               updateToolItem.setToolTipText("No updates available");
               updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled"));
               updateToolItem.setEnabled(false);
+              break;
+
+            case ERROR:
+              updateToolItem.setToolTipText("Review update problems");
+              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error"));
+              updateToolItem.setEnabled(true);
               break;
           }
         }
