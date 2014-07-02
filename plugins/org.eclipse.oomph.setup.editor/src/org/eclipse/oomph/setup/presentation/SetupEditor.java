@@ -18,6 +18,7 @@ import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.internal.setup.core.util.EMFUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
+import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
@@ -2248,7 +2249,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   public IPropertySheetPage getPropertySheetPage()
   {
-    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, dialogSettings)
+    PropertySheetPage propertySheetPage = new OomphPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, dialogSettings)
     {
       {
         setSorter(new PropertySheetSorter()

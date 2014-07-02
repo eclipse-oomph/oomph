@@ -34,12 +34,15 @@ import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributo
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProvider;
@@ -223,6 +226,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
   private RevertAction revertAction;
 
+  private OpenInSetupEditorAction openInSetupEditorAction = new OpenInSetupEditorAction();
+
   /**
    * This creates an instance of the contributor.
    * <!-- begin-user-doc -->
@@ -329,6 +334,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     commandTableAction.setActivePart(part);
     editorTableAction.setActivePart(part);
     revertAction.setActiveWorkbenchPart(part);
+    openInSetupEditorAction.setActiveWorkbenchPart(part);
 
     // Switch to the new selection provider.
     //
@@ -336,6 +342,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     {
       selectionProvider.removeSelectionChangedListener(this);
     }
+
     if (part == null)
     {
       selectionProvider = null;
@@ -412,6 +419,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   {
     selectionChangedGen(event);
     recordPreferencesAction.selectionChanged(event);
+    openInSetupEditorAction.selectionChanged(event);
     // testInstallAction.selectionChanged(event);
   }
 
@@ -815,6 +823,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         dialog.open();
       }
     });
+
+    menuManager.insertBefore("ui-actions", openInSetupEditorAction);
   }
 
   /**
@@ -1223,6 +1233,71 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         setEnabled(false);
         setupEditor = null;
       }
+    }
+  }
+
+  private static final class OpenInSetupEditorAction extends Action
+  {
+    private URI uri;
+
+    private SetupEditor setupEditor;
+
+    public OpenInSetupEditorAction()
+    {
+      setText("Open in Setup Editor");
+    }
+
+    @Override
+    public void run()
+    {
+      SetupEditor.open(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri);
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)workbenchPart;
+        setEnabled(true);
+        setChecked(setupEditor.selectionViewer.getInput() instanceof ResourceSet);
+      }
+      else
+      {
+        setEnabled(false);
+        setupEditor = null;
+      }
+    }
+
+    public final void selectionChanged(SelectionChangedEvent event)
+    {
+      uri = null;
+
+      IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+      if (selection.size() == 1)
+      {
+        Object object = selection.getFirstElement();
+        object = AdapterFactoryEditingDomain.unwrap(object);
+        if (object instanceof EObject)
+        {
+          EObject eObject = (EObject)object;
+          Resource resource = eObject.eResource();
+          if (resource != null)
+          {
+            ResourceSet resourceSet = resource.getResourceSet();
+            if (resourceSet == null || resourceSet.getResources().indexOf(resource) != 0)
+            {
+              uri = EcoreUtil.getURI(eObject);
+            }
+          }
+        }
+        else if (object instanceof Resource)
+        {
+          Resource resource = (Resource)object;
+          uri = resource.getURI();
+        }
+      }
+
+      setEnabled(uri != null);
     }
   }
 }
