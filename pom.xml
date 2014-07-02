@@ -37,6 +37,7 @@
     <module>features/org.eclipse.oomph.setup-feature</module>
     <module>features/org.eclipse.oomph.setup.git-feature</module>
     <module>features/org.eclipse.oomph.setup.installer-feature</module>
+    <module>features/org.eclipse.oomph.setup.launching-feature</module>
     <module>features/org.eclipse.oomph.setup.jdt-feature</module>
     <module>features/org.eclipse.oomph.setup.maven-feature</module>
     <module>features/org.eclipse.oomph.setup.mylyn-feature</module>
@@ -81,6 +82,8 @@
     <module>plugins/org.eclipse.oomph.setup.installer</module>
     <module>plugins/org.eclipse.oomph.setup.jdt</module>
     <module>plugins/org.eclipse.oomph.setup.jdt.edit</module>
+    <module>plugins/org.eclipse.oomph.setup.launching</module>
+    <module>plugins/org.eclipse.oomph.setup.launching.edit</module>
     <module>plugins/org.eclipse.oomph.setup.maven</module>
     <module>plugins/org.eclipse.oomph.setup.maven.edit</module>
     <module>plugins/org.eclipse.oomph.setup.mylyn</module>
