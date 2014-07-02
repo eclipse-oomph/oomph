@@ -10,6 +10,7 @@
       <programArgs>--launcher.XXMaxPermSize
 256M
 -name
+
 Oomph Installer
 
 -data
