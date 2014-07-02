@@ -60,6 +60,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -78,6 +79,8 @@ import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.provider.DelegatingWrapperItemProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProvider;
@@ -621,6 +624,18 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   private IconReflectiveItemProvider reflectiveItemProvider;
 
   /**
+   * This creates a model editor.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SetupEditor()
+  {
+    super();
+    initializeEditingDomain();
+  }
+
+  /**
    * Handles activation of the editor or it's associated views.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -801,18 +816,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   }
 
   /**
-   * This creates a model editor.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SetupEditor()
-  {
-    super();
-    initializeEditingDomain();
-  }
-
-  /**
    * This sets up the editing domain for the model editor.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -920,6 +923,45 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
 
           @Override
+          public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+          {
+            if (itemPropertyDescriptors == null)
+            {
+              super.getPropertyDescriptors(object);
+              itemPropertyDescriptors.add(new ItemPropertyDescriptor(resourceItemProviderAdapterFactory, "Resolved URI", "The resolved URI of the resource",
+                  (EStructuralFeature)null, false)
+              {
+                @Override
+                public Object getFeature(Object object)
+                {
+                  return "resolvedURI";
+                }
+
+                @Override
+                public Object getPropertyValue(Object object)
+                {
+                  Resource resource = (Resource)object;
+                  URI uri = resource.getURI();
+                  ResourceSet resourceSet = resource.getResourceSet();
+                  if (resourceSet != null)
+                  {
+                    uri = resourceSet.getURIConverter().normalize(uri);
+                  }
+
+                  if ("user".equals(uri.scheme()))
+                  {
+                    uri = uri.replacePrefix(SetupContext.GLOBAL_SETUPS_URI, SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("")).trimQuery();
+                  }
+
+                  return uri;
+                }
+              });
+
+            }
+            return itemPropertyDescriptors;
+          }
+
+          @Override
           public void dispose()
           {
             super.dispose();
@@ -954,7 +996,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     ResourceSet resourceSet = editingDomain.getResourceSet();
     EMFUtil.configureResourceSet(resourceSet);
 
-    // If the index's folder is redirected to the location file system...
+    // If the index's folder is redirected to the local file system...
     URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();
     Map<URI, URI> workspaceMappings = new HashMap<URI, URI>();
@@ -1538,7 +1580,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     };
 
-    job.setRule(ResourcesPlugin.getWorkspace().getRoot());
     job.schedule();
     getSite().getWorkbenchWindow().getWorkbench().getProgressService().showInDialog(null, job);
   }
@@ -1859,16 +1900,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           ResourceSet resourceSet = editingDomain.getResourceSet();
           EList<Resource> resources = resourceSet.getResources();
-          if (!resources.isEmpty())
+          Project project = (Project)EcoreUtil.getObjectByType(resources.get(0).getContents(), SetupPackage.Literals.PROJECT);
+          if (project != null)
           {
-            Resource resource = resources.get(0);
-            EObject eObject = resource.getContents().get(0);
-            if (eObject instanceof Project)
-            {
-              Project project = (Project)eObject;
-              ItemProvider input = getTriggeredTasks(project);
-              getTreeViewer().setInput(input);
-            }
+            ItemProvider input = getTriggeredTasks(project);
+            getTreeViewer().setInput(input);
           }
         }
         catch (Exception ex)
@@ -2537,8 +2573,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void init(IEditorSite site, IEditorInput editorInput)
+  public void initGen(IEditorSite site, IEditorInput editorInput)
   {
     setSite(site);
     setInputWithNotify(editorInput);
@@ -2546,6 +2581,27 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     site.setSelectionProvider(this);
     site.getPage().addPartListener(partListener);
     ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
+  }
+
+  @Override
+  public void init(IEditorSite site, IEditorInput editorInput)
+  {
+    final IResourceChangeListener delegateResourceChangeListener = resourceChangeListener;
+    resourceChangeListener = new IResourceChangeListener()
+    {
+      public void resourceChanged(IResourceChangeEvent event)
+      {
+        // We don't want to process deltas while we're mirroring the resource set.
+        // In particular, the loading of platform:/resource URIs can cause workspace refresh and that will cause this method to be called.
+        // But that's pointless because we won't have any resource in the resource set that needs updating as a result.
+        if (resourceMirror == null)
+        {
+          delegateResourceChangeListener.resourceChanged(event);
+        }
+      }
+    };
+
+    initGen(site, editorInput);
   }
 
   /**
@@ -2771,18 +2827,20 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         try
         {
-          IEditorInput editorInput = new URIEditorInput(normalizedURI, normalizedURI.lastSegment());
-          if (normalizedURI.isFile())
+          IEditorInput editorInput = null;
+          if ("user".equals(normalizedURI.scheme()))
           {
-            IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new java.net.URI(normalizedURI.toString()));
-            for (IFile file : files)
-            {
-              if (file.isAccessible())
-              {
-                editorInput = new FileEditorInput(files[0]);
-                break;
-              }
-            }
+            URI uri = normalizedURI.replacePrefix(SetupContext.GLOBAL_SETUPS_URI, SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("")).trimQuery();
+            editorInput = getFileEditorInput(uri);
+          }
+          else if (normalizedURI.isFile())
+          {
+            editorInput = getFileEditorInput(normalizedURI);
+          }
+
+          if (editorInput == null)
+          {
+            editorInput = new URIEditorInput(normalizedURI, normalizedURI.lastSegment());
           }
 
           IEditorPart editor = page.openEditor(editorInput, EDITOR_ID);
@@ -2810,6 +2868,30 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       }
     });
+  }
+
+  private static FileEditorInput getFileEditorInput(URI uri)
+  {
+    if (uri.isFile())
+    {
+      try
+      {
+        IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new java.net.URI(uri.toString()));
+        for (IFile file : files)
+        {
+          if (file.isAccessible())
+          {
+            return new FileEditorInput(files[0]);
+          }
+        }
+      }
+      catch (URISyntaxException ex)
+      {
+        SetupEditorPlugin.INSTANCE.log(ex);
+      }
+    }
+
+    return null;
   }
 
   public static class DelegatingDialogSettings implements IDialogSettings

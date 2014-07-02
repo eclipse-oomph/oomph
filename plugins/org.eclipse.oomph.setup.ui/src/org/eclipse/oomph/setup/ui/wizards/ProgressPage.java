@@ -613,7 +613,12 @@ public class ProgressPage extends SetupWizardPage
       EMFUtil.saveEObject(workspace);
     }
 
-    EMFUtil.saveEObject(user);
+    Resource userResource = user.eResource();
+    if (userResource.getResourceSet() == null)
+    {
+      EMFUtil.createResourceSet().getResources().add(userResource);
+      EMFUtil.saveEObject(user);
+    }
 
     installationResource.setURI(installationResourceURI);
     if (workspaceResource != null)

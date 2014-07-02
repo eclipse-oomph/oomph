@@ -71,6 +71,8 @@ public class SetupContext
 
   public static final URI GLOBAL_STATE_LOCATION_URI = URI.createFileURI(PropertiesUtil.USER_HOME).appendSegments(new String[] { ".eclipse", OOMPH_NODE });
 
+  public static final URI GLOBAL_SETUPS_URI = URI.createURI("user:/");
+
   public static final URI GLOBAL_SETUPS_LOCATION_URI = GLOBAL_STATE_LOCATION_URI.appendSegment("setups");
 
   public static final URI CONFIGURATION_STATE_LOCATION_URI = CONFIGURATION_LOCATION_URI.appendSegment(OOMPH_NODE);
@@ -78,7 +80,7 @@ public class SetupContext
   public static final URI WORKSPACE_STATE_LOCATION_URI = WORKSPACE_LOCATION_URI == null ? null : WORKSPACE_LOCATION_URI.appendSegments(new String[] {
       ".metadata", ".plugins", OOMPH_NODE });
 
-  // Resoure locations
+  // Resource locations
 
   public static final URI SETUP_LOG_URI = CONFIGURATION_STATE_LOCATION_URI.appendSegment(LOG_FILE_NAME);
 
@@ -95,9 +97,13 @@ public class SetupContext
   public static final URI WORKSPACE_SETUP_URI = WORKSPACE_STATE_LOCATION_URI == null ? null : WORKSPACE_STATE_LOCATION_URI
       .appendSegment(WORKSPACE_SETUP_FILE_NAME_URI.lastSegment());
 
-  public static final URI USER_SETUP_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("user.setup");
+  public static final URI USER_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("user.setup");
 
-  public static final URI CATALOG_SELECTION_SETUP_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("catalogs.setup");
+  public static final URI USER_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("user.setup");
+
+  public static final URI CATALOG_SELECTION_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("catalogs.setup");
+
+  public static final URI CATALOG_SELECTION_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("catalogs.setup");
 
   private static volatile SetupContext self = new SetupContext();
 
@@ -237,6 +243,27 @@ public class SetupContext
     Resource userResource = installation.eResource().getResourceSet().getResourceFactoryRegistry().getFactory(USER_SETUP_URI).createResource(USER_SETUP_URI);
     userResource.getContents().add(user);
     return new SetupContext(installation, workspace, user);
+  }
+
+  public static User createUser()
+  {
+    User user = SetupFactory.eINSTANCE.createUser();
+    user.setName(PropertiesUtil.getProperty("user.name", "user"));
+    return user;
+  }
+
+  public static Workspace createWorkspace()
+  {
+    Workspace workspace = SetupFactory.eINSTANCE.createWorkspace();
+    workspace.setName("workspace");
+    return workspace;
+  }
+
+  public static Installation createInstallation()
+  {
+    Installation installation = SetupFactory.eINSTANCE.createInstallation();
+    installation.setName("installation");
+    return installation;
   }
 
   private static URI getStaticInstallLocation()
@@ -422,27 +449,6 @@ public class SetupContext
     }
 
     return user;
-  }
-
-  private static User createUser()
-  {
-    User user = SetupFactory.eINSTANCE.createUser();
-    user.setName(PropertiesUtil.getProperty("user.name", "user"));
-    return user;
-  }
-
-  private static Workspace createWorkspace()
-  {
-    Workspace workspace = SetupFactory.eINSTANCE.createWorkspace();
-    workspace.setName("workspace");
-    return workspace;
-  }
-
-  private static Installation createInstallation()
-  {
-    Installation installation = SetupFactory.eINSTANCE.createInstallation();
-    installation.setName("installation");
-    return installation;
   }
 
   private static SetupContext proxify(Installation installation, Workspace workspace, User user)

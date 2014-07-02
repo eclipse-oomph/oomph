@@ -14,6 +14,7 @@ import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.SetupFactory;
+import org.eclipse.oomph.setup.User;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -46,27 +47,45 @@ public class UserURIHandlerImpl extends URIHandlerImpl
 
   private void create(URI uri, URI normalizedURI)
   {
-    Project project = SetupFactory.eINSTANCE.createProject();
-    String query = URI.decode(uri.query());
-    Matcher nameMatcher = NAME_PATTERN.matcher(query);
-    nameMatcher.find();
-    project.setName(nameMatcher.group(1));
-    Matcher labelMatcher = LABEL_PATTERN.matcher(query);
-    labelMatcher.find();
-    project.setLabel(labelMatcher.group(1));
-    Matcher descriptionMatcher = DESCRIPTION_PATTERN.matcher(query);
-    descriptionMatcher.find();
-    project.setDescription(descriptionMatcher.group(1));
+    String query = uri.query();
+    if (query != null)
+    {
+      Project project = SetupFactory.eINSTANCE.createProject();
+      String decodedQuery = URI.decode(query);
+      Matcher nameMatcher = NAME_PATTERN.matcher(decodedQuery);
+      nameMatcher.find();
+      project.setName(nameMatcher.group(1));
+      Matcher labelMatcher = LABEL_PATTERN.matcher(decodedQuery);
+      labelMatcher.find();
+      project.setLabel(labelMatcher.group(1));
+      Matcher descriptionMatcher = DESCRIPTION_PATTERN.matcher(decodedQuery);
+      descriptionMatcher.find();
+      project.setDescription(descriptionMatcher.group(1));
 
-    Resource resource = EMFUtil.createResourceSet().createResource(normalizedURI);
-    resource.getContents().add(project);
-    try
-    {
-      resource.save(null);
+      Resource resource = EMFUtil.createResourceSet().createResource(normalizedURI);
+      resource.getContents().add(project);
+      try
+      {
+        resource.save(null);
+      }
+      catch (IOException ex)
+      {
+        SetupCorePlugin.INSTANCE.log(ex);
+      }
     }
-    catch (IOException ex)
+    else if (SetupContext.USER_SETUP_URI.equals(uri))
     {
-      SetupCorePlugin.INSTANCE.log(ex);
+      User user = SetupContext.createUser();
+      Resource resource = EMFUtil.createResourceSet().createResource(normalizedURI);
+      resource.getContents().add(user);
+      try
+      {
+        resource.save(null);
+      }
+      catch (IOException ex)
+      {
+        SetupCorePlugin.INSTANCE.log(ex);
+      }
     }
   }
 
