@@ -13,6 +13,14 @@ package org.eclipse.oomph.util;
 
 import org.eclipse.oomph.internal.util.UtilPlugin;
 
+import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,6 +36,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -427,6 +436,25 @@ public final class IOUtil
     finally
     {
       closeSilent(output);
+    }
+  }
+
+  public static String readXML(InputStream inputStream) throws Exception
+  {
+    try
+    {
+      DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+      Document document = documentBuilder.parse(inputStream);
+      TransformerFactory transformerFactory = TransformerFactory.newInstance();
+      Transformer transformer = transformerFactory.newTransformer();
+      StringWriter out = new StringWriter();
+      transformer.transform(new DOMSource(document), new StreamResult(out));
+      out.close();
+      return out.toString();
+    }
+    finally
+    {
+      IOUtil.close(inputStream);
     }
   }
 

@@ -8,6 +8,8 @@
   <discoverablePackages
       href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore#/"/>
   <discoverablePackages
+      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Launching.ecore#/"/>
+  <discoverablePackages
       href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore#/"/>
   <discoverablePackages
       href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore#/"/>

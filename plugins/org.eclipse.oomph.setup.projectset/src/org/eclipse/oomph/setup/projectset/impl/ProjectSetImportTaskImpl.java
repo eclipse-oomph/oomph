@@ -17,8 +17,7 @@ import org.eclipse.oomph.setup.projectset.ProjectSetImportTask;
 import org.eclipse.oomph.setup.projectset.ProjectSetPackage;
 import org.eclipse.oomph.setup.projectset.ProjectSetPlugin;
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.PropertiesUtil;
-import org.eclipse.oomph.util.XMLUtil;
+import org.eclipse.oomph.util.PropertyFile;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
@@ -33,22 +32,11 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IWorkingSet;
 
-import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import java.io.File;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -231,7 +219,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
     helper.perform(context);
   }
 
-  private static class Helper
+  private static class Helper extends PropertyFile
   {
     private static final IWorkspaceRoot ROOT = EcorePlugin.getWorkspaceRoot();
 
@@ -243,6 +231,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
 
     public Helper(URI uri)
     {
+      super(HISTORY);
       this.uri = uri;
     }
 
@@ -288,15 +277,8 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
       InputStream inputStream = null;
       try
       {
-        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
         inputStream = uriConverter.createInputStream(uri, null);
-        Document document = documentBuilder.parse(inputStream);
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        StringWriter out = new StringWriter();
-        transformer.transform(new DOMSource(document), new StreamResult(out));
-        out.close();
-        return out.toString();
+        return IOUtil.readXML(inputStream);
       }
       finally
       {
@@ -306,9 +288,8 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
 
     private IProject[] getProjects(URI uri, String content)
     {
-      Map<String, String> properties = loadProperties();
       String key = uri.toString();
-      String value = properties.get(key);
+      String value = getProperty(key, null);
       if (value != null)
       {
         String digest = getDigest(content);
@@ -320,8 +301,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
           {
             if (!digest.equals(element))
             {
-              properties.remove(key);
-              saveProperties(properties);
+              removeProperty(key);
               return null;
             }
 
@@ -333,9 +313,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
           }
         }
 
-        IProject[] result = projects.toArray(new IProject[projects.size()]);
-        setProjects(uri, content, result);
-        return result;
+        return projects.toArray(new IProject[projects.size()]);
       }
 
       return null;
@@ -356,7 +334,6 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
 
     private void setProjects(URI uri, String content, IProject[] projects)
     {
-      Map<String, String> properties = loadProperties();
       String key = uri.toString();
       StringBuilder value = new StringBuilder(getDigest(content));
       for (IProject project : projects)
@@ -365,37 +342,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
         value.append(URI.encodeSegment(project.getName(), false));
       }
 
-      properties.put(key, value.toString());
-      saveProperties(properties);
-    }
-
-    private Map<String, String> loadProperties()
-    {
-      try
-      {
-        if (HISTORY.exists())
-        {
-          return PropertiesUtil.loadProperties(HISTORY);
-        }
-      }
-      catch (RuntimeException ex)
-      {
-        // Ignore.
-      }
-
-      return new LinkedHashMap<String, String>();
-    }
-
-    private void saveProperties(Map<String, String> properties)
-    {
-      try
-      {
-        PropertiesUtil.saveProperties(HISTORY, properties, true);
-      }
-      catch (RuntimeException ex)
-      {
-        ProjectSetPlugin.INSTANCE.log(ex);
-      }
+      setProperty(key, value.toString());
     }
   }
 } // ProjectSetImportTaskImpl

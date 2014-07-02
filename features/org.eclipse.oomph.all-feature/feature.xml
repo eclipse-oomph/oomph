@@ -122,6 +122,10 @@
    <includes
          id="org.eclipse.oomph.setup.jdt"
          version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.oomph.setup.launching"
+         version="0.0.0"/>
 
    <includes
          id="org.eclipse.oomph.setup.workbench"
