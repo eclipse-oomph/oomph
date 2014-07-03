@@ -34,11 +34,15 @@ public interface Agent extends AgentManagerElement, ProfileContainer
 
   public BundlePool addBundlePool(File location);
 
+  public boolean refreshBundlePools();
+
   public Set<String> getAllProfileIDs();
 
   public Collection<Profile> getAllProfiles();
 
   public Profile getCurrentProfile();
+
+  public boolean refreshProfiles();
 
   public IProvisioningAgent getProvisioningAgent();
 

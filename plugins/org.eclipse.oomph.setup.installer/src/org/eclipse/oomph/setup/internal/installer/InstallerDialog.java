@@ -10,23 +10,42 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
+import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
+import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
+import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
+import org.eclipse.oomph.setup.ui.wizards.VariablePage;
 import org.eclipse.oomph.ui.UICallback;
+import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.IRunnable;
+import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.emf.common.util.EList;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.operations.UpdateOperation;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,20 +59,31 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 /**
  * @author Eike Stepper
  */
-public final class InstallerDialog extends SetupWizardDialog
+public final class InstallerDialog extends SetupWizardDialog implements IPageChangedListener
 {
+  private static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url";
+
+  private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
+
+  public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL).replace('\\', '/');
+
   public static final int RETURN_RESTART = -4;
 
   private final boolean restarted;
 
   private ToolItem updateToolItem;
 
-  private InstallerUpdateSearchState updateSearchState;
+  private boolean updateSearching;
 
-  private IStatus updateSearchError;
+  private Resolution updateResolution;
+
+  private IStatus updateError;
 
   private Link versionLink;
 
@@ -61,6 +91,18 @@ public final class InstallerDialog extends SetupWizardDialog
   {
     super(parentShell, new SetupWizard.Installer());
     this.restarted = restarted;
+    addPageChangedListener(this);
+  }
+
+  public void pageChanged(PageChangedEvent event)
+  {
+    if (event.getSelectedPage() instanceof ConfirmationPage)
+    {
+      updateSearching = false;
+      updateResolution = null;
+      updateError = null;
+      setUpdateIcon(0);
+    }
   }
 
   @Override
@@ -101,7 +143,7 @@ public final class InstallerDialog extends SetupWizardDialog
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        update(false);
+        selfUpdate();
       }
     });
   }
@@ -123,104 +165,60 @@ public final class InstallerDialog extends SetupWizardDialog
     return toolItem;
   }
 
-  protected boolean update(final boolean needsEarlyConfirmation)
+  private void selfUpdate()
   {
-    Runnable postInstall = new Runnable()
-    {
-      public void run()
-      {
-        setUpdateIcon(0);
-      }
-    };
+    updateError = null;
+    setUpdateIcon(0);
 
-    Runnable restartHandler = new Runnable()
+    if (updateResolution == null)
     {
-      public void run()
+      initUpdateSearch();
+    }
+    else
+    {
+      final UICallback callback = new UICallback(getShell(), AbstractSetupDialog.SHELL_TEXT);
+      callback.runInProgressDialog(false, new IRunnable()
       {
-        close();
-        setReturnCode(RETURN_RESTART);
-      }
-    };
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        {
+          try
+          {
+            updateResolution.commit(monitor);
 
-    UICallback callback = new UICallback(getShell(), AbstractSetupDialog.SHELL_TEXT);
-    return UpdateUtil.update(callback, needsEarlyConfirmation, true, postInstall, restartHandler);
+            callback.execInUI(true, new Runnable()
+            {
+              public void run()
+              {
+                callback.information(false, "Updates were installed. Press OK to restart.");
+
+                close();
+                setReturnCode(RETURN_RESTART);
+              }
+            });
+          }
+          catch (CoreException ex)
+          {
+            updateError = ex.getStatus();
+          }
+          finally
+          {
+            updateResolution = null;
+            setUpdateIcon(0);
+          }
+        }
+      });
+    }
   }
 
   private void initUpdateSearch()
   {
-    updateSearchState = InstallerUpdateSearchState.SEARCHING;
+    updateSearching = true;
 
-    new Thread("Update Icon Setter")
-    {
-      @Override
-      public void run()
-      {
-        try
-        {
-          for (int i = 0; isRunning(); i = ++i % 20)
-          {
-            if (updateToolItem == null || updateToolItem.isDisposed())
-            {
-              return;
-            }
+    Thread updateIconSetter = new UpdateIconSetter();
+    updateIconSetter.start();
 
-            int icon = i > 7 ? 0 : i;
-            setUpdateIcon(icon);
-            sleep(80);
-          }
-
-          setUpdateIcon(0);
-        }
-        catch (Exception ex)
-        {
-          SetupInstallerPlugin.INSTANCE.log(ex);
-        }
-      }
-
-      private boolean isRunning()
-      {
-        return updateSearchState != InstallerUpdateSearchState.DONE && updateSearchState != InstallerUpdateSearchState.ERROR;
-      }
-    }.start();
-
-    new Thread("Update Searcher")
-    {
-      @Override
-      public void run()
-      {
-        try
-        {
-          IProvisioningAgent agent = SetupInstallerPlugin.INSTANCE.getService(IProvisioningAgent.class);
-
-          try
-          {
-            IStatus status = UpdateUtil.checkForUpdates(agent, true, null, SubMonitor.convert(null));
-            if (status == UpdateUtil.UPDATE_FOUND_STATUS)
-            {
-              updateSearchState = InstallerUpdateSearchState.FOUND;
-            }
-            else if (status.getCode() == UpdateOperation.STATUS_NOTHING_TO_UPDATE)
-            {
-              updateSearchState = InstallerUpdateSearchState.DONE;
-            }
-            else
-            {
-              SetupInstallerPlugin.INSTANCE.log(status);
-              updateSearchError = status;
-              updateSearchState = InstallerUpdateSearchState.ERROR;
-            }
-          }
-          finally
-          {
-            SetupInstallerPlugin.INSTANCE.ungetService(agent);
-          }
-        }
-        catch (Exception ex)
-        {
-          // Likely due to early exit. Ignore
-        }
-      }
-    }.start();
+    Thread updateSearcher = new UpdateSearcher();
+    updateSearcher.start();
   }
 
   private void setUpdateIcon(final int icon)
@@ -236,33 +234,31 @@ public final class InstallerDialog extends SetupWizardDialog
 
         try
         {
-          switch (updateSearchState)
+          if (updateSearching)
           {
-            case SEARCHING:
-              updateToolItem.setToolTipText("Checking for updates...");
-              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ""));
-              updateToolItem.setEnabled(false);
-              break;
-
-            case FOUND:
-              updateToolItem.setToolTipText("Install available updates");
-              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ""));
-              updateToolItem.setEnabled(true);
-              break;
-
-            case DONE:
-              updateToolItem.setToolTipText("No updates available");
-              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled"));
-              updateToolItem.setEnabled(false);
-              break;
-
-            case ERROR:
-              StringBuilder builder = new StringBuilder();
-              formatStatus(builder, "", updateSearchError);
-              updateToolItem.setToolTipText(builder.toString());
-              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error"));
-              updateToolItem.setEnabled(true);
-              break;
+            updateToolItem.setToolTipText("Checking for updates...");
+            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ""));
+            updateToolItem.setEnabled(false);
+          }
+          else if (updateError != null)
+          {
+            StringBuilder builder = new StringBuilder();
+            formatStatus(builder, "", updateError);
+            updateToolItem.setToolTipText(builder.toString());
+            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error"));
+            updateToolItem.setEnabled(true);
+          }
+          else if (updateResolution != null)
+          {
+            updateToolItem.setToolTipText("Install available updates");
+            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ""));
+            updateToolItem.setEnabled(true);
+          }
+          else
+          {
+            updateToolItem.setToolTipText("No updates available");
+            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled"));
+            updateToolItem.setEnabled(false);
           }
         }
         catch (Exception ex)
@@ -325,7 +321,7 @@ public final class InstallerDialog extends SetupWizardDialog
         {
           if (selfHosting)
           {
-            updateSearchState = InstallerUpdateSearchState.DONE;
+            updateSearching = false;
             setUpdateIcon(0);
           }
           else if (!restarted)
@@ -382,6 +378,111 @@ public final class InstallerDialog extends SetupWizardDialog
       }
 
       return null;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class UpdateIconSetter extends Thread
+  {
+    public UpdateIconSetter()
+    {
+      super("Update Icon Setter");
+    }
+
+    @Override
+    public void run()
+    {
+      try
+      {
+        for (int i = 0; updateSearching || updateResolution != null; i = ++i % 20)
+        {
+          if (updateToolItem == null || updateToolItem.isDisposed())
+          {
+            return;
+          }
+
+          int icon = i > 7 ? 0 : i;
+          setUpdateIcon(icon);
+          sleep(80);
+        }
+
+        setUpdateIcon(0);
+      }
+      catch (Exception ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class UpdateSearcher extends Thread
+  {
+    public UpdateSearcher()
+    {
+      super("Update Searcher");
+    }
+
+    @Override
+    public void run()
+    {
+      try
+      {
+        Agent agent = P2Util.getAgentManager().getCurrentAgent();
+        Profile profile = agent.getCurrentProfile();
+        ProfileTransaction transaction = profile.change();
+
+        EList<Repository> repositories = transaction.getProfileDefinition().getRepositories();
+        final boolean firstTime = repositories.isEmpty();
+        if (firstTime)
+        {
+          repositories.add(P2Factory.eINSTANCE.createRepository(InstallerDialog.INSTALLER_UPDATE_URL));
+        }
+
+        CommitContext commitContext = new CommitContext()
+        {
+          private User user = ((Installer)getWizard()).getUser();
+
+          @Override
+          @SuppressWarnings("restriction")
+          public boolean handleProvisioningPlan(org.eclipse.equinox.p2.engine.IProvisioningPlan provisioningPlan,
+              List<org.eclipse.equinox.p2.repository.metadata.IMetadataRepository> metadataRepositories) throws CoreException
+          {
+            if (firstTime)
+            {
+              int operands = org.eclipse.oomph.p2.internal.core.ProfileTransactionImpl.getOperandCount(provisioningPlan);
+              if (operands <= 1)
+              {
+                // Cancel if only the repository addition would be committed.
+                return false;
+              }
+            }
+
+            P2TaskImpl.processLicenses(provisioningPlan, VariablePage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
+            return true;
+          }
+
+          @Override
+          public Confirmer getUnsignedContentConfirmer()
+          {
+            return UnsignedContentDialog.createUnsignedContentConfirmer(user, true);
+          }
+        };
+
+        updateResolution = transaction.resolve(commitContext, null);
+      }
+      catch (CoreException ex)
+      {
+        updateError = ex.getStatus();
+      }
+      finally
+      {
+        updateSearching = false;
+      }
     }
   }
 }

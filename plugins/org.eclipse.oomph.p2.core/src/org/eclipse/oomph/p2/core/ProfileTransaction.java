@@ -70,6 +70,8 @@ public interface ProfileTransaction
 
   public boolean commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException;
 
+  public Resolution resolve(CommitContext commitContext, IProgressMonitor monitor) throws CoreException;
+
   /**
    * @author Eike Stepper
    */
@@ -80,8 +82,9 @@ public interface ProfileTransaction
       return new ProvisioningContext(transaction.getProfile().getAgent().getProvisioningAgent());
     }
 
-    public void handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
+    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
     {
+      return true;
     }
 
     public IPhaseSet getPhaseSet(ProfileTransaction transaction) throws CoreException

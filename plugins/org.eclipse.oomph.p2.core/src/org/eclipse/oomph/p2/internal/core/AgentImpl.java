@@ -121,13 +121,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       @Override
       protected void initializeFirstTime()
       {
-        IProfileRegistry profileRegistry = getProfileRegistry();
-        for (IProfile delegate : profileRegistry.getProfiles())
-        {
-          String key = delegate.getProfileId();
-          String extraInfo = AgentImpl.getProfileExtraInfo(delegate);
-          addElement(key, extraInfo);
-        }
+        fillProfileMap(this);
       }
     };
 
@@ -224,6 +218,11 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
     int xxx;
     // TODO Delete artifacts from disk
+  }
+
+  public boolean refreshBundlePools()
+  {
+    return bundlePoolMap.refresh();
   }
 
   public synchronized LazyProfileRegistry getProfileRegistry()
@@ -373,9 +372,26 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     getProfileRegistry().removeProfile(profileID);
   }
 
+  public boolean refreshProfiles()
+  {
+    fillProfileMap(profileMap);
+    return profileMap.refresh();
+  }
+
+  private void fillProfileMap(PersistentMap<Profile> profileMap)
+  {
+    IProfileRegistry profileRegistry = getProfileRegistry();
+    for (IProfile delegate : profileRegistry.getProfiles())
+    {
+      String key = delegate.getProfileId();
+      String extraInfo = AgentImpl.getProfileExtraInfo(delegate);
+      profileMap.addElement(key, extraInfo);
+    }
+  }
+
   public boolean isOffline()
   {
-     return offline;
+    return offline;
   }
 
   public void setOffline(boolean offline)

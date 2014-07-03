@@ -33,6 +33,8 @@ public interface AgentManager
 
   public Agent addAgent(File location);
 
+  public boolean refreshAgents();
+
   public Collection<BundlePool> getBundlePools();
 
   public BundlePool getBundlePool(File location) throws P2Exception;

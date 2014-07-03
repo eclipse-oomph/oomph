@@ -188,6 +188,11 @@ public class AgentManagerImpl implements AgentManager
     // TODO Delete artifacts from disk
   }
 
+  public boolean refreshAgents()
+  {
+    return agentMap.refresh();
+  }
+
   public Collection<BundlePool> getBundlePools()
   {
     List<BundlePool> bundlePools = new ArrayList<BundlePool>();

@@ -25,6 +25,7 @@ import org.eclipse.oomph.p2.core.P2Util.VersionedIdFilter;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
 import org.eclipse.oomph.p2.internal.core.ProfileImpl;
 import org.eclipse.oomph.util.IOUtil;
@@ -32,6 +33,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
 
 import org.junit.After;
@@ -122,6 +124,12 @@ public class AgentTests extends AbstractTests
   {
     AgentManagerImpl.instance = new AgentManagerImpl(userHome);
     return getAgent();
+  }
+
+  private void commitProfileTransaction(ProfileTransaction transaction, boolean expectedChange) throws CoreException
+  {
+    boolean actualChange = transaction.commit(LOGGER);
+    assertThat(actualChange, is(expectedChange));
   }
 
   @Test
@@ -467,10 +475,18 @@ public class AgentTests extends AbstractTests
     assertThat(new File(plugins, oldVersion).isFile(), is(true));
   }
 
-  private void commitProfileTransaction(ProfileTransaction transaction, boolean expectedChange) throws CoreException
+  @Test
+  public void testDetectProfileDefinitionCreation() throws Exception
   {
-    boolean actualChange = transaction.commit(LOGGER);
-    assertThat(actualChange, is(expectedChange));
+    Agent agent = getAgent();
+    IProfileRegistry profileRegistry = agent.getProfileRegistry();
+    profileRegistry.addProfile("profile1");
+    agent.refreshProfiles();
+
+    Profile profile = agent.getProfile("profile1");
+    ProfileTransaction transaction = profile.change();
+    Resolution resolution = transaction.resolve(null, LOGGER);
+    assertThat(resolution, nullValue());
   }
 
   // @Test

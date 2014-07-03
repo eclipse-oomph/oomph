@@ -10,6 +10,13 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.setup.UnsignedPolicy;
+import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.PropertiesUtil;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -89,6 +96,54 @@ public class UnsignedContentDialog extends AbstractConfirmDialog
     Control control = viewer.getControl();
     control.setLayoutData(new GridData(GridData.FILL_BOTH));
     Dialog.applyDialogFont(control);
+  }
+
+  public static Confirmer createUnsignedContentConfirmer(final User user, final boolean saveChangedUser)
+  {
+    Boolean propPolicy = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_UNSIGNED_POLICY);
+    if (propPolicy != null)
+    {
+      return propPolicy ? Confirmer.ACCEPT : Confirmer.DECLINE;
+    }
+
+    UnsignedPolicy userPolicy = user.getUnsignedPolicy();
+    if (userPolicy == UnsignedPolicy.ACCEPT)
+    {
+      return Confirmer.ACCEPT;
+    }
+
+    if (userPolicy == UnsignedPolicy.DECLINE)
+    {
+      return Confirmer.DECLINE;
+    }
+
+    return new AbstractDialogConfirmer()
+    {
+      @Override
+      public Confirmation confirm(boolean defaultConfirmed, Object info)
+      {
+        Confirmation confirmation = super.confirm(defaultConfirmed, info);
+        if (confirmation.isRemember())
+        {
+          UnsignedPolicy unsignedPolicy = confirmation.isConfirmed() ? UnsignedPolicy.ACCEPT : UnsignedPolicy.DECLINE;
+          user.setUnsignedPolicy(unsignedPolicy);
+
+          if (saveChangedUser)
+          {
+            EMFUtil.saveEObject(user);
+          }
+        }
+
+        return confirmation;
+      }
+
+      @Override
+      protected AbstractConfirmDialog createDialog(boolean defaultConfirmed, Object info)
+      {
+        String[] unsignedContent = (String[])info;
+        return new UnsignedContentDialog(unsignedContent);
+      }
+    };
   }
 
   /**

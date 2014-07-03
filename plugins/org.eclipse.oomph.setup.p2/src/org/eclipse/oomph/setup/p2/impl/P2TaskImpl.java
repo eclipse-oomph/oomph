@@ -49,6 +49,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -652,7 +653,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     ProfileTransaction.CommitContext commitContext = new ProfileTransaction.CommitContext()
     {
       @Override
-      public void handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
+      public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
       {
         try
         {
@@ -662,6 +663,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         {
           SetupP2Plugin.INSTANCE.coreException(ex);
         }
+
+        return true;
       }
 
       @Override
@@ -751,7 +754,15 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       return;
     }
 
-    final User user = context.getUser();
+    User user = context.getUser();
+    Confirmer licenseConfirmer = (Confirmer)context.get(ILicense.class);
+
+    processLicenses(provisioningPlan, licenseConfirmer, user, false, monitor);
+  }
+
+  public static void processLicenses(IProvisioningPlan provisioningPlan, Confirmer licenseConfirmer, final User user, boolean saveChangedUser,
+      IProgressMonitor monitor)
+  {
     Set<LicenseInfo> acceptedLicenses = new HashSet<LicenseInfo>(user.getAcceptedLicenses());
 
     final Map<ILicense, List<IInstallableUnit>> licensesToIUs = new HashMap<ILicense, List<IInstallableUnit>>();
@@ -794,7 +805,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     if (!licensesToIUs.isEmpty())
     {
-      Confirmer licenseConfirmer = (Confirmer)context.get(ILicense.class);
       if (licenseConfirmer == null)
       {
         licenseConfirmer = Confirmer.DECLINE;
@@ -815,6 +825,19 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
           LicenseInfo licenseInfo = new LicenseInfo(uuid, name);
           user.getAcceptedLicenses().add(licenseInfo);
+        }
+
+        if (saveChangedUser)
+        {
+          try
+          {
+            XMLResource xmlResource = (XMLResource)user.eResource();
+            xmlResource.save(null);
+          }
+          catch (IOException ex)
+          {
+            SetupP2Plugin.INSTANCE.log(ex);
+          }
         }
       }
     }

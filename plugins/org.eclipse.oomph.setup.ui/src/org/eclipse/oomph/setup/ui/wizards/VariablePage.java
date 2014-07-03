@@ -12,13 +12,11 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
-import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
-import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.Workspace;
@@ -34,7 +32,6 @@ import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.Confirmer;
-import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
@@ -84,7 +81,7 @@ import java.util.Set;
  */
 public class VariablePage extends SetupWizardPage implements SetupPrompter
 {
-  private static final Confirmer LICENSE_CONFIRMER = new AbstractDialogConfirmer()
+  public static final Confirmer LICENSE_CONFIRMER = new AbstractDialogConfirmer()
   {
     @Override
     protected AbstractConfirmDialog createDialog(boolean defaultConfirmed, Object info)
@@ -324,49 +321,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
   }
 
-  private Confirmer createUnsignedContentConfirmer(final User user)
-  {
-    Boolean propPolicy = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_UNSIGNED_POLICY);
-    if (propPolicy != null)
-    {
-      return propPolicy ? Confirmer.ACCEPT : Confirmer.DECLINE;
-    }
-
-    UnsignedPolicy userPolicy = user.getUnsignedPolicy();
-    if (userPolicy == UnsignedPolicy.ACCEPT)
-    {
-      return Confirmer.ACCEPT;
-    }
-
-    if (userPolicy == UnsignedPolicy.DECLINE)
-    {
-      return Confirmer.DECLINE;
-    }
-
-    return new AbstractDialogConfirmer()
-    {
-      @Override
-      public Confirmation confirm(boolean defaultConfirmed, Object info)
-      {
-        Confirmation confirmation = super.confirm(defaultConfirmed, info);
-        if (confirmation.isRemember())
-        {
-          UnsignedPolicy unsignedPolicy = confirmation.isConfirmed() ? UnsignedPolicy.ACCEPT : UnsignedPolicy.DECLINE;
-          user.setUnsignedPolicy(unsignedPolicy);
-        }
-
-        return confirmation;
-      }
-
-      @Override
-      protected AbstractConfirmDialog createDialog(boolean defaultConfirmed, Object info)
-      {
-        String[] unsignedContent = (String[])info;
-        return new UnsignedContentDialog(unsignedContent);
-      }
-    };
-  }
-
   private void validate()
   {
     try
@@ -395,7 +349,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         if (performer != null)
         {
           performer.put(ILicense.class, LICENSE_CONFIRMER);
-          performer.put(Certificate.class, createUnsignedContentConfirmer(user));
+          performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
         }
       }
       catch (OperationCanceledException ex)

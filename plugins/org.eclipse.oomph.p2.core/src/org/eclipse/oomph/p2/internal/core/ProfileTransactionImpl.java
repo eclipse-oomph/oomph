@@ -37,6 +37,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
+import org.eclipse.equinox.internal.p2.engine.Operand;
+import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
@@ -65,6 +67,7 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
@@ -314,193 +317,18 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   public boolean commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
   {
-    if (committed)
+    if (!committed)
     {
-      return false;
+      committed = true;
+
+      Resolution resolution = resolve(commitContext, monitor);
+      if (resolution != null)
+      {
+        return resolution.commit(monitor);
+      }
     }
 
-    committed = true;
-
-    Resolution resolution = resolve(commitContext, monitor);
-    return resolution.commit(monitor);
-
-    // if (commitContext == null)
-    // {
-    // commitContext = new CommitContext();
-    // }
-    //
-    // if (monitor == null)
-    // {
-    // monitor = new NullProgressMonitor();
-    // }
-    //
-    // List<Runnable> cleanup = new ArrayList<Runnable>();
-    //
-    // if (offline)
-    // {
-    // registerCachingTransport(cleanup);
-    // }
-    //
-    // final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
-    // if (mirrors != wasMirrors)
-    // {
-    // try
-    // {
-    // final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED");
-    // ReflectUtil.setValue(mirrorsEnabledField, null, mirrors, true);
-    //
-    // cleanup.add(new Runnable()
-    // {
-    // public void run()
-    // {
-    // try
-    // {
-    // ReflectUtil.setValue(mirrorsEnabledField, null, wasMirrors, true);
-    // }
-    // catch (Throwable ex)
-    // {
-    // // Ignore
-    // }
-    // }
-    // });
-    // }
-    // catch (Throwable ex)
-    // {
-    // // Ignore
-    // }
-    // }
-    //
-    // try
-    // {
-    // List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
-    // Set<URI> artifactURIs = new HashSet<URI>();
-    // URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, monitor);
-    //
-    // ProvisioningContext provisioningContext = commitContext.createProvisioningContext(this);
-    // provisioningContext.setMetadataRepositories(metadataURIs);
-    // provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
-    //
-    // IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
-    //
-    // Agent agent = profile.getAgent();
-    // IPlanner planner = agent.getPlanner();
-    // IEngine engine = agent.getEngine();
-    //
-    // ProfileImpl profileImpl = (ProfileImpl)profile;
-    // IProfile delegate = profileImpl.getDelegate();
-    // long timestamp = delegate.getTimestamp();
-    //
-    // IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
-    // adjustProfileChangeRequest(profileChangeRequest, metadata, monitor);
-    //
-    // IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, monitor);
-    // P2CorePlugin.INSTANCE.coreException(provisioningPlan.getStatus());
-    //
-    // if (profileDefinition.isIncludeSourceBundles())
-    // {
-    // IInstallableUnit sourceContainerIU = generateSourceContainerIU(provisioningPlan, metadata, monitor);
-    // provisioningPlan.addInstallableUnit(sourceContainerIU);
-    // provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
-    // }
-    //
-    // commitContext.handleProvisioningPlan(provisioningPlan);
-    // IPhaseSet phaseSet = commitContext.getPhaseSet(this);
-    //
-    // final Confirmer unsignedContentConfirmer = commitContext.getUnsignedContentConfirmer();
-    // if (unsignedContentConfirmer != null)
-    // {
-    // final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
-    // final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
-    // final UIServices newUIServices = new UIServices()
-    // {
-    // @Override
-    // public AuthenticationInfo getUsernamePassword(String location)
-    // {
-    // if (oldUIServices != null)
-    // {
-    // return oldUIServices.getUsernamePassword(location);
-    // }
-    //
-    // return null;
-    // }
-    //
-    // @Override
-    // public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
-    // {
-    // if (oldUIServices != null)
-    // {
-    // return oldUIServices.getUsernamePassword(location, previousInfo);
-    // }
-    //
-    // return null;
-    // }
-    //
-    // @Override
-    // public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
-    // {
-    // if (unsignedDetail != null && unsignedDetail.length != 0)
-    // {
-    // Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
-    // if (!confirmation.isConfirmed())
-    // {
-    // return new TrustInfo(new Certificate[0], false, false);
-    // }
-    //
-    // // We've checked trust already; prevent oldUIServices to check it again.
-    // unsignedDetail = null;
-    // }
-    //
-    // if (oldUIServices != null)
-    // {
-    // return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
-    // }
-    //
-    // // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
-    // final Certificate[] trusted;
-    // if (untrustedChains == null)
-    // {
-    // trusted = null;
-    // }
-    // else
-    // {
-    // trusted = new Certificate[untrustedChains.length];
-    // for (int i = 0; i < untrustedChains.length; i++)
-    // {
-    // trusted[i] = untrustedChains[i][0];
-    // }
-    // }
-    //
-    // return new TrustInfo(trusted, false, true);
-    // }
-    // };
-    //
-    // provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
-    //
-    // cleanup.add(new Runnable()
-    // {
-    // public void run()
-    // {
-    // provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
-    // if (oldUIServices != null)
-    // {
-    // provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
-    // }
-    // }
-    // });
-    // }
-    //
-    // IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
-    // P2CorePlugin.INSTANCE.coreException(status);
-    //
-    // profileImpl.setDefinition(profileDefinition);
-    // profileImpl.setDelegate(delegate); // TODO Seems redundant
-    //
-    // return delegate.getTimestamp() != timestamp;
-    // }
-    // finally
-    // {
-    // cleanup(cleanup);
-    // }
+    return false;
   }
 
   public Resolution resolve(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
@@ -511,50 +339,14 @@ public class ProfileTransactionImpl implements ProfileTransaction
       monitor = new NullProgressMonitor();
     }
 
-    final List<Runnable> cleanup = new ArrayList<Runnable>();
-
     final Agent agent = profile.getAgent();
-    final boolean wasOffline = agent.isOffline();
-    agent.setOffline(offline);
-    cleanup.add(new Runnable()
-    {
-      public void run()
-      {
-        agent.setOffline(wasOffline);
-      }
-    });
-
-    final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
-    if (mirrors != wasMirrors)
-    {
-      try
-      {
-        final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED");
-        ReflectUtil.setValue(mirrorsEnabledField, null, mirrors, true);
-
-        cleanup.add(new Runnable()
-        {
-          public void run()
-          {
-            try
-            {
-              ReflectUtil.setValue(mirrorsEnabledField, null, wasMirrors, true);
-            }
-            catch (Throwable ex)
-            {
-              // Ignore
-            }
-          }
-        });
-      }
-      catch (Throwable ex)
-      {
-        // Ignore
-      }
-    }
+    final List<Runnable> cleanup = new ArrayList<Runnable>();
 
     try
     {
+      initOffline(agent, cleanup);
+      initMirrors(cleanup);
+
       List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
       Set<URI> artifactURIs = new HashSet<URI>();
       URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, monitor);
@@ -583,7 +375,15 @@ public class ProfileTransactionImpl implements ProfileTransaction
         provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
       }
 
-      context.handleProvisioningPlan(provisioningPlan, metadataRepositories);
+      if (!context.handleProvisioningPlan(provisioningPlan, metadataRepositories))
+      {
+        return null;
+      }
+
+      if (getOperandCount(provisioningPlan) == 0)
+      {
+        return null;
+      }
 
       return new Resolution()
       {
@@ -598,88 +398,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
           {
             IPhaseSet phaseSet = context.getPhaseSet(ProfileTransactionImpl.this);
 
-            final Confirmer unsignedContentConfirmer = context.getUnsignedContentConfirmer();
-            if (unsignedContentConfirmer != null)
-            {
-              final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
-              final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
-              final UIServices newUIServices = new UIServices()
-              {
-                @Override
-                public AuthenticationInfo getUsernamePassword(String location)
-                {
-                  if (oldUIServices != null)
-                  {
-                    return oldUIServices.getUsernamePassword(location);
-                  }
-
-                  return null;
-                }
-
-                @Override
-                public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
-                {
-                  if (oldUIServices != null)
-                  {
-                    return oldUIServices.getUsernamePassword(location, previousInfo);
-                  }
-
-                  return null;
-                }
-
-                @Override
-                public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
-                {
-                  if (unsignedDetail != null && unsignedDetail.length != 0)
-                  {
-                    Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
-                    if (!confirmation.isConfirmed())
-                    {
-                      return new TrustInfo(new Certificate[0], false, false);
-                    }
-
-                    // We've checked trust already; prevent oldUIServices to check it again.
-                    unsignedDetail = null;
-                  }
-
-                  if (oldUIServices != null)
-                  {
-                    return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
-                  }
-
-                  // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
-                  final Certificate[] trusted;
-                  if (untrustedChains == null)
-                  {
-                    trusted = null;
-                  }
-                  else
-                  {
-                    trusted = new Certificate[untrustedChains.length];
-                    for (int i = 0; i < untrustedChains.length; i++)
-                    {
-                      trusted[i] = untrustedChains[i][0];
-                    }
-                  }
-
-                  return new TrustInfo(trusted, false, true);
-                }
-              };
-
-              provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
-
-              cleanup.add(new Runnable()
-              {
-                public void run()
-                {
-                  provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
-                  if (oldUIServices != null)
-                  {
-                    provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
-                  }
-                }
-              });
-            }
+            initUnsignedContentConfirmer(context, agent, cleanup);
 
             IEngine engine = agent.getEngine();
             IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
@@ -710,21 +429,138 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
   }
 
-  private void cleanup(List<Runnable> cleanup)
+  private void initOffline(final Agent agent, final List<Runnable> cleanup)
   {
-    for (Runnable runnable : cleanup)
+    final boolean wasOffline = agent.isOffline();
+    if (offline != wasOffline)
+    {
+      agent.setOffline(offline);
+      cleanup.add(new Runnable()
+      {
+        public void run()
+        {
+          agent.setOffline(wasOffline);
+        }
+      });
+    }
+  }
+
+  private void initMirrors(final List<Runnable> cleanup)
+  {
+    final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
+    if (mirrors != wasMirrors)
     {
       try
       {
-        runnable.run();
+        final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED");
+        ReflectUtil.setValue(mirrorsEnabledField, null, mirrors, true);
+
+        cleanup.add(new Runnable()
+        {
+          public void run()
+          {
+            try
+            {
+              ReflectUtil.setValue(mirrorsEnabledField, null, wasMirrors, true);
+            }
+            catch (Throwable ex)
+            {
+              // Ignore
+            }
+          }
+        });
       }
-      catch (Throwable t)
+      catch (Throwable ex)
       {
-        P2CorePlugin.INSTANCE.log(t);
+        // Ignore
       }
     }
+  }
 
-    cleanup.clear();
+  private void initUnsignedContentConfirmer(final CommitContext context, final Agent agent, final List<Runnable> cleanup)
+  {
+    final Confirmer unsignedContentConfirmer = context.getUnsignedContentConfirmer();
+    if (unsignedContentConfirmer != null)
+    {
+      final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
+      final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
+      final UIServices newUIServices = new UIServices()
+      {
+        @Override
+        public AuthenticationInfo getUsernamePassword(String location)
+        {
+          if (oldUIServices != null)
+          {
+            return oldUIServices.getUsernamePassword(location);
+          }
+
+          return null;
+        }
+
+        @Override
+        public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
+        {
+          if (oldUIServices != null)
+          {
+            return oldUIServices.getUsernamePassword(location, previousInfo);
+          }
+
+          return null;
+        }
+
+        @Override
+        public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
+        {
+          if (unsignedDetail != null && unsignedDetail.length != 0)
+          {
+            Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
+            if (!confirmation.isConfirmed())
+            {
+              return new TrustInfo(new Certificate[0], false, false);
+            }
+
+            // We've checked trust already; prevent oldUIServices to check it again.
+            unsignedDetail = null;
+          }
+
+          if (oldUIServices != null)
+          {
+            return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
+          }
+
+          // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
+          final Certificate[] trusted;
+          if (untrustedChains == null)
+          {
+            trusted = null;
+          }
+          else
+          {
+            trusted = new Certificate[untrustedChains.length];
+            for (int i = 0; i < untrustedChains.length; i++)
+            {
+              trusted[i] = untrustedChains[i][0];
+            }
+          }
+
+          return new TrustInfo(trusted, false, true);
+        }
+      };
+
+      provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
+
+      cleanup.add(new Runnable()
+      {
+        public void run()
+        {
+          provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
+          if (oldUIServices != null)
+          {
+            provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
+          }
+        }
+      });
+    }
   }
 
   private URI[] collectRepositories(List<IMetadataRepository> metadataRepositories, Set<URI> artifactURIs, List<Runnable> cleanup, IProgressMonitor monitor)
@@ -892,6 +728,31 @@ public class ProfileTransactionImpl implements ProfileTransaction
     });
   }
 
+  public static int getOperandCount(IProvisioningPlan provisioningPlan)
+  {
+    // This is a workaround for http://bugs.eclipse.org/438714
+    Method method = ReflectUtil.getMethod(ProvisioningPlan.class, "getOperands");
+    Operand[] operands = (Operand[])ReflectUtil.invokeMethod(method, provisioningPlan);
+    return operands == null ? 0 : operands.length;
+  }
+
+  private static void cleanup(List<Runnable> cleanup)
+  {
+    for (Runnable runnable : cleanup)
+    {
+      try
+      {
+        runnable.run();
+      }
+      catch (Throwable t)
+      {
+        P2CorePlugin.INSTANCE.log(t);
+      }
+    }
+
+    cleanup.clear();
+  }
+
   private static boolean isSingleton(IInstallableUnit iu)
   {
     if (iu.isSingleton())
@@ -907,7 +768,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return false;
   }
 
-  private IInstallableUnit generateSourceContainerIU(IProvisioningPlan provisioningPlan, IQueryable<IInstallableUnit> metadata, IProgressMonitor monitor)
+  private static IInstallableUnit generateSourceContainerIU(IProvisioningPlan provisioningPlan, IQueryable<IInstallableUnit> metadata, IProgressMonitor monitor)
   {
     // Create and return an IU that has optional and greedy requirements on all source bundles
     // related to bundle IUs in the profile
@@ -936,7 +797,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       }
     }
 
-    Version sourceContainerIUVersion = getSourceContainerIUVersion(monitor);
+    Version sourceContainerIUVersion = getSourceContainerIUVersion(provisioningPlan.getProfile(), monitor);
     IProvidedCapability capability = MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, SOURCE_IU_ID, sourceContainerIUVersion);
 
     InstallableUnitDescription sourceIUDescription = new MetadataFactory.InstallableUnitDescription();
@@ -949,7 +810,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return MetadataFactory.createInstallableUnit(sourceIUDescription);
   }
 
-  private Version getSourceContainerIUVersion(IProgressMonitor monitor)
+  private static Version getSourceContainerIUVersion(IProfile profile, IProgressMonitor monitor)
   {
     IQuery<IInstallableUnit> query = QueryUtil.createIUQuery(SOURCE_IU_ID);
     IQueryResult<IInstallableUnit> result = profile.query(query, monitor);

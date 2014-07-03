@@ -743,10 +743,11 @@ public class TargletContainer extends AbstractBundleContainer
         }
 
         @Override
-        public void handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
+        public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
         {
           provisioningPlanRef.set(provisioningPlan);
           metadataRepositoriesRef.set(metadataRepositories);
+          return true;
         }
 
         @Override
