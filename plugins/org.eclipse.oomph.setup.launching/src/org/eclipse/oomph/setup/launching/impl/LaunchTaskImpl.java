@@ -21,7 +21,10 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.debug.core.model.IStreamMonitor;
+import org.eclipse.debug.core.model.IStreamsProxy;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,7 +41,7 @@ import org.eclipse.debug.core.model.IProcess;
  */
 public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 {
-  private static final PropertyFile HISTORY = new PropertyFile(LaunchingPlugin.INSTANCE.getStateLocation().append("launch-histor.properties").toFile());
+  private static final PropertyFile HISTORY = new PropertyFile(LaunchingPlugin.INSTANCE.getStateLocation().append("launch-history.properties").toFile());
 
   /**
    * The default value of the '{@link #getLauncher() <em>Launcher</em>}' attribute.
@@ -209,7 +212,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     return true;
   }
 
-  public void perform(SetupTaskContext context) throws Exception
+  public void perform(final SetupTaskContext context) throws Exception
   {
     String launcher = getLauncher();
     ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
@@ -220,6 +223,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
       if (name.equals(launcher))
       {
         targetLaunchConfiguration = launchConfiguration;
+        break;
       }
     }
 
@@ -242,8 +246,25 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     }
 
     ILaunch launch = targetLaunchConfiguration.launch(ILaunchManager.RUN_MODE, null);
-    if (launch.hasChildren())
+    IProcess[] processes = launch.getProcesses();
+    if (processes.length > 0)
     {
+      for (IProcess process : processes)
+      {
+        IStreamsProxy streamsProxy = process.getStreamsProxy();
+        IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
+        IStreamListener listener = new IStreamListener()
+        {
+          public void streamAppended(String text, IStreamMonitor monitor)
+          {
+            context.log(text);
+          }
+        };
+        outputStreamMonitor.addListener(listener);
+        IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
+        errorStreamMonitor.addListener(listener);
+      }
+
       for (;;)
       {
         Thread.sleep(1000);
@@ -255,9 +276,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 
         if (launch.isTerminated())
         {
-          IProcess[] processes = launch.getProcesses();
           HISTORY.setProperty(launcher, processes.length > 0 ? Integer.toString(processes[0].getExitValue()) : "-1");
-
           return;
         }
       }
