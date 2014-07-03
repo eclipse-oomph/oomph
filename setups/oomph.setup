@@ -55,8 +55,6 @@
     <repository
         url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
     <repository
-        url="http://download.eclipse.org/modeling/emft/ecoretools/updates/1.2/201306071421"/>
-    <repository
         url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
     <repository
         url="${oomph.update.url}"/>
@@ -234,8 +232,6 @@
               url="http://download.eclipse.org/egit/updates"/>
           <repository
               url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-          <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
           <repository
