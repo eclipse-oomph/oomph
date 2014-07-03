@@ -4,5 +4,5 @@
 # This file does not need to be translated.
 
 0=${build.id}
+1=${git.branch}
 1=${git.commit}
-2=${git.branch}
