@@ -22,4 +22,17 @@
   <artifactId>org.eclipse.oomph.setup.mylyn</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>.</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>about.mappings</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+
 </project>

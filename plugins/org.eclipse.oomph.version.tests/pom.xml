@@ -22,4 +22,17 @@
   <artifactId>org.eclipse.oomph.version.tests</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-test-plugin</packaging>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>.</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>about.mappings</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+
 </project>
