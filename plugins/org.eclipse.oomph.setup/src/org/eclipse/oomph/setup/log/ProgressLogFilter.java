@@ -15,12 +15,11 @@ public class ProgressLogFilter
   private static final String[] IGNORED_PREFIXES = { "Scanning Git", "Re-indexing", "Calculating Decorations", "Decorating", "http://",
       "The user operation is waiting", "Git repository changed", "Refreshing ", "Opening ", "Connecting project ", "Connected project ",
       "Searching for associated repositories.", "Preparing type ", "Loading project description", "Generating cspec from PDE artifacts",
-      "Reporting encoding changes", "Saving", "Downloading software", "Java indexing...", "Computing Git status for ", "Configuring Plug-in Dependencies",
-      "Configuring JRE System Library", "Invoking builder on ", "Invoking '", "Verifying ", "Updating ...", "Reading saved build state for project ",
-      "Reading resource change information for ", "Cleaning output folder for ", "Copying resources to the output folder", " adding component ",
-      "Preparing to build", "Compiling ", "Analyzing ", "Comparing ", "Checking ", "Build done", "Processing API deltas...", "Create.", "Reading plug-ins",
-      "Processing", "Querying repository", "Synchronizing query: ", "Receiving related tasks", "Receiving task ", "Updating repository state",
-      "Processing Local" };
+      "Reporting encoding changes", "Saving", "Downloading software", "Java indexing...", "Computing Git status for ", "Configuring ", "Invoking builder on ",
+      "Invoking '", "Verifying ", "Updating ...", "Reading saved build state for project ", "Reading resource change information for ",
+      "Cleaning output folder for ", "Copying resources to the output folder", " adding component ", "Preparing to build", "Compiling ", "Analyzing ",
+      "Comparing ", "Checking ", "Build done", "Processing API deltas...", "Create.", "Reading plug-ins", "Processing", "Querying repository",
+      "Synchronizing query: ", "Receiving related tasks", "Receiving task ", "Updating repository state", "Processing Local" };
 
   private String lastLine;
 

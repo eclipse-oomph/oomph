@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.Agent;
@@ -94,6 +95,11 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
     addPageChangedListener(this);
   }
 
+  public Installer getInstaller()
+  {
+    return (Installer)getWizard();
+  }
+
   public void pageChanged(PageChangedEvent event)
   {
     if (event.getSelectedPage() instanceof ConfirmationPage)
@@ -102,6 +108,9 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
       updateResolution = null;
       updateError = null;
       setUpdateIcon(0);
+
+      SetupTaskPerformer performer = getInstaller().getPerformer();
+      performer.getBundles().add(SetupInstallerPlugin.INSTANCE.getBundle());
     }
   }
 
@@ -445,7 +454,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
 
         CommitContext commitContext = new CommitContext()
         {
-          private User user = ((Installer)getWizard()).getUser();
+          private User user = getInstaller().getUser();
 
           @Override
           @SuppressWarnings("restriction")

@@ -103,11 +103,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,12 +122,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -154,6 +162,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private Map<EObject, EObject> copyMap;
 
   private EList<SetupTask> neededSetupTasks;
+
+  private Set<Bundle> bundles = new HashSet<Bundle>();
 
   private List<String> logMessageBuffer;
 
@@ -205,6 +215,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     if (firstPhase)
     {
       triggeredSetupTasks = new BasicEList<SetupTask>(getSetupTasks(stream, null));
+      bundles.add(SetupCorePlugin.INSTANCE.getBundle());
 
       // 1. Collect and flatten all tasks
       Set<EClass> eClasses = new LinkedHashSet<EClass>();
@@ -212,6 +223,19 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       Set<String> keys = new LinkedHashSet<String>();
       for (SetupTask setupTask : triggeredSetupTasks)
       {
+        try
+        {
+          Bundle bundle = FrameworkUtil.getBundle(setupTask.getClass());
+          if (bundle != null)
+          {
+            bundles.add(bundle);
+          }
+        }
+        catch (Throwable ex)
+        {
+          //$FALL-THROUGH$
+        }
+
         EClass eClass = setupTask.eClass();
         CollectionUtil.add(instances, eClass, setupTask);
         eClasses.add(eClass);
@@ -1054,6 +1078,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     EPackage ePackage = eClass.getEPackage();
     URI uri = URI.createURI(ePackage.getNsURI()).appendFragment("//" + eClass.getName() + "/" + eAttribute.getName());
     return uri;
+  }
+
+  public Set<Bundle> getBundles()
+  {
+    return bundles;
   }
 
   public EList<SetupTask> getTriggeredSetupTasks()
@@ -2278,6 +2307,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         autoBuilding = disableAutoBuilding();
       }
 
+      logBundleInfos();
+
       for (SetupTask neededTask : neededSetupTasks)
       {
         checkCancelation();
@@ -2327,6 +2358,70 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         SetupCorePlugin.INSTANCE.log(ex);
       }
+    }
+  }
+
+  private void logBundleInfos()
+  {
+    List<String> bundleInfos = new ArrayList<String>();
+    for (Bundle bundle : bundles)
+    {
+      StringBuilder builder = new StringBuilder("Bundle ");
+      builder.append(bundle.getSymbolicName());
+      builder.append(" ");
+      builder.append(bundle.getVersion());
+
+      InputStream source = null;
+
+      try
+      {
+        URL url = bundle.getResource("about.mappings");
+        if (url != null)
+        {
+          source = url.openStream();
+
+          Properties properties = new Properties();
+          properties.load(source);
+
+          String buildID = (String)properties.get("0");
+          if (buildID != null && !buildID.startsWith("$"))
+          {
+            builder.append(", build=");
+            builder.append(buildID);
+          }
+
+          String gitBranch = (String)properties.get("1");
+          if (gitBranch != null && !gitBranch.startsWith("$"))
+          {
+            builder.append(", branch=");
+            builder.append(gitBranch);
+          }
+
+          String gitCommit = (String)properties.get("2");
+          if (gitCommit != null && !gitCommit.startsWith("$"))
+          {
+            builder.append(", commit=");
+            builder.append(gitCommit);
+          }
+        }
+      }
+      catch (IOException ex)
+      {
+        ex.printStackTrace();
+        //$FALL-THROUGH$
+      }
+      finally
+      {
+        IOUtil.closeSilent(source);
+      }
+
+      bundleInfos.add(builder.toString());
+    }
+
+    Collections.sort(bundleInfos);
+    for (String bundleInfo : bundleInfos)
+    {
+      log(bundleInfo);
     }
   }
 
@@ -2812,12 +2907,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // The per-stream performers from above have triggered task lists that must be composed into a single setup for multiple streams.
 
     EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
+    Set<Bundle> bundles = new HashSet<Bundle>();
     for (SetupTaskPerformer performer : performers)
     {
       setupTasks.addAll(performer.getTriggeredSetupTasks());
+      bundles.addAll(performer.getBundles());
     }
 
     SetupTaskPerformer composedPerformer = new SetupTaskPerformer(uriConverter, prompter, trigger, setupContext, setupTasks);
+    composedPerformer.getBundles().addAll(bundles);
     composedPerformer.getAppliedRuleVariables().addAll(allAppliedRuleVariables);
     composedPerformer.getUnresolvedVariables().addAll(allUnresolvedVariables);
     composedPerformer.getRuleAttributes().putAll(allRuleAttributes);
