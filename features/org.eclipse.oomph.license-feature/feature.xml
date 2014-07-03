@@ -9,13 +9,11 @@
   Contributors:
     Eike Stepper - initial API and implementation
 -->
-
 <feature
       id="org.eclipse.oomph.license"
       label="Oomph License"
       version="1.0.0.qualifier"
-      provider-name="Eclipse Oomph Project"
-      image="eclipse_update_120.jpg">
+      provider-name="Eclipse Oomph Project">
 
    <description>
       Contains the shared license for all Oomph features.

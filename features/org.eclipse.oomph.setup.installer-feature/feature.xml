@@ -13,8 +13,7 @@
       id="org.eclipse.oomph.setup.installer"
       label="%featureName"
       version="1.0.0.qualifier"
-      provider-name="%providerName"
-      image="eclipse_update_120.jpg">
+      provider-name="%providerName">
 
    <description>
       %description
