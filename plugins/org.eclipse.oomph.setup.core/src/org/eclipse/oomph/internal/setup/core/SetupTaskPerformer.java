@@ -414,7 +414,25 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             for (int j = i; --j >= 0;)
             {
               SetupTask otherSetupTask = triggeredSetupTasks.get(j);
-              if (EcoreUtil.equals(setupTask, otherSetupTask))
+
+              // We must ignore specific references that are bound to be different, but don't affect what the task actually does.
+              EcoreUtil.EqualityHelper equalityHelper = new EcoreUtil.EqualityHelper()
+              {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected boolean haveEqualReference(EObject eObject1, EObject eObject2, EReference reference)
+                {
+                  if (reference == SetupPackage.Literals.SETUP_TASK__PREDECESSORS || reference == SetupPackage.Literals.SETUP_TASK__SUCCESSORS
+                      || reference == SetupPackage.Literals.SETUP_TASK__RESTRICTIONS)
+                  {
+                    return true;
+                  }
+
+                  return super.haveEqualReference(eObject1, eObject2, reference);
+                }
+              };
+              if (equalityHelper.equals(setupTask, otherSetupTask))
               {
                 directSubstitutions.put(otherSetupTask, setupTask);
                 overrides.put(setupTask, otherSetupTask);
@@ -435,24 +453,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           else
           {
             remainingSetupTasks.add(setupTask);
-
-            for (ListIterator<SetupTask> it2 = setupTask.getPredecessors().listIterator(); it2.hasNext();)
-            {
-              SetupTask predecessor = it2.next();
-              if (directSubstitutions.containsKey(predecessor))
-              {
-                it2.set(overrides.get(predecessor));
-              }
-            }
-
-            for (ListIterator<SetupTask> it2 = setupTask.getSuccessors().listIterator(); it2.hasNext();)
-            {
-              SetupTask successor = it2.next();
-              if (directSubstitutions.containsKey(successor))
-              {
-                it2.set(overrides.get(successor));
-              }
-            }
           }
         }
 
@@ -2709,6 +2709,24 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         return dependencies.get(setupTask);
       }
     });
+
+    // Set up the predecessor dependencies so these tasks will not be reordered relative to each other when they are merged with tasks from other streams.
+    SetupTask previousSetupTask = null;
+    for (SetupTask setupTask : setupTasks)
+    {
+      setupTask.getSuccessors().clear();
+      EList<SetupTask> predecessors = setupTask.getPredecessors();
+      predecessors.clear();
+      if (previousSetupTask != null)
+      {
+        predecessors.add(previousSetupTask);
+      }
+
+      if (!(setupTask instanceof VariableTask))
+      {
+        previousSetupTask = setupTask;
+      }
+    }
   }
 
   private String getLabel(SetupTask setupTask)

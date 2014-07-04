@@ -540,6 +540,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   @Override
   public void overrideFor(SetupTask overriddenSetupTask)
   {
+    super.overrideFor(overriddenSetupTask);
     // Just ignore the overrides for the same location as long as the checkout branch is identical
     GitCloneTask gitCloneTask = (GitCloneTask)overriddenSetupTask;
     if (!ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
