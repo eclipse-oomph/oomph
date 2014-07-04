@@ -590,8 +590,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     for (Repository repository : getRepositories())
     {
       String url = context.redirect(repository.getURL());
-      repository.setURL(url);
-
       addUnknownRepository(metadataRepositoryManager, knownMetadataRepositories, url);
       addUnknownRepository(artifactRepositoryManager, knownArtifactRepositories, url);
     }
@@ -641,7 +639,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     for (Repository repository : repositories)
     {
-      context.log("Repository " + repository.getURL());
+      String url = context.redirect(repository.getURL());
+      repository.setURL(url);
+      context.log("Repository " + url);
     }
 
     String profileID = StringUtil.encodePath(eclipseDir.toString());
