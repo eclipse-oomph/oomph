@@ -512,14 +512,18 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       @Override
       protected void gatherAllMetaData(EObject eObject)
       {
-        ResourceSet resourceSet = eObject.eResource().getResourceSet();
-        for (Resource resource : resourceSet.getResources())
+        Resource mainResource = eObject.eResource();
+        if (mainResource != null)
         {
-          for (EObject root : resource.getContents())
+          ResourceSet resourceSet = mainResource.getResourceSet();
+          for (Resource resource : resourceSet == null ? Collections.singleton(mainResource) : resourceSet.getResources())
           {
-            if (root instanceof EPackage)
+            for (EObject root : resource.getContents())
             {
-              gatherMetaData((EPackage)root);
+              if (root instanceof EPackage)
+              {
+                gatherMetaData((EPackage)root);
+              }
             }
           }
         }
