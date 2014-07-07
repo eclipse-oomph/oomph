@@ -632,6 +632,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     context.log("Resolving " + requirements.size() + (requirements.size() == 1 ? " requirement" : " requirements") + " from " + repositories.size()
         + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
 
+    boolean offline = context.isOffline();
+    context.log("Offline = " + offline);
+
+    boolean mirrors = context.isMirrors();
+    context.log("Mirrors = " + mirrors);
+
     for (Requirement requirement : requirements)
     {
       context.log("Requirement " + requirement);
@@ -674,8 +680,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
     };
 
-    transaction.setOffline(context.isOffline());
-    transaction.setMirrors(context.isMirrors());
+    transaction.setOffline(offline);
+    transaction.setMirrors(mirrors);
 
     boolean profileChanged = transaction.commit(commitContext, monitor);
     if (profileChanged && context.getTrigger() != Trigger.BOOTSTRAP)
