@@ -81,33 +81,18 @@ public class CachingTransport extends Transport
     OutputStream oldTarget = target;
     target = new ByteArrayOutputStream();
 
-    IStatus status = null;
-    byte[] content = null;
+    IStatus status = delegate.download(uri, target, startPos, monitor);
+    if (status.isOK())
+    {
+      byte[] content = ((ByteArrayOutputStream)target).toByteArray();
+      IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
 
-    try
-    {
-      status = delegate.download(uri, target, startPos, monitor);
-      if (status.isOK())
-      {
-        content = ((ByteArrayOutputStream)target).toByteArray();
-        IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
-      }
-    }
-    finally
-    {
       File cacheFile = getCacheFile(uri);
-      if (content == null)
-      {
-        IOUtil.deleteBestEffort(cacheFile, false); // The file could be created later; don't delete it on exit!
-      }
-      else
-      {
-        IOUtil.writeFile(cacheFile, content);
+      IOUtil.writeFile(cacheFile, content);
 
-        DownloadStatus downloadStatus = (DownloadStatus)status;
-        long lastModified = downloadStatus.getLastModified();
-        cacheFile.setLastModified(lastModified);
-      }
+      DownloadStatus downloadStatus = (DownloadStatus)status;
+      long lastModified = downloadStatus.getLastModified();
+      cacheFile.setLastModified(lastModified);
     }
 
     return status;
@@ -148,7 +133,9 @@ public class CachingTransport extends Transport
       {
         // When being physically disconnected it's likely that DNS problems pop up in the form of CoreExceptions.
         // Since we are in offline mode just pretend the file is not found.
-        throw new FileNotFoundException(ex.getMessage());
+        FileNotFoundException exception = new FileNotFoundException(ex.getMessage());
+        exception.initCause(ex);
+        throw exception;
       }
     }
 
