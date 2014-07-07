@@ -135,6 +135,21 @@ public class CachingTransport extends Transport
       {
         return cacheFile.lastModified();
       }
+
+      try
+      {
+        return delegate.getLastModified(uri, monitor);
+      }
+      catch (FileNotFoundException ex)
+      {
+        throw ex;
+      }
+      catch (Exception ex)
+      {
+        // When being physically disconnected it's likely that DNS problems pop up in the form of CoreExceptions.
+        // Since we are in offline mode just pretend the file is not found.
+        throw new FileNotFoundException(ex.getMessage());
+      }
     }
 
     return delegate.getLastModified(uri, monitor);
