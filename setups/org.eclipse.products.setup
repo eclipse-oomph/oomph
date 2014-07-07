@@ -12,12 +12,10 @@
       id="installation"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
-    <requirements
+    <requirement
         id="org.eclipse.oomph.setup.feature.group"/>
-    <repositories
+    <repository
         url="${oomph.update.url}"/>
-    <repositories
-        url="http://download.eclipse.org/modeling/emf/emf/updates/2.10milestones/core/S201404280403"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -28,15 +26,16 @@
       label="Eclipse DSL Tools">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.dsl"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.dsl"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -44,11 +43,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.dsl"/>
-        <repositories
+        <requirement
+            id="epp.package.dsl"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -57,11 +57,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.dsl"/>
-        <repositories
+        <requirement
+            id="epp.package.dsl"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -70,11 +71,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.dsl"/>
-        <repositories
+        <requirement
+            id="epp.package.dsl"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -83,11 +85,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.dsl"/>
-        <repositories
+        <requirement
+            id="epp.package.dsl"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -96,15 +99,16 @@
       label="Eclipse IDE for Automotive Software Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.automotive"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.automotive"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -112,11 +116,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.automotive"/>
-        <repositories
+        <requirement
+            id="epp.package.automotive"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -125,11 +130,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.automotive"/>
-        <repositories
+        <requirement
+            id="epp.package.automotive"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -138,11 +144,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.automotive"/>
-        <repositories
+        <requirement
+            id="epp.package.automotive"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -151,11 +158,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.automotive"/>
-        <repositories
+        <requirement
+            id="epp.package.automotive"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -164,15 +172,16 @@
       label="Eclipse IDE for C/C++ Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.cpp"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.cpp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -180,11 +189,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.cpp"/>
-        <repositories
+        <requirement
+            id="epp.package.cpp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -193,11 +203,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.cpp"/>
-        <repositories
+        <requirement
+            id="epp.package.cpp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -206,11 +217,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.cpp"/>
-        <repositories
+        <requirement
+            id="epp.package.cpp"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -219,11 +231,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.cpp"/>
-        <repositories
+        <requirement
+            id="epp.package.cpp"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -232,11 +245,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.cpp"/>
-        <repositories
+        <requirement
+            id="epp.package.cpp"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -245,11 +259,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.cpp"/>
-        <repositories
+        <requirement
+            id="epp.package.cpp"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -258,15 +273,16 @@
       label="Eclipse IDE for Java Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.java"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.java"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -274,11 +290,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.java"/>
-        <repositories
+        <requirement
+            id="epp.package.java"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -287,11 +304,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.java"/>
-        <repositories
+        <requirement
+            id="epp.package.java"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -300,11 +318,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.java"/>
-        <repositories
+        <requirement
+            id="epp.package.java"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -313,11 +332,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.java"/>
-        <repositories
+        <requirement
+            id="epp.package.java"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -326,11 +346,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.java"/>
-        <repositories
+        <requirement
+            id="epp.package.java"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -339,11 +360,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.java"/>
-        <repositories
+        <requirement
+            id="epp.package.java"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -352,15 +374,16 @@
       label="Eclipse IDE for Java EE Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.jee"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.jee"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -368,11 +391,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.jee"/>
-        <repositories
+        <requirement
+            id="epp.package.jee"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -381,11 +405,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.jee"/>
-        <repositories
+        <requirement
+            id="epp.package.jee"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -394,11 +419,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.jee"/>
-        <repositories
+        <requirement
+            id="epp.package.jee"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -407,11 +433,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.jee"/>
-        <repositories
+        <requirement
+            id="epp.package.jee"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -420,11 +447,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.jee"/>
-        <repositories
+        <requirement
+            id="epp.package.jee"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -433,11 +461,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.jee"/>
-        <repositories
+        <requirement
+            id="epp.package.jee"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -446,15 +475,16 @@
       label="Eclipse IDE for Java and Report Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.reporting"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.reporting"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -462,11 +492,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.reporting"/>
-        <repositories
+        <requirement
+            id="epp.package.reporting"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -475,11 +506,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.reporting"/>
-        <repositories
+        <requirement
+            id="epp.package.reporting"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -488,11 +520,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.reporting"/>
-        <repositories
+        <requirement
+            id="epp.package.reporting"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -501,11 +534,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.reporting"/>
-        <repositories
+        <requirement
+            id="epp.package.reporting"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -514,11 +548,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.reporting"/>
-        <repositories
+        <requirement
+            id="epp.package.reporting"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -527,11 +562,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.reporting"/>
-        <repositories
+        <requirement
+            id="epp.package.reporting"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -540,15 +576,16 @@
       label="Eclipse IDE for PHP Developers">
     <version
         name="latest.released"
-        label="Latest Release (Helios)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.php"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
-            url="http://download.eclipse.org/releases/helios"/>
+        <requirement
+            id="epp.package.php"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -556,11 +593,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.php"/>
-        <repositories
+        <requirement
+            id="epp.package.php"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -569,11 +607,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.php"/>
-        <repositories
+        <requirement
+            id="epp.package.php"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -582,11 +621,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.php"/>
-        <repositories
+        <requirement
+            id="epp.package.php"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -595,15 +635,16 @@
       label="Eclipse Modeling Tools">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.modeling"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.modeling"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -611,11 +652,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.modeling"/>
-        <repositories
+        <requirement
+            id="epp.package.modeling"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -624,11 +666,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.modeling"/>
-        <repositories
+        <requirement
+            id="epp.package.modeling"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -637,11 +680,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.modeling"/>
-        <repositories
+        <requirement
+            id="epp.package.modeling"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -650,11 +694,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.modeling"/>
-        <repositories
+        <requirement
+            id="epp.package.modeling"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -663,11 +708,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.modeling"/>
-        <repositories
+        <requirement
+            id="epp.package.modeling"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -676,11 +722,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.modeling"/>
-        <repositories
+        <requirement
+            id="epp.package.modeling"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -689,15 +736,16 @@
       label="Eclipse Standard/SDK">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.standard"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.standard"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -705,11 +753,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.standard"/>
-        <repositories
+        <requirement
+            id="epp.package.standard"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -718,11 +767,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.standard"/>
-        <repositories
+        <requirement
+            id="epp.package.standard"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -731,11 +781,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.standard"/>
-        <repositories
+        <requirement
+            id="epp.package.standard"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -744,15 +795,16 @@
       label="Eclipse for Parallel Application Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.parallel"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.parallel"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -760,11 +812,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.parallel"/>
-        <repositories
+        <requirement
+            id="epp.package.parallel"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -773,11 +826,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.parallel"/>
-        <repositories
+        <requirement
+            id="epp.package.parallel"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -786,11 +840,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.parallel"/>
-        <repositories
+        <requirement
+            id="epp.package.parallel"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -799,11 +854,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.parallel"/>
-        <repositories
+        <requirement
+            id="epp.package.parallel"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -812,11 +868,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.parallel"/>
-        <repositories
+        <requirement
+            id="epp.package.parallel"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -825,15 +882,16 @@
       label="Eclipse for RCP and RAP Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.rcp"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.rcp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -841,11 +899,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.rcp"/>
-        <repositories
+        <requirement
+            id="epp.package.rcp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -854,11 +913,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.rcp"/>
-        <repositories
+        <requirement
+            id="epp.package.rcp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -867,11 +927,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.rcp"/>
-        <repositories
+        <requirement
+            id="epp.package.rcp"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -880,11 +941,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.rcp"/>
-        <repositories
+        <requirement
+            id="epp.package.rcp"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -893,11 +955,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.rcp"/>
-        <repositories
+        <requirement
+            id="epp.package.rcp"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -906,11 +969,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.rcp"/>
-        <repositories
+        <requirement
+            id="epp.package.rcp"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -919,15 +983,16 @@
       label="Eclipse for Scout Developers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.scout"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.scout"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -935,11 +1000,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.scout"/>
-        <repositories
+        <requirement
+            id="epp.package.scout"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -948,11 +1014,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.scout"/>
-        <repositories
+        <requirement
+            id="epp.package.scout"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -961,11 +1028,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.scout"/>
-        <repositories
+        <requirement
+            id="epp.package.scout"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -974,11 +1042,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.scout"/>
-        <repositories
+        <requirement
+            id="epp.package.scout"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -987,11 +1056,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.scout"/>
-        <repositories
+        <requirement
+            id="epp.package.scout"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1000,15 +1070,16 @@
       label="Eclipse for Testers">
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.testing"/>
-        <repositories
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
-            url="http://download.eclipse.org/releases/kepler"/>
+        <requirement
+            id="epp.package.testing"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1016,11 +1087,12 @@
         label="Latest (Luna)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.testing"/>
-        <repositories
+        <requirement
+            id="epp.package.testing"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -1029,11 +1101,12 @@
         label="Luna">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.testing"/>
-        <repositories
+        <requirement
+            id="epp.package.testing"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
@@ -1042,11 +1115,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.testing"/>
-        <repositories
+        <requirement
+            id="epp.package.testing"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -1055,11 +1129,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.testing"/>
-        <repositories
+        <requirement
+            id="epp.package.testing"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -1068,11 +1143,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.testing"/>
-        <repositories
+        <requirement
+            id="epp.package.testing"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1084,11 +1160,12 @@
         label="Latest Release (Kepler)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.mobile"/>
-        <repositories
+        <requirement
+            id="epp.package.mobile"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -1097,11 +1174,12 @@
         label="Latest (Kepler)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.mobile"/>
-        <repositories
+        <requirement
+            id="epp.package.mobile"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -1110,11 +1188,12 @@
         label="Kepler">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.mobile"/>
-        <repositories
+        <requirement
+            id="epp.package.mobile"
+            versionRange="[2.0.0,2.1.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
@@ -1123,11 +1202,12 @@
         label="Juno">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.mobile"/>
-        <repositories
+        <requirement
+            id="epp.package.mobile"
+            versionRange="[1.5.0,1.6.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
@@ -1139,11 +1219,12 @@
         label="Latest Release (Indigo)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.linuxtools"/>
-        <repositories
+        <requirement
+            id="epp.package.linuxtools"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1152,11 +1233,12 @@
         label="Latest (Indigo)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.linuxtools"/>
-        <repositories
+        <requirement
+            id="epp.package.linuxtools"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1165,11 +1247,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.linuxtools"/>
-        <repositories
+        <requirement
+            id="epp.package.linuxtools"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1178,11 +1261,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.linuxtools"/>
-        <repositories
+        <requirement
+            id="epp.package.linuxtools"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1194,11 +1278,12 @@
         label="Latest Release (Indigo)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.javascript"/>
-        <repositories
+        <requirement
+            id="epp.package.javascript"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1207,11 +1292,12 @@
         label="Latest (Indigo)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.javascript"/>
-        <repositories
+        <requirement
+            id="epp.package.javascript"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1220,11 +1306,12 @@
         label="Indigo">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.javascript"/>
-        <repositories
+        <requirement
+            id="epp.package.javascript"
+            versionRange="[1.4.0,1.5.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/indigo"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/indigo"/>
       </setupTask>
     </version>
@@ -1233,11 +1320,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.javascript"/>
-        <repositories
+        <requirement
+            id="epp.package.javascript"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1249,11 +1337,12 @@
         label="Latest Release (Helios)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="org.eclipse.epp.package.transition.feature.feature.group"/>
-        <repositories
+        <requirement
+            id="org.eclipse.epp.package.transition.feature.feature.group"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1262,11 +1351,12 @@
         label="Latest (Helios)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="org.eclipse.epp.package.transition.feature.feature.group"/>
-        <repositories
+        <requirement
+            id="org.eclipse.epp.package.transition.feature.feature.group"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1275,11 +1365,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="org.eclipse.epp.package.transition.feature.feature.group"/>
-        <repositories
+        <requirement
+            id="org.eclipse.epp.package.transition.feature.feature.group"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1291,11 +1382,12 @@
         label="Latest Release (Helios)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.soa"/>
-        <repositories
+        <requirement
+            id="epp.package.soa"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1304,11 +1396,12 @@
         label="Latest (Helios)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.soa"/>
-        <repositories
+        <requirement
+            id="epp.package.soa"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1317,11 +1410,12 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.soa"/>
-        <repositories
+        <requirement
+            id="epp.package.soa"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1333,11 +1427,12 @@
         label="Latest Release (Helios)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.pulsar"/>
-        <repositories
+        <requirement
+            id="epp.package.pulsar"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1346,11 +1441,12 @@
         label="Latest (Helios)">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.pulsar"/>
-        <repositories
+        <requirement
+            id="epp.package.pulsar"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
@@ -1359,14 +1455,14 @@
         label="Helios">
       <setupTask
           xsi:type="setup.p2:P2Task">
-        <requirements
-            id="epp.package.pulsar"/>
-        <repositories
+        <requirement
+            id="epp.package.pulsar"
+            versionRange="[1.3.0,1.4.0)"/>
+        <repository
             url="http://download.eclipse.org/technology/epp/packages/helios"/>
-        <repositories
+        <repository
             url="http://download.eclipse.org/releases/helios"/>
       </setupTask>
     </version>
   </product>
-  <description>All the Eclipse Packaging Products at Eclipse.org</description>
 </setup:ProductCatalog>

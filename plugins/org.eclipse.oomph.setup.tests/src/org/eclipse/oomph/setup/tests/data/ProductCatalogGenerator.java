@@ -15,6 +15,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.setup.EclipseIniTask;
@@ -34,6 +35,7 @@ import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
@@ -75,7 +77,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static boolean isLatestReleased()
   {
-    return false;
+    // TODO Set back to false once the first milestone of Eclipse Mars is available
+    return true;
   }
 
   private static boolean testNewUnreleasedProduct()
@@ -248,8 +251,10 @@ public class ProductCatalogGenerator implements IApplication
         List<TrainAndVersion> list = trainsAndVersions.get(id);
         int size = list.size();
 
-        String latestTrain = list.get(size - 1).getTrain();
+        TrainAndVersion latestTrainAndVersion = list.get(size - 1);
+        String latestTrain = latestTrainAndVersion.getTrain();
         String latestTrainLabel = getTrainLabel(latestTrain);
+        Version latestVersion = latestTrainAndVersion.getVersion();
 
         if (latestTrain != LATEST_TRAIN)
         {
@@ -277,18 +282,24 @@ public class ProductCatalogGenerator implements IApplication
             ++offset;
           }
 
-          String releasedTrain = list.get(size - offset).getTrain();
-          addProductVersion(product, releasedTrain, "latest.released", "Latest Release (" + getTrainLabel(releasedTrain) + ")");
+          TrainAndVersion releasedTrainAndVersion = list.get(size - offset);
+          String releasedTrain = releasedTrainAndVersion.getTrain();
+          String releasedTrainLabel = getTrainLabel(releasedTrain);
+          Version releasedVersion = releasedTrainAndVersion.getVersion();
+
+          addProductVersion(product, releasedVersion, releasedTrain, "latest.released", "Latest Release (" + releasedTrainLabel + ")");
         }
 
-        addProductVersion(product, latestTrain, "latest", "Latest (" + latestTrainLabel + ")");
+        addProductVersion(product, latestVersion, latestTrain, "latest", "Latest (" + latestTrainLabel + ")");
 
         for (int i = 0; i < size; i++)
         {
           TrainAndVersion entry = list.get(size - i - 1);
           String train = entry.getTrain();
           String trainLabel = getTrainLabel(train);
-          addProductVersion(product, train, train, trainLabel);
+          Version version = entry.getVersion();
+
+          addProductVersion(product, version, train, train, trainLabel);
         }
 
         System.out.println();
@@ -307,7 +318,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private static void addProductVersion(Product product, String train, String name, String label)
+  private static void addProductVersion(Product product, Version version, String train, String name, String label)
   {
     System.out.println("  " + label);
 
@@ -316,8 +327,11 @@ public class ProductCatalogGenerator implements IApplication
     productVersion.setLabel(label);
     product.getVersions().add(productVersion);
 
+    VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MINOR);
+
     Requirement requirement = P2Factory.eINSTANCE.createRequirement();
     requirement.setID(product.getName());
+    requirement.setVersionRange(versionRange);
 
     Repository packageRepository = P2Factory.eINSTANCE.createRepository();
     packageRepository.setURL(PACKAGES + "/" + train);
