@@ -555,7 +555,14 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     try
     {
       // Force start egit to make the clone appears in the repositories view and so projects are connected by the egit team provider.
-      CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator");
+      try
+      {
+        CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator");
+      }
+      catch (ClassNotFoundException ex)
+      {
+        // Ignore.
+      }
 
       String checkoutBranch = getCheckoutBranch();
       String remoteName = getRemoteName();

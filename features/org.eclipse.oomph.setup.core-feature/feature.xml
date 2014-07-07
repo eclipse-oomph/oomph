@@ -10,7 +10,7 @@
     Eike Stepper - initial API and implementation
 -->
 <feature
-      id="org.eclipse.oomph.setup"
+      id="org.eclipse.oomph.setup.core"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName"
@@ -34,19 +34,36 @@
       <discovery label="%updateSiteName" url="http://www.eclipse.org/modeling/updates/"/>
    </url>
 
-   <includes
-         id="org.eclipse.oomph.setup.core"
-         version="0.0.0"/>
-
    <plugin
-         id="org.eclipse.oomph.setup.editor"
+         id="org.eclipse.oomph.setup"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.oomph.setup.ui"
+         id="org.eclipse.oomph.setup.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.setup.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.setup.p2"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.setup.p2.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -35,6 +35,7 @@
     <module>features/org.eclipse.oomph.projectconfig-feature</module>
     <module>features/org.eclipse.oomph.projectcopy-feature</module>
     <module>features/org.eclipse.oomph.setup-feature</module>
+    <module>features/org.eclipse.oomph.setup.core-feature</module>
     <module>features/org.eclipse.oomph.setup.git-feature</module>
     <module>features/org.eclipse.oomph.setup.installer-feature</module>
     <module>features/org.eclipse.oomph.setup.jdt-feature</module>
