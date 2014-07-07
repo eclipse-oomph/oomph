@@ -1530,14 +1530,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       expandVariableTaskValue(keys, setupTask);
     }
 
-    for (SetupTask setupTask : setupTasks)
+    for (Iterator<EObject> it = EcoreUtil.getAllContents(setupTasks); it.hasNext();)
     {
-      expand(keys, setupTask);
-      for (Iterator<EObject> it = setupTask.eAllContents(); it.hasNext();)
-      {
-        expand(keys, it.next());
-      }
+      expand(keys, it.next());
     }
+
+    handleFeatureSubstitutions(setupTasks);
 
     if (!unresolvedSettings.isEmpty())
     {
@@ -1863,6 +1861,43 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         if (eStructuralFeature == SetupPackage.Literals.VARIABLE_TASK__VALUE)
         {
           put(((VariableTask)setting.getEObject()).getName(), expandedString);
+        }
+      }
+    }
+
+    handleFeatureSubstitutions(triggeredSetupTasks);
+  }
+
+  private void handleFeatureSubstitutions(Collection<? extends EObject> eObjects)
+  {
+    // Find all the feature substitution annotations.
+    for (Iterator<EObject> it = EcoreUtil.getAllContents(eObjects); it.hasNext();)
+    {
+      InternalEObject eObject = (InternalEObject)it.next();
+      if (eObject instanceof Annotation)
+      {
+        Annotation annotation = (Annotation)eObject;
+        if (AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION.equals(annotation.getSource()))
+        {
+          ModelElement modelElement = annotation.getModelElement();
+          EClass eClass = modelElement.eClass();
+          for (Map.Entry<String, String> detail : annotation.getDetails())
+          {
+            // Look for an attribute with the name of the detail's key.
+            EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature(detail.getKey());
+            if (eStructuralFeature instanceof EAttribute)
+            {
+              try
+              {
+                // Convert the detail's value to a value of that attribute's type and replace it.
+                modelElement.eSet(eStructuralFeature, EcoreUtil.createFromString(((EAttribute)eStructuralFeature).getEAttributeType(), detail.getValue()));
+              }
+              catch (RuntimeException ex)
+              {
+                // Ignore.
+              }
+            }
+          }
         }
       }
     }
