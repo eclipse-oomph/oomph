@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public final class SetupUtil
 {
-  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|]+)(\\|([^}]+))?}|\\$)");
+  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
 
   private SetupUtil()
   {
@@ -31,26 +31,14 @@ public final class SetupUtil
       return null;
     }
 
-    StringBuilder result = new StringBuilder();
-    int previous = 0;
-    for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
+    StringBuffer result = new StringBuffer();
+    Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string);
+    while (matcher.find())
     {
-      result.append(string.substring(previous, matcher.start()));
-      result.append('$');
-      String key = matcher.group();
-      if ("$$".equals(key))
-      {
-        result.append("$$$");
-      }
-      else
-      {
-        result.append(key);
-      }
-
-      previous = matcher.end();
+      matcher.appendReplacement(result, "\\$$0");
     }
 
-    result.append(string.substring(previous));
+    matcher.appendTail(result);
     return result.toString();
   }
 }

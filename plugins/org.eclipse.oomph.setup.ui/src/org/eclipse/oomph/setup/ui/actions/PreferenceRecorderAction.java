@@ -99,7 +99,7 @@ public class PreferenceRecorderAction extends AbstractContainerAction
         PreferenceTask preferenceTask = (PreferenceTask)object;
         if (path.equals(preferenceTask.getKey()))
         {
-          preferenceTask.setValue(value);
+          preferenceTask.setValue(SetupUtil.escape(value));
           expandItem(preferenceTask);
           return;
         }
