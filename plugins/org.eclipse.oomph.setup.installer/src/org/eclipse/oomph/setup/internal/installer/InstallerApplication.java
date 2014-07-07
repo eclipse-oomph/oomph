@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.ErrorDialog;
@@ -42,7 +43,7 @@ public class InstallerApplication implements IApplication
     Window.setDefaultImages(images);
 
     boolean restarted = false;
-    File restarting = new File(SetupInstallerPlugin.INSTANCE.getStateLocation().toString(), "restarting");
+    File restarting = new File(SetupContext.CONFIGURATION_STATE_LOCATION_URI.appendSegment("restarting").toFileString());
 
     try
     {

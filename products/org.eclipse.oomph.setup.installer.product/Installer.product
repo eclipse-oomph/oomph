@@ -13,7 +13,7 @@
 -name
 Oomph Installer
 -data
-configuration
+@none
       </programArgs>
       <vmArgs>-Xms256M
 -Xmx1024M
