@@ -13,11 +13,13 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.StringSubstitutionTask;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -31,7 +33,10 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <!-- begin-user-doc -->
@@ -548,9 +553,39 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
     return createToken(getName());
   }
 
+  @Override
+  public void overrideFor(SetupTask overriddenSetupTask)
+  {
+    super.overrideFor(overriddenSetupTask);
+
+    if (StringUtil.isEmpty(getDescription()))
+    {
+      setDescription(overriddenSetupTask.getDescription());
+    }
+
+    VariableTask variableTask = (VariableTask)overriddenSetupTask;
+    getChoices().addAll(variableTask.getChoices());
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return false;
+  }
+
+  @Override
+  public void consolidate()
+  {
+    super.consolidate();
+
+    Set<String> choices = new HashSet<String>();
+    for (Iterator<VariableChoice> it = getChoices().iterator(); it.hasNext();)
+    {
+      VariableChoice choice = it.next();
+      if (!choices.add(choice.getValue()))
+      {
+        it.remove();
+      }
+    }
   }
 
   public void perform(SetupTaskContext context) throws Exception

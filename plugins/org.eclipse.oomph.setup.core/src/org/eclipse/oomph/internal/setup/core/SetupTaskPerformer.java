@@ -2136,6 +2136,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       VariableTask userPreference = EcoreUtil.copy(unspecifiedVariable);
       userPreference.getAnnotations().clear();
+      userPreference.getChoices().clear();
       targetSetupTasks.add(userPreference);
     }
   }
