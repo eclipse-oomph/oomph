@@ -93,7 +93,7 @@
     <setupTask
         xsi:type="setup:PreferenceTask"
         key="/instance/org.eclipse.mylyn.team.ui/org.eclipse.mylyn.team.commit.template"
-        value="[$${task.key}] $${task.description} &#xD;&#xA;$${task.url}"/>
+        value="[$${task.key}] $${task.description}&#xD;&#xA;&#xD;&#xA;$${task.url}"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
