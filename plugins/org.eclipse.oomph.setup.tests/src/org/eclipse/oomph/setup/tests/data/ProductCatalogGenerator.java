@@ -371,7 +371,6 @@ public class ProductCatalogGenerator implements IApplication
       return train;
     }
 
-    @SuppressWarnings("unused")
     public Version getVersion()
     {
       return version;
