@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.workingsets.impl;
 
+import org.eclipse.oomph.predicates.Predicate;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Stream;
@@ -28,12 +29,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -182,10 +184,10 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     WorkingSetGroup defaultWorkingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
-    Set<String> existingIds = new HashSet<String>();
+    Map<String, WorkingSet> existingWorkingSets = new HashMap<String, WorkingSet>();
     for (WorkingSet workingSet : defaultWorkingSetGroup.getWorkingSets())
     {
-      existingIds.add(workingSet.getID());
+      existingWorkingSets.put(workingSet.getID(), workingSet);
     }
 
     String prefix = "";
@@ -205,28 +207,34 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
       }
     }
 
-    Set<String> newIds = new HashSet<String>();
+    boolean result = false;
     for (WorkingSet workingSet : getWorkingSets())
     {
       context.checkCancelation();
 
       String id = prefix + workingSet.getName();
       workingSet.setID(id);
-      newIds.add(id);
+      if (!result)
+      {
+        WorkingSet existingWorkingSet = existingWorkingSets.put(id, workingSet);
+        if (existingWorkingSet == null || !EcoreUtil.equals(workingSet.getPredicates(), existingWorkingSet.getPredicates()))
+        {
+          result = true;
+        }
+      }
     }
 
-    // TODO Do deeper equality check to also perform for changed workingset definitions
-    return !existingIds.containsAll(newIds);
+    return result;
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
     WorkingSetGroup defaultWorkingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
-    Set<String> existingIds = new HashSet<String>();
+    Map<String, WorkingSet> existingIds = new HashMap<String, WorkingSet>();
     EList<WorkingSet> workingSets = defaultWorkingSetGroup.getWorkingSets();
     for (WorkingSet workingSet : workingSets)
     {
-      existingIds.add(workingSet.getID());
+      existingIds.put(workingSet.getID(), workingSet);
     }
 
     EList<WorkingSet> newWorkingSetGroups = getWorkingSets();
@@ -236,20 +244,18 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
       context.checkCancelation();
 
       String id = workingSet.getID();
-      if (!existingIds.contains(id))
+      WorkingSet existingWorkingSet = existingIds.put(id, workingSet);
+      if (existingWorkingSet == null)
       {
         workingSets.add(index++, workingSet);
       }
       else
       {
-        for (int i = 0, size = workingSets.size(); i < size; ++i)
-        {
-          if (id.equals(workingSets.get(i).getID()))
-          {
-            index = i + 1;
-            break;
-          }
-        }
+        index = workingSets.indexOf(existingIds) + 1;
+
+        EList<Predicate> predicates = existingWorkingSet.getPredicates();
+        predicates.clear();
+        predicates.addAll(workingSet.getPredicates());
       }
     }
 
