@@ -61,6 +61,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -80,7 +81,12 @@ public final class TargletContainerManager
   private static final String WORKSPACE_STATE_RELATIVE_PATH = ".metadata/.plugins/" + TargletsCorePlugin.INSTANCE.getSymbolicName() //$NON-NLS-1$
       + "/targlet-containers.state"; //$NON-NLS-1$
 
+  private static final String WORKSPACE_REFERENCER_RELATIVE_PATH = ".metadata/.plugins/" + TargletsCorePlugin.INSTANCE.getSymbolicName() //$NON-NLS-1$
+      + "/targlet-profiles.txt"; //$NON-NLS-1$
+
   private static final File WORKSPACE_STATE_FILE = new File(WORKSPACE_LOCATION, WORKSPACE_STATE_RELATIVE_PATH);
+
+  public static final File WORKSPACE_REFERENCER_FILE = new File(WORKSPACE_LOCATION, WORKSPACE_REFERENCER_RELATIVE_PATH);
 
   private static TargletContainerManager instance;
 
@@ -284,30 +290,20 @@ public final class TargletContainerManager
       IOUtil.close(out);
     }
 
-    // IProfileRegistry profileRegistry = AgentUtil.getProfileRegistry();
-    // for (IProfile profile : profileRegistry.getProfiles())
-    // {
-    // String workspace = profile.getProperty(PROP_TARGLET_CONTAINER_WORKSPACE);
-    // if (WORKSPACE_LOCATION.equals(workspace))
-    // {
-    // String id = profile.getProperty(PROP_TARGLET_CONTAINER_ID);
-    // TargletContainerDescriptor descriptor = descriptors.get(id);
-    // if (descriptor != null)
-    // {
-    // String workingDigest = descriptor.getWorkingDigest();
-    // if (workingDigest != null)
-    // {
-    // String digest = profile.getProperty(PROP_TARGLET_CONTAINER_DIGEST);
-    // if (workingDigest.equals(digest))
-    // {
-    // continue;
-    // }
-    // }
-    // }
-    //
-    // AgentUtil.removeProfile(profile);
-    // }
-    // }
+    List<String> ids = new ArrayList<String>();
+    for (TargletContainerDescriptor descriptor : descriptors.values())
+    {
+      String id = descriptor.getWorkingProfileID();
+      if (id != null)
+      {
+        ids.add(id);
+      }
+    }
+
+    Collections.sort(ids);
+
+    WORKSPACE_REFERENCER_FILE.getParentFile().mkdirs();
+    IOUtil.writeLines(WORKSPACE_REFERENCER_FILE, ids);
   }
 
   private static Map<String, TargletContainerDescriptor> loadDescriptors(File file)

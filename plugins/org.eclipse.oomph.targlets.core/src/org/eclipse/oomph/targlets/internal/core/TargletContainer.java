@@ -441,23 +441,12 @@ public class TargletContainer extends AbstractBundleContainer
       String nlProperty = getNLProperty();
       String digest = createDigest(id, environmentProperties, nlProperty, targlets);
 
-      Profile profile = null;
-
-      TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild(2));
+      TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild(4));
       progress.childDone();
-      String workingDigest = descriptor.getWorkingDigest();
-      if (workingDigest != null)
-      {
-        profile = descriptor.getProfile(workingDigest, progress.newChild(2));
-        progress.childDone();
-      }
-      else
-      {
-        progress.skipped(2);
-      }
 
+      Profile profile = descriptor.getWorkingProfile();
       if (profile == null || //
-          !workingDigest.equals(digest) && descriptor.getUpdateProblem() == null || //
+          !descriptor.getWorkingDigest().equals(digest) && descriptor.getUpdateProblem() == null || //
           FORCE_UPDATE.get() == Boolean.TRUE)
       {
         try
@@ -465,6 +454,11 @@ public class TargletContainer extends AbstractBundleContainer
           Profile newProfile = updateProfile(environmentProperties, nlProperty, digest, progress.newChild(86));
           if (newProfile != null)
           {
+            if (profile != null && !profile.getProfileId().equals(newProfile.getProfileId()))
+            {
+              profile.delete();
+            }
+
             profile = newProfile;
           }
         }
@@ -472,6 +466,7 @@ public class TargletContainer extends AbstractBundleContainer
         {
           if (profile == null)
           {
+            // This just leads to logging further down.
             throw ex;
           }
         }

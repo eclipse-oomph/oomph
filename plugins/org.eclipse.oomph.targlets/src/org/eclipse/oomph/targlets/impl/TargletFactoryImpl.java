@@ -105,6 +105,13 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     return targlet;
   }
 
+  public Targlet createTarglet(String name)
+  {
+    Targlet targlet = createTarglet();
+    targlet.setName(name);
+    return targlet;
+  }
+
   public Targlet copyTarglet(Targlet source)
   {
     String activeRepositoryList = source.getActiveRepositoryList();

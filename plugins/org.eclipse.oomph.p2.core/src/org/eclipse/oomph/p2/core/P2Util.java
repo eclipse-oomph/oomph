@@ -13,7 +13,6 @@ package org.eclipse.oomph.p2.core;
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
 import org.eclipse.oomph.p2.internal.core.P2CorePlugin;
-import org.eclipse.oomph.p2.internal.core.ProfileReferencerImpl;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -80,11 +79,6 @@ public final class P2Util
   public static Agent createAgent(File agentLocation)
   {
     return new AgentImpl((AgentManagerImpl)P2Util.getAgentManager(), agentLocation);
-  }
-
-  public static ProfileReferencer createProfileReferencer(File file, boolean directory)
-  {
-    return new ProfileReferencerImpl(file, directory);
   }
 
   public static Set<String> getKnownRepositories(IRepositoryManager<?> manager)

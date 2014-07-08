@@ -19,6 +19,7 @@ import org.eclipse.oomph.targlets.core.TargletEvent.ProfileUpdate;
 import org.eclipse.oomph.targlets.core.TargletListener;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.XMLUtil;
+import org.eclipse.oomph.util.XMLUtil.ElementUpdater;
 
 import org.eclipse.emf.common.util.EMap;
 

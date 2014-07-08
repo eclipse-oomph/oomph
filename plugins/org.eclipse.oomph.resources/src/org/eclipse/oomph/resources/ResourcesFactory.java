@@ -47,6 +47,10 @@ public interface ResourcesFactory extends EFactory
    */
   SourceLocator createSourceLocator();
 
+  SourceLocator createSourceLocator(String rootFolder);
+
+  SourceLocator createSourceLocator(String rootFolder, boolean locateNestedProjects);
+
   /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->

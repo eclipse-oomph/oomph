@@ -65,7 +65,6 @@ import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -158,23 +157,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
   public ProfileDefinition getProfileDefinition()
   {
     return profileDefinition;
-  }
-
-  public File getProfileReferencer()
-  {
-    String value = profileProperties.get(Profile.PROP_PROFILE_REFERENCER);
-    if (value != null)
-    {
-      return new File(value);
-    }
-
-    return null;
-  }
-
-  public ProfileTransaction setProfileReferencer(File referencer)
-  {
-    setProfileProperty(Profile.PROP_PROFILE_REFERENCER, referencer != null ? referencer.getAbsolutePath() : null);
-    return this;
   }
 
   public String getProfileProperty(String key)

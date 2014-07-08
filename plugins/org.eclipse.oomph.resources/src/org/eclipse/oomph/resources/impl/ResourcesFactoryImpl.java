@@ -95,6 +95,20 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
     return sourceLocator;
   }
 
+  public SourceLocator createSourceLocator(String rootFolder)
+  {
+    SourceLocator sourceLocator = createSourceLocator();
+    sourceLocator.setRootFolder(rootFolder);
+    return sourceLocator;
+  }
+
+  public SourceLocator createSourceLocator(String rootFolder, boolean locateNestedProjects)
+  {
+    SourceLocator sourceLocator = createSourceLocator(rootFolder);
+    sourceLocator.setLocateNestedProjects(locateNestedProjects);
+    return sourceLocator;
+  }
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

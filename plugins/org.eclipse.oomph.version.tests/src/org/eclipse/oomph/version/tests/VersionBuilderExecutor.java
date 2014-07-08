@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.version.tests;
 
+import org.eclipse.oomph.resources.ResourcesUtil;
+import org.eclipse.oomph.tests.AbstractTest;
+import org.eclipse.oomph.util.AbstractOomphPlugin.BundleFile;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.Markers;
 import org.eclipse.oomph.version.VersionUtil;
@@ -22,7 +25,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -33,7 +35,6 @@ import org.eclipse.ui.IMarkerResolution2;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,8 +71,6 @@ public class VersionBuilderExecutor extends TestCase
 
   private static final String MESSAGE = "<" + IMarker.MESSAGE + ">";
 
-  private static final PrintStream MSG = System.out;
-
   private static String lineDelimiter;
 
   private BundleFile testFolder;
@@ -85,9 +84,9 @@ public class VersionBuilderExecutor extends TestCase
   @Override
   public void runBare() throws Throwable
   {
-    MSG.println("===============================================================================================");
-    MSG.println("Test " + getName());
-    MSG.println("===============================================================================================");
+    AbstractTest.log("===============================================================================================");
+    AbstractTest.log("Test " + getName());
+    AbstractTest.log("===============================================================================================");
 
     clearWorkspace();
 
@@ -96,23 +95,22 @@ public class VersionBuilderExecutor extends TestCase
     {
       if (phase.isDirectory())
       {
-        MSG.println("  Phase '" + phase.getName() + "'");
+        AbstractTest.log("  Phase '" + phase.getName() + "'");
         runPhase(phase, clean);
         clean = false;
       }
     }
 
-    MSG.println();
+    AbstractTest.log();
   }
 
   private void runPhase(BundleFile phase, boolean clean) throws Throwable
   {
-
     int fixAttempt = 0;
     String fileName = "build";
     String lastContents = "";
 
-    MSG.println("    Update workspace");
+    AbstractTest.log("    Update workspace");
     updateWorkspace(phase);
 
     for (;;)
@@ -145,26 +143,7 @@ public class VersionBuilderExecutor extends TestCase
   private void clearWorkspace() throws Throwable
   {
     WORKSPACE.getDescription().setAutoBuilding(false);
-    WORKSPACE.run(new IWorkspaceRunnable()
-    {
-      public void run(IProgressMonitor monitor) throws CoreException
-      {
-        for (IProject project : ROOT.getProjects())
-        {
-          MSG.println("  Deleting project " + project.getName());
-          project.delete(true, null);
-        }
-
-        for (File file : WORKSPACE_FOLDER.listFiles())
-        {
-          if (file.isDirectory() && !".metadata".equals(file.getName()))
-          {
-            MSG.println("  Deleting location " + file);
-            IOUtil.deleteBestEffort(file);
-          }
-        }
-      }
-    }, null);
+    ResourcesUtil.clearWorkspace();
   }
 
   private void updateWorkspace(final BundleFile phase) throws Throwable
@@ -231,7 +210,7 @@ public class VersionBuilderExecutor extends TestCase
     String relativePath = getRelativePath(target);
     if (source.getName().endsWith(DELETE_SUFFIX))
     {
-      msg("- " + relativePath.substring(0, relativePath.length() - DELETE_SUFFIX.length()));
+      log("- " + relativePath.substring(0, relativePath.length() - DELETE_SUFFIX.length()));
       IOUtil.deleteBestEffort(target);
       return;
     }
@@ -240,7 +219,7 @@ public class VersionBuilderExecutor extends TestCase
     {
       if (!target.exists())
       {
-        msg("+ " + relativePath);
+        log("+ " + relativePath);
         target.mkdir();
       }
 
@@ -254,34 +233,24 @@ public class VersionBuilderExecutor extends TestCase
     {
       if (!target.exists())
       {
-        msg("+ " + relativePath);
+        log("+ " + relativePath);
       }
       else
       {
-        msg("* " + relativePath);
+        log("* " + relativePath);
       }
 
-      source.copyTo(target);
+      source.export(target);
     }
   }
 
   private IMarker[] buildWorkspace(BundleFile phase, boolean clean) throws Throwable
   {
-    MSG.println("    Build " + (clean ? "clean" : "incremental"));
+    AbstractTest.log("    Build " + (clean ? "clean" : "incremental"));
     long start = System.currentTimeMillis();
-
-    if (clean)
-    {
-      WORKSPACE.build(IncrementalProjectBuilder.CLEAN_BUILD, null);
-      WORKSPACE.build(IncrementalProjectBuilder.FULL_BUILD, null);
-    }
-    else
-    {
-      WORKSPACE.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
-    }
-
-    msg("Took " + (System.currentTimeMillis() - start) + " millis");
-    return ROOT.findMarkers(Markers.MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+    IMarker[] markers = ResourcesUtil.buildWorkspace(clean, Markers.MARKER_TYPE);
+    log("Took " + (System.currentTimeMillis() - start) + " millis");
+    return markers;
   }
 
   private String processMarkers(BundleFile phase, IMarker[] markers, String fileName) throws Throwable
@@ -290,11 +259,11 @@ public class VersionBuilderExecutor extends TestCase
     BundleFile markersFile = phase.getChild(fileName);
     if (markersFile != null)
     {
-      MSG.println("    Check " + fileName);
+      AbstractTest.log("    Check " + fileName);
       return checkMarkers(phase, markers, markersFile);
     }
 
-    MSG.println("    Generate " + fileName);
+    AbstractTest.log("    Generate " + fileName);
     return generateMarkers(phase, markers, fileName);
   }
 
@@ -318,7 +287,7 @@ public class VersionBuilderExecutor extends TestCase
   {
     if (markers.length == 0)
     {
-      msg("No markers");
+      log("No markers");
       return "";
     }
 
@@ -356,7 +325,7 @@ public class VersionBuilderExecutor extends TestCase
         lineDelimiter = VersionUtil.getLineDelimiter(file);
       }
 
-      msg("Marker");
+      log("Marker");
       builder.append("Marker");
       builder.append(lineDelimiter);
 
@@ -470,11 +439,11 @@ public class VersionBuilderExecutor extends TestCase
     BundleFile resolutionsFile = phase.getChild(fileName);
     if (resolutionsFile != null)
     {
-      MSG.println("    Apply " + fileName);
+      AbstractTest.log("    Apply " + fileName);
       return applyFixes(phase, markers, resolutionsFile);
     }
 
-    MSG.println("    Generate " + fileName);
+    AbstractTest.log("    Generate " + fileName);
     generateFixes(phase, contents, fileName);
     return false;
   }
@@ -582,7 +551,7 @@ public class VersionBuilderExecutor extends TestCase
     String str = "  " + key + " = " + value;
     if (msg)
     {
-      msg(str);
+      log(str);
     }
 
     builder.append(str);
@@ -598,7 +567,7 @@ public class VersionBuilderExecutor extends TestCase
       str += " (" + resolution2.getDescription() + ")";
     }
 
-    msg(str);
+    log(str);
 
     builder.append(str);
     builder.append(lineDelimiter);
@@ -635,9 +604,9 @@ public class VersionBuilderExecutor extends TestCase
     return str.substring(pos + 1).trim();
   }
 
-  private static void msg(String string)
+  private static void log(String string)
   {
-    MSG.println("      " + string);
+    AbstractTest.log("      " + string);
   }
 
   /**

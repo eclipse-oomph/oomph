@@ -12,16 +12,21 @@ package org.eclipse.oomph.resources;
 
 import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.predicates.Predicate;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.XMLUtil.ElementHandler;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -47,6 +52,11 @@ public final class ResourcesUtil
 {
   private ResourcesUtil()
   {
+  }
+
+  private static IWorkspace getWorkspace()
+  {
+    return org.eclipse.core.resources.ResourcesPlugin.getWorkspace();
   }
 
   public static String getProjectName(File folder) throws ParserConfigurationException, Exception
@@ -77,7 +87,7 @@ public final class ResourcesUtil
     }
 
     final AtomicInteger count = new AtomicInteger();
-    org.eclipse.core.resources.ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
+    getWorkspace().run(new IWorkspaceRunnable()
     {
       public void run(IProgressMonitor monitor) throws CoreException
       {
@@ -114,7 +124,7 @@ public final class ResourcesUtil
     {
       File location = folder.getCanonicalFile();
 
-      IWorkspace workspace = org.eclipse.core.resources.ResourcesPlugin.getWorkspace();
+      IWorkspace workspace = getWorkspace();
       IProject project = workspace.getRoot().getProject(name);
       if (project.exists())
       {
@@ -211,5 +221,51 @@ public final class ResourcesUtil
     }
 
     return false;
+  }
+
+  public static void clearWorkspace() throws CoreException
+  {
+    final IWorkspace workspace = getWorkspace();
+    workspace.run(new IWorkspaceRunnable()
+    {
+      public void run(IProgressMonitor monitor) throws CoreException
+      {
+        IWorkspaceRoot root = workspace.getRoot();
+        for (IProject project : root.getProjects())
+        {
+          project.delete(true, null);
+        }
+
+        for (File file : root.getLocation().toFile().listFiles())
+        {
+          if (file.isDirectory() && !".metadata".equals(file.getName()))
+          {
+            IOUtil.deleteBestEffort(file);
+          }
+        }
+      }
+    }, null);
+  }
+
+  public static IMarker[] buildWorkspace(boolean clean, String markerType) throws CoreException
+  {
+    IWorkspace workspace = getWorkspace();
+
+    if (clean)
+    {
+      workspace.build(IncrementalProjectBuilder.CLEAN_BUILD, null);
+      workspace.build(IncrementalProjectBuilder.FULL_BUILD, null);
+    }
+    else
+    {
+      workspace.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+    }
+
+    if (markerType == null)
+    {
+      return null;
+    }
+
+    return workspace.getRoot().findMarkers(markerType, false, IResource.DEPTH_INFINITE);
   }
 }

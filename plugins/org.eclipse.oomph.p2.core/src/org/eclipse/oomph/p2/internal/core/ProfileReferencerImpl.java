@@ -11,13 +11,13 @@
 package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.p2.P2Exception;
-import org.eclipse.oomph.p2.core.ProfileReferencer;
 
 import java.io.File;
 
 /**
  * @author Eike Stepper
  */
+@Deprecated
 public class ProfileReferencerImpl extends PersistentMap<Boolean> implements ProfileReferencer
 {
   private final boolean directory;

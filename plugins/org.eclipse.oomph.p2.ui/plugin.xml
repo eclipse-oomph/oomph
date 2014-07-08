@@ -29,8 +29,11 @@
       <profileType
             icon="icons/obj16/profileEclipse.gif"
             label="Installation Profile"
-            name="Installation">
-      </profileType>
+            name="Installation"/>
+      <profileType
+            icon="icons/obj16/profileTarglet.gif"
+            label="Targlet Profile"
+            name="Targlet"/>
    </extension>
 
 </plugin>

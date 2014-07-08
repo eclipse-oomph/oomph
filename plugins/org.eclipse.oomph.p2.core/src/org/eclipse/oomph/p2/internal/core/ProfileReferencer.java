@@ -8,13 +8,14 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.p2.core;
+package org.eclipse.oomph.p2.internal.core;
 
 import java.io.File;
 
 /**
  * @author Eike Stepper
  */
+@Deprecated
 public interface ProfileReferencer
 {
   public File getFile();

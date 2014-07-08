@@ -105,6 +105,16 @@ public abstract class ProfileCreatorImpl extends HashMap<String, String> impleme
     return this;
   }
 
+  public File getReferencer()
+  {
+    return getFile(Profile.PROP_PROFILE_REFERENCER);
+  }
+
+  public ProfileCreator setReferencer(File value)
+  {
+    return setFile(Profile.PROP_PROFILE_REFERENCER, value);
+  }
+
   public File getConfigurationFolder()
   {
     return getFile(Profile.PROP_CONFIGURATION_FOLDER);

@@ -21,7 +21,6 @@ import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.P2Util;
-import org.eclipse.oomph.p2.core.P2Util.VersionedIdFilter;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
@@ -29,109 +28,22 @@ import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
 import org.eclipse.oomph.p2.internal.core.ProfileImpl;
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
-import org.eclipse.equinox.p2.metadata.IVersionedId;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.net.URI;
 import java.util.Arrays;
 
 /**
  * @author Eike Stepper
  */
-public class AgentTests extends AbstractTests
+public class AgentTests extends AbstractP2Test
 {
-  private static final String TMP = PropertiesUtil.getProperty("java.io.tmpdir");
-
-  private static final File CDO_OLD = new File(TMP, "p2-test-mirror-001-cdo-old");
-
-  private static final File CDO_NEW = new File(TMP, "p2-test-mirror-001-cdo-new");
-
-  private static final VersionedIdFilter CDO_FILTER = new VersionedIdFilter()
-  {
-    public boolean matches(IVersionedId versionedId)
-    {
-      String id = versionedId.getId();
-      return id.startsWith("org.eclipse.net4j.util") || id.startsWith("org.apache");
-    }
-  };
-
-  private static final File PLATFORM_OLD = new File(TMP, "p2-test-mirror-001-platform-old");
-
-  private static final File PLATFORM_NEW = new File(TMP, "p2-test-mirror-001-platform-new");
-
-  private static final VersionedIdFilter PLATFORM_FILTER = new VersionedIdFilter()
-  {
-    public boolean matches(IVersionedId versionedId)
-    {
-      String id = versionedId.getId();
-      return id.startsWith("com.jcraft.jsch") || id.startsWith("org.apache") || id.startsWith("a.jre");
-    }
-  };
-
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception
-  {
-    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
-    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
-    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000", PLATFORM_OLD, PLATFORM_FILTER);
-    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700", PLATFORM_NEW, PLATFORM_FILTER);
-  }
-
-  private static void mirror(String repo, File local, VersionedIdFilter filter) throws Exception
-  {
-    if (!local.isDirectory())
-    {
-      LOGGER.setTaskName("Creating test mirror of " + repo + " under " + local);
-      P2Util.mirrorRepository(new URI(repo), local.toURI(), filter, LOGGER);
-      LOGGER.setTaskName(null);
-    }
-  }
-
-  @Override
-  @Before
-  public void setUp() throws Exception
-  {
-    super.setUp();
-    AgentManagerImpl.instance = new AgentManagerImpl(userHome);
-  }
-
-  @Override
-  @After
-  public void tearDown() throws Exception
-  {
-    AgentManagerImpl.instance = null;
-    super.tearDown();
-  }
-
-  private Agent getAgent()
-  {
-    AgentManager agentManager = P2Util.getAgentManager();
-    return agentManager.getAgents().iterator().next();
-  }
-
-  private Agent getFreshAgent()
-  {
-    AgentManagerImpl.instance = new AgentManagerImpl(userHome);
-    return getAgent();
-  }
-
-  private void commitProfileTransaction(ProfileTransaction transaction, boolean expectedChange) throws CoreException
-  {
-    boolean actualChange = transaction.commit(LOGGER);
-    assertThat(actualChange, is(expectedChange));
-  }
-
   @Test
   public void testDefaultAgent() throws Exception
   {
@@ -144,7 +56,7 @@ public class AgentTests extends AbstractTests
       assertThat(agent.getProfiles().size(), is(0));
     }
 
-    AgentManagerImpl.instance = new AgentManagerImpl(userHome);
+    AgentManagerImpl.instance = new AgentManagerImpl(getUserHome());
 
     {
       AgentManager agentManager = P2Util.getAgentManager();
@@ -312,7 +224,7 @@ public class AgentTests extends AbstractTests
   public void testInstallAndUpdateFeature() throws Exception
   {
     Agent agent = getAgent();
-    File installFolder = new File(userHome, "app1");
+    File installFolder = new File(getUserHome(), "app1");
 
     String oldVersion = "org.eclipse.net4j.util_4.2.0.v20130601-1611";
     String newVersion = "org.eclipse.net4j.util_4.2.1.v20140218-1709";
@@ -356,7 +268,7 @@ public class AgentTests extends AbstractTests
   public void testInstallAndUpdateSingleton() throws Exception
   {
     Agent agent = getAgent();
-    File installFolder = new File(userHome, "app1");
+    File installFolder = new File(getUserHome(), "app1");
 
     String oldVersion = "org.eclipse.net4j.util_3.3.0.v20130601-1611.jar";
     String newVersion = "org.eclipse.net4j.util_3.3.1.v20140218-1709.jar";
@@ -401,7 +313,7 @@ public class AgentTests extends AbstractTests
   public void testInstallAndUpdateNonSingleton() throws Exception
   {
     Agent agent = getAgent();
-    File installFolder = new File(userHome, "app1");
+    File installFolder = new File(getUserHome(), "app1");
 
     String oldVersion = "com.jcraft.jsch_0.1.46.v201205102330.jar";
     String newVersion = "com.jcraft.jsch_0.1.50.v201310081430.jar";
@@ -445,7 +357,7 @@ public class AgentTests extends AbstractTests
   public void testInstallWithoutChange() throws Exception
   {
     Agent agent = getAgent();
-    File installFolder = new File(userHome, "app1");
+    File installFolder = new File(getUserHome(), "app1");
 
     String oldVersion = "com.jcraft.jsch_0.1.46.v201205102330.jar";
 
@@ -493,7 +405,7 @@ public class AgentTests extends AbstractTests
   public void testInstallStandalone() throws Exception
   {
     Agent agent = getAgent();
-    File installFolder = new File(userHome, "app1");
+    File installFolder = new File(getUserHome(), "app1");
 
     ProfileCreator creator = agent.addProfile("profile-app1", "Installation");
     Profile profile = creator.setCacheFolder(installFolder).setInstallFolder(installFolder).setInstallFeatures(true).create();

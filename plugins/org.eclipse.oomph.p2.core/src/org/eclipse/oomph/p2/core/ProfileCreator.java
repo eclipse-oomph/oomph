@@ -33,6 +33,10 @@ public interface ProfileCreator extends Map<String, String>
 
   public ProfileCreator set(String property, String value);
 
+  public File getReferencer();
+
+  public ProfileCreator setReferencer(File value);
+
   public File getConfigurationFolder();
 
   public ProfileCreator setConfigurationFolder(File value);

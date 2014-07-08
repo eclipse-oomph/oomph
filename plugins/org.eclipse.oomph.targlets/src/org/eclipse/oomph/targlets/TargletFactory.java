@@ -42,6 +42,8 @@ public interface TargletFactory extends EFactory
    */
   Targlet createTarglet();
 
+  Targlet createTarglet(String name);
+
   Targlet copyTarglet(Targlet source);
 
   EList<Targlet> copyTarglets(Collection<? extends Targlet> targlets);

@@ -14,17 +14,20 @@ import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +38,10 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -187,6 +193,11 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
     throw new CoreException(status);
   }
 
+  public BundleFile getRootFile()
+  {
+    return new BundleFile.Root(getBundle());
+  }
+
   public File exportResources(String entry)
   {
     Bundle bundle = getBundle();
@@ -202,10 +213,15 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
   public void exportResources(String entry, File target)
   {
     Bundle bundle = getBundle();
-    exportResources(bundle, entry.length(), target.getAbsolutePath() + "/", entry);
+    exportResources(bundle, entry, target);
   }
 
-  private static void exportResources(Bundle bundle, int sourceRootLength, String targetRoot, String entry)
+  private static void exportResources(Bundle bundle, String entry, File target)
+  {
+    exportResources(bundle, entry.length(), entry, target.getAbsolutePath() + "/");
+  }
+
+  private static void exportResources(Bundle bundle, int sourceRootLength, String entry, String targetRoot)
   {
     File file = new File(targetRoot + entry.substring(sourceRootLength));
 
@@ -220,7 +236,7 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
         while (entries.hasMoreElements())
         {
           String childEntry = entries.nextElement();
-          exportResources(bundle, sourceRootLength, targetRoot, childEntry);
+          exportResources(bundle, sourceRootLength, childEntry, targetRoot);
         }
       }
     }
@@ -420,6 +436,272 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
     for (int i = 0; i < level; ++i)
     {
       stream.print("  ");
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class BundleFile implements Comparable<BundleFile>
+  {
+    private static final List<BundleFile> NO_CHILDREN = Collections.emptyList();
+
+    private String name;
+
+    private boolean directory;
+
+    private BundleFile parent;
+
+    private List<BundleFile> children;
+
+    private BundleFile(String name, boolean directory, BundleFile parent)
+    {
+      this.name = name;
+      this.directory = directory;
+      this.parent = parent;
+    }
+
+    public Bundle getBundle()
+    {
+      return parent.getBundle();
+    }
+
+    public String getName()
+    {
+      return name;
+    }
+
+    public boolean isDirectory()
+    {
+      return directory;
+    }
+
+    public BundleFile getParent()
+    {
+      return parent;
+    }
+
+    public String getPath()
+    {
+      String path = parent.getPath();
+      if (path.length() != 0)
+      {
+        path += "/";
+      }
+
+      return path + name;
+    }
+
+    public List<BundleFile> getChildren()
+    {
+      if (children == null)
+      {
+        children = new ArrayList<BundleFile>();
+
+        Bundle bundle = getBundle();
+        String path = "/" + getPath();
+        Enumeration<String> paths = bundle.getEntryPaths(path);
+        while (paths.hasMoreElements())
+        {
+          String childPath = paths.nextElement();
+
+          boolean directory = childPath.endsWith("/");
+
+          String childName = new Path(childPath).removeTrailingSeparator().lastSegment();
+          BundleFile child = new BundleFile(childName, directory, this);
+          children.add(child);
+        }
+
+        if (children.isEmpty())
+        {
+          children = NO_CHILDREN;
+        }
+        else
+        {
+          Collections.sort(children);
+        }
+      }
+
+      return children;
+    }
+
+    public BundleFile getChild(String name)
+    {
+      for (BundleFile child : getChildren())
+      {
+        if (child.getName().equals(name))
+        {
+          return child;
+        }
+      }
+
+      return null;
+    }
+
+    public BundleFile addChild(String name, boolean directory) throws IOException
+    {
+      checkDirectory();
+
+      BundleFile child = getChild(name);
+      if (child != null)
+      {
+        throw new IllegalStateException("File already exists: " + child);
+      }
+
+      child = new BundleFile(name, directory, this);
+
+      File file = new File(getFile(), name);
+      if (directory)
+      {
+        file.mkdir();
+      }
+      else
+      {
+        file.createNewFile();
+      }
+
+      List<BundleFile> children = getChildren();
+      children.add(child);
+      Collections.sort(children);
+
+      return child;
+    }
+
+    public void export(File target)
+    {
+      Bundle bundle = getBundle();
+      String path = getPath();
+      if (isDirectory())
+      {
+        path += "/";
+      }
+
+      exportResources(bundle, path, target);
+    }
+
+    public String getContents()
+    {
+      checkFile();
+      String path = getPath();
+      URL url = getBundle().getEntry(path);
+
+      InputStream in = null;
+
+      try
+      {
+        in = url.openStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtil.copy(in, out);
+
+        return out.toString("UTF-8");
+      }
+      catch (RuntimeException ex)
+      {
+        throw ex;
+      }
+      catch (Exception ex)
+      {
+        throw new RuntimeException(ex);
+      }
+      finally
+      {
+        IOUtil.closeSilent(in);
+      }
+    }
+
+    public void setContents(String contents)
+    {
+      checkFile();
+      File file = getFile();
+
+      OutputStream out = null;
+
+      try
+      {
+        InputStream in = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+        out = new FileOutputStream(file);
+        IOUtil.copy(in, out);
+      }
+      catch (RuntimeException ex)
+      {
+        throw ex;
+      }
+      catch (Exception ex)
+      {
+        throw new RuntimeException(ex);
+      }
+      finally
+      {
+        IOUtil.closeSilent(out);
+      }
+    }
+
+    public int compareTo(BundleFile o)
+    {
+      return name.compareTo(o.getName());
+    }
+
+    @Override
+    public String toString()
+    {
+      return getPath();
+    }
+
+    private void checkDirectory()
+    {
+      if (!directory)
+      {
+        throw new IllegalStateException("Should not be called on files");
+      }
+    }
+
+    private void checkFile()
+    {
+      if (directory)
+      {
+        throw new IllegalStateException("Should not be called on directories");
+      }
+    }
+
+    private File getFile()
+    {
+      String path = getPath();
+      URL url = getBundle().getEntry(path);
+
+      try
+      {
+        return new File(FileLocator.toFileURL(url).getFile());
+      }
+      catch (IOException ex)
+      {
+        throw new RuntimeException(ex);
+      }
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    private static class Root extends BundleFile
+    {
+      private Bundle bundle;
+
+      public Root(Bundle bundle)
+      {
+        super("", true, null);
+        this.bundle = bundle;
+      }
+
+      @Override
+      public Bundle getBundle()
+      {
+        return bundle;
+      }
+
+      @Override
+      public String getPath()
+      {
+        return "";
+      }
     }
   }
 }

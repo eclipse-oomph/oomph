@@ -10,11 +10,11 @@
  */
 package org.eclipse.oomph.version.tests;
 
+import org.eclipse.oomph.util.AbstractOomphPlugin.BundleFile;
+
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 
 import junit.framework.Test;
-import junit.framework.TestResult;
 import junit.framework.TestSuite;
 
 /**
@@ -22,21 +22,12 @@ import junit.framework.TestSuite;
  */
 public class VersionBuilderTest extends TestSuite
 {
-  private static final IPath WORKSPACE = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-
-  @SuppressWarnings("unused")
-  private boolean openWorkspaceFolder;
-
   private VersionBuilderTest()
   {
-    super("VersionBuilderTest [Workspace: " + WORKSPACE + "]");
+    super("VersionBuilderTest [Workspace: " + ResourcesPlugin.getWorkspace().getRoot().getLocation() + "]");
 
-    BundleFile rootFile = Activator.getRootFile();
-    if (addTests(rootFile.getChild("test")))
-    {
-      openWorkspaceFolder = true;
-    }
-    else
+    BundleFile rootFile = VersionTestsPlugin.INSTANCE.getRootFile();
+    if (!addTests(rootFile.getChild("test")))
     {
       addTests(rootFile.getChild("tests"));
     }
@@ -55,24 +46,6 @@ public class VersionBuilderTest extends TestSuite
     }
 
     return added;
-  }
-
-  @Override
-  public void run(TestResult result)
-  {
-    super.run(result);
-    // if (openWorkspaceFolder)
-    // {
-    // try
-    // {
-    // // TODO Support operating systems other than Windows
-    // Runtime.getRuntime().exec("explorer.exe \"" + WORKSPACE.toOSString() + "\"");
-    // }
-    // catch (Exception ex)
-    // {
-    // Activator.log(ex);
-    // }
-    // }
   }
 
   public static Test suite()

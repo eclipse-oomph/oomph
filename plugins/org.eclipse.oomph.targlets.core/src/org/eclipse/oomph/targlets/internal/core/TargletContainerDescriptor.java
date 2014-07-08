@@ -198,9 +198,24 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
     updateProblem = null;
   }
 
-  public Profile getProfile(String digest, IProgressMonitor monitor) throws CoreException
+  public String getWorkingProfileID()
   {
-    String profileID = getProfileID(digest);
+    if (workingDigest == null)
+    {
+      return null;
+    }
+
+    return getProfileID(workingDigest);
+  }
+
+  public Profile getWorkingProfile()
+  {
+    String profileID = getWorkingProfileID();
+    if (profileID == null)
+    {
+      return null;
+    }
+
     return getBundlePool().getProfile(profileID);
   }
 
@@ -222,6 +237,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
       creator.setEnvironments(environmentProperties);
       creator.setLanguages(nlProperty);
       creator.setInstallFeatures(true);
+      creator.setReferencer(TargletContainerManager.WORKSPACE_REFERENCER_FILE);
       profile = creator.create();
     }
 

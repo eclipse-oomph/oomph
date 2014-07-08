@@ -22,7 +22,6 @@ import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -33,10 +32,6 @@ public interface ProfileTransaction
   public Profile getProfile();
 
   public ProfileDefinition getProfileDefinition();
-
-  public File getProfileReferencer();
-
-  public ProfileTransaction setProfileReferencer(File referencer);
 
   public String getProfileProperty(String key);
 
