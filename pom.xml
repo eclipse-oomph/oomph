@@ -110,7 +110,9 @@
     <module>plugins/org.eclipse.oomph.targlets.core</module>
     <module>plugins/org.eclipse.oomph.targlets.edit</module>
     <module>plugins/org.eclipse.oomph.targlets.editor</module>
+    <module>plugins/org.eclipse.oomph.targlets.tests</module>
     <module>plugins/org.eclipse.oomph.targlets.ui</module>
+    <module>plugins/org.eclipse.oomph.tests</module>
     <module>plugins/org.eclipse.oomph.ui</module>
     <module>plugins/org.eclipse.oomph.util</module>
     <module>plugins/org.eclipse.oomph.version</module>

@@ -241,6 +241,16 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
   public boolean isUsed()
   {
+    File referencer = this.referencer;
+    if (referencer == null && "Targlet".equals(type))
+    {
+      String workspace = getProperty("targlet.container.workspace");
+      if (workspace != null)
+      {
+        referencer = new File(workspace, ".metadata/.plugins/org.eclipse.oomph.targlets.core/targlet-profiles.txt");
+      }
+    }
+
     if (referencer != null)
     {
       if (!referencer.exists())

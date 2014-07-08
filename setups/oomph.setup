@@ -203,6 +203,10 @@
         <requirement
             id="org.eclipse.oomph.setup.tests"/>
         <requirement
+            id="org.eclipse.oomph.p2.tests"/>
+        <requirement
+            id="org.eclipse.oomph.targlets.tests"/>
+        <requirement
             id="org.eclipse.oomph.version.tests"/>
         <requirement
             id="org.eclipse.oomph.releng"/>
