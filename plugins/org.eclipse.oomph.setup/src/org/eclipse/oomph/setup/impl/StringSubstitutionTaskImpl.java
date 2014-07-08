@@ -264,7 +264,8 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
       return true;
     }
 
-    if (!getValue().equals(variable.getValue()))
+    String value = getValue();
+    if (!StringUtil.isEmpty(value) && !value.equals(variable.getValue()))
     {
       return true;
     }
@@ -285,7 +286,10 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
 
     IValueVariable variable = getValueVariable(true);
     variable.setDescription(getDescription());
-    variable.setValue(value);
+    if (!StringUtil.isEmpty(value))
+    {
+      variable.setValue(value);
+    }
   }
 
   private IValueVariable getValueVariable(boolean force) throws Exception
