@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
@@ -29,7 +32,10 @@ import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -46,7 +52,9 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -82,11 +90,17 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
     return plugin;
   }
 
-  public static void restart(Trigger trigger)
+  public static void restart(Trigger trigger, EList<SetupTask> setupTasks)
   {
     try
     {
-      IOUtil.writeFile(getRestartingFile(), trigger.toString().getBytes());
+      Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
+      annotation.setSource(trigger.toString());
+      annotation.getReferences().addAll(setupTasks);
+
+      Resource resource = EMFUtil.createResourceSet().createResource(URI.createFileURI(getRestartingFile().toString()));
+      resource.getContents().add(annotation);
+      resource.save(null);
     }
     catch (Exception ex)
     {
@@ -171,15 +185,26 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
   {
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
+    Set<URI> neededRestartTasks = new HashSet<URI>();
 
     try
     {
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
-        byte[] bytes = IOUtil.readFile(restartingFile);
+        Resource resource = EMFUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
+
         IOUtil.deleteBestEffort(restartingFile);
-        trigger = Trigger.valueOf(new String(bytes));
+
+        Annotation annotation = (Annotation)EcoreUtil.getObjectByType(resource.getContents(), BasePackage.Literals.ANNOTATION);
+        resource.getContents().remove(annotation);
+
+        for (EObject eObject : annotation.getReferences())
+        {
+          neededRestartTasks.add(EcoreUtil.getURI(eObject));
+        }
+
+        trigger = Trigger.get(annotation.getSource());
 
         System.setProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP, "true");
         restarting = true;
@@ -223,7 +248,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
           for (Iterator<SetupTask> it = neededTasks.iterator(); it.hasNext();)
           {
             SetupTask setupTask = it.next();
-            if (setupTask.getPriority() == SetupTask.PRIORITY_INSTALLATION)
+            if (setupTask.getPriority() == SetupTask.PRIORITY_INSTALLATION || !neededRestartTasks.contains(EcoreUtil.getURI(setupTask)))
             {
               it.remove();
             }

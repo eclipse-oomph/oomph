@@ -473,7 +473,7 @@ public class ProgressPage extends SetupWizardPage
                   {
                     public void run()
                     {
-                      SetupUIPlugin.restart(trigger);
+                      SetupUIPlugin.restart(trigger, getPerformer().getNeededTasks());
                     }
                   });
 
