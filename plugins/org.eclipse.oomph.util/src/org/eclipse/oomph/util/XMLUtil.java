@@ -22,6 +22,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -98,5 +100,60 @@ public final class XMLUtil
   public interface ElementHandler
   {
     public void handleElement(Element element) throws Exception;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class ElementUpdater
+  {
+    private final String tagName;
+
+    private String textValue;
+
+    private int index;
+
+    public ElementUpdater(final Element rootElement, String tagName) throws Exception
+    {
+      this.tagName = tagName;
+      handleElementsByTagName(rootElement, tagName, new ElementHandler()
+      {
+        public void handleElement(Element element) throws Exception
+        {
+          if (element.getParentNode() == rootElement)
+          {
+            textValue = element.getTextContent();
+          }
+
+          if (textValue == null)
+          {
+            ++index;
+          }
+        }
+      });
+    }
+
+    public String update(String text, String newValue)
+    {
+      if (!ObjectUtil.equals(textValue, newValue))
+      {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < index; i++)
+        {
+          builder.append(".*?<" + tagName + ">.*?</" + tagName + ">");
+        }
+
+        builder.append(".*?<" + tagName + ">(.*?)</" + tagName + ">.*");
+
+        Pattern pattern = Pattern.compile(builder.toString(), Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.matches())
+        {
+          text = text.substring(0, matcher.start(1)) + newValue + text.substring(matcher.end(1));
+        }
+      }
+
+      return text;
+    }
   }
 }

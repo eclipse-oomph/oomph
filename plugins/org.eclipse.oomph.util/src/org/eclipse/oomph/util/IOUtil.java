@@ -22,6 +22,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -286,7 +288,7 @@ public final class IOUtil
     }
   }
 
-  private static void mkdirs(File folder) throws IORuntimeException
+  public static void mkdirs(File folder) throws IORuntimeException
   {
     if (!folder.exists())
     {
@@ -329,24 +331,6 @@ public final class IOUtil
     return deleted;
   }
 
-  public static void copyTree(File source, File target) throws IORuntimeException
-  {
-    if (source.isDirectory())
-    {
-      mkdirs(target);
-      File[] files = source.listFiles();
-      for (File file : files)
-      {
-        String name = file.getName();
-        copyTree(new File(source, name), new File(target, name));
-      }
-    }
-    else
-    {
-      copyFile(source, target);
-    }
-  }
-
   public static void copy(InputStream input, OutputStream output, byte buffer[]) throws IORuntimeException
   {
     try
@@ -383,7 +367,25 @@ public final class IOUtil
     }
   }
 
-  private static void copyFile(File source, File target) throws IORuntimeException
+  public static void copyTree(File source, File target) throws IORuntimeException
+  {
+    if (source.isDirectory())
+    {
+      mkdirs(target);
+      File[] files = source.listFiles();
+      for (File file : files)
+      {
+        String name = file.getName();
+        copyTree(new File(source, name), new File(target, name));
+      }
+    }
+    else
+    {
+      copyFile(source, target);
+    }
+  }
+
+  public static void copyFile(File source, File target) throws IORuntimeException
   {
     mkdirs(target.getParentFile());
     FileInputStream input = null;
@@ -439,25 +441,6 @@ public final class IOUtil
     }
   }
 
-  public static String readXML(InputStream inputStream) throws Exception
-  {
-    try
-    {
-      DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-      Document document = documentBuilder.parse(inputStream);
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      Transformer transformer = transformerFactory.newTransformer();
-      StringWriter out = new StringWriter();
-      transformer.transform(new DOMSource(document), new StreamResult(out));
-      out.close();
-      return out.toString();
-    }
-    finally
-    {
-      IOUtil.close(inputStream);
-    }
-  }
-
   public static List<String> readLines(File file)
   {
     List<String> lines = new ArrayList<String>();
@@ -490,6 +473,84 @@ public final class IOUtil
     }
 
     return lines;
+  }
+
+  public static void writeLines(File file, List<String> lines)
+  {
+    FileWriter writer = null;
+    BufferedWriter bufferedWriter = null;
+
+    try
+    {
+      writer = new FileWriter(file);
+      bufferedWriter = new BufferedWriter(writer);
+
+      for (String line : lines)
+      {
+        bufferedWriter.write(line);
+        bufferedWriter.write(StringUtil.NL);
+      }
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
+    finally
+    {
+      closeSilent(bufferedWriter);
+      closeSilent(writer);
+    }
+  }
+
+  public static String readUTF8(File file) throws Exception
+  {
+    InputStream inputStream = new FileInputStream(file);
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+    try
+    {
+      copy(inputStream, outputStream);
+    }
+    finally
+    {
+      close(inputStream);
+    }
+
+    return new String(outputStream.toByteArray(), "UTF-8");
+  }
+
+  public static void writeUTF8(File file, String contents) throws Exception
+  {
+    InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+    OutputStream outputStream = new FileOutputStream(file);
+
+    try
+    {
+      copy(inputStream, outputStream);
+    }
+    finally
+    {
+      close(outputStream);
+    }
+  }
+
+  public static String readXML(InputStream inputStream) throws Exception
+  {
+    try
+    {
+      DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+      Document document = documentBuilder.parse(inputStream);
+      TransformerFactory transformerFactory = TransformerFactory.newInstance();
+      Transformer transformer = transformerFactory.newTransformer();
+      StringWriter out = new StringWriter();
+      transformer.transform(new DOMSource(document), new StreamResult(out));
+      out.close();
+      return out.toString();
+    }
+    finally
+    {
+      IOUtil.close(inputStream);
+    }
   }
 
   public static List<File> listDepthFirst(File file)

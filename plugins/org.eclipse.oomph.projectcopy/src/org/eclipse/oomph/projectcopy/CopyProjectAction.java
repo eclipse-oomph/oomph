@@ -10,6 +10,10 @@
  */
 package org.eclipse.oomph.projectcopy;
 
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.XMLUtil;
+import org.eclipse.oomph.util.XMLUtil.ElementUpdater;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
@@ -20,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -30,27 +35,22 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * @author Eike Stepper
  */
 public class CopyProjectAction implements IObjectActionDelegate
 {
-  private static final IWorkspaceRoot ROOT = ResourcesPlugin.getWorkspace().getRoot();
-
-  private static final int DEFAULT_BUFFER_SIZE = 8192;
-
   private Shell shell;
 
   private ISelection selection;
@@ -76,6 +76,7 @@ public class CopyProjectAction implements IObjectActionDelegate
 
     try
     {
+      final IWorkspaceRoot ROOT = ResourcesPlugin.getWorkspace().getRoot();
       final File parentFolder = folder.getParentFile();
 
       InputDialog dialog = new InputDialog(shell, "Copy Project", "Name of the new project:", source.getName(), new IInputValidator()
@@ -112,11 +113,11 @@ public class CopyProjectAction implements IObjectActionDelegate
     }
   }
 
-  private static void copyTree(File folder, String oldName, String newName, File source, File target) throws IOException
+  private static void copyTree(File folder, String oldName, String newName, File source, File target) throws Exception
   {
     if (source.isDirectory())
     {
-      mkdirs(target);
+      IOUtil.mkdirs(target);
       File[] files = source.listFiles();
       for (File file : files)
       {
@@ -138,75 +139,47 @@ public class CopyProjectAction implements IObjectActionDelegate
       }
       else if (source.equals(new File(folder, "feature.xml")))
       {
-        oldName = removeFeatureSuffix(oldName);
-        newName = removeFeatureSuffix(newName);
+        oldName = replaceFeatureSuffix(oldName, "");
+        newName = replaceFeatureSuffix(newName, "");
         Replacer replacer = new Replacer("id=\"" + oldName + "\"", "id=\"" + newName + "\"");
         replacer.copy(source, target);
       }
+      else if (source.equals(new File(folder, "component.def")))
+      {
+        oldName = replaceFeatureSuffix(oldName, ".feature.group");
+        newName = replaceFeatureSuffix(newName, ".feature.group");
+        Replacer replacer = new Replacer("id=\"" + oldName + "\"", "id=\"" + newName + "\"");
+        replacer.copy(source, target);
+      }
+      else if (source.equals(new File(folder, "pom.xml")))
+      {
+        oldName = replaceFeatureSuffix(oldName, "");
+        newName = replaceFeatureSuffix(newName, "");
+
+        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+        Element rootElement = XMLUtil.loadRootElement(documentBuilder, source);
+
+        ElementUpdater artifactIDUpdater = new ElementUpdater(rootElement, "artifactId");
+        String oldContents = IOUtil.readUTF8(source);
+        String newContents = artifactIDUpdater.update(oldContents, newName);
+        IOUtil.writeUTF8(target, newContents);
+      }
       else
       {
-        copyFile(source, target);
+        IOUtil.copyFile(source, target);
       }
     }
   }
 
-  private static String removeFeatureSuffix(String name)
+  private static String replaceFeatureSuffix(String name, String newSuffix)
   {
     if (name.endsWith("-feature"))
     {
       name = name.substring(0, name.length() - "-feature".length());
+      name += newSuffix;
     }
 
     return name;
-  }
-
-  private static void copyFile(File source, File target) throws IOException
-  {
-    mkdirs(target.getParentFile());
-    FileInputStream input = null;
-    FileOutputStream output = null;
-
-    try
-    {
-      input = new FileInputStream(source);
-      output = new FileOutputStream(target);
-      copy(input, output);
-    }
-    finally
-    {
-      close(input, source);
-      close(output, target);
-    }
-  }
-
-  private static void copy(InputStream input, OutputStream output, byte buffer[]) throws IOException
-  {
-    int n;
-    while ((n = input.read(buffer)) != -1)
-    {
-      output.write(buffer, 0, n);
-    }
-  }
-
-  private static void copy(InputStream input, OutputStream output, int bufferSize) throws IOException
-  {
-    copy(input, output, new byte[bufferSize]);
-  }
-
-  private static void copy(InputStream input, OutputStream output) throws IOException
-  {
-    copy(input, output, DEFAULT_BUFFER_SIZE);
-  }
-
-  private static void mkdirs(File folder) throws IOException
-  {
-    if (!folder.exists())
-    {
-      if (!folder.mkdirs())
-      {
-        throw new IOException("Unable to create directory " + folder.getAbsolutePath());
-      }
-    }
   }
 
   private static void importProject(final File folder, final String name) throws CoreException
@@ -216,8 +189,14 @@ public class CopyProjectAction implements IObjectActionDelegate
     {
       public void run(IProgressMonitor monitor) throws CoreException
       {
+        Path locationPath = new Path(folder.getAbsolutePath());
+        if (Platform.getLocation().isPrefixOf(locationPath))
+        {
+          locationPath = null;
+        }
+
         IProjectDescription description = workspace.newProjectDescription(name);
-        description.setLocation(new Path(folder.getAbsolutePath()));
+        description.setLocation(locationPath);
 
         IProject project = workspace.getRoot().getProject(name);
         project.create(description, monitor);
@@ -228,21 +207,6 @@ public class CopyProjectAction implements IObjectActionDelegate
         }
       }
     }, new NullProgressMonitor());
-  }
-
-  private static void close(Closeable closeable, Object file)
-  {
-    try
-    {
-      if (closeable != null)
-      {
-        closeable.close();
-      }
-    }
-    catch (IOException ex)
-    {
-      Activator.log("Could not close " + file, ex);
-    }
   }
 
   /**
@@ -275,8 +239,8 @@ public class CopyProjectAction implements IObjectActionDelegate
       }
       finally
       {
-        close(reader, source);
-        close(writer, target);
+        IOUtil.close(reader);
+        IOUtil.close(writer);
       }
     }
 
