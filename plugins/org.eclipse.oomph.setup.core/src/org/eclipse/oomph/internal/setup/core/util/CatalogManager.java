@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.Stream;
 
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EList;
@@ -111,6 +112,9 @@ public class CatalogManager
         // Copy over all the features of the loaded selection to the managed selection.
         this.selection.getDefaultProductVersions().putAll(selection.getDefaultProductVersions());
         this.selection.getDefaultStreams().putAll(selection.getDefaultStreams());
+        EList<Stream> selectedStreams = this.selection.getSelectedStreams();
+        selectedStreams.clear();
+        selectedStreams.addAll(selection.getSelectedStreams());
         populateSelectedProductCatalogs(this.selection, index);
         populateSelectedProjectCatalogs(this.selection, index);
       }

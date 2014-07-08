@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectToStreamMapEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectToStreamMapEntryImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ProjectToStreamMapEntryImpl#isSelection <em>Selection</em>}</li>
  * </ul>
  * </p>
  *
@@ -58,6 +59,26 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * @ordered
    */
   protected Stream value;
+
+  /**
+   * The default value of the '{@link #isSelection() <em>Selection</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSelection()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean SELECTION_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isSelection() <em>Selection</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSelection()
+   * @generated
+   * @ordered
+   */
+  protected boolean selection = SELECTION_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -179,6 +200,31 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isSelection()
+  {
+    return selection;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSelection(boolean newSelection)
+  {
+    boolean oldSelection = selection;
+    selection = newSelection;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION, oldSelection, selection));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
@@ -196,6 +242,8 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
           return getTypedValue();
         }
         return basicGetTypedValue();
+      case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION:
+        return isSelection();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -215,6 +263,9 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
         return;
       case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__VALUE:
         setTypedValue((Stream)newValue);
+        return;
+      case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION:
+        setSelection((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -236,6 +287,9 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
       case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__VALUE:
         setTypedValue((Stream)null);
         return;
+      case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION:
+        setSelection(SELECTION_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -254,8 +308,30 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
         return key != null;
       case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__VALUE:
         return value != null;
+      case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION:
+        return selection != SELECTION_EDEFAULT;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (selection: ");
+    result.append(selection);
+    result.append(')');
+    return result.toString();
   }
 
   /**

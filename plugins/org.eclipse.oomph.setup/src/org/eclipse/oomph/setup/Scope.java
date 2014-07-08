@@ -21,6 +21,7 @@ package org.eclipse.oomph.setup;
  *   <li>{@link org.eclipse.oomph.setup.Scope#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Scope#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Scope#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.Scope#getQualifiedName <em>Qualified Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -108,6 +109,21 @@ public interface Scope extends SetupTaskContainer
    * @generated
    */
   void setDescription(String value);
+
+  /**
+   * Returns the value of the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Qualified Name</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Qualified Name</em>' attribute.
+   * @see org.eclipse.oomph.setup.SetupPackage#getScope_QualifiedName()
+   * @model required="true" transient="true" changeable="false" volatile="true" derived="true"
+   * @generated
+   */
+  String getQualifiedName();
 
   /**
    * <!-- begin-user-doc -->

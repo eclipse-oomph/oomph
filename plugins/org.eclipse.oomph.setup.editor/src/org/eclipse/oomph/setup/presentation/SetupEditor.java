@@ -1901,11 +1901,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           ResourceSet resourceSet = editingDomain.getResourceSet();
           EList<Resource> resources = resourceSet.getResources();
-          Project project = (Project)EcoreUtil.getObjectByType(resources.get(0).getContents(), SetupPackage.Literals.PROJECT);
-          if (project != null)
+          if (!resources.isEmpty())
           {
-            ItemProvider input = getTriggeredTasks(project);
-            getTreeViewer().setInput(input);
+            Project project = (Project)EcoreUtil.getObjectByType(resources.get(0).getContents(), SetupPackage.Literals.PROJECT);
+            if (project != null)
+            {
+              ItemProvider input = getTriggeredTasks(project);
+              getTreeViewer().setInput(input);
+            }
           }
         }
         catch (Exception ex)

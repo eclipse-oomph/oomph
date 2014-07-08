@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getProjectCatalogs <em>Project Catalogs</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getDefaultProductVersions <em>Default Product Versions</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getDefaultStreams <em>Default Streams</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getSelectedStreams <em>Selected Streams</em>}</li>
  * </ul>
  * </p>
  *
@@ -105,5 +106,21 @@ public interface CatalogSelection extends ModelElement
    * @generated
    */
   EMap<Project, Stream> getDefaultStreams();
+
+  /**
+   * Returns the value of the '<em><b>Selected Streams</b></em>' reference list.
+   * The list contents are of type {@link org.eclipse.oomph.setup.Stream}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Selected Streams</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Selected Streams</em>' reference list.
+   * @see org.eclipse.oomph.setup.SetupPackage#getCatalogSelection_SelectedStreams()
+   * @model transient="true" volatile="true" derived="true"
+   * @generated
+   */
+  EList<Stream> getSelectedStreams();
 
 } // CatalogSelection

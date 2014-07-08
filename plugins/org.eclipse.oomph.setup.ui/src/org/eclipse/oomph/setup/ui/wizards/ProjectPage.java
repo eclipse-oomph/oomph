@@ -39,6 +39,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -147,8 +148,11 @@ public class ProjectPage extends SetupWizardPage
   @Override
   protected Control createUI(final Composite parent)
   {
+    CatalogManager catalogManager = getCatalogManager();
+    catalogSelector = new CatalogSelector(catalogManager, false);
+
     adapterFactory = new ComposedAdapterFactory(getAdapterFactory());
-    adapterFactory.insertAdapterFactory(new ItemProviderAdapterFactory());
+    adapterFactory.insertAdapterFactory(new ItemProviderAdapterFactory(catalogSelector.getSelection()));
     EMFUtil.replaceReflectiveItemProvider(adapterFactory);
 
     final Workspace workspace = getWorkspace();
@@ -178,9 +182,6 @@ public class ProjectPage extends SetupWizardPage
       }
     }, resourceSet);
     resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(editingDomain));
-
-    CatalogManager catalogManager = getCatalogManager();
-    catalogSelector = new CatalogSelector(catalogManager, false);
 
     SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
 
@@ -506,16 +507,31 @@ public class ProjectPage extends SetupWizardPage
   }
 
   @Override
-  public void leavePage(boolean forward)
+  public void enterPage(boolean forward)
   {
     if (forward)
     {
-      int xxx;
-      // if (demandCreatedWorkspace != null)
-      // {
-      // getWizard().setWorkspace(demandCreatedWorkspace);
-      // }
+      if (projectViewer.getSelection().isEmpty())
+      {
+        CatalogSelection selection = catalogSelector.getSelection();
+        List<Project> projects = new ArrayList<Project>();
+        for (Stream stream : selection.getSelectedStreams())
+        {
+          projects.add(stream.getProject());
+        }
+
+        projectViewer.setSelection(new StructuredSelection(projects), true);
+      }
     }
+  }
+
+  private void saveProjectStreamSelection(Stream stream)
+  {
+    CatalogManager catalogManager = catalogSelector.getCatalogManager();
+    EMap<Project, Stream> defaultStreams = catalogManager.getSelection().getDefaultStreams();
+    Project project = stream.getProject();
+    defaultStreams.put(project, stream);
+    catalogManager.saveSelection();
   }
 
   private void hookCellEditor(TableViewerColumn viewerColumn)
@@ -556,7 +572,9 @@ public class ProjectPage extends SetupWizardPage
             int index = streams.indexOf(element);
             if (index != -1)
             {
-              streams.set(index, (Stream)value);
+              Stream stream = (Stream)value;
+              streams.set(index, stream);
+              saveProjectStreamSelection(stream);
               streamViewer.refresh();
             }
           }
@@ -599,6 +617,10 @@ public class ProjectPage extends SetupWizardPage
     List<Project> addedProjects = new ArrayList<Project>();
     List<Stream> addedStreams = new ArrayList<Stream>();
 
+    CatalogManager catalogManager = catalogSelector.getCatalogManager();
+    CatalogSelection catalogSelection = catalogManager.getSelection();
+    EMap<Project, Stream> defaultStreams = catalogSelection.getDefaultStreams();
+
     IStructuredSelection selection = (IStructuredSelection)projectViewer.getSelection();
     for (Iterator<?> it = selection.iterator(); it.hasNext();)
     {
@@ -611,7 +633,12 @@ public class ProjectPage extends SetupWizardPage
         {
           if (!isSelected(project))
           {
-            Stream stream = projectStreams.get(0);
+            Stream stream = defaultStreams.get(project);
+            if (stream == null)
+            {
+              stream = projectStreams.get(0);
+            }
+
             addedStreams.add(stream);
             addedProjects.add(project);
           }
@@ -625,15 +652,19 @@ public class ProjectPage extends SetupWizardPage
       if (workspace == null)
       {
         getWizard().setSetupContext(SetupContext.create(getInstallation(), addedStreams, getUser()));
-        streamViewer.setInput(getWorkspace());
+        workspace = getWorkspace();
+        streamViewer.setInput(workspace);
       }
       else
       {
         EList<Stream> workspaceStreams = workspace.getStreams();
         workspaceStreams.addAll(addedStreams);
-
         streamViewer.refresh();
       }
+
+      catalogSelection.getSelectedStreams().clear();
+      catalogSelection.getSelectedStreams().addAll(workspace.getStreams());
+      catalogManager.saveSelection();
 
       streamViewer.setSelection(new StructuredSelection(addedStreams));
 
@@ -685,6 +716,12 @@ public class ProjectPage extends SetupWizardPage
       {
         projectViewer.update(removedProjects.toArray(), null);
         projectViewer.setSelection(new StructuredSelection(removedProjects));
+
+        CatalogManager catalogManager = catalogSelector.getCatalogManager();
+        CatalogSelection catalogSelection = catalogManager.getSelection();
+        catalogSelection.getSelectedStreams().clear();
+        catalogSelection.getSelectedStreams().addAll(workspace.getStreams());
+        catalogManager.saveSelection();
 
         streamViewer.refresh();
 
@@ -742,6 +779,13 @@ public class ProjectPage extends SetupWizardPage
    */
   private static final class ItemProviderAdapterFactory extends SetupItemProviderAdapterFactory implements SetupPackage.Literals
   {
+    private CatalogSelection selection;
+
+    public ItemProviderAdapterFactory(CatalogSelection selection)
+    {
+      this.selection = selection;
+    }
+
     @Override
     public Adapter createCatalogSelectionAdapter()
     {
@@ -860,6 +904,12 @@ public class ProjectPage extends SetupWizardPage
           }
 
           return UnexecutableCommand.INSTANCE;
+        }
+
+        @Override
+        public Object getParent(Object object)
+        {
+          return selection;
         }
 
         @Override
@@ -1036,6 +1086,20 @@ public class ProjectPage extends SetupWizardPage
             }
 
             return childrenFeatures;
+          }
+
+          @Override
+          public void notifyChanged(Notification notification)
+          {
+            switch (notification.getFeatureID(Workspace.class))
+            {
+              case SetupPackage.WORKSPACE__STREAMS:
+                updateChildren(notification);
+                fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+                return;
+            }
+
+            super.notifyChanged(notification);
           }
 
           @Override

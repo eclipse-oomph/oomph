@@ -10,11 +10,14 @@
  */
 package org.eclipse.oomph.setup.provider;
 
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -58,6 +61,7 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
       addNamePropertyDescriptor(object);
       addLabelPropertyDescriptor(object);
       addDescriptionPropertyDescriptor(object);
+      addQualifiedNamePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -99,6 +103,19 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Scope_description_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Scope_description_feature", "_UI_Scope_type"),
         SetupPackage.Literals.SCOPE__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Qualified Name feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addQualifiedNamePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Scope_qualifiedName_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Scope_qualifiedName_feature", "_UI_Scope_type"),
+        SetupPackage.Literals.SCOPE__QUALIFIED_NAME, false, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -154,6 +171,7 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
       case SetupPackage.SCOPE__NAME:
       case SetupPackage.SCOPE__LABEL:
       case SetupPackage.SCOPE__DESCRIPTION:
+      case SetupPackage.SCOPE__QUALIFIED_NAME:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
@@ -171,6 +189,18 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+  }
+
+  @Override
+  protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
+  {
+    Object result = super.filterParent(itemDelegator, feature, object);
+    if (result instanceof Index)
+    {
+      return null;
+    }
+
+    return result;
   }
 
 }

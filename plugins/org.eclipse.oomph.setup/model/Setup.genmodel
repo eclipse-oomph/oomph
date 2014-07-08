@@ -84,6 +84,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/label"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/description"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/qualifiedName"/>
       <genOperations ecoreOperation="Setup.ecore#//Scope/getParentScope"/>
       <genOperations ecoreOperation="Setup.ecore#//Scope/getType"/>
     </genClasses>
@@ -99,6 +100,7 @@
           ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/projectCatalogs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/defaultProductVersions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/defaultStreams"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//CatalogSelection/selectedStreams"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//ProductCatalog">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//ProductCatalog/index"/>
@@ -214,6 +216,7 @@
     <genClasses ecoreClass="Setup.ecore#//ProjectToStreamMapEntry">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectToStreamMapEntry/key"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectToStreamMapEntry/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ProjectToStreamMapEntry/selection"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

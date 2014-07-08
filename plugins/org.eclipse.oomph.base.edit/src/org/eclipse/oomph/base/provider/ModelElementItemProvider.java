@@ -26,10 +26,13 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -37,6 +40,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -269,8 +273,45 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
 
         return false;
       }
-
     };
+  }
+
+  @Override
+  protected ItemPropertyDescriptor createItemPropertyDescriptor(AdapterFactory adapterFactory, ResourceLocator resourceLocator, String displayName,
+      String description, EStructuralFeature feature, boolean isSettable, boolean multiLine, boolean sortChoices, Object staticImage, String category,
+      String[] filterFlags)
+  {
+    if (feature instanceof EReference)
+    {
+      return new HierarchicalPropertyDescriptor(adapterFactory, resourceLocator, displayName, description, feature, isSettable, multiLine, sortChoices,
+          staticImage, category, filterFlags)
+      {
+        @Override
+        protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
+        {
+          return ModelElementItemProvider.this.filterParent(itemDelegator, feature, object);
+        }
+
+        @Override
+        public Collection<?> getChoiceOfValues(Object object)
+        {
+          return filterChoices(super.getChoiceOfValues(object), feature, object);
+        }
+      };
+    }
+
+    return super.createItemPropertyDescriptor(adapterFactory, resourceLocator, displayName, description, feature, isSettable, multiLine, sortChoices,
+        staticImage, category, filterFlags);
+  }
+
+  protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
+  {
+    return object;
+  }
+
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    return choices;
   }
 
   /**
@@ -285,4 +326,137 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
     return ((IChildCreationExtender)adapterFactory).getResourceLocator();
   }
 
+  /**
+   * @author Ed Merks
+   */
+  public static class HierarchicalPropertyDescriptor extends ItemPropertyDescriptor
+  {
+    protected IItemLabelProvider labelProvider;
+
+    public HierarchicalPropertyDescriptor(AdapterFactory adapterFactory, ResourceLocator resourceLocator, String displayName, String description,
+        EStructuralFeature feature, boolean isSettable, boolean multiLine, boolean sortChoices, Object staticImage, String category, String[] filterFlags)
+    {
+      super(adapterFactory, resourceLocator, displayName, description, feature, isSettable, multiLine, sortChoices, staticImage, category, filterFlags);
+    }
+
+    protected IItemLabelProvider createLabelProvider()
+    {
+      return new HierarchicalItemLabelProvider(itemDelegator)
+      {
+        @Override
+        protected Object getParent(Object object)
+        {
+          Object parent = filterParent(itemDelegator, feature, super.getParent(object));
+          return parent;
+        }
+      };
+    }
+
+    protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
+    {
+      return object;
+    }
+
+    @Override
+    public IItemLabelProvider getLabelProvider(Object object)
+    {
+      if (labelProvider == null)
+      {
+        labelProvider = createLabelProvider();
+      }
+
+      return labelProvider;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class HierarchicalItemLabelProvider implements IItemLabelProvider
+  {
+    protected AdapterFactoryItemDelegator itemDelegator;
+
+    public HierarchicalItemLabelProvider(AdapterFactoryItemDelegator itemDelegator)
+    {
+      this.itemDelegator = itemDelegator;
+    }
+
+    public String getText(Object object)
+    {
+      if (object instanceof EList<?>)
+      {
+        StringBuffer result = new StringBuffer();
+        for (Object child : (List<?>)object)
+        {
+          if (result.length() != 0)
+          {
+            result.append(", ");
+          }
+          result.append(getText(child));
+        }
+
+        return result.toString();
+      }
+
+      StringBuilder builder = new StringBuilder(getBasicText(object));
+      int index = builder.length();
+      object = getParent(object);
+      while (object != null)
+      {
+        if (builder.length() == index)
+        {
+          builder.insert(index, " (");
+          index += 2;
+        }
+        else
+        {
+          builder.insert(index, " - ");
+        }
+
+        String text = getQualifierText(object);
+        builder.insert(index, text);
+
+        object = getParent(object);
+      }
+
+      if (builder.length() != index)
+      {
+        builder.append(")");
+      }
+
+      return builder.toString();
+    }
+
+    protected String getBasicText(Object object)
+    {
+      return itemDelegator.getText(object);
+    }
+
+    protected String getQualifierText(Object object)
+    {
+      return itemDelegator.getText(object);
+    }
+
+    protected Object getParent(Object object)
+    {
+      Object parent = itemDelegator.getParent(object);
+      if (parent instanceof Resource)
+      {
+        Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
+        if (unwrappedObject instanceof EObject)
+        {
+          return ((EObject)unwrappedObject).eContainer();
+        }
+
+        return null;
+      }
+
+      return parent;
+    }
+
+    public Object getImage(Object object)
+    {
+      return itemDelegator.getImage(object);
+    }
+  }
 }

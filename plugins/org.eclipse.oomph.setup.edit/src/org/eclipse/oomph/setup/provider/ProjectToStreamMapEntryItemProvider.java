@@ -10,11 +10,21 @@
  */
 package org.eclipse.oomph.setup.provider;
 
+import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.setup.Index;
+import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.Stream;
+import org.eclipse.oomph.setup.impl.ProjectToStreamMapEntryImpl;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -23,9 +33,14 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +53,68 @@ import java.util.Map;
 public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider,
     ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
+  private ModelElementItemProvider.HierarchicalPropertyDescriptor keyPropertyDescriptor = new ModelElementItemProvider.HierarchicalPropertyDescriptor(
+      ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_key_feature"),
+      getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_key_feature", "_UI_ProjectToStreamMapEntry_type"),
+      SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__KEY, true, false, true, null, null, null)
+  {
+    @Override
+    protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
+    {
+      Object result = super.filterParent(itemDelegator, feature, object);
+      if (result instanceof Index)
+      {
+        return null;
+      }
+
+      return result;
+    }
+
+    @Override
+    public void setPropertyValue(Object object, Object value)
+    {
+      Project project = (Project)value;
+      Stream stream = project.getStreams().get(0);
+
+      EditingDomain editingDomain = getEditingDomain(object);
+      CompoundCommand compoundCommand = new CompoundCommand(CompoundCommand.LAST_COMMAND_ALL);
+      compoundCommand.append(SetCommand.create(editingDomain, object, SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__KEY, project));
+      compoundCommand.append(SetCommand.create(editingDomain, object, SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__VALUE, stream));
+
+      editingDomain.getCommandStack().execute(compoundCommand);
+    }
+
+    @Override
+    public Collection<?> getChoiceOfValues(Object object)
+    {
+      List<Object> result = new ArrayList<Object>(super.getChoiceOfValues(object));
+      for (Iterator<Object> it = result.iterator(); it.hasNext();)
+      {
+        Project project = (Project)it.next();
+        if (project == null || project.getStreams().isEmpty())
+        {
+          it.remove();
+        }
+      }
+
+      return result;
+    }
+  };
+
+  protected ItemPropertyDescriptor valuePropertyDescriptor = new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+      getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_value_feature"), getString("_UI_PropertyDescriptor_description",
+          "_UI_ProjectToStreamMapEntry_value_feature", "_UI_ProjectToStreamMapEntry_type"), SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__VALUE, true,
+      false, true, null, null, null)
+  {
+    @Override
+    public Collection<?> getChoiceOfValues(Object object)
+    {
+      ProjectToStreamMapEntryImpl entry = (ProjectToStreamMapEntryImpl)object;
+      Project key = entry.getKey();
+      return key == null ? Collections.emptyList() : key.getStreams();
+    }
+  };
+
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -64,6 +141,7 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter imp
 
       addKeyPropertyDescriptor(object);
       addValuePropertyDescriptor(object);
+      addSelectionPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -72,28 +150,36 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter imp
    * This adds a property descriptor for the Key feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected void addKeyPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectToStreamMapEntry_key_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_key_feature", "_UI_ProjectToStreamMapEntry_type"),
-        SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__KEY, true, false, true, null, null, null));
+    itemPropertyDescriptors.add(keyPropertyDescriptor);
   }
 
   /**
    * This adds a property descriptor for the Value feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected void addValuePropertyDescriptor(Object object)
   {
+    itemPropertyDescriptors.add(valuePropertyDescriptor);
+  }
+
+  /**
+   * This adds a property descriptor for the Selection feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addSelectionPropertyDescriptor(Object object)
+  {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectToStreamMapEntry_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_value_feature", "_UI_ProjectToStreamMapEntry_type"),
-        SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__VALUE, true, false, true, null, null, null));
+        getString("_UI_ProjectToStreamMapEntry_selection_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_selection_feature", "_UI_ProjectToStreamMapEntry_type"),
+        SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -134,13 +220,17 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter imp
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    Map.Entry<?, ?> projectToStreamMapEntry = (Map.Entry<?, ?>)object;
-    return "" + projectToStreamMapEntry.getKey() + " -> " + projectToStreamMapEntry.getValue();
+    @SuppressWarnings("unchecked")
+    Map.Entry<Project, Stream> projectToStreamMapEntry = (Map.Entry<Project, Stream>)object;
+    Project project = projectToStreamMapEntry.getKey();
+    Stream stream = projectToStreamMapEntry.getValue();
+    return "" + (project == null ? "null" : keyPropertyDescriptor.getLabelProvider(object).getText(project)) + " -> "
+        + (stream == null ? "null" : valuePropertyDescriptor.getLabelProvider(object).getText(stream));
   }
 
   /**
@@ -148,12 +238,21 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter imp
    * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public void notifyChanged(Notification notification)
   {
     updateChildren(notification);
+
+    switch (notification.getFeatureID(Map.Entry.class))
+    {
+      case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__KEY:
+      case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__VALUE:
+      case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
+    }
     super.notifyChanged(notification);
   }
 

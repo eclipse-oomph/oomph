@@ -286,8 +286,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   protected void reloadIndex()
   {
-    Resource selectionResource = getCatalogManager().getSelection().eResource();
     Set<Resource> excludedResources = new HashSet<Resource>();
+
+    Resource selectionResource = getCatalogManager().getSelection().eResource();
+    excludedResources.add(selectionResource);
+
     Installation installation = setupContext.getInstallation();
     if (installation != null)
     {
@@ -326,6 +329,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
     resourceSet.getPackageRegistry().clear();
     loadIndex();
+
+    for (Resource resource : excludedResources)
+    {
+      EcoreUtil.resolveAll(resource);
+    }
   }
 
   protected void loadIndex()

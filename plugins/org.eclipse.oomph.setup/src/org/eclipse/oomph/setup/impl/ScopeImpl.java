@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getQualifiedName <em>Qualified Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -94,6 +95,16 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * @ordered
    */
   protected String description = DESCRIPTION_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getQualifiedName() <em>Qualified Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getQualifiedName()
+   * @generated
+   * @ordered
+   */
+  protected static final String QUALIFIED_NAME_EDEFAULT = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -196,6 +207,23 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  public String getQualifiedName()
+  {
+    StringBuilder result = new StringBuilder(getName());
+    for (Scope parent = getParentScope(); parent != null; parent = parent.getParentScope())
+    {
+      result.insert(0, '.');
+      result.insert(0, parent.getName());
+    }
+
+    return result.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
   public abstract ScopeType getType();
 
   /**
@@ -214,6 +242,8 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
         return getLabel();
       case SetupPackage.SCOPE__DESCRIPTION:
         return getDescription();
+      case SetupPackage.SCOPE__QUALIFIED_NAME:
+        return getQualifiedName();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -280,6 +310,8 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
         return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case SetupPackage.SCOPE__DESCRIPTION:
         return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+      case SetupPackage.SCOPE__QUALIFIED_NAME:
+        return QUALIFIED_NAME_EDEFAULT == null ? getQualifiedName() != null : !QUALIFIED_NAME_EDEFAULT.equals(getQualifiedName());
     }
     return super.eIsSet(featureID);
   }

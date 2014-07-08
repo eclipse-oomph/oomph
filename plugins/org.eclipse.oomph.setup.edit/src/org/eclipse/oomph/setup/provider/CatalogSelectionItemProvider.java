@@ -12,12 +12,17 @@ package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.setup.CatalogSelection;
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -59,6 +64,7 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
 
       addProductCatalogsPropertyDescriptor(object);
       addProjectCatalogsPropertyDescriptor(object);
+      addSelectedStreamsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -89,6 +95,20 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
         getString("_UI_CatalogSelection_projectCatalogs_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_projectCatalogs_feature", "_UI_CatalogSelection_type"),
         SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS, true, false, true, null, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Selected Streams feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addSelectedStreamsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_CatalogSelection_selectedStreams_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_selectedStreams_feature", "_UI_CatalogSelection_type"),
+        SetupPackage.Literals.CATALOG_SELECTION__SELECTED_STREAMS, true, false, true, null, null, null));
   }
 
   /**
@@ -205,4 +225,33 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
         SetupFactory.eINSTANCE.create(SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY)));
   }
 
+  @Override
+  protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
+  {
+    Object result = super.filterParent(itemDelegator, feature, object);
+    if (result instanceof Index)
+    {
+      return null;
+    }
+
+    return result;
+  }
+
+  @Override
+  protected boolean isValidValue(Object object, Object value, EStructuralFeature feature)
+  {
+    if (feature instanceof EReference)
+    {
+      EReference eReference = (EReference)feature;
+      EClass eReferenceType = eReference.getEReferenceType();
+      if (!(value instanceof EObject))
+      {
+        return false;
+      }
+
+      return eReferenceType.isSuperTypeOf(((EObject)value).eClass());
+    }
+
+    return super.isValidValue(object, value, feature);
+  }
 }

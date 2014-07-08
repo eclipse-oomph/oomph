@@ -12,8 +12,8 @@ package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.ProductVersion;
-import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -25,9 +25,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -123,115 +121,28 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
    * This adds a property descriptor for the Predecessors feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   protected void addPredecessorsPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(createDependendencyItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-        getResourceLocator(), getString("_UI_SetupTask_predecessors_feature"),
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_SetupTask_predecessors_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_predecessors_feature", "_UI_SetupTask_type"),
-        SetupPackage.Literals.SETUP_TASK__PREDECESSORS, true, false, true, null, null, PropertiesUtil.EXPERT_FILTER, true));
+        SetupPackage.Literals.SETUP_TASK__PREDECESSORS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**
    * This adds a property descriptor for the Successors feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   protected void addSuccessorsPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(createDependendencyItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-        getResourceLocator(), getString("_UI_SetupTask_successors_feature"),
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_SetupTask_successors_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_successors_feature", "_UI_SetupTask_type"),
-        SetupPackage.Literals.SETUP_TASK__SUCCESSORS, true, false, true, null, null, PropertiesUtil.EXPERT_FILTER, false));
-  }
-
-  protected ItemPropertyDescriptor createDependendencyItemPropertyDescriptor(AdapterFactory adapterFactory, ResourceLocator resourceLocator,
-      String displayName, String description, EStructuralFeature feature, boolean isSettable, boolean multiLine, boolean sortChoices, Object staticImage,
-      String category, String[] filterFlags, final boolean direction)
-  {
-    return new ItemPropertyDescriptor(adapterFactory, resourceLocator, displayName, description, feature, isSettable, multiLine, sortChoices, staticImage,
-        category, filterFlags)
-    {
-      private IItemLabelProvider labelProvider = new HierarchicalItemLabelProvider(itemDelegator);
-
-      @Override
-      public IItemLabelProvider getLabelProvider(Object object)
-      {
-        return labelProvider;
-      }
-
-      private List<Scope> getScopes(SetupTask setupTask)
-      {
-        List<Scope> scopes = new ArrayList<Scope>();
-        for (Scope scope = setupTask.getScope(); scope != null; scope = scope.getParentScope())
-        {
-          scopes.add(0, scope);
-        }
-
-        return scopes;
-      }
-
-      private boolean onlyHasVariables(SetupTask setupTask)
-      {
-        if (setupTask instanceof VariableTask)
-        {
-          return true;
-        }
-
-        if (setupTask instanceof CompoundTask)
-        {
-          CompoundTask compoundTask = (CompoundTask)setupTask;
-          for (SetupTask childSetupTask : compoundTask.getSetupTasks())
-          {
-            if (!onlyHasVariables(childSetupTask))
-            {
-              return false;
-            }
-          }
-
-          return true;
-        }
-
-        return false;
-      }
-
-      @Override
-      public Collection<?> getChoiceOfValues(Object object)
-      {
-        SetupTask setupTask = (SetupTask)object;
-        List<Scope> scopes = getScopes(setupTask);
-        int scopesSize = scopes.size();
-        Collection<?> result = new ArrayList<Object>(super.getChoiceOfValues(object));
-        for (Iterator<?> it = result.iterator(); it.hasNext();)
-        {
-          Object value = it.next();
-          if (value instanceof SetupTask)
-          {
-            SetupTask targetSetupTast = (SetupTask)value;
-            if ((direction ? !targetSetupTast.requires(setupTask) : !setupTask.requires(targetSetupTast)) && !onlyHasVariables(targetSetupTast))
-            {
-              if (scopesSize == 1 && scopes.get(0) instanceof User)
-              {
-                continue;
-              }
-
-              List<Scope> targetScopes = getScopes(targetSetupTast);
-              int targetScopesSize = targetScopes.size();
-              if (targetScopesSize <= scopesSize && scopes.subList(0, targetScopesSize).equals(targetScopes))
-              {
-                continue;
-              }
-            }
-
-            it.remove();
-          }
-        }
-
-        return result;
-      }
-    };
+        SetupPackage.Literals.SETUP_TASK__SUCCESSORS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**
@@ -251,29 +162,41 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
    * This adds a property descriptor for the Restrictions feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   protected void addRestrictionsPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_SetupTask_restrictions_feature"), getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_restrictions_feature",
-            "_UI_SetupTask_type"), SetupPackage.Literals.SETUP_TASK__RESTRICTIONS, true, false, true, null, null, PropertiesUtil.EXPERT_FILTER)
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_SetupTask_restrictions_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_restrictions_feature", "_UI_SetupTask_type"),
+        SetupPackage.Literals.SETUP_TASK__RESTRICTIONS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+  }
+
+  @Override
+  protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
+  {
+    Object result = super.filterParent(itemDelegator, feature, object);
+    if (result instanceof Index)
     {
-      private IItemLabelProvider labelProvider = new HierarchicalItemLabelProvider(itemDelegator);
+      return null;
+    }
 
-      @Override
-      public IItemLabelProvider getLabelProvider(Object object)
-      {
-        return labelProvider;
-      }
+    return result;
+  }
 
-      @Override
-      public Collection<?> getChoiceOfValues(Object object)
+  @Override
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    SetupTask setupTask = (SetupTask)object;
+    int featureID = setupTask.eClass().getFeatureID(feature);
+
+    switch (featureID)
+    {
+      case SetupPackage.SETUP_TASK__RESTRICTIONS:
       {
-        SetupTask setupTask = (SetupTask)object;
         ScopeType scope = setupTask.getScopeType();
 
-        Collection<?> result = new ArrayList<Object>(super.getChoiceOfValues(object));
+        Collection<?> result = new ArrayList<Object>(choices);
         for (Iterator<?> it = result.iterator(); it.hasNext();)
         {
           Object value = it.next();
@@ -306,7 +229,82 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
 
         return result;
       }
-    });
+
+      case SetupPackage.SETUP_TASK__PREDECESSORS:
+      case SetupPackage.SETUP_TASK__SUCCESSORS:
+      {
+        boolean direction = featureID == SetupPackage.SETUP_TASK__PREDECESSORS;
+        List<Scope> scopes = getScopes(setupTask);
+        int scopesSize = scopes.size();
+        Collection<?> result = new ArrayList<Object>(choices);
+        for (Iterator<?> it = result.iterator(); it.hasNext();)
+        {
+          Object value = it.next();
+          if (value instanceof SetupTask)
+          {
+            SetupTask targetSetupTast = (SetupTask)value;
+            if ((direction ? !targetSetupTast.requires(setupTask) : !setupTask.requires(targetSetupTast)) && !onlyHasVariables(targetSetupTast))
+            {
+              if (scopesSize == 1 && scopes.get(0) instanceof User)
+              {
+                continue;
+              }
+
+              List<Scope> targetScopes = getScopes(targetSetupTast);
+              int targetScopesSize = targetScopes.size();
+              if (targetScopesSize <= scopesSize && scopes.subList(0, targetScopesSize).equals(targetScopes))
+              {
+                continue;
+              }
+            }
+
+            it.remove();
+          }
+        }
+
+        return result;
+      }
+
+      default:
+      {
+        return super.filterChoices(choices, feature, object);
+      }
+    }
+  }
+
+  private List<Scope> getScopes(SetupTask setupTask)
+  {
+    List<Scope> scopes = new ArrayList<Scope>();
+    for (Scope scope = setupTask.getScope(); scope != null; scope = scope.getParentScope())
+    {
+      scopes.add(0, scope);
+    }
+
+    return scopes;
+  }
+
+  private boolean onlyHasVariables(SetupTask setupTask)
+  {
+    if (setupTask instanceof VariableTask)
+    {
+      return true;
+    }
+
+    if (setupTask instanceof CompoundTask)
+    {
+      CompoundTask compoundTask = (CompoundTask)setupTask;
+      for (SetupTask childSetupTask : compoundTask.getSetupTasks())
+      {
+        if (!onlyHasVariables(childSetupTask))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -431,25 +429,44 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
    * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
-  @Override
-  public void notifyChanged(Notification notification)
+  public void notifyChangedGen(Notification notification)
   {
     updateChildren(notification);
 
     switch (notification.getFeatureID(SetupTask.class))
     {
-      case SetupPackage.SETUP_TASK__DISABLED:
-        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, true));
-        return;
+      case SetupPackage.SETUP_TASK__ID:
+      case SetupPackage.SETUP_TASK__DESCRIPTION:
       case SetupPackage.SETUP_TASK__SCOPE_TYPE:
       case SetupPackage.SETUP_TASK__EXCLUDED_TRIGGERS:
-      case SetupPackage.SETUP_TASK__DESCRIPTION:
+      case SetupPackage.SETUP_TASK__DISABLED:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
     super.notifyChanged(notification);
+  }
+
+  /**
+   * This handles model notifications by calling {@link #updateChildren} to update any cached
+   * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  @Override
+  public void notifyChanged(Notification notification)
+  {
+    switch (notification.getFeatureID(SetupTask.class))
+    {
+      case SetupPackage.SETUP_TASK__DISABLED:
+        updateChildren(notification);
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, true));
+        return;
+      default:
+        super.notifyChanged(notification);
+    }
   }
 
   /**
@@ -463,57 +480,5 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static class HierarchicalItemLabelProvider implements IItemLabelProvider
-  {
-    private AdapterFactoryItemDelegator itemDelegator;
-
-    public HierarchicalItemLabelProvider(AdapterFactoryItemDelegator itemDelegator)
-    {
-      this.itemDelegator = itemDelegator;
-    }
-
-    public String getText(Object object)
-    {
-      StringBuilder builder = new StringBuilder(itemDelegator.getText(object));
-      if (!(object instanceof Collection<?>))
-      {
-        int index = builder.length();
-        object = itemDelegator.getParent(object);
-        while (object != null && !(object instanceof ProjectCatalog) && !(object instanceof Resource))
-        {
-          if (builder.length() == index)
-          {
-            builder.insert(index, " (");
-            index += 2;
-          }
-          else
-          {
-            builder.insert(index, " - ");
-          }
-
-          String text = itemDelegator.getText(object);
-          builder.insert(index, text);
-
-          object = itemDelegator.getParent(object);
-        }
-
-        if (builder.length() != index)
-        {
-          builder.append(")");
-        }
-      }
-
-      return builder.toString();
-    }
-
-    public Object getImage(Object object)
-    {
-      return itemDelegator.getImage(object);
-    }
   }
 }

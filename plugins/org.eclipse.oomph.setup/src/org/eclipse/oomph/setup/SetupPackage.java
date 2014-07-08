@@ -393,13 +393,22 @@ public interface SetupPackage extends EPackage
   int SCOPE__DESCRIPTION = SETUP_TASK_CONTAINER_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCOPE__QUALIFIED_NAME = SETUP_TASK_CONTAINER_FEATURE_COUNT + 3;
+
+  /**
    * The number of structural features of the '<em>Scope</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SCOPE_FEATURE_COUNT = SETUP_TASK_CONTAINER_FEATURE_COUNT + 3;
+  int SCOPE_FEATURE_COUNT = SETUP_TASK_CONTAINER_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -582,13 +591,22 @@ public interface SetupPackage extends EPackage
   int CATALOG_SELECTION__DEFAULT_STREAMS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
+   * The feature id for the '<em><b>Selected Streams</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATALOG_SELECTION__SELECTED_STREAMS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
+
+  /**
    * The number of structural features of the '<em>Catalog Selection</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CATALOG_SELECTION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
+  int CATALOG_SELECTION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -634,6 +652,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int PRODUCT_CATALOG__DESCRIPTION = SCOPE__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_CATALOG__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Index</b></em>' container reference.
@@ -708,6 +735,15 @@ public interface SetupPackage extends EPackage
   int PRODUCT__DESCRIPTION = SCOPE__DESCRIPTION;
 
   /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
+
+  /**
    * The feature id for the '<em><b>Product Catalog</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -778,6 +814,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int PRODUCT_VERSION__DESCRIPTION = SCOPE__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_VERSION__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Product</b></em>' container reference.
@@ -853,6 +898,15 @@ public interface SetupPackage extends EPackage
   int PROJECT_CONTAINER__DESCRIPTION = SCOPE__DESCRIPTION;
 
   /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_CONTAINER__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
+
+  /**
    * The feature id for the '<em><b>Projects</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -914,6 +968,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int PROJECT_CATALOG__DESCRIPTION = PROJECT_CONTAINER__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_CATALOG__QUALIFIED_NAME = PROJECT_CONTAINER__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Projects</b></em>' containment reference list.
@@ -986,6 +1049,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int PROJECT__DESCRIPTION = PROJECT_CONTAINER__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT__QUALIFIED_NAME = PROJECT_CONTAINER__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Projects</b></em>' containment reference list.
@@ -1096,6 +1168,15 @@ public interface SetupPackage extends EPackage
   int STREAM__DESCRIPTION = SCOPE__DESCRIPTION;
 
   /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STREAM__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
+
+  /**
    * The feature id for the '<em><b>Project</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1157,6 +1238,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int USER__DESCRIPTION = SCOPE__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int USER__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Attribute Rules</b></em>' containment reference list.
@@ -1274,6 +1364,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int INSTALLATION__DESCRIPTION = SCOPE__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTALLATION__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Product Version</b></em>' reference.
@@ -1436,6 +1535,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int WORKSPACE__DESCRIPTION = SCOPE__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORKSPACE__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
 
   /**
    * The feature id for the '<em><b>Streams</b></em>' reference list.
@@ -2884,13 +2992,22 @@ public interface SetupPackage extends EPackage
   int PROJECT_TO_STREAM_MAP_ENTRY__VALUE = 1;
 
   /**
+   * The feature id for the '<em><b>Selection</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_TO_STREAM_MAP_ENTRY__SELECTION = 2;
+
+  /**
    * The number of structural features of the '<em>Project To Stream Map Entry</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROJECT_TO_STREAM_MAP_ENTRY_FEATURE_COUNT = 2;
+  int PROJECT_TO_STREAM_MAP_ENTRY_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.ScopeType <em>Scope Type</em>}' enum.
@@ -3027,6 +3144,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EReference getCatalogSelection_DefaultStreams();
+
+  /**
+   * Returns the meta object for the reference list '{@link org.eclipse.oomph.setup.CatalogSelection#getSelectedStreams <em>Selected Streams</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Selected Streams</em>'.
+   * @see org.eclipse.oomph.setup.CatalogSelection#getSelectedStreams()
+   * @see #getCatalogSelection()
+   * @generated
+   */
+  EReference getCatalogSelection_SelectedStreams();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.Index#getProductCatalogs <em>Product Catalogs</em>}'.
@@ -3659,10 +3787,12 @@ public interface SetupPackage extends EPackage
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>Project To Stream Map Entry</em>'.
    * @see java.util.Map.Entry
-   * @model keyType="org.eclipse.oomph.setup.Project" keyRequired="true"
+   * @model features="key value selection"
+   *        keyType="org.eclipse.oomph.setup.Project" keyRequired="true"
    *        keyExtendedMetaData="kind='attribute'"
    *        valueType="org.eclipse.oomph.setup.Stream" valueRequired="true"
    *        valueExtendedMetaData="kind='attribute'"
+   *        selectionDataType="org.eclipse.emf.ecore.EBoolean"
    * @generated
    */
   EClass getProjectToStreamMapEntry();
@@ -3688,6 +3818,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EReference getProjectToStreamMapEntry_Value();
+
+  /**
+   * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Selection</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Selection</em>'.
+   * @see java.util.Map.Entry
+   * @see #getProjectToStreamMapEntry()
+   * @generated
+   */
+  EAttribute getProjectToStreamMapEntry_Selection();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.StringSubstitutionTask <em>String Substitution Task</em>}'.
@@ -4157,6 +4298,17 @@ public interface SetupPackage extends EPackage
   EAttribute getScope_Description();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Scope#getQualifiedName <em>Qualified Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Qualified Name</em>'.
+   * @see org.eclipse.oomph.setup.Scope#getQualifiedName()
+   * @see #getScope()
+   * @generated
+   */
+  EAttribute getScope_QualifiedName();
+
+  /**
    * Returns the meta object for data type '{@link org.eclipse.oomph.setup.LicenseInfo <em>License Info</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4269,6 +4421,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EReference CATALOG_SELECTION__DEFAULT_STREAMS = eINSTANCE.getCatalogSelection_DefaultStreams();
+
+    /**
+     * The meta object literal for the '<em><b>Selected Streams</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CATALOG_SELECTION__SELECTED_STREAMS = eINSTANCE.getCatalogSelection_SelectedStreams();
 
     /**
      * The meta object literal for the '<em><b>Product Catalogs</b></em>' containment reference list feature.
@@ -4785,6 +4945,14 @@ public interface SetupPackage extends EPackage
     EReference PROJECT_TO_STREAM_MAP_ENTRY__VALUE = eINSTANCE.getProjectToStreamMapEntry_Value();
 
     /**
+     * The meta object literal for the '<em><b>Selection</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROJECT_TO_STREAM_MAP_ENTRY__SELECTION = eINSTANCE.getProjectToStreamMapEntry_Selection();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.StringSubstitutionTaskImpl <em>String Substitution Task</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5169,6 +5337,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute SCOPE__DESCRIPTION = eINSTANCE.getScope_Description();
+
+    /**
+     * The meta object literal for the '<em><b>Qualified Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SCOPE__QUALIFIED_NAME = eINSTANCE.getScope_QualifiedName();
 
     /**
      * The meta object literal for the '<em>License Info</em>' data type.

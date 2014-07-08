@@ -489,6 +489,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getCatalogSelection_SelectedStreams()
+  {
+    return (EReference)catalogSelectionEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getIndex_ProductCatalogs()
   {
     return (EReference)indexEClass.getEStructuralFeatures().get(1);
@@ -1089,6 +1099,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getProjectToStreamMapEntry_Selection()
+  {
+    return (EAttribute)projectToStreamMapEntryEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getStringSubstitutionTask()
   {
     return stringSubstitutionTaskEClass;
@@ -1529,6 +1549,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getScope_QualifiedName()
+  {
+    return (EAttribute)scopeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getLicenseInfo()
   {
     return licenseInfoEDataType;
@@ -1594,6 +1624,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(scopeEClass, SCOPE__NAME);
     createEAttribute(scopeEClass, SCOPE__LABEL);
     createEAttribute(scopeEClass, SCOPE__DESCRIPTION);
+    createEAttribute(scopeEClass, SCOPE__QUALIFIED_NAME);
 
     indexEClass = createEClass(INDEX);
     createEReference(indexEClass, INDEX__DISCOVERABLE_PACKAGES);
@@ -1605,6 +1636,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEReference(catalogSelectionEClass, CATALOG_SELECTION__PROJECT_CATALOGS);
     createEReference(catalogSelectionEClass, CATALOG_SELECTION__DEFAULT_PRODUCT_VERSIONS);
     createEReference(catalogSelectionEClass, CATALOG_SELECTION__DEFAULT_STREAMS);
+    createEReference(catalogSelectionEClass, CATALOG_SELECTION__SELECTED_STREAMS);
 
     productCatalogEClass = createEClass(PRODUCT_CATALOG);
     createEReference(productCatalogEClass, PRODUCT_CATALOG__INDEX);
@@ -1716,6 +1748,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     projectToStreamMapEntryEClass = createEClass(PROJECT_TO_STREAM_MAP_ENTRY);
     createEReference(projectToStreamMapEntryEClass, PROJECT_TO_STREAM_MAP_ENTRY__KEY);
     createEReference(projectToStreamMapEntryEClass, PROJECT_TO_STREAM_MAP_ENTRY__VALUE);
+    createEAttribute(projectToStreamMapEntryEClass, PROJECT_TO_STREAM_MAP_ENTRY__SELECTION);
 
     // Create enums
     scopeTypeEEnum = createEEnum(SCOPE_TYPE);
@@ -1834,6 +1867,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScope_Description(), theBasePackage.getText(), "description", null, 0, 1, Scope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getScope_QualifiedName(), ecorePackage.getEString(), "qualifiedName", null, 1, 1, Scope.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     addEOperation(scopeEClass, getScope(), "getParentScope", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1861,6 +1896,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         IS_ORDERED);
     initEReference(getCatalogSelection_DefaultStreams(), getProjectToStreamMapEntry(), null, "defaultStreams", null, 0, -1, CatalogSelection.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCatalogSelection_SelectedStreams(), getStream(), null, "selectedStreams", null, 0, -1, CatalogSelection.class, IS_TRANSIENT, IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     initEClass(productCatalogEClass, ProductCatalog.class, "ProductCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getProductCatalog_Index(), getIndex(), getIndex_ProductCatalogs(), "index", null, 0, 1, ProductCatalog.class, IS_TRANSIENT, !IS_VOLATILE,
@@ -2040,6 +2077,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getProjectToStreamMapEntry_Value(), getStream(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProjectToStreamMapEntry_Selection(), ecorePackage.getEBoolean(), "selection", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(scopeTypeEEnum, ScopeType.class, "ScopeType");
