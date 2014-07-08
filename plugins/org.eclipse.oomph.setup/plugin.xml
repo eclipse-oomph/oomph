@@ -36,5 +36,27 @@
             supportsArgument="true">
       </variable>
    </extension>
+   
+   <extension
+        point="org.eclipse.core.contenttype.contentTypes">
+     <content-type
+           base-type="org.eclipse.emf.ecore.xmi"
+           file-extensions="setup"
+           id="org.eclipse.oomph.setup"
+           name="%_UI_Setup_content_type"
+           priority="normal">
+        <describer
+              class="org.eclipse.emf.ecore.xmi.impl.RootXMLContentHandlerImpl$Describer">
+           <parameter
+                 name="namespace"
+                 value="http://www.eclipse.org/oomph/setup/1.0">
+           </parameter>
+           <parameter
+                 name="kind"
+                 value="xmi">
+           </parameter>
+        </describer>
+     </content-type>
+   </extension>
 
 </plugin>
