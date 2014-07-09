@@ -395,6 +395,8 @@
           <repository
               url="http://download.eclipse.org/tools/orbit/downloads/drops/S20131024145017/repository/"/>
           <repository
+              url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
+          <repository
               url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
         </repositoryList>
       </targlet>
