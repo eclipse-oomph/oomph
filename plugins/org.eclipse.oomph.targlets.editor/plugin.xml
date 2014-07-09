@@ -56,6 +56,9 @@
             extensions="targlet"
             class="org.eclipse.oomph.targlets.presentation.TargletEditor"
             contributorClass="org.eclipse.oomph.targlets.presentation.TargletActionBarContributor">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.oomph.targlets.targlet">
+         </contentTypeBinding>
       </editor>
    </extension>
    
@@ -67,6 +70,9 @@
             extensions="def"
             class="org.eclipse.oomph.targlets.presentation.TargletEditor"
             contributorClass="org.eclipse.oomph.targlets.presentation.TargletActionBarContributor">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.oomph.targlets.def">
+         </contentTypeBinding>
       </editor>
       <editor
             id="org.eclipse.oomph.targlets.presentation.CExtEditorID"
@@ -75,6 +81,9 @@
             extensions="ext"
             class="org.eclipse.oomph.targlets.presentation.TargletEditor"
             contributorClass="org.eclipse.oomph.targlets.presentation.TargletActionBarContributor">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.oomph.targlets.ext">
+         </contentTypeBinding>
       </editor>
    </extension>
 

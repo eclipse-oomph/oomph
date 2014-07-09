@@ -42,6 +42,9 @@
             extensions="setup"
             class="org.eclipse.oomph.setup.presentation.SetupEditor"
             contributorClass="org.eclipse.oomph.setup.presentation.SetupActionBarContributor">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.oomph.setup">
+         </contentTypeBinding>
       </editor>
    </extension>
 
