@@ -378,7 +378,8 @@
         <requirement
             id="org.eclipse.emf.xcore.build.feature.group"/>
         <requirement
-            id="org.eclipse.xtext.sdk.feature.group"/>
+            id="org.eclipse.xtext.sdk.feature.group"
+            versionRange="2.7.0"/>
         <requirement
             id="org.eclipse.xtend.sdk.feature.group"/>
         <requirement
