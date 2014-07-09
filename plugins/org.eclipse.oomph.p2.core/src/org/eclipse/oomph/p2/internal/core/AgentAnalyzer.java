@@ -34,13 +34,14 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -50,7 +51,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 /**
  * @author Eike Stepper
@@ -530,26 +531,40 @@ public final class AgentAnalyzer
       String name = file.getName();
       if (name.endsWith(".jar") || name.endsWith(".zip"))
       {
-        ZipInputStream in = null;
+        ZipFile zipFile = null;
 
         try
         {
-          in = new ZipInputStream(new FileInputStream(file));
-
-          ZipEntry entry = in.getNextEntry();
-          if (entry == null)
+          zipFile = new ZipFile(file);
+          Enumeration<? extends ZipEntry> entries = zipFile.entries();
+          if (!entries.hasMoreElements())
           {
             return true;
           }
 
-          while (entry != null)
+          do
           {
+            ZipEntry entry = entries.nextElement();
+
             entry.getName();
             entry.getCompressedSize();
             entry.getCrc();
 
-            entry = in.getNextEntry();
-          }
+            InputStream inputStream = null;
+
+            try
+            {
+              inputStream = zipFile.getInputStream(entry);
+              if (inputStream == null)
+              {
+                return true;
+              }
+            }
+            finally
+            {
+              IOUtil.close(inputStream);
+            }
+          } while (entries.hasMoreElements());
         }
         catch (Exception ex)
         {
@@ -557,7 +572,7 @@ public final class AgentAnalyzer
         }
         finally
         {
-          IOUtil.close(in);
+          IOUtil.close(zipFile);
         }
       }
 
