@@ -361,7 +361,7 @@ public class GenericProjectTemplate extends ProjectTemplate
       InternalEObject eObject = (InternalEObject)it.next();
       for (EAttribute eAttribute : eObject.eClass().getEAllAttributes())
       {
-        if (eAttribute.getEType().getInstanceClass() == String.class)
+        if (eAttribute.getEType().getInstanceClass() == String.class && !eAttribute.isDerived())
         {
           if (!eAttribute.isMany())
           {
