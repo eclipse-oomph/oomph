@@ -387,14 +387,16 @@
         <requirement
             id="com.google.guava"/>
         <sourceLocator
-            rootFolder="${emf.git.clone.location}"/>
+            rootFolder="${emf.git.clone.location}">
+          <predicate
+              xsi:type="predicates:NamePredicate"
+              pattern=".*\.xcore.*|.*\.xtext.*"/>
+        </sourceLocator>
         <repositoryList>
           <repository
               url="${tp.materialization.url}"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/S20131024145017/repository/"/>
           <repository
               url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
           <repository
