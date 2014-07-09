@@ -209,7 +209,8 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    */
   public String getQualifiedName()
   {
-    StringBuilder result = new StringBuilder(getName());
+    StringBuilder result = new StringBuilder();
+    result.append(getName());
     for (Scope parent = getParentScope(); parent != null; parent = parent.getParentScope())
     {
       result.insert(0, '.');
