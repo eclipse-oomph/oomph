@@ -321,7 +321,7 @@
         label="2.10"/>
     <description>The development environment for the EMF Core</description>
   </project>
-  <project name="Xcore"
+  <project name="xcore"
       label="Xcore">
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -416,7 +416,7 @@
               pattern=".*\.xcore.*|.*\.xtext.*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='Xcore']/@setupTasks.5/@workingSets.1"/>
+              excludedWorkingSet="//@projects[name='xcore']/@setupTasks.5/@workingSets.1"/>
         </predicate>
       </workingSet>
       <workingSet
