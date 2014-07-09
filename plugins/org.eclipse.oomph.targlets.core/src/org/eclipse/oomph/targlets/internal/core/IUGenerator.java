@@ -187,16 +187,16 @@ public interface IUGenerator
 
     private static VersionRange adjustQualifier(VersionRange range)
     {
-      Version minimum = range.getMinimum();
-      if (minimum instanceof OSGiVersion)
+      if (!VersionRange.emptyRange.equals(range))
       {
-        OSGiVersion osgiVersion = (OSGiVersion)minimum;
-        if (osgiVersion.equals(range.getMaximum()))
+        Version minimum = range.getMinimum();
+        if (minimum instanceof OSGiVersion)
         {
-          if ("qualifier".equals(osgiVersion.getQualifier()))
+          OSGiVersion osgiMinimum = (OSGiVersion)minimum;
+          if (osgiMinimum.equals(range.getMaximum()))
           {
-            minimum = OSGiVersion.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), osgiVersion.getMicro());
-            Version maximum = OSGiVersion.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), osgiVersion.getMicro() + 1);
+            minimum = OSGiVersion.createOSGi(osgiMinimum.getMajor(), osgiMinimum.getMinor(), osgiMinimum.getMicro());
+            Version maximum = OSGiVersion.createOSGi(osgiMinimum.getMajor(), osgiMinimum.getMinor(), osgiMinimum.getMicro() + 1);
 
             return new VersionRange(minimum, true, maximum, false);
           }
