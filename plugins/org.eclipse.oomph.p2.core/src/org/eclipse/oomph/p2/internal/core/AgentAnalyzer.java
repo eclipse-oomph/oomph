@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.SubMonitor;
 
@@ -34,6 +35,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -572,7 +574,17 @@ public final class AgentAnalyzer
         }
         finally
         {
-          IOUtil.close(zipFile);
+          try
+          {
+            if (zipFile != null)
+            {
+              zipFile.close();
+            }
+          }
+          catch (IOException ex)
+          {
+            throw new IORuntimeException(ex);
+          }
         }
       }
 
