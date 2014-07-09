@@ -288,7 +288,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     String name = getActiveRepositoryList();
     if (name == null && !repositoryLists.isEmpty())
     {
-      name = repositoryLists.get(0).getName();
+      result.addAll(repositoryLists.get(0).getRepositories());
+      return result;
     }
 
     if (name != null)
