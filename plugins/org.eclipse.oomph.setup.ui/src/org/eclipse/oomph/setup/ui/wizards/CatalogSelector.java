@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Scope;
 
@@ -84,7 +84,7 @@ public class CatalogSelector
           menuItem.dispose();
         }
 
-        AdapterFactoryLabelProvider labelProvider = new AdapterFactoryLabelProvider(EMFUtil.createAdapterFactory());
+        AdapterFactoryLabelProvider labelProvider = new AdapterFactoryLabelProvider(BaseEditUtil.createAdapterFactory());
         List<? extends Scope> selectedCatalogs = catalogManager.getSelectedCatalogs(product);
         for (final Scope catalog : catalogManager.getCatalogs(product))
         {

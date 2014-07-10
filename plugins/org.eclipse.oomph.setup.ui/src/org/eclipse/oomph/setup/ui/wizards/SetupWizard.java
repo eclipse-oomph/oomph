@@ -10,11 +10,12 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
 import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
 import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
@@ -90,7 +91,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     initUI();
     if (performer == null)
     {
-      resourceSet = EMFUtil.createResourceSet();
+      resourceSet = SetupUtil.createResourceSet();
       setTrigger(Trigger.STARTUP);
       if (SetupContext.WORKSPACE_LOCATION_URI != null)
       {
@@ -125,7 +126,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     if (adapterFactory == null)
     {
-      adapterFactory = EMFUtil.createAdapterFactory();
+      adapterFactory = BaseEditUtil.createAdapterFactory();
     }
 
     return adapterFactory;

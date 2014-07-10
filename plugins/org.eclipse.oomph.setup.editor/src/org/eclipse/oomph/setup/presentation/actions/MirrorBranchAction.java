@@ -87,7 +87,7 @@ public class MirrorBranchAction extends AbstractSetupAction
       // redirection.setTargetURL(targetURL);
       //
       // Preferences preferences = setup.getPreferences();
-      // EMFUtil.saveEObject(preferences);
+      // BaseUtil.saveEObject(preferences);
     }
 
     @SuppressWarnings("unused")

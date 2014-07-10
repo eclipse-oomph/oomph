@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.setup.presentation.handlers;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -80,7 +80,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
         Set<EObject> eObjects = new HashSet<EObject>();
         final Set<EObject> parents = new LinkedHashSet<EObject>();
 
-        final ComposedAdapterFactory adapterFactory = EMFUtil.createAdapterFactory();
+        final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
         SetupContext setupContext = SetupContext.getSelf();
 

@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.editor.ProjectTemplate;
@@ -726,7 +726,7 @@ public class SetupModelWizard extends Wizard implements INewWizard
             UIUtil.grabVertical(UIUtil.applyGridData(sash));
 
             previewer = new TreeViewer(sash, SWT.BORDER | SWT.MULTI);
-            AdapterFactory adapterFactory = EMFUtil.createAdapterFactory();
+            AdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
             delegatingLabelDecorator = new DelegatingLabelDecorator();
             previewer.setLabelProvider(new PreviewerLabelProvider(new SetupLabelProvider(adapterFactory, previewer), delegatingLabelDecorator));
             previewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));

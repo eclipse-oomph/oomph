@@ -203,7 +203,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     createEcoreAnnotations();
     // http://www.eclipse.org/oomph/setup/Enablement
     createEnablementAnnotations();
-    // http://www.eclipse.org/oomph/setup/LabelProvider
+    // http://www.eclipse.org/oomph/base/LabelProvider
     createLabelProviderAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
@@ -235,14 +235,14 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
   }
 
   /**
-   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/LabelProvider</b>.
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/base/LabelProvider</b>.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/LabelProvider";
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
     addAnnotation(this, source, new String[] { "imageBaseURI",
         "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.launching.edit/icons/full/obj16" });
   }

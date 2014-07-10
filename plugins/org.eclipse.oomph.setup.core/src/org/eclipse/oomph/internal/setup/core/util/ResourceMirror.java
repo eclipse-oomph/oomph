@@ -79,7 +79,7 @@ public class ResourceMirror
 
   public ResourceMirror()
   {
-    this(EMFUtil.createResourceSet());
+    this(SetupUtil.createResourceSet());
   }
 
   public ResourceMirror(ResourceSet resourceSet)
@@ -429,7 +429,7 @@ public class ResourceMirror
 
     public WithProgress(IProgressMonitor monitor)
     {
-      this(EMFUtil.createResourceSet(), monitor);
+      this(SetupUtil.createResourceSet(), monitor);
     }
 
     public WithProgress(ResourceSet resourceSet, IProgressMonitor monitor)

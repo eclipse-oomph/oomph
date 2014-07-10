@@ -10,9 +10,9 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -123,7 +123,7 @@ public class ProductPage extends SetupWizardPage
   {
     adapterFactory = new ComposedAdapterFactory(getAdapterFactory());
     adapterFactory.insertAdapterFactory(new ItemProviderAdapterFactory());
-    EMFUtil.replaceReflectiveItemProvider(adapterFactory);
+    BaseEditUtil.replaceReflectiveItemProvider(adapterFactory);
 
     ResourceSet resourceSet = getResourceSet();
     resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(new AdapterFactoryEditingDomain(adapterFactory, null, resourceSet)));

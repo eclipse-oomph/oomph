@@ -263,21 +263,21 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
     createResource(eNS_URI);
 
     // Create annotations
-    // http://www.eclipse.org/oomph/setup/LabelProvider
+    // http://www.eclipse.org/oomph/base/LabelProvider
     createLabelProviderAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
   }
 
   /**
-   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/LabelProvider</b>.
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/base/LabelProvider</b>.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/LabelProvider";
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
     addAnnotation(this, source, new String[] { "imageBaseURI",
         "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.p2.edit/icons/full/obj16" });
   }

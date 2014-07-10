@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.EPackage;
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/PDE.ecore'"
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.pde.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.pde.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.pde.edit/icons/full/obj16'"
+ *        annotation="http://www.eclipse.org/oomph/base/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.pde.edit/icons/full/obj16'"
  * @generated
  */
 public interface PDEPackage extends EPackage

@@ -10,8 +10,9 @@
  */
 package org.eclipse.oomph.internal.setup.core;
 
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.util.AbstractOomphPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -65,10 +66,10 @@ public final class SetupCorePlugin extends AbstractOomphPlugin
 
       int xxx;
       // This is only temporary to ensure that references from the user.setup are generally absolute URIs.
-      ResourceSet resourceSet = EMFUtil.createResourceSet();
+      ResourceSet resourceSet = SetupUtil.createResourceSet();
       if (resourceSet.getURIConverter().exists(SetupContext.USER_SETUP_LOCATION_URI, null))
       {
-        Resource resource = EMFUtil.loadResourceSafely(resourceSet, SetupContext.USER_SETUP_LOCATION_URI);
+        Resource resource = BaseUtil.loadResourceSafely(resourceSet, SetupContext.USER_SETUP_LOCATION_URI);
         if (!resource.getContents().isEmpty())
         {
           resource.setURI(SetupContext.USER_SETUP_URI);

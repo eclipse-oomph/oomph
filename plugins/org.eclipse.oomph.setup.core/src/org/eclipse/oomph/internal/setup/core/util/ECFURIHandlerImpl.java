@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.setup.core.util;
 
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
 import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
@@ -514,7 +515,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
       try
       {
-        EMFUtil.writeFile(uriConverter, options, cacheURI, bytes);
+        BaseUtil.writeFile(uriConverter, options, cacheURI, bytes);
       }
       catch (IORuntimeException ex)
       {
@@ -562,7 +563,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     {
       try
       {
-        return new String(EMFUtil.readFile(uriConverter, null, eTagFile), "UTF-8");
+        return new String(BaseUtil.readFile(uriConverter, null, eTagFile), "UTF-8");
       }
       catch (IORuntimeException ex)
       {
@@ -583,11 +584,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     {
       if (eTag != null)
       {
-        EMFUtil.writeFile(uriConverter, null, file.appendFileExtension("etag"), eTag.getBytes("UTF-8"));
+        BaseUtil.writeFile(uriConverter, null, file.appendFileExtension("etag"), eTag.getBytes("UTF-8"));
       }
       else
       {
-        EMFUtil.deleteFile(uriConverter, null, file);
+        BaseUtil.deleteFile(uriConverter, null, file);
       }
     }
     catch (IORuntimeException ex)

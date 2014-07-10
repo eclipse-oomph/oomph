@@ -51,12 +51,6 @@ public final class EAnnotationConstants
 
   public static final String NESTED_ANNOTATION_CHOICE = "Choice";
 
-  public static final String ANNOTATION_LABEL_PROVIDER = "http://www.eclipse.org/oomph/setup/LabelProvider";
-
-  public static final String KEY_IMAGE_BASE_URI = "imageBaseURI";
-
-  public static final String KEY_IMAGE_URI = "imageURI";
-
   private EAnnotationConstants()
   {
   }

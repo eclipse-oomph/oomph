@@ -17,7 +17,7 @@ import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
@@ -98,7 +98,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
       annotation.setSource(trigger.toString());
       annotation.getReferences().addAll(setupTasks);
 
-      Resource resource = EMFUtil.createResourceSet().createResource(URI.createFileURI(getRestartingFile().toString()));
+      Resource resource = SetupUtil.createResourceSet().createResource(URI.createFileURI(getRestartingFile().toString()));
       resource.getContents().add(annotation);
       resource.save(null);
     }
@@ -192,7 +192,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
-        Resource resource = EMFUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
+        Resource resource = SetupUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
         IOUtil.deleteBestEffort(restartingFile);
 
@@ -217,7 +217,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
 
     // This performer is only used to detect a need to update or to open the setup wizard.
     SetupTaskPerformer performer = null;
-    final ResourceSet resourceSet = EMFUtil.createResourceSet();
+    final ResourceSet resourceSet = SetupUtil.createResourceSet();
 
     try
     {

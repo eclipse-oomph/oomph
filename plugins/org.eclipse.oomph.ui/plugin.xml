@@ -30,4 +30,12 @@
       </category>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.eclipse.oomph.views"
+            name="Oomph">
+      </category>
+   </extension>
+
 </plugin>

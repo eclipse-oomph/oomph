@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.setup.presentation.handlers;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -59,7 +59,7 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
     final User user = SetupFactory.eINSTANCE.createUser();
     ((InternalEObject)user).eSetProxyURI(SetupContext.USER_SETUP_URI.appendFragment("/"));
 
-    ComposedAdapterFactory adapterFactory = EMFUtil.createAdapterFactory();
+    ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
     ItemProviderAdapter labelProvider = (ItemProviderAdapter)adapterFactory.adapt(user, IItemLabelProvider.class);
 
     ImageDescriptor imageDescriptor = getLabelImage(labelProvider, user);

@@ -11,10 +11,10 @@
 package org.eclipse.oomph.setup.presentation;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil.IconReflectiveItemProvider;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
@@ -943,7 +943,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     @Override
     public void run()
     {
-      ResourceSet resourceSet = EMFUtil.createResourceSet();
+      ResourceSet resourceSet = SetupUtil.createResourceSet();
 
       SetupContext self = SetupContext.createInstallationAndUser(resourceSet);
       Installation installation = self.getInstallation();

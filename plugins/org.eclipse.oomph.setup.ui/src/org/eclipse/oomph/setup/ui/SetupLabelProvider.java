@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui;
 
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.setup.SetupTask;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -31,7 +31,7 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
 
   public SetupLabelProvider(Viewer viewer)
   {
-    this(EMFUtil.createAdapterFactory(), viewer);
+    this(BaseEditUtil.createAdapterFactory(), viewer);
   }
 
   public SetupLabelProvider(AdapterFactory adapterFactory, Viewer viewer)

@@ -14,19 +14,14 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
-import org.eclipse.oomph.base.util.BaseResource;
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
-import org.eclipse.oomph.setup.EAnnotationConstants;
-import org.eclipse.oomph.util.IORuntimeException;
-import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
-import org.eclipse.oomph.util.StringUtil;
 
-import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -41,7 +36,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
-import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -50,11 +44,6 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProvider;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
@@ -62,12 +51,8 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.provider.IProviderHints;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,7 +65,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public final class EMFUtil
+public final class SetupUtil
 {
   private static final ECFURIHandlerImpl.AuthorizationHandlerImpl AUTHORIZATION_HANDLER;
   static
@@ -106,44 +91,8 @@ public final class EMFUtil
     AUTHORIZATION_HANDLER = new ECFURIHandlerImpl.AuthorizationHandlerImpl(uiServices, securePreferences);
   }
 
-  private EMFUtil()
+  private SetupUtil()
   {
-  }
-
-  public static IconReflectiveItemProvider replaceReflectiveItemProvider(ComposedAdapterFactory adapterFactory)
-  {
-    EClass dynamicClass = EcoreFactory.eINSTANCE.createEClass();
-    dynamicClass.setName("Dynamic");
-
-    EPackage dynamicPackage = EcoreFactory.eINSTANCE.createEPackage();
-    dynamicPackage.setName("dynamic");
-    dynamicPackage.setNsPrefix("dynamic");
-    dynamicPackage.setNsURI("http://dynamic");
-    dynamicPackage.getEClassifiers().add(dynamicClass);
-
-    AdapterFactory factory = adapterFactory.getFactoryForType(EcoreUtil.create(dynamicClass));
-    if (factory != null)
-    {
-      adapterFactory.removeAdapterFactory(factory);
-    }
-
-    final IconReflectiveItemProvider[] itemProvider = { null };
-    adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory()
-    {
-      {
-        itemProvider[0] = new IconReflectiveItemProvider(this);
-        reflectiveItemProviderAdapter = itemProvider[0];
-      }
-    });
-
-    return itemProvider[0];
-  }
-
-  public static ComposedAdapterFactory createAdapterFactory()
-  {
-    ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-    replaceReflectiveItemProvider(adapterFactory);
-    return adapterFactory;
   }
 
   public static ResourceSet createResourceSet()
@@ -323,32 +272,6 @@ public final class EMFUtil
     }
   }
 
-  public static BaseResource loadResourceSafely(ResourceSet resourceSet, URI uri)
-  {
-    try
-    {
-      return (BaseResource)resourceSet.getResource(uri, true);
-    }
-    catch (Throwable ex)
-    {
-      SetupCorePlugin.INSTANCE.log(ex);
-      return (BaseResource)resourceSet.getResource(uri, false);
-    }
-  }
-
-  public static void saveEObject(EObject eObject)
-  {
-    try
-    {
-      XMLResource xmlResource = (XMLResource)eObject.eResource();
-      xmlResource.save(null);
-    }
-    catch (IOException ex)
-    {
-      SetupCorePlugin.INSTANCE.log(ex);
-    }
-  }
-
   public static <T> void reorder(EList<T> values, DependencyProvider<T> dependencyProvider)
   {
     for (int i = 0, size = values.size(), count = 0; i < size; ++i)
@@ -384,128 +307,6 @@ public final class EMFUtil
     }
   }
 
-  public static URI getRootURI(EObject eObject)
-  {
-    if (eObject.eIsProxy())
-    {
-      return ((InternalEObject)eObject).eProxyURI();
-    }
-    else
-    {
-      EObject rootContainer = EcoreUtil.getRootContainer(eObject);
-      URI uri = EcoreUtil.getURI(rootContainer);
-      String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(rootContainer, eObject);
-      if (relativeURIFragmentPath.length() != 0)
-      {
-        uri = uri.trimFragment().appendFragment(uri.fragment() + "/" + relativeURIFragmentPath);
-      }
-
-      return uri;
-    }
-  }
-
-  public static EStructuralFeature getFeature(EClass eClass, String xmlName)
-  {
-    for (EStructuralFeature eStructuralFeature : eClass.getEAllStructuralFeatures())
-    {
-      if (xmlName.equals(ExtendedMetaData.INSTANCE.getName(eStructuralFeature)))
-      {
-        return eStructuralFeature;
-      }
-    }
-
-    return null;
-  }
-
-  private static InputStream openInputStream(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    try
-    {
-      return uriConverter.createInputStream(uri, options);
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException();
-    }
-  }
-
-  private static OutputStream openOutputStream(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    try
-    {
-      return uriConverter.createOutputStream(uri, options);
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException();
-    }
-  }
-
-  public static void copyFile(URIConverter uriConverter, Map<?, ?> options, URI source, URI target) throws IORuntimeException
-  {
-    InputStream input = null;
-    OutputStream output = null;
-
-    try
-    {
-      input = openInputStream(uriConverter, options, source);
-      output = openOutputStream(uriConverter, options, target);
-      IOUtil.copy(input, output);
-    }
-    finally
-    {
-      IOUtil.closeSilent(input);
-      IOUtil.closeSilent(output);
-    }
-  }
-
-  public static byte[] readFile(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    InputStream input = openInputStream(uriConverter, options, uri);
-
-    try
-    {
-      ByteArrayOutputStream output = new ByteArrayOutputStream(input.available());
-      IOUtil.copy(input, output);
-      return output.toByteArray();
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
-    finally
-    {
-      IOUtil.closeSilent(input);
-    }
-  }
-
-  public static void writeFile(URIConverter uriConverter, Map<?, ?> options, URI uri, byte[] bytes) throws IORuntimeException
-  {
-    OutputStream output = openOutputStream(uriConverter, options, uri);
-
-    try
-    {
-      ByteArrayInputStream input = new ByteArrayInputStream(bytes);
-      IOUtil.copy(input, output);
-    }
-    finally
-    {
-      IOUtil.closeSilent(output);
-    }
-  }
-
-  public static void deleteFile(URIConverter uriConverter, Map<?, ?> options, URI uri) throws IORuntimeException
-  {
-    try
-    {
-      uriConverter.delete(uri, options);
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
-  }
-
   public static void migrate(Resource resource, Collection<EObject> result)
   {
     new Migrator(resource).migrate(result);
@@ -517,74 +318,6 @@ public final class EMFUtil
   public interface DependencyProvider<T>
   {
     Collection<? extends T> getDependencies(T value);
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static final class IconReflectiveItemProvider extends ReflectiveItemProvider
-  {
-    private static final String TASK_SUFFIX = " Task"; // TODO Can this be made translatable?
-
-    public IconReflectiveItemProvider(AdapterFactory adapterFactory)
-    {
-      super(adapterFactory);
-    }
-
-    @Override
-    public String getTypeText(Object object)
-    {
-      String typeText = super.getTypeText(object);
-      if (typeText.endsWith(TASK_SUFFIX))
-      {
-        typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
-      }
-
-      return typeText;
-    }
-
-    @Override
-    public Object getImage(Object object)
-    {
-      EObject eObject = (EObject)object;
-      EClass eClass = eObject.eClass();
-
-      String uri = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_LABEL_PROVIDER, EAnnotationConstants.KEY_IMAGE_URI);
-      if (!StringUtil.isEmpty(uri))
-      {
-        URI imageURI = URI.createURI(uri);
-        if (imageURI.isRelative())
-        {
-          URI imageBaseURI = getImageBaseURI(eClass);
-          if (imageBaseURI != null)
-          {
-            return imageURI.resolve(imageBaseURI);
-          }
-        }
-
-        return imageURI;
-      }
-
-      URI imageBaseURI = getImageBaseURI(eClass);
-      if (imageBaseURI != null)
-      {
-        return imageBaseURI.appendSegment(eClass.getName() + ".gif");
-      }
-
-      return super.getImage(object);
-    }
-
-    private URI getImageBaseURI(EClass eClass)
-    {
-      EPackage ePackage = eClass.getEPackage();
-      String uri = EcoreUtil.getAnnotation(ePackage, EAnnotationConstants.ANNOTATION_LABEL_PROVIDER, EAnnotationConstants.KEY_IMAGE_BASE_URI);
-      if (!StringUtil.isEmpty(uri))
-      {
-        return URI.createURI(uri);
-      }
-
-      return null;
-    }
   }
 
   public static class Migrator
@@ -610,7 +343,7 @@ public final class EMFUtil
         if (copiedEObject != null)
         {
           put(eObject, copiedEObject);
-          ((InternalEObject)copiedEObject).eSetProxyURI(URI.createURI("bogus:/" + EMFUtil.getRootURI(eObject)));
+          ((InternalEObject)copiedEObject).eSetProxyURI(URI.createURI("bogus:/" + BaseUtil.getRootURI(eObject)));
         }
 
         return copiedEObject;

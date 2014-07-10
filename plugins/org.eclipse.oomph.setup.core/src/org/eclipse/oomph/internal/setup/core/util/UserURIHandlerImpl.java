@@ -62,7 +62,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
       descriptionMatcher.find();
       project.setDescription(descriptionMatcher.group(1));
 
-      Resource resource = EMFUtil.createResourceSet().createResource(normalizedURI);
+      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
       resource.getContents().add(project);
       try
       {
@@ -76,7 +76,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     else if (SetupContext.USER_SETUP_URI.equals(uri))
     {
       User user = SetupContext.createUser();
-      Resource resource = EMFUtil.createResourceSet().createResource(normalizedURI);
+      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
       resource.getContents().add(user);
       try
       {

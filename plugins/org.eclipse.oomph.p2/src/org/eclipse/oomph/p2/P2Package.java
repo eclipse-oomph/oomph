@@ -34,7 +34,7 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-user-doc -->
  * @see org.eclipse.oomph.p2.P2Factory
  * @model kind="package"
- *        annotation="http://www.eclipse.org/oomph/setup/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.p2.edit/icons/full/obj16'"
+ *        annotation="http://www.eclipse.org/oomph/base/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.p2.edit/icons/full/obj16'"
  * @generated
  */
 public interface P2Package extends EPackage

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.setup.core.util;
 
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.CatalogSelection;
@@ -93,7 +94,7 @@ public class CatalogManager
     if (resourceSet.getURIConverter().exists(SetupContext.CATALOG_SELECTION_SETUP_URI, null))
     {
       // Load local selection file
-      Resource selectionResource = EMFUtil.loadResourceSafely(resourceSet, SetupContext.CATALOG_SELECTION_SETUP_URI);
+      Resource selectionResource = BaseUtil.loadResourceSafely(resourceSet, SetupContext.CATALOG_SELECTION_SETUP_URI);
       CatalogSelection selection = (CatalogSelection)EcoreUtil.getObjectByType(selectionResource.getContents(), SetupPackage.Literals.CATALOG_SELECTION);
 
       // Ensure that all proxies are resolved and then remove the loaded selection from its resource.

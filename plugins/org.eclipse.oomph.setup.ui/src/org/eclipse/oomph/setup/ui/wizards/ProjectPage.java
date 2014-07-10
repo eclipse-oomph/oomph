@@ -10,10 +10,11 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.util.BaseResource;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
@@ -153,7 +154,7 @@ public class ProjectPage extends SetupWizardPage
 
     adapterFactory = new ComposedAdapterFactory(getAdapterFactory());
     adapterFactory.insertAdapterFactory(new ItemProviderAdapterFactory(catalogSelector.getSelection()));
-    EMFUtil.replaceReflectiveItemProvider(adapterFactory);
+    BaseEditUtil.replaceReflectiveItemProvider(adapterFactory);
 
     final Workspace workspace = getWorkspace();
     if (workspace != null)
@@ -994,7 +995,7 @@ public class ProjectPage extends SetupWizardPage
                   targetProjects.add(project);
                 }
 
-                EMFUtil.saveEObject(targetProject);
+                BaseUtil.saveEObject(targetProject);
                 ProjectCatalog projectCatalog = targetProject.getProjectCatalog();
                 if (projectCatalog != null)
                 {
@@ -1014,7 +1015,7 @@ public class ProjectPage extends SetupWizardPage
                   if (value instanceof URI)
                   {
                     URI uri = (URI)value;
-                    BaseResource resource = EMFUtil.loadResourceSafely(resourceSet, uri);
+                    BaseResource resource = BaseUtil.loadResourceSafely(resourceSet, uri);
                     Project project = (Project)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.PROJECT);
                     if (project != null && project.getName() != null && (operation == DROP_COPY || project.eContainer() == null))
                     {

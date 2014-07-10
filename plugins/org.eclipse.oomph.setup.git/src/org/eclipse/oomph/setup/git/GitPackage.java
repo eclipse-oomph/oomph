@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.EPackage;
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore'"
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.git.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.git.feature.group'"
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.egit.p2' repository='http://download.eclipse.org/egit/updates' installableUnits='org.eclipse.egit.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16'"
+ *        annotation="http://www.eclipse.org/oomph/base/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16'"
  * @generated
  */
 public interface GitPackage extends EPackage

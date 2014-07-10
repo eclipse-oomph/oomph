@@ -10,13 +10,14 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil.IconReflectiveItemProvider;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -979,7 +980,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
-    reflectiveItemProvider = EMFUtil.replaceReflectiveItemProvider(adapterFactory);
+    reflectiveItemProvider = BaseEditUtil.replaceReflectiveItemProvider(adapterFactory);
 
     // Create the editing domain with a special command stack.
     //
@@ -995,7 +996,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     });
 
     ResourceSet resourceSet = editingDomain.getResourceSet();
-    EMFUtil.configureResourceSet(resourceSet);
+    SetupUtil.configureResourceSet(resourceSet);
 
     // If the index's folder is redirected to the local file system...
     URIConverter uriConverter = resourceSet.getURIConverter();
@@ -1347,7 +1348,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             List<EObject> migratedContents = new ArrayList<EObject>();
             try
             {
-              EMFUtil.migrate(mainResource, migratedContents);
+              SetupUtil.migrate(mainResource, migratedContents);
               CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
               command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
               command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
@@ -2822,7 +2823,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   public static void open(final IWorkbenchPage page, URI uri)
   {
-    final URI normalizedURI = EMFUtil.createResourceSet().getURIConverter().normalize(uri);
+    final URI normalizedURI = SetupUtil.createResourceSet().getURIConverter().normalize(uri);
     final Display display = page.getWorkbenchWindow().getShell().getDisplay();
 
     display.asyncExec(new Runnable()

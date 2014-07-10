@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -206,7 +206,7 @@ public class SniffAction extends AbstractContainerAction
       }
     });
 
-    EMFUtil.reorder(sniffers, new EMFUtil.DependencyProvider<Sniffer>()
+    SetupUtil.reorder(sniffers, new SetupUtil.DependencyProvider<Sniffer>()
     {
       public Collection<? extends Sniffer> getDependencies(Sniffer sniffer)
       {

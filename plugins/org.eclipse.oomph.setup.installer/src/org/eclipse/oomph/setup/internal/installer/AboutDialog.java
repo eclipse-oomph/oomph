@@ -11,7 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
@@ -56,7 +56,7 @@ public final class AboutDialog extends AbstractSetupDialog
   protected String getDefaultMessage()
   {
     URI uri = SetupContext.INDEX_SETUP_URI;
-    uri = EMFUtil.createResourceSet().getURIConverter().normalize(uri);
+    uri = SetupUtil.createResourceSet().getURIConverter().normalize(uri);
     return "The current product version is " + version + ".\n" + uri;
   }
 

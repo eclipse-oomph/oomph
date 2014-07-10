@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.internal.setup.core;
 
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
@@ -312,7 +312,7 @@ public class SetupContext
     {
       if (resourceSet.getURIConverter().exists(INSTALLATION_SETUP_URI, null))
       {
-        installationResource = EMFUtil.loadResourceSafely(resourceSet, INSTALLATION_SETUP_URI);
+        installationResource = BaseUtil.loadResourceSafely(resourceSet, INSTALLATION_SETUP_URI);
         installation = (Installation)EcoreUtil.getObjectByType(installationResource.getContents(), SetupPackage.Literals.INSTALLATION);
       }
     }
@@ -342,7 +342,7 @@ public class SetupContext
 
     if (realInstallation && installation != null && installation.getProductVersion() == null)
     {
-      Resource indexResource = EMFUtil.loadResourceSafely(resourceSet, INDEX_SETUP_URI);
+      Resource indexResource = BaseUtil.loadResourceSafely(resourceSet, INDEX_SETUP_URI);
       Index index = (Index)EcoreUtil.getObjectByType(indexResource.getContents(), SetupPackage.Literals.INDEX);
       if (index == null)
       {
@@ -383,7 +383,7 @@ public class SetupContext
     {
       if (resourceSet.getURIConverter().exists(WORKSPACE_SETUP_URI, null))
       {
-        workspaceResource = EMFUtil.loadResourceSafely(resourceSet, WORKSPACE_SETUP_URI);
+        workspaceResource = BaseUtil.loadResourceSafely(resourceSet, WORKSPACE_SETUP_URI);
         workspace = (Workspace)EcoreUtil.getObjectByType(workspaceResource.getContents(), SetupPackage.Literals.WORKSPACE);
       }
     }
@@ -420,7 +420,7 @@ public class SetupContext
     User user = null;
     if (resourceSet.getURIConverter().exists(USER_SETUP_URI, null))
     {
-      userResource = EMFUtil.loadResourceSafely(resourceSet, USER_SETUP_URI);
+      userResource = BaseUtil.loadResourceSafely(resourceSet, USER_SETUP_URI);
       user = (User)EcoreUtil.getObjectByType(userResource.getContents(), SetupPackage.Literals.USER);
     }
 

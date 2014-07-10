@@ -10,8 +10,9 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
@@ -607,17 +608,17 @@ public class ProgressPage extends SetupWizardPage
     user.getAcceptedLicenses().addAll(performerUser.getAcceptedLicenses());
     user.setUnsignedPolicy(performerUser.getUnsignedPolicy());
 
-    EMFUtil.saveEObject(installation);
+    BaseUtil.saveEObject(installation);
     if (workspace != null)
     {
-      EMFUtil.saveEObject(workspace);
+      BaseUtil.saveEObject(workspace);
     }
 
     Resource userResource = user.eResource();
     if (userResource.getResourceSet() == null)
     {
-      EMFUtil.createResourceSet().getResources().add(userResource);
-      EMFUtil.saveEObject(user);
+      SetupUtil.createResourceSet().getResources().add(userResource);
+      BaseUtil.saveEObject(user);
     }
 
     installationResource.setURI(installationResourceURI);

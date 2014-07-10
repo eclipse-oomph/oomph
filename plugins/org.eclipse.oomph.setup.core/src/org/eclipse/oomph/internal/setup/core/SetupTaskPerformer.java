@@ -15,9 +15,11 @@ package org.eclipse.oomph.internal.setup.core;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
@@ -189,7 +191,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private List<AttributeRule> attributeRules = new ArrayList<AttributeRule>();
 
-  private ComposedAdapterFactory adapterFactory = EMFUtil.createAdapterFactory();
+  private ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
   public SetupTaskPerformer(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext, Stream stream)
   {
@@ -711,7 +713,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           String target = details.get(AnnotationConstants.KEY_TARGET);
           if (target != null && inherit != null)
           {
-            EStructuralFeature eStructuralFeature = EMFUtil.getFeature(setupTask.eClass(), target);
+            EStructuralFeature eStructuralFeature = BaseUtil.getFeature(setupTask.eClass(), target);
             if (eStructuralFeature.getEType().getInstanceClass() == String.class)
             {
               VariableTask variableTask = explicitKeys.get(id + "." + target);
@@ -739,7 +741,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                       if (detailValue.startsWith("@"))
                       {
                         String featureName = detailValue.substring(1);
-                        EStructuralFeature referencedEStructuralFeature = EMFUtil.getFeature(setupTask.eClass(), featureName);
+                        EStructuralFeature referencedEStructuralFeature = BaseUtil.getFeature(setupTask.eClass(), featureName);
                         if (referencedEStructuralFeature != null && referencedEStructuralFeature.getEType().getInstanceClass() == String.class
                             && !referencedEStructuralFeature.isMany())
                         {
@@ -1028,7 +1030,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       EStructuralFeature feature = eClass.getEStructuralFeature(key);
       if (feature == null)
       {
-        feature = EMFUtil.getFeature(eClass, key);
+        feature = BaseUtil.getFeature(eClass, key);
         if (feature == null)
         {
           builder.append('@');
@@ -2694,7 +2696,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     EList<Map.Entry<String, Set<String>>> list = new BasicEList<Map.Entry<String, Set<String>>>(variables.entrySet());
 
-    EMFUtil.reorder(list, new EMFUtil.DependencyProvider<Map.Entry<String, Set<String>>>()
+    SetupUtil.reorder(list, new SetupUtil.DependencyProvider<Map.Entry<String, Set<String>>>()
     {
       public Collection<Map.Entry<String, Set<String>>> getDependencies(Map.Entry<String, Set<String>> variable)
       {
@@ -2738,7 +2740,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    EMFUtil.reorder(setupTasks, new EMFUtil.DependencyProvider<SetupTask>()
+    SetupUtil.reorder(setupTasks, new SetupUtil.DependencyProvider<SetupTask>()
     {
       public Collection<SetupTask> getDependencies(SetupTask setupTask)
       {

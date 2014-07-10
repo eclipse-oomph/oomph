@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui;
 
-import org.eclipse.oomph.internal.setup.core.util.EMFUtil;
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -113,7 +113,7 @@ public class PropertiesViewer extends TableViewer
    */
   private final class PropertiesContentProvider implements IStructuredContentProvider
   {
-    private final ComposedAdapterFactory adapterFactory = EMFUtil.createAdapterFactory();
+    private final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
     private final AdapterFactoryItemDelegator itemDelegator = new AdapterFactoryItemDelegator(adapterFactory);
 
