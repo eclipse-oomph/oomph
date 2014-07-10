@@ -258,6 +258,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
         if (neededTasks.isEmpty())
         {
           // No tasks are needed, either. Nothing to do.
+          System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
           return;
         }
       }
@@ -266,6 +267,10 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
         INSTANCE.log(ex);
         return;
       }
+    }
+    else
+    {
+      System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
     }
 
     final SetupTaskPerformer finalPerfomer = performer;

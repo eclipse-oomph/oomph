@@ -259,6 +259,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public boolean performCancel()
   {
+    System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
     for (IWizardPage page : getPages())
     {
       ((SetupWizardPage)page).performCancel();
@@ -270,6 +271,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public boolean performFinish()
   {
+    System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
     if (finishAction != null)
     {
       UIUtil.asyncExec(finishAction);
