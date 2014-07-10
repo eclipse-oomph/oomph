@@ -142,5 +142,6 @@
   <project href="interim/XSD.setup#/"/>
   <project href="interim/code.recommenders.setup#/"/>
   <project href="interim/xtext.setup#/"/>
+  <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
   <description>All the projects at Eclipse.org that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>
