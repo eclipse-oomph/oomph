@@ -19,11 +19,13 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.p2.core.ProvisionException;
+import org.eclipse.equinox.p2.engine.IProfile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,7 +45,12 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
 
   public static final String PROP_TARGLET_CONTAINER_DIGEST = "targlet.container.digest"; //$NON-NLS-1$
 
+  @SuppressWarnings("restriction")
+  private static final IPath INSTALL_FOLDERS = org.eclipse.pde.internal.core.PDECore.getDefault().getStateLocation().append(".install_folders");
+
   private static final long serialVersionUID = 1L;
+
+  private static long lastStamp;
 
   private String id;
 
@@ -228,12 +235,24 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
     String profileID = getProfileID(digest);
 
     Profile profile = bundlePool.getProfile(profileID);
+    if (profile != null)
+    {
+      File installFolder = profile.getInstallFolder();
+      if (installFolder == null)
+      {
+        // TODO Remove this code after a while (install folder property is set for all profiles below).
+        profile.delete(true);
+        profile = null;
+      }
+    }
+
     if (profile == null)
     {
       ProfileCreator creator = bundlePool.addProfile(profileID, "Targlet");
       creator.set(PROP_TARGLET_CONTAINER_WORKSPACE, TargletContainerManager.WORKSPACE_LOCATION);
       creator.set(PROP_TARGLET_CONTAINER_ID, id);
       creator.set(PROP_TARGLET_CONTAINER_DIGEST, digest);
+      creator.set(IProfile.PROP_INSTALL_FOLDER, INSTALL_FOLDERS.append(Long.toString(nextTimeStamp())).toOSString());
       creator.setEnvironments(environmentProperties);
       creator.setLanguages(nlProperty);
       creator.setInstallFeatures(true);
@@ -253,6 +272,17 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
   {
     TargletContainerManager manager = TargletContainerManager.getInstance();
     manager.saveDescriptors(monitor);
+  }
+
+  private static synchronized long nextTimeStamp()
+  {
+    long stamp = System.currentTimeMillis();
+    if (stamp == lastStamp)
+    {
+      stamp++;
+    }
+    lastStamp = stamp;
+    return stamp;
   }
 
   /**
