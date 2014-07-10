@@ -178,7 +178,11 @@ public class CatalogManager
   {
     for (Iterator<Map.Entry<K, V>> it = eMap.iterator(); it.hasNext();)
     {
-      if (it.next().getKey().eIsProxy())
+      Map.Entry<K, V> entry = it.next();
+      K key = entry.getKey();
+      V value = entry.getValue();
+
+      if (key == null || key.eIsProxy() || value == null || value.eIsProxy())
       {
         it.remove();
       }

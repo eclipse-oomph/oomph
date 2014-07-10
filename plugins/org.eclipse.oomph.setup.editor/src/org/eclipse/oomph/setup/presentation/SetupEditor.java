@@ -2428,8 +2428,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       if (resource.getContents().isEmpty() && !resource.getErrors().isEmpty())
       {
         resourceToDiagnosticMap.remove(resource);
-        resource.unload();
         resources.remove(i);
+        resource.unload();
       }
       else
       {
