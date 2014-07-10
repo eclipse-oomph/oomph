@@ -126,6 +126,11 @@ public class RequirementItemProvider extends ModelElementItemProvider
       key += "_Feature";
     }
 
+    if (requirement.isOptional())
+    {
+      key += "_Optional";
+    }
+
     return overlayImage(object, getResourceLocator().getImage(key));
   }
 
