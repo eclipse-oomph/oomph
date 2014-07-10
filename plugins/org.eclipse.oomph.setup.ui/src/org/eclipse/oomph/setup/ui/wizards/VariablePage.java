@@ -400,6 +400,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), SetupContext.createUserOnly(getResourceSet()).getUser()));
       setPageComplete(false);
       validate();
+      if (forward && getPreviousPage() == null && isPageComplete())
+      {
+        advanceToNextPage();
+      }
     }
   }
 
