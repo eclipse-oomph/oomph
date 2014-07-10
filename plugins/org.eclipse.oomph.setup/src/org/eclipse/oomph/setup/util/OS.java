@@ -135,7 +135,10 @@ public abstract class OS
     }
   }
 
-  public abstract String getEclipseDir();
+  public final String getEclipseDir()
+  {
+    return "eclipse";
+  }
 
   public abstract String getEclipseExecutable();
 
@@ -206,12 +209,6 @@ public abstract class OS
     }
 
     @Override
-    public String getEclipseDir()
-    {
-      return "eclipse";
-    }
-
-    @Override
     public String getEclipseExecutable()
     {
       return "eclipse.exe";
@@ -264,12 +261,6 @@ public abstract class OS
     }
 
     @Override
-    public String getEclipseDir()
-    {
-      return "Eclipse.app";
-    }
-
-    @Override
     public String getEclipseExecutable()
     {
       return "Eclipse.app/Contents/MacOS/eclipse";
@@ -302,12 +293,6 @@ public abstract class OS
     public Linux(String osgiWS, String osgiArch)
     {
       super(Platform.OS_LINUX, osgiWS, osgiArch);
-    }
-
-    @Override
-    public String getEclipseDir()
-    {
-      return "eclipse";
     }
 
     @Override
