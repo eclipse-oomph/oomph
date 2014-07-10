@@ -207,24 +207,24 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
       }
     }
 
-    boolean result = false;
+    for (WorkingSet workingSet : getWorkingSets())
+    {
+      String id = prefix + workingSet.getName();
+      workingSet.setID(id);
+    }
+
     for (WorkingSet workingSet : getWorkingSets())
     {
       context.checkCancelation();
 
-      String id = prefix + workingSet.getName();
-      workingSet.setID(id);
-      if (!result)
+      WorkingSet existingWorkingSet = existingWorkingSets.put(workingSet.getID(), workingSet);
+      if (existingWorkingSet == null || !EcoreUtil.equals(workingSet.getPredicates(), existingWorkingSet.getPredicates()))
       {
-        WorkingSet existingWorkingSet = existingWorkingSets.put(id, workingSet);
-        if (existingWorkingSet == null || !EcoreUtil.equals(workingSet.getPredicates(), existingWorkingSet.getPredicates()))
-        {
-          result = true;
-        }
+        return true;
       }
     }
 
-    return result;
+    return false;
   }
 
   public void perform(SetupTaskContext context) throws Exception
