@@ -129,13 +129,12 @@ public class TargletContainerItemProvider extends ModelElementItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    String label = ((TargletContainer)object).getID();
-    return label == null || label.length() == 0 ? getString("_UI_TargletContainer_type") : getString("_UI_TargletContainer_type") + " " + label;
+    return getString("_UI_TargletContainer_type");
   }
 
   /**
