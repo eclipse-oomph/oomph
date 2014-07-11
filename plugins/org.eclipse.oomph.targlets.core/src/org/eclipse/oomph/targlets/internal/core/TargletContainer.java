@@ -15,12 +15,15 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.predicates.Predicate;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerChanged;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdateProblem;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -653,7 +656,7 @@ public class TargletContainer extends AbstractBundleContainer
       final AtomicReference<IProvisioningPlan> provisioningPlanRef = new AtomicReference<IProvisioningPlan>();
       final AtomicReference<List<IMetadataRepository>> metadataRepositoriesRef = new AtomicReference<List<IMetadataRepository>>();
 
-      transaction.commit(new ProfileTransaction.CommitContext()
+      CommitContext commitContext = new CommitContext()
       {
         @Override
         public ProvisioningContext createProvisioningContext(ProfileTransaction transaction)
@@ -755,7 +758,9 @@ public class TargletContainer extends AbstractBundleContainer
         {
           return TargletContainerManager.createPhaseSet(profile.getBundlePool());
         }
-      }, progress.newChild());
+      };
+
+      transaction.commit(commitContext, progress.newChild());
 
       Set<File> projectLocations = getProjectLocations(profile, sources, progress.newChild());
       descriptor.commitUpdateTransaction(digest, projectLocations, progress.newChild());
@@ -771,7 +776,13 @@ public class TargletContainer extends AbstractBundleContainer
     catch (Throwable t)
     {
       descriptor.rollbackUpdateTransaction(t, monitor);
-      TargletsCorePlugin.INSTANCE.log(t);
+
+      UpdateProblem updateProblem = descriptor.getUpdateProblem();
+      if (updateProblem != null)
+      {
+        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletContainerUpdateProblem(this, updateProblem), monitor);
+      }
+
       TargletsCorePlugin.INSTANCE.coreException(t);
     }
 

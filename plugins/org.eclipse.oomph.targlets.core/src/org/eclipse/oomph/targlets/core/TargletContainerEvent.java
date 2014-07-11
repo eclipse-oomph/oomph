@@ -13,6 +13,7 @@ package org.eclipse.oomph.targlets.core;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
@@ -84,22 +85,22 @@ public class TargletContainerEvent extends EventObject
       this.projectLocations = projectLocations;
     }
 
-    public Profile getProfile()
+    public final Profile getProfile()
     {
       return profile;
     }
 
-    public List<IMetadataRepository> getMetadataRepositories()
+    public final List<IMetadataRepository> getMetadataRepositories()
     {
       return metadataRepositories;
     }
 
-    public IProvisioningPlan getProvisioningPlan()
+    public final IProvisioningPlan getProvisioningPlan()
     {
       return provisioningPlan;
     }
 
-    public Map<IInstallableUnit, File> getProjectLocations()
+    public final Map<IInstallableUnit, File> getProjectLocations()
     {
       return projectLocations;
     }
@@ -109,6 +110,33 @@ public class TargletContainerEvent extends EventObject
     {
       return "TargletContainerUpdated[source=" + getSource().getID() + ", metadataRepositories=" + metadataRepositories + ", profile=" + profile
           + ", provisioningPlan=" + provisioningPlan + ", projectLocations=" + projectLocations + "]";
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class TargletContainerUpdateProblem extends TargletContainerEvent
+  {
+    private static final long serialVersionUID = 1L;
+
+    private final transient IStatus updateProblem;
+
+    public TargletContainerUpdateProblem(TargletContainer source, IStatus updateProblem)
+    {
+      super(source);
+      this.updateProblem = updateProblem;
+    }
+
+    public final IStatus getUpdateProblem()
+    {
+      return updateProblem;
+    }
+
+    @Override
+    public String toString()
+    {
+      return "TargletContainerUpdateProblem[source=" + getSource().getID() + ", updateProblem=" + updateProblem + "]";
     }
   }
 }
