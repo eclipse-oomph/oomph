@@ -2755,13 +2755,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       setupTask.getSuccessors().clear();
       EList<SetupTask> predecessors = setupTask.getPredecessors();
       predecessors.clear();
-      if (previousSetupTask != null)
-      {
-        predecessors.add(previousSetupTask);
-      }
 
       if (!(setupTask instanceof VariableTask))
       {
+        if (previousSetupTask != null)
+        {
+          predecessors.add(previousSetupTask);
+        }
+
         previousSetupTask = setupTask;
       }
     }
