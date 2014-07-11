@@ -85,7 +85,7 @@ public class TargletContainerListenerRegistryImpl implements TargletContainerLis
     {
       try
       {
-        listener.handleTargletEvent(event, new SubProgressMonitor(monitor, 1));
+        listener.handleTargletContainerEvent(event, new SubProgressMonitor(monitor, 1));
       }
       catch (Exception ex)
       {

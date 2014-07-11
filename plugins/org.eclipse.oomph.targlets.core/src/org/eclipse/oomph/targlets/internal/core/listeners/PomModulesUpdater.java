@@ -49,7 +49,7 @@ public class PomModulesUpdater implements TargletContainerListener
   {
   }
 
-  public void handleTargletEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
+  public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
   {
     if (event instanceof TargletContainerUpdated)
     {

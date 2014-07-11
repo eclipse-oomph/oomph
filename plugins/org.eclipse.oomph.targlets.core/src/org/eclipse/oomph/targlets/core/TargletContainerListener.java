@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface TargletContainerListener
 {
-  public void handleTargletEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception;
+  public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception;
 
   /**
    * @author Eike Stepper
