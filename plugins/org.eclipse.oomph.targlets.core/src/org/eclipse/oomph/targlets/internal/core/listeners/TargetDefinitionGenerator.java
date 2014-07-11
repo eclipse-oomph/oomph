@@ -15,10 +15,11 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.Targlet;
-import org.eclipse.oomph.targlets.core.TargletEvent;
-import org.eclipse.oomph.targlets.core.TargletEvent.ProfileUpdate;
-import org.eclipse.oomph.targlets.core.TargletListener;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
+import org.eclipse.oomph.targlets.core.TargletContainerListener;
 import org.eclipse.oomph.targlets.internal.core.IUGenerator;
+import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -50,7 +51,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-public class TargetDefinitionGenerator implements TargletListener
+public class TargetDefinitionGenerator implements TargletContainerListener
 {
   public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator";
 
@@ -80,35 +81,37 @@ public class TargetDefinitionGenerator implements TargletListener
   {
   }
 
-  public void handleTargletEvent(TargletEvent event, IProgressMonitor monitor) throws Exception
+  public void handleTargletEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
   {
-    if (event instanceof ProfileUpdate)
+    if (event instanceof TargletContainerUpdated)
     {
-      ProfileUpdate profileUpdate = (ProfileUpdate)event;
-      Targlet targlet = profileUpdate.getSource();
-
-      Annotation annotation = targlet.getAnnotation(ANNOTATION);
-      if (annotation != null)
+      TargletContainerUpdated targletContainerUpdated = (TargletContainerUpdated)event;
+      TargletContainer targletContainer = targletContainerUpdated.getSource();
+      for (Targlet targlet : targletContainer.getTarglets())
       {
-        EMap<String, String> details = annotation.getDetails();
-
-        String name = details.get(ANNOTATION_NAME);
-        if (StringUtil.isEmpty(name))
+        Annotation annotation = targlet.getAnnotation(ANNOTATION);
+        if (annotation != null)
         {
-          name = "Generated from " + targlet.getName();
+          EMap<String, String> details = annotation.getDetails();
+
+          String name = details.get(ANNOTATION_NAME);
+          if (StringUtil.isEmpty(name))
+          {
+            name = "Generated from " + targlet.getName();
+          }
+
+          String location = details.get(ANNOTATION_LOCATION);
+          if (StringUtil.isEmpty(location))
+          {
+            location = File.createTempFile("tmp-", ".target").getAbsolutePath();
+            TargletsCorePlugin.INSTANCE.log("Generating target definition for targlet " + targlet.getName() + " to " + location);
+          }
+
+          Profile profile = targletContainerUpdated.getProfile();
+          List<IMetadataRepository> metadataRepositories = targletContainerUpdated.getMetadataRepositories();
+
+          generateTargetDefinition(targlet, name, location, profile, metadataRepositories, monitor);
         }
-
-        String location = details.get(ANNOTATION_LOCATION);
-        if (StringUtil.isEmpty(location))
-        {
-          location = File.createTempFile("tmp-", ".target").getAbsolutePath();
-          TargletsCorePlugin.INSTANCE.log("Generating target definition for targlet " + targlet.getName() + " to " + location);
-        }
-
-        Profile profile = profileUpdate.getProfile();
-        List<IMetadataRepository> metadataRepositories = profileUpdate.getMetadataRepositories();
-
-        generateTargetDefinition(targlet, name, location, profile, metadataRepositories, monitor);
       }
     }
   }

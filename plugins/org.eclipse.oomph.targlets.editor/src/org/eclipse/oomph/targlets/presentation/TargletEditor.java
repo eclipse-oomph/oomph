@@ -1013,7 +1013,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    * This is the method used by the framework to install your own controls.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public void createPages()
@@ -1035,7 +1035,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
       selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
       selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain,
           selectionViewer, TargletEditorPlugin.getPlugin().getDialogSettings())));
-      selectionViewer.setInput(editingDomain.getResourceSet());
+      selectionViewer.setInput(editingDomain.getResourceSet().getResources().get(0));
       selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 
       new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);

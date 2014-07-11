@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletPackage;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -84,6 +85,12 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
   protected TargletSwitch<Adapter> modelSwitch = new TargletSwitch<Adapter>()
   {
     @Override
+    public Adapter caseTargletContainer(TargletContainer object)
+    {
+      return createTargletContainerAdapter();
+    }
+
+    @Override
     public Adapter caseTarglet(Targlet object)
     {
       return createTargletAdapter();
@@ -126,6 +133,21 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
   public Adapter createAdapter(Notifier target)
   {
     return modelSwitch.doSwitch((EObject)target);
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.TargletContainer <em>Container</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.TargletContainer
+   * @generated
+   */
+  public Adapter createTargletContainerAdapter()
+  {
+    return null;
   }
 
   /**

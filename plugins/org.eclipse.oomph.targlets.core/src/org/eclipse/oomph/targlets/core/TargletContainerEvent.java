@@ -11,7 +11,7 @@
 package org.eclipse.oomph.targlets.core;
 
 import org.eclipse.oomph.p2.core.Profile;
-import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -25,25 +25,44 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class TargletEvent extends EventObject
+public class TargletContainerEvent extends EventObject
 {
   private static final long serialVersionUID = 1L;
 
-  public TargletEvent(Targlet source)
+  public TargletContainerEvent(TargletContainer targletContainer)
   {
-    super(source);
+    super(targletContainer);
   }
 
   @Override
-  public final Targlet getSource()
+  public final TargletContainer getSource()
   {
-    return (Targlet)super.getSource();
+    return (TargletContainer)super.getSource();
   }
 
   /**
    * @author Eike Stepper
    */
-  public static class ProfileUpdate extends TargletEvent
+  public static class TargletContainerChanged extends TargletContainerEvent
+  {
+    private static final long serialVersionUID = 1L;
+
+    public TargletContainerChanged(TargletContainer targletContainer)
+    {
+      super(targletContainer);
+    }
+
+    @Override
+    public String toString()
+    {
+      return "TargletContainerChanged[source=" + getSource().getID() + "]";
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class TargletContainerUpdated extends TargletContainerEvent
   {
     private static final long serialVersionUID = 1L;
 
@@ -55,8 +74,8 @@ public class TargletEvent extends EventObject
 
     private final transient Map<IInstallableUnit, File> projectLocations;
 
-    public ProfileUpdate(Targlet source, Profile profile, List<IMetadataRepository> metadataRepositories, IProvisioningPlan provisioningPlan,
-        Map<IInstallableUnit, File> projectLocations)
+    public TargletContainerUpdated(TargletContainer source, Profile profile, List<IMetadataRepository> metadataRepositories,
+        IProvisioningPlan provisioningPlan, Map<IInstallableUnit, File> projectLocations)
     {
       super(source);
       this.profile = profile;
@@ -88,7 +107,7 @@ public class TargletEvent extends EventObject
     @Override
     public String toString()
     {
-      return "ProfileUpdate[targlet=" + getSource().getName() + ", metadataRepositories=" + metadataRepositories + ", profile=" + profile
+      return "TargletContainerUpdated[source=" + getSource().getID() + ", metadataRepositories=" + metadataRepositories + ", profile=" + profile
           + ", provisioningPlan=" + provisioningPlan + ", projectLocations=" + projectLocations + "]";
     }
   }

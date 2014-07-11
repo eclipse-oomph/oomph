@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
@@ -12,11 +12,9 @@ package org.eclipse.oomph.targlets.internal.ui;
 
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 
-import org.eclipse.equinox.p2.metadata.IVersionedId;
-import org.eclipse.equinox.p2.metadata.Version;
-import org.eclipse.equinox.p2.metadata.VersionedId;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.pde.core.target.ITargetDefinition;
+import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.internal.ui.SWTFactory;
 import org.eclipse.pde.internal.ui.shared.target.IEditBundleContainerPage;
 import org.eclipse.swt.SWT;
@@ -24,61 +22,67 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
  */
-@SuppressWarnings("unused")
 public class TargletWizardPage extends WizardPage implements IEditBundleContainerPage
 {
   private ITargetDefinition target;
 
-  private TargletContainer targlet;
+  private TargletContainer targletContainer;
 
   /**
    * Constructor for creating a new container
    */
   public TargletWizardPage(ITargetDefinition target)
   {
-    super("AddP2Container");
-    setTitle("Add Targlet");
+    super("AddTargletContainer");
+    setTitle("Add Targlet Container");
     setMessage("Select content from a software site to be added to your target.");
     this.target = target;
+
+    Set<String> ids = new HashSet<String>();
+    ITargetLocation[] targetLocations = target.getTargetLocations();
+    if (targetLocations != null)
+    {
+      for (ITargetLocation location : targetLocations)
+      {
+        if (location instanceof TargletContainer)
+        {
+          TargletContainer targletContainer = (TargletContainer)location;
+          ids.add(targletContainer.getID());
+        }
+      }
+    }
+
+    String id = "Default";
+    int i = 1;
+    while (ids.contains(id))
+    {
+      id = "Default" + (++i);
+    }
+
+    targletContainer = new TargletContainer(id);
   }
 
   /**
    * Constructor for editing an existing container
    */
-  public TargletWizardPage(ITargetDefinition target, TargletContainer targlet)
+  public TargletWizardPage(ITargetDefinition target, TargletContainer targletContainer)
   {
-    this(target);
-    this.targlet = targlet;
-    setTitle("Edit Targlet");
+    super("EditTargletContainer");
+    setTitle("Edit Targlet Container");
+    setMessage("Select content from a software site to be added to your target.");
+    this.target = target;
+    this.targletContainer = targletContainer;
   }
 
   public TargletContainer getBundleContainer()
   {
-    try
-    {
-      File p2PoolDir = new File("C:/develop/.p2pool-ide");
-      File p2AgentDir = new File("C:/develop/.p2pool-ide/p2");
-      String profileID = "C__develop_aaa_cdo.releng_master_tpX";
-      String destination = "C:/develop/aaa/cdo.releng/master/tpX"; // XXX
-
-      java.net.URI[] p2Repositories = { new java.net.URI("http://download.eclipse.org/releases/luna") };
-      IVersionedId[] rootComponents = { new VersionedId("org.eclipse.emf.ecore.feature.group", Version.emptyVersion) };
-
-      return null;
-    }
-    catch (RuntimeException ex)
-    {
-      throw ex;
-    }
-    catch (Exception ex)
-    {
-      throw new RuntimeException(ex);
-    }
+    return targletContainer;
   }
 
   public void storeSettings()
@@ -96,19 +100,9 @@ public class TargletWizardPage extends WizardPage implements IEditBundleContaine
     setControl(composite);
   }
 
-  /**
-   * Checks if the page is complete, updating messages and finish button.
-   */
   void pageChanged()
   {
     setErrorMessage(null);
     setPageComplete(true);
-  }
-
-  /**
-   * Restores the state of the wizard from previous invocations
-   */
-  private void restoreWidgetState()
-  {
   }
 }

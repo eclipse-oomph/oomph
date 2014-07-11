@@ -70,6 +70,70 @@ public interface TargletPackage extends EPackage
   TargletPackage eINSTANCE = org.eclipse.oomph.targlets.impl.TargletPackageImpl.init();
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.TargletContainerImpl <em>Container</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.TargletContainerImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getTargletContainer()
+   * @generated
+   */
+  int TARGLET_CONTAINER = 0;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_CONTAINER__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_CONTAINER__ID = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Targlets</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_CONTAINER__TARGLETS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Container</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_CONTAINER_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_CONTAINER___GET_ANNOTATION__STRING = BasePackage.MODEL_ELEMENT___GET_ANNOTATION__STRING;
+
+  /**
+   * The number of operations of the '<em>Container</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_CONTAINER_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+  /**
    * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.TargletImpl <em>Targlet</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -77,7 +141,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getTarglet()
    * @generated
    */
-  int TARGLET = 0;
+  int TARGLET = 1;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -195,7 +259,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentExtension()
    * @generated
    */
-  int COMPONENT_EXTENSION = 1;
+  int COMPONENT_EXTENSION = 2;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -250,7 +314,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentDefinition()
    * @generated
    */
-  int COMPONENT_DEFINITION = 2;
+  int COMPONENT_DEFINITION = 3;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -314,6 +378,38 @@ public interface TargletPackage extends EPackage
    * @ordered
    */
   int COMPONENT_DEFINITION_OPERATION_COUNT = COMPONENT_EXTENSION_OPERATION_COUNT + 0;
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.TargletContainer <em>Container</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Container</em>'.
+   * @see org.eclipse.oomph.targlets.TargletContainer
+   * @generated
+   */
+  EClass getTargletContainer();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.TargletContainer#getID <em>ID</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>ID</em>'.
+   * @see org.eclipse.oomph.targlets.TargletContainer#getID()
+   * @see #getTargletContainer()
+   * @generated
+   */
+  EAttribute getTargletContainer_ID();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.targlets.TargletContainer#getTarglets <em>Targlets</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Targlets</em>'.
+   * @see org.eclipse.oomph.targlets.TargletContainer#getTarglets()
+   * @see #getTargletContainer()
+   * @generated
+   */
+  EReference getTargletContainer_Targlets();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.Targlet <em>Targlet</em>}'.
@@ -490,6 +586,32 @@ public interface TargletPackage extends EPackage
    */
   interface Literals
   {
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.TargletContainerImpl <em>Container</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.TargletContainerImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getTargletContainer()
+     * @generated
+     */
+    EClass TARGLET_CONTAINER = eINSTANCE.getTargletContainer();
+
+    /**
+     * The meta object literal for the '<em><b>ID</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_CONTAINER__ID = eINSTANCE.getTargletContainer_ID();
+
+    /**
+     * The meta object literal for the '<em><b>Targlets</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TARGLET_CONTAINER__TARGLETS = eINSTANCE.getTargletContainer_Targlets();
+
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.TargletImpl <em>Targlet</em>}' class.
      * <!-- begin-user-doc -->

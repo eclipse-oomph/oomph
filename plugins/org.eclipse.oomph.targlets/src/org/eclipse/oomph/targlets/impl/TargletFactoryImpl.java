@@ -17,6 +17,7 @@ import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
 
@@ -83,6 +84,8 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
   {
     switch (eClass.getClassifierID())
     {
+      case TargletPackage.TARGLET_CONTAINER:
+        return createTargletContainer();
       case TargletPackage.TARGLET:
         return createTarglet();
       case TargletPackage.COMPONENT_EXTENSION:
@@ -92,6 +95,17 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TargletContainer createTargletContainer()
+  {
+    TargletContainerImpl targletContainer = new TargletContainerImpl();
+    return targletContainer;
   }
 
   /**

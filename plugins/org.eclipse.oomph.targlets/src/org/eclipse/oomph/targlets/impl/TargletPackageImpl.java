@@ -16,6 +16,7 @@ import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
 
@@ -33,6 +34,13 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  */
 public class TargletPackageImpl extends EPackageImpl implements TargletPackage
 {
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass targletContainerEClass = null;
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -122,6 +130,36 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(TargletPackage.eNS_URI, theTargletPackage);
     return theTargletPackage;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTargletContainer()
+  {
+    return targletContainerEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargletContainer_ID()
+  {
+    return (EAttribute)targletContainerEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTargletContainer_Targlets()
+  {
+    return (EReference)targletContainerEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -297,6 +335,10 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     isCreated = true;
 
     // Create classes and their features
+    targletContainerEClass = createEClass(TARGLET_CONTAINER);
+    createEAttribute(targletContainerEClass, TARGLET_CONTAINER__ID);
+    createEReference(targletContainerEClass, TARGLET_CONTAINER__TARGLETS);
+
     targletEClass = createEClass(TARGLET);
     createEAttribute(targletEClass, TARGLET__NAME);
     createEReference(targletEClass, TARGLET__REQUIREMENTS);
@@ -352,11 +394,18 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     // Set bounds for type parameters
 
     // Add supertypes to classes
+    targletContainerEClass.getESuperTypes().add(theBasePackage.getModelElement());
     targletEClass.getESuperTypes().add(theBasePackage.getModelElement());
     componentExtensionEClass.getESuperTypes().add(theBasePackage.getModelElement());
     componentDefinitionEClass.getESuperTypes().add(getComponentExtension());
 
     // Initialize classes, features, and operations; add parameters
+    initEClass(targletContainerEClass, TargletContainer.class, "TargletContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getTargletContainer_ID(), ecorePackage.getEString(), "iD", null, 0, 1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTargletContainer_Targlets(), getTarglet(), null, "targlets", null, 0, -1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(targletEClass, Targlet.class, "Targlet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTarglet_Name(), ecorePackage.getEString(), "name", null, 1, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -395,6 +444,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createLabelProviderAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
+    // http://www.eclipse.org/oomph/setup/NoExpand
+    createNoExpandAnnotations();
   }
 
   /**
@@ -431,12 +482,26 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getTargletContainer_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    addAnnotation(getTargletContainer_Targlets(), source, new String[] { "name", "requirement" });
     addAnnotation(getTarglet_Requirements(), source, new String[] { "name", "requirement" });
     addAnnotation(getTarglet_SourceLocators(), source, new String[] { "name", "sourceLocator" });
     addAnnotation(getTarglet_RepositoryLists(), source, new String[] { "name", "repositoryList" });
     addAnnotation(getTarglet_ActiveRepositories(), source, new String[] { "name", "activeRepository" });
     addAnnotation(getComponentExtension_Requirements(), source, new String[] { "name", "requirement" });
     addAnnotation(getComponentDefinition_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/NoExpand</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createNoExpandAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/NoExpand";
+    addAnnotation(getTargletContainer_ID(), source, new String[] {});
   }
 
 } // TargletPackageImpl

@@ -10,26 +10,26 @@
  */
 package org.eclipse.oomph.targlets.core;
 
-import org.eclipse.oomph.targlets.internal.core.TargletListenerRegistryImpl;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerListenerRegistryImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Eike Stepper
  */
-public interface TargletListener
+public interface TargletContainerListener
 {
-  public void handleTargletEvent(TargletEvent event, IProgressMonitor monitor) throws Exception;
+  public void handleTargletEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception;
 
   /**
    * @author Eike Stepper
    */
   public interface Registry
   {
-    public static final Registry INSTANCE = TargletListenerRegistryImpl.INSTANCE;
+    public static final Registry INSTANCE = TargletContainerListenerRegistryImpl.INSTANCE;
 
-    public void addListener(TargletListener listener);
+    public void addListener(TargletContainerListener listener);
 
-    public void removeListener(TargletListener listener);
+    public void removeListener(TargletContainerListener listener);
   }
 }

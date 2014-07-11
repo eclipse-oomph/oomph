@@ -102,6 +102,31 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.TargletContainer} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected TargletContainerItemProvider targletContainerItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.TargletContainer}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createTargletContainerAdapter()
+  {
+    if (targletContainerItemProvider == null)
+    {
+      targletContainerItemProvider = new TargletContainerItemProvider(this);
+    }
+
+    return targletContainerItemProvider;
+  }
+
+  /**
    * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.Targlet} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -317,6 +342,10 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
    */
   public void dispose()
   {
+    if (targletContainerItemProvider != null)
+    {
+      targletContainerItemProvider.dispose();
+    }
     if (targletItemProvider != null)
     {
       targletItemProvider.dispose();
@@ -383,6 +412,8 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
       @Override
       public Object caseAnnotation(Annotation object)
       {
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createTargletContainer()));
+
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createTarglet()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createComponentExtension()));

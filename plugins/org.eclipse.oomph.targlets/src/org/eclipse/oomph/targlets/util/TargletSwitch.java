@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletPackage;
 
 import org.eclipse.emf.ecore.EObject;
@@ -83,6 +84,20 @@ public class TargletSwitch<T> extends Switch<T>
   {
     switch (classifierID)
     {
+      case TargletPackage.TARGLET_CONTAINER:
+      {
+        TargletContainer targletContainer = (TargletContainer)theEObject;
+        T result = caseTargletContainer(targletContainer);
+        if (result == null)
+        {
+          result = caseModelElement(targletContainer);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       case TargletPackage.TARGLET:
       {
         Targlet targlet = (Targlet)theEObject;
@@ -132,6 +147,22 @@ public class TargletSwitch<T> extends Switch<T>
       default:
         return defaultCase(theEObject);
     }
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Container</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Container</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTargletContainer(TargletContainer object)
+  {
+    return null;
   }
 
   /**

@@ -19,6 +19,8 @@ import org.eclipse.oomph.predicates.Predicate;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerChanged;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -55,7 +57,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -258,9 +259,11 @@ public class TargletContainer extends AbstractBundleContainer
     {
       TargletsCorePlugin.INSTANCE.ungetService(service);
     }
+
+    TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletContainerChanged(this), new NullProgressMonitor());
   }
 
-  private void basicSetTarglets(Collection<? extends Targlet> targlets)
+  private EList<Targlet> basicSetTarglets(Collection<? extends Targlet> targlets)
   {
     Set<String> names = new HashSet<String>();
     for (Targlet targlet : targlets)
@@ -272,7 +275,9 @@ public class TargletContainer extends AbstractBundleContainer
       }
     }
 
+    EList<Targlet> oldTarglets = this.targlets;
     this.targlets = TargletFactory.eINSTANCE.copyTarglets(targlets);
+    return oldTarglets;
   }
 
   @Override
@@ -758,7 +763,10 @@ public class TargletContainer extends AbstractBundleContainer
       IProvisioningPlan provisioningPlan = provisioningPlanRef.get();
       List<IMetadataRepository> metadataRepositories = metadataRepositoriesRef.get();
 
-      notifyUpdate(profile, sources, provisioningPlan, metadataRepositories, monitor);
+      TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(
+          new TargletContainerUpdated(this, profile, metadataRepositories, provisioningPlan, sources), monitor);
+
+      monitor.subTask("Targlet container profile update completed");
     }
     catch (Throwable t)
     {
@@ -769,22 +777,6 @@ public class TargletContainer extends AbstractBundleContainer
 
     progress.done();
     return profile;
-  }
-
-  private void notifyUpdate(Profile profile, Map<IInstallableUnit, File> sources, IProvisioningPlan provisioningPlan,
-      List<IMetadataRepository> metadataRepositories, IProgressMonitor monitor)
-  {
-    monitor.beginTask("", targlets.size());
-
-    for (Targlet targlet : targlets)
-    {
-      monitor.subTask("Notifying listeners of targlet " + targlet.getName());
-      TargletListenerRegistryImpl.INSTANCE.notifyProfileUpdate(targlet, profile, metadataRepositories, provisioningPlan, sources, new SubProgressMonitor(
-          monitor, 1));
-    }
-
-    monitor.subTask("Targlet container profile update completed");
-    monitor.done();
   }
 
   private static String createDigest(String id, String environmentProperties, String nlProperty, EList<Targlet> targlets)
@@ -914,6 +906,49 @@ public class TargletContainer extends AbstractBundleContainer
     }
 
     return projectLocations;
+  }
+
+  public static TargletContainer lookup(String id)
+  {
+    ITargetPlatformService service = null;
+
+    try
+    {
+      service = TargletsCorePlugin.INSTANCE.getService(ITargetPlatformService.class);
+
+      for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))
+      {
+        try
+        {
+          ITargetDefinition target = targetHandle.getTargetDefinition();
+          ITargetLocation[] targetLocations = target.getTargetLocations();
+          if (targetLocations != null)
+          {
+            for (ITargetLocation location : targetLocations)
+            {
+              if (location instanceof TargletContainer)
+              {
+                final TargletContainer targletContainer = (TargletContainer)location;
+                if (targletContainer.getID().equals(id))
+                {
+                  return targletContainer;
+                }
+              }
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+          TargletsCorePlugin.INSTANCE.log(ex);
+        }
+      }
+    }
+    finally
+    {
+      TargletsCorePlugin.INSTANCE.ungetService(service);
+    }
+
+    return null;
   }
 
   public static void updateWorkspace(IProgressMonitor monitor) throws CoreException

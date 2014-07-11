@@ -10,10 +10,8 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
-import org.eclipse.oomph.p2.core.Profile;
-import org.eclipse.oomph.targlets.Targlet;
-import org.eclipse.oomph.targlets.core.TargletEvent;
-import org.eclipse.oomph.targlets.core.TargletListener;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerListener;
 import org.eclipse.oomph.util.ConcurrentArray;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -24,34 +22,29 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.equinox.p2.engine.IProvisioningPlan;
-import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
-import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author Eike Stepper
  */
-public class TargletListenerRegistryImpl implements TargletListener.Registry
+public class TargletContainerListenerRegistryImpl implements TargletContainerListener.Registry
 {
-  public static final TargletListenerRegistryImpl INSTANCE = new TargletListenerRegistryImpl();
+  public static final TargletContainerListenerRegistryImpl INSTANCE = new TargletContainerListenerRegistryImpl();
 
-  private final ConcurrentArray<TargletListener> listeners = new ConcurrentArray<TargletListener>()
+  private final ConcurrentArray<TargletContainerListener> listeners = new ConcurrentArray<TargletContainerListener>()
   {
     @Override
-    protected TargletListener[] newArray(int length)
+    protected TargletContainerListener[] newArray(int length)
     {
-      return new TargletListener[length];
+      return new TargletContainerListener[length];
     }
   };
 
   private final ExtensionPointHandler extensionPointHandler = new ExtensionPointHandler();
 
-  private TargletListenerRegistryImpl()
+  private TargletContainerListenerRegistryImpl()
   {
   }
 
@@ -66,25 +59,29 @@ public class TargletListenerRegistryImpl implements TargletListener.Registry
     listeners.clear();
   }
 
-  public void addListener(TargletListener listener)
+  public void addListener(TargletContainerListener listener)
   {
     listeners.add(listener);
   }
 
-  public void removeListener(TargletListener listener)
+  public void removeListener(TargletContainerListener listener)
   {
     listeners.remove(listener);
   }
 
-  public void notifyProfileUpdate(Targlet targlet, Profile profile, List<IMetadataRepository> metadataRepositories, IProvisioningPlan provisioningPlan,
-      Map<IInstallableUnit, File> projectLocations, IProgressMonitor monitor)
+  public void notifyListeners(TargletContainerEvent event, IProgressMonitor monitor)
   {
-    TargletEvent event = new TargletEvent.ProfileUpdate(targlet, profile, metadataRepositories, provisioningPlan, projectLocations);
-    TargletListener[] targletListeners = listeners.get();
+    TargletContainerListener[] targletListeners = listeners.get();
+    if (targletListeners.length == 0)
+    {
+      return;
+    }
+
+    monitor.subTask("Notifying listeners of targlet container " + event.getSource().getID());
 
     monitor.beginTask("", targletListeners.length);
 
-    for (TargletListener listener : targletListeners)
+    for (TargletContainerListener listener : targletListeners)
     {
       try
       {
@@ -106,7 +103,7 @@ public class TargletListenerRegistryImpl implements TargletListener.Registry
   {
     public static final String EXTENSION_POINT = "org.eclipse.oomph.targlets.core.targletListeners";
 
-    private final Map<IConfigurationElement, TargletListener> listeners = new HashMap<IConfigurationElement, TargletListener>();
+    private final Map<IConfigurationElement, TargletContainerListener> listeners = new HashMap<IConfigurationElement, TargletContainerListener>();
 
     public ExtensionPointHandler()
     {
@@ -127,7 +124,7 @@ public class TargletListenerRegistryImpl implements TargletListener.Registry
     {
       Platform.getExtensionRegistry().removeListener(this);
 
-      for (TargletListener listener : listeners.values())
+      for (TargletContainerListener listener : listeners.values())
       {
         INSTANCE.removeListener(listener);
       }
@@ -171,7 +168,7 @@ public class TargletListenerRegistryImpl implements TargletListener.Registry
     {
       try
       {
-        TargletListener listener = (TargletListener)configurationElement.createExecutableExtension("class");
+        TargletContainerListener listener = (TargletContainerListener)configurationElement.createExecutableExtension("class");
         listeners.put(configurationElement, listener);
         INSTANCE.addListener(listener);
       }
@@ -183,7 +180,7 @@ public class TargletListenerRegistryImpl implements TargletListener.Registry
 
     private void removed(IConfigurationElement configurationElement)
     {
-      TargletListener listener = listeners.remove(configurationElement);
+      TargletContainerListener listener = listeners.remove(configurationElement);
       if (listener != null)
       {
         INSTANCE.removeListener(listener);

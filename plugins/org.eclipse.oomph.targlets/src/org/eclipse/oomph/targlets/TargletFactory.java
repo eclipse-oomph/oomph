@@ -34,6 +34,15 @@ public interface TargletFactory extends EFactory
   TargletFactory eINSTANCE = org.eclipse.oomph.targlets.impl.TargletFactoryImpl.init();
 
   /**
+   * Returns a new object of class '<em>Container</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Container</em>'.
+   * @generated
+   */
+  TargletContainer createTargletContainer();
+
+  /**
    * Returns a new object of class '<em>Targlet</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

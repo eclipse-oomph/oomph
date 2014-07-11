@@ -14,9 +14,10 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.targlets.Targlet;
-import org.eclipse.oomph.targlets.core.TargletEvent;
-import org.eclipse.oomph.targlets.core.TargletEvent.ProfileUpdate;
-import org.eclipse.oomph.targlets.core.TargletListener;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
+import org.eclipse.oomph.targlets.core.TargletContainerListener;
+import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.XMLUtil.ElementUpdater;
@@ -38,7 +39,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class PomArtifactUpdater implements TargletListener
+public class PomArtifactUpdater implements TargletContainerListener
 {
   public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater";
 
@@ -50,24 +51,26 @@ public class PomArtifactUpdater implements TargletListener
   {
   }
 
-  public void handleTargletEvent(TargletEvent event, IProgressMonitor monitor) throws Exception
+  public void handleTargletEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
   {
-    if (event instanceof ProfileUpdate)
+    if (event instanceof TargletContainerUpdated)
     {
-      ProfileUpdate profileUpdate = (ProfileUpdate)event;
-      Targlet targlet = profileUpdate.getSource();
-
-      Annotation annotation = targlet.getAnnotation(ANNOTATION);
-      if (annotation != null)
+      TargletContainerUpdated targletContainerUpdated = (TargletContainerUpdated)event;
+      TargletContainer targletContainer = targletContainerUpdated.getSource();
+      for (Targlet targlet : targletContainer.getTarglets())
       {
-        EMap<String, String> details = annotation.getDetails();
-        boolean skipArtifactIDs = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_ARTIFACT_IDS));
-        boolean skipVersions = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_VERSIONS));
-
-        if (!skipArtifactIDs || !skipVersions)
+        Annotation annotation = targlet.getAnnotation(ANNOTATION);
+        if (annotation != null)
         {
-          Map<IInstallableUnit, File> projectLocations = profileUpdate.getProjectLocations();
-          updatePomArtifacts(skipArtifactIDs, skipVersions, projectLocations, monitor);
+          EMap<String, String> details = annotation.getDetails();
+          boolean skipArtifactIDs = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_ARTIFACT_IDS));
+          boolean skipVersions = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_VERSIONS));
+
+          if (!skipArtifactIDs || !skipVersions)
+          {
+            Map<IInstallableUnit, File> projectLocations = targletContainerUpdated.getProjectLocations();
+            updatePomArtifacts(skipArtifactIDs, skipVersions, projectLocations, monitor);
+          }
         }
       }
     }

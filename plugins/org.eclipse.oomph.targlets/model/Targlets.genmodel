@@ -9,6 +9,10 @@
   <genPackages prefix="Targlet" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       multipleEditorPages="false" extensibleProviderFactory="true" childCreationExtenders="true"
       fileExtensions="targlet,def,ext" ecorePackage="Targlets.ecore#/" publicationLocation="/setups/models/Targlets.ecore">
+    <genClasses ecoreClass="Targlets.ecore#//TargletContainer">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//TargletContainer/iD"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//TargletContainer/targlets"/>
+    </genClasses>
     <genClasses ecoreClass="Targlets.ecore#//Targlet">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/requirements"/>

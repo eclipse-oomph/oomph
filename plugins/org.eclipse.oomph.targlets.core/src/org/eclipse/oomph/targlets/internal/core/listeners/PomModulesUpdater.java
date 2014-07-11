@@ -12,9 +12,10 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.targlets.Targlet;
-import org.eclipse.oomph.targlets.core.TargletEvent;
-import org.eclipse.oomph.targlets.core.TargletEvent.ProfileUpdate;
-import org.eclipse.oomph.targlets.core.TargletListener;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
+import org.eclipse.oomph.targlets.core.TargletContainerListener;
+import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -36,7 +37,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-public class PomModulesUpdater implements TargletListener
+public class PomModulesUpdater implements TargletContainerListener
 {
   public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomModulesUpdater";
 
@@ -48,28 +49,30 @@ public class PomModulesUpdater implements TargletListener
   {
   }
 
-  public void handleTargletEvent(TargletEvent event, IProgressMonitor monitor) throws Exception
+  public void handleTargletEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
   {
-    if (event instanceof ProfileUpdate)
+    if (event instanceof TargletContainerUpdated)
     {
-      ProfileUpdate profileUpdate = (ProfileUpdate)event;
-      Targlet targlet = profileUpdate.getSource();
-
-      Annotation annotation = targlet.getAnnotation(ANNOTATION);
-      if (annotation != null)
+      TargletContainerUpdated targletContainerUpdated = (TargletContainerUpdated)event;
+      TargletContainer targletContainer = targletContainerUpdated.getSource();
+      for (Targlet targlet : targletContainer.getTarglets())
       {
-        String location = annotation.getDetails().get(ANNOTATION_LOCATION);
-        if (!StringUtil.isEmpty(location))
+        Annotation annotation = targlet.getAnnotation(ANNOTATION);
+        if (annotation != null)
         {
-          File mainPom = new File(location);
-          if (mainPom.isFile())
+          String location = annotation.getDetails().get(ANNOTATION_LOCATION);
+          if (!StringUtil.isEmpty(location))
           {
-            Map<IInstallableUnit, File> projectLocations = profileUpdate.getProjectLocations();
-            updatePomModules(mainPom, projectLocations, monitor);
-          }
-          else
-          {
-            TargletsCorePlugin.INSTANCE.log("Not a file: " + mainPom, IStatus.WARNING);
+            File mainPom = new File(location);
+            if (mainPom.isFile())
+            {
+              Map<IInstallableUnit, File> projectLocations = targletContainerUpdated.getProjectLocations();
+              updatePomModules(mainPom, projectLocations, monitor);
+            }
+            else
+            {
+              TargletsCorePlugin.INSTANCE.log("Not a file: " + mainPom, IStatus.WARNING);
+            }
           }
         }
       }
