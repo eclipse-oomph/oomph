@@ -26,7 +26,7 @@ public final class P2UIPlugin extends AbstractOomphUIPlugin
 
   public P2UIPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { org.eclipse.oomph.p2.provider.P2EditPlugin.INSTANCE });
   }
 
   @Override

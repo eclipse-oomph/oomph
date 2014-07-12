@@ -24,9 +24,10 @@ public final class TargletsUIPlugin extends AbstractOomphUIPlugin
 
   private static Implementation plugin;
 
+  @SuppressWarnings("restriction")
   public TargletsUIPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { org.eclipse.oomph.p2.internal.ui.P2UIPlugin.INSTANCE });
   }
 
   @Override
