@@ -2810,139 +2810,126 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     Map<VariableTask, EAttribute> allRuleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
     Workspace workspace = setupContext.getWorkspace();
-    if (workspace == null || workspace.getStreams().isEmpty())
+    List<Stream> streams = workspace == null ? null : workspace.getStreams();
+    if (streams == null || streams.isEmpty())
     {
-      SetupTaskPerformer performer = new SetupTaskPerformer(uriConverter, prompter, null, setupContext, (Stream)null);
-      performers.add(performer);
-      allAppliedRuleVariables.addAll(performer.getAppliedRuleVariables());
+      streams = Collections.singletonList(null);
+    }
+
+    for (Stream stream : streams)
+    {
+      SetupTaskPerformer performer = new SetupTaskPerformer(uriConverter, prompter, null, setupContext, stream);
       Set<String> undeclaredVariables = performer.getUndeclaredVariables();
+      final Set<VariableTask> demandCreatedUnresolvedVariables = new LinkedHashSet<VariableTask>();
       if (!undeclaredVariables.isEmpty())
       {
-        throw new RuntimeException("Missing variables for " + undeclaredVariables);
-      }
-
-      if (performer.getUndeclaredVariables().isEmpty() && !performer.getUnresolvedVariables().isEmpty())
-      {
-        needsPrompt = true;
-      }
-    }
-    else
-    {
-      for (Stream stream : workspace.getStreams())
-      {
-        SetupTaskPerformer performer = new SetupTaskPerformer(uriConverter, prompter, null, setupContext, stream);
-        Set<String> undeclaredVariables = performer.getUndeclaredVariables();
-        final Set<VariableTask> demandCreatedUnresolvedVariables = new LinkedHashSet<VariableTask>();
-        if (!undeclaredVariables.isEmpty())
+        List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
+        for (String variableName : undeclaredVariables)
         {
-          List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
-          for (String variableName : undeclaredVariables)
-          {
-            VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-            variable.setName(variableName);
-            variable.setLabel(variableName + " (undeclared)");
-            variable.setStorePromptedValue(false);
-            unresolvedVariables.add(variable);
-            demandCreatedUnresolvedVariables.add(variable);
-          }
-
-          undeclaredVariables.clear();
+          VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+          variable.setName(variableName);
+          variable.setLabel(variableName + " (undeclared)");
+          variable.setStorePromptedValue(false);
+          unresolvedVariables.add(variable);
+          demandCreatedUnresolvedVariables.add(variable);
         }
 
-        if (fullPrompt)
-        {
-          SetupContext fullPromptContext = SetupContext.create(setupContext.getInstallation(), setupContext.getWorkspace());
+        undeclaredVariables.clear();
+      }
 
-          Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
-          final SetupTaskPerformer partialPromptPerformer = performer;
-          User user = EcoreUtil.copy(setupContext.getUser());
-          for (Iterator<EObject> it = user.eAllContents(); it.hasNext();)
+      if (fullPrompt)
+      {
+        SetupContext fullPromptContext = SetupContext.create(setupContext.getInstallation(), setupContext.getWorkspace());
+
+        Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
+        final SetupTaskPerformer partialPromptPerformer = performer;
+        User user = EcoreUtil.copy(setupContext.getUser());
+        for (Iterator<EObject> it = user.eAllContents(); it.hasNext();)
+        {
+          EObject eObject = it.next();
+          if (eObject instanceof VariableTask)
           {
-            EObject eObject = it.next();
-            if (eObject instanceof VariableTask)
-            {
-              VariableTask variableTask = (VariableTask)eObject;
-              variables.add(variableTask);
-              variableTask.setValue(null);
-            }
+            VariableTask variableTask = (VariableTask)eObject;
+            variables.add(variableTask);
+            variableTask.setValue(null);
+          }
+        }
+
+        user.getAttributeRules().clear();
+
+        fullPromptContext.getUser().eResource().getContents().set(0, user);
+
+        fullPromptContext = SetupContext.create(fullPromptContext.getInstallation(), fullPromptContext.getWorkspace(), user);
+
+        SetupPrompter fullPrompter = new SetupPrompter()
+        {
+          private boolean first = true;
+
+          public UserCallback getUserCallback()
+          {
+            return prompter.getUserCallback();
           }
 
-          user.getAttributeRules().clear();
-
-          fullPromptContext.getUser().eResource().getContents().set(0, user);
-
-          fullPromptContext = SetupContext.create(fullPromptContext.getInstallation(), fullPromptContext.getWorkspace(), user);
-
-          SetupPrompter fullPrompter = new SetupPrompter()
+          public String getValue(VariableTask variable)
           {
-            private boolean first = true;
-
-            public UserCallback getUserCallback()
+            if (!first)
             {
-              return prompter.getUserCallback();
+              return prompter.getValue(variable);
             }
 
-            public String getValue(VariableTask variable)
-            {
-              if (!first)
-              {
-                return prompter.getValue(variable);
-              }
+            return null;
+          }
 
-              return null;
-            }
-
-            public boolean promptVariables(List<? extends SetupTaskContext> performers)
+          public boolean promptVariables(List<? extends SetupTaskContext> performers)
+          {
+            for (SetupTaskContext context : performers)
             {
-              for (SetupTaskContext context : performers)
+              SetupTaskPerformer promptedPerformer = (SetupTaskPerformer)context;
+              Map<VariableTask, EAttribute> ruleAttributes = promptedPerformer.getRuleAttributes();
+              for (VariableTask variable : promptedPerformer.getUnresolvedVariables())
               {
-                SetupTaskPerformer promptedPerformer = (SetupTaskPerformer)context;
-                Map<VariableTask, EAttribute> ruleAttributes = promptedPerformer.getRuleAttributes();
-                for (VariableTask variable : promptedPerformer.getUnresolvedVariables())
+                EAttribute eAttribute = ruleAttributes.get(variable);
+                if (ruleAttributes.keySet().contains(variable))
                 {
-                  EAttribute eAttribute = ruleAttributes.get(variable);
-                  if (ruleAttributes.keySet().contains(variable))
+                  AttributeRule attributeRule = partialPromptPerformer.getAttributeRule(eAttribute, false);
+                  if (attributeRule != null)
                   {
-                    AttributeRule attributeRule = partialPromptPerformer.getAttributeRule(eAttribute, false);
-                    if (attributeRule != null)
-                    {
-                      String value = prompter.getValue(variable);
-                      variable.setValue(value == null ? attributeRule.getValue() : value);
-                    }
-                  }
-                  else
-                  {
-                    Object value = partialPromptPerformer.get(variable.getName());
-                    if (value instanceof String)
-                    {
-                      variable.setValue(value.toString());
-                    }
+                    String value = prompter.getValue(variable);
+                    variable.setValue(value == null ? attributeRule.getValue() : value);
                   }
                 }
-
-                promptedPerformer.getUnresolvedVariables().addAll(demandCreatedUnresolvedVariables);
+                else
+                {
+                  Object value = partialPromptPerformer.get(variable.getName());
+                  if (value instanceof String)
+                  {
+                    variable.setValue(value.toString());
+                  }
+                }
               }
 
-              first = false;
-              return true;
+              promptedPerformer.getUnresolvedVariables().addAll(demandCreatedUnresolvedVariables);
             }
-          };
 
-          SetupTaskPerformer fullPromptPerformer = new SetupTaskPerformer(uriConverter, fullPrompter, null, fullPromptContext, stream);
-          fullPrompter.promptVariables(Collections.singletonList(fullPromptPerformer));
-          // fullPromptPerformer.getUnresolvedVariables().addAll(0, performer.getUnresolvedVariables());
-          performer = fullPromptPerformer;
-        }
+            first = false;
+            return true;
+          }
+        };
 
-        allAppliedRuleVariables.addAll(performer.getAppliedRuleVariables());
-        allUnresolvedVariables.addAll(performer.getUnresolvedVariables());
-        allRuleAttributes.putAll(performer.getRuleAttributes());
-        performers.add(performer);
+        SetupTaskPerformer fullPromptPerformer = new SetupTaskPerformer(uriConverter, fullPrompter, null, fullPromptContext, stream);
+        fullPrompter.promptVariables(Collections.singletonList(fullPromptPerformer));
+        // fullPromptPerformer.getUnresolvedVariables().addAll(0, performer.getUnresolvedVariables());
+        performer = fullPromptPerformer;
+      }
 
-        if (!performer.getUnresolvedVariables().isEmpty())
-        {
-          needsPrompt = true;
-        }
+      allAppliedRuleVariables.addAll(performer.getAppliedRuleVariables());
+      allUnresolvedVariables.addAll(performer.getUnresolvedVariables());
+      allRuleAttributes.putAll(performer.getRuleAttributes());
+      performers.add(performer);
+
+      if (!performer.getUnresolvedVariables().isEmpty())
+      {
+        needsPrompt = true;
       }
     }
 

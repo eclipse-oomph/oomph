@@ -784,6 +784,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         }
       }
 
+      int maxPosition = fields.size() - 1;
       for (Map.Entry<FieldHolderRecord, Set<FieldHolderRecord>> entry : ruleUses.entrySet())
       {
         FieldHolderRecord fieldHolderRecord = entry.getKey();
@@ -791,7 +792,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         Set<FieldHolderRecord> fieldHolderRecords = entry.getValue();
         for (FieldHolderRecord dependantFieldHolderRecord : fieldHolderRecords)
         {
-          fields.move(++index, dependantFieldHolderRecord);
+          fields.move(Math.min(++index, maxPosition), dependantFieldHolderRecord);
         }
       }
 
