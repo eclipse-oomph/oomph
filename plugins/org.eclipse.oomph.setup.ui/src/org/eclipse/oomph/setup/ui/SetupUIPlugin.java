@@ -17,8 +17,8 @@ import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
@@ -73,9 +73,10 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
 
   private static SetupUIPlugin.Implementation plugin;
 
+  @SuppressWarnings("restriction")
   public SetupUIPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE });
   }
 
   public void refreshCache()

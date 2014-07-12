@@ -26,6 +26,7 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isOptional <em>Optional</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#isFeature <em>Feature</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,6 +115,21 @@ public interface Requirement extends ModelElement
    * @generated
    */
   void setOptional(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Feature</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Feature</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Feature</em>' attribute.
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Feature()
+   * @model transient="true" changeable="false" volatile="true" derived="true"
+   * @generated
+   */
+  boolean isFeature();
 
   /**
    * <!-- begin-user-doc -->

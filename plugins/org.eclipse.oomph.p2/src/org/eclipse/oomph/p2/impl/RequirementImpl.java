@@ -38,6 +38,7 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isOptional <em>Optional</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isFeature <em>Feature</em>}</li>
  * </ul>
  * </p>
  *
@@ -105,6 +106,16 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @ordered
    */
   protected boolean optional = OPTIONAL_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isFeature() <em>Feature</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isFeature()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean FEATURE_EDEFAULT = false;
 
   /**
    * <!-- begin-user-doc -->
@@ -215,6 +226,17 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public boolean isFeature()
+  {
+    String id = getID();
+    return id != null && id.endsWith(".feature.group");
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -228,6 +250,8 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return getVersionRange();
       case P2Package.REQUIREMENT__OPTIONAL:
         return isOptional();
+      case P2Package.REQUIREMENT__FEATURE:
+        return isFeature();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -294,6 +318,8 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return VERSION_RANGE_EDEFAULT == null ? versionRange != null : !VERSION_RANGE_EDEFAULT.equals(versionRange);
       case P2Package.REQUIREMENT__OPTIONAL:
         return optional != OPTIONAL_EDEFAULT;
+      case P2Package.REQUIREMENT__FEATURE:
+        return isFeature() != FEATURE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }

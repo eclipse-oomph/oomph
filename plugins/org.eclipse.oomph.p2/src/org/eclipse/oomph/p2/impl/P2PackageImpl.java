@@ -270,6 +270,16 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getRequirement_Feature()
+  {
+    return (EAttribute)requirementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EOperation getRequirement__SetVersionRange__Version_VersionSegment()
   {
     return requirementEClass.getEOperations().get(0);
@@ -419,6 +429,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     createEAttribute(requirementEClass, REQUIREMENT__ID);
     createEAttribute(requirementEClass, REQUIREMENT__VERSION_RANGE);
     createEAttribute(requirementEClass, REQUIREMENT__OPTIONAL);
+    createEAttribute(requirementEClass, REQUIREMENT__FEATURE);
     createEOperation(requirementEClass, REQUIREMENT___SET_VERSION_RANGE__VERSION_VERSIONSEGMENT);
 
     repositoryListEClass = createEClass(REPOSITORY_LIST);
@@ -500,6 +511,8 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRequirement_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRequirement_Feature(), ecorePackage.getEBoolean(), "feature", null, 0, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     op = initEOperation(getRequirement__SetVersionRange__Version_VersionSegment(), null, "setVersionRange", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getVersion(), "version", 0, 1, IS_UNIQUE, IS_ORDERED);

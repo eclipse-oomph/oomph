@@ -127,7 +127,7 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
           VersionRange versionRange = requirement.getVersionRange();
 
           String namespace;
-          if (id.endsWith(".feature.group"))
+          if (requirement.isFeature())
           {
             namespace = IInstallableUnit.NAMESPACE_IU_ID;
           }
