@@ -13,6 +13,7 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
@@ -281,7 +282,7 @@ public class TargetDefinitionGenerator implements TargletContainerListener
       Set<IU> resultIUs = new HashSet<IU>();
 
       IMetadataRepository metadataRepository = getMetadataRepository(repository.getURL(), metadataRepositories);
-      for (IInstallableUnit repositoryIU : metadataRepository.query(QueryUtil.createIUAnyQuery(), null))
+      for (IInstallableUnit repositoryIU : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUAnyQuery(), null)))
       {
         TargletsCorePlugin.checkCancelation(monitor);
 
@@ -313,7 +314,7 @@ public class TargetDefinitionGenerator implements TargletContainerListener
               {
                 TargletsCorePlugin.checkCancelation(monitor);
 
-                for (IInstallableUnit installableUnit : profile.query(QueryUtil.createMatchQuery(requirement.getMatches()), null))
+                for (IInstallableUnit installableUnit : P2Util.asIterable(profile.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
                 {
                   TargletsCorePlugin.checkCancelation(monitor);
 
@@ -392,7 +393,7 @@ public class TargetDefinitionGenerator implements TargletContainerListener
 
   private static IInstallableUnit getInstallableUnitFromProfile(IInstallableUnit repositoryIU, Profile profile)
   {
-    for (IInstallableUnit profileIU : profile.query(QueryUtil.createIUQuery(repositoryIU), null))
+    for (IInstallableUnit profileIU : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(repositoryIU), null)))
     {
       if (!TRUE.equalsIgnoreCase(profileIU.getProperty(IUGenerator.IU_PROPERTY_SOURCE)))
       {

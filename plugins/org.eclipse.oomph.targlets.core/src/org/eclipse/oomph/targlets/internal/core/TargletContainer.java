@@ -13,6 +13,7 @@ package org.eclipse.oomph.targlets.internal.core;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
@@ -102,6 +103,8 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -144,7 +147,7 @@ public class TargletContainer extends AbstractBundleContainer
 
   private ITargetDefinition target;
 
-  private EList<Targlet> targlets = new BasicEList<Targlet>();
+  private final EList<Targlet> targlets = new BasicEList<Targlet>();
 
   public TargletContainer(String id)
   {
@@ -162,6 +165,41 @@ public class TargletContainer extends AbstractBundleContainer
   {
     this(id);
     basicSetTarglets(targlets);
+  }
+
+  protected int getResolveBundlesWork()
+  {
+    return 999;
+  }
+
+  protected int getResolveFeaturesWork()
+  {
+    return 1;
+  }
+
+  public boolean isContentEqual(AbstractBundleContainer container)
+  {
+    if (container instanceof TargletContainer)
+    {
+      TargletContainer targletContainer = (TargletContainer)container;
+      if (targlets.size() != targletContainer.targlets.size())
+      {
+        return false;
+      }
+
+      for (Targlet targlet : targletContainer.targlets)
+      {
+        Targlet existingTarglet = getTarglet(targlet.getName());
+        if (existingTarglet == null || !EcoreUtil.equals(existingTarglet, targlet))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
   }
 
   public String getID()
@@ -266,7 +304,7 @@ public class TargletContainer extends AbstractBundleContainer
     TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletContainerChanged(this), new NullProgressMonitor());
   }
 
-  private EList<Targlet> basicSetTarglets(Collection<? extends Targlet> targlets)
+  private void basicSetTarglets(Collection<? extends Targlet> targlets)
   {
     Set<String> names = new HashSet<String>();
     for (Targlet targlet : targlets)
@@ -278,9 +316,8 @@ public class TargletContainer extends AbstractBundleContainer
       }
     }
 
-    EList<Targlet> oldTarglets = this.targlets;
-    this.targlets = TargletFactory.eINSTANCE.copyTarglets(targlets);
-    return oldTarglets;
+    this.targlets.clear();
+    this.targlets.addAll(TargletFactory.eINSTANCE.copyTarglets(targlets));
   }
 
   @Override
@@ -410,18 +447,6 @@ public class TargletContainer extends AbstractBundleContainer
   {
     super.associateWithTarget(target);
     this.target = target;
-  }
-
-  @Override
-  protected int getResolveBundlesWork()
-  {
-    return 999;
-  }
-
-  @Override
-  protected int getResolveFeaturesWork()
-  {
-    return 1;
   }
 
   @Override
@@ -907,7 +932,7 @@ public class TargletContainer extends AbstractBundleContainer
   private static Set<File> getProjectLocations(IProfile profile, Map<IInstallableUnit, File> sources, IProgressMonitor monitor)
   {
     Set<File> projectLocations = new HashSet<File>();
-    for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), monitor))
+    for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
       File folder = sources.get(iu);
       if (folder != null)
@@ -962,6 +987,59 @@ public class TargletContainer extends AbstractBundleContainer
     return null;
   }
 
+  private static final Method GET_WORKSPACE_TARGET_DEFINITION_METHOD;
+
+  static
+  {
+    Method method = null;
+    try
+    {
+      method = ITargetPlatformService.class.getMethod("getWorkspaceTargetDefinition");
+    }
+    catch (NoSuchMethodException ex)
+    {
+      // Ignore.
+    }
+    catch (SecurityException ex)
+    {
+      // Ignore.
+    }
+
+    GET_WORKSPACE_TARGET_DEFINITION_METHOD = method;
+  }
+
+  private static ITargetDefinition getWorkITargetDefinition(ITargetPlatformService service) throws CoreException
+  {
+    if (GET_WORKSPACE_TARGET_DEFINITION_METHOD != null)
+    {
+      try
+      {
+        return (ITargetDefinition)GET_WORKSPACE_TARGET_DEFINITION_METHOD.invoke(service);
+      }
+      catch (IllegalAccessException ex)
+      {
+        // Ignore.
+      }
+      catch (IllegalArgumentException ex)
+      {
+        // Ignore.
+      }
+      catch (InvocationTargetException ex)
+      {
+        // Ignore.
+      }
+    }
+
+    // Handle gracefully that getWorkspaceTargetDefinition() has been added in Eclipse 4.4
+    ITargetHandle handle = service.getWorkspaceTargetHandle();
+    if (handle != null)
+    {
+      return handle.getTargetDefinition();
+    }
+
+    return null;
+  }
+
   public static void updateWorkspace(IProgressMonitor monitor) throws CoreException
   {
     ITargetPlatformService service = null;
@@ -970,22 +1048,7 @@ public class TargletContainer extends AbstractBundleContainer
     {
       service = TargletsCorePlugin.INSTANCE.getService(ITargetPlatformService.class);
       Set<File> projectLocations = new HashSet<File>();
-      ITargetDefinition target = null;
-
-      try
-      {
-        target = service.getWorkspaceTargetDefinition();
-      }
-      catch (NoSuchMethodError ex)
-      {
-        // Handle gracefully that getWorkspaceTargetDefinition() has been added in Eclipse 4.4
-        ITargetHandle handle = service.getWorkspaceTargetHandle();
-        if (handle != null)
-        {
-          target = handle.getTargetDefinition();
-        }
-      }
-
+      ITargetDefinition target = getWorkITargetDefinition(service);
       if (target != null)
       {
         ITargetLocation[] targetLocations = target.getTargetLocations();

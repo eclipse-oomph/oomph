@@ -32,7 +32,7 @@
    <extension
          point="org.eclipse.debug.ui.stringVariablePresentations">
       <variablePresentation
-            argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.URIArgumentSelector"
+            argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.URIArgumentSelector$ExtensionFactory"
             variableName="file_uri">
       </variablePresentation>
    </extension>

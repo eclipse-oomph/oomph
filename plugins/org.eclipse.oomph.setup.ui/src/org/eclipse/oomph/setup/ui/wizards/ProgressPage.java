@@ -570,6 +570,7 @@ public class ProgressPage extends SetupWizardPage
         command.add(ws.toString());
       }
 
+      command.add("--launcher.appendVmargs");
       command.add("-vmargs");
       command.add("-D" + PROP_SETUP_CONFIRM_SKIP + "=true");
       command.add("-D" + PROP_SETUP_OFFLINE_STARTUP + "=" + performer.isOffline());

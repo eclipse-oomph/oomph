@@ -25,6 +25,7 @@ import org.eclipse.equinox.p2.internal.repository.mirroring.Mirroring;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
+import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepository;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -122,7 +124,7 @@ public final class P2Util
       targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
 
       List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
-      for (IInstallableUnit iu : sourceRepository.query(QueryUtil.createIUAnyQuery(), null))
+      for (IInstallableUnit iu : asIterable(sourceRepository.query(QueryUtil.createIUAnyQuery(), null)))
       {
         if (filter == null || filter.matches(iu))
         {
@@ -139,6 +141,23 @@ public final class P2Util
         manager.removeRepository(uri);
       }
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> Iterable<T> asIterable(final IQueryResult<T> queryResult)
+  {
+    if (queryResult instanceof Iterable<?>)
+    {
+      return (Iterable<T>)queryResult;
+    }
+
+    return new Iterable<T>()
+    {
+      public Iterator<T> iterator()
+      {
+        return queryResult.iterator();
+      }
+    };
   }
 
   public static void mirrorArtifactRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
@@ -166,7 +185,7 @@ public final class P2Util
       targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
 
       List<IArtifactKey> keys = new ArrayList<IArtifactKey>();
-      for (IArtifactKey key : sourceRepository.query(ArtifactKeyQuery.ALL_KEYS, null))
+      for (IArtifactKey key : asIterable(sourceRepository.query(ArtifactKeyQuery.ALL_KEYS, null)))
       {
         if (filter == null || filter.matches(key))
         {

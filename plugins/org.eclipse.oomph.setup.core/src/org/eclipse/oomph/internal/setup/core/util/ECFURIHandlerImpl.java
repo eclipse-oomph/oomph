@@ -670,6 +670,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
           if (expectedETag != null && expectedETag.equals(eTag))
           {
             receiveStartEvent.cancel();
+
+            // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
+            exception = new UserCancelledException();
+            receiveLatch.countDown();
             return;
           }
 
@@ -680,6 +684,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             incomingFileTransferException.fillInStackTrace();
             exception = incomingFileTransferException;
             receiveStartEvent.cancel();
+
+            // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
+            exception = new UserCancelledException();
+            receiveLatch.countDown();
             return;
           }
         }

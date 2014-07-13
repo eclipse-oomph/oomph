@@ -146,7 +146,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
 
         EList<Requirement> requirements = selfP2Task.getRequirements();
         IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
-        for (IInstallableUnit iu : query)
+        for (IInstallableUnit iu : P2Util.asIterable(query))
         {
           if ("true".equals(profile.getInstallableUnitProperty(iu, IProfile.PROP_PROFILE_ROOT_IU)))
           {

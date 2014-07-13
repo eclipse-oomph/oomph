@@ -381,7 +381,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
         return "Self Hosting";
       }
 
-      for (IInstallableUnit iu : profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null))
+      for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null)))
       {
         return iu.getVersion().toString();
       }

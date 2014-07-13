@@ -17,6 +17,7 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.InstallationTask;
@@ -134,7 +135,7 @@ public class ProductCatalogGenerator implements IApplication
         Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
 
         IMetadataRepository metadataRepository = manager.loadRepository(uri, null);
-        for (IInstallableUnit iu : metadataRepository.query(QueryUtil.createIUAnyQuery(), null))
+        for (IInstallableUnit iu : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUAnyQuery(), null)))
         {
           String fragment = iu.getProperty("org.eclipse.equinox.p2.type.fragment");
           if ("true".equals(fragment))

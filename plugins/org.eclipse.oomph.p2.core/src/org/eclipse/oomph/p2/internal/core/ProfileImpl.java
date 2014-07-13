@@ -19,6 +19,7 @@ import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.IOUtil;
@@ -366,7 +367,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
     EList<Requirement> requirements = definition.getRequirements();
     IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
-    for (IInstallableUnit iu : query)
+    for (IInstallableUnit iu : P2Util.asIterable(query))
     {
       if ("true".equals(profile.getInstallableUnitProperty(iu, Profile.PROP_PROFILE_ROOT_IU)))
       {

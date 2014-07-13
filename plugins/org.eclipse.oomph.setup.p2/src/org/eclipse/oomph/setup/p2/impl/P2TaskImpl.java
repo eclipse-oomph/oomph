@@ -776,7 +776,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     IQueryable<IInstallableUnit> queryable = provisioningPlan.getAdditions();
     IQueryResult<IInstallableUnit> result = queryable.query(QueryUtil.ALL_UNITS, monitor);
-    for (IInstallableUnit iu : result)
+    for (IInstallableUnit iu : P2Util.asIterable(result))
     {
       Collection<ILicense> licenses = iu.getLicenses(null);
       for (ILicense license : licenses)
@@ -908,7 +908,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     if (profile != null)
     {
       IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUAnyQuery(), null);
-      for (IInstallableUnit requirement : queryResult)
+      for (IInstallableUnit requirement : P2Util.asIterable(queryResult))
       {
         result.add(requirement);
       }

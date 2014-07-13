@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
@@ -158,13 +159,21 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
         }
       });
 
-      for (int i = 0; i < profileDirectories.length; i++)
+      for (File profileDirectory : profileDirectories)
       {
-        String directoryName = profileDirectories[i].getName();
-        String profileId = unescape(directoryName.substring(0, directoryName.lastIndexOf(PROFILE_EXT)));
+        File profileFile = findLatestProfileFile(profileDirectory);
+        if (profileFile == null)
+        {
+          IOUtil.deleteBestEffort(profileFile);
+        }
+        else
+        {
+          String directoryName = profileDirectory.getName();
+          String profileId = unescape(directoryName.substring(0, directoryName.lastIndexOf(PROFILE_EXT)));
 
-        LazyProfile profile = new LazyProfile(this, profileId, profileDirectories[i]);
-        profileMap.put(profileId, profile);
+          LazyProfile profile = new LazyProfile(this, profileId, profileDirectory);
+          profileMap.put(profileId, profile);
+        }
       }
     }
 
@@ -255,11 +264,13 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
         return (pathname.getName().endsWith(PROFILE_GZ_EXT) || pathname.getName().endsWith(PROFILE_EXT)) && !pathname.isDirectory();
       }
     });
-    // protect against NPE
+
+    // Protect against NPE.
     if (profileFiles == null)
     {
       return null;
     }
+
     for (int i = 0; i < profileFiles.length; i++)
     {
       File profileFile = profileFiles[i];
@@ -275,7 +286,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
       }
       catch (NumberFormatException e)
       {
-        // ignore
+        // Ignore.
       }
     }
     return latest;

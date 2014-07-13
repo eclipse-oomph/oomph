@@ -35,10 +35,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
+import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
@@ -48,6 +48,7 @@ import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.engine.query.UserVisibleRootQuery;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
@@ -57,7 +58,6 @@ import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.planner.IPlanner;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
-import org.eclipse.equinox.p2.planner.ProfileInclusionRules;
 import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -89,8 +89,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   private static final IRequirement BUNDLE_REQUIREMENT = MetadataFactory.createRequirement(
       "org.eclipse.equinox.p2.eclipse.type", "bundle", null, null, false, false, false); //$NON-NLS-1$ //$NON-NLS-2$
-
-  private static final String INCLUSION_RULES = "org.eclipse.equinox.p2.internal.inclusion.rules"; //$NON-NLS-1$
 
   private static final Set<String> IMMUTABLE_PROPERTIES = new HashSet<String>(Arrays.asList(Profile.PROP_INSTALL_FEATURES, Profile.PROP_INSTALL_FOLDER,
       Profile.PROP_CACHE, Profile.PROP_PROFILE_TYPE, Profile.PROP_PROFILE_DEFINITION));
@@ -130,7 +128,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     cleanProfileProperties.remove(Profile.PROP_PROFILE_DEFINITION);
     profileProperties.putAll(cleanProfileProperties);
 
-    for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), new NullProgressMonitor()))
+    for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), new NullProgressMonitor())))
     {
       Map<String, String> properties = profile.getInstallableUnitProperties(iu);
       if (!properties.isEmpty())
@@ -333,22 +331,38 @@ public class ProfileTransactionImpl implements ProfileTransaction
       Set<URI> artifactURIs = new HashSet<URI>();
       URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, monitor);
 
-      final ProvisioningContext provisioningContext = context.createProvisioningContext(this);
-      provisioningContext.setMetadataRepositories(metadataURIs);
-      provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
-
-      IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
-
       final ProfileImpl profileImpl = (ProfileImpl)profile;
       final IProfile delegate = profileImpl.getDelegate();
       final long timestamp = delegate.getTimestamp();
 
       IPlanner planner = agent.getPlanner();
       IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
-      adjustProfileChangeRequest(profileChangeRequest, metadata, monitor);
+      IInstallableUnit rootIU = adjustProfileChangeRequest(profileChangeRequest, monitor);
+
+      final ProvisioningContext provisioningContext = context.createProvisioningContext(this);
+      provisioningContext.setMetadataRepositories(metadataURIs);
+      provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
+
+      IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
 
       final IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, monitor);
       P2CorePlugin.INSTANCE.coreException(provisioningPlan.getStatus());
+
+      IQueryable<IInstallableUnit> additions = provisioningPlan.getAdditions();
+      for (IRequirement requirement : rootIU.getRequirements())
+      {
+        if (requirement instanceof IRequiredCapability)
+        {
+          IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+          for (IInstallableUnit installableUnit : P2Util.asIterable(additions.query(
+              QueryUtil.createIUQuery(requiredCapability.getName(), requiredCapability.getRange()), null)))
+          {
+            provisioningPlan.setInstallableUnitProfileProperty(installableUnit, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
+          }
+        }
+      }
+
+      provisioningPlan.removeInstallableUnit(rootIU);
 
       if (profileDefinition.isIncludeSourceBundles())
       {
@@ -605,21 +619,31 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return metadataURIs;
   }
 
-  private void adjustProfileChangeRequest(final IProfileChangeRequest request, IQueryable<IInstallableUnit> metadata, IProgressMonitor monitor)
-      throws CoreException
+  private IInstallableUnit adjustProfileChangeRequest(final IProfileChangeRequest request, IProgressMonitor monitor) throws CoreException
   {
+    InstallableUnitDescription rootDescription = new InstallableUnitDescription();
+    rootDescription.setId("artificial_root");
+    rootDescription.setVersion(Version.createOSGi(1, 0, 0));
+    rootDescription.setArtifacts(new IArtifactKey[0]);
+    rootDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
+    rootDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
+        rootDescription.getId(), rootDescription.getVersion()) });
+    List<IRequirement> rootRequirements = new ArrayList<IRequirement>();
+
     Map<String, IInstallableUnit> rootIUs = new HashMap<String, IInstallableUnit>();
-    for (IInstallableUnit rootIU : profile.query(new UserVisibleRootQuery(), null))
+    for (IInstallableUnit rootIU : P2Util.asIterable(profile.query(new UserVisibleRootQuery(), null)))
     {
-      if (removeAll)
-      {
-        request.remove(rootIU);
-      }
-      else
+      if (!removeAll)
       {
         String id = rootIU.getId();
         rootIUs.put(id, rootIU);
+
+        VersionRange versionRange = getCleanVersionRange(rootIU);
+        IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, null, false, false);
+        rootRequirements.add(rootRequirement);
       }
+
+      request.remove(rootIU);
     }
 
     MultiStatus status = new MultiStatus(P2CorePlugin.INSTANCE.getSymbolicName(), 0, "Profile could not be changed", null);
@@ -632,43 +656,15 @@ public class ProfileTransactionImpl implements ProfileTransaction
       VersionRange versionRange = requirement.getVersionRange();
       boolean optional = requirement.isOptional();
 
-      IInstallableUnit iu = queryInstallableUnit(metadata, id, versionRange, monitor);
-      if (iu != null)
-      {
-        IInstallableUnit rootIU = rootIUs.get(id);
-        if (rootIU == null || !rootIU.getVersion().equals(iu.getVersion()))
-        {
-          if (!removeAll)
-          {
-            // Check if existing rootIU needs to be removed to not violate "singleton" constraints
-            if (rootIU != null && !rootIU.getVersion().equals(iu.getVersion()))
-            {
-              if (isSingleton(rootIU) || isSingleton(iu))
-              {
-                // TODO Check IU locks
-                request.remove(rootIU);
-              }
-            }
-          }
-
-          request.add(iu);
-          request.setInstallableUnitProfileProperty(iu, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
-
-          if (optional)
-          {
-            // TODO Change exclusion rule even for existig (unchanged) IU?
-            request.setInstallableUnitProfileProperty(iu, INCLUSION_RULES, ProfileInclusionRules.createOptionalInclusionRule(iu));
-          }
-        }
-      }
-      else
-      {
-        if (!optional)
-        {
-          status.add(new Status(IStatus.ERROR, status.getPlugin(), "Unsatisfiable requirement " + requirement));
-        }
-      }
+      IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, null, optional, false);
+      rootRequirements.add(rootRequirement);
     }
+
+    rootDescription.setRequirements(rootRequirements.toArray(new IRequirement[rootRequirements.size()]));
+
+    IInstallableUnit rootUnit = MetadataFactory.createInstallableUnit(rootDescription);
+    request.add(rootUnit);
+    request.setInstallableUnitProfileProperty(rootUnit, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
 
     P2CorePlugin.INSTANCE.coreException(status);
 
@@ -708,6 +704,27 @@ public class ProfileTransactionImpl implements ProfileTransaction
         request.removeInstallableUnitProfileProperty(key.getInstallableUnit(), key.getPropertyKey());
       }
     });
+
+    return rootUnit;
+  }
+
+  private VersionRange getCleanVersionRange(IInstallableUnit rootIU)
+  {
+    String id = rootIU.getId();
+    Version version = rootIU.getVersion();
+    for (Requirement requirement : cleanProfileDefinition.getRequirements())
+    {
+      if (requirement.getID().equals(id))
+      {
+        VersionRange versionRange = requirement.getVersionRange();
+        if (versionRange.isIncluded(version))
+        {
+          return versionRange;
+        }
+      }
+    }
+
+    return new VersionRange(version.toString());
   }
 
   public static int getOperandCount(IProvisioningPlan provisioningPlan)
@@ -735,21 +752,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
     cleanup.clear();
   }
 
-  private static boolean isSingleton(IInstallableUnit iu)
-  {
-    if (iu.isSingleton())
-    {
-      return true;
-    }
-
-    if (Boolean.TRUE.toString().equals(iu.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
-    {
-      return true;
-    }
-
-    return false;
-  }
-
   private static IInstallableUnit generateSourceContainerIU(IProvisioningPlan provisioningPlan, IQueryable<IInstallableUnit> metadata, IProgressMonitor monitor)
   {
     // Create and return an IU that has optional and greedy requirements on all source bundles
@@ -757,7 +759,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     List<IRequirement> requirements = new ArrayList<IRequirement>();
 
     IQueryResult<IInstallableUnit> ius = provisioningPlan.getFutureState().query(QueryUtil.createIUAnyQuery(), monitor);
-    for (IInstallableUnit iu : ius)
+    for (IInstallableUnit iu : P2Util.asIterable(ius))
     {
       P2CorePlugin.checkCancelation(monitor);
 

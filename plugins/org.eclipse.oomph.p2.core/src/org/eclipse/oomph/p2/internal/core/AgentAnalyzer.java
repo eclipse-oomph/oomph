@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.SubMonitor;
@@ -409,7 +410,7 @@ public final class AgentAnalyzer
       Random random = new Random(System.currentTimeMillis());
 
       IFileArtifactRepository p2BundlePool = getP2BundlePool(monitor);
-      for (IArtifactKey key : p2BundlePool.query(ArtifactKeyQuery.ALL_KEYS, monitor))
+      for (IArtifactKey key : P2Util.asIterable(p2BundlePool.query(ArtifactKeyQuery.ALL_KEYS, monitor)))
       {
         checkCancelation(monitor);
 
@@ -745,7 +746,7 @@ public final class AgentAnalyzer
 
     void analyze(IProgressMonitor monitor)
     {
-      for (IInstallableUnit iu : p2Profile.query(QueryUtil.createIUAnyQuery(), monitor))
+      for (IInstallableUnit iu : P2Util.asIterable(p2Profile.query(QueryUtil.createIUAnyQuery(), monitor)))
       {
         for (IArtifactKey key : iu.getArtifacts())
         {

@@ -12,9 +12,12 @@ package org.eclipse.oomph.setup.ui.internal.ide;
 
 import org.eclipse.oomph.ui.UIUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.core.variables.IStringVariable;
 import org.eclipse.debug.ui.StringVariableSelectionDialog;
-import org.eclipse.debug.ui.stringsubstitution.IArgumentSelector;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.window.Window;
@@ -26,11 +29,50 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
 /**
  * @author Ed Merks
  */
-public class URIArgumentSelector implements IArgumentSelector
+public class URIArgumentSelector
 {
+  public static class ExtensionFactory implements IExecutableExtensionFactory
+  {
+    public Object create() throws CoreException
+    {
+      Class<?> argumentSelectorInterface = null;
+      try
+      {
+        argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.internal.ui.stringsubstitution.IArgumentSelector");
+      }
+      catch (ClassNotFoundException ex)
+      {
+        try
+        {
+          argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.ui.stringsubstitution.IArgumentSelector");
+        }
+        catch (ClassNotFoundException ex1)
+        {
+          SetupUIIDEPlugin.INSTANCE.coreException(ex);
+        }
+      }
+
+      InvocationHandler invocationHandler = new InvocationHandler()
+      {
+        private final URIArgumentSelector uriArgumentSelector = new URIArgumentSelector();
+
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+        {
+          return uriArgumentSelector.selectArgument((IStringVariable)args[0], (Shell)args[1]);
+        }
+      };
+
+      return Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] { argumentSelectorInterface }, invocationHandler);
+    }
+  }
+
   public String selectArgument(IStringVariable variable, Shell shell)
   {
     URIArgumentDialog uriArgumentDialog = new URIArgumentDialog(shell);
