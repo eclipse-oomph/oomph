@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
@@ -347,22 +348,23 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     if (contents != null || createNewContent(context))
     {
       context.log("Changing " + file + " (" + getLabel(getValue()) + ")");
-      context.getOS().writeText(file, contents);
+      IOUtil.writeLines(file, null, contents);
       context.setRestartNeeded("The eclipse.ini file has changed.");
     }
   }
 
   private boolean createNewContent(SetupTaskContext context)
   {
-    List<String> oldContents = context.getOS().readText(file);
+    List<String> oldContents = IOUtil.readLines(file, null);
     contents = new ArrayList<String>(oldContents);
     int vmargsIndex = contents.indexOf("-vmargs");
 
     String option = getOption();
+    String value = getValue();
 
     if (isVm())
     {
-      String line = option + getValue();
+      String line = option + value;
       if (vmargsIndex != -1)
       {
         for (int i = vmargsIndex + 1; i < contents.size(); i++)
@@ -391,13 +393,19 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       int optionIndex = contents.indexOf(option);
       if (optionIndex != -1)
       {
-        contents.set(optionIndex + 1, getValue());
+        if (value != null)
+        {
+          contents.set(optionIndex + 1, value);
+        }
       }
       else
       {
         optionIndex = vmargsIndex != -1 ? vmargsIndex : contents.size();
         contents.add(optionIndex, option);
-        contents.add(optionIndex + 1, getValue());
+        if (value != null)
+        {
+          contents.add(optionIndex + 1, value);
+        }
       }
     }
 

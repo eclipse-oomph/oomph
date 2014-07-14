@@ -36,31 +36,43 @@ public final class CollectionUtil
     return set;
   }
 
-  public static <K, V> void add(Map<K, Set<V>> map, K key, V value)
+  public static <K, V> boolean add(Map<K, Set<V>> map, K key, V value)
   {
     Set<V> set = getSet(map, key);
-    set.add(value);
+    return set.add(value);
   }
 
-  public static <K, V> void addAll(Map<K, Set<V>> map, K key, Collection<? extends V> values)
+  public static <K, V> boolean addAll(Map<K, Set<V>> map, K key, Collection<? extends V> values)
   {
     Set<V> set = getSet(map, key);
-    set.addAll(values);
+    return set.addAll(values);
   }
 
-  public static <K, V> void addAll(Map<K, Set<V>> map, Collection<? extends K> keys, V value)
+  public static <K, V> boolean addAll(Map<K, Set<V>> map, Collection<? extends K> keys, V value)
   {
+    boolean result = false;
     for (K key : keys)
     {
-      add(map, key, value);
+      if (add(map, key, value))
+      {
+        result = true;
+      }
     }
+
+    return result;
   }
 
-  public static <K, V> void addAll(Map<K, Set<V>> map, Map<? extends K, ? extends Collection<? extends V>> map2)
+  public static <K, V> boolean addAll(Map<K, Set<V>> map, Map<? extends K, ? extends Collection<? extends V>> map2)
   {
+    boolean result = false;
     for (Map.Entry<? extends K, ? extends Collection<? extends V>> entry : map2.entrySet())
     {
-      addAll(map, entry.getKey(), entry.getValue());
+      if (addAll(map, entry.getKey(), entry.getValue()))
+      {
+        result = true;
+      }
     }
+
+    return result;
   }
 }

@@ -261,7 +261,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
       if (referencer.isFile())
       {
-        List<String> lines = IOUtil.readLines(referencer);
+        List<String> lines = IOUtil.readLines(referencer, null);
         if (!lines.contains(id))
         {
           return false;

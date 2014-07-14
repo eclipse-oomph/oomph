@@ -29,16 +29,18 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -441,18 +443,20 @@ public final class IOUtil
     }
   }
 
-  public static List<String> readLines(File file)
+  public static List<String> readLines(File file, String charsetName)
   {
     List<String> lines = new ArrayList<String>();
 
     if (file.exists())
     {
-      FileReader reader = null;
+      InputStream in = null;
+      Reader reader = null;
       BufferedReader bufferedReader = null;
 
       try
       {
-        reader = new FileReader(file);
+        in = new FileInputStream(file);
+        reader = charsetName == null ? new InputStreamReader(in) : new InputStreamReader(in, charsetName);
         bufferedReader = new BufferedReader(reader);
 
         String line;
@@ -469,20 +473,23 @@ public final class IOUtil
       {
         closeSilent(bufferedReader);
         closeSilent(reader);
+        closeSilent(in);
       }
     }
 
     return lines;
   }
 
-  public static void writeLines(File file, List<String> lines)
+  public static void writeLines(File file, String charsetName, List<String> lines)
   {
-    FileWriter writer = null;
+    OutputStream out = null;
+    Writer writer = null;
     BufferedWriter bufferedWriter = null;
 
     try
     {
-      writer = new FileWriter(file);
+      out = new FileOutputStream(file);
+      writer = charsetName == null ? new OutputStreamWriter(out) : new OutputStreamWriter(out, charsetName);
       bufferedWriter = new BufferedWriter(writer);
 
       for (String line : lines)
@@ -499,6 +506,7 @@ public final class IOUtil
     {
       closeSilent(bufferedWriter);
       closeSilent(writer);
+      closeSilent(out);
     }
   }
 

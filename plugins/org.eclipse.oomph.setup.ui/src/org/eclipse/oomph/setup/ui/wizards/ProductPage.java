@@ -36,7 +36,6 @@ import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -451,10 +450,41 @@ public class ProductPage extends SetupWizardPage
     ProductVersion version = catalogSelector.getCatalogManager().getSelection().getDefaultProductVersions().get(product);
     if (version == null)
     {
-      EList<ProductVersion> versions = product.getVersions();
-      if (!versions.isEmpty())
+      ProductVersion firstReleasedProductVersion = null;
+      ProductVersion latestProductVersion = null;
+      ProductVersion latestReleasedProductVersion = null;
+      for (ProductVersion productVersion : product.getVersions())
       {
-        version = versions.get(0);
+        String versionName = productVersion.getName();
+        if ("latest.released".equals(versionName))
+        {
+          latestReleasedProductVersion = productVersion;
+        }
+        else if ("latest".equals(versionName))
+        {
+          latestProductVersion = productVersion;
+        }
+        else if (firstReleasedProductVersion == null)
+        {
+          firstReleasedProductVersion = productVersion;
+        }
+      }
+
+      if (latestReleasedProductVersion != null)
+      {
+        version = latestReleasedProductVersion;
+      }
+      else if (firstReleasedProductVersion != null)
+      {
+        version = firstReleasedProductVersion;
+      }
+      else
+      {
+        version = latestProductVersion;
+      }
+
+      if (version != null)
+      {
         saveProductVersionSelection(version);
       }
     }

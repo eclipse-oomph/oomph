@@ -10,22 +10,13 @@
  */
 package org.eclipse.oomph.setup.util;
 
-import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.core.runtime.Platform;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,64 +66,9 @@ public abstract class OS
     return false;
   }
 
-  public List<String> readText(File file)
+  protected String getEncoding()
   {
-    FileInputStream in = null;
-
-    try
-    {
-      in = new FileInputStream(file);
-      Reader reader = new InputStreamReader(in);
-      BufferedReader bufferedReader = new BufferedReader(reader);
-
-      List<String> lines = new ArrayList<String>();
-      String line;
-      while ((line = bufferedReader.readLine()) != null)
-      {
-        lines.add(line);
-      }
-
-      return lines;
-    }
-    catch (IOException ex)
-    {
-      throw new RuntimeException(ex);
-    }
-    finally
-    {
-      close(in);
-    }
-  }
-
-  public void writeText(File file, List<String> lines)
-  {
-    FileOutputStream out = null;
-
-    try
-    {
-      file.getParentFile().mkdirs();
-
-      out = new FileOutputStream(file);
-      Writer writer = new OutputStreamWriter(out);
-      @SuppressWarnings("resource")
-      BufferedWriter bufferedWriter = new BufferedWriter(writer);
-
-      for (String line : lines)
-      {
-        bufferedWriter.write(line);
-        bufferedWriter.write(StringUtil.NL);
-      }
-
-      bufferedWriter.flush();
-    }
-    catch (IOException ex)
-    {
-      throw new RuntimeException(ex);
-    }
-    finally
-    {
-      close(out);
-    }
+    return "ISO-8859-1";
   }
 
   public final String getEclipseDir()

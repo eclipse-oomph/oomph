@@ -27,7 +27,9 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
+import org.eclipse.oomph.util.CollectionUtil;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import org.eclipse.equinox.app.IApplication;
@@ -37,7 +39,12 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.query.CompoundQueryable;
+import org.eclipse.equinox.p2.query.IQuery;
+import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.ICompositeRepository;
+import org.eclipse.equinox.p2.repository.IRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
@@ -48,6 +55,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +71,14 @@ public class ProductCatalogGenerator implements IApplication
 
   public Object start(IApplicationContext context) throws Exception
   {
-    generate();
+    String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
+    org.eclipse.emf.common.util.URI uri = null;
+    if (arguments != null && arguments.length == 2 && "-generatorOutput".equals(arguments[0]))
+    {
+      uri = org.eclipse.emf.common.util.URI.createURI(arguments[1]);
+    }
+
+    generate(uri);
     return null;
   }
 
@@ -71,23 +86,29 @@ public class ProductCatalogGenerator implements IApplication
   {
   }
 
-  private static String[] getTrains()
+  private String[] getTrains()
   {
-    return new String[] { "helios", "indigo", "juno", "kepler", "luna" };
+    return new String[] { "juno", "kepler", "luna" };
   }
 
-  private static boolean isLatestReleased()
+  private String[] getRootIUs()
+  {
+    return new String[] { "org.eclipse.platform.feature.group", "org.eclipse.rcp.feature.group", "org.eclipse.jdt.feature.group",
+        "org.eclipse.pde.feature.group" };
+  }
+
+  private boolean isLatestReleased()
   {
     // TODO Set back to false once the first milestone of Eclipse Mars is available
     return true;
   }
 
-  private static boolean testNewUnreleasedProduct()
+  private boolean testNewUnreleasedProduct()
   {
     return false;
   }
 
-  public static void generate()
+  public void generate(org.eclipse.emf.common.util.URI uri)
   {
     final String[] TRAINS = getTrains();
     final String LATEST_TRAIN = TRAINS[TRAINS.length - 1];
@@ -104,11 +125,13 @@ public class ProductCatalogGenerator implements IApplication
       productCatalog.getSetupTasks().add(installationTask);
 
       Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
-      Repository relengRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
+      Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
+      Repository emfRepository = P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339");
 
       P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
       p2Task.getRequirements().add(oomphRequirement);
-      p2Task.getRepositories().add(relengRepository);
+      p2Task.getRepositories().add(oomphRepository);
+      p2Task.getRepositories().add(emfRepository);
       productCatalog.getSetupTasks().add(p2Task);
 
       EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
@@ -129,13 +152,43 @@ public class ProductCatalogGenerator implements IApplication
 
       for (final String train : TRAINS)
       {
-        URI uri = new URI(PACKAGES + "/" + train);
-        System.out.println(uri);
+        URI eppURI = new URI(PACKAGES + "/" + train);
+        System.out.println(eppURI);
+        IMetadataRepository eppMetaDataRepository = manager.loadRepository(eppURI, null);
 
         Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
 
-        IMetadataRepository metadataRepository = manager.loadRepository(uri, null);
-        for (IInstallableUnit iu : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUAnyQuery(), null)))
+        URI releaseURI = new URI(RELEASES + "/" + train);
+        System.out.println(releaseURI);
+        IMetadataRepository releaseMetaDataRepository = manager.loadRepository(releaseURI, null);
+
+        if (releaseMetaDataRepository instanceof ICompositeRepository<?>)
+        {
+          ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)releaseMetaDataRepository;
+          long latest = Integer.MIN_VALUE;
+          for (URI childURI : compositeRepository.getChildren())
+          {
+            String childURIString = childURI.toString();
+            if (childURIString.endsWith("/"))
+            {
+              childURI = new URI(childURIString.substring(0, childURIString.length() - 1));
+            }
+
+            if (!childURI.equals(eppURI))
+            {
+              IMetadataRepository childRepository = manager.loadRepository(childURI, null);
+              String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
+              long timestamp = Long.parseLong(value);
+              if (timestamp > latest)
+              {
+                releaseURI = childURI;
+                latest = timestamp;
+              }
+            }
+          }
+        }
+
+        for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createIUAnyQuery(), null)))
         {
           String fragment = iu.getProperty("org.eclipse.equinox.p2.type.fragment");
           if ("true".equals(fragment))
@@ -179,10 +232,12 @@ public class ProductCatalogGenerator implements IApplication
           ius.remove(requirement);
         }
 
-        for (String id : ius.keySet())
+        for (Map.Entry<String, IInstallableUnit> entry : ius.entrySet())
         {
+          String id = entry.getKey();
           String label = labels.get(id);
-          final Version version = ius.get(id).getVersion();
+          IInstallableUnit iu = entry.getValue();
+          final Version version = iu.getVersion();
           System.out.println("  " + label + "  --  " + id + " " + version);
 
           List<TrainAndVersion> list = trainsAndVersions.get(id);
@@ -192,7 +247,11 @@ public class ProductCatalogGenerator implements IApplication
             trainsAndVersions.put(id, list);
           }
 
-          list.add(new TrainAndVersion(train, version));
+          Map<String, Set<IInstallableUnit>> versionIUs = new HashMap<String, Set<IInstallableUnit>>();
+          gatherReleaseIUs(versionIUs, iu, releaseMetaDataRepository, eppMetaDataRepository);
+          filterRoots(versionIUs);
+
+          list.add(new TrainAndVersion(train, version, releaseURI, versionIUs));
         }
 
         System.out.println();
@@ -201,7 +260,7 @@ public class ProductCatalogGenerator implements IApplication
       if (testNewUnreleasedProduct())
       {
         List<TrainAndVersion> list = new ArrayList<TrainAndVersion>();
-        list.add(new TrainAndVersion("luna", null));
+        list.add(new TrainAndVersion("mars", null, null, null));
 
         trainsAndVersions.put("test.product", list);
         labels.put("test.product", "Eclipse Test Product");
@@ -256,6 +315,7 @@ public class ProductCatalogGenerator implements IApplication
         String latestTrain = latestTrainAndVersion.getTrain();
         String latestTrainLabel = getTrainLabel(latestTrain);
         Version latestVersion = latestTrainAndVersion.getVersion();
+        Map<String, Set<IInstallableUnit>> latestTrainsIUs = latestTrainAndVersion.getIUs();
 
         if (latestTrain != LATEST_TRAIN)
         {
@@ -275,6 +335,9 @@ public class ProductCatalogGenerator implements IApplication
         product.setLabel(label);
         productCatalog.getProducts().add(product);
 
+        addProductVersion(product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrain, "latest", "Latest ("
+            + latestTrainLabel + ")", latestTrainsIUs);
+
         if (!latestUnreleased || size != 1)
         {
           int offset = 1;
@@ -288,10 +351,9 @@ public class ProductCatalogGenerator implements IApplication
           String releasedTrainLabel = getTrainLabel(releasedTrain);
           Version releasedVersion = releasedTrainAndVersion.getVersion();
 
-          addProductVersion(product, releasedVersion, releasedTrain, "latest.released", "Latest Release (" + releasedTrainLabel + ")");
+          addProductVersion(product, releasedVersion, VersionSegment.MINOR, releasedTrainAndVersion.getTrainURI(), releasedTrain, "latest.released",
+              "Latest Release (" + releasedTrainLabel + ")", releasedTrainAndVersion.getIUs());
         }
-
-        addProductVersion(product, latestVersion, latestTrain, "latest", "Latest (" + latestTrainLabel + ")");
 
         for (int i = 0; i < size; i++)
         {
@@ -300,7 +362,7 @@ public class ProductCatalogGenerator implements IApplication
           String trainLabel = getTrainLabel(train);
           Version version = entry.getVersion();
 
-          addProductVersion(product, version, train, train, trainLabel);
+          addProductVersion(product, version, VersionSegment.MINOR, entry.getTrainURI(), train, train, trainLabel, entry.getIUs());
         }
 
         System.out.println();
@@ -309,9 +371,15 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("#################################################################################################################");
       System.out.println();
 
-      Resource resource = new BaseResourceFactoryImpl().createResource(org.eclipse.emf.common.util.URI.createURI("catalog"));
+      Resource resource = new BaseResourceFactoryImpl().createResource(uri == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup")
+          : uri);
       resource.getContents().add(productCatalog);
       resource.save(System.out, null);
+
+      if (uri != null)
+      {
+        resource.save(null);
+      }
     }
     catch (Exception ex)
     {
@@ -319,7 +387,47 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private static void addProductVersion(Product product, Version version, String train, String name, String label)
+  private void gatherReleaseIUs(Map<String, Set<IInstallableUnit>> releaseIUs, IInstallableUnit iu, IMetadataRepository releaseMetaDataRepository,
+      IMetadataRepository eppMetaDataRepository)
+  {
+    for (IRequirement requirement : iu.getRequirements())
+    {
+      if (requirement instanceof IRequiredCapability)
+      {
+        IRequiredCapability capability = (IRequiredCapability)requirement;
+        String capabilityName = capability.getName();
+        if (capabilityName.endsWith(".feature.group"))
+        {
+          @SuppressWarnings("unchecked")
+          IQueryable<IInstallableUnit> queriable = new CompoundQueryable<IInstallableUnit>(
+              new IQueryable[] { releaseMetaDataRepository, eppMetaDataRepository });
+          IQuery<IInstallableUnit> query = QueryUtil.createIUQuery(capabilityName, capability.getRange());
+          for (IInstallableUnit requiredIU : P2Util.asIterable(queriable.query(query, null)))
+          {
+            if (CollectionUtil.add(releaseIUs, capabilityName, requiredIU))
+            {
+              gatherReleaseIUs(releaseIUs, requiredIU, releaseMetaDataRepository, eppMetaDataRepository);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private void filterRoots(Map<String, Set<IInstallableUnit>> releaseIUs)
+  {
+    for (Iterator<Map.Entry<String, Set<IInstallableUnit>>> it = releaseIUs.entrySet().iterator(); it.hasNext();)
+    {
+      String id = it.next().getKey();
+      if (!id.endsWith("feature.group") || id.startsWith("org.eclipse.epp") || id.endsWith("epp.feature.group"))
+      {
+        it.remove();
+      }
+    }
+  }
+
+  private void addProductVersion(Product product, Version version, VersionSegment versionSegment, URI trainURI, String train, String name, String label,
+      Map<String, Set<IInstallableUnit>> ius)
   {
     System.out.println("  " + label);
 
@@ -328,7 +436,7 @@ public class ProductCatalogGenerator implements IApplication
     productVersion.setLabel(label);
     product.getVersions().add(productVersion);
 
-    VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MINOR);
+    VersionRange versionRange = createVersionRange(version, versionSegment);
 
     Requirement requirement = P2Factory.eINSTANCE.createRequirement();
     requirement.setID(product.getName());
@@ -338,16 +446,59 @@ public class ProductCatalogGenerator implements IApplication
     packageRepository.setURL(PACKAGES + "/" + train);
 
     Repository releaseRepository = P2Factory.eINSTANCE.createRepository();
-    releaseRepository.setURL(RELEASES + "/" + train);
+    releaseRepository.setURL(trainURI.toString());
 
     P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
     p2Task.getRequirements().add(requirement);
+    addRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
     p2Task.getRepositories().add(packageRepository);
     p2Task.getRepositories().add(releaseRepository);
     productVersion.getSetupTasks().add(p2Task);
   }
 
-  private static String getTrainLabel(String train)
+  private VersionRange createVersionRange(Version version, VersionSegment versionSegment)
+  {
+    VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(version, versionSegment);
+    if (versionSegment == VersionSegment.MAJOR)
+    {
+      // When expanding to major, we only want to expand the upper bound to major and the lower bound to minor.
+      VersionRange minorVersionRange = P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MINOR);
+      versionRange = new VersionRange(minorVersionRange.getMinimum(), true, versionRange.getMaximum(), false);
+    }
+
+    return versionRange;
+  }
+
+  private void addRootIURequirements(EList<Requirement> requirements, VersionSegment versionSegment, Map<String, Set<IInstallableUnit>> ius)
+  {
+    for (String iu : getRootIUs())
+    {
+      Set<IInstallableUnit> rootIUs = ius.get(iu);
+      if (rootIUs != null)
+      {
+        VersionRange range = null;
+        for (IInstallableUnit rootIU : rootIUs)
+        {
+          Version version = rootIU.getVersion();
+          VersionRange versionRange = createVersionRange(version, versionSegment);
+          if (range == null)
+          {
+            range = versionRange;
+          }
+        }
+
+        if (range != null)
+        {
+          Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+          requirement.setID(iu);
+          requirement.setVersionRange(range);
+          requirements.add(requirement);
+        }
+      }
+    }
+  }
+
+  private String getTrainLabel(String train)
   {
     return Character.toString((char)(train.charAt(0) + 'A' - 'a')) + train.substring(1);
   }
@@ -361,10 +512,16 @@ public class ProductCatalogGenerator implements IApplication
 
     private final Version version;
 
-    public TrainAndVersion(String train, Version version)
+    private final Map<String, Set<IInstallableUnit>> ius;
+
+    private final URI trainURI;
+
+    public TrainAndVersion(String train, Version version, URI trainURI, Map<String, Set<IInstallableUnit>> ius)
     {
       this.train = train;
       this.version = version;
+      this.trainURI = trainURI;
+      this.ius = ius;
     }
 
     public String getTrain()
@@ -376,5 +533,16 @@ public class ProductCatalogGenerator implements IApplication
     {
       return version;
     }
+
+    public URI getTrainURI()
+    {
+      return trainURI;
+    }
+
+    public Map<String, Set<IInstallableUnit>> getIUs()
+    {
+      return ius;
+    }
+
   }
 }

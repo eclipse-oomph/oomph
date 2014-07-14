@@ -49,7 +49,8 @@
     <requirement
         id="org.eclipse.emf.ecoretools.sdk.feature.group"/>
     <requirement
-        id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+        id="org.eclipse.pde.api.tools.ee.feature.feature.group"
+        optional="true"/>
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
@@ -242,6 +243,25 @@
               url="http://download.eclipse.org/webtools/repository/luna"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+        </repositoryList>
+        <repositoryList
+            name="Juno Dependencies">
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+          <repository
+              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+          <repository
+              url="http://download.eclipse.org/egit/updates"/>
+          <repository
+              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+          <repository
+              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+          <repository
+              url="http://download.eclipse.org/webtools/repository/juno"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/releases/juno"/>
         </repositoryList>
       </targlet>
     </setupTask>

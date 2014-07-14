@@ -168,7 +168,7 @@ public final class PropertiesUtil
     }
     catch (IOException ex)
     {
-      throw new RuntimeException(ex);
+      throw new IORuntimeException(ex);
     }
     finally
     {

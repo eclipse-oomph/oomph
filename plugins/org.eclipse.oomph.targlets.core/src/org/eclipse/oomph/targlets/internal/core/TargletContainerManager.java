@@ -303,7 +303,7 @@ public final class TargletContainerManager
     Collections.sort(ids);
 
     WORKSPACE_REFERENCER_FILE.getParentFile().mkdirs();
-    IOUtil.writeLines(WORKSPACE_REFERENCER_FILE, ids);
+    IOUtil.writeLines(WORKSPACE_REFERENCER_FILE, null, ids);
   }
 
   private static Map<String, TargletContainerDescriptor> loadDescriptors(File file)

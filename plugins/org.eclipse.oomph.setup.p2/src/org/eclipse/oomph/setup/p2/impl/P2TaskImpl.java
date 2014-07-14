@@ -36,6 +36,7 @@ import org.eclipse.oomph.setup.util.DownloadUtil;
 import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -59,6 +60,7 @@ import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.internal.repository.tools.MirrorApplication;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.VersionRange;
@@ -602,16 +604,19 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
     for (Requirement requirement : getRequirements())
     {
-      String id = requirement.getID();
-      VersionRange versionRange = requirement.getVersionRange();
-      if (versionRange == null)
+      if (!requirement.isOptional())
       {
-        versionRange = VersionRange.emptyRange;
-      }
+        String id = requirement.getID();
+        VersionRange versionRange = requirement.getVersionRange();
+        if (versionRange == null)
+        {
+          versionRange = VersionRange.emptyRange;
+        }
 
-      if (!isInstalled(installedUnits, id, versionRange))
-      {
-        return true;
+        if (!isInstalled(installedUnits, id, versionRange))
+        {
+          return true;
+        }
       }
     }
 
@@ -652,7 +657,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     String profileID = StringUtil.encodePath(eclipseDir.toString());
 
-    ProfileTransaction transaction = openProfileTransaction(context, profileID);
+    Profile profile = getProfile(context, profileID);
+    ProfileTransaction transaction = profile.change();
     transaction.getProfileDefinition().setRequirements(requirements);
     transaction.getProfileDefinition().setRepositories(repositories);
 
@@ -693,9 +699,51 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     {
       checkEclipseIniForDuplicates(context, eclipseIni);
     }
+
+    updateSplash(context, profile);
   }
 
-  private ProfileTransaction openProfileTransaction(final SetupTaskContext context, String profileID) throws Exception
+  private void updateSplash(final SetupTaskContext context, Profile profile)
+  {
+    BundlePool bundlePool = profile.getBundlePool();
+    if (bundlePool != null)
+    {
+      File productConfigurationLocation = context.getProductConfigurationLocation();
+      try
+      {
+        File configIniFile = new File(productConfigurationLocation, "config.ini");
+        Map<String, String> properties = PropertiesUtil.loadProperties(configIniFile);
+        String splashPath = properties.get("osgi.splashPath");
+        if (splashPath != null)
+        {
+          org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(splashPath);
+          if ("platform".equals(uri.scheme()) && uri.segmentCount() >= 2 && "base".equals(uri.segment(0)))
+          {
+            for (IInstallableUnit installableUnit : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(uri.lastSegment()), null)))
+            {
+              for (IArtifactKey artifactKey : installableUnit.getArtifacts())
+              {
+                File artifactFile = bundlePool.getFileArtifactRepository().getArtifactFile(artifactKey);
+                if (new File(artifactFile, "splash.bmp").exists())
+                {
+                  properties.put("osgi.splashPath", org.eclipse.emf.common.util.URI.createFileURI(artifactFile.toString()).toString());
+                  PropertiesUtil.saveProperties(configIniFile, properties, false);
+
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }
+      catch (IORuntimeException ex)
+      {
+        // Ignore.
+      }
+    }
+  }
+
+  private Profile getProfile(final SetupTaskContext context, String profileID) throws Exception
   {
     Profile profile;
     if (context.getTrigger() == Trigger.BOOTSTRAP)
@@ -742,7 +790,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         provisioningAgent.registerService(UIServices.SERVICE_NAME, uiServices);
       }
 
-      return profile.change();
+      return profile;
     }
     else
     {
@@ -750,7 +798,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       profile = agent.getCurrentProfile();
     }
 
-    return profile.change();
+    return profile;
   }
 
   private void processLicenses(final SetupTaskContext context, IProvisioningPlan provisioningPlan, IProgressMonitor monitor) throws Exception
