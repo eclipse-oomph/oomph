@@ -181,15 +181,11 @@ public final class SetupUtil
         {
           String nsURI = ePackage.getNsURI();
           redirectedEPackage = packageRegistry.getEPackage(nsURI);
-          if (redirectedEPackage != null)
-          {
-            packageRegistry.put(resource.getURI().toString(), redirectedEPackage);
-          }
 
           for (EClassifier eClassifier : ePackage.getEClassifiers())
           {
-            Class<?> instanceClass = eClassifier.getInstanceClass();
-            if (instanceClass != null)
+            String instanceClassName = eClassifier.getInstanceClassName();
+            if (instanceClassName != null)
             {
               if (eClassifier instanceof EDataType)
               {
@@ -197,9 +193,15 @@ public final class SetupUtil
               }
               else
               {
+                eClassifier.setInstanceClassName(null);
                 eClassifier.setInstanceClass(null);
               }
             }
+          }
+
+          if (redirectedEPackage != null)
+          {
+            packageRegistry.put(resource.getURI().toString(), redirectedEPackage);
           }
         }
       }
