@@ -91,7 +91,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
       id = self;
     }
 
-    org.eclipse.equinox.internal.p2.engine.Profile p = profileMap.get(id);
+    org.eclipse.equinox.internal.p2.engine.Profile p = getProfileMap().get(id);
     if (p instanceof LazyProfile)
     {
       LazyProfile lazyProfile = (LazyProfile)p;
@@ -123,7 +123,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     }
 
     // Check profiles to avoid restoring the profile registry
-    org.eclipse.equinox.internal.p2.engine.Profile p = profileMap.get(id);
+    org.eclipse.equinox.internal.p2.engine.Profile p = getProfileMap().get(id);
     if (p instanceof LazyProfile)
     {
       LazyProfile lazyProfile = (LazyProfile)p;

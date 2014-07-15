@@ -204,6 +204,8 @@ public abstract class PersistentMap<E>
           P2CorePlugin.INSTANCE.log(ex);
         }
       }
+
+      IOUtil.close(bufferedReader);
     }
     catch (IOException ex)
     {

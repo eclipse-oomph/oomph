@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.util;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -32,7 +33,9 @@ public final class ReflectUtil
   {
     try
     {
-      return c.getDeclaredConstructor(parameterTypes);
+      Constructor<T> constructor = c.getDeclaredConstructor(parameterTypes);
+      makeAccessible(constructor);
+      return constructor;
     }
     catch (RuntimeException ex)
     {
@@ -46,12 +49,6 @@ public final class ReflectUtil
 
   public static <T> T newInstance(Constructor<T> constructor, Object... arguments)
   {
-    boolean accessible = constructor.isAccessible();
-    if (!accessible)
-    {
-      constructor.setAccessible(true);
-    }
-
     try
     {
       return constructor.newInstance(arguments);
@@ -64,13 +61,6 @@ public final class ReflectUtil
     {
       throw new ReflectionException(ex);
     }
-    finally
-    {
-      if (!accessible)
-      {
-        constructor.setAccessible(false);
-      }
-    }
   }
 
   public static Method getMethod(Class<?> c, String methodName, Class<?>... parameterTypes)
@@ -79,7 +69,9 @@ public final class ReflectUtil
     {
       try
       {
-        return c.getDeclaredMethod(methodName, parameterTypes);
+        Method method = c.getDeclaredMethod(methodName, parameterTypes);
+        makeAccessible(method);
+        return method;
       }
       catch (NoSuchMethodException ex)
       {
@@ -104,12 +96,6 @@ public final class ReflectUtil
 
   public static Object invokeMethod(Method method, Object target, Object... arguments)
   {
-    boolean accessible = method.isAccessible();
-    if (!accessible)
-    {
-      method.setAccessible(true);
-    }
-
     try
     {
       return method.invoke(target, arguments);
@@ -126,13 +112,6 @@ public final class ReflectUtil
     {
       throw new ReflectionException(ex);
     }
-    finally
-    {
-      if (!accessible)
-      {
-        method.setAccessible(false);
-      }
-    }
   }
 
   public static Field getField(Class<?> c, String fieldName)
@@ -141,7 +120,9 @@ public final class ReflectUtil
     {
       try
       {
-        return c.getDeclaredField(fieldName);
+        Field field = c.getDeclaredField(fieldName);
+        makeAccessible(field);
+        return field;
       }
       catch (NoSuchFieldException ex)
       {
@@ -166,11 +147,6 @@ public final class ReflectUtil
 
   public static Object getValue(Field field, Object target)
   {
-    if (!field.isAccessible())
-    {
-      field.setAccessible(true);
-    }
-
     try
     {
       return field.get(target);
@@ -192,26 +168,13 @@ public final class ReflectUtil
 
   public static void setValue(Field field, Object target, Object value, boolean force)
   {
-    if (!field.isAccessible())
-    {
-      field.setAccessible(true);
-    }
-
-    Field modifiersField = null;
-    boolean[] finalModified = { false };
-
     try
     {
       if ((field.getModifiers() & Modifier.FINAL) != 0 && force)
       {
-        modifiersField = Field.class.getDeclaredField("modifiers");
-        if (!modifiersField.isAccessible())
-        {
-          modifiersField.setAccessible(true);
-        }
-
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        makeAccessible(modifiersField);
         modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        finalModified[0] = true;
       }
 
       Class<?> type = field.getType();
@@ -263,19 +226,13 @@ public final class ReflectUtil
     {
       throw new ReflectionException(ex);
     }
-    finally
+  }
+
+  private static <T> void makeAccessible(AccessibleObject accessibleObject)
+  {
+    if (!accessibleObject.isAccessible())
     {
-      if (finalModified[0])
-      {
-        try
-        {
-          modifiersField.setInt(field, field.getModifiers() | Modifier.FINAL);
-        }
-        catch (IllegalAccessException ex)
-        {
-          throw new ReflectionException(ex);
-        }
-      }
+      accessibleObject.setAccessible(true);
     }
   }
 

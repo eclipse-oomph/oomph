@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.targlets.presentation;
 
-import org.eclipse.oomph.setup.SetupFactory;
-import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -103,16 +101,6 @@ public class TargletModelWizard extends Wizard implements INewWizard
    * @generated
    */
   protected TargletFactory targletFactory = targletPackage.getTargletFactory();
-
-  /**
-   * This caches an instance of the model package.
-   */
-  protected SetupPackage setupPackage = SetupPackage.eINSTANCE;
-
-  /**
-   * This caches an instance of the model factory.
-   */
-  protected SetupFactory setupFactory = setupPackage.getSetupFactory();
 
   /**
    * This is the file creation page.
@@ -223,7 +211,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
     if (initialObjectNames == null)
     {
       initialObjectNames = new ArrayList<String>();
-      for (EClassifier eClassifier : setupPackage.getEClassifiers())
+      for (EClassifier eClassifier : targletPackage.getEClassifiers())
       {
         if (eClassifier instanceof EClass)
         {
