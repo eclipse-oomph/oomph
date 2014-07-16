@@ -1359,7 +1359,8 @@
       <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
-          id="org.eclipse.xtend.sdk.feature.group"/>
+          id="org.eclipse.xtend.sdk.feature.group"
+          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
       <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
       <requirement
@@ -1380,6 +1381,10 @@
           id="org.eclipse.mylyn.git.feature.group"/>
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
+      <repository
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/maintenance/releases/"/>
+      <repository
+          url="http://download.eclipse.org/recommenders/updates/stable"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
@@ -1389,7 +1394,10 @@
     </setupTask>
     <setupTask
         xsi:type="pde:TargetPlatformTask"
-        name="Target Definition for Eclipse Kepler"/>
+        id=""
+        name="Target Definition for Eclipse Luna">
+      <description></description>
+    </setupTask>
     <setupTask
         xsi:type="mylyn:MylynQueriesTask"
         repositoryURL="https://bugs.eclipse.org/bugs"
@@ -1402,8 +1410,8 @@
           summary="Open for v2.2"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.2.0"/>
       <query
-          summary="Open for v2.1"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.1.0"/>
+          summary="Open for v2.1.2"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.1.2"/>
       <query
           summary="Help Wanted"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?short_desc_type=allwordssubstr&amp;short_desc=&amp;product=Recommenders&amp;product=Recommenders.Incubator&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;keywords_type=allwords&amp;keywords=helpwanted&amp;status_whiteboard_type=allwordssubstr&amp;status_whiteboard=&amp;order=Importance"/>
@@ -1729,25 +1737,29 @@
       <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
-          id="org.eclipse.xtend.sdk.feature.group"/>
+          id="org.eclipse.xtend.sdk.feature.group"
+          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
       <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
       <requirement
           id="org.sonatype.tycho.m2e.feature.feature.group"/>
       <requirement
-          id="org.eclipse.xtext.sdk.feature.group"/>
+          id="org.eclipse.xtext.sdk.feature.group"
+          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
       <repository
           url="http://download.eclipse.org/recommenders/updates/head/"/>
       <repository
           url="http://download.codetrails.com/updates/connect/"/>
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
+      <repository
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/maintenance/releases/"/>
     </setupTask>
     <stream
         name="master"/>
   </project>
   <project name="codesearch"
-      label="Code Search">
+      label="Codesearch">
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.recommenders.codesearch"
@@ -1761,14 +1773,14 @@
         </detail>
         <detail
             key="label">
-          <value>Recommenders Code Search Git or Gerrit Repository</value>
+          <value>Recommenders Codesearch Git or Gerrit Repository</value>
         </detail>
         <detail
             key="target">
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <description>Recommenders Code Search</description>
+      <description>Recommenders Codesearch</description>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
@@ -1777,7 +1789,8 @@
       <requirement
           id="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
-          id="org.eclipse.xtend.sdk.feature.group"/>
+          id="org.eclipse.xtend.sdk.feature.group"
+          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
       <requirement
           id="org.eclipse.epp.mpc.feature.group"/>
       <requirement
@@ -1794,6 +1807,10 @@
           id="org.eclipse.mylyn.git.feature.group"/>
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
+      <repository
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/maintenance/releases/"/>
+      <repository
+          url="http://download.eclipse.org/recommenders/updates/stable"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
@@ -1834,6 +1851,25 @@
           name="codesearch.gerrit.master"/>
       <buildPlan
           name="codesearch.origin.master"/>
+    </setupTask>
+    <setupTask
+        xsi:type="mylyn:MylynQueriesTask"
+        connectorKind="org.eclipse.mylyn.gerrit"
+        repositoryURL="https://git.eclipse.org/r"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <query
+          summary="Reviews">
+        <attribute
+            key="gerrit query type"
+            value="custom"/>
+        <attribute
+            key="gerrit query project"
+            value="recommenders.incubator/org.eclipse.recommenders.codesearch"/>
+        <attribute
+            key="gerrit query string"
+            value="project:recommenders.incubator/org.eclipse.recommenders.codesearch status:open branch:master"/>
+      </query>
     </setupTask>
     <stream
         name="master"/>
@@ -1884,6 +1920,8 @@
           id="org.eclipse.mylyn.git.feature.group"/>
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
+      <repository
+          url="http://download.eclipse.org/recommenders/updates/stable"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
@@ -1924,6 +1962,25 @@
           name="logging.gerrit.master"/>
       <buildPlan
           name="logging.origin.master"/>
+    </setupTask>
+    <setupTask
+        xsi:type="mylyn:MylynQueriesTask"
+        connectorKind="org.eclipse.mylyn.gerrit"
+        repositoryURL="https://git.eclipse.org/r"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <query
+          summary="Reviews">
+        <attribute
+            key="gerrit query type"
+            value="custom"/>
+        <attribute
+            key="gerrit query project"
+            value="recommenders.incubator/org.eclipse.recommenders.logging"/>
+        <attribute
+            key="gerrit query string"
+            value="project:recommenders.incubator/org.eclipse.recommenders.logging status:open branch:master"/>
+      </query>
     </setupTask>
     <stream
         name="master"/>
@@ -1975,6 +2032,8 @@
           id="org.eclipse.mylyn.git.feature.group"/>
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
+      <repository
+          url="http://download.eclipse.org/recommenders/updates/stable"/>
     </setupTask>
     <setupTask
         xsi:type="maven:MavenImportTask">
@@ -2016,8 +2075,242 @@
       <buildPlan
           name="privacy.origin.master"/>
     </setupTask>
+    <setupTask
+        xsi:type="mylyn:MylynQueriesTask"
+        connectorKind="org.eclipse.mylyn.gerrit"
+        repositoryURL="https://git.eclipse.org/r"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <query
+          summary="Reviews">
+        <attribute
+            key="gerrit query type"
+            value="custom"/>
+        <attribute
+            key="gerrit query project"
+            value="recommenders.incubator/org.eclipse.recommenders.privacy"/>
+        <attribute
+            key="gerrit query string"
+            value="project:recommenders.incubator/org.eclipse.recommenders.privacy status:open branch:master"/>
+      </query>
+    </setupTask>
     <stream
         name="master"/>
+  </project>
+  <project name="stats"
+      label="Developer Statistics">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.recommenders.stats"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.stats"
+        pushURI="">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Recommenders Stats Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <description>Recommenders Stats</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <requirement
+          id="org.eclipse.m2e.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.m2e.logback.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.epp.mpc.feature.group"/>
+      <requirement
+          id="org.eclipse.recommenders.rcp.feature.feature.group"/>
+      <requirement
+          id="org.sonatype.tycho.m2e.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.hudson.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.git.feature.group"/>
+      <repository
+          url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
+      <repository
+          url="http://download.eclipse.org/recommenders/updates/stable"/>
+    </setupTask>
+    <setupTask
+        xsi:type="maven:MavenImportTask">
+      <sourceLocator
+          rootFolder="${git.clone.recommenders.stats.location}">
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/plugins/.*"/>
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/features/.*"/>
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/tests/.*"/>
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/targets/.*"/>
+      </sourceLocator>
+    </setupTask>
+    <setupTask
+        xsi:type="pde:TargetPlatformTask"
+        name="Target Definition for Eclipse Luna"/>
+    <setupTask
+        xsi:type="mylyn:MylynBuildsTask"
+        serverURL="https://hudson.eclipse.org/recommenders"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <buildPlan
+          name="stats.gerrit.master"/>
+      <buildPlan
+          name="stats.origin.master"/>
+    </setupTask>
+    <setupTask
+        xsi:type="mylyn:MylynQueriesTask"
+        connectorKind="org.eclipse.mylyn.gerrit"
+        repositoryURL="https://git.eclipse.org/r"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <query
+          summary="Reviews">
+        <attribute
+            key="gerrit query type"
+            value="custom"/>
+        <attribute
+            key="gerrit query project"
+            value="recommenders.incubator/org.eclipse.recommenders.stats"/>
+        <attribute
+            key="gerrit query string"
+            value="project:recommenders.incubator/org.eclipse.recommenders.stats status:open branch:master"/>
+      </query>
+    </setupTask>
+    <setupTask
+        xsi:type="mylyn:MylynQueriesTask"
+        repositoryURL="https://bugs.eclipse.org/bugs"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <query
+          summary="Bugs"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;component=Developer%20Statistics&amp;list_id=8721722&amp;order=bug_id%20DESC&amp;product=Recommenders.Incubator&amp;query_based_on=&amp;query_format=advanced"/>
+    </setupTask>
+    <stream
+        name="master"/>
+    <description></description>
+  </project>
+  <project name="livedoc"
+      label="Livedoc">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.recommenders.livedoc"
+        remoteURI="recommenders.incubator/org.eclipse.recommenders.livedoc"
+        pushURI="">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Livedoc Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <description>Recommenders Livedoc</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <requirement
+          id="org.eclipse.m2e.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.m2e.logback.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.epp.mpc.feature.group"/>
+      <requirement
+          id="org.eclipse.recommenders.rcp.feature.feature.group"/>
+      <requirement
+          id="org.sonatype.tycho.m2e.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.hudson.feature.group"/>
+      <requirement
+          id="org.eclipse.mylyn.git.feature.group"/>
+      <repository
+          url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
+      <repository
+          url="http://download.eclipse.org/recommenders/updates/stable"/>
+    </setupTask>
+    <setupTask
+        xsi:type="maven:MavenImportTask">
+      <sourceLocator
+          rootFolder="${git.clone.recommenders.livedoc.location}">
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/plugins/.*"/>
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/features/.*"/>
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/tests/.*"/>
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/targets/.*"/>
+      </sourceLocator>
+    </setupTask>
+    <setupTask
+        xsi:type="pde:TargetPlatformTask"
+        name="Target Definition for Eclipse Luna"/>
+    <setupTask
+        xsi:type="mylyn:MylynBuildsTask"
+        serverURL="https://hudson.eclipse.org/recommenders"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <buildPlan
+          name="livedoc.gerrit.master"/>
+      <buildPlan
+          name="livedoc.origin.master"/>
+    </setupTask>
+    <setupTask
+        xsi:type="mylyn:MylynQueriesTask"
+        connectorKind="org.eclipse.mylyn.gerrit"
+        repositoryURL="https://git.eclipse.org/r"
+        userID="${bugzilla.id}"
+        password="${eclipse.user.password}">
+      <query
+          summary="Reviews">
+        <attribute
+            key="gerrit query type"
+            value="custom"/>
+        <attribute
+            key="gerrit query project"
+            value="recommenders.incubator/org.eclipse.recommenders.livedoc"/>
+        <attribute
+            key="gerrit query string"
+            value="project:recommenders.incubator/org.eclipse.recommenders.livedoc status:open branch:master"/>
+      </query>
+    </setupTask>
+    <stream
+        name="master"/>
+    <description></description>
   </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
