@@ -16,6 +16,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -51,6 +52,11 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
   protected AbstractOomphPlugin(ResourceLocator[] delegateResourceLocators)
   {
     super(delegateResourceLocators);
+  }
+
+  public final boolean isOSGiRunning()
+  {
+    return getEclipsePlugin() != null;
   }
 
   protected Plugin getEclipsePlugin()
@@ -95,7 +101,32 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
 
   public final ILog getLog()
   {
-    return getEclipsePlugin().getLog();
+    Plugin eclipsePlugin = getEclipsePlugin();
+    if (eclipsePlugin == null)
+    {
+      return new ILog()
+      {
+        public void removeLogListener(ILogListener listener)
+        {
+        }
+
+        public void log(IStatus status)
+        {
+          System.out.println(status);
+        }
+
+        public Bundle getBundle()
+        {
+          return null;
+        }
+
+        public void addLogListener(ILogListener listener)
+        {
+        }
+      };
+    }
+
+    return eclipsePlugin.getLog();
   }
 
   public final void log(String message, int severity)
@@ -115,6 +146,8 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
 
   public final String log(Throwable t)
   {
+    t.printStackTrace();
+
     IStatus status = getStatus(t);
     log(status);
     return status.getMessage();
