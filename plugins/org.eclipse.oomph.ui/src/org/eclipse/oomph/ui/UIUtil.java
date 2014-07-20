@@ -164,14 +164,7 @@ public final class UIUtil
     }
     else
     {
-      if (Display.getCurrent() == display)
-      {
-        runnable.run();
-      }
-      else
-      {
-        display.syncExec(runnable);
-      }
+      syncExec(runnable);
     }
   }
 
@@ -194,6 +187,64 @@ public final class UIUtil
       }
 
       display.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          if (display.isDisposed())
+          {
+            return;
+          }
+
+          try
+          {
+            runnable.run();
+          }
+          catch (SWTException ex)
+          {
+            if (ex.code != SWT.ERROR_WIDGET_DISPOSED)
+            {
+              throw ex;
+            }
+
+            //$FALL-THROUGH$
+          }
+        }
+      });
+    }
+    catch (SWTException ex)
+    {
+      if (ex.code != SWT.ERROR_WIDGET_DISPOSED)
+      {
+        throw ex;
+      }
+
+      //$FALL-THROUGH$
+    }
+  }
+
+  public static void syncExec(final Runnable runnable)
+  {
+    final Display display = getDisplay();
+    if (Display.getCurrent() == display || display == null)
+    {
+      runnable.run();
+    }
+    else
+    {
+      syncExec(display, runnable);
+    }
+  }
+
+  public static void syncExec(final Display display, final Runnable runnable)
+  {
+    try
+    {
+      if (display.isDisposed())
+      {
+        return;
+      }
+
+      display.syncExec(new Runnable()
       {
         public void run()
         {

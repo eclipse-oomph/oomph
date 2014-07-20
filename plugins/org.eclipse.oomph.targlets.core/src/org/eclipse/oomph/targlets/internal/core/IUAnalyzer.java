@@ -203,20 +203,13 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
         @Override
         protected void handleDependency(String id, String versionDesignator) throws Exception
         {
-          try
+          Requirement requirement = P2Factory.eINSTANCE.createRequirement(id);
+          if (versionDesignator != null)
           {
-            Requirement requirement = P2Factory.eINSTANCE.createRequirement(id);
-            if (versionDesignator != null)
-            {
-              requirement.setVersionRange(new VersionRange(versionDesignator));
-            }
+            requirement.setVersionRange(new VersionRange(versionDesignator));
+          }
 
-            componentExtension.getRequirements().add(requirement);
-          }
-          catch (Exception ex)
-          {
-            TargletsCorePlugin.INSTANCE.log(ex);
-          }
+          componentExtension.getRequirements().add(requirement);
         }
       }.handleDependencies(rootElement, monitor);
     }

@@ -151,7 +151,8 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
                 @Override
                 protected IStatus run(IProgressMonitor monitor)
                 {
-                  performStartup(workbench);
+                  monitor.beginTask("Determing tasks to be performed", IProgressMonitor.UNKNOWN);
+                  performStartup(workbench, monitor);
                   return Status.OK_STATUS;
                 }
               }.schedule();
@@ -182,7 +183,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
     });
   }
 
-  private static void performStartup(IWorkbench workbench)
+  private static void performStartup(IWorkbench workbench, IProgressMonitor monitor)
   {
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
@@ -193,6 +194,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
+        monitor.subTask("Reading restart tasks");
         Resource resource = SetupUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
         IOUtil.deleteBestEffort(restartingFile);
@@ -215,6 +217,8 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
     {
       // Ignore
     }
+
+    monitor.subTask("Creating a task performer");
 
     // This performer is only used to detect a need to update or to open the setup wizard.
     SetupTaskPerformer performer = null;
@@ -274,8 +278,17 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
       System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
     }
 
+    if (performer == null)
+    {
+      monitor.setTaskName("Performing tasks that need prompted variables");
+    }
+    else
+    {
+      monitor.setTaskName("Performing " + performer.getTriggeredSetupTasks().size() + " tasks");
+    }
+
     final SetupTaskPerformer finalPerfomer = performer;
-    UIUtil.asyncExec(new Runnable()
+    UIUtil.syncExec(new Runnable()
     {
       public void run()
       {

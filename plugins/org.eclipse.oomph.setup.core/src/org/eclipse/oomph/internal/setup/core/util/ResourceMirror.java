@@ -35,12 +35,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Eike Stepper
@@ -415,15 +416,24 @@ public class ResourceMirror
 
     private final XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
     {
-      private final AtomicInteger counter = new AtomicInteger(1);
+      private int counter;
+
+      private final Set<ResourceSet> resourceSets = new HashSet<ResourceSet>();
 
       @Override
       public synchronized void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options)
       {
         ResourceSet resourceSet = getResourceSet();
+        resourceSets.add(resourceSet);
+        int total = 0;
+        for (ResourceSet rs : resourceSets)
+        {
+          total += rs.getResources().size();
+        }
+
         monitor.subTask("Loading " + resource.getURI());
         monitor.worked(1);
-        monitor.setTaskName(taskName + counter.getAndIncrement() + " of " + resourceSet.getResources().size());
+        monitor.setTaskName(taskName + ++counter + " of " + total);
       }
     };
 

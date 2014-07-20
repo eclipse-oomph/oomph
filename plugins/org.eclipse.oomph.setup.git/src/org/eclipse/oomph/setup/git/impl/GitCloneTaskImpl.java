@@ -11,6 +11,8 @@
  */
 package org.eclipse.oomph.setup.git.impl;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTask.Sniffer.SourcePathProvider;
@@ -533,8 +535,13 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   @Override
   public Object getOverrideToken()
   {
-    String location = getLocation();
-    return createToken(location);
+    String token = getLocation();
+    if (StringUtil.isEmpty(token))
+    {
+      token = getRemoteURI();
+    }
+
+    return createToken(token);
   }
 
   @Override
@@ -545,8 +552,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     GitCloneTask gitCloneTask = (GitCloneTask)overriddenSetupTask;
     if (!ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
     {
-      throw new IllegalArgumentException("The two different branches " + gitCloneTask.getCheckoutBranch() + " and " + getCheckoutBranch()
-          + " cannot be cloned to the same location " + getLocation());
+      Annotation errorAnnotation = BaseFactory.eINSTANCE.createErrorAnnotation("Multiple different Git clones cannot be at the same location");
+      getAnnotations().add(errorAnnotation);
     }
   }
 

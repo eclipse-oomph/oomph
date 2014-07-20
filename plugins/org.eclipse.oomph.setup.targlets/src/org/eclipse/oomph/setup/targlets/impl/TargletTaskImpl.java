@@ -26,6 +26,7 @@ import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerManager;
+import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -281,12 +282,27 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     super.consolidate();
 
     Set<String> targletNames = new HashSet<String>();
-    for (Iterator<Targlet> it = getTarglets().iterator(); it.hasNext();)
+    LOOP: for (Iterator<Targlet> it = getTarglets().iterator(); it.hasNext();)
     {
       Targlet targlet = it.next();
       if (!targletNames.add(targlet.getName()))
       {
         it.remove();
+      }
+      else
+      {
+        String activeRepositoryList = targlet.getActiveRepositoryList();
+        for (RepositoryList repositoryList : targlet.getRepositoryLists())
+        {
+          if (ObjectUtil.equals(activeRepositoryList, repositoryList.getName()))
+          {
+            if (repositoryList.getRepositories().isEmpty())
+            {
+              it.remove();
+              continue LOOP;
+            }
+          }
+        }
       }
     }
   }

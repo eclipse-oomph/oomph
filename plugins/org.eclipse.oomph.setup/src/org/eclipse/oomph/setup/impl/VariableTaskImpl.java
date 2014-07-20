@@ -558,12 +558,17 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
   {
     super.overrideFor(overriddenSetupTask);
 
+    VariableTask variableTask = (VariableTask)overriddenSetupTask;
+    if (StringUtil.isEmpty(getLabel()))
+    {
+      setLabel(variableTask.getLabel());
+    }
+
     if (StringUtil.isEmpty(getDescription()))
     {
       setDescription(overriddenSetupTask.getDescription());
     }
 
-    VariableTask variableTask = (VariableTask)overriddenSetupTask;
     getChoices().addAll(variableTask.getChoices());
   }
 

@@ -341,7 +341,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
       IInstallableUnit rootIU = adjustProfileChangeRequest(profileChangeRequest, monitor);
 
-      final ProvisioningContext provisioningContext = context.createProvisioningContext(this);
+      final ProvisioningContext provisioningContext = context.createProvisioningContext(this, profileChangeRequest);
       provisioningContext.setMetadataRepositories(metadataURIs);
       provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
 

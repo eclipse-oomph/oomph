@@ -16,6 +16,7 @@ import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -30,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -187,5 +189,11 @@ public final class BaseUtil
     {
       throw new IORuntimeException(ex);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> T getObjectByType(Collection<?> objects, EClassifier type)
+  {
+    return (T)EcoreUtil.getObjectByType(objects, type);
   }
 }

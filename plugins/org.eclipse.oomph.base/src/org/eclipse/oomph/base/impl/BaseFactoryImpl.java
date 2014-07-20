@@ -11,6 +11,7 @@
 package org.eclipse.oomph.base.impl;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.util.StringUtil;
@@ -149,6 +150,34 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
   public Annotation createAnnotation()
   {
     AnnotationImpl annotation = new AnnotationImpl();
+    return annotation;
+  }
+
+  public Annotation createAnnotation(String source)
+  {
+    Annotation annotation = createAnnotation();
+    annotation.setSource(source);
+    return annotation;
+  }
+
+  public Annotation createErrorAnnotation(String diagnostic)
+  {
+    Annotation annotation = createAnnotation(BaseAnnotationConstants.ANNOTATION_ERROR);
+    annotation.getDetails().put(BaseAnnotationConstants.KEY_DIAGNOSTIC, diagnostic);
+    return annotation;
+  }
+
+  public Annotation createWarningAnnotation(String diagnostic)
+  {
+    Annotation annotation = createAnnotation(BaseAnnotationConstants.ANNOTATION_WARNING);
+    annotation.getDetails().put(BaseAnnotationConstants.KEY_DIAGNOSTIC, diagnostic);
+    return annotation;
+  }
+
+  public Annotation createInfoAnnotation(String diagnostic)
+  {
+    Annotation annotation = createAnnotation(BaseAnnotationConstants.ANNOTATION_INFO);
+    annotation.getDetails().put(BaseAnnotationConstants.KEY_DIAGNOSTIC, diagnostic);
     return annotation;
   }
 

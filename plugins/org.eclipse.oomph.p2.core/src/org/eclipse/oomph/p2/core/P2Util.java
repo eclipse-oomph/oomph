@@ -24,7 +24,14 @@ import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.internal.repository.mirroring.Mirroring;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.ILicense;
+import org.eclipse.equinox.p2.metadata.IProvidedCapability;
+import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
+import org.eclipse.equinox.p2.metadata.MetadataFactory;
+import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepository;
@@ -38,9 +45,11 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -143,12 +152,12 @@ public final class P2Util
     }
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("all")
   public static <T> Iterable<T> asIterable(final IQueryResult<T> queryResult)
   {
     if (queryResult instanceof Iterable<?>)
     {
-      return (Iterable<T>)queryResult;
+      return queryResult;
     }
 
     return new Iterable<T>()
@@ -210,6 +219,54 @@ public final class P2Util
         manager.removeRepository(uri);
       }
     }
+  }
+
+  @SuppressWarnings("unused")
+  private static InstallableUnitDescription createDescription(IInstallableUnit iu)
+  {
+    InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
+
+    description.setId(iu.getId());
+
+    description.setVersion(iu.getVersion());
+
+    Collection<IArtifactKey> artifacts = iu.getArtifacts();
+    description.setArtifacts(artifacts.toArray(new IArtifactKey[artifacts.size()]));
+
+    Collection<IProvidedCapability> providedCapabilities = iu.getProvidedCapabilities();
+    description.setCapabilities(providedCapabilities.toArray(new IProvidedCapability[providedCapabilities.size()]));
+
+    description.setCopyright(iu.getCopyright());
+
+    IMatchExpression<IInstallableUnit> filter = iu.getFilter();
+    description.setFilter(filter);
+
+    Collection<ILicense> licenses = iu.getLicenses();
+    description.setLicenses(licenses.toArray(new ILicense[licenses.size()]));
+
+    Collection<IRequirement> metaRequirements = iu.getMetaRequirements();
+    description.setMetaRequirements(metaRequirements.toArray(new IRequirement[metaRequirements.size()]));
+
+    Collection<IRequirement> requirements = iu.getRequirements();
+    description.setRequirements(requirements.toArray(new IRequirement[requirements.size()]));
+
+    description.setSingleton(iu.isSingleton());
+
+    description.setTouchpointType(iu.getTouchpointType());
+    description.setUpdateDescriptor(iu.getUpdateDescriptor());
+
+    for (Iterator<Entry<String, String>> iterator = iu.getProperties().entrySet().iterator(); iterator.hasNext();)
+    {
+      Entry<String, String> entry = iterator.next();
+      description.setProperty(entry.getKey(), entry.getValue());
+    }
+
+    for (ITouchpointData touchpointData : iu.getTouchpointData())
+    {
+      description.addTouchpointData(touchpointData);
+    }
+
+    return description;
   }
 
   /**

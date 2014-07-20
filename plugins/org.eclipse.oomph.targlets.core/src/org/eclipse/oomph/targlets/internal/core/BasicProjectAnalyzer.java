@@ -18,6 +18,8 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 
 import java.io.File;
@@ -29,6 +31,22 @@ import java.util.Map;
  */
 public class BasicProjectAnalyzer<T>
 {
+  private MultiStatus status = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0, "Project Analysis", null);
+
+  protected void log(File file, Object object)
+  {
+    IStatus childStatus = TargletsCorePlugin.INSTANCE.getStatus(object);
+    String message = childStatus.getMessage() + " (while processing " + file + ")";
+    MultiStatus multiStatus = new MultiStatus(childStatus.getPlugin(), childStatus.getCode(), message, childStatus.getException());
+    multiStatus.addAll(childStatus);
+    status.add(multiStatus);
+  }
+
+  public IStatus getStatus()
+  {
+    return status;
+  }
+
   public Map<T, File> analyze(File folder, EList<Predicate> predicates, boolean locateNestedProjects, ProjectVisitor<T> visitor, IProgressMonitor monitor)
   {
     Map<T, File> results = new HashMap<T, File>();
@@ -55,13 +73,27 @@ public class BasicProjectAnalyzer<T>
           File cextFile = new File(folder, "component.ext");
           if (cextFile.exists())
           {
-            visitor.visitComponentExtension(cextFile, result, monitor);
+            try
+            {
+              visitor.visitComponentExtension(cextFile, result, monitor);
+            }
+            catch (Exception ex)
+            {
+              log(cextFile, ex);
+            }
           }
 
           File cspexFile = new File(folder, "buckminster.cspex");
           if (cspexFile.exists())
           {
-            visitor.visitCSpex(cspexFile, result, monitor);
+            try
+            {
+              visitor.visitCSpex(cspexFile, result, monitor);
+            }
+            catch (Exception ex)
+            {
+              log(cspexFile, ex);
+            }
           }
 
           result = filter(result);
@@ -78,8 +110,12 @@ public class BasicProjectAnalyzer<T>
       }
       catch (Exception ex)
       {
-        TargletsCorePlugin.INSTANCE.log(ex);
+        log(folder, ex);
       }
+    }
+    else if (!locateNestedProjects && project != null)
+    {
+      return;
     }
 
     File[] listFiles = folder.listFiles();
@@ -90,36 +126,71 @@ public class BasicProjectAnalyzer<T>
         File file = listFiles[i];
         if (file.isDirectory())
         {
-          analyze(file, predicates, locateNestedProjects, results, visitor, monitor);
+          try
+          {
+            analyze(file, predicates, locateNestedProjects, results, visitor, monitor);
+          }
+          catch (Exception ex)
+          {
+            log(file, ex);
+          }
         }
       }
     }
   }
 
-  private T analyzeProject(File folder, ProjectVisitor<T> visitor, IProgressMonitor monitor) throws Exception
+  private T analyzeProject(File folder, ProjectVisitor<T> visitor, IProgressMonitor monitor)
   {
     File featureFile = new File(folder, "feature.xml");
     if (featureFile.exists())
     {
-      return visitor.visitFeature(featureFile, monitor);
+      try
+      {
+        return visitor.visitFeature(featureFile, monitor);
+      }
+      catch (Exception ex)
+      {
+        log(featureFile, ex);
+      }
     }
 
     File manifestFile = new File(folder, "META-INF/MANIFEST.MF");
     if (manifestFile.exists())
     {
-      return visitor.visitPlugin(manifestFile, monitor);
+      try
+      {
+        return visitor.visitPlugin(manifestFile, monitor);
+      }
+      catch (Exception ex)
+      {
+        log(manifestFile, ex);
+      }
     }
 
     File cdefFile = new File(folder, "component.def");
     if (cdefFile.exists())
     {
-      return visitor.visitComponentDefinition(cdefFile, monitor);
+      try
+      {
+        return visitor.visitComponentDefinition(cdefFile, monitor);
+      }
+      catch (Exception ex)
+      {
+        log(cdefFile, ex);
+      }
     }
 
     File cspecFile = new File(folder, "buckminster.cspec");
     if (cspecFile.exists())
     {
-      return visitor.visitCSpec(cspecFile, monitor);
+      try
+      {
+        return visitor.visitCSpec(cspecFile, monitor);
+      }
+      catch (Exception ex)
+      {
+        log(cspecFile, ex);
+      }
     }
 
     return null;

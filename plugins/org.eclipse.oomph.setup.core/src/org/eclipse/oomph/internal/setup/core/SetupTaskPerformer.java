@@ -84,6 +84,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory.Registry;
 import org.eclipse.emf.ecore.resource.Resource.Internal;
@@ -99,10 +100,13 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
 import org.osgi.framework.Bundle;
@@ -114,6 +118,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -2380,23 +2385,51 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
     finally
     {
-      if (autoBuilding != null)
+      if (Boolean.TRUE.equals(autoBuilding))
       {
-        restoreAutoBuilding(autoBuilding);
-      }
+        // Disable API analysis building for the initial build.
+        Class<?> apiAnalysisBuilder = CommonPlugin.loadClass("org.eclipse.pde.api.tools", "org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder");
+        final Field buildDisabledField = apiAnalysisBuilder.getDeclaredField("buildDisabled");
+        buildDisabledField.setAccessible(true);
+        buildDisabledField.set(null, true);
 
-      try
-      {
-        PrintStream logStream = getLogStream();
-        logStream.println();
-        logStream.println();
-        logStream.println();
-        logStream.println();
-        IOUtil.closeSilent(logStream);
-      }
-      catch (Exception ex)
-      {
-        SetupCorePlugin.INSTANCE.log(ex);
+        Job buildJob = new Job("Build")
+        {
+          @Override
+          protected IStatus run(IProgressMonitor monitor)
+          {
+            try
+            {
+              EcorePlugin.getWorkspaceRoot().getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+              return Status.OK_STATUS;
+            }
+            catch (CoreException ex)
+            {
+              return SetupCorePlugin.INSTANCE.getStatus(ex);
+            }
+            finally
+            {
+              try
+              {
+                restoreAutoBuilding(true);
+              }
+              catch (CoreException ex)
+              {
+                SetupCorePlugin.INSTANCE.log(ex);
+              }
+              buildDisabledField.setAccessible(false);
+            }
+          }
+
+          @Override
+          public boolean belongsTo(Object family)
+          {
+            return ResourcesPlugin.FAMILY_MANUAL_BUILD == family;
+          }
+        };
+
+        buildJob.setRule(EcorePlugin.getWorkspaceRoot());
+        buildJob.schedule();
       }
     }
   }

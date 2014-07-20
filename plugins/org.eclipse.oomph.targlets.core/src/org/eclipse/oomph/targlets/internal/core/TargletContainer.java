@@ -10,9 +10,11 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
+import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
@@ -24,6 +26,7 @@ import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerChanged;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdateProblem;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
+import org.eclipse.oomph.targlets.internal.core.IUGenerator.FeatureIUGenerator;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
@@ -72,8 +75,12 @@ import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
+import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
+import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -167,11 +174,13 @@ public class TargletContainer extends AbstractBundleContainer
     basicSetTarglets(targlets);
   }
 
+  @Override
   protected int getResolveBundlesWork()
   {
     return 999;
   }
 
+  @Override
   protected int getResolveFeaturesWork()
   {
     return 1;
@@ -644,7 +653,7 @@ public class TargletContainer extends AbstractBundleContainer
       ProfileDefinition profileDefinition = transaction.getProfileDefinition();
       profileDefinition.setIncludeSourceBundles(isIncludeSources());
 
-      EList<Requirement> roots = profileDefinition.getRequirements();
+      final EList<Requirement> roots = profileDefinition.getRequirements();
       roots.clear();
 
       for (Targlet targlet : targlets)
@@ -678,13 +687,16 @@ public class TargletContainer extends AbstractBundleContainer
         repositories.addAll(EcoreUtil.copyAll(targlet.getActiveRepositories()));
       }
 
+      TargletsCorePlugin.INSTANCE.coreException(analyzer.getStatus());
+
       final AtomicReference<IProvisioningPlan> provisioningPlanRef = new AtomicReference<IProvisioningPlan>();
       final AtomicReference<List<IMetadataRepository>> metadataRepositoriesRef = new AtomicReference<List<IMetadataRepository>>();
 
       CommitContext commitContext = new CommitContext()
       {
         @Override
-        public ProvisioningContext createProvisioningContext(ProfileTransaction transaction)
+        public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, final IProfileChangeRequest profileChangeRequest)
+            throws CoreException
         {
           IProvisioningAgent provisioningAgent = transaction.getProfile().getAgent().getProvisioningAgent();
           ProvisioningContext provisioningContext = new ProvisioningContext(provisioningAgent)
@@ -699,18 +711,67 @@ public class TargletContainer extends AbstractBundleContainer
                 Set<String> sourceIDs = analyzer.getIDs();
 
                 List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
-                prepareSources(ius, sourceIDs, monitor);
+                Map<String, IInstallableUnit> idToIUMap = new HashMap<String, IInstallableUnit>();
+                prepareSources(ius, sourceIDs, idToIUMap, monitor);
 
                 IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
-                for (Iterator<IInstallableUnit> it = metadataResult.iterator(); it.hasNext();)
+                Set<IRequirement> licenseRequirements = new HashSet<IRequirement>();
+                for (IInstallableUnit iu : P2Util.asIterable(metadataResult))
                 {
                   TargletsCorePlugin.checkCancelation(monitor);
 
-                  IInstallableUnit iu = it.next();
-                  if (!sourceIDs.contains(iu.getId()))
+                  ius.add(iu);
+
+                  // If the binary IU corresponds to a synthetic source IU...
+                  String id = iu.getId();
+                  IInstallableUnit workspaceIU = idToIUMap.get(id);
+                  if (workspaceIU != null)
                   {
-                    ius.add(iu);
+                    // And that binary IU is in the qualifier range of the synthetic IU
+                    if (P2Factory.eINSTANCE.createVersionRange(workspaceIU.getVersion(), VersionSegment.MICRO).isIncluded(iu.getVersion()))
+                    {
+                      // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
+                      File folder = sources.get(workspaceIU);
+                      sources.put(iu, folder);
+
+                      // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
+                      ius.remove(workspaceIU);
+
+                      // If there this workspace IU has a license...
+                      String licenseFeatureID = workspaceIU.getProperty(FeatureIUGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID);
+                      if (licenseFeatureID != null)
+                      {
+                        // Keep a requirement for this IU because binary IUs are generally not installed for license feature dependencies.
+                        VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureIUGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
+                        IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null,
+                            false, false);
+                        licenseRequirements.add(requirement);
+
+                        // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
+                        File licenseFeatureFolder = sources.get(workspaceIU);
+                        sources.put(iu, licenseFeatureFolder);
+                      }
+                    }
                   }
+                }
+
+                // If we need license requirements.
+                if (!licenseRequirements.isEmpty())
+                {
+                  // Build an artificial unit that requires all the license features.
+                  InstallableUnitDescription requiredLicensesDescription = new InstallableUnitDescription();
+                  requiredLicensesDescription.setId("required_licenses");
+                  requiredLicensesDescription.setVersion(Version.createOSGi(1, 0, 0));
+                  requiredLicensesDescription.setArtifacts(new IArtifactKey[0]);
+                  requiredLicensesDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
+                  requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
+                      IInstallableUnit.NAMESPACE_IU_ID, requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
+                  requiredLicensesDescription.addRequirements(licenseRequirements);
+
+                  IInstallableUnit requiredLicensesIU = MetadataFactory.createInstallableUnit(requiredLicensesDescription);
+                  ius.add(requiredLicensesIU);
+
+                  profileChangeRequest.add(requiredLicensesIU);
                 }
 
                 metadata = new CollectionResult<IInstallableUnit>(ius);
@@ -719,17 +780,20 @@ public class TargletContainer extends AbstractBundleContainer
               return metadata;
             }
 
-            private void prepareSources(List<IInstallableUnit> ius, Set<String> ids, IProgressMonitor monitor)
+            private Map<String, IInstallableUnit> prepareSources(List<IInstallableUnit> ius, Set<String> ids, Map<String, IInstallableUnit> idToIUMap,
+                IProgressMonitor monitor)
             {
+              Map<IInstallableUnit, File> sourceSources = new HashMap<IInstallableUnit, File>();
               for (IInstallableUnit iu : sources.keySet())
               {
                 TargletsCorePlugin.checkCancelation(monitor);
+
+                String id = iu.getId();
                 ius.add(iu);
+                idToIUMap.put(id, iu);
 
                 // TODO Should we create source IUs for source projects only if needed (i.e. required by feature content)?
-                String id = iu.getId();
                 String suffix = "";
-
                 if (id.endsWith(FEATURE_SUFFIX))
                 {
                   id = id.substring(0, id.length() - FEATURE_SUFFIX.length());
@@ -737,7 +801,8 @@ public class TargletContainer extends AbstractBundleContainer
                 }
 
                 InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
-                description.setId(id + ".source" + suffix);
+                String sourceID = id + ".source" + suffix;
+                description.setId(sourceID);
                 description.setVersion(iu.getVersion());
 
                 for (Map.Entry<String, String> property : iu.getProperties().entrySet())
@@ -760,8 +825,16 @@ public class TargletContainer extends AbstractBundleContainer
 
                 IInstallableUnit sourceIU = MetadataFactory.createInstallableUnit(description);
                 ius.add(sourceIU);
-                ids.add(sourceIU.getId());
+                ids.add(sourceID);
+
+                idToIUMap.put(sourceID, sourceIU);
+                sourceSources.put(sourceIU, sources.get(iu));
               }
+
+              // Include all source IUs in the map.
+              sources.putAll(sourceSources);
+
+              return idToIUMap;
             }
           };
 
@@ -1306,4 +1379,5 @@ public class TargletContainer extends AbstractBundleContainer
       return writer;
     }
   }
+
 }

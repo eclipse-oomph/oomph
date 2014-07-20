@@ -40,6 +40,14 @@ public interface BaseFactory extends EFactory
    */
   Annotation createAnnotation();
 
+  Annotation createAnnotation(String source);
+
+  Annotation createErrorAnnotation(String diagnostic);
+
+  Annotation createWarningAnnotation(String diagnostic);
+
+  Annotation createInfoAnnotation(String diagnostic);
+
   /**
    * Returns an instance of data type '<em>URI</em>' corresponding the given literal.
    * <!-- begin-user-doc -->

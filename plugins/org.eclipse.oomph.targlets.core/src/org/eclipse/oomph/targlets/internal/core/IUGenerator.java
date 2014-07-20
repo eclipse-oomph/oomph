@@ -95,6 +95,10 @@ public interface IUGenerator
    */
   public static final class FeatureIUGenerator extends FeaturesAction implements IUGenerator
   {
+    public static final String PROP_REQUIRED_LICENCSE_FEATURE_ID = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureID";
+
+    public static final String PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureVersionRange";
+
     public static final IUGenerator INSTANCE = new FeatureIUGenerator();
 
     private FeatureIUGenerator()
@@ -156,6 +160,9 @@ public interface IUGenerator
         String name = licenseFeature + ".feature.group";
         IRequirement requirement = MetadataFactory.createRequirement(namespace, name, osgiRange, null, true, false);
         newRequirements[size] = requirement;
+
+        iu.setProperty(PROP_REQUIRED_LICENCSE_FEATURE_ID, name);
+        iu.setProperty(PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE, osgiRange.toString());
       }
 
       // Adjust childIU requirements to support possible .qualifier specifications

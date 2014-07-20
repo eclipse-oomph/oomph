@@ -20,6 +20,7 @@ import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.PhaseSetFactory;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public interface ProfileTransaction
    */
   public class CommitContext
   {
-    public ProvisioningContext createProvisioningContext(ProfileTransaction transaction) throws CoreException
+    public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, IProfileChangeRequest profileChangeRequest) throws CoreException
     {
       return new ProvisioningContext(transaction.getProfile().getAgent().getProvisioningAgent());
     }

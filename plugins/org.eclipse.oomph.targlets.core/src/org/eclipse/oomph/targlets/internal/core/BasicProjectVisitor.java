@@ -10,8 +10,10 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.XMLUtil.ElementHandler;
@@ -66,13 +68,23 @@ public class BasicProjectVisitor<T> implements ProjectVisitor<T>
   public T visitComponentDefinition(File cdefFile, IProgressMonitor monitor) throws Exception
   {
     Resource resource = getResourceSet().getResource(URI.createFileURI(cdefFile.getAbsolutePath()), true);
-    return visitComponentDefinition((ComponentDefinition)resource.getContents().get(0), monitor);
+    ComponentDefinition componentDefinition = BaseUtil.getObjectByType(resource.getContents(), TargletPackage.Literals.COMPONENT_DEFINITION);
+    if (componentDefinition == null)
+    {
+      return null;
+    }
+
+    return visitComponentDefinition(componentDefinition, monitor);
   }
 
   public void visitComponentExtension(File cextFile, T host, IProgressMonitor monitor) throws Exception
   {
     Resource resource = getResourceSet().getResource(URI.createFileURI(cextFile.getAbsolutePath()), true);
-    visitComponentExtension((ComponentExtension)resource.getContents().get(0), host, monitor);
+    ComponentExtension componentExtension = BaseUtil.getObjectByType(resource.getContents(), TargletPackage.Literals.COMPONENT_EXTENSION);
+    if (componentExtension != null)
+    {
+      visitComponentExtension(componentExtension, host, monitor);
+    }
   }
 
   public T visitCSpec(File cspecFile, IProgressMonitor monitor) throws Exception
@@ -176,17 +188,14 @@ public class BasicProjectVisitor<T> implements ProjectVisitor<T>
 
     public static String getP2ID(String id, String type)
     {
-      if (id == null && type != null)
+      if (id != null && type != null)
       {
         if (type.equals("eclipse.feature"))
         {
           return id + ".feature.group";
         }
 
-        if (type.equals("osgi.bundle"))
-        {
-          return id;
-        }
+        return id;
       }
 
       return null;
