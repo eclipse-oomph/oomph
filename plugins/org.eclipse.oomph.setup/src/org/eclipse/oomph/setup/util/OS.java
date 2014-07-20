@@ -10,14 +10,10 @@
  */
 package org.eclipse.oomph.setup.util;
 
-import org.eclipse.oomph.util.IOUtil;
-
 import org.eclipse.core.runtime.Platform;
 
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author Eike Stepper
