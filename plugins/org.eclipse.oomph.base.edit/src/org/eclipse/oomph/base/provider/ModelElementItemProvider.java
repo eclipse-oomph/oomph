@@ -346,8 +346,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
         @Override
         protected Object getParent(Object object)
         {
-          Object parent = filterParent(itemDelegator, feature, super.getParent(object));
-          return parent;
+          return filterParent(itemDelegator, feature, super.getParent(object));
         }
       };
     }
@@ -392,6 +391,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
           {
             result.append(", ");
           }
+
           result.append(getText(child));
         }
 

@@ -24,8 +24,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.internal.p2.director.Explanation;
+import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.metadata.IRequirement;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -195,7 +198,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
   void rollbackUpdateTransaction(Throwable t, IProgressMonitor monitor) throws CoreException
   {
     transactionProfile = null;
-    updateProblem = new UpdateProblem(t);
+    updateProblem = UpdateProblem.create(t);
 
     saveDescriptors(monitor);
   }
@@ -288,7 +291,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
   /**
    * @author Eike Stepper
    */
-  public static final class UpdateProblem implements Serializable, IStatus
+  public static class UpdateProblem implements Serializable, IStatus
   {
     private static final long serialVersionUID = 3L;
 
@@ -310,12 +313,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
     {
     }
 
-    public UpdateProblem(Throwable t)
-    {
-      this(TargletsCorePlugin.INSTANCE.getStatus(t));
-    }
-
-    public UpdateProblem(IStatus status)
+    protected UpdateProblem(IStatus status)
     {
       plugin = status.getPlugin();
       message = status.getMessage();
@@ -330,9 +328,39 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
         for (int i = 0; i < statusChildren.length; i++)
         {
           IStatus statusChild = statusChildren[i];
-          children[i] = new UpdateProblem(statusChild);
+          children[i] = UpdateProblem.create(statusChild);
         }
       }
+    }
+
+    public static UpdateProblem create(Throwable t)
+    {
+      return create(TargletsCorePlugin.INSTANCE.getStatus(t));
+    }
+
+    @SuppressWarnings("restriction")
+    public static UpdateProblem create(IStatus status)
+    {
+      if (status instanceof org.eclipse.equinox.internal.provisional.p2.director.PlannerStatus)
+      {
+        org.eclipse.equinox.internal.provisional.p2.director.PlannerStatus plannerStatus = (org.eclipse.equinox.internal.provisional.p2.director.PlannerStatus)status;
+        org.eclipse.equinox.internal.provisional.p2.director.RequestStatus requestStatus = plannerStatus.getRequestStatus();
+        if (requestStatus != null)
+        {
+          Explanation explanation = requestStatus.getExplanationDetails();
+          if (explanation instanceof Explanation.MissingIU)
+          {
+            Explanation.MissingIU detailedExplanation = (Explanation.MissingIU)explanation;
+            IRequirement req = detailedExplanation.req;
+            if (req instanceof IRequiredCapability)
+            {
+              return new MissingIU(status, (IRequiredCapability)req);
+            }
+          }
+        }
+      }
+
+      return new UpdateProblem(status);
     }
 
     public String getPlugin()
@@ -447,7 +475,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
         if (exception instanceof CoreException)
         {
           CoreException coreException = (CoreException)exception;
-          exception = new CoreException(new UpdateProblem(coreException.getStatus()));
+          exception = new CoreException(UpdateProblem.create(coreException.getStatus()));
         }
         else
         {
@@ -461,6 +489,47 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
       }
 
       return exception;
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    public static final class MissingIU extends UpdateProblem
+    {
+      private static final long serialVersionUID = 1L;
+
+      private String namespace;
+
+      private String name;
+
+      private String range;
+
+      public MissingIU()
+      {
+      }
+
+      protected MissingIU(IStatus status, IRequiredCapability requirement)
+      {
+        super(status);
+        namespace = requirement.getNamespace();
+        name = requirement.getName();
+        range = requirement.getRange().toString();
+      }
+
+      public String getNamespace()
+      {
+        return namespace;
+      }
+
+      public String getName()
+      {
+        return name;
+      }
+
+      public String getRange()
+      {
+        return range;
+      }
     }
   }
 }
