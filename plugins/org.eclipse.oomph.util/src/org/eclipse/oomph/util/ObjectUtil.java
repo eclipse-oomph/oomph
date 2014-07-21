@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.util;
 
+
 /**
  * Various static helper methods.
  *
@@ -40,5 +41,73 @@ public final class ObjectUtil
     }
 
     return o.hashCode();
+  }
+
+  public static <TYPE> TYPE adapt(Object object, Class<TYPE> type)
+  {
+    if (object == null)
+    {
+      return null;
+    }
+
+    Object adapter = null;
+    if (type.isInstance(object))
+    {
+      adapter = object;
+    }
+    else
+    {
+      try
+      {
+        adapter = AdaptableHelper.adapt(object, type);
+        if (adapter == null)
+        {
+          adapter = AdapterManagerHelper.adapt(object, type);
+        }
+      }
+      catch (Throwable ignore)
+      {
+      }
+    }
+
+    return type.cast(adapter);
+  }
+
+  /**
+   * Nested class to factor out dependencies on org.eclipse.core.runtime
+   *
+   * @author Eike Stepper
+   */
+  private static final class AdaptableHelper
+  {
+    public static Object adapt(Object object, Class<?> type)
+    {
+      if (object instanceof org.eclipse.core.runtime.IAdaptable)
+      {
+        return ((org.eclipse.core.runtime.IAdaptable)object).getAdapter(type);
+      }
+
+      return null;
+    }
+  }
+
+  /**
+   * Nested class to factor out dependencies on org.eclipse.core.runtime
+   *
+   * @author Eike Stepper
+   */
+  private static final class AdapterManagerHelper
+  {
+    private static org.eclipse.core.runtime.IAdapterManager adapterManager = org.eclipse.core.runtime.Platform.getAdapterManager();
+
+    public static Object adapt(Object object, Class<?> type)
+    {
+      if (adapterManager != null)
+      {
+        return adapterManager.getAdapter(object, type);
+      }
+
+      return null;
+    }
   }
 }

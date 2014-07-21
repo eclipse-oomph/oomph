@@ -8,9 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.util;
-
-import org.eclipse.oomph.internal.util.UtilPlugin;
+package org.eclipse.oomph.internal.util;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
