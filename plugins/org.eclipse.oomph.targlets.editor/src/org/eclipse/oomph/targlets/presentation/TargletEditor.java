@@ -14,6 +14,8 @@ import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.p2.provider.P2ItemProviderAdapterFactory;
 import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactory;
 import org.eclipse.oomph.resources.provider.ResourcesItemProviderAdapterFactory;
+import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -23,6 +25,7 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.MarkerHelper;
+import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
@@ -100,10 +103,12 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -134,6 +139,8 @@ import java.util.Map;
  */
 public class TargletEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker
 {
+  public static final String EDITOR_ID = "org.eclipse.oomph.targlets.presentation.TargletEditorID";
+
   /**
    * This keeps track of the editing domain that is used to track all changes to the model.
    * <!-- begin-user-doc -->
@@ -1050,6 +1057,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
         public void run()
         {
           setActivePage(0);
+          selectionViewer.expandAll();
         }
       });
     }
@@ -1707,5 +1715,15 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
   protected boolean showOutlineView()
   {
     return false;
+  }
+
+  public static void open(IWorkbenchPage page, TargletContainer targletContainer) throws PartInitException
+  {
+    String id = targletContainer.getID();
+    URI uri = URI.createGenericURI(TargletContainerResourceFactory.PROTOCOL_NAME, id, null);
+    String label = targletContainer.getTarget().getName() + " - " + id;
+
+    IEditorInput input = new URIEditorInput(uri, label);
+    IDE.openEditor(page, input, EDITOR_ID);
   }
 }

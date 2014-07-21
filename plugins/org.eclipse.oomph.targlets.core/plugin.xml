@@ -31,4 +31,12 @@
       <targletListener class="org.eclipse.oomph.targlets.internal.core.listeners.TargetDefinitionGenerator"/>
    </extension>
 
+   <extension
+         point="org.eclipse.emf.ecore.protocol_parser">
+      <parser
+            class="org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory"
+            protocolName="targlet_container">
+      </parser>
+   </extension>
+
 </plugin>

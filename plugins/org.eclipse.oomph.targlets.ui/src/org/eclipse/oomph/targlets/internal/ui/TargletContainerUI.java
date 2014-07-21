@@ -13,6 +13,8 @@ package org.eclipse.oomph.targlets.internal.ui;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
+import org.eclipse.oomph.targlets.presentation.TargletEditor;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -31,7 +33,12 @@ import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.internal.ui.shared.target.StyledBundleLabelProvider;
 import org.eclipse.pde.ui.target.ITargetLocationEditor;
 import org.eclipse.pde.ui.target.ITargetLocationUpdater;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +103,19 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
   public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
   {
-    return new EditTargletWizard(target, (TargletContainer)targetLocation);
+    try
+    {
+      TargletEditor.open(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (TargletContainer)targetLocation);
+    }
+    catch (PartInitException ex)
+    {
+      ex.printStackTrace();
+    }
+
+    simulateEscapeKey();
+    simulateEscapeKey();
+
+    return null;
   }
 
   public boolean canUpdate(ITargetDefinition target, ITargetLocation targetLocation)
@@ -107,6 +126,36 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
   public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
   {
     return ((TargletContainer)targetLocation).updateProfile(monitor);
+  }
+
+  private static void simulateEscapeKey()
+  {
+    Display display = UIUtil.getDisplay();
+  
+    Event event = new Event();
+    event.type = SWT.KeyDown;
+    event.character = SWT.ESC;
+    display.post(event);
+  
+    try
+    {
+      Thread.sleep(10);
+    }
+    catch (InterruptedException ex)
+    {
+    }
+  
+    event.type = SWT.KeyUp;
+    display.post(event);
+    display.post(event);
+  
+    try
+    {
+      Thread.sleep(10);
+    }
+    catch (InterruptedException ex)
+    {
+    }
   }
 
   /**
