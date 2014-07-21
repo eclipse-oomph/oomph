@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
 
 import java.io.File;
 import java.util.HashMap;
@@ -61,6 +62,8 @@ public class BasicProjectAnalyzer<T>
     {
       throw new OperationCanceledException();
     }
+
+    SubMonitor progress = SubMonitor.convert(monitor, 10);
 
     IProject project = ResourcesFactory.eINSTANCE.loadProject(folder);
     if (ResourcesUtil.matchesPredicates(project, predicates))
@@ -112,15 +115,25 @@ public class BasicProjectAnalyzer<T>
       {
         log(folder, ex);
       }
+
+      progress.worked(1);
     }
     else if (!locateNestedProjects && project != null)
     {
+      progress.worked(10);
       return;
     }
 
+    analyzeRecursive(folder, predicates, locateNestedProjects, results, visitor, progress.newChild(9));
+  }
+
+  private void analyzeRecursive(File folder, EList<Predicate> predicates, boolean locateNestedProjects, Map<T, File> results, ProjectVisitor<T> visitor,
+      IProgressMonitor monitor)
+  {
     File[] listFiles = folder.listFiles();
     if (listFiles != null)
     {
+      SubMonitor progress = SubMonitor.convert(monitor, listFiles.length);
       for (int i = 0; i < listFiles.length; i++)
       {
         File file = listFiles[i];
@@ -128,12 +141,16 @@ public class BasicProjectAnalyzer<T>
         {
           try
           {
-            analyze(file, predicates, locateNestedProjects, results, visitor, monitor);
+            analyze(file, predicates, locateNestedProjects, results, visitor, progress.newChild(1));
           }
           catch (Exception ex)
           {
             log(file, ex);
           }
+        }
+        else
+        {
+          progress.worked(1);
         }
       }
     }
