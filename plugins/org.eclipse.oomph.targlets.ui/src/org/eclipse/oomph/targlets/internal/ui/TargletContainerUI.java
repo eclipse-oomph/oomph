@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.ui;
 
+import org.eclipse.oomph.p2.internal.core.P2Index;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
@@ -23,6 +24,8 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -37,11 +40,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -131,12 +138,12 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
   private static void simulateEscapeKey()
   {
     Display display = UIUtil.getDisplay();
-  
+
     Event event = new Event();
     event.type = SWT.KeyDown;
     event.character = SWT.ESC;
     display.post(event);
-  
+
     try
     {
       Thread.sleep(10);
@@ -144,11 +151,11 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     catch (InterruptedException ex)
     {
     }
-  
+
     event.type = SWT.KeyUp;
     display.post(event);
     display.post(event);
-  
+
     try
     {
       Thread.sleep(10);
@@ -163,6 +170,8 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
    */
   private class ContainerContentProvider implements ITreeContentProvider
   {
+    private StatusWrapper missingIUInfo;
+
     public ContainerContentProvider()
     {
     }
@@ -194,16 +203,48 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
           if (updateProblem != null)
           {
             IStatus status = updateProblem.toStatus();
-            children.add(status);
-
-            // TODO Uncomment when bug 429373 is fixed
-            // children.add(updateProblem);
-            // parents.put(updateProblem, location);
+            children.add(new StatusWrapper(status));
 
             if (descriptor.getWorkingDigest() != null)
             {
-              IStatus info = TargletsUIPlugin.INSTANCE.getStatus("Location content is available from the last working profile.");
-              children.add(info);
+              children.add(new StatusWrapper("Content is available from the last working profile"));
+            }
+
+            try
+            {
+              if (updateProblem instanceof UpdateProblem.MissingIU)
+              {
+                if (missingIUInfo == null)
+                {
+                  UpdateProblem.MissingIU missingIU = (UpdateProblem.MissingIU)updateProblem;
+
+                  VersionRange range = new VersionRange(missingIU.getRange());
+                  Set<P2Index.Repository> repositories = new HashSet<P2Index.Repository>();
+
+                  Map<P2Index.Repository, Set<Version>> simpleResult = P2Index.INSTANCE.lookupCapabilities(missingIU.getNamespace(), missingIU.getName());
+                  collectRepositories(simpleResult, range, repositories);
+
+                  Map<P2Index.Repository, Set<Version>> composedResult = P2Index.INSTANCE.generateCapabilitiesFromComposedRepositories(simpleResult);
+                  collectRepositories(composedResult, range, repositories);
+
+                  if (!repositories.isEmpty())
+                  {
+                    missingIUInfo = new StatusWrapper("Found " + repositories.size() + " " + "repositories that satisfy " + missingIU.getNamespace() + "/"
+                        + missingIU.getName() + " " + missingIU.getRange());
+                    for (P2Index.Repository repository : repositories)
+                    {
+                      missingIUInfo.addChild(new StatusWrapper(repository.getLocation().toString() + "  (" + (repository.isComposed() ? "composed" : "simple")
+                          + ": " + repository.getCapabilityCount()));
+                    }
+                  }
+                }
+
+                children.add(missingIUInfo);
+              }
+            }
+            catch (Exception ex)
+            {
+              TargletsUIPlugin.INSTANCE.log(ex);
             }
           }
           else
@@ -229,6 +270,21 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     public Object getParent(Object element)
     {
       return null;
+    }
+
+    private void collectRepositories(Map<P2Index.Repository, Set<Version>> result, VersionRange range, Set<P2Index.Repository> repositories)
+    {
+      for (Map.Entry<P2Index.Repository, Set<Version>> entry : result.entrySet())
+      {
+        for (Version version : entry.getValue())
+        {
+          if (range.isIncluded(version))
+          {
+            repositories.add(entry.getKey());
+            break;
+          }
+        }
+      }
     }
   }
 
@@ -275,6 +331,111 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
       }
 
       return super.getText(element);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class StatusWrapper implements ITreeContentProvider, ILabelProvider
+  {
+    private final int severity;
+
+    private final String message;
+
+    private final List<StatusWrapper> children = new ArrayList<StatusWrapper>();
+
+    public StatusWrapper(int severity, String message)
+    {
+      this.severity = severity;
+      this.message = message;
+    }
+
+    public StatusWrapper(IStatus delegate)
+    {
+      this(delegate.getSeverity(), delegate.getMessage());
+
+      for (IStatus child : delegate.getChildren())
+      {
+        children.add(new StatusWrapper(child));
+      }
+    }
+
+    public StatusWrapper(String message)
+    {
+      this(IStatus.INFO, message);
+    }
+
+    public void addChild(StatusWrapper child)
+    {
+      children.add(child);
+    }
+
+    public void dispose()
+    {
+    }
+
+    public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
+    {
+    }
+
+    public Object[] getElements(Object inputElement)
+    {
+      return getChildren(inputElement);
+    }
+
+    public Object[] getChildren(Object parentElement)
+    {
+      return children.toArray();
+    }
+
+    public Object getParent(Object element)
+    {
+      return null;
+    }
+
+    public boolean hasChildren(Object element)
+    {
+      return !children.isEmpty();
+    }
+
+    public void addListener(ILabelProviderListener listener)
+    {
+    }
+
+    public boolean isLabelProperty(Object element, String property)
+    {
+      return false;
+    }
+
+    public void removeListener(ILabelProviderListener listener)
+    {
+    }
+
+    public Image getImage(Object element)
+    {
+      if (severity == IStatus.WARNING)
+      {
+        return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
+      }
+
+      if (severity == IStatus.ERROR)
+      {
+        return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+      }
+
+      return TargletsUIPlugin.INSTANCE.getSWTImage("info");
+    }
+
+    public String getText(Object element)
+    {
+      return message;
+    }
+
+    @Override
+    public String toString()
+    {
+      return message;
     }
   }
 
