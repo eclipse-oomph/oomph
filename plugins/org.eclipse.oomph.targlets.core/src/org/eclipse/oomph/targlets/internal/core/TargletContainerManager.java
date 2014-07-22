@@ -333,7 +333,7 @@ public final class TargletContainerManager
     }
   }
 
-  private static Set<String> getContainerIDs(IProgressMonitor monitor)
+  public static Set<String> getContainerIDs(IProgressMonitor monitor)
   {
     ITargetPlatformService service = null;
 

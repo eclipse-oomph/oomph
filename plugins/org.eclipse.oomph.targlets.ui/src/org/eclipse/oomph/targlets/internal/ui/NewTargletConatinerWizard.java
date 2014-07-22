@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
@@ -20,40 +20,38 @@ import org.eclipse.pde.ui.target.ITargetLocationWizard;
 /**
  * @author Eike Stepper
  */
-public class NewTargletWizard extends Wizard implements ITargetLocationWizard
+public class NewTargletConatinerWizard extends Wizard implements ITargetLocationWizard
 {
-  private ITargetDefinition target;
+  private TargletContainer targletContainer;
 
-  private TargletContainer targlet;
+  private NewTargletContainerWizardPage page;
 
-  private TargletWizardPage page;
-
-  public NewTargletWizard()
+  public NewTargletConatinerWizard()
   {
-    setWindowTitle("Add Targlet");
+    setWindowTitle("Add Targlet Container");
   }
 
   public void setTarget(ITargetDefinition target)
   {
-    this.target = target;
   }
 
   @Override
   public void addPages()
   {
-    page = new TargletWizardPage(target);
+    page = new NewTargletContainerWizardPage();
     addPage(page);
   }
 
   @Override
   public boolean performFinish()
   {
-    targlet = page.getBundleContainer();
+    String containerID = page.getContainerID();
+    targletContainer = new TargletContainer(containerID);
     return true;
   }
 
   public ITargetLocation[] getLocations()
   {
-    return new ITargetLocation[] { targlet };
+    return new ITargetLocation[] { targletContainer };
   }
 }
