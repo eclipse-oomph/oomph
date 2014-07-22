@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.Stack;
 
 /**
  * @author Eike Stepper
@@ -36,6 +37,17 @@ import java.net.URI;
 @SuppressWarnings("restriction")
 public class CachingTransport extends Transport
 {
+  private static final boolean DEBUG = true;
+
+  private static final ThreadLocal<Stack<String>> REPOSITORY_LOCATIONS = new InheritableThreadLocal<Stack<String>>()
+  {
+    @Override
+    protected Stack<String> initialValue()
+    {
+      return new Stack<String>();
+    }
+  };
+
   private final Agent agent;
 
   private final Transport delegate;
@@ -60,7 +72,13 @@ public class CachingTransport extends Transport
   @Override
   public IStatus download(URI uri, OutputStream target, long startPos, IProgressMonitor monitor)
   {
-    if (agent.isOffline())
+    if (DEBUG)
+    {
+      log("  ! " + uri);
+    }
+
+    boolean loadingRepository = isLoadingRepository(uri);
+    if (loadingRepository && agent.isOffline())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -87,12 +105,15 @@ public class CachingTransport extends Transport
       byte[] content = ((ByteArrayOutputStream)target).toByteArray();
       IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
 
-      File cacheFile = getCacheFile(uri);
-      IOUtil.writeFile(cacheFile, content);
+      if (loadingRepository)
+      {
+        File cacheFile = getCacheFile(uri);
+        IOUtil.writeFile(cacheFile, content);
 
-      DownloadStatus downloadStatus = (DownloadStatus)status;
-      long lastModified = downloadStatus.getLastModified();
-      cacheFile.setLastModified(lastModified);
+        DownloadStatus downloadStatus = (DownloadStatus)status;
+        long lastModified = downloadStatus.getLastModified();
+        cacheFile.setLastModified(lastModified);
+      }
     }
 
     return status;
@@ -113,7 +134,13 @@ public class CachingTransport extends Transport
   @Override
   public long getLastModified(URI uri, IProgressMonitor monitor) throws CoreException, FileNotFoundException, AuthenticationFailedException
   {
-    if (agent.isOffline())
+    if (DEBUG)
+    {
+      log("  ? " + uri);
+    }
+
+    boolean loadingRepository = isLoadingRepository(uri);
+    if (loadingRepository && agent.isOffline())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -123,7 +150,7 @@ public class CachingTransport extends Transport
 
       try
       {
-        return delegate.getLastModified(uri, monitor);
+        return delegateGetLastModified(uri, monitor);
       }
       catch (FileNotFoundException ex)
       {
@@ -139,6 +166,70 @@ public class CachingTransport extends Transport
       }
     }
 
-    return delegate.getLastModified(uri, monitor);
+    return delegateGetLastModified(uri, monitor);
+  }
+
+  private long delegateGetLastModified(URI uri, IProgressMonitor monitor) throws CoreException, FileNotFoundException, AuthenticationFailedException
+  {
+    long lastModified = delegate.getLastModified(uri, monitor);
+
+    File cacheFile = getCacheFile(uri);
+    if (!cacheFile.exists() || cacheFile.lastModified() != lastModified)
+    {
+      return 1;
+    }
+
+    return lastModified;
+  }
+
+  private boolean isLoadingRepository(URI uri)
+  {
+    String location = org.eclipse.emf.common.util.URI.createURI(uri.toString()).trimSegments(1).toString();
+
+    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    return !stack.isEmpty() && stack.peek().equals(location);
+  }
+
+  static void startLoadingRepository(URI location)
+  {
+    String uri = location.toString();
+    if (uri.endsWith("/"))
+    {
+      uri = uri.substring(0, uri.length() - 1);
+    }
+
+    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    stack.push(uri);
+
+    if (DEBUG && !uri.startsWith("file:"))
+    {
+      log("--> " + location);
+    }
+  }
+
+  static void stopLoadingRepository()
+  {
+    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    if (DEBUG && !stack.isEmpty())
+    {
+      String location = stack.peek();
+      if (!location.startsWith("file:"))
+      {
+        log("<-- " + location);
+      }
+    }
+
+    stack.pop();
+  }
+
+  private static void log(String message)
+  {
+    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    for (int i = 1; i < stack.size(); i++)
+    {
+      message = "   " + message;
+    }
+
+    System.out.println(message);
   }
 }

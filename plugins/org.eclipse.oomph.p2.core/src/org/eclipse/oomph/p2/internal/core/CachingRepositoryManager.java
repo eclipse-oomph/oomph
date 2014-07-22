@@ -102,7 +102,9 @@ public class CachingRepositoryManager<T>
 
     try
     {
+      CachingTransport.startLoadingRepository(location);
       enterLoad(location, sub.newChild(5));
+
       result = basicGetRepository(location);
       if (result != null)
       {
@@ -191,6 +193,7 @@ public class CachingRepositoryManager<T>
     }
     finally
     {
+      CachingTransport.stopLoadingRepository();
       exitLoad(location);
     }
 
