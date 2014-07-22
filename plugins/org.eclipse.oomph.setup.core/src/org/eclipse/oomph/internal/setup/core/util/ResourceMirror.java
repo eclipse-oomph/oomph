@@ -425,6 +425,7 @@ public class ResourceMirror
       {
         ResourceSet resourceSet = getResourceSet();
         resourceSets.add(resourceSet);
+
         int total = 0;
         for (ResourceSet rs : resourceSets)
         {
@@ -433,7 +434,14 @@ public class ResourceMirror
 
         monitor.subTask("Loading " + resource.getURI());
         monitor.worked(1);
-        monitor.setTaskName(taskName + ++counter + " of " + total);
+
+        ++counter;
+        if (total < counter)
+        {
+          total = counter;
+        }
+
+        monitor.setTaskName(taskName + counter + " of " + total);
       }
     };
 
