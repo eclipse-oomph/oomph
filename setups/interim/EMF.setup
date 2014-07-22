@@ -53,28 +53,16 @@
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
-      name="tp.materialization.url"
-      label="Target Platform">
-    <choice
-        value="http://download.eclipse.org/releases/galileo"
-        label="Galileo - 3.5"/>
-    <choice
-        value="http://download.eclipse.org/releases/helios"
-        label="Helios - 3.6"/>
-    <choice
-        value="http://download.eclipse.org/releases/indigo"
-        label="Indigo - 3.7"/>
-    <choice
-        value="http://download.eclipse.org/releases/juno"
-        label="Juno - 4.2"/>
-    <choice
-        value="http://download.eclipse.org/releases/kepler"
-        label="Kepler - 4.3"/>
-    <choice
-        value="http://download.eclipse.org/releases/luna"
-        label="Luna - 4.4"/>
-    <description>The release train repository location that will be used to materialize a target platform.  EMF and XSD are built and tested with Eclipse 3.5, i.e., Galileo.</description>
-  </setupTask>
+      name="gwt.tool.url"
+      value="https://dl.google.com/eclipse/plugin/4.3"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="xtext.nightly.composite"
+      value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.target.platform"
+      defaultValue="Luna"/>
   <setupTask
       xsi:type="git:GitCloneTask"
       id="emf.git.clone"
@@ -95,6 +83,146 @@
       </detail>
     </annotation>
     <description>EMF</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.targlets:TargletTask">
+    <targlet
+        name="EMF Target Platform"
+        activeRepositoryList="${eclipse.target.platform}">
+      <requirement
+          id="org.eclipse.platform.feature.group"/>
+      <requirement
+          id="org.eclipse.jdt.feature.group"/>
+      <requirement
+          id="org.eclipse.pde.feature.group"/>
+      <requirement
+          id="org.eclipse.equinox.executable.feature.group"/>
+      <repositoryList
+          name="Mars">
+        <repository
+            url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+        <repository
+            url="http://download.itemis.com/updates/releases/2.1.0/"/>
+        <repository
+            url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
+        <repository
+            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+      </repositoryList>
+      <repositoryList
+          name="Luna">
+        <repository
+            url="http://download.eclipse.org/releases/luna"/>
+        <repository
+            url="${xtext.nightly.composite}"/>
+        <repository
+            url="http://download.itemis.com/updates/releases/2.1.0/"/>
+        <repository
+            url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
+        <repository
+            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+        <repository
+            url="http://download.eclipse.org/rt/rap/2.2"/>
+        <repository
+            url="${gwt.tool.url}"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
+        <repository
+            url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+      </repositoryList>
+      <repositoryList
+          name="Kepler">
+        <repository
+            url="${xtext.nightly.composite}"/>
+        <repository
+            url="http://download.itemis.com/updates/releases/2.1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
+        <repository
+            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+      </repositoryList>
+      <repositoryList
+          name="Juno">
+        <repository
+            url="${xtext.nightly.composite}"/>
+        <repository
+            url="http://download.itemis.com/updates/releases/2.1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
+        <repository
+            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+      </repositoryList>
+      <repositoryList
+          name="Indigo">
+        <repository
+            url="${xtext.nightly.composite}"/>
+        <repository
+            url="http://download.itemis.com/updates/releases/2.1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
+        <repository
+            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+      </repositoryList>
+      <repositoryList
+          name="Helios">
+        <repository
+            url="${xtext.nightly.composite}"/>
+        <repository
+            url="http://download.itemis.com/updates/releases/2.1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
+        <repository
+            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+      </repositoryList>
+      <repositoryList
+          name="Galileo">
+        <repository
+            url="${xtext.nightly.composite}"/>
+        <repository
+            url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+        <repository
+            url="http://download.itemis.com/updates/releases/2.1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
+        <repository
+            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
+        <repository
+            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+      </repositoryList>
+    </targlet>
   </setupTask>
   <project name="core"
       label="Core">
@@ -128,25 +256,8 @@
             id="org.eclipse.emf.base.build.feature.group"/>
         <requirement
             id="org.eclipse.emf.tests.feature.group"/>
-        <requirement
-            id="org.eclipse.platform.feature.group"/>
-        <requirement
-            id="org.eclipse.jdt.feature.group"/>
-        <requirement
-            id="org.eclipse.pde.feature.group"/>
-        <requirement
-            id="org.eclipse.equinox.executable.feature.group"/>
         <sourceLocator
             rootFolder="${emf.git.clone.location}"/>
-        <repositoryList
-            name="Dependencies">
-          <repository
-              url="${tp.materialization.url}"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-          <repository
-              url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
-        </repositoryList>
       </targlet>
     </setupTask>
     <setupTask
@@ -392,20 +503,7 @@
               xsi:type="predicates:NamePredicate"
               pattern=".*\.xcore.*|.*\.xtext.*"/>
         </sourceLocator>
-        <repositoryList>
-          <repository
-              url="${tp.materialization.url}"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
-          <repository
-              url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
-          <repository
-              url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
-          <repository
-              url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
-        </repositoryList>
+        <repositoryList/>
       </targlet>
     </setupTask>
     <setupTask
@@ -490,10 +588,6 @@
           id="org.eclipse.emf.sdk.feature.group"/>
     </setupTask>
     <setupTask
-        xsi:type="setup:VariableTask"
-        name="gwt.tool.url"
-        value="https://dl.google.com/eclipse/plugin/4.3"/>
-    <setupTask
         xsi:type="setup.p2:P2Task">
       <requirement
           id="com.google.gdt.eclipse.suite.e43.feature.feature.group"/>
@@ -517,11 +611,6 @@
             id="org.eclipse.emf.gwt.sdk.feature.group"/>
         <sourceLocator
             rootFolder="${emf.git.clone.location}"/>
-        <repositoryList
-            name="Dependencies">
-          <repository
-              url="${gwt.tool.url}"/>
-        </repositoryList>
       </targlet>
     </setupTask>
     <setupTask
@@ -541,7 +630,7 @@
               pattern=".*\.gwt.*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='gwt']/@setupTasks.6/@workingSets.2"/>
+              excludedWorkingSet="//@projects[name='gwt']/@setupTasks.5/@workingSets.2"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -617,15 +706,6 @@
               xsi:type="predicates:NamePredicate"
               pattern=".*\.rap.*"/>
         </sourceLocator>
-        <repositoryList
-            name="Dependencies">
-          <repository
-              url="${tp.materialization.url}"/>
-          <repository
-              url="http://download.eclipse.org/rt/rap/2.2"/>
-          <repository
-              url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
-        </repositoryList>
       </targlet>
     </setupTask>
     <setupTask

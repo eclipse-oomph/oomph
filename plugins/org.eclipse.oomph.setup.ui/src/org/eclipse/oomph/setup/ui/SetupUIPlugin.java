@@ -153,6 +153,7 @@ public final class SetupUIPlugin extends AbstractOomphUIPlugin
                 {
                   monitor.beginTask("Determing tasks to be performed", IProgressMonitor.UNKNOWN);
                   performStartup(workbench, monitor);
+                  monitor.done();
                   return Status.OK_STATUS;
                 }
               }.schedule();

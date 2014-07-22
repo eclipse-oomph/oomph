@@ -10,6 +10,10 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
+import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.VersionSegment;
+
+import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.OSGiVersion;
 import org.eclipse.equinox.internal.p2.metadata.RequiredCapability;
@@ -32,6 +36,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -40,9 +45,45 @@ public interface IUGenerator
 {
   public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source";
 
-  public static final SimpleDateFormat QUALIFIER_FORMAT = new SimpleDateFormat("'v'yyyyMMdd-HHmmss");
+  public static final class VersionGenerator
+  {
+    private static final String QUALIFIER = "qualifier";
 
-  public IInstallableUnit generateIU(File location) throws Exception;
+    private static final String QUALIFIER_SUFFIX = "." + QUALIFIER;
+
+    private static final int QUALIFIER_LENGTH = QUALIFIER.length();
+
+    public static String generateQualifierReplacement()
+    {
+      return new SimpleDateFormat("'v'yyyyMMdd-HHmmss").format(new Date());
+    }
+
+    public static String replaceQualifier(String version, String qualifierReplacement)
+    {
+      if (version != null && qualifierReplacement != null && version.endsWith(QUALIFIER_SUFFIX))
+      {
+        int length = version.length();
+        StringBuilder result = new StringBuilder(length - QUALIFIER_LENGTH + qualifierReplacement.length());
+        result.append(version, 0, length - QUALIFIER_LENGTH);
+        result.append(qualifierReplacement);
+        version = result.toString();
+      }
+
+      return version;
+    }
+
+    public static Version replaceQualifier(Version version, String qualifierReplacement)
+    {
+      if (version != null && version.isOSGiCompatible())
+      {
+        version = Version.create(replaceQualifier(version.toString(), qualifierReplacement));
+      }
+
+      return version;
+    }
+  }
+
+  public IInstallableUnit generateIU(File location, String qualifierReplacement, Map<String, Version> ius) throws Exception;
 
   /**
    * @author Eike Stepper
@@ -57,7 +98,7 @@ public interface IUGenerator
       setPublisherInfo(new PublisherInfo());
     }
 
-    public IInstallableUnit generateIU(File location) throws Exception
+    public IInstallableUnit generateIU(File location, String qualifierReplacement, Map<String, Version> ius) throws Exception
     {
       Dictionary<String, String> manifest = loadManifest(location);
       if (manifest == null)
@@ -66,12 +107,7 @@ public interface IUGenerator
       }
 
       String version = manifest.get(org.osgi.framework.Constants.BUNDLE_VERSION);
-      if (version.endsWith(".qualifier"))
-      {
-        version = version.substring(0, version.length() - "qualifier".length());
-        version += QUALIFIER_FORMAT.format(new Date());
-        manifest.put(org.osgi.framework.Constants.BUNDLE_VERSION, version);
-      }
+      manifest.put(org.osgi.framework.Constants.BUNDLE_VERSION, VersionGenerator.replaceQualifier(version, qualifierReplacement));
 
       BundleDescription description = createBundleDescription(manifest, location);
       if (description == null)
@@ -107,7 +143,7 @@ public interface IUGenerator
       setPublisherInfo(new PublisherInfo());
     }
 
-    public IInstallableUnit generateIU(File location) throws Exception
+    public IInstallableUnit generateIU(File location, String qualifierReplacement, final Map<String, Version> ius) throws Exception
     {
       Feature[] features = getFeatures(new File[] { location });
       if (features == null || features.length == 0)
@@ -118,12 +154,8 @@ public interface IUGenerator
       Feature feature = features[0];
 
       String version = feature.getVersion();
-      if (version.endsWith(".qualifier"))
-      {
-        version = version.substring(0, version.length() - "qualifier".length());
-        version += QUALIFIER_FORMAT.format(new Date());
-        feature.setVersion(version);
-      }
+      feature.getId();
+      feature.setVersion(VersionGenerator.replaceQualifier(version, qualifierReplacement));
 
       List<IInstallableUnit> childIUs = Collections.emptyList();
       InstallableUnit iu = (InstallableUnit)createGroupIU(feature, childIUs, info);
@@ -166,28 +198,126 @@ public interface IUGenerator
       }
 
       // Adjust childIU requirements to support possible .qualifier specifications
-      for (int i = 0; i < size; i++)
+      if (qualifierReplacement != null)
       {
-        IRequirement requirement = requirements.get(i);
-        if (requirement instanceof RequiredCapability)
+        for (int i = 0; i < size; i++)
         {
-          RequiredCapability capability = (RequiredCapability)requirement;
-          VersionRange range = adjustQualifier(capability.getRange());
-          if (range != null)
+          IRequirement requirement = requirements.get(i);
+          if (requirement instanceof RequiredCapability)
           {
-            String namespace = capability.getNamespace();
-            String name = capability.getName();
-            IMatchExpression<IInstallableUnit> filter = capability.getFilter();
-            boolean optional = capability.getMin() == 0;
-            boolean multiple = capability.getMax() > 1;
-            requirement = MetadataFactory.createRequirement(namespace, name, range, filter, optional, multiple);
+            RequiredCapability capability = (RequiredCapability)requirement;
+            final VersionRange originalRange = capability.getRange();
+            final VersionRange adjustedRange = adjustQualifier(originalRange);
+            final String namespace = capability.getNamespace();
+            final String name = capability.getName();
+            final IMatchExpression<IInstallableUnit> filter = capability.getFilter();
+            final boolean optional = capability.getMin() == 0;
+            final boolean multiple = capability.getMax() > 1;
+            if (adjustedRange != null)
+            {
+              requirement = MetadataFactory.createRequirement(namespace, name, adjustedRange, filter, optional, multiple);
+            }
+            else
+            {
+              requirement = new IRequiredCapability()
+              {
+                private IRequirement delegate;
+
+                private VersionRange versionRange;
+
+                private IRequirement getDelegate()
+                {
+                  if (delegate == null)
+                  {
+                    delegate = MetadataFactory.createRequirement(namespace, name, getRange(), filter, optional, multiple);
+                  }
+
+                  return delegate;
+                }
+
+                public String getName()
+                {
+                  return name;
+                }
+
+                public String getNamespace()
+                {
+                  return namespace;
+                }
+
+                public VersionRange getRange()
+                {
+                  if (versionRange == null)
+                  {
+                    Version version = ius.get(name);
+                    if (version != null)
+                    {
+                      versionRange = P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MICRO);
+                    }
+                    else
+                    {
+                      versionRange = originalRange;
+                    }
+                  }
+
+                  return versionRange;
+                }
+
+                public int getMin()
+                {
+                  return getDelegate().getMin();
+                }
+
+                public int getMax()
+                {
+                  return getDelegate().getMax();
+                }
+
+                public IMatchExpression<IInstallableUnit> getFilter()
+                {
+                  return getDelegate().getFilter();
+                }
+
+                public IMatchExpression<IInstallableUnit> getMatches()
+                {
+                  return getDelegate().getMatches();
+                }
+
+                public boolean isMatch(IInstallableUnit iu)
+                {
+                  return getDelegate().isMatch(iu);
+                }
+
+                public boolean isGreedy()
+                {
+                  return getDelegate().isGreedy();
+                }
+
+                public String getDescription()
+                {
+                  return getDelegate().getDescription();
+                }
+
+                @Override
+                public String toString()
+                {
+                  if (delegate != null)
+                  {
+                    return delegate.toString();
+                  }
+
+                  return name + " " + versionRange;
+                }
+              };
+            }
           }
+
+          newRequirements[i] = requirement;
         }
 
-        newRequirements[i] = requirement;
+        iu.setRequiredCapabilities(newRequirements);
       }
 
-      iu.setRequiredCapabilities(newRequirements);
       iu.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
       return iu;
     }

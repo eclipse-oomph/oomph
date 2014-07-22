@@ -4,6 +4,8 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"
     name="org.eclipse"
     label="Eclipse.org">
   <setupTask
@@ -87,6 +89,37 @@
       <description>Choose from the available Gerrit or Git URIs</description>
     </setupTask>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.target.platform"
+        defaultValue="None"
+        label="Target Platform">
+      <choice
+          value="Mars"
+          label="Eclipse Mars - 4.5"/>
+      <choice
+          value="Luna"
+          label="Eclipse Luna - 4.4"/>
+      <choice
+          value="Kepler"
+          label="Eclipse Kepler - 4.3"/>
+      <choice
+          value="Juno"
+          label="Eclipse Juno - 4.2"/>
+      <choice
+          value="Indigo"
+          label="Eclipse Indigo - 3.7"/>
+      <choice
+          value="Helios"
+          label="Eclipse Helios - 3.6"/>
+      <choice
+          value="Galileo"
+          label="Eclipse Galileo - 3.5"/>
+      <choice
+          value="None"
+          label="None"/>
+      <description>Choose the compatibly level for the target platform.</description>
+    </setupTask>
+    <setupTask
         xsi:type="setup:CompoundTask"
         name="Github">
       <setupTask
@@ -135,13 +168,58 @@
       <substitution>${workspace.location|path}</substitution>
     </modification>
   </setupTask>
+  <setupTask
+      xsi:type="setup.targlets:TargletTask">
+    <targlet
+        name="Eclipse Platform"
+        activeRepositoryList="${eclipse.target.platform}">
+      <repositoryList
+          name="None"/>
+      <repositoryList
+          name="Mars">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.5"/>
+      </repositoryList>
+      <repositoryList
+          name="Luna">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.4"/>
+      </repositoryList>
+      <repositoryList
+          name="Kepler">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.3"/>
+      </repositoryList>
+      <repositoryList
+          name="Juno">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.2"/>
+      </repositoryList>
+      <repositoryList
+          name="Indigo">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/3.7"/>
+      </repositoryList>
+      <repositoryList
+          name="Helios">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/3.6"/>
+      </repositoryList>
+      <repositoryList
+          name="Galileo">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/3.5"/>
+      </repositoryList>
+    </targlet>
+  </setupTask>
   <project href="user:/org.eclipse.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Eclipse.org project catalog'#/"/>
-  <project href="oomph.setup#/"/>
+  <project href="Oomph.setup#/"/>
+  <project href="interim/EGit.setup#/"/>
   <project href="interim/E4Tools.setup#/"/>
   <project href="interim/EMF.setup#/"/>
   <project href="interim/XSD.setup#/"/>
   <project href="interim/code.recommenders.setup#/"/>
-  <project href="interim/xtext.setup#/"/>
+  <project href="interim/Xtext.setup#/"/>
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
   <description>All the projects at Eclipse.org that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>

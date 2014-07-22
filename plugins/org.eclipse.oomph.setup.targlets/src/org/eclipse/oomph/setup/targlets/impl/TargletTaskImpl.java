@@ -374,12 +374,9 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     for (Targlet targlet : copyTarglets)
     {
-      for (RepositoryList repositoryList : targlet.getRepositoryLists())
+      for (Repository p2Repository : targlet.getActiveRepositories())
       {
-        for (Repository p2Repository : repositoryList.getRepositories())
-        {
-          context.log("Using " + p2Repository.getURL());
-        }
+        context.log("Using " + p2Repository.getURL());
       }
     }
 

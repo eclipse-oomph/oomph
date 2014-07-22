@@ -66,7 +66,7 @@ public class BasicProjectAnalyzer<T>
     SubMonitor progress = SubMonitor.convert(monitor, 10);
 
     IProject project = ResourcesFactory.eINSTANCE.loadProject(folder);
-    if (ResourcesUtil.matchesPredicates(project, predicates))
+    if (project != null && ResourcesUtil.matchesPredicates(project, predicates))
     {
       try
       {

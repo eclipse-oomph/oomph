@@ -27,48 +27,63 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
 
 import org.w3c.dom.Element;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Eike Stepper
  */
 public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
 {
-  private final Set<String> ids = new HashSet<String>();
+  private final String qualifierReplacement;
+
+  private final Map<String, Version> ius = new HashMap<String, Version>();
 
   public IUAnalyzer()
   {
+    qualifierReplacement = IUGenerator.VersionGenerator.generateQualifierReplacement();
   }
 
-  public Set<String> getIDs()
+  public IUAnalyzer(String qualifierReplacement)
   {
-    return ids;
+    this.qualifierReplacement = qualifierReplacement;
+  }
+
+  public Map<String, Version> getIUs()
+  {
+    return ius;
+  }
+
+  public String getQualifierReplacement()
+  {
+    return qualifierReplacement;
   }
 
   public Map<IInstallableUnit, File> analyze(File folder, EList<Predicate> predicates, boolean locateNestedProjects, IProgressMonitor monitor)
   {
-    ProjectVisitor<IInstallableUnit> visitor = new IUVisitor();
+    ProjectVisitor<IInstallableUnit> visitor = new IUVisitor(qualifierReplacement, ius);
     return analyze(folder, predicates, locateNestedProjects, visitor, monitor);
   }
 
   @Override
   protected IInstallableUnit filter(IInstallableUnit iu)
   {
-    ids.add(iu.getId());
+    ius.put(iu.getId(), iu.getVersion());
     return iu;
   }
 
@@ -77,18 +92,28 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
    */
   public static class IUVisitor extends BasicProjectVisitor<IInstallableUnit>
   {
+    private String qualifierReplacement;
+
+    private Map<String, Version> ius;
+
+    public IUVisitor(String qualifierReplacement, Map<String, Version> ius)
+    {
+      this.qualifierReplacement = qualifierReplacement;
+      this.ius = ius;
+    }
+
     @Override
     public IInstallableUnit visitPlugin(File manifestFile, IProgressMonitor monitor) throws Exception
     {
       File pluginFolder = manifestFile.getParentFile().getParentFile();
-      return BundleIUGenerator.INSTANCE.generateIU(pluginFolder);
+      return BundleIUGenerator.INSTANCE.generateIU(pluginFolder, qualifierReplacement, ius);
     }
 
     @Override
     public IInstallableUnit visitFeature(File featureFile, IProgressMonitor monitor) throws Exception
     {
       File featureFolder = featureFile.getParentFile();
-      return FeatureIUGenerator.INSTANCE.generateIU(featureFolder);
+      return FeatureIUGenerator.INSTANCE.generateIU(featureFolder, qualifierReplacement, ius);
     }
 
     @Override
@@ -96,7 +121,7 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
     protected IInstallableUnit visitComponentDefinition(ComponentDefinition componentDefinition, IProgressMonitor monitor) throws Exception
     {
       String id = componentDefinition.getID();
-      Version version = componentDefinition.getVersion();
+      Version version = IUGenerator.VersionGenerator.replaceQualifier(componentDefinition.getVersion(), qualifierReplacement);
 
       InstallableUnitDescription description = new InstallableUnitDescription();
       description.setId(id);
@@ -106,6 +131,11 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
       description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, id, version)));
       description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
       description.setArtifacts(new IArtifactKey[0]);
+      if (!id.endsWith(".feature.group"))
+      {
+        description.addProvidedCapabilities(Arrays.asList(new IProvidedCapability[] { BundlesAction.BUNDLE_CAPABILITY,
+            MetadataFactory.createProvidedCapability(BundlesAction.CAPABILITY_NS_OSGI_BUNDLE, id, version) }));
+      }
 
       IInstallableUnit iu = MetadataFactory.createInstallableUnit(description);
       visitComponentExtension(componentDefinition, iu, monitor);

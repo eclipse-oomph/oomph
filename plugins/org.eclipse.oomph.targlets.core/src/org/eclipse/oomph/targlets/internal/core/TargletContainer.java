@@ -681,6 +681,19 @@ public class TargletContainer extends AbstractBundleContainer
           boolean locateNestedProjects = sourceLocator.isLocateNestedProjects();
 
           Map<IInstallableUnit, File> ius = analyzer.analyze(rootFolder, predicates, locateNestedProjects, progress.newChild());
+
+          for (IInstallableUnit iu : ius.keySet())
+          {
+            for (Requirement requirement : roots)
+            {
+              if (VersionRange.emptyRange.equals(requirement.getVersionRange()) && requirement.getID().equals(iu.getId()))
+              {
+                Version version = iu.getVersion();
+                requirement.setVersionRange(P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MICRO));
+              }
+            }
+          }
+
           sources.putAll(ius);
         }
 
@@ -708,11 +721,11 @@ public class TargletContainer extends AbstractBundleContainer
             {
               if (metadata == null)
               {
-                Set<String> sourceIDs = analyzer.getIDs();
+                Map<String, Version> workspaceIUs = analyzer.getIUs();
 
                 List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
                 Map<String, IInstallableUnit> idToIUMap = new HashMap<String, IInstallableUnit>();
-                prepareSources(ius, sourceIDs, idToIUMap, monitor);
+                prepareSources(ius, workspaceIUs, idToIUMap, monitor);
 
                 IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
                 Set<IRequirement> licenseRequirements = new HashSet<IRequirement>();
@@ -780,7 +793,7 @@ public class TargletContainer extends AbstractBundleContainer
               return metadata;
             }
 
-            private Map<String, IInstallableUnit> prepareSources(List<IInstallableUnit> ius, Set<String> ids, Map<String, IInstallableUnit> idToIUMap,
+            private Map<String, IInstallableUnit> prepareSources(List<IInstallableUnit> ius, Map<String, Version> ids, Map<String, IInstallableUnit> idToIUMap,
                 IProgressMonitor monitor)
             {
               Map<IInstallableUnit, File> sourceSources = new HashMap<IInstallableUnit, File>();
@@ -803,7 +816,8 @@ public class TargletContainer extends AbstractBundleContainer
                 InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
                 String sourceID = id + ".source" + suffix;
                 description.setId(sourceID);
-                description.setVersion(iu.getVersion());
+                Version version = iu.getVersion();
+                description.setVersion(version);
 
                 for (Map.Entry<String, String> property : iu.getProperties().entrySet())
                 {
@@ -825,7 +839,7 @@ public class TargletContainer extends AbstractBundleContainer
 
                 IInstallableUnit sourceIU = MetadataFactory.createInstallableUnit(description);
                 ius.add(sourceIU);
-                ids.add(sourceID);
+                ids.put(sourceID, version);
 
                 idToIUMap.put(sourceID, sourceIU);
                 sourceSources.put(sourceIU, sources.get(iu));

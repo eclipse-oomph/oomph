@@ -124,6 +124,10 @@
       name="launcher.setup.ide.installation"
       value=""
       documentation="The folder location of the installation for the self hosting setup IDE."/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.target.platform"
+      defaultValue="Mars"/>
   <stream name="master">
     <setupTask
         xsi:type="setup:VariableTask"
@@ -159,7 +163,8 @@
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
-          name="Oomph">
+          name="Oomph"
+          activeRepositoryList="${eclipse.target.platform}">
         <annotation
             source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
           <detail
@@ -218,17 +223,7 @@
         <sourceLocator
             rootFolder="${git.clone.oomph.location}"/>
         <repositoryList
-            name="Luna Dependencies">
-          <repository
-              url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215">
-            <annotation
-                source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
-              <detail
-                  key="extraUnits">
-                <value>org.eclipse.equinox.executable.feature.group</value>
-              </detail>
-            </annotation>
-          </repository>
+            name="Mars">
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
           <repository
@@ -245,7 +240,41 @@
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
         <repositoryList
-            name="Juno Dependencies">
+            name="Luna">
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+          <repository
+              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+          <repository
+              url="http://download.eclipse.org/egit/updates"/>
+          <repository
+              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+          <repository
+              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+          <repository
+              url="http://download.eclipse.org/webtools/repository/luna"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+        </repositoryList>
+        <repositoryList
+            name="Kelper">
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+          <repository
+              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+          <repository
+              url="http://download.eclipse.org/egit/updates"/>
+          <repository
+              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+          <repository
+              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+          <repository
+              url="http://download.eclipse.org/webtools/repository/kepler"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+        </repositoryList>
+        <repositoryList
+            name="Juno">
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
           <repository
@@ -260,8 +289,6 @@
               url="http://download.eclipse.org/webtools/repository/juno"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-          <repository
-              url="http://download.eclipse.org/releases/juno"/>
         </repositoryList>
       </targlet>
     </setupTask>
