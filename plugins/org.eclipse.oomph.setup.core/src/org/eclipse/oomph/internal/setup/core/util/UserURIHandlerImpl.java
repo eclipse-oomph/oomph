@@ -42,7 +42,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public boolean canHandle(URI uri)
   {
-    return "user".equals(uri.scheme());
+    return SetupContext.USER_SCHEME.equals(uri.scheme());
   }
 
   private void create(URI uri, URI normalizedURI)
@@ -89,15 +89,10 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     }
   }
 
-  private URI normalize(URI uri)
-  {
-    return SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments());
-  }
-
   @Override
   public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = normalize(uri);
+    URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {
@@ -110,7 +105,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public OutputStream createOutputStream(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = normalize(uri);
+    URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
     return uriConverter.createOutputStream(normalizedURI, options);
   }
@@ -118,7 +113,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public void delete(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = normalize(uri);
+    URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
     uriConverter.delete(normalizedURI, options);
   }
@@ -126,7 +121,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public Map<String, ?> contentDescription(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = normalize(uri);
+    URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {
@@ -145,7 +140,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
-    URI normalizedURI = normalize(uri);
+    URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {
@@ -158,7 +153,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public void setAttributes(URI uri, Map<String, ?> attributes, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = normalize(uri);
+    URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {

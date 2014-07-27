@@ -11,18 +11,26 @@
 package org.eclipse.oomph.p2.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.VersionSegment;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -60,7 +68,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
     {
       super.getPropertyDescriptors(object);
 
-      addIDPropertyDescriptor(object);
+      addNamePropertyDescriptor(object);
+      addNamespacePropertyDescriptor(object);
       addVersionRangePropertyDescriptor(object);
       addOptionalPropertyDescriptor(object);
       addFeaturePropertyDescriptor(object);
@@ -69,16 +78,30 @@ public class RequirementItemProvider extends ModelElementItemProvider
   }
 
   /**
-   * This adds a property descriptor for the ID feature.
+   * This adds a property descriptor for the Name feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void addIDPropertyDescriptor(Object object)
+  protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_iD_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_iD_feature", "_UI_Requirement_type"),
-        P2Package.Literals.REQUIREMENT__ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_Requirement_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_name_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Namespace feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addNamespacePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Requirement_namespace_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_namespace_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__NAMESPACE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -121,6 +144,60 @@ public class RequirementItemProvider extends ModelElementItemProvider
         getString("_UI_Requirement_feature_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Requirement_feature_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__FEATURE,
         false, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  @Override
+  protected Collection<?> filterAlternatives(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> alternatives)
+  {
+    return super.filterAlternatives(domain, owner, location, operations, operation, filterAlternatives(alternatives));
+  }
+
+  public static Collection<?> filterAlternatives(Collection<?> alternatives)
+  {
+    Collection<Object> result = new ArrayList<Object>();
+    for (Object object : alternatives)
+    {
+      if (object instanceof Requirement)
+      {
+        Requirement requirement = (Requirement)object;
+
+        String namespace = requirement.getNamespace();
+        if ("osgi.bundle".equals(namespace))
+        {
+          requirement.setNamespace(IInstallableUnit.NAMESPACE_IU_ID);
+        }
+        else if (!"org.eclipse.equinox.p2.iu".equals(namespace) && !"java.package".equals(namespace))
+        {
+          continue;
+        }
+
+        VersionRange versionRange = requirement.getVersionRange();
+        if (versionRange != null)
+        {
+          Version minimum = versionRange.getMinimum();
+          if (minimum.toString().endsWith(".qualifier"))
+          {
+            VersionRange minimumVersionRange = P2Factory.eINSTANCE.createVersionRange(minimum, VersionSegment.MICRO);
+            requirement.setVersionRange(minimumVersionRange);
+          }
+        }
+      }
+
+      result.add(object);
+    }
+
+    return result;
+  }
+
+  @Override
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    if (feature == P2Package.Literals.REQUIREMENT__NAMESPACE)
+    {
+      return Arrays.asList(new String[] { "org.eclipse.equinox.p2.iu", "java.package" });
+    }
+
+    return super.filterChoices(choices, feature, object);
   }
 
   /**
@@ -169,7 +246,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     Requirement requirement = (Requirement)object;
-    String label = requirement.getID();
+    String label = requirement.getName();
     if (label == null || label.length() == 0)
     {
       label = getString("_UI_Requirement_type");
@@ -201,6 +278,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
     switch (notification.getFeatureID(Requirement.class))
     {
       case P2Package.REQUIREMENT__ID:
+      case P2Package.REQUIREMENT__NAME:
+      case P2Package.REQUIREMENT__NAMESPACE:
       case P2Package.REQUIREMENT__VERSION_RANGE:
       case P2Package.REQUIREMENT__OPTIONAL:
       case P2Package.REQUIREMENT__FEATURE:

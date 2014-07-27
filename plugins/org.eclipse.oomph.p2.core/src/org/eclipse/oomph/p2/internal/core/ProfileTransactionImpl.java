@@ -656,7 +656,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       P2CorePlugin.checkCancelation(monitor);
 
-      String id = requirement.getID();
+      String id = requirement.getName();
       VersionRange versionRange = requirement.getVersionRange();
       boolean optional = requirement.isOptional();
 
@@ -718,7 +718,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     Version version = rootIU.getVersion();
     for (Requirement requirement : cleanProfileDefinition.getRequirements())
     {
-      if (requirement.getID().equals(id))
+      if (requirement.getName().equals(id))
       {
         VersionRange versionRange = requirement.getVersionRange();
         if (versionRange.isIncluded(version))

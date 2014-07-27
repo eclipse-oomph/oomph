@@ -161,7 +161,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
               requirement.setVersionRange(versionRange);
             }
 
-            requirement.setID(iu.getId());
+            requirement.setName(iu.getId());
             requirements.add(requirement);
           }
         }

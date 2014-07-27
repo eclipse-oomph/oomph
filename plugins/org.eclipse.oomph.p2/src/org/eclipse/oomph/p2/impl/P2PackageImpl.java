@@ -250,7 +250,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRequirement_VersionRange()
+  public EAttribute getRequirement_Name()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(1);
   }
@@ -260,7 +260,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRequirement_Optional()
+  public EAttribute getRequirement_Namespace()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(2);
   }
@@ -270,9 +270,29 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRequirement_Feature()
+  public EAttribute getRequirement_VersionRange()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRequirement_Optional()
+  {
+    return (EAttribute)requirementEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRequirement_Feature()
+  {
+    return (EAttribute)requirementEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -427,6 +447,8 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
 
     requirementEClass = createEClass(REQUIREMENT);
     createEAttribute(requirementEClass, REQUIREMENT__ID);
+    createEAttribute(requirementEClass, REQUIREMENT__NAME);
+    createEAttribute(requirementEClass, REQUIREMENT__NAMESPACE);
     createEAttribute(requirementEClass, REQUIREMENT__VERSION_RANGE);
     createEAttribute(requirementEClass, REQUIREMENT__OPTIONAL);
     createEAttribute(requirementEClass, REQUIREMENT__FEATURE);
@@ -505,8 +527,12 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     addEParameter(op, getRepository(), "repositories", 0, -1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(requirementEClass, Requirement.class, "Requirement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getRequirement_ID(), ecorePackage.getEString(), "iD", null, 1, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRequirement_ID(), ecorePackage.getEString(), "iD", null, 1, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRequirement_Name(), ecorePackage.getEString(), "name", null, 1, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRequirement_Namespace(), ecorePackage.getEString(), "namespace", "org.eclipse.equinox.p2.iu", 1, 1, Requirement.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRequirement_VersionRange(), getVersionRange(), "versionRange", "0.0.0", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRequirement_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE,

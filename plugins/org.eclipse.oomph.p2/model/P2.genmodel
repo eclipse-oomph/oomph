@@ -13,11 +13,36 @@
       <genEnumLiterals ecoreEnumLiteral="P2.ecore#//RepositoryType/Artifact"/>
       <genEnumLiterals ecoreEnumLiteral="P2.ecore#//RepositoryType/Combined"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="P2.ecore#//VersionSegment">
+      <genEnumLiterals ecoreEnumLiteral="P2.ecore#//VersionSegment/Major"/>
+      <genEnumLiterals ecoreEnumLiteral="P2.ecore#//VersionSegment/Minor"/>
+      <genEnumLiterals ecoreEnumLiteral="P2.ecore#//VersionSegment/Micro"/>
+      <genEnumLiterals ecoreEnumLiteral="P2.ecore#//VersionSegment/Qualifier"/>
+    </genEnums>
     <genDataTypes ecoreDataType="P2.ecore#//Version"/>
     <genDataTypes ecoreDataType="P2.ecore#//VersionRange"/>
+    <genClasses ecoreClass="P2.ecore#//ProfileDefinition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference P2.ecore#//ProfileDefinition/requirements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference P2.ecore#//ProfileDefinition/repositories"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//ProfileDefinition/includeSourceBundles"/>
+      <genOperations ecoreOperation="P2.ecore#//ProfileDefinition/setRequirements">
+        <genParameters ecoreParameter="P2.ecore#//ProfileDefinition/setRequirements/requirements"/>
+      </genOperations>
+      <genOperations ecoreOperation="P2.ecore#//ProfileDefinition/setRepositories">
+        <genParameters ecoreParameter="P2.ecore#//ProfileDefinition/setRepositories/repositories"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="P2.ecore#//Requirement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/iD"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/namespace"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/versionRange"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/optional"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/feature"/>
+      <genOperations ecoreOperation="P2.ecore#//Requirement/setVersionRange">
+        <genParameters ecoreParameter="P2.ecore#//Requirement/setVersionRange/version"/>
+        <genParameters ecoreParameter="P2.ecore#//Requirement/setVersionRange/segment"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="P2.ecore#//RepositoryList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference P2.ecore#//RepositoryList/repositories"/>

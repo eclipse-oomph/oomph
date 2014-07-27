@@ -17,9 +17,11 @@ import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
+import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
+import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
@@ -45,6 +47,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -71,6 +74,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CopyCommand.Helper;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -89,9 +93,6 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProvider;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.EMFEditUIPlugin;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
-import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
-import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
-import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
@@ -129,7 +130,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -144,11 +144,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.FileTransfer;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.dnd.URLTransfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -900,6 +895,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
 
           @Override
+          protected Command createCopyCommand(EditingDomain domain, EObject owner, Helper helper)
+          {
+            return UnexecutableCommand.INSTANCE;
+          }
+
+          @Override
           public Collection<?> getChildren(Object object)
           {
             Resource resource = (Resource)object;
@@ -984,7 +985,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // Create the editing domain with a special command stack.
     //
-    editingDomain = new AdapterFactoryEditingDomain(adapterFactory, editingDomain.getCommandStack(), new HashMap<Resource, Boolean>()
+    Map<Resource, Boolean> readOnlyMap = new HashMap<Resource, Boolean>()
     {
       private static final long serialVersionUID = 1L;
 
@@ -993,7 +994,35 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         return !editingDomain.getResourceSet().getResources().contains(key) ? Boolean.TRUE : super.get(key);
       }
-    });
+    };
+
+    List<? extends OomphTransferDelegate> delegates = OomphTransferDelegate.merge(OomphTransferDelegate.DELEGATES,
+        new OomphTransferDelegate.FileTransferDelegate()
+        {
+          @Override
+          protected void gather(EditingDomain domain, URI uri)
+          {
+            if (SetupContext.USER_SCHEME.equals(uri.scheme()))
+            {
+              uri = SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments());
+            }
+
+            super.gather(domain, uri);
+          }
+        }, new OomphTransferDelegate.URLTransferDelegate()
+        {
+          @Override
+          protected void gather(EditingDomain domain, URI uri)
+          {
+            if (SetupContext.USER_SCHEME.equals(uri.scheme()))
+            {
+              uri = SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments());
+            }
+
+            super.gather(domain, uri);
+          }
+        });
+    editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, delegates);
 
     ResourceSet resourceSet = editingDomain.getResourceSet();
     SetupUtil.configureResourceSet(resourceSet);
@@ -1076,7 +1105,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSelectionToViewer(Collection<?> collection)
+  public void setSelectionToViewerGen(Collection<?> collection)
   {
     final Collection<?> theSelection = collection;
     // Make sure it's okay.
@@ -1097,6 +1126,24 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       };
       getSite().getShell().getDisplay().asyncExec(runnable);
     }
+  }
+
+  public void setSelectionToViewer(Collection<?> collection)
+  {
+    // If we're trying to select a resource in the selection viewer, make sure resources are visible there.
+    if (currentViewer == selectionViewer)
+    {
+      for (Object object : collection)
+      {
+        if (object instanceof Resource)
+        {
+          toggleInput(true);
+          break;
+        }
+      }
+    }
+
+    setSelectionToViewerGen(collection);
   }
 
   /**
@@ -1256,47 +1303,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     viewer.getControl().setMenu(menu);
     getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 
-    int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-    Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance(),
-        URLTransfer.getInstance() };
-    viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
-    viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, viewer)
-    {
-      @Override
-      protected Collection<?> getDragSource(DropTargetEvent event)
-      {
-        // Check whether the current data type can be transfered locally.
-        //
-        URLTransfer urlTransfer = URLTransfer.getInstance();
-        if (urlTransfer.isSupportedType(event.currentDataType))
-        {
-          // Motif kludge: we would get something random instead of null.
-          //
-          if (IS_MOTIF)
-          {
-            return null;
-          }
-
-          // Transfer the data and, if non-null, extract it.
-          //
-          Object object = urlTransfer.nativeToJava(event.currentDataType);
-          return object == null ? null : extractDragSource(object);
-        }
-
-        return super.getDragSource(event);
-      }
-
-      @Override
-      protected Collection<?> extractDragSource(Object object)
-      {
-        if (object instanceof String)
-        {
-          return Collections.singleton(URI.createURI((String)object));
-        }
-
-        return super.extractDragSource(object);
-      }
-    });
+    ((OomphEditingDomain)editingDomain).registerDragAndDrop(viewer);
   }
 
   /**
@@ -2536,11 +2543,21 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   public void toggleInput()
   {
+    toggleInput(false);
+  }
+
+  private void toggleInput(boolean forceResourceSet)
+  {
     ISelection selection = selectionViewer.getSelection();
     Object[] expandedElements = selectionViewer.getExpandedElements();
     Object input = selectionViewer.getInput();
     if (input instanceof ResourceSet)
     {
+      if (forceResourceSet)
+      {
+        return;
+      }
+
       Resource resource = editingDomain.getResourceSet().getResources().get(0);
       selectionViewer.setInput(resource);
     }
@@ -2550,6 +2567,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
     else if (input == loadingResourceInput)
     {
+      if (forceResourceSet)
+      {
+        return;
+      }
+
       selectionViewer.setInput(loadingResourceSetInput);
     }
     else if (input == loadingResourceSetInput)

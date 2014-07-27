@@ -153,7 +153,7 @@ public class IUAnalyzer extends BasicProjectAnalyzer<IInstallableUnit>
 
         for (Requirement requirement : componentExtension.getRequirements())
         {
-          String id = requirement.getID();
+          String id = requirement.getName();
           VersionRange versionRange = requirement.getVersionRange();
 
           String namespace;

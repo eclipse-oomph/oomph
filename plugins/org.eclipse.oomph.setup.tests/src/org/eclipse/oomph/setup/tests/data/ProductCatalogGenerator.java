@@ -439,7 +439,7 @@ public class ProductCatalogGenerator implements IApplication
     VersionRange versionRange = createVersionRange(version, versionSegment);
 
     Requirement requirement = P2Factory.eINSTANCE.createRequirement();
-    requirement.setID(product.getName());
+    requirement.setName(product.getName());
     requirement.setVersionRange(versionRange);
 
     Repository packageRepository = P2Factory.eINSTANCE.createRepository();
@@ -490,7 +490,7 @@ public class ProductCatalogGenerator implements IApplication
         if (range != null)
         {
           Requirement requirement = P2Factory.eINSTANCE.createRequirement();
-          requirement.setID(iu);
+          requirement.setName(iu);
           requirement.setVersionRange(range);
           requirements.add(requirement);
         }

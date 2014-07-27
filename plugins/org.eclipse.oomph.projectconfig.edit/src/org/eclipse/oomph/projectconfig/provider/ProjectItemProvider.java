@@ -594,14 +594,14 @@ public class ProjectItemProvider extends ModelElementItemProvider
   }
 
   @Override
-  protected Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
   {
     if (operation == DragAndDropFeedback.DROP_LINK)
     {
       return references.createCommand(references, domain, DragAndDropCommand.class, new CommandParameter(references,
           new Detail(location, operations, operation), collection));
     }
-    return super.createDragAndDropCommand(domain, owner, location, operations, operation, collection);
+    return super.createPrimaryDragAndDropCommand(domain, owner, location, operations, operation, collection);
   }
 
   private static final Set<String> IGNORE_NAME_COMPONENTS = new HashSet<String>(Arrays.asList(new String[] { "org", "eclipse", "com" }));

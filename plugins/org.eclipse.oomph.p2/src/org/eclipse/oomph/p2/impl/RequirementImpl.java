@@ -36,6 +36,8 @@ import java.lang.reflect.InvocationTargetException;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getID <em>ID</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getNamespace <em>Namespace</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isFeature <em>Feature</em>}</li>
@@ -57,14 +59,44 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
   protected static final String ID_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getID() <em>ID</em>}' attribute.
+   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getID()
+   * @see #getName()
    * @generated
    * @ordered
    */
-  protected String iD = ID_EDEFAULT;
+  protected static final String NAME_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected String name = NAME_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getNamespace() <em>Namespace</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNamespace()
+   * @generated
+   * @ordered
+   */
+  protected static final String NAMESPACE_EDEFAULT = "org.eclipse.equinox.p2.iu";
+
+  /**
+   * The cached value of the '{@link #getNamespace() <em>Namespace</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNamespace()
+   * @generated
+   * @ordered
+   */
+  protected String namespace = NAMESPACE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getVersionRange() <em>Version Range</em>}' attribute.
@@ -141,11 +173,21 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public String getID()
   {
-    return iD;
+    return name;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public void setID(String newID)
+  {
+    setName(newID);
   }
 
   /**
@@ -153,13 +195,48 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setID(String newID)
+  public String getName()
   {
-    String oldID = iD;
-    iD = newID;
+    return name;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(String newName)
+  {
+    String oldName = name;
+    name = newName;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__ID, oldID, iD));
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__NAME, oldName, name));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getNamespace()
+  {
+    return namespace;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setNamespace(String newNamespace)
+  {
+    String oldNamespace = namespace;
+    namespace = newNamespace;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__NAMESPACE, oldNamespace, namespace));
     }
   }
 
@@ -230,7 +307,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    */
   public boolean isFeature()
   {
-    String id = getID();
+    String id = getName();
     return id != null && id.endsWith(".feature.group");
   }
 
@@ -246,6 +323,10 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     {
       case P2Package.REQUIREMENT__ID:
         return getID();
+      case P2Package.REQUIREMENT__NAME:
+        return getName();
+      case P2Package.REQUIREMENT__NAMESPACE:
+        return getNamespace();
       case P2Package.REQUIREMENT__VERSION_RANGE:
         return getVersionRange();
       case P2Package.REQUIREMENT__OPTIONAL:
@@ -268,6 +349,12 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     {
       case P2Package.REQUIREMENT__ID:
         setID((String)newValue);
+        return;
+      case P2Package.REQUIREMENT__NAME:
+        setName((String)newValue);
+        return;
+      case P2Package.REQUIREMENT__NAMESPACE:
+        setNamespace((String)newValue);
         return;
       case P2Package.REQUIREMENT__VERSION_RANGE:
         setVersionRange((VersionRange)newValue);
@@ -292,6 +379,12 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       case P2Package.REQUIREMENT__ID:
         setID(ID_EDEFAULT);
         return;
+      case P2Package.REQUIREMENT__NAME:
+        setName(NAME_EDEFAULT);
+        return;
+      case P2Package.REQUIREMENT__NAMESPACE:
+        setNamespace(NAMESPACE_EDEFAULT);
+        return;
       case P2Package.REQUIREMENT__VERSION_RANGE:
         setVersionRange(VERSION_RANGE_EDEFAULT);
         return;
@@ -313,7 +406,11 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     switch (featureID)
     {
       case P2Package.REQUIREMENT__ID:
-        return ID_EDEFAULT == null ? iD != null : !ID_EDEFAULT.equals(iD);
+        return ID_EDEFAULT == null ? getID() != null : !ID_EDEFAULT.equals(getID());
+      case P2Package.REQUIREMENT__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case P2Package.REQUIREMENT__NAMESPACE:
+        return NAMESPACE_EDEFAULT == null ? namespace != null : !NAMESPACE_EDEFAULT.equals(namespace);
       case P2Package.REQUIREMENT__VERSION_RANGE:
         return VERSION_RANGE_EDEFAULT == null ? versionRange != null : !VERSION_RANGE_EDEFAULT.equals(versionRange);
       case P2Package.REQUIREMENT__OPTIONAL:
@@ -356,10 +453,10 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       boolean remove = false;
       if ("eclipse.feature".equals(value))
       {
-        String id = getID();
+        String id = getName();
         if (id != null)
         {
-          setID(id + ".feature.group");
+          setName(id + ".feature.group");
           remove = true;
         }
       }
@@ -393,7 +490,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     }
 
     StringBuffer result = new StringBuffer();
-    result.append(iD);
+    result.append(name);
 
     if (versionRange != null && !versionRange.equals(VersionRange.emptyRange))
     {

@@ -10,9 +10,11 @@
  */
 package org.eclipse.oomph.base.provider;
 
+import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.edit.BasePasteCommand;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
@@ -22,12 +24,23 @@ import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -44,8 +57,12 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.oomph.base.ModelElement} object.
@@ -188,92 +205,89 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
   }
 
   @Override
-  protected Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  public Command createCommand(Object object, EditingDomain domain, Class<? extends Command> commandClass, CommandParameter commandParameter)
   {
-    return new DragAndDropCommand(domain, owner, location, operations, operation, collection)
+    if (commandClass == BasePasteCommand.class)
+    {
+      CommandParameter oldCommandParameter = commandParameter;
+      commandParameter = unwrapCommandValues(commandParameter, commandClass);
+
+      Collection<?> collection = commandParameter.getCollection();
+      if (collection == null)
+      {
+        return UnexecutableCommand.INSTANCE;
+      }
+
+      Command result = createPasteCommand(domain, commandParameter.getEOwner(), commandParameter.getEStructuralFeature(), collection,
+          commandParameter.getIndex());
+      return wrapCommand(result, object, commandClass, commandParameter, oldCommandParameter);
+    }
+
+    return super.createCommand(object, domain, commandClass, commandParameter);
+  }
+
+  /**
+   * A specialized form of {@link #createAddCommand(EditingDomain, EObject, EStructuralFeature, Collection, int)}
+   */
+  protected Command createPasteCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
+  {
+    return new PasteAlternativeVisitor(domain, owner, feature, collection, index)
     {
       @Override
-      protected boolean prepareDropLinkOn()
+      protected Collection<?> filterAlternatives(Collection<?> alternativeCollection)
       {
-        dragCommand = IdentityCommand.INSTANCE;
-        dropCommand = SetCommand.create(domain, owner, null, collection);
-
-        // If we can't set the collection, try setting use the single value of the collection.
-        //
-        if (!dropCommand.canExecute() && collection.size() == 1)
-        {
-          dropCommand.dispose();
-          dropCommand = SetCommand.create(domain, owner, null, collection.iterator().next());
-        }
-
-        if (!dropCommand.canExecute() || !analyzeForDropLinkEnablement(dropCommand))
-        {
-          dropCommand.dispose();
-          dropCommand = AddCommand.create(domain, owner, null, collection);
-          if (!analyzeForDropLinkEnablement(dropCommand))
-          {
-            dropCommand.dispose();
-            dropCommand = UnexecutableCommand.INSTANCE;
-          }
-        }
-
-        boolean result = dropCommand.canExecute();
-        return result;
+        return ModelElementItemProvider.this.filterAlternatives(domain, owner, alternativeCollection);
       }
+    }.createCommand();
+  }
 
-      protected boolean analyzeForDropLinkEnablement(Command command)
+  protected Collection<?> filterAlternatives(EditingDomain domain, Object owner, Collection<?> alternatives)
+  {
+    return alternatives;
+  }
+
+  @Override
+  protected final Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    Command dragAndDropCommand = createPrimaryDragAndDropCommand(domain, owner, location, operations, operation, collection);
+    if (!dragAndDropCommand.canExecute())
+    {
+      Command alternativeDragAndDropCommand = createAlternativeDragAndDropCommand(domain, owner, location, operations, operation, collection);
+      if (alternativeDragAndDropCommand.canExecute())
       {
-        if (command instanceof AddCommand)
-        {
-          AddCommand addCommand = (AddCommand)command;
-          if (isNonContainment(addCommand.getFeature()))
-          {
-            return true;
-          }
-
-          // If it's an add command on a proxy resolving containment reference and the objects being added all have no container then we can link them.
-          EList<?> ownerList = addCommand.getOwnerList();
-          if (ownerList != null)
-          {
-            if (((EReference)addCommand.getFeature()).isResolveProxies())
-            {
-              for (Object value : addCommand.getCollection())
-              {
-                EObject eObject = (EObject)value;
-                if (eObject.eContainer() != null)
-                {
-                  return false;
-                }
-              }
-
-              return true;
-            }
-          }
-
-          return false;
-        }
-        else if (command instanceof SetCommand)
-        {
-          return isNonContainment(((SetCommand)command).getFeature());
-        }
-        else if (command instanceof CommandWrapper)
-        {
-          return analyzeForDropLinkEnablement(((CommandWrapper)command).getCommand());
-        }
-        else if (command instanceof CompoundCommand)
-        {
-          for (Command childCommand : ((CompoundCommand)command).getCommandList())
-          {
-            if (analyzeForDropLinkEnablement(childCommand))
-            {
-              return true;
-            }
-          }
-        }
-
-        return false;
+        dragAndDropCommand.dispose();
+        dragAndDropCommand = alternativeDragAndDropCommand;
       }
-    };
+      else
+      {
+        alternativeDragAndDropCommand.dispose();
+      }
+    }
+
+    return dragAndDropCommand;
+  }
+
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    return new BaseDragAndDropCommand(domain, owner, location, operations, operation, collection);
+  }
+
+  protected Command createAlternativeDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation,
+      Collection<?> collection)
+  {
+    return new DragAndDropAlternativeVisitor(domain, owner, location, operations, operation, collection)
+    {
+      @Override
+      protected Collection<?> filterAlternatives(Collection<?> alternativeCollection)
+      {
+        return ModelElementItemProvider.this.filterAlternatives(domain, owner, location, operations, operation, alternativeCollection);
+      }
+    }.createCommand();
+  }
+
+  protected Collection<?> filterAlternatives(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> alternatives)
+  {
+    return filterAlternatives(domain, owner, alternatives);
   }
 
   @Override
@@ -300,8 +314,15 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
       };
     }
 
-    return super.createItemPropertyDescriptor(adapterFactory, resourceLocator, displayName, description, feature, isSettable, multiLine, sortChoices,
-        staticImage, category, filterFlags);
+    return new ItemPropertyDescriptor(adapterFactory, resourceLocator, displayName, description, feature, isSettable, multiLine, sortChoices, staticImage,
+        category, filterFlags)
+    {
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        return filterChoices(super.getChoiceOfValues(object), feature, object);
+      }
+    };
   }
 
   protected Object filterParent(AdapterFactoryItemDelegator itemDelegator, EStructuralFeature feature, Object object)
@@ -324,6 +345,99 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
   public ResourceLocator getResourceLocator()
   {
     return ((IChildCreationExtender)adapterFactory).getResourceLocator();
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class BaseDragAndDropCommand extends DragAndDropCommand
+  {
+    public BaseDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+    {
+      super(domain, owner, location, operations, operation, collection);
+    }
+
+    @Override
+    protected boolean prepareDropLinkOn()
+    {
+      dragCommand = IdentityCommand.INSTANCE;
+      dropCommand = SetCommand.create(domain, owner, null, collection);
+
+      // If we can't set the collection, try setting use the single value of the collection.
+      //
+      if (!dropCommand.canExecute() && collection.size() == 1)
+      {
+        dropCommand.dispose();
+        dropCommand = SetCommand.create(domain, owner, null, collection.iterator().next());
+      }
+
+      if (!dropCommand.canExecute() || !analyzeForDropLinkEnablement(dropCommand))
+      {
+        dropCommand.dispose();
+        dropCommand = AddCommand.create(domain, owner, null, collection);
+        if (!analyzeForDropLinkEnablement(dropCommand))
+        {
+          dropCommand.dispose();
+          dropCommand = UnexecutableCommand.INSTANCE;
+        }
+      }
+
+      boolean result = dropCommand.canExecute();
+      return result;
+    }
+
+    protected boolean analyzeForDropLinkEnablement(Command command)
+    {
+      if (command instanceof AddCommand)
+      {
+        AddCommand addCommand = (AddCommand)command;
+        if (isNonContainment(addCommand.getFeature()))
+        {
+          return true;
+        }
+
+        // If it's an add command on a proxy resolving containment reference and the objects being added all have no container then we can link them.
+        EList<?> ownerList = addCommand.getOwnerList();
+        if (ownerList != null)
+        {
+          if (((EReference)addCommand.getFeature()).isResolveProxies())
+          {
+            for (Object value : addCommand.getCollection())
+            {
+              EObject eObject = (EObject)value;
+              if (eObject.eContainer() != null)
+              {
+                return false;
+              }
+            }
+
+            return true;
+          }
+        }
+
+        return false;
+      }
+      else if (command instanceof SetCommand)
+      {
+        return isNonContainment(((SetCommand)command).getFeature());
+      }
+      else if (command instanceof CommandWrapper)
+      {
+        return analyzeForDropLinkEnablement(((CommandWrapper)command).getCommand());
+      }
+      else if (command instanceof CompoundCommand)
+      {
+        for (Command childCommand : ((CompoundCommand)command).getCommandList())
+        {
+          if (analyzeForDropLinkEnablement(childCommand))
+          {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
   }
 
   /**
@@ -457,6 +571,271 @@ public class ModelElementItemProvider extends ItemProviderAdapter implements IEd
     public Object getImage(Object object)
     {
       return itemDelegator.getImage(object);
+    }
+  }
+
+  /**
+   *
+   * @author Ed Merks
+   */
+  public abstract static class CommandAlternativeVisitor
+  {
+    protected EditingDomain domain;
+
+    protected Object owner;
+
+    protected Collection<?> collection;
+
+    public CommandAlternativeVisitor(EditingDomain domain, Object owner, Collection<?> collection)
+    {
+      this.domain = domain;
+      this.owner = owner;
+      this.collection = collection;
+    }
+
+    public Command createCommand()
+    {
+      List<Object> alternativeCollection = new ArrayList<Object>();
+      Map<EObject, EObject> fullConversionMap = new HashMap<EObject, EObject>();
+      for (Object object : collection)
+      {
+        if (object instanceof EObject)
+        {
+          EObject eObject = (EObject)object;
+          EClass eClass = eObject.eClass();
+          for (EAnnotation eAnnotation : eClass.getEAnnotations())
+          {
+            if (BaseAnnotationConstants.ANNOTATION_CONVERSION.equals(eAnnotation.getSource()))
+            {
+              EMap<String, String> details = eAnnotation.getDetails();
+              String conversionEClassURI = details.get(BaseAnnotationConstants.KEY_ECLASS);
+              if (conversionEClassURI != null)
+              {
+                EClass conversionEClass = getConversionEClass(domain, owner, URI.createURI(conversionEClassURI));
+                if (conversionEClass != null)
+                {
+                  Map<EObject, EObject> conversionMap = new HashMap<EObject, EObject>();
+                  conversionMap.put(eClass, conversionEClass);
+
+                  for (EStructuralFeature eStructuralFeature : eClass.getEAllStructuralFeatures())
+                  {
+                    String name = eStructuralFeature.getName();
+                    EStructuralFeature conversionEStructuralFeature = conversionEClass.getEStructuralFeature(name);
+                    conversionMap.put(eStructuralFeature, conversionEStructuralFeature);
+                  }
+
+                  for (Map.Entry<String, String> entry : details)
+                  {
+                    String key = entry.getKey();
+                    EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature(key);
+                    if (eStructuralFeature != null)
+                    {
+                      String value = entry.getValue();
+                      EStructuralFeature conversionEStructuralFeature = conversionEClass.getEStructuralFeature(value);
+                      conversionMap.put(eStructuralFeature, conversionEStructuralFeature);
+                    }
+                  }
+
+                  ConversionCopier copier = new ConversionCopier(conversionMap);
+                  EObject copy = copier.copy(eObject);
+                  copier.copyReferences();
+                  Command probeCommand = createCommand(Collections.singleton(copy));
+                  if (probeCommand.canExecute())
+                  {
+                    alternativeCollection.add(eObject);
+                    fullConversionMap.putAll(conversionMap);
+                  }
+
+                  probeCommand.dispose();
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (!alternativeCollection.isEmpty())
+      {
+        ConversionCopier copier = new ConversionCopier(fullConversionMap);
+        final Collection<?> alternatives = filterAlternatives(copier.copyAll(alternativeCollection));
+        copier.copyReferences();
+
+        if (!alternatives.isEmpty())
+        {
+          Command command = createCommand(alternatives);
+          if (command.canExecute())
+          {
+            return command;
+          }
+
+          command.dispose();
+        }
+      }
+
+      return UnexecutableCommand.INSTANCE;
+    }
+
+    protected EClass getConversionEClass(EditingDomain domain, Object owner, URI uri)
+    {
+      ResourceSet resourceSet = domain.getResourceSet();
+      if (resourceSet != null)
+      {
+        EObject eObject = resourceSet.getEObject(uri, false);
+        if (eObject instanceof EClass)
+        {
+          return (EClass)eObject;
+        }
+
+        try
+        {
+          ResourceSet temporaryResourceSet = new ResourceSetImpl();
+          eObject = temporaryResourceSet.getEObject(uri, true);
+          if (eObject instanceof EClass)
+          {
+            eObject = resourceSet.getEObject(uri, true);
+            if (eObject instanceof EClass)
+            {
+              return (EClass)eObject;
+            }
+          }
+        }
+        catch (RuntimeException ex)
+        {
+          // Ignore.
+        }
+      }
+
+      return null;
+    }
+
+    protected abstract Command createCommand(Collection<?> alternatives);
+
+    protected Collection<?> filterAlternatives(Collection<?> alternatives)
+    {
+      return alternatives;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class PasteAlternativeVisitor extends CommandAlternativeVisitor
+  {
+    protected Object feature;
+
+    protected int index;
+
+    public PasteAlternativeVisitor(EditingDomain domain, Object owner, Object feature, Collection<?> collection, int index)
+    {
+      super(domain, owner, collection);
+      this.feature = feature;
+      this.index = index;
+    }
+
+    @Override
+    protected Command createCommand(Collection<?> alternatives)
+    {
+      return AddCommand.create(domain, owner, feature, alternatives, index);
+    }
+  }
+
+  /**
+   *
+   * @author Ed Merks
+   */
+  public static class DragAndDropAlternativeVisitor extends CommandAlternativeVisitor
+  {
+    protected float location;
+
+    protected int operations;
+
+    protected int operation;
+
+    public DragAndDropAlternativeVisitor(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+    {
+      super(domain, owner, collection);
+      this.location = location;
+      this.operations = operations;
+      this.operation = operation;
+    }
+
+    @Override
+    protected Command createCommand(final Collection<?> alternatives)
+    {
+      return new BaseDragAndDropCommand(domain, owner, location, operations, operation, alternatives)
+      {
+        @Override
+        public boolean validate(Object owner, float location, int operations, int operation, java.util.Collection<?> collection)
+        {
+          // If the original collection is the same as the collection being validated, then reuse the already computed alternatives again.
+          if (DragAndDropAlternativeVisitor.this.collection.equals(collection))
+          {
+            collection = alternatives;
+          }
+
+          return super.validate(owner, location, operations, operation, collection);
+        }
+      };
+    }
+  }
+
+  /**
+   *
+   * @author Ed Merks
+   */
+  public static class ConversionCopier extends EcoreUtil.Copier
+  {
+    private static final long serialVersionUID = 1L;
+
+    private Map<EObject, EObject> conversionMap;
+
+    public ConversionCopier(Map<EObject, EObject> conversionMap)
+    {
+      this.conversionMap = conversionMap;
+    }
+
+    @Override
+    protected EClass getTarget(EClass eClass)
+    {
+      return (EClass)conversionMap.get(eClass);
+    }
+
+    @Override
+    protected EStructuralFeature getTarget(EStructuralFeature eStructuralFeature)
+    {
+      return (EStructuralFeature)conversionMap.get(eStructuralFeature);
+    }
+
+    @Override
+    protected void copyAttributeValue(EAttribute eAttribute, EObject eObject, Object value, Setting setting)
+    {
+      if (value != null)
+      {
+        // Do data conversion to a string representation.
+        EDataType eAttributeType = eAttribute.getEAttributeType();
+        EDataType eType = (EDataType)setting.getEStructuralFeature().getEType();
+        Class<?> instanceClass = eType.getInstanceClass();
+        Class<?> instanceClass2 = eAttributeType.getInstanceClass();
+        if (instanceClass != instanceClass2 || instanceClass == null)
+        {
+          if (eAttribute.isMany())
+          {
+            List<Object> values = new ArrayList<Object>();
+            for (Object element : (Collection<?>)value)
+            {
+              values.add(EcoreUtil.createFromString(eType, EcoreUtil.convertToString(eAttributeType, element)));
+            }
+
+            value = values;
+          }
+          else
+          {
+            value = EcoreUtil.createFromString(eType, EcoreUtil.convertToString(eAttributeType, value));
+          }
+        }
+      }
+
+      super.copyAttributeValue(eAttribute, eObject, value, setting);
     }
   }
 }

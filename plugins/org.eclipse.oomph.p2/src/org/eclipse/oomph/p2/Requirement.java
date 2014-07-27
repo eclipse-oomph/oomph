@@ -23,7 +23,8 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.oomph.p2.Requirement#getID <em>ID</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#getNamespace <em>Namespace</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isOptional <em>Optional</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isFeature <em>Feature</em>}</li>
@@ -31,37 +32,65 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
  * </p>
  *
  * @see org.eclipse.oomph.p2.P2Package#getRequirement()
- * @model
+ * @model features="iD"
+ *        iDDataType="org.eclipse.emf.ecore.EString" iDRequired="true" iDTransient="true" iDVolatile="true" iDDerived="true" iDSuppressedGetVisibility="true" iDSuppressedSetVisibility="true"
+ *        iDExtendedMetaData="kind='attribute' name='id'"
  * @generated
  */
 public interface Requirement extends ModelElement
 {
   /**
-   * Returns the value of the '<em><b>ID</b></em>' attribute.
+   * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>ID</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>ID</em>' attribute.
-   * @see #setID(String)
-   * @see org.eclipse.oomph.p2.P2Package#getRequirement_ID()
+   * @return the value of the '<em>Name</em>' attribute.
+   * @see #setName(String)
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Name()
    * @model required="true"
-   *        extendedMetaData="kind='attribute' name='id'"
    * @generated
    */
-  String getID();
+  String getName();
 
   /**
-   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#getID <em>ID</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>ID</em>' attribute.
-   * @see #getID()
+   * @param value the new value of the '<em>Name</em>' attribute.
+   * @see #getName()
    * @generated
    */
-  void setID(String value);
+  void setName(String value);
+
+  /**
+   * Returns the value of the '<em><b>Namespace</b></em>' attribute.
+   * The default value is <code>"org.eclipse.equinox.p2.iu"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Namespace</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Namespace</em>' attribute.
+   * @see #setNamespace(String)
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Namespace()
+   * @model default="org.eclipse.equinox.p2.iu" required="true"
+   * @generated
+   */
+  String getNamespace();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#getNamespace <em>Namespace</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Namespace</em>' attribute.
+   * @see #getNamespace()
+   * @generated
+   */
+  void setNamespace(String value);
 
   /**
    * Returns the value of the '<em><b>Version Range</b></em>' attribute.

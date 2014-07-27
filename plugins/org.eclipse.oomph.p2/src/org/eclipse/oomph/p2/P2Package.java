@@ -191,13 +191,31 @@ public interface P2Package extends EPackage
   int REQUIREMENT__ID = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__NAME = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Namespace</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__NAMESPACE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
    * The feature id for the '<em><b>Version Range</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REQUIREMENT__VERSION_RANGE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+  int REQUIREMENT__VERSION_RANGE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -206,7 +224,7 @@ public interface P2Package extends EPackage
    * @generated
    * @ordered
    */
-  int REQUIREMENT__OPTIONAL = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int REQUIREMENT__OPTIONAL = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Feature</b></em>' attribute.
@@ -215,7 +233,7 @@ public interface P2Package extends EPackage
    * @generated
    * @ordered
    */
-  int REQUIREMENT__FEATURE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+  int REQUIREMENT__FEATURE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Requirement</em>' class.
@@ -224,7 +242,7 @@ public interface P2Package extends EPackage
    * @generated
    * @ordered
    */
-  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
+  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -495,15 +513,37 @@ public interface P2Package extends EPackage
   EClass getRequirement();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getID <em>ID</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement <em>ID</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>ID</em>'.
-   * @see org.eclipse.oomph.p2.Requirement#getID()
+   * @see org.eclipse.oomph.p2.Requirement
    * @see #getRequirement()
    * @generated
    */
   EAttribute getRequirement_ID();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#getName()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getNamespace <em>Namespace</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Namespace</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#getNamespace()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Namespace();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getVersionRange <em>Version Range</em>}'.
@@ -745,6 +785,22 @@ public interface P2Package extends EPackage
      * @generated
      */
     EAttribute REQUIREMENT__ID = eINSTANCE.getRequirement_ID();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__NAME = eINSTANCE.getRequirement_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Namespace</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__NAMESPACE = eINSTANCE.getRequirement_Namespace();
 
     /**
      * The meta object literal for the '<em><b>Version Range</b></em>' attribute feature.

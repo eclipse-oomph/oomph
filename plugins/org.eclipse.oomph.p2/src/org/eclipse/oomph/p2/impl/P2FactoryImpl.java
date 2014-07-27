@@ -166,7 +166,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
   public Requirement createRequirement(String id)
   {
     Requirement requirement = createRequirement();
-    requirement.setID(id);
+    requirement.setName(id);
     return requirement;
   }
 

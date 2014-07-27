@@ -57,6 +57,21 @@ public class SetupContext
 
   public static final String LOG_FILE_NAME = "setup.log";
 
+  public static final String USER_SCHEME = "user";
+
+  /**
+   * Resolves a '{@link #USER_SCHEME user}' scheme URI to a 'file' scheme URI.
+   */
+  public static URI resolveUser(URI uri)
+  {
+    if (USER_SCHEME.equals(uri.scheme()))
+    {
+      return SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments());
+    }
+
+    return uri;
+  }
+
   // Basic locations
 
   public static final URI CONFIGURATION_LOCATION_URI = getStaticConfigurationLocation();
@@ -71,7 +86,7 @@ public class SetupContext
 
   public static final URI GLOBAL_STATE_LOCATION_URI = URI.createFileURI(PropertiesUtil.USER_HOME).appendSegments(new String[] { ".eclipse", OOMPH_NODE });
 
-  public static final URI GLOBAL_SETUPS_URI = URI.createURI("user:/");
+  public static final URI GLOBAL_SETUPS_URI = URI.createURI(USER_SCHEME + ":/");
 
   public static final URI GLOBAL_SETUPS_LOCATION_URI = GLOBAL_STATE_LOCATION_URI.appendSegment("setups");
 

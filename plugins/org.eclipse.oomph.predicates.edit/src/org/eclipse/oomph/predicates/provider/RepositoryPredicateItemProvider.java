@@ -18,7 +18,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
@@ -157,9 +156,9 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
   }
 
   @Override
-  protected Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
   {
-    return new DragAndDropCommand(domain, owner, location, operations, operation, collection)
+    return new BaseDragAndDropCommand(domain, owner, location, operations, operation, collection)
     {
       @Override
       protected boolean analyzeForNonContainment(Command command)

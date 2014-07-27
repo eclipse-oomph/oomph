@@ -12,6 +12,7 @@ package org.eclipse.oomph.targlets.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -19,6 +20,7 @@ import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -120,6 +122,12 @@ public class TargletItemProvider extends ModelElementItemProvider
         getString("_UI_Targlet_includeAllPlatforms_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeAllPlatforms_feature", "_UI_Targlet_type"),
         TargletPackage.Literals.TARGLET__INCLUDE_ALL_PLATFORMS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  @Override
+  protected Collection<?> filterAlternatives(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> alternatives)
+  {
+    return super.filterAlternatives(domain, owner, location, operations, operation, RequirementItemProvider.filterAlternatives(alternatives));
   }
 
   /**

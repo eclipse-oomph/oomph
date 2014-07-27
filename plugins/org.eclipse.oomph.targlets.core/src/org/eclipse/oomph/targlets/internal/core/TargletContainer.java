@@ -686,7 +686,7 @@ public class TargletContainer extends AbstractBundleContainer
           {
             for (Requirement requirement : roots)
             {
-              if (VersionRange.emptyRange.equals(requirement.getVersionRange()) && requirement.getID().equals(iu.getId()))
+              if (VersionRange.emptyRange.equals(requirement.getVersionRange()) && requirement.getName().equals(iu.getId()))
               {
                 Version version = iu.getVersion();
                 requirement.setVersionRange(P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MICRO));

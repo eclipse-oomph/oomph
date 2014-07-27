@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.p2.provider;
 
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
@@ -19,6 +20,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -218,6 +220,12 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
     newChildDescriptors.add(createChildParameter(SetupP2Package.Literals.P2_TASK__REQUIREMENTS, P2Factory.eINSTANCE.createRequirement()));
 
     newChildDescriptors.add(createChildParameter(SetupP2Package.Literals.P2_TASK__REPOSITORIES, P2Factory.eINSTANCE.createRepository()));
+  }
+
+  @Override
+  protected Collection<?> filterAlternatives(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> alternatives)
+  {
+    return super.filterAlternatives(domain, owner, location, operations, operation, RequirementItemProvider.filterAlternatives(alternatives));
   }
 
   /**

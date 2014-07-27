@@ -517,7 +517,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     for (Iterator<Requirement> it = getRequirements().iterator(); it.hasNext();)
     {
       Requirement requirement = it.next();
-      if (!installableUnitKeys.add(requirement.getID() + "->" + requirement.getVersionRange().toString()))
+      if (!installableUnitKeys.add(requirement.getName() + "->" + requirement.getVersionRange().toString()))
       {
         it.remove();
       }
@@ -606,7 +606,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     {
       if (!requirement.isOptional())
       {
-        String id = requirement.getID();
+        String id = requirement.getName();
         VersionRange versionRange = requirement.getVersionRange();
         if (versionRange == null)
         {

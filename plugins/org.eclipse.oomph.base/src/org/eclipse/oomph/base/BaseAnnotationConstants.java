@@ -11,7 +11,7 @@
 package org.eclipse.oomph.base;
 
 /**
- * @author Eike Stepper
+ * @author Ed Merks
  */
 public final class BaseAnnotationConstants
 {
@@ -26,4 +26,8 @@ public final class BaseAnnotationConstants
   public static final String ANNOTATION_INFO = "http://www.eclipse.org/oomph/base/Info";
 
   public static final String KEY_DIAGNOSTIC = "diagnostic";
+
+  public static final String ANNOTATION_CONVERSION = "http://www.eclipse.org/oomph/base/Conversion";
+
+  public static final String KEY_ECLASS = "eClass";
 }
