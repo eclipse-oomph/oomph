@@ -2387,11 +2387,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (Boolean.TRUE.equals(autoBuilding))
       {
-        // Disable API analysis building for the initial build.
-        Class<?> apiAnalysisBuilder = CommonPlugin.loadClass("org.eclipse.pde.api.tools", "org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder");
-        final Field buildDisabledField = apiAnalysisBuilder.getDeclaredField("buildDisabled");
-        buildDisabledField.setAccessible(true);
-        buildDisabledField.set(null, true);
+        // Disable the PDE's API analsysis builder, if it's installed, and remember it's previously current state.
+        // It's considered disabled if it's not installed at all.
+        final boolean disabled = PDEAPIUtil.setDisableAPIAnalysisBuilder(true);
 
         Job buildJob = new Job("Build")
         {
@@ -2417,7 +2415,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               {
                 SetupCorePlugin.INSTANCE.log(ex);
               }
-              buildDisabledField.setAccessible(false);
+
+              if (!disabled)
+              {
+                // Restore it to false if it was true before we set it to false;
+                PDEAPIUtil.setDisableAPIAnalysisBuilder(false);
+              }
             }
           }
 
@@ -3130,6 +3133,51 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private static String getVariableReference(String variableName)
   {
     return "${" + variableName + "}";
+  }
+
+  private static class PDEAPIUtil
+  {
+    private static final Field BUILD_DISABLED_FIELD;
+    static
+    {
+      Field buildDisabledField = null;
+      // Disable API analysis building for the initial build.
+      try
+      {
+        Class<?> apiAnalysisBuilder = CommonPlugin.loadClass("org.eclipse.pde.api.tools", "org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder");
+        buildDisabledField = apiAnalysisBuilder.getDeclaredField("buildDisabled");
+        buildDisabledField.setAccessible(true);
+      }
+      catch (Exception ex)
+      {
+        // Ignore
+      }
+
+      BUILD_DISABLED_FIELD = buildDisabledField;
+    }
+
+    private static boolean setDisableAPIAnalysisBuilder(boolean disabled)
+    {
+      if (BUILD_DISABLED_FIELD != null)
+      {
+        try
+        {
+          boolean result = (Boolean)BUILD_DISABLED_FIELD.get(null);
+          if (result != disabled)
+          {
+            BUILD_DISABLED_FIELD.set(null, disabled);
+          }
+
+          return result;
+        }
+        catch (Exception ex)
+        {
+          // Ignore.
+        }
+      }
+
+      return true;
+    }
   }
 
   /**
