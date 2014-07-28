@@ -37,19 +37,19 @@
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
-        id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+        name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.version.feature.group"/>
+        name="org.eclipse.oomph.version.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.launches.feature.group"/>
+        name="org.eclipse.oomph.launches.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.manifests.feature.group"/>
+        name="org.eclipse.oomph.manifests.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.projectconfig.feature.group"/>
+        name="org.eclipse.oomph.projectconfig.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.projectcopy.feature.group"/>
+        name="org.eclipse.oomph.projectcopy.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.workingsets.feature.group"/>
+        name="org.eclipse.oomph.workingsets.feature.group"/>
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
@@ -90,13 +90,13 @@
         name="EMF Target Platform"
         activeRepositoryList="${eclipse.target.platform}">
       <requirement
-          id="org.eclipse.platform.feature.group"/>
+          name="org.eclipse.platform.feature.group"/>
       <requirement
-          id="org.eclipse.jdt.feature.group"/>
+          name="org.eclipse.jdt.feature.group"/>
       <requirement
-          id="org.eclipse.pde.feature.group"/>
+          name="org.eclipse.pde.feature.group"/>
       <requirement
-          id="org.eclipse.equinox.executable.feature.group"/>
+          name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
           name="Mars">
         <repository
@@ -142,8 +142,6 @@
             url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
-        <repository
-            url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
@@ -229,11 +227,11 @@
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirement
-          id="org.eclipse.emf.sdk.feature.group"/>
+          name="org.eclipse.emf.sdk.feature.group"/>
       <requirement
-          id="org.eclipse.emf.ecoretools.sdk.feature.group"/>
+          name="org.eclipse.emf.ecoretools.sdk.feature.group"/>
       <requirement
-          id="org.eclipse.xsd.sdk.feature.group"/>
+          name="org.eclipse.xsd.sdk.feature.group"/>
       <repository
           url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
     </setupTask>
@@ -251,11 +249,11 @@
       <targlet
           name="EMF Core">
         <requirement
-            id="org.eclipse.emf.all.feature.group"/>
+            name="org.eclipse.emf.all.feature.group"/>
         <requirement
-            id="org.eclipse.emf.base.build.feature.group"/>
+            name="org.eclipse.emf.base.build.feature.group"/>
         <requirement
-            id="org.eclipse.emf.tests.feature.group"/>
+            name="org.eclipse.emf.tests.feature.group"/>
         <sourceLocator
             rootFolder="${emf.git.clone.location}"/>
       </targlet>
@@ -453,15 +451,15 @@
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirement
-          id="org.eclipse.emf.sdk.feature.group"/>
+          name="org.eclipse.emf.sdk.feature.group"/>
       <requirement
-          id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
+          name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
       <requirement
-          id="org.eclipse.xtext.sdk.feature.group"/>
+          name="org.eclipse.xtext.sdk.feature.group"/>
       <requirement
-          id="org.eclipse.xtend.sdk.feature.group"/>
+          name="org.eclipse.xtend.sdk.feature.group"/>
       <requirement
-          id="org.eclipse.xsd.sdk.feature.group"/>
+          name="org.eclipse.xsd.sdk.feature.group"/>
       <repository
           url="http://download.eclipse.org/modeling/emf/updates/"/>
       <repository
@@ -483,20 +481,20 @@
       <targlet
           name="EMF Xcore">
         <requirement
-            id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
+            name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
-            id="org.eclipse.emf.test.ecore.xcore.feature.group"/>
+            name="org.eclipse.emf.test.ecore.xcore.feature.group"/>
         <requirement
-            id="org.eclipse.emf.xcore.build.feature.group"/>
+            name="org.eclipse.emf.xcore.build.feature.group"/>
         <requirement
-            id="org.eclipse.xtext.sdk.feature.group"
+            name="org.eclipse.xtext.sdk.feature.group"
             versionRange="[2.7.0,3.0.0)"/>
         <requirement
-            id="org.eclipse.xtend.sdk.feature.group"/>
+            name="org.eclipse.xtend.sdk.feature.group"/>
         <requirement
-            id="org.eclipse.sdk.feature.group"/>
+            name="org.eclipse.sdk.feature.group"/>
         <requirement
-            id="com.google.guava"/>
+            name="com.google.guava"/>
         <sourceLocator
             rootFolder="${emf.git.clone.location}">
           <predicate
@@ -585,16 +583,16 @@
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirement
-          id="org.eclipse.emf.sdk.feature.group"/>
+          name="org.eclipse.emf.sdk.feature.group"/>
     </setupTask>
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirement
-          id="com.google.gdt.eclipse.suite.e43.feature.feature.group"/>
+          name="com.google.gdt.eclipse.suite.e43.feature.feature.group"/>
       <requirement
-          id="com.google.gwt.eclipse.sdkbundle.feature.feature.group"/>
+          name="com.google.gwt.eclipse.sdkbundle.feature.feature.group"/>
       <requirement
-          id="com.google.appengine.eclipse.sdkbundle.feature.feature.group"/>
+          name="com.google.appengine.eclipse.sdkbundle.feature.feature.group"/>
       <repository
           url="${gwt.tool.url}"/>
     </setupTask>
@@ -608,7 +606,7 @@
       <targlet
           name="EMF GWT">
         <requirement
-            id="org.eclipse.emf.gwt.sdk.feature.group"/>
+            name="org.eclipse.emf.gwt.sdk.feature.group"/>
         <sourceLocator
             rootFolder="${emf.git.clone.location}"/>
       </targlet>
@@ -689,16 +687,16 @@
     <setupTask
         xsi:type="setup.p2:P2Task">
       <requirement
-          id="org.eclipse.rap.tools.feature.feature.group"/>
+          name="org.eclipse.rap.tools.feature.feature.group"/>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="EMF RAP">
         <requirement
-            id="org.eclipse.emf.rap.sdk.feature.group"/>
+            name="org.eclipse.emf.rap.sdk.feature.group"/>
         <requirement
-            id="org.eclipse.rap.sdk.feature.feature.group"
+            name="org.eclipse.rap.sdk.feature.feature.group"
             optional="true"/>
         <sourceLocator
             rootFolder="${emf.git.clone.location}">
