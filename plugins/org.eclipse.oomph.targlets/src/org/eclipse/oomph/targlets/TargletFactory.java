@@ -76,6 +76,42 @@ public interface TargletFactory extends EFactory
   ComponentDefinition createComponentDefinition();
 
   /**
+   * Returns a new object of class '<em>Feature Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Feature Generator</em>'.
+   * @generated
+   */
+  FeatureGenerator createFeatureGenerator();
+
+  /**
+   * Returns a new object of class '<em>Plugin Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Plugin Generator</em>'.
+   * @generated
+   */
+  PluginGenerator createPluginGenerator();
+
+  /**
+   * Returns a new object of class '<em>Component Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Component Generator</em>'.
+   * @generated
+   */
+  ComponentGenerator createComponentGenerator();
+
+  /**
+   * Returns a new object of class '<em>Buckminster Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Buckminster Generator</em>'.
+   * @generated
+   */
+  BuckminsterGenerator createBuckminsterGenerator();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

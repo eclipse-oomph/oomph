@@ -172,4 +172,9 @@ public abstract class AbstractTest
   {
     LOG.println(object);
   }
+
+  public static org.hamcrest.Matcher<java.lang.Object> isNull()
+  {
+    return org.hamcrest.core.IsNull.nullValue();
+  }
 }

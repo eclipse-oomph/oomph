@@ -10,20 +10,18 @@
  */
 package org.eclipse.oomph.resources.impl;
 
-import org.eclipse.oomph.internal.resources.ExternalProject;
+import org.eclipse.oomph.resources.EclipseProjectFactory;
+import org.eclipse.oomph.resources.MavenProjectFactory;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.SourceLocator;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import org.eclipse.core.resources.IProject;
-
-import java.io.File;
 
 /**
  * <!-- begin-user-doc -->
@@ -79,8 +77,42 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
     {
       case ResourcesPackage.SOURCE_LOCATOR:
         return createSourceLocator();
+      case ResourcesPackage.ECLIPSE_PROJECT_FACTORY:
+        return createEclipseProjectFactory();
+      case ResourcesPackage.MAVEN_PROJECT_FACTORY:
+        return createMavenProjectFactory();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object createFromString(EDataType eDataType, String initialValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String convertToString(EDataType eDataType, Object instanceValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
   }
 
@@ -93,6 +125,28 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
   {
     SourceLocatorImpl sourceLocator = new SourceLocatorImpl();
     return sourceLocator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EclipseProjectFactory createEclipseProjectFactory()
+  {
+    EclipseProjectFactoryImpl eclipseProjectFactory = new EclipseProjectFactoryImpl();
+    return eclipseProjectFactory;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MavenProjectFactory createMavenProjectFactory()
+  {
+    MavenProjectFactoryImpl mavenProjectFactory = new MavenProjectFactoryImpl();
+    return mavenProjectFactory;
   }
 
   public SourceLocator createSourceLocator(String rootFolder)
@@ -129,16 +183,6 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
   public static ResourcesPackage getPackage()
   {
     return ResourcesPackage.eINSTANCE;
-  }
-
-  public IProject loadProject(File folder)
-  {
-    return loadProject(folder, ProjectDescriptionFactory.ECLIPSE);
-  }
-
-  public IProject loadProject(File folder, ProjectDescriptionFactory... factories)
-  {
-    return ExternalProject.load(folder, factories);
   }
 
 } // ResourcesFactoryImpl

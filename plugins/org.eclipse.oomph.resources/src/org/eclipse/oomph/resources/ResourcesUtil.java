@@ -10,8 +10,11 @@
  */
 package org.eclipse.oomph.resources;
 
+import org.eclipse.oomph.internal.resources.ExternalResource;
 import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.predicates.Predicate;
+import org.eclipse.oomph.resources.backend.BackendContainer;
+import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.XMLUtil;
@@ -19,6 +22,7 @@ import org.eclipse.oomph.util.XMLUtil.ElementHandler;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -30,7 +34,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 
 import org.w3c.dom.Element;
@@ -39,8 +42,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -79,9 +87,103 @@ public final class ResourcesUtil
     return projectName.get();
   }
 
-  public static int importProjects(final Collection<File> projectLocations, IProgressMonitor monitor) throws CoreException
+  public static BackendResource getBackendResource(IResource resource)
   {
-    if (projectLocations.isEmpty())
+    try
+    {
+      Object sessionProperty = resource.getSessionProperty(ExternalResource.BACKEND_RESOURCE_PROPERTY_NAME);
+      if (sessionProperty instanceof BackendResource)
+      {
+        return (BackendResource)sessionProperty;
+      }
+    }
+    catch (CoreException ex)
+    {
+      ResourcesPlugin.INSTANCE.log(ex);
+    }
+
+    return null;
+  }
+
+  public static boolean isLocal(IResource resource)
+  {
+    BackendResource backendResource = getBackendResource(resource);
+    if (backendResource != null)
+    {
+      return backendResource.isLocal();
+    }
+
+    URI locationURI = resource.getLocationURI();
+    if (locationURI != null)
+    {
+      String scheme = locationURI.getScheme();
+      return "file".equalsIgnoreCase(scheme);
+    }
+
+    return false;
+  }
+
+  public static void runWithFile(IProject project, IPath path, RunnableWithFile runnable) throws Exception
+  {
+    IFile iFile = project.getFile(path);
+    if (iFile.exists())
+    {
+      boolean local = ResourcesUtil.isLocal(iFile);
+      File projectFolder = null;
+
+      try
+      {
+        File file;
+        if (!local)
+        {
+          projectFolder = File.createTempFile("local-", "");
+          projectFolder.delete();
+
+          file = new File(projectFolder, path.toOSString());
+          IOUtil.mkdirs(file.getParentFile());
+
+          copyFile(iFile, file);
+        }
+        else
+        {
+          projectFolder = new File(project.getLocationURI().getPath());
+          file = new File(iFile.getLocationURI().getPath());
+        }
+
+        runnable.run(projectFolder, file);
+      }
+      finally
+      {
+        if (!local)
+        {
+          IOUtil.deleteBestEffort(projectFolder);
+        }
+      }
+    }
+  }
+
+  public static void copyFile(IFile source, File target) throws CoreException, FileNotFoundException
+  {
+    InputStream inputStream = null;
+    OutputStream outputStream = null;
+
+    try
+    {
+      inputStream = source.getContents();
+      outputStream = new FileOutputStream(target);
+
+      IOUtil.copy(inputStream, outputStream);
+    }
+    finally
+    {
+      IOUtil.closeSilent(outputStream);
+      IOUtil.closeSilent(inputStream);
+    }
+  }
+
+  public static int importIntoWorkspace(final Map<BackendContainer, IProject> backendContainers, IProgressMonitor monitor) throws CoreException
+  {
+    if (backendContainers.isEmpty())
     {
       return 0;
     }
@@ -91,13 +193,15 @@ public final class ResourcesUtil
     {
       public void run(IProgressMonitor monitor) throws CoreException
       {
-        SubMonitor progress = SubMonitor.convert(monitor, projectLocations.size()).detectCancelation();
+        SubMonitor progress = SubMonitor.convert(monitor, backendContainers.size()).detectCancelation();
 
         try
         {
-          for (File folder : projectLocations)
+          for (Map.Entry<BackendContainer, IProject> entry : backendContainers.entrySet())
           {
-            if (importProject(folder, progress.newChild()))
+            BackendContainer backendContainer = entry.getKey();
+            IProject project = entry.getValue();
+            if (backendContainer.importIntoWorkspace(project, progress.newChild()) == ImportResult.IMPORTED)
             {
               count.incrementAndGet();
             }
@@ -117,115 +221,108 @@ public final class ResourcesUtil
     return count.get();
   }
 
-  @SuppressWarnings("restriction")
-  private static boolean importProject(File folder, IProgressMonitor monitor) throws Exception
+  public static ImportResult importProject(File delegate, IProject project, IProgressMonitor monitor)
   {
-    String name = getProjectName(folder);
-    if (name != null && name.length() != 0)
-    {
-      File location = folder.getCanonicalFile();
+    return null;
+  }
 
-      IWorkspace workspace = getWorkspace();
-      IWorkspaceRoot root = workspace.getRoot();
-      IProject project = root.getProject(name);
-      if (project.exists())
+  public static int importProjects(final Collection<File> projectLocations, IProgressMonitor monitor) throws CoreException
+  {
+    if (projectLocations.isEmpty())
+    {
+      return 0;
+    }
+
+    final AtomicInteger count = new AtomicInteger();
+    getWorkspace().run(new IWorkspaceRunnable()
+    {
+      public void run(IProgressMonitor monitor) throws CoreException
       {
-        File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
-        if (!existingLocation.equals(location))
+        SubMonitor progress = SubMonitor.convert(monitor, projectLocations.size()).detectCancelation();
+
+        try
         {
-          ResourcesPlugin.INSTANCE.log("Project " + name + " exists in different location: " + existingLocation);
-          return false;
+          for (File folder : projectLocations)
+          {
+            if (importProject(folder, progress.newChild()) == ImportResult.IMPORTED)
+            {
+              count.incrementAndGet();
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+          ResourcesPlugin.INSTANCE.coreException(ex);
+        }
+        finally
+        {
+          progress.done();
         }
       }
-      else
+    }, monitor);
+
+    return count.get();
+  }
+
+  public static ImportResult importProject(File folder, IProgressMonitor monitor) throws Exception
+  {
+    String projectName = getProjectName(folder);
+    if (projectName == null || projectName.length() == 0)
+    {
+      ResourcesPlugin.INSTANCE.log("No project name for folder " + folder);
+      return ImportResult.ERROR;
+    }
+
+    return importProject(folder, projectName, monitor);
+  }
+
+  @SuppressWarnings("restriction")
+  public static ImportResult importProject(File folder, String projectName, IProgressMonitor monitor) throws IOException, CoreException
+  {
+    File location = folder.getCanonicalFile();
+
+    IWorkspace workspace = getWorkspace();
+    IWorkspaceRoot root = workspace.getRoot();
+    IProject project = root.getProject(projectName);
+    if (project.exists())
+    {
+      File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
+      if (!existingLocation.equals(location))
       {
-        monitor.setTaskName("Importing project " + name);
-
-        IPath locationPath = new Path(location.getAbsolutePath());
-        IPath parentPath = locationPath.removeLastSegments(1);
-        IPath defaultDefaultLocation = root.getLocation();
-        if (org.eclipse.core.internal.utils.FileUtil.isPrefixOf(parentPath, defaultDefaultLocation)
-            && org.eclipse.core.internal.utils.FileUtil.isPrefixOf(defaultDefaultLocation, parentPath))
-        {
-          locationPath = null;
-        }
-
-        IProjectDescription projectDescription = workspace.newProjectDescription(name);
-        projectDescription.setLocation(locationPath);
-
-        project.create(projectDescription, monitor);
+        ResourcesPlugin.INSTANCE.log("Project " + projectName + " exists in different location: " + existingLocation);
+        return ImportResult.EXISTED_DIFFERENT_LOCATION;
       }
 
       if (!project.isOpen())
       {
         project.open(monitor);
       }
+
+      return ImportResult.EXISTED;
     }
 
-    return true;
-  }
+    monitor.setTaskName("Importing project " + projectName);
 
-  public static Map<IProject, File> collectProjects(File folder, EList<Predicate> predicates, boolean locatedNestedProjects, IProgressMonitor monitor)
-  {
-    Map<IProject, File> results = new HashMap<IProject, File>();
-    collectProjects(folder, predicates, locatedNestedProjects, results, monitor);
-    return results;
-  }
-
-  private static void collectProjects(File folder, EList<Predicate> predicates, boolean locateNestedProjects, Map<IProject, File> results,
-      IProgressMonitor monitor)
-  {
-    if (monitor != null && monitor.isCanceled())
+    IPath locationPath = new Path(location.getAbsolutePath());
+    IPath parentPath = locationPath.removeLastSegments(1);
+    IPath defaultDefaultLocation = root.getLocation();
+    if (org.eclipse.core.internal.utils.FileUtil.isPrefixOf(parentPath, defaultDefaultLocation)
+        && org.eclipse.core.internal.utils.FileUtil.isPrefixOf(defaultDefaultLocation, parentPath))
     {
-      throw new OperationCanceledException();
+      locationPath = null;
     }
 
-    IProject project = ResourcesFactory.eINSTANCE.loadProject(folder);
-    if (matchesPredicates(project, predicates))
+    IProjectDescription projectDescription = workspace.newProjectDescription(projectName);
+    projectDescription.setLocation(locationPath);
+
+    project.create(projectDescription, monitor);
+
+    if (!project.isOpen())
     {
-      results.put(project, folder);
-
-      if (!locateNestedProjects)
-      {
-        return;
-      }
+      project.open(monitor);
     }
 
-    File[] listFiles = folder.listFiles();
-    if (listFiles != null)
-    {
-      for (int i = 0; i < listFiles.length; i++)
-      {
-        File file = listFiles[i];
-        if (file.isDirectory())
-        {
-          collectProjects(file, predicates, locateNestedProjects, results, monitor);
-        }
-      }
-    }
-  }
-
-  public static boolean matchesPredicates(IProject project, EList<Predicate> predicates)
-  {
-    if (project == null)
-    {
-      return false;
-    }
-
-    if (predicates == null || predicates.isEmpty())
-    {
-      return true;
-    }
-
-    for (Predicate predicate : predicates)
-    {
-      if (predicate.matches(project))
-      {
-        return true;
-      }
-    }
-
-    return false;
+    return ImportResult.IMPORTED;
   }
 
   public static void clearWorkspace() throws CoreException
@@ -272,5 +369,44 @@ public final class ResourcesUtil
     }
 
     return workspace.getRoot().findMarkers(markerType, false, IResource.DEPTH_INFINITE);
+  }
+
+  public static boolean matchesPredicates(IProject project, EList<Predicate> predicates)
+  {
+    if (project == null)
+    {
+      return false;
+    }
+
+    if (predicates == null || predicates.isEmpty())
+    {
+      return true;
+    }
+
+    for (Predicate predicate : predicates)
+    {
+      if (predicate.matches(project))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface RunnableWithFile
+  {
+    public void run(File folder, File file) throws Exception;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static enum ImportResult
+  {
+    EXISTED, EXISTED_DIFFERENT_LOCATION, IMPORTED, ERROR
   }
 }

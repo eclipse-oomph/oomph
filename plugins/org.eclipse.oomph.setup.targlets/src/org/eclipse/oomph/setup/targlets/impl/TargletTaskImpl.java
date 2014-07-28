@@ -16,17 +16,15 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.internal.targlets.SetupTargletsPlugin;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerManager;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -39,12 +37,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetPlatformService;
-import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -67,6 +63,10 @@ import java.util.Set;
  */
 public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 {
+  private static final String TARGET_DEFINITION_NAME = "Modular Target";
+
+  private static final String TARGLET_CONTAINER_ID = "Oomph";
+
   /**
    * The cached value of the '{@link #getTarglets() <em>Targlets</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -87,13 +87,9 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    */
   protected EList<String> targletURIs;
 
-  private static final String TARGET_NAME = "Modular Target";
+  private TargletContainer targletContainer;
 
-  private static final String CONTAINER_ID = "Oomph";
-
-  private transient TargletContainer targletContainer;
-
-  private transient ITargetDefinition target;
+  private ITargetDefinition targetDefinition;
 
   private EList<Targlet> copyTarglets;
 
@@ -264,7 +260,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   @Override
   public Object getOverrideToken()
   {
-    return createToken(CONTAINER_ID);
+    return createToken(TARGLET_CONTAINER_ID);
   }
 
   @Override
@@ -308,7 +304,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     }
   }
 
-  public boolean isNeeded(SetupTaskContext context) throws Exception
+  public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
     copyTarglets = TargletFactory.eINSTANCE.copyTarglets(getTarglets());
     for (Targlet targlet : copyTarglets)
@@ -329,49 +325,45 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       return true;
     }
 
-    ITargetPlatformService service = null;
-
-    try
+    return TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Boolean>()
     {
-      service = SetupTargletsPlugin.INSTANCE.getService(ITargetPlatformService.class);
-      ITargetHandle activeTarget = service.getWorkspaceTargetHandle();
-
-      target = getTarget(context, service);
-      if (target == null)
+      public Boolean run(ITargetPlatformService service) throws CoreException
       {
-        return true;
-      }
+        ITargetHandle activeTargetHandle = service.getWorkspaceTargetHandle();
 
-      boolean targetNeedsActivation = true;
-      if (target.getHandle().equals(activeTarget))
-      {
-        targetNeedsActivation = false;
-      }
-
-      targletContainer = getTargletContainer();
-      if (targletContainer == null)
-      {
-        return true;
-      }
-
-      for (Targlet targlet : copyTarglets)
-      {
-        Targlet existingTarglet = targletContainer.getTarglet(targlet.getName());
-        if (existingTarglet == null || !EcoreUtil.equals(existingTarglet, targlet))
+        targetDefinition = getTargetDefinition(context, service);
+        if (targetDefinition == null)
         {
           return true;
         }
-      }
 
-      return targetNeedsActivation;
-    }
-    finally
-    {
-      SetupTargletsPlugin.INSTANCE.ungetService(service);
-    }
+        boolean targetNeedsActivation = true;
+        if (targetDefinition.getHandle().equals(activeTargetHandle))
+        {
+          targetNeedsActivation = false;
+        }
+
+        targletContainer = getTargletContainer();
+        if (targletContainer == null)
+        {
+          return true;
+        }
+
+        for (Targlet targlet : copyTarglets)
+        {
+          Targlet existingTarglet = targletContainer.getTarglet(targlet.getName());
+          if (existingTarglet == null || !EcoreUtil.equals(existingTarglet, targlet))
+          {
+            return true;
+          }
+        }
+
+        return targetNeedsActivation;
+      }
+    });
   }
 
-  public void perform(SetupTaskContext context) throws Exception
+  public void perform(final SetupTaskContext context) throws Exception
   {
     for (Targlet targlet : copyTarglets)
     {
@@ -381,107 +373,84 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       }
     }
 
-    ITargetPlatformService service = null;
-
-    try
+    TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
-      service = SetupTargletsPlugin.INSTANCE.getService(ITargetPlatformService.class);
-
-      if (target == null)
+      public Object run(ITargetPlatformService service) throws CoreException
       {
-        target = getTarget(context, service);
-      }
-
-      if (target == null)
-      {
-        target = service.newTarget();
-        target.setName(TARGET_NAME);
-      }
-
-      if (targletContainer == null)
-      {
-        targletContainer = getTargletContainer();
-      }
-
-      EList<Targlet> targlets;
-      if (targletContainer == null)
-      {
-        targletContainer = new TargletContainer(CONTAINER_ID);
-
-        ITargetLocation[] newLocations;
-        ITargetLocation[] oldLocations = target.getTargetLocations();
-        if (oldLocations != null && oldLocations.length != 0)
+        if (targetDefinition == null)
         {
-          newLocations = new ITargetLocation[oldLocations.length + 1];
-          System.arraycopy(oldLocations, 0, newLocations, 0, oldLocations.length);
-          newLocations[oldLocations.length] = targletContainer;
-        }
-        else
-        {
-          newLocations = new ITargetLocation[] { targletContainer };
+          targetDefinition = getTargetDefinition(context, service);
         }
 
-        target.setTargetLocations(newLocations);
-
-        targlets = copyTarglets;
-      }
-      else
-      {
-        targlets = targletContainer.getTarglets();
-        for (Targlet targlet : copyTarglets)
+        if (targetDefinition == null)
         {
-          int index = targletContainer.getTargletIndex(targlet.getName());
-          if (index != -1)
+          targetDefinition = service.newTarget();
+          targetDefinition.setName(TARGET_DEFINITION_NAME);
+        }
+
+        if (targletContainer == null)
+        {
+          targletContainer = getTargletContainer();
+        }
+
+        EList<Targlet> targlets;
+        if (targletContainer == null)
+        {
+          targletContainer = new TargletContainer(TARGLET_CONTAINER_ID);
+
+          ITargetLocation[] newLocations;
+          ITargetLocation[] oldLocations = targetDefinition.getTargetLocations();
+          if (oldLocations != null && oldLocations.length != 0)
           {
-            targlets.set(index, targlet);
+            newLocations = new ITargetLocation[oldLocations.length + 1];
+            System.arraycopy(oldLocations, 0, newLocations, 0, oldLocations.length);
+            newLocations[oldLocations.length] = targletContainer;
           }
           else
           {
-            targlets.add(targlet);
+            newLocations = new ITargetLocation[] { targletContainer };
+          }
+
+          targetDefinition.setTargetLocations(newLocations);
+
+          targlets = copyTarglets;
+        }
+        else
+        {
+          targlets = targletContainer.getTarglets();
+          for (Targlet targlet : copyTarglets)
+          {
+            int index = targletContainer.getTargletIndex(targlet.getName());
+            if (index != -1)
+            {
+              targlets.set(index, targlet);
+            }
+            else
+            {
+              targlets.add(targlet);
+            }
           }
         }
+
+        IProgressMonitor monitor = new ProgressLogMonitor(context);
+        boolean offline = context.isOffline();
+        boolean mirrors = context.isMirrors();
+
+        targletContainer.setTarglets(targlets);
+        targletContainer.forceUpdate(true, offline, mirrors, monitor);
+        return null;
       }
-
-      IProgressMonitor monitor = new ProgressLogMonitor(context);
-      boolean offline = context.isOffline();
-      boolean mirrors = context.isMirrors();
-
-      targletContainer.setTarglets(targlets);
-      targletContainer.forceUpdate(offline, mirrors, monitor);
-
-      String containerID = targletContainer.getID();
-      TargletContainerManager manager = TargletContainerManager.getInstance();
-      TargletContainerDescriptor descriptor = manager.getDescriptor(containerID, monitor);
-
-      UpdateProblem updateProblem = descriptor.getUpdateProblem();
-      if (updateProblem != null)
-      {
-        SetupTargletsPlugin.INSTANCE.coreException(new CoreException(updateProblem));
-      }
-
-      LoadTargetDefinitionJob job = new LoadTargetDefinitionJob(target);
-      IStatus status = job.run(monitor);
-      if (status.getSeverity() == IStatus.ERROR)
-      {
-        throw new CoreException(status);
-      }
-
-      TargletContainer.updateWorkspace(monitor);
-    }
-    finally
-    {
-      SetupTargletsPlugin.INSTANCE.ungetService(service);
-    }
+    });
   }
 
-  private ITargetDefinition getTarget(SetupTaskContext context, ITargetPlatformService service) throws CoreException
+  private ITargetDefinition getTargetDefinition(SetupTaskContext context, ITargetPlatformService service) throws CoreException
   {
     for (ITargetHandle targetHandle : service.getTargets(new ProgressLogMonitor(context)))
     {
-      ITargetDefinition target = targetHandle.getTargetDefinition();
-      if (TARGET_NAME.equals(target.getName()))
+      ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
+      if (TARGET_DEFINITION_NAME.equals(targetDefinition.getName()))
       {
-        return target;
+        return targetDefinition;
       }
     }
 
@@ -490,7 +459,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
   private TargletContainer getTargletContainer()
   {
-    ITargetLocation[] locations = target.getTargetLocations();
+    ITargetLocation[] locations = targetDefinition.getTargetLocations();
     if (locations != null)
     {
       for (ITargetLocation location : locations)
@@ -498,7 +467,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         if (location instanceof TargletContainer)
         {
           TargletContainer targletContainer = (TargletContainer)location;
-          if (CONTAINER_ID.equals(targletContainer.getID()))
+          if (TARGLET_CONTAINER_ID.equals(targletContainer.getID()))
           {
             return targletContainer;
           }

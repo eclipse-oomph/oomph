@@ -10,9 +10,12 @@
  */
 package org.eclipse.oomph.setup.projects.impl;
 
-import org.eclipse.oomph.predicates.Predicate;
+import org.eclipse.oomph.resources.EclipseProjectFactory;
+import org.eclipse.oomph.resources.ProjectHandler;
 import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.resources.backend.BackendContainer;
+import org.eclipse.oomph.resources.impl.SourceLocatorImpl;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
@@ -37,6 +40,7 @@ import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.MultiStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -45,6 +49,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -225,23 +230,35 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    List<File> projectFolders = new ArrayList<File>();
     ProgressLogMonitor monitor = new ProgressLogMonitor(context);
+    Map<BackendContainer, IProject> backendContainers = new HashMap<BackendContainer, IProject>();
+    MultiStatus status = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, "Projects Import Analysis", null);
 
     for (SourceLocator sourceLocator : getSourceLocators())
     {
-      File rootFolder = new File(sourceLocator.getRootFolder());
-      EList<Predicate> predicates = sourceLocator.getPredicates();
-      boolean locateNestedProjects = sourceLocator.isLocateNestedProjects();
-
+      String rootFolder = sourceLocator.getRootFolder();
       context.log("Importing projects from " + rootFolder);
-      Map<IProject, File> projects = ResourcesUtil.collectProjects(rootFolder, predicates, locateNestedProjects, monitor);
-      projectFolders.addAll(projects.values());
 
-      setProjects(sourceLocator, projects.keySet().toArray(new IProject[projects.size()]));
+      try
+      {
+        ProjectHandler.Collector collector = new ProjectHandler.Collector();
+        sourceLocator.handleProjects(EclipseProjectFactory.LIST, collector, status, monitor);
+
+        Map<IProject, BackendContainer> projectMap = collector.getProjectMap();
+        for (Map.Entry<IProject, BackendContainer> entry : projectMap.entrySet())
+        {
+          backendContainers.put(entry.getValue(), entry.getKey());
+        }
+
+        setProjects(sourceLocator, projectMap.keySet().toArray(new IProject[projectMap.size()]));
+      }
+      catch (Exception ex)
+      {
+        SourceLocatorImpl.addStatus(status, ProjectsPlugin.INSTANCE, rootFolder, ex);
+      }
     }
 
-    ResourcesUtil.importProjects(projectFolders, monitor);
+    ResourcesUtil.importIntoWorkspace(backendContainers, monitor);
   }
 
   private IProject[] getProjects(SourceLocator sourceLocator)

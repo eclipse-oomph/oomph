@@ -29,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getRequirements <em>Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getSourceLocators <em>Source Locators</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.Targlet#getInstallableUnitGenerators <em>Installable Unit Generators</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getRepositoryLists <em>Repository Lists</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryList <em>Active Repository List</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositories <em>Active Repositories</em>}</li>
@@ -102,6 +103,23 @@ public interface Targlet extends ModelElement
    * @generated
    */
   EList<SourceLocator> getSourceLocators();
+
+  /**
+   * Returns the value of the '<em><b>Installable Unit Generators</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.oomph.targlets.IUGenerator}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Installable Unit Generators</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Installable Unit Generators</em>' containment reference list.
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_InstallableUnitGenerators()
+   * @model containment="true"
+   *        extendedMetaData="name='installableUnitGenerator'"
+   * @generated
+   */
+  EList<IUGenerator> getInstallableUnitGenerators();
 
   /**
    * Returns the value of the '<em><b>Repository Lists</b></em>' containment reference list.

@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletPackage;
 
@@ -40,6 +41,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getRequirements <em>Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getSourceLocators <em>Source Locators</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getInstallableUnitGenerators <em>Installable Unit Generators</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getRepositoryLists <em>Repository Lists</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getActiveRepositoryList <em>Active Repository List</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getActiveRepositories <em>Active Repositories</em>}</li>
@@ -91,6 +93,16 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * @ordered
    */
   protected EList<SourceLocator> sourceLocators;
+
+  /**
+   * The cached value of the '{@link #getInstallableUnitGenerators() <em>Installable Unit Generators</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getInstallableUnitGenerators()
+   * @generated
+   * @ordered
+   */
+  protected EList<IUGenerator> installableUnitGenerators;
 
   /**
    * The cached value of the '{@link #getRepositoryLists() <em>Repository Lists</em>}' containment reference list.
@@ -241,6 +253,20 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<IUGenerator> getInstallableUnitGenerators()
+  {
+    if (installableUnitGenerators == null)
+    {
+      installableUnitGenerators = new EObjectContainmentEList<IUGenerator>(IUGenerator.class, this, TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS);
+    }
+    return installableUnitGenerators;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EList<RepositoryList> getRepositoryLists()
   {
     if (repositoryLists == null)
@@ -371,6 +397,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return ((InternalEList<?>)getRequirements()).basicRemove(otherEnd, msgs);
       case TargletPackage.TARGLET__SOURCE_LOCATORS:
         return ((InternalEList<?>)getSourceLocators()).basicRemove(otherEnd, msgs);
+      case TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS:
+        return ((InternalEList<?>)getInstallableUnitGenerators()).basicRemove(otherEnd, msgs);
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         return ((InternalEList<?>)getRepositoryLists()).basicRemove(otherEnd, msgs);
     }
@@ -393,6 +421,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return getRequirements();
       case TargletPackage.TARGLET__SOURCE_LOCATORS:
         return getSourceLocators();
+      case TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS:
+        return getInstallableUnitGenerators();
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         return getRepositoryLists();
       case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:
@@ -428,6 +458,10 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__SOURCE_LOCATORS:
         getSourceLocators().clear();
         getSourceLocators().addAll((Collection<? extends SourceLocator>)newValue);
+        return;
+      case TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS:
+        getInstallableUnitGenerators().clear();
+        getInstallableUnitGenerators().addAll((Collection<? extends IUGenerator>)newValue);
         return;
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         getRepositoryLists().clear();
@@ -465,6 +499,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__SOURCE_LOCATORS:
         getSourceLocators().clear();
         return;
+      case TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS:
+        getInstallableUnitGenerators().clear();
+        return;
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         getRepositoryLists().clear();
         return;
@@ -497,6 +534,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return requirements != null && !requirements.isEmpty();
       case TargletPackage.TARGLET__SOURCE_LOCATORS:
         return sourceLocators != null && !sourceLocators.isEmpty();
+      case TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS:
+        return installableUnitGenerators != null && !installableUnitGenerators.isEmpty();
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         return repositoryLists != null && !repositoryLists.isEmpty();
       case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:

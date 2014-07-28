@@ -20,7 +20,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="targlets" upperBound="-1"
         eType="#//Targlet" containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
-        <details key="name" value="requirement"/>
+        <details key="name" value="targlet"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -38,6 +38,12 @@
         containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="sourceLocator"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="installableUnitGenerators"
+        upperBound="-1" eType="#//IUGenerator" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="installableUnitGenerator"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositoryLists" upperBound="-1"
@@ -78,4 +84,28 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType ../../org.eclipse.oomph.p2/model/P2.ecore#//Version"
         defaultValueLiteral="1.0.0"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IUGenerator" abstract="true" interface="true"
+      eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
+    <eOperations name="generateIU" eType="#//InstallableUnit" eExceptions="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//Exception">
+      <eParameters name="project" eType="ecore:EDataType ../../org.eclipse.oomph.predicates/model/Predicates.ecore#//Project"/>
+      <eParameters name="qualifierReplacement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="iuVersions" eType="#//StringToVersionMap"/>
+    </eOperations>
+    <eOperations name="modifyIU" eExceptions="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//Exception">
+      <eParameters name="iu" eType="#//InstallableUnit"/>
+      <eParameters name="project" eType="ecore:EDataType ../../org.eclipse.oomph.predicates/model/Predicates.ecore#//Project"/>
+      <eParameters name="qualifierReplacement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="iuVersions" eType="#//StringToVersionMap"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PluginGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BuckminsterGenerator" eSuperTypes="#//IUGenerator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="saveAsComponent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="InstallableUnit" instanceClassName="org.eclipse.equinox.p2.metadata.IInstallableUnit"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="StringToVersionMap" instanceTypeName="java.util.Map&lt;java.lang.String, org.eclipse.equinox.p2.metadata.Version>"
+      serializable="false"/>
 </ecore:EPackage>

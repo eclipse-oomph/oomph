@@ -115,6 +115,7 @@
     <module>plugins/org.eclipse.oomph.tests</module>
     <module>plugins/org.eclipse.oomph.ui</module>
     <module>plugins/org.eclipse.oomph.util</module>
+    <module>plugins/org.eclipse.oomph.util.pde</module>
     <module>plugins/org.eclipse.oomph.version</module>
     <module>plugins/org.eclipse.oomph.version.digest</module>
     <module>plugins/org.eclipse.oomph.version.tests</module>

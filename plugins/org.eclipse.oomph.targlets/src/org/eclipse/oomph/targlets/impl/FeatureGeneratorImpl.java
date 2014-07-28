@@ -1,23 +1,25 @@
-/*
- * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *    Eike Stepper - initial API and implementation
+/**
  */
-package org.eclipse.oomph.targlets.internal.core;
+package org.eclipse.oomph.targlets.impl;
 
+import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.VersionSegment;
+import org.eclipse.oomph.resources.ResourcesUtil;
+import org.eclipse.oomph.targlets.FeatureGenerator;
+import org.eclipse.oomph.targlets.TargletPackage;
+import org.eclipse.oomph.targlets.util.VersionGenerator;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.OSGiVersion;
 import org.eclipse.equinox.internal.p2.metadata.RequiredCapability;
-import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
@@ -25,127 +27,129 @@ import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.publisher.PublisherInfo;
-import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
 import org.eclipse.equinox.p2.publisher.eclipse.Feature;
 import org.eclipse.equinox.p2.publisher.eclipse.FeaturesAction;
-import org.eclipse.osgi.service.resolver.BundleDescription;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author Eike Stepper
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Feature Generator</b></em>'.
+ * <!-- end-user-doc -->
+ * <p>
+ * </p>
+ *
+ * @generated
  */
-public interface IUGenerator
+public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGenerator
 {
-  public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source";
+  private static final IPath MANIFEST_PATH = new Path("feature.xml");
 
-  public static final class VersionGenerator
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected FeatureGeneratorImpl()
   {
-    private static final String QUALIFIER = "qualifier";
-
-    private static final String QUALIFIER_SUFFIX = "." + QUALIFIER;
-
-    private static final int QUALIFIER_LENGTH = QUALIFIER.length();
-
-    public static String generateQualifierReplacement()
-    {
-      return new SimpleDateFormat("'v'yyyyMMdd-HHmmss").format(new Date());
-    }
-
-    public static String replaceQualifier(String version, String qualifierReplacement)
-    {
-      if (version != null && qualifierReplacement != null && version.endsWith(QUALIFIER_SUFFIX))
-      {
-        int length = version.length();
-        StringBuilder result = new StringBuilder(length - QUALIFIER_LENGTH + qualifierReplacement.length());
-        result.append(version, 0, length - QUALIFIER_LENGTH);
-        result.append(qualifierReplacement);
-        version = result.toString();
-      }
-
-      return version;
-    }
-
-    public static Version replaceQualifier(Version version, String qualifierReplacement)
-    {
-      if (version != null && version.isOSGiCompatible())
-      {
-        version = Version.create(replaceQualifier(version.toString(), qualifierReplacement));
-      }
-
-      return version;
-    }
+    super();
   }
 
-  public IInstallableUnit generateIU(File location, String qualifierReplacement, Map<String, Version> ius) throws Exception;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass()
+  {
+    return TargletPackage.Literals.FEATURE_GENERATOR;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public IInstallableUnit generateIU(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions) throws Exception
+  {
+    final IInstallableUnit[] result = { null };
+
+    ResourcesUtil.runWithFile(project, MANIFEST_PATH, new ResourcesUtil.RunnableWithFile()
+    {
+      public void run(File projectFolder, File file) throws Exception
+      {
+        result[0] = FeatureGeneratorAction.INSTANCE.generateIU(projectFolder, qualifierReplacement, iuVersions);
+      }
+    });
+
+    return result[0];
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public void modifyIU(IInstallableUnit iu, IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception
+  {
+    // Do nothing
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException
+  {
+    switch (operationID)
+    {
+      case TargletPackage.FEATURE_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP:
+        try
+        {
+          return generateIU((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
+        }
+        catch (Throwable throwable)
+        {
+          throw new InvocationTargetException(throwable);
+        }
+      case TargletPackage.FEATURE_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP:
+        try
+        {
+          modifyIU((IInstallableUnit)arguments.get(0), (IProject)arguments.get(1), (String)arguments.get(2), (Map<String, Version>)arguments.get(3));
+          return null;
+        }
+        catch (Throwable throwable)
+        {
+          throw new InvocationTargetException(throwable);
+        }
+    }
+    return super.eInvoke(operationID, arguments);
+  }
 
   /**
    * @author Eike Stepper
    */
-  public static final class BundleIUGenerator extends BundlesAction implements IUGenerator
+  public static final class FeatureGeneratorAction extends FeaturesAction
   {
-    public static final IUGenerator INSTANCE = new BundleIUGenerator();
+    public static final FeatureGeneratorAction INSTANCE = new FeatureGeneratorAction();
 
-    private BundleIUGenerator()
+    private FeatureGeneratorAction()
     {
       super((File[])null);
       setPublisherInfo(new PublisherInfo());
     }
 
-    public IInstallableUnit generateIU(File location, String qualifierReplacement, Map<String, Version> ius) throws Exception
+    public IInstallableUnit generateIU(File projectFolder, String qualifierReplacement, final Map<String, Version> ius) throws Exception
     {
-      Dictionary<String, String> manifest = loadManifest(location);
-      if (manifest == null)
-      {
-        return null;
-      }
-
-      String version = manifest.get(org.osgi.framework.Constants.BUNDLE_VERSION);
-      manifest.put(org.osgi.framework.Constants.BUNDLE_VERSION, VersionGenerator.replaceQualifier(version, qualifierReplacement));
-
-      BundleDescription description = createBundleDescription(manifest, location);
-      if (description == null)
-      {
-        return null;
-      }
-
-      IInstallableUnit iu = createBundleIU(description, null, info);
-      if (iu instanceof InstallableUnit)
-      {
-        ((InstallableUnit)iu).setArtifacts(new IArtifactKey[0]);
-        ((InstallableUnit)iu).setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
-      }
-
-      return iu;
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static final class FeatureIUGenerator extends FeaturesAction implements IUGenerator
-  {
-    public static final String PROP_REQUIRED_LICENCSE_FEATURE_ID = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureID";
-
-    public static final String PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureVersionRange";
-
-    public static final IUGenerator INSTANCE = new FeatureIUGenerator();
-
-    private FeatureIUGenerator()
-    {
-      super((File[])null);
-      setPublisherInfo(new PublisherInfo());
-    }
-
-    public IInstallableUnit generateIU(File location, String qualifierReplacement, final Map<String, Version> ius) throws Exception
-    {
-      Feature[] features = getFeatures(new File[] { location });
+      Feature[] features = getFeatures(new File[] { projectFolder });
       if (features == null || features.length == 0)
       {
         return null;
@@ -193,8 +197,8 @@ public interface IUGenerator
         IRequirement requirement = MetadataFactory.createRequirement(namespace, name, osgiRange, null, true, false);
         newRequirements[size] = requirement;
 
-        iu.setProperty(PROP_REQUIRED_LICENCSE_FEATURE_ID, name);
-        iu.setProperty(PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE, osgiRange.toString());
+        iu.setProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID, name);
+        iu.setProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE, osgiRange.toString());
       }
 
       // Adjust childIU requirements to support possible .qualifier specifications
@@ -318,7 +322,6 @@ public interface IUGenerator
         iu.setRequiredCapabilities(newRequirements);
       }
 
-      iu.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
       return iu;
     }
 
@@ -343,4 +346,5 @@ public interface IUGenerator
       return null;
     }
   }
-}
+
+} // FeatureGeneratorImpl

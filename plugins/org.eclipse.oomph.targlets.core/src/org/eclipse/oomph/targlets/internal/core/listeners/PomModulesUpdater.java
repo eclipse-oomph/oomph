@@ -12,11 +12,11 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.targlets.Targlet;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
-import org.eclipse.oomph.targlets.core.TargletContainerListener;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-public class PomModulesUpdater implements TargletContainerListener
+public class PomModulesUpdater extends WorkspaceUpdateListener
 {
   public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomModulesUpdater";
 
@@ -49,37 +49,36 @@ public class PomModulesUpdater implements TargletContainerListener
   {
   }
 
-  public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
+  @Override
+  protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
+      WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
   {
-    if (event instanceof TargletContainerUpdated)
+    TargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
+    for (Targlet targlet : targletContainer.getTarglets())
     {
-      TargletContainerUpdated targletContainerUpdated = (TargletContainerUpdated)event;
-      TargletContainer targletContainer = targletContainerUpdated.getSource();
-      for (Targlet targlet : targletContainer.getTarglets())
+      Annotation annotation = targlet.getAnnotation(ANNOTATION);
+      if (annotation != null)
       {
-        Annotation annotation = targlet.getAnnotation(ANNOTATION);
-        if (annotation != null)
+        String location = annotation.getDetails().get(ANNOTATION_LOCATION);
+        if (!StringUtil.isEmpty(location))
         {
-          String location = annotation.getDetails().get(ANNOTATION_LOCATION);
-          if (!StringUtil.isEmpty(location))
+          File mainPom = new File(location);
+          if (mainPom.isFile())
           {
-            File mainPom = new File(location);
-            if (mainPom.isFile())
-            {
-              Map<IInstallableUnit, File> projectLocations = targletContainerUpdated.getProjectLocations();
-              updatePomModules(mainPom, projectLocations, monitor);
-            }
-            else
-            {
-              TargletsCorePlugin.INSTANCE.log("Not a file: " + mainPom, IStatus.WARNING);
-            }
+            Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = profileUpdateSucceededEvent.getWorkspaceIUInfos();
+            updatePomModules(mainPom, workspaceIUInfos, monitor);
+          }
+          else
+          {
+            TargletsCorePlugin.INSTANCE.log("Not a file: " + mainPom, IStatus.WARNING);
           }
         }
       }
     }
   }
 
-  private static void updatePomModules(final File mainPom, final Map<IInstallableUnit, File> projectLocations, final IProgressMonitor monitor) throws Exception
+  private static void updatePomModules(final File mainPom, final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, final IProgressMonitor monitor)
+      throws Exception
   {
     monitor.subTask("Checking for POM modules updates");
     new FileUpdater()
@@ -100,7 +99,7 @@ public class PomModulesUpdater implements TargletContainerListener
           builder.append("<modules>");
           builder.append(nl);
 
-          List<String> modules = analyzeProjects(mainPom, projectLocations, monitor);
+          List<String> modules = analyzeProjects(mainPom, workspaceIUInfos, monitor);
           for (String module : modules)
           {
             builder.append(indent);
@@ -130,15 +129,16 @@ public class PomModulesUpdater implements TargletContainerListener
     }.update(mainPom);
   }
 
-  private static List<String> analyzeProjects(File mainPom, Map<IInstallableUnit, File> projectLocations, IProgressMonitor monitor)
+  private static List<String> analyzeProjects(File mainPom, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, IProgressMonitor monitor)
   {
     URI mainURI = URI.createFileURI(mainPom.getAbsolutePath());
     List<String> modules = new ArrayList<String>();
 
-    for (File folder : projectLocations.values())
+    for (WorkspaceIUInfo info : workspaceIUInfos.values())
     {
       TargletsCorePlugin.checkCancelation(monitor);
 
+      File folder = info.getLocation();
       File pom = new File(folder, "pom.xml");
       if (pom.isFile())
       {

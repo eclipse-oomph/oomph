@@ -14,8 +14,12 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.targlets.BuckminsterGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.ComponentGenerator;
+import org.eclipse.oomph.targlets.FeatureGenerator;
+import org.eclipse.oomph.targlets.PluginGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
@@ -24,6 +28,7 @@ import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
@@ -92,8 +97,46 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
         return createComponentExtension();
       case TargletPackage.COMPONENT_DEFINITION:
         return createComponentDefinition();
+      case TargletPackage.FEATURE_GENERATOR:
+        return createFeatureGenerator();
+      case TargletPackage.PLUGIN_GENERATOR:
+        return createPluginGenerator();
+      case TargletPackage.COMPONENT_GENERATOR:
+        return createComponentGenerator();
+      case TargletPackage.BUCKMINSTER_GENERATOR:
+        return createBuckminsterGenerator();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object createFromString(EDataType eDataType, String initialValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String convertToString(EDataType eDataType, Object instanceValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
   }
 
@@ -194,6 +237,50 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
   {
     ComponentDefinitionImpl componentDefinition = new ComponentDefinitionImpl();
     return componentDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FeatureGenerator createFeatureGenerator()
+  {
+    FeatureGeneratorImpl featureGenerator = new FeatureGeneratorImpl();
+    return featureGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PluginGenerator createPluginGenerator()
+  {
+    PluginGeneratorImpl pluginGenerator = new PluginGeneratorImpl();
+    return pluginGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ComponentGenerator createComponentGenerator()
+  {
+    ComponentGeneratorImpl componentGenerator = new ComponentGeneratorImpl();
+    return componentGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public BuckminsterGenerator createBuckminsterGenerator()
+  {
+    BuckminsterGeneratorImpl buckminsterGenerator = new BuckminsterGeneratorImpl();
+    return buckminsterGenerator;
   }
 
   /**

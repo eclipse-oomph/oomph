@@ -37,8 +37,6 @@ import java.util.Stack;
 @SuppressWarnings("restriction")
 public class CachingTransport extends Transport
 {
-  private static final boolean DEBUG = true;
-
   private static final ThreadLocal<Stack<String>> REPOSITORY_LOCATIONS = new InheritableThreadLocal<Stack<String>>()
   {
     @Override
@@ -47,6 +45,8 @@ public class CachingTransport extends Transport
       return new Stack<String>();
     }
   };
+
+  private static boolean DEBUG = false;
 
   private final Agent agent;
 

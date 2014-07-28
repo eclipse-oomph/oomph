@@ -11,8 +11,12 @@
 package org.eclipse.oomph.resources.util;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.resources.EclipseProjectFactory;
+import org.eclipse.oomph.resources.MavenProjectFactory;
+import org.eclipse.oomph.resources.ProjectFactory;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.resources.XMLProjectFactory;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -88,6 +92,30 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseProjectFactory(ProjectFactory object)
+    {
+      return createProjectFactoryAdapter();
+    }
+
+    @Override
+    public Adapter caseXMLProjectFactory(XMLProjectFactory object)
+    {
+      return createXMLProjectFactoryAdapter();
+    }
+
+    @Override
+    public Adapter caseEclipseProjectFactory(EclipseProjectFactory object)
+    {
+      return createEclipseProjectFactoryAdapter();
+    }
+
+    @Override
+    public Adapter caseMavenProjectFactory(MavenProjectFactory object)
+    {
+      return createMavenProjectFactoryAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -125,6 +153,66 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSourceLocatorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.resources.ProjectFactory <em>Project Factory</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.resources.ProjectFactory
+   * @generated
+   */
+  public Adapter createProjectFactoryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.resources.XMLProjectFactory <em>XML Project Factory</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.resources.XMLProjectFactory
+   * @generated
+   */
+  public Adapter createXMLProjectFactoryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.resources.EclipseProjectFactory <em>Eclipse Project Factory</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.resources.EclipseProjectFactory
+   * @generated
+   */
+  public Adapter createEclipseProjectFactoryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.resources.MavenProjectFactory <em>Maven Project Factory</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.resources.MavenProjectFactory
+   * @generated
+   */
+  public Adapter createMavenProjectFactoryAdapter()
   {
     return null;
   }

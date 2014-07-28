@@ -10,6 +10,10 @@
  */
 package org.eclipse.oomph.internal.resources;
 
+import org.eclipse.oomph.resources.backend.BackendException;
+import org.eclipse.oomph.resources.backend.BackendResource;
+import org.eclipse.oomph.resources.backend.BackendSystem;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IPathVariableManager;
@@ -24,13 +28,13 @@ import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
-import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -39,19 +43,26 @@ import java.util.Map;
  */
 public abstract class ExternalResource extends PlatformObject implements IResource, IResourceProxy
 {
+  public static final QualifiedName BACKEND_RESOURCE_PROPERTY_NAME = new QualifiedName("org.eclipse.oomph.resources", "backendResource");
+
   private final ExternalContainer parent;
 
-  private final String name;
+  private final BackendResource backendResource;
 
-  protected ExternalResource(ExternalContainer parent, String name)
+  protected ExternalResource(ExternalContainer parent, BackendResource backendResource)
   {
     this.parent = parent;
-    this.name = name;
+    this.backendResource = backendResource;
   }
 
-  protected File getFile()
+  protected BackendResource getBackendResource()
   {
-    return new File(parent.getFile(), name);
+    return backendResource;
+  }
+
+  protected BackendSystem getBackendSystem()
+  {
+    return backendResource.getSystem();
   }
 
   public boolean contains(ISchedulingRule rule)
@@ -152,7 +163,7 @@ public abstract class ExternalResource extends PlatformObject implements IResour
 
   public boolean exists()
   {
-    return getFile().exists();
+    return backendResource.exists(new NullProgressMonitor());
   }
 
   public IMarker findMarker(long id) throws CoreException
@@ -182,17 +193,29 @@ public abstract class ExternalResource extends PlatformObject implements IResour
 
   public long getLocalTimeStamp()
   {
-    return getFile().lastModified();
+    return backendResource.getLastModified();
   }
 
   public IPath getLocation()
   {
-    return new Path(getFile().getAbsolutePath());
+    return backendResource.getLocation();
   }
 
   public URI getLocationURI()
   {
-    return getFile().toURI();
+    try
+    {
+      if (backendResource.isLocal())
+      {
+        return new URI(backendResource.getLocation().toString());
+      }
+
+      return new URI(backendResource.getAbsoluteURI().toString());
+    }
+    catch (URISyntaxException ex)
+    {
+      throw new BackendException(ex);
+    }
   }
 
   public IMarker getMarker(long id)
@@ -207,7 +230,7 @@ public abstract class ExternalResource extends PlatformObject implements IResour
 
   public String getName()
   {
-    return name;
+    return backendResource.getName();
   }
 
   public IPathVariableManager getPathVariableManager()
@@ -243,12 +266,12 @@ public abstract class ExternalResource extends PlatformObject implements IResour
 
   public IPath getRawLocation()
   {
-    return new Path(getFile().getAbsolutePath());
+    return getLocation();
   }
 
   public URI getRawLocationURI()
   {
-    return getFile().toURI();
+    return getLocationURI();
   }
 
   public ResourceAttributes getResourceAttributes()
@@ -258,11 +281,16 @@ public abstract class ExternalResource extends PlatformObject implements IResour
 
   public Map<QualifiedName, Object> getSessionProperties()
   {
-    return Collections.emptyMap();
+    return Collections.singletonMap(BACKEND_RESOURCE_PROPERTY_NAME, (Object)backendResource);
   }
 
   public Object getSessionProperty(QualifiedName key)
   {
+    if (BACKEND_RESOURCE_PROPERTY_NAME.equals(key))
+    {
+      return backendResource;
+    }
+
     return null;
   }
 

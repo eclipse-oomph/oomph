@@ -24,8 +24,8 @@ import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerManager;
+import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -33,13 +33,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.frameworkadmin.BundleInfo;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetPlatformService;
-import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
 
@@ -94,31 +92,11 @@ public class TargletTests extends AbstractP2Test
     return targlet;
   }
 
-  @SuppressWarnings("restriction")
   private void setTarglet(Targlet targlet) throws CoreException
   {
     Set<Targlet> targlets = Collections.singleton(targlet);
     targletContainer.setTarglets(targlets);
-    targletContainer.forceUpdate(false, false, LOGGER);
-
-    String containerID = targletContainer.getID();
-    TargletContainerManager manager = TargletContainerManager.getInstance();
-    TargletContainerDescriptor descriptor = manager.getDescriptor(containerID, LOGGER);
-
-    TargletContainerDescriptor.UpdateProblem updateProblem = descriptor.getUpdateProblem();
-    if (updateProblem != null)
-    {
-      TargletsTestsPlugin.INSTANCE.coreException(new CoreException(updateProblem));
-    }
-
-    LoadTargetDefinitionJob job = new LoadTargetDefinitionJob(target);
-    IStatus status = job.run(LOGGER);
-    if (status.getSeverity() == IStatus.ERROR)
-    {
-      throw new CoreException(status);
-    }
-
-    TargletContainer.updateWorkspace(LOGGER);
+    targletContainer.forceUpdate(true, false, false, LOGGER);
   }
 
   private static void assertImportedProjects(String... names)
@@ -168,46 +146,42 @@ public class TargletTests extends AbstractP2Test
     super.setUp();
     ResourcesUtil.clearWorkspace();
 
-    ITargetPlatformService service = null;
-
-    try
+    TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
-      service = TargletsTestsPlugin.INSTANCE.getService(ITargetPlatformService.class);
-
-      for (ITargetHandle targetHandle : service.getTargets(LOGGER))
+      public Object run(ITargetPlatformService service) throws CoreException
       {
-        ITargetDefinition target = targetHandle.getTargetDefinition();
-        if (TARGET_NAME.equals(target.getName()))
+        for (ITargetHandle targetHandle : service.getTargets(LOGGER))
         {
-          service.deleteTarget(targetHandle);
-          break;
+          ITargetDefinition target = targetHandle.getTargetDefinition();
+          if (TARGET_NAME.equals(target.getName()))
+          {
+            service.deleteTarget(targetHandle);
+            break;
+          }
         }
+
+        target = service.newTarget();
+        target.setName(TARGET_NAME);
+
+        targletContainer = new TargletContainer(CONTAINER_ID);
+
+        ITargetLocation[] newLocations;
+        ITargetLocation[] oldLocations = target.getTargetLocations();
+        if (oldLocations != null && oldLocations.length != 0)
+        {
+          newLocations = new ITargetLocation[oldLocations.length + 1];
+          System.arraycopy(oldLocations, 0, newLocations, 0, oldLocations.length);
+          newLocations[oldLocations.length] = targletContainer;
+        }
+        else
+        {
+          newLocations = new ITargetLocation[] { targletContainer };
+        }
+
+        target.setTargetLocations(newLocations);
+        return null;
       }
-
-      target = service.newTarget();
-      target.setName(TARGET_NAME);
-
-      targletContainer = new TargletContainer(CONTAINER_ID);
-
-      ITargetLocation[] newLocations;
-      ITargetLocation[] oldLocations = target.getTargetLocations();
-      if (oldLocations != null && oldLocations.length != 0)
-      {
-        newLocations = new ITargetLocation[oldLocations.length + 1];
-        System.arraycopy(oldLocations, 0, newLocations, 0, oldLocations.length);
-        newLocations[oldLocations.length] = targletContainer;
-      }
-      else
-      {
-        newLocations = new ITargetLocation[] { targletContainer };
-      }
-
-      target.setTargetLocations(newLocations);
-    }
-    finally
-    {
-      TargletsTestsPlugin.INSTANCE.ungetService(service);
-    }
+    });
   }
 
   @Override

@@ -233,8 +233,8 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
                         + missingIU.getName() + " " + missingIU.getRange());
                     for (P2Index.Repository repository : repositories)
                     {
-                      missingIUInfo.addChild(new StatusWrapper(repository.getLocation().toString() + "  (" + (repository.isComposed() ? "composed" : "simple")
-                          + ": " + repository.getCapabilityCount()));
+                      missingIUInfo.addChild(new StatusWrapper(repository.getLocation() + "  (" + (repository.isComposed() ? "composed" : "simple") + ": "
+                          + repository.getCapabilityCount() + ")"));
                     }
                   }
                 }

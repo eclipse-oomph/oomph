@@ -12,16 +12,26 @@ package org.eclipse.oomph.resources.impl;
 
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.predicates.PredicatesPackage;
+import org.eclipse.oomph.resources.EclipseProjectFactory;
+import org.eclipse.oomph.resources.MavenProjectFactory;
+import org.eclipse.oomph.resources.ProjectFactory;
+import org.eclipse.oomph.resources.ProjectHandler;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.resources.XMLProjectFactory;
+import org.eclipse.oomph.resources.backend.BackendContainer;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.MultiStatus;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,6 +47,62 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * @generated
    */
   private EClass sourceLocatorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass projectFactoryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass xmlProjectFactoryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass eclipseProjectFactoryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass mavenProjectFactoryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType projectHandlerEDataType = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType backendContainerEDataType = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType multiStatusEDataType = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType progressMonitorEDataType = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -132,9 +198,19 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getSourceLocator_ProjectFactories()
+  {
+    return (EReference)sourceLocatorEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getSourceLocator_LocateNestedProjects()
   {
-    return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -144,7 +220,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    */
   public EReference getSourceLocator_Predicates()
   {
-    return (EReference)sourceLocatorEClass.getEStructuralFeatures().get(2);
+    return (EReference)sourceLocatorEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -155,6 +231,116 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
   public EOperation getSourceLocator__Matches__IProject()
   {
     return sourceLocatorEClass.getEOperations().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getSourceLocator__LoadProject__EList_BackendContainer_IProgressMonitor()
+  {
+    return sourceLocatorEClass.getEOperations().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getSourceLocator__HandleProjects__EList_ProjectHandler_MultiStatus_IProgressMonitor()
+  {
+    return sourceLocatorEClass.getEOperations().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getProjectFactory()
+  {
+    return projectFactoryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getProjectFactory__CreateProject__BackendContainer_IProgressMonitor()
+  {
+    return projectFactoryEClass.getEOperations().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getXMLProjectFactory()
+  {
+    return xmlProjectFactoryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEclipseProjectFactory()
+  {
+    return eclipseProjectFactoryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getMavenProjectFactory()
+  {
+    return mavenProjectFactoryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EDataType getProjectHandler()
+  {
+    return projectHandlerEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EDataType getBackendContainer()
+  {
+    return backendContainerEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EDataType getMultiStatus()
+  {
+    return multiStatusEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EDataType getProgressMonitor()
+  {
+    return progressMonitorEDataType;
   }
 
   /**
@@ -192,9 +378,27 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     // Create classes and their features
     sourceLocatorEClass = createEClass(SOURCE_LOCATOR);
     createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__ROOT_FOLDER);
+    createEReference(sourceLocatorEClass, SOURCE_LOCATOR__PROJECT_FACTORIES);
     createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS);
     createEReference(sourceLocatorEClass, SOURCE_LOCATOR__PREDICATES);
     createEOperation(sourceLocatorEClass, SOURCE_LOCATOR___MATCHES__IPROJECT);
+    createEOperation(sourceLocatorEClass, SOURCE_LOCATOR___LOAD_PROJECT__ELIST_BACKENDCONTAINER_IPROGRESSMONITOR);
+    createEOperation(sourceLocatorEClass, SOURCE_LOCATOR___HANDLE_PROJECTS__ELIST_PROJECTHANDLER_MULTISTATUS_IPROGRESSMONITOR);
+
+    projectFactoryEClass = createEClass(PROJECT_FACTORY);
+    createEOperation(projectFactoryEClass, PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR);
+
+    xmlProjectFactoryEClass = createEClass(XML_PROJECT_FACTORY);
+
+    eclipseProjectFactoryEClass = createEClass(ECLIPSE_PROJECT_FACTORY);
+
+    mavenProjectFactoryEClass = createEClass(MAVEN_PROJECT_FACTORY);
+
+    // Create data types
+    projectHandlerEDataType = createEDataType(PROJECT_HANDLER);
+    backendContainerEDataType = createEDataType(BACKEND_CONTAINER);
+    multiStatusEDataType = createEDataType(MULTI_STATUS);
+    progressMonitorEDataType = createEDataType(PROGRESS_MONITOR);
   }
 
   /**
@@ -234,11 +438,17 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 
     // Add supertypes to classes
     sourceLocatorEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    projectFactoryEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    xmlProjectFactoryEClass.getESuperTypes().add(getProjectFactory());
+    eclipseProjectFactoryEClass.getESuperTypes().add(getXMLProjectFactory());
+    mavenProjectFactoryEClass.getESuperTypes().add(getXMLProjectFactory());
 
     // Initialize classes, features, and operations; add parameters
     initEClass(sourceLocatorEClass, SourceLocator.class, "SourceLocator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSourceLocator_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSourceLocator_ProjectFactories(), getProjectFactory(), null, "projectFactories", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSourceLocator_LocateNestedProjects(), ecorePackage.getEBoolean(), "locateNestedProjects", null, 0, 1, SourceLocator.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSourceLocator_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
@@ -246,6 +456,38 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 
     EOperation op = initEOperation(getSourceLocator__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+    op = initEOperation(getSourceLocator__LoadProject__EList_BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(), "loadProject", 0, 1,
+        IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getProjectFactory(), "defaultProjectFactories", 0, -1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+    op = initEOperation(getSourceLocator__HandleProjects__EList_ProjectHandler_MultiStatus_IProgressMonitor(), null, "handleProjects", 0, 1, IS_UNIQUE,
+        IS_ORDERED);
+    addEParameter(op, getProjectFactory(), "defaultProjectFactories", 0, -1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getProjectHandler(), "projectHandler", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getMultiStatus(), "status", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+    initEClass(projectFactoryEClass, ProjectFactory.class, "ProjectFactory", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    op = initEOperation(getProjectFactory__CreateProject__BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(), "createProject", 0, 1,
+        IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+    initEClass(xmlProjectFactoryEClass, XMLProjectFactory.class, "XMLProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(eclipseProjectFactoryEClass, EclipseProjectFactory.class, "EclipseProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(mavenProjectFactoryEClass, MavenProjectFactory.class, "MavenProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    // Initialize data types
+    initEDataType(projectHandlerEDataType, ProjectHandler.class, "ProjectHandler", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(backendContainerEDataType, BackendContainer.class, "BackendContainer", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(multiStatusEDataType, MultiStatus.class, "MultiStatus", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(progressMonitorEDataType, IProgressMonitor.class, "ProgressMonitor", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore");
@@ -293,6 +535,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getSourceLocator_ProjectFactories(), source, new String[] { "name", "projectFactory" });
     addAnnotation(getSourceLocator_Predicates(), source, new String[] { "name", "predicate" });
   }
 

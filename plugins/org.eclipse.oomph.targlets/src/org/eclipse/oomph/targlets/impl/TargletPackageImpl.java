@@ -12,9 +12,15 @@ package org.eclipse.oomph.targlets.impl;
 
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.p2.P2Package;
+import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.oomph.resources.ResourcesPackage;
+import org.eclipse.oomph.targlets.BuckminsterGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.ComponentGenerator;
+import org.eclipse.oomph.targlets.FeatureGenerator;
+import org.eclipse.oomph.targlets.IUGenerator;
+import org.eclipse.oomph.targlets.PluginGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
@@ -22,9 +28,15 @@ import org.eclipse.oomph.targlets.TargletPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -61,6 +73,55 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * @generated
    */
   private EClass componentDefinitionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass iuGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass featureGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass pluginGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass componentGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass buckminsterGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType installableUnitEDataType = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType stringToVersionMapEDataType = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -207,7 +268,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getTarglet_RepositoryLists()
+  public EReference getTarglet_InstallableUnitGenerators()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(3);
   }
@@ -217,9 +278,19 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getTarglet_RepositoryLists()
+  {
+    return (EReference)targletEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getTarglet_ActiveRepositoryList()
   {
-    return (EAttribute)targletEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -229,7 +300,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   public EReference getTarglet_ActiveRepositories()
   {
-    return (EReference)targletEClass.getEStructuralFeatures().get(5);
+    return (EReference)targletEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -239,7 +310,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   public EAttribute getTarglet_IncludeSources()
   {
-    return (EAttribute)targletEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -249,7 +320,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   public EAttribute getTarglet_IncludeAllPlatforms()
   {
-    return (EAttribute)targletEClass.getEStructuralFeatures().get(7);
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -307,6 +378,106 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getIUGenerator()
+  {
+    return iuGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getIUGenerator__GenerateIU__IProject_String_Map()
+  {
+    return iuGeneratorEClass.getEOperations().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getIUGenerator__ModifyIU__IInstallableUnit_IProject_String_Map()
+  {
+    return iuGeneratorEClass.getEOperations().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFeatureGenerator()
+  {
+    return featureGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPluginGenerator()
+  {
+    return pluginGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getComponentGenerator()
+  {
+    return componentGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getBuckminsterGenerator()
+  {
+    return buckminsterGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getBuckminsterGenerator_SaveAsComponent()
+  {
+    return (EAttribute)buckminsterGeneratorEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EDataType getInstallableUnit()
+  {
+    return installableUnitEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EDataType getStringToVersionMap()
+  {
+    return stringToVersionMapEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public TargletFactory getTargletFactory()
   {
     return (TargletFactory)getEFactoryInstance();
@@ -343,6 +514,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEAttribute(targletEClass, TARGLET__NAME);
     createEReference(targletEClass, TARGLET__REQUIREMENTS);
     createEReference(targletEClass, TARGLET__SOURCE_LOCATORS);
+    createEReference(targletEClass, TARGLET__INSTALLABLE_UNIT_GENERATORS);
     createEReference(targletEClass, TARGLET__REPOSITORY_LISTS);
     createEAttribute(targletEClass, TARGLET__ACTIVE_REPOSITORY_LIST);
     createEReference(targletEClass, TARGLET__ACTIVE_REPOSITORIES);
@@ -355,6 +527,23 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     componentDefinitionEClass = createEClass(COMPONENT_DEFINITION);
     createEAttribute(componentDefinitionEClass, COMPONENT_DEFINITION__ID);
     createEAttribute(componentDefinitionEClass, COMPONENT_DEFINITION__VERSION);
+
+    iuGeneratorEClass = createEClass(IU_GENERATOR);
+    createEOperation(iuGeneratorEClass, IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP);
+    createEOperation(iuGeneratorEClass, IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP);
+
+    featureGeneratorEClass = createEClass(FEATURE_GENERATOR);
+
+    pluginGeneratorEClass = createEClass(PLUGIN_GENERATOR);
+
+    componentGeneratorEClass = createEClass(COMPONENT_GENERATOR);
+
+    buckminsterGeneratorEClass = createEClass(BUCKMINSTER_GENERATOR);
+    createEAttribute(buckminsterGeneratorEClass, BUCKMINSTER_GENERATOR__SAVE_AS_COMPONENT);
+
+    // Create data types
+    installableUnitEDataType = createEDataType(INSTALLABLE_UNIT);
+    stringToVersionMapEDataType = createEDataType(STRING_TO_VERSION_MAP);
   }
 
   /**
@@ -388,6 +577,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     BasePackage theBasePackage = (BasePackage)EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI);
     P2Package theP2Package = (P2Package)EPackage.Registry.INSTANCE.getEPackage(P2Package.eNS_URI);
     ResourcesPackage theResourcesPackage = (ResourcesPackage)EPackage.Registry.INSTANCE.getEPackage(ResourcesPackage.eNS_URI);
+    PredicatesPackage thePredicatesPackage = (PredicatesPackage)EPackage.Registry.INSTANCE.getEPackage(PredicatesPackage.eNS_URI);
 
     // Create type parameters
 
@@ -398,6 +588,11 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     targletEClass.getESuperTypes().add(theBasePackage.getModelElement());
     componentExtensionEClass.getESuperTypes().add(theBasePackage.getModelElement());
     componentDefinitionEClass.getESuperTypes().add(getComponentExtension());
+    iuGeneratorEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    featureGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    pluginGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    componentGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    buckminsterGeneratorEClass.getESuperTypes().add(getIUGenerator());
 
     // Initialize classes, features, and operations; add parameters
     initEClass(targletContainerEClass, TargletContainer.class, "TargletContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -412,6 +607,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     initEReference(getTarglet_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTarglet_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 0, -1, Targlet.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTarglet_InstallableUnitGenerators(), getIUGenerator(), null, "installableUnitGenerators", null, 0, -1, Targlet.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTarglet_RepositoryLists(), theP2Package.getRepositoryList(), null, "repositoryLists", null, 0, -1, Targlet.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -433,6 +630,36 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getComponentDefinition_Version(), theP2Package.getVersion(), "version", "1.0.0", 0, 1, ComponentDefinition.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(iuGeneratorEClass, IUGenerator.class, "IUGenerator", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    EOperation op = initEOperation(getIUGenerator__GenerateIU__IProject_String_Map(), getInstallableUnit(), "generateIU", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, ecorePackage.getEString(), "qualifierReplacement", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getStringToVersionMap(), "iuVersions", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEException(op, theBasePackage.getException());
+
+    op = initEOperation(getIUGenerator__ModifyIU__IInstallableUnit_IProject_String_Map(), null, "modifyIU", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getInstallableUnit(), "iu", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, ecorePackage.getEString(), "qualifierReplacement", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getStringToVersionMap(), "iuVersions", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEException(op, theBasePackage.getException());
+
+    initEClass(featureGeneratorEClass, FeatureGenerator.class, "FeatureGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(pluginGeneratorEClass, PluginGenerator.class, "PluginGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(componentGeneratorEClass, ComponentGenerator.class, "ComponentGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(buckminsterGeneratorEClass, BuckminsterGenerator.class, "BuckminsterGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getBuckminsterGenerator_SaveAsComponent(), ecorePackage.getEBoolean(), "saveAsComponent", null, 0, 1, BuckminsterGenerator.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    // Initialize data types
+    initEDataType(installableUnitEDataType, IInstallableUnit.class, "InstallableUnit", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(stringToVersionMapEDataType, Map.class, "StringToVersionMap", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS,
+        "java.util.Map<java.lang.String, org.eclipse.equinox.p2.metadata.Version>");
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore");
@@ -483,9 +710,10 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getTargletContainer_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getTargletContainer_Targlets(), source, new String[] { "name", "requirement" });
+    addAnnotation(getTargletContainer_Targlets(), source, new String[] { "name", "targlet" });
     addAnnotation(getTarglet_Requirements(), source, new String[] { "name", "requirement" });
     addAnnotation(getTarglet_SourceLocators(), source, new String[] { "name", "sourceLocator" });
+    addAnnotation(getTarglet_InstallableUnitGenerators(), source, new String[] { "name", "installableUnitGenerator" });
     addAnnotation(getTarglet_RepositoryLists(), source, new String[] { "name", "repositoryList" });
     addAnnotation(getTarglet_ActiveRepositories(), source, new String[] { "name", "activeRepository" });
     addAnnotation(getComponentExtension_Requirements(), source, new String[] { "name", "requirement" });

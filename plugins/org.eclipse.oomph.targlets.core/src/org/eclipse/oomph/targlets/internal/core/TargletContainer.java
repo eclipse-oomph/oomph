@@ -15,25 +15,26 @@ import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
+import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
-import org.eclipse.oomph.predicates.Predicate;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.targlets.FeatureGenerator;
+import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerChanged;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdateProblem;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
-import org.eclipse.oomph.targlets.internal.core.IUGenerator.FeatureIUGenerator;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateFailedEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletsChangedEvent;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.SubMonitor;
-import org.eclipse.oomph.util.XMLUtil;
-import org.eclipse.oomph.util.XMLUtil.ElementHandler;
+import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -51,27 +52,27 @@ import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.emf.ecore.xml.type.AnyType;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.equinox.internal.p2.engine.DownloadManager;
+import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
+import org.eclipse.equinox.internal.p2.engine.InstallableUnitPhase;
+import org.eclipse.equinox.internal.p2.engine.Phase;
+import org.eclipse.equinox.internal.p2.engine.PhaseSet;
+import org.eclipse.equinox.internal.p2.engine.phases.Collect;
+import org.eclipse.equinox.internal.p2.engine.phases.Install;
+import org.eclipse.equinox.internal.p2.engine.phases.Property;
+import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
+import org.eclipse.equinox.p2.engine.spi.ProvisioningAction;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
@@ -85,22 +86,19 @@ import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.pde.core.target.ITargetDefinition;
-import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetLocationFactory;
 import org.eclipse.pde.core.target.ITargetPlatformService;
-import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
 import org.eclipse.pde.internal.core.target.AbstractBundleContainer;
 
-import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-
-import javax.xml.parsers.DocumentBuilder;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -110,8 +108,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -122,7 +118,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Eike Stepper
@@ -132,15 +127,17 @@ public class TargletContainer extends AbstractBundleContainer
 {
   public static final String TYPE = "Targlet";
 
-  private static final String A_PDE_TARGET_PLATFORM = "A.PDE.Target.Platform";
-
-  private static final String A_PDE_TARGET_PLATFORM_LOWER_CASE = A_PDE_TARGET_PLATFORM.toLowerCase();
+  public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source";
 
   private static final ThreadLocal<Boolean> FORCE_UPDATE = new ThreadLocal<Boolean>();
 
   private static final ThreadLocal<Boolean> OFFLINE = new ThreadLocal<Boolean>();
 
   private static final ThreadLocal<Boolean> MIRRORS = new ThreadLocal<Boolean>();
+
+  private static final String A_PDE_TARGET_PLATFORM = "A.PDE.Target.Platform";
+
+  private static final String A_PDE_TARGET_PLATFORM_LOWER_CASE = A_PDE_TARGET_PLATFORM.toLowerCase();
 
   private static final String FOLLOW_ARTIFACT_REPOSITORY_REFERENCES = "org.eclipse.equinox.p2.director.followArtifactRepositoryReferences";
 
@@ -156,7 +153,7 @@ public class TargletContainer extends AbstractBundleContainer
 
   private final String id;
 
-  private ITargetDefinition target;
+  private ITargetDefinition targetDefinition;
 
   private final EList<Targlet> targlets = new BasicEList<Targlet>();
 
@@ -230,7 +227,7 @@ public class TargletContainer extends AbstractBundleContainer
   {
     try
     {
-      TargletContainerManager manager = TargletContainerManager.getInstance();
+      TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
       return manager.getDescriptor(id, new NullProgressMonitor());
     }
     catch (Exception ex)
@@ -240,9 +237,9 @@ public class TargletContainer extends AbstractBundleContainer
     }
   }
 
-  public ITargetDefinition getTarget()
+  public ITargetDefinition getTargetDefinition()
   {
-    return target;
+    return targetDefinition;
   }
 
   /**
@@ -295,6 +292,7 @@ public class TargletContainer extends AbstractBundleContainer
   public void setTarglets(Collection<? extends Targlet> targlets) throws CoreException
   {
     basicSetTarglets(targlets);
+    clearResolutionStatus();
 
     TargletContainerDescriptor descriptor = getDescriptor();
     if (descriptor != null)
@@ -302,19 +300,16 @@ public class TargletContainer extends AbstractBundleContainer
       descriptor.resetUpdateProblem();
     }
 
-    ITargetPlatformService service = null;
-
-    try
+    TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
-      service = TargletsCorePlugin.INSTANCE.getService(ITargetPlatformService.class);
-      service.saveTargetDefinition(target);
-    }
-    finally
-    {
-      TargletsCorePlugin.INSTANCE.ungetService(service);
-    }
+      public Object run(ITargetPlatformService service) throws CoreException
+      {
+        service.saveTargetDefinition(targetDefinition);
+        return null;
+      }
+    });
 
-    TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletContainerChanged(this), new NullProgressMonitor());
+    TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletsChangedEvent(this, descriptor), new NullProgressMonitor());
   }
 
   private void basicSetTarglets(Collection<? extends Targlet> targlets)
@@ -376,7 +371,7 @@ public class TargletContainer extends AbstractBundleContainer
   public String getEnvironmentProperties()
   {
     StringBuilder builder = new StringBuilder();
-    String ws = target.getWS();
+    String ws = targetDefinition.getWS();
     if (ws == null)
     {
       ws = Platform.getWS();
@@ -386,7 +381,7 @@ public class TargletContainer extends AbstractBundleContainer
     builder.append("="); //$NON-NLS-1$
     builder.append(ws);
     builder.append(","); //$NON-NLS-1$
-    String os = target.getOS();
+    String os = targetDefinition.getOS();
     if (os == null)
     {
       os = Platform.getOS();
@@ -396,7 +391,7 @@ public class TargletContainer extends AbstractBundleContainer
     builder.append("="); //$NON-NLS-1$
     builder.append(os);
     builder.append(","); //$NON-NLS-1$
-    String arch = target.getArch();
+    String arch = targetDefinition.getArch();
     if (arch == null)
     {
       arch = Platform.getOSArch();
@@ -410,7 +405,7 @@ public class TargletContainer extends AbstractBundleContainer
 
   public String getNLProperty()
   {
-    String nl = target.getNL();
+    String nl = targetDefinition.getNL();
     if (nl == null)
     {
       nl = Platform.getNL();
@@ -443,7 +438,7 @@ public class TargletContainer extends AbstractBundleContainer
   @Override
   public String getLocation(boolean resolve) throws CoreException
   {
-    TargletContainerManager manager = TargletContainerManager.getInstance();
+    TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
     TargletContainerDescriptor descriptor = manager.getDescriptor(id, new NullProgressMonitor());
     return descriptor.getPoolLocation().getAbsolutePath();
   }
@@ -459,7 +454,7 @@ public class TargletContainer extends AbstractBundleContainer
   protected void associateWithTarget(ITargetDefinition target)
   {
     super.associateWithTarget(target);
-    this.target = target;
+    targetDefinition = target;
   }
 
   @Override
@@ -481,7 +476,7 @@ public class TargletContainer extends AbstractBundleContainer
     try
     {
       SubMonitor progress = SubMonitor.convert(monitor, 100).detectCancelation();
-      TargletContainerManager manager = TargletContainerManager.getInstance();
+      TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
 
       String environmentProperties = getEnvironmentProperties();
       String nlProperty = getNLProperty();
@@ -600,7 +595,7 @@ public class TargletContainer extends AbstractBundleContainer
     }
   }
 
-  public void forceUpdate(boolean offline, boolean mirrors, IProgressMonitor monitor) throws CoreException
+  public void forceUpdate(boolean activateTargetDefinition, boolean offline, boolean mirrors, IProgressMonitor monitor) throws CoreException
   {
     try
     {
@@ -608,10 +603,34 @@ public class TargletContainer extends AbstractBundleContainer
       OFFLINE.set(offline ? Boolean.TRUE : false);
       MIRRORS.set(mirrors ? Boolean.TRUE : false);
 
-      IStatus status = target.resolve(monitor);
-      if (!status.isOK())
+      // Clear the resolution statuses of the involved targlet containers.
+      for (ITargetLocation targetLocation : targetDefinition.getTargetLocations())
       {
-        TargletsCorePlugin.INSTANCE.coreException(new CoreException(status));
+        if (targetLocation instanceof TargletContainer)
+        {
+          TargletContainer targletContainer = (TargletContainer)targetLocation;
+          targletContainer.clearResolutionStatus();
+        }
+      }
+
+      if (activateTargetDefinition || TargetPlatformUtil.isActiveTargetDefinition(targetDefinition))
+      {
+        // If the target definition is currently active then use PDE's LoadTargetDefinitionJob so that the WorkspaceIUImporter gets triggered.
+        TargetPlatformUtil.activateTargetDefinition(targetDefinition, monitor);
+      }
+      else
+      {
+        // Otherwise just update the profile and resolve.
+        targetDefinition.resolve(monitor);
+      }
+
+      TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
+      TargletContainerDescriptor descriptor = manager.getDescriptor(id, monitor);
+
+      UpdateProblem updateProblem = descriptor.getUpdateProblem();
+      if (updateProblem != null)
+      {
+        TargletsCorePlugin.INSTANCE.coreException(new CoreException(updateProblem));
       }
     }
     finally
@@ -643,7 +662,7 @@ public class TargletContainer extends AbstractBundleContainer
   {
     SubMonitor progress = SubMonitor.convert(monitor, 100).detectCancelation();
 
-    TargletContainerManager manager = TargletContainerManager.getInstance();
+    TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
     TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild());
 
     final Profile profile = descriptor.startUpdateTransaction(environmentProperties, nlProperty, digest, progress.newChild());
@@ -657,248 +676,60 @@ public class TargletContainer extends AbstractBundleContainer
       ProfileDefinition profileDefinition = transaction.getProfileDefinition();
       profileDefinition.setIncludeSourceBundles(isIncludeSources());
 
-      final EList<Requirement> roots = profileDefinition.getRequirements();
-      roots.clear();
+      final EList<Requirement> rootRequirements = profileDefinition.getRequirements();
+      rootRequirements.clear();
 
       for (Targlet targlet : targlets)
       {
-        roots.addAll(EcoreUtil.copyAll(targlet.getRequirements()));
+        rootRequirements.addAll(EcoreUtil.copyAll(targlet.getRequirements()));
       }
 
-      if (roots.isEmpty())
+      if (rootRequirements.isEmpty())
       {
+        // TODO Should descriptor.rollbackUpdateTransaction() be called?
         return null;
       }
 
-      final IUAnalyzer analyzer = new IUAnalyzer();
-      final Map<IInstallableUnit, File> sources = new HashMap<IInstallableUnit, File>();
+      final WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(rootRequirements);
+      final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
 
       EList<Repository> repositories = profileDefinition.getRepositories();
       repositories.clear();
 
       for (Targlet targlet : targlets)
       {
+        EList<IUGenerator> effectiveIUGenerators = effectiveIUGenerators(targlet);
+
         for (SourceLocator sourceLocator : targlet.getSourceLocators())
         {
-          File rootFolder = new File(sourceLocator.getRootFolder());
-          EList<Predicate> predicates = sourceLocator.getPredicates();
-          boolean locateNestedProjects = sourceLocator.isLocateNestedProjects();
-
-          Map<IInstallableUnit, File> ius = analyzer.analyze(rootFolder, predicates, locateNestedProjects, progress.newChild());
-
-          for (IInstallableUnit iu : ius.keySet())
-          {
-            for (Requirement requirement : roots)
-            {
-              if (VersionRange.emptyRange.equals(requirement.getVersionRange()) && requirement.getName().equals(iu.getId()))
-              {
-                Version version = iu.getVersion();
-                requirement.setVersionRange(P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MICRO));
-              }
-            }
-          }
-
-          sources.putAll(ius);
+          workspaceIUAnalyzer.analyze(sourceLocator, effectiveIUGenerators, progress.newChild());
         }
 
         repositories.addAll(EcoreUtil.copyAll(targlet.getActiveRepositories()));
       }
 
-      TargletsCorePlugin.INSTANCE.coreException(analyzer.getStatus());
+      TargletsCorePlugin.INSTANCE.coreException(workspaceIUAnalyzer.getStatus());
 
-      final AtomicReference<IProvisioningPlan> provisioningPlanRef = new AtomicReference<IProvisioningPlan>();
-      final AtomicReference<List<IMetadataRepository>> metadataRepositoriesRef = new AtomicReference<List<IMetadataRepository>>();
-
-      CommitContext commitContext = new CommitContext()
-      {
-        @Override
-        public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, final IProfileChangeRequest profileChangeRequest)
-            throws CoreException
-        {
-          IProvisioningAgent provisioningAgent = transaction.getProfile().getAgent().getProvisioningAgent();
-          ProvisioningContext provisioningContext = new ProvisioningContext(provisioningAgent)
-          {
-            private CollectionResult<IInstallableUnit> metadata;
-
-            @Override
-            public IQueryable<IInstallableUnit> getMetadata(IProgressMonitor monitor)
-            {
-              if (metadata == null)
-              {
-                Map<String, Version> workspaceIUs = analyzer.getIUs();
-
-                List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
-                Map<String, IInstallableUnit> idToIUMap = new HashMap<String, IInstallableUnit>();
-                prepareSources(ius, workspaceIUs, idToIUMap, monitor);
-
-                ius.add(createPDETargetPlatformIU());
-
-                IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
-                Set<IRequirement> licenseRequirements = new HashSet<IRequirement>();
-                for (IInstallableUnit iu : P2Util.asIterable(metadataResult))
-                {
-                  TargletsCorePlugin.checkCancelation(monitor);
-
-                  ius.add(iu);
-
-                  // If the binary IU corresponds to a synthetic source IU...
-                  String id = iu.getId();
-                  IInstallableUnit workspaceIU = idToIUMap.get(id);
-                  if (workspaceIU != null)
-                  {
-                    // And that binary IU is in the qualifier range of the synthetic IU
-                    if (P2Factory.eINSTANCE.createVersionRange(workspaceIU.getVersion(), VersionSegment.MICRO).isIncluded(iu.getVersion()))
-                    {
-                      // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
-                      File folder = sources.get(workspaceIU);
-                      sources.put(iu, folder);
-
-                      // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
-                      ius.remove(workspaceIU);
-
-                      // If there this workspace IU has a license...
-                      String licenseFeatureID = workspaceIU.getProperty(FeatureIUGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID);
-                      if (licenseFeatureID != null)
-                      {
-                        // Keep a requirement for this IU because binary IUs are generally not installed for license feature dependencies.
-                        VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureIUGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
-                        IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null,
-                            false, false);
-                        licenseRequirements.add(requirement);
-
-                        // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
-                        File licenseFeatureFolder = sources.get(workspaceIU);
-                        sources.put(iu, licenseFeatureFolder);
-                      }
-                    }
-                  }
-                }
-
-                // If we need license requirements.
-                if (!licenseRequirements.isEmpty())
-                {
-                  // Build an artificial unit that requires all the license features.
-                  InstallableUnitDescription requiredLicensesDescription = new InstallableUnitDescription();
-                  requiredLicensesDescription.setId("required_licenses");
-                  requiredLicensesDescription.setVersion(Version.createOSGi(1, 0, 0));
-                  requiredLicensesDescription.setArtifacts(new IArtifactKey[0]);
-                  requiredLicensesDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-                  requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
-                      IInstallableUnit.NAMESPACE_IU_ID, requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
-                  requiredLicensesDescription.addRequirements(licenseRequirements);
-
-                  IInstallableUnit requiredLicensesIU = MetadataFactory.createInstallableUnit(requiredLicensesDescription);
-                  ius.add(requiredLicensesIU);
-
-                  profileChangeRequest.add(requiredLicensesIU);
-                }
-
-                metadata = new CollectionResult<IInstallableUnit>(ius);
-              }
-
-              return metadata;
-            }
-
-            private Map<String, IInstallableUnit> prepareSources(List<IInstallableUnit> ius, Map<String, Version> ids, Map<String, IInstallableUnit> idToIUMap,
-                IProgressMonitor monitor)
-            {
-              Map<IInstallableUnit, File> sourceSources = new HashMap<IInstallableUnit, File>();
-              for (IInstallableUnit iu : sources.keySet())
-              {
-                TargletsCorePlugin.checkCancelation(monitor);
-
-                String id = iu.getId();
-                ius.add(iu);
-                idToIUMap.put(id, iu);
-
-                // TODO Should we create source IUs for source projects only if needed (i.e. required by feature content)?
-                String suffix = "";
-                if (id.endsWith(FEATURE_SUFFIX))
-                {
-                  id = id.substring(0, id.length() - FEATURE_SUFFIX.length());
-                  suffix = FEATURE_SUFFIX;
-                }
-
-                InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
-                String sourceID = id + ".source" + suffix;
-                description.setId(sourceID);
-                Version version = iu.getVersion();
-                description.setVersion(version);
-
-                for (Map.Entry<String, String> property : iu.getProperties().entrySet())
-                {
-                  TargletsCorePlugin.checkCancelation(monitor);
-
-                  String key = property.getKey();
-                  String value = property.getValue();
-
-                  if ("org.eclipse.equinox.p2.name".equals(key))
-                  {
-                    value = "Source for " + value;
-                  }
-
-                  description.setProperty(key, value);
-                }
-
-                description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-                    description.getId(), description.getVersion())));
-
-                IInstallableUnit sourceIU = MetadataFactory.createInstallableUnit(description);
-                ius.add(sourceIU);
-                ids.put(sourceID, version);
-
-                idToIUMap.put(sourceID, sourceIU);
-                sourceSources.put(sourceIU, sources.get(iu));
-              }
-
-              // Include all source IUs in the map.
-              sources.putAll(sourceSources);
-
-              return idToIUMap;
-            }
-          };
-
-          provisioningContext.setProperty(ProvisioningContext.FOLLOW_REPOSITORY_REFERENCES, Boolean.FALSE.toString());
-          provisioningContext.setProperty(FOLLOW_ARTIFACT_REPOSITORY_REFERENCES, Boolean.FALSE.toString());
-          return provisioningContext;
-        }
-
-        @Override
-        public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
-        {
-          provisioningPlanRef.set(provisioningPlan);
-          metadataRepositoriesRef.set(metadataRepositories);
-          return true;
-        }
-
-        @Override
-        public IPhaseSet getPhaseSet(ProfileTransaction transaction)
-        {
-          return TargletContainerManager.createPhaseSet(profile.getBundlePool());
-        }
-      };
-
+      TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer);
       transaction.commit(commitContext, progress.newChild());
 
-      Set<File> projectLocations = getProjectLocations(profile, sources, progress.newChild());
-      descriptor.commitUpdateTransaction(digest, projectLocations, progress.newChild());
+      Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUInfos, progress.newChild());
+      descriptor.commitUpdateTransaction(digest, requiredProjects.values(), progress.newChild());
 
-      IProvisioningPlan provisioningPlan = provisioningPlanRef.get();
-      List<IMetadataRepository> metadataRepositories = metadataRepositoriesRef.get();
-
-      TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(
-          new TargletContainerUpdated(this, profile, metadataRepositories, provisioningPlan, sources), monitor);
+      ProfileUpdateSucceededEvent event = new ProfileUpdateSucceededEvent(this, descriptor, profile, commitContext.getMetadataRepositories(),
+          commitContext.getProvisioningPlan(), requiredProjects);
+      TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(event, progress.newChild());
 
       monitor.subTask("Targlet container profile update completed");
     }
     catch (Throwable t)
     {
-      descriptor.rollbackUpdateTransaction(t, monitor);
+      descriptor.rollbackUpdateTransaction(t, progress.newChild());
 
       UpdateProblem updateProblem = descriptor.getUpdateProblem();
       if (updateProblem != null)
       {
-        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletContainerUpdateProblem(this, updateProblem), monitor);
+        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new ProfileUpdateFailedEvent(this, descriptor, updateProblem), progress.newChild());
       }
 
       TargletsCorePlugin.INSTANCE.coreException(t);
@@ -908,17 +739,15 @@ public class TargletContainer extends AbstractBundleContainer
     return profile;
   }
 
-  private IInstallableUnit createPDETargetPlatformIU()
+  private static EList<IUGenerator> effectiveIUGenerators(Targlet targlet)
   {
-    InstallableUnitDescription description = new InstallableUnitDescription();
-    description.setId(A_PDE_TARGET_PLATFORM_LOWER_CASE);
-    Version version = Version.createOSGi(1, 0, 0);
-    description.setVersion(version);
-    description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM,
-        "Cannot be installed into the IDE", version)));
-    description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
-    description.setArtifacts(new IArtifactKey[0]);
-    return MetadataFactory.createInstallableUnit(description);
+    EList<IUGenerator> effectiveInstallableUnitGenerators = targlet.getInstallableUnitGenerators();
+    if (effectiveInstallableUnitGenerators.isEmpty())
+    {
+      effectiveInstallableUnitGenerators = IUGenerator.DEFAULTS;
+    }
+
+    return effectiveInstallableUnitGenerators;
   }
 
   private static String createDigest(String id, String environmentProperties, String nlProperty, EList<Targlet> targlets)
@@ -1035,265 +864,355 @@ public class TargletContainer extends AbstractBundleContainer
     return false;
   }
 
-  private static Set<File> getProjectLocations(IProfile profile, Map<IInstallableUnit, File> sources, IProgressMonitor monitor)
+  private static Map<IInstallableUnit, WorkspaceIUInfo> getRequiredProjects(IProfile profile, Map<IInstallableUnit, WorkspaceIUInfo> allProjects,
+      IProgressMonitor monitor)
   {
-    Set<File> projectLocations = new HashSet<File>();
+    Map<IInstallableUnit, WorkspaceIUInfo> result = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
-      File folder = sources.get(iu);
-      if (folder != null)
+      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
       {
-        projectLocations.add(folder);
+        continue;
+      }
+
+      WorkspaceIUInfo info = allProjects.get(iu);
+      if (info != null)
+      {
+        result.put(iu, info);
       }
     }
 
-    return projectLocations;
+    return result;
   }
 
-  public static TargletContainer lookup(String id)
+  /**
+   * @author Eike Stepper
+   */
+  private static final class TargletCommitContext extends CommitContext
   {
-    ITargetPlatformService service = null;
+    private static final String NATIVE_ARTIFACTS = "nativeArtifacts"; //$NON-NLS-1$
 
-    try
+    private final Profile profile;
+
+    private final WorkspaceIUAnalyzer workspaceIUAnalyzer;
+
+    private IProvisioningPlan provisioningPlan;
+
+    private List<IMetadataRepository> metadataRepositories;
+
+    public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer)
     {
-      service = TargletsCorePlugin.INSTANCE.getService(ITargetPlatformService.class);
+      this.profile = profile;
+      this.workspaceIUAnalyzer = workspaceIUAnalyzer;
+    }
 
-      for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))
+    public IProvisioningPlan getProvisioningPlan()
+    {
+      return provisioningPlan;
+    }
+
+    public List<IMetadataRepository> getMetadataRepositories()
+    {
+      return metadataRepositories;
+    }
+
+    @Override
+    public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, final IProfileChangeRequest profileChangeRequest) throws CoreException
+    {
+      IProvisioningAgent provisioningAgent = transaction.getProfile().getAgent().getProvisioningAgent();
+      ProvisioningContext provisioningContext = new ProvisioningContext(provisioningAgent)
       {
-        try
+        private CollectionResult<IInstallableUnit> metadata;
+
+        @Override
+        public IQueryable<IInstallableUnit> getMetadata(IProgressMonitor monitor)
         {
-          ITargetDefinition target = targetHandle.getTargetDefinition();
-          ITargetLocation[] targetLocations = target.getTargetLocations();
-          if (targetLocations != null)
+          if (metadata == null)
           {
-            for (ITargetLocation location : targetLocations)
+            Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
+            Map<String, Version> workspaceIUVersions = workspaceIUAnalyzer.getIUVersions();
+
+            List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
+            Map<String, IInstallableUnit> idToIUMap = new HashMap<String, IInstallableUnit>();
+            generateWorkspaceSourceIUs(ius, workspaceIUVersions, idToIUMap, monitor);
+
+            ius.add(createPDETargetPlatformIU());
+
+            IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
+            Set<IRequirement> licenseRequirements = new HashSet<IRequirement>();
+            for (IInstallableUnit iu : P2Util.asIterable(metadataResult))
             {
-              if (location instanceof TargletContainer)
+              TargletsCorePlugin.checkCancelation(monitor);
+
+              ius.add(iu);
+
+              // If the binary IU corresponds to a synthetic source IU...
+              String id = iu.getId();
+              IInstallableUnit workspaceIU = idToIUMap.get(id);
+              if (workspaceIU != null)
               {
-                final TargletContainer targletContainer = (TargletContainer)location;
-                if (targletContainer.getID().equals(id))
+                // And that binary IU is in the qualifier range of the synthetic IU
+                if (P2Factory.eINSTANCE.createVersionRange(workspaceIU.getVersion(), VersionSegment.MICRO).isIncluded(iu.getVersion()))
                 {
-                  return targletContainer;
-                }
-              }
-            }
-          }
-        }
-        catch (Exception ex)
-        {
-          TargletsCorePlugin.INSTANCE.log(ex);
-        }
-      }
-    }
-    finally
-    {
-      TargletsCorePlugin.INSTANCE.ungetService(service);
-    }
+                  // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
+                  WorkspaceIUInfo info = workspaceIUInfos.get(workspaceIU);
+                  workspaceIUInfos.put(iu, info);
 
-    return null;
-  }
+                  // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
+                  ius.remove(workspaceIU);
 
-  private static final Method GET_WORKSPACE_TARGET_DEFINITION_METHOD;
-
-  static
-  {
-    Method method = null;
-    try
-    {
-      method = ITargetPlatformService.class.getMethod("getWorkspaceTargetDefinition");
-    }
-    catch (NoSuchMethodException ex)
-    {
-      // Ignore.
-    }
-    catch (SecurityException ex)
-    {
-      // Ignore.
-    }
-
-    GET_WORKSPACE_TARGET_DEFINITION_METHOD = method;
-  }
-
-  private static ITargetDefinition getWorkITargetDefinition(ITargetPlatformService service) throws CoreException
-  {
-    if (GET_WORKSPACE_TARGET_DEFINITION_METHOD != null)
-    {
-      try
-      {
-        return (ITargetDefinition)GET_WORKSPACE_TARGET_DEFINITION_METHOD.invoke(service);
-      }
-      catch (IllegalAccessException ex)
-      {
-        // Ignore.
-      }
-      catch (IllegalArgumentException ex)
-      {
-        // Ignore.
-      }
-      catch (InvocationTargetException ex)
-      {
-        // Ignore.
-      }
-    }
-
-    // Handle gracefully that getWorkspaceTargetDefinition() has been added in Eclipse 4.4
-    ITargetHandle handle = service.getWorkspaceTargetHandle();
-    if (handle != null)
-    {
-      return handle.getTargetDefinition();
-    }
-
-    return null;
-  }
-
-  public static void updateWorkspace(IProgressMonitor monitor) throws CoreException
-  {
-    ITargetPlatformService service = null;
-
-    try
-    {
-      service = TargletsCorePlugin.INSTANCE.getService(ITargetPlatformService.class);
-      Set<File> projectLocations = new HashSet<File>();
-      ITargetDefinition target = getWorkITargetDefinition(service);
-      if (target != null)
-      {
-        ITargetLocation[] targetLocations = target.getTargetLocations();
-        if (targetLocations != null)
-        {
-          for (ITargetLocation location : targetLocations)
-          {
-            if (location instanceof TargletContainer)
-            {
-              TargletContainer container = (TargletContainer)location;
-              TargletContainerDescriptor descriptor = container.getDescriptor();
-              if (descriptor != null)
-              {
-                Set<File> workingProjects = descriptor.getWorkingProjects();
-                if (workingProjects != null)
-                {
-                  projectLocations.addAll(workingProjects);
-                }
-              }
-            }
-          }
-        }
-      }
-
-      updateWorkspace(projectLocations, monitor);
-    }
-    catch (Exception ex)
-    {
-      TargletsCorePlugin.INSTANCE.coreException(ex);
-    }
-    finally
-    {
-      TargletsCorePlugin.INSTANCE.ungetService(service);
-    }
-  }
-
-  private static void updateWorkspace(final Set<File> projectLocations, IProgressMonitor monitor) throws CoreException
-  {
-    final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-    workspace.run(new IWorkspaceRunnable()
-    {
-      public void run(IProgressMonitor monitor) throws CoreException
-      {
-        try
-        {
-          DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-          IWorkspaceRoot root = workspace.getRoot();
-
-          for (File folder : projectLocations)
-          {
-            try
-            {
-              final AtomicReference<String> projectName = new AtomicReference<String>();
-
-              Element rootElement = XMLUtil.loadRootElement(documentBuilder, new File(folder, ".project"));
-              XMLUtil.handleChildElements(rootElement, new ElementHandler()
-              {
-                public void handleElement(Element element) throws Exception
-                {
-                  if ("name".equals(element.getTagName()))
+                  // If there this workspace IU has a license...
+                  String licenseFeatureID = workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID);
+                  if (licenseFeatureID != null)
                   {
-                    projectName.set(element.getTextContent().trim());
+                    // Keep a requirement for this IU because binary IUs are generally not installed for license feature dependencies.
+                    VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
+                    IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null, false,
+                        false);
+                    licenseRequirements.add(requirement);
                   }
                 }
-              });
-
-              String name = projectName.get();
-              if (name != null && name.length() != 0)
-              {
-                File location = folder.getCanonicalFile();
-
-                IProject project = root.getProject(name);
-                if (project.exists())
-                {
-                  File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
-                  if (!existingLocation.equals(location))
-                  {
-                    TargletsCorePlugin.INSTANCE.log("Project " + name + " exists in different location: " + existingLocation);
-                    continue;
-                  }
-                }
-                else
-                {
-                  monitor.setTaskName("Importing project " + projectName);
-
-                  IProjectDescription projectDescription = workspace.newProjectDescription(name);
-                  projectDescription.setLocation(new Path(location.getAbsolutePath()));
-                  project.create(projectDescription, monitor);
-                }
-
-                if (!project.isOpen())
-                {
-                  project.open(monitor);
-                }
               }
             }
-            catch (Exception ex)
-            {
-              TargletsCorePlugin.INSTANCE.log(ex);
-              monitor.subTask("Failed to import project from " + folder + " (see error log for details)");
-            }
-          }
-        }
-        catch (Exception ex)
-        {
-          TargletsCorePlugin.INSTANCE.coreException(ex);
-        }
-      }
-    }, monitor);
-  }
 
-  static
-  {
-    Job.getJobManager().addJobChangeListener(new JobChangeAdapter()
+            // If we need license requirements.
+            if (!licenseRequirements.isEmpty())
+            {
+              // Build an artificial unit that requires all the license features.
+              InstallableUnitDescription requiredLicensesDescription = new InstallableUnitDescription();
+              requiredLicensesDescription.setId("required_licenses");
+              requiredLicensesDescription.setVersion(Version.createOSGi(1, 0, 0));
+              requiredLicensesDescription.setArtifacts(new IArtifactKey[0]);
+              requiredLicensesDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
+              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
+                  IInstallableUnit.NAMESPACE_IU_ID, requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
+              requiredLicensesDescription.addRequirements(licenseRequirements);
+
+              IInstallableUnit requiredLicensesIU = MetadataFactory.createInstallableUnit(requiredLicensesDescription);
+              ius.add(requiredLicensesIU);
+
+              profileChangeRequest.add(requiredLicensesIU);
+            }
+
+            metadata = new CollectionResult<IInstallableUnit>(ius);
+          }
+
+          return metadata;
+        }
+
+        private void generateWorkspaceSourceIUs(List<IInstallableUnit> ius, Map<String, Version> ids, Map<String, IInstallableUnit> idToIUMap,
+            IProgressMonitor monitor)
+        {
+          Map<IInstallableUnit, WorkspaceIUInfo> workspaceSourceIUInfos = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
+          Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
+
+          for (IInstallableUnit iu : workspaceIUInfos.keySet())
+          {
+            TargletsCorePlugin.checkCancelation(monitor);
+
+            String id = iu.getId();
+            ius.add(iu);
+            idToIUMap.put(id, iu);
+
+            String suffix = "";
+            if (id.endsWith(FEATURE_SUFFIX))
+            {
+              id = id.substring(0, id.length() - FEATURE_SUFFIX.length());
+              suffix = FEATURE_SUFFIX;
+            }
+
+            InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
+            String workspaceSourceID = id + ".source" + suffix;
+            description.setId(workspaceSourceID);
+            Version version = iu.getVersion();
+            description.setVersion(version);
+
+            for (Map.Entry<String, String> property : iu.getProperties().entrySet())
+            {
+              TargletsCorePlugin.checkCancelation(monitor);
+
+              String key = property.getKey();
+              String value = property.getValue();
+
+              if ("org.eclipse.equinox.p2.name".equals(key))
+              {
+                value = "Source for " + value;
+              }
+
+              description.setProperty(key, value);
+            }
+
+            description.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
+            description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
+                description.getId(), description.getVersion())));
+
+            IInstallableUnit workspaceSourceIU = MetadataFactory.createInstallableUnit(description);
+            ius.add(workspaceSourceIU);
+            ids.put(workspaceSourceID, version);
+
+            idToIUMap.put(workspaceSourceID, workspaceSourceIU);
+            WorkspaceIUInfo info = workspaceIUInfos.get(iu);
+            workspaceSourceIUInfos.put(workspaceSourceIU, info);
+          }
+
+          // Include all source IUs in the map.
+          workspaceIUInfos.putAll(workspaceSourceIUInfos);
+        }
+      };
+
+      provisioningContext.setProperty(ProvisioningContext.FOLLOW_REPOSITORY_REFERENCES, Boolean.FALSE.toString());
+      provisioningContext.setProperty(FOLLOW_ARTIFACT_REPOSITORY_REFERENCES, Boolean.FALSE.toString());
+      return provisioningContext;
+    }
+
+    @Override
+    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
     {
+      this.provisioningPlan = provisioningPlan;
+      this.metadataRepositories = metadataRepositories;
+      return true;
+    }
+
+    @Override
+    public IPhaseSet getPhaseSet(ProfileTransaction transaction)
+    {
+      List<Phase> phases = new ArrayList<Phase>(4);
+      phases.add(new Collect(100));
+      phases.add(new Property(1));
+      phases.add(new Uninstall(50, true));
+      phases.add(new Install(50));
+      phases.add(new CollectNativesPhase(profile.getBundlePool(), 100));
+
+      return new PhaseSet(phases.toArray(new Phase[phases.size()]));
+    }
+
+    private static IInstallableUnit createPDETargetPlatformIU()
+    {
+      InstallableUnitDescription description = new InstallableUnitDescription();
+      description.setId(A_PDE_TARGET_PLATFORM_LOWER_CASE);
+      Version version = Version.createOSGi(1, 0, 0);
+      description.setVersion(version);
+      description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM,
+          "Cannot be installed into the IDE", version)));
+      description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
+      description.setArtifacts(new IArtifactKey[0]);
+      return MetadataFactory.createInstallableUnit(description);
+    }
+
+    /**
+     * @author Pascal Rapicault
+     */
+    private static final class CollectNativesPhase extends InstallableUnitPhase
+    {
+      private static final String NATIVE_TYPE = "org.eclipse.equinox.p2.native"; //$NON-NLS-1$
+
+      private final BundlePool bundlePool;
+
+      public CollectNativesPhase(BundlePool bundlePool, int weight)
+      {
+        super(NATIVE_ARTIFACTS, weight);
+        this.bundlePool = bundlePool;
+      }
+
       @Override
-      public void done(IJobChangeEvent event)
+      protected List<ProvisioningAction> getActions(InstallableUnitOperand operand)
       {
-        if (event.getJob() instanceof LoadTargetDefinitionJob)
+        IInstallableUnit installableUnit = operand.second();
+        if (installableUnit != null && installableUnit.getTouchpointType().getId().equals(NATIVE_TYPE))
         {
-          new Job("Import projects")
-          {
-            @Override
-            protected IStatus run(IProgressMonitor monitor)
-            {
-              try
-              {
-                updateWorkspace(monitor);
-                return Status.OK_STATUS;
-              }
-              catch (Exception ex)
-              {
-                return TargletsCorePlugin.INSTANCE.getStatus(ex);
-              }
-            }
-          }.schedule();
+          List<ProvisioningAction> list = new ArrayList<ProvisioningAction>(1);
+          list.add(new CollectNativesAction(bundlePool));
+          return list;
         }
+
+        return null;
       }
-    });
+
+      @Override
+      protected IStatus initializePhase(IProgressMonitor monitor, IProfile profile, Map<String, Object> parameters)
+      {
+        parameters.put(NATIVE_ARTIFACTS, new ArrayList<Object>());
+        parameters.put(PARM_PROFILE, profile);
+        return null;
+      }
+
+      @Override
+      protected IStatus completePhase(IProgressMonitor monitor, IProfile profile, Map<String, Object> parameters)
+      {
+        @SuppressWarnings("unchecked")
+        List<IArtifactRequest> artifactRequests = (List<IArtifactRequest>)parameters.get(NATIVE_ARTIFACTS);
+        ProvisioningContext context = (ProvisioningContext)parameters.get(PARM_CONTEXT);
+        IProvisioningAgent agent = (IProvisioningAgent)parameters.get(PARM_AGENT);
+        DownloadManager downloadManager = new DownloadManager(context, agent);
+        for (Iterator<IArtifactRequest> it = artifactRequests.iterator(); it.hasNext();)
+        {
+          downloadManager.add(it.next());
+        }
+
+        return downloadManager.start(monitor);
+      }
+    }
+
+    /**
+     * @author Pascal Rapicault
+     */
+    private static final class CollectNativesAction extends ProvisioningAction
+    {
+      private static final String PARM_OPERAND = "operand"; //$NON-NLS-1$
+
+      private final BundlePool bundlePool;
+
+      public CollectNativesAction(BundlePool bundlePool)
+      {
+        this.bundlePool = bundlePool;
+      }
+
+      @Override
+      public IStatus execute(Map<String, Object> parameters)
+      {
+        InstallableUnitOperand operand = (InstallableUnitOperand)parameters.get(PARM_OPERAND);
+        IInstallableUnit installableUnit = operand.second();
+        if (installableUnit == null)
+        {
+          return Status.OK_STATUS;
+        }
+
+        try
+        {
+          Collection<?> toDownload = installableUnit.getArtifacts();
+          if (toDownload == null)
+          {
+            return Status.OK_STATUS;
+          }
+
+          @SuppressWarnings("unchecked")
+          List<IArtifactRequest> artifactRequests = (List<IArtifactRequest>)parameters.get(NATIVE_ARTIFACTS);
+
+          IArtifactRepositoryManager manager = bundlePool.getAgent().getArtifactRepositoryManager();
+          IFileArtifactRepository fileArtifactRepository = bundlePool.getFileArtifactRepository();
+
+          for (Iterator<?> it = toDownload.iterator(); it.hasNext();)
+          {
+            IArtifactKey keyToDownload = (IArtifactKey)it.next();
+            IArtifactRequest request = manager.createMirrorRequest(keyToDownload, fileArtifactRepository, null, null);
+            artifactRequests.add(request);
+          }
+        }
+        catch (Exception ex)
+        {
+          return TargletsCorePlugin.INSTANCE.getStatus(ex);
+        }
+
+        return Status.OK_STATUS;
+      }
+
+      @Override
+      public IStatus undo(Map<String, Object> parameters)
+      {
+        // Nothing to do for now
+        return Status.OK_STATUS;
+      }
+    }
   }
 
   /**

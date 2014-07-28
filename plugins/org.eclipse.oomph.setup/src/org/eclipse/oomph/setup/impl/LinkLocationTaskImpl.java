@@ -13,7 +13,6 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.setup.LinkLocationTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -277,7 +276,6 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
   public void perform(SetupTaskContext context) throws Exception
   {
     List<String> lines = Collections.singletonList("path=" + canonicalPath.toString().replace("\\", "\\\\"));
-    OS r = context.getOS();
     IOUtil.writeLines(link, null, lines);
     context.setRestartNeeded("Product extension locations have been added to the installation.");
   }

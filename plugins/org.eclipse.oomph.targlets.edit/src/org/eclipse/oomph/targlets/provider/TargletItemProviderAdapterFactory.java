@@ -202,6 +202,106 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.FeatureGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected FeatureGeneratorItemProvider featureGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.FeatureGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createFeatureGeneratorAdapter()
+  {
+    if (featureGeneratorItemProvider == null)
+    {
+      featureGeneratorItemProvider = new FeatureGeneratorItemProvider(this);
+    }
+
+    return featureGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.PluginGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected PluginGeneratorItemProvider pluginGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.PluginGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createPluginGeneratorAdapter()
+  {
+    if (pluginGeneratorItemProvider == null)
+    {
+      pluginGeneratorItemProvider = new PluginGeneratorItemProvider(this);
+    }
+
+    return pluginGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.ComponentGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ComponentGeneratorItemProvider componentGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.ComponentGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createComponentGeneratorAdapter()
+  {
+    if (componentGeneratorItemProvider == null)
+    {
+      componentGeneratorItemProvider = new ComponentGeneratorItemProvider(this);
+    }
+
+    return componentGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.BuckminsterGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected BuckminsterGeneratorItemProvider buckminsterGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.BuckminsterGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createBuckminsterGeneratorAdapter()
+  {
+    if (buckminsterGeneratorItemProvider == null)
+    {
+      buckminsterGeneratorItemProvider = new BuckminsterGeneratorItemProvider(this);
+    }
+
+    return buckminsterGeneratorItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -358,6 +458,22 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
     {
       componentDefinitionItemProvider.dispose();
     }
+    if (featureGeneratorItemProvider != null)
+    {
+      featureGeneratorItemProvider.dispose();
+    }
+    if (pluginGeneratorItemProvider != null)
+    {
+      pluginGeneratorItemProvider.dispose();
+    }
+    if (componentGeneratorItemProvider != null)
+    {
+      componentGeneratorItemProvider.dispose();
+    }
+    if (buckminsterGeneratorItemProvider != null)
+    {
+      buckminsterGeneratorItemProvider.dispose();
+    }
   }
 
   /**
@@ -419,6 +535,14 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createComponentExtension()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createComponentDefinition()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createFeatureGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createPluginGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createComponentGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createBuckminsterGenerator()));
 
         return null;
       }

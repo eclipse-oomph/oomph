@@ -64,7 +64,7 @@ public interface TargletContainer extends ModelElement
    * @return the value of the '<em>Targlets</em>' containment reference list.
    * @see org.eclipse.oomph.targlets.TargletPackage#getTargletContainer_Targlets()
    * @model containment="true"
-   *        extendedMetaData="name='requirement'"
+   *        extendedMetaData="name='targlet'"
    * @generated
    */
   EList<Targlet> getTarglets();

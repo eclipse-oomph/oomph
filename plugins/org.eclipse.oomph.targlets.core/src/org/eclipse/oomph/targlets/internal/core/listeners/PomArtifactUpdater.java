@@ -14,11 +14,11 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.targlets.Targlet;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
-import org.eclipse.oomph.targlets.core.TargletContainerListener;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.XMLUtil.ElementUpdater;
 
@@ -35,11 +35,12 @@ import javax.xml.parsers.DocumentBuilder;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author Eike Stepper
  */
-public class PomArtifactUpdater implements TargletContainerListener
+public class PomArtifactUpdater extends WorkspaceUpdateListener
 {
   public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater";
 
@@ -51,43 +52,42 @@ public class PomArtifactUpdater implements TargletContainerListener
   {
   }
 
-  public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
+  @Override
+  protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
+      WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
   {
-    if (event instanceof TargletContainerUpdated)
+    TargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
+    for (Targlet targlet : targletContainer.getTarglets())
     {
-      TargletContainerUpdated targletContainerUpdated = (TargletContainerUpdated)event;
-      TargletContainer targletContainer = targletContainerUpdated.getSource();
-      for (Targlet targlet : targletContainer.getTarglets())
+      Annotation annotation = targlet.getAnnotation(ANNOTATION);
+      if (annotation != null)
       {
-        Annotation annotation = targlet.getAnnotation(ANNOTATION);
-        if (annotation != null)
-        {
-          EMap<String, String> details = annotation.getDetails();
-          boolean skipArtifactIDs = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_ARTIFACT_IDS));
-          boolean skipVersions = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_VERSIONS));
+        EMap<String, String> details = annotation.getDetails();
+        boolean skipArtifactIDs = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_ARTIFACT_IDS));
+        boolean skipVersions = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_VERSIONS));
 
-          if (!skipArtifactIDs || !skipVersions)
-          {
-            Map<IInstallableUnit, File> projectLocations = targletContainerUpdated.getProjectLocations();
-            updatePomArtifacts(skipArtifactIDs, skipVersions, projectLocations, monitor);
-          }
+        if (!skipArtifactIDs || !skipVersions)
+        {
+          Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = profileUpdateSucceededEvent.getWorkspaceIUInfos();
+          updatePomArtifacts(skipArtifactIDs, skipVersions, workspaceIUInfos, monitor);
         }
       }
     }
   }
 
-  private static void updatePomArtifacts(final boolean skipArtifactIDs, final boolean skipVersions, Map<IInstallableUnit, File> projectLocations,
+  private static void updatePomArtifacts(final boolean skipArtifactIDs, final boolean skipVersions, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos,
       final IProgressMonitor monitor) throws Exception
   {
     final DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
     monitor.subTask("Checking for POM artifact updates");
 
-    for (Map.Entry<IInstallableUnit, File> entry : projectLocations.entrySet())
+    for (Entry<IInstallableUnit, WorkspaceIUInfo> entry : workspaceIUInfos.entrySet())
     {
       TargletsCorePlugin.checkCancelation(monitor);
 
       final IInstallableUnit iu = entry.getKey();
-      File folder = entry.getValue();
+      WorkspaceIUInfo info = entry.getValue();
+      File folder = info.getLocation();
 
       final File pom = new File(folder, "pom.xml");
       if (pom.isFile())

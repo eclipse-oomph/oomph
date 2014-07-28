@@ -15,8 +15,12 @@ import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
+
+import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectInputStream;
+import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -30,12 +34,17 @@ import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author Eike Stepper
@@ -51,7 +60,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
   @SuppressWarnings("restriction")
   private static final IPath INSTALL_FOLDERS = org.eclipse.pde.internal.core.PDECore.getDefault().getStateLocation().append(".install_folders");
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
 
   private static long lastStamp;
 
@@ -61,7 +70,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
 
   private String workingDigest;
 
-  private Set<File> workingProjects;
+  private Collection<WorkspaceIUInfo> workingProjects;
 
   private UpdateProblem updateProblem;
 
@@ -79,6 +88,88 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
     this.poolLocation = poolLocation;
   }
 
+  public TargletContainerDescriptor(EObjectInputStream stream) throws IOException
+  {
+    id = stream.readString();
+
+    String path = stream.readString();
+    if (path != null)
+    {
+      poolLocation = new File(path);
+    }
+
+    workingDigest = stream.readString();
+
+    int size = stream.readInt();
+    if (size != 0)
+    {
+      workingProjects = new ArrayList<WorkspaceIUInfo>();
+      for (int i = 0; i < size; i++)
+      {
+        WorkspaceIUInfo workspaceIUInfo = new WorkspaceIUInfo(stream);
+        workingProjects.add(workspaceIUInfo);
+      }
+    }
+
+    size = stream.readInt();
+    if (size != 0)
+    {
+      byte[] bytes = new byte[size];
+      for (int i = 0; i < size; i++)
+      {
+        bytes[i] = stream.readByte();
+      }
+
+      try
+      {
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        updateProblem = (UpdateProblem)new ObjectInputStream(bais).readObject();
+      }
+      catch (ClassNotFoundException ex)
+      {
+        throw new IORuntimeException(ex);
+      }
+    }
+  }
+
+  public void write(EObjectOutputStream stream) throws IOException
+  {
+    stream.writeString(id);
+    stream.writeString(poolLocation == null ? null : poolLocation.getAbsolutePath());
+    stream.writeString(workingDigest);
+
+    int size = workingProjects == null ? 0 : workingProjects.size();
+    stream.writeInt(size);
+    if (size != 0)
+    {
+      for (WorkspaceIUInfo workspaceIUInfo : workingProjects)
+      {
+        workspaceIUInfo.write(stream);
+      }
+    }
+
+    if (updateProblem != null)
+    {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ObjectOutputStream oos = new ObjectOutputStream(baos);
+      oos.writeObject(updateProblem);
+      oos.close();
+
+      byte[] bytes = baos.toByteArray();
+      stream.writeInt(bytes.length);
+
+      for (int i = 0; i < bytes.length; i++)
+      {
+        byte b = bytes[i];
+        stream.writeByte(b);
+      }
+    }
+    else
+    {
+      stream.writeInt(0);
+    }
+  }
+
   public String getID()
   {
     return id;
@@ -94,7 +185,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
     return workingDigest;
   }
 
-  public Set<File> getWorkingProjects()
+  public Collection<WorkspaceIUInfo> getWorkingProjects()
   {
     return workingProjects;
   }
@@ -180,7 +271,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
     return transactionProfile;
   }
 
-  void commitUpdateTransaction(String digest, Set<File> projectLocations, IProgressMonitor monitor) throws CoreException
+  void commitUpdateTransaction(String digest, Collection<WorkspaceIUInfo> workspaceIUInfos, IProgressMonitor monitor) throws CoreException
   {
     if (transactionProfile == null)
     {
@@ -189,7 +280,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
 
     transactionProfile = null;
     workingDigest = digest;
-    workingProjects = projectLocations;
+    workingProjects = workspaceIUInfos;
     resetUpdateProblem();
 
     saveDescriptors(monitor);
@@ -252,14 +343,14 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
     if (profile == null)
     {
       ProfileCreator creator = bundlePool.addProfile(profileID, "Targlet");
-      creator.set(PROP_TARGLET_CONTAINER_WORKSPACE, TargletContainerManager.WORKSPACE_LOCATION);
+      creator.set(PROP_TARGLET_CONTAINER_WORKSPACE, TargletContainerDescriptorManager.WORKSPACE_LOCATION);
       creator.set(PROP_TARGLET_CONTAINER_ID, id);
       creator.set(PROP_TARGLET_CONTAINER_DIGEST, digest);
       creator.set(IProfile.PROP_INSTALL_FOLDER, INSTALL_FOLDERS.append(Long.toString(nextTimeStamp())).toOSString());
       creator.setEnvironments(environmentProperties);
       creator.setLanguages(nlProperty);
       creator.setInstallFeatures(true);
-      creator.setReferencer(TargletContainerManager.WORKSPACE_REFERENCER_FILE);
+      creator.setReferencer(TargletContainerDescriptorManager.WORKSPACE_REFERENCER_FILE);
       profile = creator.create();
     }
 
@@ -268,12 +359,12 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
 
   private static String getProfileID(String suffix)
   {
-    return StringUtil.encodePath(TargletContainerManager.WORKSPACE_LOCATION) + "-" + suffix;
+    return StringUtil.encodePath(TargletContainerDescriptorManager.WORKSPACE_LOCATION) + "-" + suffix;
   }
 
   private static void saveDescriptors(IProgressMonitor monitor) throws CoreException
   {
-    TargletContainerManager manager = TargletContainerManager.getInstance();
+    TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
     manager.saveDescriptors(monitor);
   }
 

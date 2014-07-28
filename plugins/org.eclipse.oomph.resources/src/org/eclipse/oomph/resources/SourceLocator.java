@@ -12,10 +12,13 @@ package org.eclipse.oomph.resources;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.predicates.Predicate;
+import org.eclipse.oomph.resources.backend.BackendContainer;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.MultiStatus;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,6 +29,7 @@ import org.eclipse.core.resources.IProject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getRootFolder <em>Root Folder</em>}</li>
+ *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getProjectFactories <em>Project Factories</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#isLocateNestedProjects <em>Locate Nested Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getPredicates <em>Predicates</em>}</li>
  * </ul>
@@ -62,6 +66,23 @@ public interface SourceLocator extends ModelElement
    * @generated
    */
   void setRootFolder(String value);
+
+  /**
+   * Returns the value of the '<em><b>Project Factories</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.oomph.resources.ProjectFactory}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Project Factories</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Project Factories</em>' containment reference list.
+   * @see org.eclipse.oomph.resources.ResourcesPackage#getSourceLocator_ProjectFactories()
+   * @model containment="true"
+   *        extendedMetaData="name='projectFactory'"
+   * @generated
+   */
+  EList<ProjectFactory> getProjectFactories();
 
   /**
    * Returns the value of the '<em><b>Locate Nested Projects</b></em>' attribute.
@@ -113,5 +134,21 @@ public interface SourceLocator extends ModelElement
    * @generated
    */
   boolean matches(IProject project);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model dataType="org.eclipse.oomph.predicates.Project" defaultProjectFactoriesMany="true" backendContainerDataType="org.eclipse.oomph.resources.BackendContainer" monitorDataType="org.eclipse.oomph.resources.ProgressMonitor"
+   * @generated
+   */
+  IProject loadProject(EList<ProjectFactory> defaultProjectFactories, BackendContainer backendContainer, IProgressMonitor monitor);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model defaultProjectFactoriesMany="true" projectHandlerDataType="org.eclipse.oomph.resources.ProjectHandler" statusDataType="org.eclipse.oomph.resources.MultiStatus" monitorDataType="org.eclipse.oomph.resources.ProgressMonitor"
+   * @generated
+   */
+  void handleProjects(EList<ProjectFactory> defaultProjectFactories, ProjectHandler projectHandler, MultiStatus status, IProgressMonitor monitor);
 
 } // SourceLocator

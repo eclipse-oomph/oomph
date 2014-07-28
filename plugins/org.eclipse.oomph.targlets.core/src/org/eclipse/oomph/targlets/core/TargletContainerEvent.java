@@ -11,14 +11,17 @@
 package org.eclipse.oomph.targlets.core;
 
 import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUInfo;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
-import java.io.File;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +33,12 @@ public class TargletContainerEvent extends EventObject
 {
   private static final long serialVersionUID = 1L;
 
-  public TargletContainerEvent(TargletContainer targletContainer)
+  private final transient TargletContainerDescriptor descriptor;
+
+  public TargletContainerEvent(TargletContainer source, TargletContainerDescriptor descriptor)
   {
-    super(targletContainer);
+    super(source);
+    this.descriptor = descriptor;
   }
 
   @Override
@@ -41,29 +47,34 @@ public class TargletContainerEvent extends EventObject
     return (TargletContainer)super.getSource();
   }
 
+  public final TargletContainerDescriptor getDescriptor()
+  {
+    return descriptor;
+  }
+
   /**
    * @author Eike Stepper
    */
-  public static class TargletContainerChanged extends TargletContainerEvent
+  public static class TargletsChangedEvent extends TargletContainerEvent
   {
     private static final long serialVersionUID = 1L;
 
-    public TargletContainerChanged(TargletContainer targletContainer)
+    public TargletsChangedEvent(TargletContainer source, TargletContainerDescriptor descriptor)
     {
-      super(targletContainer);
+      super(source, descriptor);
     }
 
     @Override
     public String toString()
     {
-      return "TargletContainerChanged[source=" + getSource().getID() + "]";
+      return "TargletsChangedEvent[source=" + getSource().getID() + "]";
     }
   }
 
   /**
    * @author Eike Stepper
    */
-  public static class TargletContainerUpdated extends TargletContainerEvent
+  public static class ProfileUpdateSucceededEvent extends TargletContainerEvent
   {
     private static final long serialVersionUID = 1L;
 
@@ -73,16 +84,16 @@ public class TargletContainerEvent extends EventObject
 
     private final transient IProvisioningPlan provisioningPlan;
 
-    private final transient Map<IInstallableUnit, File> projectLocations;
+    private final transient Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos;
 
-    public TargletContainerUpdated(TargletContainer source, Profile profile, List<IMetadataRepository> metadataRepositories,
-        IProvisioningPlan provisioningPlan, Map<IInstallableUnit, File> projectLocations)
+    public ProfileUpdateSucceededEvent(TargletContainer source, TargletContainerDescriptor descriptor, Profile profile,
+        List<IMetadataRepository> metadataRepositories, IProvisioningPlan provisioningPlan, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos)
     {
-      super(source);
+      super(source, descriptor);
       this.profile = profile;
       this.metadataRepositories = metadataRepositories;
       this.provisioningPlan = provisioningPlan;
-      this.projectLocations = projectLocations;
+      this.workspaceIUInfos = workspaceIUInfos;
     }
 
     public final Profile getProfile()
@@ -100,31 +111,31 @@ public class TargletContainerEvent extends EventObject
       return provisioningPlan;
     }
 
-    public final Map<IInstallableUnit, File> getProjectLocations()
+    public final Map<IInstallableUnit, WorkspaceIUInfo> getWorkspaceIUInfos()
     {
-      return projectLocations;
+      return workspaceIUInfos;
     }
 
     @Override
     public String toString()
     {
-      return "TargletContainerUpdated[source=" + getSource().getID() + ", metadataRepositories=" + metadataRepositories + ", profile=" + profile
-          + ", provisioningPlan=" + provisioningPlan + ", projectLocations=" + projectLocations + "]";
+      return "ProfileUpdateSucceededEvent[source=" + getSource().getID() + ", metadataRepositories=" + metadataRepositories + ", profile=" + profile
+          + ", provisioningPlan=" + provisioningPlan + ", workspaceIUInfos=" + workspaceIUInfos + "]";
     }
   }
 
   /**
    * @author Eike Stepper
    */
-  public static class TargletContainerUpdateProblem extends TargletContainerEvent
+  public static class ProfileUpdateFailedEvent extends TargletContainerEvent
   {
     private static final long serialVersionUID = 1L;
 
     private final transient IStatus updateProblem;
 
-    public TargletContainerUpdateProblem(TargletContainer source, IStatus updateProblem)
+    public ProfileUpdateFailedEvent(TargletContainer source, TargletContainerDescriptor descriptor, IStatus updateProblem)
     {
-      super(source);
+      super(source, descriptor);
       this.updateProblem = updateProblem;
     }
 
@@ -136,7 +147,35 @@ public class TargletContainerEvent extends EventObject
     @Override
     public String toString()
     {
-      return "TargletContainerUpdateProblem[source=" + getSource().getID() + ", updateProblem=" + updateProblem + "]";
+      return "ProfileUpdateFailedEvent[source=" + getSource().getID() + ", updateProblem=" + updateProblem + "]";
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class WorkspaceUpdateFinishedEvent extends TargletContainerEvent
+  {
+    private static final long serialVersionUID = 1L;
+
+    private final transient Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> importResults;
+
+    public WorkspaceUpdateFinishedEvent(TargletContainer source, TargletContainerDescriptor descriptor,
+        Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> importResults)
+    {
+      super(source, descriptor);
+      this.importResults = Collections.unmodifiableMap(importResults);
+    }
+
+    public final Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> getImportResults()
+    {
+      return importResults;
+    }
+
+    @Override
+    public String toString()
+    {
+      return "WorkspaceUpdateFinishedEvent[source=" + getSource().getID() + ", importResults=" + importResults + "]";
     }
   }
 }

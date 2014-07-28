@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.ui;
 
-import org.eclipse.oomph.targlets.internal.core.TargletContainerManager;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.WizardPage;
@@ -48,7 +48,7 @@ public class NewTargletContainerWizardPage extends WizardPage
 
   public void createControl(Composite parent)
   {
-    final Set<String> ids = TargletContainerManager.getContainerIDs(new NullProgressMonitor());
+    final Set<String> ids = TargletContainerDescriptorManager.getContainerIDs(new NullProgressMonitor());
 
     int i = 1;
     while (ids.contains(containerID))

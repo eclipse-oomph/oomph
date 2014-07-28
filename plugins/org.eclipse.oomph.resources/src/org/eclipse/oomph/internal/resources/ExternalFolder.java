@@ -10,11 +10,14 @@
  */
 package org.eclipse.oomph.internal.resources;
 
+import org.eclipse.oomph.resources.backend.BackendFolder;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 
 import java.net.URI;
 
@@ -23,11 +26,12 @@ import java.net.URI;
  */
 public final class ExternalFolder extends ExternalContainer implements IFolder
 {
-  protected ExternalFolder(ExternalContainer parent, String name)
+  protected ExternalFolder(ExternalContainer parent, BackendFolder backendFolder)
   {
-    super(parent, name);
+    super(parent, backendFolder);
   }
 
+  @Override
   public int getType()
   {
     return FOLDER;
@@ -60,12 +64,12 @@ public final class ExternalFolder extends ExternalContainer implements IFolder
 
   public IFile getFile(String name)
   {
-    return new ExternalFile(this, name);
+    return getFile(new Path(name));
   }
 
   public IFolder getFolder(String name)
   {
-    return new ExternalFolder(this, name);
+    return getFolder(new Path(name));
   }
 
   public void move(IPath destination, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException

@@ -12,6 +12,7 @@ package org.eclipse.oomph.resources.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.predicates.PredicatesFactory;
+import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.SourceLocator;
 
@@ -106,6 +107,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
     if (childrenFeatures == null)
     {
       super.getChildrenFeatures(object);
+      childrenFeatures.add(ResourcesPackage.Literals.SOURCE_LOCATOR__PROJECT_FACTORIES);
       childrenFeatures.add(ResourcesPackage.Literals.SOURCE_LOCATOR__PREDICATES);
     }
     return childrenFeatures;
@@ -179,6 +181,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
       case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
+      case ResourcesPackage.SOURCE_LOCATOR__PROJECT_FACTORIES:
       case ResourcesPackage.SOURCE_LOCATOR__PREDICATES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
@@ -197,6 +200,12 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PROJECT_FACTORIES,
+        ResourcesFactory.eINSTANCE.createEclipseProjectFactory()));
+
+    newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PROJECT_FACTORIES,
+        ResourcesFactory.eINSTANCE.createMavenProjectFactory()));
 
     newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PREDICATES, PredicatesFactory.eINSTANCE.createNamePredicate()));
 

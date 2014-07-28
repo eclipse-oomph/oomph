@@ -16,12 +16,11 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.Targlet;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletContainerUpdated;
-import org.eclipse.oomph.targlets.core.TargletContainerListener;
-import org.eclipse.oomph.targlets.internal.core.IUGenerator;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EMap;
@@ -52,7 +51,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-public class TargetDefinitionGenerator implements TargletContainerListener
+public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 {
   public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator";
 
@@ -82,37 +81,35 @@ public class TargetDefinitionGenerator implements TargletContainerListener
   {
   }
 
-  public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
+  @Override
+  protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
+      WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
   {
-    if (event instanceof TargletContainerUpdated)
+    TargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
+    for (Targlet targlet : targletContainer.getTarglets())
     {
-      TargletContainerUpdated targletContainerUpdated = (TargletContainerUpdated)event;
-      TargletContainer targletContainer = targletContainerUpdated.getSource();
-      for (Targlet targlet : targletContainer.getTarglets())
+      Annotation annotation = targlet.getAnnotation(ANNOTATION);
+      if (annotation != null)
       {
-        Annotation annotation = targlet.getAnnotation(ANNOTATION);
-        if (annotation != null)
+        EMap<String, String> details = annotation.getDetails();
+
+        String name = details.get(ANNOTATION_NAME);
+        if (StringUtil.isEmpty(name))
         {
-          EMap<String, String> details = annotation.getDetails();
-
-          String name = details.get(ANNOTATION_NAME);
-          if (StringUtil.isEmpty(name))
-          {
-            name = "Generated from " + targlet.getName();
-          }
-
-          String location = details.get(ANNOTATION_LOCATION);
-          if (StringUtil.isEmpty(location))
-          {
-            location = File.createTempFile("tmp-", ".target").getAbsolutePath();
-            TargletsCorePlugin.INSTANCE.log("Generating target definition for targlet " + targlet.getName() + " to " + location);
-          }
-
-          Profile profile = targletContainerUpdated.getProfile();
-          List<IMetadataRepository> metadataRepositories = targletContainerUpdated.getMetadataRepositories();
-
-          generateTargetDefinition(targlet, name, location, profile, metadataRepositories, monitor);
+          name = "Generated from " + targlet.getName();
         }
+
+        String location = details.get(ANNOTATION_LOCATION);
+        if (StringUtil.isEmpty(location))
+        {
+          location = File.createTempFile("tmp-", ".target").getAbsolutePath();
+          TargletsCorePlugin.INSTANCE.log("Generating target definition for targlet " + targlet.getName() + " to " + location);
+        }
+
+        Profile profile = profileUpdateSucceededEvent.getProfile();
+        List<IMetadataRepository> metadataRepositories = profileUpdateSucceededEvent.getMetadataRepositories();
+
+        generateTargetDefinition(targlet, name, location, profile, metadataRepositories, monitor);
       }
     }
   }
@@ -395,7 +392,7 @@ public class TargetDefinitionGenerator implements TargletContainerListener
   {
     for (IInstallableUnit profileIU : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(repositoryIU), null)))
     {
-      if (!TRUE.equalsIgnoreCase(profileIU.getProperty(IUGenerator.IU_PROPERTY_SOURCE)))
+      if (!TRUE.equalsIgnoreCase(profileIU.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
       {
         return profileIU;
       }

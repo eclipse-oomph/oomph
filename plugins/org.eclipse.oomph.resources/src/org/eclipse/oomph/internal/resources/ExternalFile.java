@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.internal.resources;
 
+import org.eclipse.oomph.resources.backend.BackendFile;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFileState;
 import org.eclipse.core.runtime.CoreException;
@@ -19,8 +21,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentDescription;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
@@ -30,9 +30,15 @@ import java.net.URI;
  */
 public final class ExternalFile extends ExternalResource implements IFile
 {
-  protected ExternalFile(ExternalContainer parent, String name)
+  protected ExternalFile(ExternalContainer parent, BackendFile backendFile)
   {
-    super(parent, name);
+    super(parent, backendFile);
+  }
+
+  @Override
+  protected BackendFile getBackendResource()
+  {
+    return (BackendFile)super.getBackendResource();
   }
 
   public int getType()
@@ -101,9 +107,9 @@ public final class ExternalFile extends ExternalResource implements IFile
   {
     try
     {
-      return new FileInputStream(getFile());
+      return getBackendResource().getContents(null);
     }
-    catch (FileNotFoundException ex)
+    catch (Exception ex)
     {
       throw new CoreException(new Status(IStatus.ERROR, "org.eclipse.oomph.predicates", ex.getMessage(), ex));
     }

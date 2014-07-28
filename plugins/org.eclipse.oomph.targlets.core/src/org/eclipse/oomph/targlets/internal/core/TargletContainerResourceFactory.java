@@ -27,7 +27,7 @@ public class TargletContainerResourceFactory implements Factory
   public Resource createResource(URI uri)
   {
     final String id = uri.opaquePart();
-    final TargletContainer targletContainer = TargletContainer.lookup(id);
+    final TargletContainer targletContainer = TargletContainerDescriptorManager.getContainer(id);
     final org.eclipse.oomph.targlets.TargletContainer wrapper = TargletFactory.eINSTANCE.createTargletContainer();
     wrapper.setID(id);
 
@@ -41,9 +41,7 @@ public class TargletContainerResourceFactory implements Factory
           try
           {
             targletContainer.setTarglets(wrapper.getTarglets());
-            targletContainer.forceUpdate(true, true, new NullProgressMonitor());
-
-            TargletContainer.updateWorkspace(new NullProgressMonitor());
+            targletContainer.forceUpdate(false, true, true, new NullProgressMonitor());
           }
           catch (CoreException ex)
           {

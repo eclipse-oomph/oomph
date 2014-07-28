@@ -51,11 +51,13 @@ public final class TargletsCorePlugin extends AbstractOomphPlugin
     {
       super.start(context);
       TargletContainerListenerRegistryImpl.INSTANCE.start();
+      WorkspaceIUImporter.INSTANCE.start();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception
     {
+      WorkspaceIUImporter.INSTANCE.stop();
       TargletContainerListenerRegistryImpl.INSTANCE.stop();
       super.stop(context);
     }

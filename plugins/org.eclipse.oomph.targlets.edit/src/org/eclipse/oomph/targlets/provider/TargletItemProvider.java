@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -146,6 +147,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       super.getChildrenFeatures(object);
       childrenFeatures.add(TargletPackage.Literals.TARGLET__REQUIREMENTS);
       childrenFeatures.add(TargletPackage.Literals.TARGLET__SOURCE_LOCATORS);
+      childrenFeatures.add(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS);
       childrenFeatures.add(TargletPackage.Literals.TARGLET__REPOSITORY_LISTS);
     }
     return childrenFeatures;
@@ -223,6 +225,7 @@ public class TargletItemProvider extends ModelElementItemProvider
         return;
       case TargletPackage.TARGLET__REQUIREMENTS:
       case TargletPackage.TARGLET__SOURCE_LOCATORS:
+      case TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS:
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
@@ -245,6 +248,18 @@ public class TargletItemProvider extends ModelElementItemProvider
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__REQUIREMENTS, P2Factory.eINSTANCE.createRequirement()));
 
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__SOURCE_LOCATORS, ResourcesFactory.eINSTANCE.createSourceLocator()));
+
+    newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS,
+        TargletFactory.eINSTANCE.createFeatureGenerator()));
+
+    newChildDescriptors
+        .add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS, TargletFactory.eINSTANCE.createPluginGenerator()));
+
+    newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS,
+        TargletFactory.eINSTANCE.createComponentGenerator()));
+
+    newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS,
+        TargletFactory.eINSTANCE.createBuckminsterGenerator()));
 
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__REPOSITORY_LISTS, P2Factory.eINSTANCE.createRepositoryList()));
   }

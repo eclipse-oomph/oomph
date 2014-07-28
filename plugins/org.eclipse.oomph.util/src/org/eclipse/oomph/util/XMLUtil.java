@@ -22,6 +22,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,15 +43,33 @@ public final class XMLUtil
     return documentBuilderFactory.newDocumentBuilder();
   }
 
-  public static Element loadRootElement(DocumentBuilder documentBuilder, File file) throws Exception
+  public static Document loadDocument(DocumentBuilder documentBuilder, InputStream inputStream) throws SAXException, IOException
   {
-    Document document = loadDocument(documentBuilder, file);
-    return document.getDocumentElement();
+    try
+    {
+      return documentBuilder.parse(inputStream);
+    }
+    finally
+    {
+      IOUtil.close(inputStream);
+    }
   }
 
   public static Document loadDocument(DocumentBuilder documentBuilder, File file) throws SAXException, IOException
   {
     return documentBuilder.parse(file);
+  }
+
+  public static Element loadRootElement(DocumentBuilder documentBuilder, InputStream inputStream) throws Exception
+  {
+    Document document = loadDocument(documentBuilder, inputStream);
+    return document.getDocumentElement();
+  }
+
+  public static Element loadRootElement(DocumentBuilder documentBuilder, File file) throws Exception
+  {
+    Document document = loadDocument(documentBuilder, file);
+    return document.getDocumentElement();
   }
 
   public static int handleElements(NodeList nodeList, ElementHandler handler) throws Exception

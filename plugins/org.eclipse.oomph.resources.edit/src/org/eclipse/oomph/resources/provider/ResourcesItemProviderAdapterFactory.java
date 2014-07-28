@@ -127,6 +127,56 @@ public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.resources.EclipseProjectFactory} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected EclipseProjectFactoryItemProvider eclipseProjectFactoryItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.resources.EclipseProjectFactory}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createEclipseProjectFactoryAdapter()
+  {
+    if (eclipseProjectFactoryItemProvider == null)
+    {
+      eclipseProjectFactoryItemProvider = new EclipseProjectFactoryItemProvider(this);
+    }
+
+    return eclipseProjectFactoryItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.resources.MavenProjectFactory} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected MavenProjectFactoryItemProvider mavenProjectFactoryItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.resources.MavenProjectFactory}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createMavenProjectFactoryAdapter()
+  {
+    if (mavenProjectFactoryItemProvider == null)
+    {
+      mavenProjectFactoryItemProvider = new MavenProjectFactoryItemProvider(this);
+    }
+
+    return mavenProjectFactoryItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -271,6 +321,14 @@ public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
     {
       sourceLocatorItemProvider.dispose();
     }
+    if (eclipseProjectFactoryItemProvider != null)
+    {
+      eclipseProjectFactoryItemProvider.dispose();
+    }
+    if (mavenProjectFactoryItemProvider != null)
+    {
+      mavenProjectFactoryItemProvider.dispose();
+    }
   }
 
   /**
@@ -326,6 +384,10 @@ public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ResourcesFactory.eINSTANCE.createSourceLocator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ResourcesFactory.eINSTANCE.createEclipseProjectFactory()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ResourcesFactory.eINSTANCE.createMavenProjectFactory()));
 
         return null;
       }

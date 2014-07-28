@@ -11,8 +11,13 @@
 package org.eclipse.oomph.targlets.util;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.targlets.BuckminsterGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.ComponentGenerator;
+import org.eclipse.oomph.targlets.FeatureGenerator;
+import org.eclipse.oomph.targlets.IUGenerator;
+import org.eclipse.oomph.targlets.PluginGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -109,6 +114,36 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseIUGenerator(IUGenerator object)
+    {
+      return createIUGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseFeatureGenerator(FeatureGenerator object)
+    {
+      return createFeatureGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter casePluginGenerator(PluginGenerator object)
+    {
+      return createPluginGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseComponentGenerator(ComponentGenerator object)
+    {
+      return createComponentGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseBuckminsterGenerator(BuckminsterGenerator object)
+    {
+      return createBuckminsterGeneratorAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -191,6 +226,81 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createComponentDefinitionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.IUGenerator <em>IU Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.IUGenerator
+   * @generated
+   */
+  public Adapter createIUGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.FeatureGenerator <em>Feature Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.FeatureGenerator
+   * @generated
+   */
+  public Adapter createFeatureGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.PluginGenerator <em>Plugin Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.PluginGenerator
+   * @generated
+   */
+  public Adapter createPluginGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.ComponentGenerator <em>Component Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.ComponentGenerator
+   * @generated
+   */
+  public Adapter createComponentGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.BuckminsterGenerator <em>Buckminster Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.BuckminsterGenerator
+   * @generated
+   */
+  public Adapter createBuckminsterGeneratorAdapter()
   {
     return null;
   }

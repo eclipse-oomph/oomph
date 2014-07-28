@@ -16,12 +16,13 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.pde.PDEPackage;
 import org.eclipse.oomph.setup.pde.TargetPlatformTask;
-import org.eclipse.oomph.setup.pde.util.TargetPlatformUtil;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.pde.core.target.ITargetDefinition;
 
 /**
@@ -59,7 +60,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
    */
   protected String name = NAME_EDEFAULT;
 
-  private ITargetDefinition targetPlatform;
+  private ITargetDefinition targetDefinition;
 
   /**
    * <!-- begin-user-doc -->
@@ -200,26 +201,25 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
       return true;
     }
 
-    initTargetPlatform(context);
-    ITargetDefinition activeTargetPlatform = TargetPlatformUtil.getActiveTargetPlatform();
-    return targetPlatform == null || activeTargetPlatform == null || !targetPlatform.getHandle().equals(activeTargetPlatform.getHandle());
-  }
+    IProgressMonitor monitor = new ProgressLogMonitor(context);
+    targetDefinition = TargetPlatformUtil.getTargetDefinition(getName(), monitor);
 
-  private void initTargetPlatform(SetupTaskContext context)
-  {
-    targetPlatform = TargetPlatformUtil.getTargetPlatform(getName(), context);
+    ITargetDefinition activeTargetDefinition = TargetPlatformUtil.getActiveTargetDefinition();
+    return targetDefinition == null || activeTargetDefinition == null || !targetDefinition.getHandle().equals(activeTargetDefinition.getHandle());
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    if (targetPlatform == null)
+    IProgressMonitor monitor = new ProgressLogMonitor(context);
+
+    if (targetDefinition == null)
     {
-      initTargetPlatform(context);
+      targetDefinition = TargetPlatformUtil.getTargetDefinition(getName(), monitor);
     }
 
-    if (targetPlatform != null)
+    if (targetDefinition != null)
     {
-      TargetPlatformUtil.setTargetActive(targetPlatform, new ProgressLogMonitor(context));
+      TargetPlatformUtil.activateTargetDefinition(targetDefinition, monitor);
     }
   }
 

@@ -249,6 +249,7 @@ public final class IOUtil
   {
     try
     {
+      mkdirs(file.getParentFile());
       return new FileOutputStream(file);
     }
     catch (IOException ex)
@@ -390,6 +391,7 @@ public final class IOUtil
   public static void copyFile(File source, File target) throws IORuntimeException
   {
     mkdirs(target.getParentFile());
+
     FileInputStream input = null;
     FileOutputStream output = null;
 
@@ -488,6 +490,8 @@ public final class IOUtil
 
     try
     {
+      mkdirs(file.getParentFile());
+
       out = new FileOutputStream(file);
       writer = charsetName == null ? new OutputStreamWriter(out) : new OutputStreamWriter(out, charsetName);
       bufferedWriter = new BufferedWriter(writer);
@@ -529,6 +533,8 @@ public final class IOUtil
 
   public static void writeUTF8(File file, String contents) throws Exception
   {
+    mkdirs(file.getParentFile());
+
     InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
     OutputStream outputStream = new FileOutputStream(file);
 
@@ -548,11 +554,14 @@ public final class IOUtil
     {
       DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
       Document document = documentBuilder.parse(inputStream);
+
       TransformerFactory transformerFactory = TransformerFactory.newInstance();
       Transformer transformer = transformerFactory.newTransformer();
+
       StringWriter out = new StringWriter();
       transformer.transform(new DOMSource(document), new StreamResult(out));
       out.close();
+
       return out.toString();
     }
     finally

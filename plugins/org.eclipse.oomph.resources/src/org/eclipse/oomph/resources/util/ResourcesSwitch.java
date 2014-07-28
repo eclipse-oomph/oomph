@@ -11,8 +11,12 @@
 package org.eclipse.oomph.resources.util;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.resources.EclipseProjectFactory;
+import org.eclipse.oomph.resources.MavenProjectFactory;
+import org.eclipse.oomph.resources.ProjectFactory;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.resources.XMLProjectFactory;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -95,6 +99,82 @@ public class ResourcesSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case ResourcesPackage.PROJECT_FACTORY:
+      {
+        ProjectFactory projectFactory = (ProjectFactory)theEObject;
+        T result = caseProjectFactory(projectFactory);
+        if (result == null)
+        {
+          result = caseModelElement(projectFactory);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case ResourcesPackage.XML_PROJECT_FACTORY:
+      {
+        XMLProjectFactory xmlProjectFactory = (XMLProjectFactory)theEObject;
+        T result = caseXMLProjectFactory(xmlProjectFactory);
+        if (result == null)
+        {
+          result = caseProjectFactory(xmlProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(xmlProjectFactory);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case ResourcesPackage.ECLIPSE_PROJECT_FACTORY:
+      {
+        EclipseProjectFactory eclipseProjectFactory = (EclipseProjectFactory)theEObject;
+        T result = caseEclipseProjectFactory(eclipseProjectFactory);
+        if (result == null)
+        {
+          result = caseXMLProjectFactory(eclipseProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseProjectFactory(eclipseProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(eclipseProjectFactory);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case ResourcesPackage.MAVEN_PROJECT_FACTORY:
+      {
+        MavenProjectFactory mavenProjectFactory = (MavenProjectFactory)theEObject;
+        T result = caseMavenProjectFactory(mavenProjectFactory);
+        if (result == null)
+        {
+          result = caseXMLProjectFactory(mavenProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseProjectFactory(mavenProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(mavenProjectFactory);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -112,6 +192,70 @@ public class ResourcesSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSourceLocator(SourceLocator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Project Factory</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseProjectFactory(ProjectFactory object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>XML Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>XML Project Factory</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseXMLProjectFactory(XMLProjectFactory object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Eclipse Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Eclipse Project Factory</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseEclipseProjectFactory(EclipseProjectFactory object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Maven Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Maven Project Factory</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMavenProjectFactory(MavenProjectFactory object)
   {
     return null;
   }

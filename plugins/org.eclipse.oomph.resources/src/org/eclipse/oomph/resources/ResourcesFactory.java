@@ -10,15 +10,7 @@
  */
 package org.eclipse.oomph.resources;
 
-import org.eclipse.oomph.internal.resources.ExternalProject.AbstractXMLDescriptionFactory.Eclipse;
-import org.eclipse.oomph.internal.resources.ExternalProject.AbstractXMLDescriptionFactory.Maven;
-
 import org.eclipse.emf.ecore.EFactory;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-
-import java.io.File;
 
 /**
  * <!-- begin-user-doc -->
@@ -47,6 +39,24 @@ public interface ResourcesFactory extends EFactory
    */
   SourceLocator createSourceLocator();
 
+  /**
+   * Returns a new object of class '<em>Eclipse Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Eclipse Project Factory</em>'.
+   * @generated
+   */
+  EclipseProjectFactory createEclipseProjectFactory();
+
+  /**
+   * Returns a new object of class '<em>Maven Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Maven Project Factory</em>'.
+   * @generated
+   */
+  MavenProjectFactory createMavenProjectFactory();
+
   SourceLocator createSourceLocator(String rootFolder);
 
   SourceLocator createSourceLocator(String rootFolder, boolean locateNestedProjects);
@@ -59,21 +69,5 @@ public interface ResourcesFactory extends EFactory
    * @generated
    */
   ResourcesPackage getResourcesPackage();
-
-  IProject loadProject(File folder);
-
-  IProject loadProject(File folder, ProjectDescriptionFactory... factories);
-
-  /**
-   * @author Eike Stepper
-   */
-  public interface ProjectDescriptionFactory
-  {
-    public static final ProjectDescriptionFactory ECLIPSE = new Eclipse();
-
-    public static final ProjectDescriptionFactory MAVEN = new Maven();
-
-    public IProjectDescription createDescription(File folder) throws Exception;
-  }
 
 } // ResourcesFactory

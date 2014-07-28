@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.internal.resources;
 
-import org.eclipse.oomph.resources.ResourcesFactory.ProjectDescriptionFactory;
-import org.eclipse.oomph.util.XMLUtil;
+import org.eclipse.oomph.resources.backend.BackendContainer;
+import org.eclipse.oomph.resources.backend.BackendException;
 
 import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.ICommand;
@@ -27,12 +27,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.content.IContentTypeMatcher;
 
-import org.w3c.dom.Element;
-
-import javax.xml.parsers.DocumentBuilder;
-
-import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,26 +39,17 @@ import java.util.Map;
  */
 public final class ExternalProject extends ExternalContainer implements IProject
 {
-  private final File folder;
-
   private final IProjectDescription description;
 
-  public ExternalProject(File folder, IProjectDescription description)
+  public ExternalProject(BackendContainer backendContainer, IProjectDescription description)
   {
-    super(null, description.getName());
-    this.folder = folder;
+    super(null, backendContainer);
     this.description = description;
 
     if (description instanceof Description)
     {
       ((Description)description).setProject(this);
     }
-  }
-
-  @Override
-  protected File getFile()
-  {
-    return folder;
   }
 
   @Override
@@ -77,6 +64,7 @@ public final class ExternalProject extends ExternalContainer implements IProject
     return this;
   }
 
+  @Override
   public int getType()
   {
     return PROJECT;
@@ -274,37 +262,12 @@ public final class ExternalProject extends ExternalContainer implements IProject
     throw new ReadOnlyException();
   }
 
-  public static IProject load(File folder, ProjectDescriptionFactory... factories)
-  {
-    try
-    {
-      for (ProjectDescriptionFactory factory : factories)
-      {
-        IProjectDescription description = factory.createDescription(folder);
-        if (description != null)
-        {
-          return new ExternalProject(folder, description);
-        }
-      }
-    }
-    catch (RuntimeException ex)
-    {
-      throw ex;
-    }
-    catch (Exception ex)
-    {
-      throw new RuntimeException(ex);
-    }
-
-    return null;
-  }
-
   /**
    * @author Eike Stepper
    */
   public static final class Description implements IProjectDescription
   {
-    private final File folder;
+    private final BackendContainer backendContainer;
 
     private String name;
 
@@ -316,9 +279,9 @@ public final class ExternalProject extends ExternalContainer implements IProject
 
     private final List<String> natureIDs = new ArrayList<String>();
 
-    public Description(File folder)
+    public Description(BackendContainer backendContainer)
     {
-      this.folder = folder;
+      this.backendContainer = backendContainer;
     }
 
     public String getName()
@@ -364,12 +327,19 @@ public final class ExternalProject extends ExternalContainer implements IProject
     @Deprecated
     public IPath getLocation()
     {
-      return new Path(folder.getAbsolutePath());
+      return backendContainer.getLocation();
     }
 
     public URI getLocationURI()
     {
-      return folder.toURI();
+      try
+      {
+        return new URI(backendContainer.getAbsoluteURI().toString());
+      }
+      catch (URISyntaxException ex)
+      {
+        throw new BackendException(ex);
+      }
     }
 
     public IProject[] getReferencedProjects()
@@ -530,126 +500,6 @@ public final class ExternalProject extends ExternalContainer implements IProject
       public void setBuilding(int kind, boolean value)
       {
         throw new ReadOnlyException();
-      }
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static abstract class AbstractXMLDescriptionFactory implements ProjectDescriptionFactory
-  {
-    public final IProjectDescription createDescription(File folder) throws Exception
-    {
-      File projectFile = new File(folder, getProjectFileName());
-      if (!projectFile.isFile())
-      {
-        return null;
-      }
-
-      DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-      Element rootElement = XMLUtil.loadRootElement(documentBuilder, projectFile);
-
-      Description description = new Description(folder);
-      fillDescription(description, rootElement);
-      return description;
-    }
-
-    protected abstract String getProjectFileName();
-
-    protected abstract void fillDescription(final Description description, Element rootElement) throws Exception;
-
-    /**
-     * @author Eike Stepper
-     */
-    public static final class Eclipse extends AbstractXMLDescriptionFactory
-    {
-      @Override
-      protected String getProjectFileName()
-      {
-        return ".project";
-      }
-
-      @Override
-      protected void fillDescription(final Description description, Element rootElement) throws Exception
-      {
-        XMLUtil.handleChildElements(rootElement, new XMLUtil.ElementHandler()
-        {
-          public void handleElement(Element element) throws Exception
-          {
-            if ("name".equals(element.getTagName()))
-            {
-              String name = element.getTextContent().trim();
-              description.internalSetName(name);
-            }
-            else if ("comment".equals(element.getTagName()))
-            {
-              String comment = element.getTextContent().trim();
-              description.internalSetComment(comment);
-            }
-            else if ("buildSpec".equals(element.getTagName()))
-            {
-              XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
-              {
-                public void handleElement(Element buildCommandElement) throws Exception
-                {
-                  XMLUtil.handleChildElements(buildCommandElement, new XMLUtil.ElementHandler()
-                  {
-                    public void handleElement(Element nameElement) throws Exception
-                    {
-                      String builderName = nameElement.getTextContent().trim();
-                      description.internalAddCommand(builderName);
-                    }
-                  });
-                }
-              });
-            }
-            else if ("natures".equals(element.getTagName()))
-            {
-              XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
-              {
-                public void handleElement(Element natureElement) throws Exception
-                {
-                  String natureID = natureElement.getTextContent().trim();
-                  description.internalAddNatureID(natureID);
-                }
-              });
-            }
-          }
-        });
-      }
-    }
-
-    /**
-     * @author Eike Stepper
-     */
-    public static final class Maven extends AbstractXMLDescriptionFactory
-    {
-      @Override
-      protected String getProjectFileName()
-      {
-        return "pom.xml";
-      }
-
-      @Override
-      protected void fillDescription(final Description description, Element rootElement) throws Exception
-      {
-        XMLUtil.handleChildElements(rootElement, new XMLUtil.ElementHandler()
-        {
-          public void handleElement(Element element) throws Exception
-          {
-            if ("artifactId".equals(element.getTagName()))
-            {
-              String name = element.getTextContent().trim();
-              description.internalSetName(name);
-            }
-            else if ("name".equals(element.getTagName()))
-            {
-              String comment = element.getTextContent().trim();
-              description.internalSetComment(comment);
-            }
-          }
-        });
       }
     }
   }

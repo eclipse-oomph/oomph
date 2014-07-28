@@ -10,6 +10,11 @@
  */
 package org.eclipse.oomph.internal.resources;
 
+import org.eclipse.oomph.resources.backend.BackendContainer;
+import org.eclipse.oomph.resources.backend.BackendFile;
+import org.eclipse.oomph.resources.backend.BackendFolder;
+import org.eclipse.oomph.resources.backend.BackendResource;
+
 import org.eclipse.core.resources.FileInfoMatcherDescription;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -22,8 +27,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,14 +36,26 @@ import java.util.List;
  */
 public abstract class ExternalContainer extends ExternalResource implements IContainer
 {
-  protected ExternalContainer(ExternalContainer parent, String name)
+  protected ExternalContainer(ExternalContainer parent, BackendContainer backendContainer)
   {
-    super(parent, name);
+    super(parent, backendContainer);
+  }
+
+  @Override
+  protected BackendContainer getBackendResource()
+  {
+    return (BackendContainer)super.getBackendResource();
+  }
+
+  public int getType()
+  {
+    return 0;
   }
 
   public boolean exists(IPath path)
   {
-    return new File(getFile(), path.toOSString()).exists();
+    IResource member = findMember(path);
+    return member.exists();
   }
 
   public IResource findMember(IPath path)
@@ -48,16 +65,27 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
       return this;
     }
 
-    String name = path.segment(0);
-    File member = new File(getFile(), name);
-    if (member.isFile())
+    BackendResource backendResource = getBackendResource().findMember(path, null);
+    if (backendResource != null)
     {
-      return new ExternalFile(this, name);
-    }
+      BackendResource thisBackendResource = getBackendResource();
 
-    if (member.isDirectory())
-    {
-      return new ExternalFolder(this, name).findMember(path.removeFirstSegments(1));
+      LinkedList<BackendResource> backendResources = new LinkedList<BackendResource>();
+      for (BackendResource it = backendResource; it != thisBackendResource; it = it.getParent())
+      {
+        backendResources.addFirst(it);
+      }
+
+      ExternalContainer container = this;
+      for (BackendResource it : backendResources)
+      {
+        if (!it.isContainer())
+        {
+          return new ExternalFile(container, (BackendFile)it);
+        }
+
+        container = new ExternalFolder(container, (BackendFolder)it);
+      }
     }
 
     return null;
@@ -91,28 +119,28 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
 
   public IFile getFile(IPath path)
   {
-    ExternalContainer parent = getParent(path);
-    return new ExternalFile(parent, path.lastSegment());
+    BackendFile childBackendFile = getBackendResource().getFile(path);
+    return new ExternalFile(this, childBackendFile);
   }
 
   public IFolder getFolder(IPath path)
   {
-    ExternalContainer parent = getParent(path);
-    return new ExternalFolder(parent, path.lastSegment());
+    BackendFolder childBackendFolder = getBackendResource().getFolder(path);
+    return new ExternalFolder(this, childBackendFolder);
   }
 
   public IResource[] members() throws CoreException
   {
     List<IResource> members = new ArrayList<IResource>();
-    for (File file : getFile().listFiles())
+    for (BackendResource member : getBackendResource().getMembers(null))
     {
-      if (file.isFile())
+      if (member.isContainer())
       {
-        members.add(new ExternalFile(this, file.getName()));
+        members.add(new ExternalFolder(this, (BackendFolder)member));
       }
-      else if (file.isDirectory())
+      else
       {
-        members.add(new ExternalFolder(this, file.getName()));
+        members.add(new ExternalFile(this, (BackendFile)member));
       }
     }
 
@@ -156,21 +184,21 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
     return new IResourceFilterDescription[0];
   }
 
-  protected ExternalContainer getParent(IPath path)
-  {
-    int segmentCount = path.segmentCount();
-    if (segmentCount > 1)
-    {
-      return new ExternalFolder(this, path.segment(0)).getParent(path.removeFirstSegments(1));
-    }
-
-    if (segmentCount == 1)
-    {
-      return this;
-    }
-
-    return null;
-  }
+  // protected ExternalContainer getParent(IPath path)
+  // {
+  // int segmentCount = path.segmentCount();
+  // if (segmentCount > 1)
+  // {
+  // return new ExternalFolder(this, path.segment(0)).getParent(path.removeFirstSegments(1));
+  // }
+  //
+  // if (segmentCount == 1)
+  // {
+  // return this;
+  // }
+  //
+  // return null;
+  // }
 
   @Override
   protected boolean visit(IResourceVisitor visitor, int depth) throws CoreException

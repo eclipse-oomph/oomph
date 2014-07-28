@@ -13,6 +13,8 @@
 
 <plugin>
 
+   <extension-point id="backendSystemFactories" name="Backend System Factories" schema="schema/backendSystemFactories.exsd"/>
+
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated resources -->
       <package

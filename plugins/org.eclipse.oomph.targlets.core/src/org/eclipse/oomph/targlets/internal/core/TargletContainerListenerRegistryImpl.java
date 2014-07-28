@@ -78,7 +78,6 @@ public class TargletContainerListenerRegistryImpl implements TargletContainerLis
     }
 
     monitor.subTask("Notifying listeners of targlet container " + event.getSource().getID());
-
     monitor.beginTask("", targletListeners.length);
 
     for (TargletContainerListener listener : targletListeners)

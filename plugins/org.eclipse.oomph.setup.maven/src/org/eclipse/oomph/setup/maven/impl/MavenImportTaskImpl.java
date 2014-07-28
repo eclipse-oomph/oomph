@@ -10,9 +10,10 @@
  */
 package org.eclipse.oomph.setup.maven.impl;
 
-import org.eclipse.oomph.resources.ResourcesFactory;
-import org.eclipse.oomph.resources.ResourcesFactory.ProjectDescriptionFactory;
+import org.eclipse.oomph.resources.MavenProjectFactory;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.resources.backend.BackendContainer;
+import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
@@ -43,7 +44,6 @@ import org.eclipse.m2e.core.project.LocalProjectScanner;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -312,7 +312,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
 
       for (MavenProjectInfo projectInfo : projectScanner.getProjects())
       {
-        processMavenProject(projectInfo, projectInfos, sourceLocator);
+        processMavenProject(projectInfo, projectInfos, sourceLocator, monitor);
       }
     }
 
@@ -331,10 +331,11 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     }
   }
 
-  private static void processMavenProject(MavenProjectInfo projectInfo, Set<MavenProjectInfo> projectInfos, SourceLocator sourceLocator)
+  private static void processMavenProject(MavenProjectInfo projectInfo, Set<MavenProjectInfo> projectInfos, SourceLocator sourceLocator,
+      IProgressMonitor monitor)
   {
-    File folder = projectInfo.getPomFile().getParentFile();
-    IProject project = ResourcesFactory.eINSTANCE.loadProject(folder, ProjectDescriptionFactory.MAVEN);
+    BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectInfo.getPomFile().getParent());
+    IProject project = sourceLocator.loadProject(MavenProjectFactory.LIST, backendContainer, monitor);
     if (project != null)
     {
       if (sourceLocator.matches(project))
@@ -349,7 +350,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
 
     for (MavenProjectInfo childProjectInfo : projectInfo.getProjects())
     {
-      processMavenProject(childProjectInfo, projectInfos, sourceLocator);
+      processMavenProject(childProjectInfo, projectInfos, sourceLocator, monitor);
     }
   }
 

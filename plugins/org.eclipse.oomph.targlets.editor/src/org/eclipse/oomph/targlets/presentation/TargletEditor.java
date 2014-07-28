@@ -688,7 +688,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    * This sets up the editing domain for the model editor.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected void initializeEditingDomain()
   {
@@ -1713,7 +1713,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
   {
     String id = targletContainer.getID();
     URI uri = URI.createGenericURI(TargletContainerResourceFactory.PROTOCOL_NAME, id, null);
-    String label = targletContainer.getTarget().getName() + " - " + id;
+    String label = targletContainer.getTargetDefinition().getName() + " - " + id;
 
     IEditorInput input = new URIEditorInput(uri, label);
     IDE.openEditor(page, input, EDITOR_ID);
