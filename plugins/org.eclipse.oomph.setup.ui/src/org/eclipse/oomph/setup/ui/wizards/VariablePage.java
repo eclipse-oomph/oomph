@@ -219,13 +219,37 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     for (FieldHolder fieldHolder : manager)
     {
-      for (VariableTask variable : fieldHolder.getVariables())
+      if (StringUtil.isEmpty(fieldHolder.getValue()))
       {
-        String value = variable.getValue();
-        if (!StringUtil.isEmpty(value) && StringUtil.isEmpty(fieldHolder.getValue()))
+        String initialValue = null;
+        String initialDefaultValue = null;
+        for (VariableTask variable : fieldHolder.getVariables())
         {
-          fieldHolder.setValue(value);
-          break;
+          if (initialValue == null)
+          {
+            String value = variable.getValue();
+            if (!StringUtil.isEmpty(value))
+            {
+              initialValue = value;
+            }
+          }
+          else if (initialDefaultValue == null)
+          {
+            String defaultValue = variable.getDefaultValue();
+            if (!StringUtil.isEmpty(defaultValue))
+            {
+              initialDefaultValue = defaultValue;
+            }
+          }
+        }
+
+        if (!StringUtil.isEmpty(initialValue))
+        {
+          fieldHolder.setValue(initialValue);
+        }
+        else if (!StringUtil.isEmpty(initialDefaultValue))
+        {
+          fieldHolder.setValue(initialDefaultValue);
         }
       }
     }
@@ -547,7 +571,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       field = PropertyField.createField(variable);
       field.fill(composite);
-      field.setValue(variable.getDefaultValue());
       field.addValueListener(this);
       field.getControl().addFocusListener(focusListener);
       variables.add(variable);
