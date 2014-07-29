@@ -289,8 +289,9 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       {
         it.remove();
       }
-      else
+      else if (targlet.getRequirements().isEmpty() && targlet.getSourceLocators().isEmpty())
       {
+        // Eliminate targlets that are effectively empty, i.e., no requirements, no source locators, and the active repository list is empty.
         String activeRepositoryList = targlet.getActiveRepositoryList();
         for (RepositoryList repositoryList : targlet.getRepositoryLists())
         {
