@@ -118,9 +118,7 @@ public class ProgressPage extends SetupWizardPage
             Point textSelection = setupTaskSelections.get(eObject);
             if (textSelection != null)
             {
-              // Force the first line to be scrolled into view
-              logText.setSelection(textSelection.x, textSelection.x);
-
+              int start = textSelection.x;
               // Treat -1 so that at selects to the very end.
               int end = textSelection.y;
               if (end == -1)
@@ -128,13 +126,33 @@ public class ProgressPage extends SetupWizardPage
                 end = logText.getCharCount();
               }
 
+              String selectedText = logText.getText(start, end);
+              int index = 0;
+              int length = selectedText.length();
+
+              // Skip leading line feeds.
+              for (; index < length; ++index)
+              {
+                char c = selectedText.charAt(index);
+                if (c == '\n' || c == '\r')
+                {
+                  ++start;
+                }
+                else
+                {
+                  break;
+                }
+              }
+
+              // Force the first line to be scrolled into view
+              logText.setSelection(start, start);
+
               // Determine the number of lines of text to be selected
-              String selectedText = logText.getText(textSelection.x, end);
               int lineFeedCount = 0;
               int carriageReturnCount = 0;
-              for (int i = 0, length = selectedText.length(); i < length; ++i)
+              for (; index < length; ++index)
               {
-                char c = selectedText.charAt(i);
+                char c = selectedText.charAt(index);
                 if (c == '\n')
                 {
                   ++lineFeedCount;
@@ -150,11 +168,11 @@ public class ProgressPage extends SetupWizardPage
               int visibleLineCount = logText.getClientArea().height / logText.getLineHeight();
               if (lineFeedCount > visibleLineCount || carriageReturnCount > visibleLineCount)
               {
-                logText.setSelection(end, textSelection.x);
+                logText.setSelection(end, start);
               }
               else
               {
-                logText.setSelection(textSelection.x, end);
+                logText.setSelection(start, end);
               }
             }
           }
@@ -688,7 +706,7 @@ public class ProgressPage extends SetupWizardPage
 
     public void task(final SetupTask setupTask)
     {
-      UIUtil.asyncExec(new Runnable()
+      UIUtil.syncExec(new Runnable()
       {
         public void run()
         {
@@ -699,7 +717,7 @@ public class ProgressPage extends SetupWizardPage
           if (previousCurrentTask != null)
           {
             Point previousTextSelection = setupTaskSelections.get(previousCurrentTask);
-            offset = logText.getCharCount();
+            offset = logText.getCharCount() - 1;
             int start = previousTextSelection.x;
             setupTaskSelections.put(previousCurrentTask, new Point(start, offset));
             treeViewer.refresh(previousCurrentTask, true);
