@@ -132,6 +132,10 @@ public class TargletContainer extends AbstractBundleContainer
 {
   public static final String TYPE = "Targlet";
 
+  private static final String A_PDE_TARGET_PLATFORM = "A.PDE.Target.Platform";
+
+  private static final String A_PDE_TARGET_PLATFORM_LOWER_CASE = A_PDE_TARGET_PLATFORM.toLowerCase();
+
   private static final ThreadLocal<Boolean> FORCE_UPDATE = new ThreadLocal<Boolean>();
 
   private static final ThreadLocal<Boolean> OFFLINE = new ThreadLocal<Boolean>();
@@ -727,6 +731,8 @@ public class TargletContainer extends AbstractBundleContainer
                 Map<String, IInstallableUnit> idToIUMap = new HashMap<String, IInstallableUnit>();
                 prepareSources(ius, workspaceIUs, idToIUMap, monitor);
 
+                ius.add(createPDETargetPlatformIU());
+
                 IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
                 Set<IRequirement> licenseRequirements = new HashSet<IRequirement>();
                 for (IInstallableUnit iu : P2Util.asIterable(metadataResult))
@@ -900,6 +906,19 @@ public class TargletContainer extends AbstractBundleContainer
 
     progress.done();
     return profile;
+  }
+
+  private IInstallableUnit createPDETargetPlatformIU()
+  {
+    InstallableUnitDescription description = new InstallableUnitDescription();
+    description.setId(A_PDE_TARGET_PLATFORM_LOWER_CASE);
+    Version version = Version.createOSGi(1, 0, 0);
+    description.setVersion(version);
+    description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM,
+        "Cannot be installed into the IDE", version)));
+    description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
+    description.setArtifacts(new IArtifactKey[0]);
+    return MetadataFactory.createInstallableUnit(description);
   }
 
   private static String createDigest(String id, String environmentProperties, String nlProperty, EList<Targlet> targlets)
