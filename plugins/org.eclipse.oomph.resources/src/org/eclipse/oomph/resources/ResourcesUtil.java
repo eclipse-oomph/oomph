@@ -28,10 +28,10 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 
 import org.w3c.dom.Element;
 
@@ -117,6 +117,7 @@ public final class ResourcesUtil
     return count.get();
   }
 
+  @SuppressWarnings("restriction")
   private static boolean importProject(File folder, IProgressMonitor monitor) throws Exception
   {
     String name = getProjectName(folder);
@@ -125,7 +126,8 @@ public final class ResourcesUtil
       File location = folder.getCanonicalFile();
 
       IWorkspace workspace = getWorkspace();
-      IProject project = workspace.getRoot().getProject(name);
+      IWorkspaceRoot root = workspace.getRoot();
+      IProject project = root.getProject(name);
       if (project.exists())
       {
         File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
@@ -139,8 +141,11 @@ public final class ResourcesUtil
       {
         monitor.setTaskName("Importing project " + name);
 
-        Path locationPath = new Path(location.getAbsolutePath());
-        if (Platform.getLocation().isPrefixOf(locationPath))
+        IPath locationPath = new Path(location.getAbsolutePath());
+        IPath parentPath = locationPath.removeLastSegments(1);
+        IPath defaultDefaultLocation = root.getLocation();
+        if (org.eclipse.core.internal.utils.FileUtil.isPrefixOf(parentPath, defaultDefaultLocation)
+            && org.eclipse.core.internal.utils.FileUtil.isPrefixOf(defaultDefaultLocation, parentPath))
         {
           locationPath = null;
         }
