@@ -252,23 +252,26 @@ public final class SetupUtil
         if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
         {
           String[] mapping = ((String)entry.getValue()).split("->");
-          URI sourceURI = URI.createURI(mapping[0]);
-          URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
-
-          // Only include the mapping if the target exists.
-          // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
-          // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
-          //
-          if (targetURI.isFile())
+          if (mapping.length == 2)
           {
-            File file = new File(targetURI.toFileString());
-            if (!file.exists())
-            {
-              continue;
-            }
-          }
+            URI sourceURI = URI.createURI(mapping[0]);
+            URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
 
-          uriMap.put(sourceURI, targetURI);
+            // Only include the mapping if the target exists.
+            // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
+            // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
+            //
+            if (targetURI.isFile())
+            {
+              File file = new File(targetURI.toFileString());
+              if (!file.exists())
+              {
+                continue;
+              }
+            }
+
+            uriMap.put(sourceURI, targetURI);
+          }
         }
       }
     }
