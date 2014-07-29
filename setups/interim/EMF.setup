@@ -135,6 +135,8 @@
         <repository
             url="http://download.eclipse.org/rt/rap/2.2"/>
         <repository
+            url="http://download.eclipse.org/rt/rap/3.0"/>
+        <repository
             url="${gwt.tool.url}"/>
         <repository
             url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
