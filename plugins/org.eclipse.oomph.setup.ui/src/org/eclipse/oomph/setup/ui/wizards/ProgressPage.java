@@ -577,7 +577,10 @@ public class ProgressPage extends SetupWizardPage
       command.add("-D" + PROP_SETUP_MIRRORS_STARTUP + "=" + performer.isMirrors());
 
       ProcessBuilder builder = new ProcessBuilder(command);
-      builder.start();
+      Process process = builder.start();
+      process.getInputStream().close();
+      process.getOutputStream().close();
+      process.getErrorStream().close();
     }
     else
     {
