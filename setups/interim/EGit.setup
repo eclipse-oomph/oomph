@@ -12,12 +12,12 @@
     xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
     xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
     name="egit"
-    label="Eclipse Git Team Provider"
+    label="EGit"
     setup:toolVersion="8">
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
-        id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+        name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -56,7 +56,7 @@
         </detail>
         <detail
             key="label">
-          <value>Oomph Git or Gerrit Repository</value>
+          <value>JGit Gerrit Repository</value>
         </detail>
         <detail
             key="target">
@@ -78,7 +78,7 @@
         </detail>
         <detail
             key="label">
-          <value>Oomph Git or Gerrit Repository</value>
+          <value>EGit Gerrit Repository</value>
         </detail>
         <detail
             key="target">
@@ -92,47 +92,47 @@
           name="EGit"
           activeRepositoryList="${eclipse.target.platform}">
         <requirement
-            id="org.eclipse.platform.feature.group"/>
+            name="org.eclipse.platform.feature.group"/>
         <requirement
-            id="org.eclipse.jgit.ant"/>
+            name="org.eclipse.jgit.ant"/>
         <requirement
-            id="org.eclipse.jgit.ant.test"/>
+            name="org.eclipse.jgit.ant.test"/>
         <requirement
-            id="org.eclipse.jgit.console"/>
+            name="org.eclipse.jgit.console"/>
         <requirement
-            id="org.eclipse.jgit.http.test"/>
+            name="org.eclipse.jgit.http.test"/>
         <requirement
-            id="org.eclipse.jgit.http.apache.feature.group"/>
+            name="org.eclipse.jgit.http.apache.feature.group"/>
         <requirement
-            id="org.eclipse.jgit.java7.feature.group"/>
+            name="org.eclipse.jgit.java7.feature.group"/>
         <requirement
-            id="org.eclipse.jgit.java7.test"/>
+            name="org.eclipse.jgit.java7.test"/>
         <requirement
-            id="org.eclipse.jgit.junit.feature.group"/>
+            name="org.eclipse.jgit.junit.feature.group"/>
         <requirement
-            id="org.eclipse.jgit.pgm.feature.group"/>
+            name="org.eclipse.jgit.pgm.feature.group"/>
         <requirement
-            id="org.eclipse.jgit.pgm.source.feature.group"/>
+            name="org.eclipse.jgit.pgm.source.feature.group"/>
         <requirement
-            id="org.eclipse.jgit.pgm.test"/>
+            name="org.eclipse.jgit.pgm.test"/>
         <requirement
-            id="org.eclipse.jgit.target"/>
+            name="org.eclipse.jgit.target"/>
         <requirement
-            id="org.eclipse.jgit.test"/>
+            name="org.eclipse.jgit.test"/>
         <requirement
-            id="org.eclipse.egit.feature.group"/>
+            name="org.eclipse.egit.feature.group"/>
         <requirement
-            id="org.eclipse.egit.core.test"/>
+            name="org.eclipse.egit.core.test"/>
         <requirement
-            id="org.eclipse.egit.mylyn.feature.group"/>
+            name="org.eclipse.egit.mylyn.feature.group"/>
         <requirement
-            id="org.eclipse.egit.mylyn.ui.test"/>
+            name="org.eclipse.egit.mylyn.ui.test"/>
         <requirement
-            id="org.eclipse.egit.target"/>
+            name="org.eclipse.egit.target"/>
         <requirement
-            id="org.eclipse.egit.ui.test"/>
+            name="org.eclipse.egit.ui.test"/>
         <requirement
-            id="org.eclipse.egit.source.feature.group"/>
+            name="org.eclipse.egit.source.feature.group"/>
         <sourceLocator
             rootFolder="${git.clone.jgit.location}"
             locateNestedProjects="true"/>
@@ -178,14 +178,14 @@
         </predicate>
       </workingSet>
       <workingSet
-          name="Tests">
+          name="EGit/JGit Tests">
         <predicate
             xsi:type="predicates:FilePredicate"
             filePattern="META-INF/MANIFEST.MF"
             contentPattern="org\.junit"/>
       </workingSet>
       <workingSet
-          name="Features">
+          name="EGit/JGit Features">
         <predicate
             xsi:type="predicates:NaturePredicate"
             nature="org.eclipse.pde.FeatureNature"/>
