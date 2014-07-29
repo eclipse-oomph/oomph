@@ -39,11 +39,12 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ScrollBar;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class PropertiesViewer extends TableViewer
 
   public PropertiesViewer(Composite parent, int style)
   {
-    super(parent, style | SWT.NO_SCROLL | SWT.V_SCROLL);
+    super(parent, style | SWT.H_SCROLL | SWT.V_SCROLL);
 
     final Table table = getTable();
     UIUtil.applyGridData(table).heightHint = 64;
@@ -75,10 +76,12 @@ public class PropertiesViewer extends TableViewer
     propertyColumn = new TableColumn(table, SWT.NONE);
     propertyColumn.setText("Property");
     propertyColumn.setWidth(200);
+    propertyColumn.setResizable(false);
 
     valueColumn = new TableColumn(table, SWT.NONE);
     valueColumn.setText("Value");
     valueColumn.setWidth(400);
+    valueColumn.setResizable(false);
 
     table.setHeaderVisible(true);
     table.setLinesVisible(true);
@@ -88,19 +91,49 @@ public class PropertiesViewer extends TableViewer
       @Override
       public void controlResized(ControlEvent e)
       {
-        Point size = table.getSize();
-        ScrollBar bar = table.getVerticalBar();
-        if (bar != null && bar.isVisible())
+        try
         {
-          size.x -= bar.getSize().x;
-        }
+          table.setRedraw(false);
 
-        valueColumn.setWidth(size.x - propertyColumn.getWidth());
+          Rectangle clientArea = table.getClientArea();
+          int clientWidth = clientArea.width - clientArea.x;
+
+          TableItem[] items = table.getItems();
+          if (items.length == 0)
+          {
+            propertyColumn.setWidth(clientWidth / 2);
+            valueColumn.setWidth(clientWidth - clientWidth / 2);
+          }
+          else
+          {
+            propertyColumn.pack();
+            int propertyColumnWidth = propertyColumn.getWidth();
+            propertyColumn.setWidth(propertyColumnWidth += 20);
+
+            valueColumn.pack();
+            int valueColumnWidth = valueColumn.getWidth();
+
+            if (propertyColumnWidth + valueColumnWidth < clientWidth)
+            {
+              valueColumn.setWidth(clientWidth - propertyColumnWidth);
+            }
+          }
+        }
+        finally
+        {
+          table.setRedraw(true);
+        }
       }
     };
 
-    // TODO Can lead to temporary UI freeze
-    // table.addControlListener(columnResizer);
+    table.addControlListener(columnResizer);
+    table.getDisplay().asyncExec(new Runnable()
+    {
+      public void run()
+      {
+        columnResizer.controlResized(null);
+      }
+    });
   }
 
   public DelegatingLabelDecorator getDelegatingLabelDecorator()
@@ -124,24 +157,17 @@ public class PropertiesViewer extends TableViewer
 
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
-      Class<?> oldClass = oldInput == null ? null : oldInput.getClass();
-      Class<?> newClass = newInput == null ? null : newInput.getClass();
-      if (oldClass != newClass)
+      final Control control = viewer.getControl();
+      control.getDisplay().asyncExec(new Runnable()
       {
-        getTable().getDisplay().asyncExec(new Runnable()
+        public void run()
         {
-          public void run()
+          if (!control.isDisposed())
           {
-            if (!propertyColumn.isDisposed())
-            {
-              propertyColumn.pack();
-              propertyColumn.setWidth(propertyColumn.getWidth() + 20);
-
-              columnResizer.controlResized(null);
-            }
+            columnResizer.controlResized(null);
           }
-        });
-      }
+        }
+      });
     }
 
     public Object[] getElements(Object element)

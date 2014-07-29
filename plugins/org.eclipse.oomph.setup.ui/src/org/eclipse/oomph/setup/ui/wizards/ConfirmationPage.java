@@ -49,15 +49,15 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,6 +97,8 @@ public class ConfirmationPage extends SetupWizardPage
   private boolean configurationLocationExists;
 
   private boolean someTaskChecked;
+
+  private ControlAdapter columnResizer;
 
   public ConfirmationPage()
   {
@@ -291,7 +293,7 @@ public class ConfirmationPage extends SetupWizardPage
 
   private void fillCheckPane(Composite parent)
   {
-    viewer = new CheckboxTreeViewer(parent, SWT.BORDER | SWT.NO_SCROLL | SWT.V_SCROLL);
+    viewer = new CheckboxTreeViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 
     final Tree tree = viewer.getTree();
     tree.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -409,7 +411,7 @@ public class ConfirmationPage extends SetupWizardPage
 
   private void fillChildrenPane(SashForm verticalSash)
   {
-    childrenViewer = new TreeViewer(verticalSash, SWT.BORDER | SWT.NO_SCROLL | SWT.V_SCROLL);
+    childrenViewer = new TreeViewer(verticalSash, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
     AdapterFactory adapterFactory = getAdapterFactory();
     childrenViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
     childrenViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
@@ -435,21 +437,39 @@ public class ConfirmationPage extends SetupWizardPage
 
     final TreeColumn column = new TreeColumn(tree, SWT.NONE);
     column.setText("Nested Elements");
-    column.setWidth(600);
-
-    final ControlAdapter columnResizer = new ControlAdapter()
+    columnResizer = new ControlAdapter()
     {
       @Override
       public void controlResized(ControlEvent e)
       {
-        Point size = tree.getSize();
-        ScrollBar bar = tree.getVerticalBar();
-        if (bar != null && bar.isVisible())
+        try
         {
-          size.x -= bar.getSize().x;
-        }
+          tree.setRedraw(false);
 
-        column.setWidth(size.x);
+          Rectangle clientArea = tree.getClientArea();
+          int clientWidth = clientArea.width - clientArea.x;
+
+          // We get events during setInput where the tree items are disposed because the view is empty and then the column can't be packed.
+          TreeItem[] items = tree.getItems();
+          if (items.length > 0 && !items[0].isDisposed())
+          {
+            column.pack();
+            int width = column.getWidth();
+            if (width < clientWidth)
+            {
+              column.setWidth(clientWidth);
+            }
+          }
+          else
+          {
+            column.setWidth(clientWidth);
+          }
+
+        }
+        finally
+        {
+          tree.setRedraw(true);
+        }
       }
     };
 
@@ -474,7 +494,17 @@ public class ConfirmationPage extends SetupWizardPage
         if (detail != null)
         {
           Object selection = ((IStructuredSelection)master.getSelection()).getFirstElement();
-          detail.setInput(selection);
+          Control control = detail.getControl();
+          try
+          {
+            control.setRedraw(false);
+            detail.setInput(selection);
+            columnResizer.controlResized(null);
+          }
+          finally
+          {
+            control.setRedraw(true);
+          }
         }
       }
     });
