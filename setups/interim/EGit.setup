@@ -18,6 +18,8 @@
       xsi:type="setup.p2:P2Task">
     <requirement
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+    <repository
+        url="http://download.eclipse.org/egit/updates-nightly"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
