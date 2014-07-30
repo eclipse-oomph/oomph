@@ -2990,9 +2990,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
     Set<Bundle> bundles = new HashSet<Bundle>();
+    Map<Object, Set<Object>> composedMap = new HashMap<Object, Set<Object>>();
     for (SetupTaskPerformer performer : performers)
     {
       setupTasks.addAll(performer.getTriggeredSetupTasks());
+      CollectionUtil.putAll(composedMap, performer.getMap());
       bundles.addAll(performer.getBundles());
     }
 
@@ -3020,6 +3022,22 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       for (SetupTaskPerformer performer : performers)
       {
         performer.getInstallation().eResource().setURI(installationURI);
+      }
+    }
+
+    Map<Object, Object> finalComposedMap = composedPerformer.getMap();
+    for (Map.Entry<Object, Set<Object>> entry : composedMap.entrySet())
+    {
+      Object key = entry.getKey();
+      if (!finalComposedMap.containsKey(key))
+      {
+        Set<Object> value = entry.getValue();
+        value.remove(null);
+        value.remove("");
+        if (value.size() == 1)
+        {
+          finalComposedMap.put(key, value.iterator().next());
+        }
       }
     }
 

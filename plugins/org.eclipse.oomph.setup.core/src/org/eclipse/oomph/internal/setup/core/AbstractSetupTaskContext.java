@@ -274,6 +274,11 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
     return map.put(key, value);
   }
 
+  public Set<Object> keySet()
+  {
+    return map.keySet();
+  }
+
   protected String lookup(String key)
   {
     Object object = get(key);

@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -66,4 +67,6 @@ public interface SetupTaskContext extends ProgressLog, StringExpander
   public Object get(Object key);
 
   public Object put(Object key, Object value);
+
+  public Set<Object> keySet();
 }

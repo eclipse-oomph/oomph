@@ -75,4 +75,18 @@ public final class CollectionUtil
 
     return result;
   }
+
+  public static <K, V> boolean putAll(Map<K, Set<V>> map, Map<? extends K, ? extends V> map2)
+  {
+    boolean result = false;
+    for (Map.Entry<? extends K, ? extends V> entry : map2.entrySet())
+    {
+      if (add(map, entry.getKey(), entry.getValue()))
+      {
+        result = true;
+      }
+    }
+
+    return result;
+  }
 }

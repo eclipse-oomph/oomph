@@ -64,8 +64,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <!-- begin-user-doc -->
@@ -686,9 +688,35 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     boolean changed = false;
     changed |= configureLineEndingConversion(context, config);
     URI uri = URI.createURI(remoteURI);
-    if ("git.eclipse.org".equals(uri.host()) && uri.port() != null)
+
+    Set<String> gerritPatterns = new HashSet<String>();
+    for (Object key : context.keySet())
     {
-      changed |= addPushRefSpec(context, config, checkoutBranch, remoteName);
+      if (key instanceof String)
+      {
+        if (key.toString().endsWith(".gerrit.uri.pattern"))
+        {
+          Object value = context.get(key);
+          if (value instanceof String)
+          {
+            gerritPatterns.add(value.toString());
+          }
+        }
+      }
+    }
+
+    if (!gerritPatterns.isEmpty())
+    {
+      String uriString = uri.toString();
+      for (String gerritPattern : gerritPatterns)
+      {
+        if (uriString.matches(gerritPattern))
+        {
+          changed |= addGerritPullRefSpec(context, config, remoteName);
+          changed |= addGerritPushRefSpec(context, config, checkoutBranch, remoteName);
+          break;
+        }
+      }
     }
 
     changed |= addPushURI(context, config, remoteName, pushURI);
@@ -714,27 +742,38 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     return false;
   }
 
-  private static boolean addPushRefSpec(SetupTaskContext context, StoredConfig config, String checkoutBranch, String remoteName) throws Exception
+  private static boolean addGerritPullRefSpec(SetupTaskContext context, StoredConfig config, String remoteName) throws Exception
   {
-    String gerritQueue = "refs/for/" + checkoutBranch;
     for (RemoteConfig remoteConfig : RemoteConfig.getAllRemoteConfigs(config))
     {
       if (remoteName.equals(remoteConfig.getName()))
       {
-        List<RefSpec> pushRefSpecs = remoteConfig.getPushRefSpecs();
-        if (hasGerritPushRefSpec(pushRefSpecs, gerritQueue))
-        {
-          return false;
-        }
-
-        RefSpec refSpec = new RefSpec("HEAD:" + gerritQueue);
-
-        if (context.isPerforming())
+        RefSpec refSpec = new RefSpec("refs/notes/*:refs/notes/*");
+        if (remoteConfig.addFetchRefSpec(refSpec) && context.isPerforming())
         {
           context.log("Adding push ref spec: " + refSpec);
         }
 
-        remoteConfig.addPushRefSpec(refSpec);
+        remoteConfig.update(config);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private static boolean addGerritPushRefSpec(SetupTaskContext context, StoredConfig config, String checkoutBranch, String remoteName) throws Exception
+  {
+    for (RemoteConfig remoteConfig : RemoteConfig.getAllRemoteConfigs(config))
+    {
+      if (remoteName.equals(remoteConfig.getName()))
+      {
+        RefSpec refSpec = new RefSpec("HEAD:refs/for/" + checkoutBranch);
+        if (remoteConfig.addPushRefSpec(refSpec) && context.isPerforming())
+        {
+          context.log("Adding push ref spec: " + refSpec);
+        }
+
         remoteConfig.update(config);
         return true;
       }
@@ -768,19 +807,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       }
     }
     return uriAdded;
-  }
-
-  private static boolean hasGerritPushRefSpec(List<RefSpec> pushRefSpecs, String gerritQueue)
-  {
-    for (RefSpec refSpec : pushRefSpecs)
-    {
-      if (refSpec.getDestination().equals(gerritQueue))
-      {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   private static void createBranch(SetupTaskContext context, Git git, String checkoutBranch, String remoteName) throws Exception

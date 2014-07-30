@@ -47,6 +47,10 @@
         documentation="The Eclipse password for Bugzilla/Hudson.  Leave empty if you don't have an account or don't plan to submit bugs."/>
     <setupTask
         xsi:type="setup:VariableTask"
+        name="eclipse.gerrit.uri.pattern"
+        value="(https|ssh)://([^@/]+@)?(git.eclipse.org:29418/.*|git.eclipse.org/r/.*)"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
         name="eclipse.gerrit.remoteURIs"
         label="Eclipse Gerrit Repository">
       <choice
