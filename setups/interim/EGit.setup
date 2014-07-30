@@ -19,8 +19,14 @@
       xsi:type="setup.p2:P2Task">
     <requirement
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+    <requirement
+        name="org.eclipse.swtbot.ide.feature.group"/>
+    <requirement
+        name="org.eclipse.swtbot.generator.feature.feature.group"/>
     <repository
         url="http://download.eclipse.org/egit/updates-nightly"/>
+    <repository
+        url="http://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -103,6 +109,10 @@
         <requirement
             name="org.eclipse.platform.feature.group"/>
         <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
             name="org.eclipse.jgit.ant"/>
         <requirement
             name="org.eclipse.jgit.ant.test"/>
@@ -142,6 +152,8 @@
             name="org.eclipse.egit.ui.test"/>
         <requirement
             name="org.eclipse.egit.source.feature.group"/>
+        <requirement
+            name="org.eclipse.swtbot.eclipse.core"/>
         <sourceLocator
             rootFolder="${git.clone.jgit.location}"
             locateNestedProjects="true"/>
@@ -152,11 +164,11 @@
           <repository
               url="http://download.eclipse.org/releases/luna"/>
           <repository
-              url="http://download.eclipse.org/technology/swtbot/releases/2.1.0"/>
-          <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
           <repository
               url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
+          <repository
+              url="http://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
         </repositoryList>
       </targlet>
     </setupTask>
