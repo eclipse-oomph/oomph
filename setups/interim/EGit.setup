@@ -56,7 +56,7 @@
       name="EGit"
       version="3.4"
       location="${workspace.location/../api.baseline}"
-      remoteURI="http://www.eclipse.org/downloads/download.php?file=/egit/updates/org.eclipse.egit.repository-3.4.1.201406201815-r.zip"/>
+      remoteURI="http://download.eclipse.org/egit/updates/org.eclipse.egit.repository-3.4.1.201406201815-r.zip"/>
   <stream name="master">
     <setupTask
         xsi:type="git:GitCloneTask"
