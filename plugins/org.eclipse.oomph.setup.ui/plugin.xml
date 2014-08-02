@@ -52,7 +52,7 @@
       <wizard
             category="org.eclipse.oomph.importWizards"
             class="org.eclipse.oomph.setup.ui.wizards.SetupWizard$Importer"
-            icon="icons/import_wiz.gif"
+            icon="icons/oomph16.png"
             id="org.eclipse.oomph.setup.ui.ImportWizard"
             name="Projects into Workspace">
          <description>
