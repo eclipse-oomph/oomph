@@ -17,39 +17,39 @@
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
-        id="org.eclipse.emf.sdk.feature.group"/>
+        name="org.eclipse.emf.sdk.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.ide_feature.feature.group"/>
+        name="org.eclipse.mylyn.ide_feature.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.java_feature.feature.group"/>
+        name="org.eclipse.mylyn.java_feature.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.pde_feature.feature.group"/>
+        name="org.eclipse.mylyn.pde_feature.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.team_feature.feature.group"/>
+        name="org.eclipse.mylyn.team_feature.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.gerrit.feature.feature.group"/>
+        name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn_feature.feature.group"/>
+        name="org.eclipse.mylyn_feature.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.git.feature.group"/>
+        name="org.eclipse.mylyn.git.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.builds.feature.group"/>
+        name="org.eclipse.mylyn.builds.feature.group"/>
     <requirement
-        id="org.eclipse.mylyn.hudson.feature.group"/>
+        name="org.eclipse.mylyn.hudson.feature.group"/>
     <requirement
-        id="org.eclipse.egit.feature.group"/>
+        name="org.eclipse.egit.feature.group"/>
     <requirement
-        id="org.eclipse.egit.mylyn.feature.group"/>
+        name="org.eclipse.egit.mylyn.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.projectcopy.feature.group"/>
+        name="org.eclipse.oomph.projectcopy.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.version.feature.group"/>
+        name="org.eclipse.oomph.version.feature.group"/>
     <requirement
-        id="org.eclipse.emf.ecoretools.sdk.feature.group"/>
+        name="org.eclipse.emf.ecoretools.sdk.feature.group"/>
     <requirement
-        id="org.eclipse.pde.api.tools.ee.feature.feature.group"
+        name="org.eclipse.pde.api.tools.ee.feature.feature.group"
         optional="true"/>
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
@@ -199,27 +199,27 @@
           </detail>
         </annotation>
         <requirement
-            id="org.eclipse.oomph.all.feature.group"/>
+            name="org.eclipse.oomph.all.feature.group"/>
         <requirement
-            id="org.eclipse.oomph.license.feature.group"/>
+            name="org.eclipse.oomph.license.feature.group"/>
         <requirement
-            id="org.eclipse.oomph.setup.installer.feature.group"/>
+            name="org.eclipse.oomph.setup.installer.feature.group"/>
         <requirement
-            id="org.eclipse.oomph.setup.installer.product"/>
+            name="org.eclipse.oomph.setup.installer.product"/>
         <requirement
-            id="org.eclipse.oomph.setup.tests"/>
+            name="org.eclipse.oomph.setup.tests"/>
         <requirement
-            id="org.eclipse.oomph.p2.tests"/>
+            name="org.eclipse.oomph.p2.tests"/>
         <requirement
-            id="org.eclipse.oomph.targlets.tests"/>
+            name="org.eclipse.oomph.targlets.tests"/>
         <requirement
-            id="org.eclipse.oomph.version.tests"/>
+            name="org.eclipse.oomph.version.tests"/>
         <requirement
-            id="org.eclipse.oomph.releng"/>
+            name="org.eclipse.oomph.releng"/>
         <requirement
-            id="org.eclipse.oomph.site"/>
+            name="org.eclipse.oomph.site"/>
         <requirement
-            id="setups"/>
+            name="setups"/>
         <sourceLocator
             rootFolder="${git.clone.oomph.location}"/>
         <repositoryList
@@ -253,8 +253,6 @@
               url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
           <repository
               url="http://download.eclipse.org/webtools/repository/luna"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
         <repositoryList
             name="Kelper">
