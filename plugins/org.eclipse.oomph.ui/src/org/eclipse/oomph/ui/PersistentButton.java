@@ -10,13 +10,9 @@
  */
 package org.eclipse.oomph.ui;
 
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.State;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
 
 /**
  * @author Eike Stepper
@@ -118,22 +114,13 @@ public class PersistentButton extends Button
     @Override
     protected boolean load(boolean defaultSelection)
     {
-      State commandState = getCommandState();
-      return ((Boolean)commandState.getValue()).booleanValue();
+      return ToggleCommandHandler.getToggleState(commandID);
     }
 
     @Override
     protected void save(boolean selection)
     {
-      State commandState = getCommandState();
-      commandState.setValue(selection);
-    }
-
-    private State getCommandState()
-    {
-      ICommandService commandService = (ICommandService)PlatformUI.getWorkbench().getService(ICommandService.class);
-      Command command = commandService.getCommand(commandID);
-      return command.getState("org.eclipse.ui.commands.toggleState");
+      ToggleCommandHandler.setToggleState(commandID, selection);
     }
   }
 }

@@ -19,6 +19,7 @@ import org.eclipse.oomph.resources.provider.ResourcesItemProviderAdapterFactory;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
+import org.eclipse.oomph.ui.OfflineMode;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -1323,7 +1324,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    * This is for implementing {@link IEditorPart} and simply saves the model file.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public void doSave(IProgressMonitor progressMonitor)
@@ -1333,6 +1334,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
     saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
     saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
+    saveOptions.put(TargletContainerResourceFactory.OPTION_OFFLINE, OfflineMode.isEnabled());
 
     // Do the work within an operation because this is a long running activity that modifies the workbench.
     //
