@@ -19,7 +19,9 @@ import org.eclipse.oomph.resources.provider.ResourcesItemProviderAdapterFactory;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
+import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.OfflineMode;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -1711,13 +1713,27 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     return false;
   }
 
-  public static void open(IWorkbenchPage page, TargletContainer targletContainer) throws PartInitException
+  public static void open(final IWorkbenchPage page, final TargletContainer targletContainer)
   {
-    String id = targletContainer.getID();
-    URI uri = URI.createGenericURI(TargletContainerResourceFactory.PROTOCOL_NAME, id, null);
-    String label = targletContainer.getTargetDefinition().getName() + " - " + id;
+    UIUtil.asyncExec(new Runnable()
+    {
+      public void run()
+      {
+        try
+        {
+          String id = targletContainer.getID();
+          URI uri = URI.createGenericURI(TargletContainerResourceFactory.PROTOCOL_NAME, id, null);
+          String label = targletContainer.getTargetDefinition().getName() + " - " + id;
 
-    IEditorInput input = new URIEditorInput(uri, label);
-    IDE.openEditor(page, input, EDITOR_ID);
+          IEditorInput input = new URIEditorInput(uri, label);
+          IDE.openEditor(page, input, EDITOR_ID);
+        }
+        catch (PartInitException ex)
+        {
+          TargletEditorPlugin.INSTANCE.log(ex);
+          ErrorDialog.open(ex);
+        }
+      }
+    });
   }
 }

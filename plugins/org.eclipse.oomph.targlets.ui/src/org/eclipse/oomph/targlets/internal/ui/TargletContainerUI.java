@@ -41,7 +41,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import java.util.ArrayList;
@@ -110,14 +110,8 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
   public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
   {
-    try
-    {
-      TargletEditor.open(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (TargletContainer)targetLocation);
-    }
-    catch (PartInitException ex)
-    {
-      ex.printStackTrace();
-    }
+    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+    TargletEditor.open(page, (TargletContainer)targetLocation);
 
     simulateEscapeKey();
     simulateEscapeKey();
