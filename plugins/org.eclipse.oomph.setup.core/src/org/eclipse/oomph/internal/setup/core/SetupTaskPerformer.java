@@ -983,6 +983,24 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           ruleVariable.setName(getAttributeRuleVariableName(eAttribute));
         }
 
+        VariableType explicitVariableType = VariableType.get(details.get(EAnnotationConstants.KEY_EXPLICIT_TYPE));
+        if (explicitVariableType != null)
+        {
+          variable.setType(explicitVariableType);
+        }
+
+        String explicitLabel = details.get(EAnnotationConstants.KEY_EXPLICIT_LABEL);
+        if (explicitLabel != null)
+        {
+          variable.setLabel(expandAttributeReferences(setupTask, explicitLabel));
+        }
+
+        String explicitDescription = details.get(EAnnotationConstants.KEY_EXPLICIT_DESCRIPTION);
+        if (explicitDescription != null)
+        {
+          variable.setDescription(expandAttributeReferences(setupTask, explicitDescription));
+        }
+
         String promptedValue = getPrompter().getValue(ruleVariable);
         if (promptedValue != null)
         {

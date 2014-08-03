@@ -807,15 +807,20 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         }
       }
 
-      int maxPosition = fields.size() - 1;
-      for (Map.Entry<FieldHolderRecord, Set<FieldHolderRecord>> entry : ruleUses.entrySet())
+      int fieldsSize = fields.size();
+      if (fieldsSize > 1)
       {
-        FieldHolderRecord fieldHolderRecord = entry.getKey();
-        int index = fields.indexOf(fieldHolderRecord);
-        Set<FieldHolderRecord> fieldHolderRecords = entry.getValue();
-        for (FieldHolderRecord dependantFieldHolderRecord : fieldHolderRecords)
+        int index = 0;
+        int maxPosition = fieldsSize - 1;
+        for (Map.Entry<FieldHolderRecord, Set<FieldHolderRecord>> entry : ruleUses.entrySet())
         {
-          fields.move(Math.min(++index, maxPosition), dependantFieldHolderRecord);
+          FieldHolderRecord fieldHolderRecord = entry.getKey();
+          fields.move(index++, fieldHolderRecord);
+          Set<FieldHolderRecord> fieldHolderRecords = entry.getValue();
+          for (FieldHolderRecord dependantFieldHolderRecord : fieldHolderRecords)
+          {
+            fields.move(Math.min(index++, maxPosition), dependantFieldHolderRecord);
+          }
         }
       }
 
