@@ -717,7 +717,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       if (requirement.getName().equals(id))
       {
         VersionRange versionRange = requirement.getVersionRange();
-        if (versionRange.isIncluded(version))
+        if (versionRange == null || versionRange.isIncluded(version))
         {
           return versionRange;
         }
