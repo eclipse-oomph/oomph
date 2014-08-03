@@ -32,6 +32,7 @@ import org.eclipse.oomph.setup.provider.ProductItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.PersistentButton;
+import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -269,7 +270,7 @@ public class ProductPage extends SetupWizardPage
     {
       initBundlePool();
 
-      poolButton = new PersistentButton(installationPane, SWT.CHECK, getDialogSettings(), "useBundlePool", true);
+      poolButton = new PersistentButton(installationPane, SWT.CHECK, true, new DialogSettingsPersistence(getDialogSettings(), "useBundlePool"));
       poolButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       poolButton.setText("Bundle Pool:");
 

@@ -55,8 +55,4 @@ public interface Agent extends AgentManagerElement, ProfileContainer
   public IEngine getEngine();
 
   public IPlanner getPlanner();
-
-  public boolean isOffline();
-
-  public void setOffline(boolean offline);
 }

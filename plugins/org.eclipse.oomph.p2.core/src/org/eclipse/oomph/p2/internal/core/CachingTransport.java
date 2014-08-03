@@ -37,6 +37,8 @@ import java.util.Stack;
 @SuppressWarnings("restriction")
 public class CachingTransport extends Transport
 {
+  private static final ThreadLocal<Boolean> OFFLINE = new InheritableThreadLocal<Boolean>();
+
   private static final ThreadLocal<Stack<String>> REPOSITORY_LOCATIONS = new InheritableThreadLocal<Stack<String>>()
   {
     @Override
@@ -78,7 +80,7 @@ public class CachingTransport extends Transport
     }
 
     boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && agent.isOffline())
+    if (loadingRepository && isOffline())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -140,7 +142,7 @@ public class CachingTransport extends Transport
     }
 
     boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && agent.isOffline())
+    if (loadingRepository && isOffline())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -182,7 +184,22 @@ public class CachingTransport extends Transport
     return lastModified;
   }
 
-  private boolean isLoadingRepository(URI uri)
+  private static boolean isOffline()
+  {
+    return OFFLINE.get() == Boolean.TRUE;
+  }
+
+  static void setOffline(boolean on)
+  {
+    OFFLINE.set(on ? Boolean.TRUE : Boolean.FALSE);
+  }
+
+  static void unsetOffline()
+  {
+    OFFLINE.remove();
+  }
+
+  private static boolean isLoadingRepository(URI uri)
   {
     String location = org.eclipse.emf.common.util.URI.createURI(uri.toString()).trimSegments(1).toString();
 

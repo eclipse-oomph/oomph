@@ -71,7 +71,7 @@ public interface ProfileTransaction
   /**
    * @author Eike Stepper
    */
-  public class CommitContext
+  public static class CommitContext
   {
     public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, IProfileChangeRequest profileChangeRequest) throws CoreException
     {

@@ -326,7 +326,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     try
     {
-      initOffline(agent, cleanup);
+      initOffline(cleanup);
       initMirrors(cleanup);
 
       List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
@@ -429,20 +429,16 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
   }
 
-  private void initOffline(final Agent agent, final List<Runnable> cleanup)
+  private void initOffline(final List<Runnable> cleanup)
   {
-    final boolean wasOffline = agent.isOffline();
-    if (offline != wasOffline)
+    CachingTransport.setOffline(offline);
+    cleanup.add(new Runnable()
     {
-      agent.setOffline(offline);
-      cleanup.add(new Runnable()
+      public void run()
       {
-        public void run()
-        {
-          agent.setOffline(wasOffline);
-        }
-      });
-    }
+        CachingTransport.unsetOffline();
+      }
+    });
   }
 
   private void initMirrors(final List<Runnable> cleanup)

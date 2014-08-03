@@ -10,52 +10,130 @@
  */
 package org.eclipse.oomph.ui;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.State;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 
 /**
  * @author Eike Stepper
  */
 public class PersistentButton extends Button
 {
-  private final IDialogSettings settings;
+  private final Persistence persistence;
 
-  private final String key;
-
-  private boolean loaded;
-
-  public PersistentButton(Composite parent, int style, IDialogSettings settings, String key, boolean defaultSelection)
+  public PersistentButton(Composite parent, int style, boolean defaultSelection, Persistence persistence)
   {
     super(parent, style);
-    this.settings = settings;
-    this.key = key;
-
-    String value = settings.get(key);
-    if (value != null)
-    {
-      setSelection(Boolean.parseBoolean(value));
-    }
-    else
-    {
-      setSelection(defaultSelection);
-    }
-
-    loaded = true;
+    this.persistence = persistence;
+    super.setSelection(persistence.load(defaultSelection));
   }
 
   @Override
-  public void setSelection(boolean selected)
+  public void setSelection(boolean selection)
   {
-    super.setSelection(selected);
-    if (loaded)
-    {
-      settings.put(key, selected);
-    }
+    super.setSelection(selection);
+    persistence.save(selection);
   }
 
   @Override
   protected void checkSubclass()
   {
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static abstract class Persistence
+  {
+    protected abstract boolean load(boolean defaultSelection);
+
+    protected abstract void save(boolean selection);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class DialogSettingsPersistence extends Persistence
+  {
+    private final IDialogSettings dialogSettings;
+
+    private final String key;
+
+    public DialogSettingsPersistence(IDialogSettings dialogSettings, String key)
+    {
+      this.dialogSettings = dialogSettings;
+      this.key = key;
+    }
+
+    public IDialogSettings getDialogSettings()
+    {
+      return dialogSettings;
+    }
+
+    public String getKey()
+    {
+      return key;
+    }
+
+    @Override
+    protected boolean load(boolean defaultSelection)
+    {
+      String value = dialogSettings.get(key);
+      if (value != null)
+      {
+        return Boolean.parseBoolean(value);
+      }
+
+      return defaultSelection;
+    }
+
+    @Override
+    protected void save(boolean selection)
+    {
+      dialogSettings.put(key, selection);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class ToggleCommandPersistence extends Persistence
+  {
+    private final String commandID;
+
+    public ToggleCommandPersistence(String commandID)
+    {
+      this.commandID = commandID;
+    }
+
+    public String getCommandID()
+    {
+      return commandID;
+    }
+
+    @Override
+    protected boolean load(boolean defaultSelection)
+    {
+      State commandState = getCommandState();
+      return ((Boolean)commandState.getValue()).booleanValue();
+    }
+
+    @Override
+    protected void save(boolean selection)
+    {
+      State commandState = getCommandState();
+      commandState.setValue(selection);
+    }
+
+    private State getCommandState()
+    {
+      ICommandService commandService = (ICommandService)PlatformUI.getWorkbench().getService(ICommandService.class);
+      Command command = commandService.getCommand(commandID);
+      return command.getState("org.eclipse.ui.commands.toggleState");
+    }
   }
 }

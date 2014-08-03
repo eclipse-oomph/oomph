@@ -74,8 +74,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   private CachingTransport cachingTransport;
 
-  private boolean offline;
-
   public AgentImpl(AgentManagerImpl agentManager, File location)
   {
     this.agentManager = agentManager;
@@ -387,16 +385,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       String extraInfo = AgentImpl.getProfileExtraInfo(delegate);
       profileMap.addElement(key, extraInfo);
     }
-  }
-
-  public boolean isOffline()
-  {
-    return offline;
-  }
-
-  public void setOffline(boolean offline)
-  {
-    this.offline = offline;
   }
 
   public void initializeProvisioningAgent(IProvisioningAgent provisioningAgent)

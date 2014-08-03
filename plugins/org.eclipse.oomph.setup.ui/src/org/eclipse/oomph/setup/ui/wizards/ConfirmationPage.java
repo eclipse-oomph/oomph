@@ -154,7 +154,8 @@ public class ConfirmationPage extends SetupWizardPage
     offlineProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
     if (offlineProperty == null)
     {
-      offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false, "offline");
+      offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false,
+          "toggleCommand:org.eclipse.oomph.ui.ToggleOfflineMode");
     }
 
     mirrorsProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);

@@ -38,4 +38,69 @@
       </category>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.eclipse.oomph.commands"
+            name="Oomph">
+      </category>
+      <command
+            categoryId="org.eclipse.oomph.commands"
+            id="org.eclipse.oomph.ui.ToggleOfflineMode"
+            name="Toggle Offline Mode">
+         <state
+               class="org.eclipse.ui.handlers.RegistryToggleState:false"
+               id="org.eclipse.ui.commands.toggleState">
+         </state>
+      </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.oomph.internal.ui.ToggleOfflineModeHandler"
+            commandId="org.eclipse.oomph.ui.ToggleOfflineMode">
+      </handler>
+   </extension>
+
+   <!--extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+6">
+      </key>
+   </extension-->
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="org.eclipse.oomph.ui.menus.sampleMenu"
+               label="Sample Menu"
+               mnemonic="M">
+            <command
+                  commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
+                  id="org.eclipse.oomph.ui.menus.sampleCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="org.eclipse.oomph.ui.toolbars.sampleToolbar">
+            <command
+                  commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
+                  icon="icons/offline.gif"
+                  id="org.eclipse.oomph.ui.toolbars.sampleCommand"
+                  style="toggle"
+                  tooltip="Offline">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
 </plugin>

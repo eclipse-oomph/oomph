@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Control;
  */
 public abstract class SetupWizardPage extends WizardPage
 {
+  private static final String TOGGLE_COMMAND_PREFIX = "toggleCommand:";
+
   private Composite checkComposite;
 
   public SetupWizardPage(String pageName)
@@ -171,7 +173,18 @@ public abstract class SetupWizardPage extends WizardPage
     Button button;
     if (persistenceKey != null)
     {
-      button = new PersistentButton(checkComposite, SWT.CHECK, getDialogSettings(), persistenceKey, defaultSelection);
+      PersistentButton.Persistence persistence;
+      if (persistenceKey.startsWith(TOGGLE_COMMAND_PREFIX))
+      {
+        String commandID = persistenceKey.substring(TOGGLE_COMMAND_PREFIX.length());
+        persistence = new PersistentButton.ToggleCommandPersistence(commandID);
+      }
+      else
+      {
+        persistence = new PersistentButton.DialogSettingsPersistence(getDialogSettings(), persistenceKey);
+      }
+
+      button = new PersistentButton(checkComposite, SWT.CHECK, defaultSelection, persistence);
     }
     else
     {
