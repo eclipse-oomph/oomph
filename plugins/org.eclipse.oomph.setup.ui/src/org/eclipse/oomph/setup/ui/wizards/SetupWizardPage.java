@@ -174,7 +174,7 @@ public abstract class SetupWizardPage extends WizardPage
     if (persistenceKey != null)
     {
       boolean toggleCommand = false;
-      if (persistenceKey.startsWith(TOGGLE_COMMAND_PREFIX) && UIUtil.WORKBENCH != null)
+      if (persistenceKey.startsWith(TOGGLE_COMMAND_PREFIX))
       {
         persistenceKey = persistenceKey.substring(TOGGLE_COMMAND_PREFIX.length());
         toggleCommand = UIUtil.WORKBENCH != null;
