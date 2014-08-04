@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
@@ -32,6 +33,24 @@ import java.lang.reflect.InvocationTargetException;
  */
 public final class UIUtil
 {
+  public static final IWorkbench WORKBENCH;
+
+  static
+  {
+    IWorkbench workbench = null;
+
+    try
+    {
+      workbench = PlatformUI.getWorkbench();
+    }
+    catch (Exception ex)
+    {
+      // Workbench has not been created.
+    }
+
+    WORKBENCH = workbench;
+  }
+
   private UIUtil()
   {
   }

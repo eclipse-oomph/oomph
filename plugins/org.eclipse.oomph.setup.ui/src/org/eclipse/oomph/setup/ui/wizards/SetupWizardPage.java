@@ -173,11 +173,17 @@ public abstract class SetupWizardPage extends WizardPage
     Button button;
     if (persistenceKey != null)
     {
-      PersistentButton.Persistence persistence;
-      if (persistenceKey.startsWith(TOGGLE_COMMAND_PREFIX))
+      boolean toggleCommand = false;
+      if (persistenceKey.startsWith(TOGGLE_COMMAND_PREFIX) && UIUtil.WORKBENCH != null)
       {
-        String commandID = persistenceKey.substring(TOGGLE_COMMAND_PREFIX.length());
-        persistence = new PersistentButton.ToggleCommandPersistence(commandID);
+        persistenceKey = persistenceKey.substring(TOGGLE_COMMAND_PREFIX.length());
+        toggleCommand = UIUtil.WORKBENCH != null;
+      }
+
+      PersistentButton.Persistence persistence;
+      if (toggleCommand)
+      {
+        persistence = new PersistentButton.ToggleCommandPersistence(persistenceKey);
       }
       else
       {

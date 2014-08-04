@@ -32,7 +32,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
 import java.security.cert.Certificate;
 
@@ -147,7 +146,7 @@ public class P2ServiceUI extends UIServices
       final Object[] result = new Object[1];
       final TreeNode[] input = createTreeNodes(untrustedChains);
 
-      PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable()
+      UIUtil.getDisplay().syncExec(new Runnable()
       {
         public void run()
         {
@@ -163,6 +162,7 @@ public class P2ServiceUI extends UIServices
           result[0] = values;
         }
       });
+
       persistTrust = true;
       trusted = (Certificate[])result[0];
     }
@@ -198,7 +198,7 @@ public class P2ServiceUI extends UIServices
       final Shell shell = getShell();
       if (shell != null)
       {
-        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable()
+        UIUtil.getDisplay().syncExec(new Runnable()
         {
           public void run()
           {
