@@ -178,7 +178,7 @@ public class CachingTransport extends Transport
     File cacheFile = getCacheFile(uri);
     if (!cacheFile.exists() || cacheFile.lastModified() != lastModified)
     {
-      return 1;
+      return lastModified - 1;
     }
 
     return lastModified;

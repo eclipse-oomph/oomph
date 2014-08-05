@@ -15,8 +15,8 @@ import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
 import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
+import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -80,6 +80,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   private Runnable finishAction;
 
   private ComposedAdapterFactory adapterFactory;
+
+  private boolean isCanceled;
 
   public SetupWizard()
   {
@@ -250,7 +252,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     // Remember new page before enterPage() to support page change in enterPage().
     lastPage = targetPage;
 
-    if (targetPage instanceof SetupWizardPage)
+    if (isCanceled)
+    {
+      dispose();
+      getContainer().getShell().dispose();
+    }
+    else if (targetPage instanceof SetupWizardPage)
     {
       SetupWizardPage setupWizardPage = (SetupWizardPage)targetPage;
       setupWizardPage.enterPage(forward);
@@ -260,6 +267,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public boolean performCancel()
   {
+    isCanceled = true;
     System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
     for (IWizardPage page : getPages())
     {

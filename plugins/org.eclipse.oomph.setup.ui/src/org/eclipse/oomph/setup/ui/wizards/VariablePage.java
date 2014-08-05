@@ -259,7 +259,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       fieldHolder.recordInitialValue();
     }
 
-    // Determine the URIs of all the variables actually being used.
+    // Determine the URIs of all the variables actually being .
     Set<URI> uris = new HashSet<URI>();
     if (performer != null)
     {

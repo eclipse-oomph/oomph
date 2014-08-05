@@ -501,7 +501,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 String variableReference = getVariableReference(variableName);
                 if (explicitKeys.containsKey(variableName))
                 {
-                  if (StringUtil.isEmpty(value))
+                  if (StringUtil.isEmpty(value) || setupTask instanceof WorkspaceTask)
                   {
                     EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                     if (variableAnnotation != null)

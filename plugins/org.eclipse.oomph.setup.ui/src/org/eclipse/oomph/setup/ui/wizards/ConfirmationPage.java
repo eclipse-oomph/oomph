@@ -10,27 +10,39 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -58,10 +70,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.PlatformUI;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -96,9 +111,17 @@ public class ConfirmationPage extends SetupWizardPage
 
   private boolean configurationLocationExists;
 
+  private Button switchWorkspaceButton;
+
+  private File currentWorkspaceLocation;
+
+  private File newWorkspaceLocation;
+
   private boolean someTaskChecked;
 
   private ControlAdapter columnResizer;
+
+  private AdapterFactoryLabelProvider.ColorProvider labelProvider;
 
   public ConfirmationPage()
   {
@@ -176,6 +199,18 @@ public class ConfirmationPage extends SetupWizardPage
         }
       });
     }
+    else if (getWorkspace() != null)
+    {
+      switchWorkspaceButton = addCheckButton("Switch workspace", "Switch to a different workspace", false, null);
+      switchWorkspaceButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          validate();
+        }
+      });
+    }
   }
 
   @Override
@@ -199,7 +234,20 @@ public class ConfirmationPage extends SetupWizardPage
         }
 
         configurationLocationExists = configurationLocation.exists();
-        overwriteButton.setEnabled(configurationLocationExists);
+        overwriteButton.setVisible(configurationLocationExists);
+      }
+
+      if (switchWorkspaceButton != null)
+      {
+        newWorkspaceLocation = getPerformer().getWorkspaceLocation();
+        URI currentWorkspaceLocationURI = CommonPlugin.resolve(URI.createURI(Platform.getInstanceLocation().getURL().toString()));
+        if (currentWorkspaceLocationURI.isFile())
+        {
+          currentWorkspaceLocation = new File(currentWorkspaceLocationURI.toFileString());
+          boolean workspaceLocationChanged = !newWorkspaceLocation.equals(currentWorkspaceLocation);
+          switchWorkspaceButton.setVisible(workspaceLocationChanged);
+          viewer.getControl().setEnabled(!workspaceLocationChanged);
+        }
       }
 
       validate();
@@ -266,30 +314,115 @@ public class ConfirmationPage extends SetupWizardPage
   {
     if (forward)
     {
-      EList<SetupTask> neededSetupTasks = null;
-
-      try
+      if (switchWorkspaceButton != null && switchWorkspaceButton.getSelection())
       {
-        SetupTaskPerformer performer = getPerformer();
-        performer.setOffline(isOffline());
-        performer.setMirrors(isMirrors());
-
-        Set<SetupTask> checkedTasks = getCheckedTasks();
-
-        neededSetupTasks = performer.initNeededSetupTasks();
-        neededSetupTasks.retainAll(checkedTasks);
-      }
-      catch (Exception ex)
-      {
-        if (neededSetupTasks != null)
+        try
         {
-          neededSetupTasks.clear();
-        }
+          Class<?> openWorkspaceActionClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction");
+          Class<?> chooseWorkspaceDataClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.internal.ide.ChooseWorkspaceData");
+          Constructor<?> chooseWorkspaceDataConstructor = ReflectUtil.getConstructor(chooseWorkspaceDataClass, String.class);
+          Object chooseWorkspaceData = chooseWorkspaceDataConstructor.newInstance(currentWorkspaceLocation.toString());
 
-        SetupUIPlugin.INSTANCE.log(ex);
-        ErrorDialog.open(ex);
+          Object openWorkspaceAction = openWorkspaceActionClass.getConstructors()[0].newInstance(PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+          Class<?>[] declaredClasses = openWorkspaceActionClass.getDeclaredClasses();
+          for (Class<?> declaredClass : declaredClasses)
+          {
+            if ("WorkspaceMRUAction".equals(declaredClass.getSimpleName()))
+            {
+              Constructor<?> workspaceMRUActionConstructor = ReflectUtil.getConstructor(declaredClass, openWorkspaceActionClass, String.class,
+                  chooseWorkspaceDataClass);
+              Action workspaceMRUAction = (Action)workspaceMRUActionConstructor.newInstance(openWorkspaceAction, newWorkspaceLocation.toString(),
+                  chooseWorkspaceData);
+              saveLocalFiles(getPerformer());
+              workspaceMRUAction.run();
+              getWizard().performCancel();
+              break;
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex);
+          ErrorDialog.open(ex);
+        }
+      }
+      else
+      {
+        EList<SetupTask> neededSetupTasks = null;
+
+        try
+        {
+          SetupTaskPerformer performer = getPerformer();
+          performer.setOffline(isOffline());
+          performer.setMirrors(isMirrors());
+
+          Set<SetupTask> checkedTasks = getCheckedTasks();
+
+          neededSetupTasks = performer.initNeededSetupTasks();
+          neededSetupTasks.retainAll(checkedTasks);
+        }
+        catch (Exception ex)
+        {
+          if (neededSetupTasks != null)
+          {
+            neededSetupTasks.clear();
+          }
+
+          SetupUIPlugin.INSTANCE.log(ex);
+          ErrorDialog.open(ex);
+        }
       }
     }
+  }
+
+  private void saveLocalFiles(SetupTaskPerformer performer) throws Exception
+  {
+    // Get the user with the recorded changes and the original user.
+    User user = getUser();
+    User originalUser = SetupContext.createUserOnly(getResourceSet()).getUser();
+
+    // Get the workspace with the changes and copy it.
+    Workspace workspace = getWorkspace();
+    Workspace copiedWorkspace = EcoreUtil.copy(workspace);
+
+    // Find the compound task with the recorded changes.
+    CompoundTask workspaceRestrictedCompoundTask = null;
+    for (Iterator<EObject> it = user.eAllContents(); it.hasNext();)
+    {
+      EObject eObject = it.next();
+      if (eObject instanceof CompoundTask)
+      {
+        CompoundTask compoundTask = (CompoundTask)eObject;
+        if (compoundTask.getRestrictions().contains(workspace))
+        {
+          // Make a copy of it.
+          workspaceRestrictedCompoundTask = EcoreUtil.copy(compoundTask);
+          break;
+        }
+      }
+    }
+
+    // If we can't find it, something is seriously wrong.
+    if (workspaceRestrictedCompoundTask == null)
+    {
+      throw new Exception("Workspace compound task could not be found");
+    }
+
+    // Put the workspace copy in a resource at the right location and save it.
+    URI workspaceResourceURI = URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
+        .toString());
+    Resource workspaceResource = getResourceSet().getResourceFactoryRegistry().getFactory(workspaceResourceURI).createResource(workspaceResourceURI);
+    workspaceResource.getContents().add(copiedWorkspace);
+    BaseUtil.saveEObject(copiedWorkspace);
+
+    // Change the restriction to be restricted to the new workspace copy.
+    workspaceRestrictedCompoundTask.getRestrictions().clear();
+    workspaceRestrictedCompoundTask.getRestrictions().add(copiedWorkspace);
+    workspaceRestrictedCompoundTask.setName(labelProvider.getText(copiedWorkspace));
+
+    // Add the restricted compound task to the original user, and save it.
+    originalUser.getSetupTasks().add(workspaceRestrictedCompoundTask);
+    BaseUtil.saveEObject(originalUser);
   }
 
   private void fillCheckPane(Composite parent)
@@ -355,7 +488,7 @@ public class ConfirmationPage extends SetupWizardPage
     Color normalBackground = viewer.getControl().getBackground();
     final Color disabledForeground = ExtendedColorRegistry.INSTANCE.getColor(normalForeground, normalBackground, IItemColorProvider.GRAYED_OUT_COLOR);
     AdapterFactory adapterFactory = getAdapterFactory();
-    viewer.setLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, normalForeground, normalBackground)
+    labelProvider = new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, normalForeground, normalBackground)
     {
       @Override
       public String getText(Object object)
@@ -374,7 +507,8 @@ public class ConfirmationPage extends SetupWizardPage
       {
         return !(object instanceof SetupTask) || getPerformer().getNeededTasks().contains(object) ? normalForeground : disabledForeground;
       }
-    });
+    };
+    viewer.setLabelProvider(labelProvider);
 
     viewer.addCheckStateListener(new ICheckStateListener()
     {
@@ -539,9 +673,17 @@ public class ConfirmationPage extends SetupWizardPage
 
   private void validate()
   {
-    // setMessage(null);
     setErrorMessage(null);
     setPageComplete(false);
+
+    if (switchWorkspaceButton != null && switchWorkspaceButton.isVisible() && switchWorkspaceButton.getSelection())
+    {
+      setMessage("The IDE will be restarted with the new workspace " + getPerformer().getWorkspaceLocation() + ".", IMessageProvider.WARNING);
+    }
+    else
+    {
+      setMessage(null);
+    }
 
     if (!someTaskChecked)
     {
@@ -554,6 +696,12 @@ public class ConfirmationPage extends SetupWizardPage
     {
       setErrorMessage("The folder " + lastConfigurationLocation
           + " exists.\n Please check the Overwrite button to rename it and continue with the installation process.");
+      return;
+    }
+    else if (!ObjectUtil.equals(newWorkspaceLocation, currentWorkspaceLocation) && !switchWorkspaceButton.getSelection())
+    {
+      setErrorMessage("The workspace location is changed to " + getPerformer().getWorkspaceLocation()
+          + ".  Please check the 'Switch workspace' button to restarted the IDE, switch to the new workspace, and continue the installation process.");
       return;
     }
 

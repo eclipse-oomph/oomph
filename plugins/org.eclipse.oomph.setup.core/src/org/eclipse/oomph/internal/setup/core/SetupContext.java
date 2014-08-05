@@ -112,6 +112,9 @@ public class SetupContext
   public static final URI WORKSPACE_SETUP_URI = WORKSPACE_STATE_LOCATION_URI == null ? null : WORKSPACE_STATE_LOCATION_URI
       .appendSegment(WORKSPACE_SETUP_FILE_NAME_URI.lastSegment());
 
+  public static final URI WORKSPACE_SETUP_RELATIVE_URI = URI.createHierarchicalURI(new String[] { ".metadata", ".plugins", OOMPH_NODE,
+      WORKSPACE_SETUP_FILE_NAME_URI.lastSegment() }, null, null);
+
   public static final URI USER_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("user.setup");
 
   public static final URI USER_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("user.setup");
