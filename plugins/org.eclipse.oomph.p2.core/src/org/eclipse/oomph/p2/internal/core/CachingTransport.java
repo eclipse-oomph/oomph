@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
-import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OfflineUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.CoreException;
@@ -37,8 +37,6 @@ import java.util.Stack;
 @SuppressWarnings("restriction")
 public class CachingTransport extends Transport
 {
-  private static final ThreadLocal<Boolean> OFFLINE = new InheritableThreadLocal<Boolean>();
-
   private static final ThreadLocal<Stack<String>> REPOSITORY_LOCATIONS = new InheritableThreadLocal<Stack<String>>()
   {
     @Override
@@ -50,15 +48,12 @@ public class CachingTransport extends Transport
 
   private static boolean DEBUG = false;
 
-  private final Agent agent;
-
   private final Transport delegate;
 
   private final File cacheFolder;
 
-  public CachingTransport(Agent agent, Transport delegate)
+  public CachingTransport(Transport delegate)
   {
-    this.agent = agent;
     this.delegate = delegate;
 
     File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.USER_HOME));
@@ -80,7 +75,7 @@ public class CachingTransport extends Transport
     }
 
     boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && isOffline())
+    if (loadingRepository && OfflineUtil.isOffline())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -142,7 +137,7 @@ public class CachingTransport extends Transport
     }
 
     boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && isOffline())
+    if (loadingRepository && OfflineUtil.isOffline())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -182,21 +177,6 @@ public class CachingTransport extends Transport
     }
 
     return lastModified;
-  }
-
-  private static boolean isOffline()
-  {
-    return OFFLINE.get() == Boolean.TRUE;
-  }
-
-  static void setOffline(boolean on)
-  {
-    OFFLINE.set(on ? Boolean.TRUE : Boolean.FALSE);
-  }
-
-  static void unsetOffline()
-  {
-    OFFLINE.remove();
   }
 
   private static boolean isLoadingRepository(URI uri)
@@ -249,4 +229,31 @@ public class CachingTransport extends Transport
 
     System.out.println(message);
   }
+
+  // public static void main(String[] args)
+  // {
+  // List<Long> times = new ArrayList<Long>();
+  // for (File file : new File("C:/develop/oomph/ws-IDE/.metadata/.plugins/org.eclipse.oomph.resources/cache/eee6128dae530a6b0d43f5ce71aa47a03e818074")
+  // .listFiles())
+  // {
+  // times.add(file.lastModified());
+  // }
+  //
+  // Collections.sort(times);
+  //
+  // Long last = null;
+  // for (Long time : times)
+  // {
+  // if (last != null)
+  // {
+  // long millis = time - last;
+  // if (millis < 10000)
+  // {
+  // System.out.println(millis);
+  // }
+  // }
+  //
+  // last = time;
+  // }
+  // }
 }

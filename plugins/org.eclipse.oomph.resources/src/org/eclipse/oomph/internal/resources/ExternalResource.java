@@ -193,7 +193,7 @@ public abstract class ExternalResource extends PlatformObject implements IResour
 
   public long getLocalTimeStamp()
   {
-    return backendResource.getLastModified();
+    return backendResource.getLastModified(null);
   }
 
   public IPath getLocation()

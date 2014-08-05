@@ -35,7 +35,7 @@ public final class BackendFile extends BackendResource
     return Type.FILE;
   }
 
-  public InputStream getContents(IProgressMonitor monitor) throws IOException, BackendException, OperationCanceledException
+  public InputStream getContents(IProgressMonitor monitor) throws BackendException, OperationCanceledException, IOException
   {
     if (monitor == null)
     {
@@ -52,6 +52,10 @@ public final class BackendFile extends BackendResource
       throw ex;
     }
     catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (BackendException ex)
     {
       throw ex;
     }

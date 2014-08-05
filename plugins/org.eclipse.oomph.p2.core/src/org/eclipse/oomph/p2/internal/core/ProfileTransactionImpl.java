@@ -23,6 +23,7 @@ import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.OfflineUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -431,14 +432,17 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   private void initOffline(final List<Runnable> cleanup)
   {
-    CachingTransport.setOffline(offline);
-    cleanup.add(new Runnable()
+    if (offline)
     {
-      public void run()
+      OfflineUtil.begin(true);
+      cleanup.add(new Runnable()
       {
-        CachingTransport.unsetOffline();
-      }
-    });
+        public void run()
+        {
+          OfflineUtil.begin(false);
+        }
+      });
+    }
   }
 
   private void initMirrors(final List<Runnable> cleanup)

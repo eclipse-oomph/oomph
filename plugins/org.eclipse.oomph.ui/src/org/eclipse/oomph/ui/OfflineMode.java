@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.ui;
 
+import org.eclipse.oomph.util.OfflineUtil;
+
 /**
  * @author Eike Stepper
  */
@@ -29,5 +31,18 @@ public final class OfflineMode
   public static void setEnabled(boolean enabled)
   {
     ToggleCommandHandler.setToggleState(COMMAND_ID, enabled);
+  }
+
+  public static void run(Runnable runnable)
+  {
+    try
+    {
+      OfflineUtil.begin(OfflineMode.isEnabled());
+      runnable.run();
+    }
+    finally
+    {
+      OfflineUtil.begin(false);
+    }
   }
 }

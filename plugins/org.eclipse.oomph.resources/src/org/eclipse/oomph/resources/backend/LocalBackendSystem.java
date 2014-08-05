@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.resources.backend;
 
-import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.ResourcesUtil.ImportResult;
 import org.eclipse.oomph.util.StringUtil;
@@ -18,6 +17,7 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -56,6 +56,52 @@ public final class LocalBackendSystem extends BackendSystem
   }
 
   @Override
+  protected Object[] getDelegateMembers(Object containerDelegate, IProgressMonitor monitor) throws Exception
+  {
+    return ((File)containerDelegate).listFiles();
+  }
+
+  @Override
+  protected Object getDelegateMember(Object containerDelegate, String relativePath, IProgressMonitor monitor) throws Exception
+  {
+    return new File((File)containerDelegate, relativePath);
+  }
+
+  @Override
+  protected String getDelegateName(Object resourceDelegate) throws Exception
+  {
+    return ((File)resourceDelegate).getName();
+  }
+
+  @Override
+  protected Type getDelegateType(Object resourceDelegate, boolean checkExists) throws Exception
+  {
+    if (resourceDelegate.equals(getDelegate()))
+    {
+      return Type.SYSTEM;
+    }
+
+    File file = (File)resourceDelegate;
+    if (file.isDirectory())
+    {
+      return Type.FOLDER;
+    }
+
+    if (file.isFile())
+    {
+      return Type.FILE;
+    }
+
+    return null;
+  }
+
+  @Override
+  protected IPath getLocation(BackendResource resource) throws Exception
+  {
+    return new Path(getDelegate(resource).getAbsolutePath());
+  }
+
+  @Override
   protected boolean exists(BackendResource resource, IProgressMonitor monitor) throws Exception
   {
     File file = getDelegate(resource);
@@ -74,79 +120,62 @@ public final class LocalBackendSystem extends BackendSystem
   }
 
   @Override
-  protected IPath getLocation(BackendResource resource) throws Exception
-  {
-    return new Path(getDelegate(resource).getAbsolutePath());
-  }
-
-  @Override
-  protected long getLastModified(BackendResource resource) throws Exception
+  protected long getLastModified(BackendResource resource, IProgressMonitor monitor) throws Exception
   {
     return getDelegate(resource).lastModified();
   }
 
   @Override
-  protected InputStream getContents(BackendFile file, IProgressMonitor monitor) throws Exception
+  protected InputStream getContents(BackendFile backendFile, IProgressMonitor monitor) throws Exception
   {
-    return new FileInputStream(getDelegate(file));
-  }
-
-  @Override
-  protected BackendResource[] getMembers(BackendContainer container, IProgressMonitor monitor) throws Exception
-  {
-    File folder = getDelegate(container);
-    File[] members = folder.listFiles();
-    if (members == null)
-    {
-      return new BackendResource[0];
-    }
-
-    BackendResource[] result = new BackendResource[members.length];
-    for (int i = 0; i < members.length; i++)
-    {
-      ResourcesPlugin.checkCancelation(monitor);
-
-      File member = members[i];
-      URI systemRelativeURI = container.getSystemRelativeURI().appendSegment(member.getName());
-
-      if (member.isFile())
-      {
-        result[i] = createBackendFile(systemRelativeURI);
-      }
-      else if (member.isDirectory())
-      {
-        result[i] = createBackendFolder(systemRelativeURI);
-      }
-    }
-
-    return result;
-  }
-
-  @Override
-  protected BackendResource findMember(BackendContainer container, URI relativeURI, IProgressMonitor monitor) throws Exception
-  {
-    File folder = getDelegate(container);
-
-    File member = new File(folder, relativeURI.toString());
-    URI systemRelativeURI = container.getSystemRelativeURI().appendSegments(relativeURI.segments());
-
-    if (member.isDirectory())
-    {
-      return createBackendFolder(systemRelativeURI);
-    }
-
-    if (member.isFile())
-    {
-      return createBackendFile(systemRelativeURI);
-    }
-
-    throw new BackendException("Member not found: " + member);
+    return new FileInputStream(getDelegate(backendFile));
   }
 
   @Override
   protected ImportResult importIntoWorkspace(BackendContainer container, IProject project, IProgressMonitor monitor) throws Exception
   {
     return ResourcesUtil.importProject(getDelegate(container), project, monitor);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class Member
+  {
+    private final String name;
+
+    private final Type type;
+
+    public Member(String name, Type type)
+    {
+      Assert.isNotNull(name);
+      Assert.isNotNull(type);
+
+      this.name = name;
+      this.type = type;
+    }
+
+    public String getName()
+    {
+      return name;
+    }
+
+    public Type getType()
+    {
+      return type;
+    }
+
+    @Override
+    public String toString()
+    {
+      String string = name;
+      if (type != Type.FILE)
+      {
+        string += "/";
+      }
+
+      return string;
+    }
   }
 
   /**

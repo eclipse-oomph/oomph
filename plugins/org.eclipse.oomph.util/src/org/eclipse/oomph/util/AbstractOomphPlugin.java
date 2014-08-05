@@ -79,6 +79,11 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
     return getEclipsePlugin().getStateLocation();
   }
 
+  public final IPath getUserLocation() throws IllegalStateException
+  {
+    return new Path(PropertiesUtil.USER_HOME).append(".eclipse").append(getSymbolicName());
+  }
+
   public final boolean isDebugging()
   {
     return getEclipsePlugin().isDebugging();

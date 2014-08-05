@@ -161,7 +161,7 @@ public class TargletContainer extends AbstractBundleContainer
   {
     this.id = id;
 
-    // Make the Targlets UI active
+    // Make the Targlets UI active.
     Platform.getAdapterManager().loadAdapter(this, "org.eclipse.jface.viewers.ITreeContentProvider");
   }
 
@@ -467,7 +467,7 @@ public class TargletContainer extends AbstractBundleContainer
   @Override
   protected TargetFeature[] resolveFeatures(ITargetDefinition target, IProgressMonitor monitor) throws CoreException
   {
-    // All work has been done in resolveBundles() already
+    // All work has been done in resolveBundles() already.
     return fFeatures;
   }
 
@@ -951,7 +951,7 @@ public class TargletContainer extends AbstractBundleContainer
               IInstallableUnit workspaceIU = idToIUMap.get(id);
               if (workspaceIU != null)
               {
-                // And that binary IU is in the qualifier range of the synthetic IU
+                // And that binary IU is in the qualifier range of the synthetic IU.
                 if (P2Factory.eINSTANCE.createVersionRange(workspaceIU.getVersion(), VersionSegment.MICRO).isIncluded(iu.getVersion()))
                 {
                   // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
@@ -1209,7 +1209,7 @@ public class TargletContainer extends AbstractBundleContainer
       @Override
       public IStatus undo(Map<String, Object> parameters)
       {
-        // Nothing to do for now
+        // Nothing to do for now.
         return Status.OK_STATUS;
       }
     }
@@ -1331,5 +1331,4 @@ public class TargletContainer extends AbstractBundleContainer
       return writer;
     }
   }
-
 }

@@ -77,6 +77,10 @@ public abstract class BackendResource
 
       return system.getFolder(systemRelativeURI.trimSegments(1));
     }
+    catch (BackendException ex)
+    {
+      throw ex;
+    }
     catch (Exception ex)
     {
       throw new BackendException(ex);
@@ -147,12 +151,16 @@ public abstract class BackendResource
     }
   }
 
-  public final long getLastModified() throws BackendException
+  public final long getLastModified(IProgressMonitor monitor) throws BackendException, OperationCanceledException
   {
     try
     {
       BackendSystem system = getSystem();
-      return system.getLastModified(this);
+      return system.getLastModified(this, monitor);
+    }
+    catch (OperationCanceledException ex)
+    {
+      throw ex;
     }
     catch (Exception ex)
     {
@@ -166,6 +174,10 @@ public abstract class BackendResource
     {
       BackendSystem system = getSystem();
       return system.getDelegate(this);
+    }
+    catch (BackendException ex)
+    {
+      throw ex;
     }
     catch (Exception ex)
     {

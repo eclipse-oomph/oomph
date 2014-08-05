@@ -47,6 +47,10 @@ public abstract class BackendContainer extends BackendResource
     {
       throw ex;
     }
+    catch (BackendException ex)
+    {
+      throw ex;
+    }
     catch (Exception ex)
     {
       throw new BackendException(ex);
@@ -71,6 +75,10 @@ public abstract class BackendContainer extends BackendResource
       return system.findMember(this, relativeURI, monitor);
     }
     catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (BackendException ex)
     {
       throw ex;
     }
@@ -135,6 +143,10 @@ public abstract class BackendContainer extends BackendResource
       return system.importIntoWorkspace(this, project, monitor);
     }
     catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (BackendException ex)
     {
       throw ex;
     }

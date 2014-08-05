@@ -142,11 +142,6 @@ public final class StringUtil
     return builder.toString();
   }
 
-  public static String encodePath(String path)
-  {
-    return path.replace(':', '_').replace('/', '_').replace('\\', '_');
-  }
-
   public static List<String> explode(String string, String separators)
   {
     return explode(string, separators, '\\');

@@ -37,6 +37,8 @@ import java.util.WeakHashMap;
  */
 public abstract class BackendSystem extends BackendContainer
 {
+  private static final BackendResource[] NO_MEMBERS = new BackendResource[0];
+
   private static final String[] EMPTY_SEGMENTS = {};
 
   private static final URI EMPTY_URI = URI.createHierarchicalURI(EMPTY_SEGMENTS, null, null);
@@ -62,19 +64,23 @@ public abstract class BackendSystem extends BackendContainer
 
   protected abstract Object getDelegate(BackendResource resource) throws Exception;
 
-  protected abstract boolean exists(BackendResource resource, IProgressMonitor monitor) throws Exception;
+  protected abstract Object[] getDelegateMembers(Object containerDelegate, IProgressMonitor monitor) throws Exception;
 
-  protected abstract IPath getLocation(BackendResource resource) throws Exception;
+  protected abstract Object getDelegateMember(Object containerDelegate, String relativePath, IProgressMonitor monitor) throws Exception;
 
-  protected abstract long getLastModified(BackendResource resource) throws Exception;
+  protected abstract String getDelegateName(Object resourceDelegate) throws Exception;
 
-  protected abstract InputStream getContents(BackendFile file, IProgressMonitor monitor) throws Exception;
+  protected abstract Type getDelegateType(Object resourceDelegate, boolean checkExists) throws Exception;
 
-  protected abstract BackendResource[] getMembers(BackendContainer container, IProgressMonitor monitor) throws Exception;
+  protected abstract IPath getLocation(BackendResource backendResource) throws Exception;
 
-  protected abstract BackendResource findMember(BackendContainer container, URI relativeURI, IProgressMonitor monitor) throws Exception;
+  protected abstract boolean exists(BackendResource backendResource, IProgressMonitor monitor) throws Exception;
 
-  protected abstract ImportResult importIntoWorkspace(BackendContainer container, IProject project, IProgressMonitor monitor) throws Exception;
+  protected abstract long getLastModified(BackendResource backendResource, IProgressMonitor monitor) throws Exception;
+
+  protected abstract InputStream getContents(BackendFile backendFile, IProgressMonitor monitor) throws Exception;
+
+  protected abstract ImportResult importIntoWorkspace(BackendContainer backendContainer, IProject project, IProgressMonitor monitor) throws Exception;
 
   protected final BackendFolder createBackendFolder(URI systemRelativeURI)
   {
@@ -84,6 +90,63 @@ public abstract class BackendSystem extends BackendContainer
   protected final BackendFile createBackendFile(URI systemRelativeURI)
   {
     return new BackendFile(this, systemRelativeURI);
+  }
+
+  protected BackendResource[] getMembers(BackendContainer backendContainer, IProgressMonitor monitor) throws Exception
+  {
+    Object delegate = getDelegate(backendContainer);
+
+    Object[] delegateMembers = getDelegateMembers(delegate, monitor);
+    if (delegateMembers == null)
+    {
+      return NO_MEMBERS;
+    }
+
+    BackendResource[] result = new BackendResource[delegateMembers.length];
+    for (int i = 0; i < delegateMembers.length; i++)
+    {
+      ResourcesPlugin.checkCancelation(monitor);
+
+      Object delegateMember = delegateMembers[i];
+      String name = getDelegateName(delegateMember);
+      URI systemRelativeURI = backendContainer.getSystemRelativeURI().appendSegment(name);
+
+      result[i] = createMember(delegateMember, systemRelativeURI, false);
+    }
+
+    return result;
+  }
+
+  protected BackendResource findMember(BackendContainer backendContainer, URI relativeURI, IProgressMonitor monitor) throws Exception
+  {
+    Object delegate = getDelegate(backendContainer);
+
+    Object delegateMember = getDelegateMember(delegate, relativeURI.toString(), monitor);
+    URI systemRelativeURI = backendContainer.getSystemRelativeURI().appendSegments(relativeURI.segments());
+
+    return createMember(delegateMember, systemRelativeURI, true);
+  }
+
+  private BackendResource createMember(Object delegateMember, URI systemRelativeURI, boolean checkExists) throws Exception
+  {
+    BackendSystem system = getSystem();
+    Type type = system.getDelegateType(delegateMember, checkExists);
+    if (type == null)
+    {
+      return null;
+    }
+
+    switch (type)
+    {
+      case FOLDER:
+        return system.createBackendFolder(systemRelativeURI);
+
+      case FILE:
+        return system.createBackendFile(systemRelativeURI);
+
+      default:
+        throw new BackendException("The " + type.toString().toLowerCase() + " can't be a member: " + delegateMember);
+    }
   }
 
   @Override

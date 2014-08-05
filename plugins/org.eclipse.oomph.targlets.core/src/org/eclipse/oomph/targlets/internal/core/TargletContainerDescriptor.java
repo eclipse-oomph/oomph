@@ -359,7 +359,7 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
 
   private static String getProfileID(String suffix)
   {
-    return StringUtil.encodePath(TargletContainerDescriptorManager.WORKSPACE_LOCATION) + "-" + suffix;
+    return IOUtil.encodeFileName(TargletContainerDescriptorManager.WORKSPACE_LOCATION + "-" + suffix);
   }
 
   private static void saveDescriptors(IProgressMonitor monitor) throws CoreException

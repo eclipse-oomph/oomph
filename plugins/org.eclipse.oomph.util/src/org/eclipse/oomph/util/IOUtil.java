@@ -207,9 +207,9 @@ public final class IOUtil
     }
   }
 
-  public static String encodeFileName(String name)
+  public static String encodeFileName(String path)
   {
-    String result = name.replace(':', '_').replace('/', '_');
+    String result = path.replace(':', '_').replace('/', '_').replace('\\', '_');
 
     int length = result.length();
     if (length > MAX_FILE_NAME_LENGTH)
@@ -334,15 +334,20 @@ public final class IOUtil
     return deleted;
   }
 
-  public static void copy(InputStream input, OutputStream output, byte buffer[]) throws IORuntimeException
+  public static long copy(InputStream input, OutputStream output, byte buffer[]) throws IORuntimeException
   {
     try
     {
+      long length = 0;
       int n;
+
       while ((n = input.read(buffer)) != -1)
       {
         output.write(buffer, 0, n);
+        length += n;
       }
+
+      return length;
     }
     catch (IOException ex)
     {
@@ -350,23 +355,21 @@ public final class IOUtil
     }
   }
 
-  public static void copy(InputStream input, OutputStream output, int bufferSize) throws IORuntimeException
+  public static long copy(InputStream input, OutputStream output, int bufferSize) throws IORuntimeException
   {
     if (bufferSize == BUFFER.length)
     {
-      copy(input, output);
+      return copy(input, output);
     }
-    else
-    {
-      copy(input, output, new byte[bufferSize]);
-    }
+
+    return copy(input, output, new byte[bufferSize]);
   }
 
-  public static void copy(InputStream input, OutputStream output) throws IORuntimeException
+  public static long copy(InputStream input, OutputStream output) throws IORuntimeException
   {
     synchronized (BUFFER)
     {
-      copy(input, output, BUFFER);
+      return copy(input, output, BUFFER);
     }
   }
 

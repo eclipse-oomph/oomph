@@ -399,7 +399,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
       if (!PropertiesUtil.isProperty("oomph.p2.disable.offline"))
       {
-        cachingTransport = new CachingTransport(this, (Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
+        cachingTransport = new CachingTransport((Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
         provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
 
         metadataRepositoryManager = new CachingRepositoryManager.Metadata(provisioningAgent, cachingTransport);

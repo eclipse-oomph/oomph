@@ -655,7 +655,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       context.log("Repository " + url);
     }
 
-    String profileID = StringUtil.encodePath(eclipseDir.toString());
+    String profileID = IOUtil.encodeFileName(eclipseDir.toString());
 
     Profile profile = getProfile(context, profileID);
     ProfileTransaction transaction = profile.change();
