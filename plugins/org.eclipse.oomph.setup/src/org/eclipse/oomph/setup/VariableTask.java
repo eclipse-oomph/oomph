@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,18 +25,25 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getDefaultValue <em>Default Value</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.VariableTask#isStorePromptedValue <em>Store Prompted Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.VariableTask#getStorageURI <em>Storage URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getChoices <em>Choices</em>}</li>
  * </ul>
  * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask()
- * @model
+ * @model features="storePromptedValue"
+ *        storePromptedValueDefault="true" storePromptedValueDataType="org.eclipse.emf.ecore.EBoolean" storePromptedValueTransient="true" storePromptedValueVolatile="true" storePromptedValueDerived="true" storePromptedValueSuppressedGetVisibility="true" storePromptedValueSuppressedSetVisibility="true"
  * @generated
  */
 public interface VariableTask extends SetupTask
 {
+  URI DEFAULT_STORAGE_URI = URI.createURI("scope://");
+
+  URI WORKSPACE_STORAGE_URI = URI.createURI("scope://Workspace");
+
+  URI INSTALLATION_STORAGE_URI = URI.createURI("scope://Installation");
+
   /**
    * Returns the value of the '<em><b>Type</b></em>' attribute.
    * The default value is <code>"STRING"</code>.
@@ -145,6 +153,33 @@ public interface VariableTask extends SetupTask
   void setDefaultValue(String value);
 
   /**
+   * Returns the value of the '<em><b>Storage URI</b></em>' attribute.
+   * The default value is <code>"scope://"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Storage URI</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Storage URI</em>' attribute.
+   * @see #setStorageURI(URI)
+   * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_StorageURI()
+   * @model default="scope://" dataType="org.eclipse.oomph.base.URI"
+   * @generated
+   */
+  URI getStorageURI();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.VariableTask#getStorageURI <em>Storage URI</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Storage URI</em>' attribute.
+   * @see #getStorageURI()
+   * @generated
+   */
+  void setStorageURI(URI value);
+
+  /**
    * Returns the value of the '<em><b>Label</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
@@ -186,32 +221,5 @@ public interface VariableTask extends SetupTask
    * @generated
    */
   EList<VariableChoice> getChoices();
-
-  /**
-   * Returns the value of the '<em><b>Store Prompted Value</b></em>' attribute.
-   * The default value is <code>"true"</code>.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Store Prompted Value</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Store Prompted Value</em>' attribute.
-   * @see #setStorePromptedValue(boolean)
-   * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_StorePromptedValue()
-   * @model default="true"
-   * @generated
-   */
-  boolean isStorePromptedValue();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.VariableTask#isStorePromptedValue <em>Store Prompted Value</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Store Prompted Value</em>' attribute.
-   * @see #isStorePromptedValue()
-   * @generated
-   */
-  void setStorePromptedValue(boolean value);
 
 } // VariableTask

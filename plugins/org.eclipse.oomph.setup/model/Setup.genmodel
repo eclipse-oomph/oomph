@@ -162,7 +162,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/defaultValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/storePromptedValue"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/storePromptedValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/storageURI"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//VariableTask/label"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//VariableTask/choices"/>
     </genClasses>

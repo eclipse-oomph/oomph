@@ -50,7 +50,8 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"/>
+      defaultValue="Luna"
+      storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="pde:APIBaselineTask"
       name="EGit"

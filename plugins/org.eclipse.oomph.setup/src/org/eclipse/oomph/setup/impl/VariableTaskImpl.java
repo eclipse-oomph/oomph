@@ -11,6 +11,8 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
@@ -25,6 +27,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -50,6 +53,7 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getDefaultValue <em>Default Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#isStorePromptedValue <em>Store Prompted Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getStorageURI <em>Storage URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getChoices <em>Choices</em>}</li>
  * </ul>
@@ -154,14 +158,24 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
   protected static final boolean STORE_PROMPTED_VALUE_EDEFAULT = true;
 
   /**
-   * The cached value of the '{@link #isStorePromptedValue() <em>Store Prompted Value</em>}' attribute.
+   * The default value of the '{@link #getStorageURI() <em>Storage URI</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isStorePromptedValue()
+   * @see #getStorageURI()
    * @generated
    * @ordered
    */
-  protected boolean storePromptedValue = STORE_PROMPTED_VALUE_EDEFAULT;
+  protected static final URI STORAGE_URI_EDEFAULT = (URI)BaseFactory.eINSTANCE.createFromString(BasePackage.eINSTANCE.getURI(), "scope://");
+
+  /**
+   * The cached value of the '{@link #getStorageURI() <em>Storage URI</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStorageURI()
+   * @generated
+   * @ordered
+   */
+  protected URI storageURI = STORAGE_URI_EDEFAULT;
 
   /**
    * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
@@ -356,11 +370,21 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public boolean isStorePromptedValue()
   {
-    return storePromptedValue;
+    return getStorageURI() != null;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public void setStorePromptedValue(boolean newStorePromptedValue)
+  {
+    setStorageURI(newStorePromptedValue ? URI.createURI("") : null);
   }
 
   /**
@@ -368,13 +392,23 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setStorePromptedValue(boolean newStorePromptedValue)
+  public URI getStorageURI()
   {
-    boolean oldStorePromptedValue = storePromptedValue;
-    storePromptedValue = newStorePromptedValue;
+    return storageURI;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setStorageURI(URI newStorageURI)
+  {
+    URI oldStorageURI = storageURI;
+    storageURI = newStorageURI;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE, oldStorePromptedValue, storePromptedValue));
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.VARIABLE_TASK__STORAGE_URI, oldStorageURI, storageURI));
     }
   }
 
@@ -414,6 +448,8 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         return getDefaultValue();
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
         return isStorePromptedValue();
+      case SetupPackage.VARIABLE_TASK__STORAGE_URI:
+        return getStorageURI();
       case SetupPackage.VARIABLE_TASK__LABEL:
         return getLabel();
       case SetupPackage.VARIABLE_TASK__CHOICES:
@@ -447,6 +483,9 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         return;
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
         setStorePromptedValue((Boolean)newValue);
+        return;
+      case SetupPackage.VARIABLE_TASK__STORAGE_URI:
+        setStorageURI((URI)newValue);
         return;
       case SetupPackage.VARIABLE_TASK__LABEL:
         setLabel((String)newValue);
@@ -484,6 +523,9 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
         setStorePromptedValue(STORE_PROMPTED_VALUE_EDEFAULT);
         return;
+      case SetupPackage.VARIABLE_TASK__STORAGE_URI:
+        setStorageURI(STORAGE_URI_EDEFAULT);
+        return;
       case SetupPackage.VARIABLE_TASK__LABEL:
         setLabel(LABEL_EDEFAULT);
         return;
@@ -513,7 +555,9 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
       case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
         return DEFAULT_VALUE_EDEFAULT == null ? defaultValue != null : !DEFAULT_VALUE_EDEFAULT.equals(defaultValue);
       case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
-        return storePromptedValue != STORE_PROMPTED_VALUE_EDEFAULT;
+        return isStorePromptedValue() != STORE_PROMPTED_VALUE_EDEFAULT;
+      case SetupPackage.VARIABLE_TASK__STORAGE_URI:
+        return STORAGE_URI_EDEFAULT == null ? storageURI != null : !STORAGE_URI_EDEFAULT.equals(storageURI);
       case SetupPackage.VARIABLE_TASK__LABEL:
         return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case SetupPackage.VARIABLE_TASK__CHOICES:

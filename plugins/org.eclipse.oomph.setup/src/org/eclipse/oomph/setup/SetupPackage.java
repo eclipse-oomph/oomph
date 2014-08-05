@@ -1917,13 +1917,22 @@ public interface SetupPackage extends EPackage
   int VARIABLE_TASK__STORE_PROMPTED_VALUE = SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
+   * The feature id for the '<em><b>Storage URI</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_TASK__STORAGE_URI = SETUP_TASK_FEATURE_COUNT + 5;
+
+  /**
    * The feature id for the '<em><b>Label</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK__LABEL = SETUP_TASK_FEATURE_COUNT + 5;
+  int VARIABLE_TASK__LABEL = SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Choices</b></em>' containment reference list.
@@ -1932,7 +1941,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK__CHOICES = SETUP_TASK_FEATURE_COUNT + 6;
+  int VARIABLE_TASK__CHOICES = SETUP_TASK_FEATURE_COUNT + 7;
 
   /**
    * The number of structural features of the '<em>Variable Task</em>' class.
@@ -1941,7 +1950,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 7;
+  int VARIABLE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 8;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -3508,15 +3517,26 @@ public interface SetupPackage extends EPackage
   EAttribute getVariableTask_DefaultValue();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.VariableTask#isStorePromptedValue <em>Store Prompted Value</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.VariableTask <em>Store Prompted Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Store Prompted Value</em>'.
-   * @see org.eclipse.oomph.setup.VariableTask#isStorePromptedValue()
+   * @see org.eclipse.oomph.setup.VariableTask
    * @see #getVariableTask()
    * @generated
    */
   EAttribute getVariableTask_StorePromptedValue();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.VariableTask#getStorageURI <em>Storage URI</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Storage URI</em>'.
+   * @see org.eclipse.oomph.setup.VariableTask#getStorageURI()
+   * @see #getVariableTask()
+   * @generated
+   */
+  EAttribute getVariableTask_StorageURI();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.VariableTask#getLabel <em>Label</em>}'.
@@ -4715,6 +4735,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute VARIABLE_TASK__STORE_PROMPTED_VALUE = eINSTANCE.getVariableTask_StorePromptedValue();
+
+    /**
+     * The meta object literal for the '<em><b>Storage URI</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VARIABLE_TASK__STORAGE_URI = eINSTANCE.getVariableTask_StorageURI();
 
     /**
      * The meta object literal for the '<em><b>Label</b></em>' attribute feature.

@@ -555,7 +555,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                       annotateRuleVariable(ruleVariable, variable);
                       String ruleVariableName = details.get(EAnnotationConstants.KEY_NAME);
                       ruleVariable.setName(ruleVariableName);
-                      ruleVariable.setStorePromptedValue("true".equals(details.get(EAnnotationConstants.KEY_STORE_PROMPTED_VALUE)));
+                      ruleVariable.setStorageURI(BaseFactory.eINSTANCE.createURI(details.get(EAnnotationConstants.KEY_STORAGE_URI)));
 
                       populateImpliedVariable(setupTask, null, ruleVariableAnnotation, ruleVariable);
                       it.add(ruleVariable);
@@ -571,7 +571,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     VariableTask explicitVariable = SetupFactory.eINSTANCE.createVariableTask();
                     String explicitVariableName = variableName + ".explicit";
                     explicitVariable.setName(explicitVariableName);
-                    explicitVariable.setStorePromptedValue(false);
+                    explicitVariable.setStorageURI(null);
                     explicitVariable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_EXPLICIT_TYPE)));
                     explicitVariable.setLabel(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_LABEL)));
                     explicitVariable.setDescription(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_DESCRIPTION)));
@@ -868,6 +868,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               if (uri.equals(existingAttributeRule.getAttributeURI()))
               {
                 attributeRule = existingAttributeRule;
+                break;
               }
             }
 
@@ -956,7 +957,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
     variable.setName(details.get(EAnnotationConstants.KEY_NAME));
-    variable.setStorePromptedValue(!"false".equals(details.get(EAnnotationConstants.KEY_STORE_PROMPTED_VALUE)));
+
+    // The storageURI remains the default unless there is an explicit key to specify it be null or whatever else is specified.
+    if (details.containsKey(EAnnotationConstants.KEY_STORAGE_URI))
+    {
+      String storageURIValue = details.get(EAnnotationConstants.KEY_STORAGE_URI);
+      variable.setStorageURI(StringUtil.isEmpty(storageURIValue) ? null : URI.createURI(storageURIValue));
+    }
+
     populateImpliedVariable(null, null, eAnnotation, variable);
 
     return variable;
@@ -2035,9 +2043,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               case PROJECT_CATALOG:
               case WORKSPACE:
               {
-                Workspace workspace = getWorkspace();
                 if (workspaceScopeTasks == null)
                 {
+                  Workspace workspace = getWorkspace();
                   workspaceScopeTasks = findOrCreate(itemDelegator, workspace, userSetupTasks).getSetupTasks();
                 }
                 projectCatalogScopedVariables.add(unspecifiedVariable);
@@ -2049,9 +2057,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               case PRODUCT_CATALOG:
               case INSTALLATION:
               {
-                Installation installation = getInstallation();
                 if (installationScopeTasks == null)
                 {
+                  Installation installation = getInstallation();
                   installationScopeTasks = findOrCreate(itemDelegator, installation, userSetupTasks).getSetupTasks();
                 }
                 productCatalogScopedVariables.add(unspecifiedVariable);
@@ -2098,7 +2106,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     List<VariableTask> unspecifiedVariables = new ArrayList<VariableTask>();
     for (VariableTask variable : variables)
     {
-      if (variable.isStorePromptedValue())
+      URI storageURI = variable.getStorageURI();
+      if (storageURI != null)
       {
         String value = variable.getValue();
         if (value != null)
@@ -2111,7 +2120,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           else
           {
             Scope scope = variable.getScope();
-            if (scope instanceof User)
+            if (scope instanceof User && storageURI.equals(VariableTask.DEFAULT_STORAGE_URI))
             {
               String uriFragment = scope.eResource().getURIFragment(variable);
               EObject eObject = userResource.getEObject(uriFragment);
@@ -2137,12 +2146,30 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       String name = unspecifiedVariable.getName();
       String value = unspecifiedVariable.getValue();
+      URI storageURI = unspecifiedVariable.getStorageURI();
 
       EList<SetupTask> targetSetupTasks = rootTasks;
       Scope scope = unspecifiedVariable.getScope();
       if (scope != null)
       {
-        targetSetupTasks = findOrCreate(itemDelegator, scope, rootTasks).getSetupTasks();
+        if (storageURI.equals(VariableTask.WORKSPACE_STORAGE_URI))
+        {
+          Workspace workspace = getWorkspace();
+          if (workspace != null)
+          {
+            targetSetupTasks = findOrCreate(itemDelegator, workspace, targetSetupTasks).getSetupTasks();
+          }
+        }
+        else if (storageURI.equals(VariableTask.INSTALLATION_STORAGE_URI))
+        {
+          Installation installation = getInstallation();
+          if (installation != null)
+          {
+            targetSetupTasks = findOrCreate(itemDelegator, installation, targetSetupTasks).getSetupTasks();
+          }
+        }
+
+        targetSetupTasks = findOrCreate(itemDelegator, scope, targetSetupTasks).getSetupTasks();
       }
 
       // This happens in the multi-stream case where each perform wants to add setup-restricted tasks for the same variable.
@@ -2162,6 +2189,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       VariableTask userPreference = EcoreUtil.copy(unspecifiedVariable);
       userPreference.getAnnotations().clear();
       userPreference.getChoices().clear();
+      userPreference.setStorageURI(VariableTask.DEFAULT_STORAGE_URI);
       targetSetupTasks.add(userPreference);
     }
   }
@@ -2885,7 +2913,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
           variable.setName(variableName);
           variable.setLabel(variableName + " (undeclared)");
-          variable.setStorePromptedValue(false);
+          variable.setStorageURI(null);
           unresolvedVariables.add(variable);
           demandCreatedUnresolvedVariables.add(variable);
         }

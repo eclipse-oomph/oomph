@@ -195,11 +195,11 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public URI createURI(String literal)
   {
-    return (URI)super.createFromString(BasePackage.Literals.URI, literal);
+    return literal == null ? null : URI.createURI(literal);
   }
 
   /**
@@ -209,27 +209,27 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    */
   public URI createURIFromString(EDataType eDataType, String initialValue)
   {
-    return URI.createURI(initialValue);
+    return initialValue == null ? null : URI.createURI(initialValue);
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public String convertURI(URI instanceValue)
   {
-    return super.convertToString(BasePackage.Literals.URI, instanceValue);
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public String convertURIToString(EDataType eDataType, Object instanceValue)
   {
-    return convertURI((URI)instanceValue);
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**

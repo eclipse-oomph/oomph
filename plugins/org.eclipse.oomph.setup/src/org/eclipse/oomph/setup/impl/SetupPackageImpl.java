@@ -829,7 +829,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getVariableTask_Label()
+  public EAttribute getVariableTask_StorageURI()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(5);
   }
@@ -839,9 +839,19 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getVariableTask_Label()
+  {
+    return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getVariableTask_Choices()
   {
-    return (EReference)variableTaskEClass.getEStructuralFeatures().get(6);
+    return (EReference)variableTaskEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -1695,6 +1705,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(variableTaskEClass, VARIABLE_TASK__VALUE);
     createEAttribute(variableTaskEClass, VARIABLE_TASK__DEFAULT_VALUE);
     createEAttribute(variableTaskEClass, VARIABLE_TASK__STORE_PROMPTED_VALUE);
+    createEAttribute(variableTaskEClass, VARIABLE_TASK__STORAGE_URI);
     createEAttribute(variableTaskEClass, VARIABLE_TASK__LABEL);
     createEReference(variableTaskEClass, VARIABLE_TASK__CHOICES);
 
@@ -1992,8 +2003,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVariableTask_DefaultValue(), ecorePackage.getEString(), "defaultValue", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableTask_StorePromptedValue(), ecorePackage.getEBoolean(), "storePromptedValue", "true", 0, 1, VariableTask.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getVariableTask_StorePromptedValue(), ecorePackage.getEBoolean(), "storePromptedValue", "true", 0, 1, VariableTask.class, IS_TRANSIENT,
+        IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEAttribute(getVariableTask_StorageURI(), theBasePackage.getURI(), "storageURI", "scope://", 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVariableTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getVariableTask_Choices(), getVariableChoice(), null, "choices", null, 0, -1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -2217,14 +2230,14 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
     addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "install.root", "type", "FOLDER", "label", "Root install folder",
-        "description", "The root install folder where all the products are installed", "storePromptedValue", "true" });
+        "description", "The root install folder where all the products are installed", "storageURI", "scope://" });
     addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "installation.id", "type", "STRING", "label", "Installation folder name",
         "description", "The name of the folder within the root install folder where the product is installed" });
     addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.id", "type", "STRING", "label", "Workspace folder name",
         "description", "The name of the workspace folder within the root workspace-container folder where the workspaces are located" });
-    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.container.root", "type", "FOLDER", "label",
-        "Root workspace-container folder", "description", "The root workspace-container folder where all the workspaces are located", "storePromptedValue",
-        "true" });
+    addAnnotation(getWorkspaceTask_Location(), source,
+        new String[] { "name", "workspace.container.root", "type", "FOLDER", "label", "Root workspace-container folder", "description",
+            "The root workspace-container folder where all the workspaces are located", "storageURI", "scope://" });
   }
 
   /**

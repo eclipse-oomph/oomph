@@ -231,7 +231,7 @@
         <details key="type" value="FOLDER"/>
         <details key="label" value="Root install folder"/>
         <details key="description" value="The root install folder where all the products are installed"/>
-        <details key="storePromptedValue" value="true"/>
+        <details key="storageURI" value="scope://"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/oomph/setup/RuleVariable">
         <details key="name" value="installation.id"/>
@@ -283,7 +283,7 @@
         <details key="type" value="FOLDER"/>
         <details key="label" value="Root workspace-container folder"/>
         <details key="description" value="The root workspace-container folder where all the workspaces are located"/>
-        <details key="storePromptedValue" value="true"/>
+        <details key="storageURI" value="scope://"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -299,7 +299,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="storePromptedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
+        volatile="true" transient="true" defaultValueLiteral="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+        <details key="suppressedGetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="storageURI" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"
+        defaultValueLiteral="scope://"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="choices" upperBound="-1"
         eType="#//VariableChoice" containment="true">

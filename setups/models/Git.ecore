@@ -59,7 +59,7 @@
         <details key="type" value="FOLDER"/>
         <details key="label" value="Root Git-container folder"/>
         <details key="description" value="The root Git-container folder where all the Git clones are located"/>
-        <details key="storePromptedValue" value="true"/>
+        <details key="storageURI" value="scope://"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteName" lowerBound="1"

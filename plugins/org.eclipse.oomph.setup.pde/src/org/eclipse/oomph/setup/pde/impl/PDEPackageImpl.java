@@ -385,7 +385,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
     addAnnotation(getAPIBaselineTask_Location(), source, new String[] { "name", "api.baselines.root", "type", "FOLDER", "label", "Root API baselines folder",
-        "description", "The root API baselines folder where all the API baselines are located", "storePromptedValue", "true" });
+        "description", "The root API baselines folder where all the API baselines are located", "storageURI", "scope://" });
   }
 
   /**

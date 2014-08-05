@@ -13,16 +13,19 @@ package org.eclipse.oomph.setup.provider;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,7 +65,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
       addNamePropertyDescriptor(object);
       addValuePropertyDescriptor(object);
       addDefaultValuePropertyDescriptor(object);
-      addStorePromptedValuePropertyDescriptor(object);
+      addStorageURIPropertyDescriptor(object);
       addLabelPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
@@ -149,17 +152,34 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Store Prompted Value feature.
+   * This adds a property descriptor for the Storage URI feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void addStorePromptedValuePropertyDescriptor(Object object)
+  protected void addStorageURIPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_VariableTask_storePromptedValue_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_storePromptedValue_feature", "_UI_VariableTask_type"),
-        SetupPackage.Literals.VARIABLE_TASK__STORE_PROMPTED_VALUE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+        getString("_UI_VariableTask_storageURI_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_storageURI_feature", "_UI_VariableTask_type"),
+        SetupPackage.Literals.VARIABLE_TASK__STORAGE_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  @Override
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    if (feature == SetupPackage.Literals.VARIABLE_TASK__STORAGE_URI)
+    {
+      VariableTask variableTask = (VariableTask)object;
+      if (variableTask.getType() == VariableType.PASSWORD)
+      {
+        return null;
+      }
+
+      return Arrays.asList(new URI[] { null, VariableTask.DEFAULT_STORAGE_URI, VariableTask.INSTALLATION_STORAGE_URI, VariableTask.WORKSPACE_STORAGE_URI });
+    }
+
+    return super.filterChoices(choices, feature, object);
   }
 
   /**
@@ -270,7 +290,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
       case SetupPackage.VARIABLE_TASK__NAME:
       case SetupPackage.VARIABLE_TASK__VALUE:
       case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
-      case SetupPackage.VARIABLE_TASK__STORE_PROMPTED_VALUE:
+      case SetupPackage.VARIABLE_TASK__STORAGE_URI:
       case SetupPackage.VARIABLE_TASK__LABEL:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
