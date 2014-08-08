@@ -20,7 +20,6 @@ import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.resources.backend.BackendContainer;
 import org.eclipse.oomph.resources.backend.BackendException;
-import org.eclipse.oomph.resources.backend.BackendFolder;
 import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.util.AbstractOomphPlugin;
 
@@ -30,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -40,6 +40,8 @@ import org.eclipse.core.runtime.MultiStatus;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <!-- begin-user-doc -->
@@ -49,9 +51,10 @@ import java.util.Collection;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#getRootFolder <em>Root Folder</em>}</li>
+ *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#getExcludedPaths <em>Excluded Paths</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#getProjectFactories <em>Project Factories</em>}</li>
- *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#isLocateNestedProjects <em>Locate Nested Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#getPredicates <em>Predicates</em>}</li>
+ *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#isLocateNestedProjects <em>Locate Nested Projects</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,6 +83,16 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   protected String rootFolder = ROOT_FOLDER_EDEFAULT;
 
   /**
+   * The cached value of the '{@link #getExcludedPaths() <em>Excluded Paths</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getExcludedPaths()
+   * @generated
+   * @ordered
+   */
+  protected EList<String> excludedPaths;
+
+  /**
    * The cached value of the '{@link #getProjectFactories() <em>Project Factories</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -88,6 +101,16 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * @ordered
    */
   protected EList<ProjectFactory> projectFactories;
+
+  /**
+   * The cached value of the '{@link #getPredicates() <em>Predicates</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPredicates()
+   * @generated
+   * @ordered
+   */
+  protected EList<Predicate> predicates;
 
   /**
    * The default value of the '{@link #isLocateNestedProjects() <em>Locate Nested Projects</em>}' attribute.
@@ -108,16 +131,6 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * @ordered
    */
   protected boolean locateNestedProjects = LOCATE_NESTED_PROJECTS_EDEFAULT;
-
-  /**
-   * The cached value of the '{@link #getPredicates() <em>Predicates</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPredicates()
-   * @generated
-   * @ordered
-   */
-  protected EList<Predicate> predicates;
 
   /**
    * <!-- begin-user-doc -->
@@ -163,6 +176,20 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     {
       eNotify(new ENotificationImpl(this, Notification.SET, ResourcesPackage.SOURCE_LOCATOR__ROOT_FOLDER, oldRootFolder, rootFolder));
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<String> getExcludedPaths()
+  {
+    if (excludedPaths == null)
+    {
+      excludedPaths = new EDataTypeUniqueEList<String>(String.class, this, ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS);
+    }
+    return excludedPaths;
   }
 
   /**
@@ -279,12 +306,14 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     {
       case ResourcesPackage.SOURCE_LOCATOR__ROOT_FOLDER:
         return getRootFolder();
+      case ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS:
+        return getExcludedPaths();
       case ResourcesPackage.SOURCE_LOCATOR__PROJECT_FACTORIES:
         return getProjectFactories();
-      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
-        return isLocateNestedProjects();
       case ResourcesPackage.SOURCE_LOCATOR__PREDICATES:
         return getPredicates();
+      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
+        return isLocateNestedProjects();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -303,16 +332,20 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
       case ResourcesPackage.SOURCE_LOCATOR__ROOT_FOLDER:
         setRootFolder((String)newValue);
         return;
+      case ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS:
+        getExcludedPaths().clear();
+        getExcludedPaths().addAll((Collection<? extends String>)newValue);
+        return;
       case ResourcesPackage.SOURCE_LOCATOR__PROJECT_FACTORIES:
         getProjectFactories().clear();
         getProjectFactories().addAll((Collection<? extends ProjectFactory>)newValue);
         return;
-      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
-        setLocateNestedProjects((Boolean)newValue);
-        return;
       case ResourcesPackage.SOURCE_LOCATOR__PREDICATES:
         getPredicates().clear();
         getPredicates().addAll((Collection<? extends Predicate>)newValue);
+        return;
+      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
+        setLocateNestedProjects((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -331,14 +364,17 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
       case ResourcesPackage.SOURCE_LOCATOR__ROOT_FOLDER:
         setRootFolder(ROOT_FOLDER_EDEFAULT);
         return;
+      case ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS:
+        getExcludedPaths().clear();
+        return;
       case ResourcesPackage.SOURCE_LOCATOR__PROJECT_FACTORIES:
         getProjectFactories().clear();
         return;
-      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
-        setLocateNestedProjects(LOCATE_NESTED_PROJECTS_EDEFAULT);
-        return;
       case ResourcesPackage.SOURCE_LOCATOR__PREDICATES:
         getPredicates().clear();
+        return;
+      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
+        setLocateNestedProjects(LOCATE_NESTED_PROJECTS_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -356,12 +392,14 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     {
       case ResourcesPackage.SOURCE_LOCATOR__ROOT_FOLDER:
         return ROOT_FOLDER_EDEFAULT == null ? rootFolder != null : !ROOT_FOLDER_EDEFAULT.equals(rootFolder);
+      case ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS:
+        return excludedPaths != null && !excludedPaths.isEmpty();
       case ResourcesPackage.SOURCE_LOCATOR__PROJECT_FACTORIES:
         return projectFactories != null && !projectFactories.isEmpty();
-      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
-        return locateNestedProjects != LOCATE_NESTED_PROJECTS_EDEFAULT;
       case ResourcesPackage.SOURCE_LOCATOR__PREDICATES:
         return predicates != null && !predicates.isEmpty();
+      case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
+        return locateNestedProjects != LOCATE_NESTED_PROJECTS_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -405,6 +443,8 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (rootFolder: ");
     result.append(rootFolder);
+    result.append(", excludedPaths: ");
+    result.append(excludedPaths);
     result.append(", locateNestedProjects: ");
     result.append(locateNestedProjects);
     result.append(')');
@@ -426,7 +466,13 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   {
     try
     {
-      for (ProjectFactory projectFactory : getEffectiveProjectFactories(sourceLocator, defaultProjectFactories))
+      EList<ProjectFactory> effectiveProjectFactories = sourceLocator.getProjectFactories();
+      if (effectiveProjectFactories.isEmpty() && defaultProjectFactories != null)
+      {
+        effectiveProjectFactories = defaultProjectFactories;
+      }
+
+      for (ProjectFactory projectFactory : effectiveProjectFactories)
       {
         IProject project = projectFactory.createProject(backendContainer, monitor);
         if (project != null)
@@ -451,17 +497,24 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
       final ProjectHandler projectHandler, final MultiStatus status, final IProgressMonitor monitor)
   {
     String rootFolder = sourceLocator.getRootFolder();
-    final EList<ProjectFactory> effectiveProjectFactories = getEffectiveProjectFactories(sourceLocator, defaultProjectFactories);
 
     BackendContainer backendContainer = (BackendContainer)BackendResource.get(rootFolder);
     backendContainer.accept(new BackendResource.Visitor.Default()
     {
+      private final Set<String> excludedPaths = new HashSet<String>(sourceLocator.getExcludedPaths());
+
       @Override
       public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
       {
         ResourcesPlugin.checkCancelation(monitor);
 
-        IProject project = loadProject(sourceLocator, effectiveProjectFactories, container, monitor);
+        String path = container.getSystemRelativePath();
+        if (excludedPaths.contains(path))
+        {
+          return false;
+        }
+
+        IProject project = loadProject(sourceLocator, defaultProjectFactories, container, monitor);
         if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
         {
           try
@@ -482,56 +535,6 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
         return true;
       }
     }, monitor);
-
-    // handleProjects(sourceLocator, backendContainer, effectiveProjectFactories, projectHandler, status, monitor);
-  }
-
-  private static void handleProjects(SourceLocator sourceLocator, BackendContainer backendContainer, EList<ProjectFactory> projectFactories,
-      ProjectHandler projectHandler, MultiStatus status, IProgressMonitor monitor)
-  {
-    ResourcesPlugin.checkCancelation(monitor);
-
-    IProject project = loadProject(sourceLocator, projectFactories, backendContainer, monitor);
-    if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
-    {
-      try
-      {
-        projectHandler.handleProject(project, backendContainer);
-      }
-      catch (Exception ex)
-      {
-        SourceLocatorImpl.addStatus(status, ResourcesPlugin.INSTANCE, project.getName(), ex);
-      }
-
-      if (!sourceLocator.isLocateNestedProjects())
-      {
-        return;
-      }
-    }
-
-    BackendResource[] members = backendContainer.getMembers(monitor);
-    if (members != null)
-    {
-      for (int i = 0; i < members.length; i++)
-      {
-        BackendResource member = members[i];
-        if (member.isContainer())
-        {
-          handleProjects(sourceLocator, (BackendFolder)member, projectFactories, projectHandler, status, monitor);
-        }
-      }
-    }
-  }
-
-  private static EList<ProjectFactory> getEffectiveProjectFactories(SourceLocator sourceLocator, EList<ProjectFactory> defaultProjectFactories)
-  {
-    EList<ProjectFactory> effectiveProjectFactories = sourceLocator.getProjectFactories();
-    if (effectiveProjectFactories.isEmpty() && defaultProjectFactories != null)
-    {
-      effectiveProjectFactories = defaultProjectFactories;
-    }
-
-    return effectiveProjectFactories;
   }
 
 } // SourceLocatorImpl

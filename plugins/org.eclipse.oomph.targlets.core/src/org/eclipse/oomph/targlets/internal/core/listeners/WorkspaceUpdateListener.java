@@ -48,7 +48,10 @@ public abstract class WorkspaceUpdateListener implements TargletContainerListene
       TargletContainer targletContainer = workspaceUpdateFinishedEvent.getSource();
       ProfileUpdateSucceededEvent profileUpdateSucceededEvent = profileUpdateSucceededEvents.remove(targletContainer.getID());
 
-      handleTargletContainerEvent(profileUpdateSucceededEvent, workspaceUpdateFinishedEvent, monitor);
+      if (profileUpdateSucceededEvent != null)
+      {
+        handleTargletContainerEvent(profileUpdateSucceededEvent, workspaceUpdateFinishedEvent, monitor);
+      }
     }
   }
 

@@ -60,6 +60,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
       super.getPropertyDescriptors(object);
 
       addRootFolderPropertyDescriptor(object);
+      addExcludedPathsPropertyDescriptor(object);
       addLocateNestedProjectsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
@@ -77,6 +78,20 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
         getString("_UI_SourceLocator_rootFolder_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_rootFolder_feature", "_UI_SourceLocator_type"),
         ResourcesPackage.Literals.SOURCE_LOCATOR__ROOT_FOLDER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Excluded Paths feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addExcludedPathsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_SourceLocator_excludedPaths_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_excludedPaths_feature", "_UI_SourceLocator_type"),
+        ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -178,6 +193,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
     switch (notification.getFeatureID(SourceLocator.class))
     {
       case ResourcesPackage.SOURCE_LOCATOR__ROOT_FOLDER:
+      case ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS:
       case ResourcesPackage.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;

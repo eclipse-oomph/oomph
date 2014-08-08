@@ -2,20 +2,27 @@
  */
 package org.eclipse.oomph.resources.provider;
 
+import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.resources.ProjectFactory;
+import org.eclipse.oomph.resources.ResourcesPackage;
+
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.oomph.resources.XMLProjectFactory} object.
+ * This is the item provider adapter for a {@link org.eclipse.oomph.resources.ProjectFactory} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class XMLProjectFactoryItemProvider extends ProjectFactoryItemProvider
+public class ProjectFactoryItemProvider extends ModelElementItemProvider
 {
   /**
    * This constructs an instance from a factory and a notifier.
@@ -23,7 +30,7 @@ public class XMLProjectFactoryItemProvider extends ProjectFactoryItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  public XMLProjectFactoryItemProvider(AdapterFactory adapterFactory)
+  public ProjectFactoryItemProvider(AdapterFactory adapterFactory)
   {
     super(adapterFactory);
   }
@@ -41,8 +48,23 @@ public class XMLProjectFactoryItemProvider extends ProjectFactoryItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addExcludedPathsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Excluded Paths feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addExcludedPathsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ProjectFactory_excludedPaths_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectFactory_excludedPaths_feature", "_UI_ProjectFactory_type"),
+        ResourcesPackage.Literals.PROJECT_FACTORY__EXCLUDED_PATHS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -65,7 +87,7 @@ public class XMLProjectFactoryItemProvider extends ProjectFactoryItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_XMLProjectFactory_type");
+    return getString("_UI_ProjectFactory_type");
   }
 
   /**
@@ -79,6 +101,13 @@ public class XMLProjectFactoryItemProvider extends ProjectFactoryItemProvider
   public void notifyChanged(Notification notification)
   {
     updateChildren(notification);
+
+    switch (notification.getFeatureID(ProjectFactory.class))
+    {
+      case ResourcesPackage.PROJECT_FACTORY__EXCLUDED_PATHS:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
+    }
     super.notifyChanged(notification);
   }
 

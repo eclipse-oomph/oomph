@@ -10,12 +10,15 @@
  */
 package org.eclipse.oomph.resources.backend;
 
+import org.eclipse.oomph.util.IOUtil;
+
 import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Queue;
@@ -47,6 +50,32 @@ public final class BackendFile extends BackendResource
     {
       BackendSystem system = getSystem();
       return system.getContents(this, monitor);
+    }
+    catch (IOException ex)
+    {
+      throw ex;
+    }
+    catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (BackendException ex)
+    {
+      throw ex;
+    }
+    catch (Exception ex)
+    {
+      throw new BackendException(ex);
+    }
+  }
+
+  public byte[] getContentBytes(IProgressMonitor monitor) throws BackendException, OperationCanceledException, IOException
+  {
+    try
+    {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      IOUtil.copy(getContents(monitor), baos);
+      return baos.toByteArray();
     }
     catch (IOException ex)
     {

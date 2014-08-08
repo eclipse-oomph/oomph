@@ -198,9 +198,19 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getSourceLocator_ExcludedPaths()
+  {
+    return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getSourceLocator_ProjectFactories()
   {
-    return (EReference)sourceLocatorEClass.getEStructuralFeatures().get(1);
+    return (EReference)sourceLocatorEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -210,7 +220,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    */
   public EAttribute getSourceLocator_LocateNestedProjects()
   {
-    return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -268,9 +278,29 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getProjectFactory_ExcludedPaths()
+  {
+    return (EAttribute)projectFactoryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EOperation getProjectFactory__CreateProject__BackendContainer_IProgressMonitor()
   {
     return projectFactoryEClass.getEOperations().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getProjectFactory__IsExcludedPath__BackendContainer()
+  {
+    return projectFactoryEClass.getEOperations().get(1);
   }
 
   /**
@@ -378,15 +408,18 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     // Create classes and their features
     sourceLocatorEClass = createEClass(SOURCE_LOCATOR);
     createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__ROOT_FOLDER);
+    createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__EXCLUDED_PATHS);
     createEReference(sourceLocatorEClass, SOURCE_LOCATOR__PROJECT_FACTORIES);
-    createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS);
     createEReference(sourceLocatorEClass, SOURCE_LOCATOR__PREDICATES);
+    createEAttribute(sourceLocatorEClass, SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS);
     createEOperation(sourceLocatorEClass, SOURCE_LOCATOR___MATCHES__IPROJECT);
     createEOperation(sourceLocatorEClass, SOURCE_LOCATOR___LOAD_PROJECT__ELIST_BACKENDCONTAINER_IPROGRESSMONITOR);
     createEOperation(sourceLocatorEClass, SOURCE_LOCATOR___HANDLE_PROJECTS__ELIST_PROJECTHANDLER_MULTISTATUS_IPROGRESSMONITOR);
 
     projectFactoryEClass = createEClass(PROJECT_FACTORY);
+    createEAttribute(projectFactoryEClass, PROJECT_FACTORY__EXCLUDED_PATHS);
     createEOperation(projectFactoryEClass, PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR);
+    createEOperation(projectFactoryEClass, PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER);
 
     xmlProjectFactoryEClass = createEClass(XML_PROJECT_FACTORY);
 
@@ -447,12 +480,14 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     initEClass(sourceLocatorEClass, SourceLocator.class, "SourceLocator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSourceLocator_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSourceLocator_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSourceLocator_ProjectFactories(), getProjectFactory(), null, "projectFactories", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSourceLocator_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSourceLocator_LocateNestedProjects(), ecorePackage.getEBoolean(), "locateNestedProjects", null, 0, 1, SourceLocator.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSourceLocator_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     EOperation op = initEOperation(getSourceLocator__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -470,12 +505,17 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     addEParameter(op, getMultiStatus(), "status", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-    initEClass(projectFactoryEClass, ProjectFactory.class, "ProjectFactory", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(projectFactoryEClass, ProjectFactory.class, "ProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getProjectFactory_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, ProjectFactory.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     op = initEOperation(getProjectFactory__CreateProject__BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(), "createProject", 0, 1,
         IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+    op = initEOperation(getProjectFactory__IsExcludedPath__BackendContainer(), ecorePackage.getEBoolean(), "isExcludedPath", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(xmlProjectFactoryEClass, XMLProjectFactory.class, "XMLProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -535,8 +575,10 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getSourceLocator_ExcludedPaths(), source, new String[] { "name", "excludedPath" });
     addAnnotation(getSourceLocator_ProjectFactories(), source, new String[] { "name", "projectFactory" });
     addAnnotation(getSourceLocator_Predicates(), source, new String[] { "name", "predicate" });
+    addAnnotation(getProjectFactory_ExcludedPaths(), source, new String[] { "name", "excludedPath" });
   }
 
 } // ResourcesPackageImpl

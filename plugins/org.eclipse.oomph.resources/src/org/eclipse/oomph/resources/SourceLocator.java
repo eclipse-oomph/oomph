@@ -29,9 +29,10 @@ import org.eclipse.core.runtime.MultiStatus;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getRootFolder <em>Root Folder</em>}</li>
+ *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getExcludedPaths <em>Excluded Paths</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getProjectFactories <em>Project Factories</em>}</li>
- *   <li>{@link org.eclipse.oomph.resources.SourceLocator#isLocateNestedProjects <em>Locate Nested Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getPredicates <em>Predicates</em>}</li>
+ *   <li>{@link org.eclipse.oomph.resources.SourceLocator#isLocateNestedProjects <em>Locate Nested Projects</em>}</li>
  * </ul>
  * </p>
  *
@@ -66,6 +67,22 @@ public interface SourceLocator extends ModelElement
    * @generated
    */
   void setRootFolder(String value);
+
+  /**
+   * Returns the value of the '<em><b>Excluded Paths</b></em>' attribute list.
+   * The list contents are of type {@link java.lang.String}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Excluded Paths</em>' attribute list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Excluded Paths</em>' attribute list.
+   * @see org.eclipse.oomph.resources.ResourcesPackage#getSourceLocator_ExcludedPaths()
+   * @model extendedMetaData="name='excludedPath'"
+   * @generated
+   */
+  EList<String> getExcludedPaths();
 
   /**
    * Returns the value of the '<em><b>Project Factories</b></em>' containment reference list.

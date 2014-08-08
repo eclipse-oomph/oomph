@@ -122,6 +122,11 @@ public abstract class BackendResource
     return systemRelativeURI;
   }
 
+  public final String getSystemRelativePath()
+  {
+    return systemRelativeURI.toString();
+  }
+
   public final boolean isLocal() throws BackendException
   {
     return getLocation() != null;

@@ -92,22 +92,22 @@ public interface ResourcesPackage extends EPackage
   int SOURCE_LOCATOR__ROOT_FOLDER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Excluded Paths</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SOURCE_LOCATOR__EXCLUDED_PATHS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
    * The feature id for the '<em><b>Project Factories</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SOURCE_LOCATOR__PROJECT_FACTORIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Locate Nested Projects</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int SOURCE_LOCATOR__PROJECT_FACTORIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Predicates</b></em>' containment reference list.
@@ -119,13 +119,22 @@ public interface ResourcesPackage extends EPackage
   int SOURCE_LOCATOR__PREDICATES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
+   * The feature id for the '<em><b>Locate Nested Projects</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
+
+  /**
    * The number of structural features of the '<em>Source Locator</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SOURCE_LOCATOR_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
+  int SOURCE_LOCATOR_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -173,10 +182,10 @@ public interface ResourcesPackage extends EPackage
   int SOURCE_LOCATOR_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link org.eclipse.oomph.resources.ProjectFactory <em>Project Factory</em>}' class.
+   * The meta object id for the '{@link org.eclipse.oomph.resources.impl.ProjectFactoryImpl <em>Project Factory</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.resources.ProjectFactory
+   * @see org.eclipse.oomph.resources.impl.ProjectFactoryImpl
    * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getProjectFactory()
    * @generated
    */
@@ -192,13 +201,22 @@ public interface ResourcesPackage extends EPackage
   int PROJECT_FACTORY__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Excluded Paths</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_FACTORY__EXCLUDED_PATHS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The number of structural features of the '<em>Project Factory</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROJECT_FACTORY_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+  int PROJECT_FACTORY_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -219,13 +237,22 @@ public interface ResourcesPackage extends EPackage
   int PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
   /**
+   * The operation id for the '<em>Is Excluded Path</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
+
+  /**
    * The number of operations of the '<em>Project Factory</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROJECT_FACTORY_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
+  int PROJECT_FACTORY_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.resources.impl.XMLProjectFactoryImpl <em>XML Project Factory</em>}' class.
@@ -245,6 +272,15 @@ public interface ResourcesPackage extends EPackage
    * @ordered
    */
   int XML_PROJECT_FACTORY__ANNOTATIONS = PROJECT_FACTORY__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>Excluded Paths</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int XML_PROJECT_FACTORY__EXCLUDED_PATHS = PROJECT_FACTORY__EXCLUDED_PATHS;
 
   /**
    * The number of structural features of the '<em>XML Project Factory</em>' class.
@@ -272,6 +308,15 @@ public interface ResourcesPackage extends EPackage
    * @ordered
    */
   int XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR;
+
+  /**
+   * The operation id for the '<em>Is Excluded Path</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER;
 
   /**
    * The number of operations of the '<em>XML Project Factory</em>' class.
@@ -302,6 +347,15 @@ public interface ResourcesPackage extends EPackage
   int ECLIPSE_PROJECT_FACTORY__ANNOTATIONS = XML_PROJECT_FACTORY__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Excluded Paths</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ECLIPSE_PROJECT_FACTORY__EXCLUDED_PATHS = XML_PROJECT_FACTORY__EXCLUDED_PATHS;
+
+  /**
    * The number of structural features of the '<em>Eclipse Project Factory</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -327,6 +381,15 @@ public interface ResourcesPackage extends EPackage
    * @ordered
    */
   int ECLIPSE_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR;
+
+  /**
+   * The operation id for the '<em>Is Excluded Path</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ECLIPSE_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER;
 
   /**
    * The number of operations of the '<em>Eclipse Project Factory</em>' class.
@@ -357,6 +420,15 @@ public interface ResourcesPackage extends EPackage
   int MAVEN_PROJECT_FACTORY__ANNOTATIONS = XML_PROJECT_FACTORY__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Excluded Paths</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAVEN_PROJECT_FACTORY__EXCLUDED_PATHS = XML_PROJECT_FACTORY__EXCLUDED_PATHS;
+
+  /**
    * The number of structural features of the '<em>Maven Project Factory</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -382,6 +454,15 @@ public interface ResourcesPackage extends EPackage
    * @ordered
    */
   int MAVEN_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR;
+
+  /**
+   * The operation id for the '<em>Is Excluded Path</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAVEN_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER;
 
   /**
    * The number of operations of the '<em>Maven Project Factory</em>' class.
@@ -452,6 +533,17 @@ public interface ResourcesPackage extends EPackage
    * @generated
    */
   EAttribute getSourceLocator_RootFolder();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.resources.SourceLocator#getExcludedPaths <em>Excluded Paths</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Excluded Paths</em>'.
+   * @see org.eclipse.oomph.resources.SourceLocator#getExcludedPaths()
+   * @see #getSourceLocator()
+   * @generated
+   */
+  EAttribute getSourceLocator_ExcludedPaths();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.resources.SourceLocator#getProjectFactories <em>Project Factories</em>}'.
@@ -527,6 +619,17 @@ public interface ResourcesPackage extends EPackage
   EClass getProjectFactory();
 
   /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.resources.ProjectFactory#getExcludedPaths <em>Excluded Paths</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Excluded Paths</em>'.
+   * @see org.eclipse.oomph.resources.ProjectFactory#getExcludedPaths()
+   * @see #getProjectFactory()
+   * @generated
+   */
+  EAttribute getProjectFactory_ExcludedPaths();
+
+  /**
    * Returns the meta object for the '{@link org.eclipse.oomph.resources.ProjectFactory#createProject(org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.core.runtime.IProgressMonitor) <em>Create Project</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -535,6 +638,16 @@ public interface ResourcesPackage extends EPackage
    * @generated
    */
   EOperation getProjectFactory__CreateProject__BackendContainer_IProgressMonitor();
+
+  /**
+   * Returns the meta object for the '{@link org.eclipse.oomph.resources.ProjectFactory#isExcludedPath(org.eclipse.oomph.resources.backend.BackendContainer) <em>Is Excluded Path</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Is Excluded Path</em>' operation.
+   * @see org.eclipse.oomph.resources.ProjectFactory#isExcludedPath(org.eclipse.oomph.resources.backend.BackendContainer)
+   * @generated
+   */
+  EOperation getProjectFactory__IsExcludedPath__BackendContainer();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.resources.XMLProjectFactory <em>XML Project Factory</em>}'.
@@ -653,6 +766,14 @@ public interface ResourcesPackage extends EPackage
     EAttribute SOURCE_LOCATOR__ROOT_FOLDER = eINSTANCE.getSourceLocator_RootFolder();
 
     /**
+     * The meta object literal for the '<em><b>Excluded Paths</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SOURCE_LOCATOR__EXCLUDED_PATHS = eINSTANCE.getSourceLocator_ExcludedPaths();
+
+    /**
      * The meta object literal for the '<em><b>Project Factories</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -703,14 +824,22 @@ public interface ResourcesPackage extends EPackage
         .getSourceLocator__HandleProjects__EList_ProjectHandler_MultiStatus_IProgressMonitor();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.oomph.resources.ProjectFactory <em>Project Factory</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.oomph.resources.impl.ProjectFactoryImpl <em>Project Factory</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.resources.ProjectFactory
+     * @see org.eclipse.oomph.resources.impl.ProjectFactoryImpl
      * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getProjectFactory()
      * @generated
      */
     EClass PROJECT_FACTORY = eINSTANCE.getProjectFactory();
+
+    /**
+     * The meta object literal for the '<em><b>Excluded Paths</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROJECT_FACTORY__EXCLUDED_PATHS = eINSTANCE.getProjectFactory_ExcludedPaths();
 
     /**
      * The meta object literal for the '<em><b>Create Project</b></em>' operation.
@@ -720,6 +849,14 @@ public interface ResourcesPackage extends EPackage
      */
     EOperation PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = eINSTANCE
         .getProjectFactory__CreateProject__BackendContainer_IProgressMonitor();
+
+    /**
+     * The meta object literal for the '<em><b>Is Excluded Path</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = eINSTANCE.getProjectFactory__IsExcludedPath__BackendContainer();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.resources.impl.XMLProjectFactoryImpl <em>XML Project Factory</em>}' class.
