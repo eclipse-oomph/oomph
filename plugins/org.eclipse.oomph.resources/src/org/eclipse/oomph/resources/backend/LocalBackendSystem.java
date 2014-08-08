@@ -45,14 +45,14 @@ public final class LocalBackendSystem extends BackendSystem
   }
 
   @Override
-  protected File getDelegate(BackendResource resource) throws Exception
+  protected File getDelegate(BackendResource backendResource) throws Exception
   {
-    if (resource == this)
+    if (backendResource == this)
     {
       return root;
     }
 
-    return new File(root, resource.getSystemRelativeURI().toFileString());
+    return new File(root, backendResource.getSystemRelativeURI().toFileString());
   }
 
   @Override
@@ -96,22 +96,22 @@ public final class LocalBackendSystem extends BackendSystem
   }
 
   @Override
-  protected IPath getLocation(BackendResource resource) throws Exception
+  protected IPath getLocation(BackendResource backendResource) throws Exception
   {
-    return new Path(getDelegate(resource).getAbsolutePath());
+    return new Path(getDelegate(backendResource).getAbsolutePath());
   }
 
   @Override
-  protected boolean exists(BackendResource resource, IProgressMonitor monitor) throws Exception
+  protected boolean exists(BackendResource backendResource, IProgressMonitor monitor) throws Exception
   {
-    File file = getDelegate(resource);
+    File file = getDelegate(backendResource);
     if (StringUtil.isEmpty(file.getName()))
     {
       // This file is a root as returned by File.listRoots().
       return file.exists();
     }
 
-    if (resource.isContainer())
+    if (backendResource.isContainer())
     {
       return file.isDirectory();
     }
@@ -120,9 +120,9 @@ public final class LocalBackendSystem extends BackendSystem
   }
 
   @Override
-  protected long getLastModified(BackendResource resource, IProgressMonitor monitor) throws Exception
+  protected long getLastModified(BackendResource backendResource, IProgressMonitor monitor) throws Exception
   {
-    return getDelegate(resource).lastModified();
+    return getDelegate(backendResource).lastModified();
   }
 
   @Override

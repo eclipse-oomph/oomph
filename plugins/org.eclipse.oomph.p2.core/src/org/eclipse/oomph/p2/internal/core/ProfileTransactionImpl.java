@@ -22,8 +22,8 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.ObjectUtil;
-import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.OfflineUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;

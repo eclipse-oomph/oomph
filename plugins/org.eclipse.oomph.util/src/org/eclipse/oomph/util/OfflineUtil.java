@@ -10,14 +10,13 @@
  */
 package org.eclipse.oomph.util;
 
-import java.util.Stack;
 
 /**
  * @author Eike Stepper
  */
 public class OfflineUtil
 {
-  private static final ThreadLocal<Stack<Boolean>> OFFLINE = new ThreadLocal<Stack<Boolean>>();
+  private static final ReentrantThreadLocal<Boolean> OFFLINE = new ReentrantThreadLocal<Boolean>();
 
   public OfflineUtil()
   {
@@ -25,37 +24,16 @@ public class OfflineUtil
 
   public static boolean isOffline()
   {
-    Stack<Boolean> stack = OFFLINE.get();
-    return stack != null && !stack.isEmpty() && stack.peek();
+    return OFFLINE.get() == Boolean.TRUE;
   }
 
   public static void begin(boolean offline)
   {
-    Stack<Boolean> stack = OFFLINE.get();
-    if (stack == null)
-    {
-      stack = new Stack<Boolean>();
-      OFFLINE.set(stack);
-    }
-
-    stack.push(offline);
+    OFFLINE.begin(offline ? Boolean.TRUE : null);
   }
 
   public static void end()
   {
-    Stack<Boolean> stack = OFFLINE.get();
-    if (stack != null)
-    {
-      int size = stack.size();
-      if (size != 0)
-      {
-        stack.pop();
-
-        if (size == 1)
-        {
-          OFFLINE.remove();
-        }
-      }
-    }
+    OFFLINE.end();
   }
 }

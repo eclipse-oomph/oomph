@@ -19,6 +19,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 
+import java.util.Queue;
+
 /**
  * @author Eike Stepper
  */
@@ -47,11 +49,11 @@ public abstract class BackendResource
     return system != null ? system : (BackendSystem)this;
   }
 
-  public abstract Type getResourceType();
+  public abstract Type getType();
 
   public final boolean isContainer()
   {
-    return getResourceType() != Type.FILE;
+    return getType() != Type.FILE;
   }
 
   public final String getName()
@@ -105,6 +107,10 @@ public abstract class BackendResource
 
       return URI.createURI(uri);
     }
+    catch (BackendException ex)
+    {
+      throw ex;
+    }
     catch (Exception ex)
     {
       throw new BackendException(ex);
@@ -128,6 +134,10 @@ public abstract class BackendResource
       BackendSystem system = getSystem();
       return system.getLocation(this);
     }
+    catch (BackendException ex)
+    {
+      throw ex;
+    }
     catch (Exception ex)
     {
       throw new BackendException(ex);
@@ -145,6 +155,10 @@ public abstract class BackendResource
     {
       throw ex;
     }
+    catch (BackendException ex)
+    {
+      throw ex;
+    }
     catch (Exception ex)
     {
       throw new BackendException(ex);
@@ -159,6 +173,10 @@ public abstract class BackendResource
       return system.getLastModified(this, monitor);
     }
     catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (BackendException ex)
     {
       throw ex;
     }
@@ -192,10 +210,26 @@ public abstract class BackendResource
       monitor = new NullProgressMonitor();
     }
 
-    doAccept(visitor, monitor);
+    try
+    {
+      BackendSystem system = getSystem();
+      system.accept(this, visitor, monitor);
+    }
+    catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (BackendException ex)
+    {
+      throw ex;
+    }
+    catch (Exception ex)
+    {
+      throw new BackendException(ex);
+    }
   }
 
-  abstract void doAccept(Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException;
+  abstract void visit(Queue<BackendResource> queue, Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException;
 
   @Override
   public final int hashCode()
@@ -334,33 +368,38 @@ public abstract class BackendResource
      */
   public interface Visitor
   {
-    public boolean visit(BackendSystem system) throws BackendException;
+    public boolean visit(BackendSystem system, IProgressMonitor monitor) throws BackendException;
 
-    public boolean visit(BackendFolder folder) throws BackendException;
+    public boolean visit(BackendFolder folder, IProgressMonitor monitor) throws BackendException;
 
-    public boolean visit(BackendFile file) throws BackendException;
+    public boolean visit(BackendFile file, IProgressMonitor monitor) throws BackendException;
 
     /**
      * @author Eike Stepper
      */
     public static class Default implements Visitor
     {
-      public boolean visit(BackendSystem system) throws BackendException
+      public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
       {
-        return visitDefault(system);
+        return visitDefault(container, monitor);
       }
 
-      public boolean visit(BackendFolder folder) throws BackendException
+      public boolean visit(BackendSystem system, IProgressMonitor monitor) throws BackendException
       {
-        return visitDefault(folder);
+        return visitContainer(system, monitor);
       }
 
-      public boolean visit(BackendFile file) throws BackendException
+      public boolean visit(BackendFolder folder, IProgressMonitor monitor) throws BackendException
       {
-        return visitDefault(file);
+        return visitContainer(folder, monitor);
       }
 
-      protected boolean visitDefault(BackendResource resource)
+      public boolean visit(BackendFile file, IProgressMonitor monitor) throws BackendException
+      {
+        return visitDefault(file, monitor);
+      }
+
+      protected boolean visitDefault(BackendResource resource, IProgressMonitor monitor)
       {
         return true;
       }

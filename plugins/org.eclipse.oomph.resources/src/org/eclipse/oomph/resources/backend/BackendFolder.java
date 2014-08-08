@@ -26,15 +26,14 @@ public final class BackendFolder extends BackendContainer
   }
 
   @Override
-  public Type getResourceType()
+  public Type getType()
   {
     return Type.FOLDER;
   }
 
   @Override
-  void doAccept(Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
+  protected boolean doVisit(BackendContainer backendContainer, Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
   {
-    visitor.visit(this);
-    super.doAccept(visitor, monitor);
+    return visitor.visit(this, monitor);
   }
 }

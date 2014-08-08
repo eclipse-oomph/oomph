@@ -28,7 +28,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -172,10 +171,7 @@ public final class TargletContainerDescriptorManager
     {
       for (;;)
       {
-        if (monitor.isCanceled())
-        {
-          throw new OperationCanceledException();
-        }
+        TargletsCorePlugin.checkCancelation(monitor);
 
         if (initialized.await(100, TimeUnit.MILLISECONDS))
         {

@@ -14,7 +14,6 @@ import org.eclipse.oomph.internal.setup.SetupPlugin;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -107,19 +106,16 @@ public final class FileUtil
       Collections.reverse(files);
       for (File child : files)
       {
+        SetupPlugin.checkCancelation(monitor);
+
         if (verbose)
         {
           String childPath = child.getAbsolutePath();
           monitor.setTaskName("Deleting file " + childPath);
         }
 
-        doDelete(child);
-
+        doDelete(child, monitor);
         monitor.worked(1);
-        if (monitor.isCanceled())
-        {
-          throw new OperationCanceledException();
-        }
       }
     }
     finally
@@ -131,10 +127,11 @@ public final class FileUtil
     }
   }
 
-  private static void doDelete(File file) throws IOException, InterruptedException
+  private static void doDelete(File file, IProgressMonitor monitor) throws IOException, InterruptedException
   {
     for (int i = 0; i < 1000; i++)
     {
+      // SetupPlugin.checkCancelation(monitor);
       if (file.delete())
       {
         return;

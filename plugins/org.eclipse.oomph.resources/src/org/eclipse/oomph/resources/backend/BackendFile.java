@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Queue;
 
 /**
  * @author Eike Stepper
@@ -30,7 +31,7 @@ public final class BackendFile extends BackendResource
   }
 
   @Override
-  public Type getResourceType()
+  public Type getType()
   {
     return Type.FILE;
   }
@@ -66,8 +67,8 @@ public final class BackendFile extends BackendResource
   }
 
   @Override
-  void doAccept(Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
+  void visit(Queue<BackendResource> queue, Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
   {
-    visitor.visit(this);
+    visitor.visit(this, monitor);
   }
 }

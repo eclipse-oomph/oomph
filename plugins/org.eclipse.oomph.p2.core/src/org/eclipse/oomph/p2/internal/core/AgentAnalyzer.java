@@ -412,7 +412,7 @@ public final class AgentAnalyzer
       IFileArtifactRepository p2BundlePool = getP2BundlePool(monitor);
       for (IArtifactKey key : P2Util.asIterable(p2BundlePool.query(ArtifactKeyQuery.ALL_KEYS, monitor)))
       {
-        checkCancelation(monitor);
+        P2CorePlugin.checkCancelation(monitor);
 
         File file = p2BundlePool.getArtifactFile(key);
         Artifact artifact = new Artifact(this, key, file);
@@ -433,7 +433,7 @@ public final class AgentAnalyzer
 
       for (Profile profile : getProfiles())
       {
-        checkCancelation(monitor);
+        P2CorePlugin.checkCancelation(monitor);
         profile.analyze(monitor);
       }
 
@@ -447,7 +447,7 @@ public final class AgentAnalyzer
     {
       for (Artifact artifact : getArtifacts())
       {
-        checkCancelation(monitor);
+        P2CorePlugin.checkCancelation(monitor);
         if (analyzeUnusedArtifact(artifact, monitor))
         {
           synchronized (this)
@@ -467,7 +467,7 @@ public final class AgentAnalyzer
     {
       for (Profile profile : getProfiles())
       {
-        checkCancelation(monitor);
+        P2CorePlugin.checkCancelation(monitor);
         if (profile.getArtifacts().contains(artifact))
         {
           return false;
@@ -485,7 +485,7 @@ public final class AgentAnalyzer
 
       for (Artifact artifact : artifacts)
       {
-        checkCancelation(monitor);
+        P2CorePlugin.checkCancelation(monitor);
 
         int percent = ++i * 100 / total;
         if (percent != damagedArtifactsPercent)
@@ -590,14 +590,6 @@ public final class AgentAnalyzer
       }
 
       return false;
-    }
-
-    private static void checkCancelation(IProgressMonitor monitor)
-    {
-      if (monitor.isCanceled())
-      {
-        throw new OperationCanceledException();
-      }
     }
   }
 

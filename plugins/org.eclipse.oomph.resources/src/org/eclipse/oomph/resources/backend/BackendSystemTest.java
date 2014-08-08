@@ -67,12 +67,12 @@ public abstract class BackendSystemTest extends AbstractTest
     for (BackendResource member : members)
     {
       names.remove(member.getName());
-      if (member.getResourceType() == Type.FOLDER)
+      if (member.getType() == Type.FOLDER)
       {
         --folders;
       }
 
-      if (member.getResourceType() == Type.FILE)
+      if (member.getType() == Type.FILE)
       {
         --files;
       }
@@ -99,21 +99,21 @@ public abstract class BackendSystemTest extends AbstractTest
     assertThat(folder1.getParent(), is((BackendContainer)system));
     assertThat(folder1.getSystemRelativeURI(), is(URI.createURI("folder1")));
     assertThat(folder1.exists(LOGGER), is(true));
-    assertThat(folder1.getResourceType(), is(BackendResource.Type.FOLDER));
+    assertThat(folder1.getType(), is(BackendResource.Type.FOLDER));
 
     BackendResource file1 = system.findMember(new Path("file1.txt"), null);
     assertThat(file1.getName(), is("file1.txt"));
     assertThat(file1.getParent(), is((BackendContainer)system));
     assertThat(file1.getSystemRelativeURI(), is(URI.createURI("file1.txt")));
     assertThat(file1.exists(LOGGER), is(true));
-    assertThat(file1.getResourceType(), is(BackendResource.Type.FILE));
+    assertThat(file1.getType(), is(BackendResource.Type.FILE));
 
     BackendResource self = system.findMember(Path.EMPTY, null);
     assertThat(self.getName(), is(""));
     assertThat(self.getParent(), isNull());
     assertThat(self.getSystemRelativeURI(), is(URI.createURI("")));
     assertThat(self.exists(LOGGER), is(true));
-    assertThat(self.getResourceType(), is(BackendResource.Type.SYSTEM));
+    assertThat(self.getType(), is(BackendResource.Type.SYSTEM));
 
     try
     {

@@ -305,7 +305,7 @@ public abstract class AbstractOomphPlugin extends EMFPlugin
 
   public static void checkCancelation(IProgressMonitor monitor)
   {
-    if (monitor.isCanceled())
+    if (monitor != null && monitor.isCanceled())
     {
       throw new OperationCanceledException();
     }

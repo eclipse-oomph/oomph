@@ -13,6 +13,9 @@ package org.eclipse.oomph.resources.backend;
 import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.resources.ResourcesUtil.ImportResult;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReentrantThreadLocal;
+import org.eclipse.oomph.util.SynchronizedCounter;
 
 import org.eclipse.emf.common.util.URI;
 
@@ -28,9 +31,13 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author Eike Stepper
@@ -45,6 +52,24 @@ public abstract class BackendSystem extends BackendContainer
 
   private final String systemURI; // Store as string to not lock this system in the system registry's weak map.
 
+  private final ReentrantThreadLocal<Boolean> visitorLifecycle = new ReentrantThreadLocal<Boolean>()
+  {
+    @Override
+    protected synchronized void init() throws Exception
+    {
+      visitorThreadPool = new VisitorThreadPool(BackendSystem.this);
+    }
+
+    @Override
+    protected synchronized void done() throws Exception
+    {
+      visitorThreadPool.dispose();
+      visitorThreadPool = null;
+    }
+  };
+
+  private VisitorThreadPool visitorThreadPool;
+
   protected BackendSystem(URI systemURI) throws BackendException
   {
     super(null, EMPTY_URI);
@@ -57,12 +82,34 @@ public abstract class BackendSystem extends BackendContainer
   }
 
   @Override
-  public final Type getResourceType()
+  public final Type getType()
   {
     return Type.SYSTEM;
   }
 
-  protected abstract Object getDelegate(BackendResource resource) throws Exception;
+  public <T> T call(Callable<T> callable) throws Exception
+  {
+    try
+    {
+      beginConnected();
+      return callable.call();
+    }
+    finally
+    {
+      endConnected();
+    }
+  }
+
+  protected Object beginConnected()
+  {
+    return null;
+  }
+
+  protected void endConnected()
+  {
+  }
+
+  protected abstract Object getDelegate(BackendResource backendResource) throws Exception;
 
   protected abstract Object[] getDelegateMembers(Object containerDelegate, IProgressMonitor monitor) throws Exception;
 
@@ -149,11 +196,300 @@ public abstract class BackendSystem extends BackendContainer
     }
   }
 
-  @Override
-  void doAccept(Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
+  protected final void accept(final BackendResource backendResource, final Visitor visitor, final IProgressMonitor monitor) throws Exception
   {
-    visitor.visit(this);
-    super.doAccept(visitor, monitor);
+    visitorLifecycle.call(Boolean.TRUE, new Callable<Object>()
+    {
+      public Object call() throws Exception
+      {
+        doAccept(backendResource, visitor, monitor);
+        return null;
+      }
+    });
+  }
+
+  protected void doAccept(BackendResource backendResource, Visitor visitor, IProgressMonitor monitor) throws Exception
+  {
+    SynchronizedCounter counter = new SynchronizedCounter();
+
+    Queue<BackendResource> queue = new ConcurrentLinkedQueue<BackendResource>();
+    queue.offer(backendResource);
+
+    for (;;)
+    {
+      BackendResource polledResource = queue.poll();
+      if (polledResource != null)
+      {
+        VisitorThread thread = visitorThreadPool.checkout();
+        if (thread != null)
+        {
+          thread.scheduleVisit(polledResource, queue, counter, visitor, monitor);
+        }
+        else
+        {
+          polledResource.visit(queue, visitor, monitor);
+        }
+      }
+      else
+      {
+        if (counter.isZero())
+        {
+          break;
+        }
+
+        counter.awaitChange();
+      }
+    }
+  }
+
+  @Override
+  protected boolean doVisit(BackendContainer backendContainer, Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
+  {
+    return visitor.visit(this, monitor);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class VisitorThread extends Thread
+  {
+    private static int lastID;
+
+    private final Object mutex = new Object();
+
+    private final VisitorThreadPool pool;
+
+    private BackendResource backendResource;
+
+    private Queue<BackendResource> queue;
+
+    private SynchronizedCounter counter;
+
+    private Visitor visitor;
+
+    private IProgressMonitor monitor;
+
+    public VisitorThread(VisitorThreadPool pool)
+    {
+      super("VisitorThread-" + (++lastID));
+      this.pool = pool;
+      setDaemon(true);
+    }
+
+    public void scheduleVisit(BackendResource backendResource, Queue<BackendResource> queue, SynchronizedCounter counter, Visitor visitor,
+        IProgressMonitor monitor)
+    {
+      counter.countUp();
+
+      synchronized (mutex)
+      {
+        this.backendResource = backendResource;
+        this.queue = queue;
+        this.counter = counter;
+        this.visitor = visitor;
+        this.monitor = monitor;
+        mutex.notifyAll();
+      }
+    }
+
+    @Override
+    public void run()
+    {
+      BackendSystem backendSystem = pool.getBackendSystem();
+      backendSystem.beginConnected();
+
+      try
+      {
+        while (!isInterrupted())
+        {
+          try
+          {
+            doVisit();
+          }
+          catch (OperationCanceledException ex)
+          {
+            return;
+          }
+          catch (InterruptedException ex)
+          {
+            return;
+          }
+        }
+      }
+      finally
+      {
+        backendSystem.endConnected();
+      }
+    }
+
+    private void doVisit() throws InterruptedException
+    {
+      synchronized (mutex)
+      {
+        while (backendResource == null)
+        {
+          mutex.wait();
+        }
+      }
+
+      if (isInterrupted())
+      {
+        throw new InterruptedException();
+      }
+
+      try
+      {
+        backendResource.visit(queue, visitor, monitor);
+      }
+      catch (OperationCanceledException ex)
+      {
+        throw ex;
+      }
+      catch (Exception ex)
+      {
+        if (ex instanceof InterruptedException)
+        {
+          throw (InterruptedException)ex;
+        }
+
+        ResourcesPlugin.INSTANCE.log(ex);
+      }
+      finally
+      {
+        synchronized (mutex)
+        {
+          // Must happen before countDown() because that can dispose of the pool.
+          pool.checkin(this);
+
+          // Can dispose of the pool.
+          counter.countDown();
+
+          backendResource = null;
+          queue = null;
+          counter = null;
+          visitor = null;
+          monitor = null;
+        }
+      }
+    }
+
+    @Override
+    public void interrupt()
+    {
+      if (monitor != null)
+      {
+        monitor.setCanceled(true);
+      }
+
+      synchronized (mutex)
+      {
+        mutex.notifyAll();
+      }
+
+      super.interrupt();
+    }
+
+    @Override
+    public String toString()
+    {
+      return super.toString();
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class VisitorThreadPool
+  {
+    private static final String PROP_MAX_THREADS = "oomph.resources.VisitorThreadPool.MAX_THREADS";
+
+    private static final int DEFAULT_MAX_THREADS = 10;
+
+    private static final int MAX_THREADS = Integer.parseInt(PropertiesUtil.getProperty(PROP_MAX_THREADS, "" + DEFAULT_MAX_THREADS));
+
+    private static final String PROP_SKIP_THRESHOLD = "oomph.resources.VisitorThreadPool.SKIP_THRESHOLD";
+
+    private static final int DEFAULT_SKIP_THRESHOLD = MAX_THREADS / 2;
+
+    private static final int SKIP_THRESHOLD = Integer.parseInt(PropertiesUtil.getProperty(PROP_SKIP_THRESHOLD, "" + DEFAULT_SKIP_THRESHOLD));
+
+    private final LinkedList<VisitorThread> threads = new LinkedList<VisitorThread>();
+
+    private final Set<VisitorThread> checkouts = new HashSet<VisitorThread>();
+
+    private final BackendSystem backendSystem;
+
+    private int skippedThreadCreations;
+
+    private boolean disposed;
+
+    public VisitorThreadPool(BackendSystem backendSystem)
+    {
+      this.backendSystem = backendSystem;
+    }
+
+    public BackendSystem getBackendSystem()
+    {
+      return backendSystem;
+    }
+
+    public synchronized VisitorThread checkout()
+    {
+      if (!disposed)
+      {
+        if (!threads.isEmpty())
+        {
+          VisitorThread thread = threads.removeFirst();
+          checkouts.add(thread);
+          return thread;
+        }
+
+        int currentNumberOfThreads = checkouts.size(); // Here we know that the pool is empty.
+        if (currentNumberOfThreads < MAX_THREADS)
+        {
+          int threadCreationsToSkip = currentNumberOfThreads / SKIP_THRESHOLD;
+          if (++skippedThreadCreations >= threadCreationsToSkip)
+          {
+            skippedThreadCreations = 0;
+
+            // System.out.println("--> THREAD " + (currentNumberOfThreads + 1));
+            VisitorThread thread = new VisitorThread(this);
+            thread.start();
+            checkouts.add(thread);
+            return thread;
+          }
+        }
+      }
+
+      // Let the calling thread do the work.
+      return null;
+    }
+
+    public synchronized void checkin(VisitorThread thread)
+    {
+      if (!disposed)
+      {
+        checkouts.remove(thread);
+        threads.addLast(thread);
+      }
+    }
+
+    public synchronized void dispose()
+    {
+      for (VisitorThread thread : threads)
+      {
+        thread.interrupt();
+      }
+
+      for (VisitorThread thread : checkouts)
+      {
+        thread.interrupt();
+      }
+
+      threads.clear();
+      checkouts.clear();
+      disposed = true;
+    }
   }
 
   /**

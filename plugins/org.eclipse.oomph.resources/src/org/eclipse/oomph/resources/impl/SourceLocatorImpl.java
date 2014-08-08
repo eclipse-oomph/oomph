@@ -19,6 +19,7 @@ import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.resources.backend.BackendContainer;
+import org.eclipse.oomph.resources.backend.BackendException;
 import org.eclipse.oomph.resources.backend.BackendFolder;
 import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.util.AbstractOomphPlugin;
@@ -36,7 +37,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -447,23 +447,49 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     return null;
   }
 
-  public static void handleProjects(SourceLocator sourceLocator, EList<ProjectFactory> defaultProjectFactories, ProjectHandler projectHandler,
-      MultiStatus status, IProgressMonitor monitor)
+  public static void handleProjects(final SourceLocator sourceLocator, final EList<ProjectFactory> defaultProjectFactories,
+      final ProjectHandler projectHandler, final MultiStatus status, final IProgressMonitor monitor)
   {
     String rootFolder = sourceLocator.getRootFolder();
-    EList<ProjectFactory> effectiveProjectFactories = getEffectiveProjectFactories(sourceLocator, defaultProjectFactories);
+    final EList<ProjectFactory> effectiveProjectFactories = getEffectiveProjectFactories(sourceLocator, defaultProjectFactories);
 
     BackendContainer backendContainer = (BackendContainer)BackendResource.get(rootFolder);
-    handleProjects(sourceLocator, backendContainer, effectiveProjectFactories, projectHandler, status, monitor);
+    backendContainer.accept(new BackendResource.Visitor.Default()
+    {
+      @Override
+      public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
+      {
+        ResourcesPlugin.checkCancelation(monitor);
+
+        IProject project = loadProject(sourceLocator, effectiveProjectFactories, container, monitor);
+        if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
+        {
+          try
+          {
+            projectHandler.handleProject(project, container);
+          }
+          catch (Exception ex)
+          {
+            SourceLocatorImpl.addStatus(status, ResourcesPlugin.INSTANCE, project.getName(), ex);
+          }
+
+          if (!sourceLocator.isLocateNestedProjects())
+          {
+            return false;
+          }
+        }
+
+        return true;
+      }
+    }, monitor);
+
+    // handleProjects(sourceLocator, backendContainer, effectiveProjectFactories, projectHandler, status, monitor);
   }
 
   private static void handleProjects(SourceLocator sourceLocator, BackendContainer backendContainer, EList<ProjectFactory> projectFactories,
       ProjectHandler projectHandler, MultiStatus status, IProgressMonitor monitor)
   {
-    if (monitor != null && monitor.isCanceled())
-    {
-      throw new OperationCanceledException();
-    }
+    ResourcesPlugin.checkCancelation(monitor);
 
     IProject project = loadProject(sourceLocator, projectFactories, backendContainer, monitor);
     if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))

@@ -171,7 +171,7 @@ public class MirrorBranchAction extends AbstractSetupAction
 
         for (MirrorRunnable runnable : runnables)
         {
-          checkCancelation(monitor);
+          SetupEditorPlugin.checkCancelation(monitor);
           run(monitor, performer, runnable);
         }
       }
@@ -201,7 +201,7 @@ public class MirrorBranchAction extends AbstractSetupAction
       List<MirrorRunnable> runnables = new ArrayList<MirrorRunnable>();
       for (SetupTask task : performer.getTriggeredSetupTasks())
       {
-        checkCancelation(monitor);
+        SetupEditorPlugin.checkCancelation(monitor);
 
         MirrorRunnable runnable = task.mirror(performer, mirrorsDir, true);
         if (runnable != null)
@@ -211,14 +211,6 @@ public class MirrorBranchAction extends AbstractSetupAction
       }
 
       return runnables;
-    }
-
-    private void checkCancelation(IProgressMonitor monitor)
-    {
-      if (monitor.isCanceled())
-      {
-        throw new OperationCanceledException();
-      }
     }
   }
 }

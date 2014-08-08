@@ -20,6 +20,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
+
+import java.util.Queue;
 
 /**
  * @author Eike Stepper
@@ -95,7 +98,7 @@ public abstract class BackendContainer extends BackendResource
 
   public final BackendResource findMember(IPath relativePath, IProgressMonitor monitor) throws BackendException, OperationCanceledException
   {
-    return findMember(URI.createURI(relativePath.toString()), monitor);
+    return findMember(relativePath.toString(), monitor);
   }
 
   public final BackendFolder getFolder(URI relativeURI) throws BackendException
@@ -111,7 +114,7 @@ public abstract class BackendContainer extends BackendResource
 
   public final BackendFolder getFolder(IPath relativePath) throws BackendException
   {
-    return getFolder(URI.createURI(relativePath.toString()));
+    return getFolder(relativePath.toString());
   }
 
   public final BackendFile getFile(URI relativeURI) throws BackendException
@@ -127,7 +130,7 @@ public abstract class BackendContainer extends BackendResource
 
   public final BackendFile getFile(IPath relativePath) throws BackendException
   {
-    return getFile(URI.createURI(relativePath.toString()));
+    return getFile(relativePath.toString());
   }
 
   public final ImportResult importIntoWorkspace(IProject project, IProgressMonitor monitor) throws BackendException, OperationCanceledException
@@ -157,12 +160,21 @@ public abstract class BackendContainer extends BackendResource
   }
 
   @Override
-  void doAccept(Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
+  final void visit(Queue<BackendResource> queue, Visitor visitor, IProgressMonitor monitor) throws BackendException, OperationCanceledException
   {
-    for (BackendResource member : getMembers(monitor))
+    SubMonitor progress = SubMonitor.convert(monitor, 2);
+    if (doVisit(this, visitor, progress.newChild(1)))
     {
-      ResourcesPlugin.checkCancelation(monitor);
-      member.doAccept(visitor, monitor);
+      for (BackendResource member : getMembers(progress.newChild(1)))
+      {
+        ResourcesPlugin.checkCancelation(monitor);
+        queue.add(member);
+      }
     }
+
+    progress.done();
   }
+
+  protected abstract boolean doVisit(BackendContainer backendContainer, Visitor visitor, IProgressMonitor monitor) throws BackendException,
+      OperationCanceledException;
 }
