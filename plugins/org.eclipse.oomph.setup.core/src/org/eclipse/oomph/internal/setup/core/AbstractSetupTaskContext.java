@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.util.OS;
+import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.EMFPlugin;
@@ -133,12 +134,12 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
 
   public boolean isOffline()
   {
-    return offline;
+    return OfflineMode.isEnabled();
   }
 
   public void setOffline(boolean offline)
   {
-    this.offline = offline;
+    OfflineMode.setEnabled(offline);
   }
 
   public boolean isMirrors()

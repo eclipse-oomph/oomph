@@ -11,7 +11,7 @@
 package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.OfflineUtil;
+import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.CoreException;
@@ -75,7 +75,7 @@ public class CachingTransport extends Transport
     }
 
     boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && OfflineUtil.isOffline())
+    if (loadingRepository && OfflineMode.isEnabled())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -137,7 +137,7 @@ public class CachingTransport extends Transport
     }
 
     boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && OfflineUtil.isOffline())
+    if (loadingRepository && OfflineMode.isEnabled())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())

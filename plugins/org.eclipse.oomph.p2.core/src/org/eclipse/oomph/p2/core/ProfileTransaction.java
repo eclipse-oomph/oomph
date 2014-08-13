@@ -50,10 +50,6 @@ public interface ProfileTransaction
 
   public ProfileTransaction setRemoveExistingInstallableUnits(boolean removeAll);
 
-  public boolean isOffline();
-
-  public ProfileTransaction setOffline(boolean offline);
-
   public boolean isMirrors();
 
   public ProfileTransaction setMirrors(boolean mirrors);

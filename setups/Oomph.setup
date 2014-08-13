@@ -52,11 +52,11 @@
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"
         optional="true"/>
     <repository
+        url="http://download.eclipse.org/modeling/emf/emf/updates/nightly/core"/>
+    <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
         url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-    <repository
-        url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
     <repository
         url="${oomph.update.url}"/>
   </setupTask>

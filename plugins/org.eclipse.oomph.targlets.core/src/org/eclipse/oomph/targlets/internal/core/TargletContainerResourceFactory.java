@@ -20,8 +20,6 @@ public class TargletContainerResourceFactory implements Factory
 {
   public static final String PROTOCOL_NAME = "targlet_container";
 
-  public static final String OPTION_OFFLINE = "OFFLINE";
-
   public static final String OPTION_MIRRORS = "MIRRORS";
 
   public TargletContainerResourceFactory()
@@ -42,16 +40,13 @@ public class TargletContainerResourceFactory implements Factory
       {
         if (targletContainer != null)
         {
-          boolean offline = options != null && options.containsKey(OPTION_OFFLINE) ? (Boolean)options.get(OPTION_OFFLINE)
-              : defaultSaveOptions != null ? (Boolean)defaultSaveOptions.get(OPTION_OFFLINE) : Boolean.FALSE;
-
           boolean mirrors = options != null && options.containsKey(OPTION_MIRRORS) ? (Boolean)options.get(OPTION_MIRRORS)
               : defaultSaveOptions != null ? (Boolean)defaultSaveOptions.get(OPTION_MIRRORS) : Boolean.TRUE;
 
           try
           {
             targletContainer.setTarglets(wrapper.getTarglets());
-            targletContainer.forceUpdate(false, offline, mirrors, new NullProgressMonitor());
+            targletContainer.forceUpdate(false, mirrors, new NullProgressMonitor());
           }
           catch (CoreException ex)
           {

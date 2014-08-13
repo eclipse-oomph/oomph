@@ -63,31 +63,8 @@
       </handler>
    </extension>
 
-   <!--extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+6">
-      </key>
-   </extension-->
-
    <extension
          point="org.eclipse.ui.menus">
-      <!--menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="org.eclipse.oomph.ui.menus.sampleMenu"
-               label="Sample Menu"
-               mnemonic="M">
-            <command
-                  commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
-                  id="org.eclipse.oomph.ui.menus.sampleCommand"
-                  mnemonic="S">
-            </command>
-         </menu>
-      </menuContribution-->
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar

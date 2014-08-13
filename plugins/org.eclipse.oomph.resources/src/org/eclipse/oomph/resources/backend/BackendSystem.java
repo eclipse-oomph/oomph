@@ -28,6 +28,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -109,6 +111,11 @@ public abstract class BackendSystem extends BackendContainer
   {
   }
 
+  protected int getMaxThreads()
+  {
+    return Integer.MAX_VALUE;
+  }
+
   protected abstract Object getDelegate(BackendResource backendResource) throws Exception;
 
   protected abstract Object[] getDelegateMembers(Object containerDelegate, IProgressMonitor monitor) throws Exception;
@@ -160,6 +167,23 @@ public abstract class BackendSystem extends BackendContainer
 
       result[i] = createMember(delegateMember, systemRelativeURI, false);
     }
+
+    Arrays.sort(result, new Comparator<BackendResource>()
+    {
+      public int compare(BackendResource r1, BackendResource r2)
+      {
+        int t1 = r1 instanceof BackendContainer ? 0 : 1;
+        int t2 = r2 instanceof BackendContainer ? 0 : 1;
+
+        int result = t2 - t1;
+        if (result == 0)
+        {
+          result = r1.getName().compareTo(r2.getName());
+        }
+
+        return result;
+      }
+    });
 
     return result;
   }
@@ -419,6 +443,8 @@ public abstract class BackendSystem extends BackendContainer
 
     private final BackendSystem backendSystem;
 
+    private final int maxThreads;
+
     private int skippedThreadCreations;
 
     private boolean disposed;
@@ -426,6 +452,7 @@ public abstract class BackendSystem extends BackendContainer
     public VisitorThreadPool(BackendSystem backendSystem)
     {
       this.backendSystem = backendSystem;
+      maxThreads = Math.min(MAX_THREADS, backendSystem.getMaxThreads());
     }
 
     public BackendSystem getBackendSystem()
@@ -435,7 +462,7 @@ public abstract class BackendSystem extends BackendContainer
 
     public synchronized VisitorThread checkout()
     {
-      if (!disposed)
+      if (!disposed && maxThreads > 0)
       {
         if (!threads.isEmpty())
         {
@@ -445,14 +472,13 @@ public abstract class BackendSystem extends BackendContainer
         }
 
         int currentNumberOfThreads = checkouts.size(); // Here we know that the pool is empty.
-        if (currentNumberOfThreads < MAX_THREADS)
+        if (currentNumberOfThreads < maxThreads)
         {
           int threadCreationsToSkip = currentNumberOfThreads / SKIP_THRESHOLD;
           if (++skippedThreadCreations >= threadCreationsToSkip)
           {
             skippedThreadCreations = 0;
 
-            // System.out.println("--> THREAD " + (currentNumberOfThreads + 1));
             VisitorThread thread = new VisitorThread(this);
             thread.start();
             checkouts.add(thread);

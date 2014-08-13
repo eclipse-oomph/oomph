@@ -96,7 +96,7 @@ public class TargletTests extends AbstractP2Test
   {
     Set<Targlet> targlets = Collections.singleton(targlet);
     targletContainer.setTarglets(targlets);
-    targletContainer.forceUpdate(true, false, false, LOGGER);
+    targletContainer.forceUpdate(true, false, LOGGER);
   }
 
   private static void assertImportedProjects(String... names)

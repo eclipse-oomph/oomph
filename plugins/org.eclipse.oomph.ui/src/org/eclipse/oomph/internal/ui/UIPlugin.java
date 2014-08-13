@@ -10,10 +10,14 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.oomph.internal.util.UtilPlugin;
 import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.ToggleCommandHandler;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import org.osgi.framework.BundleContext;
 
 /**
  * @author Eike Stepper
@@ -43,6 +47,25 @@ public final class UIPlugin extends AbstractOomphUIPlugin
     public Implementation()
     {
       plugin = this;
+    }
+
+    @Override
+    public void start(BundleContext context) throws Exception
+    {
+      super.start(context);
+
+      UtilPlugin.setToggleStateAccessor(new UtilPlugin.ToggleStateAccessor()
+      {
+        public boolean isEnabled(String id)
+        {
+          return ToggleCommandHandler.getToggleState(id);
+        }
+
+        public void setEnabled(String id, boolean enabled)
+        {
+          ToggleCommandHandler.setToggleState(id, enabled);
+        }
+      });
     }
   }
 }

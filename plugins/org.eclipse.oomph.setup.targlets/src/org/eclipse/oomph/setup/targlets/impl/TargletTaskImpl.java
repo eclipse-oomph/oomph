@@ -433,11 +433,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         }
 
         IProgressMonitor monitor = new ProgressLogMonitor(context);
-        boolean offline = context.isOffline();
         boolean mirrors = context.isMirrors();
 
         targletContainer.setTarglets(targlets);
-        targletContainer.forceUpdate(true, offline, mirrors, monitor);
+        targletContainer.forceUpdate(true, mirrors, monitor);
         return null;
       }
     });

@@ -131,8 +131,6 @@ public class TargletContainer extends AbstractBundleContainer
 
   private static final ThreadLocal<Boolean> FORCE_UPDATE = new ThreadLocal<Boolean>();
 
-  private static final ThreadLocal<Boolean> OFFLINE = new ThreadLocal<Boolean>();
-
   private static final ThreadLocal<Boolean> MIRRORS = new ThreadLocal<Boolean>();
 
   private static final String A_PDE_TARGET_PLATFORM = "A.PDE.Target.Platform";
@@ -595,12 +593,11 @@ public class TargletContainer extends AbstractBundleContainer
     }
   }
 
-  public void forceUpdate(boolean activateTargetDefinition, boolean offline, boolean mirrors, IProgressMonitor monitor) throws CoreException
+  public void forceUpdate(boolean activateTargetDefinition, boolean mirrors, IProgressMonitor monitor) throws CoreException
   {
     try
     {
       FORCE_UPDATE.set(Boolean.TRUE);
-      OFFLINE.set(offline ? Boolean.TRUE : false);
       MIRRORS.set(mirrors ? Boolean.TRUE : false);
 
       // Clear the resolution statuses of the involved targlet containers.
@@ -636,7 +633,6 @@ public class TargletContainer extends AbstractBundleContainer
     finally
     {
       MIRRORS.remove();
-      OFFLINE.remove();
       FORCE_UPDATE.remove();
     }
   }
@@ -668,7 +664,6 @@ public class TargletContainer extends AbstractBundleContainer
     final Profile profile = descriptor.startUpdateTransaction(environmentProperties, nlProperty, digest, progress.newChild());
 
     ProfileTransaction transaction = profile.change().setRemoveExistingInstallableUnits(true);
-    transaction.setOffline(OFFLINE.get() == Boolean.TRUE);
     transaction.setMirrors(MIRRORS.get() == Boolean.TRUE);
 
     try

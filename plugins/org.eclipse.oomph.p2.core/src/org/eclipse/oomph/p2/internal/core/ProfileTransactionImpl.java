@@ -22,7 +22,6 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.ObjectUtil;
-import org.eclipse.oomph.util.OfflineUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -111,8 +110,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
   private final Map<IUPropertyKey, String> cleanIUProperties = new HashMap<IUPropertyKey, String>();
 
   private boolean removeAll;
-
-  private boolean offline;
 
   private boolean mirrors;
 
@@ -225,17 +222,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return this;
   }
 
-  public boolean isOffline()
-  {
-    return offline;
-  }
-
-  public ProfileTransaction setOffline(boolean offline)
-  {
-    this.offline = offline;
-    return this;
-  }
-
   public boolean isMirrors()
   {
     return mirrors;
@@ -327,7 +313,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     try
     {
-      initOffline(cleanup);
       initMirrors(cleanup);
 
       List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
@@ -427,21 +412,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
       cleanup(cleanup);
       P2CorePlugin.INSTANCE.coreException(t);
       return null;
-    }
-  }
-
-  private void initOffline(final List<Runnable> cleanup)
-  {
-    if (offline)
-    {
-      OfflineUtil.begin(true);
-      cleanup.add(new Runnable()
-      {
-        public void run()
-        {
-          OfflineUtil.begin(false);
-        }
-      });
     }
   }
 

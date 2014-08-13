@@ -38,11 +38,26 @@ import java.lang.reflect.Proxy;
  */
 public class URIArgumentSelector
 {
+  public String selectArgument(IStringVariable variable, Shell shell)
+  {
+    URIArgumentDialog uriArgumentDialog = new URIArgumentDialog(shell);
+    if (uriArgumentDialog.open() == Window.OK)
+    {
+      return uriArgumentDialog.getValue();
+    }
+
+    return null;
+  }
+
+  /**
+   * @author Ed Merks
+   */
   public static class ExtensionFactory implements IExecutableExtensionFactory
   {
     public Object create() throws CoreException
     {
       Class<?> argumentSelectorInterface = null;
+
       try
       {
         argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.internal.ui.stringsubstitution.IArgumentSelector");
@@ -73,17 +88,9 @@ public class URIArgumentSelector
     }
   }
 
-  public String selectArgument(IStringVariable variable, Shell shell)
-  {
-    URIArgumentDialog uriArgumentDialog = new URIArgumentDialog(shell);
-    if (uriArgumentDialog.open() == Window.OK)
-    {
-      return uriArgumentDialog.getValue();
-    }
-
-    return null;
-  }
-
+  /**
+   * @author Ed Merks
+   */
   private static class URIArgumentDialog extends TrayDialog
   {
     private Text text;

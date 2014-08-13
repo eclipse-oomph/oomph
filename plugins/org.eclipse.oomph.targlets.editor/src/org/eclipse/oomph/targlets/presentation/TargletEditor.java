@@ -20,7 +20,6 @@ import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.ErrorDialog;
-import org.eclipse.oomph.ui.OfflineMode;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -1336,7 +1335,6 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
     saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
     saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
-    saveOptions.put(TargletContainerResourceFactory.OPTION_OFFLINE, OfflineMode.isEnabled());
 
     // Do the work within an operation because this is a long running activity that modifies the workbench.
     //
