@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 
+import java.io.File;
 import java.util.Queue;
 
 /**
@@ -356,7 +357,17 @@ public abstract class BackendResource
       return get(uri);
     }
 
-    URI uri = URI.createURI(prefix + URI.createFileURI(rootFolder) + "!/");
+    File folder = new File(rootFolder);
+    String absolutePath = folder.getAbsolutePath();
+
+    URI fileURI = URI.createFileURI(absolutePath);
+    URI uri = URI.createURI(prefix + fileURI.trimSegments(fileURI.segmentCount()).toString() + "!/").appendSegments(fileURI.segments());
+
+    if (folder.isDirectory())
+    {
+      uri = uri.appendSegment("");
+    }
+
     return get(uri);
   }
 

@@ -334,7 +334,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   private static void processMavenProject(MavenProjectInfo projectInfo, Set<MavenProjectInfo> projectInfos, SourceLocator sourceLocator,
       IProgressMonitor monitor)
   {
-    BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectInfo.getPomFile().getParent());
+    String projectFolder = projectInfo.getPomFile().getParent();
+    BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectFolder);
     IProject project = sourceLocator.loadProject(MavenProjectFactory.LIST, backendContainer, monitor);
     if (project != null)
     {
