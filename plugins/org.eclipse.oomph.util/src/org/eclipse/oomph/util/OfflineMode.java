@@ -30,8 +30,15 @@ public class OfflineMode
 
   public static boolean isEnabled()
   {
-    ToggleStateAccessor toggleStateAccessor = UtilPlugin.getToggleStateAccessor();
-    return toggleStateAccessor.isEnabled(COMMAND_ID);
+    try
+    {
+      ToggleStateAccessor toggleStateAccessor = UtilPlugin.getToggleStateAccessor();
+      return toggleStateAccessor.isEnabled(COMMAND_ID);
+    }
+    catch (Exception ex)
+    {
+      return UtilPlugin.DEFAULT_TOGGLE_STATE_ACCESSOR.isEnabled(COMMAND_ID);
+    }
   }
 
   public static void setEnabled(boolean enabled)
@@ -42,8 +49,15 @@ public class OfflineMode
       initializedToggleStateAccessor = true;
     }
 
-    ToggleStateAccessor toggleStateAccessor = UtilPlugin.getToggleStateAccessor();
-    toggleStateAccessor.setEnabled(COMMAND_ID, enabled);
+    try
+    {
+      ToggleStateAccessor toggleStateAccessor = UtilPlugin.getToggleStateAccessor();
+      toggleStateAccessor.setEnabled(COMMAND_ID, enabled);
+    }
+    catch (Exception ex)
+    {
+      UtilPlugin.DEFAULT_TOGGLE_STATE_ACCESSOR.setEnabled(COMMAND_ID, enabled);
+    }
   }
 
   private static void injectUILevelAccessor()

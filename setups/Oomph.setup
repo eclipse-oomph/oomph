@@ -253,9 +253,11 @@
               url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
           <repository
               url="http://download.eclipse.org/webtools/repository/luna"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
         <repositoryList
-            name="Kelper">
+            name="Kepler">
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
           <repository

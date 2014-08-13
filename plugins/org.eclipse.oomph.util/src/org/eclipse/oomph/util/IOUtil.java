@@ -51,7 +51,7 @@ import java.util.List;
  */
 public final class IOUtil
 {
-  private static final int MAX_FILE_NAME_LENGTH = 250;
+  private static final int MAX_FILE_NAME_LENGTH = 200;
 
   private static final byte[] BUFFER = new byte[8192];
 

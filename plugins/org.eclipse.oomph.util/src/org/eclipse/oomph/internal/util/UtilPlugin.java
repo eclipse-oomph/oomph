@@ -26,7 +26,7 @@ public final class UtilPlugin extends AbstractOomphPlugin
 
   private static Implementation plugin;
 
-  private static ToggleStateAccessor toggleStateAccessor = new ToggleStateAccessor()
+  public static final ToggleStateAccessor DEFAULT_TOGGLE_STATE_ACCESSOR = new ToggleStateAccessor()
   {
     private final IEclipsePreferences preferences = Platform.getPreferencesService().getRootNode();
 
@@ -45,6 +45,8 @@ public final class UtilPlugin extends AbstractOomphPlugin
       return preferences.getBoolean(getPreferenceKey(id), false);
     }
   };
+
+  private static ToggleStateAccessor toggleStateAccessor = DEFAULT_TOGGLE_STATE_ACCESSOR;
 
   public UtilPlugin()
   {
