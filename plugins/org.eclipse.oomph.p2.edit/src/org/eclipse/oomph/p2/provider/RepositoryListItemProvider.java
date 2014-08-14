@@ -13,11 +13,22 @@ package org.eclipse.oomph.p2.provider;
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
+import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -185,31 +196,60 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
     newChildDescriptors.add(createChildParameter(P2Package.Literals.REPOSITORY_LIST__REPOSITORIES, P2Factory.eINSTANCE.createRepository()));
   }
 
-  // @Override
-  // protected Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
-  // {
-  // return new DragAndDropCommand(domain, owner, location, operations, operation, collection)
-  // {
-  // @Override
-  // protected boolean prepareDropCopyOn()
-  // {
-  // EList<Object> providers = new BasicEList<Object>();
-  // for (Object object : collection)
-  // {
-  // System.out.println(object);
-  // }
-  //
-  // if (providers.isEmpty())
-  // {
-  // return false;
-  // }
-  //
-  // dragCommand = IdentityCommand.INSTANCE;
-  // dropCommand = AddCommand.create(domain, owner, P2Package.Literals.REPOSITORY_LIST__REPOSITORIES, providers);
-  //
-  // return dragCommand.canExecute() && dropCommand.canExecute();
-  // }
-  // };
-  // }
+  @Override
+  public Command createCommand(Object object, EditingDomain domain, Class<? extends Command> commandClass, CommandParameter commandParameter)
+  {
+    if (commandClass == DragAndDropCommand.class)
+    {
+      DragAndDropCommand.Detail detail = (DragAndDropCommand.Detail)commandParameter.getFeature();
+
+      Command command = createDragAndDropCommand(domain, commandParameter.getOwner(), detail.location, detail.operations, detail.operation,
+          commandParameter.getCollection());
+      if (command != null && command.canExecute())
+      {
+        return command;
+      }
+
+      return UnexecutableCommand.INSTANCE;
+    }
+
+    return super.createCommand(object, domain, commandClass, commandParameter);
+  }
+
+  @Override
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    return new DragAndDropCommand(domain, owner, location, operations, operation, collection)
+    {
+      @Override
+      protected boolean prepareDropCopyOn()
+      {
+        EList<Object> objects = new BasicEList<Object>();
+        for (Object object : collection)
+        {
+          if (object instanceof URI)
+          {
+            URI uri = (URI)object;
+            Repository repository = P2Factory.eINSTANCE.createRepository(uri.toString());
+            objects.add(repository);
+          }
+          else
+          {
+            objects.add(object);
+          }
+        }
+
+        if (objects.isEmpty())
+        {
+          return false;
+        }
+
+        dragCommand = IdentityCommand.INSTANCE;
+        dropCommand = AddCommand.create(domain, owner, P2Package.Literals.REPOSITORY_LIST__REPOSITORIES, objects);
+
+        return dragCommand.canExecute() && dropCommand.canExecute();
+      }
+    };
+  }
 
 }
