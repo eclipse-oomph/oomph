@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.director.SimplePlanner;
+import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
 import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
@@ -352,7 +353,23 @@ public class ProfileTransactionImpl implements ProfileTransaction
         }
       }
 
-      provisioningPlan.removeInstallableUnit(rootIU);
+      // Undo (remove) the addition of our artificial root IU.
+      Field operandsField = ReflectUtil.getField(ProvisioningPlan.class, "operands");
+      @SuppressWarnings("unchecked")
+      List<Operand> operands = (List<Operand>)ReflectUtil.getValue(operandsField, provisioningPlan);
+      for (Iterator<Operand> it = operands.iterator(); it.hasNext();)
+      {
+        Operand operand = it.next();
+        if (operand instanceof InstallableUnitOperand)
+        {
+          InstallableUnitOperand iuOperand = (InstallableUnitOperand)operand;
+          if (iuOperand.first() == null && iuOperand.second().getId().equals("artificial_root"))
+          {
+            it.remove();
+            break;
+          }
+        }
+      }
 
       if (profileDefinition.isIncludeSourceBundles())
       {
@@ -597,7 +614,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
   {
     InstallableUnitDescription rootDescription = new InstallableUnitDescription();
     rootDescription.setId("artificial_root");
-    rootDescription.setVersion(Version.createOSGi(1, 0, 0));
+    rootDescription.setVersion(Version.createOSGi(1, 0, 0, "v" + System.currentTimeMillis()));
+    rootDescription.setSingleton(true);
     rootDescription.setArtifacts(new IArtifactKey[0]);
     rootDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
     rootDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
