@@ -127,7 +127,9 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"/>
+      defaultValue="Luna">
+    <description>Specifies a default value for the variable that's originally defined in the Eclipse.org project catalog.</description>
+  </setupTask>
   <stream name="master">
     <setupTask
         xsi:type="setup:VariableTask"
@@ -295,52 +297,55 @@
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
       <workingSet
-          name="Setup">
+          name="Oomph Setup">
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.setup.*"/>
+      </workingSet>
+      <workingSet
+          name="Oomph Setup Models">
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="setups.*"/>
       </workingSet>
       <workingSet
-          name="Targlets">
+          name="Oomph Targlets">
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.targlets.*"/>
       </workingSet>
       <workingSet
-          name="Project Configuration">
-        <predicate
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.projectconfig.*"/>
-      </workingSet>
-      <workingSet
-          name="Version Management">
-        <predicate
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.version.*"/>
-      </workingSet>
-      <workingSet
-          name="Dynamic Working Sets">
-        <predicate
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.workingsets.*"/>
-      </workingSet>
-      <workingSet
-          name="Preferences Management">
-        <predicate
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.preferences.*"/>
-      </workingSet>
-      <workingSet
-          name="P2 Management">
+          name="Oomph P2 Management">
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.p2.*"/>
       </workingSet>
       <workingSet
-          name="Utilities">
+          name="Oomph Project Configuration">
+        <predicate
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.projectconfig.*"/>
+      </workingSet>
+      <workingSet
+          name="Oomph Version Management">
+        <predicate
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.version.*"/>
+      </workingSet>
+      <workingSet
+          name="Oomph Dynamic Working Sets">
+        <predicate
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.workingsets.*"/>
+      </workingSet>
+      <workingSet
+          name="Oomph Preferences Management">
+        <predicate
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.preferences.*"/>
+      </workingSet>
+      <workingSet
+          name="Oomph Utilities">
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.util.*"/>
@@ -361,7 +366,7 @@
             pattern="org\.eclipse\.oomph\.tests.*"/>
       </workingSet>
       <workingSet
-          name="Tools">
+          name="Oomph Tools">
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.gitbash.*"/>
@@ -379,7 +384,7 @@
             pattern="org\.eclipse\.oomph\.winexplorer.*"/>
       </workingSet>
       <workingSet
-          name="Release Engineering">
+          name="Oomph Releng">
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.all-feature"/>
@@ -392,9 +397,6 @@
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.releng.*"/>
-        <predicate
-            xsi:type="predicates:FilePredicate"
-            filePattern="user.setup"/>
       </workingSet>
     </setupTask>
     <setupTask
