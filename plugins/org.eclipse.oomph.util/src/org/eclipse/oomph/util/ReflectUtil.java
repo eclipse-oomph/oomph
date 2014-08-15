@@ -11,6 +11,8 @@
  */
 package org.eclipse.oomph.util;
 
+import org.eclipse.core.runtime.OperationCanceledException;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -56,6 +58,16 @@ public final class ReflectUtil
     catch (RuntimeException ex)
     {
       throw ex;
+    }
+    catch (InvocationTargetException ex)
+    {
+      Throwable cause = ex.getCause();
+      if (cause instanceof OperationCanceledException)
+      {
+        throw (OperationCanceledException)cause;
+      }
+
+      throw new ReflectionException(cause);
     }
     catch (Exception ex)
     {
@@ -106,7 +118,13 @@ public final class ReflectUtil
     }
     catch (InvocationTargetException ex)
     {
-      throw new ReflectionException(ex.getCause());
+      Throwable cause = ex.getCause();
+      if (cause instanceof OperationCanceledException)
+      {
+        throw (OperationCanceledException)cause;
+      }
+
+      throw new ReflectionException(cause);
     }
     catch (Exception ex)
     {
