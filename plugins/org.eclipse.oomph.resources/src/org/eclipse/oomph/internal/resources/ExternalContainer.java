@@ -65,13 +65,13 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
       return this;
     }
 
-    BackendResource backendResource = getBackendResource().findMember(path, null);
-    if (backendResource != null)
+    BackendResource member = getBackendResource().findMember(path, null);
+    if (member != null)
     {
       BackendResource thisBackendResource = getBackendResource();
 
       LinkedList<BackendResource> backendResources = new LinkedList<BackendResource>();
-      for (BackendResource it = backendResource; it != thisBackendResource; it = it.getParent())
+      for (BackendResource it = member; it != thisBackendResource; it = it.getParent())
       {
         backendResources.addFirst(it);
       }

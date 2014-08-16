@@ -59,14 +59,13 @@ public abstract class BackendSystem extends BackendContainer
     @Override
     protected synchronized void init() throws Exception
     {
-      visitorThreadPool = new VisitorThreadPool(BackendSystem.this);
+      beginVisitor();
     }
 
     @Override
     protected synchronized void done() throws Exception
     {
-      visitorThreadPool.dispose();
-      visitorThreadPool = null;
+      endVisitor();
     }
   };
 
@@ -89,17 +88,15 @@ public abstract class BackendSystem extends BackendContainer
     return Type.SYSTEM;
   }
 
-  public <T> T call(Callable<T> callable) throws Exception
+  protected void beginVisitor()
   {
-    try
-    {
-      beginConnected();
-      return callable.call();
-    }
-    finally
-    {
-      endConnected();
-    }
+    visitorThreadPool = new VisitorThreadPool(BackendSystem.this);
+  }
+
+  protected void endVisitor()
+  {
+    visitorThreadPool.dispose();
+    visitorThreadPool = null;
   }
 
   protected Object beginConnected()
