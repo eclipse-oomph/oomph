@@ -81,7 +81,7 @@ public final class WorkspaceIUImporter
               {
                 TargletContainer container = (TargletContainer)location;
                 TargletContainerDescriptor descriptor = container.getDescriptor();
-                if (descriptor != null)
+                if (descriptor != null && descriptor.getUpdateProblem() == null)
                 {
                   targletContainerInfos.add(Pair.create(container, descriptor));
 

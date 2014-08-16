@@ -13,7 +13,6 @@ package org.eclipse.oomph.resources;
 import org.eclipse.oomph.internal.resources.ExternalResource;
 import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.predicates.Predicate;
-import org.eclipse.oomph.resources.backend.BackendContainer;
 import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.SubMonitor;
@@ -49,7 +48,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -181,51 +179,6 @@ public final class ResourcesUtil
     }
   }
 
-  public static int importIntoWorkspace(final Map<BackendContainer, IProject> backendContainers, IProgressMonitor monitor) throws CoreException
-  {
-    if (backendContainers.isEmpty())
-    {
-      return 0;
-    }
-
-    final AtomicInteger count = new AtomicInteger();
-    getWorkspace().run(new IWorkspaceRunnable()
-    {
-      public void run(IProgressMonitor monitor) throws CoreException
-      {
-        SubMonitor progress = SubMonitor.convert(monitor, backendContainers.size()).detectCancelation();
-
-        try
-        {
-          for (Map.Entry<BackendContainer, IProject> entry : backendContainers.entrySet())
-          {
-            BackendContainer backendContainer = entry.getKey();
-            IProject project = entry.getValue();
-            if (backendContainer.importIntoWorkspace(project, progress.newChild()) == ImportResult.IMPORTED)
-            {
-              count.incrementAndGet();
-            }
-          }
-        }
-        catch (Exception ex)
-        {
-          ResourcesPlugin.INSTANCE.coreException(ex);
-        }
-        finally
-        {
-          progress.done();
-        }
-      }
-    }, monitor);
-
-    return count.get();
-  }
-
-  public static ImportResult importProject(File delegate, IProject project, IProgressMonitor monitor)
-  {
-    return null;
-  }
-
   public static int importProjects(final Collection<File> projectLocations, IProgressMonitor monitor) throws CoreException
   {
     if (projectLocations.isEmpty())
@@ -264,22 +217,21 @@ public final class ResourcesUtil
     return count.get();
   }
 
-  public static ImportResult importProject(File folder, IProgressMonitor monitor) throws Exception
+  public static ImportResult importProject(File projectLocation, IProgressMonitor monitor) throws Exception
   {
-    String projectName = getProjectName(folder);
+    String projectName = getProjectName(projectLocation);
     if (projectName == null || projectName.length() == 0)
     {
-      ResourcesPlugin.INSTANCE.log("No project name for folder " + folder);
+      ResourcesPlugin.INSTANCE.log("No project name for folder " + projectLocation);
       return ImportResult.ERROR;
     }
 
-    return importProject(folder, projectName, monitor);
+    return importProject(projectLocation, projectName, monitor);
   }
 
-  @SuppressWarnings("restriction")
-  public static ImportResult importProject(File folder, String projectName, IProgressMonitor monitor) throws IOException, CoreException
+  public static ImportResult importProject(File projectLocation, String projectName, IProgressMonitor monitor) throws IOException, CoreException
   {
-    File location = folder.getCanonicalFile();
+    File location = projectLocation.getCanonicalFile();
 
     IWorkspace workspace = getWorkspace();
     IWorkspaceRoot root = workspace.getRoot();
@@ -306,8 +258,7 @@ public final class ResourcesUtil
     IPath locationPath = new Path(location.getAbsolutePath());
     IPath parentPath = locationPath.removeLastSegments(1);
     IPath defaultDefaultLocation = root.getLocation();
-    if (org.eclipse.core.internal.utils.FileUtil.isPrefixOf(parentPath, defaultDefaultLocation)
-        && org.eclipse.core.internal.utils.FileUtil.isPrefixOf(defaultDefaultLocation, parentPath))
+    if (isPrefixOf(parentPath, defaultDefaultLocation) && isPrefixOf(defaultDefaultLocation, parentPath))
     {
       locationPath = null;
     }
@@ -323,6 +274,12 @@ public final class ResourcesUtil
     }
 
     return ImportResult.IMPORTED;
+  }
+
+  @SuppressWarnings("restriction")
+  private static boolean isPrefixOf(IPath location1, IPath location2)
+  {
+    return org.eclipse.core.internal.utils.FileUtil.isPrefixOf(location1, location2);
   }
 
   public static void clearWorkspace() throws CoreException

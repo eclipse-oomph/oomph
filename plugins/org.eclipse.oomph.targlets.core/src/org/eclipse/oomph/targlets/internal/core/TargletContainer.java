@@ -415,22 +415,7 @@ public class TargletContainer extends AbstractBundleContainer
   @Override
   public String toString()
   {
-    StringBuilder builder = new StringBuilder();
-    // for (Targlet targlet : targlets)
-    // {
-    // if (builder.length() == 0)
-    // {
-    // builder.append(" for ");
-    // }
-    // else
-    // {
-    // builder.append(", ");
-    // }
-    //
-    // builder.append(targlet.getName());
-    // }
-
-    return "Targlet Container" + builder;
+    return "Targlet Container " + id;
   }
 
   @Override

@@ -77,7 +77,7 @@ public class UICallback extends UserCallback
         }
         catch (InterruptedException ex)
         {
-          // Do nothing
+          // Ignore.
         }
       }
     });

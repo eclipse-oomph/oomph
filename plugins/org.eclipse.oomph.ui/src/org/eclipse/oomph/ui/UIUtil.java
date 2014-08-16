@@ -12,6 +12,7 @@ package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.internal.ui.UIPlugin;
 
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -166,7 +167,21 @@ public final class UIUtil
       }
     };
 
-    dialog.run(true, true, runnable);
+    try
+    {
+      dialog.run(true, true, runnable);
+    }
+    catch (OperationCanceledException ex)
+    {
+      // Ignore.
+    }
+    catch (InvocationTargetException ex)
+    {
+      if (!(ex.getCause() instanceof OperationCanceledException))
+      {
+        throw ex;
+      }
+    }
   }
 
   public static void handleException(Throwable ex)

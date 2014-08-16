@@ -19,12 +19,10 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectInputStream
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStream;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,9 +107,8 @@ public final class WorkspaceIUInfo
 
       monitor.setTaskName("Importing project " + projectName);
 
-      IProjectDescription projectDescription = workspace.newProjectDescription(projectName);
-      projectDescription.setLocation(new Path(location.getAbsolutePath()));
-      project.create(projectDescription, monitor);
+      BackendContainer backendContainer = getBackendContainer();
+      backendContainer.importIntoWorkspace(project, monitor);
 
       if (!project.isOpen())
       {

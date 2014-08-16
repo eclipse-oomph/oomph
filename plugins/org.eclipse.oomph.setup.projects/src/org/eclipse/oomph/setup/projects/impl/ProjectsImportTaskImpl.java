@@ -10,9 +10,10 @@
  */
 package org.eclipse.oomph.setup.projects.impl;
 
+import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.resources.EclipseProjectFactory;
 import org.eclipse.oomph.resources.ProjectHandler;
-import org.eclipse.oomph.resources.ResourcesUtil;
+import org.eclipse.oomph.resources.ResourcesUtil.ImportResult;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.resources.backend.BackendContainer;
 import org.eclipse.oomph.resources.impl.SourceLocatorImpl;
@@ -25,6 +26,7 @@ import org.eclipse.oomph.setup.projects.ProjectsPackage;
 import org.eclipse.oomph.setup.projects.ProjectsPlugin;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertyFile;
+import org.eclipse.oomph.util.SubMonitor;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -39,7 +41,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.MultiStatus;
 
 import java.io.ByteArrayInputStream;
@@ -52,6 +58,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <!-- begin-user-doc -->
@@ -68,6 +75,10 @@ import java.util.Map;
  */
 public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImportTask
 {
+  private static final PropertyFile HISTORY = new PropertyFile(ProjectsPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile());
+
+  private static final IWorkspaceRoot ROOT = EcorePlugin.getWorkspaceRoot();
+
   /**
    * The cached value of the '{@link #getSourceLocators() <em>Source Locators</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -197,10 +208,6 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     return super.eIsSet(featureID);
   }
 
-  private static final PropertyFile HISTORY = new PropertyFile(ProjectsPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile());
-
-  private static final IWorkspaceRoot ROOT = EcorePlugin.getWorkspaceRoot();
-
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (context.getTrigger() == Trigger.MANUAL)
@@ -258,7 +265,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
       }
     }
 
-    ResourcesUtil.importIntoWorkspace(backendContainers, monitor);
+    importProjects(backendContainers, monitor);
   }
 
   private IProject[] getProjects(SourceLocator sourceLocator)
@@ -322,6 +329,48 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   public MirrorRunnable mirror(MirrorContext context, File mirrorsDir, boolean includingLocals) throws Exception
   {
     return null;
+  }
+
+  private static int importProjects(final Map<BackendContainer, IProject> backendContainers, IProgressMonitor monitor) throws CoreException
+  {
+    if (backendContainers.isEmpty())
+    {
+      return 0;
+    }
+  
+    final AtomicInteger count = new AtomicInteger();
+  
+    IWorkspace workspace = org.eclipse.core.resources.ResourcesPlugin.getWorkspace();
+    workspace.run(new IWorkspaceRunnable()
+    {
+      public void run(IProgressMonitor monitor) throws CoreException
+      {
+        SubMonitor progress = SubMonitor.convert(monitor, backendContainers.size()).detectCancelation();
+  
+        try
+        {
+          for (Map.Entry<BackendContainer, IProject> entry : backendContainers.entrySet())
+          {
+            BackendContainer backendContainer = entry.getKey();
+            IProject project = entry.getValue();
+            if (backendContainer.importIntoWorkspace(project, progress.newChild()) == ImportResult.IMPORTED)
+            {
+              count.incrementAndGet();
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+          ResourcesPlugin.INSTANCE.coreException(ex);
+        }
+        finally
+        {
+          progress.done();
+        }
+      }
+    }, monitor);
+  
+    return count.get();
   }
 
 } // ProjectsImportTaskImpl

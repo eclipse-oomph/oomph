@@ -22,7 +22,6 @@ import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.SubMonitor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -610,7 +609,7 @@ public class AgentAnalyzerComposite extends Composite
     }
     catch (InterruptedException ex)
     {
-      throw new OperationCanceledException();
+      // Ignore.
     }
   }
 
@@ -681,7 +680,7 @@ public class AgentAnalyzerComposite extends Composite
     }
     catch (InterruptedException ex)
     {
-      throw new OperationCanceledException();
+      // Ignore.
     }
   }
 

@@ -134,7 +134,9 @@ public final class LocalBackendSystem extends BackendSystem
   @Override
   protected ImportResult importIntoWorkspace(BackendContainer container, IProject project, IProgressMonitor monitor) throws Exception
   {
-    return ResourcesUtil.importProject(getDelegate(container), project, monitor);
+    File projectLocation = container.getLocation().toFile();
+    String projectName = project.getName();
+    return ResourcesUtil.importProject(projectLocation, projectName, monitor);
   }
 
   /**
