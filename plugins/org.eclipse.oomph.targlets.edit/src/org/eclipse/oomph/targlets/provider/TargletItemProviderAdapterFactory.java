@@ -13,6 +13,8 @@ package org.eclipse.oomph.targlets.provider;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.util.BaseSwitch;
+import org.eclipse.oomph.p2.RepositoryList;
+import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.targlets.util.TargletAdapterFactory;
@@ -40,6 +42,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -86,19 +89,38 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
    */
   protected Collection<Object> supportedTypes = new ArrayList<Object>();
 
+  private boolean showOnlyActiveRepositoryList;
+
   /**
    * This constructs an instance.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public TargletItemProviderAdapterFactory()
   {
+    this(false);
+  }
+
+  public TargletItemProviderAdapterFactory(boolean showOnlyActiveRepositoryList)
+  {
+    this.showOnlyActiveRepositoryList = showOnlyActiveRepositoryList;
+
     supportedTypes.add(IEditingDomainItemProvider.class);
     supportedTypes.add(IStructuredItemContentProvider.class);
     supportedTypes.add(ITreeItemContentProvider.class);
     supportedTypes.add(IItemLabelProvider.class);
     supportedTypes.add(IItemPropertySource.class);
+  }
+
+  public final boolean isShowOnlyActiveRepositoryList()
+  {
+    return showOnlyActiveRepositoryList;
+  }
+
+  public final void setShowOnlyActiveRepositoryList(boolean showOnlyActiveRepositoryList)
+  {
+    this.showOnlyActiveRepositoryList = showOnlyActiveRepositoryList;
   }
 
   /**
@@ -138,14 +160,36 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
    * This creates an adapter for a {@link org.eclipse.oomph.targlets.Targlet}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public Adapter createTargletAdapter()
   {
     if (targletItemProvider == null)
     {
-      targletItemProvider = new TargletItemProvider(this);
+      targletItemProvider = new TargletItemProvider(this)
+      {
+        @Override
+        public Collection<?> getChildren(Object object)
+        {
+          Collection<?> children = super.getChildren(object);
+
+          if (showOnlyActiveRepositoryList)
+          {
+            RepositoryList activeRepositoryList = ((Targlet)object).getRepositoryList();
+            for (Iterator<?> it = children.iterator(); it.hasNext();)
+            {
+              Object child = it.next();
+              if (child instanceof RepositoryList && child != activeRepositoryList)
+              {
+                it.remove();
+              }
+            }
+          }
+
+          return children;
+        }
+      };
     }
 
     return targletItemProvider;

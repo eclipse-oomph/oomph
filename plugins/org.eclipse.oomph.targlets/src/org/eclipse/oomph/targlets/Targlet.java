@@ -139,6 +139,11 @@ public interface Targlet extends ModelElement
   EList<RepositoryList> getRepositoryLists();
 
   /**
+   * TODO Rename to getActiveRepositoryList.
+   */
+  RepositoryList getRepositoryList();
+
+  /**
    * Returns the value of the '<em><b>Active Repository List</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>

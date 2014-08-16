@@ -15,6 +15,7 @@ import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
 import org.eclipse.oomph.targlets.presentation.TargletEditor;
+import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -59,14 +60,19 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
   private static final Object[] NO_CHILDREN = new Object[0];
 
-  private ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+  private final ComposedAdapterFactory adapterFactory;
 
-  private AdapterFactoryContentProvider contentProvider = new AdapterFactoryContentProvider(adapterFactory);
+  private final AdapterFactoryContentProvider contentProvider;
 
-  private AdapterFactoryLabelProvider labelProvider = new AdapterFactoryLabelProvider(adapterFactory);
+  private final AdapterFactoryLabelProvider labelProvider;
 
   public TargletContainerUI()
   {
+    adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+    adapterFactory.addAdapterFactory(new TargletItemProviderAdapterFactory(true));
+
+    contentProvider = new AdapterFactoryContentProvider(adapterFactory);
+    labelProvider = new AdapterFactoryLabelProvider(adapterFactory);
   }
 
   @SuppressWarnings("rawtypes")

@@ -301,6 +301,29 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     }
   }
 
+  public RepositoryList getRepositoryList()
+  {
+    EList<RepositoryList> repositoryLists = getRepositoryLists();
+    String name = getActiveRepositoryList();
+    if (name == null && !repositoryLists.isEmpty())
+    {
+      return repositoryLists.get(0);
+    }
+
+    if (name != null)
+    {
+      for (RepositoryList repositoryList : repositoryLists)
+      {
+        if (name.equals(repositoryList.getName()))
+        {
+          return repositoryList;
+        }
+      }
+    }
+
+    return null;
+  }
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -310,24 +333,10 @@ public class TargletImpl extends ModelElementImpl implements Targlet
   {
     EList<Repository> result = new EObjectEList<Repository>(Repository.class, this, TargletPackage.TARGLET__ACTIVE_REPOSITORIES);
 
-    EList<RepositoryList> repositoryLists = getRepositoryLists();
-    String name = getActiveRepositoryList();
-    if (name == null && !repositoryLists.isEmpty())
+    RepositoryList repositoryList = getRepositoryList();
+    if (repositoryList != null)
     {
-      result.addAll(repositoryLists.get(0).getRepositories());
-      return result;
-    }
-
-    if (name != null)
-    {
-      for (RepositoryList repositoryList : repositoryLists)
-      {
-        if (name.equals(repositoryList.getName()))
-        {
-          result.addAll(repositoryList.getRepositories());
-          break;
-        }
-      }
+      result.addAll(repositoryList.getRepositories());
     }
 
     return result;
