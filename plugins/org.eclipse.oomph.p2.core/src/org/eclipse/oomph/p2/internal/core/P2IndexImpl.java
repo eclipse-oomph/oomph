@@ -22,6 +22,7 @@ import org.eclipse.equinox.p2.metadata.Version;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -216,6 +217,10 @@ public class P2IndexImpl implements P2Index
           capabilities.put(repository, versions);
         }
       }
+    }
+    catch (FileNotFoundException ex)
+    {
+      // Ignore.
     }
     catch (Exception ex)
     {

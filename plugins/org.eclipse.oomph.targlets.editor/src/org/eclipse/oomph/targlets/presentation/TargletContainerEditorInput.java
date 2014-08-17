@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
+ */
+package org.eclipse.oomph.targlets.presentation;
+
+import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
+
+import org.eclipse.emf.common.ui.URIEditorInput;
+import org.eclipse.emf.common.util.URI;
+
+import org.eclipse.pde.core.target.ITargetDefinition;
+import org.eclipse.ui.IMemento;
+
+/**
+ * @author Eike Stepper
+ */
+public final class TargletContainerEditorInput extends URIEditorInput
+{
+  public TargletContainerEditorInput(URI uri, String name)
+  {
+    super(uri, name);
+  }
+
+  public TargletContainerEditorInput(IMemento memento)
+  {
+    super(memento);
+  }
+
+  @Override
+  public String getToolTipText()
+  {
+    String id = getURI().opaquePart();
+    TargletContainer targletContainer = TargletContainerDescriptorManager.getContainer(id);
+
+    ITargetDefinition targetDefinition = targletContainer.getTargetDefinition();
+    boolean active = TargetPlatformUtil.isActiveTargetDefinition(targetDefinition);
+    return TargletEditor.getContainerLabel(targletContainer, active);
+  }
+
+  @Override
+  protected String getBundleSymbolicName()
+  {
+    return TargletEditorPlugin.INSTANCE.getSymbolicName();
+  }
+}

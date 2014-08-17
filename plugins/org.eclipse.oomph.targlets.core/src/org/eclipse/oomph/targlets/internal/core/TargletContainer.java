@@ -25,6 +25,7 @@ import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.IDChangedEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateFailedEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletsChangedEvent;
@@ -149,7 +150,7 @@ public class TargletContainer extends AbstractBundleContainer
 
   private static final String PROP_WS = "osgi.ws"; //$NON-NLS-1$
 
-  private final String id;
+  private String id;
 
   private ITargetDefinition targetDefinition;
 
@@ -213,6 +214,42 @@ public class TargletContainer extends AbstractBundleContainer
   public String getID()
   {
     return id;
+  }
+
+  public void setID(String newID) throws CoreException
+  {
+    if (!ObjectUtil.equals(newID, id))
+    {
+      String oldID = id;
+      id = newID;
+
+      TargletContainerDescriptor descriptor = updateTargetDefinition();
+      TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new IDChangedEvent(this, descriptor, oldID), new NullProgressMonitor());
+    }
+  }
+
+  private TargletContainerDescriptor updateTargetDefinition() throws CoreException
+  {
+    clearResolutionStatus();
+
+    TargletContainerDescriptor descriptor = getDescriptor();
+    if (descriptor != null)
+    {
+      descriptor.resetUpdateProblem();
+    }
+
+    if (targetDefinition != null)
+    {
+      TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
+      {
+        public Object run(ITargetPlatformService service) throws CoreException
+        {
+          service.saveTargetDefinition(targetDefinition);
+          return null;
+        }
+      });
+    }
+    return descriptor;
   }
 
   @Override
@@ -290,23 +327,8 @@ public class TargletContainer extends AbstractBundleContainer
   public void setTarglets(Collection<? extends Targlet> targlets) throws CoreException
   {
     basicSetTarglets(targlets);
-    clearResolutionStatus();
 
-    TargletContainerDescriptor descriptor = getDescriptor();
-    if (descriptor != null)
-    {
-      descriptor.resetUpdateProblem();
-    }
-
-    TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
-    {
-      public Object run(ITargetPlatformService service) throws CoreException
-      {
-        service.saveTargetDefinition(targetDefinition);
-        return null;
-      }
-    });
-
+    TargletContainerDescriptor descriptor = updateTargetDefinition();
     TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletsChangedEvent(this, descriptor), new NullProgressMonitor());
   }
 

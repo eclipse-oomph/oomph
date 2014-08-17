@@ -55,6 +55,33 @@ public class TargletContainerEvent extends EventObject
   /**
    * @author Eike Stepper
    */
+  public static class IDChangedEvent extends TargletContainerEvent
+  {
+    private static final long serialVersionUID = 1L;
+
+    private final String oldID;
+
+    public IDChangedEvent(TargletContainer source, TargletContainerDescriptor descriptor, String oldID)
+    {
+      super(source, descriptor);
+      this.oldID = oldID;
+    }
+
+    public String getOldID()
+    {
+      return oldID;
+    }
+
+    @Override
+    public String toString()
+    {
+      return "TargletsChangedEvent[source=" + getSource().getID() + ", oldID=" + oldID + "]";
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
   public static class TargletsChangedEvent extends TargletContainerEvent
   {
     private static final long serialVersionUID = 1L;

@@ -16,11 +16,17 @@ import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.p2.provider.P2ItemProviderAdapterFactory;
 import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactory;
 import org.eclipse.oomph.resources.provider.ResourcesItemProviderAdapterFactory;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent.IDChangedEvent;
+import org.eclipse.oomph.targlets.core.TargletContainerListener;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.pde.TargetPlatformListener;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -29,13 +35,13 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.MarkerHelper;
-import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -87,6 +93,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlAdapter;
@@ -507,6 +514,46 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
       catch (CoreException exception)
       {
         TargletEditorPlugin.INSTANCE.log(exception);
+      }
+    }
+  };
+
+  private TargetPlatformListener targetPlatformListener = new TargetPlatformListener()
+  {
+    public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
+    {
+      EObject rootObject = editingDomain.getResourceSet().getResources().get(0).getContents().get(0);
+      if (rootObject instanceof org.eclipse.oomph.targlets.TargletContainer)
+      {
+        UIUtil.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            firePropertyChange(IWorkbenchPart.PROP_TITLE);
+          }
+        });
+      }
+    }
+  };
+
+  private TargletContainerListener targletContainerListener = new TargletContainerListener()
+  {
+    public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
+    {
+      EObject rootObject = editingDomain.getResourceSet().getResources().get(0).getContents().get(0);
+      if (rootObject instanceof org.eclipse.oomph.targlets.TargletContainer)
+      {
+        String id = ((org.eclipse.oomph.targlets.TargletContainer)rootObject).getID();
+
+        if (event instanceof IDChangedEvent)
+        {
+          IDChangedEvent idChangedEvent = (IDChangedEvent)event;
+          if (ObjectUtil.equals(idChangedEvent.getOldID(), id))
+          {
+            IWorkbenchPage page = getEditorSite().getPage();
+            page.closeEditor(TargletEditor.this, false);
+          }
+        }
       }
     }
   };
@@ -1488,8 +1535,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void init(IEditorSite site, IEditorInput editorInput)
+  public void initGen(IEditorSite site, IEditorInput editorInput)
   {
     setSite(site);
     setInputWithNotify(editorInput);
@@ -1497,6 +1543,14 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     site.setSelectionProvider(this);
     site.getPage().addPartListener(partListener);
     ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
+  }
+
+  @Override
+  public void init(IEditorSite site, IEditorInput editorInput)
+  {
+    initGen(site, editorInput);
+    TargetPlatformUtil.addListener(targetPlatformListener);
+    TargletContainerListener.Registry.INSTANCE.addListener(targletContainerListener);
   }
 
   /**
@@ -1671,8 +1725,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void dispose()
+  public void disposeGen()
   {
     updateProblemIndication = false;
 
@@ -1700,6 +1753,14 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     super.dispose();
   }
 
+  @Override
+  public void dispose()
+  {
+    TargletContainerListener.Registry.INSTANCE.removeListener(targletContainerListener);
+    TargetPlatformUtil.removeListener(targetPlatformListener);
+    disposeGen();
+  }
+
   /**
    * Returns whether the outline view should be presented to the user.
    * <!-- begin-user-doc -->
@@ -1711,6 +1772,11 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     return false;
   }
 
+  public static String getContainerLabel(TargletContainer targletContainer, boolean active)
+  {
+    return targletContainer.getID() + " (" + targletContainer.getTargetDefinition().getName() + (active ? ", active" : "") + ")";
+  }
+
   public static void open(final IWorkbenchPage page, final TargletContainer targletContainer)
   {
     UIUtil.asyncExec(new Runnable()
@@ -1719,11 +1785,10 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
       {
         try
         {
-          String id = targletContainer.getID();
+          final String id = targletContainer.getID();
           URI uri = URI.createGenericURI(TargletContainerResourceFactory.PROTOCOL_NAME, id, null);
-          String label = targletContainer.getTargetDefinition().getName() + " - " + id;
 
-          IEditorInput input = new URIEditorInput(uri, label);
+          IEditorInput input = new TargletContainerEditorInput(uri, id);
           IDE.openEditor(page, input, EDITOR_ID);
         }
         catch (PartInitException ex)
