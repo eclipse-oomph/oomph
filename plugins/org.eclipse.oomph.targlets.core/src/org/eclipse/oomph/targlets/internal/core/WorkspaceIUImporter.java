@@ -111,8 +111,13 @@ public final class WorkspaceIUImporter
           TargletContainer container = pair.getElement1();
           TargletContainerDescriptor descriptor = pair.getElement2();
 
-          Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> containerImportResults = new HashMap<WorkspaceIUInfo, ResourcesUtil.ImportResult>(importResults);
-          containerImportResults.keySet().retainAll(descriptor.getWorkingProjects());
+          Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> containerImportResults = new HashMap<WorkspaceIUInfo, ResourcesUtil.ImportResult>();
+          Collection<WorkspaceIUInfo> workingProjects = descriptor.getWorkingProjects();
+          if (workingProjects != null)
+          {
+            containerImportResults.putAll(importResults);
+            containerImportResults.keySet().retainAll(workingProjects);
+          }
 
           TargletContainerEvent event = new WorkspaceUpdateFinishedEvent(container, descriptor, containerImportResults);
           TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(event, monitor);
