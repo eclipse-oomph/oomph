@@ -207,6 +207,14 @@ public final class TargletContainerDescriptorManager
     return descriptor;
   }
 
+  public void removeDescriptor(String id)
+  {
+    if (descriptors.remove(id) != null)
+    {
+      saveDescriptors(new NullProgressMonitor());
+    }
+  }
+
   public IProfileChangeRequest createProfileChangeRequest(TargletContainerDescriptor descriptor, IProfile profile)
   {
     return descriptor.getBundlePool().getAgent().getPlanner().createChangeRequest(profile);
