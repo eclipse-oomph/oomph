@@ -288,7 +288,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getTarglet_ActiveRepositoryList()
+  public EAttribute getTarglet_ActiveRepositoryListName()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(5);
   }
@@ -298,7 +298,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getTarglet_ActiveRepositories()
+  public EReference getTarglet_ActiveRepositoryList()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(6);
   }
@@ -308,9 +308,19 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getTarglet_ActiveRepositories()
+  {
+    return (EReference)targletEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getTarglet_IncludeSources()
   {
-    return (EAttribute)targletEClass.getEStructuralFeatures().get(7);
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -320,7 +330,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   public EAttribute getTarglet_IncludeAllPlatforms()
   {
-    return (EAttribute)targletEClass.getEStructuralFeatures().get(8);
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -516,7 +526,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEReference(targletEClass, TARGLET__SOURCE_LOCATORS);
     createEReference(targletEClass, TARGLET__INSTALLABLE_UNIT_GENERATORS);
     createEReference(targletEClass, TARGLET__REPOSITORY_LISTS);
-    createEAttribute(targletEClass, TARGLET__ACTIVE_REPOSITORY_LIST);
+    createEAttribute(targletEClass, TARGLET__ACTIVE_REPOSITORY_LIST_NAME);
+    createEReference(targletEClass, TARGLET__ACTIVE_REPOSITORY_LIST);
     createEReference(targletEClass, TARGLET__ACTIVE_REPOSITORIES);
     createEAttribute(targletEClass, TARGLET__INCLUDE_SOURCES);
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_PLATFORMS);
@@ -612,8 +623,10 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTarglet_RepositoryLists(), theP2Package.getRepositoryList(), null, "repositoryLists", null, 0, -1, Targlet.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTarglet_ActiveRepositoryList(), ecorePackage.getEString(), "activeRepositoryList", null, 0, 1, Targlet.class, !IS_TRANSIENT,
+    initEAttribute(getTarglet_ActiveRepositoryListName(), ecorePackage.getEString(), "activeRepositoryListName", null, 0, 1, Targlet.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTarglet_ActiveRepositoryList(), theP2Package.getRepositoryList(), null, "activeRepositoryList", null, 0, 1, Targlet.class, IS_TRANSIENT,
+        IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEReference(getTarglet_ActiveRepositories(), theP2Package.getRepository(), null, "activeRepositories", null, 0, -1, Targlet.class, IS_TRANSIENT,
         IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getTarglet_IncludeSources(), ecorePackage.getEBoolean(), "includeSources", "true", 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -715,6 +728,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     addAnnotation(getTarglet_SourceLocators(), source, new String[] { "name", "sourceLocator" });
     addAnnotation(getTarglet_InstallableUnitGenerators(), source, new String[] { "name", "installableUnitGenerator" });
     addAnnotation(getTarglet_RepositoryLists(), source, new String[] { "name", "repositoryList" });
+    addAnnotation(getTarglet_ActiveRepositoryListName(), source, new String[] { "kind", "attribute", "name", "activeRepositoryList" });
+    addAnnotation(getTarglet_ActiveRepositoryList(), source, new String[] { "name", "activeRepository" });
     addAnnotation(getTarglet_ActiveRepositories(), source, new String[] { "name", "activeRepository" });
     addAnnotation(getComponentExtension_Requirements(), source, new String[] { "name", "requirement" });
     addAnnotation(getComponentDefinition_ID(), source, new String[] { "kind", "attribute", "name", "id" });

@@ -171,7 +171,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
 
   public Targlet copyTarglet(Targlet source)
   {
-    String activeRepositoryList = source.getActiveRepositoryList();
+    String activeRepositoryList = source.getActiveRepositoryListName();
     if (activeRepositoryList != null && activeRepositoryList.length() == 0)
     {
       activeRepositoryList = null;
@@ -179,7 +179,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
 
     Targlet targlet = createTarglet();
     targlet.setName(source.getName());
-    targlet.setActiveRepositoryList(activeRepositoryList);
+    targlet.setActiveRepositoryListName(activeRepositoryList);
     targlet.setIncludeSources(source.isIncludeSources());
     targlet.setIncludeAllPlatforms(source.isIncludeAllPlatforms());
 

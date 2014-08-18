@@ -31,6 +31,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getInstallableUnitGenerators <em>Installable Unit Generators</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getRepositoryLists <em>Repository Lists</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryListName <em>Active Repository List Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryList <em>Active Repository List</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositories <em>Active Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeSources <em>Include Sources</em>}</li>
@@ -139,35 +140,46 @@ public interface Targlet extends ModelElement
   EList<RepositoryList> getRepositoryLists();
 
   /**
-   * TODO Rename to getActiveRepositoryList.
-   */
-  RepositoryList getRepositoryList();
-
-  /**
-   * Returns the value of the '<em><b>Active Repository List</b></em>' attribute.
+   * Returns the value of the '<em><b>Active Repository List Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Active Repository List</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Active Repository List</em>' attribute.
-   * @see #setActiveRepositoryList(String)
-   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_ActiveRepositoryList()
-   * @model
+   * @return the value of the '<em>Active Repository List Name</em>' attribute.
+   * @see #setActiveRepositoryListName(String)
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_ActiveRepositoryListName()
+   * @model extendedMetaData="kind='attribute' name='activeRepositoryList'"
    * @generated
    */
-  String getActiveRepositoryList();
+  String getActiveRepositoryListName();
 
   /**
-   * Sets the value of the '{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryList <em>Active Repository List</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryListName <em>Active Repository List Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Active Repository List</em>' attribute.
-   * @see #getActiveRepositoryList()
+   * @param value the new value of the '<em>Active Repository List Name</em>' attribute.
+   * @see #getActiveRepositoryListName()
    * @generated
    */
-  void setActiveRepositoryList(String value);
+  void setActiveRepositoryListName(String value);
+
+  /**
+   * Returns the value of the '<em><b>Active Repository List</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Active Repository List</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Active Repository List</em>' reference.
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_ActiveRepositoryList()
+   * @model resolveProxies="false" transient="true" changeable="false" volatile="true" derived="true"
+   *        extendedMetaData="name='activeRepository'"
+   * @generated
+   */
+  RepositoryList getActiveRepositoryList();
 
   /**
    * Returns the value of the '<em><b>Active Repositories</b></em>' reference list.

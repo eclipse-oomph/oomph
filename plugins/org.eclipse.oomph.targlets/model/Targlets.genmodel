@@ -9,6 +9,8 @@
   <genPackages prefix="Targlet" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       multipleEditorPages="false" extensibleProviderFactory="true" childCreationExtenders="true"
       fileExtensions="targlet,def,ext" ecorePackage="Targlets.ecore#/" publicationLocation="/setups/models/Targlets.ecore">
+    <genDataTypes ecoreDataType="Targlets.ecore#//InstallableUnit"/>
+    <genDataTypes ecoreDataType="Targlets.ecore#//StringToVersionMap"/>
     <genClasses ecoreClass="Targlets.ecore#//TargletContainer">
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//TargletContainer/iD"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//TargletContainer/targlets"/>
@@ -17,8 +19,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/requirements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/sourceLocators"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/installableUnitGenerators"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/repositoryLists"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/activeRepositoryList"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/activeRepositoryListName"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/activeRepositoryList"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/activeRepositories"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeSources"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllPlatforms"/>
@@ -29,6 +33,25 @@
     <genClasses ecoreClass="Targlets.ecore#//ComponentDefinition">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//ComponentDefinition/iD"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//ComponentDefinition/version"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Targlets.ecore#//IUGenerator">
+      <genOperations ecoreOperation="Targlets.ecore#//IUGenerator/generateIU">
+        <genParameters ecoreParameter="Targlets.ecore#//IUGenerator/generateIU/project"/>
+        <genParameters ecoreParameter="Targlets.ecore#//IUGenerator/generateIU/qualifierReplacement"/>
+        <genParameters ecoreParameter="Targlets.ecore#//IUGenerator/generateIU/iuVersions"/>
+      </genOperations>
+      <genOperations ecoreOperation="Targlets.ecore#//IUGenerator/modifyIU">
+        <genParameters ecoreParameter="Targlets.ecore#//IUGenerator/modifyIU/iu"/>
+        <genParameters ecoreParameter="Targlets.ecore#//IUGenerator/modifyIU/project"/>
+        <genParameters ecoreParameter="Targlets.ecore#//IUGenerator/modifyIU/qualifierReplacement"/>
+        <genParameters ecoreParameter="Targlets.ecore#//IUGenerator/modifyIU/iuVersions"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Targlets.ecore#//FeatureGenerator"/>
+    <genClasses ecoreClass="Targlets.ecore#//PluginGenerator"/>
+    <genClasses ecoreClass="Targlets.ecore#//ComponentGenerator"/>
+    <genClasses ecoreClass="Targlets.ecore#//BuckminsterGenerator">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//BuckminsterGenerator/saveAsComponent"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

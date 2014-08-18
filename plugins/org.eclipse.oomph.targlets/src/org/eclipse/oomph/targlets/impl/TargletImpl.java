@@ -43,6 +43,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getInstallableUnitGenerators <em>Installable Unit Generators</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getRepositoryLists <em>Repository Lists</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getActiveRepositoryListName <em>Active Repository List Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getActiveRepositoryList <em>Active Repository List</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getActiveRepositories <em>Active Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeSources <em>Include Sources</em>}</li>
@@ -115,24 +116,24 @@ public class TargletImpl extends ModelElementImpl implements Targlet
   protected EList<RepositoryList> repositoryLists;
 
   /**
-   * The default value of the '{@link #getActiveRepositoryList() <em>Active Repository List</em>}' attribute.
+   * The default value of the '{@link #getActiveRepositoryListName() <em>Active Repository List Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getActiveRepositoryList()
+   * @see #getActiveRepositoryListName()
    * @generated
    * @ordered
    */
-  protected static final String ACTIVE_REPOSITORY_LIST_EDEFAULT = null;
+  protected static final String ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getActiveRepositoryList() <em>Active Repository List</em>}' attribute.
+   * The cached value of the '{@link #getActiveRepositoryListName() <em>Active Repository List Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getActiveRepositoryList()
+   * @see #getActiveRepositoryListName()
    * @generated
    * @ordered
    */
-  protected String activeRepositoryList = ACTIVE_REPOSITORY_LIST_EDEFAULT;
+  protected String activeRepositoryListName = ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT;
 
   /**
    * The default value of the '{@link #isIncludeSources() <em>Include Sources</em>}' attribute.
@@ -281,9 +282,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getActiveRepositoryList()
+  public String getActiveRepositoryListName()
   {
-    return activeRepositoryList;
+    return activeRepositoryListName;
   }
 
   /**
@@ -291,20 +292,26 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setActiveRepositoryList(String newActiveRepositoryList)
+  public void setActiveRepositoryListName(String newActiveRepositoryListName)
   {
-    String oldActiveRepositoryList = activeRepositoryList;
-    activeRepositoryList = newActiveRepositoryList;
+    String oldActiveRepositoryListName = activeRepositoryListName;
+    activeRepositoryListName = newActiveRepositoryListName;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST, oldActiveRepositoryList, activeRepositoryList));
+      eNotify(new ENotificationImpl(this, Notification.SET, TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME, oldActiveRepositoryListName,
+          activeRepositoryListName));
     }
   }
 
-  public RepositoryList getRepositoryList()
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public RepositoryList getActiveRepositoryList()
   {
     EList<RepositoryList> repositoryLists = getRepositoryLists();
-    String name = getActiveRepositoryList();
+    String name = getActiveRepositoryListName();
     if (name == null && !repositoryLists.isEmpty())
     {
       return repositoryLists.get(0);
@@ -333,10 +340,10 @@ public class TargletImpl extends ModelElementImpl implements Targlet
   {
     EList<Repository> result = new EObjectEList<Repository>(Repository.class, this, TargletPackage.TARGLET__ACTIVE_REPOSITORIES);
 
-    RepositoryList repositoryList = getRepositoryList();
-    if (repositoryList != null)
+    RepositoryList activeRepositoryList = getActiveRepositoryList();
+    if (activeRepositoryList != null)
     {
-      result.addAll(repositoryList.getRepositories());
+      result.addAll(activeRepositoryList.getRepositories());
     }
 
     return result;
@@ -434,6 +441,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return getInstallableUnitGenerators();
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         return getRepositoryLists();
+      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME:
+        return getActiveRepositoryListName();
       case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:
         return getActiveRepositoryList();
       case TargletPackage.TARGLET__ACTIVE_REPOSITORIES:
@@ -476,8 +485,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         getRepositoryLists().clear();
         getRepositoryLists().addAll((Collection<? extends RepositoryList>)newValue);
         return;
-      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:
-        setActiveRepositoryList((String)newValue);
+      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME:
+        setActiveRepositoryListName((String)newValue);
         return;
       case TargletPackage.TARGLET__INCLUDE_SOURCES:
         setIncludeSources((Boolean)newValue);
@@ -514,8 +523,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         getRepositoryLists().clear();
         return;
-      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:
-        setActiveRepositoryList(ACTIVE_REPOSITORY_LIST_EDEFAULT);
+      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME:
+        setActiveRepositoryListName(ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT);
         return;
       case TargletPackage.TARGLET__INCLUDE_SOURCES:
         setIncludeSources(INCLUDE_SOURCES_EDEFAULT);
@@ -547,8 +556,11 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return installableUnitGenerators != null && !installableUnitGenerators.isEmpty();
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         return repositoryLists != null && !repositoryLists.isEmpty();
+      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME:
+        return ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT == null ? activeRepositoryListName != null : !ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT
+            .equals(activeRepositoryListName);
       case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:
-        return ACTIVE_REPOSITORY_LIST_EDEFAULT == null ? activeRepositoryList != null : !ACTIVE_REPOSITORY_LIST_EDEFAULT.equals(activeRepositoryList);
+        return getActiveRepositoryList() != null;
       case TargletPackage.TARGLET__ACTIVE_REPOSITORIES:
         return !getActiveRepositories().isEmpty();
       case TargletPackage.TARGLET__INCLUDE_SOURCES:
@@ -575,8 +587,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");
     result.append(name);
-    result.append(", activeRepositoryList: ");
-    result.append(activeRepositoryList);
+    result.append(", activeRepositoryListName: ");
+    result.append(activeRepositoryListName);
     result.append(", includeSources: ");
     result.append(includeSources);
     result.append(", includeAllPlatforms: ");

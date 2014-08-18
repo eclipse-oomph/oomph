@@ -200,13 +200,22 @@ public interface TargletPackage extends EPackage
   int TARGLET__REPOSITORY_LISTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
-   * The feature id for the '<em><b>Active Repository List</b></em>' attribute.
+   * The feature id for the '<em><b>Active Repository List Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET__ACTIVE_REPOSITORY_LIST = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
+  int TARGLET__ACTIVE_REPOSITORY_LIST_NAME = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
+
+  /**
+   * The feature id for the '<em><b>Active Repository List</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET__ACTIVE_REPOSITORY_LIST = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Active Repositories</b></em>' reference list.
@@ -215,7 +224,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET__ACTIVE_REPOSITORIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
+  int TARGLET__ACTIVE_REPOSITORIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Include Sources</b></em>' attribute.
@@ -224,7 +233,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET__INCLUDE_SOURCES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
+  int TARGLET__INCLUDE_SOURCES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
 
   /**
    * The feature id for the '<em><b>Include All Platforms</b></em>' attribute.
@@ -233,7 +242,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET__INCLUDE_ALL_PLATFORMS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
+  int TARGLET__INCLUDE_ALL_PLATFORMS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 9;
 
   /**
    * The number of structural features of the '<em>Targlet</em>' class.
@@ -242,7 +251,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 9;
+  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 10;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -837,15 +846,26 @@ public interface TargletPackage extends EPackage
   EReference getTarglet_RepositoryLists();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryList <em>Active Repository List</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryListName <em>Active Repository List Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Active Repository List</em>'.
+   * @return the meta object for the attribute '<em>Active Repository List Name</em>'.
+   * @see org.eclipse.oomph.targlets.Targlet#getActiveRepositoryListName()
+   * @see #getTarglet()
+   * @generated
+   */
+  EAttribute getTarglet_ActiveRepositoryListName();
+
+  /**
+   * Returns the meta object for the reference '{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositoryList <em>Active Repository List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Active Repository List</em>'.
    * @see org.eclipse.oomph.targlets.Targlet#getActiveRepositoryList()
    * @see #getTarglet()
    * @generated
    */
-  EAttribute getTarglet_ActiveRepositoryList();
+  EReference getTarglet_ActiveRepositoryList();
 
   /**
    * Returns the meta object for the reference list '{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositories <em>Active Repositories</em>}'.
@@ -1137,12 +1157,20 @@ public interface TargletPackage extends EPackage
     EReference TARGLET__REPOSITORY_LISTS = eINSTANCE.getTarglet_RepositoryLists();
 
     /**
-     * The meta object literal for the '<em><b>Active Repository List</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Active Repository List Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TARGLET__ACTIVE_REPOSITORY_LIST = eINSTANCE.getTarglet_ActiveRepositoryList();
+    EAttribute TARGLET__ACTIVE_REPOSITORY_LIST_NAME = eINSTANCE.getTarglet_ActiveRepositoryListName();
+
+    /**
+     * The meta object literal for the '<em><b>Active Repository List</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TARGLET__ACTIVE_REPOSITORY_LIST = eINSTANCE.getTarglet_ActiveRepositoryList();
 
     /**
      * The meta object literal for the '<em><b>Active Repositories</b></em>' reference list feature.

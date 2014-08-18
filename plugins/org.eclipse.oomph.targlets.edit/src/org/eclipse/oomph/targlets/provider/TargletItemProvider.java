@@ -63,7 +63,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       super.getPropertyDescriptors(object);
 
       addNamePropertyDescriptor(object);
-      addActiveRepositoryListPropertyDescriptor(object);
+      addActiveRepositoryListNamePropertyDescriptor(object);
       addIncludeSourcesPropertyDescriptor(object);
       addIncludeAllPlatformsPropertyDescriptor(object);
     }
@@ -84,17 +84,17 @@ public class TargletItemProvider extends ModelElementItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Active Repository List feature.
+   * This adds a property descriptor for the Active Repository List Name feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void addActiveRepositoryListPropertyDescriptor(Object object)
+  protected void addActiveRepositoryListNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_activeRepositoryList_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_activeRepositoryList_feature", "_UI_Targlet_type"),
-        TargletPackage.Literals.TARGLET__ACTIVE_REPOSITORY_LIST, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_Targlet_activeRepositoryListName_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_activeRepositoryListName_feature", "_UI_Targlet_type"),
+        TargletPackage.Literals.TARGLET__ACTIVE_REPOSITORY_LIST_NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -218,7 +218,7 @@ public class TargletItemProvider extends ModelElementItemProvider
     switch (notification.getFeatureID(Targlet.class))
     {
       case TargletPackage.TARGLET__NAME:
-      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:
+      case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME:
       case TargletPackage.TARGLET__INCLUDE_SOURCES:
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

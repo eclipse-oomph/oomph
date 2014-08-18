@@ -176,7 +176,7 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory imp
 
           if (showOnlyActiveRepositoryList)
           {
-            RepositoryList activeRepositoryList = ((Targlet)object).getRepositoryList();
+            RepositoryList activeRepositoryList = ((Targlet)object).getActiveRepositoryList();
             for (Iterator<?> it = children.iterator(); it.hasNext();)
             {
               Object child = it.next();
