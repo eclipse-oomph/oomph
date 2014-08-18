@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -19,7 +19,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Eike Stepper
  */
-public final class TargletsCorePlugin extends AbstractOomphPlugin
+public final class TargletsCorePlugin extends OomphPlugin
 {
   public static final TargletsCorePlugin INSTANCE = new TargletsCorePlugin();
 

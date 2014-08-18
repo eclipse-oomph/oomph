@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.internal.base;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
  * <!-- end-user-doc -->
  * @generated not
  */
-public final class BasePlugin extends AbstractOomphPlugin
+public final class BasePlugin extends OomphPlugin
 {
   /**
    * Keep track of the singleton.

@@ -11,7 +11,7 @@
 package org.eclipse.oomph.setup.presentation;
 
 import org.eclipse.oomph.base.provider.BaseEditPlugin;
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Status;
  * <!-- end-user-doc -->
  * @generated not
  */
-public final class SetupEditorPlugin extends AbstractOomphUIPlugin
+public final class SetupEditorPlugin extends OomphUIPlugin
 {
   public static final String PLUGIN_ID = "org.eclipse.oomph.setup.editor";
 

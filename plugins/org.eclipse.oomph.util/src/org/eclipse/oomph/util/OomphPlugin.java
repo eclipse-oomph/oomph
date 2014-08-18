@@ -47,9 +47,9 @@ import java.util.List;
 /**
  * @author Eike Stepper
  */
-public abstract class AbstractOomphPlugin extends EMFPlugin
+public abstract class OomphPlugin extends EMFPlugin
 {
-  protected AbstractOomphPlugin(ResourceLocator[] delegateResourceLocators)
+  protected OomphPlugin(ResourceLocator[] delegateResourceLocators)
   {
     super(delegateResourceLocators);
   }

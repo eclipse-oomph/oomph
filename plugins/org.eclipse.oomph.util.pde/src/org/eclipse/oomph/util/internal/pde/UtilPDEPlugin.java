@@ -10,14 +10,14 @@
  */
 package org.eclipse.oomph.util.internal.pde;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
  * @author Eike Stepper
  */
-public final class UtilPDEPlugin extends AbstractOomphPlugin
+public final class UtilPDEPlugin extends OomphPlugin
 {
   public static final UtilPDEPlugin INSTANCE = new UtilPDEPlugin();
 

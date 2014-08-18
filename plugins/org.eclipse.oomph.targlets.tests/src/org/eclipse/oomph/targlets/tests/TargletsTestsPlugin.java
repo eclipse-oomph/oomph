@@ -10,14 +10,14 @@
  */
 package org.eclipse.oomph.targlets.tests;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
  * @author Eike Stepper
  */
-public final class TargletsTestsPlugin extends AbstractOomphPlugin
+public final class TargletsTestsPlugin extends OomphPlugin
 {
   public static final TargletsTestsPlugin INSTANCE = new TargletsTestsPlugin();
 

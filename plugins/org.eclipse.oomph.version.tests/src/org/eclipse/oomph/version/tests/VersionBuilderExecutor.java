@@ -12,7 +12,7 @@ package org.eclipse.oomph.version.tests;
 
 import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.tests.AbstractTest;
-import org.eclipse.oomph.util.AbstractOomphPlugin.BundleFile;
+import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.Markers;
 import org.eclipse.oomph.version.VersionUtil;

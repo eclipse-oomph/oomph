@@ -13,7 +13,7 @@ package org.eclipse.oomph.internal.setup.core;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -28,7 +28,7 @@ import java.util.Collections;
 /**
  * @author Eike Stepper
  */
-public final class SetupCorePlugin extends AbstractOomphPlugin
+public final class SetupCorePlugin extends OomphPlugin
 {
   private static final String DEFAULT_UPDATE_URL = "http://download.eclipse.org/oomph/updates";
 

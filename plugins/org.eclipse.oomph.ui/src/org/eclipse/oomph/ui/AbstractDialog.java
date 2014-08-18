@@ -53,11 +53,11 @@ public abstract class AbstractDialog extends TitleAreaDialog
 
   private int height;
 
-  private AbstractOomphUIPlugin plugin;
+  private OomphUIPlugin plugin;
 
   private String help;
 
-  protected AbstractDialog(Shell parentShell, String title, int width, int height, AbstractOomphUIPlugin plugin, String help)
+  protected AbstractDialog(Shell parentShell, String title, int width, int height, OomphUIPlugin plugin, String help)
   {
     super(parentShell);
     this.title = title;

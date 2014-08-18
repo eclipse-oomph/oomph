@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 /**
  * @author Eike Stepper
  */
-public final class P2UIPlugin extends AbstractOomphUIPlugin
+public final class P2UIPlugin extends OomphUIPlugin
 {
   public static final P2UIPlugin INSTANCE = new P2UIPlugin();
 

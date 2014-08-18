@@ -21,7 +21,7 @@ import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.resources.backend.BackendContainer;
 import org.eclipse.oomph.resources.backend.BackendException;
 import org.eclipse.oomph.resources.backend.BackendResource;
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -451,7 +451,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     return result.toString();
   }
 
-  public static void addStatus(MultiStatus status, AbstractOomphPlugin plugin, String file, Object object)
+  public static void addStatus(MultiStatus status, OomphPlugin plugin, String file, Object object)
   {
     IStatus childStatus = plugin.getStatus(object);
     String message = childStatus.getMessage() + " (while processing " + file + ")";

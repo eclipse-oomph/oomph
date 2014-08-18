@@ -10,14 +10,14 @@
  */
 package org.eclipse.oomph.setup.launching;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
  * @author Eike Stepper
  */
-public final class LaunchingPlugin extends AbstractOomphPlugin
+public final class LaunchingPlugin extends OomphPlugin
 {
   public static final LaunchingPlugin INSTANCE = new LaunchingPlugin();
 

@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.internal.predicates;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
  * <!-- end-user-doc -->
  * @generated not
  */
-public final class PredicatesPlugin extends AbstractOomphPlugin
+public final class PredicatesPlugin extends OomphPlugin
 {
   /**
    * Keep track of the singleton.

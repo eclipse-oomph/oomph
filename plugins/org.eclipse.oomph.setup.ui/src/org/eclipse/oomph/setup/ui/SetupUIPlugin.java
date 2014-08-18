@@ -23,7 +23,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -59,7 +59,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public final class SetupUIPlugin extends AbstractOomphUIPlugin
+public final class SetupUIPlugin extends OomphUIPlugin
 {
   public static final SetupUIPlugin INSTANCE = new SetupUIPlugin();
 

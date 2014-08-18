@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.version.tests;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin.BundleFile;
+import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 

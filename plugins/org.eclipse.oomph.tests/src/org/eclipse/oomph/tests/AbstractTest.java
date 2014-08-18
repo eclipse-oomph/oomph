@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.tests;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
-import org.eclipse.oomph.util.AbstractOomphPlugin.BundleFile;
+import org.eclipse.oomph.util.OomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 
@@ -133,7 +133,7 @@ public abstract class AbstractTest
     return userHome;
   }
 
-  public File getTestFolder(AbstractOomphPlugin plugin, String name)
+  public File getTestFolder(OomphPlugin plugin, String name)
   {
     try
     {

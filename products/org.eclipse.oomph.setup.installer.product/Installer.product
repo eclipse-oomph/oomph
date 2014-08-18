@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Oomph Setup Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Oomph-Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <configIni use="">
    </configIni>
@@ -11,7 +11,7 @@
 --launcher.XXMaxPermSize
 256M
 -name
-Oomph Installer
+Oomph-Installer
 -data
 @none
       </programArgs>
@@ -27,7 +27,7 @@ Oomph Installer
 
    <splash
       location="org.eclipse.oomph.setup.installer" />
-   <launcher name="setup-eclipse">
+   <launcher name="oomph">
       <linux icon="icons/oomph.xpm"/>
       <macosx icon="icons/oomph.icns"/>
       <solaris/>

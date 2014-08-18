@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -20,7 +20,7 @@ import java.io.File;
 /**
  * @author Eike Stepper
  */
-public final class P2CorePlugin extends AbstractOomphPlugin
+public final class P2CorePlugin extends OomphPlugin
 {
   public static final P2CorePlugin INSTANCE = new P2CorePlugin();
 

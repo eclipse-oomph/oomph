@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.internal.util;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 /**
  * @author Eike Stepper
  */
-public final class UtilPlugin extends AbstractOomphPlugin
+public final class UtilPlugin extends OomphPlugin
 {
   public static final UtilPlugin INSTANCE = new UtilPlugin();
 

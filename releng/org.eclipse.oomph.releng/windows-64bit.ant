@@ -13,8 +13,9 @@
 
 	<property name="source" location="${git.clone.location}\products\org.eclipse.oomph.setup.installer.product\target\products\org.eclipse.oomph.setup.installer.product-win32.win32.x86_64.zip" />
 	<property name="target" location="/develop/installer-test" />
-	<property name="target.ini" location="${target}/setup-eclipse.ini" />
-	<property name="target.exe" location="${target}/setup-eclipse.exe" />
+
+	<property name="launcher.ini" location="${target}/oomph.ini" />
+	<property name="launcher.exe" location="${target}/oomph.exe" />
 
 	<target name="clean">
 		<delete verbose="false" failonerror="false">
@@ -26,17 +27,17 @@
 
 	<target name="deploy" depends="clean">
 		<unzip dest="${target}" src="${source}" />
-		<echo message="-Doomph.installer.update.url=${git.clone.uri}/products/org.eclipse.oomph.setup.installer.product/target/repository${line.separator}" file="${target.ini}" append="true" />
-		<echo message="-Doomph.update.url=${git.clone.uri}/sites/org.eclipse.oomph.site/target/repository${line.separator}" file="${target.ini}" append="true" />
+		<echo message="-Doomph.installer.update.url=${git.clone.uri}/products/org.eclipse.oomph.setup.installer.product/target/repository${line.separator}" file="${launcher.ini}" append="true" />
+		<echo message="-Doomph.update.url=${git.clone.uri}/sites/org.eclipse.oomph.site/target/repository${line.separator}" file="${launcher.ini}" append="true" />
 	</target>
 
 	<target name="deploy-for-debug" depends="deploy">
-		<echo message="-Xdebug${line.separator}" file="${target.ini}" append="true" />
-		<echo message="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8123${line.separator}" file="${target.ini}" append="true" />
+		<echo message="-Xdebug${line.separator}" file="${launcher.ini}" append="true" />
+		<echo message="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8123${line.separator}" file="${launcher.ini}" append="true" />
 	</target>
 
 	<target name="execute">
-		<exec executable="${target.exe}" />
+		<exec executable="${launcher.exe}" />
 	</target>
 
 </project>

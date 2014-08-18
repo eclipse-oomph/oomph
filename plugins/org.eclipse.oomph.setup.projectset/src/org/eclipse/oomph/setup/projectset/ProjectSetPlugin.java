@@ -10,14 +10,14 @@
  */
 package org.eclipse.oomph.setup.projectset;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
  * @author Eike Stepper
  */
-public final class ProjectSetPlugin extends AbstractOomphPlugin
+public final class ProjectSetPlugin extends OomphPlugin
 {
   public static final ProjectSetPlugin INSTANCE = new ProjectSetPlugin();
 

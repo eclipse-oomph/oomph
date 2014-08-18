@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.ui;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
@@ -28,9 +28,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * @author Eike Stepper
  */
-public abstract class AbstractOomphUIPlugin extends AbstractOomphPlugin
+public abstract class OomphUIPlugin extends OomphPlugin
 {
-  protected AbstractOomphUIPlugin(ResourceLocator[] delegateResourceLocators)
+  protected OomphUIPlugin(ResourceLocator[] delegateResourceLocators)
   {
     super(delegateResourceLocators);
   }

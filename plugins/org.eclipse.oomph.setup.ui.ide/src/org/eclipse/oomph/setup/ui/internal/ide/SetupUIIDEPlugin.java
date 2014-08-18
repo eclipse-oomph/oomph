@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui.internal.ide;
 
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 /**
  * @author Eike Stepper
  */
-public final class SetupUIIDEPlugin extends AbstractOomphUIPlugin
+public final class SetupUIIDEPlugin extends OomphUIPlugin
 {
   public static final SetupUIIDEPlugin INSTANCE = new SetupUIIDEPlugin();
 

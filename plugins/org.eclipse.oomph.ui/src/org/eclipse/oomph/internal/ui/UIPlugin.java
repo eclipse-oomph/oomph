@@ -11,7 +11,7 @@
 package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.oomph.internal.util.UtilPlugin;
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.ToggleCommandHandler;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -22,7 +22,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Eike Stepper
  */
-public final class UIPlugin extends AbstractOomphUIPlugin
+public final class UIPlugin extends OomphUIPlugin
 {
   public static final UIPlugin INSTANCE = new UIPlugin();
 

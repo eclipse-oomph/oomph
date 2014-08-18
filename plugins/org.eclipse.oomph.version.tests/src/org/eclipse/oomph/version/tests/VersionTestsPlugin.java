@@ -10,14 +10,14 @@
  */
 package org.eclipse.oomph.version.tests;
 
-import org.eclipse.oomph.util.AbstractOomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
  * @author Eike Stepper
  */
-public final class VersionTestsPlugin extends AbstractOomphPlugin
+public final class VersionTestsPlugin extends OomphPlugin
 {
   public static final VersionTestsPlugin INSTANCE = new VersionTestsPlugin();
 

@@ -11,7 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Eike Stepper
  */
-public final class SetupInstallerPlugin extends AbstractOomphUIPlugin
+public final class SetupInstallerPlugin extends OomphUIPlugin
 {
   public static final SetupInstallerPlugin INSTANCE = new SetupInstallerPlugin();
 

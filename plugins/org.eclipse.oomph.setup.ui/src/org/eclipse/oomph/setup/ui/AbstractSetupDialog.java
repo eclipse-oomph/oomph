@@ -11,7 +11,7 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.ui.AbstractDialog;
-import org.eclipse.oomph.ui.AbstractOomphUIPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.swt.widgets.Shell;
 
@@ -20,9 +20,9 @@ import org.eclipse.swt.widgets.Shell;
  */
 public abstract class AbstractSetupDialog extends AbstractDialog
 {
-  public static final String SHELL_TEXT = "Oomph Installer";
+  public static final String SHELL_TEXT = "Oomph-Installer";
 
-  public AbstractSetupDialog(Shell parentShell, String title, int width, int height, AbstractOomphUIPlugin plugin, String help)
+  public AbstractSetupDialog(Shell parentShell, String title, int width, int height, OomphUIPlugin plugin, String help)
   {
     super(parentShell, title, width, height, plugin, help);
   }
