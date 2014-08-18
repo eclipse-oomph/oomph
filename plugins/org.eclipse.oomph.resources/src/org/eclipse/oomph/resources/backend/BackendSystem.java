@@ -14,7 +14,6 @@ import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.resources.ResourcesUtil.ImportResult;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
-import org.eclipse.oomph.util.ReentrantThreadLocal;
 import org.eclipse.oomph.util.SynchronizedCounter;
 
 import org.eclipse.emf.common.util.URI;
@@ -38,8 +37,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Eike Stepper
@@ -54,20 +53,7 @@ public abstract class BackendSystem extends BackendContainer
 
   private final String systemURI; // Store as string to not lock this system in the system registry's weak map.
 
-  private final ReentrantThreadLocal<Boolean> visitorLifecycle = new ReentrantThreadLocal<Boolean>()
-  {
-    @Override
-    protected synchronized void init() throws Exception
-    {
-      beginVisitor();
-    }
-
-    @Override
-    protected synchronized void done() throws Exception
-    {
-      endVisitor();
-    }
-  };
+  private final AtomicInteger visitorCounter = new AtomicInteger();
 
   private VisitorThreadPool visitorThreadPool;
 
@@ -219,14 +205,23 @@ public abstract class BackendSystem extends BackendContainer
 
   protected final void accept(final BackendResource backendResource, final Visitor visitor, final IProgressMonitor monitor) throws Exception
   {
-    visitorLifecycle.call(Boolean.TRUE, new Callable<Object>()
+    synchronized (visitorCounter)
     {
-      public Object call() throws Exception
+      if (visitorCounter.incrementAndGet() == 1)
       {
-        doAccept(backendResource, visitor, monitor);
-        return null;
+        beginVisitor();
       }
-    });
+    }
+
+    doAccept(backendResource, visitor, monitor);
+
+    synchronized (visitorCounter)
+    {
+      if (visitorCounter.decrementAndGet() == 0)
+      {
+        endVisitor();
+      }
+    }
   }
 
   protected void doAccept(BackendResource backendResource, Visitor visitor, IProgressMonitor monitor) throws Exception

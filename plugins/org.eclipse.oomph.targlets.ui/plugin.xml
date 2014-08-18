@@ -36,7 +36,7 @@
    <extension
          point="org.eclipse.pde.ui.targetLocationProvisioners">
       <locationProvider
-            class="org.eclipse.oomph.targlets.internal.ui.NewTargletConatinerWizard"
+            class="org.eclipse.oomph.targlets.internal.ui.NewTargletContainerWizard"
             icon="icons/targlet_container.gif"
             id="org.eclipse.oomph.targlets.TargletProvisioner"
             name="Targlet Container">

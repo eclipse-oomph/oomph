@@ -20,13 +20,13 @@ import org.eclipse.pde.ui.target.ITargetLocationWizard;
 /**
  * @author Eike Stepper
  */
-public class NewTargletConatinerWizard extends Wizard implements ITargetLocationWizard
+public class NewTargletContainerWizard extends Wizard implements ITargetLocationWizard
 {
   private TargletContainer targletContainer;
 
   private NewTargletContainerWizardPage page;
 
-  public NewTargletConatinerWizard()
+  public NewTargletContainerWizard()
   {
     setWindowTitle("Add Targlet Container");
   }

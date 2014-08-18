@@ -117,7 +117,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
   public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
   {
     IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-    TargletEditor.open(page, (TargletContainer)targetLocation);
+    TargletEditor.open(page, ((TargletContainer)targetLocation).getID());
 
     simulateEscapeKey();
     simulateEscapeKey();

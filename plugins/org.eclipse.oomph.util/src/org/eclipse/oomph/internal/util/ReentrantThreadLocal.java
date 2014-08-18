@@ -8,9 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.util;
-
-import org.eclipse.oomph.internal.util.UtilPlugin;
+package org.eclipse.oomph.internal.util;
 
 import java.util.Stack;
 import java.util.concurrent.Callable;
@@ -20,7 +18,7 @@ import java.util.concurrent.Callable;
  */
 public class ReentrantThreadLocal<T>
 {
-  private final ThreadLocal<Stack<T>> OFFLINE = new ThreadLocal<Stack<T>>();
+  private final ThreadLocal<Stack<T>> stacks = new ThreadLocal<Stack<T>>();
 
   public ReentrantThreadLocal()
   {
@@ -28,7 +26,7 @@ public class ReentrantThreadLocal<T>
 
   public T get()
   {
-    Stack<T> stack = OFFLINE.get();
+    Stack<T> stack = stacks.get();
     if (stack == null || stack.isEmpty())
     {
       return null;
@@ -37,9 +35,9 @@ public class ReentrantThreadLocal<T>
     return stack.peek();
   }
 
-  public void begin(T value)
+  public synchronized void begin(T value)
   {
-    Stack<T> stack = OFFLINE.get();
+    Stack<T> stack = stacks.get();
     if (stack == null)
     {
       try
@@ -52,15 +50,15 @@ public class ReentrantThreadLocal<T>
       }
 
       stack = new Stack<T>();
-      OFFLINE.set(stack);
+      stacks.set(stack);
     }
 
     stack.push(value);
   }
 
-  public T end()
+  public synchronized T end()
   {
-    Stack<T> stack = OFFLINE.get();
+    Stack<T> stack = stacks.get();
     if (stack != null)
     {
       int size = stack.size();
@@ -70,7 +68,7 @@ public class ReentrantThreadLocal<T>
 
         if (size == 1)
         {
-          OFFLINE.remove();
+          stacks.remove();
 
           try
           {

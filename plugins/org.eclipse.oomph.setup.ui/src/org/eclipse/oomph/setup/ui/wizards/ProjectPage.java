@@ -217,7 +217,7 @@ public class ProjectPage extends SetupWizardPage
 
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
     collapseAllButton.setToolTipText("Collapse All");
-    collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapseall"));
+    collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
 
     final ToolItem refreshButton = new ToolItem(filterToolBar, SWT.NONE);
     refreshButton.setToolTipText("Refresh");
