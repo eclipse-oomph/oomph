@@ -383,8 +383,12 @@ public class ProfileTransactionImpl implements ProfileTransaction
         return null;
       }
 
-      if (getOperandCount(provisioningPlan) == 0)
+      if (getOperandCount(provisioningPlan) == 3)
       {
+        // TODO Find a better way to detect NOOP situation; ideally by ending up with an empty operands list.
+        // [IInstallableUnit property for artificial_root] org.eclipse.equinox.p2.internal.inclusion.rules = null --> STRICT
+        // [IInstallableUnit property for artificial_root] org.eclipse.equinox.p2.type.root = null --> true
+        // [IInstallableUnit property for org.eclipse.oomph.setup.installer.product] org.eclipse.equinox.p2.internal.inclusion.rules = STRICT --> null
         return null;
       }
 
@@ -408,8 +412,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
             P2CorePlugin.INSTANCE.coreException(status);
 
             profileImpl.setDefinition(profileDefinition);
-            profileImpl.setDelegate(delegate); // TODO Seems redundant
-
             return delegate.getTimestamp() != timestamp;
           }
           finally
