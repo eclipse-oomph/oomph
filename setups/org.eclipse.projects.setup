@@ -217,6 +217,7 @@
     </targlet>
   </setupTask>
   <project href="user:/org.eclipse.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Eclipse.org project catalog'#/"/>
+  <project href="http://git.eclipse.org/c/cdo/cdo.git/plain/plugins/org.eclipse.emf.cdo.releng/CDO.setup#/"/>
   <project href="interim/code.recommenders.setup#/"/>
   <project href="interim/E4Tools.setup#/"/>
   <project href="interim/EGit.setup#/"/>
