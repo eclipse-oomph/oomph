@@ -22,11 +22,11 @@
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
-        id="org.eclipse.m2e.feature.feature.group"/>
+        name="org.eclipse.m2e.feature.feature.group"/>
     <requirement
-        id="org.eclipse.b3.aggregator.editor.feature.feature.group"/>
+        name="org.eclipse.b3.aggregator.editor.feature.feature.group"/>
     <requirement
-        id="org.jboss.tools.m2e.jdt.feature.feature.group"/>
+        name="org.jboss.tools.m2e.jdt.feature.feature.group"/>
     <repository
         url="${xtext.nightly.composite}"/>
     <repository
@@ -51,23 +51,24 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"/>
+      defaultValue="Luna"
+      storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
-        id="org.eclipse.emf.sdk.feature.group"/>
+        name="org.eclipse.emf.sdk.feature.group"/>
     <requirement
-        id="org.eclipse.xtext.sdk.feature.group"/>
+        name="org.eclipse.xtext.sdk.feature.group"/>
     <requirement
-        id="org.eclipse.emf.mwe2.language.sdk.feature.group"/>
+        name="org.eclipse.emf.mwe2.language.sdk.feature.group"/>
     <requirement
-        id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
+        name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
     <requirement
-        id="edu.umd.cs.findbugs.plugin.eclipse.feature.group"/>
+        name="edu.umd.cs.findbugs.plugin.eclipse.feature.group"/>
     <requirement
-        id="org.eclipse.epp.mpc.feature.group"/>
+        name="org.eclipse.epp.mpc.feature.group"/>
     <requirement
-        id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+        name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
     <repository
         url="${xtext.nightly.composite}"/>
     <repository
@@ -254,33 +255,33 @@
         name="Eclipse TP"
         activeRepositoryList="galileo">
       <requirement
-          id="org.eclipse.jdt.feature.group"
+          name="org.eclipse.jdt.feature.group"
           versionRange="[3.5.0,3.6.0)"/>
       <requirement
-          id="org.eclipse.pde.feature.group"
+          name="org.eclipse.pde.feature.group"
           versionRange="[3.5.0,3.6.0)"/>
       <requirement
-          id="org.eclipse.platform.feature.group"
+          name="org.eclipse.platform.feature.group"
           versionRange="[3.5.0,3.6.0)"/>
       <requirement
-          id="org.eclipse.emf.sdk.feature.group"
+          name="org.eclipse.emf.sdk.feature.group"
           versionRange="2.9.0"/>
       <requirement
-          id="de.itemis.xtext.antlr.feature.feature.group"
+          name="de.itemis.xtext.antlr.feature.feature.group"
           versionRange="2.0.0"/>
       <requirement
-          id="org.eclipse.draw2d.feature.group"/>
+          name="org.eclipse.draw2d.feature.group"/>
       <requirement
-          id="org.eclipse.m2e.core"
+          name="org.eclipse.m2e.core"
           versionRange="[1.0.0,1.0.100)"/>
       <requirement
-          id="com.google.guava"
+          name="com.google.guava"
           versionRange="[10.0.1,11.0.0)"/>
       <requirement
-          id="org.objectweb.asm"
+          name="org.objectweb.asm"
           versionRange="5.0.1"/>
       <requirement
-          id="org.junit"/>
+          name="org.junit"/>
       <repositoryList
           name="galileo">
         <repository
@@ -309,9 +310,9 @@
         name="Jdt Annotation"
         activeRepositoryList="juno">
       <requirement
-          id="org.eclipse.jdt.annotation"/>
+          name="org.eclipse.jdt.annotation"/>
       <requirement
-          id="org.junit4"/>
+          name="org.junit4"/>
       <repositoryList
           name="juno">
         <repository
@@ -326,17 +327,17 @@
         name="Project Import"
         activeRepositoryList="galileo">
       <requirement
-          id="org.eclipse.xtext.build.feature.group"/>
+          name="org.eclipse.xtext.build.feature.group"/>
       <requirement
-          id="org.eclipse.xtext.tests.feature.group"/>
+          name="org.eclipse.xtext.tests.feature.group"/>
       <requirement
-          id="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
+          name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
       <requirement
-          id="org.eclipse.emf.test.ecore.xcore.feature.group"/>
+          name="org.eclipse.emf.test.ecore.xcore.feature.group"/>
       <requirement
-          id="org.eclipse.xtext.examples.feature.group"/>
+          name="org.eclipse.xtext.examples.feature.group"/>
       <requirement
-          id="org.eclipse.xtend.tests.feature.group"/>
+          name="org.eclipse.xtend.tests.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.xtext.location}">
         <predicate
@@ -357,13 +358,13 @@
         name="Xtext Target Platform"
         activeRepositoryList="${eclipse.target.platform}">
       <requirement
-          id="org.eclipse.platform.feature.group"/>
+          name="org.eclipse.platform.feature.group"/>
       <requirement
-          id="org.eclipse.jdt.feature.group"/>
+          name="org.eclipse.jdt.feature.group"/>
       <requirement
-          id="org.eclipse.pde.feature.group"/>
+          name="org.eclipse.pde.feature.group"/>
       <requirement
-          id="org.eclipse.m2e.core"/>
+          name="org.eclipse.m2e.core"/>
       <repositoryList
           name="Mars">
         <repository
@@ -671,33 +672,33 @@
         <targlet
             name="Xtext Core">
           <requirement
-              id="org.eclipse.xtext.tests.feature.group"/>
+              name="org.eclipse.xtext.tests.feature.group"/>
           <requirement
-              id="org.eclipse.xtext.build.feature.group"/>
+              name="org.eclipse.xtext.build.feature.group"/>
           <requirement
-              id="org.eclipse.xtext.compatibility.galileo"/>
+              name="org.eclipse.xtext.compatibility.galileo"/>
           <requirement
-              id="org.eclipse.xtext.bootstrap"/>
+              name="org.eclipse.xtext.bootstrap"/>
           <requirement
-              id="org.eclipse.xtext.doc.xdoc"/>
+              name="org.eclipse.xtext.doc.xdoc"/>
           <requirement
-              id="org.eclipse.xtext.language-generator"/>
+              name="org.eclipse.xtext.language-generator"/>
           <requirement
-              id="org.eclipse.xtext.ui.codetemplates.tests"/>
+              name="org.eclipse.xtext.ui.codetemplates.tests"/>
           <requirement
-              id="org.eclipse.xtext.contributor"/>
+              name="org.eclipse.xtext.contributor"/>
           <requirement
-              id="org.eclipse.xtext.xtext.ui.examples-container"/>
+              name="org.eclipse.xtext.xtext.ui.examples-container"/>
           <requirement
-              id="org.eclipse.xtend.bootstrapdoc"/>
+              name="org.eclipse.xtend.bootstrapdoc"/>
           <requirement
-              id="org.eclipse.xtend.doc.xdoc"/>
+              name="org.eclipse.xtend.doc.xdoc"/>
           <requirement
-              id="org.eclipse.xtend.tests.feature.group"/>
+              name="org.eclipse.xtend.tests.feature.group"/>
           <requirement
-              id="org.eclipse.xtend.performance.tests"/>
+              name="org.eclipse.xtend.performance.tests"/>
           <requirement
-              id="org.eclipse.xtend.examples-container"/>
+              name="org.eclipse.xtend.examples-container"/>
           <sourceLocator
               rootFolder="${git.clone.xtext.location}"/>
           <sourceLocator
@@ -713,23 +714,23 @@
         <targlet
             name="Xtext Examples Not Referenced Anywhere">
           <requirement
-              id="org.eclipse.xtext.example.arithmetics.tests"/>
+              name="org.eclipse.xtext.example.arithmetics.tests"/>
           <requirement
-              id="org.eclipse.xtext.example.arithmetics.ui"/>
+              name="org.eclipse.xtext.example.arithmetics.ui"/>
           <requirement
-              id="org.eclipse.xtext.example.fowlerdsl.ui"/>
+              name="org.eclipse.xtext.example.fowlerdsl.ui"/>
           <requirement
-              id="org.eclipse.xtext.example.tutorial"/>
+              name="org.eclipse.xtext.example.tutorial"/>
           <requirement
-              id="org.eclipse.xtext.example.gmf"/>
+              name="org.eclipse.xtext.example.gmf"/>
           <requirement
-              id="org.eclipse.xtext.example.gmf.edit"/>
+              name="org.eclipse.xtext.example.gmf.edit"/>
           <requirement
-              id="org.eclipse.xtext.example.gmf.ui"/>
+              name="org.eclipse.xtext.example.gmf.ui"/>
           <requirement
-              id="org.eclipse.xtext.xtext.ui.examples"/>
+              name="org.eclipse.xtext.xtext.ui.examples"/>
           <requirement
-              id="xbase.tutorial"/>
+              name="xbase.tutorial"/>
           <sourceLocator
               rootFolder="${git.clone.xtext.location/examples/org.eclipse.xtext.xtext.ui.examples/contents}"
               locateNestedProjects="true"/>
@@ -740,11 +741,11 @@
         <targlet
             name="Xtend Examples Not Referenced Anywhere">
           <requirement
-              id="xtend-examples"/>
+              name="xtend-examples"/>
           <requirement
-              id="xtend-annotation-examples-client"/>
+              name="xtend-annotation-examples-client"/>
           <requirement
-              id="xtend-annotation-examples"/>
+              name="xtend-annotation-examples"/>
           <sourceLocator
               rootFolder="${git.clone.xtext.location/examples/org.eclipse.xtend.examples-container/contents}"
               locateNestedProjects="true"/>
@@ -756,9 +757,9 @@
         <targlet
             name="Xtext Examples Not That Can't be Materialize with Bad Dependencies">
           <requirement
-              id="org.eclipse.xtext.example.gmf.diagram"/>
+              name="org.eclipse.xtext.example.gmf.diagram"/>
           <requirement
-              id="org.eclipse.xtext.example.gmf.diagram.extensions"/>
+              name="org.eclipse.xtext.example.gmf.diagram.extensions"/>
           <sourceLocator
               rootFolder="${git.clone.xtext.location/examples/org.eclipse.xtext.xtext.ui.examples/contents}"
               locateNestedProjects="true"/>
@@ -773,11 +774,11 @@
         <targlet
             name="Xtext Examples That Have Errors When Materialized">
           <requirement
-              id="org.eclipse.xtext.gmf.glue"/>
+              name="org.eclipse.xtext.gmf.glue"/>
           <requirement
-              id="org.eclipse.xtext.example.tutorial.tests"/>
+              name="org.eclipse.xtext.example.tutorial.tests"/>
           <requirement
-              id="org.eclipse.xtext.example.tutorial.ui"/>
+              name="org.eclipse.xtext.example.tutorial.ui"/>
           <sourceLocator
               rootFolder="${git.clone.xtext.location/examples/org.eclipse.xtext.xtext.ui.examples/contents}"
               locateNestedProjects="true"/>
@@ -792,16 +793,16 @@
         <targlet
             name="Xtext Problem Bundles with dependencies that can't be resolved">
           <requirement
-              id="org.eclipse.xtext.releng">
+              name="org.eclipse.xtext.releng">
             <annotation
                 source="This has the problem that it requires a Mac-specific fragment."/>
           </requirement>
           <requirement
-              id="org.xtext.sevenlanguages.doc.xdoc"/>
+              name="org.xtext.sevenlanguages.doc.xdoc"/>
           <requirement
-              id="xtend.website.generator"/>
+              name="xtend.website.generator"/>
           <requirement
-              id="xtext.website.generator"/>
+              name="xtext.website.generator"/>
           <sourceLocator
               rootFolder="${git.clone.xtext.location}"/>
           <repositoryList

@@ -213,7 +213,8 @@
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform"
         defaultValue="None"
-        label="Target Platform">
+        storageURI="scope://Workspace"
+        label="${scope.project.label} Target Platform">
       <choice
           value="Mars"
           label="Eclipse Mars - 4.5"/>
@@ -238,7 +239,7 @@
       <choice
           value="None"
           label="None"/>
-      <description>Choose the compatibly level for the target platform.</description>
+      <description>Choose the compatibly level of the target platform for ${scope.project.label}</description>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

@@ -127,7 +127,8 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna">
+      defaultValue="Luna"
+      storageURI="scope://Workspace">
     <description>Specifies a default value for the variable that's originally defined in the Eclipse.org project catalog.</description>
   </setupTask>
   <stream name="master">
