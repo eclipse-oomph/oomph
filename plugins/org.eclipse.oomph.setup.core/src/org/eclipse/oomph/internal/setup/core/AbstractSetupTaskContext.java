@@ -21,21 +21,16 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.util.OS;
+import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.StringUtil;
 
-import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
-import org.eclipse.equinox.security.storage.provider.IProviderHints;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -45,13 +40,11 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public abstract class AbstractSetupTaskContext implements SetupTaskContext, SetupProperties
+public abstract class AbstractSetupTaskContext extends StringExpander implements SetupTaskContext, SetupProperties
 {
   private static final String packageNameShouldBe = "!!!!!!!!!!!! org.eclipse.oomph.setup.internal.core !!!!!!!!!!";
 
   private static final Map<String, StringFilter> STRING_FILTER_REGISTRY = new HashMap<String, StringFilter>();
-
-  protected static final String SECURE_STORAGE_NODE = "org.eclipse.oomph.setup";
 
   private SetupPrompter prompter;
 
@@ -70,8 +63,6 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
   private URIConverter uriConverter;
 
   private Map<Object, Object> map = new LinkedHashMap<Object, Object>();
-
-  private ISecurePreferences securePreferences;
 
   protected AbstractSetupTaskContext(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext)
   {
@@ -291,69 +282,7 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
     return null;
   }
 
-  protected String lookupSecurely(String key)
-  {
-    String newValue = null;
-
-    if (EMFPlugin.IS_ECLIPSE_RUNNING)
-    {
-      ISecurePreferences prefs = getSecurePreferences();
-      if (prefs != null && prefs.nodeExists(SECURE_STORAGE_NODE))
-      {
-        ISecurePreferences node = prefs.node(SECURE_STORAGE_NODE);
-
-        try
-        {
-          newValue = node.get(key, null);
-        }
-        catch (StorageException ex)
-        {
-          log(ex);
-        }
-      }
-    }
-
-    return newValue;
-  }
-
-  protected void saveSecurePreference(String name, String value)
-  {
-    ISecurePreferences prefs = getSecurePreferences();
-    if (prefs != null)
-    {
-      ISecurePreferences node = prefs.node(SECURE_STORAGE_NODE);
-
-      try
-      {
-        node.put(name, value, true);
-      }
-      catch (StorageException ex)
-      {
-        log(ex);
-      }
-    }
-  }
-
-  protected ISecurePreferences getSecurePreferences()
-  {
-    if (securePreferences == null)
-    {
-      Map<Object, Object> options = new HashMap<Object, Object>();
-      options.put(IProviderHints.PROMPT_USER, Boolean.FALSE);
-
-      try
-      {
-        securePreferences = SecurePreferencesFactory.open(null, options);
-      }
-      catch (IOException ex)
-      {
-        log(ex);
-      }
-    }
-
-    return securePreferences;
-  }
-
+  @Override
   protected String filter(String value, String filterName)
   {
     StringFilter filter = STRING_FILTER_REGISTRY.get(filterName);
@@ -386,6 +315,14 @@ public abstract class AbstractSetupTaskContext implements SetupTaskContext, Setu
         }
 
         return URI.decode(uri.lastSegment());
+      }
+    });
+
+    STRING_FILTER_REGISTRY.put("preferenceNode", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return value.replaceAll("/", "\\\\2f");
       }
     });
 

@@ -13,7 +13,6 @@ package org.eclipse.oomph.setup.presentation.templates;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Project;
@@ -23,6 +22,7 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.editor.ProjectTemplate;
 import org.eclipse.oomph.setup.ui.LabelDecorator;
 import org.eclipse.oomph.setup.ui.PropertyField;
+import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -513,7 +513,7 @@ public class GenericProjectTemplate extends ProjectTemplate
 
     StringBuilder result = new StringBuilder();
     int previous = 0;
-    for (Matcher matcher = SetupTaskPerformer.STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
+    for (Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
     {
       result.append(string.substring(previous, matcher.start()));
       String key = matcher.group(1);

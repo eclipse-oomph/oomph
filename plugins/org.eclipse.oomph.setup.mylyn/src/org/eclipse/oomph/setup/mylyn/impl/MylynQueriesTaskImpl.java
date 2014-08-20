@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
@@ -547,17 +548,18 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
       {
         context.log("Adding " + connectorKind + " repository: " + repositoryURL);
         repository = new TaskRepository(connectorKind, repositoryURL);
-
-        String userID = task.getUserID();
-        String password = context.expandString(task.getPassword(), true);
-        if (!StringUtil.isEmpty(userID) && !StringUtil.isEmpty(password))
-        {
-          AuthenticationCredentials credentials = new AuthenticationCredentials(userID, password);
-          repository.setCredentials(AuthenticationType.REPOSITORY, credentials, true);
-        }
-
-        TasksUi.getRepositoryManager().addRepository(repository);
+        repository.setCredentials(AuthenticationType.PROXY, null, true);
       }
+
+      String userID = task.getUserID();
+      String password = PreferencesUtil.decrypt(task.getPassword());
+      if (!StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password))
+      {
+        AuthenticationCredentials credentials = new AuthenticationCredentials(userID, password);
+        repository.setCredentials(AuthenticationType.REPOSITORY, credentials, true);
+      }
+
+      TasksUi.getRepositoryManager().addRepository(repository);
 
       for (Map.Entry<Query, RepositoryQuery> entry : repositoryQueries.entrySet())
       {

@@ -10,20 +10,13 @@
  */
 package org.eclipse.oomph.internal.setup.core;
 
-import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.osgi.framework.BundleContext;
-
-import java.io.IOException;
-import java.util.Collections;
 
 /**
  * @author Eike Stepper
@@ -63,26 +56,6 @@ public final class SetupCorePlugin extends OomphPlugin
     public void start(BundleContext context) throws Exception
     {
       super.start(context);
-
-      int xxx;
-      // This is only temporary to ensure that references from the user.setup are generally absolute URIs.
-      ResourceSet resourceSet = SetupUtil.createResourceSet();
-      if (resourceSet.getURIConverter().exists(SetupContext.USER_SETUP_LOCATION_URI, null))
-      {
-        Resource resource = BaseUtil.loadResourceSafely(resourceSet, SetupContext.USER_SETUP_LOCATION_URI);
-        if (!resource.getContents().isEmpty())
-        {
-          resource.setURI(SetupContext.USER_SETUP_URI);
-          try
-          {
-            resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
-          }
-          catch (IOException ex)
-          {
-            log(ex);
-          }
-        }
-      }
     }
   }
 }

@@ -18,7 +18,8 @@ import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
+import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 
@@ -48,7 +49,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.provider.IProviderHints;
 
 import java.io.File;
@@ -74,19 +74,8 @@ public final class SetupUtil
         org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
     UIServices uiServices = (UIServices)agent.getService(UIServices.SERVICE_NAME);
 
-    Map<Object, Object> options = new HashMap<Object, Object>();
-    options.put(IProviderHints.PROMPT_USER, Boolean.FALSE);
-
-    ISecurePreferences securePreferences = null;
-    try
-    {
-      ISecurePreferences root = SecurePreferencesFactory.open(null, options);
-      securePreferences = root.node("org.eclipse.oomph").node("hosts");
-    }
-    catch (IOException ex)
-    {
-      SetupCorePlugin.INSTANCE.log(ex);
-    }
+    ISecurePreferences root = PreferencesUtil.getSecurePreferences();
+    ISecurePreferences securePreferences = root.node("org.eclipse.oomph").node("hosts");
 
     AUTHORIZATION_HANDLER = new ECFURIHandlerImpl.AuthorizationHandlerImpl(uiServices, securePreferences);
   }
@@ -117,7 +106,8 @@ public final class SetupUtil
     EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
     uriHandlers.add(4, new UserURIHandlerImpl());
     uriHandlers.add(5, new ProductCatalogURIHandlerImpl());
-    uriHandlers.add(6, new ECFURIHandlerImpl());
+    uriHandlers.add(6, new PreferencesURIHandlerImpl());
+    uriHandlers.add(7, new ECFURIHandlerImpl());
 
     resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_AUTHORIZATION_HANDLER, AUTHORIZATION_HANDLER);
 

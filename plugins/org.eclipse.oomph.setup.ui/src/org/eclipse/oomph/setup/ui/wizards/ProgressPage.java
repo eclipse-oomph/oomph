@@ -648,6 +648,8 @@ public class ProgressPage extends SetupWizardPage
     {
       workspaceResource.setURI(workspaceResourceURI);
     }
+
+    performer.savePasswords();
   }
 
   private void setCancelState(boolean enabled)

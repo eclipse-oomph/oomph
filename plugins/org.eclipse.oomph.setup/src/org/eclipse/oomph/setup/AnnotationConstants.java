@@ -25,6 +25,8 @@ public final class AnnotationConstants
 
   public static final String ANNOTATION_FEATURE_SUBSTITUTION = "http://www.eclipse.org/oomph/setup/FeatureSubstitution";
 
+  public static final String ANNOTATION_PASSWORD_VERIFICATION = "http://www.eclipse.org/oomph/setup/PasswordVerification";
+
   public static final String KEY_INHERIT = "inherit";
 
   public static final String KEY_TARGET = "target";

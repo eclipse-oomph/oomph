@@ -10,12 +10,121 @@
  */
 package org.eclipse.oomph.setup.util;
 
+import java.io.File;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Eike Stepper
  */
-public interface StringExpander
+public abstract class StringExpander
 {
-  public String expandString(String string);
+  public static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
 
-  public String expandString(String string, boolean secure);
+  private static boolean NEEDS_PATH_SEPARATOR_CONVERSION = File.separatorChar == '\\';
+
+  protected static String resolve(StringExpander stringExpander, String key)
+  {
+    return stringExpander.resolve(key);
+  }
+
+  protected static boolean isUnexpanded(StringExpander stringExpander, String key)
+  {
+    return stringExpander.isUnexpanded(key);
+  }
+
+  protected static String filter(StringExpander stringExpander, String value, String filterName)
+  {
+    return stringExpander.filter(value, filterName);
+  }
+
+  protected abstract String resolve(String key);
+
+  protected abstract boolean isUnexpanded(String key);
+
+  protected abstract String filter(String value, String filterName);
+
+  public String expandString(String string)
+  {
+    return expandString(string, null);
+  }
+
+  public String expandString(String string, Set<String> keys)
+  {
+    if (string == null)
+    {
+      return null;
+    }
+
+    StringBuilder result = new StringBuilder();
+    int previous = 0;
+    boolean unresolved = false;
+    for (Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
+    {
+      result.append(string.substring(previous, matcher.start()));
+      String key = matcher.group(1);
+      if ("$".equals(key))
+      {
+        result.append('$');
+      }
+      else
+      {
+        key = matcher.group(2);
+        String suffix = matcher.group(5);
+        if (NEEDS_PATH_SEPARATOR_CONVERSION)
+        {
+          suffix = suffix.replace('/', File.separatorChar);
+        }
+
+        boolean isUnexpanded = isUnexpanded(key);
+        String value = isUnexpanded ? null : resolve(key);
+        if (value == null)
+        {
+          if (keys != null)
+          {
+            unresolved = true;
+
+            if (!isUnexpanded)
+            {
+              keys.add(key);
+            }
+          }
+          else if (!unresolved)
+          {
+            result.append(matcher.group());
+          }
+        }
+
+        if (value != null)
+        {
+          String filters = matcher.group(4);
+          if (filters != null)
+          {
+            for (String filterName : filters.split("\\|"))
+            {
+              value = filter(value, filterName);
+            }
+          }
+
+          if (!unresolved)
+          {
+            result.append(value);
+            result.append(suffix);
+          }
+        }
+      }
+
+      previous = matcher.end();
+    }
+
+    if (unresolved)
+    {
+      return null;
+    }
+
+    result.append(string.substring(previous));
+    return result.toString();
+  }
+
 }

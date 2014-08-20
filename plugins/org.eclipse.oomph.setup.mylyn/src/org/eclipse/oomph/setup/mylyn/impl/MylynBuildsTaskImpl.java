@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
@@ -535,7 +536,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
           {
             String serverURL = task.getServerURL();
             String userID = task.getUserID();
-            String password = context.expandString(task.getPassword(), true);
+            String password = PreferencesUtil.decrypt(task.getPassword());
 
             context.log("Adding " + connectorKind + " server: " + serverURL);
 
@@ -544,7 +545,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
             server.getAttributes().put("id", serverURL);
             server.getAttributes().put("url", serverURL);
 
-            boolean authenticate = !StringUtil.isEmpty(userID) && !StringUtil.isEmpty(password);
+            boolean authenticate = !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password);
             if (authenticate)
             {
               server.getAttributes().put("org.eclipse.mylyn.tasklist.repositories.enabled", "true");
@@ -559,6 +560,8 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
               UserCredentials credentials = new UserCredentials(userID, password, true);
               repositoryLocation.setCredentials(AuthenticationType.REPOSITORY, credentials);
             }
+
+            repositoryLocation.setProxy(null);
 
             server.setLocation(repositoryLocation);
 

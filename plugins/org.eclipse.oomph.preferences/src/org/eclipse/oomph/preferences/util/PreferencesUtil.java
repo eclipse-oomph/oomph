@@ -13,6 +13,8 @@ package org.eclipse.oomph.preferences.util;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.Property;
+import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.emf.common.notify.Notifier;
@@ -21,7 +23,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.DESCipherImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
@@ -37,7 +42,11 @@ import org.eclipse.equinox.security.storage.provider.IProviderHints;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,13 +63,29 @@ import java.util.WeakHashMap;
  */
 public final class PreferencesUtil
 {
+  private static final Cipher CIPHER = new Cipher();
+
   /**
    * A resource load option to load an instance using {@link #getRootPreferenceNode(boolean) PreferencesUtil.getRootPreferenceNode(true)}.
    * The resource must be {@link Resource#unload() unloaded}, to avoid dangling listeners.
    */
   public static final String OPTION_SYNCHRONIZED_PREFERENCES = "SYNCHRONIZED_PREFERENCES";
 
-  public static final URI ROOT_PREFERENCE_NODE_URI = URI.createURI("preference:/");
+  public static final String BUNDLE_DEFAULTS_NODE = "bundle_defaults";
+
+  public static final String PREFERENCE_SCHEME = "preference";
+
+  public static final URI ROOT_PREFERENCE_NODE_URI = URI.createURI(PREFERENCE_SCHEME + ":/");
+
+  public static final String DEFAULT_NODE = "default";
+
+  public static final String CONFIRGURATION_NODE = "configuration";
+
+  public static final String INSTANCE_NODE = "instance";
+
+  public static final String PROJECT_NODE = "project";
+
+  public static final String SECURE_NODE = "secure";
 
   private static final IEclipsePreferences ROOT = Platform.getPreferencesService().getRootNode();
 
@@ -222,7 +247,7 @@ public final class PreferencesUtil
     traverse(root, ROOT, isSynchronized);
 
     int index = 0;
-    for (String name : new String[] { "bundle_defaults", "default", "configuration", "instance", "project" })
+    for (String name : new String[] { BUNDLE_DEFAULTS_NODE, DEFAULT_NODE, CONFIRGURATION_NODE, INSTANCE_NODE, PROJECT_NODE })
     {
       PreferenceNode node = root.getNode(name);
       if (node != null)
@@ -245,7 +270,7 @@ public final class PreferencesUtil
       }
     }
 
-    secureRoot.setName("secure");
+    secureRoot.setName(SECURE_NODE);
     root.getChildren().add(0, secureRoot);
 
     return root;
@@ -279,7 +304,7 @@ public final class PreferencesUtil
       {
         result.addAll(reconcile(child, (IEclipsePreferences)preferences.node(name)));
       }
-      else if (preferences == ROOT && "secure".equals(name))
+      else if (preferences == ROOT && SECURE_NODE.equals(name))
       {
         result.addAll(reconcile(child, SecurePreferenceWapper.create(getSecurePreferences())));
       }
@@ -389,7 +414,7 @@ public final class PreferencesUtil
       {
         return (IEclipsePreferences)parentPreferences.node(name);
       }
-      else if (parentPreferences == ROOT && "secure".equals(name))
+      else if (parentPreferences == ROOT && SECURE_NODE.equals(name))
       {
         return SecurePreferenceWapper.create(getSecurePreferences());
       }
@@ -507,6 +532,16 @@ public final class PreferencesUtil
     }
 
     return null;
+  }
+
+  public static String encrypt(String value)
+  {
+    return CIPHER.encrypt(value);
+  }
+
+  public static String decrypt(String value)
+  {
+    return CIPHER.decrypt(value);
   }
 
   public static class PreferenceProperty
@@ -1018,7 +1053,8 @@ public final class PreferencesUtil
       String name = preferences.name();
       if (name == null)
       {
-        builder.append("/secure");
+        builder.append('/');
+        builder.append(SECURE_NODE);
       }
       else
       {
@@ -1032,6 +1068,67 @@ public final class PreferencesUtil
     public String toString()
     {
       return toString(preferences).toString();
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class Cipher extends DESCipherImpl
+  {
+    public Cipher()
+    {
+      super(EcoreUtil.generateUUID());
+    }
+
+    public String encrypt(String value)
+    {
+      if (value == null)
+      {
+        return null;
+      }
+      else if ("".equals(value))
+      {
+        return "";
+      }
+
+      try
+      {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        OutputStream out = encrypt(bytes);
+        out.write(value.getBytes());
+        out.close();
+        return XMLTypeFactory.eINSTANCE.convertBase64Binary(bytes.toByteArray());
+      }
+      catch (Exception ex)
+      {
+        throw new IORuntimeException(ex);
+      }
+    }
+
+    public String decrypt(String value)
+    {
+      if (value == null)
+      {
+        return null;
+      }
+      else if ("".equals(value))
+      {
+        return "";
+      }
+
+      ByteArrayInputStream byteValue = new ByteArrayInputStream(XMLTypeFactory.eINSTANCE.createBase64Binary(value));
+      try
+      {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        InputStream in = decrypt(byteValue);
+        IOUtil.copy(in, bytes);
+        return new String(bytes.toByteArray());
+      }
+      catch (Exception ex)
+      {
+        throw new IORuntimeException(ex);
+      }
     }
   }
 }

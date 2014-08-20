@@ -11,6 +11,9 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
+import org.eclipse.oomph.internal.setup.core.util.Authenticator;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
@@ -21,7 +24,11 @@ import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -47,7 +54,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -77,24 +86,24 @@ public abstract class PropertyField
     return field;
   }
 
-  public static PropertyField createField(VariableType type, List<VariableChoice> choices)
+  public static PropertyField createField(VariableType type, List<? extends VariableChoice> choices)
   {
     switch (type)
     {
       case FOLDER:
-        PropertyField.FileField fileField = new PropertyField.FileField(choices);
+        PropertyField.FileField fileField = new FileField(choices);
         fileField.setDialogText("Folder Selection");
         fileField.setDialogMessage("Select a folder.");
         return fileField;
 
       case CONTAINER:
-        PropertyField.ContainerField containerField = new PropertyField.ContainerField(choices);
+        PropertyField.ContainerField containerField = new ContainerField(choices);
         containerField.setDialogText("Folder Selection");
         containerField.setDialogMessage("Select a folder.");
         return containerField;
 
       case TEXT:
-        PropertyField.TextField textField = new PropertyField.TextField(choices)
+        PropertyField.TextField textField = new TextField(choices)
         {
           @Override
           protected Text createText(Composite parent, int style)
@@ -106,10 +115,10 @@ public abstract class PropertyField
         return textField;
 
       case PASSWORD:
-        return new PropertyField.TextField(true);
+        return new AuthenticatedField();
     }
 
-    return new PropertyField.TextField(choices);
+    return new TextField(choices);
   }
 
   private final GridData labelGridData = new GridData(SWT.RIGHT, SWT.TOP, false, false);
@@ -430,7 +439,7 @@ public abstract class PropertyField
 
     private boolean linked = true;
 
-    private List<VariableChoice> choices;
+    private List<? extends VariableChoice> choices;
 
     public TextField()
     {
@@ -452,17 +461,17 @@ public abstract class PropertyField
       this(labelText, secret, null);
     }
 
-    public TextField(List<VariableChoice> choices)
+    public TextField(List<? extends VariableChoice> choices)
     {
       this(null, choices);
     }
 
-    public TextField(String labelText, List<VariableChoice> choices)
+    public TextField(String labelText, List<? extends VariableChoice> choices)
     {
       this(labelText, false, choices);
     }
 
-    private TextField(String labelText, boolean secret, List<VariableChoice> choices)
+    private TextField(String labelText, boolean secret, List<? extends VariableChoice> choices)
     {
       super(labelText);
       this.secret = secret;
@@ -530,7 +539,7 @@ public abstract class PropertyField
     @Override
     protected String getControlValue()
     {
-      return text != null ? text.getText() : comboViewer.getCombo().getText();
+      return text != null ? secret ? PreferencesUtil.encrypt(text.getText()) : text.getText() : comboViewer.getCombo().getText();
     }
 
     @Override
@@ -538,7 +547,7 @@ public abstract class PropertyField
     {
       if (text != null)
       {
-        text.setText(value);
+        text.setText(secret ? PreferencesUtil.decrypt(value) : value);
       }
       else
       {
@@ -654,6 +663,11 @@ public abstract class PropertyField
         public void modifyText(ModifyEvent e)
         {
           String value = text.getText();
+          if (secret)
+          {
+            value = PreferencesUtil.encrypt(value);
+          }
+
           if (!value.equals(getValue()))
           {
             setValue(value);
@@ -747,7 +761,7 @@ public abstract class PropertyField
       super(labelText, secret);
     }
 
-    public TextButtonField(String labelText, List<VariableChoice> choices)
+    public TextButtonField(String labelText, List<? extends VariableChoice> choices)
     {
       super(labelText, choices);
     }
@@ -807,12 +821,12 @@ public abstract class PropertyField
       this(labelText, null);
     }
 
-    public FileField(List<VariableChoice> choices)
+    public FileField(List<? extends VariableChoice> choices)
     {
       this(null, choices);
     }
 
-    public FileField(String labelText, List<VariableChoice> choices)
+    public FileField(String labelText, List<? extends VariableChoice> choices)
     {
       super(labelText, choices);
       setButtonText("Browse...");
@@ -886,12 +900,12 @@ public abstract class PropertyField
       this(labelText, null);
     }
 
-    public ContainerField(List<VariableChoice> choices)
+    public ContainerField(List<? extends VariableChoice> choices)
     {
       this(null, choices);
     }
 
-    public ContainerField(String labelText, List<VariableChoice> choices)
+    public ContainerField(String labelText, List<? extends VariableChoice> choices)
     {
       super(labelText, choices);
       setButtonText("Browse...");
@@ -954,6 +968,82 @@ public abstract class PropertyField
       }
 
       return null;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class AuthenticatedField extends TextButtonField
+  {
+    private Set<Authenticator> authenticators = new LinkedHashSet<Authenticator>();
+
+    public AuthenticatedField()
+    {
+      super(true);
+      setButtonText("Authenticate...");
+    }
+
+    public void clear()
+    {
+      authenticators.clear();
+      getHelper().setEnabled(false);
+    }
+
+    public void addAll(Set<? extends Authenticator> authenticators)
+    {
+      this.authenticators.addAll(authenticators);
+      getHelper().setEnabled(!this.authenticators.isEmpty());
+
+      StringBuilder toolTip = new StringBuilder();
+      for (Authenticator authenticator : this.authenticators)
+      {
+        if (toolTip.length() != 0)
+        {
+          toolTip.append("\n");
+        }
+
+        toolTip.append(authenticator.getMessage(IStatus.INFO));
+      }
+
+      ((Button)getHelper()).setToolTipText(toolTip.toString());
+    }
+
+    @Override
+    protected void helperButtonSelected(SelectionEvent e)
+    {
+      String pluginID = SetupCorePlugin.INSTANCE.getSymbolicName();
+      MultiStatus status = new MultiStatus(pluginID, 0, "Authentication Status", null);
+      for (Authenticator authenticator : authenticators)
+      {
+        int severity = authenticator.validate();
+        status.add(new Status(severity == IStatus.OK ? IStatus.INFO : severity, pluginID, authenticator.getMessage(severity)));
+      }
+
+      IStatus finalStatus = status;
+      switch (status.getSeverity())
+      {
+        case IStatus.INFO:
+        {
+          status = new MultiStatus(pluginID, 0, "The password is successfully authenticated", null);
+          status.addAll(finalStatus);
+          break;
+        }
+        case IStatus.WARNING:
+        {
+          status = new MultiStatus(pluginID, 0, "The password cannot be authenticated", null);
+          status.addAll(finalStatus);
+          break;
+        }
+        case IStatus.ERROR:
+        {
+          status = new MultiStatus(pluginID, 0, "The password is invalid", null);
+          status.addAll(finalStatus);
+          break;
+        }
+      }
+
+      ErrorDialog.openError(getHelper().getShell(), "Authentication Status", null, status);
     }
   }
 

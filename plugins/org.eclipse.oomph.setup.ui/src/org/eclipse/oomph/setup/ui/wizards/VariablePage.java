@@ -14,6 +14,8 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
+import org.eclipse.oomph.internal.setup.core.util.Authenticator;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -25,6 +27,7 @@ import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.LicenseDialog;
 import org.eclipse.oomph.setup.ui.PropertyField;
+import org.eclipse.oomph.setup.ui.PropertyField.AuthenticatedField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
@@ -103,6 +106,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   private boolean fullPrompt;
 
   private boolean recursiveValidate;
+
+  private boolean updating;
 
   private Set<SetupTaskPerformer> incompletePerformers = new LinkedHashSet<SetupTaskPerformer>();
 
@@ -198,7 +203,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       fieldHolder.clear();
     }
 
-    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers)
+    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers.isEmpty() ? Collections.singleton(performer) : incompletePerformers)
     {
       List<VariableTask> variables = setupTaskPerformer.getUnresolvedVariables();
       for (VariableTask variable : variables)
@@ -206,11 +211,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         VariableTask ruleVariable = setupTaskPerformer.getRuleVariable(variable);
         if (ruleVariable == null)
         {
-          manager.getFieldHolder(variable, true);
+          manager.getFieldHolder(variable, true, false);
         }
         else
         {
-          FieldHolder fieldHolder = manager.getFieldHolder(ruleVariable, true);
+          FieldHolder fieldHolder = manager.getFieldHolder(ruleVariable, true, false);
           fieldHolder.add(variable);
           manager.associate(variable, fieldHolder);
         }
@@ -233,7 +238,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
               initialValue = value;
             }
           }
-          else if (initialDefaultValue == null)
+
+          if (initialDefaultValue == null)
           {
             String defaultValue = variable.getDefaultValue();
             if (!StringUtil.isEmpty(defaultValue))
@@ -254,12 +260,25 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
     }
 
+    try
+    {
+      for (FieldHolder fieldHolder : manager)
+      {
+        updating = true;
+        fieldHolder.update();
+      }
+    }
+    finally
+    {
+      updating = false;
+    }
+
     for (FieldHolder fieldHolder : manager)
     {
       fieldHolder.recordInitialValue();
     }
 
-    // Determine the URIs of all the variables actually being .
+    // Determine the URIs of all the variables actually being used.
     Set<URI> uris = new HashSet<URI>();
     if (performer != null)
     {
@@ -279,14 +298,13 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     Composite parent = composite.getParent();
     parent.setRedraw(false);
 
-    // Determine an appropriate field order.
-
     List<SetupTaskPerformer> allPerformers = new ArrayList<SetupTaskPerformer>(allPromptedPerfomers);
     if (performer != null)
     {
       allPerformers.add(0, performer);
     }
 
+    // Determine an appropriate field order.
     manager.reorder(allPerformers);
 
     FieldHolder firstField = null;
@@ -424,9 +442,18 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), SetupContext.createUserOnly(getResourceSet()).getUser()));
       setPageComplete(false);
       validate();
-      if (forward && getPreviousPage() == null && isPageComplete())
+      if (forward && getPreviousPage() == null)
       {
-        advanceToNextPage();
+        UIUtil.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            if (isPageComplete())
+            {
+              advanceToNextPage();
+            }
+          }
+        });
       }
     }
   }
@@ -474,15 +501,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         workspaceResource.setURI(workspaceResourceURI);
       }
 
-      // try
-      // {
-      // copiedUser.eResource().save(System.err, null);
-      // }
-      // catch (IOException ex)
-      // {
-      // ex.printStackTrace();
-      // }
-
       unresolvedVariables.clear();
 
       getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), copiedUser));
@@ -496,13 +514,22 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   public String getValue(VariableTask variable)
   {
-    FieldHolder fieldHolder = manager.getFieldHolder(variable, false);
-    if (fieldHolder != null)
+    FieldHolder fieldHolder = manager.getFieldHolder(variable, false, true);
+    if (fieldHolder != null && (updating || fieldHolder.isDirty()))
     {
       String value = fieldHolder.getValue();
       if (!"".equals(value))
       {
         return value;
+      }
+    }
+
+    if (updating && performer != null)
+    {
+      Object value = performer.getMap().get(variable.getName());
+      if (value != null)
+      {
+        return value.toString();
       }
     }
 
@@ -522,7 +549,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
       for (VariableTask variable : unresolvedVariables)
       {
-        FieldHolder fieldHolder = manager.getFieldHolder(variable, false);
+        FieldHolder fieldHolder = manager.getFieldHolder(variable, false, true);
         if (fieldHolder != null)
         {
           String value = fieldHolder.getValue();
@@ -610,7 +637,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public String getValue()
     {
-      return field == null ? "" : field.getValue();
+      return field == null ? initialValue : field.getValue();
     }
 
     public void setValue(String value)
@@ -625,12 +652,18 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public Set<VariableTask> getVariables()
     {
-      return variables;
+      return Collections.unmodifiableSet(variables);
     }
 
     public void clear()
     {
       variables.clear();
+
+      if (field instanceof AuthenticatedField)
+      {
+        AuthenticatedField authenticatedField = (AuthenticatedField)field;
+        authenticatedField.clear();
+      }
     }
 
     public void add(VariableTask variable)
@@ -641,6 +674,45 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         if ("".equals(value))
         {
           variable.setValue(value);
+        }
+      }
+    }
+
+    public void update()
+    {
+      if (field instanceof AuthenticatedField)
+      {
+        AuthenticatedField authenticatedField = (AuthenticatedField)field;
+        String value = field.getValue();
+        Set<Authenticator> allAuthenticators = new LinkedHashSet<Authenticator>();
+        for (VariableTask variable : variables)
+        {
+          if (!StringUtil.isEmpty(value))
+          {
+            variable.setValue(value);
+          }
+
+          Set<? extends Authenticator> authenticators = SetupTaskPerformer.getAuthenticators(variable);
+          if (authenticators != null)
+          {
+            allAuthenticators.addAll(authenticators);
+          }
+        }
+
+        for (Iterator<Authenticator> it = allAuthenticators.iterator(); it.hasNext();)
+        {
+          Authenticator authenticator = it.next();
+          if (authenticator.isFiltered())
+          {
+            it.remove();
+          }
+        }
+
+        authenticatedField.addAll(allAuthenticators);
+
+        if (allAuthenticators.isEmpty())
+        {
+          dispose(PreferencesUtil.encrypt(" "));
         }
       }
     }
@@ -657,7 +729,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public void recordInitialValue()
     {
-      if (initialValue == null)
+      if (initialValue == null && field != null)
       {
         initialValue = field.getValue();
       }
@@ -666,6 +738,20 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     public boolean isDirty()
     {
       return field != null && initialValue != null && !initialValue.equals(field.getValue());
+    }
+
+    public void dispose(String value)
+    {
+      if (field != null)
+      {
+        field.dispose();
+        field = null;
+      }
+
+      if (StringUtil.isEmpty(initialValue))
+      {
+        initialValue = value;
+      }
     }
 
     public void dispose()
@@ -925,7 +1011,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
     }
 
-    public FieldHolder getFieldHolder(VariableTask variable, boolean demandCreate)
+    public FieldHolder getFieldHolder(VariableTask variable, boolean demandCreate, boolean includeDisposed)
     {
       URI uri = getURI(variable);
       FieldHolderRecord fieldHolderRecord = getFieldHolderRecord(uri);
@@ -946,6 +1032,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         fieldHolder = fieldHolderRecord.getFieldHolder();
         if (fieldHolder.isDisposed())
         {
+          if (includeDisposed)
+          {
+            return fieldHolder;
+          }
+
           if (!demandCreate)
           {
             return null;
@@ -960,7 +1051,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         fieldHolder = new FieldHolder(variable);
         fieldHolderRecord.setFieldHolder(fieldHolder);
       }
-      else
+      else if (!updating)
       {
         fieldHolder.add(variable);
       }

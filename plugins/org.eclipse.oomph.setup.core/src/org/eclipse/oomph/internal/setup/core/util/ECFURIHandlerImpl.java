@@ -76,6 +76,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER";
 
+  public static final String OPTION_AUTHORIZATION = "OPTION_AUTHORIZATION";
+
   public interface AuthorizationHandler
   {
     public final class Authorization
@@ -106,12 +108,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
       public String getAuthorization()
       {
-        return "Basic " + obscure(user + ":" + getPassword());
+        return "Basic " + obscure(user.length() == 0 ? getPassword() : user + ":" + getPassword());
       }
 
       public boolean isAuthorized()
       {
-        return !"".equals(user) && !"".equals(password);
+        return !"".equals(password);
       }
 
       public boolean isUnauthorizeable()
@@ -346,6 +348,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     return (AuthorizationHandler)options.get(OPTION_AUTHORIZATION_HANDLER);
   }
 
+  private static Authorization getAuthorizaton(Map<?, ?> options)
+  {
+    return (Authorization)options.get(OPTION_AUTHORIZATION);
+  }
+
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
@@ -412,7 +419,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     IContainer container = createContainer();
 
     AuthorizationHandler authorizatonHandler = getAuthorizatonHandler(options);
-    Authorization authorization = null;
+    Authorization authorization = getAuthorizaton(options);
     int triedReauthorization = 0;
     for (int i = 0;; ++i)
     {
@@ -686,7 +693,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             receiveStartEvent.cancel();
 
             // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
-            exception = new UserCancelledException();
+            // exception = new UserCancelledException();
             receiveLatch.countDown();
             return;
           }

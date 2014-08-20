@@ -26,6 +26,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.StorageException;
 
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
@@ -35,12 +37,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
 /**
- * @author Eike Stepper
+ * @author Ed Merks
  */
 public class PreferencesURIHandlerImpl extends URIHandlerImpl
 {
@@ -56,34 +59,99 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
   {
     private final Preferences preferences;
 
+    private final ISecurePreferences securePreferences;
+
     private final String key;
+
+    private final boolean isEncrypted;
 
     public PreferenceAccessor(URI uri)
     {
-      Preferences node = ROOT;
-      for (String name : uri.trimSegments(1).segments())
+      String[] segments = uri.segments();
+      int last = segments.length - 1;
+
+      if ("secure".equals(segments[0]))
       {
-        node = node.node(name);
+        ISecurePreferences node = PreferencesUtil.getSecurePreferences();
+        for (int i = 1; i < last; ++i)
+        {
+          node = node.node(segments[i]);
+        }
+
+        preferences = null;
+        securePreferences = node;
+
+        isEncrypted = !"encrypted=false".equals(uri.query());
       }
-      key = uri.lastSegment();
-      preferences = node;
+      else
+      {
+        Preferences node = ROOT;
+        for (int i = 0; i < last; ++i)
+        {
+          node = node.node(segments[i]);
+        }
+        preferences = node;
+        securePreferences = null;
+        isEncrypted = false;
+      }
+
+      key = segments[last];
     }
 
-    public String get()
+    public String get() throws IOException
     {
-      return preferences.get(key, null);
-
+      try
+      {
+        return securePreferences == null ? preferences.get(key, null) : securePreferences.get(key, null);
+      }
+      catch (StorageException ex)
+      {
+        throw new IOExceptionWithCause(ex);
+      }
     }
 
     public void put(String value) throws IOException
     {
-      preferences.put(key, value);
+      if (securePreferences == null)
+      {
+        preferences.put(key, value);
+      }
+      else
+      {
+        try
+        {
+          boolean encrypt = isEncrypted;
+          for (String key : securePreferences.keys())
+          {
+            if (key.equals(this.key))
+            {
+              encrypt = securePreferences.isEncrypted(key);
+              break;
+            }
+          }
+
+          securePreferences.put(key, value, encrypt);
+        }
+        catch (StorageException ex)
+        {
+          throw new IOExceptionWithCause(ex);
+        }
+      }
+
       flush();
     }
 
     public void remove() throws IOException
     {
-      preferences.remove(key);
+      if (securePreferences == null)
+      {
+        preferences.remove(key);
+      }
+      else
+      {
+        securePreferences.remove(key);
+      }
+
       flush();
     }
 
@@ -91,7 +159,14 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
     {
       try
       {
-        preferences.flush();
+        if (securePreferences == null)
+        {
+          preferences.flush();
+        }
+        else
+        {
+          securePreferences.flush();
+        }
       }
       catch (BackingStoreException ex)
       {
@@ -132,6 +207,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
 
       return new PreferencesInput();
     }
+
     URI preferencePath = uri.trimSegments(1);
     String value = new PreferenceAccessor(preferencePath).get();
     if (value == null)
@@ -214,14 +290,15 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
     }
 
     final PreferenceAccessor accessor = new PreferenceAccessor(uri.trimSegments(1));
-    return new ByteArrayOutputStream()
+    return new URIConverter.WriteableOutputStream(new StringWriter()
     {
       @Override
       public void close() throws IOException
       {
-        accessor.put(new String(toByteArray(), "UTF-8"));
+        super.close();
+        accessor.put(toString());
       }
-    };
+    }, "UTF-8");
   }
 
   @Override
@@ -233,7 +310,14 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
   @Override
   public boolean exists(URI uri, Map<?, ?> options)
   {
-    return new PreferenceAccessor(uri.trimSegments(1)).get() != null;
+    try
+    {
+      return new PreferenceAccessor(uri.trimSegments(1)).get() != null;
+    }
+    catch (IOException ex)
+    {
+      return false;
+    }
   }
 
   @Override

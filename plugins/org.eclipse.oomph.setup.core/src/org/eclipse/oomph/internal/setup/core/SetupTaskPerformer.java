@@ -19,10 +19,12 @@ import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.setup.core.util.Authenticator;
 import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -56,6 +58,7 @@ import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
+import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -118,6 +121,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -150,13 +155,17 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static final Adapter RULE_VARIABLE_ADAPTER = new AdapterImpl();
 
-  public static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
+  private static final Map<String, ValueConverter> CONVERTERS = new HashMap<String, ValueConverter>();
+
+  static
+  {
+    CONVERTERS.put("java.lang.String", new ValueConverter());
+    CONVERTERS.put("org.eclipse.emf.common.util.URI", new URIValueConverter());
+  }
 
   private static final SimpleDateFormat DATE_TIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   private static final Pattern INSTALLABLE_UNIT_WITH_RANGE_PATTERN = Pattern.compile("([^\\[\\(]*)(.*)");
-
-  private static boolean NEEDS_PATH_SEPARATOR_CONVERSION = File.separatorChar == '\\';
 
   private static Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
 
@@ -179,6 +188,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private ProgressLogFilter logFilter = new ProgressLogFilter();
 
   private List<EStructuralFeature.Setting> unresolvedSettings = new ArrayList<EStructuralFeature.Setting>();
+
+  private List<VariableTask> passwordVariables = new ArrayList<VariableTask>();
+
+  private Map<URI, String> passwords = new LinkedHashMap<URI, String>();
 
   private List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
 
@@ -314,7 +327,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             if (eAttribute.getEType().getInstanceClass() == String.class)
             {
               EAnnotation eAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
-              if (eAnnotation != null)
+              if (eAnnotation != null && eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_RULE_VARIABLE) != null)
               {
                 AttributeRule attributeRule = getAttributeRule(eAttribute, true);
                 if (attributeRule == null)
@@ -532,13 +545,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                       populateImpliedVariable(setupTask, eAttribute, variableAnnotation, variable);
                       setupTask.eSet(eAttribute, variableReference);
                     }
-                    else
-                    {
-                      variable.setValue(value);
-                    }
                   }
                   else
                   {
+                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
+                    if (variableAnnotation != null)
+                    {
+                      populateImpliedVariable(setupTask, null, variableAnnotation, variable);
+                      setupTask.eSet(eAttribute, variableReference);
+                    }
+
                     variable.setValue(value);
                   }
 
@@ -594,18 +610,53 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         // 2.4. Build variable map in the context
         Set<String> keys = new LinkedHashSet<String>();
+        boolean fullPromptUser = isFullPromptUser(user);
+        VariableAdapter variableAdapter = new VariableAdapter(this);
         for (SetupTask setupTask : triggeredSetupTasks)
         {
           if (setupTask instanceof VariableTask)
           {
-            VariableTask contextVariableTask = (VariableTask)setupTask;
+            VariableTask variable = (VariableTask)setupTask;
+            variable.eAdapters().add(variableAdapter);
 
-            String name = contextVariableTask.getName();
+            String name = variable.getName();
             keys.add(name);
 
-            String value = contextVariableTask.getValue();
+            String value = variable.getValue();
+
+            if (variable.getType() == VariableType.PASSWORD)
+            {
+              passwordVariables.add(variable);
+              if (StringUtil.isEmpty(value) && !fullPromptUser)
+              {
+                URI storageURI = getEffectiveStorage(variable);
+                if (storageURI != null && PreferencesUtil.PREFERENCE_SCHEME.equals(storageURI.scheme()))
+                {
+                  URIConverter uriConverter = getURIConverter();
+                  if (uriConverter.exists(storageURI, null))
+                  {
+                    try
+                    {
+                      Reader reader = ((URIConverter.ReadableInputStream)uriConverter.createInputStream(storageURI)).asReader();
+                      StringBuilder result = new StringBuilder();
+                      for (int character = reader.read(); character != -1; character = reader.read())
+                      {
+                        result.append((char)character);
+                      }
+                      reader.close();
+                      value = PreferencesUtil.encrypt(result.toString());
+                    }
+                    catch (IOException ex)
+                    {
+                      SetupCorePlugin.INSTANCE.log(ex);
+                    }
+                  }
+                }
+              }
+            }
+
             put(name, value);
-            allVariables.put(name, contextVariableTask);
+            allVariables.put(name, variable);
           }
         }
 
@@ -958,13 +1009,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
     variable.setName(details.get(EAnnotationConstants.KEY_NAME));
 
-    // The storageURI remains the default unless there is an explicit key to specify it be null or whatever else is specified.
-    if (details.containsKey(EAnnotationConstants.KEY_STORAGE_URI))
-    {
-      String storageURIValue = details.get(EAnnotationConstants.KEY_STORAGE_URI);
-      variable.setStorageURI(StringUtil.isEmpty(storageURIValue) ? null : URI.createURI(storageURIValue));
-    }
-
     populateImpliedVariable(null, null, eAnnotation, variable);
 
     return variable;
@@ -975,8 +1019,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     EMap<String, String> details = eAnnotation.getDetails();
 
     variable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_TYPE)));
-    variable.setLabel(details.get(EAnnotationConstants.KEY_LABEL));
-    variable.setDescription(details.get(EAnnotationConstants.KEY_DESCRIPTION));
+    variable.setLabel(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_LABEL)));
+    variable.setDescription(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_DESCRIPTION)));
+
+    // The storageURI remains the default unless there is an explicit key to specify it be null or whatever else is specified.
+    if (details.containsKey(EAnnotationConstants.KEY_STORAGE_URI))
+    {
+      String storageURIValue = expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_STORAGE_URI));
+      variable.setStorageURI(StringUtil.isEmpty(storageURIValue) ? null : URI.createURI(storageURIValue));
+    }
 
     if (eAttribute != null)
     {
@@ -998,16 +1049,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
 
         String explicitLabel = details.get(EAnnotationConstants.KEY_EXPLICIT_LABEL);
-        if (explicitLabel != null)
-        {
-          variable.setLabel(expandAttributeReferences(setupTask, explicitLabel));
-        }
+        variable.setLabel(expandAttributeReferences(setupTask, explicitLabel));
 
         String explicitDescription = details.get(EAnnotationConstants.KEY_EXPLICIT_DESCRIPTION);
-        if (explicitDescription != null)
-        {
-          variable.setDescription(expandAttributeReferences(setupTask, explicitDescription));
-        }
+        variable.setDescription(expandAttributeReferences(setupTask, explicitDescription));
 
         String promptedValue = getPrompter().getValue(ruleVariable);
         if (promptedValue != null)
@@ -1033,11 +1078,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         EMap<String, String> subDetails = subAnnotation.getDetails();
 
         VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-        String subValue = subDetails.get(EAnnotationConstants.KEY_VALUE);
-        if (setupTask != null)
-        {
-          subValue = expandAttributeReferences(setupTask, subValue);
-        }
+        String subValue = expandAttributeReferences(setupTask, subDetails.get(EAnnotationConstants.KEY_VALUE));
 
         choice.setValue(subValue);
         choice.setLabel(subDetails.get(EAnnotationConstants.KEY_LABEL));
@@ -1049,6 +1090,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private String expandAttributeReferences(SetupTask setupTask, String value)
   {
+    if (setupTask == null || value == null)
+    {
+      return value;
+    }
+
     EClass eClass = setupTask.eClass();
     Matcher matcher = ATTRIBUTE_REFERENCE_PATTERN.matcher(value);
 
@@ -1535,6 +1581,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return unresolvedVariables;
   }
 
+  public List<VariableTask> getPasswordVariables()
+  {
+    return passwordVariables;
+  }
+
   public Map<VariableTask, EAttribute> getRuleAttributes()
   {
     return ruleAttributes;
@@ -1597,118 +1648,28 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  public String expandString(String string)
+  @Override
+  protected String resolve(String key)
   {
-    return expandString(string, false);
+    return lookup(key);
   }
 
-  public String expandString(String string, boolean secure)
+  @Override
+  protected boolean isUnexpanded(String key)
   {
-    return expandString(string, null, secure);
-  }
-
-  protected String expandString(String string, Set<String> keys)
-  {
-    return expandString(string, keys, false);
-  }
-
-  private String expandString(String string, Set<String> keys, boolean secure)
-  {
-    if (string == null)
+    VariableTask variableTask = allVariables.get(key);
+    if (variableTask != null)
     {
-      return null;
-    }
-
-    StringBuilder result = new StringBuilder();
-    int previous = 0;
-    boolean unresolved = false;
-    for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
-    {
-      result.append(string.substring(previous, matcher.start()));
-      String key = matcher.group(1);
-      if ("$".equals(key))
+      for (Setting setting : unresolvedSettings)
       {
-        result.append('$');
-      }
-      else
-      {
-        key = matcher.group(2);
-        String suffix = matcher.group(5);
-        if (NEEDS_PATH_SEPARATOR_CONVERSION)
+        if (setting.getEObject() == variableTask && setting.getEStructuralFeature() == SetupPackage.Literals.VARIABLE_TASK__VALUE)
         {
-          suffix = suffix.replace('/', File.separatorChar);
-        }
-
-        boolean isUnexpanded = false;
-        VariableTask variableTask = allVariables.get(key);
-        if (variableTask != null)
-        {
-          for (Setting setting : unresolvedSettings)
-          {
-            if (setting.getEObject() == variableTask && setting.getEStructuralFeature() == SetupPackage.Literals.VARIABLE_TASK__VALUE)
-            {
-              isUnexpanded = true;
-            }
-          }
-        }
-
-        String value = isUnexpanded ? null : lookup(key);
-        if (value == null)
-        {
-          value = isUnexpanded ? null : lookupSecurely(key); // If the value is in secure store, don't prompt for it
-
-          if (value == null || !secure)
-          {
-            if (value == null && keys != null)
-            {
-              unresolved = true;
-
-              if (!isUnexpanded)
-              {
-                keys.add(key);
-              }
-            }
-            else if (!unresolved)
-            {
-              result.append(matcher.group());
-            }
-          }
-
-          if (!secure)
-          {
-            value = null;
-          }
-        }
-
-        if (value != null)
-        {
-          String filters = matcher.group(4);
-          if (filters != null)
-          {
-            for (String filterName : filters.split("\\|"))
-            {
-              value = filter(value, filterName);
-            }
-          }
-
-          if (!unresolved)
-          {
-            result.append(value);
-            result.append(suffix);
-          }
+          return true;
         }
       }
-
-      previous = matcher.end();
     }
 
-    if (unresolved)
-    {
-      return null;
-    }
-
-    result.append(string.substring(previous));
-    return result.toString();
+    return false;
   }
 
   public Set<String> getVariables(String string)
@@ -1719,7 +1680,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     Set<String> result = new LinkedHashSet<String>();
-    for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
+    for (Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
     {
       String key = matcher.group(1);
       if (!"$".equals(key))
@@ -1877,20 +1838,21 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     for (EStructuralFeature.Setting setting : unresolvedSettings)
     {
       EStructuralFeature eStructuralFeature = setting.getEStructuralFeature();
+      ValueConverter valueConverter = CONVERTERS.get(eStructuralFeature.getEType().getInstanceClassName());
       if (eStructuralFeature.isMany())
       {
         @SuppressWarnings("unchecked")
-        List<String> values = (List<String>)setting.get(false);
-        for (ListIterator<String> it = values.listIterator(); it.hasNext();)
+        List<Object> values = (List<Object>)setting.get(false);
+        for (ListIterator<Object> it = values.listIterator(); it.hasNext();)
         {
-          it.set(expandString(it.next()));
+          it.set(valueConverter.createFromString(expandString(valueConverter.convertToString(it.next()))));
         }
       }
       else
       {
-        String value = (String)setting.get(false);
-        String expandedString = expandString(value);
-        setting.set(expandedString);
+        Object value = setting.get(false);
+        String expandedString = expandString(valueConverter.convertToString(value));
+        setting.set(valueConverter.createFromString(expandedString));
         if (eStructuralFeature == SetupPackage.Literals.VARIABLE_TASK__VALUE)
         {
           put(((VariableTask)setting.getEObject()).getName(), expandedString);
@@ -2100,13 +2062,55 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
+  private URI getEffectiveStorage(VariableTask variable)
+  {
+    URI storageURI = variable.getStorageURI();
+    if (variable.getType() == VariableType.PASSWORD)
+    {
+      if (VariableTask.DEFAULT_STORAGE_URI.equals(storageURI))
+      {
+        storageURI = PreferencesUtil.ROOT_PREFERENCE_NODE_URI.appendSegments(new String[] { PreferencesUtil.SECURE_NODE, SetupContext.OOMPH_NODE,
+            variable.getName(), "" });
+      }
+      else if (storageURI != null && PreferencesUtil.PREFERENCE_SCHEME.equals(storageURI.scheme()) && !storageURI.hasTrailingPathSeparator())
+      {
+        storageURI = storageURI.appendSegment("");
+      }
+    }
+
+    return storageURI;
+  }
+
+  public void savePasswords()
+  {
+    for (Map.Entry<URI, String> entry : passwords.entrySet())
+    {
+      String value = PreferencesUtil.decrypt(entry.getValue());
+      if (!StringUtil.isEmpty(value) && !" ".equals(value))
+      {
+        URI storageURI = entry.getKey();
+        URIConverter uriConverter = getURIConverter();
+        try
+        {
+          Writer writer = ((URIConverter.WriteableOutputStream)uriConverter.createOutputStream(storageURI)).asWriter();
+          writer.write(value);
+          writer.close();
+        }
+        catch (IOException ex)
+        {
+          SetupCorePlugin.INSTANCE.log(ex);
+        }
+      }
+    }
+  }
+
   private void applyUnresolvedVariables(User user, Collection<VariableTask> variables, EList<SetupTask> rootTasks, AdapterFactoryItemDelegator itemDelegator)
   {
     Resource userResource = user.eResource();
     List<VariableTask> unspecifiedVariables = new ArrayList<VariableTask>();
     for (VariableTask variable : variables)
     {
-      URI storageURI = variable.getStorageURI();
+      URI storageURI = getEffectiveStorage(variable);
       if (storageURI != null)
       {
         String value = variable.getValue();
@@ -2114,8 +2118,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           if (variable.getType() == VariableType.PASSWORD)
           {
-            String name = variable.getName();
-            saveSecurePreference(name, value);
+            passwords.put(storageURI, value);
           }
           else
           {
@@ -2221,59 +2224,66 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     EClass eClass = eObject.eClass();
     for (EAttribute attribute : eClass.getEAllAttributes())
     {
-      if (attribute.isChangeable() && attribute.getEAttributeType().getInstanceClassName() == "java.lang.String"
-          && attribute.getEAnnotation("http://www.eclipse.org/oomph/setup/NoExpand") == null)
+      if (attribute.isChangeable() && attribute.getEAnnotation("http://www.eclipse.org/oomph/setup/NoExpand") == null)
       {
-        if (attribute.isMany())
+        String instanceClassName = attribute.getEAttributeType().getInstanceClassName();
+        ValueConverter valueConverter = CONVERTERS.get(instanceClassName);
+        if (valueConverter != null)
         {
-          @SuppressWarnings("unchecked")
-          List<String> values = (List<String>)eObject.eGet(attribute);
-          List<String> newValues = new ArrayList<String>();
-          boolean failed = false;
-          for (String value : values)
+          if (attribute.isMany())
           {
-            String newValue = expandString(value, keys);
-            if (newValue == null)
+            List<?> values = (List<?>)eObject.eGet(attribute);
+            List<Object> newValues = new ArrayList<Object>();
+            boolean failed = false;
+            for (Object value : values)
             {
-              if (!failed)
-              {
-                unresolvedSettings.add(((InternalEObject)eObject).eSetting(attribute));
-                failed = true;
-              }
-            }
-            else
-            {
-              newValues.add(newValue);
-            }
-          }
-
-          if (!failed)
-          {
-            eObject.eSet(attribute, newValues);
-          }
-        }
-        else
-        {
-          String value = (String)eObject.eGet(attribute);
-          if (value != null)
-          {
-            String newValue;
-            if (eClass.getClassifierID() == SetupPackage.VARIABLE_TASK && attribute == SetupPackage.Literals.VARIABLE_TASK__DEFAULT_VALUE)
-            {
-              // With second parameter not null, if value is not resolved, expandString returns newValue as null
-              newValue = expandString(value, new LinkedHashSet<String>());
-              eObject.eSet(attribute, newValue);
-            }
-            else
-            {
-              newValue = expandString(value, keys);
+              String newValue = expandString(valueConverter.convertToString(value), keys);
               if (newValue == null)
               {
-                unresolvedSettings.add(((InternalEObject)eObject).eSetting(attribute));
+                if (!failed)
+                {
+                  unresolvedSettings.add(((InternalEObject)eObject).eSetting(attribute));
+                  failed = true;
+                }
               }
-              else if (!value.equals(newValue))
+              else
               {
-                eObject.eSet(attribute, newValue);
+                newValues.add(valueConverter.createFromString(newValue));
+              }
+            }
+
+            if (!failed)
+            {
+              eObject.eSet(attribute, newValues);
+            }
+          }
+          else
+          {
+            Object value = eObject.eGet(attribute);
+            if (value != null)
+            {
+              String newValue;
+              if (attribute == SetupPackage.Literals.VARIABLE_TASK__DEFAULT_VALUE)
+              {
+                // With second parameter not null, if value is not resolved, expandString returns newValue as null
+                newValue = expandString(valueConverter.convertToString(value), new LinkedHashSet<String>());
+                eObject.eSet(attribute, valueConverter.createFromString(newValue));
+              }
+              else if (attribute != SetupPackage.Literals.VARIABLE_TASK__VALUE)
+              {
+                newValue = expandString(valueConverter.convertToString(value), keys);
+                if (newValue == null)
+                {
+                  unresolvedSettings.add(((InternalEObject)eObject).eSetting(attribute));
+                }
+                else
+                {
+                  Object object = valueConverter.createFromString(newValue);
+                  if (!value.equals(object))
+                  {
+                    eObject.eSet(attribute, object);
+                  }
+                }
               }
             }
           }
@@ -2889,8 +2899,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     List<SetupTaskPerformer> performers = new ArrayList<SetupTaskPerformer>();
     boolean needsPrompt = false;
 
+    Map<Object, Set<Object>> composedMap = new HashMap<Object, Set<Object>>();
     List<VariableTask> allAppliedRuleVariables = new ArrayList<VariableTask>();
     List<VariableTask> allUnresolvedVariables = new ArrayList<VariableTask>();
+    List<VariableTask> allPasswordVariables = new ArrayList<VariableTask>();
     Map<VariableTask, EAttribute> allRuleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
     Workspace workspace = setupContext.getWorkspace();
@@ -2921,6 +2933,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         undeclaredVariables.clear();
       }
 
+      CollectionUtil.putAll(composedMap, performer.getMap());
+
       if (fullPrompt)
       {
         SetupContext fullPromptContext = SetupContext.create(setupContext.getInstallation(), setupContext.getWorkspace());
@@ -2940,6 +2954,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
 
         user.getAttributeRules().clear();
+
+        setFullPromptUser(user);
 
         fullPromptContext.getUser().eResource().getContents().set(0, user);
 
@@ -3002,12 +3018,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         SetupTaskPerformer fullPromptPerformer = new SetupTaskPerformer(uriConverter, fullPrompter, null, fullPromptContext, stream);
         fullPrompter.promptVariables(Collections.singletonList(fullPromptPerformer));
-        // fullPromptPerformer.getUnresolvedVariables().addAll(0, performer.getUnresolvedVariables());
+        CollectionUtil.putAll(composedMap, performer.getMap());
         performer = fullPromptPerformer;
       }
 
       allAppliedRuleVariables.addAll(performer.getAppliedRuleVariables());
       allUnresolvedVariables.addAll(performer.getUnresolvedVariables());
+      allPasswordVariables.addAll(performer.getPasswordVariables());
       allRuleAttributes.putAll(performer.getRuleAttributes());
       performers.add(performer);
 
@@ -3036,11 +3053,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
     Set<Bundle> bundles = new HashSet<Bundle>();
-    Map<Object, Set<Object>> composedMap = new HashMap<Object, Set<Object>>();
     for (SetupTaskPerformer performer : performers)
     {
       setupTasks.addAll(performer.getTriggeredSetupTasks());
-      CollectionUtil.putAll(composedMap, performer.getMap());
       bundles.addAll(performer.getBundles());
     }
 
@@ -3048,6 +3063,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     composedPerformer.getBundles().addAll(bundles);
     composedPerformer.getAppliedRuleVariables().addAll(allAppliedRuleVariables);
     composedPerformer.getUnresolvedVariables().addAll(allUnresolvedVariables);
+    composedPerformer.getPasswordVariables().addAll(allPasswordVariables);
     composedPerformer.getRuleAttributes().putAll(allRuleAttributes);
     File workspaceLocation = composedPerformer.getWorkspaceLocation();
     if (workspaceLocation != null)
@@ -3088,6 +3104,90 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     return composedPerformer;
+  }
+
+  public static Set<? extends Authenticator> getAuthenticators(VariableTask variable)
+  {
+    VariableAdapter variableAdapter = (VariableAdapter)EcoreUtil.getExistingAdapter(variable, VariableAdapter.class);
+    if (variableAdapter != null)
+    {
+      return variableAdapter.getAuthenticators(variable);
+    }
+
+    return null;
+  }
+
+  private static class VariableAdapter extends AdapterImpl
+  {
+    private SetupTaskPerformer performer;
+
+    public VariableAdapter(SetupTaskPerformer perform)
+    {
+      performer = perform;
+    }
+
+    @Override
+    public boolean isAdapterForType(Object type)
+    {
+      return type == VariableAdapter.class;
+    }
+
+    protected Set<? extends Authenticator> getAuthenticators(final VariableTask variable)
+    {
+      StringExpander stringExpander = new StringExpander()
+      {
+        @Override
+        protected String resolve(String key)
+        {
+          String value = getValue(key);
+          return StringUtil.isEmpty(value) ? performer.resolve(key) : value;
+        }
+
+        @Override
+        protected boolean isUnexpanded(String key)
+        {
+          return performer.isUnexpanded(key) && StringUtil.isEmpty(getValue(key));
+        }
+
+        private String getValue(String key)
+        {
+          VariableTask variable = performer.allVariables.get(key);
+          if (variable != null)
+          {
+            return performer.getPrompter().getValue(variable);
+          }
+
+          return null;
+        }
+
+        @Override
+        protected String filter(String value, String filterName)
+        {
+          return performer.filter(value, filterName);
+        }
+      };
+
+      return Authenticator.create(variable, stringExpander);
+    }
+  }
+
+  private static class FullPromptMarker extends AdapterImpl
+  {
+    @Override
+    public boolean isAdapterForType(Object type)
+    {
+      return type == FullPromptMarker.class;
+    }
+  }
+
+  private static boolean isFullPromptUser(User user)
+  {
+    return EcoreUtil.getExistingAdapter(user, FullPromptMarker.class) != null;
+  }
+
+  private static void setFullPromptUser(User user)
+  {
+    user.eAdapters().add(new FullPromptMarker());
   }
 
   public void setProgress(ProgressLog progress)
@@ -3197,6 +3297,28 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private static String getVariableReference(String variableName)
   {
     return "${" + variableName + "}";
+  }
+
+  protected static class ValueConverter
+  {
+    public Object createFromString(String literal)
+    {
+      return literal;
+    }
+
+    public String convertToString(Object value)
+    {
+      return value == null ? null : value.toString();
+    }
+  }
+
+  protected static class URIValueConverter extends ValueConverter
+  {
+    @Override
+    public Object createFromString(String literal)
+    {
+      return BaseFactory.eINSTANCE.createURI(literal);
+    }
   }
 
   private static class PDEAPIUtil
