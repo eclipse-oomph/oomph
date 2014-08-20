@@ -17,7 +17,6 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -27,6 +26,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.CopyCommand;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
@@ -244,10 +244,19 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
           return false;
         }
 
-        dragCommand = IdentityCommand.INSTANCE;
-        dropCommand = AddCommand.create(domain, owner, P2Package.Literals.REPOSITORY_LIST__REPOSITORIES, objects);
+        dropCommand = AddCommand.create(domain, owner, null, objects);
+        if (!dropCommand.canExecute())
+        {
+          return false;
+        }
 
-        return dragCommand.canExecute() && dropCommand.canExecute();
+        dropCommand.dispose();
+        optimizedDropCommandOwner = owner;
+        dropCommand = null;
+
+        dragCommand = CopyCommand.create(domain, objects);
+
+        return dragCommand.canExecute();
       }
     };
   }
