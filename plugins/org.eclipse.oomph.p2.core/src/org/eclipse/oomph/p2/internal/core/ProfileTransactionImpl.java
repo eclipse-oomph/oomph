@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.director.SimplePlanner;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
+import org.eclipse.equinox.internal.p2.engine.InstallableUnitPropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
@@ -366,7 +367,14 @@ public class ProfileTransactionImpl implements ProfileTransaction
           if (iuOperand.first() == null && iuOperand.second().getId().equals("artificial_root"))
           {
             it.remove();
-            break;
+          }
+        }
+        else if (operand instanceof InstallableUnitPropertyOperand)
+        {
+          InstallableUnitPropertyOperand iuPropertyOperand = (InstallableUnitPropertyOperand)operand;
+          if (iuPropertyOperand.getInstallableUnit().getId().equals("artificial_root"))
+          {
+            it.remove();
           }
         }
       }
@@ -383,7 +391,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         return null;
       }
 
-      if (getOperandCount(provisioningPlan) == 3)
+      if (getOperandCount(provisioningPlan) == 1)
       {
         // TODO Find a better way to detect NOOP situation; ideally by ending up with an empty operands list.
         // [IInstallableUnit property for artificial_root] org.eclipse.equinox.p2.internal.inclusion.rules = null --> STRICT
