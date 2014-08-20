@@ -54,8 +54,6 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   private boolean performing;
 
-  private boolean offline;
-
   private boolean mirrors;
 
   private Set<String> restartReasons = new LinkedHashSet<String>();
@@ -76,10 +74,6 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   private void initialize(SetupContext setupContext)
   {
     setSetupContext(setupContext);
-
-    // put("os", Platform.getOS());
-    // put("os.arch", Platform.getOSArch());
-    // put("ws", Platform.getWS());
 
     for (Map.Entry<String, String> entry : System.getenv().entrySet())
     {
@@ -315,6 +309,26 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
         }
 
         return URI.decode(uri.lastSegment());
+      }
+    });
+
+    STRING_FILTER_REGISTRY.put("gitRepository", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        URI uri = URI.createURI(value);
+        if (!uri.isHierarchical())
+        {
+          uri = URI.createURI(uri.opaquePart());
+        }
+
+        String result = URI.decode(uri.lastSegment());
+        if (result.endsWith(".git"))
+        {
+          result = result.substring(0, result.length() - 4);
+        }
+
+        return result;
       }
     });
 

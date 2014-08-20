@@ -354,14 +354,14 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         "The rule for the absolute folder location where the Git clone is located", "explicitType", "FOLDER", "explicitLabel",
         "${@id.description} Git clone location", "explicitDescription", "The absolute folder location where the ${@id.description} Git clone is located" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${installation.location/git/}${@id.remoteURI|uriLastSegment}", "label", "Located in a folder named \'git/<repo>\' within the installation folder" });
+        "${installation.location/git/}${@id.remoteURI|gitRepository}", "label", "Located in a folder named \'git/<repo>\' within the installation folder" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${workspace.location/.git/}${@id.remoteURI|uriLastSegment}", "label", "Located in a folder named \'.git/<repo>\' within the workspace folder" });
+        "${workspace.location/.git/}${@id.remoteURI|gitRepository}", "label", "Located in a folder named \'.git/<repo>\' within the workspace folder" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${git.container.root/}${@id.remoteURI|uriLastSegment}-${@id.checkoutBranch}", "label",
+        "${git.container.root/}${@id.remoteURI|gitRepository}-${@id.checkoutBranch}", "label",
         "Located in a folder named \'<repo>-<branch>\' within the root Git-container folder " });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${git.container.root/}${@id.remoteURI|uriLastSegment/}${@id.checkoutBranch}", "label",
+        "${git.container.root/}${@id.remoteURI|gitRepository/}${@id.checkoutBranch}", "label",
         "Located in a folder named \'<repo>/<branch>\' within the root Git-container folder " });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${@id.location}", "label",
         "Located in the specified absolute folder location" });

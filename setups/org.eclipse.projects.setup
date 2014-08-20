@@ -187,7 +187,7 @@
         label="Eclipse Git Repository">
       <choice
           value="ssh://${git.user.id}@git.eclipse.org/gitroot/@{remoteURI}.git"
-          label="SSH (read-only, direct)"/>
+          label="SSH (read-write, direct)"/>
       <choice
           value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
           label="HTTP (read-only, anonymous, direct)"/>

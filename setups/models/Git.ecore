@@ -28,19 +28,19 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
         <eAnnotations source="Choice">
-          <details key="value" value="${installation.location/git/}${@id.remoteURI|uriLastSegment}"/>
+          <details key="value" value="${installation.location/git/}${@id.remoteURI|gitRepository}"/>
           <details key="label" value="Located in a folder named 'git/&lt;repo>' within the installation folder"/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${workspace.location/.git/}${@id.remoteURI|uriLastSegment}"/>
+          <details key="value" value="${workspace.location/.git/}${@id.remoteURI|gitRepository}"/>
           <details key="label" value="Located in a folder named '.git/&lt;repo>' within the workspace folder"/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${git.container.root/}${@id.remoteURI|uriLastSegment}-${@id.checkoutBranch}"/>
+          <details key="value" value="${git.container.root/}${@id.remoteURI|gitRepository}-${@id.checkoutBranch}"/>
           <details key="label" value="Located in a folder named '&lt;repo>-&lt;branch>' within the root Git-container folder "/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${git.container.root/}${@id.remoteURI|uriLastSegment/}${@id.checkoutBranch}"/>
+          <details key="value" value="${git.container.root/}${@id.remoteURI|gitRepository/}${@id.checkoutBranch}"/>
           <details key="label" value="Located in a folder named '&lt;repo>/&lt;branch>' within the root Git-container folder "/>
         </eAnnotations>
         <eAnnotations source="Choice">

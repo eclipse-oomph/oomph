@@ -503,7 +503,6 @@
               xsi:type="predicates:NamePredicate"
               pattern=".*\.xcore.*|.*\.xtext.*"/>
         </sourceLocator>
-        <repositoryList/>
       </targlet>
     </setupTask>
     <setupTask
