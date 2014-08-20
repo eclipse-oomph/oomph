@@ -337,13 +337,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
       final IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, monitor);
       P2CorePlugin.INSTANCE.coreException(provisioningPlan.getStatus());
 
-      IQueryable<IInstallableUnit> additions = provisioningPlan.getAdditions();
+      IQueryable<IInstallableUnit> futureState = provisioningPlan.getFutureState();
       for (IRequirement requirement : rootIU.getRequirements())
       {
         if (requirement instanceof IRequiredCapability)
         {
           IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
-          for (IInstallableUnit installableUnit : P2Util.asIterable(additions.query(
+          for (IInstallableUnit installableUnit : P2Util.asIterable(futureState.query(
               QueryUtil.createIUQuery(requiredCapability.getName(), requiredCapability.getRange()), null)))
           {
             provisioningPlan.setInstallableUnitProfileProperty(installableUnit, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
