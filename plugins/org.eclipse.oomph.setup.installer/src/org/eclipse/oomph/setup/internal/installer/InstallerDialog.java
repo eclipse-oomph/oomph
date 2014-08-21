@@ -46,6 +46,7 @@ import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.jface.dialogs.Dialog;
@@ -311,7 +312,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
 
     versionLink = new Link(parent, SWT.NO_FOCUS);
     versionLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER));
-    versionLink.setToolTipText("About this build");
+    versionLink.setToolTipText("About");
 
     Thread thread = new ProductVersionSetter();
     thread.start();
@@ -390,6 +391,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
         return "Self Hosting";
       }
 
+      String buildID = null;
       InputStream source = null;
 
       try
@@ -402,10 +404,10 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
           Properties properties = new Properties();
           properties.load(source);
 
-          String buildID = (String)properties.get("0");
-          if (buildID != null && !buildID.startsWith("$"))
+          buildID = (String)properties.get("0");
+          if (buildID != null && buildID.startsWith("$"))
           {
-            return "#" + buildID;
+            buildID = null;
           }
         }
       }
@@ -418,10 +420,26 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
         IOUtil.closeSilent(source);
       }
 
-      // In the unlikely case that we haven't found the build ID we return the product version.
       for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null)))
       {
-        return iu.getVersion().toString();
+        String label;
+
+        Version version = iu.getVersion();
+        if (buildID != null && version.getSegmentCount() > 3)
+        {
+          label = version.getSegment(0) + "." + version.getSegment(1) + version.getSegment(2);
+        }
+        else
+        {
+          label = version.toString();
+        }
+
+        if (buildID != null)
+        {
+          label += " (" + buildID + ")";
+        }
+
+        return label;
       }
 
       return null;
