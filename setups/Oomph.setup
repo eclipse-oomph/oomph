@@ -413,7 +413,7 @@
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=enhancement"/>
       <query
           summary="Resolved in ${bugzilla.version}"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;version=${bugzilla.version}"/>
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=${bugzilla.version}"/>
       <query
           summary="Unspecified Version"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;version=unspecified"/>
