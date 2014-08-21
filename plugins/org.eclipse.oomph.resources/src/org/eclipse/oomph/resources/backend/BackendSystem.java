@@ -248,12 +248,15 @@ public abstract class BackendSystem extends BackendContainer
       }
       else
       {
-        if (counter.isZero())
+        synchronized (counter)
         {
-          break;
-        }
+          if (counter.isZero())
+          {
+            break;
+          }
 
-        counter.awaitChange();
+          counter.awaitChange();
+        }
       }
     }
   }
