@@ -12,6 +12,7 @@ package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,6 +25,7 @@ import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -69,12 +71,21 @@ public interface ProfileTransaction
    */
   public static class CommitContext
   {
+    /**
+     * @author Ed Merks
+     */
+    public enum DeltaType
+    {
+      REMOVAL, ADDITION
+    }
+
     public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, IProfileChangeRequest profileChangeRequest) throws CoreException
     {
       return new ProvisioningContext(transaction.getProfile().getAgent().getProvisioningAgent());
     }
 
-    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
+    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
+        Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
     {
       return true;
     }

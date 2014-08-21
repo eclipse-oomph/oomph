@@ -32,6 +32,7 @@ import org.eclipse.oomph.setup.ui.wizards.VariablePage;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.IRunnable;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -42,8 +43,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
+import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -62,6 +65,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -457,18 +461,13 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
           private User user = getInstaller().getUser();
 
           @Override
-          @SuppressWarnings("restriction")
-          public boolean handleProvisioningPlan(org.eclipse.equinox.p2.engine.IProvisioningPlan provisioningPlan,
-              List<org.eclipse.equinox.p2.repository.metadata.IMetadataRepository> metadataRepositories) throws CoreException
+          public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
+              Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
           {
-            if (firstTime)
+            if (firstTime && iuDeltas.isEmpty() && propertyDeltas.size() <= 1)
             {
-              int operands = org.eclipse.oomph.p2.internal.core.ProfileTransactionImpl.getOperandCount(provisioningPlan);
-              if (operands <= 1)
-              {
-                // Cancel if only the repository addition would be committed.
-                return false;
-              }
+              // Cancel if only the repository addition would be committed.
+              return false;
             }
 
             P2TaskImpl.processLicenses(provisioningPlan, VariablePage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());

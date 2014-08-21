@@ -22,6 +22,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -40,6 +41,7 @@ import org.eclipse.equinox.internal.p2.director.SimplePlanner;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitPropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.Operand;
+import org.eclipse.equinox.internal.p2.engine.PropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
@@ -70,7 +72,6 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
@@ -354,31 +355,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
         }
       }
 
-      // Undo (remove) the addition of our artificial root IU.
-      Field operandsField = ReflectUtil.getField(ProvisioningPlan.class, "operands");
-      @SuppressWarnings("unchecked")
-      List<Operand> operands = (List<Operand>)ReflectUtil.getValue(operandsField, provisioningPlan);
-      for (Iterator<Operand> it = operands.iterator(); it.hasNext();)
-      {
-        Operand operand = it.next();
-        if (operand instanceof InstallableUnitOperand)
-        {
-          InstallableUnitOperand iuOperand = (InstallableUnitOperand)operand;
-          if (iuOperand.first() == null && iuOperand.second().getId().equals("artificial_root"))
-          {
-            it.remove();
-          }
-        }
-        else if (operand instanceof InstallableUnitPropertyOperand)
-        {
-          InstallableUnitPropertyOperand iuPropertyOperand = (InstallableUnitPropertyOperand)operand;
-          if (iuPropertyOperand.getInstallableUnit().getId().equals("artificial_root"))
-          {
-            it.remove();
-          }
-        }
-      }
-
       if (profileDefinition.isIncludeSourceBundles())
       {
         IInstallableUnit sourceContainerIU = generateSourceContainerIU(provisioningPlan, metadata, monitor);
@@ -386,17 +362,17 @@ public class ProfileTransactionImpl implements ProfileTransaction
         provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
       }
 
-      if (!context.handleProvisioningPlan(provisioningPlan, metadataRepositories))
+      Map<IInstallableUnit, CommitContext.DeltaType> iuDeltas = new HashMap<IInstallableUnit, CommitContext.DeltaType>();
+      Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas = new HashMap<IInstallableUnit, Map<String, Pair<Object, Object>>>();
+      computeOperandDeltas(provisioningPlan, iuDeltas, propertyDeltas);
+
+      if (!context.handleProvisioningPlan(provisioningPlan, iuDeltas, propertyDeltas, metadataRepositories))
       {
         return null;
       }
 
-      if (getOperandCount(provisioningPlan) == 1)
+      if (iuDeltas.isEmpty() && propertyDeltas.isEmpty())
       {
-        // TODO Find a better way to detect NOOP situation; ideally by ending up with an empty operands list.
-        // [IInstallableUnit property for artificial_root] org.eclipse.equinox.p2.internal.inclusion.rules = null --> STRICT
-        // [IInstallableUnit property for artificial_root] org.eclipse.equinox.p2.type.root = null --> true
-        // [IInstallableUnit property for org.eclipse.oomph.setup.installer.product] org.eclipse.equinox.p2.internal.inclusion.rules = STRICT --> null
         return null;
       }
 
@@ -439,6 +415,112 @@ public class ProfileTransactionImpl implements ProfileTransaction
       cleanup(cleanup);
       P2CorePlugin.INSTANCE.coreException(t);
       return null;
+    }
+  }
+
+  private void computeOperandDeltas(final IProvisioningPlan provisioningPlan, Map<IInstallableUnit, CommitContext.DeltaType> iuDeltas,
+      Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas)
+  {
+    // Undo (remove) the addition of our artificial root IU and compute the effective deltas (to remove redundancies in the operands).
+    Field operandsField = ReflectUtil.getField(ProvisioningPlan.class, "operands");
+    @SuppressWarnings("unchecked")
+    List<Operand> operands = (List<Operand>)ReflectUtil.getValue(operandsField, provisioningPlan);
+    for (Iterator<Operand> it = operands.iterator(); it.hasNext();)
+    {
+      Operand operand = it.next();
+      if (operand instanceof InstallableUnitOperand)
+      {
+        InstallableUnitOperand iuOperand = (InstallableUnitOperand)operand;
+        IInstallableUnit first = iuOperand.first();
+        IInstallableUnit second = iuOperand.second();
+        if (first == null)
+        {
+          if (second.getId().equals("artificial_root"))
+          {
+            it.remove();
+          }
+          else
+          {
+            iuDeltas.put(second, CommitContext.DeltaType.ADDITION);
+          }
+        }
+        else
+        {
+          iuDeltas.put(first, CommitContext.DeltaType.REMOVAL);
+          if (second != null)
+          {
+            iuDeltas.put(second, CommitContext.DeltaType.ADDITION);
+          }
+        }
+      }
+      else if (operand instanceof InstallableUnitPropertyOperand)
+      {
+        InstallableUnitPropertyOperand iuPropertyOperand = (InstallableUnitPropertyOperand)operand;
+        IInstallableUnit operandIU = iuPropertyOperand.getInstallableUnit();
+        if (operandIU.getId().equals("artificial_root"))
+        {
+          it.remove();
+        }
+        else
+        {
+          Object first = iuPropertyOperand.first();
+          Object second = iuPropertyOperand.second();
+          String key = iuPropertyOperand.getKey();
+          populatePropertyDeltas(operandIU, first, second, key, propertyDeltas);
+        }
+      }
+      else if (operand instanceof PropertyOperand)
+      {
+        PropertyOperand propertyOperand = (PropertyOperand)operand;
+        Object first = propertyOperand.first();
+        Object second = propertyOperand.second();
+        String key = propertyOperand.getKey();
+        populatePropertyDeltas(null, first, second, key, propertyDeltas);
+      }
+    }
+
+    for (Iterator<Map.Entry<IInstallableUnit, Map<String, Pair<Object, Object>>>> it = propertyDeltas.entrySet().iterator(); it.hasNext();)
+    {
+      Map.Entry<IInstallableUnit, Map<String, Pair<Object, Object>>> entry = it.next();
+      Set<Map.Entry<String, Pair<Object, Object>>> properties = entry.getValue().entrySet();
+      for (Iterator<Map.Entry<String, Pair<Object, Object>>> it2 = properties.iterator(); it2.hasNext();)
+      {
+        Map.Entry<String, Pair<Object, Object>> property = it2.next();
+        Pair<Object, Object> pair = property.getValue();
+        if (ObjectUtil.equals(pair.getElement1(), pair.getElement2()))
+        {
+          it2.remove();
+        }
+      }
+
+      if (properties.isEmpty())
+      {
+        it.remove();
+      }
+    }
+  }
+
+  private void populatePropertyDeltas(IInstallableUnit operandIU, Object first, Object second,
+      String key, Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas)
+  {
+    Map<String, Pair<Object, Object>> propertyDelta = propertyDeltas.get(operandIU);
+    if (propertyDelta == null)
+    {
+      propertyDelta = new HashMap<String, Pair<Object, Object>>();
+      propertyDelta.put(key, new Pair<Object, Object>(first, second));
+      propertyDeltas.put(operandIU, propertyDelta);
+    }
+    else
+    {
+      Pair<Object, Object> pair = propertyDelta.get(key);
+      if (pair == null)
+      {
+        propertyDelta.put(key, new Pair<Object, Object>(first, second));
+      }
+      else
+      {
+        pair.setElement2(second);
+      }
     }
   }
 
@@ -727,14 +809,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
 
     return new VersionRange(version.toString());
-  }
-
-  public static int getOperandCount(IProvisioningPlan provisioningPlan)
-  {
-    // This is a workaround for http://bugs.eclipse.org/438714
-    Method method = ReflectUtil.getMethod(ProvisioningPlan.class, "getOperands");
-    Operand[] operands = (Operand[])ReflectUtil.invokeMethod(method, provisioningPlan);
-    return operands == null ? 0 : operands.length;
   }
 
   private static void cleanup(List<Runnable> cleanup)

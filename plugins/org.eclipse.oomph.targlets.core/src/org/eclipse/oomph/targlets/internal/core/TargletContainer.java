@@ -33,6 +33,7 @@ import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.Updat
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -1068,7 +1069,8 @@ public class TargletContainer extends AbstractBundleContainer
     }
 
     @Override
-    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
+    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
+        Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
     {
       this.provisioningPlan = provisioningPlan;
       this.metadataRepositories = metadataRepositories;

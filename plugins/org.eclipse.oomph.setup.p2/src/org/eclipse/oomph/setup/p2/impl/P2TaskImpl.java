@@ -662,7 +662,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     ProfileTransaction.CommitContext commitContext = new ProfileTransaction.CommitContext()
     {
       @Override
-      public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, List<IMetadataRepository> metadataRepositories) throws CoreException
+      public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
+          Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
       {
         try
         {
