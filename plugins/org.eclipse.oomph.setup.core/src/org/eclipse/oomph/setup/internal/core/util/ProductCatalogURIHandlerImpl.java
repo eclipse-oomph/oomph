@@ -8,9 +8,8 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.core.util;
+package org.eclipse.oomph.setup.internal.core.util;
 
-import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
@@ -21,6 +20,7 @@ import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.IOUtil;
@@ -142,7 +142,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
       IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
       if (profile != null)
       {
-        int xxx; // TODO Use AgentManager
+        // TODO Use AgentManager
 
         EList<Requirement> requirements = selfP2Task.getRequirements();
         IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);

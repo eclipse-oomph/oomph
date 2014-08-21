@@ -11,12 +11,12 @@
  */
 package org.eclipse.oomph.setup.ui;
 
-import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
-import org.eclipse.oomph.internal.setup.core.util.Authenticator;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
+import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
+import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.util.ConcurrentArray;
 import org.eclipse.oomph.util.StringUtil;
 

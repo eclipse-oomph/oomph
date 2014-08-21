@@ -11,13 +11,13 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.log.ProgressLogProvider;

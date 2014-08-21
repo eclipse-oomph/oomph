@@ -10,7 +10,7 @@
  *    Ericsson AB (Julian Enoch) - Bug 425815 - Add support for secure context variables
  *    Ericsson AB (Julian Enoch) - Bug 434525 - Allow prompted variables to be pre-populated
  */
-package org.eclipse.oomph.internal.setup.core;
+package org.eclipse.oomph.setup.internal.core;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
@@ -19,8 +19,6 @@ import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.util.Authenticator;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
@@ -54,6 +52,8 @@ import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
+import org.eclipse.oomph.setup.internal.core.util.Authenticator;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.p2.P2Task;

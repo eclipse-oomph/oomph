@@ -11,9 +11,9 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
-import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 

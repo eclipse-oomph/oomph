@@ -15,6 +15,8 @@ package org.eclipse.oomph.base;
  */
 public final class BaseAnnotationConstants
 {
+  public static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator";
+
   private BaseAnnotationConstants()
   {
   }

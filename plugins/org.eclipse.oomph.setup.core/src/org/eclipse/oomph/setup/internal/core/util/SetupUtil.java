@@ -8,18 +8,19 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.core.util;
+package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 
@@ -49,12 +50,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.provider.IProviderHints;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -315,10 +314,14 @@ public final class SetupUtil
     Collection<? extends T> getDependencies(T value);
   }
 
+  /**
+   * @author Ed Merks
+   */
   public static class Migrator
   {
-    public static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator";
-
+    /**
+     * @author Ed Merks
+     */
     private static class MigrationCopier extends EcoreUtil.Copier
     {
       private static final long serialVersionUID = 1L;
@@ -440,7 +443,7 @@ public final class SetupUtil
               {
                 // Handle mappings to annotations in a special way to record the original as a details entry.
                 Annotation annotation = (Annotation)setting.getEObject();
-                annotation.setSource(ANNOTATION_SOURCE);
+                annotation.setSource(BaseAnnotationConstants.ANNOTATION_SOURCE);
                 @SuppressWarnings("unchecked")
                 Map.Entry<String, String> stringToStringMapEntry = (Map.Entry<String, String>)BaseFactory.eINSTANCE
                     .create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY);
@@ -700,7 +703,7 @@ public final class SetupUtil
 
       private String getAnnotation(EModelElement eModelElement, String key)
       {
-        return EcoreUtil.getAnnotation(eModelElement, ANNOTATION_SOURCE, key);
+        return EcoreUtil.getAnnotation(eModelElement, BaseAnnotationConstants.ANNOTATION_SOURCE, key);
       }
     }
 
@@ -779,7 +782,7 @@ public final class SetupUtil
         if (object instanceof Annotation)
         {
           Annotation annotation = (Annotation)object;
-          if (ANNOTATION_SOURCE.equals(annotation.getSource()))
+          if (BaseAnnotationConstants.ANNOTATION_SOURCE.equals(annotation.getSource()))
           {
             annotatedModelElements.add(annotation.getModelElement());
           }

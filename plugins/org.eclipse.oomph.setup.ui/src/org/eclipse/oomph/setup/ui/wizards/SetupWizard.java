@@ -11,12 +11,6 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
-import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl;
-import org.eclipse.oomph.internal.setup.core.util.ResourceMirror;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -24,6 +18,12 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;

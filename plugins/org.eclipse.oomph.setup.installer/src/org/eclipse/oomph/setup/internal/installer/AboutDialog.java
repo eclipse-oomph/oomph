@@ -10,11 +10,11 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 
 import org.eclipse.emf.common.util.URI;

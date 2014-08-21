@@ -10,19 +10,12 @@
  */
 package org.eclipse.oomph.setup.impl;
 
-import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesFactory;
-import org.eclipse.oomph.preferences.Property;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
-import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.PreferenceTask;
-import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
-import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.ObjectUtil;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
@@ -30,11 +23,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <!-- begin-user-doc -->
@@ -321,101 +310,4 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       }
     });
   }
-
-  @Override
-  public void collectSniffers(List<Sniffer> sniffers)
-  {
-    sniffers.add(new PreferenceSniffer("configuration"));
-    sniffers.add(new PreferenceSniffer("instance"));
-    sniffers.add(new PreferenceSniffer("project")
-    {
-      @Override
-      public int getWork()
-      {
-        return 100;
-      }
-    });
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private class PreferenceSniffer extends BasicSniffer
-  {
-    private String scope;
-
-    public PreferenceSniffer(String scope)
-    {
-      super(PreferenceTaskImpl.this);
-      setLabel(StringUtil.cap(scope) + "-scoped preferences");
-      setDescription("Creates tasks for the non-default Eclipse preferences in the " + scope + " scope.");
-      this.scope = scope;
-    }
-
-    @Override
-    public int getPriority()
-    {
-      return scope.equals("project") ? PRIORITY_LATE : PRIORITY_EARLY;
-    }
-
-    public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception
-    {
-      try
-      {
-        PreferenceNode node = PreferencesUtil.getRootPreferenceNode().getNode(scope);
-        if (node != null)
-        {
-          List<Property> properties = new ArrayList<Property>();
-          collectNonDefaultProperties(node, properties);
-
-          if (!properties.isEmpty())
-          {
-            monitor.beginTask("", properties.size());
-
-            CompoundTask compound = getCompound(container, getLabel());
-            for (Property property : properties)
-            {
-              addTaskForProperty(compound, property);
-              monitor.worked(1);
-            }
-          }
-        }
-      }
-      finally
-      {
-        monitor.done();
-      }
-    }
-
-    private void collectNonDefaultProperties(PreferenceNode node, List<Property> properties)
-    {
-      for (PreferenceNode child : node.getChildren())
-      {
-        collectNonDefaultProperties(child, properties);
-      }
-
-      for (Property property : node.getProperties())
-      {
-        if (property.isNonDefault())
-        {
-          properties.add(property);
-        }
-      }
-    }
-
-    private void addTaskForProperty(CompoundTask compound, Property property)
-    {
-      URI path = property.getAbsolutePath();
-      for (String segment : path.trimSegments(1).segments())
-      {
-        compound = getCompound(compound, segment);
-      }
-
-      PreferenceTask task = SetupFactory.eINSTANCE.createPreferenceTask();
-      task.setKey(PreferencesFactory.eINSTANCE.convertURI(path));
-      task.setValue(SetupUtil.escape(property.getValue()));
-      compound.getSetupTasks().add(task);
-    }
-  }
-
 } // PreferenceTaskImpl

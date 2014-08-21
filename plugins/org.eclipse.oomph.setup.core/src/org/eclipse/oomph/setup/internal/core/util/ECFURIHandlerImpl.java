@@ -8,12 +8,12 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.core.util;
+package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.base.util.BaseUtil;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.SetupCorePlugin;
-import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;

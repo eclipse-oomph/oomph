@@ -108,7 +108,7 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
 
   public String getDefaultCharset() throws CoreException
   {
-    // TODO
+    // XXX
     return "UTF-8";
   }
 

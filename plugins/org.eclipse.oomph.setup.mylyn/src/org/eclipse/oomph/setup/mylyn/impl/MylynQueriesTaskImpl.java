@@ -12,10 +12,8 @@
 package org.eclipse.oomph.setup.mylyn.impl;
 
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
-import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.mylyn.MylynFactory;
 import org.eclipse.oomph.setup.mylyn.MylynPackage;
 import org.eclipse.oomph.setup.mylyn.MylynQueriesTask;
 import org.eclipse.oomph.setup.mylyn.Query;
@@ -31,7 +29,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.mylyn.commons.net.AuthenticationCredentials;
 import org.eclipse.mylyn.commons.net.AuthenticationType;
 import org.eclipse.mylyn.internal.tasks.core.RepositoryQuery;
@@ -45,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -475,19 +471,6 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     mylynHelper.perform(context, this);
   }
 
-  @Override
-  public void collectSniffers(List<Sniffer> sniffers)
-  {
-    sniffers.add(new BasicSniffer(this, "Creates one or several tasks for the queries in the Mylyn task list.")
-    {
-      public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception
-      {
-        MylynHelper mylynHelper = MylynHelperImpl.create();
-        mylynHelper.sniff(container, null, monitor);
-      }
-    });
-  }
-
   /**
    * @author Eike Stepper
    */
@@ -496,8 +479,6 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     public boolean isNeeded(SetupTaskContext context, MylynQueriesTask task) throws Exception;
 
     public void perform(SetupTaskContext context, MylynQueriesTask task) throws Exception;
-
-    public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor);
   }
 
   /**
@@ -658,34 +639,6 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
         {
           context.log("Removing query attribute " + key);
           repositoryQuery.setAttribute(key, null);
-        }
-      }
-    }
-
-    public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor)
-    {
-      Map<String, MylynQueriesTask> tasks = new HashMap<String, MylynQueriesTask>();
-      for (RepositoryQuery repositoryQuery : TasksUiPlugin.getTaskList().getQueries())
-      {
-        String repositoryURL = repositoryQuery.getRepositoryUrl();
-        MylynQueriesTask task = tasks.get(repositoryURL);
-        if (task == null)
-        {
-          task = MylynFactory.eINSTANCE.createMylynQueriesTask();
-          task.setRepositoryURL(repositoryURL);
-          task.setConnectorKind(repositoryQuery.getConnectorKind());
-          container.getSetupTasks().add(task);
-          tasks.put(repositoryURL, task);
-        }
-
-        Query query = MylynFactory.eINSTANCE.createQuery();
-        query.setSummary(repositoryQuery.getSummary());
-        query.setURL(repositoryQuery.getUrl());
-        task.getQueries().add(query);
-
-        for (Map.Entry<String, String> entry : repositoryQuery.getAttributes().entrySet())
-        {
-          query.getAttributes().put(entry.getKey(), entry.getValue());
         }
       }
     }

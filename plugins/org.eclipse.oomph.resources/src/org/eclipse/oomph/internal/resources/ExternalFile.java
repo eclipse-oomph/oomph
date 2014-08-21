@@ -83,7 +83,7 @@ public final class ExternalFile extends ExternalResource implements IFile
 
   public String getCharset() throws CoreException
   {
-    // TODO
+    // XXX
     return "UTF-8";
   }
 

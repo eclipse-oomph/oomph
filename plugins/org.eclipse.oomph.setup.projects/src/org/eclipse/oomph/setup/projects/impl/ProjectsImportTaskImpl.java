@@ -50,7 +50,6 @@ import org.eclipse.core.runtime.MultiStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -325,28 +324,22 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     HISTORY.setProperty(key, value.toString());
   }
 
-  @Override
-  public MirrorRunnable mirror(MirrorContext context, File mirrorsDir, boolean includingLocals) throws Exception
-  {
-    return null;
-  }
-
   private static int importProjects(final Map<BackendContainer, IProject> backendContainers, IProgressMonitor monitor) throws CoreException
   {
     if (backendContainers.isEmpty())
     {
       return 0;
     }
-  
+
     final AtomicInteger count = new AtomicInteger();
-  
+
     IWorkspace workspace = org.eclipse.core.resources.ResourcesPlugin.getWorkspace();
     workspace.run(new IWorkspaceRunnable()
     {
       public void run(IProgressMonitor monitor) throws CoreException
       {
         SubMonitor progress = SubMonitor.convert(monitor, backendContainers.size()).detectCancelation();
-  
+
         try
         {
           for (Map.Entry<BackendContainer, IProject> entry : backendContainers.entrySet())
@@ -369,7 +362,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
         }
       }
     }, monitor);
-  
+
     return count.get();
   }
 

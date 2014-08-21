@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.core.util;
+package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;

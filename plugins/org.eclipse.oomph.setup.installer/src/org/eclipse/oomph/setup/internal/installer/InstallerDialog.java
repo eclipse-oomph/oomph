@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.Agent;
@@ -20,6 +19,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;

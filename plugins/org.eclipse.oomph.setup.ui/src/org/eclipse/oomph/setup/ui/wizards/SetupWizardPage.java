@@ -10,12 +10,12 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;

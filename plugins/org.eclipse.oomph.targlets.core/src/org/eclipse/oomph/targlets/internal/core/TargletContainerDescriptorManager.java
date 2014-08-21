@@ -122,7 +122,7 @@ public final class TargletContainerDescriptorManager
       descriptors = new HashMap<String, TargletContainerDescriptor>();
     }
 
-    int xxx;
+    // TODO must reenable this.
     // saveDescriptors(monitor);
     //
     // Set<String> workspaces = new HashSet<String>();

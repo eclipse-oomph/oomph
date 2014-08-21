@@ -12,13 +12,13 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.ErrorDialog;

@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -20,6 +19,7 @@ import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
 

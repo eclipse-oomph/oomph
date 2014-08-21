@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.editor;
 
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.LabelDecorator;
 import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.util.StringUtil;

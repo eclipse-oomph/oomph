@@ -214,7 +214,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   {
     bundlePoolMap.removeElement(bundlePool.getLocation().getAbsolutePath());
 
-    int xxx;
     // TODO Delete artifacts from disk
   }
 

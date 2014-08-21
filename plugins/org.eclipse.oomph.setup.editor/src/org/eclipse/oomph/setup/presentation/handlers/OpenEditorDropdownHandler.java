@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -21,6 +20,7 @@ import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.presentation.SetupEditor;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 
@@ -94,7 +94,6 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
     EClass eClass = object.eClass();
     if (eClass == SetupPackage.Literals.USER || eClass == SetupPackage.Literals.INSTALLATION || eClass == SetupPackage.Literals.WORKSPACE)
     {
-      int xxx;
       return "Open " + SetupEditPlugin.getPlugin().getString("_UI_" + eClass.getName() + "_type");
     }
 

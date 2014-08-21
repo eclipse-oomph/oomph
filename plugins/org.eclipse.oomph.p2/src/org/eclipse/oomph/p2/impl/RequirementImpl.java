@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.impl;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
@@ -48,6 +49,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class RequirementImpl extends ModelElementImpl implements Requirement
 {
+  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//Component/type";
+
   /**
    * The default value of the '{@link #getID() <em>ID</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -438,14 +441,9 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     return super.eInvoke(operationID, arguments);
   }
 
-  private static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator";
-
-  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//Component/type";
-
   protected void eMigrate()
   {
-    int xxx; // The above ANNOTATION_SOURCE is not visible here.
-    Annotation annotation = getAnnotation(ANNOTATION_SOURCE);
+    Annotation annotation = getAnnotation(BaseAnnotationConstants.ANNOTATION_SOURCE);
     if (annotation != null)
     {
       EMap<String, String> details = annotation.getDetails();

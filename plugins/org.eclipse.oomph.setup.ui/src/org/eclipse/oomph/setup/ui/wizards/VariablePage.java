@@ -12,9 +12,6 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.Authenticator;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
@@ -22,6 +19,9 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.setup.ui.AbstractConfirmDialog;
 import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
@@ -475,7 +475,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       Resource userResource = getResourceSet().getResourceFactoryRegistry().getFactory(userResourceURI).createResource(userResourceURI);
       userResource.getContents().add(copiedUser);
 
-      int xxx; // This code is just like in org.eclipse.oomph.setup.ui.wizards.ProgressPage.saveLocalFiles(SetupTaskPerformer)
+      // TODO This code is just like in org.eclipse.oomph.setup.ui.wizards.ProgressPage.saveLocalFiles(SetupTaskPerformer)
       Installation installation = getInstallation();
       Resource installationResource = installation.eResource();
       URI installationResourceURI = installationResource.getURI();

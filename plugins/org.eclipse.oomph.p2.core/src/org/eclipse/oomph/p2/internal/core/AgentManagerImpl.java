@@ -184,7 +184,6 @@ public class AgentManagerImpl implements AgentManager
   {
     agentMap.removeElement(agent.getLocation().getAbsolutePath());
 
-    int xxx;
     // TODO Delete artifacts from disk
   }
 

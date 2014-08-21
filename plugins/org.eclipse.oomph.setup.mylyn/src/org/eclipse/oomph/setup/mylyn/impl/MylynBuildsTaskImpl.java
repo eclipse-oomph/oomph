@@ -12,12 +12,10 @@
 package org.eclipse.oomph.setup.mylyn.impl;
 
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
-import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.mylyn.BuildPlan;
 import org.eclipse.oomph.setup.mylyn.MylynBuildsTask;
-import org.eclipse.oomph.setup.mylyn.MylynFactory;
 import org.eclipse.oomph.setup.mylyn.MylynPackage;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -32,7 +30,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.mylyn.builds.core.IBuildPlan;
 import org.eclipse.mylyn.builds.core.IBuildServer;
 import org.eclipse.mylyn.builds.internal.core.BuildFactory;
@@ -44,10 +41,7 @@ import org.eclipse.mylyn.internal.builds.ui.BuildsUiInternal;
 import org.eclipse.mylyn.internal.builds.ui.BuildsUiPlugin;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -458,19 +452,6 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
     mylynHelper.perform(context, this);
   }
 
-  @Override
-  public void collectSniffers(List<Sniffer> sniffers)
-  {
-    sniffers.add(new BasicSniffer(this, "Creates one or several tasks for the build plans in the Mylyn builds list.")
-    {
-      public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception
-      {
-        MylynHelper mylynHelper = MylynHelperImpl.create();
-        mylynHelper.sniff(container, null, monitor);
-      }
-    });
-  }
-
   /**
    * @author Eike Stepper
    */
@@ -479,8 +460,6 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
     public boolean isNeeded(SetupTaskContext context, MylynBuildsTask task) throws Exception;
 
     public void perform(SetupTaskContext context, MylynBuildsTask task) throws Exception;
-
-    public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor);
   }
 
   /**
@@ -597,29 +576,6 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
       }
 
       return null;
-    }
-
-    public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor)
-    {
-      Map<String, MylynBuildsTask> tasks = new HashMap<String, MylynBuildsTask>();
-      for (IBuildPlan buildPlan : BuildsUiInternal.getModel().getPlans())
-      {
-        IBuildServer buildServer = buildPlan.getServer();
-        String serverURL = buildServer.getUrl();
-        MylynBuildsTask task = tasks.get(serverURL);
-        if (task == null)
-        {
-          task = MylynFactory.eINSTANCE.createMylynBuildsTask();
-          task.setServerURL(serverURL);
-          task.setConnectorKind(buildServer.getConnectorKind());
-          container.getSetupTasks().add(task);
-          tasks.put(serverURL, task);
-        }
-
-        BuildPlan plan = MylynFactory.eINSTANCE.createBuildPlan();
-        plan.setName(buildPlan.getName());
-        task.getBuildPlans().add(plan);
-      }
     }
 
     public static MylynHelper create()

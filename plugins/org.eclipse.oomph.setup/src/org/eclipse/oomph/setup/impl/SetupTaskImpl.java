@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
-import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
@@ -21,17 +20,13 @@ import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
-import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
-import org.eclipse.oomph.setup.SetupTask.Sniffer.ResourceHandler;
-import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
-import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -43,21 +38,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -590,7 +575,6 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   public void dispose()
   {
     // TODO Move all these framework hooks out of the public API
-    int xxx;
   }
 
   /**
@@ -798,194 +782,6 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     {
       throw exception[0];
     }
-  }
-
-  public MirrorRunnable mirror(MirrorContext context, File mirrorsDir, boolean includingLocals) throws Exception
-  {
-    return null;
-  }
-
-  public void collectSniffers(List<Sniffer> sniffers)
-  {
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static abstract class BasicSniffer implements Sniffer
-  {
-    private Object icon;
-
-    private String label;
-
-    private String description;
-
-    public BasicSniffer(Object icon, String label, String description)
-    {
-      this.icon = icon;
-      this.label = label;
-      this.description = description;
-    }
-
-    public BasicSniffer(EObject object, String description)
-    {
-      this.description = description;
-      ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-      IItemLabelProvider labelProvider = (IItemLabelProvider)adapterFactory.adapt(object, IItemLabelProvider.class);
-
-      icon = labelProvider.getImage(object);
-      label = labelProvider.getText(object);
-    }
-
-    public BasicSniffer(EObject object)
-    {
-      this(object, null);
-    }
-
-    public BasicSniffer()
-    {
-    }
-
-    public Object getIcon()
-    {
-      return icon;
-    }
-
-    public void setIcon(Object icon)
-    {
-      this.icon = icon;
-    }
-
-    public String getLabel()
-    {
-      return label;
-    }
-
-    public void setLabel(String label)
-    {
-      this.label = label;
-    }
-
-    public String getDescription()
-    {
-      return description;
-    }
-
-    public void setDescription(String description)
-    {
-      this.description = description;
-    }
-
-    public int getWork()
-    {
-      return 1;
-    }
-
-    public int getPriority()
-    {
-      return PRIORITY_DEFAULT;
-    }
-
-    public void retainDependencies(List<Sniffer> dependencies)
-    {
-      dependencies.clear();
-    }
-
-    @Override
-    public String toString()
-    {
-      return label;
-    }
-
-    public static void retainType(Collection<?> c, Class<?> type)
-    {
-      for (Iterator<?> it = c.iterator(); it.hasNext();)
-      {
-        Object element = it.next();
-        if (type.isInstance(element))
-        {
-          continue;
-        }
-
-        it.remove();
-      }
-    }
-
-    public static Map<File, IPath> getSourcePaths(List<Sniffer> dependencies)
-    {
-      Map<File, IPath> sourcePaths = new HashMap<File, IPath>();
-      for (Sniffer sniffer : dependencies)
-      {
-        sourcePaths.putAll(((SourcePathProvider)sniffer).getSourcePaths());
-      }
-
-      return sourcePaths;
-    }
-
-    public static CompoundTask getCompound(SetupTaskContainer container, String name)
-    {
-      EList<SetupTask> children = container.getSetupTasks();
-      for (SetupTask setupTask : children)
-      {
-        if (setupTask instanceof CompoundTask)
-        {
-          CompoundTask compound = (CompoundTask)setupTask;
-          if (ObjectUtil.equals(compound.getName(), name))
-          {
-            return compound;
-          }
-        }
-      }
-
-      CompoundTask compound = SetupFactory.eINSTANCE.createCompoundTask(name);
-      children.add(compound);
-      return compound;
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static abstract class ResourceSniffer extends BasicSniffer implements ResourceHandler
-  {
-    private List<IResource> resources = new ArrayList<IResource>();
-
-    public ResourceSniffer()
-    {
-    }
-
-    public ResourceSniffer(EObject object, String description)
-    {
-      super(object, description);
-    }
-
-    public ResourceSniffer(EObject object)
-    {
-      super(object);
-    }
-
-    public ResourceSniffer(Object icon, String label, String description)
-    {
-      super(icon, label, description);
-    }
-
-    public void handleResource(IResource resource) throws Exception
-    {
-      if (filterResource(resource))
-      {
-        resources.add(resource);
-      }
-    }
-
-    public final void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception
-    {
-      sniff(container, dependencies, resources, monitor);
-    }
-
-    protected abstract boolean filterResource(IResource resource);
-
-    protected abstract void sniff(SetupTaskContainer container, List<Sniffer> dependencies, List<IResource> resources, IProgressMonitor monitor)
-        throws Exception;
   }
 
   /**

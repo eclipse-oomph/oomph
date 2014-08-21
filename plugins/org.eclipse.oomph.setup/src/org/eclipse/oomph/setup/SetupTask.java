@@ -14,13 +14,6 @@ import org.eclipse.oomph.base.ModelElement;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import java.io.File;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -277,61 +270,4 @@ public interface SetupTask extends ModelElement
   void perform(SetupTaskContext context) throws Exception;
 
   void dispose();
-
-  MirrorRunnable mirror(MirrorContext context, File mirrorsDir, boolean includingLocals) throws Exception;
-
-  void collectSniffers(List<Sniffer> sniffers);
-
-  /**
-   * @author Eike Stepper
-   */
-  public interface MirrorContext extends SetupTaskContext
-  {
-    public void addRedirection(String sourceURL, String targetURL);
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public interface MirrorRunnable
-  {
-    public void run(IProgressMonitor monitor) throws Exception;
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public interface Sniffer
-  {
-    public Object getIcon();
-
-    public String getLabel();
-
-    public String getDescription();
-
-    public int getWork();
-
-    public int getPriority();
-
-    public void retainDependencies(List<Sniffer> dependencies);
-
-    public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception;
-
-    /**
-     * @author Eike Stepper
-     */
-    public interface ResourceHandler
-    {
-      public void handleResource(IResource resource) throws Exception;
-    }
-
-    /**
-     * @author Eike Stepper
-     */
-    public interface SourcePathProvider
-    {
-      public Map<File, IPath> getSourcePaths();
-    }
-  }
-
 } // SetupTask

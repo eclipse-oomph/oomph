@@ -1,11 +1,11 @@
-package org.eclipse.oomph.internal.setup.core.util;
+package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.base.Annotation;
-import org.eclipse.oomph.internal.setup.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.IOUtil;
 

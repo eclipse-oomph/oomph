@@ -42,14 +42,14 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.oomph.preferences;bundle-version="[1.0.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.oomph.internal.setup.core;version="1.0.0";
+Export-Package: org.eclipse.oomph.setup.internal.core;version="1.0.0";
   x-friends:="org.eclipse.oomph.setup.edit,
    org.eclipse.oomph.setup.editor,
    org.eclipse.oomph.setup.installer,
    org.eclipse.oomph.setup.tests,
    org.eclipse.oomph.setup.ui,
    org.eclipse.oomph.setup.ui.ide",
- org.eclipse.oomph.internal.setup.core.util;version="1.0.0";
+ org.eclipse.oomph.setup.internal.core.util;version="1.0.0";
   x-friends:="org.eclipse.oomph.setup.edit,
    org.eclipse.oomph.setup.editor,
    org.eclipse.oomph.setup.installer,
@@ -57,4 +57,4 @@ Export-Package: org.eclipse.oomph.internal.setup.core;version="1.0.0";
    org.eclipse.oomph.setup.ui,
    org.eclipse.oomph.setup.ui.ide,
    org.eclipse.oomph.setup.projects"
-Bundle-Activator: org.eclipse.oomph.internal.setup.core.SetupCorePlugin$Implementation
+Bundle-Activator: org.eclipse.oomph.setup.internal.core.SetupCorePlugin$Implementation

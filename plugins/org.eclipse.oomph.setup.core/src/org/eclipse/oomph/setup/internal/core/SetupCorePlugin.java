@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.core;
+package org.eclipse.oomph.setup.internal.core;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.util.OomphPlugin;

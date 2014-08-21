@@ -11,8 +11,6 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.util.CatalogManager;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -24,6 +22,8 @@ import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.provider.CatalogSelectionItemProvider;
 import org.eclipse.oomph.setup.provider.IndexItemProvider;
 import org.eclipse.oomph.setup.provider.InstallationItemProvider;

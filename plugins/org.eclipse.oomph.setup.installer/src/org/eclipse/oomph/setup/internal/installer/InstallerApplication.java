@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.internal.setup.core.SetupContext;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.ErrorDialog;
 

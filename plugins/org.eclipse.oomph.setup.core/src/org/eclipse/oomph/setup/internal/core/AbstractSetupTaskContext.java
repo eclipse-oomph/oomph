@@ -10,7 +10,7 @@
  *    Ericsson AB (Julian Enoch) - Bug 425815 - Add support for secure context variables
  *    Ericsson AB (Julian Enoch) - Bug 434512 - Disable prompt for master password recovery information
  */
-package org.eclipse.oomph.internal.setup.core;
+package org.eclipse.oomph.setup.internal.core;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
@@ -42,8 +42,6 @@ import java.util.Set;
  */
 public abstract class AbstractSetupTaskContext extends StringExpander implements SetupTaskContext, SetupProperties
 {
-  private static final String packageNameShouldBe = "!!!!!!!!!!!! org.eclipse.oomph.setup.internal.core !!!!!!!!!!";
-
   private static final Map<String, StringFilter> STRING_FILTER_REGISTRY = new HashMap<String, StringFilter>();
 
   private SetupPrompter prompter;

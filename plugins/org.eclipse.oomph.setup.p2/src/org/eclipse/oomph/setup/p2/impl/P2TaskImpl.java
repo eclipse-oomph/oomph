@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.p2.impl;
 
-import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
@@ -22,7 +21,6 @@ import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
-import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
@@ -30,7 +28,6 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.internal.p2.SetupP2Plugin;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.p2.P2Task;
-import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.util.DownloadUtil;
 import org.eclipse.oomph.setup.util.OS;
@@ -963,167 +960,4 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     return result;
   }
-
-  @Override
-  public MirrorRunnable mirror(final MirrorContext context, final File mirrorsDir, boolean includingLocals) throws Exception
-  {
-    throw new UnsupportedOperationException();
-
-    // // There's no longer a predefined bundle pool location for Buckminster
-    // return new MirrorRunnable()
-    // {
-    // public void run(IProgressMonitor monitor) throws Exception
-    // {
-    // String targetURL = URI.createFileURI(context.getP2PoolTPDir().toString()).toString();
-    //
-    // SlicingOptions slicingOptions = new SlicingOptions();
-    // slicingOptions.latestVersionOnly(true);
-    // slicingOptions.everythingGreedy(false);
-    //
-    // MirrorApplication app = new MirrorApplication()
-    // {
-    // @Override
-    // public IStatus run(IProgressMonitor monitor) throws ProvisionException
-    // {
-    // IStatus mirrorStatus = Status.OK_STATUS;
-    // monitor.beginTask("", 1 + 100 + 1000 + 100);
-    //
-    // try
-    // {
-    // initializeRepos(new SubProgressMonitor(monitor, 1));
-    // initializeIUs();
-    //
-    // IQueryable<IInstallableUnit> slice = slice(new SubProgressMonitor(monitor, 100));
-    //
-    // mirrorStatus = mirrorArtifacts(slice, new SubProgressMonitor(monitor, 1000));
-    // mirrorMetadata(slice, new SubProgressMonitor(monitor, 100));
-    // }
-    // finally
-    // {
-    // finalizeRepositories();
-    // }
-    //
-    // if (mirrorStatus.isOK())
-    // {
-    // return Status.OK_STATUS;
-    // }
-    //
-    // return mirrorStatus;
-    // }
-    //
-    // private void initializeIUs()
-    // {
-    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "initializeIUs");
-    // ReflectUtil.invokeMethod(method, this);
-    // }
-    //
-    // @SuppressWarnings("unchecked")
-    // private IQueryable<IInstallableUnit> slice(IProgressMonitor monitor)
-    // {
-    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "slice", IProgressMonitor.class);
-    // return (IQueryable<IInstallableUnit>)ReflectUtil.invokeMethod(method, this, monitor);
-    // }
-    //
-    // private IStatus mirrorArtifacts(IQueryable<IInstallableUnit> slice, IProgressMonitor monitor)
-    // {
-    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "mirrorArtifacts", IQueryable.class,
-    // IProgressMonitor.class);
-    // return (IStatus)ReflectUtil.invokeMethod(method, this, slice, monitor);
-    // }
-    //
-    // private void mirrorMetadata(IQueryable<IInstallableUnit> slice, IProgressMonitor monitor)
-    // {
-    // Method method = ReflectUtil.getMethod(MIRROR_CLASS, "mirrorMetadata", IQueryable.class,
-    // IProgressMonitor.class);
-    // ReflectUtil.invokeMethod(method, this, slice, monitor);
-    // }
-    // };
-    //
-    // app.setIncludePacked(false);
-    // app.setVerbose(true);
-    // app.setSlicingOptions(slicingOptions);
-    //
-    // RepositoryDescriptor destination = new RepositoryDescriptor();
-    // destination.setLocation(new URI(targetURL));
-    // destination.setAppend(true);
-    // app.addDestination(destination);
-    //
-    // initSourceRepos(app, context, targetURL);
-    // initRootIUs(app);
-    //
-    // app.run(monitor);
-    // }
-    //
-    // private void initSourceRepos(MirrorApplication app, final MirrorContext context, String targetURL)
-    // throws URISyntaxException
-    // {
-    // for (P2Repository p2Repository : getP2Repositories())
-    // {
-    // String sourceURL = context.redirect(URI.createURI(p2Repository.getURL())).toString();
-    //
-    // RepositoryDescriptor descriptor = new RepositoryDescriptor();
-    // descriptor.setLocation(new URI(sourceURL));
-    // app.addSource(descriptor);
-    //
-    // context.addRedirection(sourceURL, targetURL);
-    // }
-    // }
-    //
-    // private void initRootIUs(MirrorApplication app)
-    // {
-    // EList<Requirement> installableUnits = getRequirements();
-    // String[] rootIUs = new String[installableUnits.size()];
-    // for (int i = 0; i < rootIUs.length; i++)
-    // {
-    // Requirement requirement = installableUnits.get(i);
-    // rootIUs[i] = requirement.getID();
-    //
-    // VersionRange range = requirement.getVersionRange();
-    // if (!VersionRange.emptyRange.equals(range))
-    // {
-    // rootIUs[i] += "/" + range;
-    // }
-    // }
-    //
-    // Field field = ReflectUtil.getField(MIRROR_CLASS, "rootIUs");
-    // ReflectUtil.setValue(field, app, rootIUs);
-    // }
-    // };
-  }
-
-  @Override
-  public void collectSniffers(List<Sniffer> sniffers)
-  {
-    sniffers.add(new BasicSniffer(this, "Creates a task to install the current software.")
-    {
-      public void sniff(SetupTaskContainer container, List<Sniffer> dependencies, IProgressMonitor monitor) throws Exception
-      {
-        Agent agent = P2Util.getAgentManager().getCurrentAgent();
-        Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
-
-        IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
-        Set<String> knownRepositories = P2Util.getKnownRepositories(manager);
-        if (installedUnits.isEmpty() && knownRepositories.isEmpty())
-        {
-          return;
-        }
-
-        P2Task task = SetupP2Factory.eINSTANCE.createP2Task();
-        container.getSetupTasks().add(task);
-
-        for (IInstallableUnit iu : installedUnits)
-        {
-          Requirement requirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
-          task.getRequirements().add(requirement);
-        }
-
-        for (String url : knownRepositories)
-        {
-          Repository repository = P2Factory.eINSTANCE.createRepository(url);
-          task.getRepositories().add(repository);
-        }
-      }
-    });
-  }
-
 } // InstallTaskImpl

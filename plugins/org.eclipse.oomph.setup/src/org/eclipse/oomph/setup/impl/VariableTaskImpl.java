@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupFactory;
@@ -63,8 +64,6 @@ import java.util.Set;
  */
 public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 {
-  private static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator";
-
   private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//ContextVariableTask/stringSubstitution";
 
   /**
@@ -644,10 +643,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 
   protected void eMigrate()
   {
-    // The above ANNOTATION_SOURCE is not visible here.
-    int xxx;
-
-    Annotation annotation = getAnnotation(ANNOTATION_SOURCE);
+    Annotation annotation = getAnnotation(BaseAnnotationConstants.ANNOTATION_SOURCE);
     if (annotation != null)
     {
       EMap<String, String> details = annotation.getDetails();

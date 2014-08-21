@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.presentation.actions;
 
-import org.eclipse.oomph.internal.setup.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
 

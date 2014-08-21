@@ -12,9 +12,6 @@ package org.eclipse.oomph.setup.presentation;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
-import org.eclipse.oomph.internal.setup.core.SetupContext;
-import org.eclipse.oomph.internal.setup.core.SetupTaskPerformer;
-import org.eclipse.oomph.internal.setup.core.util.SetupUtil;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
@@ -25,6 +22,9 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.actions.PreferenceRecorderAction;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
@@ -222,6 +222,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
   private EditorTableAction editorTableAction = new EditorTableAction();
 
+  @SuppressWarnings("unused")
   private TestInstallAction testInstallAction = new TestInstallAction();
 
   private RevertAction revertAction;
