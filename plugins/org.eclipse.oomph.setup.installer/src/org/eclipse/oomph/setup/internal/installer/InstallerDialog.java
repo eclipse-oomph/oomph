@@ -31,6 +31,7 @@ import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
 import org.eclipse.oomph.setup.ui.wizards.VariablePage;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.IRunnable;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -63,9 +64,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Eike Stepper
@@ -306,7 +311,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
 
     versionLink = new Link(parent, SWT.NO_FOCUS);
     versionLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER));
-    versionLink.setToolTipText("About");
+    versionLink.setToolTipText("About this build");
 
     Thread thread = new ProductVersionSetter();
     thread.start();
@@ -385,6 +390,35 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
         return "Self Hosting";
       }
 
+      InputStream source = null;
+
+      try
+      {
+        URL url = SetupInstallerPlugin.INSTANCE.getBundle().getResource("about.mappings");
+        if (url != null)
+        {
+          source = url.openStream();
+
+          Properties properties = new Properties();
+          properties.load(source);
+
+          String buildID = (String)properties.get("0");
+          if (buildID != null && !buildID.startsWith("$"))
+          {
+            return "#" + buildID;
+          }
+        }
+      }
+      catch (IOException ex)
+      {
+        //$FALL-THROUGH$
+      }
+      finally
+      {
+        IOUtil.closeSilent(source);
+      }
+
+      // In the unlikely case that we haven't found the build ID we return the product version.
       for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null)))
       {
         return iu.getVersion().toString();

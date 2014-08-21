@@ -2539,7 +2539,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
       catch (IOException ex)
       {
-        ex.printStackTrace();
         //$FALL-THROUGH$
       }
       finally
