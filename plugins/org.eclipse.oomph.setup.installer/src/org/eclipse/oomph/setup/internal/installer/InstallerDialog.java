@@ -427,7 +427,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
         Version version = iu.getVersion();
         if (buildID != null && version.getSegmentCount() > 3)
         {
-          label = version.getSegment(0) + "." + version.getSegment(1) + version.getSegment(2);
+          label = version.getSegment(0) + "." + version.getSegment(1) + "." + version.getSegment(2);
         }
         else
         {
@@ -436,7 +436,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
 
         if (buildID != null)
         {
-          label += " (" + buildID + ")";
+          label += " (build " + buildID + ")";
         }
 
         return label;
