@@ -953,26 +953,26 @@ public class TargletContainer extends AbstractBundleContainer
               IInstallableUnit workspaceIU = idToIUMap.get(id);
               if (workspaceIU != null)
               {
+                // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
+                WorkspaceIUInfo info = workspaceIUInfos.get(workspaceIU);
+                workspaceIUInfos.put(iu, info);
+
                 // And that binary IU is in the qualifier range of the synthetic IU.
                 if (P2Factory.eINSTANCE.createVersionRange(workspaceIU.getVersion(), VersionSegment.MICRO).isIncluded(iu.getVersion()))
                 {
-                  // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
-                  WorkspaceIUInfo info = workspaceIUInfos.get(workspaceIU);
-                  workspaceIUInfos.put(iu, info);
-
                   // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
                   ius.remove(workspaceIU);
+                }
 
-                  // If there this workspace IU has a license...
-                  String licenseFeatureID = workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID);
-                  if (licenseFeatureID != null)
-                  {
-                    // Keep a requirement for this IU because binary IUs are generally not installed for license feature dependencies.
-                    VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
-                    IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null, false,
-                        false);
-                    licenseRequirements.add(requirement);
-                  }
+                // If there this workspace IU has a license...
+                String licenseFeatureID = workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID);
+                if (licenseFeatureID != null)
+                {
+                  // Keep a requirement for this IU because binary IUs are generally not installed for license feature dependencies.
+                  VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
+                  IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null, false,
+                      false);
+                  licenseRequirements.add(requirement);
                 }
               }
             }
