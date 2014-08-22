@@ -30,10 +30,14 @@ import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 
 import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The default GUI-based implementation of {@link UIServices}.
@@ -152,7 +156,40 @@ public class P2ServiceUI extends UIServices
         {
           ILabelProvider labelProvider = new CertificateLabelProvider();
           TreeNodeContentProvider contentProvider = new TreeNodeContentProvider();
-          TrustCertificateDialog trustCertificateDialog = new TrustCertificateDialog(shell, input, labelProvider, contentProvider);
+          TrustCertificateDialog trustCertificateDialog = new TrustCertificateDialog(shell, input, labelProvider, contentProvider)
+          {
+            @Override
+            protected void configureShell(Shell shell)
+            {
+              Image[] defaultImages = getDefaultImages();
+              if (defaultImages.length > 0)
+              {
+                List<Image> nonDisposedImages = new ArrayList<Image>(defaultImages.length);
+                for (Image defaultImage : defaultImages)
+                {
+                  if (defaultImage != null && !defaultImage.isDisposed())
+                  {
+                    nonDisposedImages.add(defaultImage);
+                  }
+                }
+
+                if (!nonDisposedImages.isEmpty())
+                {
+                  Image[] array = new Image[nonDisposedImages.size()];
+                  nonDisposedImages.toArray(array);
+                  shell.setImages(array);
+                }
+              }
+
+              Layout layout = getLayout();
+              if (layout != null)
+              {
+                shell.setLayout(layout);
+              }
+
+              shell.setText(ProvUIMessages.TrustCertificateDialog_Title);
+            }
+          };
           trustCertificateDialog.open();
           Certificate[] values = new Certificate[trustCertificateDialog.getResult() == null ? 0 : trustCertificateDialog.getResult().length];
           for (int i = 0; i < values.length; i++)
