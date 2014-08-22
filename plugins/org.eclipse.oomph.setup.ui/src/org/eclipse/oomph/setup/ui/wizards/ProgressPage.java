@@ -324,6 +324,8 @@ public class ProgressPage extends SetupWizardPage
   {
     if (forward)
     {
+      setErrorMessage(null);
+
       progressPageLog = new ProgressPageLog();
       logDocument.set("");
 
@@ -526,19 +528,35 @@ public class ProgressPage extends SetupWizardPage
                     return Status.OK_STATUS;
                   }
 
-                  progressLog.log("Press Finish to close the dialog.");
+                  if (success)
+                  {
+                    progressLog.log("Press Finish to close the dialog.");
+                  }
+                  else
+                  {
+                    progressLog.log("There are failed tasks.");
+                    progressLog.log("Press Back to choose different settings or Cancel to abort.");
+                  }
                 }
 
+                final boolean finalSuccess = success;
                 UIUtil.asyncExec(new Runnable()
                 {
                   public void run()
                   {
                     progressLog.setFinished();
-                    setPageComplete(true);
+                    setPageComplete(finalSuccess);
 
-                    if (disableCancelButton.get())
+                    if (finalSuccess)
                     {
-                      setCancelState(false);
+                      if (disableCancelButton.get())
+                      {
+                        setCancelState(false);
+                      }
+                    }
+                    else
+                    {
+                      setErrorMessage("There are failed tasks.  Press Back to choose different settings or Cancel to abort.");
                     }
                   }
                 });
