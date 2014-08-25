@@ -11,11 +11,11 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
-import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
-import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
@@ -33,9 +33,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -374,7 +372,7 @@ public class ProgressPage extends SetupWizardPage
       final SetupTaskPerformer performer = getPerformer();
       performer.setProgress(progressPageLog);
 
-      progressMonitorPart.beginTask("", performer.getTriggeredSetupTasks().size());
+      progressMonitorPart.beginTask("", performer.getNeededTasks().size());
 
       File renamed = null;
       if (getTrigger() == Trigger.BOOTSTRAP)
@@ -393,6 +391,10 @@ public class ProgressPage extends SetupWizardPage
           }
           catch (Exception ex)
           {
+            progressPageLog.log(ex);
+            setErrorMessage("Could not rename '" + configurationLocation + "'.  Press Back twice to choose a different installation location.");
+            progressPageLog.setFinished();
+
             throw new IORuntimeException(ex);
           }
         }
@@ -717,48 +719,22 @@ public class ProgressPage extends SetupWizardPage
 
   private void saveLocalFiles(SetupTaskPerformer performer)
   {
-    Installation installation = getInstallation();
-    Resource installationResource = installation.eResource();
-    URI installationResourceURI = installationResource.getURI();
-    installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
-        .toString()));
-
-    Workspace workspace = getWorkspace();
-    Resource workspaceResource = null;
-    URI workspaceResourceURI = null;
-    if (workspace != null)
-    {
-      workspaceResource = workspace.eResource();
-      workspaceResourceURI = workspaceResource.getURI();
-      workspaceResource.setURI(URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
-          .toString()));
-    }
-
     User performerUser = performer.getUser();
-    User user = getUser();
-    user.getAcceptedLicenses().addAll(performerUser.getAcceptedLicenses());
-    user.setUnsignedPolicy(performerUser.getUnsignedPolicy());
+    User user = SetupContext.createUserOnly(SetupUtil.createResourceSet()).getUser();
 
-    BaseUtil.saveEObject(installation);
-    if (workspace != null)
+    boolean shouldSave = user.getAcceptedLicenses().addAll(performerUser.getAcceptedLicenses());
+    UnsignedPolicy userUnsignedPolicy = user.getUnsignedPolicy();
+    UnsignedPolicy performerUserUnsignedPolicy = performerUser.getUnsignedPolicy();
+    if (userUnsignedPolicy != performerUserUnsignedPolicy)
     {
-      BaseUtil.saveEObject(workspace);
+      user.setUnsignedPolicy(performerUserUnsignedPolicy);
+      shouldSave = true;
     }
 
-    Resource userResource = user.eResource();
-    if (userResource.getResourceSet() == null)
+    if (shouldSave)
     {
-      SetupUtil.createResourceSet().getResources().add(userResource);
       BaseUtil.saveEObject(user);
     }
-
-    installationResource.setURI(installationResourceURI);
-    if (workspaceResource != null)
-    {
-      workspaceResource.setURI(workspaceResourceURI);
-    }
-
-    performer.savePasswords();
   }
 
   private void setButtonState(int buttonID, boolean enabled)

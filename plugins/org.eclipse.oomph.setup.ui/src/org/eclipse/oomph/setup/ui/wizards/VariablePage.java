@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.Installation;
@@ -22,6 +23,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.AbstractConfirmDialog;
 import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
@@ -472,10 +474,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       User user = getUser();
       User copiedUser = EcoreUtil.copy(user);
       URI userResourceURI = user.eResource().getURI();
-      Resource userResource = getResourceSet().getResourceFactoryRegistry().getFactory(userResourceURI).createResource(userResourceURI);
+      Resource userResource = SetupUtil.createResourceSet().createResource(userResourceURI);
       userResource.getContents().add(copiedUser);
 
-      // TODO This code is just like in org.eclipse.oomph.setup.ui.wizards.ProgressPage.saveLocalFiles(SetupTaskPerformer)
       Installation installation = getInstallation();
       Resource installationResource = installation.eResource();
       URI installationResourceURI = installationResource.getURI();
@@ -495,16 +496,26 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
       performer.recordVariables(copiedUser);
 
+      unresolvedVariables.clear();
+
+      getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), copiedUser));
+      setPerformer(performer);
+
+      BaseUtil.saveEObject(installation);
+      if (workspace != null)
+      {
+        BaseUtil.saveEObject(workspace);
+      }
+
+      BaseUtil.saveEObject(copiedUser);
+
+      performer.savePasswords();
+
       installationResource.setURI(installationResourceURI);
       if (workspaceResource != null)
       {
         workspaceResource.setURI(workspaceResourceURI);
       }
-
-      unresolvedVariables.clear();
-
-      getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), copiedUser));
-      setPerformer(performer);
     }
     else
     {

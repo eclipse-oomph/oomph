@@ -111,12 +111,14 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
@@ -160,8 +162,10 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWindowListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -195,6 +199,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This is an example of a Setup model editor.
@@ -388,6 +393,53 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       // Ignore.
     }
   };
+
+  protected IWindowListener windowListener = new IWindowListener()
+  {
+    public void windowOpened(IWorkbenchWindow window)
+    {
+    }
+
+    public void windowDeactivated(IWorkbenchWindow window)
+    {
+    }
+
+    public void windowClosed(IWorkbenchWindow window)
+    {
+    }
+
+    public void windowActivated(IWorkbenchWindow window)
+    {
+      if (getSite().getWorkbenchWindow() == window)
+      {
+        IWorkbenchPage activePage = window.getActivePage();
+        if (activePage != null)
+        {
+          IWorkbenchPart activePart = activePage.getActivePart();
+          if (activePart instanceof ContentOutline)
+          {
+            if (((ContentOutline)activePart).getCurrentPage() == contentOutlinePage)
+            {
+              handleActivate();
+            }
+          }
+          else if (activePart instanceof PropertySheet)
+          {
+            if (propertySheetPages.contains(((PropertySheet)activePart).getCurrentPage()))
+            {
+              handleActivate();
+            }
+          }
+          else if (activePart == SetupEditor.this)
+          {
+            handleActivate();
+          }
+        }
+      }
+    }
+  };
+
+  protected boolean isHandlingActivate;
 
   /**
    * Resources that have been removed since last activation.
@@ -638,7 +690,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void handleActivate()
+  protected void handleActivateGen()
   {
     // Recompute the read only state.
     //
@@ -670,6 +722,140 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       handleChangedResources();
       changedResources.clear();
       savedResources.clear();
+    }
+  }
+
+  protected void handleActivate()
+  {
+    if (!isHandlingActivate)
+    {
+      isHandlingActivate = true;
+
+      try
+      {
+        ResourceSet resourceSet = editingDomain.getResourceSet();
+        URIConverter uriConverter = resourceSet.getURIConverter();
+        final Set<IFile> files = new HashSet<IFile>();
+        for (Resource resource : resourceSet.getResources())
+        {
+          if (resource.isLoaded())
+          {
+            URI uri = resource.getURI();
+            URI normalizedURI = uriConverter.normalize(uri);
+
+            if (normalizedURI.isPlatformResource())
+            {
+              files.add(EcorePlugin.getWorkspaceRoot().getFile(new Path(normalizedURI.toPlatformString(true))));
+            }
+            else if (normalizedURI.isFile())
+            {
+              Map<String, ?> attributes = uriConverter.getAttributes(normalizedURI,
+                  Collections.singletonMap(URIConverter.OPTION_REQUESTED_ATTRIBUTES, Collections.singleton(URIConverter.ATTRIBUTE_TIME_STAMP)));
+              Long timeStamp = (Long)attributes.get(URIConverter.ATTRIBUTE_TIME_STAMP);
+              if (timeStamp != null && timeStamp != resource.getTimeStamp())
+              {
+                changedResources.add(resource);
+              }
+            }
+          }
+        }
+
+        if (!files.isEmpty())
+        {
+          final AtomicBoolean needsRefresh = new AtomicBoolean();
+
+          // Do the work within an operation because this is a long running activity that modifies the workbench.
+          //
+          IWorkspaceRunnable operation = new IWorkspaceRunnable()
+          {
+            public void run(IProgressMonitor monitor) throws CoreException
+            {
+              for (IFile file : files)
+              {
+                if (!file.isSynchronized(1))
+                {
+                  needsRefresh.set(true);
+                  file.refreshLocal(1, monitor);
+                }
+              }
+            }
+          };
+
+          try
+          {
+            EcorePlugin.getWorkspaceRoot().getWorkspace().run(operation, null);
+          }
+          catch (Exception exception)
+          {
+            // Something went wrong that shouldn't.
+            //
+            SetupEditorPlugin.INSTANCE.log(exception);
+          }
+
+          // If the refreshes must take place, the delta visitor will cause this method to be invoked again so exit early now.
+          if (needsRefresh.get())
+          {
+            return;
+          }
+        }
+
+        if (!removedResources.isEmpty())
+        {
+          List<Resource> removedResources = new ArrayList<Resource>(this.removedResources);
+          if (!removedResources.remove(resourceSet.getResources().get(0)))
+          {
+            // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them form further dirty handling.
+            for (Resource resource : removedResources)
+            {
+              this.removedResources.remove(resource);
+              resource.unload();
+            }
+          }
+        }
+
+        if (!changedResources.isEmpty())
+        {
+          // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them form further dirty handling.
+          List<Resource> changedResources = new ArrayList<Resource>(this.changedResources);
+          if (!changedResources.remove(resourceSet.getResources().get(0)))
+          {
+            updateProblemIndication = false;
+            for (Resource resource : changedResources)
+            {
+              this.changedResources.remove(resource);
+              if (resource.isLoaded())
+              {
+                resource.unload();
+                try
+                {
+                  resource.load(Collections.EMPTY_MAP);
+                }
+                catch (IOException exception)
+                {
+                  if (!resourceToDiagnosticMap.containsKey(resource))
+                  {
+                    resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
+                  }
+                }
+              }
+            }
+
+            if (AdapterFactoryEditingDomain.isStale(editorSelection))
+            {
+              setSelection(StructuredSelection.EMPTY);
+            }
+
+            updateProblemIndication = true;
+            updateProblemIndication();
+          }
+        }
+
+        handleActivateGen();
+      }
+      finally
+      {
+        isHandlingActivate = false;
+      }
     }
   }
 
@@ -2628,6 +2814,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     };
 
+    site.getWorkbenchWindow().getWorkbench().addWindowListener(windowListener);
+
     initGen(site, editorInput);
   }
 
@@ -2803,8 +2991,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void dispose()
+  public void disposeGen()
   {
     updateProblemIndication = false;
 
@@ -2830,6 +3017,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
 
     super.dispose();
+  }
+
+  @Override
+  public void dispose()
+  {
+    getSite().getWorkbenchWindow().getWorkbench().removeWindowListener(windowListener);
+    disposeGen();
   }
 
   /**
