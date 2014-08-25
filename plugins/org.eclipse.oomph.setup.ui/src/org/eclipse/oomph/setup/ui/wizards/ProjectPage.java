@@ -64,6 +64,9 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellEditor;
@@ -100,13 +103,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
+import org.eclipse.ui.progress.WorkbenchJob;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -210,10 +216,10 @@ public class ProjectPage extends SetupWizardPage
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
-    final ToolItem showHierarchyButton = new ToolItem(filterToolBar, SWT.CHECK);
-    showHierarchyButton.setToolTipText("Show Hierarchy");
-    showHierarchyButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("tree"));
-    showHierarchyButton.setSelection(true);
+    // final ToolItem showHierarchyButton = new ToolItem(filterToolBar, SWT.CHECK);
+    // showHierarchyButton.setToolTipText("Show Hierarchy");
+    // showHierarchyButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("tree"));
+    // showHierarchyButton.setSelection(true);
 
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
     collapseAllButton.setToolTipText("Collapse All");
@@ -228,7 +234,141 @@ public class ProjectPage extends SetupWizardPage
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
     catalogSelector.configure(catalogsButton);
 
-    FilteredTree filteredTree = new FilteredTree(upperComposite, SWT.BORDER | SWT.MULTI, new PatternFilter(), true);
+    FilteredTree filteredTree = new FilteredTree(upperComposite, SWT.BORDER | SWT.MULTI, new PatternFilter(), true)
+    {
+      @Override
+      protected WorkbenchJob doCreateRefreshJob()
+      {
+        return new WorkbenchJob("Refresh Filter")
+        {
+          @Override
+          public IStatus runInUIThread(IProgressMonitor monitor)
+          {
+            if (treeViewer.getControl().isDisposed())
+            {
+              return Status.CANCEL_STATUS;
+            }
+
+            String text = getFilterString();
+            if (text == null)
+            {
+              return Status.OK_STATUS;
+            }
+
+            boolean initial = initialText != null && initialText.equals(text);
+            if (initial)
+            {
+              getPatternFilter().setPattern(null);
+            }
+            else
+            {
+              getPatternFilter().setPattern(text);
+            }
+
+            Control redrawFalseControl = treeComposite != null ? treeComposite : treeViewer.getControl();
+            try
+            {
+              redrawFalseControl.setRedraw(false);
+              TreeItem[] is = treeViewer.getTree().getItems();
+              for (int i = 0; i < is.length; i++)
+              {
+                TreeItem item = is[i];
+                if (item.getExpanded())
+                {
+                  treeViewer.setExpandedState(item.getData(), false);
+                }
+              }
+
+              treeViewer.refresh(true);
+
+              if (text.length() > 0 && !initial)
+              {
+                TreeItem[] items = getViewer().getTree().getItems();
+                int treeHeight = getViewer().getTree().getBounds().height;
+                int numVisibleItems = treeHeight / getViewer().getTree().getItemHeight();
+                long stopTime = 200 + System.currentTimeMillis();
+                boolean cancel = false;
+                if (items.length > 0 && recursiveExpand(items, monitor, stopTime, new int[] { numVisibleItems }))
+                {
+                  cancel = true;
+                }
+
+                updateToolbar(true);
+
+                if (cancel)
+                {
+                  return Status.CANCEL_STATUS;
+                }
+              }
+              else
+              {
+                updateToolbar(false);
+              }
+            }
+            finally
+            {
+              TreeItem[] items = getViewer().getTree().getItems();
+              if (items.length > 0 && getViewer().getTree().getSelectionCount() == 0)
+              {
+                treeViewer.getTree().setTopItem(items[0]);
+              }
+              redrawFalseControl.setRedraw(true);
+            }
+            return Status.OK_STATUS;
+          }
+
+          private boolean recursiveExpand(TreeItem[] items, IProgressMonitor monitor, long cancelTime, int[] numItemsLeft)
+          {
+            boolean canceled = false;
+            for (int i = 0; !canceled && i < items.length; i++)
+            {
+              TreeItem item = items[i];
+              boolean visible = numItemsLeft[0]-- >= 0;
+              if (monitor.isCanceled() || !visible && System.currentTimeMillis() > cancelTime)
+              {
+                canceled = true;
+              }
+              else
+              {
+                Object itemData = item.getData();
+                if (itemData != null)
+                {
+                  if (!item.getExpanded())
+                  {
+                    treeViewer.setExpandedState(itemData, true);
+                  }
+
+                  TreeItem[] children = item.getItems();
+                  if (items.length > 0)
+                  {
+                    canceled = recursiveExpand(children, monitor, cancelTime, numItemsLeft);
+                  }
+                }
+              }
+            }
+            return canceled;
+          }
+
+          @Override
+          public Display getDisplay()
+          {
+            return UIUtil.getDisplay();
+          }
+
+          @Override
+          public boolean shouldSchedule()
+          {
+            return true;
+          }
+
+          @Override
+          public boolean shouldRun()
+          {
+            return true;
+          }
+        };
+      }
+    };
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
 
@@ -403,14 +543,14 @@ public class ProjectPage extends SetupWizardPage
     projectViewer.setInput(selection);
     streamViewer.setInput(workspace);
 
-    showHierarchyButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        collapseAllButton.setEnabled(showHierarchyButton.getSelection());
-      }
-    });
+    // showHierarchyButton.addSelectionListener(new SelectionAdapter()
+    // {
+    // @Override
+    // public void widgetSelected(SelectionEvent e)
+    // {
+    // collapseAllButton.setEnabled(showHierarchyButton.getSelection());
+    // }
+    // });
 
     collapseAllButton.addSelectionListener(new SelectionAdapter()
     {
