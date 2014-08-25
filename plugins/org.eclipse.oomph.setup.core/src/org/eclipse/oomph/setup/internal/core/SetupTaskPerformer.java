@@ -211,6 +211,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
+  private boolean hasSuccessfullyPerformed;
+
   public SetupTaskPerformer(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext, Stream stream)
   {
     super(uriConverter, prompter, trigger, setupContext);
@@ -222,6 +224,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     super(uriConverter, prompter, trigger, setupContext);
     this.triggeredSetupTasks = triggeredSetupTasks;
     initTriggeredSetupTasks(null, false);
+  }
+
+  public boolean hasSuccessfullyPerformed()
+  {
+    return hasSuccessfullyPerformed;
   }
 
   private void initTriggeredSetupTasks(Stream stream, boolean firstPhase)
@@ -1518,7 +1525,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     try
     {
-      PrintStream logStream = getLogStream();
+      PrintStream logStream = getLogStream(true);
       logStream.println("[" + DATE_TIME.format(new Date()) + "] " + line);
       logStream.flush();
     }
@@ -1530,9 +1537,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     progress.log(line, filter);
   }
 
-  private PrintStream getLogStream()
+  public PrintStream getLogStream()
   {
-    if (logStream == null)
+    return logStream;
+  }
+
+  private PrintStream getLogStream(boolean demandCreate)
+  {
+    if (logStream == null && demandCreate)
     {
       try
       {
@@ -2364,6 +2376,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         performTask(resourceCopyTask);
       }
     }
+
+    hasSuccessfullyPerformed = true;
   }
 
   private void performTriggeredSetupTasks() throws Exception
@@ -2375,7 +2389,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  public void performNeededSetupTasks() throws Exception
+  private void performNeededSetupTasks() throws Exception
   {
     setPerforming(true);
 

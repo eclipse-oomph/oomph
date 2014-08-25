@@ -146,6 +146,8 @@ public abstract class SetupWizardPage extends WizardPage
     ui.setLayoutData(layoutData);
 
     createCheckButtons();
+
+    createFooter(pageControl);
   }
 
   protected void createCheckButtons()
@@ -225,4 +227,8 @@ public abstract class SetupWizardPage extends WizardPage
   }
 
   protected abstract Control createUI(Composite parent);
+
+  protected void createFooter(Composite parent)
+  {
+  }
 }

@@ -727,12 +727,13 @@ public class TargletContainer extends AbstractBundleContainer
     }
     catch (Throwable t)
     {
-      descriptor.rollbackUpdateTransaction(t, progress.newChild());
+      descriptor.rollbackUpdateTransaction(t, progress.isCanceled() ? new NullProgressMonitor() : progress.newChild());
 
       UpdateProblem updateProblem = descriptor.getUpdateProblem();
       if (updateProblem != null)
       {
-        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new ProfileUpdateFailedEvent(this, descriptor, updateProblem), progress.newChild());
+        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new ProfileUpdateFailedEvent(this, descriptor, updateProblem),
+            progress.isCanceled() ? new NullProgressMonitor() : progress.newChild());
       }
 
       TargletsCorePlugin.INSTANCE.coreException(t);

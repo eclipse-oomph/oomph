@@ -29,6 +29,7 @@ import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
@@ -57,6 +58,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationEvent;
@@ -72,6 +74,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.internal.progress.ProgressManager;
 
@@ -183,6 +186,8 @@ public class ProgressPage extends SetupWizardPage
 
   private StyledText logText;
 
+  private ProgressMonitorPart progressMonitorPart;
+
   private final Document logDocument = new Document();
 
   private final ProgressLogFilter logFilter = new ProgressLogFilter();
@@ -203,11 +208,13 @@ public class ProgressPage extends SetupWizardPage
 
   private Button launchButton;
 
+  private boolean hasLaunched;
+
   public ProgressPage()
   {
     super("ProgressPage");
     setTitle("Progress");
-    setDescription("Wait for the setup to complete or press Back to cancel and make changes.");
+    setDescription("Wait for the setup to complete, or cancel the progress indictor and press Back to make changes.");
   }
 
   @Override
@@ -320,17 +327,54 @@ public class ProgressPage extends SetupWizardPage
   }
 
   @Override
+  protected void createFooter(Composite parent)
+  {
+    progressMonitorPart = new ProgressMonitorPart(parent, null, true)
+    {
+      @Override
+      protected void initialize(Layout layout, int progressIndicatorHeight)
+      {
+        super.initialize(layout, progressIndicatorHeight);
+        fLabel.dispose();
+      }
+
+      @Override
+      protected void updateLabel()
+      {
+      }
+
+      @Override
+      public void done()
+      {
+        fProgressIndicator.sendRemainingWork();
+        fProgressIndicator.done();
+        removeFromCancelComponent(null);
+        // progressMonitorPart.setSize(new Point(0, 0));
+        progressMonitorPart.setLayoutData(new GridData(0, 0));
+        progressMonitorPart.getParent().layout();
+      }
+    };
+
+    progressMonitorPart.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+  }
+
+  @Override
   public void enterPage(boolean forward)
   {
     if (forward)
     {
       setErrorMessage(null);
+      setMessage(null);
 
-      progressPageLog = new ProgressPageLog();
+      hasLaunched = false;
+
+      progressPageLog = new ProgressPageLog(progressMonitorPart);
       logDocument.set("");
 
       final SetupTaskPerformer performer = getPerformer();
       performer.setProgress(progressPageLog);
+
+      progressMonitorPart.beginTask("", performer.getTriggeredSetupTasks().size());
 
       File renamed = null;
       if (getTrigger() == Trigger.BOOTSTRAP)
@@ -399,7 +443,8 @@ public class ProgressPage extends SetupWizardPage
     {
       performCancel();
       setPageComplete(false);
-      setCancelState(true);
+      hasLaunched = false;
+      setButtonState(IDialogConstants.CANCEL_ID, true);
     }
   }
 
@@ -441,6 +486,9 @@ public class ProgressPage extends SetupWizardPage
       {
         public void run()
         {
+          setButtonState(IDialogConstants.CANCEL_ID, false);
+          setButtonState(IDialogConstants.BACK_ID, false);
+
           final Job job = new Job(jobName)
           {
             @Override
@@ -477,10 +525,11 @@ public class ProgressPage extends SetupWizardPage
               finally
               {
                 long seconds = (System.currentTimeMillis() - start) / 1000;
+                progressLog.setTerminating();
                 progressLog.log("Took " + seconds + " seconds.");
 
                 final AtomicBoolean disableCancelButton = new AtomicBoolean(true);
-                SetupWizard wizard = getWizard();
+                final SetupWizard wizard = getWizard();
 
                 if (!(restartReasons == null || restartReasons.isEmpty()) && SetupUIPlugin.SETUP_IDE)
                 {
@@ -531,13 +580,43 @@ public class ProgressPage extends SetupWizardPage
                   if (success)
                   {
                     progressLog.log("Press Finish to close the dialog.");
+
+                    if (launchButton != null && !hasLaunched)
+                    {
+                      wizard.setFinishAction(new Runnable()
+                      {
+                        public void run()
+                        {
+                          if (launchAutomatically)
+                          {
+                            try
+                            {
+                              launchProduct(getPerformer());
+                            }
+                            catch (Exception ex)
+                            {
+                              SetupUIPlugin.INSTANCE.log(ex);
+                            }
+                          }
+                        }
+                      });
+                    }
                   }
                   else
                   {
-                    progressLog.log("There are failed tasks.");
+                    if (progressMonitorPart.isCanceled())
+                    {
+                      progressLog.log("Task execution was canceled.");
+                    }
+                    else
+                    {
+                      progressLog.log("There are failed tasks.");
+                    }
                     progressLog.log("Press Back to choose different settings or Cancel to abort.");
                   }
                 }
+
+                IOUtil.close(getPerformer().getLogStream());
 
                 final boolean finalSuccess = success;
                 UIUtil.asyncExec(new Runnable()
@@ -546,17 +625,27 @@ public class ProgressPage extends SetupWizardPage
                   {
                     progressLog.setFinished();
                     setPageComplete(finalSuccess);
+                    setButtonState(IDialogConstants.BACK_ID, true);
 
                     if (finalSuccess)
                     {
+                      setMessage("Task execution has successfully completed.  Press Back to choose different settings or Finish to exit.");
                       if (disableCancelButton.get())
                       {
-                        setCancelState(false);
+                        setButtonState(IDialogConstants.CANCEL_ID, false);
                       }
                     }
                     else
                     {
-                      setErrorMessage("There are failed tasks.  Press Back to choose different settings or Cancel to abort.");
+                      setButtonState(IDialogConstants.CANCEL_ID, true);
+                      if (progressMonitorPart.isCanceled())
+                      {
+                        setErrorMessage("Task execution was canceled.  Press Back to choose different settings or Cancel to abort.");
+                      }
+                      else
+                      {
+                        setErrorMessage("There are failed tasks.  Press Back to choose different settings or Cancel to abort.");
+                      }
                     }
                   }
                 });
@@ -617,6 +706,8 @@ public class ProgressPage extends SetupWizardPage
       process.getInputStream().close();
       process.getOutputStream().close();
       process.getErrorStream().close();
+
+      hasLaunched = true;
     }
     else
     {
@@ -670,21 +761,25 @@ public class ProgressPage extends SetupWizardPage
     performer.savePasswords();
   }
 
-  private void setCancelState(boolean enabled)
+  private void setButtonState(int buttonID, boolean enabled)
   {
     try
     {
       IWizardContainer container = getContainer();
       Method method = ReflectUtil.getMethod(container.getClass(), "getButton", int.class);
       method.setAccessible(true);
-      Button cancelButton = (Button)method.invoke(container, IDialogConstants.CANCEL_ID);
-      cancelButton.setEnabled(enabled);
+      Button button = (Button)method.invoke(container, buttonID);
+      button.setEnabled(enabled);
 
-      scrollLockButton.setEnabled(enabled);
-      dismissButton.setEnabled(enabled);
-      if (launchButton != null)
+      if (buttonID == IDialogConstants.CANCEL_ID && getPerformer().hasSuccessfullyPerformed())
       {
-        launchButton.setEnabled(enabled);
+        scrollLockButton.setEnabled(enabled);
+        dismissButton.setEnabled(enabled);
+
+        if (launchButton != null)
+        {
+          launchButton.setEnabled(!hasLaunched);
+        }
       }
     }
     catch (Throwable ex)
@@ -700,22 +795,35 @@ public class ProgressPage extends SetupWizardPage
   {
     private final StringBuilder queue = new StringBuilder();
 
-    private boolean canceled;
-
     private boolean finished;
 
-    public ProgressPageLog()
+    private boolean terminating;
+
+    private ProgressMonitorPart progressMonitorPart;
+
+    public ProgressPageLog(ProgressMonitorPart progressMonitorPart)
     {
+      this.progressMonitorPart = progressMonitorPart;
+      progressMonitorPart.attachToCancelComponent(null);
+      progressMonitorPart.setCanceled(false);
+      progressMonitorPart.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+      progressMonitorPart.getParent().layout();
+    }
+
+    public void setTerminating()
+    {
+      terminating = true;
     }
 
     public boolean isCanceled()
     {
-      return canceled;
+      return progressMonitorPart.isCanceled();
     }
 
     public void cancel()
     {
-      canceled = true;
+      progressMonitorPart.setCanceled(true);
+      progressMonitorPart.done();
     }
 
     public void setFinished()
@@ -730,6 +838,15 @@ public class ProgressPage extends SetupWizardPage
       {
         public void run()
         {
+          if (setupTask == null)
+          {
+            progressMonitorPart.done();
+          }
+          else
+          {
+            progressMonitorPart.worked(1);
+          }
+
           SetupTask previousCurrentTask = currentTask;
           currentTask = setupTask;
 
@@ -779,7 +896,7 @@ public class ProgressPage extends SetupWizardPage
         return;
       }
 
-      if (isCanceled())
+      if (!terminating && isCanceled())
       {
         throw new OperationCanceledException();
       }

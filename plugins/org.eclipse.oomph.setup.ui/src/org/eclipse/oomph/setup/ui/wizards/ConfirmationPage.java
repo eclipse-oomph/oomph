@@ -224,18 +224,7 @@ public class ConfirmationPage extends SetupWizardPage
       viewer.setSubtreeChecked(ROOT_ELEMENT, true);
       someTaskChecked = true;
 
-      if (overwriteButton != null)
-      {
-        File configurationLocation = getPerformer().getProductConfigurationLocation();
-        if (!ObjectUtil.equals(configurationLocation, lastConfigurationLocation))
-        {
-          overwriteButton.setSelection(false);
-          lastConfigurationLocation = configurationLocation;
-        }
-
-        configurationLocationExists = configurationLocation.exists();
-        overwriteButton.setVisible(configurationLocationExists);
-      }
+      checkOverwrite();
 
       if (switchWorkspaceButton != null)
       {
@@ -261,13 +250,15 @@ public class ConfirmationPage extends SetupWizardPage
     else
     {
       Set<URI> checkedElements = new HashSet<URI>();
-      for (SetupTask setupTask : getPerformer().getTriggeredSetupTasks())
+      SetupTaskPerformer performer = getPerformer();
+      for (SetupTask setupTask : performer.getTriggeredSetupTasks())
       {
         if (viewer.getChecked(setupTask))
         {
           checkedElements.add(EcoreUtil.getURI(setupTask));
         }
       }
+      boolean hasSuccessfullyPerformed = performer.hasSuccessfullyPerformed();
 
       SetupWizardPage promptPage = (SetupWizardPage)getPreviousPage();
       promptPage.enterPage(false);
@@ -285,10 +276,37 @@ public class ConfirmationPage extends SetupWizardPage
         }
       }
 
+      if (hasSuccessfullyPerformed)
+      {
+        lastConfigurationLocation = null;
+        checkOverwrite();
+      }
+      else if (overwriteButton != null)
+      {
+        // If we've not successfully perform and we try to perform for the current configuration location again, we'll want to overwrite it.
+        overwriteButton.setSelection(true);
+      }
+
       updateCheckStates();
     }
 
     viewer.expandAll();
+  }
+
+  private void checkOverwrite()
+  {
+    if (overwriteButton != null)
+    {
+      File configurationLocation = getPerformer().getProductConfigurationLocation();
+      if (!ObjectUtil.equals(configurationLocation, lastConfigurationLocation))
+      {
+        overwriteButton.setSelection(false);
+        lastConfigurationLocation = configurationLocation;
+      }
+
+      configurationLocationExists = configurationLocation.exists();
+      overwriteButton.setVisible(configurationLocationExists);
+    }
   }
 
   private void initNeededSetupTasks()

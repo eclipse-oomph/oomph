@@ -283,7 +283,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
     if (finishAction != null)
     {
-      UIUtil.asyncExec(finishAction);
+      UIUtil.syncExec(finishAction);
     }
 
     return true;
