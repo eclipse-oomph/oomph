@@ -149,7 +149,7 @@ public class ProjectPage extends SetupWizardPage
   {
     super("ProjectPage");
     setTitle("Projects");
-    setDescription("Select the projects you want to work with and choose one stream per project.");
+    setDescription("Double click the projects you want to provision, and for each choose its Stream in the table column.");
   }
 
   @Override
