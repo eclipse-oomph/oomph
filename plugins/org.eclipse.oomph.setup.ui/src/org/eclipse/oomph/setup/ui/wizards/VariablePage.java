@@ -205,7 +205,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       fieldHolder.clear();
     }
 
-    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers.isEmpty() ? Collections.singleton(performer) : incompletePerformers)
+    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers.isEmpty() ? performer == null ? Collections.<SetupTaskPerformer> emptySet() : Collections
+        .singleton(performer) : incompletePerformers)
     {
       List<VariableTask> variables = setupTaskPerformer.getUnresolvedVariables();
       for (VariableTask variable : variables)
@@ -371,6 +372,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       performer = null;
 
+      String errorMessage = null;
       try
       {
         incompletePerformers.clear();
@@ -400,6 +402,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       {
         //$FALL-THROUGH$
       }
+      catch (IllegalArgumentException ex)
+      {
+        errorMessage = ex.getMessage();
+      }
+
+      setErrorMessage(errorMessage);
 
       UIUtil.asyncExec(new Runnable()
       {
