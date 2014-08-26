@@ -498,43 +498,47 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   {
     String rootFolder = sourceLocator.getRootFolder();
 
-    BackendContainer backendContainer = (BackendContainer)BackendResource.get(rootFolder);
-    backendContainer.accept(new BackendResource.Visitor.Default()
+    BackendResource backendResource = BackendResource.get(rootFolder);
+    if (backendResource instanceof BackendContainer)
     {
-      private final Set<String> excludedPaths = new HashSet<String>(sourceLocator.getExcludedPaths());
-
-      @Override
-      public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
+      BackendContainer backendContainer = (BackendContainer)backendResource;
+      backendContainer.accept(new BackendResource.Visitor.Default()
       {
-        ResourcesPlugin.checkCancelation(monitor);
+        private final Set<String> excludedPaths = new HashSet<String>(sourceLocator.getExcludedPaths());
 
-        String path = container.getSystemRelativePath();
-        if (excludedPaths.contains(path))
+        @Override
+        public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
         {
-          return false;
-        }
+          ResourcesPlugin.checkCancelation(monitor);
 
-        IProject project = loadProject(sourceLocator, defaultProjectFactories, container, monitor);
-        if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
-        {
-          try
-          {
-            projectHandler.handleProject(project, container);
-          }
-          catch (Exception ex)
-          {
-            SourceLocatorImpl.addStatus(status, ResourcesPlugin.INSTANCE, project.getName(), ex);
-          }
-
-          if (!sourceLocator.isLocateNestedProjects())
+          String path = container.getSystemRelativePath();
+          if (excludedPaths.contains(path))
           {
             return false;
           }
-        }
 
-        return true;
-      }
-    }, monitor);
+          IProject project = loadProject(sourceLocator, defaultProjectFactories, container, monitor);
+          if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
+          {
+            try
+            {
+              projectHandler.handleProject(project, container);
+            }
+            catch (Exception ex)
+            {
+              SourceLocatorImpl.addStatus(status, ResourcesPlugin.INSTANCE, project.getName(), ex);
+            }
+
+            if (!sourceLocator.isLocateNestedProjects())
+            {
+              return false;
+            }
+          }
+
+          return true;
+        }
+      }, monitor);
+    }
   }
 
 } // SourceLocatorImpl
