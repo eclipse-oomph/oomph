@@ -190,12 +190,12 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   @Override
   protected final IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException
   {
-    List<IProject> buildDpependencies = new ArrayList<IProject>();
-    build(kind, args, monitor, buildDpependencies);
-    return buildDpependencies.toArray(new IProject[buildDpependencies.size()]);
+    List<IProject> buildDependencies = new ArrayList<IProject>();
+    build(kind, args, monitor, buildDependencies);
+    return buildDependencies.toArray(new IProject[buildDependencies.size()]);
   }
 
-  private void build(int kind, Map<String, String> args, IProgressMonitor monitor, List<IProject> buildDpependencies) throws CoreException
+  private void build(int kind, Map<String, String> args, IProgressMonitor monitor, List<IProject> buildDependencies) throws CoreException
   {
     arguments = new VersionBuilderArguments(args);
     VersionValidator validator = null;
@@ -259,7 +259,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       try
       {
         IFile releaseSpecFile = ResourcesPlugin.getWorkspace().getRoot().getFile(releasePath);
-        buildDpependencies.add(releaseSpecFile.getProject());
+        buildDependencies.add(releaseSpecFile.getProject());
 
         IRelease release;
         if (!releaseSpecFile.exists())
@@ -279,6 +279,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         }
 
         this.release = release;
+
+        Markers.deleteAllMarkers(projectDescription, Markers.RELEASE_PATH_PROBLEM);
       }
       catch (Exception ex)
       {
@@ -331,7 +333,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         IProject childProject = getProject(child);
         if (childProject != null)
         {
-          buildDpependencies.add(childProject);
+          buildDependencies.add(childProject);
           if (checkComponentModel)
           {
             IModel childProjectComponentModel = VersionUtil.getComponentModel(childProject);
