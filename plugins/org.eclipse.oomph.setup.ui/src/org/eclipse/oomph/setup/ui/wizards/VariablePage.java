@@ -465,57 +465,35 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   {
     if (forward)
     {
-      List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
+      final List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
       for (FieldHolder fieldHolder : manager)
       {
         unresolvedVariables.addAll(fieldHolder.getVariables());
       }
 
       User user = getUser();
-      User copiedUser = EcoreUtil.copy(user);
+      final User copiedUser = EcoreUtil.copy(user);
       URI userResourceURI = user.eResource().getURI();
       Resource userResource = SetupUtil.createResourceSet().createResource(userResourceURI);
       userResource.getContents().add(copiedUser);
 
-      Installation installation = getInstallation();
-      Resource installationResource = installation.eResource();
-      URI installationResourceURI = installationResource.getURI();
-      installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
-          .toString()));
-
-      Workspace workspace = getWorkspace();
-      Resource workspaceResource = null;
-      URI workspaceResourceURI = null;
-      if (workspace != null)
+      new SetupURIUpdater()
       {
-        workspaceResource = workspace.eResource();
-        workspaceResourceURI = workspaceResource.getURI();
-        workspaceResource.setURI(URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
-            .toString()));
-      }
+        @Override
+        protected void visit(Installation installation, Workspace workspace)
+        {
+          performer.recordVariables(copiedUser);
 
-      performer.recordVariables(copiedUser);
+          unresolvedVariables.clear();
 
-      unresolvedVariables.clear();
+          getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), copiedUser));
+          setPerformer(performer);
 
-      getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), copiedUser));
-      setPerformer(performer);
+          BaseUtil.saveEObject(copiedUser);
 
-      BaseUtil.saveEObject(installation);
-      if (workspace != null)
-      {
-        BaseUtil.saveEObject(workspace);
-      }
-
-      BaseUtil.saveEObject(copiedUser);
-
-      performer.savePasswords();
-
-      installationResource.setURI(installationResourceURI);
-      if (workspaceResource != null)
-      {
-        workspaceResource.setURI(workspaceResourceURI);
-      }
+          performer.savePasswords();
+        }
+      }.visit(performer);
     }
     else
     {
@@ -1075,5 +1053,38 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       return fields.toString();
     }
+  }
+
+  static abstract class SetupURIUpdater
+  {
+    public void visit(SetupTaskPerformer performer)
+    {
+      Installation installation = performer.getInstallation();
+      Resource installationResource = installation.eResource();
+      URI installationResourceURI = installationResource.getURI();
+      installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
+          .toString()));
+
+      Workspace workspace = performer.getWorkspace();
+      Resource workspaceResource = null;
+      URI workspaceResourceURI = null;
+      if (workspace != null)
+      {
+        workspaceResource = workspace.eResource();
+        workspaceResourceURI = workspaceResource.getURI();
+        workspaceResource.setURI(URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
+            .toString()));
+      }
+
+      visit(installation, workspace);
+
+      installationResource.setURI(installationResourceURI);
+      if (workspaceResource != null)
+      {
+        workspaceResource.setURI(workspaceResourceURI);
+      }
+    }
+
+    protected abstract void visit(Installation installation, Workspace workspace);
   }
 }

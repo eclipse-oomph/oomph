@@ -11,10 +11,12 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
@@ -720,7 +722,7 @@ public class ProgressPage extends SetupWizardPage
   private void saveLocalFiles(SetupTaskPerformer performer)
   {
     User performerUser = performer.getUser();
-    User user = SetupContext.createUserOnly(SetupUtil.createResourceSet()).getUser();
+    final User user = SetupContext.createUserOnly(SetupUtil.createResourceSet()).getUser();
 
     boolean shouldSave = user.getAcceptedLicenses().addAll(performerUser.getAcceptedLicenses());
     UnsignedPolicy userUnsignedPolicy = user.getUnsignedPolicy();
@@ -731,10 +733,25 @@ public class ProgressPage extends SetupWizardPage
       shouldSave = true;
     }
 
-    if (shouldSave)
+    final boolean finalShouldSave = shouldSave;
+    new VariablePage.SetupURIUpdater()
     {
-      BaseUtil.saveEObject(user);
-    }
+      @Override
+      protected void visit(Installation installation, Workspace workspace)
+      {
+        if (finalShouldSave)
+        {
+          BaseUtil.saveEObject(user);
+        }
+
+        BaseUtil.saveEObject(installation);
+        if (workspace != null)
+        {
+          BaseUtil.saveEObject(workspace);
+        }
+      }
+    }.visit(performer);
+
   }
 
   private void setButtonState(int buttonID, boolean enabled)
