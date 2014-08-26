@@ -44,6 +44,8 @@ public final class WorkspaceIUImporter
 {
   public static final WorkspaceIUImporter INSTANCE = new WorkspaceIUImporter();
 
+  public static final Object WORKSPACE_IU_IMPORT_FAMILY = new Object();
+
   private final TargetPlatformListener listener = new TargetPlatformListener()
   {
     public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
@@ -166,6 +168,12 @@ public final class WorkspaceIUImporter
     private ImportProjectsJob()
     {
       super("Import projects");
+    }
+
+    @Override
+    public boolean belongsTo(Object family)
+    {
+      return family == WORKSPACE_IU_IMPORT_FAMILY;
     }
 
     @Override

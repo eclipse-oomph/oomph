@@ -22,6 +22,8 @@ import org.eclipse.oomph.setup.targlets.TargletTask;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUImporter;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -37,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetLocation;
@@ -437,9 +440,20 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
         targletContainer.setTarglets(targlets);
         targletContainer.forceUpdate(true, mirrors, monitor);
+
+        try
+        {
+          Job.getJobManager().join(WorkspaceIUImporter.WORKSPACE_IU_IMPORT_FAMILY, monitor);
+        }
+        catch (InterruptedException ex)
+        {
+          TargletsCorePlugin.INSTANCE.coreException(ex);
+        }
+
         return null;
       }
     });
+
   }
 
   private ITargetDefinition getTargetDefinition(SetupTaskContext context, ITargetPlatformService service) throws CoreException

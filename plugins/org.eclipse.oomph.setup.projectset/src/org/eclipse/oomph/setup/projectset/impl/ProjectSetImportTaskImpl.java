@@ -237,9 +237,9 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
 
     public boolean isNeeded(SetupTaskContext context) throws Exception
     {
-      content = getXMLContent(context.getURIConverter());
-      if (content != null)
+      try
       {
+        content = getXMLContent(context.getURIConverter());
         IProject[] projects = getProjects(uri, content);
         if (projects == null)
         {
@@ -254,6 +254,11 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
           }
         }
       }
+      catch (Exception ex)
+      {
+        // The content might not be available until perform time.
+        return true;
+      }
 
       return false;
     }
@@ -261,6 +266,12 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
     @SuppressWarnings("restriction")
     public void perform(SetupTaskContext context) throws Exception
     {
+      if (content == null)
+      {
+        // Try to get the content again if it wasn't available during isNeeded testing.
+        content = getXMLContent(context.getURIConverter());
+      }
+
       IProject[] projects = new org.eclipse.team.internal.ui.wizards.ImportProjectSetOperation(null, content, uri.toString(), new IWorkingSet[0])
       {
         public IProject[] perform(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
