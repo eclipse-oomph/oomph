@@ -101,7 +101,9 @@
       <repositoryList
           name="Mars">
         <repository
-            url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+            url="http://download.eclipse.org/releases/mars"/>
+        <repository
+            url="${xtext.nightly.composite}"/>
         <repository
             url="http://download.itemis.com/updates/releases/2.1.0/"/>
         <repository
@@ -114,6 +116,18 @@
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
             url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+        <repository
+            url="http://download.eclipse.org/rt/rap/2.3"/>
+        <repository
+            url="http://download.eclipse.org/rt/rap/nightly/runtime/"/>
+        <repository
+            url="${gwt.tool.url}"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
       </repositoryList>
       <repositoryList
           name="Luna">

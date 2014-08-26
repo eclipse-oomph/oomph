@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
+import org.eclipse.equinox.internal.p2.metadata.OSGiVersion;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
@@ -88,7 +89,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private String[] getTrains()
   {
-    return new String[] { "juno", "kepler", "luna" };
+    return new String[] { "juno", "kepler", "luna", "mars" };
   }
 
   private String[] getRootIUs()
@@ -99,8 +100,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean isLatestReleased()
   {
-    // TODO Set back to false once the first milestone of Eclipse Mars is available
-    return true;
+    return false;
   }
 
   private boolean testNewUnreleasedProduct()
@@ -371,6 +371,8 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("#################################################################################################################");
       System.out.println();
 
+      checkVersionRanges(productCatalog);
+
       Resource resource = new BaseResourceFactoryImpl().createResource(uri == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup")
           : uri);
       resource.getContents().add(productCatalog);
@@ -384,6 +386,50 @@ public class ProductCatalogGenerator implements IApplication
     catch (Exception ex)
     {
       ex.printStackTrace();
+    }
+  }
+
+  private void checkVersionRanges(ProductCatalog productCatalog)
+  {
+    if (!isLatestReleased())
+    {
+      for (Product product : productCatalog.getProducts())
+      {
+        EList<ProductVersion> versions = product.getVersions();
+        if (versions.size() > 3)
+        {
+          ProductVersion latestReleaseVersion = versions.get(1);
+          ProductVersion latestDevelopmentVersion = versions.get(2);
+
+          P2Task latestReleaseP2Task = (P2Task)latestReleaseVersion.getSetupTasks().get(0);
+          P2Task latestDevelopmentP2Task = (P2Task)latestDevelopmentVersion.getSetupTasks().get(0);
+
+          for (Requirement developmentRequirement : latestDevelopmentP2Task.getRequirements())
+          {
+            String name = developmentRequirement.getName();
+            for (Requirement releaseRequirement : latestReleaseP2Task.getRequirements())
+            {
+              if (name.equals(releaseRequirement.getName()))
+              {
+                VersionRange developmentVersionRange = developmentRequirement.getVersionRange();
+                VersionRange releaseVersionRange = releaseRequirement.getVersionRange();
+                if (developmentVersionRange.equals(releaseVersionRange))
+                {
+                  OSGiVersion minimum = (OSGiVersion)developmentVersionRange.getMinimum();
+                  OSGiVersion maximum = (OSGiVersion)developmentVersionRange.getMaximum();
+                  int major = minimum.getMajor();
+                  if (major == maximum.getMajor())
+                  {
+                    developmentRequirement.setVersionRange(new VersionRange(minimum, true, Version.createOSGi(major, maximum.getMinor() + 1, 0), false));
+                  }
+                }
+
+                break;
+              }
+            }
+          }
+        }
+      }
     }
   }
 

@@ -300,7 +300,7 @@
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.5"/>
+            url="http://download.eclipse.org/eclipse/updates/4.5milestones"/>
       </repositoryList>
       <repositoryList
           name="Luna">
