@@ -552,7 +552,26 @@ public abstract class PropertyField
       else
       {
         comboViewer.getCombo().setText(value);
+        updateToolTip(value);
       }
+    }
+
+    private void updateToolTip(String value)
+    {
+      if (!StringUtil.isEmpty(value))
+      {
+        for (VariableChoice choice : choices)
+        {
+          if (value.equals(choice.getValue()))
+          {
+            comboViewer.getCombo().setToolTipText(choice.getLabel());
+            return;
+          }
+        }
+      }
+
+      String toolTip = getToolTip();
+      comboViewer.getCombo().setToolTipText(toolTip == null ? "" : toolTip);
     }
 
     @Override
@@ -691,14 +710,17 @@ public abstract class PropertyField
     protected Combo createCombo(Composite parent)
     {
       comboViewer = new ComboViewer(parent, SWT.BORDER);
-      comboViewer.setLabelProvider(new LabelProvider()
+
+      final LabelProvider labelProvider = new LabelProvider()
       {
         @Override
         public String getText(Object element)
         {
-          return ((VariableChoice)element).getLabel();
+          VariableChoice choice = (VariableChoice)element;
+          return choice.getLabel();
         }
-      });
+      };
+      comboViewer.setLabelProvider(labelProvider);
 
       comboViewer.setContentProvider(new ArrayContentProvider());
       comboViewer.setInput(choices);
@@ -706,7 +728,9 @@ public abstract class PropertyField
       {
         public void modifyText(ModifyEvent e)
         {
-          setValue(comboViewer.getCombo().getText());
+          String value = comboViewer.getCombo().getText();
+          setValue(value);
+          updateToolTip(value);
         }
       });
 
@@ -718,7 +742,7 @@ public abstract class PropertyField
           {
             for (VariableChoice choice : choices)
             {
-              if (choice.getLabel().equals(e.text))
+              if (labelProvider.getText(choice).equals(e.text))
               {
                 e.text = choice.getValue();
                 break;
@@ -732,7 +756,6 @@ public abstract class PropertyField
       control.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
       return control;
     }
-
   }
 
   /**
