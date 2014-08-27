@@ -233,7 +233,7 @@ public class ConfirmationPage extends SetupWizardPage
         if (currentWorkspaceLocationURI.isFile())
         {
           currentWorkspaceLocation = new File(currentWorkspaceLocationURI.toFileString());
-          boolean workspaceLocationChanged = !newWorkspaceLocation.equals(currentWorkspaceLocation);
+          boolean workspaceLocationChanged = newWorkspaceLocation != null && !newWorkspaceLocation.equals(currentWorkspaceLocation);
           switchWorkspaceButton.setVisible(workspaceLocationChanged);
           viewer.getControl().setEnabled(!workspaceLocationChanged);
         }
@@ -716,7 +716,7 @@ public class ConfirmationPage extends SetupWizardPage
           + " exists.\n Please check the Overwrite button to rename it and continue with the installation process.");
       return;
     }
-    else if (!ObjectUtil.equals(newWorkspaceLocation, currentWorkspaceLocation) && !switchWorkspaceButton.getSelection())
+    else if (newWorkspaceLocation != null && !ObjectUtil.equals(newWorkspaceLocation, currentWorkspaceLocation) && !switchWorkspaceButton.getSelection())
     {
       setErrorMessage("The workspace location is changed to " + getPerformer().getWorkspaceLocation()
           + ".  Please check the 'Switch workspace' button to restarted the IDE, switch to the new workspace, and continue the installation process.");
