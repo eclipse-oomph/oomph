@@ -689,7 +689,7 @@ public class TargletContainer extends AbstractBundleContainer
 
       if (rootRequirements.isEmpty())
       {
-        // TODO Should descriptor.rollbackUpdateTransaction() be called?
+        descriptor.rollbackUpdateTransaction(null, new NullProgressMonitor());
         return null;
       }
 
@@ -727,13 +727,12 @@ public class TargletContainer extends AbstractBundleContainer
     }
     catch (Throwable t)
     {
-      descriptor.rollbackUpdateTransaction(t, progress.isCanceled() ? new NullProgressMonitor() : progress.newChild());
+      descriptor.rollbackUpdateTransaction(t, new NullProgressMonitor());
 
       UpdateProblem updateProblem = descriptor.getUpdateProblem();
       if (updateProblem != null)
       {
-        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new ProfileUpdateFailedEvent(this, descriptor, updateProblem),
-            progress.isCanceled() ? new NullProgressMonitor() : progress.newChild());
+        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new ProfileUpdateFailedEvent(this, descriptor, updateProblem), new NullProgressMonitor());
       }
 
       TargletsCorePlugin.INSTANCE.coreException(t);

@@ -289,9 +289,13 @@ public final class TargletContainerDescriptor implements Serializable, Comparabl
   void rollbackUpdateTransaction(Throwable t, IProgressMonitor monitor) throws CoreException
   {
     transactionProfile = null;
-    updateProblem = UpdateProblem.create(t);
 
-    saveDescriptors(monitor);
+    if (t != null)
+    {
+      updateProblem = UpdateProblem.create(t);
+
+      saveDescriptors(monitor);
+    }
   }
 
   void resetUpdateProblem()
