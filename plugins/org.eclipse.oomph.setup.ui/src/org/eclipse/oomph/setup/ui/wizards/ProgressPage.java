@@ -45,8 +45,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
@@ -76,6 +78,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.progress.JobInfo;
 import org.eclipse.ui.internal.progress.ProgressManager;
 
 import java.io.File;
@@ -416,11 +420,33 @@ public class ProgressPage extends SetupWizardPage
       {
         public Set<String> run(ProgressLog log) throws Exception
         {
-          ProgressManager oldProgressProvider = ProgressManager.getInstance();
+          final ProgressManager oldProgressProvider = ProgressManager.getInstance();
           ProgressLogProvider newProgressLogProvider = new ProgressLogProvider(progressPageLog, oldProgressProvider);
+
+          // When the workbench isn't running org.eclipse.ui.internal.progress.new JobChangeAdapter()'s done(IJobChangeEvent) method one cleanup.
+          JobChangeAdapter jobChangeListener = PlatformUI.isWorkbenchRunning() ? null : new JobChangeAdapter()
+          {
+            @Override
+            public void done(IJobChangeEvent event)
+            {
+              Job job = event.getJob();
+              for (JobInfo jobInfo : oldProgressProvider.getJobInfos(true))
+              {
+                if (jobInfo.getJob() == job)
+                {
+                  oldProgressProvider.removeJobInfo(jobInfo);
+                  break;
+                }
+              }
+            }
+          };
 
           IJobManager jobManager = Job.getJobManager();
           jobManager.setProgressProvider(newProgressLogProvider);
+          if (jobChangeListener != null)
+          {
+            jobManager.addJobChangeListener(jobChangeListener);
+          }
 
           try
           {
@@ -430,6 +456,10 @@ public class ProgressPage extends SetupWizardPage
           finally
           {
             jobManager.setProgressProvider(oldProgressProvider);
+            if (jobChangeListener != null)
+            {
+              jobManager.removeJobChangeListener(jobChangeListener);
+            }
           }
         }
       });
