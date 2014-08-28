@@ -37,6 +37,8 @@ import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleViewerInputAction;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
+import org.eclipse.oomph.setup.ui.SetupEditorSupport;
+import org.eclipse.oomph.setup.ui.SetupEditorSupport.Callback;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.StringUtil;
@@ -52,7 +54,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.MarkerHelper;
-import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
@@ -153,9 +154,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -238,8 +237,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     UNDECLARED_VARIABLE_GROUP_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(composedImage);
   }
-
-  public static final String EDITOR_ID = "org.eclipse.oomph.setup.presentation.SetupEditorID";
 
   /**
    * This keeps track of the editing domain that is used to track all changes to the model.
@@ -1567,8 +1564,28 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               }
             }
           }
+
+          modelCreated();
         }
       });
+    }
+    else
+    {
+      modelCreated();
+    }
+  }
+
+  private void modelCreated()
+  {
+    IEditorInput editorInput = getEditorInput();
+    if (editorInput instanceof SetupEditorSupport.Callback.Provider)
+    {
+      SetupEditorSupport.Callback.Provider provider = (SetupEditorSupport.Callback.Provider)editorInput;
+      Callback callback = provider.getCallback();
+      if (callback != null)
+      {
+        callback.modelCreated(this);
+      }
     }
   }
 
@@ -3035,84 +3052,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   protected boolean showOutlineView()
   {
     return true;
-  }
-
-  public static void open(final IWorkbenchPage page, URI uri)
-  {
-    final URI normalizedURI = SetupUtil.createResourceSet().getURIConverter().normalize(uri);
-    final Display display = page.getWorkbenchWindow().getShell().getDisplay();
-
-    display.asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        try
-        {
-          IEditorInput editorInput = null;
-          if ("user".equals(normalizedURI.scheme()))
-          {
-            URI uri = normalizedURI.replacePrefix(SetupContext.GLOBAL_SETUPS_URI, SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("")).trimQuery();
-            editorInput = getFileEditorInput(uri);
-          }
-          else if (normalizedURI.isFile())
-          {
-            editorInput = getFileEditorInput(normalizedURI);
-          }
-
-          if (editorInput == null)
-          {
-            editorInput = new URIEditorInput(normalizedURI, normalizedURI.lastSegment());
-          }
-
-          IEditorPart editor = page.openEditor(editorInput, EDITOR_ID);
-          if (editor instanceof SetupEditor && normalizedURI.fragment() != null)
-          {
-            final SetupEditor setupEditor = (SetupEditor)editor;
-
-            ResourceSet resourceSet = setupEditor.getEditingDomain().getResourceSet();
-            final EObject object = resourceSet.getEObject(normalizedURI, true);
-            if (object != null)
-            {
-              setupEditor.selectionViewer.setSelection(new StructuredSelection(object));
-
-              ScrollBar scrollBar = setupEditor.selectionViewer.getTree().getHorizontalBar();
-              if (scrollBar != null && !scrollBar.isDisposed() && scrollBar.isVisible())
-              {
-                scrollBar.setSelection(0);
-              }
-            }
-          }
-        }
-        catch (Exception ex)
-        {
-          SetupEditorPlugin.INSTANCE.log(ex);
-        }
-      }
-    });
-  }
-
-  private static FileEditorInput getFileEditorInput(URI uri)
-  {
-    if (uri.isFile())
-    {
-      try
-      {
-        IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new java.net.URI(uri.toString()));
-        for (IFile file : files)
-        {
-          if (file.isAccessible())
-          {
-            return new FileEditorInput(files[0]);
-          }
-        }
-      }
-      catch (URISyntaxException ex)
-      {
-        SetupEditorPlugin.INSTANCE.log(ex);
-      }
-    }
-
-    return null;
   }
 
   public static class DelegatingDialogSettings implements IDialogSettings

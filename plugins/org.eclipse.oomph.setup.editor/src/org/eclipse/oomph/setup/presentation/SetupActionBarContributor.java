@@ -25,7 +25,7 @@ import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
-import org.eclipse.oomph.setup.ui.actions.PreferenceRecorderAction;
+import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
 import org.eclipse.oomph.ui.UIUtil;
@@ -69,6 +69,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -419,7 +420,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   public void selectionChanged(SelectionChangedEvent event)
   {
     selectionChangedGen(event);
-    recordPreferencesAction.selectionChanged(event);
+    // recordPreferencesAction.selectionChanged(event);
     openInSetupEditorAction.selectionChanged(event);
     // testInstallAction.selectionChanged(event);
   }
@@ -958,14 +959,33 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   /**
    * @author Eike Stepper
    */
-  private static class PreferenceRecorderToolbarAction extends PreferenceRecorderAction
+  private class PreferenceRecorderToolbarAction extends Action
   {
     public PreferenceRecorderToolbarAction(boolean withDialog)
     {
-      super(withDialog);
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("recorder"));
+      super("Record", SetupEditorPlugin.INSTANCE.getImageDescriptor("recorder"));
+    }
+
+    @Override
+    public void run()
+    {
+      MessageDialog.openInformation(activeEditorPart.getSite().getShell(), "Heads Up!",
+          "The workflow for the recording of preference tasks has been simplified:\n\n" + "You don't need to open the editor for the user tasks anymore.\n"
+              + "Just open the Preferences dialog and your user tasks will be updated automatically.");
     }
   }
+
+  // /**
+  // * @author Eike Stepper
+  // */
+  // private static class PreferenceRecorderToolbarAction extends PreferenceRecorderAction
+  // {
+  // public PreferenceRecorderToolbarAction(boolean withDialog)
+  // {
+  // super(withDialog);
+  // setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("recorder"));
+  // }
+  // }
 
   /**
    * @author Eike Stepper
@@ -1255,7 +1275,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     @Override
     public void run()
     {
-      SetupEditor.open(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri);
+      SetupEditorSupport.openEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri);
     }
 
     public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)

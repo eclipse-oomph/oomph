@@ -15,9 +15,7 @@ package org.eclipse.oomph.setup;
  */
 public final class AnnotationConstants
 {
-  private AnnotationConstants()
-  {
-  }
+  public static final String ANNOTATION_USER_PREFERENCES = "http://www.eclipse.org/oomph/setup/UserPreferences";
 
   public static final String ANNOTATION_INHERITED_CHOICES = "http://www.eclipse.org/oomph/setup/InheritedChoices";
 
@@ -34,4 +32,8 @@ public final class AnnotationConstants
   public static final String KEY_LABEL = "label";
 
   public static final String KEY_DESCRIPTION = "description";
+
+  private AnnotationConstants()
+  {
+  }
 }

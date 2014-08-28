@@ -10,11 +10,14 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.util.StringUtil;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
@@ -25,10 +28,15 @@ public abstract class AbstractConfirmDialog extends AbstractSetupDialog
 
   private boolean remember;
 
+  public AbstractConfirmDialog(Shell parentShell, String title, int width, int height, String rememberButtonText)
+  {
+    super(parentShell, title, width, height, SetupUIPlugin.INSTANCE, null);
+    this.rememberButtonText = rememberButtonText;
+  }
+
   public AbstractConfirmDialog(String title, int width, int height, String rememberButtonText)
   {
-    super(null, title, width, height, SetupUIPlugin.INSTANCE, null);
-    this.rememberButtonText = rememberButtonText;
+    this(null, title, width, height, rememberButtonText);
   }
 
   public boolean isRemember()
@@ -49,7 +57,23 @@ public abstract class AbstractConfirmDialog extends AbstractSetupDialog
       }
     });
 
+    String rememberButtonToolTip = getRememberButtonToolTip();
+    if (!StringUtil.isEmpty(rememberButtonToolTip))
+    {
+      rememberButton.setToolTipText(rememberButtonToolTip);
+    }
+
+    doCreateButtons(parent);
+  }
+
+  protected void doCreateButtons(Composite parent)
+  {
     createButton(parent, IDialogConstants.OK_ID, "Accept", false);
     createButton(parent, IDialogConstants.CANCEL_ID, "Decline", true);
+  }
+
+  protected String getRememberButtonToolTip()
+  {
+    return null;
   }
 }

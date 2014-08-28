@@ -21,8 +21,8 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
-import org.eclipse.oomph.setup.presentation.SetupEditor;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
+import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -145,6 +145,7 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
   {
     URI uri = EcoreUtil.getURI(object);
     IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-    SetupEditor.open(page, uri);
+    final IWorkbenchPage page1 = page;
+    SetupEditorSupport.openEditor(page1, uri);
   }
 }

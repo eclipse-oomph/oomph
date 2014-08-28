@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
@@ -43,8 +44,10 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
   {
     Composite parent = getFieldEditorParent();
 
-    addField(new BooleanFieldEditor(SetupUIPlugin.PREF_SKIP_STARTUP_TASKS, "Skip automatic task execution at startup time", parent));
+    BooleanFieldEditor editor = new BooleanFieldEditor(SetupUIPlugin.PREF_SKIP_STARTUP_TASKS, "Skip automatic task execution at startup time", parent);
+    editor.fillIntoGrid(parent, 2);
+    addField(editor);
 
-    // addField(new BooleanFieldEditor(ProgressDialog.PREF_LOG_UNNEEDED_TASKS, "Show also tasks in progress dialog that are not executed", parent));
+    addField(new ComboFieldEditor(SetupUIPlugin.PREF_USER_PREFERENCES_STORAGE, "User preferences:", UserPreferencesManager.CHOICES, parent));
   }
 }

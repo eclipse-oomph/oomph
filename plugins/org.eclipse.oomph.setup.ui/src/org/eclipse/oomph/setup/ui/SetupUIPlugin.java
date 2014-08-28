@@ -67,6 +67,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
 
+  public static final String PREF_USER_PREFERENCES_STORAGE = "user.preferences.storage";
+
   public static final boolean SETUP_IDE = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP);
 
   private static final boolean SETUP_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SKIP);
@@ -143,6 +145,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
             {
               MessageDialog.openInformation(UIUtil.getShell(), "Remote Debug Pause", "The setup tasks are paused to allow you to attach a remote debugger");
             }
+
+            UserPreferencesManager.INSTANCE.register(display);
 
             if (SETUP_IDE && !SETUP_SKIP && !isSkipStartupTasks())
             {

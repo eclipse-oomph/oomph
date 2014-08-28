@@ -129,6 +129,7 @@ public final class PreferencesUtil
       PreferenceNode preferenceNode = (PreferenceNode)target;
       Resource resource = preferenceNode.eResource();
       ResourceSet resourceSet = resource.getResourceSet();
+
       synchronized (resource)
       {
         synchronized (resourceSet)
@@ -150,6 +151,7 @@ public final class PreferencesUtil
               {
                 property.setValue(value.toString());
               }
+
               return;
             }
             else if (comparison > 0)
@@ -161,6 +163,7 @@ public final class PreferencesUtil
                 property.setValue(value.toString());
                 properties.add(i, property);
               }
+
               return;
             }
           }
@@ -178,6 +181,7 @@ public final class PreferencesUtil
       PreferenceNode preferenceNode = (PreferenceNode)target;
       Resource resource = preferenceNode.eResource();
       ResourceSet resourceSet = resource.getResourceSet();
+
       synchronized (resource)
       {
         synchronized (resourceSet)
@@ -210,6 +214,7 @@ public final class PreferencesUtil
       PreferenceNode preferenceNode = (PreferenceNode)target;
       Preferences childNode = event.getChild();
       String name = childNode.name();
+
       EList<PreferenceNode> children = preferenceNode.getChildren();
       for (int i = 0, size = children.size(); i < size; ++i)
       {
