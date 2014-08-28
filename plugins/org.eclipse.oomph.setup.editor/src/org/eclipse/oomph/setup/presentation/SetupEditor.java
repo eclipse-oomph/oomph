@@ -733,7 +733,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         ResourceSet resourceSet = editingDomain.getResourceSet();
         URIConverter uriConverter = resourceSet.getURIConverter();
         final Set<IFile> files = new HashSet<IFile>();
-        for (Resource resource : resourceSet.getResources())
+
+        EList<Resource> resources = resourceSet.getResources();
+        for (Resource resource : resources.toArray(new Resource[resources.size()]))
         {
           if (resource.isLoaded())
           {
