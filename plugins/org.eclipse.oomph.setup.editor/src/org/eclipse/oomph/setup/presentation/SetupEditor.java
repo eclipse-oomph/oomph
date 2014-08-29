@@ -1538,6 +1538,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
           {
             List<EObject> migratedContents = new ArrayList<EObject>();
+
             try
             {
               SetupUtil.migrate(mainResource, migratedContents);
@@ -2280,8 +2281,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
 
           SetupContext setupContext = SetupContext.create(version, stream);
-          SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(getEditingDomain().getResourceSet().getURIConverter(), SetupPrompter.CANCEL, trigger,
-              setupContext, stream);
+          URIConverter uriConverter = getEditingDomain().getResourceSet().getURIConverter();
+          SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(uriConverter, SetupPrompter.CANCEL, trigger, setupContext, stream);
           List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
 
           if (!triggeredSetupTasks.isEmpty())

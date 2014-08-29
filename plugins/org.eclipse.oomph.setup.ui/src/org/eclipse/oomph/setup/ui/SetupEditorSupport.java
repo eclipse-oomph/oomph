@@ -52,18 +52,26 @@ public final class SetupEditorSupport
     URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
     URI normalizedURI = uriConverter.normalize(uri).trimFragment();
 
+    IEditorInput input = getEditorInput(normalizedURI, null);
+    return findEditor(page, uriConverter, input);
+  }
+
+  private static IEditorPart findEditor(IWorkbenchPage page, URIConverter uriConverter, IEditorInput input)
+  {
+    URI resourceURI = EditUIUtil.getURI(input);
+
     for (IEditorReference editorReference : page.getEditorReferences())
     {
       if (editorReference.getId().equals(EDITOR_ID))
       {
         try
         {
-          IEditorInput input = editorReference.getEditorInput();
-          URI resourceURI = EditUIUtil.getURI(input);
-          if (resourceURI != null)
+          IEditorInput editorInput = editorReference.getEditorInput();
+          URI editorResourceURI = EditUIUtil.getURI(editorInput);
+          if (editorResourceURI != null)
           {
-            resourceURI = uriConverter.normalize(resourceURI).trimFragment();
-            if (resourceURI.equals(normalizedURI))
+            editorResourceURI = uriConverter.normalize(editorResourceURI).trimFragment();
+            if (editorResourceURI.equals(resourceURI))
             {
               return editorReference.getEditor(true);
             }
@@ -93,22 +101,24 @@ public final class SetupEditorSupport
       {
         try
         {
-          IEditorPart editor = findEditor(page, uri);
+          URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
+          final URI normalizedURI = uriConverter.normalize(uri);
+
+          IEditorInput editorInput = getEditorInput(normalizedURI, new Callback()
+          {
+            public void modelCreated(IEditorPart editor)
+            {
+              postOpen(editor, normalizedURI, callback);
+            }
+          });
+
+          IEditorPart editor = findEditor(page, uriConverter, editorInput);
           if (editor != null)
           {
             callback.modelCreated(editor);
           }
           else
           {
-            final URI normalizedURI = SetupUtil.createResourceSet().getURIConverter().normalize(uri);
-            IEditorInput editorInput = getEditorInput(normalizedURI, new Callback()
-            {
-              public void modelCreated(IEditorPart editor)
-              {
-                postOpen(editor, normalizedURI, callback);
-              }
-            });
-
             page.openEditor(editorInput, EDITOR_ID);
           }
         }

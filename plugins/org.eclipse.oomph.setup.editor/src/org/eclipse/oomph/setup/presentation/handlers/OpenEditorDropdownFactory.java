@@ -88,6 +88,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
         createMenuItem(menu, adapterFactory, user);
         eObjects.add(user);
 
+        // TODO Remove at some point
         if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.legacy")))
         {
           Index legacyIndex = SetupFactory.eINSTANCE.createIndex();

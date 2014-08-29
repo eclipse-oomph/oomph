@@ -62,7 +62,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -153,31 +152,30 @@ public final class UserPreferencesManager
     }
 
     IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-    final AtomicBoolean tryToSave = new AtomicBoolean();
-    SetupEditorSupport.Callback callback = new SetupEditorSupport.Callback()
-    {
-      public void modelCreated(IEditorPart editor)
-      {
-        storePreferences(editor, tryToSave.get(), values);
-      }
-    };
+    final URI userSetupURI = getUserSetupURI();
 
     if (storage == Storage.EDITOR)
     {
-      SetupEditorSupport.openEditor(page, SetupContext.USER_SETUP_URI, callback);
+      SetupEditorSupport.openEditor(page, userSetupURI, new SetupEditorSupport.Callback()
+      {
+        public void modelCreated(IEditorPart editor)
+        {
+          storePreferences(editor, false, values);
+        }
+      });
+
       return;
     }
 
-    IEditorPart editor = SetupEditorSupport.findEditor(page, SetupContext.USER_SETUP_URI);
+    IEditorPart editor = SetupEditorSupport.findEditor(page, userSetupURI);
     if (editor != null)
     {
-      tryToSave.set(true);
-      callback.modelCreated(editor);
+      storePreferences(editor, true, values);
       return;
     }
 
     ResourceSet resourceSet = org.eclipse.oomph.setup.internal.core.util.SetupUtil.createResourceSet();
-    Resource resource = resourceSet.getResource(SetupContext.USER_SETUP_URI, true);
+    Resource resource = resourceSet.getResource(userSetupURI, true);
     List<PreferenceTask> preferenceTasks = storePreferences(resource, values);
     if (preferenceTasks != null)
     {
@@ -198,7 +196,7 @@ public final class UserPreferencesManager
 
     EditingDomain editingDomain = ((IEditingDomainProvider)editor).getEditingDomain();
     ResourceSet resourceSet = editingDomain.getResourceSet();
-    final Resource resource = resourceSet.getResource(SetupContext.USER_SETUP_URI, true);
+    final Resource resource = resourceSet.getResources().get(0);
 
     final AtomicReference<List<PreferenceTask>> result = new AtomicReference<List<PreferenceTask>>();
     ChangeCommand command = new ChangeCommand(resourceSet)
@@ -338,6 +336,11 @@ public final class UserPreferencesManager
         migrateOldTasksRecursively(preferencesCompound, (SetupTaskContainer)object);
       }
     }
+  }
+
+  private URI getUserSetupURI()
+  {
+    return SetupContext.USER_SETUP_URI;
   }
 
   private static CompoundTask getPreferencesCompound(SetupTaskContainer container)
