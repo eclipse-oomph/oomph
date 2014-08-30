@@ -16,6 +16,7 @@ import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.PhaseSetFactory;
@@ -67,37 +68,61 @@ public interface ProfileTransaction
   public Resolution resolve(CommitContext commitContext, IProgressMonitor monitor) throws CoreException;
 
   /**
+   * Customizes the resolution and commit process of a {@link ProfileTransaction profile transaction}.
+   *
+   * The methods of this callback class are called in the order in which they're declared.
+   *
    * @author Eike Stepper
    */
   public static class CommitContext
   {
     /**
-     * @author Ed Merks
+     * Called early during {@link ProfileTransaction#resolve(CommitContext, IProgressMonitor) resolve}.
      */
-    public enum DeltaType
-    {
-      REMOVAL, ADDITION
-    }
-
     public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, IProfileChangeRequest profileChangeRequest) throws CoreException
     {
       return new ProvisioningContext(transaction.getProfile().getAgent().getProvisioningAgent());
     }
 
+    /**
+     * Called late during {@link ProfileTransaction#resolve(CommitContext, IProgressMonitor) resolve}.
+     */
     public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
         Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
     {
       return true;
     }
 
+    /**
+     * Called early during {@link Resolution#commit(IProgressMonitor) commit}.
+     */
     public IPhaseSet getPhaseSet(ProfileTransaction transaction) throws CoreException
     {
       return PhaseSetFactory.createDefaultPhaseSet();
     }
 
+    /**
+     * Called early during {@link Resolution#commit(IProgressMonitor) commit}.
+     */
     public Confirmer getUnsignedContentConfirmer()
     {
       return null;
+    }
+
+    /**
+     * Called late during {@link Resolution#commit(IProgressMonitor) commit}.
+     */
+    public void handleExecutionResult(IStatus status)
+    {
+      // Subclasses may override.
+    }
+
+    /**
+     * @author Ed Merks
+     */
+    public enum DeltaType
+    {
+      REMOVAL, ADDITION
     }
   }
 
@@ -106,6 +131,8 @@ public interface ProfileTransaction
    */
   public interface Resolution
   {
+    public ProfileTransaction getProfileTransaction();
+
     public IProvisioningPlan getProvisioningPlan();
 
     public boolean commit(IProgressMonitor monitor) throws CoreException;

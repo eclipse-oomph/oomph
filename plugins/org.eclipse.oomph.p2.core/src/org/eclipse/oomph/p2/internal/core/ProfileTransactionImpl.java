@@ -378,6 +378,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       return new Resolution()
       {
+        public ProfileTransaction getProfileTransaction()
+        {
+          return ProfileTransactionImpl.this;
+        }
+
         public IProvisioningPlan getProvisioningPlan()
         {
           return provisioningPlan;
@@ -393,6 +398,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
             IEngine engine = agent.getEngine();
             IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
+
+            context.handleExecutionResult(status);
             P2CorePlugin.INSTANCE.coreException(status);
 
             profileImpl.setDefinition(profileDefinition);
@@ -500,8 +507,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
   }
 
-  private void populatePropertyDeltas(IInstallableUnit operandIU, Object first, Object second,
-      String key, Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas)
+  private void populatePropertyDeltas(IInstallableUnit operandIU, Object first, Object second, String key,
+      Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas)
   {
     Map<String, Pair<Object, Object>> propertyDelta = propertyDeltas.get(operandIU);
     if (propertyDelta == null)

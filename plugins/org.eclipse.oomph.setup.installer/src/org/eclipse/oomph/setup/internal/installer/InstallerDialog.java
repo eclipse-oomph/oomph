@@ -510,7 +510,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
 
         CommitContext commitContext = new CommitContext()
         {
-          private User user = getInstaller().getUser();
+          private IProvisioningPlan provisioningPlan;
 
           @Override
           public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
@@ -522,13 +522,17 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
               return false;
             }
 
-            P2TaskImpl.processLicenses(provisioningPlan, ProgressPage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
+            this.provisioningPlan = provisioningPlan;
             return true;
           }
 
           @Override
           public Confirmer getUnsignedContentConfirmer()
           {
+            User user = getInstaller().getUser();
+            P2TaskImpl.processLicenses(provisioningPlan, ProgressPage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
+            provisioningPlan = null;
+
             return UnsignedContentDialog.createUnsignedContentConfirmer(user, true);
           }
         };
