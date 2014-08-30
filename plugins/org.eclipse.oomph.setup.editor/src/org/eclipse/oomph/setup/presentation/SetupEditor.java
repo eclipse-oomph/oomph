@@ -1502,117 +1502,83 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   public void createModel()
   {
-    final Display display = getSite().getShell().getDisplay();
-    final Tree tree = selectionViewer.getTree();
+    URI resourceURI = EditUIUtil.getURI(getEditorInput());
+    final ResourceSet resourceSet = editingDomain.getResourceSet();
 
-    final Cursor[] oldCursor = { null };
-    boolean deferCursorReset = false;
+    resourceMirror.mirror(resourceURI);
 
-    display.syncExec(new Runnable()
+    final Resource mainResource = editingDomain.getResourceSet().getResource(resourceURI, false);
+    EList<EObject> contents = mainResource.getContents();
+    EObject rootObject = null;
+    if (!contents.isEmpty())
     {
-      public void run()
+      rootObject = contents.get(0);
+      if (!(rootObject instanceof Index))
       {
-        oldCursor[0] = tree.getCursor();
-
-        Cursor waitCursor = display.getSystemCursor(SWT.CURSOR_WAIT);
-        tree.setCursor(waitCursor);
-      }
-    });
-
-    try
-    {
-      URI resourceURI = EditUIUtil.getURI(getEditorInput());
-      final ResourceSet resourceSet = editingDomain.getResourceSet();
-
-      resourceMirror.mirror(resourceURI);
-
-      final Resource mainResource = editingDomain.getResourceSet().getResource(resourceURI, false);
-      EList<EObject> contents = mainResource.getContents();
-      EObject rootObject = null;
-      if (!contents.isEmpty())
-      {
-        rootObject = contents.get(0);
-        if (!(rootObject instanceof Index))
-        {
-          resourceMirror.mirror(SetupContext.INDEX_SETUP_URI);
-        }
-      }
-
-      for (Resource resource : resourceSet.getResources())
-      {
-        Diagnostic diagnostic = analyzeResourceProblems(resource, null);
-        if (diagnostic.getSeverity() != Diagnostic.OK)
-        {
-          resourceToDiagnosticMap.put(resource, diagnostic);
-        }
-      }
-
-      editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
-
-      if (!resourceMirror.isCanceled() && rootObject != null)
-      {
-        deferCursorReset = true;
-        display.asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            try
-            {
-              EPackage ePackage = mainResource.getContents().get(0).eClass().getEPackage();
-              URI ePackageResourceURI = ePackage.eResource().getURI();
-              if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
-              {
-                List<EObject> migratedContents = new ArrayList<EObject>();
-
-                try
-                {
-                  SetupUtil.migrate(mainResource, migratedContents);
-                  CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
-                  command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
-                  command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-                  editingDomain.getCommandStack().execute(command);
-                }
-                catch (RuntimeException ex)
-                {
-                  CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
-                  command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-                  editingDomain.getCommandStack().execute(command);
-
-                  SetupEditorPlugin.INSTANCE.log(ex);
-                }
-
-                EcoreUtil.resolveAll(mainResource);
-                for (Resource resource : resourceSet.getResources())
-                {
-                  URI uri = resource.getURI();
-                  if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
-                  {
-                    resource.getErrors().clear();
-                    resource.getWarnings().clear();
-                  }
-                }
-              }
-
-              modelCreated();
-            }
-            finally
-            {
-              tree.setCursor(oldCursor[0]);
-            }
-          }
-        });
-      }
-      else
-      {
-        modelCreated();
+        resourceMirror.mirror(SetupContext.INDEX_SETUP_URI);
       }
     }
-    finally
+
+    for (Resource resource : resourceSet.getResources())
     {
-      if (!deferCursorReset)
+      Diagnostic diagnostic = analyzeResourceProblems(resource, null);
+      if (diagnostic.getSeverity() != Diagnostic.OK)
       {
-        tree.setCursor(oldCursor[0]);
+        resourceToDiagnosticMap.put(resource, diagnostic);
       }
+    }
+
+    editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
+
+    if (!resourceMirror.isCanceled() && rootObject != null)
+    {
+      Display display = getSite().getShell().getDisplay();
+      display.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          EPackage ePackage = mainResource.getContents().get(0).eClass().getEPackage();
+          URI ePackageResourceURI = ePackage.eResource().getURI();
+          if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
+          {
+            List<EObject> migratedContents = new ArrayList<EObject>();
+
+            try
+            {
+              SetupUtil.migrate(mainResource, migratedContents);
+              CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
+              command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
+              command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+              editingDomain.getCommandStack().execute(command);
+            }
+            catch (RuntimeException ex)
+            {
+              CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
+              command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+              editingDomain.getCommandStack().execute(command);
+
+              SetupEditorPlugin.INSTANCE.log(ex);
+            }
+
+            EcoreUtil.resolveAll(mainResource);
+            for (Resource resource : resourceSet.getResources())
+            {
+              URI uri = resource.getURI();
+              if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+              {
+                resource.getErrors().clear();
+                resource.getWarnings().clear();
+              }
+            }
+          }
+
+          modelCreated();
+        }
+      });
+    }
+    else
+    {
+      modelCreated();
     }
   }
 
@@ -1628,7 +1594,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         callback.modelCreated(this);
       }
     }
-
   }
 
   /**
@@ -1759,6 +1724,21 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   protected void doLoad()
   {
+    final Display display = getSite().getShell().getDisplay();
+    final Tree tree = selectionViewer.getTree();
+    final Cursor[] oldCursor = { null };
+
+    display.syncExec(new Runnable()
+    {
+      public void run()
+      {
+        oldCursor[0] = tree.getCursor();
+
+        Cursor waitCursor = display.getSystemCursor(SWT.CURSOR_WAIT);
+        tree.setCursor(waitCursor);
+      }
+    });
+
     Job job = new Job("Loading Model")
     {
       @Override
@@ -1778,7 +1758,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
         };
 
-        getSite().getShell().getDisplay().asyncExec(new Runnable()
+        display.asyncExec(new Runnable()
         {
           public void run()
           {
@@ -1827,6 +1807,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             }
 
             updateProblemIndication();
+            tree.setCursor(oldCursor[0]);
           }
         });
 
