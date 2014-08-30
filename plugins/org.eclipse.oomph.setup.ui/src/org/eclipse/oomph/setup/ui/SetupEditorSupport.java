@@ -115,6 +115,7 @@ public final class SetupEditorSupport
           IEditorPart editor = findEditor(page, uriConverter, editorInput);
           if (editor != null)
           {
+            page.activate(editor);
             callback.modelCreated(editor);
           }
           else
