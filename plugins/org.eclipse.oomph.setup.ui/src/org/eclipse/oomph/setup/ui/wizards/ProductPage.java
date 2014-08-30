@@ -157,11 +157,6 @@ public class ProductPage extends SetupWizardPage
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
-    final ToolItem showHierarchyButton = new ToolItem(filterToolBar, SWT.CHECK);
-    showHierarchyButton.setToolTipText("Show Hierarchy");
-    showHierarchyButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("tree"));
-    showHierarchyButton.setSelection(true);
-
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
     collapseAllButton.setToolTipText("Collapse All");
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
@@ -353,15 +348,6 @@ public class ProductPage extends SetupWizardPage
         }
       });
     }
-
-    showHierarchyButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        collapseAllButton.setEnabled(showHierarchyButton.getSelection());
-      }
-    });
 
     collapseAllButton.addSelectionListener(new SelectionAdapter()
     {
