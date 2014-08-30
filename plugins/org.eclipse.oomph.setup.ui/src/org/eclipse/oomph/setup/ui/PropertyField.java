@@ -91,19 +91,19 @@ public abstract class PropertyField
     switch (type)
     {
       case FOLDER:
-        PropertyField.FileField fileField = new FileField(choices);
+        FileField fileField = new FileField(choices);
         fileField.setDialogText("Folder Selection");
         fileField.setDialogMessage("Select a folder.");
         return fileField;
 
       case CONTAINER:
-        PropertyField.ContainerField containerField = new ContainerField(choices);
+        ContainerField containerField = new ContainerField(choices);
         containerField.setDialogText("Folder Selection");
         containerField.setDialogMessage("Select a folder.");
         return containerField;
 
       case TEXT:
-        PropertyField.TextField textField = new TextField(choices)
+        TextField textField = new TextField(choices)
         {
           @Override
           protected Text createText(Composite parent, int style)
@@ -116,6 +116,9 @@ public abstract class PropertyField
 
       case PASSWORD:
         return new AuthenticatedField();
+
+      case BOOLEAN:
+        return new CheckboxField();
     }
 
     return new TextField(choices);
@@ -251,13 +254,14 @@ public abstract class PropertyField
     }
 
     Control control = createControl(parent);
-    getMainControl().setLayoutData(controlGridData);
+    Control mainControl = getMainControl();
+    mainControl.setLayoutData(controlGridData);
 
     if (toolTip != null && toolTip.length() != 0)
     {
       label.setToolTipText(toolTip);
       control.setToolTipText(toolTip);
-      getMainControl().setToolTipText(toolTip);
+      mainControl.setToolTipText(toolTip);
     }
 
     helper = createHelper(parent);
@@ -418,6 +422,158 @@ public abstract class PropertyField
   public interface ValueListener
   {
     public void valueChanged(String oldValue, String newValue) throws Exception;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class CheckboxField extends PropertyField
+  {
+    private TristateCheckbox button;
+
+    public CheckboxField()
+    {
+      this(null);
+    }
+
+    public CheckboxField(String labelText)
+    {
+      super(labelText);
+    }
+
+    @Override
+    public Control getControl()
+    {
+      return button;
+    }
+
+    @Override
+    protected String getControlValue()
+    {
+      if (button == null)
+      {
+        return "";
+      }
+
+      Boolean selection = button.getTristateSelection();
+      if (selection == null)
+      {
+        return "";
+      }
+
+      return selection ? "true" : "false";
+    }
+
+    @Override
+    protected void transferValueToControl(String value)
+    {
+      if (button != null)
+      {
+        Boolean selection = null;
+        if (!StringUtil.isEmpty(value))
+        {
+          selection = "true".equalsIgnoreCase(value);
+        }
+
+        button.setTristateSelection(selection);
+      }
+    }
+
+    @Override
+    protected Control createControl(Composite parent)
+    {
+      button = new TristateCheckbox(parent);
+      button.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          String value = getControlValue();
+          if (!value.equals(getValue()))
+          {
+            setValue(value);
+          }
+        }
+      });
+
+      String toolTip = getToolTip();
+      if (toolTip != null)
+      {
+        button.setToolTipText(toolTip);
+      }
+
+      return button;
+    }
+
+    protected String computeLinkedValue(String thisValue, String linkValue)
+    {
+      return linkValue;
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    private static final class TristateCheckbox extends Button
+    {
+      private Boolean tristateSelection;
+
+      public TristateCheckbox(Composite parent)
+      {
+        super(parent, SWT.CHECK);
+        setTristateSelection(null);
+
+        addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            if (tristateSelection == null)
+            {
+              tristateSelection = true;
+            }
+            else if (tristateSelection)
+            {
+              tristateSelection = false;
+            }
+            else
+            {
+              tristateSelection = null;
+            }
+
+            updateTristateSelection();
+          }
+        });
+      }
+
+      @Override
+      protected void checkSubclass()
+      {
+        // Don't check.
+      }
+
+      @Override
+      public void setSelection(boolean selection)
+      {
+        // Do nothing
+      }
+
+      public Boolean getTristateSelection()
+      {
+        return tristateSelection;
+      }
+
+      public void setTristateSelection(Boolean selection)
+      {
+        tristateSelection = selection;
+        updateTristateSelection();
+      }
+
+      private void updateTristateSelection()
+      {
+        setGrayed(tristateSelection == null);
+        super.setSelection(!Boolean.FALSE.equals(tristateSelection));
+      }
+    }
   }
 
   /**
