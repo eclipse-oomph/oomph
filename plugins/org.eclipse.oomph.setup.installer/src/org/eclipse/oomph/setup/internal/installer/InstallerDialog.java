@@ -436,7 +436,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
 
         if (buildID != null)
         {
-          label += " (build " + buildID + ")";
+          label += " Build " + buildID;
         }
 
         return label;
