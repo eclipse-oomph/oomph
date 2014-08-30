@@ -58,75 +58,75 @@
       <key
             commandId="org.eclipse.oomph.OpenManifest"
             contextId="org.eclipse.ui.contexts.window"
-            sequence="F6"
+            sequence="F9"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenManifest"
             contextId="org.eclipse.ui.textEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="F6">
+            sequence="F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenManifest"
             contextId="org.eclipse.jdt.ui.javaEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="F6">
+            sequence="F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenManifest"
             contextId="org.eclipse.jdt.ui.breadcrumbEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="F6">
+            sequence="F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenManifest"
             contextId="org.eclipse.ant.ui.AntEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="F6">
+            sequence="F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenManifest"
             contextId="org.eclipse.jdt.ui.propertiesEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="F6">
+            sequence="F9">
       </key>
 
       <key
             commandId="org.eclipse.oomph.OpenProperties"
             contextId="org.eclipse.ui.contexts.window"
-            sequence="M2+F6"
+            sequence="M2+F9"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenProperties"
             contextId="org.eclipse.ui.textEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M2+F6">
+            sequence="M2+F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenProperties"
             contextId="org.eclipse.jdt.ui.javaEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M2+F6">
+            sequence="M2+F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenProperties"
             contextId="org.eclipse.jdt.ui.breadcrumbEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M2+F6">
+            sequence="M2+F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenProperties"
             contextId="org.eclipse.ant.ui.AntEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M2+F6">
+            sequence="M2+F9">
       </key>
       <key
             commandId="org.eclipse.oomph.OpenProperties"
             contextId="org.eclipse.jdt.ui.propertiesEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M2+F6">
+            sequence="M2+F9">
       </key>
       <key
             commandId="org.eclipse.oomph.buildClean"
