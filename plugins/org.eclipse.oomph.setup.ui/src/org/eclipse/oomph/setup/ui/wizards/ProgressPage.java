@@ -24,12 +24,17 @@ import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.log.ProgressLogProvider;
 import org.eclipse.oomph.setup.log.ProgressLogRunnable;
+import org.eclipse.oomph.setup.ui.AbstractConfirmDialog;
+import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
+import org.eclipse.oomph.setup.ui.LicenseDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
+import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -49,6 +54,8 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
@@ -84,6 +91,7 @@ import org.eclipse.ui.internal.progress.ProgressManager;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.security.cert.Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -213,6 +221,17 @@ public class ProgressPage extends SetupWizardPage
   private Button launchButton;
 
   private boolean hasLaunched;
+
+  public static final Confirmer LICENSE_CONFIRMER = new AbstractDialogConfirmer()
+  {
+    @Override
+    protected AbstractConfirmDialog createDialog(boolean defaultConfirmed, Object info)
+    {
+      @SuppressWarnings("unchecked")
+      Map<ILicense, List<IInstallableUnit>> licensesToIUs = (Map<ILicense, List<IInstallableUnit>>)info;
+      return new LicenseDialog(licensesToIUs);
+    }
+  };
 
   public ProgressPage()
   {
@@ -377,6 +396,8 @@ public class ProgressPage extends SetupWizardPage
 
       final SetupTaskPerformer performer = getPerformer();
       performer.setProgress(progressPageLog);
+      performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
+      performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performer.getUser(), false));
 
       progressMonitorPart.beginTask("", performer.getNeededTasks().size());
 

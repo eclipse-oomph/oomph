@@ -25,10 +25,10 @@ import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
+import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
-import org.eclipse.oomph.setup.ui.wizards.VariablePage;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.IOUtil;
@@ -522,7 +522,7 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
               return false;
             }
 
-            P2TaskImpl.processLicenses(provisioningPlan, VariablePage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
+            P2TaskImpl.processLicenses(provisioningPlan, ProgressPage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
             return true;
           }
 

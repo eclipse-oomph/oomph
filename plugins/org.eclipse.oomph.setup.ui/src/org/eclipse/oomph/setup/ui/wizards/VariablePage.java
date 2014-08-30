@@ -24,19 +24,14 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
-import org.eclipse.oomph.setup.ui.AbstractConfirmDialog;
-import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
-import org.eclipse.oomph.setup.ui.LicenseDialog;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.ui.PropertyField.AuthenticatedField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
-import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
@@ -49,8 +44,6 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -69,7 +62,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 
 import java.io.File;
-import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -86,17 +78,6 @@ import java.util.Set;
  */
 public class VariablePage extends SetupWizardPage implements SetupPrompter
 {
-  public static final Confirmer LICENSE_CONFIRMER = new AbstractDialogConfirmer()
-  {
-    @Override
-    protected AbstractConfirmDialog createDialog(boolean defaultConfirmed, Object info)
-    {
-      @SuppressWarnings("unchecked")
-      Map<ILicense, List<IInstallableUnit>> licensesToIUs = (Map<ILicense, List<IInstallableUnit>>)info;
-      return new LicenseDialog(licensesToIUs);
-    }
-  };
-
   private Composite composite;
 
   private ScrolledComposite scrolledComposite;
@@ -392,11 +373,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         SetupContext context = SetupContext.create(installation, workspace, user);
 
         performer = SetupTaskPerformer.create(uriConverter, this, trigger, context, fullPrompt);
-        if (performer != null)
-        {
-          performer.put(ILicense.class, LICENSE_CONFIRMER);
-          performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
-        }
       }
       catch (OperationCanceledException ex)
       {

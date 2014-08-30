@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.util.Confirmer;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -30,7 +29,7 @@ public abstract class AbstractDialogConfirmer implements Confirmer
       public void run()
       {
         AbstractConfirmDialog dialog = createDialog(defaultConfirmed, info);
-        confirmed[0] = dialog.open() == Dialog.OK;
+        confirmed[0] = dialog.open() == AbstractConfirmDialog.OK;
         remember[0] = dialog.isRemember();
       }
     });
