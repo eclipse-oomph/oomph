@@ -396,7 +396,7 @@ public class ProgressPage extends SetupWizardPage
 
       final SetupTaskPerformer performer = getPerformer();
       performer.setProgress(progressPageLog);
-      performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
+      performer.put(ILicense.class, LICENSE_CONFIRMER);
       performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performer.getUser(), false));
 
       progressMonitorPart.beginTask("", performer.getNeededTasks().size());
