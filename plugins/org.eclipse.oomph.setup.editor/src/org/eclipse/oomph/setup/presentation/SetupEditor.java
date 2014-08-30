@@ -1728,22 +1728,22 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     final Tree tree = selectionViewer.getTree();
     final Cursor[] oldCursor = { null };
 
-    display.syncExec(new Runnable()
-    {
-      public void run()
-      {
-        oldCursor[0] = tree.getCursor();
-
-        Cursor waitCursor = display.getSystemCursor(SWT.CURSOR_WAIT);
-        tree.setCursor(waitCursor);
-      }
-    });
-
     Job job = new Job("Loading Model")
     {
       @Override
       protected IStatus run(final IProgressMonitor monitor)
       {
+        display.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            oldCursor[0] = tree.getCursor();
+
+            Cursor waitCursor = display.getSystemCursor(SWT.CURSOR_WAIT);
+            tree.setCursor(waitCursor);
+          }
+        });
+
         final ResourceSet resourceSet = editingDomain.getResourceSet();
 
         final ResourceMirror resourceMirror = new ResourceMirror.WithProgress(resourceSet, monitor)
