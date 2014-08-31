@@ -277,7 +277,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   @Override
   protected String filter(String value, String filterName)
   {
-    StringFilter filter = STRING_FILTER_REGISTRY.get(filterName);
+    StringFilter filter = STRING_FILTER_REGISTRY.get(filterName.toLowerCase());
     if (filter != null)
     {
       return filter.filter(value);
@@ -286,9 +286,14 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return value;
   }
 
+  private static void registerFilter(String filterName, StringFilter filter)
+  {
+    STRING_FILTER_REGISTRY.put(filterName.toLowerCase(), filter);
+  }
+
   static
   {
-    STRING_FILTER_REGISTRY.put("uri", new StringFilter()
+    registerFilter("uri", new StringFilter()
     {
       public String filter(String value)
       {
@@ -296,7 +301,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("uriLastSegment", new StringFilter()
+    registerFilter("uriLastSegment", new StringFilter()
     {
       public String filter(String value)
       {
@@ -310,7 +315,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("gitRepository", new StringFilter()
+    registerFilter("gitRepository", new StringFilter()
     {
       public String filter(String value)
       {
@@ -330,7 +335,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("preferenceNode", new StringFilter()
+    registerFilter("preferenceNode", new StringFilter()
     {
       public String filter(String value)
       {
@@ -338,7 +343,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("upper", new StringFilter()
+    registerFilter("upper", new StringFilter()
     {
       public String filter(String value)
       {
@@ -346,7 +351,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("lower", new StringFilter()
+    registerFilter("lower", new StringFilter()
     {
       public String filter(String value)
       {
@@ -354,7 +359,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("cap", new StringFilter()
+    registerFilter("cap", new StringFilter()
     {
       public String filter(String value)
       {
@@ -362,7 +367,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("allCap", new StringFilter()
+    registerFilter("allCap", new StringFilter()
     {
       public String filter(String value)
       {
@@ -370,7 +375,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("property", new StringFilter()
+    registerFilter("property", new StringFilter()
     {
       public String filter(String value)
       {
@@ -378,11 +383,40 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
-    STRING_FILTER_REGISTRY.put("path", new StringFilter()
+    registerFilter("path", new StringFilter()
     {
       public String filter(String value)
       {
         return value.replaceAll("\\\\", "/");
+      }
+    });
+
+    registerFilter("basePath", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        value = value.replaceAll("\\\\", "/");
+        int pos = value.lastIndexOf('/');
+        if (pos == -1)
+        {
+          return "";
+        }
+
+        return value.substring(0, pos);
+      }
+    });
+
+    registerFilter("lastSegment", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        int pos = Math.max(value.lastIndexOf('/'), value.lastIndexOf('\\'));
+        if (pos == -1)
+        {
+          return value;
+        }
+
+        return value.substring(pos + 1);
       }
     });
   }
