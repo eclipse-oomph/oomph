@@ -23,7 +23,11 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 
+import org.osgi.framework.Constants;
+
 import java.io.File;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * @author Eike Stepper
@@ -56,12 +60,14 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
               File file = artifactRepository.getArtifactFile(artifactKey);
               if (file != null)
               {
-                if (builder.length() != 0)
+                if (file.isDirectory())
                 {
-                  builder.append(";");
+                  appendBundleClasspath(builder, file);
                 }
-
-                builder.append(file.getAbsolutePath());
+                else
+                {
+                  appendFile(builder, file);
+                }
               }
             }
           }
@@ -70,5 +76,38 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
     }
 
     return builder.toString();
+  }
+
+  @SuppressWarnings("restriction")
+  private static void appendBundleClasspath(StringBuilder builder, File bundleFolder) throws CoreException
+  {
+    Map<String, String> manifest = org.eclipse.pde.internal.core.util.ManifestUtils.loadManifest(bundleFolder);
+    String bundleClasspath = manifest.get(Constants.BUNDLE_CLASSPATH);
+    if (bundleClasspath != null)
+    {
+      StringTokenizer tokenizer = new StringTokenizer(bundleClasspath, ",");
+      while (tokenizer.hasMoreTokens())
+      {
+        String token = tokenizer.nextToken();
+        if (".".equals(token))
+        {
+          appendFile(builder, bundleFolder);
+        }
+        else
+        {
+          appendFile(builder, new File(bundleFolder, token));
+        }
+      }
+    }
+  }
+
+  private static void appendFile(StringBuilder builder, File file)
+  {
+    if (builder.length() != 0)
+    {
+      builder.append(";");
+    }
+
+    builder.append(file.getAbsolutePath());
   }
 }
