@@ -39,4 +39,13 @@
       </parser>
    </extension>
 
+   <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            description="Targlet Container Classpath"
+            name="targlet_container_classpath"
+            resolver="org.eclipse.oomph.targlets.internal.core.TargletContainerClasspathResolver"
+            supportsArgument="true"/>
+   </extension>
+
 </plugin>
