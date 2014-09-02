@@ -23,8 +23,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.ProgressMonitorWrapper;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -306,7 +309,7 @@ public abstract class BackendSystem extends BackendContainer
         this.queue = queue;
         this.counter = counter;
         this.visitor = visitor;
-        this.monitor = monitor;
+        this.monitor = new ThreadProgressMonitor(monitor);
         mutex.notifyAll();
       }
     }
@@ -412,6 +415,85 @@ public abstract class BackendSystem extends BackendContainer
     public String toString()
     {
       return super.toString();
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    private static final class ThreadProgressMonitor extends ProgressMonitorWrapper
+    {
+      private boolean canceled;
+
+      protected ThreadProgressMonitor(IProgressMonitor monitor)
+      {
+        super(monitor != null ? monitor : new NullProgressMonitor());
+      }
+
+      @Override
+      public boolean isCanceled()
+      {
+        return canceled || super.isCanceled();
+      }
+
+      @Override
+      public void setCanceled(boolean value)
+      {
+        canceled = value;
+      }
+
+      @Override
+      public void beginTask(String name, int totalWork)
+      {
+        setTaskName(name);
+      }
+
+      @Override
+      public void clearBlocked()
+      {
+        // Do nothing.
+      }
+
+      @Override
+      public void setBlocked(IStatus reason)
+      {
+        // Do nothing.
+      }
+
+      @Override
+      public void setTaskName(String name)
+      {
+        synchronized (getWrappedProgressMonitor())
+        {
+          super.setTaskName(name);
+        }
+      }
+
+      @Override
+      public void subTask(String name)
+      {
+        synchronized (getWrappedProgressMonitor())
+        {
+          super.subTask(name);
+        }
+      }
+
+      @Override
+      public void internalWorked(double work)
+      {
+        // Do nothing.
+      }
+
+      @Override
+      public void worked(int work)
+      {
+        // Do nothing.
+      }
+
+      @Override
+      public void done()
+      {
+        // Do nothing.
+      }
     }
   }
 
