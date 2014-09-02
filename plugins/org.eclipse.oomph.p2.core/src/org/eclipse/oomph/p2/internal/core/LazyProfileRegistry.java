@@ -253,7 +253,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     }
   }
 
-  private File findLatestProfileFile(File profileDirectory)
+  public static File findLatestProfileFile(File profileDirectory)
   {
     File latest = null;
     long latestTimestamp = 0;

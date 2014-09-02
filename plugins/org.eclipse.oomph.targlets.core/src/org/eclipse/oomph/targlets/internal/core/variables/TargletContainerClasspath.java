@@ -8,9 +8,11 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.targlets.internal.core;
+package org.eclipse.oomph.targlets.internal.core.variables;
 
 import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -26,7 +28,7 @@ import java.io.File;
 /**
  * @author Eike Stepper
  */
-public class TargletContainerClasspathResolver implements IDynamicVariableResolver
+public class TargletContainerClasspath implements IDynamicVariableResolver
 {
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
   {

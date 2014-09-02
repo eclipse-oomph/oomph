@@ -42,9 +42,29 @@
    <extension
          point="org.eclipse.core.variables.dynamicVariables">
       <variable
+            description="Targlet Container Profile ID"
+            name="targlet_container_profile_id"
+            resolver="org.eclipse.oomph.targlets.internal.core.variables.TargletContainerProfileID"
+            supportsArgument="true"/>
+      <variable
+            description="Targlet Container Profile File"
+            name="targlet_container_profile_file"
+            resolver="org.eclipse.oomph.targlets.internal.core.variables.TargletContainerProfileFile"
+            supportsArgument="true"/>
+      <variable
+            description="Targlet Container Profile Directory"
+            name="targlet_container_profile_directory"
+            resolver="org.eclipse.oomph.targlets.internal.core.variables.TargletContainerProfileDirectory"
+            supportsArgument="true"/>
+      <variable
+            description="Targlet Container Bundle Pool"
+            name="targlet_container_bundle_pool"
+            resolver="org.eclipse.oomph.targlets.internal.core.variables.TargletContainerBundlePool"
+            supportsArgument="true"/>
+      <variable
             description="Targlet Container Classpath"
             name="targlet_container_classpath"
-            resolver="org.eclipse.oomph.targlets.internal.core.TargletContainerClasspathResolver"
+            resolver="org.eclipse.oomph.targlets.internal.core.variables.TargletContainerClasspath"
             supportsArgument="true"/>
    </extension>
 
