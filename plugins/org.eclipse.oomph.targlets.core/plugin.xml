@@ -66,6 +66,11 @@
             name="targlet_container_classpath"
             resolver="org.eclipse.oomph.targlets.internal.core.variables.TargletContainerClasspath"
             supportsArgument="true"/>
+      <variable
+            description="Targlet Container Classpath File"
+            name="targlet_container_classpath_file"
+            resolver="org.eclipse.oomph.targlets.internal.core.variables.TargletContainerClasspathFile"
+            supportsArgument="true"/>
    </extension>
 
 </plugin>

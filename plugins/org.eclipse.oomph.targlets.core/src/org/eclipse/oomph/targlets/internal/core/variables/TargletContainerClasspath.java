@@ -32,6 +32,11 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
 {
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
   {
+    return getClasspath(containerID);
+  }
+
+  public static String getClasspath(String containerID) throws CoreException
+  {
     StringBuilder builder = new StringBuilder();
 
     TargletContainerDescriptor descriptor = TargletContainerDescriptorManager.getInstance().getDescriptor(containerID, new NullProgressMonitor());
