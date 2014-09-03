@@ -39,54 +39,14 @@ public class UserURIHandlerImpl extends URIHandlerImpl
 
   private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("description='([^']*)'");
 
+  public UserURIHandlerImpl()
+  {
+  }
+
   @Override
   public boolean canHandle(URI uri)
   {
     return SetupContext.USER_SCHEME.equals(uri.scheme());
-  }
-
-  private void create(URI uri, URI normalizedURI)
-  {
-    String query = uri.query();
-    if (query != null)
-    {
-      Project project = SetupFactory.eINSTANCE.createProject();
-      String decodedQuery = URI.decode(query);
-      Matcher nameMatcher = NAME_PATTERN.matcher(decodedQuery);
-      nameMatcher.find();
-      project.setName(nameMatcher.group(1));
-      Matcher labelMatcher = LABEL_PATTERN.matcher(decodedQuery);
-      labelMatcher.find();
-      project.setLabel(labelMatcher.group(1));
-      Matcher descriptionMatcher = DESCRIPTION_PATTERN.matcher(decodedQuery);
-      descriptionMatcher.find();
-      project.setDescription(descriptionMatcher.group(1));
-
-      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
-      resource.getContents().add(project);
-      try
-      {
-        resource.save(null);
-      }
-      catch (IOException ex)
-      {
-        SetupCorePlugin.INSTANCE.log(ex);
-      }
-    }
-    else if (SetupContext.USER_SETUP_URI.equals(uri))
-    {
-      User user = SetupContext.createUser();
-      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
-      resource.getContents().add(user);
-      try
-      {
-        resource.save(null);
-      }
-      catch (IOException ex)
-      {
-        SetupCorePlugin.INSTANCE.log(ex);
-      }
-    }
   }
 
   @Override
@@ -161,5 +121,47 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     }
 
     uriConverter.setAttributes(normalizedURI, attributes, options);
+  }
+
+  private void create(URI uri, URI normalizedURI)
+  {
+    String query = uri.query();
+    if (query != null)
+    {
+      Project project = SetupFactory.eINSTANCE.createProject();
+      String decodedQuery = URI.decode(query);
+      Matcher nameMatcher = NAME_PATTERN.matcher(decodedQuery);
+      nameMatcher.find();
+      project.setName(nameMatcher.group(1));
+      Matcher labelMatcher = LABEL_PATTERN.matcher(decodedQuery);
+      labelMatcher.find();
+      project.setLabel(labelMatcher.group(1));
+      Matcher descriptionMatcher = DESCRIPTION_PATTERN.matcher(decodedQuery);
+      descriptionMatcher.find();
+      project.setDescription(descriptionMatcher.group(1));
+
+      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
+      resource.getContents().add(project);
+      saveResource(resource);
+    }
+    else if (SetupContext.USER_SETUP_URI.equals(uri))
+    {
+      User user = SetupContext.createUser();
+      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
+      resource.getContents().add(user);
+      saveResource(resource);
+    }
+  }
+
+  private static void saveResource(Resource resource)
+  {
+    try
+    {
+      resource.save(null);
+    }
+    catch (IOException ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
   }
 }
