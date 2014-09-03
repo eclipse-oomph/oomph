@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:article="http://www.eclipse.org/ARTICLE/1.0">
+  <article:Plugin name="org.eclipse.oomph.resources" label="Oomph Resources Model">
+    <packages name="org.eclipse.oomph.resources"/>
+    <packages name="org.eclipse.oomph.resources.backend"/>
+    <packages name="org.eclipse.oomph.resources.impl"/>
+    <packages name="org.eclipse.oomph.resources.util"/>
+    <extensionPoints name="backendSystemFactories"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup" label="Oomph Setup">
+    <packages name="org.eclipse.oomph.setup"/>
+    <packages name="org.eclipse.oomph.setup.impl"/>
+    <packages name="org.eclipse.oomph.setup.log"/>
+    <packages name="org.eclipse.oomph.setup.util"/>
+  </article:Plugin>
+</xmi:XMI>

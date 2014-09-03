@@ -62,6 +62,14 @@
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
+      name="org.eclipse.ant.ui">
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.ant.ui/problem_classpath"
+        value="ignore"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
       name="org.eclipse.jdt.core">
     <setupTask
         xsi:type="setup:PreferenceTask"

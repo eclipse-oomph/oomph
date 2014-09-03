@@ -1,0 +1,23 @@
+a:link {
+  text-decoration: none;
+  border: none;
+  color: #000000;
+}
+
+a:visited {
+  color: #000000;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  color: #0000bb;
+  font-weight: bold;
+}
+
+.te {
+	margin-bottom: 2px;
+	white-space: nowrap;
+}

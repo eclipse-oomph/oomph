@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.ant.AntLaunchConfigurationType">
+<booleanAttribute key="org.eclipse.ant.ui.DEFAULT_VM_INSTALL" value="true"/>
+<stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${working_set:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;resources&gt;&#13;&#10;&lt;item path=&quot;/org.eclipse.oomph.releng.helpcenter&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;item path=&quot;/org.eclipse.oomph.setup.doc&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;/resources&gt;}"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.ui.externaltools.launchGroup"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JRE for J2SE-1.5"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.ant.internal.launching.remote.InternalAntRunner"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value=""/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${bundle_location:org.eclipse.oomph.releng.doc}/build.ant"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dtp.classpath.file=${targlet_container_classpath_file:Oomph}&#13;&#10;-Dplugins.dir=${project_loc:/org.eclipse.oomph.setup}/..&#13;&#10;-Dhelpcenter.project=${project_loc:/org.eclipse.oomph.releng.helpcenter}&#13;&#10;-Dreleng.project=${bundle_location:org.eclipse.oomph.releng.doc}"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/org.eclipse.oomph.releng.helpcenter}"/>
+<stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
+</launchConfiguration>

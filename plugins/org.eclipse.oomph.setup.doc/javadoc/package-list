@@ -1,0 +1,8 @@
+org.eclipse.oomph.resources
+org.eclipse.oomph.resources.backend
+org.eclipse.oomph.resources.impl
+org.eclipse.oomph.resources.util
+org.eclipse.oomph.setup
+org.eclipse.oomph.setup.impl
+org.eclipse.oomph.setup.log
+org.eclipse.oomph.setup.util

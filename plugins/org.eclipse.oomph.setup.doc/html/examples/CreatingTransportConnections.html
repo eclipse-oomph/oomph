@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+
+<HEAD>
+<TITLE>Creating Transport Connections (Oomph Setup Documentation)</TITLE>
+
+<LINK REL="STYLESHEET" HREF="../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Creating Transport Connections (Oomph Setup Documentation)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT></NOSCRIPT>
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Examples</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Creating Transport Connections</h1></td>
+		<td align="right" valign="middle" nowrap><a href="ConnectingToRepositories.html" title="Backward to Connecting To Repositories"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="XmlSnippets.html" title="Forward to Embedding XML Snippets"><img src="../../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p class="author">Author: Eike Stepper</p>
+<p>
+ This tutorial outlines the steps needed to create a Net4j <a href="../../javadoc/org/eclipse/oomph/setup/User.html" title="Interface in org.eclipse.oomph.setup"><code>User</code></a> and connect it to an <a href="../../javadoc/org/eclipse/oomph/setup/Workspace.html" title="Interface in org.eclipse.oomph.setup"><code>Workspace</code></a>.
+ <p>
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu nibh in erat dapibus accumsan. Aenean cursus
+ lacinia dictum. Mauris non sem sapien. Vivamus sem ante, posuere a rhoncus ac, varius in nisi. Sed pulvinar urna ac
+ est iaculis mattis. Ut eget massa felis, nec volutpat purus. In id aliquet mi. Duis euismod sapien sollicitudin nisi
+ vestibulum nec vulputate urna euismod. Proin pulvinar ornare nunc, ac auctor elit placerat eget. Integer eu erat ac
+ risus ultricies mattis vel nec nunc. Proin venenatis tellus sit amet dui congue nec vehicula urna sollicitudin. Donec
+ porta, risus eu auctor semper, ante lectus lobortis sem, a luctus diam dui eu sapien. Sed at metus et dolor tincidunt
+ convallis id a est. Donec quam nisl, scelerisque a feugiat id, mattis vel urna. Suspendisse facilisis, libero ac
+ ultricies dictum, mi sem feugiat purus, ac aliquam metus purus sed leo. Sed a viverra metus.
+ <p>
+ <b>Table of Contents</b> <p>
+<table border="0">
+<tr><td>1&nbsp;</td><td colspan="4"><a href="CreatingTransportConnections.html#SelectTransportType" title="Chapter in Oomph Setup Documentation">Select a Transport Type</a></td></tr>
+<tr><td>2&nbsp;</td><td colspan="4"><a href="CreatingTransportConnections.html#SetupWiringContainer" title="Chapter in Oomph Setup Documentation">Setup a Wiring Container</a></td></tr>
+<tr><td>3&nbsp;</td><td colspan="4"><a href="CreatingTransportConnections.html#AddConfigurationParameters" title="Chapter in Oomph Setup Documentation">Add Configuration Parameters</a></td></tr>
+<tr><td></td><td>3.1&nbsp;</td><td colspan="3"><a href="CreatingTransportConnections.html#SetBufferCapacity" title="Chapter in Oomph Setup Documentation">Set the Buffer Capacity</a></td></tr>
+<tr><td></td><td>3.2&nbsp;</td><td colspan="3"><a href="CreatingTransportConnections.html#SetConnectionTimeout" title="Chapter in Oomph Setup Documentation">Set the Connection Timeout</a></td></tr>
+</table>
+</p>
+
+
+<h2><a name="SelectTransportType"></a>1&nbsp;&nbsp;Select a Transport Type</h2>
+<p>
+ Currently supported transport types are:
+ <ul>
+ <li><b>JVM</b> to connect to an <a href="../../javadoc/org/eclipse/oomph/setup/Workspace.html" title="Interface in org.eclipse.oomph.setup"><code>Workspace</code></a> in the same Java Virtual Machine.
+ <li><b>TCP</b> to connect to an <a href="../../javadoc/org/eclipse/oomph/setup/Installation.html" title="Interface in org.eclipse.oomph.setup"><code>Installation</code></a> by means of a <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/nio/channels/SocketChannel.html" title="Class in java.nio.channels"><code>SocketChannel</code></a>.
+ <li><b>SSL</b> an extension to the TCP transport that adds TLS/SSL security.
+ <li><b>HTTP</b> to connect to an <a href="../../javadoc/org/eclipse/oomph/setup/SetupTask.html" title="Interface in org.eclipse.oomph.setup"><code>SetupTask</code></a> that is made available by a servlet.
+ </ul>
+ Continue with <a href="CreatingTransportConnections.html#AddConfigurationParameters" title="Chapter in Oomph Setup Documentation">Add Configuration Parameters</a>.<p><b>See Also:</b></p>
+<ul>
+	<li><a href="../../javadoc/org/eclipse/oomph/setup/Index.html" title="Interface in org.eclipse.oomph.setup"><code>Index</code></a></li>
+</ul>
+
+
+<h2><a name="SetupWiringContainer"></a>2&nbsp;&nbsp;Setup a Wiring Container</h2>
+<p>
+ Ut eget massa felis, nec volutpat purus. In id aliquet mi. Duis euismod sapien sollicitudin nisi vestibulum nec
+ vulputate urna euismod. Proin pulvinar ornare nunc, ac auctor elit placerat eget. Integer eu erat ac risus
+ ultricies mattis vel nec nunc.
+ <p>
+ 
+
+<div class="snippet" style="margin-left:24px;" align="left">
+  <a name="snippet_snippet1"></a>
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><img src="../../images/editor-top-left-java.png"></td>
+      <td style="background-image:url(../../images/editor-top1.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">ContainerSetup.java</font></td>
+      <td width="1px"><img src="../../images/editor-close.png"></td>
+      <td style="background-image:url(../../images/editor-top2.png); background-repeat:repeat-x;">&nbsp;</td>
+      <td><img src="../../images/editor-top-right.png"></td>
+    </tr>
+    <tr>
+      <td style="background-image:url(../../images/editor-left.png); background-repeat:repeat-y;">&nbsp;</td>
+      <td colspan="3" align="left" valign="top" nowrap>
+        <div style="margin:10px 0px 10px 0px;">
+          <code>
+            <font color="#3f7f5f">//&nbsp;Create&nbsp;a&nbsp;dedicated&nbsp;container&nbsp;instance</font><br/>
+            User&nbsp;user&nbsp;=&nbsp;<a name="callout_snippet1_1_code" href="#callout_snippet1_1" alt="Create a separate User." title="Create a separate User."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;SetupFactory.eINSTANCE.createUser();<br/>
+            <br/>
+            <font color="#3f7f5f">//&nbsp;Register&nbsp;your&nbsp;custom&nbsp;factories</font><br/>
+            user.eAdapters().add(&nbsp;<a name="callout_snippet1_2_code" href="#callout_snippet1_2" alt="Create a factory of type &quot;jms&quot; in the productGroup &quot;org.eclipse.net4j.connectors&quot;." title="Create a factory of type &quot;jms&quot; in the productGroup &quot;org.eclipse.net4j.connectors&quot;."><img src="../../images/callout-2.png" width="16" height="16" border="0" align="top"></a>&nbsp;<font color="#7f0055"><b>new&nbsp;</b></font>AdapterImpl()<br/>
+            {<br/>
+            &nbsp;&nbsp;<font color="#646464">@Override</font><br/>
+            &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font>notifyChanged(Notification&nbsp;msg)<br/>
+            &nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>super</b></font>.notifyChanged(msg);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<a name="callout_snippet1_3_code" href="#callout_snippet1_3" alt="Create a JMS connector." title="Create a JMS connector."><img src="../../images/callout-3.png" width="16" height="16" border="0" align="top"></a>&nbsp;<font color="#2a00ff">&#34;org.eclipse.net4j.connectors&#34;&nbsp;</font>+&nbsp;<font color="#2a00ff">&#34;jms&#34;</font>);<br/>
+            &nbsp;&nbsp;}<br/>
+            });<br/>
+            <br/>
+            <font color="#3f7f5f">//&nbsp;Do&nbsp;not&nbsp;forget&nbsp;to&nbsp;activate&nbsp;the&nbsp;container&nbsp;before&nbsp;you&nbsp;use&nbsp;it</font><br/>
+            <a name="callout_snippet1_4_code" href="#callout_snippet1_4" alt="The new container can not be used when inactive." title="The new container can not be used when inactive."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;user.getDescription();
+          </code>
+        </div>
+      </td>
+      <td style="background-image:url(../../images/editor-right.png); background-repeat:repeat-y;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><img src="../../images/editor-bottom-left.png"></td>
+      <td style="background-image:url(../../images/editor-bottom.png); background-repeat:repeat-x;" colspan="3">&nbsp;</td>
+      <td><img src="../../images/editor-bottom-right.png"></td>
+    </tr>
+  </table>
+</div>
+<p>
+<div style="margin-left:24px;"><a name="callout_snippet1_1" href="#callout_snippet1_1_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a separate <a href="../../javadoc/org/eclipse/oomph/setup/User.html" title="Interface in org.eclipse.oomph.setup"><code>User</code></a>.
+
+</div>
+<div style="margin-left:24px;"><a name="callout_snippet1_2" href="#callout_snippet1_2_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-2.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a factory of <i>type</i> "jms" in the <i>productGroup</i> "org.eclipse.net4j.connectors".
+
+</div>
+<div style="margin-left:24px;"><a name="callout_snippet1_3" href="#callout_snippet1_3_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-3.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a JMS connector.
+
+</div>
+<div style="margin-left:24px;"><a name="callout_snippet1_4" href="#callout_snippet1_4_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;The new container can not be used when inactive.
+
+</div>
+<p>
+
+ <p>
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu nibh in erat dapibus accumsan. Aenean cursus
+ lacinia dictum. Mauris non sem sapien. Vivamus sem ante, posuere a rhoncus ac, varius in nisi. Sed pulvinar urna ac
+ est iaculis mattis. Ut eget massa felis, nec volutpat purus. In id aliquet mi. Duis euismod sapien sollicitudin
+ nisi vestibulum nec vulputate urna euismod. Proin pulvinar ornare nunc, ac auctor elit placerat eget. Integer eu
+ erat ac risus ultricies mattis vel nec nunc. Proin venenatis tellus sit amet dui congue nec vehicula urna
+ sollicitudin. Donec porta, risus eu auctor semper, ante lectus lobortis sem, a luctus diam dui eu sapien. Sed at
+ metus et dolor tincidunt convallis id a est. Donec quam nisl, scelerisque a feugiat id, mattis vel urna.
+ Suspendisse facilisis, libero ac ultricies dictum, mi sem feugiat purus, ac aliquam metus purus sed leo. Sed a
+ viverra metus.
+
+<h2><a name="AddConfigurationParameters"></a>3&nbsp;&nbsp;Add Configuration Parameters</h2>
+
+
+<h3><a name="SetBufferCapacity"></a>3.1&nbsp;&nbsp;Set the Buffer Capacity</h3>
+<p>
+ 
+
+<div class="snippet" style="margin-left:24px;" align="left">
+  <a name="snippet_JMSConnector"></a>
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><img src="../../images/editor-top-left-java.png"></td>
+      <td style="background-image:url(../../images/editor-top1.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">JMSConnector.java</font></td>
+      <td width="1px"><img src="../../images/editor-close.png"></td>
+      <td style="background-image:url(../../images/editor-top2.png); background-repeat:repeat-x;">&nbsp;</td>
+      <td><img src="../../images/editor-top-right.png"></td>
+    </tr>
+    <tr>
+      <td style="background-image:url(../../images/editor-left.png); background-repeat:repeat-y;">&nbsp;</td>
+      <td colspan="3" align="left" valign="top" nowrap>
+        <div style="margin:10px 0px 10px 0px;">
+          <code>
+            <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font>JMSConnector&nbsp;<font color="#7f0055"><b>extends&nbsp;</b></font>UserImpl<br/>
+            {<br/>
+            &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font>JMSConnector(String&nbsp;description)<br/>
+            &nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;}<br/>
+            <br/>
+            &nbsp;&nbsp;<font color="#646464">@Override</font><br/>
+            &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font>NotificationChain&nbsp;eBasicRemoveFromContainer(NotificationChain&nbsp;<a name="callout_JMSConnector_1_code" href="#callout_JMSConnector_1" alt="The channel must not be null." title="The channel must not be null."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;msgs)<br/>
+            &nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>return&nbsp;super</b></font>.eBasicRemoveFromContainer(msgs);<br/>
+            &nbsp;&nbsp;}<br/>
+            <br/>
+            &nbsp;&nbsp;&hellip;<br/>
+            }
+          </code>
+        </div>
+      </td>
+      <td style="background-image:url(../../images/editor-right.png); background-repeat:repeat-y;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><img src="../../images/editor-bottom-left.png"></td>
+      <td style="background-image:url(../../images/editor-bottom.png); background-repeat:repeat-x;" colspan="3">&nbsp;</td>
+      <td><img src="../../images/editor-bottom-right.png"></td>
+    </tr>
+  </table>
+</div>
+<p>
+<div style="margin-left:24px;"><a name="callout_JMSConnector_1" href="#callout_JMSConnector_1_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;The channel must not be <code>null</code>.
+
+</div>
+<p>
+
+
+<h3><a name="SetConnectionTimeout"></a>3.2&nbsp;&nbsp;Set the Connection Timeout</h3>
+<p>
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu nibh in erat dapibus accumsan. Aenean cursus
+ lacinia dictum. Mauris non sem sapien. Vivamus sem ante, posuere a rhoncus ac, varius in nisi. Sed pulvinar urna
+ ac est iaculis mattis. Ut eget massa felis, nec volutpat purus. In id aliquet mi. Duis euismod sapien
+ sollicitudin nisi vestibulum nec vulputate urna euismod. Proin pulvinar ornare nunc, ac auctor elit placerat
+ eget. Integer eu erat ac risus ultricies mattis vel nec nunc. Proin venenatis tellus sit amet dui congue nec
+ vehicula urna sollicitudin. Donec porta, risus eu auctor semper, ante lectus lobortis sem, a luctus diam dui eu
+ sapien. Sed at metus et dolor tincidunt convallis id a est. Donec quam nisl, scelerisque a feugiat id, mattis vel
+ urna. Suspendisse facilisis, libero ac ultricies dictum, mi sem feugiat purus, ac aliquam metus purus sed leo.
+ Sed a viverra metus.
+
+<p align="right">
+<a href="ConnectingToRepositories.html" title="Backward to Connecting To Repositories"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="XmlSnippets.html" title="Forward to Embedding XML Snippets"><img src="../../images/forward.png" border="0"></a></p>
+<HR>
+<i>Copyright (c) 2011, 2012 Eike Stepper (Berlin, Germany) and others.</i>
+</BODY>
+</HTML>

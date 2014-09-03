@@ -126,6 +126,7 @@
     <module>plugins/org.eclipse.oomph.workingsets.editor</module>
     <module>products/org.eclipse.oomph.setup.installer.product</module>
     <module>releng/org.eclipse.oomph.releng</module>
+    <module>releng/org.eclipse.oomph.releng.helpcenter</module>
     <module>sites/org.eclipse.oomph.site</module>
   </modules>
 

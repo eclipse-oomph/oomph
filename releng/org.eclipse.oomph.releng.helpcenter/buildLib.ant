@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+<project name="JavaDocLib" default="delegate">
+
+	<!-- =========================================== -->
+	<!-- THIS FILE HAS BEEN GENERATED, DO NOT CHANGE -->
+	<!-- =========================================== -->
+
+	<target name="delegate">
+		<ant antfile="${plugins.dir}/org.eclipse.oomph.setup.doc/build.xml" target="${delegate.target}" />
+	</target>
+
+	<target name="toc">
+		<concat destfile="${helpcenter.project}/html/toc.html">
+			<path path="${releng.project}/html/tocHeader.html" />
+			<path path="${plugins.dir}/org.eclipse.oomph.setup.doc/toc.html" />
+			<path path="${releng.project}/html/tocFooter.html" />
+		</concat>
+	</target>
+
+</project>

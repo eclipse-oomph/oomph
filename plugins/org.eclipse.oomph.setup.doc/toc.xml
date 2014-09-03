@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Oomph Setup Documentation" topic="html/Overview.html">
+  <topic label="Overview" href="html/Overview.html" />
+  <topic label="Examples" href="html/examples/index.html">
+    <topic label="Connecting To Repositories" href="html/examples/ConnectingToRepositories.html" />
+    <topic label="Creating Transport Connections" href="html/examples/CreatingTransportConnections.html" />
+    <topic label="Embedding XML Snippets" href="html/examples/XmlSnippets.html" />
+  </topic>
+  <topic label="Reference" href="html/reference/index.html">
+    <topic label="API Reference" href="javadoc/overview-summary.html">
+      <topic label="Oomph Resources Model" href="javadoc/org/eclipse/oomph/resources/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.resources" href="javadoc/org/eclipse/oomph/resources/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.resources.backend" href="javadoc/org/eclipse/oomph/resources/backend/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.resources.impl" href="javadoc/org/eclipse/oomph/resources/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.resources.util" href="javadoc/org/eclipse/oomph/resources/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup" href="javadoc/org/eclipse/oomph/setup/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup" href="javadoc/org/eclipse/oomph/setup/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.impl" href="javadoc/org/eclipse/oomph/setup/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.log" href="javadoc/org/eclipse/oomph/setup/log/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.util" href="javadoc/org/eclipse/oomph/setup/util/package-summary.html" icon="package" />
+      </topic>
+    </topic>
+    <topic label="Extension Point Reference" href="html/reference/schema/index.html">
+      <topic label="Oomph Resources Model" href="schemadoc/org_eclipse_oomph_resources_backendSystemFactories.html" icon="plugin">
+        <topic label="backendSystemFactories" href="schemadoc/org_eclipse_oomph_resources_backendSystemFactories.html" icon="extpoint" />
+      </topic>
+    </topic>
+  </topic>
+  <topic label="Online Docs" href="html/online/index.html">
+    <topic label="Homepage" href="http://www.eclipse.org/oomph" icon="external" />
+    <topic label="Wiki" href="http://wiki.eclipse.org/Oomph" icon="external" />
+  </topic>
+  <topic label="Legal" href="about.html" />
+</toc>
