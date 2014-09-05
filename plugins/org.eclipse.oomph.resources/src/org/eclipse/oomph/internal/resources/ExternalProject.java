@@ -70,6 +70,12 @@ public final class ExternalProject extends ExternalContainer implements IProject
     return PROJECT;
   }
 
+  @Override
+  public String getName()
+  {
+    return description.getName();
+  }
+
   public void build(int kind, String builderName, Map<String, String> args, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();

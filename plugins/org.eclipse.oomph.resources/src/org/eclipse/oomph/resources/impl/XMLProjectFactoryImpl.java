@@ -4,6 +4,7 @@ package org.eclipse.oomph.resources.impl;
 
 import org.eclipse.oomph.internal.resources.ExternalProject;
 import org.eclipse.oomph.internal.resources.ExternalProject.Description;
+import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.XMLProjectFactory;
 import org.eclipse.oomph.resources.backend.BackendContainer;
@@ -85,8 +86,8 @@ public abstract class XMLProjectFactoryImpl extends ProjectFactoryImpl implement
     }
     catch (Exception ex)
     {
-      // String message = "Problem parsing " + (xmlFile != null ? xmlFile : xmlFilePath);
-      // ResourcesPlugin.INSTANCE.log(new Exception(message, ex));
+      String message = "Problem parsing " + (xmlFile != null ? xmlFile : xmlFilePath);
+      ResourcesPlugin.INSTANCE.log(new Exception(message, ex));
     }
 
     return null;
