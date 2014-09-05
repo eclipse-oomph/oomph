@@ -25,21 +25,6 @@
   </properties>
 
   <modules>
-    <module>../com.levitasoft.git/features/com.levitasoft.all-feature</module>
-    <module>../com.levitasoft.git/features/com.levitasoft.license-feature</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.p2.analysis</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.p2.analysis.edit</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.p2.analysis.editor</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.pde.ui</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.resources</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.resources.cvs</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.resources.subclipse</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.resources.subversive</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.resources.ui</module>
-    <module>../com.levitasoft.git/plugins/com.levitasoft.targlets.ui</module>
-    <module>../com.levitasoft.git/releng/com.levitasoft.releng</module>
-    <module>../com.levitasoft.git/sites/com.levitasoft.site</module>
-    <module>../org.eclipse.oomph</module>
     <module>features/org.eclipse.oomph.all-feature</module>
     <module>features/org.eclipse.oomph.gitbash-feature</module>
     <module>features/org.eclipse.oomph.launches-feature</module>
@@ -66,6 +51,7 @@
     <module>features/org.eclipse.oomph.targlets-feature</module>
     <module>features/org.eclipse.oomph.version-feature</module>
     <module>features/org.eclipse.oomph.version.headless-feature</module>
+    <module>features/org.eclipse.oomph.winexplorer-feature</module>
     <module>features/org.eclipse.oomph.workingsets-feature</module>
     <module>plugins/org.eclipse.oomph.base</module>
     <module>plugins/org.eclipse.oomph.base.edit</module>
@@ -80,6 +66,7 @@
     <module>plugins/org.eclipse.oomph.predicates</module>
     <module>plugins/org.eclipse.oomph.predicates.edit</module>
     <module>plugins/org.eclipse.oomph.preferences</module>
+    <module>plugins/org.eclipse.oomph.preferences.edit</module>
     <module>plugins/org.eclipse.oomph.preferences.editor</module>
     <module>plugins/org.eclipse.oomph.projectconfig</module>
     <module>plugins/org.eclipse.oomph.projectconfig.edit</module>
@@ -242,17 +229,17 @@
       -->
     </plugins>
     <pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<argLine>${os-jvm-flags}</argLine>
-				</configuration>
-			</plugin>
-		</plugins>
-	</pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <argLine>${os-jvm-flags}</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </pluginManagement>
   </build>
 
   <profiles>
@@ -446,17 +433,17 @@
         </plugins>
       </build>
     </profile>
-	<profile>
-		<id>macosx-jvm-flags</id>
-		<activation>
-			<os>
-				<family>mac</family>
-			</os>
-		</activation>
-		<properties>
-			<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
-		</properties>
-	</profile>
+    <profile>
+        <id>macosx-jvm-flags</id>
+        <activation>
+            <os>
+                <family>mac</family>
+            </os>
+        </activation>
+        <properties>
+            <os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
+        </properties>
+    </profile>
   </profiles>
 
 </project>
