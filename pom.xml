@@ -76,6 +76,7 @@
     <module>plugins/org.eclipse.oomph.resources.edit</module>
     <module>plugins/org.eclipse.oomph.setup</module>
     <module>plugins/org.eclipse.oomph.setup.core</module>
+    <module>plugins/org.eclipse.oomph.setup.doc</module>
     <module>plugins/org.eclipse.oomph.setup.edit</module>
     <module>plugins/org.eclipse.oomph.setup.editor</module>
     <module>plugins/org.eclipse.oomph.setup.git</module>
