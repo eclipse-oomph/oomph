@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -118,6 +119,49 @@ public final class IOUtil
     try
     {
       ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(bytes));
+      return (Serializable)stream.readObject();
+    }
+    catch (Exception ex)
+    {
+      UtilPlugin.INSTANCE.log(ex);
+      return null;
+    }
+  }
+
+  public static Serializable deserialize(byte[] bytes, final ClassLoader classLoader)
+  {
+    try
+    {
+      ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(bytes))
+      {
+        @Override
+        protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException
+        {
+          if (classLoader != null)
+          {
+            String className = desc.getName();
+
+            try
+            {
+              Class<?> c = classLoader.loadClass(className);
+              if (c != null)
+              {
+                return c;
+              }
+            }
+            catch (ClassNotFoundException ex)
+            {
+              if (!StackTraceElement[].class.getName().equals(className))
+              {
+                UtilPlugin.INSTANCE.log(ex);
+              }
+            }
+          }
+
+          return super.resolveClass(desc);
+        }
+      };
+
       return (Serializable)stream.readObject();
     }
     catch (Exception ex)
