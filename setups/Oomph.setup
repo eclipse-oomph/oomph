@@ -139,7 +139,23 @@
       storageURI="scope://Workspace">
     <description>Specifies a default value for the variable that's originally defined in the Eclipse.org project catalog.</description>
   </setupTask>
-  <stream name="master">
+  <project name="releng.doc"
+      label="Documentation Generator">
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <requirement
+          name="org.eclipse.oomph.releng.doc"/>
+      <repository
+          url="http://estepper-build.github.io/oomphup/updates"/>
+      <description>Install the org.eclipse.osgi.compatibility.plugins fragment (see bug 407312)</description>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>Installs the optional documentation generator</description>
+  </project>
+  <stream name="master"
+      label="Master">
     <setupTask
         xsi:type="setup:VariableTask"
         name="bugzilla.version"
@@ -227,6 +243,8 @@
             name="org.eclipse.oomph.version.tests"/>
         <requirement
             name="org.eclipse.oomph.releng"/>
+        <requirement
+            name="org.eclipse.oomph.releng.helpcenter"/>
         <requirement
             name="org.eclipse.oomph.site"/>
         <requirement
