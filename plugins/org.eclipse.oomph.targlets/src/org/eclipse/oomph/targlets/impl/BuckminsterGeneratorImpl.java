@@ -15,6 +15,7 @@ import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.XMLUtil.ElementHandler;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -125,7 +126,7 @@ public class BuckminsterGeneratorImpl extends ModelElementImpl implements Buckmi
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public IInstallableUnit generateIU(IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception
+  public EList<IInstallableUnit> generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception
   {
     IFile file = project.getFile(CSPEC_PATH);
     if (file.exists())
@@ -150,7 +151,8 @@ public class BuckminsterGeneratorImpl extends ModelElementImpl implements Buckmi
 
         handleBuckminsterDependencies(rootElement, componentDefinition);
 
-        return ComponentGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);
+        IInstallableUnit iu = ComponentGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);
+        return ECollections.singletonEList(iu);
       }
       finally
       {
@@ -287,10 +289,10 @@ public class BuckminsterGeneratorImpl extends ModelElementImpl implements Buckmi
   {
     switch (operationID)
     {
-      case TargletPackage.BUCKMINSTER_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP:
+      case TargletPackage.BUCKMINSTER_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP:
         try
         {
-          return generateIU((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
+          return generateIUs((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
         }
         catch (Throwable throwable)
         {

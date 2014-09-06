@@ -13,6 +13,7 @@ import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
 import org.eclipse.oomph.util.IOUtil;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -80,7 +81,7 @@ public class ComponentGeneratorImpl extends ModelElementImpl implements Componen
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public IInstallableUnit generateIU(IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception
+  public EList<IInstallableUnit> generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception
   {
     IFile file = project.getFile(DEFINITION_PATH);
     if (file.exists())
@@ -95,7 +96,8 @@ public class ComponentGeneratorImpl extends ModelElementImpl implements Componen
         resource.load(inputStream, null);
 
         ComponentDefinition componentDefinition = BaseUtil.getObjectByType(resource.getContents(), TargletPackage.Literals.COMPONENT_DEFINITION);
-        return generateIU(componentDefinition, qualifierReplacement);
+        IInstallableUnit iu = generateIU(componentDefinition, qualifierReplacement);
+        return ECollections.singletonEList(iu);
       }
       finally
       {
@@ -200,10 +202,10 @@ public class ComponentGeneratorImpl extends ModelElementImpl implements Componen
   {
     switch (operationID)
     {
-      case TargletPackage.COMPONENT_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP:
+      case TargletPackage.COMPONENT_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP:
         try
         {
-          return generateIU((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
+          return generateIUs((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
         }
         catch (Throwable throwable)
         {

@@ -47,17 +47,17 @@ public interface ProjectFactory extends ModelElement
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model dataType="org.eclipse.oomph.predicates.Project" backendContainerDataType="org.eclipse.oomph.resources.BackendContainer" monitorDataType="org.eclipse.oomph.resources.ProgressMonitor"
+   * @model dataType="org.eclipse.oomph.predicates.Project" rootContainerDataType="org.eclipse.oomph.resources.BackendContainer" backendContainerDataType="org.eclipse.oomph.resources.BackendContainer" monitorDataType="org.eclipse.oomph.resources.ProgressMonitor"
    * @generated
    */
-  IProject createProject(BackendContainer backendContainer, IProgressMonitor monitor);
+  IProject createProject(BackendContainer rootContainer, BackendContainer backendContainer, IProgressMonitor monitor);
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model backendContainerDataType="org.eclipse.oomph.resources.BackendContainer"
+   * @model rootContainerDataType="org.eclipse.oomph.resources.BackendContainer" backendContainerDataType="org.eclipse.oomph.resources.BackendContainer"
    * @generated
    */
-  boolean isExcludedPath(BackendContainer backendContainer);
+  boolean isExcludedPath(BackendContainer rootContainer, BackendContainer backendContainer);
 
 } // ProjectFactory

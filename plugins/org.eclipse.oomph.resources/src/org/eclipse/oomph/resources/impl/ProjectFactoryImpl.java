@@ -8,6 +8,7 @@ import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.backend.BackendContainer;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
@@ -44,7 +45,7 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
    */
   protected EList<String> excludedPaths;
 
-  private Set<String> excludedPathSet;
+  private Set<URI> excludedURIs;
 
   /**
    * <!-- begin-user-doc -->
@@ -85,7 +86,7 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
         {
           synchronized (ProjectFactoryImpl.this)
           {
-            excludedPathSet = null;
+            excludedURIs = null;
           }
         }
       };
@@ -98,32 +99,41 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public final IProject createProject(BackendContainer backendContainer, IProgressMonitor monitor)
+  public final IProject createProject(BackendContainer rootContainer, BackendContainer backendContainer, IProgressMonitor monitor)
   {
-    if (isExcludedPath(backendContainer))
+    if (isExcludedPath(rootContainer, backendContainer))
     {
       return null;
     }
 
-    return doCreateProject(backendContainer, monitor);
+    return doCreateProject(rootContainer, backendContainer, monitor);
   }
 
-  protected abstract IProject doCreateProject(BackendContainer backendContainer, IProgressMonitor monitor);
+  protected abstract IProject doCreateProject(BackendContainer rootContainer, BackendContainer backendContainer, IProgressMonitor monitor);
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public synchronized boolean isExcludedPath(BackendContainer backendContainer)
+  public synchronized boolean isExcludedPath(BackendContainer rootContainer, BackendContainer backendContainer)
   {
-    if (excludedPathSet == null)
+    if (excludedURIs == null)
     {
-      excludedPathSet = new HashSet<String>(getExcludedPaths());
+      excludedURIs = new HashSet<URI>();
+      for (String path : getExcludedPaths())
+      {
+        while (path.startsWith("/"))
+        {
+          path = path.substring(1);
+        }
+
+        excludedURIs.add(URI.createURI(path));
+      }
     }
 
-    String systemRelativePath = backendContainer.getSystemRelativePath();
-    return excludedPathSet.contains(systemRelativePath);
+    URI relativeURI = backendContainer.getRelativeURI(rootContainer);
+    return relativeURI != null && excludedURIs.contains(relativeURI);
   }
 
   /**
@@ -204,10 +214,10 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
   {
     switch (operationID)
     {
-      case ResourcesPackage.PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR:
-        return createProject((BackendContainer)arguments.get(0), (IProgressMonitor)arguments.get(1));
-      case ResourcesPackage.PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER:
-        return isExcludedPath((BackendContainer)arguments.get(0));
+      case ResourcesPackage.PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR:
+        return createProject((BackendContainer)arguments.get(0), (BackendContainer)arguments.get(1), (IProgressMonitor)arguments.get(2));
+      case ResourcesPackage.PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER:
+        return isExcludedPath((BackendContainer)arguments.get(0), (BackendContainer)arguments.get(1));
     }
     return super.eInvoke(operationID, arguments);
   }

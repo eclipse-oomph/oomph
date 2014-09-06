@@ -48,10 +48,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ProjectFactory" abstract="true" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eOperations name="createProject" eType="ecore:EDataType ../../org.eclipse.oomph.predicates/model/Predicates.ecore#//Project">
+      <eParameters name="rootContainer" eType="#//BackendContainer"/>
       <eParameters name="backendContainer" eType="#//BackendContainer"/>
       <eParameters name="monitor" eType="#//ProgressMonitor"/>
     </eOperations>
     <eOperations name="isExcludedPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="rootContainer" eType="#//BackendContainer"/>
       <eParameters name="backendContainer" eType="#//BackendContainer"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludedPaths" upperBound="-1"

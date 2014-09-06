@@ -102,17 +102,17 @@ public class WorkspaceIUAnalyzer
       {
         try
         {
-          IInstallableUnit installableUnit = null;
+          EList<IInstallableUnit> installableUnits = null;
           IUGenerator generator = null;
 
           for (IUGenerator iuGenerator : iuGenerators)
           {
             try
             {
-              IInstallableUnit iu = iuGenerator.generateIU(project, qualifierReplacement, iuVersions);
-              if (iu != null)
+              EList<IInstallableUnit> ius = iuGenerator.generateIUs(project, qualifierReplacement, iuVersions);
+              if (ius != null && !ius.isEmpty())
               {
-                installableUnit = iu;
+                installableUnits = ius;
                 generator = iuGenerator;
                 break;
               }
@@ -123,11 +123,14 @@ public class WorkspaceIUAnalyzer
             }
           }
 
-          if (installableUnit != null)
+          if (installableUnits != null)
           {
-            if (installableUnit instanceof InstallableUnit)
+            for (IInstallableUnit installableUnit : installableUnits)
             {
-              ((InstallableUnit)installableUnit).setProperty(IU_PROPERTY_WORKSPACE, Boolean.TRUE.toString());
+              if (installableUnit instanceof InstallableUnit)
+              {
+                ((InstallableUnit)installableUnit).setProperty(IU_PROPERTY_WORKSPACE, Boolean.TRUE.toString());
+              }
             }
 
             for (IUGenerator iuModifier : iuGenerators)
@@ -136,7 +139,8 @@ public class WorkspaceIUAnalyzer
               {
                 try
                 {
-                  iuModifier.modifyIU(installableUnit, project, qualifierReplacement, iuVersions);
+                  IInstallableUnit mainIU = installableUnits.get(0);
+                  iuModifier.modifyIU(mainIU, project, qualifierReplacement, iuVersions);
                 }
                 catch (Exception ex)
                 {
@@ -145,10 +149,21 @@ public class WorkspaceIUAnalyzer
               }
             }
 
-            adjustOmniRootRequirements(installableUnit);
+            boolean main = true;
+            for (IInstallableUnit installableUnit : installableUnits)
+            {
+              adjustOmniRootRequirements(installableUnit);
 
-            WorkspaceIUInfo info = new WorkspaceIUInfo(backendContainer, project.getName());
-            workspaceIUInfos.put(installableUnit, info);
+              WorkspaceIUInfo info = null;
+              if (main)
+              {
+                String projectName = project.getName();
+                info = new WorkspaceIUInfo(backendContainer, projectName);
+                main = false;
+              }
+
+              workspaceIUInfos.put(installableUnit, info);
+            }
           }
         }
         catch (Exception ex)

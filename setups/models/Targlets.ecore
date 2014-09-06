@@ -96,7 +96,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IUGenerator" abstract="true" interface="true"
       eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
-    <eOperations name="generateIU" eType="#//InstallableUnit" eExceptions="ecore:EDataType http://www.eclipse.org/oomph/base/1.0#//Exception">
+    <eOperations name="generateIUs" upperBound="-1" eType="#//InstallableUnit" eExceptions="ecore:EDataType http://www.eclipse.org/oomph/base/1.0#//Exception">
       <eParameters name="project" eType="ecore:EDataType http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Project"/>
       <eParameters name="qualifierReplacement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eParameters name="iuVersions" eType="#//StringToVersionMap"/>

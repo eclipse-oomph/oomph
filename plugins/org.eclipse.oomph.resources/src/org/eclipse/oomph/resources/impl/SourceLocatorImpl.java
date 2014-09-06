@@ -263,7 +263,8 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    */
   public IProject loadProject(EList<ProjectFactory> defaultProjectFactories, BackendContainer backendContainer, IProgressMonitor monitor)
   {
-    return loadProject(this, defaultProjectFactories, backendContainer, monitor);
+    BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(this);
+    return loadProject(this, defaultProjectFactories, rootContainer, backendContainer, monitor);
   }
 
   /**
@@ -461,8 +462,21 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     status.add(multiStatus);
   }
 
-  public static IProject loadProject(SourceLocator sourceLocator, EList<ProjectFactory> defaultProjectFactories, BackendContainer backendContainer,
-      IProgressMonitor monitor)
+  public static BackendContainer getRootContainer(SourceLocator sourceLocator)
+  {
+    String rootFolder = sourceLocator.getRootFolder();
+
+    BackendResource rootResource = BackendResource.get(rootFolder);
+    if (rootResource instanceof BackendContainer)
+    {
+      return (BackendContainer)rootResource;
+    }
+
+    return null;
+  }
+
+  public static IProject loadProject(SourceLocator sourceLocator, EList<ProjectFactory> defaultProjectFactories, BackendContainer rootContainer,
+      BackendContainer backendContainer, IProgressMonitor monitor)
   {
     try
     {
@@ -474,7 +488,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
 
       for (ProjectFactory projectFactory : effectiveProjectFactories)
       {
-        IProject project = projectFactory.createProject(backendContainer, monitor);
+        IProject project = projectFactory.createProject(rootContainer, backendContainer, monitor);
         if (project != null)
         {
           return project;
@@ -496,13 +510,10 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   public static void handleProjects(final SourceLocator sourceLocator, final EList<ProjectFactory> defaultProjectFactories,
       final ProjectHandler projectHandler, final MultiStatus status, final IProgressMonitor monitor)
   {
-    String rootFolder = sourceLocator.getRootFolder();
-
-    BackendResource backendResource = BackendResource.get(rootFolder);
-    if (backendResource instanceof BackendContainer)
+    final BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(sourceLocator);
+    if (rootContainer != null)
     {
-      BackendContainer backendContainer = (BackendContainer)backendResource;
-      backendContainer.accept(new BackendResource.Visitor.Default()
+      rootContainer.accept(new BackendResource.Visitor.Default()
       {
         private final Set<String> excludedPaths = new HashSet<String>(sourceLocator.getExcludedPaths());
 
@@ -517,7 +528,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
             return false;
           }
 
-          IProject project = loadProject(sourceLocator, defaultProjectFactories, container, monitor);
+          IProject project = loadProject(sourceLocator, defaultProjectFactories, rootContainer, container, monitor);
           if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
           {
             try

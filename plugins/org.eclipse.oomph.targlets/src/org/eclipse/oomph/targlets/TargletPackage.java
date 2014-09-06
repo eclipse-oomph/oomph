@@ -437,13 +437,13 @@ public interface TargletPackage extends EPackage
   int IU_GENERATOR___GET_ANNOTATION__STRING = BasePackage.MODEL_ELEMENT___GET_ANNOTATION__STRING;
 
   /**
-   * The operation id for the '<em>Generate IU</em>' operation.
+   * The operation id for the '<em>Generate IUs</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+  int IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
   /**
    * The operation id for the '<em>Modify IU</em>' operation.
@@ -501,13 +501,13 @@ public interface TargletPackage extends EPackage
   int FEATURE_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
 
   /**
-   * The operation id for the '<em>Generate IU</em>' operation.
+   * The operation id for the '<em>Generate IUs</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FEATURE_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP;
+  int FEATURE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
 
   /**
    * The operation id for the '<em>Modify IU</em>' operation.
@@ -565,13 +565,13 @@ public interface TargletPackage extends EPackage
   int PLUGIN_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
 
   /**
-   * The operation id for the '<em>Generate IU</em>' operation.
+   * The operation id for the '<em>Generate IUs</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PLUGIN_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP;
+  int PLUGIN_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
 
   /**
    * The operation id for the '<em>Modify IU</em>' operation.
@@ -629,13 +629,13 @@ public interface TargletPackage extends EPackage
   int COMPONENT_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
 
   /**
-   * The operation id for the '<em>Generate IU</em>' operation.
+   * The operation id for the '<em>Generate IUs</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COMPONENT_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP;
+  int COMPONENT_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
 
   /**
    * The operation id for the '<em>Modify IU</em>' operation.
@@ -702,13 +702,13 @@ public interface TargletPackage extends EPackage
   int BUCKMINSTER_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
 
   /**
-   * The operation id for the '<em>Generate IU</em>' operation.
+   * The operation id for the '<em>Generate IUs</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BUCKMINSTER_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP;
+  int BUCKMINSTER_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
 
   /**
    * The operation id for the '<em>Modify IU</em>' operation.
@@ -964,14 +964,14 @@ public interface TargletPackage extends EPackage
   EClass getIUGenerator();
 
   /**
-   * Returns the meta object for the '{@link org.eclipse.oomph.targlets.IUGenerator#generateIU(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map) <em>Generate IU</em>}' operation.
+   * Returns the meta object for the '{@link org.eclipse.oomph.targlets.IUGenerator#generateIUs(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map) <em>Generate IUs</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the '<em>Generate IU</em>' operation.
-   * @see org.eclipse.oomph.targlets.IUGenerator#generateIU(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map)
+   * @return the meta object for the '<em>Generate IUs</em>' operation.
+   * @see org.eclipse.oomph.targlets.IUGenerator#generateIUs(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map)
    * @generated
    */
-  EOperation getIUGenerator__GenerateIU__IProject_String_Map();
+  EOperation getIUGenerator__GenerateIUs__IProject_String_Map();
 
   /**
    * Returns the meta object for the '{@link org.eclipse.oomph.targlets.IUGenerator#modifyIU(org.eclipse.equinox.p2.metadata.IInstallableUnit, org.eclipse.core.resources.IProject, java.lang.String, java.util.Map) <em>Modify IU</em>}' operation.
@@ -1251,12 +1251,12 @@ public interface TargletPackage extends EPackage
     EClass IU_GENERATOR = eINSTANCE.getIUGenerator();
 
     /**
-     * The meta object literal for the '<em><b>Generate IU</b></em>' operation.
+     * The meta object literal for the '<em><b>Generate IUs</b></em>' operation.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EOperation IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP = eINSTANCE.getIUGenerator__GenerateIU__IProject_String_Map();
+    EOperation IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = eINSTANCE.getIUGenerator__GenerateIUs__IProject_String_Map();
 
     /**
      * The meta object literal for the '<em><b>Modify IU</b></em>' operation.

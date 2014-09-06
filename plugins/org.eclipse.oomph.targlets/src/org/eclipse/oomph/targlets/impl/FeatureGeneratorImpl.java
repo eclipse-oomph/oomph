@@ -10,6 +10,7 @@ import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
@@ -23,9 +24,12 @@ import org.eclipse.equinox.internal.p2.metadata.RequiredCapability;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
+import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
+import org.eclipse.equinox.p2.publisher.AdviceFileAdvice;
+import org.eclipse.equinox.p2.publisher.IPublisherInfo;
 import org.eclipse.equinox.p2.publisher.PublisherInfo;
 import org.eclipse.equinox.p2.publisher.eclipse.Feature;
 import org.eclipse.equinox.p2.publisher.eclipse.FeaturesAction;
@@ -75,19 +79,20 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public IInstallableUnit generateIU(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions) throws Exception
+  public EList<IInstallableUnit> generateIUs(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions) throws Exception
   {
-    final IInstallableUnit[] result = { null };
+    final EList<IInstallableUnit> result = new BasicEList<IInstallableUnit>();
 
     ResourcesUtil.runWithFile(project, MANIFEST_PATH, new ResourcesUtil.RunnableWithFile()
     {
       public void run(File projectFolder, File file) throws Exception
       {
-        result[0] = FeatureGeneratorAction.INSTANCE.generateIU(projectFolder, qualifierReplacement, iuVersions);
+        FeatureGeneratorAction action = new FeatureGeneratorAction();
+        action.generateIUs(projectFolder, qualifierReplacement, iuVersions, result);
       }
     });
 
-    return result[0];
+    return result;
   }
 
   /**
@@ -111,10 +116,10 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
   {
     switch (operationID)
     {
-      case TargletPackage.FEATURE_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP:
+      case TargletPackage.FEATURE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP:
         try
         {
-          return generateIU((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
+          return generateIUs((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
         }
         catch (Throwable throwable)
         {
@@ -139,23 +144,22 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
    */
   public static final class FeatureGeneratorAction extends FeaturesAction
   {
-    public static final FeatureGeneratorAction INSTANCE = new FeatureGeneratorAction();
-
-    private FeatureGeneratorAction()
+    public FeatureGeneratorAction()
     {
       super((File[])null);
       setPublisherInfo(new PublisherInfo());
     }
 
-    public IInstallableUnit generateIU(File projectFolder, String qualifierReplacement, final Map<String, Version> ius) throws Exception
+    public void generateIUs(File projectFolder, String qualifierReplacement, final Map<String, Version> ius, EList<IInstallableUnit> result) throws Exception
     {
       Feature[] features = getFeatures(new File[] { projectFolder });
       if (features == null || features.length == 0)
       {
-        return null;
+        return;
       }
 
       Feature feature = features[0];
+      createAdviceFileAdvice(feature, info);
 
       String version = feature.getVersion();
       feature.getId();
@@ -322,7 +326,37 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
         iu.setRequiredCapabilities(newRequirements);
       }
 
-      return iu;
+      result.add(iu);
+
+      InstallableUnitDescription[] otherDescriptions = processAdditionalInstallableUnitsAdvice(iu, info);
+      if (otherDescriptions != null)
+      {
+        for (InstallableUnitDescription otherDescription : otherDescriptions)
+        {
+          IInstallableUnit otherIU = MetadataFactory.createInstallableUnit(otherDescription);
+          result.add(otherIU);
+        }
+      }
+    }
+
+    private void createAdviceFileAdvice(Feature feature, IPublisherInfo publisherInfo)
+    {
+      // assume p2.inf is co-located with feature.xml
+      String location = feature.getLocation();
+      if (location != null)
+      {
+        String groupId = getTransformedId(feature.getId(), /* isPlugin */false, /* isGroup */true);
+        AdviceFileAdvice advice = new AdviceFileAdvice(groupId, Version.parseVersion(feature.getVersion()), new Path(location), new Path("p2.inf")); //$NON-NLS-1$
+        if (advice.containsAdvice())
+        {
+          publisherInfo.addAdvice(advice);
+        }
+      }
+    }
+
+    private static String getTransformedId(String original, boolean isPlugin, boolean isGroup)
+    {
+      return isPlugin ? original : original + (isGroup ? ".feature.group" : ".feature.jar"); //$NON-NLS-1$//$NON-NLS-2$
     }
 
     private static VersionRange adjustQualifier(VersionRange range)

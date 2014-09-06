@@ -8,6 +8,7 @@ import org.eclipse.oomph.targlets.PluginGenerator;
 import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
@@ -17,6 +18,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.MetadataFactory;
+import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.publisher.PublisherInfo;
 import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
@@ -67,19 +70,20 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public IInstallableUnit generateIU(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions) throws Exception
+  public EList<IInstallableUnit> generateIUs(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions) throws Exception
   {
-    final IInstallableUnit[] result = { null };
+    final EList<IInstallableUnit> result = new BasicEList<IInstallableUnit>();
 
     ResourcesUtil.runWithFile(project, MANIFEST_PATH, new ResourcesUtil.RunnableWithFile()
     {
       public void run(File projectFolder, File file) throws Exception
       {
-        result[0] = BundleGeneratorAction.INSTANCE.generateIU(projectFolder, qualifierReplacement, iuVersions);
+        BundleGeneratorAction action = new BundleGeneratorAction();
+        action.generateIUs(projectFolder, qualifierReplacement, iuVersions, result);
       }
     });
 
-    return result[0];
+    return result;
   }
 
   /**
@@ -103,10 +107,10 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
   {
     switch (operationID)
     {
-      case TargletPackage.PLUGIN_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP:
+      case TargletPackage.PLUGIN_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP:
         try
         {
-          return generateIU((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
+          return generateIUs((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
         }
         catch (Throwable throwable)
         {
@@ -131,20 +135,18 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
    */
   private static final class BundleGeneratorAction extends BundlesAction
   {
-    public static final BundleGeneratorAction INSTANCE = new BundleGeneratorAction();
-
-    private BundleGeneratorAction()
+    public BundleGeneratorAction()
     {
       super((File[])null);
       setPublisherInfo(new PublisherInfo());
     }
 
-    public IInstallableUnit generateIU(File projectFolder, String qualifierReplacement, Map<String, Version> ius) throws Exception
+    public void generateIUs(File projectFolder, String qualifierReplacement, Map<String, Version> ius, EList<IInstallableUnit> result) throws Exception
     {
       Dictionary<String, String> manifest = loadManifest(projectFolder);
       if (manifest == null)
       {
-        return null;
+        return;
       }
 
       String version = manifest.get(org.osgi.framework.Constants.BUNDLE_VERSION);
@@ -153,8 +155,10 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
       BundleDescription description = createBundleDescription(manifest, projectFolder);
       if (description == null)
       {
-        return null;
+        return;
       }
+
+      createAdviceFileAdvice(description, info);
 
       IInstallableUnit iu = createBundleIU(description, null, info);
       if (iu instanceof InstallableUnit)
@@ -162,7 +166,17 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
         ((InstallableUnit)iu).setArtifacts(new IArtifactKey[0]);
       }
 
-      return iu;
+      result.add(iu);
+
+      InstallableUnitDescription[] otherDescriptions = processAdditionalInstallableUnitsAdvice(iu, info);
+      if (otherDescriptions != null)
+      {
+        for (InstallableUnitDescription otherDescription : otherDescriptions)
+        {
+          IInstallableUnit otherIU = MetadataFactory.createInstallableUnit(otherDescription);
+          result.add(otherIU);
+        }
+      }
     }
   }
 

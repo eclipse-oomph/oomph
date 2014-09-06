@@ -693,30 +693,20 @@ public class TargletContainer extends AbstractBundleContainer
         return null;
       }
 
-      final WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(rootRequirements);
-      final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
-
       EList<Repository> repositories = profileDefinition.getRepositories();
       repositories.clear();
 
       for (Targlet targlet : targlets)
       {
-        EList<IUGenerator> effectiveIUGenerators = effectiveIUGenerators(targlet);
-
-        for (SourceLocator sourceLocator : targlet.getSourceLocators())
-        {
-          workspaceIUAnalyzer.analyze(sourceLocator, effectiveIUGenerators, progress.newChild());
-        }
-
         repositories.addAll(EcoreUtil.copyAll(targlet.getActiveRepositories()));
       }
 
-      TargletsCorePlugin.INSTANCE.coreException(workspaceIUAnalyzer.getStatus());
+      WorkspaceIUAnalyzer workspaceIUAnalyzer = analyzeWorkspaceIUs(rootRequirements, progress);
 
       TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer);
       transaction.commit(commitContext, progress.newChild());
 
-      Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUInfos, progress.newChild());
+      Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
       descriptor.commitUpdateTransaction(digest, requiredProjects.values(), progress.newChild());
 
       ProfileUpdateSucceededEvent event = new ProfileUpdateSucceededEvent(this, descriptor, profile, commitContext.getMetadataRepositories(),
@@ -740,6 +730,26 @@ public class TargletContainer extends AbstractBundleContainer
 
     progress.done();
     return profile;
+  }
+
+  private WorkspaceIUAnalyzer analyzeWorkspaceIUs(final EList<Requirement> rootRequirements, SubMonitor progress) throws CoreException
+  {
+    WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(rootRequirements);
+
+    for (Targlet targlet : targlets)
+    {
+      EList<IUGenerator> effectiveIUGenerators = effectiveIUGenerators(targlet);
+
+      for (SourceLocator sourceLocator : targlet.getSourceLocators())
+      {
+        workspaceIUAnalyzer.analyze(sourceLocator, effectiveIUGenerators, progress.newChild());
+      }
+    }
+
+    IStatus status = workspaceIUAnalyzer.getStatus();
+    TargletsCorePlugin.INSTANCE.coreException(status);
+
+    return workspaceIUAnalyzer;
   }
 
   private static EList<IUGenerator> effectiveIUGenerators(Targlet targlet)
@@ -879,7 +889,7 @@ public class TargletContainer extends AbstractBundleContainer
       }
 
       WorkspaceIUInfo info = allProjects.get(iu);
-      if (info != null)
+      if (info != null) // Extra IUs from p2.inf files have no separate workspace project
       {
         result.put(iu, info);
       }
@@ -956,7 +966,10 @@ public class TargletContainer extends AbstractBundleContainer
               {
                 // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
                 WorkspaceIUInfo info = workspaceIUInfos.get(workspaceIU);
-                workspaceIUInfos.put(iu, info);
+                if (info != null) // Extra IUs from p2.inf files have no separate workspace project
+                {
+                  workspaceIUInfos.put(iu, info);
+                }
 
                 // And that binary IU is in the qualifier range of the synthetic IU.
                 if (P2Factory.eINSTANCE.createVersionRange(workspaceIU.getVersion(), VersionSegment.MICRO).isIncluded(iu.getVersion()))
@@ -1055,7 +1068,10 @@ public class TargletContainer extends AbstractBundleContainer
 
             idToIUMap.put(workspaceSourceID, workspaceSourceIU);
             WorkspaceIUInfo info = workspaceIUInfos.get(iu);
-            workspaceSourceIUInfos.put(workspaceSourceIU, info);
+            if (info != null) // Extra IUs from p2.inf files have no separate workspace project
+            {
+              workspaceSourceIUInfos.put(workspaceSourceIU, info);
+            }
           }
 
           // Include all source IUs in the map.

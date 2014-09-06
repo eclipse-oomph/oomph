@@ -128,6 +128,29 @@ public abstract class BackendResource
     return systemRelativeURI.toString();
   }
 
+  public final URI getRelativeURI(BackendContainer base)
+  {
+    if (base.getSystem() == system)
+    {
+      URI baseURI = makeAbsolute(base.getSystemRelativeURI());
+      URI uri = makeAbsolute(systemRelativeURI);
+      return uri.deresolve(baseURI, true, true, false);
+    }
+
+    return null;
+  }
+
+  public final String getRelativePath(BackendContainer base)
+  {
+    URI relativeURI = getRelativeURI(base);
+    if (relativeURI != null)
+    {
+      return relativeURI.toString();
+    }
+
+    return null;
+  }
+
   public final boolean isLocal() throws BackendException
   {
     return getLocation() != null;
@@ -369,6 +392,11 @@ public abstract class BackendResource
     }
 
     return get(uri);
+  }
+
+  private static URI makeAbsolute(URI uri)
+  {
+    return URI.createHierarchicalURI("absolute", null, null, uri.segments(), null, null);
   }
 
   /**

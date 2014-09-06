@@ -234,7 +234,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+  int PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
   /**
    * The operation id for the '<em>Is Excluded Path</em>' operation.
@@ -243,7 +243,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
+  int PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
 
   /**
    * The number of operations of the '<em>Project Factory</em>' class.
@@ -307,7 +307,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR;
+  int XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR = PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR;
 
   /**
    * The operation id for the '<em>Is Excluded Path</em>' operation.
@@ -316,7 +316,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER;
+  int XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER = PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER;
 
   /**
    * The number of operations of the '<em>XML Project Factory</em>' class.
@@ -380,7 +380,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ECLIPSE_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR;
+  int ECLIPSE_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR = XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR;
 
   /**
    * The operation id for the '<em>Is Excluded Path</em>' operation.
@@ -389,7 +389,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ECLIPSE_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER;
+  int ECLIPSE_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER = XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER;
 
   /**
    * The number of operations of the '<em>Eclipse Project Factory</em>' class.
@@ -453,7 +453,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR;
+  int MAVEN_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR = XML_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR;
 
   /**
    * The operation id for the '<em>Is Excluded Path</em>' operation.
@@ -462,7 +462,7 @@ public interface ResourcesPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER;
+  int MAVEN_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER = XML_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER;
 
   /**
    * The number of operations of the '<em>Maven Project Factory</em>' class.
@@ -630,24 +630,24 @@ public interface ResourcesPackage extends EPackage
   EAttribute getProjectFactory_ExcludedPaths();
 
   /**
-   * Returns the meta object for the '{@link org.eclipse.oomph.resources.ProjectFactory#createProject(org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.core.runtime.IProgressMonitor) <em>Create Project</em>}' operation.
+   * Returns the meta object for the '{@link org.eclipse.oomph.resources.ProjectFactory#createProject(org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.core.runtime.IProgressMonitor) <em>Create Project</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the '<em>Create Project</em>' operation.
-   * @see org.eclipse.oomph.resources.ProjectFactory#createProject(org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.core.runtime.IProgressMonitor)
+   * @see org.eclipse.oomph.resources.ProjectFactory#createProject(org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.core.runtime.IProgressMonitor)
    * @generated
    */
-  EOperation getProjectFactory__CreateProject__BackendContainer_IProgressMonitor();
+  EOperation getProjectFactory__CreateProject__BackendContainer_BackendContainer_IProgressMonitor();
 
   /**
-   * Returns the meta object for the '{@link org.eclipse.oomph.resources.ProjectFactory#isExcludedPath(org.eclipse.oomph.resources.backend.BackendContainer) <em>Is Excluded Path</em>}' operation.
+   * Returns the meta object for the '{@link org.eclipse.oomph.resources.ProjectFactory#isExcludedPath(org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.oomph.resources.backend.BackendContainer) <em>Is Excluded Path</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the '<em>Is Excluded Path</em>' operation.
-   * @see org.eclipse.oomph.resources.ProjectFactory#isExcludedPath(org.eclipse.oomph.resources.backend.BackendContainer)
+   * @see org.eclipse.oomph.resources.ProjectFactory#isExcludedPath(org.eclipse.oomph.resources.backend.BackendContainer, org.eclipse.oomph.resources.backend.BackendContainer)
    * @generated
    */
-  EOperation getProjectFactory__IsExcludedPath__BackendContainer();
+  EOperation getProjectFactory__IsExcludedPath__BackendContainer_BackendContainer();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.resources.XMLProjectFactory <em>XML Project Factory</em>}'.
@@ -847,8 +847,8 @@ public interface ResourcesPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EOperation PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR = eINSTANCE
-        .getProjectFactory__CreateProject__BackendContainer_IProgressMonitor();
+    EOperation PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR = eINSTANCE
+        .getProjectFactory__CreateProject__BackendContainer_BackendContainer_IProgressMonitor();
 
     /**
      * The meta object literal for the '<em><b>Is Excluded Path</b></em>' operation.
@@ -856,7 +856,8 @@ public interface ResourcesPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EOperation PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER = eINSTANCE.getProjectFactory__IsExcludedPath__BackendContainer();
+    EOperation PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER = eINSTANCE
+        .getProjectFactory__IsExcludedPath__BackendContainer_BackendContainer();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.resources.impl.XMLProjectFactoryImpl <em>XML Project Factory</em>}' class.

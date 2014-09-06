@@ -34,7 +34,7 @@ public interface IUGenerator extends ModelElement
    * @model dataType="org.eclipse.oomph.targlets.InstallableUnit" exceptions="org.eclipse.oomph.base.Exception" projectDataType="org.eclipse.oomph.predicates.Project" iuVersionsDataType="org.eclipse.oomph.targlets.StringToVersionMap"
    * @generated
    */
-  IInstallableUnit generateIU(IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception;
+  EList<IInstallableUnit> generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception;
 
   /**
    * <!-- begin-user-doc -->

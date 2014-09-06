@@ -288,7 +288,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getProjectFactory__CreateProject__BackendContainer_IProgressMonitor()
+  public EOperation getProjectFactory__CreateProject__BackendContainer_BackendContainer_IProgressMonitor()
   {
     return projectFactoryEClass.getEOperations().get(0);
   }
@@ -298,7 +298,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getProjectFactory__IsExcludedPath__BackendContainer()
+  public EOperation getProjectFactory__IsExcludedPath__BackendContainer_BackendContainer()
   {
     return projectFactoryEClass.getEOperations().get(1);
   }
@@ -418,8 +418,8 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 
     projectFactoryEClass = createEClass(PROJECT_FACTORY);
     createEAttribute(projectFactoryEClass, PROJECT_FACTORY__EXCLUDED_PATHS);
-    createEOperation(projectFactoryEClass, PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_IPROGRESSMONITOR);
-    createEOperation(projectFactoryEClass, PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER);
+    createEOperation(projectFactoryEClass, PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR);
+    createEOperation(projectFactoryEClass, PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER);
 
     xmlProjectFactoryEClass = createEClass(XML_PROJECT_FACTORY);
 
@@ -509,12 +509,15 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     initEAttribute(getProjectFactory_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, ProjectFactory.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    op = initEOperation(getProjectFactory__CreateProject__BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(), "createProject", 0, 1,
-        IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getProjectFactory__CreateProject__BackendContainer_BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(),
+        "createProject", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getBackendContainer(), "rootContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-    op = initEOperation(getProjectFactory__IsExcludedPath__BackendContainer(), ecorePackage.getEBoolean(), "isExcludedPath", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getProjectFactory__IsExcludedPath__BackendContainer_BackendContainer(), ecorePackage.getEBoolean(), "isExcludedPath", 0, 1, IS_UNIQUE,
+        IS_ORDERED);
+    addEParameter(op, getBackendContainer(), "rootContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(xmlProjectFactoryEClass, XMLProjectFactory.class, "XMLProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

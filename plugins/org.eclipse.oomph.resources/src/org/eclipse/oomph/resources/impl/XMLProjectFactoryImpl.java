@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * <!-- begin-user-doc -->
@@ -62,7 +63,7 @@ public abstract class XMLProjectFactoryImpl extends ProjectFactoryImpl implement
    * @generated NOT
    */
   @Override
-  public final IProject doCreateProject(BackendContainer backendContainer, IProgressMonitor monitor)
+  public final IProject doCreateProject(BackendContainer rootContainer, BackendContainer backendContainer, IProgressMonitor monitor)
   {
     IPath xmlFilePath = new Path(getXMLFileName());
     BackendFile xmlFile = null;
@@ -83,6 +84,10 @@ public abstract class XMLProjectFactoryImpl extends ProjectFactoryImpl implement
 
         return new ExternalProject(backendContainer, description);
       }
+    }
+    catch (FileNotFoundException ex)
+    {
+      //$FALL-THROUGH$
     }
     catch (Exception ex)
     {

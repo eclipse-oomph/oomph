@@ -398,7 +398,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getIUGenerator__GenerateIU__IProject_String_Map()
+  public EOperation getIUGenerator__GenerateIUs__IProject_String_Map()
   {
     return iuGeneratorEClass.getEOperations().get(0);
   }
@@ -540,7 +540,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEAttribute(componentDefinitionEClass, COMPONENT_DEFINITION__VERSION);
 
     iuGeneratorEClass = createEClass(IU_GENERATOR);
-    createEOperation(iuGeneratorEClass, IU_GENERATOR___GENERATE_IU__IPROJECT_STRING_MAP);
+    createEOperation(iuGeneratorEClass, IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP);
     createEOperation(iuGeneratorEClass, IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP);
 
     featureGeneratorEClass = createEClass(FEATURE_GENERATOR);
@@ -646,7 +646,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
 
     initEClass(iuGeneratorEClass, IUGenerator.class, "IUGenerator", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    EOperation op = initEOperation(getIUGenerator__GenerateIU__IProject_String_Map(), getInstallableUnit(), "generateIU", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getIUGenerator__GenerateIUs__IProject_String_Map(), getInstallableUnit(), "generateIUs", 0, -1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, ecorePackage.getEString(), "qualifierReplacement", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getStringToVersionMap(), "iuVersions", 0, 1, IS_UNIQUE, IS_ORDERED);
