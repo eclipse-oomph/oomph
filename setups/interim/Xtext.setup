@@ -795,7 +795,7 @@
           <requirement
               name="org.eclipse.xtext.releng">
             <annotation
-                source="This has the problem that it requires a Mac-specific fragment."/>
+                source="This_has_the_problem_that_it_requires_a_Mac-specific_fragment."/>
           </requirement>
           <requirement
               name="org.xtext.sevenlanguages.doc.xdoc"/>
@@ -819,12 +819,12 @@
         <sourceLocator
             rootFolder="${git.clone.xtext.location/examples/org.eclipse.xtext.xtext.ui.examples/contents/org.eclipse.xtext.example.gmf.models}">
           <annotation
-              source="This project can't be materlized because it has no component extension"/>
+              source="This_project_can't_be_materlized_because_it_has_no_component_extension"/>
         </sourceLocator>
         <sourceLocator
             rootFolder="${git.clone.xtext.location/examples/org.eclipse.xtend.examples-container/contents/xtend-euler}">
           <annotation
-              source="This project can't be materlized because it has no component extension; it's also missing the xtend-gen folder"/>
+              source="This_project_can't_be_materlized_because_it_has_no_component_extension;_it's_also_missing_the_xtend-gen_folder"/>
         </sourceLocator>
         <description>Maven Dependencies</description>
       </setupTask>
