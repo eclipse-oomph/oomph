@@ -50,6 +50,8 @@ public class AgentManagerImpl implements AgentManager
 
   private Agent currentAgent;
 
+  private boolean currentAgentInMap;
+
   public AgentManagerImpl()
   {
     this(new File(PropertiesUtil.USER_HOME));
@@ -124,6 +126,19 @@ public class AgentManagerImpl implements AgentManager
     return agentMap;
   }
 
+  public void dispose()
+  {
+    for (Agent agent : getAgents())
+    {
+      ((AgentImpl)agent).dispose();
+    }
+
+    if (!currentAgentInMap)
+    {
+      ((AgentImpl)currentAgent).dispose();
+    }
+  }
+
   public synchronized Agent getCurrentAgent()
   {
     if (currentAgent == null)
@@ -143,6 +158,7 @@ public class AgentManagerImpl implements AgentManager
         if (agent != null)
         {
           currentAgent = agent;
+          currentAgentInMap = true;
         }
         else
         {

@@ -25,6 +25,7 @@ import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
+import org.eclipse.equinox.p2.core.spi.IAgentService;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
@@ -73,6 +74,14 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   private IPlanner planner;
 
   private CachingTransport cachingTransport;
+
+  private IProfileRegistry originalProfileRegistry;
+
+  private Transport originalTransport;
+
+  private IMetadataRepositoryManager originalMetadataRepositoryManager;
+
+  private IArtifactRepositoryManager originalArtifactRepositoryManager;
 
   public AgentImpl(AgentManagerImpl agentManager, File location)
   {
@@ -131,6 +140,43 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   public String getElementType()
   {
     return "agent";
+  }
+
+  public void dispose()
+  {
+    if (provisioningAgent != null)
+    {
+      if (originalProfileRegistry != null)
+      {
+        profileRegistry.stop();
+        provisioningAgent.registerService(IProfileRegistry.SERVICE_NAME, originalProfileRegistry);
+      }
+
+      if (originalTransport != null)
+      {
+        provisioningAgent.registerService(Transport.SERVICE_NAME, originalTransport);
+      }
+
+      if (originalMetadataRepositoryManager != null)
+      {
+        if (metadataRepositoryManager instanceof IAgentService)
+        {
+          ((IAgentService)metadataRepositoryManager).stop();
+        }
+
+        provisioningAgent.registerService(IMetadataRepositoryManager.SERVICE_NAME, originalMetadataRepositoryManager);
+      }
+
+      if (originalArtifactRepositoryManager != null)
+      {
+        if (artifactRepositoryManager instanceof IAgentService)
+        {
+          ((IAgentService)artifactRepositoryManager).stop();
+        }
+
+        provisioningAgent.registerService(IArtifactRepositoryManager.SERVICE_NAME, originalArtifactRepositoryManager);
+      }
+    }
   }
 
   public AgentManager getAgentManager()
@@ -393,17 +439,21 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       IAgentLocation agentLocation = (IAgentLocation)provisioningAgent.getService(IAgentLocation.SERVICE_NAME);
       File directory = LazyProfileRegistry.getDefaultRegistryDirectory(agentLocation);
 
+      originalProfileRegistry = (IProfileRegistry)provisioningAgent.getService(IProfileRegistry.SERVICE_NAME);
       profileRegistry = new LazyProfileRegistry(provisioningAgent, directory);
       provisioningAgent.registerService(IProfileRegistry.SERVICE_NAME, profileRegistry);
 
       if (!PropertiesUtil.isProperty("oomph.p2.disable.offline"))
       {
-        cachingTransport = new CachingTransport((Transport)provisioningAgent.getService(Transport.SERVICE_NAME));
+        originalTransport = (Transport)provisioningAgent.getService(Transport.SERVICE_NAME);
+        cachingTransport = new CachingTransport(originalTransport);
         provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
 
+        originalMetadataRepositoryManager = (IMetadataRepositoryManager)provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
         metadataRepositoryManager = new CachingRepositoryManager.Metadata(provisioningAgent, cachingTransport);
         provisioningAgent.registerService(IMetadataRepositoryManager.SERVICE_NAME, metadataRepositoryManager);
 
+        originalArtifactRepositoryManager = (IArtifactRepositoryManager)provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME);
         artifactRepositoryManager = new CachingRepositoryManager.Artifact(provisioningAgent, cachingTransport);
         provisioningAgent.registerService(IArtifactRepositoryManager.SERVICE_NAME, artifactRepositoryManager);
       }

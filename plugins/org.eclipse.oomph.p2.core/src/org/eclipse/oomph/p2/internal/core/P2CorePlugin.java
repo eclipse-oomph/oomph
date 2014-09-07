@@ -10,10 +10,13 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
-import org.eclipse.oomph.util.OomphPlugin;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import org.osgi.framework.BundleContext;
 
 import java.io.File;
 
@@ -72,6 +75,13 @@ public final class P2CorePlugin extends OomphPlugin
     public Implementation()
     {
       plugin = this;
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception
+    {
+      ((AgentManagerImpl)P2Util.getAgentManager()).dispose();
+      super.stop(context);
     }
   }
 }
