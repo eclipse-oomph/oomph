@@ -57,6 +57,7 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
@@ -496,7 +497,6 @@ public class ProgressPage extends SetupWizardPage
     }
     else
     {
-      performCancel();
       setPageComplete(false);
       hasLaunched = false;
       setButtonState(IDialogConstants.CANCEL_ID, true);
@@ -504,13 +504,9 @@ public class ProgressPage extends SetupWizardPage
   }
 
   @Override
-  public void performCancel()
+  public boolean performCancel()
   {
-    if (progressPageLog != null)
-    {
-      progressPageLog.cancel();
-      progressPageLog = null;
-    }
+    return progressPageLog == null || progressPageLog.isFinished() || progressPageLog.isCanceled();
   }
 
   private ILabelProvider createLabelProvider()
@@ -586,7 +582,8 @@ public class ProgressPage extends SetupWizardPage
                 final AtomicBoolean disableCancelButton = new AtomicBoolean(true);
                 final SetupWizard wizard = getWizard();
 
-                if (!(restartReasons == null || restartReasons.isEmpty()) && SetupUIPlugin.SETUP_IDE)
+                final boolean restart = restartReasons != null && !restartReasons.isEmpty();
+                if (restart && trigger != Trigger.BOOTSTRAP)
                 {
                   progressLog.log("A restart is needed for the following reasons:");
                   for (String reason : restartReasons)
@@ -684,10 +681,20 @@ public class ProgressPage extends SetupWizardPage
 
                     if (finalSuccess)
                     {
-                      setMessage("Task execution has successfully completed.  Press Back to choose different settings or Finish to exit.");
-                      if (disableCancelButton.get())
+                      if (restart)
                       {
-                        setButtonState(IDialogConstants.CANCEL_ID, false);
+                        setMessage(
+                            "Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
+                            IMessageProvider.WARNING);
+                        setButtonState(IDialogConstants.CANCEL_ID, true);
+                      }
+                      else
+                      {
+                        setMessage("Task execution has successfully completed.  Press Back to choose different settings or Finish to exit.");
+                        if (disableCancelButton.get())
+                        {
+                          setButtonState(IDialogConstants.CANCEL_ID, false);
+                        }
                       }
                     }
                     else
@@ -864,16 +871,15 @@ public class ProgressPage extends SetupWizardPage
       return progressMonitorPart.isCanceled();
     }
 
-    public void cancel()
-    {
-      progressMonitorPart.setCanceled(true);
-      progressMonitorPart.done();
-    }
-
     public void setFinished()
     {
       finished = true;
       task(null);
+    }
+
+    public boolean isFinished()
+    {
+      return finished;
     }
 
     public void task(final SetupTask setupTask)
@@ -996,7 +1002,7 @@ public class ProgressPage extends SetupWizardPage
         int length = logDocument.getLength();
         logDocument.replace(length, 0, string);
 
-        if (!scrollLock)
+        if (!scrollLock && !logText.isDisposed())
         {
           int lineCount = logText.getLineCount();
           logText.setTopIndex(lineCount - 1);

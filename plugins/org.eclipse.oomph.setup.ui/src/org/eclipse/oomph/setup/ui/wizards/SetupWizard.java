@@ -267,12 +267,16 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public boolean performCancel()
   {
-    isCanceled = true;
-    System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
     for (IWizardPage page : getPages())
     {
-      ((SetupWizardPage)page).performCancel();
+      if (!((SetupWizardPage)page).performCancel())
+      {
+        return false;
+      }
     }
+
+    isCanceled = true;
+    System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
 
     return true;
   }

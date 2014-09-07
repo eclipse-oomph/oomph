@@ -107,8 +107,9 @@ public abstract class SetupWizardPage extends WizardPage
     getWizard().setPerformer(performer);
   }
 
-  public void performCancel()
+  public boolean performCancel()
   {
+    return true;
   }
 
   public void enterPage(boolean forward)

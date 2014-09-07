@@ -687,9 +687,16 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     transaction.setMirrors(mirrors);
 
     boolean profileChanged = transaction.commit(commitContext, monitor);
-    if (profileChanged && context.getTrigger() != Trigger.BOOTSTRAP)
+    if (context.getTrigger() != Trigger.BOOTSTRAP)
     {
-      context.setRestartNeeded("New software has been installed.");
+      if (profileChanged)
+      {
+        context.setRestartNeeded("New software has been installed.");
+      }
+      else
+      {
+        context.log("No software updates are available");
+      }
     }
 
     if (eclipseIniExisted)
