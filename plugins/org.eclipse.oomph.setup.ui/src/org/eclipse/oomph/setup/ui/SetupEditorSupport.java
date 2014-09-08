@@ -17,43 +17,137 @@ import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.ScrollBar;
-import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Eike Stepper
  */
 public final class SetupEditorSupport
 {
+  /**
+   * The job family used by the setup editor for loading the model using a resource mirror.
+   */
+  public static final Object FAMILY_MODEL_LOAD = new Object();
+
   public static final String EDITOR_ID = "org.eclipse.oomph.setup.presentation.SetupEditorID";
 
-  public static IEditorPart findEditor(IWorkbenchPage page, URI uri)
+  public static IEditorPart getEditor(final IWorkbenchPage page, final URI uri, boolean force, LoadHandler... loadHandlers)
   {
-    URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
-    URI normalizedURI = uriConverter.normalize(uri).trimFragment();
+    try
+    {
+      URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
+      final String fragment = uri.fragment();
+      final URI normalizedURI = uriConverter.normalize(uri.trimFragment());
 
-    IEditorInput input = getEditorInput(normalizedURI, null);
-    return findEditor(page, uriConverter, input);
+      final IEditorInput editorInput = getEditorInput(normalizedURI);
+      IEditorPart editor = findEditor(page, uriConverter, editorInput);
+      if (editor != null)
+      {
+        page.activate(editor);
+      }
+      else if (force)
+      {
+        editor = page.openEditor(editorInput, EDITOR_ID);
+      }
+
+      // If there is an editor...
+      if (editor != null)
+      {
+        // Convert the handlers to a list, and if there is a fragment, add a handler for selecting the object associated with that fragment.
+        final List<LoadHandler> handlers = new ArrayList<LoadHandler>(Arrays.asList(loadHandlers));
+        if (fragment != null)
+        {
+          handlers.add(0, new LoadHandler()
+          {
+            @Override
+            protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
+            {
+              EObject eObject = resource.getEObject(fragment);
+              if (eObject != null)
+              {
+                ((IViewerProvider)editor).getViewer().setSelection(new StructuredSelection(eObject), true);
+              }
+            }
+          });
+        }
+
+        // If there are handlers...
+        if (!handlers.isEmpty())
+        {
+          final IEditorPart finalEditor = editor;
+          Job job = new Job("Loading Setup Editor")
+          {
+            @Override
+            protected IStatus run(IProgressMonitor monitor)
+            {
+              try
+              {
+                // Wait for the model load jobs to complete.
+                Job.getJobManager().join(SetupEditorSupport.FAMILY_MODEL_LOAD, monitor);
+
+                Shell shell = page.getWorkbenchWindow().getShell();
+                if (!shell.isDisposed())
+                {
+                  shell.getDisplay().asyncExec(new Runnable()
+                  {
+                    public void run()
+                    {
+                      URI uri = EditUIUtil.getURI(editorInput);
+                      for (LoadHandler handler : handlers)
+                      {
+                        handler.loaded(finalEditor, uri);
+                      }
+                    }
+                  });
+                }
+
+                return Status.OK_STATUS;
+              }
+              catch (Exception ex)
+              {
+                return SetupUIPlugin.INSTANCE.getStatus(ex);
+              }
+            }
+          };
+
+          // Hide the job and schedule it.
+          job.setSystem(true);
+          job.schedule();
+        }
+
+        return editor;
+      }
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
+    }
+
+    return null;
   }
 
   private static IEditorPart findEditor(IWorkbenchPage page, URIConverter uriConverter, IEditorInput input)
@@ -87,86 +181,12 @@ public final class SetupEditorSupport
     return null;
   }
 
-  public static void openEditor(final IWorkbenchPage page, URI uri)
-  {
-    openEditor(page, uri, null);
-  }
-
-  public static void openEditor(final IWorkbenchPage page, final URI uri, final Callback callback)
-  {
-    Display display = page.getWorkbenchWindow().getShell().getDisplay();
-    display.asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        try
-        {
-          URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
-          final URI normalizedURI = uriConverter.normalize(uri);
-
-          IEditorInput editorInput = getEditorInput(normalizedURI, new Callback()
-          {
-            public void modelCreated(IEditorPart editor)
-            {
-              postOpen(editor, normalizedURI, callback);
-            }
-          });
-
-          IEditorPart editor = findEditor(page, uriConverter, editorInput);
-          if (editor != null)
-          {
-            page.activate(editor);
-            callback.modelCreated(editor);
-          }
-          else
-          {
-            page.openEditor(editorInput, EDITOR_ID);
-          }
-        }
-        catch (Exception ex)
-        {
-          SetupUIPlugin.INSTANCE.log(ex);
-        }
-      }
-    });
-  }
-
-  private static void postOpen(IEditorPart editor, URI normalizedURI, Callback callback)
-  {
-    if (editor instanceof IEditingDomainProvider && editor instanceof IViewerProvider && normalizedURI.fragment() != null)
-    {
-      Viewer viewer = ((IViewerProvider)editor).getViewer();
-      ResourceSet resourceSet = ((IEditingDomainProvider)editor).getEditingDomain().getResourceSet();
-      EObject object = resourceSet.getEObject(normalizedURI, true);
-      if (object != null)
-      {
-        viewer.setSelection(new StructuredSelection(object));
-
-        Control control = viewer.getControl();
-        if (control instanceof Tree)
-        {
-          Tree tree = (Tree)control;
-          ScrollBar scrollBar = tree.getHorizontalBar();
-          if (scrollBar != null && !scrollBar.isDisposed() && scrollBar.isVisible())
-          {
-            scrollBar.setSelection(0);
-          }
-        }
-      }
-    }
-
-    if (callback != null)
-    {
-      callback.modelCreated(editor);
-    }
-  }
-
-  private static IEditorInput getEditorInput(final URI normalizedURI, Callback callback)
+  private static IEditorInput getEditorInput(final URI normalizedURI)
   {
     if ("user".equals(normalizedURI.scheme()))
     {
       URI uri = normalizedURI.replacePrefix(SetupContext.GLOBAL_SETUPS_URI, SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("")).trimQuery();
-      FileEditorInput editorInput = getFileEditorInput(uri, callback);
+      FileEditorInput editorInput = getFileEditorInput(uri);
       if (editorInput != null)
       {
         return editorInput;
@@ -175,17 +195,17 @@ public final class SetupEditorSupport
 
     if (normalizedURI.isFile())
     {
-      FileEditorInput editorInput = getFileEditorInput(normalizedURI, callback);
+      FileEditorInput editorInput = getFileEditorInput(normalizedURI);
       if (editorInput != null)
       {
         return editorInput;
       }
     }
 
-    return new URIEditorInputWithCallback(normalizedURI, normalizedURI.lastSegment(), callback);
+    return new URIEditorInput(normalizedURI, normalizedURI.lastSegment());
   }
 
-  private static FileEditorInput getFileEditorInput(URI uri, Callback callback)
+  private static FileEditorInput getFileEditorInput(URI uri)
   {
     if (uri.isFile())
     {
@@ -196,7 +216,7 @@ public final class SetupEditorSupport
         {
           if (file.isAccessible())
           {
-            return new FileEditorInputWithCallback(files[0], callback);
+            return new FileEditorInput(file);
           }
         }
       }
@@ -214,74 +234,26 @@ public final class SetupEditorSupport
   }
 
   /**
-   * @author Eike Stepper
+   * @author Ed Merks
    */
-  public interface Callback
+  public static class LoadHandler
   {
-    public void modelCreated(IEditorPart editor);
-
-    /**
-     * @author Eike Stepper
-     */
-    public interface Provider
+    public void loaded(IEditorPart editor, URI uri)
     {
-      public Callback getCallback();
+      loaded(editor, ((IEditingDomainProvider)editor).getEditingDomain(), uri);
     }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class FileEditorInputWithCallback extends FileEditorInput implements Callback.Provider
-  {
-    private final transient Callback callback;
-
-    public FileEditorInputWithCallback(IFile file, Callback callback)
+  
+    protected void loaded(IEditorPart editorPart, EditingDomain domain, URI uri)
     {
-      super(file);
-      this.callback = callback;
+      Resource resource = domain.getResourceSet().getResource(uri, false);
+      if (resource != null)
+      {
+        loaded(editorPart, domain, resource);
+      }
     }
-
-    public Callback getCallback()
+  
+    protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
     {
-      return callback;
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class URIEditorInputWithCallback extends URIEditorInput implements Callback.Provider
-  {
-    private final transient Callback callback;
-
-    public URIEditorInputWithCallback(IMemento memento)
-    {
-      super(memento);
-      callback = null;
-    }
-
-    public URIEditorInputWithCallback(URI uri, String name, Callback callback)
-    {
-      super(uri, name);
-      this.callback = callback;
-    }
-
-    public URIEditorInputWithCallback(URI uri, Callback callback)
-    {
-      super(uri);
-      this.callback = callback;
-    }
-
-    public Callback getCallback()
-    {
-      return callback;
-    }
-
-    @Override
-    protected String getBundleSymbolicName()
-    {
-      return SetupUIPlugin.INSTANCE.getSymbolicName();
     }
   }
 }

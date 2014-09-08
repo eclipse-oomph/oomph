@@ -192,18 +192,19 @@ public final class PreferencesUtil
           {
             PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
             childPreferenceNode.setName(name);
-            traverse(childPreferenceNode, childNode, true);
             EList<PreferenceNode> children = preferenceNode.getChildren();
-            for (int i = 0, size = children.size(); i < size; ++i)
+            int index = 0;
+            for (int size = children.size(); index < size; ++index)
             {
-              PreferenceNode otherChildPreferenceNode = children.get(i);
+              PreferenceNode otherChildPreferenceNode = children.get(index);
               if (otherChildPreferenceNode.getName().compareTo(name) >= 0)
               {
-                children.add(i, childPreferenceNode);
-                return;
+                break;
               }
             }
-            children.add(childPreferenceNode);
+
+            children.add(index, childPreferenceNode);
+            traverse(childPreferenceNode, childNode, true);
           }
         }
       }
@@ -446,8 +447,8 @@ public final class PreferencesUtil
       {
         Preferences childNode = node.node(name);
         PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
-        traverse(childPreferenceNode, childNode, isSynchronized);
         children.add(childPreferenceNode);
+        traverse(childPreferenceNode, childNode, isSynchronized);
       }
 
       EList<Property> properties = preferenceNode.getProperties();

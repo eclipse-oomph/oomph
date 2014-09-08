@@ -22,11 +22,9 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.util.SetupUtil;
-import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -38,13 +36,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.ChangeCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -58,11 +55,12 @@ import org.eclipse.ui.PlatformUI;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Eike Stepper
@@ -156,21 +154,29 @@ public final class UserPreferencesManager
 
     if (storage == Storage.EDITOR)
     {
-      SetupEditorSupport.openEditor(page, userSetupURI, new SetupEditorSupport.Callback()
+      SetupEditorSupport.getEditor(page, userSetupURI, true, new SetupEditorSupport.LoadHandler()
       {
-        public void modelCreated(IEditorPart editor)
+        @Override
+        protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
         {
-          storePreferences(editor, false, values);
+          storePreferences(editor, domain, resource, false, values);
         }
       });
 
       return;
     }
 
-    IEditorPart editor = SetupEditorSupport.findEditor(page, userSetupURI);
+    IEditorPart editor = SetupEditorSupport.getEditor(page, userSetupURI, false, new SetupEditorSupport.LoadHandler()
+    {
+      @Override
+      protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
+      {
+        storePreferences(editor, domain, resource, true, values);
+      }
+    });
+
     if (editor != null)
     {
-      storePreferences(editor, true, values);
       return;
     }
 
@@ -190,33 +196,61 @@ public final class UserPreferencesManager
     }
   }
 
-  private void storePreferences(IEditorPart editor, boolean tryToSave, final Map<URI, String> values)
+  private void storePreferences(IEditorPart editor, EditingDomain domain, final Resource resource, boolean tryToSave, final Map<URI, String> values)
   {
     boolean wasDirty = editor.isDirty();
 
-    EditingDomain editingDomain = ((IEditingDomainProvider)editor).getEditingDomain();
-    ResourceSet resourceSet = editingDomain.getResourceSet();
-    final Resource resource = resourceSet.getResources().get(0);
+    ISelection selection = ((ISelectionProvider)editor).getSelection();
+    final List<?> oldSelection = selection instanceof IStructuredSelection ? ((IStructuredSelection)selection).toList() : Collections.emptyList();
 
-    final AtomicReference<List<PreferenceTask>> result = new AtomicReference<List<PreferenceTask>>();
-    ChangeCommand command = new ChangeCommand(resourceSet)
+    ChangeCommand command = new ChangeCommand(domain.getResourceSet())
     {
+      List<PreferenceTask> preferenceTasks = Collections.emptyList();
+
+      List<? extends Object> affectedObjects = Collections.emptyList();
+
+      @Override
+      public String getLabel()
+      {
+        return "Record Preferences";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Records the preferences changes as preference tasks";
+      }
+
+      @Override
+      public Collection<?> getAffectedObjects()
+      {
+        return affectedObjects;
+      }
+
       @Override
       protected void doExecute()
       {
-        List<PreferenceTask> preferenceTasks = storePreferences(resource, values);
-        result.set(preferenceTasks);
+        preferenceTasks = storePreferences(resource, values);
+        affectedObjects = preferenceTasks;
+      }
+
+      @Override
+      public void undo()
+      {
+        super.undo();
+        affectedObjects = oldSelection;
+      }
+
+      @Override
+      public void redo()
+      {
+        super.redo();
+        affectedObjects = preferenceTasks;
       }
     };
 
-    CommandStack commandStack = editingDomain.getCommandStack();
+    CommandStack commandStack = domain.getCommandStack();
     commandStack.execute(command);
-
-    List<PreferenceTask> preferenceTasks = result.get();
-    if (preferenceTasks != null)
-    {
-      expandTasks(editor, preferenceTasks);
-    }
 
     if (tryToSave && !wasDirty)
     {
@@ -394,43 +428,6 @@ public final class UserPreferencesManager
     task.eSet(key, value);
     tasks.add(position, task);
     return task;
-  }
-
-  private static void expandTasks(IEditorPart editor, final List<PreferenceTask> preferenceTasks)
-  {
-    if (editor instanceof IViewerProvider)
-    {
-      IViewerProvider viewerProvider = (IViewerProvider)editor;
-      final Viewer viewer = viewerProvider.getViewer();
-      if (viewer instanceof TreeViewer)
-      {
-        UIUtil.getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            TreeViewer treeViewer = (TreeViewer)viewer;
-
-            for (PreferenceTask preferenceTask : preferenceTasks)
-            {
-              expand(treeViewer, preferenceTask);
-            }
-
-            treeViewer.setSelection(new StructuredSelection(preferenceTasks));
-          }
-
-          private void expand(TreeViewer treeViewer, EObject object)
-          {
-            treeViewer.setExpandedState(object, true);
-
-            EObject eContainer = object.eContainer();
-            if (eContainer != null)
-            {
-              expand(treeViewer, eContainer);
-            }
-          }
-        });
-      }
-    }
   }
 
   private static Storage getStorage()

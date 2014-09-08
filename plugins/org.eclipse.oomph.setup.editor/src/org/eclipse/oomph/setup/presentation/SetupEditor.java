@@ -38,7 +38,6 @@ import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleViewerInputAction;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
-import org.eclipse.oomph.setup.ui.SetupEditorSupport.Callback;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.StringUtil;
@@ -151,7 +150,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -727,7 +725,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   protected void handleActivate()
   {
-    if (!isHandlingActivate)
+    if (!isHandlingActivate && resourceMirror == null)
     {
       isHandlingActivate = true;
 
@@ -737,8 +735,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         URIConverter uriConverter = resourceSet.getURIConverter();
         final Set<IFile> files = new HashSet<IFile>();
 
-        EList<Resource> resources = resourceSet.getResources();
-        for (Resource resource : resources.toArray(new Resource[resources.size()]))
+        for (Resource resource : resourceSet.getResources())
         {
           if (resource.isLoaded())
           {
@@ -1571,28 +1568,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               }
             }
           }
-
-          modelCreated();
         }
       });
-    }
-    else
-    {
-      modelCreated();
-    }
-  }
-
-  private void modelCreated()
-  {
-    IEditorInput editorInput = getEditorInput();
-    if (editorInput instanceof SetupEditorSupport.Callback.Provider)
-    {
-      SetupEditorSupport.Callback.Provider provider = (SetupEditorSupport.Callback.Provider)editorInput;
-      Callback callback = provider.getCallback();
-      if (callback != null)
-      {
-        callback.modelCreated(this);
-      }
     }
   }
 
@@ -1726,24 +1703,17 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     final Display display = getSite().getShell().getDisplay();
     final Tree tree = selectionViewer.getTree();
-    final Cursor[] oldCursor = { null };
-
     Job job = new Job("Loading Model")
     {
       @Override
+      public boolean belongsTo(Object family)
+      {
+        return family == SetupEditorSupport.FAMILY_MODEL_LOAD;
+      }
+
+      @Override
       protected IStatus run(final IProgressMonitor monitor)
       {
-        display.asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            oldCursor[0] = tree.getCursor();
-
-            Cursor waitCursor = display.getSystemCursor(SWT.CURSOR_WAIT);
-            tree.setCursor(waitCursor);
-          }
-        });
-
         final ResourceSet resourceSet = editingDomain.getResourceSet();
 
         final ResourceMirror resourceMirror = new ResourceMirror.WithProgress(resourceSet, monitor)
@@ -1762,52 +1732,60 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           public void run()
           {
-            markReadOnlyResources();
-
-            Resource resource = resourceSet.getResources().get(0);
-            EList<EObject> contents = resource.getContents();
-            EObject rootObject = contents.isEmpty() ? null : contents.get(0);
-
-            selectionViewer.setInput(selectionViewer.getInput() == loadingResourceInput ? resource : resourceSet);
-
-            if (rootObject != null)
+            try
             {
-              selectionViewer.setSelection(new StructuredSelection(rootObject), true);
-            }
+              tree.setRedraw(false);
 
-            boolean canceled = resourceMirror.isCanceled();
-            if (!canceled)
-            {
-              if (rootObject instanceof Project)
+              markReadOnlyResources();
+
+              Resource resource = resourceSet.getResources().get(0);
+              EList<EObject> contents = resource.getContents();
+              EObject rootObject = contents.isEmpty() ? null : contents.get(0);
+
+              selectionViewer.setInput(selectionViewer.getInput() == loadingResourceInput ? resource : resourceSet);
+
+              if (rootObject != null)
               {
-                EList<Stream> streams = ((Project)rootObject).getStreams();
-                if (streams.isEmpty())
+                selectionViewer.setSelection(new StructuredSelection(rootObject), true);
+              }
+
+              boolean canceled = resourceMirror.isCanceled();
+              if (!canceled)
+              {
+                if (rootObject instanceof Project)
+                {
+                  EList<Stream> streams = ((Project)rootObject).getStreams();
+                  if (streams.isEmpty())
+                  {
+                    selectionViewer.expandToLevel(rootObject, 1);
+                  }
+                  else
+                  {
+                    for (Stream branch : streams)
+                    {
+                      selectionViewer.expandToLevel(branch, 1);
+                    }
+                  }
+                }
+                else if (rootObject != null)
                 {
                   selectionViewer.expandToLevel(rootObject, 1);
                 }
-                else
+
+                if (contentOutlinePage != null)
                 {
-                  for (Stream branch : streams)
-                  {
-                    selectionViewer.expandToLevel(branch, 1);
-                  }
+                  contentOutlinePage.update(2);
                 }
-              }
-              else if (rootObject != null)
-              {
-                selectionViewer.expandToLevel(rootObject, 1);
+
+                getActionBarContributor().scheduleValidation();
               }
 
-              if (contentOutlinePage != null)
-              {
-                contentOutlinePage.update(2);
-              }
-
-              getActionBarContributor().scheduleValidation();
+              updateProblemIndication();
             }
-
-            updateProblemIndication();
-            tree.setCursor(oldCursor[0]);
+            finally
+            {
+              tree.setRedraw(true);
+            }
           }
         });
 

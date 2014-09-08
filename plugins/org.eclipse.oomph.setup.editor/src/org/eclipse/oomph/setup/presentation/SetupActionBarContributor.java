@@ -1275,7 +1275,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     @Override
     public void run()
     {
-      SetupEditorSupport.openEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri);
+      SetupEditorSupport.getEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri, true);
     }
 
     public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
