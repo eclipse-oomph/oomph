@@ -73,7 +73,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static final boolean SETUP_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SKIP);
 
-  private static SetupUIPlugin.Implementation plugin;
+  private static Implementation plugin;
 
   @SuppressWarnings("restriction")
   public SetupUIPlugin()
@@ -133,6 +133,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
         String productID = PropertiesUtil.getProperty("eclipse.product");
         if (!INSTALLER_PRODUCT_ID.equals(productID))
         {
+          StartingPropertyTester.setStarting(true);
+
           final IWorkbench workbench = PlatformUI.getWorkbench();
           IExtensionTracker extensionTracker = workbench.getExtensionTracker();
           if (extensionTracker == null || workbench.getWorkbenchWindowCount() == 0)
@@ -155,15 +157,24 @@ public final class SetupUIPlugin extends OomphUIPlugin
                 @Override
                 protected IStatus run(IProgressMonitor monitor)
                 {
-                  monitor.beginTask("Determing tasks to be performed", IProgressMonitor.UNKNOWN);
-                  performStartup(workbench, monitor);
-                  monitor.done();
-                  return Status.OK_STATUS;
+                  try
+                  {
+                    monitor.beginTask("Determing tasks to be performed", IProgressMonitor.UNKNOWN);
+                    performStartup(workbench, monitor);
+                    monitor.done();
+                    return Status.OK_STATUS;
+                  }
+                  finally
+                  {
+                    StartingPropertyTester.setStarting(false);
+                  }
                 }
               }.schedule();
             }
             else
             {
+              StartingPropertyTester.setStarting(false);
+
               new Job("Refresh Setup Cache")
               {
                 @Override

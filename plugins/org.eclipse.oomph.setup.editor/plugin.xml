@@ -80,13 +80,11 @@
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
-            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.PerformDropdownHandler"
             id="org.eclipse.oomph.setup.editor.performDropdown"
             name="Perform Dropdown">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
-            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.PerformHandler"
             id="org.eclipse.oomph.setup.editor.perform"
             name="Perform Setup Tasks">
       </command>
@@ -96,18 +94,56 @@
             id="org.eclipse.oomph.setup.editor.openLog"
             name="Open Log File">
       </command>
+      <!--
       <command
             categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ChangeProductHandler"
             id="org.eclipse.oomph.setup.editor.changeProduct"
             name="Change Product">
       </command>
+      -->
       <command
             categoryId="org.eclipse.oomph.setup.category"
-            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ImportProjectsHandler"
             id="org.eclipse.oomph.setup.editor.importProjects"
             name="Import Projects">
       </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.oomph.setup.presentation.handlers.PerformDropdownHandler"
+            commandId="org.eclipse.oomph.setup.editor.performDropdown">
+         <enabledWhen>
+            <test
+                  forcePluginActivation="true"
+                  property="org.eclipse.oomph.setup.ui.starting"
+                  value="false">
+            </test>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="org.eclipse.oomph.setup.presentation.handlers.PerformHandler"
+            commandId="org.eclipse.oomph.setup.editor.perform">
+         <enabledWhen>
+            <test
+                  forcePluginActivation="true"
+                  property="org.eclipse.oomph.setup.ui.starting"
+                  value="false">
+            </test>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="org.eclipse.oomph.setup.presentation.handlers.ImportProjectsHandler"
+            commandId="org.eclipse.oomph.setup.editor.importProjects">
+         <enabledWhen>
+            <test
+                  forcePluginActivation="true"
+                  property="org.eclipse.oomph.setup.ui.starting"
+                  value="false">
+            </test>
+         </enabledWhen>
+      </handler>
    </extension>
    
    <extension
@@ -157,12 +193,14 @@
                name="org.eclipse.oomph.setup.perform.menu.separator"
                visible="true">
          </separator>
+         <!--
          <command
                commandId="org.eclipse.oomph.setup.editor.changeProduct"
                icon="icons/Product.gif"
                label="Change Product..."
                style="push">
          </command>
+         -->
          <command
                commandId="org.eclipse.oomph.setup.editor.importProjects"
                icon="icons/Project.gif"

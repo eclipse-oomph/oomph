@@ -61,4 +61,15 @@
       </wizard>
    </extension>
 
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.eclipse.oomph.setup.ui.StartingPropertyTester"
+            id="org.eclipse.oomph.setup.ui.propertyTester"
+            namespace="org.eclipse.oomph.setup.ui"
+            properties="starting"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
+
 </plugin>
