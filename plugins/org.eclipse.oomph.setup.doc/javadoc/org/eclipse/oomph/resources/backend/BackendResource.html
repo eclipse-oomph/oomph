@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!-- NewPage -->
-<html lang="de">
+<html lang="en">
 <head>
 
 <title>BackendResource (Oomph Setup Documentation)</title>
@@ -166,7 +166,7 @@ extends <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Obje
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.html#accept(org.eclipse.oomph.resources.backend.BackendResource.Visitor,%20org.eclipse.core.runtime.IProgressMonitor)">accept</a></strong>(<a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.Visitor.html" title="interface in org.eclipse.oomph.resources.backend">BackendResource.Visitor</a>&nbsp;visitor,
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.html#accept(org.eclipse.oomph.resources.backend.BackendResource.Visitor, org.eclipse.core.runtime.IProgressMonitor)">accept</a></strong>(<a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.Visitor.html" title="interface in org.eclipse.oomph.resources.backend">BackendResource.Visitor</a>&nbsp;visitor,
       <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -210,6 +210,14 @@ extends <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Obje
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.html#getParent()">getParent</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.html#getRelativePath(org.eclipse.oomph.resources.backend.BackendContainer)">getRelativePath</a></strong>(<a href="../../../../../org/eclipse/oomph/resources/backend/BackendContainer.html" title="class in org.eclipse.oomph.resources.backend">BackendContainer</a>&nbsp;base)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/URI.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">URI</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.html#getRelativeURI(org.eclipse.oomph.resources.backend.BackendContainer)">getRelativeURI</a></strong>(<a href="../../../../../org/eclipse/oomph/resources/backend/BackendContainer.html" title="class in org.eclipse.oomph.resources.backend">BackendContainer</a>&nbsp;base)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/resources/backend/BackendSystem.html" title="class in org.eclipse.oomph.resources.backend">BackendSystem</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/resources/backend/BackendResource.html#getSystem()">getSystem</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -247,7 +255,7 @@ extends <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Obje
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -357,6 +365,24 @@ extends <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Obje
 <li class="blockList">
 <h4>getSystemRelativePath</h4>
 <pre>public final&nbsp;<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getSystemRelativePath()</pre>
+</li>
+</ul>
+<a name="getRelativeURI(org.eclipse.oomph.resources.backend.BackendContainer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRelativeURI</h4>
+<pre>public final&nbsp;<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/URI.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">URI</a>&nbsp;getRelativeURI(<a href="../../../../../org/eclipse/oomph/resources/backend/BackendContainer.html" title="class in org.eclipse.oomph.resources.backend">BackendContainer</a>&nbsp;base)</pre>
+</li>
+</ul>
+<a name="getRelativePath(org.eclipse.oomph.resources.backend.BackendContainer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRelativePath</h4>
+<pre>public final&nbsp;<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getRelativePath(<a href="../../../../../org/eclipse/oomph/resources/backend/BackendContainer.html" title="class in org.eclipse.oomph.resources.backend">BackendContainer</a>&nbsp;base)</pre>
 </li>
 </ul>
 <a name="isLocal()">
