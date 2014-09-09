@@ -29,18 +29,22 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ReflogCommand;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.StatusCommand;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.CoreConfig.AutoCRLF;
 import org.eclipse.jgit.lib.ProgressMonitor;
+import org.eclipse.jgit.lib.ReflogEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.transport.RefSpec;
@@ -49,6 +53,7 @@ import org.eclipse.jgit.transport.URIish;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -484,9 +489,10 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     try
     {
       Git git = Git.open(workDir);
-      if (!hasWorkTree(git))
+      if (!hasWorkTree(git) || !hasReflog(git))
       {
         FileUtil.rename(workDir);
+        workDirExisted = false;
         return true;
       }
 
@@ -584,7 +590,30 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       if (!workDirExisted)
       {
-        FileUtil.delete(workDir, new ProgressLogMonitor(context));
+        context.setTerminating();
+
+        if (ex instanceof OperationCanceledException)
+        {
+          context.log("Deleting the result of the canceled clone operation");
+        }
+        else
+        {
+          context.log("Deleting the result of the failed clone operation");
+        }
+
+        FileUtil.delete(workDir, new ProgressLogMonitor(context)
+        {
+          @Override
+          public boolean isCanceled()
+          {
+            return false;
+          }
+        });
+      }
+
+      if (ex instanceof OperationCanceledException)
+      {
+        throw (OperationCanceledException)ex;
       }
 
       throw new Exception(ex);
@@ -611,6 +640,20 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       return true;
     }
     catch (NoWorkTreeException ex)
+    {
+      return false;
+    }
+  }
+
+  private static boolean hasReflog(Git git) throws Exception
+  {
+    try
+    {
+      ReflogCommand reflogCommand = git.reflog();
+      Collection<ReflogEntry> reflog = reflogCommand.call();
+      return !reflog.isEmpty();
+    }
+    catch (InvalidRefNameException ex)
     {
       return false;
     }

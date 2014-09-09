@@ -34,4 +34,6 @@ public interface ProgressLog
   public void log(Throwable t);
 
   public void task(SetupTask setupTask);
+
+  public void setTerminating();
 }

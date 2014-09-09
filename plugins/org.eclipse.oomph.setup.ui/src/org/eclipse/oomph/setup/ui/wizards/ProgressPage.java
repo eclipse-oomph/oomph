@@ -620,6 +620,7 @@ public class ProgressPage extends SetupWizardPage
                         if (container instanceof WizardDialog)
                         {
                           WizardDialog dialog = (WizardDialog)container;
+                          progressLog.setFinished();
                           dialog.close();
                         }
                       }

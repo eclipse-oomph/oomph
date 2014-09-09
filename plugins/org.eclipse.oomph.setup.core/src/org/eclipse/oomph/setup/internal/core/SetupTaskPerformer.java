@@ -1464,6 +1464,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     this.canceled = canceled;
   }
 
+  public void setTerminating()
+  {
+    if (progress != null)
+    {
+      progress.setTerminating();
+    }
+  }
+
   public void task(SetupTask setupTask)
   {
     progress.task(setupTask);
