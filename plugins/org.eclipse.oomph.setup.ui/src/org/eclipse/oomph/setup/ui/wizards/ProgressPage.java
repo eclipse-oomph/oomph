@@ -400,7 +400,9 @@ public class ProgressPage extends SetupWizardPage
       performer.put(ILicense.class, LICENSE_CONFIRMER);
       performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performer.getUser(), false));
 
-      progressMonitorPart.beginTask("", performer.getNeededTasks().size());
+      // Because the worked is incremented at the start of the task, behave as if there is one more task than there really is
+      // so we don't have full progress until the final task is completed.
+      progressMonitorPart.beginTask("", performer.getNeededTasks().size() + 1);
 
       File renamed = null;
       if (getTrigger() == Trigger.BOOTSTRAP)
@@ -595,6 +597,7 @@ public class ProgressPage extends SetupWizardPage
                   {
                     public void run()
                     {
+                      progressLog.setFinished();
                       SetupUIPlugin.restart(trigger, getPerformer().getNeededTasks());
                     }
                   });
