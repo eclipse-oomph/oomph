@@ -1415,7 +1415,7 @@
           name="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
           name="org.eclipse.xtend.sdk.feature.group"
-          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
+          versionRange="[2.7.0,2.8.0)"/>
       <requirement
           name="org.eclipse.epp.mpc.feature.group"/>
       <requirement
@@ -1440,10 +1440,15 @@
           name="org.eclipse.mylyn.git.feature.group"/>
       <requirement
           name="com.mountainminds.eclemma.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.emf.ecore.xcore.sdk.feature.group"
+          versionRange="[1.2.1,2.0.0)"/>
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
       <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/maintenance/releases/"/>
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/milestones/"/>
+      <repository
+          url="http://download.eclipse.org/modeling/emf/emf/updates/milestones/"/>
       <repository
           url="http://download.eclipse.org/recommenders/updates/milestones/"/>
       <repository
@@ -1475,8 +1480,8 @@
           summary="Open for v2.2"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.2.0"/>
       <query
-          summary="Open for v2.1.2"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.1.2"/>
+          summary="Open for v2.1.10"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;list_id=8727949&amp;order=bug_id%20DESC&amp;product=Recommenders&amp;query_based_on=&amp;query_format=advanced&amp;target_milestone=2.1.10"/>
       <query
           summary="Help Wanted"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?short_desc_type=allwordssubstr&amp;short_desc=&amp;product=Recommenders&amp;product=Recommenders.Incubator&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;keywords_type=allwords&amp;keywords=helpwanted&amp;status_whiteboard_type=allwordssubstr&amp;status_whiteboard=&amp;order=Importance"/>
@@ -1515,6 +1520,11 @@
           name="gerrit.master.luna"/>
     </setupTask>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="debug.port"
+        defaultValue="8001"
+        label="Debug Port"/>
+    <setupTask
         xsi:type="setup:EclipseIniTask"
         option="-Xdebug"
         value=""
@@ -1522,8 +1532,10 @@
     <setupTask
         xsi:type="setup:EclipseIniTask"
         option="-Xrunjdwp:transport"
-        value="=dt_socket,server=y,suspend=n,address=8001"
-        vm="true"/>
+        value="=dt_socket,server=y,suspend=n,address=${debug.port}"
+        vm="true">
+      <description>The port used to attach a remore Java Application for debugging purposes</description>
+    </setupTask>
     <stream
         name="master"/>
   </project>
