@@ -214,7 +214,9 @@
         name="eclipse.target.platform"
         defaultValue="None"
         storageURI="scope://Workspace"
-        label="${scope.project.label} Target Platform">
+        label="Target Platform">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
           value="Mars"
           label="Eclipse Mars - 4.5"/>
@@ -239,7 +241,7 @@
       <choice
           value="None"
           label="None"/>
-      <description>Choose the compatibly level of the target platform for ${scope.project.label}</description>
+      <description>Choose the compatibly level of the target platform</description>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

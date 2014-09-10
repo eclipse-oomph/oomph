@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
@@ -34,6 +35,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import java.util.Collection;
@@ -613,6 +615,13 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
     }
 
     getChoices().addAll(variableTask.getChoices());
+
+    Annotation annotation = variableTask.getAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE);
+    if (annotation != null)
+    {
+      getAnnotations().add(EcoreUtil.copy(annotation));
+      setStorageURI(variableTask.getStorageURI());
+    }
   }
 
   public boolean isNeeded(SetupTaskContext context) throws Exception

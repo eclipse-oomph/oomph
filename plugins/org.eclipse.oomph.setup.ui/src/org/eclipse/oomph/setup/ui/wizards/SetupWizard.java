@@ -164,6 +164,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return catalogManager;
   }
 
+  public SetupContext getSetupContext()
+  {
+    return setupContext;
+  }
+
   public void setSetupContext(SetupContext setupContext)
   {
     this.setupContext = setupContext;

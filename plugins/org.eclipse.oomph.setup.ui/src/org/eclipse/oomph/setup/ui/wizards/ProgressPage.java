@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
-import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.UnsignedPolicy;
@@ -795,25 +794,18 @@ public class ProgressPage extends SetupWizardPage
       shouldSave = true;
     }
 
-    final boolean finalShouldSave = shouldSave;
-    new VariablePage.SetupURIUpdater()
+    if (shouldSave)
     {
-      @Override
-      protected void visit(Installation installation, Workspace workspace)
-      {
-        if (finalShouldSave)
-        {
-          BaseUtil.saveEObject(user);
-        }
+      BaseUtil.saveEObject(user);
+    }
 
-        BaseUtil.saveEObject(installation);
-        if (workspace != null)
-        {
-          BaseUtil.saveEObject(workspace);
-        }
-      }
-    }.visit(performer);
-
+    SetupContext setupContext = getWizard().getSetupContext();
+    BaseUtil.saveEObject(setupContext.getInstallation());
+    Workspace workspace = setupContext.getWorkspace();
+    if (workspace != null)
+    {
+      BaseUtil.saveEObject(workspace);
+    }
   }
 
   private void setButtonState(int buttonID, boolean enabled)

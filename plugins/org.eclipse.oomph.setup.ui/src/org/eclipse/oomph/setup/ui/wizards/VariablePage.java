@@ -14,6 +14,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -40,6 +41,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -100,6 +102,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private Control focusControl;
 
+  private SetupContext originalContext;
+
   private FocusListener focusListener = new FocusAdapter()
   {
     @Override
@@ -114,7 +118,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     super("VariablePage");
     setTitle("Variables");
     setDescription("Enter values for the required variables.");
-
   }
 
   @Override
@@ -425,7 +428,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
     else
     {
-      getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), SetupContext.createUserOnly(getResourceSet()).getUser()));
+      if (!forward)
+      {
+        getWizard().setSetupContext(originalContext);
+        originalContext = null;
+      }
+
       setPageComplete(false);
       validate();
       if (forward && getPreviousPage() == null)
@@ -449,38 +457,73 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   {
     if (forward)
     {
+      originalContext = getWizard().getSetupContext();
+
       final List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
       for (FieldHolder fieldHolder : manager)
       {
         unresolvedVariables.addAll(fieldHolder.getVariables());
       }
 
+      final ResourceSet resourceSet = SetupUtil.createResourceSet();
+
       User user = getUser();
       final User copiedUser = EcoreUtil.copy(user);
       URI userResourceURI = user.eResource().getURI();
-      Resource userResource = SetupUtil.createResourceSet().createResource(userResourceURI);
+      Resource userResource = resourceSet.createResource(userResourceURI);
       userResource.getContents().add(copiedUser);
 
-      new SetupURIUpdater()
+      Installation installation = performer.getInstallation();
+      Resource installationResource = installation.eResource();
+      URI installationResourceURI = installationResource.getURI();
+      installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
+          .toString()));
+
+      Workspace workspace = performer.getWorkspace();
+      Resource workspaceResource = null;
+      URI workspaceResourceURI = null;
+      if (workspace != null)
       {
-        @Override
-        protected void visit(Installation installation, Workspace workspace)
-        {
-          performer.recordVariables(copiedUser);
+        workspaceResource = workspace.eResource();
+        workspaceResourceURI = workspaceResource.getURI();
+        workspaceResource.setURI(URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
+            .toString()));
+      }
 
-          unresolvedVariables.clear();
+      Installation copiedInstallation = EcoreUtil.copy(installation);
+      URI copiedInstallationResourceURI = installation.eResource().getURI();
+      Resource copiedInstallationResource = resourceSet.createResource(copiedInstallationResourceURI);
+      copiedInstallationResource.getContents().add(copiedInstallation);
 
-          getWizard().setSetupContext(SetupContext.create(getInstallation(), getWorkspace(), copiedUser));
-          setPerformer(performer);
+      Workspace copiedWorkspace = EcoreUtil.copy(workspace);
+      if (workspace != null)
+      {
+        URI copiedWorkspaceResourceURI = workspace.eResource().getURI();
+        Resource copiedWorkspaceResource = resourceSet.createResource(copiedWorkspaceResourceURI);
+        copiedWorkspaceResource.getContents().add(copiedWorkspace);
+      }
 
-          BaseUtil.saveEObject(copiedUser);
+      performer.recordVariables(copiedInstallation, copiedWorkspace, copiedUser);
 
-          performer.savePasswords();
-        }
-      }.visit(performer);
+      unresolvedVariables.clear();
+
+      getWizard().setSetupContext(SetupContext.create(copiedInstallation, copiedWorkspace, copiedUser));
+      setPerformer(performer);
+
+      BaseUtil.saveEObject(copiedUser);
+
+      performer.savePasswords();
+
+      installationResource.setURI(installationResourceURI);
+      if (workspaceResource != null)
+      {
+        workspaceResource.setURI(workspaceResourceURI);
+      }
     }
     else
     {
+      originalContext = null;
+
       setPerformer(null);
     }
   }
@@ -644,7 +687,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       if (variables.add(variable))
       {
         String value = field.getValue();
-        if ("".equals(value))
+        if (!"".equals(value))
         {
           variable.setValue(value);
         }
@@ -953,6 +996,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     public URI getURI(VariableTask variable)
     {
       String name = variable.getName();
+      if (variable.getAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE) != null)
+      {
+        return URI.createURI("#" + name);
+      }
+
       URI uri = variable.eResource() == null ? URI.createURI("#") : EcoreUtil.getURI(variable);
       uri = uri.appendFragment(uri.fragment() + "~" + name);
       return uri;
@@ -1039,36 +1087,4 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
   }
 
-  static abstract class SetupURIUpdater
-  {
-    public void visit(SetupTaskPerformer performer)
-    {
-      Installation installation = performer.getInstallation();
-      Resource installationResource = installation.eResource();
-      URI installationResourceURI = installationResource.getURI();
-      installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
-          .toString()));
-
-      Workspace workspace = performer.getWorkspace();
-      Resource workspaceResource = null;
-      URI workspaceResourceURI = null;
-      if (workspace != null)
-      {
-        workspaceResource = workspace.eResource();
-        workspaceResourceURI = workspaceResource.getURI();
-        workspaceResource.setURI(URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
-            .toString()));
-      }
-
-      visit(installation, workspace);
-
-      installationResource.setURI(installationResourceURI);
-      if (workspaceResource != null)
-      {
-        workspaceResource.setURI(workspaceResourceURI);
-      }
-    }
-
-    protected abstract void visit(Installation installation, Workspace workspace);
-  }
 }

@@ -1970,7 +1970,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  public void recordVariables(User user)
+  public void recordVariables(Installation installation, Workspace workspace, User user)
   {
     recordRules(user.getAttributeRules(), true);
 
@@ -2002,7 +2002,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     EList<SetupTask> userSetupTasks = user.getSetupTasks();
     if (!unresolvedVariables.isEmpty())
     {
-      applyUnresolvedVariables(user, unresolvedVariables, userSetupTasks, itemDelegator);
+      applyUnresolvedVariables(installation, workspace, user, unresolvedVariables, userSetupTasks, itemDelegator);
     }
 
     if (!appliedRuleVariables.isEmpty())
@@ -2027,8 +2027,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               {
                 if (workspaceScopeTasks == null)
                 {
-                  Workspace workspace = getWorkspace();
-                  workspaceScopeTasks = findOrCreate(itemDelegator, workspace, userSetupTasks).getSetupTasks();
+                  workspaceScopeTasks = workspace.getSetupTasks();
                 }
                 projectCatalogScopedVariables.add(unspecifiedVariable);
                 break;
@@ -2041,8 +2040,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               {
                 if (installationScopeTasks == null)
                 {
-                  Installation installation = getInstallation();
-                  installationScopeTasks = findOrCreate(itemDelegator, installation, userSetupTasks).getSetupTasks();
+                  installationScopeTasks = installation.getSetupTasks();
                 }
                 productCatalogScopedVariables.add(unspecifiedVariable);
 
@@ -2051,7 +2049,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
               case USER:
               {
-                Workspace workspace = getWorkspace();
                 if (workspace != null)
                 {
                   if (workspaceScopeTasks == null)
@@ -2061,7 +2058,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   projectCatalogScopedVariables.add(unspecifiedVariable);
                 }
 
-                Installation installation = getInstallation();
                 if (installationScopeTasks == null)
                 {
                   installationScopeTasks = findOrCreate(itemDelegator, installation, userSetupTasks).getSetupTasks();
@@ -2077,8 +2073,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       }
 
-      applyUnresolvedVariables(user, productCatalogScopedVariables, installationScopeTasks, itemDelegator);
-      applyUnresolvedVariables(user, projectCatalogScopedVariables, workspaceScopeTasks, itemDelegator);
+      applyUnresolvedVariables(installation, workspace, user, productCatalogScopedVariables, installationScopeTasks, itemDelegator);
+      applyUnresolvedVariables(installation, workspace, user, projectCatalogScopedVariables, workspaceScopeTasks, itemDelegator);
     }
   }
 
@@ -2124,8 +2120,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  private void applyUnresolvedVariables(User user, Collection<VariableTask> variables, EList<SetupTask> rootTasks, AdapterFactoryItemDelegator itemDelegator)
+  private void applyUnresolvedVariables(Installation installation, Workspace workspace, User user, Collection<VariableTask> variables,
+      EList<SetupTask> rootTasks, AdapterFactoryItemDelegator itemDelegator)
   {
+    Resource installationResource = installation.eResource();
+    Resource workspaceResource = workspace == null ? null : workspace.eResource();
     Resource userResource = user.eResource();
     List<VariableTask> unspecifiedVariables = new ArrayList<VariableTask>();
     for (VariableTask variable : variables)
@@ -2143,16 +2142,29 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           else
           {
             Scope scope = variable.getScope();
-            if (scope instanceof User && storageURI.equals(VariableTask.DEFAULT_STORAGE_URI))
+            if (scope != null && storageURI.equals(VariableTask.DEFAULT_STORAGE_URI))
             {
-              String uriFragment = scope.eResource().getURIFragment(variable);
-              EObject eObject = userResource.getEObject(uriFragment);
-              if (eObject instanceof VariableTask)
+              switch (scope.getType())
               {
-                VariableTask targetVariable = (VariableTask)eObject;
-                if (variable.getName().equals(targetVariable.getName()))
+                case INSTALLATION:
                 {
-                  targetVariable.setValue(value);
+                  apply(installationResource, scope, variable, value);
+                  break;
+                }
+                case WORKSPACE:
+                {
+                  apply(workspaceResource, scope, variable, value);
+                  break;
+                }
+                case USER:
+                {
+                  apply(userResource, scope, variable, value);
+                  break;
+                }
+                default:
+                {
+                  unspecifiedVariables.add(variable);
+                  break;
                 }
               }
             }
@@ -2177,22 +2189,20 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         if (storageURI.equals(VariableTask.WORKSPACE_STORAGE_URI))
         {
-          Workspace workspace = getWorkspace();
           if (workspace != null)
           {
-            targetSetupTasks = findOrCreate(itemDelegator, workspace, targetSetupTasks).getSetupTasks();
+            targetSetupTasks = workspace.getSetupTasks();
           }
         }
         else if (storageURI.equals(VariableTask.INSTALLATION_STORAGE_URI))
         {
-          Installation installation = getInstallation();
-          if (installation != null)
-          {
-            targetSetupTasks = findOrCreate(itemDelegator, installation, targetSetupTasks).getSetupTasks();
-          }
+          targetSetupTasks = installation.getSetupTasks();
         }
 
-        targetSetupTasks = findOrCreate(itemDelegator, scope, targetSetupTasks).getSetupTasks();
+        if (unspecifiedVariable.getAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE) == null)
+        {
+          targetSetupTasks = findOrCreate(itemDelegator, scope, targetSetupTasks).getSetupTasks();
+        }
       }
 
       // This happens in the multi-stream case where each perform wants to add setup-restricted tasks for the same variable.
@@ -2214,6 +2224,20 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       userPreference.getChoices().clear();
       userPreference.setStorageURI(VariableTask.DEFAULT_STORAGE_URI);
       targetSetupTasks.add(userPreference);
+    }
+  }
+
+  private void apply(Resource resource, Scope scope, VariableTask variable, String value)
+  {
+    String uriFragment = scope.eResource().getURIFragment(variable);
+    EObject eObject = resource.getEObject(uriFragment);
+    if (eObject instanceof VariableTask)
+    {
+      VariableTask targetVariable = (VariableTask)eObject;
+      if (variable.getName().equals(targetVariable.getName()))
+      {
+        targetVariable.setValue(value);
+      }
     }
   }
 
@@ -2958,29 +2982,17 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (fullPrompt)
       {
-        SetupContext fullPromptContext = SetupContext.create(setupContext.getInstallation(), setupContext.getWorkspace());
+        SetupContext fullPromptContext = SetupContext.createCopy(setupContext.getInstallation(), setupContext.getWorkspace(), setupContext.getUser());
 
         Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
         final SetupTaskPerformer partialPromptPerformer = performer;
-        User user = EcoreUtil.copy(setupContext.getUser());
-        for (Iterator<EObject> it = user.eAllContents(); it.hasNext();)
-        {
-          EObject eObject = it.next();
-          if (eObject instanceof VariableTask)
-          {
-            VariableTask variableTask = (VariableTask)eObject;
-            variables.add(variableTask);
-            variableTask.setValue(null);
-          }
-        }
 
+        prepareFullPrompt(variables, fullPromptContext.getInstallation());
+        prepareFullPrompt(variables, fullPromptContext.getWorkspace());
+
+        User user = fullPromptContext.getUser();
+        prepareFullPrompt(variables, user);
         user.getAttributeRules().clear();
-
-        setFullPromptUser(user);
-
-        fullPromptContext.getUser().eResource().getContents().set(0, user);
-
-        fullPromptContext = SetupContext.create(fullPromptContext.getInstallation(), fullPromptContext.getWorkspace(), user);
 
         SetupPrompter fullPrompter = new SetupPrompter()
         {
@@ -3206,9 +3218,28 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return EcoreUtil.getExistingAdapter(user, FullPromptMarker.class) != null;
   }
 
-  private static void setFullPromptUser(User user)
+  private static void prepareFullPrompt(Set<VariableTask> variables, ModelElement modelElement)
   {
-    user.eAdapters().add(new FullPromptMarker());
+    if (modelElement != null)
+    {
+      for (Iterator<EObject> it = modelElement.eAllContents(); it.hasNext();)
+      {
+        EObject eObject = it.next();
+        if (eObject instanceof VariableTask)
+        {
+          VariableTask variableTask = (VariableTask)eObject;
+          variables.add(variableTask);
+          variableTask.setValue(null);
+        }
+      }
+
+      setFullPromptMarker(modelElement);
+    }
+  }
+
+  private static void setFullPromptMarker(ModelElement modelElement)
+  {
+    modelElement.eAdapters().add(new FullPromptMarker());
   }
 
   public void setProgress(ProgressLog progress)

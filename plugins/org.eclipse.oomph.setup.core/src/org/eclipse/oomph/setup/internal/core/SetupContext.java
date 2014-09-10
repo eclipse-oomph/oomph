@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -261,6 +262,28 @@ public class SetupContext
     Resource userResource = installation.eResource().getResourceSet().getResourceFactoryRegistry().getFactory(USER_SETUP_URI).createResource(USER_SETUP_URI);
     userResource.getContents().add(user);
     return new SetupContext(installation, workspace, user);
+  }
+
+  public static SetupContext createCopy(Installation installation, Workspace workspace, User user)
+  {
+    Resource.Factory.Registry resourceFactoryRegistry = SetupUtil.createResourceSet().getResourceFactoryRegistry();
+
+    Installation copiedInstallation = EcoreUtil.copy(installation);
+    Resource installationResource = resourceFactoryRegistry.getFactory(INSTALLATION_SETUP_FILE_NAME_URI).createResource(INSTALLATION_SETUP_FILE_NAME_URI);
+    installationResource.getContents().add(copiedInstallation);
+
+    Workspace copiedWorkspace = EcoreUtil.copy(workspace);
+    if (workspace != null)
+    {
+      Resource workResource = resourceFactoryRegistry.getFactory(WORKSPACE_SETUP_FILE_NAME_URI).createResource(WORKSPACE_SETUP_FILE_NAME_URI);
+      workResource.getContents().add(copiedWorkspace);
+    }
+
+    User copiedUser = EcoreUtil.copy(user);
+    Resource userResource = resourceFactoryRegistry.getFactory(USER_SETUP_URI).createResource(USER_SETUP_URI);
+    userResource.getContents().add(copiedUser);
+
+    return new SetupContext(copiedInstallation, copiedWorkspace, copiedUser);
   }
 
   public static User createUser()
