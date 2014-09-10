@@ -128,52 +128,63 @@ public final class PreferencesUtil
     {
       PreferenceNode preferenceNode = (PreferenceNode)target;
       Resource resource = preferenceNode.eResource();
-      ResourceSet resourceSet = resource.getResourceSet();
-
-      synchronized (resource)
+      if (resource == null)
       {
-        synchronized (resourceSet)
+        handlePreferenceChange(event, preferenceNode);
+      }
+      else
+      {
+        ResourceSet resourceSet = resource.getResourceSet();
+        synchronized (resource)
         {
-          String name = event.getKey();
-          Object value = event.getNewValue();
-          EList<Property> properties = preferenceNode.getProperties();
-          for (int i = 0, size = properties.size(); i < size; ++i)
+          synchronized (resourceSet)
           {
-            Property property = properties.get(i);
-            int comparison = property.getName().compareTo(name);
-            if (comparison == 0)
-            {
-              if (value == null)
-              {
-                properties.remove(i);
-              }
-              else
-              {
-                property.setValue(value.toString());
-              }
-
-              return;
-            }
-            else if (comparison > 0)
-            {
-              if (value != null)
-              {
-                property = PreferencesFactory.eINSTANCE.createProperty();
-                property.setName(name);
-                property.setValue(value.toString());
-                properties.add(i, property);
-              }
-
-              return;
-            }
+            handlePreferenceChange(event, preferenceNode);
           }
-
-          Property property = PreferencesFactory.eINSTANCE.createProperty();
-          property.setName(name);
-          property.setValue(value.toString());
-          properties.add(property);
         }
       }
+    }
+
+    private void handlePreferenceChange(PreferenceChangeEvent event, PreferenceNode preferenceNode)
+    {
+      String name = event.getKey();
+      Object value = event.getNewValue();
+      EList<Property> properties = preferenceNode.getProperties();
+      for (int i = 0, size = properties.size(); i < size; ++i)
+      {
+        Property property = properties.get(i);
+        int comparison = property.getName().compareTo(name);
+        if (comparison == 0)
+        {
+          if (value == null)
+          {
+            properties.remove(i);
+          }
+          else
+          {
+            property.setValue(value.toString());
+          }
+
+          return;
+        }
+        else if (comparison > 0)
+        {
+          if (value != null)
+          {
+            property = PreferencesFactory.eINSTANCE.createProperty();
+            property.setName(name);
+            property.setValue(value.toString());
+            properties.add(i, property);
+          }
+
+          return;
+        }
+      }
+
+      Property property = PreferencesFactory.eINSTANCE.createProperty();
+      property.setName(name);
+      property.setValue(value.toString());
+      properties.add(property);
     }
 
     public void added(NodeChangeEvent event)
@@ -213,6 +224,26 @@ public final class PreferencesUtil
     public void removed(NodeChangeEvent event)
     {
       PreferenceNode preferenceNode = (PreferenceNode)target;
+      Resource resource = preferenceNode.eResource();
+      if (resource == null)
+      {
+        handleRemoved(event, preferenceNode);
+      }
+      else
+      {
+        ResourceSet resourceSet = resource.getResourceSet();
+        synchronized (resource)
+        {
+          synchronized (resourceSet)
+          {
+            handleRemoved(event, preferenceNode);
+          }
+        }
+      }
+    }
+
+    private void handleRemoved(NodeChangeEvent event, PreferenceNode preferenceNode)
+    {
       Preferences childNode = event.getChild();
       String name = childNode.name();
 

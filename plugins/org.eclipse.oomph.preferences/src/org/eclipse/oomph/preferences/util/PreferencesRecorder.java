@@ -41,7 +41,7 @@ public class PreferencesRecorder extends EContentAdapter
 
   public Map<URI, String> done()
   {
-    rootPreferenceNode.eAdapters().remove(this);
+    rootPreferenceNode.eResource().unload();
     rootPreferenceNode = null;
 
     paths.clear();
