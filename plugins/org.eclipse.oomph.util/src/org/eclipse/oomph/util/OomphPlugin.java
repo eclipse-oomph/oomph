@@ -22,11 +22,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.Preferences;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -82,6 +85,23 @@ public abstract class OomphPlugin extends EMFPlugin
   public final IPath getUserLocation() throws IllegalStateException
   {
     return new Path(PropertiesUtil.USER_HOME).append(".eclipse").append(getSymbolicName());
+  }
+
+  public final Preferences getInstancePreferences()
+  {
+    return getPreferences("instance");
+  }
+
+  public final Preferences getConfigurationPreferences()
+  {
+    return getPreferences("configuration");
+  }
+
+  private Preferences getPreferences(String scope)
+  {
+    IEclipsePreferences rootNode = Platform.getPreferencesService().getRootNode();
+    Preferences instanceScope = rootNode.node(scope);
+    return instanceScope.node(getSymbolicName());
   }
 
   public final boolean isDebugging()

@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.OomphUIPlugin;
@@ -67,7 +68,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
 
-  public static final String PREF_USER_PREFERENCES_STORAGE = "user.preferences.storage";
+  public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder";
 
   public static final boolean SETUP_IDE = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP);
 
@@ -148,7 +149,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
               MessageDialog.openInformation(UIUtil.getShell(), "Remote Debug Pause", "The setup tasks are paused to allow you to attach a remote debugger");
             }
 
-            UserPreferencesManager.INSTANCE.register(display);
+            RecorderManager.Lifecycle.start(display);
 
             if (SETUP_IDE && !SETUP_SKIP && !isSkipStartupTasks())
             {
@@ -334,6 +335,13 @@ public final class SetupUIPlugin extends OomphUIPlugin
     {
       super.start(context);
       performStartup();
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception
+    {
+      RecorderManager.Lifecycle.stop();
+      super.stop(context);
     }
   }
 }

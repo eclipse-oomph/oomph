@@ -106,169 +106,6 @@ public final class PreferencesUtil
     return null;
   }
 
-  private static class PreferencesAdapter extends AdapterImpl implements IEclipsePreferences.INodeChangeListener, IEclipsePreferences.IPreferenceChangeListener
-  {
-    protected IEclipsePreferences preferences;
-
-    public PreferencesAdapter(IEclipsePreferences preferences)
-    {
-      this.preferences = preferences;
-
-      preferences.addNodeChangeListener(this);
-      preferences.addPreferenceChangeListener(this);
-    }
-
-    @Override
-    public boolean isAdapterForType(Object type)
-    {
-      return type == PreferencesAdapter.class;
-    }
-
-    public void preferenceChange(PreferenceChangeEvent event)
-    {
-      PreferenceNode preferenceNode = (PreferenceNode)target;
-      Resource resource = preferenceNode.eResource();
-      if (resource == null)
-      {
-        handlePreferenceChange(event, preferenceNode);
-      }
-      else
-      {
-        ResourceSet resourceSet = resource.getResourceSet();
-        synchronized (resource)
-        {
-          synchronized (resourceSet)
-          {
-            handlePreferenceChange(event, preferenceNode);
-          }
-        }
-      }
-    }
-
-    private void handlePreferenceChange(PreferenceChangeEvent event, PreferenceNode preferenceNode)
-    {
-      String name = event.getKey();
-      Object value = event.getNewValue();
-      EList<Property> properties = preferenceNode.getProperties();
-      for (int i = 0, size = properties.size(); i < size; ++i)
-      {
-        Property property = properties.get(i);
-        int comparison = property.getName().compareTo(name);
-        if (comparison == 0)
-        {
-          if (value == null)
-          {
-            properties.remove(i);
-          }
-          else
-          {
-            property.setValue(value.toString());
-          }
-
-          return;
-        }
-        else if (comparison > 0)
-        {
-          if (value != null)
-          {
-            property = PreferencesFactory.eINSTANCE.createProperty();
-            property.setName(name);
-            property.setValue(value.toString());
-            properties.add(i, property);
-          }
-
-          return;
-        }
-      }
-
-      Property property = PreferencesFactory.eINSTANCE.createProperty();
-      property.setName(name);
-      property.setValue(value.toString());
-      properties.add(property);
-    }
-
-    public void added(NodeChangeEvent event)
-    {
-      PreferenceNode preferenceNode = (PreferenceNode)target;
-      Resource resource = preferenceNode.eResource();
-      ResourceSet resourceSet = resource.getResourceSet();
-
-      synchronized (resource)
-      {
-        synchronized (resourceSet)
-        {
-          Preferences childNode = event.getChild();
-          String name = childNode.name();
-          if (preferenceNode.getNode(name) == null)
-          {
-            PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
-            childPreferenceNode.setName(name);
-            EList<PreferenceNode> children = preferenceNode.getChildren();
-            int index = 0;
-            for (int size = children.size(); index < size; ++index)
-            {
-              PreferenceNode otherChildPreferenceNode = children.get(index);
-              if (otherChildPreferenceNode.getName().compareTo(name) >= 0)
-              {
-                break;
-              }
-            }
-
-            children.add(index, childPreferenceNode);
-            traverse(childPreferenceNode, childNode, true);
-          }
-        }
-      }
-    }
-
-    public void removed(NodeChangeEvent event)
-    {
-      PreferenceNode preferenceNode = (PreferenceNode)target;
-      Resource resource = preferenceNode.eResource();
-      if (resource == null)
-      {
-        handleRemoved(event, preferenceNode);
-      }
-      else
-      {
-        ResourceSet resourceSet = resource.getResourceSet();
-        synchronized (resource)
-        {
-          synchronized (resourceSet)
-          {
-            handleRemoved(event, preferenceNode);
-          }
-        }
-      }
-    }
-
-    private void handleRemoved(NodeChangeEvent event, PreferenceNode preferenceNode)
-    {
-      Preferences childNode = event.getChild();
-      String name = childNode.name();
-
-      EList<PreferenceNode> children = preferenceNode.getChildren();
-      for (int i = 0, size = children.size(); i < size; ++i)
-      {
-        PreferenceNode childPreferenceNode = children.get(i);
-        if (childPreferenceNode.getName().equals(name))
-        {
-          children.remove(i);
-          return;
-        }
-      }
-    }
-
-    @Override
-    public void unsetTarget(Notifier oldTarget)
-    {
-      super.unsetTarget(oldTarget);
-
-      preferences.removeNodeChangeListener(this);
-      preferences.removePreferenceChangeListener(this);
-    }
-  }
-
   public static PreferenceNode getRootPreferenceNode()
   {
     return getRootPreferenceNode(false);
@@ -1166,6 +1003,169 @@ public final class PreferencesUtil
       {
         throw new IORuntimeException(ex);
       }
+    }
+  }
+
+  private static class PreferencesAdapter extends AdapterImpl implements IEclipsePreferences.INodeChangeListener, IEclipsePreferences.IPreferenceChangeListener
+  {
+    protected IEclipsePreferences preferences;
+
+    public PreferencesAdapter(IEclipsePreferences preferences)
+    {
+      this.preferences = preferences;
+
+      preferences.addNodeChangeListener(this);
+      preferences.addPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean isAdapterForType(Object type)
+    {
+      return type == PreferencesAdapter.class;
+    }
+
+    public void preferenceChange(PreferenceChangeEvent event)
+    {
+      PreferenceNode preferenceNode = (PreferenceNode)target;
+      Resource resource = preferenceNode.eResource();
+      if (resource == null)
+      {
+        handlePreferenceChange(event, preferenceNode);
+      }
+      else
+      {
+        ResourceSet resourceSet = resource.getResourceSet();
+        synchronized (resource)
+        {
+          synchronized (resourceSet)
+          {
+            handlePreferenceChange(event, preferenceNode);
+          }
+        }
+      }
+    }
+
+    private void handlePreferenceChange(PreferenceChangeEvent event, PreferenceNode preferenceNode)
+    {
+      String name = event.getKey();
+      Object value = event.getNewValue();
+      EList<Property> properties = preferenceNode.getProperties();
+      for (int i = 0, size = properties.size(); i < size; ++i)
+      {
+        Property property = properties.get(i);
+        int comparison = property.getName().compareTo(name);
+        if (comparison == 0)
+        {
+          if (value == null)
+          {
+            properties.remove(i);
+          }
+          else
+          {
+            property.setValue(value.toString());
+          }
+
+          return;
+        }
+        else if (comparison > 0)
+        {
+          if (value != null)
+          {
+            property = PreferencesFactory.eINSTANCE.createProperty();
+            property.setName(name);
+            property.setValue(value.toString());
+            properties.add(i, property);
+          }
+
+          return;
+        }
+      }
+
+      Property property = PreferencesFactory.eINSTANCE.createProperty();
+      property.setName(name);
+      property.setValue(value.toString());
+      properties.add(property);
+    }
+
+    public void added(NodeChangeEvent event)
+    {
+      PreferenceNode preferenceNode = (PreferenceNode)target;
+      Resource resource = preferenceNode.eResource();
+      ResourceSet resourceSet = resource.getResourceSet();
+
+      synchronized (resource)
+      {
+        synchronized (resourceSet)
+        {
+          Preferences childNode = event.getChild();
+          String name = childNode.name();
+          if (preferenceNode.getNode(name) == null)
+          {
+            PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
+            childPreferenceNode.setName(name);
+            EList<PreferenceNode> children = preferenceNode.getChildren();
+            int index = 0;
+            for (int size = children.size(); index < size; ++index)
+            {
+              PreferenceNode otherChildPreferenceNode = children.get(index);
+              if (otherChildPreferenceNode.getName().compareTo(name) >= 0)
+              {
+                break;
+              }
+            }
+
+            children.add(index, childPreferenceNode);
+            traverse(childPreferenceNode, childNode, true);
+          }
+        }
+      }
+    }
+
+    public void removed(NodeChangeEvent event)
+    {
+      PreferenceNode preferenceNode = (PreferenceNode)target;
+      Resource resource = preferenceNode.eResource();
+      if (resource == null)
+      {
+        handleRemoved(event, preferenceNode);
+      }
+      else
+      {
+        ResourceSet resourceSet = resource.getResourceSet();
+        synchronized (resource)
+        {
+          synchronized (resourceSet)
+          {
+            handleRemoved(event, preferenceNode);
+          }
+        }
+      }
+    }
+
+    private void handleRemoved(NodeChangeEvent event, PreferenceNode preferenceNode)
+    {
+      Preferences childNode = event.getChild();
+      String name = childNode.name();
+
+      EList<PreferenceNode> children = preferenceNode.getChildren();
+      for (int i = 0, size = children.size(); i < size; ++i)
+      {
+        PreferenceNode childPreferenceNode = children.get(i);
+        if (childPreferenceNode.getName().equals(name))
+        {
+          children.remove(i);
+          return;
+        }
+      }
+    }
+
+    @Override
+    public void unsetTarget(Notifier oldTarget)
+    {
+      super.unsetTarget(oldTarget);
+
+      preferences.removeNodeChangeListener(this);
+      preferences.removePreferenceChangeListener(this);
     }
   }
 }

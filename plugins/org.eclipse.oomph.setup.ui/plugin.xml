@@ -28,6 +28,12 @@
             class="org.eclipse.oomph.setup.ui.SetupPreferencePage"
             name="Setup">
       </page>
+      <page
+            category="org.eclipse.oomph.setup.SetupPreferencePage"
+            id="org.eclipse.oomph.setup.PreferenceRecorderPreferencePage"
+            class="org.eclipse.oomph.setup.ui.recorder.RecorderPreferencePage"
+            name="Preference Recorder">
+      </page>
    </extension>
 
    <extension
