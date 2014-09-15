@@ -114,14 +114,14 @@ public final class SetupUIPlugin extends OomphUIPlugin
     PlatformUI.getWorkbench().restart();
   }
 
-  private static File getRestartingFile()
-  {
-    return new File(INSTANCE.getStateLocation().toString(), "restarting");
-  }
-
   public static boolean isSkipStartupTasks()
   {
     return plugin.getPreferenceStore().getBoolean(PREF_SKIP_STARTUP_TASKS);
+  }
+
+  private static File getRestartingFile()
+  {
+    return new File(INSTANCE.getStateLocation().toString(), "restarting");
   }
 
   private static void performStartup()
@@ -131,8 +131,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     {
       public void run()
       {
-        String productID = PropertiesUtil.getProperty("eclipse.product");
-        if (!INSTALLER_PRODUCT_ID.equals(productID))
+        if (!isInstallerProduct())
         {
           StartingPropertyTester.setStarting(true);
 
@@ -320,6 +319,12 @@ public final class SetupUIPlugin extends OomphUIPlugin
     });
   }
 
+  private static boolean isInstallerProduct()
+  {
+    String productID = PropertiesUtil.getProperty("eclipse.product");
+    return INSTALLER_PRODUCT_ID.equals(productID);
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -340,7 +345,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
     @Override
     public void stop(BundleContext context) throws Exception
     {
-      RecorderManager.Lifecycle.stop();
+      if (!isInstallerProduct())
+      {
+        RecorderManager.Lifecycle.stop();
+      }
+
       super.stop(context);
     }
   }

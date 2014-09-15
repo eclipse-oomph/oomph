@@ -251,15 +251,18 @@ public final class RecorderManager
 
     public static void stop()
     {
-      UIUtil.syncExec(INSTANCE.display, new Runnable()
+      if (INSTANCE.display != null)
       {
-        public void run()
+        UIUtil.syncExec(INSTANCE.display, new Runnable()
         {
-          INSTANCE.display.removeListener(SWT.Skin, INSTANCE.displayListener);
-        }
-      });
+          public void run()
+          {
+            INSTANCE.display.removeListener(SWT.Skin, INSTANCE.displayListener);
+          }
+        });
 
-      INSTANCE.display = null;
+        INSTANCE.display = null;
+      }
     }
   }
 
