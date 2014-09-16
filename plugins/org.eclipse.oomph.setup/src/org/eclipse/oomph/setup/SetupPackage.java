@@ -127,7 +127,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLinkLocationTask()
    * @generated
    */
-  int LINK_LOCATION_TASK = 24;
+  int LINK_LOCATION_TASK = 25;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl <em>Eclipse Ini Task</em>}' class.
@@ -137,7 +137,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getEclipseIniTask()
    * @generated
    */
-  int ECLIPSE_INI_TASK = 23;
+  int ECLIPSE_INI_TASK = 24;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl <em>Resource Copy Task</em>}' class.
@@ -147,7 +147,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getResourceCopyTask()
    * @generated
    */
-  int RESOURCE_COPY_TASK = 26;
+  int RESOURCE_COPY_TASK = 27;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.TextModifyTaskImpl <em>Text Modify Task</em>}' class.
@@ -157,7 +157,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTextModifyTask()
    * @generated
    */
-  int TEXT_MODIFY_TASK = 28;
+  int TEXT_MODIFY_TASK = 29;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.TextModificationImpl <em>Text Modification</em>}' class.
@@ -167,7 +167,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTextModification()
    * @generated
    */
-  int TEXT_MODIFICATION = 29;
+  int TEXT_MODIFICATION = 30;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl <em>Resource Creation Task</em>}' class.
@@ -177,7 +177,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getResourceCreationTask()
    * @generated
    */
-  int RESOURCE_CREATION_TASK = 27;
+  int RESOURCE_CREATION_TASK = 28;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.RedirectionTaskImpl <em>Redirection Task</em>}' class.
@@ -187,7 +187,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getRedirectionTask()
    * @generated
    */
-  int REDIRECTION_TASK = 22;
+  int REDIRECTION_TASK = 23;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.VariableChoiceImpl <em>Variable Choice</em>}' class.
@@ -197,7 +197,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getVariableChoice()
    * @generated
    */
-  int VARIABLE_CHOICE = 20;
+  int VARIABLE_CHOICE = 21;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.AttributeRuleImpl <em>Attribute Rule</em>}' class.
@@ -217,7 +217,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getInstallationTask()
    * @generated
    */
-  int INSTALLATION_TASK = 15;
+  int INSTALLATION_TASK = 16;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.WorkspaceTaskImpl <em>Workspace Task</em>}' class.
@@ -227,7 +227,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getWorkspaceTask()
    * @generated
    */
-  int WORKSPACE_TASK = 17;
+  int WORKSPACE_TASK = 18;
 
   /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
@@ -446,7 +446,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getWorkspace()
    * @generated
    */
-  int WORKSPACE = 16;
+  int WORKSPACE = 17;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.InstallationImpl <em>Installation</em>}' class.
@@ -456,7 +456,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getInstallation()
    * @generated
    */
-  int INSTALLATION = 14;
+  int INSTALLATION = 15;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.CatalogSelectionImpl <em>Catalog Selection</em>}' class.
@@ -1321,6 +1321,43 @@ public interface SetupPackage extends EPackage
   int ATTRIBUTE_RULE_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.LocationCatalogImpl <em>Location Catalog</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.LocationCatalogImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLocationCatalog()
+   * @generated
+   */
+  int LOCATION_CATALOG = 14;
+
+  /**
+   * The feature id for the '<em><b>Installations</b></em>' map.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LOCATION_CATALOG__INSTALLATIONS = 0;
+
+  /**
+   * The feature id for the '<em><b>Workspaces</b></em>' map.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LOCATION_CATALOG__WORKSPACES = 1;
+
+  /**
+   * The number of structural features of the '<em>Location Catalog</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LOCATION_CATALOG_FEATURE_COUNT = 2;
+
+  /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1670,7 +1707,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getCompoundTask()
    * @generated
    */
-  int COMPOUND_TASK = 18;
+  int COMPOUND_TASK = 19;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -1788,7 +1825,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getVariableTask()
    * @generated
    */
-  int VARIABLE_TASK = 19;
+  int VARIABLE_TASK = 20;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -1996,7 +2033,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getStringSubstitutionTask()
    * @generated
    */
-  int STRING_SUBSTITUTION_TASK = 21;
+  int STRING_SUBSTITUTION_TASK = 22;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -2447,7 +2484,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getPreferenceTask()
    * @generated
    */
-  int PREFERENCE_TASK = 25;
+  int PREFERENCE_TASK = 26;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -2943,7 +2980,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getProductToProductVersionMapEntry()
    * @generated
    */
-  int PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY = 30;
+  int PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY = 31;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -2980,7 +3017,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getProjectToStreamMapEntry()
    * @generated
    */
-  int PROJECT_TO_STREAM_MAP_ENTRY = 31;
+  int PROJECT_TO_STREAM_MAP_ENTRY = 32;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -3019,6 +3056,80 @@ public interface SetupPackage extends EPackage
   int PROJECT_TO_STREAM_MAP_ENTRY_FEATURE_COUNT = 3;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.InstallationToWorkspacesMapEntryImpl <em>Installation To Workspaces Map Entry</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.InstallationToWorkspacesMapEntryImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getInstallationToWorkspacesMapEntry()
+   * @generated
+   */
+  int INSTALLATION_TO_WORKSPACES_MAP_ENTRY = 33;
+
+  /**
+   * The feature id for the '<em><b>Key</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTALLATION_TO_WORKSPACES_MAP_ENTRY__KEY = 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTALLATION_TO_WORKSPACES_MAP_ENTRY__VALUE = 1;
+
+  /**
+   * The number of structural features of the '<em>Installation To Workspaces Map Entry</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTALLATION_TO_WORKSPACES_MAP_ENTRY_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.WorkspaceToInstallationsMapEntryImpl <em>Workspace To Installations Map Entry</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.WorkspaceToInstallationsMapEntryImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getWorkspaceToInstallationsMapEntry()
+   * @generated
+   */
+  int WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY = 34;
+
+  /**
+   * The feature id for the '<em><b>Key</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__KEY = 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__VALUE = 1;
+
+  /**
+   * The number of structural features of the '<em>Workspace To Installations Map Entry</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.ScopeType <em>Scope Type</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3026,7 +3137,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getScopeType()
    * @generated
    */
-  int SCOPE_TYPE = 32;
+  int SCOPE_TYPE = 35;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.Trigger <em>Trigger</em>}' enum.
@@ -3036,7 +3147,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTrigger()
    * @generated
    */
-  int TRIGGER = 33;
+  int TRIGGER = 36;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.VariableType <em>Variable Type</em>}' enum.
@@ -3046,7 +3157,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getVariableType()
    * @generated
    */
-  int VARIABLE_TYPE = 34;
+  int VARIABLE_TYPE = 37;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.UnsignedPolicy <em>Unsigned Policy</em>}' enum.
@@ -3056,7 +3167,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getUnsignedPolicy()
    * @generated
    */
-  int UNSIGNED_POLICY = 35;
+  int UNSIGNED_POLICY = 38;
 
   /**
    * The meta object id for the '<em>License Info</em>' data type.
@@ -3066,7 +3177,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLicenseInfo()
    * @generated
    */
-  int LICENSE_INFO = 37;
+  int LICENSE_INFO = 40;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Index <em>Index</em>}'.
@@ -3184,7 +3295,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTriggerSet()
    * @generated
    */
-  int TRIGGER_SET = 36;
+  int TRIGGER_SET = 39;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Project <em>Project</em>}'.
@@ -3851,6 +3962,74 @@ public interface SetupPackage extends EPackage
   EAttribute getProjectToStreamMapEntry_Selection();
 
   /**
+   * Returns the meta object for class '{@link java.util.Map.Entry <em>Installation To Workspaces Map Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Installation To Workspaces Map Entry</em>'.
+   * @see java.util.Map.Entry
+   * @model keyType="org.eclipse.oomph.setup.Installation" keyRequired="true"
+   *        valueType="org.eclipse.oomph.setup.Workspace" valueMany="true"
+   * @generated
+   */
+  EClass getInstallationToWorkspacesMapEntry();
+
+  /**
+   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Key</em>'.
+   * @see java.util.Map.Entry
+   * @see #getInstallationToWorkspacesMapEntry()
+   * @generated
+   */
+  EReference getInstallationToWorkspacesMapEntry_Key();
+
+  /**
+   * Returns the meta object for the reference list '{@link java.util.Map.Entry <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Value</em>'.
+   * @see java.util.Map.Entry
+   * @see #getInstallationToWorkspacesMapEntry()
+   * @generated
+   */
+  EReference getInstallationToWorkspacesMapEntry_Value();
+
+  /**
+   * Returns the meta object for class '{@link java.util.Map.Entry <em>Workspace To Installations Map Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Workspace To Installations Map Entry</em>'.
+   * @see java.util.Map.Entry
+   * @model keyType="org.eclipse.oomph.setup.Workspace" keyRequired="true"
+   *        valueType="org.eclipse.oomph.setup.Installation" valueMany="true"
+   * @generated
+   */
+  EClass getWorkspaceToInstallationsMapEntry();
+
+  /**
+   * Returns the meta object for the reference list '{@link java.util.Map.Entry <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Value</em>'.
+   * @see java.util.Map.Entry
+   * @see #getWorkspaceToInstallationsMapEntry()
+   * @generated
+   */
+  EReference getWorkspaceToInstallationsMapEntry_Value();
+
+  /**
+   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Key</em>'.
+   * @see java.util.Map.Entry
+   * @see #getWorkspaceToInstallationsMapEntry()
+   * @generated
+   */
+  EReference getWorkspaceToInstallationsMapEntry_Key();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.StringSubstitutionTask <em>String Substitution Task</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3944,6 +4123,38 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EAttribute getAttributeRule_Value();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.LocationCatalog <em>Location Catalog</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Location Catalog</em>'.
+   * @see org.eclipse.oomph.setup.LocationCatalog
+   * @generated
+   */
+  EClass getLocationCatalog();
+
+  /**
+   * Returns the meta object for the map '{@link org.eclipse.oomph.setup.LocationCatalog#getInstallations <em>Installations</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the map '<em>Installations</em>'.
+   * @see org.eclipse.oomph.setup.LocationCatalog#getInstallations()
+   * @see #getLocationCatalog()
+   * @generated
+   */
+  EReference getLocationCatalog_Installations();
+
+  /**
+   * Returns the meta object for the map '{@link org.eclipse.oomph.setup.LocationCatalog#getWorkspaces <em>Workspaces</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the map '<em>Workspaces</em>'.
+   * @see org.eclipse.oomph.setup.LocationCatalog#getWorkspaces()
+   * @see #getLocationCatalog()
+   * @generated
+   */
+  EReference getLocationCatalog_Workspaces();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.RedirectionTask <em>Redirection Task</em>}'.
@@ -4981,6 +5192,58 @@ public interface SetupPackage extends EPackage
     EAttribute PROJECT_TO_STREAM_MAP_ENTRY__SELECTION = eINSTANCE.getProjectToStreamMapEntry_Selection();
 
     /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.InstallationToWorkspacesMapEntryImpl <em>Installation To Workspaces Map Entry</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.InstallationToWorkspacesMapEntryImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getInstallationToWorkspacesMapEntry()
+     * @generated
+     */
+    EClass INSTALLATION_TO_WORKSPACES_MAP_ENTRY = eINSTANCE.getInstallationToWorkspacesMapEntry();
+
+    /**
+     * The meta object literal for the '<em><b>Key</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INSTALLATION_TO_WORKSPACES_MAP_ENTRY__KEY = eINSTANCE.getInstallationToWorkspacesMapEntry_Key();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INSTALLATION_TO_WORKSPACES_MAP_ENTRY__VALUE = eINSTANCE.getInstallationToWorkspacesMapEntry_Value();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.WorkspaceToInstallationsMapEntryImpl <em>Workspace To Installations Map Entry</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.WorkspaceToInstallationsMapEntryImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getWorkspaceToInstallationsMapEntry()
+     * @generated
+     */
+    EClass WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY = eINSTANCE.getWorkspaceToInstallationsMapEntry();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__VALUE = eINSTANCE.getWorkspaceToInstallationsMapEntry_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Key</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__KEY = eINSTANCE.getWorkspaceToInstallationsMapEntry_Key();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.StringSubstitutionTaskImpl <em>String Substitution Task</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5059,6 +5322,32 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute ATTRIBUTE_RULE__VALUE = eINSTANCE.getAttributeRule_Value();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.LocationCatalogImpl <em>Location Catalog</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.LocationCatalogImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLocationCatalog()
+     * @generated
+     */
+    EClass LOCATION_CATALOG = eINSTANCE.getLocationCatalog();
+
+    /**
+     * The meta object literal for the '<em><b>Installations</b></em>' map feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LOCATION_CATALOG__INSTALLATIONS = eINSTANCE.getLocationCatalog_Installations();
+
+    /**
+     * The meta object literal for the '<em><b>Workspaces</b></em>' map feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LOCATION_CATALOG__WORKSPACES = eINSTANCE.getLocationCatalog_Workspaces();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.RedirectionTaskImpl <em>Redirection Task</em>}' class.

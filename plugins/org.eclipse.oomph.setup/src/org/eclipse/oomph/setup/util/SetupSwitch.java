@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LinkLocationTask;
+import org.eclipse.oomph.setup.LocationCatalog;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -43,6 +44,7 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -384,6 +386,16 @@ public class SetupSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case SetupPackage.LOCATION_CATALOG:
+      {
+        LocationCatalog locationCatalog = (LocationCatalog)theEObject;
+        T result = caseLocationCatalog(locationCatalog);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       case SetupPackage.INSTALLATION:
       {
         Installation installation = (Installation)theEObject;
@@ -692,6 +704,28 @@ public class SetupSwitch<T> extends Switch<T>
         @SuppressWarnings("unchecked")
         Map.Entry<Project, Stream> projectToStreamMapEntry = (Map.Entry<Project, Stream>)theEObject;
         T result = caseProjectToStreamMapEntry(projectToStreamMapEntry);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case SetupPackage.INSTALLATION_TO_WORKSPACES_MAP_ENTRY:
+      {
+        @SuppressWarnings("unchecked")
+        Map.Entry<Installation, EList<Workspace>> installationToWorkspacesMapEntry = (Map.Entry<Installation, EList<Workspace>>)theEObject;
+        T result = caseInstallationToWorkspacesMapEntry(installationToWorkspacesMapEntry);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case SetupPackage.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY:
+      {
+        @SuppressWarnings("unchecked")
+        Map.Entry<Workspace, EList<Installation>> workspaceToInstallationsMapEntry = (Map.Entry<Workspace, EList<Installation>>)theEObject;
+        T result = caseWorkspaceToInstallationsMapEntry(workspaceToInstallationsMapEntry);
         if (result == null)
         {
           result = defaultCase(theEObject);
@@ -1088,6 +1122,38 @@ public class SetupSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Installation To Workspaces Map Entry</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Installation To Workspaces Map Entry</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseInstallationToWorkspacesMapEntry(Map.Entry<Installation, EList<Workspace>> object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Workspace To Installations Map Entry</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Workspace To Installations Map Entry</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWorkspaceToInstallationsMapEntry(Map.Entry<Workspace, EList<Installation>> object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Model Element</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1147,6 +1213,22 @@ public class SetupSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseAttributeRule(AttributeRule object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Location Catalog</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Location Catalog</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseLocationCatalog(LocationCatalog object)
   {
     return null;
   }

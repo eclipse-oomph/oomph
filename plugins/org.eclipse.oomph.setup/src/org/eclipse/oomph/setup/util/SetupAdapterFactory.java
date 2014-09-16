@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LinkLocationTask;
+import org.eclipse.oomph.setup.LocationCatalog;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -46,6 +47,7 @@ import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import java.util.Map;
@@ -197,6 +199,12 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseLocationCatalog(LocationCatalog object)
+    {
+      return createLocationCatalogAdapter();
+    }
+
+    @Override
     public Adapter caseInstallation(Installation object)
     {
       return createInstallationAdapter();
@@ -302,6 +310,18 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
     public Adapter caseProjectToStreamMapEntry(Map.Entry<Project, Stream> object)
     {
       return createProjectToStreamMapEntryAdapter();
+    }
+
+    @Override
+    public Adapter caseInstallationToWorkspacesMapEntry(Map.Entry<Installation, EList<Workspace>> object)
+    {
+      return createInstallationToWorkspacesMapEntryAdapter();
+    }
+
+    @Override
+    public Adapter caseWorkspaceToInstallationsMapEntry(Map.Entry<Workspace, EList<Installation>> object)
+    {
+      return createWorkspaceToInstallationsMapEntryAdapter();
     }
 
     @Override
@@ -617,6 +637,36 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Installation To Workspaces Map Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see java.util.Map.Entry
+   * @generated
+   */
+  public Adapter createInstallationToWorkspacesMapEntryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Workspace To Installations Map Entry</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see java.util.Map.Entry
+   * @generated
+   */
+  public Adapter createWorkspaceToInstallationsMapEntryAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.oomph.base.ModelElement <em>Model Element</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -672,6 +722,21 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createAttributeRuleAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.LocationCatalog <em>Location Catalog</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.LocationCatalog
+   * @generated
+   */
+  public Adapter createLocationCatalogAdapter()
   {
     return null;
   }

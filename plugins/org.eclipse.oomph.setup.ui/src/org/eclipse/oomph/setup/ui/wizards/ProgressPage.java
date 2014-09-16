@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.UnsignedPolicy;
@@ -40,6 +41,7 @@ import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -583,8 +585,8 @@ public class ProgressPage extends SetupWizardPage
                 final AtomicBoolean disableCancelButton = new AtomicBoolean(true);
                 final SetupWizard wizard = getWizard();
 
-                final boolean restart = restartReasons != null && !restartReasons.isEmpty();
-                if (restart && trigger != Trigger.BOOTSTRAP)
+                final boolean restart = restartReasons != null && !restartReasons.isEmpty() && trigger != Trigger.BOOTSTRAP;
+                if (restart)
                 {
                   progressLog.log("A restart is needed for the following reasons:");
                   for (String reason : restartReasons)
@@ -783,7 +785,8 @@ public class ProgressPage extends SetupWizardPage
   private void saveLocalFiles(SetupTaskPerformer performer)
   {
     User performerUser = performer.getUser();
-    final User user = SetupContext.createUserOnly(SetupUtil.createResourceSet()).getUser();
+    ResourceSet resourceSet = SetupUtil.createResourceSet();
+    User user = SetupContext.createUserOnly(resourceSet).getUser();
 
     boolean shouldSave = user.getAcceptedLicenses().addAll(performerUser.getAcceptedLicenses());
     UnsignedPolicy userUnsignedPolicy = user.getUnsignedPolicy();
@@ -800,12 +803,15 @@ public class ProgressPage extends SetupWizardPage
     }
 
     SetupContext setupContext = getWizard().getSetupContext();
-    BaseUtil.saveEObject(setupContext.getInstallation());
+    Installation installation = setupContext.getInstallation();
+    BaseUtil.saveEObject(installation);
     Workspace workspace = setupContext.getWorkspace();
     if (workspace != null)
     {
       BaseUtil.saveEObject(workspace);
     }
+
+    SetupContext.associate(installation, workspace);
   }
 
   private void setButtonState(int buttonID, boolean enabled)

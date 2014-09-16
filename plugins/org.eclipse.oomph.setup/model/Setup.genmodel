@@ -142,6 +142,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//AttributeRule/attributeURI"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//AttributeRule/value"/>
     </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//LocationCatalog">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//LocationCatalog/installations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//LocationCatalog/workspaces"/>
+    </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Installation">
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Installation/productVersion"/>
     </genClasses>
@@ -218,6 +222,16 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectToStreamMapEntry/key"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectToStreamMapEntry/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ProjectToStreamMapEntry/selection"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//InstallationToWorkspacesMapEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//InstallationToWorkspacesMapEntry/key"/>
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference Setup.ecore#//InstallationToWorkspacesMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//WorkspaceToInstallationsMapEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//WorkspaceToInstallationsMapEntry/key"/>
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference Setup.ecore#//WorkspaceToInstallationsMapEntry/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

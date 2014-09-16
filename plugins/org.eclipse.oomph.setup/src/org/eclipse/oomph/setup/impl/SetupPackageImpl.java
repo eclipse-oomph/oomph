@@ -20,6 +20,7 @@ import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.LinkLocationTask;
+import org.eclipse.oomph.setup.LocationCatalog;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -207,6 +208,20 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass installationToWorkspacesMapEntryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass workspaceToInstallationsMapEntryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass stringSubstitutionTaskEClass = null;
 
   /**
@@ -229,6 +244,13 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   private EClass attributeRuleEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass locationCatalogEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1119,6 +1141,66 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getInstallationToWorkspacesMapEntry()
+  {
+    return installationToWorkspacesMapEntryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInstallationToWorkspacesMapEntry_Key()
+  {
+    return (EReference)installationToWorkspacesMapEntryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInstallationToWorkspacesMapEntry_Value()
+  {
+    return (EReference)installationToWorkspacesMapEntryEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getWorkspaceToInstallationsMapEntry()
+  {
+    return workspaceToInstallationsMapEntryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWorkspaceToInstallationsMapEntry_Value()
+  {
+    return (EReference)workspaceToInstallationsMapEntryEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWorkspaceToInstallationsMapEntry_Key()
+  {
+    return (EReference)workspaceToInstallationsMapEntryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getStringSubstitutionTask()
   {
     return stringSubstitutionTaskEClass;
@@ -1202,6 +1284,36 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   public EAttribute getAttributeRule_Value()
   {
     return (EAttribute)attributeRuleEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getLocationCatalog()
+  {
+    return locationCatalogEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getLocationCatalog_Installations()
+  {
+    return (EReference)locationCatalogEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getLocationCatalog_Workspaces()
+  {
+    return (EReference)locationCatalogEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1684,6 +1796,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(attributeRuleEClass, ATTRIBUTE_RULE__ATTRIBUTE_URI);
     createEAttribute(attributeRuleEClass, ATTRIBUTE_RULE__VALUE);
 
+    locationCatalogEClass = createEClass(LOCATION_CATALOG);
+    createEReference(locationCatalogEClass, LOCATION_CATALOG__INSTALLATIONS);
+    createEReference(locationCatalogEClass, LOCATION_CATALOG__WORKSPACES);
+
     installationEClass = createEClass(INSTALLATION);
     createEReference(installationEClass, INSTALLATION__PRODUCT_VERSION);
 
@@ -1760,6 +1876,14 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEReference(projectToStreamMapEntryEClass, PROJECT_TO_STREAM_MAP_ENTRY__KEY);
     createEReference(projectToStreamMapEntryEClass, PROJECT_TO_STREAM_MAP_ENTRY__VALUE);
     createEAttribute(projectToStreamMapEntryEClass, PROJECT_TO_STREAM_MAP_ENTRY__SELECTION);
+
+    installationToWorkspacesMapEntryEClass = createEClass(INSTALLATION_TO_WORKSPACES_MAP_ENTRY);
+    createEReference(installationToWorkspacesMapEntryEClass, INSTALLATION_TO_WORKSPACES_MAP_ENTRY__KEY);
+    createEReference(installationToWorkspacesMapEntryEClass, INSTALLATION_TO_WORKSPACES_MAP_ENTRY__VALUE);
+
+    workspaceToInstallationsMapEntryEClass = createEClass(WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY);
+    createEReference(workspaceToInstallationsMapEntryEClass, WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__KEY);
+    createEReference(workspaceToInstallationsMapEntryEClass, WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__VALUE);
 
     // Create enums
     scopeTypeEEnum = createEEnum(SCOPE_TYPE);
@@ -1974,6 +2098,12 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEAttribute(getAttributeRule_Value(), ecorePackage.getEString(), "value", null, 1, 1, AttributeRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(locationCatalogEClass, LocationCatalog.class, "LocationCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getLocationCatalog_Installations(), getInstallationToWorkspacesMapEntry(), null, "installations", null, 0, -1, LocationCatalog.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLocationCatalog_Workspaces(), getWorkspaceToInstallationsMapEntry(), null, "workspaces", null, 0, -1, LocationCatalog.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(installationEClass, Installation.class, "Installation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInstallation_ProductVersion(), getProductVersion(), null, "productVersion", null, 1, 1, Installation.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2093,6 +2223,20 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEAttribute(getProjectToStreamMapEntry_Selection(), ecorePackage.getEBoolean(), "selection", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(installationToWorkspacesMapEntryEClass, Map.Entry.class, "InstallationToWorkspacesMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+        !IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getInstallationToWorkspacesMapEntry_Key(), getInstallation(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInstallationToWorkspacesMapEntry_Value(), getWorkspace(), null, "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(workspaceToInstallationsMapEntryEClass, Map.Entry.class, "WorkspaceToInstallationsMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+        !IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getWorkspaceToInstallationsMapEntry_Key(), getWorkspace(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getWorkspaceToInstallationsMapEntry_Value(), getInstallation(), null, "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     // Initialize enums and add enum literals
     initEEnum(scopeTypeEEnum, ScopeType.class, "ScopeType");
     addEEnumLiteral(scopeTypeEEnum, ScopeType.NONE);
@@ -2195,6 +2339,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getProject_Streams(), source, new String[] { "name", "stream" });
     addAnnotation(getUser_AttributeRules(), source, new String[] { "name", "attributeRule" });
     addAnnotation(getUser_AcceptedLicenses(), source, new String[] { "name", "acceptedLicense" });
+    addAnnotation(getLocationCatalog_Installations(), source, new String[] { "name", "installation" });
+    addAnnotation(getLocationCatalog_Workspaces(), source, new String[] { "name", "workspace" });
     addAnnotation(getWorkspace_Streams(), source, new String[] { "name", "stream" });
     addAnnotation(getVariableTask_Choices(), source, new String[] { "name", "choice" });
     addAnnotation(getTextModifyTask_URL(), source, new String[] { "kind", "attribute", "name", "url" });

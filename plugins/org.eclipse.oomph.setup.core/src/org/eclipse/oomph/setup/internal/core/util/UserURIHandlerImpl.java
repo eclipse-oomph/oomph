@@ -94,7 +94,9 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public boolean exists(URI uri, Map<?, ?> options)
   {
-    return true;
+    URI normalizedURI = SetupContext.resolveUser(uri);
+    URIConverter uriConverter = getURIConverter(options);
+    return uriConverter.exists(normalizedURI, options);
   }
 
   @Override

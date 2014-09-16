@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.LinkLocationTask;
+import org.eclipse.oomph.setup.LocationCatalog;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -45,6 +46,7 @@ import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -127,6 +129,8 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return createUser();
       case SetupPackage.ATTRIBUTE_RULE:
         return createAttributeRule();
+      case SetupPackage.LOCATION_CATALOG:
+        return createLocationCatalog();
       case SetupPackage.INSTALLATION:
         return createInstallation();
       case SetupPackage.INSTALLATION_TASK:
@@ -163,6 +167,10 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return (EObject)createProductToProductVersionMapEntry();
       case SetupPackage.PROJECT_TO_STREAM_MAP_ENTRY:
         return (EObject)createProjectToStreamMapEntry();
+      case SetupPackage.INSTALLATION_TO_WORKSPACES_MAP_ENTRY:
+        return (EObject)createInstallationToWorkspacesMapEntry();
+      case SetupPackage.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY:
+        return (EObject)createWorkspaceToInstallationsMapEntry();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -457,6 +465,28 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public Map.Entry<Installation, EList<Workspace>> createInstallationToWorkspacesMapEntry()
+  {
+    InstallationToWorkspacesMapEntryImpl installationToWorkspacesMapEntry = new InstallationToWorkspacesMapEntryImpl();
+    return installationToWorkspacesMapEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Map.Entry<Workspace, EList<Installation>> createWorkspaceToInstallationsMapEntry()
+  {
+    WorkspaceToInstallationsMapEntryImpl workspaceToInstallationsMapEntry = new WorkspaceToInstallationsMapEntryImpl();
+    return workspaceToInstallationsMapEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public StringSubstitutionTask createStringSubstitutionTask()
   {
     StringSubstitutionTaskImpl stringSubstitutionTask = new StringSubstitutionTaskImpl();
@@ -497,6 +527,17 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
   {
     AttributeRuleImpl attributeRule = new AttributeRuleImpl();
     return attributeRule;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public LocationCatalog createLocationCatalog()
+  {
+    LocationCatalogImpl locationCatalog = new LocationCatalogImpl();
+    return locationCatalog;
   }
 
   /**

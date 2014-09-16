@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.core;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.LocationCatalog;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -23,11 +24,14 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -35,6 +39,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -46,8 +51,10 @@ import org.eclipse.osgi.service.datalocation.Location;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author Eike Stepper
@@ -124,6 +131,8 @@ public class SetupContext
 
   public static final URI CATALOG_SELECTION_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("catalogs.setup");
 
+  public static final URI LOCATION_CATALOG_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("locations.setup");
+
   private static volatile SetupContext self = new SetupContext();
 
   // static creation methods
@@ -195,20 +204,34 @@ public class SetupContext
 
   public static SetupContext createSelf(ResourceSet resourceSet)
   {
-    Installation installation = getInstallation(resourceSet, true, false);
-    Workspace workspace = getWorkspace(resourceSet, true, false);
+    Installation installation = getInstallation(resourceSet, true, Mode.CREATE_AND_SAVE);
+    Workspace workspace = getWorkspace(resourceSet, true, Mode.CREATE_AND_SAVE);
+
+    Installation effectiveInstallation = null;
+    URI uri = installation.eResource().getURI();
+    if (uri.segmentCount() > 3)
+    {
+      URI executable = uri.trimSegments(3).appendSegments(URI.createURI(OS.INSTANCE.getEclipseExecutable()).segments());
+      if (resourceSet.getURIConverter().exists(executable, null))
+      {
+        effectiveInstallation = installation;
+      }
+    }
+
+    SetupContext.associate(effectiveInstallation, workspace);
+
     User user = getUser(resourceSet, false);
     return createSelf(installation, workspace, user);
   }
 
   public static SetupContext createInstallationAndUser(ResourceSet resourceSet)
   {
-    return new SetupContext(getInstallation(resourceSet, true, true), null, getUser(resourceSet, true));
+    return new SetupContext(getInstallation(resourceSet, true, Mode.CREATE), null, getUser(resourceSet, true));
   }
 
   public static SetupContext create(ResourceSet resourceSet)
   {
-    return new SetupContext(getInstallation(resourceSet, true, true), getWorkspace(resourceSet, true, true), getUser(resourceSet, true));
+    return new SetupContext(getInstallation(resourceSet, true, Mode.CREATE), getWorkspace(resourceSet, true, Mode.CREATE), getUser(resourceSet, true));
   }
 
   public static SetupContext createUserOnly(ResourceSet resourceSet)
@@ -218,9 +241,9 @@ public class SetupContext
 
   public static SetupContext create(ResourceSet resourceSet, ProductVersion productVersion)
   {
-    Installation installation = getInstallation(resourceSet, false, true);
+    Installation installation = getInstallation(resourceSet, false, Mode.CREATE);
     installation.setProductVersion(productVersion);
-    return new SetupContext(installation, getWorkspace(resourceSet, false, false), getUser(resourceSet, true));
+    return new SetupContext(installation, getWorkspace(resourceSet, false, Mode.NONE), getUser(resourceSet, true));
   }
 
   public static SetupContext create(ProductVersion productVersion, Stream stream)
@@ -307,6 +330,135 @@ public class SetupContext
     return installation;
   }
 
+  public static void associate(final Installation installation, final Workspace workspace)
+  {
+    final ResourceSet resourceSet = SetupUtil.createResourceSet();
+    URIConverter uriConverter = resourceSet.getURIConverter();
+    BaseUtil.execute(5000, new Runnable()
+    {
+      public void run()
+      {
+        associate(resourceSet, installation, workspace);
+      }
+    }, uriConverter, LOCATION_CATALOG_SETUP_URI, installation == null ? null : installation.eResource().getURI(), workspace == null ? null : workspace
+        .eResource().getURI());
+  }
+
+  private static void associate(ResourceSet resourceSet, Installation installation, Workspace workspace)
+  {
+    URIConverter uriConverter = resourceSet.getURIConverter();
+
+    Resource resource;
+    if (uriConverter.exists(LOCATION_CATALOG_SETUP_URI, null))
+    {
+      resource = BaseUtil.loadResourceSafely(resourceSet, LOCATION_CATALOG_SETUP_URI);
+    }
+    else
+    {
+      resource = resourceSet.createResource(LOCATION_CATALOG_SETUP_URI);
+    }
+
+    EList<EObject> contents = resource.getContents();
+    LocationCatalog locationCatalog = (LocationCatalog)EcoreUtil.getObjectByType(contents, SetupPackage.Literals.LOCATION_CATALOG);
+    if (locationCatalog == null)
+    {
+      locationCatalog = SetupFactory.eINSTANCE.createLocationCatalog();
+      contents.add(locationCatalog);
+    }
+
+    EMap<Installation, EList<Workspace>> installations = locationCatalog.getInstallations();
+    removeProxies(installations);
+
+    EMap<Workspace, EList<Installation>> workspaces = locationCatalog.getWorkspaces();
+    removeProxies(workspaces);
+
+    Installation localInstallation = installation == null ? null : (Installation)resourceSet.getEObject(EcoreUtil.getURI(installation), true);
+    Workspace localWorkspace = workspace == null ? null : (Workspace)resourceSet.getEObject(EcoreUtil.getURI(workspace), true);
+
+    if (installation != null)
+    {
+      int installationEntryIndex = installations.indexOfKey(localInstallation);
+      if (installationEntryIndex == -1)
+      {
+        installations.put(localInstallation, localWorkspace == null ? ECollections.<Workspace> emptyEList() : ECollections.singletonEList(localWorkspace));
+        installations.move(0, installations.size() - 1);
+      }
+      else if (localWorkspace != null)
+      {
+        EList<Workspace> associatedWorkspaces = installations.get(installationEntryIndex).getValue();
+        int position = associatedWorkspaces.indexOf(localWorkspace);
+        if (position == -1)
+        {
+          associatedWorkspaces.add(0, localWorkspace);
+        }
+        else
+        {
+          associatedWorkspaces.move(0, position);
+        }
+
+        installations.move(0, installationEntryIndex);
+      }
+    }
+
+    if (localWorkspace != null)
+    {
+      int workspaceEntryIndex = workspaces.indexOfKey(localWorkspace);
+      if (workspaceEntryIndex == -1)
+      {
+        workspaces.put(localWorkspace, localInstallation == null ? ECollections.<Installation> emptyEList() : ECollections.singletonEList(localInstallation));
+        workspaces.move(0, workspaces.size() - 1);
+      }
+      else if (localInstallation != null)
+      {
+        EList<Installation> associatedInstallations = workspaces.get(workspaceEntryIndex).getValue();
+        int position = associatedInstallations.indexOf(localInstallation);
+        if (position == -1)
+        {
+          associatedInstallations.add(0, localInstallation);
+        }
+        else
+        {
+          associatedInstallations.move(0, position);
+        }
+
+        workspaces.move(0, workspaceEntryIndex);
+      }
+    }
+
+    try
+    {
+      resource.save(null);
+    }
+    catch (IOException ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
+  }
+
+  private static <K extends EObject, V extends EObject> void removeProxies(EMap<K, EList<V>> map)
+  {
+    for (Iterator<Entry<K, EList<V>>> it = map.iterator(); it.hasNext();)
+    {
+      Entry<K, EList<V>> entry = it.next();
+      K key = entry.getKey();
+      if (key == null || key.eIsProxy())
+      {
+        it.remove();
+      }
+      else
+      {
+        for (Iterator<V> it2 = entry.getValue().iterator(); it2.hasNext();)
+        {
+          V value = it2.next();
+          if (value.eIsProxy())
+          {
+            it2.remove();
+          }
+        }
+      }
+    }
+  }
+
   private static URI getStaticInstallLocation()
   {
     try
@@ -345,7 +497,12 @@ public class SetupContext
     }
   }
 
-  private static Installation getInstallation(ResourceSet resourceSet, boolean realInstallation, boolean demandCreate)
+  private enum Mode
+  {
+    NONE, CREATE, CREATE_AND_SAVE
+  }
+
+  private static Installation getInstallation(ResourceSet resourceSet, boolean realInstallation, Mode mode)
   {
     Installation installation = null;
     Resource installationResource = null;
@@ -366,7 +523,8 @@ public class SetupContext
       }
     }
 
-    if (installation == null && demandCreate)
+    boolean save = false;
+    if (installation == null && mode != Mode.NONE)
     {
       if (installationResource == null)
       {
@@ -379,6 +537,8 @@ public class SetupContext
 
       installation = createInstallation();
       installationResource.getContents().add(installation);
+
+      save = mode == Mode.CREATE_AND_SAVE;
     }
 
     if (realInstallation && installation != null && installation.getProductVersion() == null)
@@ -411,12 +571,17 @@ public class SetupContext
       }
 
       installation.setProductVersion(versions.get(0));
+
+      if (save)
+      {
+        BaseUtil.saveEObject(installation);
+      }
     }
 
     return installation;
   }
 
-  private static Workspace getWorkspace(ResourceSet resourceSet, boolean realWorkspace, boolean demandCreate)
+  private static Workspace getWorkspace(ResourceSet resourceSet, boolean realWorkspace, Mode mode)
   {
     Resource workspaceResource = null;
     Workspace workspace = null;
@@ -437,7 +602,7 @@ public class SetupContext
       }
     }
 
-    if (workspace == null && demandCreate)
+    if (workspace == null && mode != Mode.NONE)
     {
       if (workspaceResource == null)
       {
@@ -450,6 +615,11 @@ public class SetupContext
 
       workspace = createWorkspace();
       workspaceResource.getContents().add(workspace);
+
+      if (mode == Mode.CREATE_AND_SAVE)
+      {
+        BaseUtil.saveEObject(workspace);
+      }
     }
 
     return workspace;

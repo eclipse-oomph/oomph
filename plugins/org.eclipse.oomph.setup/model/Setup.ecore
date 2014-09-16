@@ -203,6 +203,20 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeURI" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocationCatalog">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="installations" upperBound="-1"
+        eType="#//InstallationToWorkspacesMapEntry" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="installation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workspaces" upperBound="-1"
+        eType="#//WorkspaceToInstallationsMapEntry" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="workspace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Installation" eSuperTypes="#//Scope">
     <eStructuralFeatures xsi:type="ecore:EReference" name="productVersion" lowerBound="1"
         eType="#//ProductVersion"/>
@@ -416,6 +430,16 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="selection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstallationToWorkspacesMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="#//Installation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//Workspace"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkspaceToInstallationsMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="#//Workspace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//Installation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ScopeType">
     <eLiterals name="None"/>

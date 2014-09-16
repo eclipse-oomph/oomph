@@ -577,6 +577,56 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory impleme
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected InstallationToWorkspacesMapEntryItemProvider installationToWorkspacesMapEntryItemProvider;
+
+  /**
+   * This creates an adapter for a {@link java.util.Map.Entry}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createInstallationToWorkspacesMapEntryAdapter()
+  {
+    if (installationToWorkspacesMapEntryItemProvider == null)
+    {
+      installationToWorkspacesMapEntryItemProvider = new InstallationToWorkspacesMapEntryItemProvider(this);
+    }
+
+    return installationToWorkspacesMapEntryItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected WorkspaceToInstallationsMapEntryItemProvider workspaceToInstallationsMapEntryItemProvider;
+
+  /**
+   * This creates an adapter for a {@link java.util.Map.Entry}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createWorkspaceToInstallationsMapEntryAdapter()
+  {
+    if (workspaceToInstallationsMapEntryItemProvider == null)
+    {
+      workspaceToInstallationsMapEntryItemProvider = new WorkspaceToInstallationsMapEntryItemProvider(this);
+    }
+
+    return workspaceToInstallationsMapEntryItemProvider;
+  }
+
+  /**
    * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.StringSubstitutionTask} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -624,6 +674,31 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory impleme
     }
 
     return attributeRuleItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.LocationCatalog} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected LocationCatalogItemProvider locationCatalogItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.LocationCatalog}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createLocationCatalogAdapter()
+  {
+    if (locationCatalogItemProvider == null)
+    {
+      locationCatalogItemProvider = new LocationCatalogItemProvider(this);
+    }
+
+    return locationCatalogItemProvider;
   }
 
   /**
@@ -982,6 +1057,10 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory impleme
     {
       attributeRuleItemProvider.dispose();
     }
+    if (locationCatalogItemProvider != null)
+    {
+      locationCatalogItemProvider.dispose();
+    }
     if (installationItemProvider != null)
     {
       installationItemProvider.dispose();
@@ -1053,6 +1132,14 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory impleme
     if (projectToStreamMapEntryItemProvider != null)
     {
       projectToStreamMapEntryItemProvider.dispose();
+    }
+    if (installationToWorkspacesMapEntryItemProvider != null)
+    {
+      installationToWorkspacesMapEntryItemProvider.dispose();
+    }
+    if (workspaceToInstallationsMapEntryItemProvider != null)
+    {
+      workspaceToInstallationsMapEntryItemProvider.dispose();
     }
   }
 
@@ -1128,6 +1215,8 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory impleme
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createAttributeRule()));
 
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createLocationCatalog()));
+
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createInstallation()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createInstallationTask()));
@@ -1165,6 +1254,12 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory impleme
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
             SetupFactory.eINSTANCE.create(SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY)));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
+            SetupFactory.eINSTANCE.create(SetupPackage.Literals.INSTALLATION_TO_WORKSPACES_MAP_ENTRY)));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
+            SetupFactory.eINSTANCE.create(SetupPackage.Literals.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY)));
 
         return null;
       }

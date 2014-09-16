@@ -204,6 +204,15 @@ public interface SetupFactory extends EFactory
   AttributeRule createAttributeRule();
 
   /**
+   * Returns a new object of class '<em>Location Catalog</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Location Catalog</em>'.
+   * @generated
+   */
+  LocationCatalog createLocationCatalog();
+
+  /**
    * Returns a new object of class '<em>Redirection Task</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

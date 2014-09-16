@@ -606,31 +606,35 @@ public class ProjectPage extends SetupWizardPage
   @Override
   protected void createCheckButtons()
   {
-    skipButton = addCheckButton("Skip Project Selection", "Enable the Next button to proceed without provisioning projects", false, "skipButton");
-    skipButton.addSelectionListener(new SelectionAdapter()
+    if (existingStreams.isEmpty())
     {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      skipButton = addCheckButton("Skip Project Selection", "Enable the Next button to proceed without provisioning projects", false, "skipButton");
+      skipButton.addSelectionListener(new SelectionAdapter()
       {
-        Workspace workspace = getWorkspace();
-        if (skipButton.getSelection())
+        @Override
+        public void widgetSelected(SelectionEvent e)
         {
-          if (workspace != null)
+          Workspace workspace = getWorkspace();
+          if (skipButton.getSelection())
           {
-            streamViewer.setSelection(new StructuredSelection(workspace.getStreams()));
+            if (workspace != null)
+            {
+              streamViewer.setSelection(new StructuredSelection(workspace.getStreams()));
+            }
+
+            removeSelectedStreams();
+            getWizard().setSetupContext(SetupContext.create(getInstallation(), (Workspace)null, getUser()));
+            setPageComplete(true);
           }
-
-          removeSelectedStreams();
-          setPageComplete(true);
+          else
+          {
+            setPageComplete(workspace != null && workspace.getStreams().size() != existingStreams.size());
+          }
         }
-        else
-        {
-          setPageComplete(workspace != null && workspace.getStreams().size() != existingStreams.size());
-        }
-      }
-    });
+      });
 
-    setPageComplete(skipButton.getSelection());
+      setPageComplete(skipButton.getSelection());
+    }
   }
 
   @Override
@@ -798,7 +802,10 @@ public class ProjectPage extends SetupWizardPage
       projectViewer.update(addedProjects.toArray(), null);
 
       setPageComplete(true);
-      skipButton.setSelection(false);
+      if (skipButton != null)
+      {
+        skipButton.setSelection(false);
+      }
     }
   }
 
