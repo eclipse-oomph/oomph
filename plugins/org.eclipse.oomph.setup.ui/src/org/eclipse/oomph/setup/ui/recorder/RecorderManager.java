@@ -301,6 +301,7 @@ public final class RecorderManager
               }
 
               final Map<URI, String> values = recorder.done();
+              recorder = null;
 
               for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
               {
