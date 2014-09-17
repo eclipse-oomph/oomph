@@ -46,6 +46,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 
 import java.io.ByteArrayInputStream;
@@ -57,6 +58,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -244,19 +246,32 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     {
       String rootFolder = sourceLocator.getRootFolder();
       context.log("Importing projects from " + rootFolder);
+      MultiStatus childStatus = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, "Projects Import Analysis of '" + rootFolder + "'", null);
 
       try
       {
         ProjectHandler.Collector collector = new ProjectHandler.Collector();
-        sourceLocator.handleProjects(EclipseProjectFactory.LIST, collector, status, monitor);
-
-        Map<IProject, BackendContainer> projectMap = collector.getProjectMap();
-        for (Map.Entry<IProject, BackendContainer> entry : projectMap.entrySet())
+        sourceLocator.handleProjects(EclipseProjectFactory.LIST, collector, childStatus, monitor);
+        if (childStatus.getSeverity() >= IStatus.ERROR)
         {
-          backendContainers.put(entry.getValue(), entry.getKey());
+          status.add(childStatus);
         }
+        else
+        {
+          Map<IProject, BackendContainer> projectMap = collector.getProjectMap();
+          for (Map.Entry<IProject, BackendContainer> entry : projectMap.entrySet())
+          {
+            backendContainers.put(entry.getValue(), entry.getKey());
+          }
 
-        setProjects(sourceLocator, projectMap.keySet().toArray(new IProject[projectMap.size()]));
+          Set<IProject> projects = projectMap.keySet();
+          if (projects.isEmpty())
+          {
+            context.log("No projects were found");
+          }
+
+          setProjects(sourceLocator, projects.toArray(new IProject[projectMap.size()]));
+        }
       }
       catch (Exception ex)
       {
@@ -265,6 +280,8 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     }
 
     importProjects(backendContainers, monitor);
+
+    ProjectsPlugin.INSTANCE.coreException(status);
   }
 
   private IProject[] getProjects(SourceLocator sourceLocator)

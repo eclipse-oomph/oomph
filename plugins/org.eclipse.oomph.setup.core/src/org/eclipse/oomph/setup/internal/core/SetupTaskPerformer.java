@@ -2489,7 +2489,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (Boolean.TRUE.equals(autoBuilding))
       {
-        // Disable the PDE's API analsysis builder, if it's installed, and remember it's previously current state.
+        // Disable the PDE's API analysis builder, if it's installed, and remember its previously current state.
         // It's considered disabled if it's not installed at all.
         final boolean disabled = PDEAPIUtil.setDisableAPIAnalysisBuilder(true);
 

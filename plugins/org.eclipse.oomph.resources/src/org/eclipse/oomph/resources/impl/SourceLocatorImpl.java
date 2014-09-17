@@ -37,6 +37,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -511,7 +512,13 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
       final ProjectHandler projectHandler, final MultiStatus status, final IProgressMonitor monitor)
   {
     final BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(sourceLocator);
-    if (rootContainer != null)
+    if (rootContainer == null)
+    {
+      status
+          .add(new Status(IStatus.ERROR, ResourcesPlugin.INSTANCE.getSymbolicName(), "The root folder '" + sourceLocator.getRootFolder() + "' doesn't exist"));
+
+    }
+    else
     {
       rootContainer.accept(new BackendResource.Visitor.Default()
       {
