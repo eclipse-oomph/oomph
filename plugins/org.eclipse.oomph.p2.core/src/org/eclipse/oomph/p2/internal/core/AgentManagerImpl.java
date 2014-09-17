@@ -133,7 +133,7 @@ public class AgentManagerImpl implements AgentManager
       ((AgentImpl)agent).dispose();
     }
 
-    if (!currentAgentInMap)
+    if (!currentAgentInMap && currentAgent != null)
     {
       ((AgentImpl)currentAgent).dispose();
     }
