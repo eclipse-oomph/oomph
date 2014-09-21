@@ -8,14 +8,14 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package @PackageName@.provider;
+package @QualifiedPackageName@.provider;
 
-import @PackageName@.@TaskName@Task;
+import @QualifiedPackageName@.@TaskName@Task;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 
 /**
- * This is the item provider adapter for a {@link @PackageName@.@TaskName@Task} object.
+ * This is the item provider adapter for a {@link @QualifiedPackageName@.@TaskName@Task} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated

@@ -17,6 +17,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.oomph.resources;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.targlets;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.workingsets;bundle-version="[1.0.0,2.0.0)";visibility:=reexport
-Export-Package: @PackageName@;version="1.0.0",
- @PackageName@.impl;version="1.0.0",
- @PackageName@.util;version="1.0.0"
+Export-Package: @QualifiedPackageName@;version="1.0.0",
+ @QualifiedPackageName@.impl;version="1.0.0",
+ @QualifiedPackageName@.util;version="1.0.0"

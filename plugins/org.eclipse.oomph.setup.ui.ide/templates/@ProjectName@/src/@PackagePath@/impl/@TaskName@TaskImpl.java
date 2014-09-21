@@ -8,9 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package @PackageName@.impl;
+package @QualifiedPackageName@.impl;
 
-import @PackageName@.@TaskName@Task;
+import @QualifiedPackageName@.@TaskName@Task;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.SetupTaskContext;

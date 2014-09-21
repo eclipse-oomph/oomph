@@ -56,7 +56,7 @@ public class SetupTaskWizardPage extends WizardPage
 
   private Button containerLocationBrowseButton;
 
-  private Text packageNameText;
+  private Text qualifiedPackageNameText;
 
   private Text modelNameText;
 
@@ -144,13 +144,13 @@ public class SetupTaskWizardPage extends WizardPage
       }
     });
 
-    Label packageNameLabel = new Label(container, SWT.NULL);
-    packageNameLabel.setText("Package Name:");
-    packageNameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+    Label qualifiedPackageNameLabel = new Label(container, SWT.NULL);
+    qualifiedPackageNameLabel.setText("Package Name:");
+    qualifiedPackageNameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
-    packageNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
-    packageNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    packageNameText.setToolTipText("The Java package name in which the model interfaces will be generated.");
+    qualifiedPackageNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
+    qualifiedPackageNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    qualifiedPackageNameText.setToolTipText("The Java package name in which the model interfaces will be generated.");
 
     Label modelNameLabel = new Label(container, SWT.NONE);
     modelNameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
@@ -269,7 +269,7 @@ public class SetupTaskWizardPage extends WizardPage
     });
 
     listenTo(containerLocationText);
-    listenTo(packageNameText);
+    listenTo(qualifiedPackageNameText);
     listenTo(modelNameText);
     listenTo(taskNameText);
     listenTo(priorityText);
@@ -286,7 +286,7 @@ public class SetupTaskWizardPage extends WizardPage
   {
     String projectName = projectNameText.getText();
     String containerLocation = containerLocationText.getText();
-    String packageName = packageNameText.getText();
+    String qualifiedPackageName = qualifiedPackageNameText.getText();
     String modelName = modelNameText.getText();
     String taskName = taskNameText.getText();
     String formattedTaskName = CodeGenUtil.format(taskName, ' ', " ", false, false);
@@ -300,11 +300,11 @@ public class SetupTaskWizardPage extends WizardPage
     variables.put("@ProjectName@", projectName);
     variables.put("@ProjectURI@", getProjectURI(projectName));
     variables.put("@ContainerLocation@", containerLocation);
-    variables.put("@PackageName@", packageName);
-    variables.put("@PackagePath@", packageName.replace('.', '/'));
-    variables.put("@BasePackage@", getBasePackage(packageName));
+    variables.put("@QualifiedPackageName@", qualifiedPackageName);
+    variables.put("@PackageName@", getPackageName(qualifiedPackageName));
+    variables.put("@PackagePath@", qualifiedPackageName.replace('.', '/'));
+    variables.put("@BasePackage@", getBasePackage(qualifiedPackageName));
     variables.put("@ModelName@", modelName);
-    variables.put("@modelname@", modelName.toLowerCase());
     variables.put("@TaskName@", taskName);
     variables.put("@taskName@", StringUtil.uncap(taskName));
     variables.put("@Task Name@", formattedTaskName);
@@ -319,7 +319,7 @@ public class SetupTaskWizardPage extends WizardPage
     variables.put("@SchemaLocation@", schemaLocation);
     variables.put("@EnablementURL@", enablementURL);
     variables.put("@PublicationLocation@", publicationLocation);
-    variables.put("@ProviderName@", getProviderName(packageName));
+    variables.put("@ProviderName@", getProviderName(qualifiedPackageName));
     return variables;
   }
 
@@ -376,14 +376,14 @@ public class SetupTaskWizardPage extends WizardPage
     adjustContainerLocation();
 
     String value = projectNameText.getText();
-    if (lastValue == null || packageNameText.getText().equals(getPackageName(lastValue)))
+    if (lastValue == null || qualifiedPackageNameText.getText().equals(getQualifiedPackageName(lastValue)))
     {
-      packageNameText.setText(getPackageName(value));
+      qualifiedPackageNameText.setText(getQualifiedPackageName(value));
     }
 
-    if (lastValue == null || modelNameText.getText().equals(getModelName(getPackageName(lastValue))))
+    if (lastValue == null || modelNameText.getText().equals(getModelName(getQualifiedPackageName(lastValue))))
     {
-      modelNameText.setText(getModelName(getPackageName(value)));
+      modelNameText.setText(getModelName(getQualifiedPackageName(value)));
     }
 
     if (lastValue == null || taskNameText.getText().equals(getTaskName(lastValue)))
@@ -400,9 +400,9 @@ public class SetupTaskWizardPage extends WizardPage
     }
 
     if (lastValue == null
-        || schemaLocationText.getText().equals(getProjectURI(lastValue) + "/schemas/" + getModelName(getPackageName(lastValue)) + "-1.0.ecore"))
+        || schemaLocationText.getText().equals(getProjectURI(lastValue) + "/schemas/" + getModelName(getQualifiedPackageName(lastValue)) + "-1.0.ecore"))
     {
-      schemaLocationText.setText(uri + "/schemas/" + getModelName(getPackageName(value)) + "-1.0.ecore");
+      schemaLocationText.setText(uri + "/schemas/" + getModelName(getQualifiedPackageName(value)) + "-1.0.ecore");
     }
 
     if (lastValue == null || publicationLocationText.getText().equals(getPublicationLocation(lastValue)))
@@ -464,16 +464,16 @@ public class SetupTaskWizardPage extends WizardPage
       }
     }
 
-    String packageName = packageNameText.getText();
-    if (packageName.length() == 0)
+    String qualifiedPackageName = qualifiedPackageNameText.getText();
+    if (qualifiedPackageName.length() == 0)
     {
       updateStatus("Package name is empty.");
       return;
     }
 
-    if (!JavaConventions.validatePackageName(packageName, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5).isOK())
+    if (!JavaConventions.validatePackageName(qualifiedPackageName, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5).isOK())
     {
-      updateStatus("Package name '" + packageName + "' is not valid in Java.");
+      updateStatus("Package name '" + qualifiedPackageName + "' is not valid in Java.");
       return;
     }
 
@@ -602,29 +602,40 @@ public class SetupTaskWizardPage extends WizardPage
     return "http://" + host + ".example.org/" + projectName.replace('.', '/');
   }
 
-  private static String getBasePackage(String packageName)
+  private static String getPackageName(String qualifiedPackageName)
   {
-    int lastDot = packageName.lastIndexOf('.');
+    int lastDot = qualifiedPackageName.lastIndexOf('.');
     if (lastDot != -1)
     {
-      return packageName.substring(0, lastDot);
+      return qualifiedPackageName.substring(lastDot + 1);
+    }
+
+    return qualifiedPackageName;
+  }
+
+  private static String getBasePackage(String qualifiedPackageName)
+  {
+    int lastDot = qualifiedPackageName.lastIndexOf('.');
+    if (lastDot != -1)
+    {
+      return qualifiedPackageName.substring(0, lastDot);
     }
 
     return "";
   }
 
-  private static String getModelName(String packageName)
+  private static String getModelName(String qualifiedPackageName)
   {
-    int lastDot = packageName.lastIndexOf('.');
+    int lastDot = qualifiedPackageName.lastIndexOf('.');
     if (lastDot != -1)
     {
-      return StringUtil.cap(packageName.substring(lastDot + 1));
+      return StringUtil.cap(qualifiedPackageName.substring(lastDot + 1));
     }
 
-    return StringUtil.cap(packageName);
+    return StringUtil.cap(qualifiedPackageName);
   }
 
-  private static String getPackageName(String projectName)
+  private static String getQualifiedPackageName(String projectName)
   {
     return projectName.toLowerCase().replace(' ', '.');
   }
@@ -637,6 +648,6 @@ public class SetupTaskWizardPage extends WizardPage
 
   private static String getPublicationLocation(String projectName)
   {
-    return "/" + projectName + "/model/" + getModelName(getPackageName(projectName)) + "-1.0.ecore";
+    return "/" + projectName + "/model/" + getModelName(getQualifiedPackageName(projectName)) + "-1.0.ecore";
   }
 }

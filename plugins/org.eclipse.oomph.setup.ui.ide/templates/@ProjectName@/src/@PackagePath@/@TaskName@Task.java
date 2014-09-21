@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package @PackageName@;
+package @QualifiedPackageName@;
 
 import org.eclipse.oomph.setup.SetupTask;
 
