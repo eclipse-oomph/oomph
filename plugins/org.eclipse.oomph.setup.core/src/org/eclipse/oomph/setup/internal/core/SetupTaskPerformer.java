@@ -241,7 +241,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // This approach ensures that implicit variables for all tasks (even for untriggered tasks) are created with the right values.
     if (firstPhase)
     {
-      triggeredSetupTasks = new BasicEList<SetupTask>(getSetupTasks(stream, null));
+      triggeredSetupTasks = new BasicEList<SetupTask>(getSetupTasks(stream));
       bundles.add(SetupCorePlugin.INSTANCE.getBundle());
 
       // 1. Collect and flatten all tasks
@@ -673,7 +673,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         expandStrings(triggeredSetupTasks);
 
         flattenPredecessorsAndSuccessors(triggeredSetupTasks);
-        propagateRestrictionsAndFollows(triggeredSetupTasks);
+        propagateRestrictionsPredecessorsAndSuccessors(triggeredSetupTasks);
       }
 
       reorderSetupTasks(triggeredSetupTasks);
@@ -1202,7 +1202,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return null;
   }
 
-  public EList<SetupTask> getSetupTasks(Stream stream, Trigger trigger)
+  public EList<SetupTask> getSetupTasks(Stream stream)
   {
     User user = getUser();
     Installation installation = getInstallation();
@@ -1331,7 +1331,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        getSetupTasks(trigger, result, configurableItems, scope);
+        getSetupTasks(result, configurableItems, scope);
       }
     }
 
@@ -1360,16 +1360,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return variable;
   }
 
-  private void getSetupTasks(Trigger trigger, EList<SetupTask> setupTasks, List<Scope> configurableItems, SetupTaskContainer setupTaskContainer)
+  private void getSetupTasks(EList<SetupTask> setupTasks, List<Scope> configurableItems, SetupTaskContainer setupTaskContainer)
   {
     for (SetupTask setupTask : setupTaskContainer.getSetupTasks())
     {
       if (setupTask.isDisabled())
-      {
-        continue;
-      }
-
-      if (trigger != null && !setupTask.getTriggers().contains(trigger))
       {
         continue;
       }
@@ -1383,7 +1378,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       if (setupTask instanceof SetupTaskContainer)
       {
         SetupTaskContainer container = (SetupTaskContainer)setupTask;
-        getSetupTasks(trigger, setupTasks, configurableItems, container);
+        getSetupTasks(setupTasks, configurableItems, container);
       }
       else
       {
@@ -1714,7 +1709,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return result;
   }
 
-  private void propagateRestrictionsAndFollows(EList<SetupTask> setupTasks)
+  private void propagateRestrictionsPredecessorsAndSuccessors(EList<SetupTask> setupTasks)
   {
     for (SetupTask setupTask : setupTasks)
     {
@@ -1724,10 +1719,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         restrictions.addAll(((SetupTask)eContainer).getRestrictions());
       }
 
-      EList<SetupTask> preceders = setupTask.getPredecessors();
+      EList<SetupTask> predecessors = setupTask.getPredecessors();
       for (EObject eContainer = setupTask.eContainer(); eContainer instanceof SetupTask; eContainer = eContainer.eContainer())
       {
-        preceders.addAll(((SetupTask)eContainer).getPredecessors());
+        predecessors.addAll(((SetupTask)eContainer).getPredecessors());
+      }
+
+      EList<SetupTask> successors = setupTask.getSuccessors();
+      for (EObject eContainer = setupTask.eContainer(); eContainer instanceof SetupTask; eContainer = eContainer.eContainer())
+      {
+        successors.addAll(((SetupTask)eContainer).getSuccessors());
       }
     }
   }
