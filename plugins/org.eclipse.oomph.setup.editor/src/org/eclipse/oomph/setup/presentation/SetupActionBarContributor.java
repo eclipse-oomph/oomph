@@ -518,17 +518,32 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         if (mainResource != null)
         {
           ResourceSet resourceSet = mainResource.getResourceSet();
-          for (Resource resource : resourceSet == null ? Collections.singleton(mainResource) : resourceSet.getResources())
+          if (resourceSet == null)
           {
-            for (EObject root : resource.getContents())
+            gatherAllMetaData(mainResource);
+          }
+          else
+          {
+            // Allow for the resource set to grow as a result of proxy resolution.
+            EList<Resource> resources = resourceSet.getResources();
+            for (int i = 0; i < resources.size(); ++i)
             {
-              if (root instanceof EPackage)
-              {
-                gatherMetaData((EPackage)root);
-              }
+              gatherAllMetaData(resources.get(i));
             }
           }
         }
+      }
+
+      protected void gatherAllMetaData(Resource resource)
+      {
+        for (EObject root : resource.getContents())
+        {
+          if (root instanceof EPackage)
+          {
+            gatherMetaData((EPackage)root);
+          }
+        }
+
       }
     };
 
