@@ -42,6 +42,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -309,6 +310,24 @@ public final class IOUtil
       if (closeable != null)
       {
         closeable.close();
+      }
+
+      return null;
+    }
+    catch (Exception ex)
+    {
+      UtilPlugin.INSTANCE.log(ex);
+      return ex;
+    }
+  }
+
+  public static Exception closeSilent(Socket socket)
+  {
+    try
+    {
+      if (socket != null)
+      {
+        socket.close();
       }
 
       return null;
