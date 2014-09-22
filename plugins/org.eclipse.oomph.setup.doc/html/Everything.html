@@ -346,13 +346,13 @@ It is stored in a <a href="Everything.html#ProductCatalogResource" title="Chapte
 
 <a name="Product.example">
 For example,
- there is a product in the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>Eclipse</code></a> product catalog
+ there is a product in the <a href="Everything.html#ProductCatalog.example" title="Section in Oomph Setup Documentation">Eclipse</a> product catalog
  for each Eclipse <a href="http://www.eclipse.org/downloads/packages/release/Luna/R">package</a>.
 
 <a name="Product.self">
 In the case of a product that has Oomph installed,
  but wasn't actually <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installed</a> by Oomph,
- there always exists a synthetic so called self product in the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>self product catalog</code></a>
+ there always exists a synthetic so called self product in the <a href="Everything.html#ProductCatalog.self" title="Section in Oomph Setup Documentation">self product catalog</a>
  that contains a <a href="Everything.html#Version.self" title="Section in Oomph Setup Documentation">self product version</a>.
 
 <a name="Product.footer">
@@ -364,14 +364,14 @@ In the case of a product that has Oomph installed,
 
 <a name="Version.example">
 For example,
- there is a product version in the <a href="Everything.html#Product.example" title="Section in Oomph Setup Documentation">Eclipse Standard product</a> in the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>Eclipse product catalog</code></a>
+ there is a product version in the <a href="Everything.html#Product.example" title="Section in Oomph Setup Documentation">Eclipse Standard product</a> in the <a href="Everything.html#ProductCatalog.example" title="Section in Oomph Setup Documentation">Eclipse product catalog</a>
  for installing the Eclipse Standard <a href="https://www.eclipse.org/downloads/packages/eclipse-standard-44/lunar">Luna</a> package.
  </p>
 
 <a name="Version.self">
 In the case of a product that has Oomph installed
  but wasn't actually <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installed</a> by Oomph,
- there always exists a synthetic so called product version in the <a href="Everything.html#Product.self" title="Section in Oomph Setup Documentation">self product</a> int the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>self product catalog</code></a>.
+ there always exists a synthetic so called product version in the <a href="Everything.html#Product.self" title="Section in Oomph Setup Documentation">self product</a> int the <a href="Everything.html#ProductCatalog.self" title="Section in Oomph Setup Documentation">self product catalog</a>.
  It captures,
  via a <a href="Everything.html#P2" title="Chapter in Oomph Setup Documentation">p2 task</a>,
  all the information about the installable units that of that product installation
@@ -468,8 +468,8 @@ Projects can optionally contain <a href="../javadoc/org/eclipse/oomph/setup/Proj
 
 <h3><a name="Index"></a>3.1&nbsp;&nbsp;Index</h3>
 <p>
- An <a href="../javadoc/org/eclipse/oomph/setup/Index.html" title="Interface in org.eclipse.oomph.setup"><code>index</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalogs</code></a>
- as well as a <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getProjectCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>project catalogs</code></a>.
+ An <a href="../javadoc/org/eclipse/oomph/setup/Index.html" title="Interface in org.eclipse.oomph.setup"><code>index</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="Everything.html#ProductCatalog" title="Chapter in Oomph Setup Documentation">product catalogs</a>
+ as well as a <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getProjectCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="Everything.html#ProductCatalog" title="Chapter in Oomph Setup Documentation">project catalogs</a>.
  It also <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getDiscoverablePackages()" title="Method in org.eclipse.oomph.setup.Index"><code>provides access</code></a> to all task models.
  All available <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a> and <a href="Everything.html#Project" title="Chapter in Oomph Setup Documentation">projects</a> are reachable from the index.
  All the <a href="Everything.html#SetupWizard" title="Chapter in Oomph Setup Documentation">setup wizards</a> are driven by this information.
@@ -503,7 +503,7 @@ Projects can optionally contain <a href="../javadoc/org/eclipse/oomph/setup/Proj
  It maintains the following:
  <ul>
  <li>
- The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>selected subset</code></a> of the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a>'s available <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalogs</code></a> displayed in the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product page</a>.
+ The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>selected subset</code></a> of the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a>'s available <a href="Everything.html#ProductCatalog" title="Chapter in Oomph Setup Documentation">product catalogs</a> displayed in the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product page</a>.
  </li>
  The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getDefaultProductVersions()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>most recently selected</code></a> <a href="Everything.html#Version" title="Chapter in Oomph Setup Documentation">product version</a> of each <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">product</a> displayed in the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product product page</a>.
  </li>
@@ -536,7 +536,7 @@ Projects can optionally contain <a href="../javadoc/org/eclipse/oomph/setup/Proj
 
 <h4><a name="ProductCatalogResource"></a>4.1.1&nbsp;&nbsp;Product Catalogs</h4>
 <p>
- A product catalog resource maintains a <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalog</code></a>.
+ A product catalog resource maintains a <a href="Everything.html#ProductCatalog" title="Chapter in Oomph Setup Documentation">product catalog</a>.
  For example,
  the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.products.setup">Eclipse Products Catalog</a> resource
  contains all the products available at Eclipse,
@@ -645,7 +645,7 @@ The following process of collecting scopes is repeated once for each <a href="Ev
  as selected in the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product page</a> or in the <a href="Everything.html#Installation" title="Chapter in Oomph Setup Documentation">installation</a>.
  <ul>
  <li>
- Add that product version's containing <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a>'s containing <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalog</code></a> to the list.
+ Add that product version's containing <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a>'s containing <a href="Everything.html#ProductCatalog" title="Chapter in Oomph Setup Documentation">product catalog</a> to the list.
  Add that product version's containing product to the list.
  Add that product version itself to the list.
  </li>
@@ -857,7 +857,7 @@ The following process of collecting scopes is repeated once for each <a href="Ev
  For the initial phase processing,
  all the tasks are efficiently copied,
  including the copying of the containing scopes.
- The copying process takes the task-to-task TaskList#substitutions substitution map into account,
+ The copying process takes the task-to-task <a href="Everything.html#TaskList.substitutions" title="Section in Oomph Setup Documentation">substitution</a> map into account,
  i.e., each task is logically replaced in the copy by its <a href="Everything.html#Task.override" title="Section in Oomph Setup Documentation">merged override</a>.
  As such,
  only the final overridden merged task remains in the resulting task list copy
@@ -1139,7 +1139,7 @@ The following process of collecting scopes is repeated once for each <a href="Ev
  The product page is used exclusively by the <a href="Everything.html#Installation" title="Chapter in Oomph Setup Documentation">installation wizard</a>.
  </p>
  <p>
- The tree viewer of the page displays the <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html" title="Interface in org.eclipse.oomph.setup"><code>selected</code></a> <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalogs</code></a>.
+ The tree viewer of the page displays the <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html" title="Interface in org.eclipse.oomph.setup"><code>selected</code></a> <a href="Everything.html#ProductCatalog" title="Chapter in Oomph Setup Documentation">product catalogs</a>.
  The <em>product catalog selection</em> tool bar button
  is used to choose which of the product catalogs available in the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a> are displayed.
  The <em>filter text</em> can be used to filter which of the <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a> are displayed.

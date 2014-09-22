@@ -12,12 +12,12 @@ package org.eclipse.oomph.setup.doc;
 
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.LocationCatalog;
-import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.doc.Everything.Infrastructure.Index;
 import org.eclipse.oomph.setup.doc.Everything.Scope.Installation;
+import org.eclipse.oomph.setup.doc.Everything.Scope.ProductCatalog;
 import org.eclipse.oomph.setup.doc.Everything.Scope.ProductCatalog.Product;
 import org.eclipse.oomph.setup.doc.Everything.Scope.ProductCatalog.Product.Version;
 import org.eclipse.oomph.setup.doc.Everything.Scope.ProjectCatalog;
@@ -1092,7 +1092,7 @@ public class Everything
        * For the initial phase processing,
        * all the tasks are efficiently copied,
        * including the copying of the containing scopes.
-       * The copying process takes the task-to-task {@ink TaskList#substitutions substitution} map into account,
+       * The copying process takes the task-to-task {@link TaskList#substitutions substitution} map into account,
        * i.e., each task is logically replaced in the copy by its {@link Task#override merged override}.
        * As such,
        * only the final overridden merged task remains in the resulting task list copy
