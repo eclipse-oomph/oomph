@@ -76,7 +76,7 @@ import java.util.Properties;
 /**
  * @author Eike Stepper
  */
-public final class InstallerDialog extends SetupWizardDialog implements IPageChangedListener
+public final class InstallerDialog extends SetupWizardDialog
 {
   private static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url";
 
@@ -85,6 +85,8 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
   public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL).replace('\\', '/');
 
   public static final int RETURN_RESTART = -4;
+
+  private final IPageChangedListener pageChangedListener = new PageChangedListener();
 
   private final boolean restarted;
 
@@ -102,26 +104,12 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
   {
     super(parentShell, new SetupWizard.Installer());
     this.restarted = restarted;
-    addPageChangedListener(this);
+    addPageChangedListener(pageChangedListener);
   }
 
   public Installer getInstaller()
   {
     return (Installer)getWizard();
-  }
-
-  public void pageChanged(PageChangedEvent event)
-  {
-    if (event.getSelectedPage() instanceof ConfirmationPage)
-    {
-      updateSearching = false;
-      updateResolution = null;
-      updateError = null;
-      setUpdateIcon(0);
-
-      SetupTaskPerformer performer = getInstaller().getPerformer();
-      performer.getBundles().add(SetupInstallerPlugin.INSTANCE.getBundle());
-    }
   }
 
   @Override
@@ -316,6 +304,26 @@ public final class InstallerDialog extends SetupWizardDialog implements IPageCha
 
     Thread thread = new ProductVersionSetter();
     thread.start();
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class PageChangedListener implements IPageChangedListener
+  {
+    public void pageChanged(PageChangedEvent event)
+    {
+      if (event.getSelectedPage() instanceof ConfirmationPage)
+      {
+        updateSearching = false;
+        updateResolution = null;
+        updateError = null;
+        setUpdateIcon(0);
+
+        SetupTaskPerformer performer = getInstaller().getPerformer();
+        performer.getBundles().add(SetupInstallerPlugin.INSTANCE.getBundle());
+      }
+    }
   }
 
   /**

@@ -512,7 +512,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
     private List<BundleFile> children;
 
-    private BundleFile(String name, boolean directory, BundleFile parent)
+    protected BundleFile(String name, boolean directory, BundleFile parent)
     {
       this.name = name;
       this.directory = directory;
@@ -637,7 +637,7 @@ public abstract class OomphPlugin extends EMFPlugin
       exportResources(bundle, path, target);
     }
 
-    public String getContents()
+    public InputStream getContents()
     {
       checkFile();
       String path = getPath();
@@ -647,11 +647,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
       try
       {
-        in = url.openStream();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtil.copy(in, out);
-
-        return out.toString("UTF-8");
+        return url.openStream();
       }
       catch (RuntimeException ex)
       {
@@ -664,6 +660,22 @@ public abstract class OomphPlugin extends EMFPlugin
       finally
       {
         IOUtil.closeSilent(in);
+      }
+    }
+
+    public String getContentsString()
+    {
+      InputStream contents = getContents();
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      IOUtil.copy(contents, out);
+
+      try
+      {
+        return out.toString("UTF-8");
+      }
+      catch (UnsupportedEncodingException ex)
+      {
+        throw new RuntimeException(ex);
       }
     }
 

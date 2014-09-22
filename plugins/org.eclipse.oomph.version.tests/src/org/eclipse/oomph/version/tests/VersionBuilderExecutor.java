@@ -269,7 +269,7 @@ public class VersionBuilderExecutor extends TestCase
 
   private String checkMarkers(BundleFile phase, IMarker[] markers, BundleFile markersFile) throws Throwable
   {
-    String expected = markersFile.getContents();
+    String expected = markersFile.getContentsString();
     String actual = createMarkers(markers);
     assertEquals("In " + markersFile, expected, actual);
     return actual;
@@ -455,7 +455,7 @@ public class VersionBuilderExecutor extends TestCase
     String location = null;
     String problemType = null;
 
-    String contents = resolutionsFile.getContents();
+    String contents = resolutionsFile.getContentsString();
     String[] lines = contents.split("[\n\r]");
     for (int i = 0; i < lines.length; i++)
     {

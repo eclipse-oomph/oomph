@@ -12,7 +12,6 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.ant.internal.launching.remote.InternalAntRunner"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value=""/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Duser.language=fr"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${bundle_location:org.eclipse.oomph.releng.doc}/build.ant"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dtp.classpath.file=${targlet_container_classpath_file:Oomph}&#13;&#10;-Dplugins.dir=${project_loc:/org.eclipse.oomph.setup}/..&#13;&#10;-Dhelpcenter.project=${project_loc:/org.eclipse.oomph.releng.helpcenter}&#13;&#10;-Dreleng.project=${bundle_location:org.eclipse.oomph.releng.doc}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/org.eclipse.oomph.releng.helpcenter}"/>

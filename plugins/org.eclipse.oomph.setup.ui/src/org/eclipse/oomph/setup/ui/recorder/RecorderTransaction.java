@@ -293,7 +293,7 @@ public abstract class RecorderTransaction
       BundleFile policiesFile = SetupUIPlugin.INSTANCE.getRootFile().getChild(POLICIES_FILE_NAME);
       if (policiesFile != null)
       {
-        String contents = policiesFile.getContents();
+        String contents = policiesFile.getContentsString();
         String[] lines = contents.split("[\n\r]");
         for (int i = 0; i < lines.length; i++)
         {

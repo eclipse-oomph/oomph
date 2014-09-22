@@ -152,6 +152,12 @@ public class ProjectPage extends SetupWizardPage
     setDescription("Double click the projects you want to provision, and for each choose its Stream in the table column.");
   }
 
+  // @Override
+  // public String getHelpPath()
+  // {
+  // return "/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/help/installer/ProjectPage.html";
+  // }
+
   @Override
   protected Control createUI(final Composite parent)
   {

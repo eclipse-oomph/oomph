@@ -67,6 +67,11 @@ public abstract class SetupWizardPage extends WizardPage
     return getWizard().getAdapterFactory();
   }
 
+  public String getHelpPath()
+  {
+    return getWizard().getHelpPath();
+  }
+
   public ResourceSet getResourceSet()
   {
     return getWizard().getResourceSet();

@@ -124,6 +124,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     setNeedsProgressMonitor(false);
   }
 
+  public String getHelpPath()
+  {
+    return "/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/help/installer/InstallerDialog.html";
+  }
+
   public ComposedAdapterFactory getAdapterFactory()
   {
     if (adapterFactory == null)

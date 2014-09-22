@@ -13,12 +13,16 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.util.ReflectUtil;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.dialogs.DialogTray;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.TrayDialog;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.HelpEvent;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.widgets.Composite;
@@ -27,23 +31,97 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import org.osgi.framework.Bundle;
-
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * @author Eike Stepper
  */
 public class SetupWizardDialog extends WizardDialog
 {
+  private static final String HELP_CONTEXT = "/help";
+
+  private final IPageChangedListener pageChangedListener = new PageChangedListener();
+
+  private HTTPServer helpServer;
+
+  private Browser helpBrowser;
+
   public SetupWizardDialog(Shell parentShell, SetupWizard wizard)
   {
     super(parentShell, wizard);
     setHelpAvailable(true);
+    addPageChangedListener(pageChangedListener);
+  }
+
+  @Override
+  public boolean close()
+  {
+    if (helpServer != null)
+    {
+      try
+      {
+        helpServer.stop();
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex);
+      }
+
+      helpServer = null;
+    }
+
+    return super.close();
+  }
+
+  private synchronized String getHelpURL(String path)
+  {
+    if (helpServer == null)
+    {
+      try
+      {
+        helpServer = new HTTPServer();
+        helpServer.addContext(new HTTPServer.PluginContext(HELP_CONTEXT, true));
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex);
+        return null;
+      }
+    }
+
+    return "http://localhost:" + helpServer.getPort() + HELP_CONTEXT + path;
+  }
+
+  private void setHelpPath(String path)
+  {
+    if (helpBrowser != null)
+    {
+      String url = getHelpURL(path);
+      if (url != null)
+      {
+        if (!url.equals(helpBrowser.getUrl()))
+        {
+          helpBrowser.setUrl(url);
+        }
+      }
+      else
+      {
+        helpBrowser.setText("<h3>Help content not found.</h3>");
+      }
+    }
+  }
+
+  private void setHelpPath(IWizardPage page)
+  {
+    if (page instanceof SetupWizardPage)
+    {
+      SetupWizardPage setupWizardPage = (SetupWizardPage)page;
+      String helpPath = setupWizardPage.getHelpPath();
+      if (helpPath != null)
+      {
+        setHelpPath(helpPath);
+      }
+    }
   }
 
   @Override
@@ -56,7 +134,7 @@ public class SetupWizardDialog extends WizardDialog
         if (getTray() != null)
         {
           closeTray();
-          updatedHelpButton(false);
+          updateHelpButton(false);
           return;
         }
 
@@ -65,61 +143,26 @@ public class SetupWizardDialog extends WizardDialog
           @Override
           protected Control createContents(Composite parent)
           {
-            String prefix = "help/";
-            String suffix = "installer/InstallerDialog.html";
-
-            Bundle bundle = SetupUIPlugin.INSTANCE.getBundle();
-            URL url = bundle.getResource(prefix + suffix);
-
-            try
+            helpBrowser = new Browser(parent, SWT.NONE);
+            helpBrowser.setSize(500, 800);
+            helpBrowser.addDisposeListener(new DisposeListener()
             {
-              url = FileLocator.resolve(url);
-              if (!"file".equalsIgnoreCase(url.getProtocol()))
+              public void widgetDisposed(DisposeEvent e)
               {
-                url = null;
+                helpBrowser = null;
               }
-            }
-            catch (IOException ex)
-            {
-              SetupUIPlugin.INSTANCE.log(ex);
-              url = null;
-            }
+            });
 
-            if (url == null)
-            {
-              File target = SetupUIPlugin.INSTANCE.exportResources(prefix);
-
-              try
-              {
-                url = new File(target, suffix).toURI().toURL();
-              }
-              catch (MalformedURLException ex)
-              {
-                SetupUIPlugin.INSTANCE.log(ex);
-              }
-            }
-
-            Browser browser = new Browser(parent, SWT.NONE);
-            browser.setSize(500, 800);
-
-            if (url != null)
-            {
-              browser.setUrl(url.toString());
-            }
-            else
-            {
-              browser.setText("Help content not found.");
-            }
-
-            return browser;
+            setHelpPath(getCurrentPage());
+            return helpBrowser;
           }
         };
 
         openTray(tray);
-        updatedHelpButton(true);
+        updateHelpButton(true);
       }
 
-      private void updatedHelpButton(boolean pushed)
+      private void updateHelpButton(boolean pushed)
       {
         try
         {
@@ -141,5 +184,16 @@ public class SetupWizardDialog extends WizardDialog
 
   protected void createToolItemsForToolBar(ToolBar toolBar)
   {
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class PageChangedListener implements IPageChangedListener
+  {
+    public void pageChanged(PageChangedEvent event)
+    {
+      setHelpPath((IWizardPage)event.getSelectedPage());
+    }
   }
 }
