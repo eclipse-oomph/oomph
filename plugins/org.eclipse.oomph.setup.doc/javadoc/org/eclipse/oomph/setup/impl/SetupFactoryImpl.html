@@ -356,13 +356,21 @@ implements <a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html" ti
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#createInstallationTask()">createInstallationTask</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#createInstallationToWorkspacesMapEntry()">createInstallationToWorkspacesMapEntry</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/LicenseInfo.html" title="class in org.eclipse.oomph.setup">LicenseInfo</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#createLicenseInfoFromString(org.eclipse.emf.ecore.EDataType, java.lang.String)">createLicenseInfoFromString</a></strong>(<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/EDataType.html?is-external=true" title="class or interface in org.eclipse.emf.ecore">EDataType</a>&nbsp;eDataType,
                            <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initialValue)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/LinkLocationTask.html" title="interface in org.eclipse.oomph.setup">LinkLocationTask</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#createLinkLocationTask()">createLinkLocationTask</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/LocationCatalog.html" title="interface in org.eclipse.oomph.setup">LocationCatalog</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#createLocationCatalog()">createLocationCatalog</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/PreferenceTask.html" title="interface in org.eclipse.oomph.setup">PreferenceTask</a></code></td>
@@ -470,16 +478,20 @@ implements <a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html" ti
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#createWorkspaceTask()">createWorkspaceTask</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#createWorkspaceToInstallationsMapEntry()">createWorkspaceToInstallationsMapEntry</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../org/eclipse/oomph/setup/SetupPackage.html" title="interface in org.eclipse.oomph.setup">SetupPackage</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#getPackage()">getPackage</a></strong>()</code>
 <div class="block"><strong>Deprecated.</strong>&nbsp;&nbsp;</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/SetupPackage.html" title="interface in org.eclipse.oomph.setup">SetupPackage</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#getSetupPackage()">getSetupPackage</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html" title="interface in org.eclipse.oomph.setup">SetupFactory</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/impl/SetupFactoryImpl.html#init()">init</a></strong>()</code>
 <div class="block">Creates the default factory implementation.</div>
@@ -984,6 +996,32 @@ implements <a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html" ti
   <dd></dd></dl>
 </li>
 </ul>
+<a name="createInstallationToWorkspacesMapEntry()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createInstallationToWorkspacesMapEntry</h4>
+<pre>public&nbsp;<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>&gt;&gt;&nbsp;createInstallationToWorkspacesMapEntry()</pre>
+<div class="block"><!-- begin-user-doc -->
+ <!-- end-user-doc --></div>
+<dl><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
+<a name="createWorkspaceToInstallationsMapEntry()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createWorkspaceToInstallationsMapEntry</h4>
+<pre>public&nbsp;<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>&gt;&gt;&nbsp;createWorkspaceToInstallationsMapEntry()</pre>
+<div class="block"><!-- begin-user-doc -->
+ <!-- end-user-doc --></div>
+<dl><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
 <a name="createStringSubstitutionTask()">
 <!--   -->
 </a>
@@ -1041,6 +1079,22 @@ implements <a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html" ti
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html#createAttributeRule()">createAttributeRule</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html" title="interface in org.eclipse.oomph.setup">SetupFactory</a></code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>a new object of class '<em>Attribute Rule</em>'.</dd><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
+<a name="createLocationCatalog()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createLocationCatalog</h4>
+<pre>public&nbsp;<a href="../../../../../org/eclipse/oomph/setup/LocationCatalog.html" title="interface in org.eclipse.oomph.setup">LocationCatalog</a>&nbsp;createLocationCatalog()</pre>
+<div class="block"><!-- begin-user-doc -->
+ <!-- end-user-doc --></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html#createLocationCatalog()">createLocationCatalog</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/eclipse/oomph/setup/SetupFactory.html" title="interface in org.eclipse.oomph.setup">SetupFactory</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>a new object of class '<em>Location Catalog</em>'.</dd><dt><span class="strong">Generated</span></dt>
   <dd></dd></dl>
 </li>
 </ul>

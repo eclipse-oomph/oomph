@@ -218,8 +218,20 @@ extends <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html#caseInstallationToWorkspacesMapEntry(java.util.Map.Entry)">caseInstallationToWorkspacesMapEntry</a></strong>(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>&gt;&gt;&nbsp;object)</code>
+<div class="block">Returns the result of interpreting the object as an instance of '<em>Installation To Workspaces Map Entry</em>'.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html#caseLinkLocationTask(org.eclipse.oomph.setup.LinkLocationTask)">caseLinkLocationTask</a></strong>(<a href="../../../../../org/eclipse/oomph/setup/LinkLocationTask.html" title="interface in org.eclipse.oomph.setup">LinkLocationTask</a>&nbsp;object)</code>
 <div class="block">Returns the result of interpreting the object as an instance of '<em>Link Location Task</em>'.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html#caseLocationCatalog(org.eclipse.oomph.setup.LocationCatalog)">caseLocationCatalog</a></strong>(<a href="../../../../../org/eclipse/oomph/setup/LocationCatalog.html" title="interface in org.eclipse.oomph.setup">LocationCatalog</a>&nbsp;object)</code>
+<div class="block">Returns the result of interpreting the object as an instance of '<em>Location Catalog</em>'.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -374,18 +386,24 @@ extends <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html#caseWorkspaceToInstallationsMapEntry(java.util.Map.Entry)">caseWorkspaceToInstallationsMapEntry</a></strong>(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>&gt;&gt;&nbsp;object)</code>
+<div class="block">Returns the result of interpreting the object as an instance of '<em>Workspace To Installations Map Entry</em>'.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html#defaultCase(org.eclipse.emf.ecore.EObject)">defaultCase</a></strong>(<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/EObject.html?is-external=true" title="class or interface in org.eclipse.emf.ecore">EObject</a>&nbsp;object)</code>
 <div class="block">Returns the result of interpreting the object as an instance of '<em>EObject</em>'.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html#doSwitch(int, org.eclipse.emf.ecore.EObject)">doSwitch</a></strong>(int&nbsp;classifierID,
         <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/EObject.html?is-external=true" title="class or interface in org.eclipse.emf.ecore">EObject</a>&nbsp;theEObject)</code>
 <div class="block">Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html#isSwitchFor(org.eclipse.emf.ecore.EPackage)">isSwitchFor</a></strong>(<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/EPackage.html?is-external=true" title="class or interface in org.eclipse.emf.ecore">EPackage</a>&nbsp;ePackage)</code>
 <div class="block">Checks whether this is a switch for the given package.</div>
@@ -907,6 +925,40 @@ extends <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/
   <dd></dd></dl>
 </li>
 </ul>
+<a name="caseInstallationToWorkspacesMapEntry(java.util.Map.Entry)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>caseInstallationToWorkspacesMapEntry</h4>
+<pre>public&nbsp;<a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a>&nbsp;caseInstallationToWorkspacesMapEntry(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>&gt;&gt;&nbsp;object)</pre>
+<div class="block">Returns the result of interpreting the object as an instance of '<em>Installation To Workspaces Map Entry</em>'.
+ <!-- begin-user-doc -->
+ This implementation returns null;
+ returning a non-null result will terminate the switch.
+ <!-- end-user-doc --></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>object</code> - the target of the switch.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result of interpreting the object as an instance of '<em>Installation To Workspaces Map Entry</em>'.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/util/Switch.html?is-external=true#doSwitch(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.util"><code>doSwitch(EObject)</code></a></dd><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
+<a name="caseWorkspaceToInstallationsMapEntry(java.util.Map.Entry)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>caseWorkspaceToInstallationsMapEntry</h4>
+<pre>public&nbsp;<a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a>&nbsp;caseWorkspaceToInstallationsMapEntry(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Workspace.html" title="interface in org.eclipse.oomph.setup">Workspace</a>,<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/EList.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">EList</a>&lt;<a href="../../../../../org/eclipse/oomph/setup/Installation.html" title="interface in org.eclipse.oomph.setup">Installation</a>&gt;&gt;&nbsp;object)</pre>
+<div class="block">Returns the result of interpreting the object as an instance of '<em>Workspace To Installations Map Entry</em>'.
+ <!-- begin-user-doc -->
+ This implementation returns null;
+ returning a non-null result will terminate the switch.
+ <!-- end-user-doc --></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>object</code> - the target of the switch.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result of interpreting the object as an instance of '<em>Workspace To Installations Map Entry</em>'.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/util/Switch.html?is-external=true#doSwitch(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.util"><code>doSwitch(EObject)</code></a></dd><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
 <a name="caseModelElement(org.eclipse.oomph.base.ModelElement)">
 <!--   -->
 </a>
@@ -972,6 +1024,23 @@ extends <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/
  <!-- end-user-doc --></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>object</code> - the target of the switch.</dd>
 <dt><span class="strong">Returns:</span></dt><dd>the result of interpreting the object as an instance of '<em>Attribute Rule</em>'.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/util/Switch.html?is-external=true#doSwitch(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.util"><code>doSwitch(EObject)</code></a></dd><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
+<a name="caseLocationCatalog(org.eclipse.oomph.setup.LocationCatalog)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>caseLocationCatalog</h4>
+<pre>public&nbsp;<a href="../../../../../org/eclipse/oomph/setup/util/SetupSwitch.html" title="type parameter in SetupSwitch">T</a>&nbsp;caseLocationCatalog(<a href="../../../../../org/eclipse/oomph/setup/LocationCatalog.html" title="interface in org.eclipse.oomph.setup">LocationCatalog</a>&nbsp;object)</pre>
+<div class="block">Returns the result of interpreting the object as an instance of '<em>Location Catalog</em>'.
+ <!-- begin-user-doc -->
+ This implementation returns null;
+ returning a non-null result will terminate the switch.
+ <!-- end-user-doc --></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>object</code> - the target of the switch.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result of interpreting the object as an instance of '<em>Location Catalog</em>'.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/util/Switch.html?is-external=true#doSwitch(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.util"><code>doSwitch(EObject)</code></a></dd><dt><span class="strong">Generated</span></dt>
   <dd></dd></dl>
 </li>
 </ul>

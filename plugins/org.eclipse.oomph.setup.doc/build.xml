@@ -311,6 +311,7 @@
 
   <target name="build" depends="build.java, build.schema, build.article">
     <fixcrlf srcdir="${project.path}" includes="**/*.html **/*.css" />
+    <fixcrlf srcdir="${helpcenter.project}" includes="**/*.html **/*.css" />
   </target>
 
 </project>

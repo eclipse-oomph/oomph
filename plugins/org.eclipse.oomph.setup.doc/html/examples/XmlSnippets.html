@@ -295,6 +295,18 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EAttribute"</font>&nbsp;name<font color="#000080">="attributeURI"</font>&nbsp;eType<font color="#000080">="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EAttribute"</font>&nbsp;name<font color="#000080">="value"</font>&nbsp;lowerBound<font color="#000080">="1"</font>&nbsp;eType<font color="#000080">="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"</font>/&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;/eClassifiers&gt;</font><br/>
+&nbsp;&nbsp;<font color="#0000e1">&lt;eClassifiers&nbsp;xsi:type<font color="#000080">="ecore:EClass"</font>&nbsp;name<font color="#000080">="LocationCatalog"</font>&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EReference"</font>&nbsp;name<font color="#000080">="installations"</font>&nbsp;upperBound<font color="#000080">="-1"</font>&nbsp;eType<font color="#000080">="#//InstallationToWorkspacesMapEntry"</font>&nbsp;containment<font color="#000080">="true"</font>&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eAnnotations&nbsp;source<font color="#000080">="http:///org/eclipse/emf/ecore/util/ExtendedMetaData"</font>&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="name"</font>&nbsp;value<font color="#000080">="installation"</font>/&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;/eAnnotations&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;/eStructuralFeatures&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EReference"</font>&nbsp;name<font color="#000080">="workspaces"</font>&nbsp;upperBound<font color="#000080">="-1"</font>&nbsp;eType<font color="#000080">="#//WorkspaceToInstallationsMapEntry"</font>&nbsp;containment<font color="#000080">="true"</font>&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eAnnotations&nbsp;source<font color="#000080">="http:///org/eclipse/emf/ecore/util/ExtendedMetaData"</font>&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="name"</font>&nbsp;value<font color="#000080">="workspace"</font>/&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;/eAnnotations&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;/eStructuralFeatures&gt;</font><br/>
+&nbsp;&nbsp;<font color="#0000e1">&lt;/eClassifiers&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;eClassifiers&nbsp;xsi:type<font color="#000080">="ecore:EClass"</font>&nbsp;name<font color="#000080">="Installation"</font>&nbsp;eSuperTypes<font color="#000080">="#//Scope"</font>&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EReference"</font>&nbsp;name<font color="#000080">="productVersion"</font>&nbsp;lowerBound<font color="#000080">="1"</font>&nbsp;eType<font color="#000080">="#//ProductVersion"</font>/&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;/eClassifiers&gt;</font><br/>
@@ -312,6 +324,7 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="type"</font>&nbsp;value<font color="#000080">="STRING"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="label"</font>&nbsp;value<font color="#000080">="Installation location rule"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="description"</font>&nbsp;value<font color="#000080">="The rule for the absolute folder location where the product is installed"</font>/&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="storageURI"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="explicitType"</font>&nbsp;value<font color="#000080">="FOLDER"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="explicitLabel"</font>&nbsp;value<font color="#000080">="Installation location"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="explicitDescription"</font>&nbsp;value<font color="#000080">="The absolute folder location where the product is installed"</font>/&gt;</font><br/>
@@ -356,6 +369,7 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="type"</font>&nbsp;value<font color="#000080">="STRING"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="label"</font>&nbsp;value<font color="#000080">="Workspace location rule"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="description"</font>&nbsp;value<font color="#000080">="The rule for the absolute folder location where the workspace is located"</font>/&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="storageURI"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="explicitType"</font>&nbsp;value<font color="#000080">="FOLDER"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="explicitLabel"</font>&nbsp;value<font color="#000080">="Workspace location"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;details&nbsp;key<font color="#000080">="explicitDescription"</font>&nbsp;value<font color="#000080">="The absolute folder location where the workspace is located"</font>/&gt;</font><br/>
@@ -488,6 +502,14 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;/eAnnotations&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;/eStructuralFeatures&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EAttribute"</font>&nbsp;name<font color="#000080">="selection"</font>&nbsp;eType<font color="#000080">="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"</font>/&gt;</font><br/>
+&nbsp;&nbsp;<font color="#0000e1">&lt;/eClassifiers&gt;</font><br/>
+&nbsp;&nbsp;<font color="#0000e1">&lt;eClassifiers&nbsp;xsi:type<font color="#000080">="ecore:EClass"</font>&nbsp;name<font color="#000080">="InstallationToWorkspacesMapEntry"</font>&nbsp;instanceClassName<font color="#000080">="java.util.Map$Entry"</font>&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EReference"</font>&nbsp;name<font color="#000080">="key"</font>&nbsp;lowerBound<font color="#000080">="1"</font>&nbsp;eType<font color="#000080">="#//Installation"</font>/&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EReference"</font>&nbsp;name<font color="#000080">="value"</font>&nbsp;upperBound<font color="#000080">="-1"</font>&nbsp;eType<font color="#000080">="#//Workspace"</font>/&gt;</font><br/>
+&nbsp;&nbsp;<font color="#0000e1">&lt;/eClassifiers&gt;</font><br/>
+&nbsp;&nbsp;<font color="#0000e1">&lt;eClassifiers&nbsp;xsi:type<font color="#000080">="ecore:EClass"</font>&nbsp;name<font color="#000080">="WorkspaceToInstallationsMapEntry"</font>&nbsp;instanceClassName<font color="#000080">="java.util.Map$Entry"</font>&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EReference"</font>&nbsp;name<font color="#000080">="key"</font>&nbsp;lowerBound<font color="#000080">="1"</font>&nbsp;eType<font color="#000080">="#//Workspace"</font>/&gt;</font><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eStructuralFeatures&nbsp;xsi:type<font color="#000080">="ecore:EReference"</font>&nbsp;name<font color="#000080">="value"</font>&nbsp;upperBound<font color="#000080">="-1"</font>&nbsp;eType<font color="#000080">="#//Installation"</font>/&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;/eClassifiers&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;eClassifiers&nbsp;xsi:type<font color="#000080">="ecore:EEnum"</font>&nbsp;name<font color="#000080">="ScopeType"</font>&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eLiterals&nbsp;name<font color="#000080">="None"</font>/&gt;</font><br/>

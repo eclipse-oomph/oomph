@@ -1,0 +1,1322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+
+<HEAD>
+<TITLE>Outline (Oomph Setup Documentation)</TITLE>
+
+<LINK REL="STYLESHEET" HREF="book.css" CHARSET="ISO-8859-1" TYPE="text/css">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Outline (Oomph Setup Documentation)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT></NOSCRIPT>
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs"><a href="Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Outline</h1></td>
+		<td align="right" valign="middle" nowrap><a href="Overview.html" title="Backward to Overview"><img src="../images/backward.png" border="0"></a>&nbsp;<a href="examples/index.html" title="Forward to Examples"><img src="../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p>
+ Consider the steps involved in setting up a fresh Eclipse development environment to work with the source code of a particular version of a specific project:
+ <ul>
+ <li>
+ Install a project-specific IDE with appropriate tooling,
+ i.e., an IDE configured with all the settings and tools needed for editing, compiling, debugging, and testing the project's artifacts.
+ </li>
+ <li>
+ Materialize the workspace with the project's bundles and features by importing their workspace projects from various source code repositories,
+ organizing those workspace projects into meaningful working sets.
+ </li>
+ <li>
+ Materialize the target platform to contain all the bundles and features needed to compile the project's source code, run the project's tests, and exercise the project's end-user functionality.
+ </li>
+ </ul>
+
+ The instructions for all these steps must be well-documented and generally evolve from release to release.
+ As such, one should consider the following salient questions:
+ <ul>
+ <li>
+ Who writes and maintains these instructions?
+ </li>
+ <li>
+ How do contributors find these instructions for each specific project?
+ </li>
+ <li>
+ How many contributors must follow these instructions, how often, and with how much invested time?
+ </li>
+ </ul>
+ The most fundamental question is, why is anyone doing this manually?
+ The overall process is tedious, error-prone, and time consuming,
+ i.e., it's a complete waste of human resource.
+ With Oomph, all these instructions are formalized as setup <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">tasks</a> that are <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">performed</a> automatically.
+ </p>
+ <p>
+ In addition to the project-specific setup process,
+ each user typically has her own personal favorite tools she wants installed
+ as well as has her own personal preferences,
+ such as key bindings,
+ she wants uniformly applied to each installation and workspace.
+ With Oomph Setup, this too is formalized and automated.
+ </p>
+
+ <p>
+ The process of setting up a development environment involves two phases.
+ The first, or bootstrap phase, involves installing a functional product on disk.
+ Using the traditional manual approach one achieves this goal by as follows:
+ <ul>
+ <li>
+ Download a product, i.e., a package, from Eclipse's download page.
+ </li>
+ <li>
+ Unzip that download to the desired location on disk using an unzip tool that can handle Eclipse's zip files.
+ </li>
+ <li>
+ Ensure that a bit-appropriate JRE version is installed and visible on the execution path.
+ </li>
+ <li>
+ Run the executable.
+ </li>
+ </ul>
+ </p>
+ <p>
+ The second phase involves activities performed in the running product itself:
+ <ul>
+ <li>
+ Install additional tools not included in the downloaded product.
+ </li>
+ <li>
+ Configure various preferences appropriately, ideally by importing those preferences from a carefully-crafted Eclipse preference file.
+ </li>
+ <li>
+ Import workspace projects, ideally by importing those projects from a carefully-crafted project set file.
+ </li>
+ <li>
+ Activate the required target platform, ideally by activating a carefully-crafted target platform description file.
+ </li>
+ </ul>
+ </p>
+ <p>
+ To automate this setup process, Oomph provides the following:
+ <ul>
+ <li>
+ An <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installer wizard</a> that automates the both phases of setting up a development environment.
+ </li>
+ <li>
+ A <a href="Everything.html#ProjectWizard" title="Chapter in Oomph Setup Documentation">project wizard</a> that automates the second phase of setting up a development environment.
+ <li>
+ An <a href="Everything.html#ProjectWizard" title="Chapter in Oomph Setup Documentation">execution wizard</a> that automates updating the development environment,
+ including the provisioning of personal favorite tools and personal preferences.
+ </li>
+ </ul>
+ Oomph helps ensure that each developer works with the same uniformly-provisioned development environment
+ and that each user has her personal tools and preferences uniformly available across all installations and workspaces.
+ Note that Oomph can be installed into an existing IDE, i.e., one not installed by Oomph,
+ via Oomph's <a rel="nofollow" href="http://download.eclipse.org/oomph/updates">update site</a>
+ or via Oomph's <a rel="nofollow" href="http://download.eclipse.org/oomph/updates/org.eclipse.oomph.site.zip">site archive</a>.</p>
+ </p>
+ <p>
+ To understand how best to exploit Oomph in order to save time and spare aggravation,
+ some basic concepts need to be well understood.
+ Automation is achieved by specifying setup <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">tasks</a> organized into <a href="Everything.html#Scope" title="Chapter in Oomph Setup Documentation">scopes</a> stored in <a href="Everything.html#SetupResource" title="Chapter in Oomph Setup Documentation">resources</a>.
+ </p>
+ <p>
+ An important footnote is that Oomph makes heavy use of <a href="Everything.html#BundlePool" title="Chapter in Oomph Setup Documentation">bundle pooling</a>
+ so it highly disk-space efficient to install many products and provision many target platforms
+ because they can all share a common bundle pool such that for each installable unit, there is only on jar file on disk.
+ Not only is this space efficient,
+ it also dramatically improves installation and provisioning performance
+ because once an installable unit is in the pool,
+ it never again needs to be downloaded from the Internet.
+
+<h2><a name="Task"></a>1&nbsp;&nbsp;Tasks</h2>
+<p>
+ A setup <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html" title="Interface in org.eclipse.oomph.setup"><code>task</code></a> is the fine-grained unit of work in the overall setup process.
+ A task is declarative in nature,
+ i.e., it describes what needs to be achieved rather than how it's achieved.
+ Each task is contained within a <a href="Everything.html#Scope" title="Chapter in Oomph Setup Documentation">scope</a>.
+ The overall setup process involves <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathering</a> tasks from various scopes
+ and then <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">performing</a> those tasks.
+ </p>
+
+<a name="Task.properties">
+<p>
+ Each task has the following properties:
+ <ul>
+
+<a name="Task.id">
+<li>
+ An optional <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getID()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>ID</code></a> attribute.
+ The value of this attribute,
+ if present,
+ must be unique within the containing <a href="Everything.html#SetupResource" title="Chapter in Oomph Setup Documentation">resource</a>.
+ If the task has an ID,
+ a <a href="Everything.html#Variable" title="Chapter in Oomph Setup Documentation">variable</a> is inferred for each populated String-typed attribute of that task.
+ This variable behaves as if it were logically contained just before the task in the task's container.
+ </li>
+
+<a name="Task.excludedTriggers">
+<p>
+ An <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getExcludedTriggers()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>excluded</code></a> <a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">triggers</a> attribute
+ that specifies the triggers for which that task is not applicable.
+ This affects which tasks will be <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a>.
+ Most task implementations exclude the bootstrap trigger
+ because they must execute within a running product where the task implementation along with the supporting infrastructure are installed.
+ As such, task implementations hard-code the <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getValidTriggers()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>permissible</code></a> triggers
+ and task authors can further exclude triggers from those that are permissible.
+ In the end,
+ by logical exclusion,
+ this induces an overall set of <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getTriggers()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>allowed</code></a> triggers.
+ </li>
+
+<a name="Task.disabled">
+<li>
+ A <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#isDisabled()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>disabled</code></a> attribute that specifies whether or not the task should be gathered.
+ </li>
+
+<a name="Task.restrictions">
+<li>
+ An optional <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getRestrictions()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>restrictions</code></a> reference
+ that specifies the set of <a href="Everything.html#Scope" title="Chapter in Oomph Setup Documentation">scopes</a> to which the task inclusively applies.
+ TODO
+ </li>
+
+<a name="Task.order">
+<li>
+ Both a <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getPredecessors()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>predecessors</code></a> references and a <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getSuccessors()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>successors</code></a> reference,
+ that specify that tasks that must be performed, respectively, before or after, the task itself is performed.
+ Furthermore, a task has an intrinsic <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getPriority()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>priority</code></a> that is determined by the task implementor.
+ All these properties affect the <a href="Everything.html#Reorder" title="Chapter in Oomph Setup Documentation">order</a> in which tasks are performed.
+ </li>
+
+<a name="Task.operations">
+</ul>
+ <p>
+ Each task supports the following operations:
+ <ul>
+
+<a name="Task.performance">
+<li>
+ Logic for determining whether the task <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#isNeeded(org.eclipse.oomph.setup.SetupTaskContext)" title="Method in org.eclipse.oomph.setup.SetupTask"><code>needs</code></a> to perform
+ as well the logic for <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#perform(org.eclipse.oomph.setup.SetupTaskContext)" title="Method in org.eclipse.oomph.setup.SetupTask"><code>performing</code></a> the task.
+ The determination of whether that the task needs to perform
+ is influenced by the <a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">trigger</a>,
+ i.e.,
+ it affects how detailed will be the analysis for determining whether the task needs to be performed
+ with the general goal being to <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">perform</a> only those tasks strictly needed for the <a href="Everything.html#Trigger.startup" title="Section in Oomph Setup Documentation">startup</a> trigger.
+ This behavior is documented on a per-task basis.
+ </li>
+
+<a name="Task.override">
+<li>
+ A task, in general, can be <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#overrideFor(org.eclipse.oomph.setup.SetupTask)" title="Method in org.eclipse.oomph.setup.SetupTask"><code>overridden</code></a> by other tasks during the process of <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathering</a> tasks.
+ Which tasks are overridden by which other tasks,
+ and how that override merges two tasks into a single combined task
+ is specific to each task implementation and is therefore documented on a per-task basis.
+ A task implement supports overrides by yielding a so called <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#getOverrideToken()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>override token</code></a>.
+ Two tasks that yield equal override tokens are merged during the <a href="Everything.html#InitialPhase" title="Chapter in Oomph Setup Documentation">initial</a> task gathering phase.
+ </li>
+
+<a name="Task.consolidate">
+<li>
+ A task, in general, can be <a href="../javadoc/org/eclipse/oomph/setup/SetupTask.html#consolidate()" title="Method in org.eclipse.oomph.setup.SetupTask"><code>consolidated</code></a>.
+ At the end of the task gathering phase,
+ each task is <a href="Everything.html#Consolidation" title="Chapter in Oomph Setup Documentation">consolidated</a> to optimize its representation in preparation before the task is <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">performed</a>.
+ </li>
+
+<a name="Task.footer">
+</ul>
+ </p>
+
+<h3><a name="Trigger"></a>1.1&nbsp;&nbsp;Trigger</h3>
+
+
+<a name="Trigger.introduction">
+<p>
+ There are three types of <a href="../javadoc/org/eclipse/oomph/setup/Trigger.html" title="Class in org.eclipse.oomph.setup"><code>triggers</code></a>:
+ <ul>
+
+<a name="Trigger.bootstrap">
+<li>
+ <a href="../javadoc/org/eclipse/oomph/setup/Trigger.html#BOOTSTRAP" title="Field in org.eclipse.oomph.setup.Trigger"><code>Bootstrap</code></a> applies when using the <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installer wizard</a>.
+ </li>
+
+<a name="Trigger.startup">
+<li>
+ <a href="../javadoc/org/eclipse/oomph/setup/Trigger.html#STARTUP" title="Field in org.eclipse.oomph.setup.Trigger"><code>Startup</code></a> applies when a product is first launched, automated task performance is enabled, and there are tasks that need to be performed,
+ at which point the <a href="Everything.html#ExecutionWizard" title="Chapter in Oomph Setup Documentation">execution wizard</a> will be opened on the <a href="Everything.html#ConfirmationPage" title="Chapter in Oomph Setup Documentation">confirmation page</a>.
+ </li>
+
+<a name="Trigger.manual">
+<li>
+ <a href="../javadoc/org/eclipse/oomph/setup/Trigger.html#MANUAL" title="Field in org.eclipse.oomph.setup.Trigger"><code>Manual</code></a> applies when invoking the <a href="Everything.html#ProjectWizard" title="Chapter in Oomph Setup Documentation">project wizard</a> or directly invoking <a href="Everything.html#ExecutionWizard" title="Chapter in Oomph Setup Documentation">execution wizard</a>.
+ </li>
+
+<a name="Trigger.summary">
+</ul>
+ <p>
+ Each task specifies its <a href="Everything.html#Task.excludedTriggers" title="Section in Oomph Setup Documentation">valid</a> triggers
+ determining whether that task is <a href="Everything.html#Filter" title="Chapter in Oomph Setup Documentation">filtered</a> when tasks are gathered.
+ </p>
+
+<h3><a name="Variable"></a>1.2&nbsp;&nbsp;Everything.Task.Variable</h3>
+
+
+<h3><a name="Compound"></a>1.3&nbsp;&nbsp;Everything.Task.Compound</h3>
+
+
+<h3><a name="P2"></a>1.4&nbsp;&nbsp;Everything.Task.P2</h3>
+
+
+<h3><a name="Targlet"></a>1.5&nbsp;&nbsp;Everything.Task.Targlet</h3>
+
+
+<h2><a name="Scope"></a>2&nbsp;&nbsp;Scopes</h2>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/Scope.html" title="Interface in org.eclipse.oomph.setup"><code>scope</code></a> is the course-grained unit for grouping related <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">tasks</a>.
+ Scope are hierarchically structured and tasks are <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a> from them based on this hierarchical structure.
+ They are stored in <a href="Everything.html#SetupResource" title="Chapter in Oomph Setup Documentation">resources</a>.
+
+<a name="Scope.properties">
+Scopes
+ <p>
+ Each scope has the following properties:
+ <ul>
+
+<a name="Scope.name">
+<li>
+ A required <a href="../javadoc/org/eclipse/oomph/setup/Scope.html#getName()" title="Method in org.eclipse.oomph.setup.Scope"><code>attribute</code></a>
+ which should be a lower case name,
+ i.e., like a single component of a qualified Java package name.
+ The hierarchical <a href="../javadoc/org/eclipse/oomph/setup/Scope.html#getParentScope()" title="Method in org.eclipse.oomph.setup.Scope"><code>containment</code></a> structure of scopes
+ induces a <a href="../javadoc/org/eclipse/oomph/setup/Scope.html#getQualifiedName()" title="Method in org.eclipse.oomph.setup.Scope"><code>qualified</code></a> name attribute,
+ based on the '.' separated names of the scopes,
+ hence the recommendation to use a lower case scope name.
+ </li>
+
+<a name="Scope.label">
+<li>
+ An optional <a href="../javadoc/org/eclipse/oomph/setup/Scope.html#getLabel()" title="Method in org.eclipse.oomph.setup.Scope"><code>label</code></a> attribute,
+ which should be a title case name that may include spaces and punctuation.
+ </li>
+
+<a name="Scope.description">
+<li>
+ An optional <a href="../javadoc/org/eclipse/oomph/setup/Scope.html#getDescription()" title="Method in org.eclipse.oomph.setup.Scope"><code>description</code></a> attribute
+ which description can be arbitrary descriptive text.
+ </li>
+
+<a name="Scope.footer">
+</p>
+
+<h3><a name="ProductCatalog"></a>2.1&nbsp;&nbsp;Product Catalogs</h3>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalog</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html#getProducts()" title="Method in org.eclipse.oomph.setup.ProductCatalog"><code>container</code></a> for <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a>
+ as well as a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for all the <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">tasks</a> to install any of those products.
+
+<a name="ProductCatalog.example">
+For example,
+ there is an Eclipse product catalog
+ generated for all the packages available on <a href="https://www.eclipse.org/downloads/">Eclipse's download page</a>.
+ In other words, you can use Oomph to install any version of any package that you'd normally download and unzip from Eclipse.org.
+
+<a name="ProductCatalog.self">
+In the case of a product that has Oomph installed,
+ but wasn't actually <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installed</a> by Oomph,
+ there always exists a synthetic so called self product catalog
+ that contains the <a href="Everything.html#Product.self" title="Section in Oomph Setup Documentation">self product</a>.
+
+<a name="ProductCatalog.footer">
+It is stored in a <a href="Everything.html#ProductCatalogResource" title="Chapter in Oomph Setup Documentation">project catalog resource</a>.
+ </p>
+
+<h4><a name="Product"></a>2.1.1&nbsp;&nbsp;Products</h4>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/Product.html" title="Interface in org.eclipse.oomph.setup"><code>product</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/Product.html#getVersions()" title="Method in org.eclipse.oomph.setup.Product"><code>container</code></a> for product <a href="Everything.html#Version" title="Chapter in Oomph Setup Documentation">versions</a>
+ as well as a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for all the <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">tasks</a> to install any of those product versions.
+
+<a name="Product.example">
+For example,
+ there is a product in the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>Eclipse</code></a> product catalog
+ for each Eclipse <a href="http://www.eclipse.org/downloads/packages/release/Luna/R">package</a>.
+
+<a name="Product.self">
+In the case of a product that has Oomph installed,
+ but wasn't actually <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installed</a> by Oomph,
+ there always exists a synthetic so called self product in the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>self product catalog</code></a>
+ that contains a <a href="Everything.html#Version.self" title="Section in Oomph Setup Documentation">self product version</a>.
+
+<a name="Product.footer">
+</p>
+
+<h5><a name="Version"></a>2.1.1.1&nbsp;&nbsp;Product Versions</h5>
+<p>
+ A product <a href="../javadoc/org/eclipse/oomph/setup/ProductVersion.html" title="Interface in org.eclipse.oomph.setup"><code>version</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for all the <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">tasks</a> to install a specific version of a product.
+
+<a name="Version.example">
+For example,
+ there is a product version in the <a href="Everything.html#Product.example" title="Section in Oomph Setup Documentation">Eclipse Standard product</a> in the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>Eclipse product catalog</code></a>
+ for installing the Eclipse Standard <a href="https://www.eclipse.org/downloads/packages/eclipse-standard-44/lunar">Luna</a> package.
+ </p>
+
+<a name="Version.self">
+In the case of a product that has Oomph installed
+ but wasn't actually <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installed</a> by Oomph,
+ there always exists a synthetic so called product version in the <a href="Everything.html#Product.self" title="Section in Oomph Setup Documentation">self product</a> int the <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>self product catalog</code></a>.
+ It captures,
+ via a <a href="Everything.html#P2" title="Chapter in Oomph Setup Documentation">p2 task</a>,
+ all the information about the installable units that of that product installation
+ as well as all the update p2 sites that are available for updating those units within that product installation.
+ </p>
+
+<h3><a name="ProjectCatalog"></a>2.2&nbsp;&nbsp;Project Catalogs</h3>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/Project.html" title="Interface in org.eclipse.oomph.setup"><code>project catalog</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/ProjectContainer.html#getProjects()" title="Method in org.eclipse.oomph.setup.ProjectContainer"><code>container</code></a> for <a href="Everything.html#Project" title="Chapter in Oomph Setup Documentation">projects</a>
+ as well as a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for both
+ the tasks to provision a workspace with any of those projects
+ and the tasks to install the tools needed to work with any of those projects.
+ For example,
+ there is an Eclipse project catalog for provisioning various projects hosted at Eclipse.org.
+ It is stored in a <a href="Everything.html#ProjectCatalogResource" title="Chapter in Oomph Setup Documentation">project catalog resource</a>.
+ </p>
+
+<h4><a name="Project"></a>2.2.1&nbsp;&nbsp;Projects</h4>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/Project.html" title="Interface in org.eclipse.oomph.setup"><code>project</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">streams</a>
+ as well as a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for both
+ the tasks to provision a workspace with any of those streams
+ and the tasks to install the tools needed to work with any of those streams.
+ For example,
+ there is a project in the Eclipse project catalog for provisioning the Oomph project itself.
+ Projects can optionally {contain nested projects.
+ It is stored in a <a href="Everything.html#ProjectResource" title="Chapter in Oomph Setup Documentation">project resource</a>.
+ </p>
+
+<a name="Project.nested">
+Projects can optionally contain <a href="../javadoc/org/eclipse/oomph/setup/ProjectContainer.html#getProjects()" title="Method in org.eclipse.oomph.setup.ProjectContainer"><code>nested</code></a> projects
+ which may be stored in a separate <a href="Everything.html#ProjectResource" title="Chapter in Oomph Setup Documentation">project resource</a> or in the same resource as the <a href="../javadoc/org/eclipse/oomph/setup/Project.html#getParentProject()" title="Method in org.eclipse.oomph.setup.Project"><code>containing</code></a> project.
+ </p>
+
+<h5><a name="Stream"></a>2.2.1.1&nbsp;&nbsp;Streams</h5>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/Stream.html" title="Interface in org.eclipse.oomph.setup"><code>stream</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for both
+ the tasks to provision a workspace with for that particular stream
+ and the tasks to install the tools needed to work with that particular stream.
+ For example,
+ there is a stream in the Oomph project in the Eclipse project catalog
+ for provisioning the source code of the Git <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/">master</a> branch of the Oomph project.
+
+<h3><a name="Installation"></a>2.3&nbsp;&nbsp;Installations</h3>
+<p>
+ An <a href="../javadoc/org/eclipse/oomph/setup/Installation.html" title="Interface in org.eclipse.oomph.setup"><code>installation</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for the tasks to provision a specific installed Eclipse product.
+ Its primary function,
+ however,
+ is that it specifies a reference to a product <a href="Everything.html#Version" title="Chapter in Oomph Setup Documentation">version</a>.
+ The tasks <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a> for that product version are <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">performed</a> to that installed product.
+ The <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installer wizard</a> creates an instance based on the selected product version on the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product page</a>.
+ Even if the product installation hasn't been installed by Oomph,
+ when Oomph is present,
+ an installation instance is automatically created
+ to refer to the synthetic <a href="Everything.html#Version.self" title="Section in Oomph Setup Documentation">self</a> product version.
+ </p>
+
+<h3><a name="Workspace"></a>2.4&nbsp;&nbsp;Workspaces</h3>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/Workspace.html" title="Interface in org.eclipse.oomph.setup"><code>workspace</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for the tasks to provision a specific Eclipse workspace.
+ Its primary function is that it specifies zero or more references to project <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">streams</a>.
+ The tasks <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a> for each of those project streams are <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">performed</a> for that workspace
+ as well as for the installed product used to open that workspace.
+ The <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installer wizard</a> creates an instance based on the selected project streams on the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project page</a>.
+ The <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installer</a> and <a href="Everything.html#ProjectWizard" title="Chapter in Oomph Setup Documentation">project</a> wizards
+ </p>
+
+<h3><a name="User"></a>2.5&nbsp;&nbsp;Users</h3>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/User.html" title="Interface in org.eclipse.oomph.setup"><code>user</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/SetupTaskContainer.html#getSetupTasks()" title="Method in org.eclipse.oomph.setup.SetupTaskContainer"><code>container</code></a> for the tasks to provision
+ every installed Eclipse product and every opened workspace ever used by the end-user.
+ It provides an opportunity to customize all aspects of a user's experience with all their Eclipse products and workspaces.
+ It also provides support for the following:
+ <ul>
+ <li>
+ Recording the <a href="../javadoc/org/eclipse/oomph/setup/User.html#getAcceptedLicenses()" title="Method in org.eclipse.oomph.setup.User"><code>accepted license</code></a> of each of the tools automatically installed tools,
+ i.e., once a license is accepted,
+ it can be recorded to avoid any future prompts involving that particular license.
+ </li>
+ Recording the <a href="../javadoc/org/eclipse/oomph/setup/User.html#getUnsignedPolicy()" title="Method in org.eclipse.oomph.setup.User"><code>policy</code></a> with regard to handling of unsigned content,
+ i.e., once unsigned content is accepted,
+ that acceptance can be recorded to avoid any future prompts involving unsigned content.
+ </li>
+ <li>
+ Recording configuration options, so called <a href="../javadoc/org/eclipse/oomph/setup/User.html#getAttributeRules()" title="Method in org.eclipse.oomph.setup.User"><code>attribute rules</code></a>,
+ that tailor where and how repositories, workspaces, and installations are physically stored.
+ </li>
+ </ul>
+
+<h2><a name="Infrastructure"></a>3&nbsp;&nbsp;Infrastructure</h2>
+<p>
+ In addition to <a href="Everything.html#Scope" title="Chapter in Oomph Setup Documentation">scopes</a> there are several other important structural elements for organizing and maintaining setup information.
+ </p>
+
+<h3><a name="Index"></a>3.1&nbsp;&nbsp;Index</h3>
+<p>
+ An <a href="../javadoc/org/eclipse/oomph/setup/Index.html" title="Interface in org.eclipse.oomph.setup"><code>index</code></a> is a <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalogs</code></a>
+ as well as a <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getProjectCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>project catalogs</code></a>.
+ It also <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getDiscoverablePackages()" title="Method in org.eclipse.oomph.setup.Index"><code>provides access</code></a> to all task models.
+ All available <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a> and <a href="Everything.html#Project" title="Chapter in Oomph Setup Documentation">projects</a> are reachable from the index.
+ All the <a href="Everything.html#SetupWizard" title="Chapter in Oomph Setup Documentation">setup wizards</a> are driven by this information.
+ The index also <a href="../javadoc/org/eclipse/oomph/setup/Index.html#getDiscoverablePackages()" title="Method in org.eclipse.oomph.setup.Index"><code>maintains references</code></a> to dynamic Ecore models that provide additional <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">task</a> implementations.
+ It is stored in the <a href="Everything.html#InstallationResource" title="Chapter in Oomph Setup Documentation">installation resource</a>.
+ </p>
+
+<h3><a name="LocationCatalog"></a>3.2&nbsp;&nbsp;Location Catalog</h3>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/LocationCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>location catalog</code></a> maintains an index of all <a href="Everything.html#Installation" title="Chapter in Oomph Setup Documentation">installations</a> and <a href="Everything.html#Workspace" title="Chapter in Oomph Setup Documentation">workspaces</a>
+ installed and provisioned by Oomph,
+ including any installation where Oomph is installed,
+ and any workspace opened by any installation with Oomph installed.
+ It maintains a two-way map,
+ i.e., for each installation, the workspaces it has opened are <a href="../javadoc/org/eclipse/oomph/setup/LocationCatalog.html#getInstallations()" title="Method in org.eclipse.oomph.setup.LocationCatalog"><code>recorded</code></a>
+ and for each workspace, the installations that have opened it are <a href="../javadoc/org/eclipse/oomph/setup/LocationCatalog.html#getWorkspaces()" title="Method in org.eclipse.oomph.setup.LocationCatalog"><code>recorded</code></a>.
+ Each time a product with Oomph installed is started,
+ its installation-workspace pair is added to the maps.
+ The installation-to-workspace map is ordered,
+ so the most recently installed or started installation is moved to the front
+ and its workspace is moved to the front of the list associated with that installation.
+ Similarly, the workspace-to-installation map is ordered,
+ so the most recently provisioned or opened workspace is moved to the front
+ and the installation that opened it is moved to the front of the list associated with that workspace.
+ It is stored in the <a href="Everything.html#LocationResource" title="Chapter in Oomph Setup Documentation">location resource</a>.
+ </p>
+
+<h3><a name="CatalogSelection"></a>3.3&nbsp;&nbsp;Catalog Selection</h3>
+<p>
+ A <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html" title="Interface in org.eclipse.oomph.setup"><code>catalog selection</code></a> maintains an installation and provisioning history for the <a href="Everything.html#SetupWizard" title="Chapter in Oomph Setup Documentation">setup wizards</a>.
+ It maintains the following:
+ <ul>
+ <li>
+ The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>selected subset</code></a> of the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a>'s available <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalogs</code></a> displayed in the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product page</a>.
+ </li>
+ The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getDefaultProductVersions()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>most recently selected</code></a> <a href="Everything.html#Version" title="Chapter in Oomph Setup Documentation">product version</a> of each <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">product</a> displayed in the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product product page</a>.
+ </li>
+ <li>
+ The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getProjectCatalogs()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>selected subset</code></a> of the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a>'s available <a href="Everything.html#ProjectCatalog" title="Chapter in Oomph Setup Documentation">project catalogs</a> displayed in the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project page</a>.
+ </li>
+ The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getDefaultStreams()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>most recently selected</code></a> <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">stream</a> of each <a href="Everything.html#Project" title="Chapter in Oomph Setup Documentation">project</a> every chosen in the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project  page</a>.
+ </li>
+ </li>
+ The <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getSelectedStreams()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>most recently selected</code></a> <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">streams</a> chosen by the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project  page</a>.
+ </li>
+ </ul>
+ In other words, it maintains a persistent initial state for all the <a href="Everything.html#SetupWizard" title="Chapter in Oomph Setup Documentation">setup wizards</a>.
+ It is stored in the <a href="Everything.html#CatalogSelectionResource" title="Chapter in Oomph Setup Documentation">catalog selection resource</a>.
+ </p>
+
+<h2><a name="SetupResource"></a>4&nbsp;&nbsp;Setup Resources</h2>
+<p>
+ All the information for managing the automated installation and provisioning is maintained in resources.
+ Because Oomph is modeled using <a href="http://www.eclipse.org/emf">EMF</a>,
+ these resources are stored in XMI format.
+ </p>
+
+<h3><a name="IndexResource"></a>4.1&nbsp;&nbsp;Index</h3>
+<p>
+ The <code><a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup">index:/org.eclipse.setup</a></code> resource maintains the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a>,
+ where <code>index:/</code> is redirected to <code>http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/</code>.
+ It generally consists of references to <a href="Everything.html#ProductCatalogResource" title="Chapter in Oomph Setup Documentation">product catalog</a> resources and <a href="Everything.html#ProjectCatalogResource" title="Chapter in Oomph Setup Documentation">project catalog</a> resources.
+ </p>
+
+<h4><a name="ProductCatalogResource"></a>4.1.1&nbsp;&nbsp;Product Catalogs</h4>
+<p>
+ A product catalog resource maintains a <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalog</code></a>.
+ For example,
+ the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.products.setup">Eclipse Products Catalog</a> resource
+ contains all the products available at Eclipse,
+ i.e., the equivalents of downloading and installing Eclipse packages.
+ Each product catalog resource is generally assumed to contain a <a href="Everything.html#ProductCatalog.self" title="Section in Oomph Setup Documentation">self</a> product catalog
+ so that any product with Oomph installed, but not installed by Oomph,
+ will behave consistently as if it where installed by Oomph,
+ in particular,
+ a <a href="Everything.html#InstallationResource" title="Chapter in Oomph Setup Documentation">installation resource</a> will be demand created to refer to the <a href="Everything.html#Version.self" title="Section in Oomph Setup Documentation">self</a> <a href="Everything.html#Version" title="Chapter in Oomph Setup Documentation">product version</a>.
+ The logical URI for this resource is <code>catalog:/self-product-catalog.setup</code>.
+ It does not correspond to any physical artifact located in the file system.
+ </p>
+
+<h4><a name="ProjectCatalogResource"></a>4.1.2&nbsp;&nbsp;Project Catalogs</h4>
+<p>
+ A project catalog resource maintains a <a href="Everything.html#ProjectCatalog" title="Chapter in Oomph Setup Documentation">project catalog</a>.
+ It generally contains references to various separately-maintained <a href="Everything.html#ProjectResource" title="Chapter in Oomph Setup Documentation">project resources</a>.
+ For example,
+ the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.projects.setup">Eclipse Projects Catalog</a> resource
+ references all the Oomph-enabled Eclipse projects
+ and the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/com.github.projects.setup">Github Projects Catalog</a> resource
+ references all the Oomph-enabled Github projects.
+ Each project catalog resource is generally assumed to maintain a so called &lt;User> project resource.
+ For example,
+ the Eclipse Projects Catalog contains a reference to <code>user:/org.eclipse.projects.setup</code>
+ where <code>user:/</code> is redirected to <code>~/.eclipse/org.eclipse.oomph.setup/setups/</code>.
+ Projects can be added to or removed from this resource using the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project page</a>.
+ This feature allows a developer to author her own setup project and to logically add it to an existing read-only project catalog without modifying that project catalog.
+ </p>
+
+<h5><a name="ProjectResource"></a>4.1.2.1&nbsp;&nbsp;Project Resources</h5>
+<p>
+ A project resource maintains a <a href="Everything.html#Project" title="Chapter in Oomph Setup Documentation">project</a>.
+ Project resources are generally hosted on the Internet or on the local file system.
+ For example
+ the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/Oomph.setup">Oomph.setup</a> resource
+ contains the <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">streams</a> and <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">tasks</a> for the Oomph project itself.
+ </p>
+
+<h3><a name="LocationResource"></a>4.2&nbsp;&nbsp;Location Catalog</h3>
+<p>
+ The location resource maintains the <a href="../javadoc/org/eclipse/oomph/setup/LocationCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>location catalog</code></a>.
+ The logical URI for this resource is <code>user:/locations.setup</code>
+ where <code>user:/</code> is redirected to <code>~/.eclipse/org.eclipse.oomph.setup/setups/</code>.
+ </p>
+
+<h3><a name="CatalogSelectionResource"></a>4.3&nbsp;&nbsp;Catalog Selection</h3>
+<p>
+ The catalog selection resource maintains the <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html" title="Interface in org.eclipse.oomph.setup"><code>catalog selection</code></a>.
+ The logical URI for this resource is <code>user:/catalogs.setup</code>
+ where <code>user:/</code> is redirected to <code>~/.eclipse/org.eclipse.oomph.setup/setups/</code>.
+ </p>
+
+<h3><a name="InstallationResource"></a>4.4&nbsp;&nbsp;Installation</h3>
+<p>
+ An installation resource maintains an <a href="Everything.html#Installation" title="Chapter in Oomph Setup Documentation">installation</a>.
+ The physical URI of this resource is <code>org.eclipse.oomph.setup/installation.setup</code>
+ relatively within the <code>configuration</code> folder of the installed product.
+ </p>
+
+<h3><a name="WorkspaceResource"></a>4.5&nbsp;&nbsp;Workspace</h3>
+<p>
+ An workspace resource maintains a <a href="Everything.html#Workspace" title="Chapter in Oomph Setup Documentation">workspace</a>.
+ The physical URI of this resource is <code>.metadata/.plugins/org.eclipse.oomph.setup/workspace.setup</code>
+ relatively within the running product's phyiscal <code>workspace</code> folder.
+ </p>
+
+<h3><a name="UserResource"></a>4.6&nbsp;&nbsp;User</h3>
+<p>
+ The user resource maintain the <a href="Everything.html#User" title="Chapter in Oomph Setup Documentation">user</a>.
+ The logical URI for this resource is <code>user:/user.setup</code>
+ where <code>user:/</code> is redirected to <code>~/.eclipse/org.eclipse.oomph.setup/setups/</code>.
+ </p>
+
+<h2><a name="BundlePool"></a>5&nbsp;&nbsp;Bundle Pools</h2>
+<p>
+ Eclipse's p2 technology supports the concept of a <a href="http://wiki.eclipse.org/Equinox/p2/Getting_Started#Bundle_pooling">bundle pool</a>.
+ Bundle pools help to dramatically reduce disk footprint
+ and to eliminate repeated downloads of the same bundles and features,
+ thereby dramatically improving the performance of software updates and target platform provisioning.
+ Oomph makes heavy use of this technology for both its <a href="Everything.html#P2" title="Chapter in Oomph Setup Documentation">p2</a> tasks and it <a href="Everything.html#Targlet" title="Chapter in Oomph Setup Documentation">targlet</a> tasks.
+ Further,
+ Oomph provides a technology layer on top of p2
+ to improve the behavior and performance of caching
+ allowing Oomph to provide offline support for installing and updating installations and target platforms.
+ </p>
+
+<h2><a name="TaskComposition"></a>6&nbsp;&nbsp;Task Composition</h2>
+<p>
+ The installation and provisioning process is driven by gathering a <a href="Everything.html#Task" title="Chapter in Oomph Setup Documentation">task</a> list from the available <a href="Everything.html#Scope" title="Chapter in Oomph Setup Documentation">scopes</a>
+ in preparation for <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">task execution</a>.
+ </p>
+
+<h3><a name="ScopeList"></a>6.1&nbsp;&nbsp;Scope List</h3>
+<p>
+ In preparation for gathering a task list,
+ an ordered list of <a href="Everything.html#Scope" title="Chapter in Oomph Setup Documentation">scopes</a> is collected.
+
+<a name="ScopeList.scopeList">
+The following process of collecting scopes is repeated once for each <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">stream</a>
+ specified in the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project page</a> or in the <a href="Everything.html#Workspace" title="Chapter in Oomph Setup Documentation">workspace</a>:
+ <ul>
+
+ <li>
+ Visit the <a href="Everything.html#Version" title="Chapter in Oomph Setup Documentation">product version</a>
+ as selected in the <a href="Everything.html#ProductPage" title="Chapter in Oomph Setup Documentation">product page</a> or in the <a href="Everything.html#Installation" title="Chapter in Oomph Setup Documentation">installation</a>.
+ <ul>
+ <li>
+ Add that product version's containing <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a>'s containing <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalog</code></a> to the list.
+ Add that product version's containing product to the list.
+ Add that product version itself to the list.
+ </li>
+ </ul>
+ </li>
+
+ <li>
+ Visit a <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">stream</a>
+ as selected in the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project page</a> or in the <a href="Everything.html#Workspace" title="Chapter in Oomph Setup Documentation">workspace</a>, if there is one.
+ <ul>
+ <li>
+ Add that stream's containing <a href="Everything.html#Project" title="Chapter in Oomph Setup Documentation">projects</a>'s containing <a href="Everything.html#ProjectCatalog" title="Chapter in Oomph Setup Documentation">project catalog</a> to the list.
+ Add that stream's outer-most containing project to the list
+ and proceed down through the nested projects up to the stream's directly containing project,
+ adding each project to the list along the way.
+ Add that stream itself to the list.
+ </li>
+ </ul>
+ </li>
+
+ <li>
+ Add the <a href="Everything.html#Installation" title="Chapter in Oomph Setup Documentation">installation</a> to the list.
+ </li>
+
+ <li>
+ Add the <a href="Everything.html#Workspace" title="Chapter in Oomph Setup Documentation">workspace</a> to the list.
+ </li>
+
+ <li>
+ Add the <a href="Everything.html#User" title="Chapter in Oomph Setup Documentation">user</a> to the list.
+ </li>
+ </ul>
+ </p>
+
+<a name="ScopeList.scopeVariables">
+<p>
+ For each list of scopes, an ordered list of tasks is collected.
+ Initially, for each scope in the list,
+ three <a href="Everything.html#Variable" title="Chapter in Oomph Setup Documentation">variables</a> are induced,
+ one each for the <a href="Everything.html#Scope.name" title="Section in Oomph Setup Documentation">name</a>, <a href="Everything.html#Scope.label" title="Section in Oomph Setup Documentation">label</a>, and <a href="Everything.html#Scope.description" title="Section in Oomph Setup Documentation">description</a>
+ attributes of the scope
+ where the variable name is prefixed with the <a href="../javadoc/org/eclipse/oomph/setup/ScopeType.html" title="Class in org.eclipse.oomph.setup"><code>scope type</code></a> as follows:
+ <ul>
+ <li>
+ <code>scope.product.catalog</code>
+ </li>
+ <li>
+  <code>scope.product</code>
+ </li>
+ <li>
+  <code>scope.product.version</code>
+ </li>
+ <li>
+ <code>scope.project.catalog</code>
+ </li>
+ <li>
+ <code>scope.project</code>
+ </li>
+ <li>
+ <code>scope.project.stream</code>
+ </li>
+ <li>
+ <code>scope.installation</code>
+ </li>
+ <li>
+ <code>scope.workspace</code>
+ </li>
+ <li>
+  <code>scope.user</code>
+ </li>
+ </ul>
+ The value of each such variable will be the value of that attribute for the scope.
+ If the scope's label is <code>null</code>, the name is used as the label value
+ and if the scope's description is <code>null</code>, the scope's label is used as the description value.
+ In addition, to the <code>name</code> variable,
+ for each product, product version, project, and project stream
+ an additional variable with the name suffix <code>.qualifier</code> is induced
+ where the value is the <a href="../javadoc/org/eclipse/oomph/setup/Scope.html#getQualifiedName()" title="Method in org.eclipse.oomph.setup.Scope"><code>qualified name</code></a> of the scope.
+ For example,
+ the value of the <code>scope.project.stream.name.qualified</code> variable of the Oomph.setup project's master stream
+ is <code>org.eclipse.oomph.master</code>
+ All these induced variables are added, in scope order, to the initial gathered list of tasks.
+ </p>
+
+<a name="ScopeList.footer">
+<p>
+ Additional tasks are gathered into the task list from the ordered scopes by visiting each contained task of each scope as follows:
+ <ul>
+ <li>
+ If the task is disabled,
+ ignore the task.
+ </li>
+ <li>
+ If the list of scopes doesn't contain all of the task's restrictions,
+ ignore the task.
+ </li>
+ <li>
+ If the task is <a href="Everything.html#Compound" title="Chapter in Oomph Setup Documentation">compound</a>,
+ recursively visit each of that compound task's contained tasks.
+ </li>
+ <li>
+ Otherwise,
+ add the task to the list of tasks.
+ In other works,
+ the gathered task list will only contain leaf tasks.
+ </li>
+ </ul>
+ At the end of scope processing,
+ the gathered task list contains
+ all of the per-stream tasks,
+ or just task list if there is no stream.
+ Each task list (or the one task list) is further processed in two phases.
+ The initial phase is applied for each task list separately.
+ The per-stream task lists are then concatenated into a single list and the second phase is applied to that final composed list,
+ or the one task list is further processed by the second phase.
+ The processing of the the task list in each phase is roughly same.
+ </p>
+
+<h3><a name="TaskList"></a>6.2&nbsp;&nbsp;Task List</h3>
+<p>
+ The task list is processed to induce additional tasks,
+ to <a href="Everything.html#Task.override" title="Section in Oomph Setup Documentation">override and merge</a> tasks,
+ to evaluate and expand variables
+ and to <a href="Everything.html#Task.order" title="Section in Oomph Setup Documentation">reorder</a> tasks.
+ The members of the task list that are <a href="Everything.html#Variable" title="Chapter in Oomph Setup Documentation">variables</a> induce an initial set of keys,
+ i.e., a set of all variable names.
+ Oomph tasks are modeled with EMF,
+ so each task instance knows it corresponding EMF class.
+ During the initial phase processing,
+ the list of tasks is analyzed to determine the set of EMF classes that are required to implement all the tasks in the list.
+ Each EMF class is processed as follows:
+ <ul>
+ <li>
+ If the class contains enablement annotations,
+ induce <a href="Everything.html#P2" title="Chapter in Oomph Setup Documentation">p2 tasks</a>,
+ i.e., tasks to install the necessary implementations in the installed product,
+ and add these induced tasks to the head of the task list.
+ </li>
+ <li>
+ If the class contains variable annotations,
+ induce the <a href="Everything.html#Variable" title="Chapter in Oomph Setup Documentation">variables</a>
+ and add them to the head of the task list.
+ </li>
+
+ <li>
+ Visit each attribute of the class as follows:
+ <ul>
+ If the attribute's type isn't String,
+ ignore it.
+ <li>
+ If the attribute has both a variable annotation and a variable rule annotation,
+ visit each instance of that attribute's class in the task list as follows:
+ <ul>
+ <li>
+ If the attribute's value in that instance task is not empty,
+ the rule isn't needed,
+ so ignore it.
+ </li>
+ <li>
+ If the instance task doesn't have an ID,
+ or it does,
+ but the key composed from the ID value, with '.' and the attribute name appended,
+ is already in the list of induced keys,
+ the rule isn't needed,
+ so ignore it.
+ </li>
+ <li>
+ Induce a rule variable for that attribute,
+ if that rule variable hasn't already been induced for another task instance.
+ </li>
+ </ul>
+ A mapping from rule variables to their inducing attribute is maintained.
+ <li>
+ </li>
+ </li>
+ </ul>
+ </li>
+ </ul>
+ At the end of this processing for the first phase,
+ the list of tasks includes additional induced variables and tasks.
+ For the final phase,
+ the composed list of tasks contains no variables, because they've all been evaluated and expanded,
+ and the induced tasks are already present.
+ </p>
+
+<a name="TaskList.substitutions">
+<p>
+ Further processing proceeds as follows:
+ <ul>
+ <li>
+ Build a substitution map,
+ i.e., task-to-task map of substitutions by visiting each task as follows:
+ <ul>
+ <li>
+ Put the task's <a href="Everything.html#Task.override" title="Section in Oomph Setup Documentation">override token</a> into an token-to-task map,
+ and if another task for that token is already present in the token-to-task map,
+ the visited task is a substitution for that other task so add that to the substitution map.
+ As such,
+ tasks later in the list can override tasks earlier in the list.
+ </li>
+ The substitution map is then further processed to follow the substitution mappings so as to represent the direct substitutions.
+ </ul>
+ </li>
+ </ul>
+ </p>
+
+<h4><a name="InitialPhase"></a>6.2.1&nbsp;&nbsp;Initial Phase</h4>
+<p>
+ For the initial phase processing,
+ all the tasks are efficiently copied,
+ including the copying of the containing scopes.
+ The copying process takes the task-to-task TaskList#substitutions substitution map into account,
+ i.e., each task is logically replaced in the copy by its <a href="Everything.html#Task.override" title="Section in Oomph Setup Documentation">merged override</a>.
+ As such,
+ only the final overridden merged task remains in the resulting task list copy
+ and all references to the overridden and overriding tasks will reference the final merged override instead.
+ Further processing of the task list proceeds with this copied task list.
+ </p>
+ <p>
+ An explicit key map,
+ i.e., a map from variable name to variable,
+ is computed by visiting each variable in the task list.
+ Note that the preceding copying process will have eliminated duplicate variables.
+ The initial phase processing then proceeds by visiting each task with a non-empty ID attribute as follows:
+ <ul>
+ <li>
+ Visit each attribute of the task's EMF class
+ with respect to the variable name induced by appending '.' and the attribute name to the value of the task's ID attribute:
+ <ul>
+ <li>
+ If the attribute is the ID attribute of a task,
+ or the attribute isn't a single-valued String-typed attribute,
+ ignore it.
+ </li>
+ <li>
+ If the explicit keys contains the induced variable's name,
+ the task's value for the attribute is empty,
+ and the attribute has a variable annotation,
+ change the task's value for the attribute to be a reference to the explicit variable.
+ </li>
+ <li>
+ If the explicit keys do not include the induced variable name,
+ induce a new variable
+ record that it's an explicit key,
+ add it to the task list,
+ and also do the following:
+ <ul>
+ <li>
+ If the task's value for the attribute is empty,
+ and the attribute has a variable annotation,
+ change the task's value for the attribute to be a reference to the induced variable.
+ </li>
+ <li>
+ Conversely,
+ if the task's value for the attribute is non-empty,
+ set the induced variable's value to that value,
+ and as for the empty value case,
+ if the attribute has a variable annotation,
+ change the task's value for the attribute to be a reference to the induced variable.
+ </li>
+ <li>
+ Also induce rule variables for each of the attribute's rule annotations,
+ recording them as explicit keys.
+ </li>
+ <li>
+ And finally,
+ if the attribute has a variable annotation,
+ and the induced variable's value is a self reference that would lead to circular evaluation,
+ induce a yet another variable with the induced variable's name suffixed with <code>.explicit</code>
+ from the explicit annotations of the attribute,
+ and also change the self-referencing variable's value to refer to that explicit variable.
+ </li>
+ </ul>
+ </li>
+ </ul>
+ </li>
+ <li>
+ Visit each task to handle its so called active annotations.
+ Such annotations can be used on variables to compose a set of choices
+ from choices defined in other variables,
+ or to induce choices from the value of another variable.
+ TODO examples
+ </li>
+ <li>
+ Visit each variable task to build a key-to-value map.
+ Analyze that map to determine the variable references,
+ reordering the map base on this dependency analysis.
+ And expand the variables in the ordered map.
+ </li>
+ <li>
+ Expand the values of all attributes, of all tasks based on the key-to-value map, except those attributes marked as not expandable.
+ E.g., the name attribute of a variable itself is not expanded.
+ </li>
+ <li>
+ Recall that the gathering of tasks effectively <a href="Everything.html#ScopeList.footer" title="Section in Oomph Setup Documentation">ignore</a> <a href="Everything.html#Compound" title="Chapter in Oomph Setup Documentation">compound tasks</a>.
+ But those compound tasks can specify <a href="Everything.html#Task.order" title="Section in Oomph Setup Documentation">predecessors and successors</a> and well as <a href="Everything.html#Task.restrictions" title="Section in Oomph Setup Documentation">restrictions</a>.
+ As such,
+ those predecessors and successors are expanded to become references to the leaf tasks.
+ Furthermore,
+ the resulting expanded predecessors and successors,
+ as well at the restrictions,
+ are propagated down to the leaf tasks.
+ </li>
+ </ul>
+ <p>
+
+<h4><a name="FinalPhase"></a>6.2.2&nbsp;&nbsp;Final Phase</h4>
+<p>
+ The final phase processes a task list that is a concatenation of task lists produced from the initial phase,
+ or just the one task list already processed by the initial phase.
+ As such,
+ it's working with task copies for which all variables have been expanded and eliminated.
+ The processing for this phase augments the substitution map
+ by analyzing the task list for structural duplicates.
+ It then applies those substitutions,
+ i.e., overriding and merging duplicate tasks,
+ thereby reducing the task list before further processing.
+ </p>
+
+<h4><a name="Reorder"></a>6.2.3&nbsp;&nbsp;Reordering</h4>
+<p>
+ The processing of the task list,
+ particularly task <a href="Everything.html#Task.override" title="Section in Oomph Setup Documentation">overriding</a> and merging,
+ affects the overall order of the task list such that it's different from the original authored order gathered from the scopes.
+ Not only that,
+ when multiple streams are involved,
+ <a href="Everything.html#FinalPhase" title="Chapter in Oomph Setup Documentation">final phase</a> processing is dealing with a concatenated list in which the tasks must be properly reordered.
+ To support that,
+ each task has an intrinsic <a href="Everything.html#Task.order" title="Section in Oomph Setup Documentation">priority</a>;
+ the task list is primarily sorted according to that priority.
+ Each task also specifies <a href="Everything.html#Task.order" title="Section in Oomph Setup Documentation">predecessors and successors</a>;
+ the task list is secondarily sorted to respect that induced partial order.
+ After these two sorting steps,
+ the tasks in the list are modified to clear both the predecessors and successors
+ and then the predecessors are set to form a chain that induces an overall order that's exactly this final order of sorted task list;
+ this chain excludes variables.
+ This chain of dependencies ensures that the final phase processing,
+ which deals with the concatenated task lists,
+ will properly interleave the tasks (because of the priority sorting)
+ while also respecting the per-stream order of the multiple streams.
+ <p>
+
+<h4><a name="Filter"></a>6.2.4&nbsp;&nbsp;Trigger Filtering</h4>
+<p>
+ Each task that <a href="Everything.html#Task.excludedTriggers" title="Section in Oomph Setup Documentation">excludes</a> the current <a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">trigger</a> is removed from the task list.
+ Note that the task list gathering process gathers <b>all</b> tasks
+ because the task list is analyzed to determine which tasks need to be installed for all possible triggers.
+ So for <a href="Everything.html#Trigger.bootstrap" title="Section in Oomph Setup Documentation">bootstrap bootstrap </a>trigger,
+ even the tasks that can't execute until they're running in an installed product are analyzed to ensure that,
+ once the product is installed,
+ the tasks that will need to perform in that installation,
+ i.e., for <a href="Everything.html#Trigger.startup" title="Section in Oomph Setup Documentation">startup</a> or <a href="Everything.html#Trigger.manual" title="Section in Oomph Setup Documentation">manual</a> trigger,
+ are properly installed.
+ The processing of all tasks also implies that at bootstrap time,
+ all  variables that will be needed in the running installed product will be <a href="Everything.html#PromptPage" title="Chapter in Oomph Setup Documentation">prompted</a> early
+ and hence will already be available in the running installed product.
+ </p>
+
+<h4><a name="Consolidation"></a>6.2.5&nbsp;&nbsp;Consolidation</h4>
+<p>
+ The final task list processing step
+ removes all variables from the task list
+ and <a href="Everything.html#Task.consolidate" title="Section in Oomph Setup Documentation">consolidates</a> each remaining task.
+ At this point,
+ the tasks in the list are ready to be <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">performed</a>.
+ </p>
+
+<h2><a name="VariableRecording"></a>7&nbsp;&nbsp;Variable Recording</h2>
+<p>
+ </p>
+
+<h2><a name="TaskExecution"></a>8&nbsp;&nbsp;Task Execution</h2>
+<p>
+ The <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a> task list is prepared to <a href="Everything.html#Task.performance" title="Section in Oomph Setup Documentation">perform</a> the specified tasks.
+ This list is presented to the user on the setup wizard's <a href="Everything.html#ConfirmationPage" title="Chapter in Oomph Setup Documentation">confirmation page</a>.
+ Initially,
+ each task in the list is visited
+ to determine if it needs to perform.
+ That determination is generally influenced by the <a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">trigger</a>.
+ Tasks that don't need to perform are logically removed from the list
+ to induce the so called needed task list.
+ The confirmation page allows the user to see either the full list or the needed task list.
+
+ Each task remaining in the reduced list of needed tasks
+ is then performed.
+ </p>
+
+<h2><a name="SetupWizard"></a>9&nbsp;&nbsp;Setup Wizards</h2>
+<p>
+ Oomph provides three wizards to drive the automated installation and provisioning process.
+ These wizards reuse the same underlying pages.
+ They makes heavy use of Internet-hosted <a href="Everything.html#SetupResource" title="Chapter in Oomph Setup Documentation">resources</a>,
+ but these resources are cached locally on each download,
+ so once cached,
+ the wizards can function offline based on these cached instances.
+ </p>
+
+<a name="SetupWizard.wizardFooter">
+<p>
+ All the wizard's footers contain the following:
+ <ul>
+ <li>
+ A <em>help</em> button
+ to bring up this help.
+ </li>
+ <li>
+ The usual wizard navigation buttons for back, next, finish, and cancel.
+ </li>
+ </ul>
+ </p>
+
+<h3><a name="InstallerWizard"></a>9.1&nbsp;&nbsp;Installer Wizard</h3>
+<p>
+ The installer wizard is the basis for Oomph's bootstrap-<a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">triggered</a>, automated installation and provisioning process.
+ The following downloads are available for this Eclipse RCP application.
+ <ul>
+ <li>
+ <a rel="nofollow" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-win32.win32.x86_64.zip">Windows 64 bit</a>
+ </li>
+ <li>
+ <a rel="nofollow" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-win32.win32.x86.zip">Windows 32 bit</a>
+ </li>
+ <li>
+ <a rel="nofollow" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-macosx.cocoa.x86_64.tar.gz">Mac OS 64 bit</a>
+ </li>
+ <li>
+ <a rel="nofollow" class="external text" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86_64.zip">Linux 64 bit</a>
+ </li>
+ <a rel="nofollow" class="external text" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86.zip">Linux 32 bit</a>
+ </li>
+ </ul>
+ This download can be "installed" just like <a href="https://wiki.eclipse.org/Eclipse/Installation">Eclipse itself</a>.
+ </p>
+
+<a name="InstallerWizard.wizardFooter">
+<p>
+ In addition to <a href="Everything.html#SetupWizard.wizardFooter" title="Section in Oomph Setup Documentation">usual</a> controls,
+ installer's footer contains the following:
+ <ul>
+ <li>
+ A <em>network proxy settings</em> button
+ to bring up the equivalent of Eclipse's <em>Window->Preferences...->General->Network Connections</em> preferences.
+ Configuration the network proxies is a necessary first step for users working in an environment behind a fire wall,
+ none of Oomph's Internet-hosed resources will be accessible without that configuration.
+ Note that all the configured network settings will be propagated to the installed product.
+ </li>
+ <li>
+ An <em>SSH2 settings</em> button
+ to bring up the equivalent of Eclipse's <em>Window->Preferences...->General->Network Connections->SSH2</em> preferences.
+ Confirming the SSH2 settings during initial installation is a good idea when using any technologies that are based on SSH access,
+ i.e., if you plan to clone Git projects via public-key encryption.
+ Note that all the configured SSH2 settings will be propagated to the installed product.
+ </li>
+ <li>
+ An <em>self update</em> button
+ to update the installer itself to the last Internet-hosted version.
+ The wizard always check whether updates are available.
+ If so, the button is animated, otherwise it's disabled.
+ </li>
+ <li>
+ A <em>build identifier</em> so you know which version you're currently using and can provide that information for problem reports.
+ </li>
+ </ul>
+ </p>
+
+<h3><a name="ProjectWizard"></a>9.2&nbsp;&nbsp;Project Import Wizard</h3>
+<p>
+ The project wizard is the basis for Oomph's manually-<a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">triggered</a>, updates to the automated installation and provisioning process.
+ It is available in any running Eclipse product with Oomph installed
+ via the <em>File->Import...->Oomph->Projects into Workspace</em>
+ and the <em>execution</em> tool bar button.
+ It's purpose is to augment the <a href="Everything.html#WorkspaceResource" title="Chapter in Oomph Setup Documentation">workspace</a>'s set of <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">streams</a>.
+ </p>
+
+<h3><a name="ExecutionWizard"></a>9.3&nbsp;&nbsp;Execution Wizard</h3>
+<p>
+ The execution wizard is the basis for Oomph's manually-<a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">triggered</a>, automated installation and provisioning process.
+ It's also used for startup-triggered, installation and provisioning,
+ i.e., when the Eclipse product starts
+ and the <em>Window->Preferences...->Oomph->Setup->Skip automatic task execution at startup time</em> preference permits,
+ tasks are <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a>,
+ and if any tasks <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">need to perform</a>,
+ the execution wizard is opened on the <a href="Everything.html#ConfirmationPage" title="Chapter in Oomph Setup Documentation">confirmation page</a>.
+ </p>
+
+<h3><a name="ProductPage"></a>9.4&nbsp;&nbsp;Product Page</h3>
+<p>
+ The primary purpose of the product page is to create an <a href="Everything.html#InstallationResource" title="Chapter in Oomph Setup Documentation">installation</a>
+ with a specific <a href="Everything.html#Version" title="Chapter in Oomph Setup Documentation">product version</a>.
+ Its secondary purpose is to manage Oomph's <a href="Everything.html#BundlePool" title="Chapter in Oomph Setup Documentation">bundle pools</a>.
+ The product page is used exclusively by the <a href="Everything.html#Installation" title="Chapter in Oomph Setup Documentation">installation wizard</a>.
+ </p>
+ <p>
+ The tree viewer of the page displays the <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html" title="Interface in org.eclipse.oomph.setup"><code>selected</code></a> <a href="../javadoc/org/eclipse/oomph/setup/ProductCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>product catalogs</code></a>.
+ The <em>product catalog selection</em> tool bar button
+ is used to choose which of the product catalogs available in the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a> are displayed.
+ The <em>filter text</em> can be used to filter which of the <a href="Everything.html#Product" title="Chapter in Oomph Setup Documentation">products</a> are displayed.
+ The <em>collapse button</em> can be used to collapse the tree;
+ initially it's fully expanded.
+ The <em>refresh</em> button can be used to update the locally-cached versions of all the <a href="Everything.html#SetupResource" title="Chapter in Oomph Setup Documentation">resources</a> used in the wizard.
+ </p>
+ <p>
+ Selecting a specific product displays its ID, name, and version.
+ The <em>Product Version</em> drop-down determines which specific version of the available product versions to install.
+ The <a href="Everything.html#CatalogSelectionResource" title="Chapter in Oomph Setup Documentation">selected product</a> is remembered,
+ as well as the selected version of that product,
+ so when the wizard comes up the next time,
+ these will be the defaults initially available.
+ Double-clicking a product automatically advances the <a href="Everything.html#ProjectPage" title="Chapter in Oomph Setup Documentation">project page</a>.
+ </p>
+ <p>
+ The <em>Bundle Pool</em> check-box determines whether the installation will use <a href="Everything.html#BundlePool" title="Chapter in Oomph Setup Documentation">bundle pools</a>,
+ and the adjacent drop-down determines which specific bundle pool to use.
+ The <em>Manage Bundle Pools</em> button brings up the <a href="Everything.html#BundlePoolManager" title="Chapter in Oomph Setup Documentation">bundle pool management</a> dialog.
+ </p>
+
+<h3><a name="ProjectPage"></a>9.5&nbsp;&nbsp;Project Page</h3>
+<p>
+ The primary purpose of the project page is to create (or update) a <a href="Everything.html#WorkspaceResource" title="Chapter in Oomph Setup Documentation">workspace</a>
+ with one or more specific <a href="Everything.html#Stream" title="Chapter in Oomph Setup Documentation">project streams</a>.
+ </p>
+ <p>
+ The tree viewer of the page displays the <a href="../javadoc/org/eclipse/oomph/setup/CatalogSelection.html" title="Interface in org.eclipse.oomph.setup"><code>selected</code></a> <a href="Everything.html#ProjectCatalog" title="Chapter in Oomph Setup Documentation">project catalogs</a>.
+ The <em>project catalog selection</em> tool bar button
+ is used to choose which of the project catalogs available in the <a href="Everything.html#Index" title="Chapter in Oomph Setup Documentation">index</a> are displayed.
+ The <em>filter text</em> can be used to filter which of the <a href="Everything.html#Project" title="Chapter in Oomph Setup Documentation">projects</a> are displayed.
+ The <em>collapse button</em> can be used to collapse the tree;
+ initially it's expanded to the second level.
+ The <em>refresh</em> button can be used to update the locally-cached versions of all the <a href="Everything.html#SetupResource" title="Chapter in Oomph Setup Documentation">resources</a> used in the wizard.
+ TODO need buttons to add and remove user projects and explain how they work
+ </p>
+ <p>
+ Choosing a specific project displays it in the table viewer.
+ There are two ways add a project to the table viewer:
+ <ul>
+ <li>
+ Double-clicking the project.
+ </li>
+ <li>
+ Selecting one or more projects
+ and then clicking  the <em>down arrow</em>.
+ </li>
+ </ul>
+ </p>
+ </p>
+ Selecting streams is optional, except in <a href="Everything.html#ProjectWizard" title="Chapter in Oomph Setup Documentation">project import wizard</a>.
+ In the <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installer wizard</a>,
+ the <em>Skip project selection</em> check-box can be used enabled advancement to the <a href="Everything.html#PromptPage" title="Chapter in Oomph Setup Documentation">prompt page</a>
+ without selecting any project streams.
+ This is useful for installing a product without workspace provisioning.
+ <p>
+ The table viewer determines which stream of the project will be provisioned.
+ The cell editor of the <em>Stream</em> column selects which specific stream of the project's available streams to provision.
+ There are two ways remove a project from the table viewer:
+ <ul>
+ <li>
+ Double-clicking the project.
+ </li>
+ <li>
+ Selecting one or more projects
+ and then clicking the <em>up arrow</em>.
+ </li>
+ </ul>
+ </p>
+
+<h3><a name="PromptPage"></a>9.6&nbsp;&nbsp;Prompt Page</h3>
+<p>
+ The primary purpose of the prompt page is to specify the values for <a href="Everything.html#Variable" title="Chapter in Oomph Setup Documentation">variables</a>.
+ At this point in the wizard's work flow,
+ a task list has been <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a>.
+ That process induces variables and evaluates and expands variables.
+ Any variable with an empty value requires the user's input.
+ Information related to those variables is displayed on this page in a three column format:
+ <ul>
+ <li>
+ A <em>label</em> column displaying the label for the variable
+ with hover help that describes the purpose of the variable.
+ </li>
+ <li>
+ A field of some sort for specifying the value.
+ In the case of a drop-down field,
+ the hover help displays the corresponding label of the selected choice.
+ </li>
+ <li>
+ An optional action button to help specify the value.
+ </li>
+ </ul>
+ The values of the variables are <a href="Everything.html#VariableRecording" title="Chapter in Oomph Setup Documentation">recorded</a>.
+ The <em>Show all variables</em> check-box determines whether or not those already-recorded variables
+ are displayed on the page.
+ All variables must specify a non-empty value in order to advance to the <a href="Everything.html#ConfirmationPage" title="Chapter in Oomph Setup Documentation">confirmation page</a>.
+ </p>
+
+<h3><a name="ConfirmationPage"></a>9.7&nbsp;&nbsp;Confirmation</h3>
+<p>
+ The primary purpose of the confirmation page is to review that <a href="Everything.html#TaskComposition" title="Chapter in Oomph Setup Documentation">gathered</a> task list.
+ </p>
+ <p>
+ The left check-box tree viewer of the page displays the <a href="Everything.html#Trigger" title="Chapter in Oomph Setup Documentation">trigger</a>
+ with all the triggered tasks as children.
+ The <em>Show all triggered tasks</em> check-button determines whether
+ all triggered tasks are displayed
+ or only the triggered tasks that need to be performed are displayed.
+ Tasks that aren't needed will be grayed-out.
+ Using the tree's check-boxes,
+ the tasks that will actually be performed can be selectively enabled and disabled.
+ A task can be double-clicked to enable only that one task.
+ </p>
+ <p>
+ The top right tree viewer displays the nested elements of the selected task in the left check-box tree viewer.
+ Similarly,
+ The bottom right table viewer displays the properties of
+ either the selected task in the left check-box tree viewer,
+ or the selected nested element in the top right tree viewer.
+ These viewers are useful for understanding exactly what the task will do when it's performed.
+ </p>
+ </p>
+ Before proceeding the the <a href="Everything.html#ProgressPage" title="Chapter in Oomph Setup Documentation">progress page</a>,
+ it's important to specify the setting that affect how the tasks will be performed.
+ The <em>Offline</em> check-button determines whether Internet-hosted resources will be used
+ or whether execution will proceed to the best extent possible using already-cached resources.
+ The <em>Mirror</em> check-button determines whether Internet-hosted resource mirrors will be used
+ or whether execution will proceed using the primary Internet host.
+ These settings are particularly relevant for <a href="Everything.html#P2" title="Chapter in Oomph Setup Documentation">p2</a> and <a href="Everything.html#Targlet" title="Chapter in Oomph Setup Documentation">targlet</a> tasks
+ which make heavy use of p2 update sites.
+ If the progress page detects that the tasks will overwrite an existing product installation,
+ the <em>Overwrite</em> check-box will be displayed,
+ and the user must confirm that they do indeed wish to reinstall, i.e., overwrite, an existing installation.
+ </p>
+
+<h3><a name="ProgressPage"></a>9.8&nbsp;&nbsp;Progress Page</h3>
+<p>
+ The primary purpose of the progress page is to manage the tasks while they are <a href="Everything.html#TaskExecution" title="Chapter in Oomph Setup Documentation">performing</a>.
+ </p>
+ <p>
+ The tree viewer of the page displays the tasks being performed
+ and the text viewer of the page displays a progress log.
+ The task currently being performed is automatically selected in the tree viewer.
+ While tasks are executing,
+ the bottom of the page displays a progress monitor.
+ The cancel button of that monitor can be used to interrupt task execution.
+ The text viewer automatically scrolls to the button, unless the <em>Scroll lock</em> check-box is enabled.
+ Scrolling the text viewer manually will automatically enable the scroll lock.
+ Selecting an already-performed task in the tree viewer
+ will select the text viewer's text associated with that tasks monitored progress.
+ Once task execution terminates,
+ either because it has been completed successfully, has been partially successful but requires a restart, has terminated in failure, or has been canceled,
+ the progress monitor will be hidden.
+ The page banner provides important feedback with regard to the actions to be taken upon task execution termination.
+ The <em>Dismiss automatically</em> check-box,
+ when checked,
+ will result in the automatic dismissal of the dialog when task execution terminates successfully.
+ The <em>Launch automatically</em> check-box, which is only available in the <a href="Everything.html#InstallerWizard" title="Chapter in Oomph Setup Documentation">installer wizard</a>,
+ when checked,
+ will result in the installed product being automatically launched when the wizard completes.
+ The <em>Restart automatically</em> check-box, which is only available in the <a href="Everything.html#ProjectWizard" title="Chapter in Oomph Setup Documentation">project wizard</a> and the <a href="Everything.html#ExecutionWizard" title="Chapter in Oomph Setup Documentation">execution wizard</a>,
+ when checked,
+ will result in the installed product being automatically restarted when task execution terminates with partially successful results that require a restart,
+ i.e., because the product's 'ini' file has been modified or new software has been installed.
+ The restarted product will automatically open the <a href="Everything.html#ExecutionWizard" title="Chapter in Oomph Setup Documentation">execution wizard</a>,
+ proceeding directly to the progress page,
+ to continue performing the remaining tasks.
+ </p>
+
+<h2><a name="BundlePoolManager"></a>10&nbsp;&nbsp;Bundle Pool Management</h2>
+<p>
+ </p>
+
+<p align="right">
+<a href="Overview.html" title="Backward to Overview"><img src="../images/backward.png" border="0"></a>&nbsp;<a href="examples/index.html" title="Forward to Examples"><img src="../images/forward.png" border="0"></a></p>
+<HR>
+<i>Copyright (c) 2011, 2012 Eike Stepper (Berlin, Germany) and others.</i>
+</BODY>
+</HTML>

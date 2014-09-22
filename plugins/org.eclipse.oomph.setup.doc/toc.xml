@@ -3,6 +3,7 @@
 
 <toc label="Oomph Setup Documentation" topic="html/Overview.html">
   <topic label="Overview" href="html/Overview.html" />
+  <topic label="Outline" href="html/Everything.html" />
   <topic label="Examples" href="html/examples/index.html">
     <topic label="Connecting To Repositories" href="html/examples/ConnectingToRepositories.html" />
     <topic label="Creating Transport Connections" href="html/examples/CreatingTransportConnections.html" />
@@ -31,7 +32,7 @@
   </topic>
   <topic label="Online Docs" href="html/online/index.html">
     <topic label="Homepage" href="http://www.eclipse.org/oomph" icon="external" />
-    <topic label="Wiki" href="http://wiki.eclipse.org/Oomph" icon="external" />
+    <topic label="Wiki" href="https://wiki.eclipse.org/Eclipse_Oomph_Installer" icon="external" />
   </topic>
   <topic label="Legal" href="about.html" />
 </toc>
