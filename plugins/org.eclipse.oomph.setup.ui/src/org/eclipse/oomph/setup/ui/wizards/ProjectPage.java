@@ -39,9 +39,12 @@ import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
+import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -50,6 +53,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
+import org.eclipse.emf.edit.command.DragAndDropFeedback;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
@@ -64,9 +68,14 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellEditor;
@@ -87,6 +96,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
@@ -94,6 +105,8 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.URLTransfer;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -104,6 +117,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
@@ -114,6 +128,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.progress.WorkbenchJob;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -178,7 +193,7 @@ public class ProjectPage extends SetupWizardPage
     }
 
     ResourceSet resourceSet = getResourceSet();
-    AdapterFactoryEditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack()
+    final AdapterFactoryEditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack()
     {
       @Override
       public void execute(Command command)
@@ -221,6 +236,289 @@ public class ProjectPage extends SetupWizardPage
     filterPlaceholder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
+
+    final ToolItem addProjectButton = new ToolItem(filterToolBar, SWT.NONE);
+    addProjectButton.setToolTipText("Add a project to the user project of the selected catalog");
+    addProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project"));
+    addProjectButton.setEnabled(false);
+
+    final List<ProjectCatalog> projectCatalogs = new ArrayList<ProjectCatalog>();
+    addProjectButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        ResourceDialog resourceDialog = new ResourceDialog(getShell(), "Locate Project", SWT.OPEN | SWT.MULTI)
+        {
+          @Override
+          protected void prepareBrowseFileSystemButton(Button browseFileSystemButton)
+          {
+            browseFileSystemButton.addSelectionListener(new SelectionAdapter()
+            {
+              @Override
+              public void widgetSelected(SelectionEvent event)
+              {
+                FileDialog fileDialog = new FileDialog(getShell(), style);
+                fileDialog.setFilterExtensions(new String[] { "*.setup" });
+                fileDialog.open();
+
+                String filterPath = fileDialog.getFilterPath();
+                String[] fileNames = fileDialog.getFileNames();
+                StringBuffer uris = new StringBuffer();
+
+                for (int i = 0, len = fileNames.length; i < len; i++)
+                {
+                  uris.append(URI.createFileURI(filterPath + File.separator + fileNames[i]).toString());
+                  uris.append("  ");
+                }
+                uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
+              }
+            });
+          }
+
+          @Override
+          protected void prepareBrowseWorkspaceButton(Button browseWorkspaceButton)
+          {
+            browseWorkspaceButton.addSelectionListener(new SelectionAdapter()
+            {
+              @Override
+              public void widgetSelected(SelectionEvent event)
+              {
+                StringBuffer uris = new StringBuffer();
+
+                IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
+                    Collections.<ViewerFilter> singletonList(new ViewerFilter()
+                    {
+                      @Override
+                      public boolean select(Viewer viewer, Object parentElement, Object element)
+                      {
+                        if (element instanceof IFile)
+                        {
+                          IFile file = (IFile)element;
+                          return "setup".equals(file.getFileExtension());
+                        }
+
+                        return true;
+                      }
+                    }));
+
+                for (int i = 0, len = files.length; i < len; i++)
+                {
+                  uris.append(URI.createURI(files[i].getLocationURI().toString(), true));
+                  uris.append("  ");
+                }
+
+                uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
+              }
+
+              private String getContextPath()
+              {
+                return context != null && context.isPlatformResource() ? URI.createURI(".").resolve(context).path().substring(9) : null;
+              }
+
+              private Object[] getContextSelection()
+              {
+                String path = getContextPath();
+                if (path != null)
+                {
+                  IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+                  IResource resource = root.findMember(path);
+                  if (resource != null && resource.isAccessible())
+                  {
+                    return new Object[] { resource };
+                  }
+                }
+                return null;
+              }
+            });
+          }
+
+          @Override
+          protected boolean processResources()
+          {
+            List<Project> validProjects = new ArrayList<Project>();
+            List<Project> invalidProjects = new ArrayList<Project>();
+            List<URI> invalidURIs = new ArrayList<URI>();
+            ResourceSet resourceSet = editingDomain.getResourceSet();
+            for (URI uri : getURIs())
+            {
+              BaseResource resource = BaseUtil.loadResourceSafely(resourceSet, uri);
+              Project project = (Project)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.PROJECT);
+              if (project == null)
+              {
+                invalidURIs.add(uri);
+              }
+              else if (project.eContainer() != null)
+              {
+                invalidProjects.add(project);
+              }
+              else
+              {
+                validProjects.add(project);
+              }
+            }
+
+            if (!validProjects.isEmpty())
+            {
+              Command command = DragAndDropCommand.create(editingDomain, projectCatalogs.get(0), 0.5F, DragAndDropFeedback.DROP_LINK,
+                  DragAndDropFeedback.DROP_LINK, validProjects);
+              editingDomain.getCommandStack().execute(command);
+              return true;
+            }
+
+            StringBuilder message = new StringBuilder();
+
+            int invalidURIsSize = invalidURIs.size();
+            if (invalidURIsSize != 0)
+            {
+              if (invalidURIsSize == 1)
+              {
+                message.append("The URI ");
+              }
+              else
+              {
+                message.append("The URIs ");
+              }
+
+              for (int i = 0; i < invalidURIsSize; ++i)
+              {
+                if (i != 0)
+                {
+                  message.append(", ");
+
+                  if (i + 1 == invalidURIsSize)
+                  {
+                    message.append(" and ");
+                  }
+                }
+
+                message.append('\'');
+                message.append(invalidURIs.get(i));
+                message.append('\'');
+              }
+
+              if (invalidURIsSize == 1)
+              {
+                message.append(" does not contain a valid project.");
+              }
+              else
+              {
+                message.append(" do not contain valid projects.");
+              }
+            }
+
+            int invalidProjectsSize = invalidProjects.size();
+            if (invalidProjectsSize != 0)
+            {
+              if (message.length() != 0)
+              {
+                message.append("\n\n");
+              }
+
+              if (invalidProjectsSize == 1)
+              {
+                message.append("The project ");
+              }
+              else
+              {
+                message.append("The projects ");
+              }
+
+              for (int i = 0; i < invalidProjectsSize; ++i)
+              {
+                if (i != 0)
+                {
+                  message.append(", ");
+
+                  if (i + 1 == invalidProjectsSize)
+                  {
+                    message.append(" and ");
+                  }
+                }
+
+                message.append('\'');
+                message.append(invalidProjects.get(i).getLabel());
+                message.append('\'');
+              }
+
+              if (invalidProjectsSize == 1)
+              {
+                message.append(" is already contained in the index.");
+              }
+              else
+              {
+                message.append(" are already contained in the index.");
+              }
+            }
+
+            if (message.length() == 0)
+            {
+              message.append("No URIs were specified. Hit Cancel to terminate the dialog.");
+            }
+
+            ErrorDialog.openError(getShell(), "Error Adding Projects", null,
+                new Status(IStatus.ERROR, SetupUIPlugin.INSTANCE.getSymbolicName(), message.toString()));
+            return false;
+          }
+        };
+
+        if (resourceDialog.open() == Window.OK)
+        {
+        }
+      }
+    });
+
+    final ToolItem removeProjectButton = new ToolItem(filterToolBar, SWT.NONE);
+    removeProjectButton.setToolTipText("Remove the select project from the user project");
+    removeProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove_project"));
+    removeProjectButton.setEnabled(false);
+
+    final List<Project> projects = new ArrayList<Project>();
+    final List<Project> userProjects = new ArrayList<Project>();
+    final SelectionAdapter removeProjectSelectionAdapter = new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent event)
+      {
+        Workspace workspace = getWorkspace();
+        List<Stream> streamsToRemove = new ArrayList<Stream>();
+
+        List<Project> parents = new UniqueEList<Project>();
+        for (Project project : userProjects)
+        {
+          Project parentProject = project.getParentProject();
+          parentProject.getProjects().remove(project);
+          parents.add(parentProject);
+
+          if (workspace != null)
+          {
+            EList<Stream> streams = project.getStreams();
+            for (Stream stream : workspace.getStreams())
+            {
+              if (streams.contains(stream))
+              {
+                streamsToRemove.add(stream);
+                break;
+              }
+            }
+          }
+        }
+
+        for (Project parent : parents)
+        {
+          BaseUtil.saveEObject(parent);
+        }
+
+        if (!streamsToRemove.isEmpty())
+        {
+          streamViewer.setSelection(new StructuredSelection(streamsToRemove));
+          removeSelectedStreams();
+        }
+
+        projectViewer.setSelection(new StructuredSelection(parents));
+      }
+    };
+    removeProjectButton.addSelectionListener(removeProjectSelectionAdapter);
 
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
     collapseAllButton.setToolTipText("Collapse All");
@@ -471,13 +769,15 @@ public class ProjectPage extends SetupWizardPage
     bucketToolBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
     bucketToolBar.setSize(46, 22);
 
-    ToolItem addButton = new ToolItem(bucketToolBar, SWT.PUSH);
+    final ToolItem addButton = new ToolItem(bucketToolBar, SWT.PUSH);
     addButton.setToolTipText("Add Project (or double-click in upper tree)");
     addButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add"));
+    addButton.setEnabled(false);
 
-    ToolItem removeButton = new ToolItem(bucketToolBar, SWT.PUSH);
+    final ToolItem removeButton = new ToolItem(bucketToolBar, SWT.PUSH);
     removeButton.setToolTipText("Remove Project (or double-click in lower table)");
     removeButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove"));
+    removeButton.setEnabled(false);
 
     addButton.addSelectionListener(new SelectionAdapter()
     {
@@ -485,6 +785,7 @@ public class ProjectPage extends SetupWizardPage
       public void widgetSelected(SelectionEvent e)
       {
         addSelectedProjects();
+        addButton.setEnabled(false);
       }
     });
 
@@ -562,6 +863,74 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
+    projectViewer.addSelectionChangedListener(new ISelectionChangedListener()
+    {
+      public void selectionChanged(SelectionChangedEvent event)
+      {
+        projects.clear();
+        userProjects.clear();
+        projectCatalogs.clear();
+
+        IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+        for (Object value : selection.toArray())
+        {
+          if (value instanceof Project)
+          {
+            Project project = (Project)value;
+            projects.add(project);
+            projectCatalogs.add(project.getProjectCatalog());
+            addRootUserProject(project);
+          }
+          else if (value instanceof ProjectCatalog)
+          {
+            ProjectCatalog projectCatalog = (ProjectCatalog)value;
+            projectCatalogs.add(projectCatalog);
+          }
+        }
+
+        addProjectButton.setEnabled(!projectCatalogs.isEmpty());
+        removeProjectButton.setEnabled(!userProjects.isEmpty());
+
+        Workspace workspace = getWorkspace();
+        List<Project> projectsToAdd = new ArrayList<Project>(projects);
+        if (workspace != null)
+        {
+          for (Stream stream : workspace.getStreams())
+          {
+            projectsToAdd.remove(stream.getProject());
+          }
+        }
+
+        for (Project project : projectsToAdd)
+        {
+          if (!project.getStreams().isEmpty())
+          {
+            addButton.setEnabled(true);
+            return;
+          }
+        }
+
+        addButton.setEnabled(false);
+      }
+
+      protected void addRootUserProject(Project project)
+      {
+        Project parentProject = project.getParentProject();
+        if (parentProject != null)
+        {
+          Resource resource = parentProject.eResource();
+          if (resource != null && SetupContext.USER_SCHEME.equals(resource.getURI().scheme()))
+          {
+            userProjects.add(project);
+          }
+          else
+          {
+            addRootUserProject(project.getParentProject());
+          }
+        }
+      }
+    });
+
     projectViewer.addDoubleClickListener(new IDoubleClickListener()
     {
       public void doubleClick(DoubleClickEvent event)
@@ -589,6 +958,7 @@ public class ProjectPage extends SetupWizardPage
           if (!project.getStreams().isEmpty())
           {
             addSelectedProjects();
+            addButton.setEnabled(false);
             return;
           }
         }
@@ -598,11 +968,77 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
+    projectViewer.getControl().addKeyListener(new KeyAdapter()
+    {
+      @Override
+      public void keyReleased(KeyEvent event)
+      {
+        if (event.character == SWT.DEL)
+        {
+          List<Stream> selectedProjectStreams = new ArrayList<Stream>();
+          Workspace workspace = getWorkspace();
+          if (workspace != null)
+          {
+            for (Stream stream : workspace.getStreams())
+            {
+              Project project = stream.getProject();
+              if (projects.contains(project))
+              {
+                selectedProjectStreams.add(stream);
+              }
+            }
+          }
+
+          if (selectedProjectStreams.isEmpty())
+          {
+            if (removeProjectButton.isEnabled())
+            {
+              removeProjectSelectionAdapter.widgetSelected(null);
+            }
+          }
+          else
+          {
+            streamViewer.setSelection(new StructuredSelection(selectedProjectStreams));
+            removeSelectedStreams();
+          }
+        }
+        else if (event.keyCode == SWT.INSERT && addButton.isEnabled())
+        {
+          addSelectedProjects();
+          addButton.setEnabled(false);
+        }
+      }
+    });
+
+    streamViewer.addSelectionChangedListener(new ISelectionChangedListener()
+    {
+      public void selectionChanged(SelectionChangedEvent event)
+      {
+        removeButton.setEnabled(!event.getSelection().isEmpty());
+      }
+    });
+
     streamViewer.addDoubleClickListener(new IDoubleClickListener()
     {
       public void doubleClick(DoubleClickEvent event)
       {
         removeSelectedStreams();
+      }
+    });
+
+    streamViewer.getControl().addKeyListener(new KeyAdapter()
+    {
+      @Override
+      public void keyReleased(KeyEvent event)
+      {
+        if (event.character == SWT.DEL && removeButton.isEnabled())
+        {
+          removeSelectedStreams();
+        }
+        else if (event.keyCode == SWT.INSERT && addButton.isEnabled())
+        {
+          addSelectedProjects();
+        }
       }
     });
 
@@ -1028,10 +1464,10 @@ public class ProjectPage extends SetupWizardPage
         }
 
         @Override
-        protected Command createDragAndDropCommand(EditingDomain domain, ResourceSet resourceSet, float location, int operations, int operation,
-            Collection<URI> collection)
+        protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation,
+            Collection<?> collection)
         {
-          ProjectCatalog projectCatalog = (ProjectCatalog)getTarget();
+          ProjectCatalog projectCatalog = (ProjectCatalog)owner;
           for (Project project : projectCatalog.getProjects())
           {
             Command command = itemDelegator.createCommand(project, domain, DragAndDropCommand.class, new CommandParameter(project,
@@ -1044,6 +1480,13 @@ public class ProjectPage extends SetupWizardPage
           }
 
           return UnexecutableCommand.INSTANCE;
+        }
+
+        @Override
+        protected Command createDragAndDropCommand(EditingDomain domain, ResourceSet resourceSet, float location, int operations, int operation,
+            Collection<URI> collection)
+        {
+          return createPrimaryDragAndDropCommand(domain, getTarget(), location, operations, operation, collection);
         }
 
         @Override
@@ -1085,14 +1528,14 @@ public class ProjectPage extends SetupWizardPage
         }
 
         @Override
-        protected Command createDragAndDropCommand(EditingDomain domain, final ResourceSet resourceSet, float location, int operations, int operation,
-            Collection<URI> collection)
+        protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation,
+            Collection<?> collection)
         {
           final Project targetProject = (Project)getTarget();
           Resource directResource = ((InternalEObject)targetProject).eDirectResource();
           if (directResource != null && "user".equals(directResource.getURI().scheme()))
           {
-
+            final ResourceSet resourceSet = domain.getResourceSet();
             return new DragAndDropCommand(domain, resourceSet, location, operations, operation, collection)
             {
               final Set<Project> projects = new LinkedHashSet<Project>();
@@ -1161,6 +1604,14 @@ public class ProjectPage extends SetupWizardPage
                       projects.add(project);
                     }
                   }
+                  else if (value instanceof Project)
+                  {
+                    Project project = (Project)value;
+                    if (project.getName() != null && (operation == DROP_COPY || project.eContainer() == null))
+                    {
+                      projects.add(project);
+                    }
+                  }
                 }
 
                 if (operation == DROP_MOVE)
@@ -1186,6 +1637,13 @@ public class ProjectPage extends SetupWizardPage
           }
 
           return UnexecutableCommand.INSTANCE;
+        }
+
+        @Override
+        protected Command createDragAndDropCommand(EditingDomain domain, final ResourceSet resourceSet, float location, int operations, int operation,
+            Collection<URI> collection)
+        {
+          return createPrimaryDragAndDropCommand(domain, getTarget(), location, operations, operation, collection);
         }
 
         @Override
