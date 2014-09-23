@@ -96,7 +96,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   {
     URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
-    return uriConverter.exists(normalizedURI, options);
+    return uriConverter.exists(normalizedURI, options) || create(uri, normalizedURI);
   }
 
   @Override
@@ -125,7 +125,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     uriConverter.setAttributes(normalizedURI, attributes, options);
   }
 
-  private void create(URI uri, URI normalizedURI)
+  private boolean create(URI uri, URI normalizedURI)
   {
     String query = uri.query();
     if (query != null)
@@ -144,26 +144,31 @@ public class UserURIHandlerImpl extends URIHandlerImpl
 
       Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
       resource.getContents().add(project);
-      saveResource(resource);
+      return saveResource(resource);
     }
-    else if (SetupContext.USER_SETUP_URI.equals(uri))
+
+    if (SetupContext.USER_SETUP_URI.equals(uri))
     {
       User user = SetupContext.createUser();
       Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
       resource.getContents().add(user);
-      saveResource(resource);
+      return saveResource(resource);
     }
+
+    return false;
   }
 
-  private static void saveResource(Resource resource)
+  private static boolean saveResource(Resource resource)
   {
     try
     {
       resource.save(null);
+      return true;
     }
     catch (IOException ex)
     {
       SetupCorePlugin.INSTANCE.log(ex);
+      return false;
     }
   }
 }
