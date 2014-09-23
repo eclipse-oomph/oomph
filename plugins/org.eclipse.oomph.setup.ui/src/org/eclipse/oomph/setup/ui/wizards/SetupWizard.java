@@ -517,7 +517,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       addPage(new ProjectPage());
       super.addPages();
 
-      getShell().getDisplay().timerExec(500, new Runnable()
+      UIUtil.getDisplay().timerExec(500, new Runnable()
       {
         public void run()
         {
