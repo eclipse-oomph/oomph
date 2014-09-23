@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.ui.AbstractDialog;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.jface.dialogs.DialogTray;
@@ -25,6 +26,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.HelpEvent;
 import org.eclipse.swt.events.HelpListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -184,6 +186,21 @@ public class SetupWizardDialog extends WizardDialog
 
   protected void createToolItemsForToolBar(ToolBar toolBar)
   {
+  }
+
+  @Override
+  protected Control createContents(Composite parent)
+  {
+    Control contents = super.createContents(parent);
+    AbstractDialog.fixTitleImageLayout(this);
+    return contents;
+  }
+
+  @Override
+  public void setTitleImage(Image newTitleImage)
+  {
+    super.setTitleImage(newTitleImage);
+    AbstractDialog.fixTitleImageLayout(this);
   }
 
   /**

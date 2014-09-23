@@ -25,6 +25,8 @@ import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -141,6 +143,21 @@ public abstract class AbstractDialog extends TitleAreaDialog
     }
 
     return null;
+  }
+
+  @Override
+  public void setTitleImage(Image newTitleImage)
+  {
+    super.setTitleImage(newTitleImage);
+    fixTitleImageLayout(this);
+  }
+
+  @Override
+  protected Control createContents(Composite parent)
+  {
+    Control contents = super.createContents(parent);
+    fixTitleImageLayout(this);
+    return contents;
   }
 
   @Override
@@ -304,4 +321,37 @@ public abstract class AbstractDialog extends TitleAreaDialog
   protected abstract String getShellText();
 
   protected abstract void createUI(Composite parent);
+
+  public static void fixTitleImageLayout(TitleAreaDialog dialog)
+  {
+    try
+    {
+      Field titleImageLargestField = ReflectUtil.getField(TitleAreaDialog.class, "titleImageLargest");
+      boolean titleImageLargest = (Boolean)ReflectUtil.getValue(titleImageLargestField, dialog);
+
+      Field workAreaField = ReflectUtil.getField(TitleAreaDialog.class, "workArea");
+      Composite workArea = (Composite)ReflectUtil.getValue(workAreaField, dialog);
+
+      Field titleImageLabelField = ReflectUtil.getField(TitleAreaDialog.class, "titleImageLabel");
+      Label titleImageLabel = (Label)ReflectUtil.getValue(titleImageLabelField, dialog);
+
+      FormData layoutData = (FormData)titleImageLabel.getLayoutData();
+
+      if (titleImageLargest)
+      {
+        layoutData.top = new FormAttachment(0, 0);
+        layoutData.bottom = null;
+      }
+      else
+      {
+        layoutData.top = null;
+        layoutData.bottom = new FormAttachment(workArea);
+      }
+    }
+    catch (Throwable t)
+    {
+      // Ignore.
+    }
+  }
+
 }
