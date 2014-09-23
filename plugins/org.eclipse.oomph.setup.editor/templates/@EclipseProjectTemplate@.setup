@@ -158,6 +158,11 @@
     <description>Initialize JDT's package explorer to show working sets as its root objects</description>
   </setupTask>
   <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.target.platform"
+      defaultValue="Luna"
+      storageURI="scope://Workspace"/>
+  <setupTask
       xsi:type="setup.p2:P2Task">
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
   </setupTask>
@@ -185,17 +190,33 @@
   <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
-        name="${scope.project.label}">
+        name="${scope.project.label}"
+        activeRepositoryList="${eclipse.target.platform}">
       <requirement
-          id="${project.requirement.id}"/>
+          name="${project.requirement.id}"/>
       <requirement
-          id="org.eclipse.sdk.feature.group"/>
+          name="org.eclipse.sdk.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.location}"/>
       <repositoryList
-          name="Dependencies">
+          name="Mars">
+        <repository
+            url="http://download.eclipse.org/releases/mars"/>
+      </repositoryList>
+      <repositoryList
+          name="Luna">
         <repository
             url="http://download.eclipse.org/releases/luna"/>
+      </repositoryList>
+      <repositoryList
+          name="Kepler">
+        <repository
+            url="http://download.eclipse.org/releases/kepler"/>
+      </repositoryList>
+      <repositoryList
+          name="Juno">
+        <repository
+            url="http://download.eclipse.org/releases/juno"/>
       </repositoryList>
     </targlet>
   </setupTask>
