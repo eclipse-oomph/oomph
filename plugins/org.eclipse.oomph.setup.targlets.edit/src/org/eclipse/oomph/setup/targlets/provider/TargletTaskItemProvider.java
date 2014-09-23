@@ -14,18 +14,32 @@ import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 import org.eclipse.oomph.targlets.TargletFactory;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.oomph.setup.targlets.TargletTask} object.
@@ -60,6 +74,10 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       super.getPropertyDescriptors(object);
 
       addTargletURIsPropertyDescriptor(object);
+      addOperatingSystemPropertyDescriptor(object);
+      addWindowingSystemPropertyDescriptor(object);
+      addArchitecturePropertyDescriptor(object);
+      addLocalePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -76,6 +94,132 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_TargletTask_targletURIs_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_targletURIs_feature", "_UI_TargletTask_type"),
         SetupTargletsPackage.Literals.TARGLET_TASK__TARGLET_UR_IS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Operating System feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addOperatingSystemPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_operatingSystem_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_operatingSystem_feature",
+            "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, true, false, true,
+        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+    {
+      private static final String OS_EXTRA = "org.eclipse.pde.os.extra";
+
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        return getChoices(Platform.knownOSValues(), OS_EXTRA);
+      }
+    });
+  }
+
+  /**
+   * This adds a property descriptor for the Windowing System feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addWindowingSystemPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_windowingSystem_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_windowingSystem_feature",
+            "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, true, false, true,
+        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+    {
+      private static final String WS_EXTRA = "org.eclipse.pde.ws.extra";
+
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        return getChoices(Platform.knownWSValues(), WS_EXTRA);
+      }
+    });
+  }
+
+  /**
+   * This adds a property descriptor for the Architecture feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addArchitecturePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_architecture_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_architecture_feature",
+            "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+        null, null)
+    {
+      private static final String ARCH_EXTRA = "org.eclipse.pde.arch.extra";
+
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        return getChoices(Platform.knownOSArchValues(), ARCH_EXTRA);
+      }
+    });
+  }
+
+  /**
+   * This adds a property descriptor for the Locale feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addLocalePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_locale_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_locale_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+    {
+      private static final String NL_EXTRA = "org.eclipse.pde.nl.extra";
+
+      private LocaleItemLabelProvider labelProvider;
+
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        LocaleItemLabelProvider labelProvider = getLabelProvider(object);
+        Set<String> locales = labelProvider.getLocaleMap().keySet();
+        return getChoices(locales.toArray(new String[locales.size()]), NL_EXTRA);
+      }
+
+      @Override
+      public LocaleItemLabelProvider getLabelProvider(Object object)
+      {
+        if (labelProvider == null)
+        {
+          labelProvider = new LocaleItemLabelProvider(itemDelegator);
+        }
+
+        return labelProvider;
+      }
+    });
+  }
+
+  private static Set<String> getChoices(String[] values, String extraValuesPreference)
+  {
+    Set<String> result = new HashSet<String>();
+    result.addAll(Arrays.asList(values));
+
+    IEclipsePreferences node = InstanceScope.INSTANCE.getNode("org.eclipse.pde.core");
+    String extraValues = node.get(extraValuesPreference, null);
+    if (!StringUtil.isEmpty(extraValues))
+    {
+      StringTokenizer tokenizer = new StringTokenizer(extraValues, ",");
+      while (tokenizer.hasMoreTokens())
+      {
+        String extraValue = tokenizer.nextToken().trim();
+        result.add(extraValue);
+      }
+    }
+
+    return result;
   }
 
   /**
@@ -161,6 +305,10 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     switch (notification.getFeatureID(TargletTask.class))
     {
       case SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS:
+      case SetupTargletsPackage.TARGLET_TASK__OPERATING_SYSTEM:
+      case SetupTargletsPackage.TARGLET_TASK__WINDOWING_SYSTEM:
+      case SetupTargletsPackage.TARGLET_TASK__ARCHITECTURE:
+      case SetupTargletsPackage.TARGLET_TASK__LOCALE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
@@ -197,4 +345,42 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     return SetupTargletsEditPlugin.INSTANCE;
   }
 
+  /**
+   * @author Eike Stepper
+   */
+  private static final class LocaleItemLabelProvider implements IItemLabelProvider
+  {
+    private final AdapterFactoryItemDelegator itemDelegator;
+
+    private Map<String, String> localeMap;
+
+    public LocaleItemLabelProvider(AdapterFactoryItemDelegator itemDelegator)
+    {
+      this.itemDelegator = itemDelegator;
+    }
+
+    public Object getImage(Object object)
+    {
+      return itemDelegator.getImage(object);
+    }
+
+    public String getText(Object object)
+    {
+      return localeMap.get(object);
+    }
+
+    public Map<String, String> getLocaleMap()
+    {
+      if (localeMap == null)
+      {
+        localeMap = new HashMap<String, String>();
+        for (Locale locale : Locale.getAvailableLocales())
+        {
+          localeMap.put(locale.toString(), locale.toString() + " - " + locale.getDisplayName());
+        }
+      }
+
+      return localeMap;
+    }
+  }
 }

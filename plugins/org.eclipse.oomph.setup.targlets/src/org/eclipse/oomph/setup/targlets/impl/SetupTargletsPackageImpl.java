@@ -142,6 +142,46 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTargletTask_OperatingSystem()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargletTask_WindowingSystem()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargletTask_Architecture()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargletTask_Locale()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public SetupTargletsFactory getSetupTargletsFactory()
   {
     return (SetupTargletsFactory)getEFactoryInstance();
@@ -173,6 +213,10 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     targletTaskEClass = createEClass(TARGLET_TASK);
     createEReference(targletTaskEClass, TARGLET_TASK__TARGLETS);
     createEAttribute(targletTaskEClass, TARGLET_TASK__TARGLET_UR_IS);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__OPERATING_SYSTEM);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__WINDOWING_SYSTEM);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__ARCHITECTURE);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__LOCALE);
   }
 
   /**
@@ -219,6 +263,14 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTargletTask_TargletURIs(), ecorePackage.getEString(), "targletURIs", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_OperatingSystem(), ecorePackage.getEString(), "operatingSystem", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_WindowingSystem(), ecorePackage.getEString(), "windowingSystem", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_Architecture(), ecorePackage.getEString(), "architecture", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_Locale(), ecorePackage.getEString(), "locale", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore");

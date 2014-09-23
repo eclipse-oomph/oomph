@@ -179,13 +179,49 @@ public interface SetupTargletsPackage extends EPackage
   int TARGLET_TASK__TARGLET_UR_IS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Operating System</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__OPERATING_SYSTEM = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Windowing System</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__WINDOWING_SYSTEM = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Architecture</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__ARCHITECTURE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>Locale</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__LOCALE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+
+  /**
    * The number of structural features of the '<em>Targlet Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.targlets.TargletTask <em>Targlet Task</em>}'.
@@ -218,6 +254,50 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    */
   EAttribute getTargletTask_TargletURIs();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getOperatingSystem <em>Operating System</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Operating System</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getOperatingSystem()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_OperatingSystem();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getWindowingSystem <em>Windowing System</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Windowing System</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getWindowingSystem()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_WindowingSystem();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getArchitecture <em>Architecture</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Architecture</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getArchitecture()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_Architecture();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getLocale <em>Locale</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Locale</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getLocale()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_Locale();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -267,6 +347,38 @@ public interface SetupTargletsPackage extends EPackage
      * @generated
      */
     EAttribute TARGLET_TASK__TARGLET_UR_IS = eINSTANCE.getTargletTask_TargletURIs();
+
+    /**
+     * The meta object literal for the '<em><b>Operating System</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__OPERATING_SYSTEM = eINSTANCE.getTargletTask_OperatingSystem();
+
+    /**
+     * The meta object literal for the '<em><b>Windowing System</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__WINDOWING_SYSTEM = eINSTANCE.getTargletTask_WindowingSystem();
+
+    /**
+     * The meta object literal for the '<em><b>Architecture</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__ARCHITECTURE = eINSTANCE.getTargletTask_Architecture();
+
+    /**
+     * The meta object literal for the '<em><b>Locale</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__LOCALE = eINSTANCE.getTargletTask_Locale();
 
   }
 

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.targlets.impl;
 
+import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.setup.SetupTask;
@@ -28,10 +29,13 @@ import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -59,6 +63,10 @@ import java.util.Set;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getTarglets <em>Targlets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getTargletURIs <em>Targlet UR Is</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getOperatingSystem <em>Operating System</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getWindowingSystem <em>Windowing System</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getArchitecture <em>Architecture</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getLocale <em>Locale</em>}</li>
  * </ul>
  * </p>
  *
@@ -89,6 +97,86 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * @ordered
    */
   protected EList<String> targletURIs;
+
+  /**
+   * The default value of the '{@link #getOperatingSystem() <em>Operating System</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOperatingSystem()
+   * @generated
+   * @ordered
+   */
+  protected static final String OPERATING_SYSTEM_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getOperatingSystem() <em>Operating System</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOperatingSystem()
+   * @generated
+   * @ordered
+   */
+  protected String operatingSystem = OPERATING_SYSTEM_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getWindowingSystem() <em>Windowing System</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWindowingSystem()
+   * @generated
+   * @ordered
+   */
+  protected static final String WINDOWING_SYSTEM_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getWindowingSystem() <em>Windowing System</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWindowingSystem()
+   * @generated
+   * @ordered
+   */
+  protected String windowingSystem = WINDOWING_SYSTEM_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getArchitecture() <em>Architecture</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getArchitecture()
+   * @generated
+   * @ordered
+   */
+  protected static final String ARCHITECTURE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getArchitecture() <em>Architecture</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getArchitecture()
+   * @generated
+   * @ordered
+   */
+  protected String architecture = ARCHITECTURE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getLocale() <em>Locale</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLocale()
+   * @generated
+   * @ordered
+   */
+  protected static final String LOCALE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLocale() <em>Locale</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLocale()
+   * @generated
+   * @ordered
+   */
+  protected String locale = LOCALE_EDEFAULT;
 
   private TargletContainer targletContainer;
 
@@ -150,6 +238,106 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getOperatingSystem()
+  {
+    return operatingSystem;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOperatingSystem(String newOperatingSystem)
+  {
+    String oldOperatingSystem = operatingSystem;
+    operatingSystem = newOperatingSystem;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__OPERATING_SYSTEM, oldOperatingSystem, operatingSystem));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getWindowingSystem()
+  {
+    return windowingSystem;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setWindowingSystem(String newWindowingSystem)
+  {
+    String oldWindowingSystem = windowingSystem;
+    windowingSystem = newWindowingSystem;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__WINDOWING_SYSTEM, oldWindowingSystem, windowingSystem));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getArchitecture()
+  {
+    return architecture;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setArchitecture(String newArchitecture)
+  {
+    String oldArchitecture = architecture;
+    architecture = newArchitecture;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__ARCHITECTURE, oldArchitecture, architecture));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getLocale()
+  {
+    return locale;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLocale(String newLocale)
+  {
+    String oldLocale = locale;
+    locale = newLocale;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__LOCALE, oldLocale, locale));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -175,6 +363,14 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return getTarglets();
       case SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS:
         return getTargletURIs();
+      case SetupTargletsPackage.TARGLET_TASK__OPERATING_SYSTEM:
+        return getOperatingSystem();
+      case SetupTargletsPackage.TARGLET_TASK__WINDOWING_SYSTEM:
+        return getWindowingSystem();
+      case SetupTargletsPackage.TARGLET_TASK__ARCHITECTURE:
+        return getArchitecture();
+      case SetupTargletsPackage.TARGLET_TASK__LOCALE:
+        return getLocale();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -198,6 +394,18 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         getTargletURIs().clear();
         getTargletURIs().addAll((Collection<? extends String>)newValue);
         return;
+      case SetupTargletsPackage.TARGLET_TASK__OPERATING_SYSTEM:
+        setOperatingSystem((String)newValue);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__WINDOWING_SYSTEM:
+        setWindowingSystem((String)newValue);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__ARCHITECTURE:
+        setArchitecture((String)newValue);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__LOCALE:
+        setLocale((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -218,6 +426,18 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       case SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS:
         getTargletURIs().clear();
         return;
+      case SetupTargletsPackage.TARGLET_TASK__OPERATING_SYSTEM:
+        setOperatingSystem(OPERATING_SYSTEM_EDEFAULT);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__WINDOWING_SYSTEM:
+        setWindowingSystem(WINDOWING_SYSTEM_EDEFAULT);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__ARCHITECTURE:
+        setArchitecture(ARCHITECTURE_EDEFAULT);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__LOCALE:
+        setLocale(LOCALE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -236,6 +456,14 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return targlets != null && !targlets.isEmpty();
       case SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS:
         return targletURIs != null && !targletURIs.isEmpty();
+      case SetupTargletsPackage.TARGLET_TASK__OPERATING_SYSTEM:
+        return OPERATING_SYSTEM_EDEFAULT == null ? operatingSystem != null : !OPERATING_SYSTEM_EDEFAULT.equals(operatingSystem);
+      case SetupTargletsPackage.TARGLET_TASK__WINDOWING_SYSTEM:
+        return WINDOWING_SYSTEM_EDEFAULT == null ? windowingSystem != null : !WINDOWING_SYSTEM_EDEFAULT.equals(windowingSystem);
+      case SetupTargletsPackage.TARGLET_TASK__ARCHITECTURE:
+        return ARCHITECTURE_EDEFAULT == null ? architecture != null : !ARCHITECTURE_EDEFAULT.equals(architecture);
+      case SetupTargletsPackage.TARGLET_TASK__LOCALE:
+        return LOCALE_EDEFAULT == null ? locale != null : !LOCALE_EDEFAULT.equals(locale);
     }
     return super.eIsSet(featureID);
   }
@@ -256,6 +484,14 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (targletURIs: ");
     result.append(targletURIs);
+    result.append(", operatingSystem: ");
+    result.append(operatingSystem);
+    result.append(", windowingSystem: ");
+    result.append(windowingSystem);
+    result.append(", architecture: ");
+    result.append(architecture);
+    result.append(", locale: ");
+    result.append(locale);
     result.append(')');
     return result.toString();
   }
@@ -273,6 +509,33 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
     TargletTask targletTask = (TargletTask)overriddenSetupTask;
     getTarglets().addAll(targletTask.getTarglets());
+
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, "operating systems");
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, "windowing systems");
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, "architectures");
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, "locales");
+  }
+
+  private void mergeSetting(TargletTask overriddenTargletTask, EAttribute attribute, String errorLabel)
+  {
+    String overridingValue = (String)eGet(attribute);
+    String overriddenValue = (String)overriddenTargletTask.eGet(attribute);
+
+    if (!ObjectUtil.equals(overridingValue, overriddenValue))
+    {
+      if (overridingValue == null)
+      {
+        eSet(attribute, overriddenValue);
+      }
+      else
+      {
+        if (overriddenValue != null)
+        {
+          getAnnotations().add(
+              BaseFactory.eINSTANCE.createErrorAnnotation("The " + errorLabel + " '" + overriddenValue + "' and '" + overridingValue + "' collide."));
+        }
+      }
+    }
   }
 
   @Override
@@ -346,6 +609,13 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           targetNeedsActivation = false;
         }
 
+        boolean environmentNeedsUpdate = true;
+        if (ObjectUtil.equals(targetDefinition.getOS(), getOperatingSystem()) && ObjectUtil.equals(targetDefinition.getWS(), getWindowingSystem())
+            && ObjectUtil.equals(targetDefinition.getArch(), getArchitecture()) && ObjectUtil.equals(targetDefinition.getNL(), getLocale()))
+        {
+          environmentNeedsUpdate = false;
+        }
+
         targletContainer = getTargletContainer();
         if (targletContainer == null)
         {
@@ -361,7 +631,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           }
         }
 
-        return targetNeedsActivation;
+        return targetNeedsActivation || environmentNeedsUpdate;
       }
     });
   }
@@ -390,6 +660,11 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           targetDefinition = service.newTarget();
           targetDefinition.setName(TARGET_DEFINITION_NAME);
         }
+
+        targetDefinition.setOS(getOperatingSystem());
+        targetDefinition.setWS(getWindowingSystem());
+        targetDefinition.setArch(getArchitecture());
+        targetDefinition.setNL(getLocale());
 
         if (targletContainer == null)
         {

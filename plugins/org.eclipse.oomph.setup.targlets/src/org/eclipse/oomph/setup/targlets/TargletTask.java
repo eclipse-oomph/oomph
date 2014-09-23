@@ -25,6 +25,10 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getTarglets <em>Targlets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getTargletURIs <em>Targlet UR Is</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getOperatingSystem <em>Operating System</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getWindowingSystem <em>Windowing System</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getArchitecture <em>Architecture</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getLocale <em>Locale</em>}</li>
  * </ul>
  * </p>
  *
@@ -67,4 +71,108 @@ public interface TargletTask extends SetupTask
    * @generated
    */
   EList<String> getTargletURIs();
+
+  /**
+   * Returns the value of the '<em><b>Operating System</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Operating System</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Operating System</em>' attribute.
+   * @see #setOperatingSystem(String)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_OperatingSystem()
+   * @model
+   * @generated
+   */
+  String getOperatingSystem();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#getOperatingSystem <em>Operating System</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Operating System</em>' attribute.
+   * @see #getOperatingSystem()
+   * @generated
+   */
+  void setOperatingSystem(String value);
+
+  /**
+   * Returns the value of the '<em><b>Windowing System</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Windowing System</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Windowing System</em>' attribute.
+   * @see #setWindowingSystem(String)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_WindowingSystem()
+   * @model
+   * @generated
+   */
+  String getWindowingSystem();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#getWindowingSystem <em>Windowing System</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Windowing System</em>' attribute.
+   * @see #getWindowingSystem()
+   * @generated
+   */
+  void setWindowingSystem(String value);
+
+  /**
+   * Returns the value of the '<em><b>Architecture</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Architecture</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Architecture</em>' attribute.
+   * @see #setArchitecture(String)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_Architecture()
+   * @model
+   * @generated
+   */
+  String getArchitecture();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#getArchitecture <em>Architecture</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Architecture</em>' attribute.
+   * @see #getArchitecture()
+   * @generated
+   */
+  void setArchitecture(String value);
+
+  /**
+   * Returns the value of the '<em><b>Locale</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Locale</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Locale</em>' attribute.
+   * @see #setLocale(String)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_Locale()
+   * @model
+   * @generated
+   */
+  String getLocale();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#getLocale <em>Locale</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Locale</em>' attribute.
+   * @see #getLocale()
+   * @generated
+   */
+  void setLocale(String value);
 } // TargletTask
