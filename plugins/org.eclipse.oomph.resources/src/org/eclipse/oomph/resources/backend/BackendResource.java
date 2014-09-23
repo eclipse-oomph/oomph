@@ -132,9 +132,9 @@ public abstract class BackendResource
   {
     if (base.getSystem() == system)
     {
-      URI baseURI = makeAbsolute(base.getSystemRelativeURI());
-      URI uri = makeAbsolute(systemRelativeURI);
-      return uri.deresolve(baseURI, true, true, false);
+      URI baseURI = makeAbsolute(base.getSystemRelativeURI()).appendSegment("");
+      URI uri = makeAbsolute(systemRelativeURI).appendSegment("");
+      return uri.deresolve(baseURI, true, true, false).trimSegments(1);
     }
 
     return null;

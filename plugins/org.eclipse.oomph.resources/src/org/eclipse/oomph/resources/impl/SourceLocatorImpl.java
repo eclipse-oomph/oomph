@@ -26,6 +26,7 @@ import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -520,17 +521,25 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     }
     else
     {
+      final Set<URI> excludedURIs = new HashSet<URI>();
+      for (String path : sourceLocator.getExcludedPaths())
+      {
+        while (path.startsWith("/"))
+        {
+          path = path.substring(1);
+        }
+
+        excludedURIs.add(URI.createURI(path));
+      }
+
       rootContainer.accept(new BackendResource.Visitor.Default()
       {
-        private final Set<String> excludedPaths = new HashSet<String>(sourceLocator.getExcludedPaths());
-
         @Override
         public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
         {
           ResourcesPlugin.checkCancelation(monitor);
 
-          String path = container.getSystemRelativePath();
-          if (excludedPaths.contains(path))
+          if (isExcludedPath(rootContainer, container))
           {
             return false;
           }
@@ -554,6 +563,12 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
           }
 
           return true;
+        }
+
+        private boolean isExcludedPath(BackendContainer rootContainer, BackendContainer backendContainer)
+        {
+          URI relativeURI = backendContainer.getRelativeURI(rootContainer);
+          return relativeURI != null && excludedURIs.contains(relativeURI);
         }
       }, monitor);
     }
