@@ -11,6 +11,8 @@
 
 /**
  * Examples
+ * <p>
+ * {@link org.eclipse.oomph.setup.doc.examples.TreeExamples#tree1()}
  *
  * @number 3
  */

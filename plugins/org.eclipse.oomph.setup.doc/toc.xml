@@ -7,6 +7,7 @@
   <topic label="Examples" href="html/examples/index.html">
     <topic label="Connecting To Repositories" href="html/examples/ConnectingToRepositories.html" />
     <topic label="Creating Transport Connections" href="html/examples/CreatingTransportConnections.html" />
+    <topic label="Tree Examples" href="html/examples/TreeExamples.html" />
     <topic label="Embedding XML Snippets" href="html/examples/XmlSnippets.html" />
   </topic>
   <topic label="Reference" href="html/reference/index.html">
