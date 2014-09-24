@@ -715,20 +715,23 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           }
         }
 
-        for (Iterator<Authenticator> it = allAuthenticators.iterator(); it.hasNext();)
+        if (!allAuthenticators.isEmpty())
         {
-          Authenticator authenticator = it.next();
-          if (authenticator.isFiltered())
+          for (Iterator<Authenticator> it = allAuthenticators.iterator(); it.hasNext();)
           {
-            it.remove();
+            Authenticator authenticator = it.next();
+            if (authenticator.isFiltered())
+            {
+              it.remove();
+            }
           }
-        }
 
-        authenticatedField.addAll(allAuthenticators);
+          authenticatedField.addAll(allAuthenticators);
 
-        if (allAuthenticators.isEmpty())
-        {
-          dispose(PreferencesUtil.encrypt(" "));
+          if (allAuthenticators.isEmpty())
+          {
+            dispose(PreferencesUtil.encrypt(" "));
+          }
         }
       }
     }
