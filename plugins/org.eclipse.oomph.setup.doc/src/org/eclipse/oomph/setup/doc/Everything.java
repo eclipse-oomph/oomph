@@ -44,6 +44,7 @@ import org.eclipse.oomph.setup.doc.Everything.Task.P2;
 import org.eclipse.oomph.setup.doc.Everything.Task.Targlet;
 import org.eclipse.oomph.setup.doc.Everything.Task.Trigger;
 import org.eclipse.oomph.setup.doc.Everything.Task.Variable;
+import org.eclipse.oomph.setup.doc.Everything.TaskComposition.ScopeList;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Consolidation;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Filter;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.InitialPhase;
@@ -163,11 +164,28 @@ import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Reorder;
  * it also dramatically improves installation and provisioning performance
  * because once an installable unit is in the pool,
  * it never again needs to be downloaded from the Internet.
+ * </p>
+ * <p>
+ * Here is the setup model:
+ * {@link #setupModel()}
+ * </p>
  *
  * @number 2
  */
-public class Everything
+public abstract class Everything
 {
+  /**
+   * @snippet tree org.eclipse.setup.tree http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup
+   * @title org.eclipse.setup
+   */
+  protected abstract void index();
+
+  /**
+   * @snippet tree Setup.genmodel.tree /org.eclipse.oomph.setup/model/Setup.genmodel
+   * @title Setup.genmodel
+   */
+  protected abstract void setupModel();
+
   /**
    * Tasks
    * <p>
@@ -357,7 +375,7 @@ public class Everything
    * Scopes
    * <p>
    * A {@link org.eclipse.oomph.setup.Scope scope} is the course-grained unit for grouping related {@linkplain Task tasks}.
-   * Scope are hierarchically structured and tasks are {@linkplain TaskComposition gathered} from them based on this hierarchical structure.
+   * Scope are hierarchically structured and tasks are {@linkplain ScopeList#scopeList gathered} from them based on this hierarchical structure.
    * They are stored in {@link SetupResource resources}.
    */
   public static class Scope

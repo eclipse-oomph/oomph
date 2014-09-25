@@ -366,7 +366,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
     public String getText(Object object)
     {
-      return localeMap.get(object);
+      return getLocaleMap().get(object);
     }
 
     public Map<String, String> getLocaleMap()
