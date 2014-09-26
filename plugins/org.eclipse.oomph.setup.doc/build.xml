@@ -30,6 +30,7 @@
   <property name="schemadoc.destdir" value="${project.path}/schemadoc" />
   <property name="article.destdir" value="${project.path}/html" />
   <property name="article.sources" value="${project.path}/src" />
+	<property name="skip.schemadoc" value="true" />
 
   <loadfile property="tp.classpath" srcfile="${tp.classpath.file}" />
   <path id="javadoc.classpath" path="${tp.classpath}">
@@ -57,7 +58,7 @@
            classname="org.eclipse.pde.internal.core.ant.ConvertSchemaToHTML"
            classpathref="javadoc.classpath"/>
 
-  <target name="build.java" unless="java.skip">
+  <target name="build.java" unless="skip.javadoc">
     <echo message="Building JavaDoc for org.eclipse.oomph.setup.doc" />
 
     <delete includeemptydirs="true" failonerror="false">
@@ -92,9 +93,9 @@
              windowtitle="${javadoc.name}"
              doctitle="&lt;h1>${javadoc.name}&lt;/h1>"
              overview="${project.path}/overview.html"
-             bottom="&lt;i>Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.&lt;/i>">
+             bottom="&lt;i class=&quot;copyright&quot;>Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.&lt;br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html&lt;/i>">
 
-      <!-- Disable APIviz UML diagram generation
+    	<!-- Disable APIviz UML diagram generation
       <doclet name="org.jboss.apiviz.APIviz" path="${releng.project}/bin">
         <param name="-nopackagediagram" />
         <param name="-nosubtypes" />
@@ -103,32 +104,127 @@
       -->
 
       <fileset dir="${plugins.dir}" defaultexcludes="yes">
-				<include name="org.eclipse.oomph.resources/src/org/eclipse/oomph/resources/*.java" />
-				<include name="org.eclipse.oomph.resources/src/org/eclipse/oomph/resources/backend/*.java" />
-				<include name="org.eclipse.oomph.resources/src/org/eclipse/oomph/resources/impl/*.java" />
-				<include name="org.eclipse.oomph.resources/src/org/eclipse/oomph/resources/util/*.java" />
+				<include name="org.eclipse.oomph.setup.editor/src/org/eclipse/oomph/setup/editor/*.java" />
+				<include name="org.eclipse.oomph.setup.git/src/org/eclipse/oomph/setup/git/*.java" />
+				<include name="org.eclipse.oomph.setup.git/src/org/eclipse/oomph/setup/git/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.git/src/org/eclipse/oomph/setup/git/util/*.java" />
+				<include name="org.eclipse.oomph.setup.jdt/src/org/eclipse/oomph/setup/jdt/*.java" />
+				<include name="org.eclipse.oomph.setup.jdt/src/org/eclipse/oomph/setup/jdt/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.jdt/src/org/eclipse/oomph/setup/jdt/util/*.java" />
+				<include name="org.eclipse.oomph.setup.launching/src/org/eclipse/oomph/setup/launching/*.java" />
+				<include name="org.eclipse.oomph.setup.launching/src/org/eclipse/oomph/setup/launching/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.launching/src/org/eclipse/oomph/setup/launching/util/*.java" />
+				<include name="org.eclipse.oomph.setup.maven/src/org/eclipse/oomph/setup/maven/*.java" />
+				<include name="org.eclipse.oomph.setup.maven/src/org/eclipse/oomph/setup/maven/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.maven/src/org/eclipse/oomph/setup/maven/util/*.java" />
+				<include name="org.eclipse.oomph.setup.mylyn/src/org/eclipse/oomph/setup/mylyn/*.java" />
+				<include name="org.eclipse.oomph.setup.mylyn/src/org/eclipse/oomph/setup/mylyn/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.mylyn/src/org/eclipse/oomph/setup/mylyn/util/*.java" />
+				<include name="org.eclipse.oomph.setup.p2/src/org/eclipse/oomph/setup/p2/*.java" />
+				<include name="org.eclipse.oomph.setup.p2/src/org/eclipse/oomph/setup/p2/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.p2/src/org/eclipse/oomph/setup/p2/util/*.java" />
+				<include name="org.eclipse.oomph.setup.pde/src/org/eclipse/oomph/internal/setup/pde/*.java" />
+				<include name="org.eclipse.oomph.setup.pde/src/org/eclipse/oomph/setup/pde/*.java" />
+				<include name="org.eclipse.oomph.setup.pde/src/org/eclipse/oomph/setup/pde/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.pde/src/org/eclipse/oomph/setup/pde/util/*.java" />
+				<include name="org.eclipse.oomph.setup.projects/src/org/eclipse/oomph/setup/projects/*.java" />
+				<include name="org.eclipse.oomph.setup.projects/src/org/eclipse/oomph/setup/projects/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.projects/src/org/eclipse/oomph/setup/projects/util/*.java" />
+				<include name="org.eclipse.oomph.setup.projectset/src/org/eclipse/oomph/setup/projectset/*.java" />
+				<include name="org.eclipse.oomph.setup.projectset/src/org/eclipse/oomph/setup/projectset/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.projectset/src/org/eclipse/oomph/setup/projectset/util/*.java" />
+				<include name="org.eclipse.oomph.setup.targlets/src/org/eclipse/oomph/setup/targlets/*.java" />
+				<include name="org.eclipse.oomph.setup.targlets/src/org/eclipse/oomph/setup/targlets/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.targlets/src/org/eclipse/oomph/setup/targlets/util/*.java" />
+				<include name="org.eclipse.oomph.setup.workbench/src/org/eclipse/oomph/setup/workbench/*.java" />
+				<include name="org.eclipse.oomph.setup.workbench/src/org/eclipse/oomph/setup/workbench/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.workbench/src/org/eclipse/oomph/setup/workbench/util/*.java" />
+				<include name="org.eclipse.oomph.setup.workingsets/src/org/eclipse/oomph/setup/workingsets/*.java" />
+				<include name="org.eclipse.oomph.setup.workingsets/src/org/eclipse/oomph/setup/workingsets/impl/*.java" />
+				<include name="org.eclipse.oomph.setup.workingsets/src/org/eclipse/oomph/setup/workingsets/util/*.java" />
 				<include name="org.eclipse.oomph.setup/src/org/eclipse/oomph/setup/*.java" />
 				<include name="org.eclipse.oomph.setup/src/org/eclipse/oomph/setup/impl/*.java" />
 				<include name="org.eclipse.oomph.setup/src/org/eclipse/oomph/setup/log/*.java" />
 				<include name="org.eclipse.oomph.setup/src/org/eclipse/oomph/setup/util/*.java" />
       </fileset>
 
-			<group title="Oomph Resources Model">
-				<package name="org.eclipse.oomph.resources" />
-				<package name="org.eclipse.oomph.resources.backend" />
-				<package name="org.eclipse.oomph.resources.impl" />
-				<package name="org.eclipse.oomph.resources.util" />
-			</group>
 			<group title="Oomph Setup">
 				<package name="org.eclipse.oomph.setup" />
 				<package name="org.eclipse.oomph.setup.impl" />
 				<package name="org.eclipse.oomph.setup.log" />
 				<package name="org.eclipse.oomph.setup.util" />
 			</group>
+			<group title="Oomph Setup Editor">
+				<package name="org.eclipse.oomph.setup.editor" />
+			</group>
+			<group title="Oomph Setup Git">
+				<package name="org.eclipse.oomph.setup.git" />
+				<package name="org.eclipse.oomph.setup.git.impl" />
+				<package name="org.eclipse.oomph.setup.git.util" />
+			</group>
+			<group title="Oomph Setup JDT">
+				<package name="org.eclipse.oomph.setup.jdt" />
+				<package name="org.eclipse.oomph.setup.jdt.impl" />
+				<package name="org.eclipse.oomph.setup.jdt.util" />
+			</group>
+			<group title="Oomph Setup Launching">
+				<package name="org.eclipse.oomph.setup.launching" />
+				<package name="org.eclipse.oomph.setup.launching.impl" />
+				<package name="org.eclipse.oomph.setup.launching.util" />
+			</group>
+			<group title="Oomph Setup Maven">
+				<package name="org.eclipse.oomph.setup.maven" />
+				<package name="org.eclipse.oomph.setup.maven.impl" />
+				<package name="org.eclipse.oomph.setup.maven.util" />
+			</group>
+			<group title="Oomph Setup Mylyn">
+				<package name="org.eclipse.oomph.setup.mylyn" />
+				<package name="org.eclipse.oomph.setup.mylyn.impl" />
+				<package name="org.eclipse.oomph.setup.mylyn.util" />
+			</group>
+			<group title="Oomph Setup P2">
+				<package name="org.eclipse.oomph.setup.p2" />
+				<package name="org.eclipse.oomph.setup.p2.impl" />
+				<package name="org.eclipse.oomph.setup.p2.util" />
+			</group>
+			<group title="Oomph Setup PDE">
+				<package name="org.eclipse.oomph.internal.setup.pde" />
+				<package name="org.eclipse.oomph.setup.pde" />
+				<package name="org.eclipse.oomph.setup.pde.impl" />
+				<package name="org.eclipse.oomph.setup.pde.util" />
+			</group>
+			<group title="Oomph Setup Project Sets">
+				<package name="org.eclipse.oomph.setup.projectset" />
+				<package name="org.eclipse.oomph.setup.projectset.impl" />
+				<package name="org.eclipse.oomph.setup.projectset.util" />
+			</group>
+			<group title="Oomph Setup Projects">
+				<package name="org.eclipse.oomph.setup.projects" />
+				<package name="org.eclipse.oomph.setup.projects.impl" />
+				<package name="org.eclipse.oomph.setup.projects.util" />
+			</group>
+			<group title="Oomph Setup Targlets">
+				<package name="org.eclipse.oomph.setup.targlets" />
+				<package name="org.eclipse.oomph.setup.targlets.impl" />
+				<package name="org.eclipse.oomph.setup.targlets.util" />
+			</group>
+			<group title="Oomph Setup Workbench">
+				<package name="org.eclipse.oomph.setup.workbench" />
+				<package name="org.eclipse.oomph.setup.workbench.impl" />
+				<package name="org.eclipse.oomph.setup.workbench.util" />
+			</group>
+			<group title="Oomph Setup Working Sets">
+				<package name="org.eclipse.oomph.setup.workingsets" />
+				<package name="org.eclipse.oomph.setup.workingsets.impl" />
+				<package name="org.eclipse.oomph.setup.workingsets.util" />
+			</group>
 
       <link href="${jdk.link}" />
       <link href="${emf.link}" />
       <link href="${platform.link}" offline="true" packagelistloc="${platform.api}" />
+			<link href="MAKE-RELATIVE/org.eclipse.oomph.p2.doc/javadoc" offline="true" packagelistloc="${plugins.dir}/org.eclipse.oomph.p2.doc/javadoc" />
+			<link href="MAKE-RELATIVE/org.eclipse.oomph.targlets.doc/javadoc" offline="true" packagelistloc="${plugins.dir}/org.eclipse.oomph.targlets.doc/javadoc" />
+			<link href="MAKE-RELATIVE/org.eclipse.oomph.util.doc/javadoc" offline="true" packagelistloc="${plugins.dir}/org.eclipse.oomph.util.doc/javadoc" />
 
       <tag name="ADDED" description="Added" />
       <tag name="Singleton" description="Singleton" />
@@ -223,7 +319,7 @@
     </java>
   </target>
 
-  <target name="build.schema" unless="schema.skip">
+  <target name="build.schema" unless="skip.schemadoc">
     <echo message="Building SchemaDoc for org.eclipse.oomph.setup.doc" />
 
     <delete includeemptydirs="true" failonerror="false">
@@ -239,7 +335,6 @@
       </fileset>
     </copy>
 
-		<pde.convertSchemaToHTML destination="${schemadoc.destdir}" manifest="${plugins.dir}/org.eclipse.oomph.resources/plugin.xml" />
 
     <replaceregexp match="\.\./\.\./(.*?)\.css" replace="\1.css" byline="true">
       <fileset dir="${schemadoc.destdir}">
@@ -248,7 +343,7 @@
     </replaceregexp>
   </target>
 
-  <target name="build.article" unless="article.skip">
+  <target name="build.article" unless="skip.articledoc">
     <echo message="Building Articles for org.eclipse.oomph.setup.doc" />
 
     <tstamp>
@@ -267,15 +362,20 @@
         <include name="copies/**/*" />
       </fileset>
     </delete>
+
     <copy todir="${project.path}/images" verbose="true" failonerror="false">
       <fileset dir="${releng.project}/html/images" defaultexcludes="true">
         <include name="**/*" />
       </fileset>
     </copy>
-    <copy file="${releng.project}/html/book.css"
-          todir="${project.path}/html"
-          verbose="true"
-          failonerror="false" />
+
+    <copy todir="${project.path}/html" verbose="true" failonerror="false">
+      <fileset dir="${releng.project}/html" defaultexcludes="true">
+        <include name="book.css" />
+        <include name="editor.css" />
+        <include name="tree.css" />
+      </fileset>
+    </copy>
 
     <javadoc locale="en"
              encoding="UTF-8"
@@ -297,6 +397,9 @@
 
       <fileset dir="${plugins.dir}">
         <include name="org.eclipse.oomph.setup.doc/src/**/*.java" />
+				<include name="org.eclipse.oomph.p2.doc/src/**/*.java" />
+				<include name="org.eclipse.oomph.targlets.doc/src/**/*.java" />
+				<include name="org.eclipse.oomph.util.doc/src/**/*.java" />
       </fileset>
 
 			<package name="org.eclipse.oomph.setup.doc" />
@@ -305,6 +408,22 @@
 			<package name="org.eclipse.oomph.setup.doc.reference" />
 			<package name="org.eclipse.oomph.setup.doc.reference.api" />
 			<package name="org.eclipse.oomph.setup.doc.reference.schema" />
+			<package name="org.eclipse.oomph.p2.doc" />
+			<package name="org.eclipse.oomph.p2.doc.online" />
+			<package name="org.eclipse.oomph.p2.doc.reference" />
+			<package name="org.eclipse.oomph.p2.doc.reference.api" />
+			<package name="org.eclipse.oomph.p2.doc.reference.schema" />
+			<package name="org.eclipse.oomph.targlets.doc" />
+			<package name="org.eclipse.oomph.targlets.doc.guide" />
+			<package name="org.eclipse.oomph.targlets.doc.online" />
+			<package name="org.eclipse.oomph.targlets.doc.reference" />
+			<package name="org.eclipse.oomph.targlets.doc.reference.api" />
+			<package name="org.eclipse.oomph.targlets.doc.reference.schema" />
+			<package name="org.eclipse.oomph.util.doc" />
+			<package name="org.eclipse.oomph.util.doc.online" />
+			<package name="org.eclipse.oomph.util.doc.reference" />
+			<package name="org.eclipse.oomph.util.doc.reference.api" />
+			<package name="org.eclipse.oomph.util.doc.reference.schema" />
     </javadoc>
   </target>
 

@@ -25,11 +25,10 @@ import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.IDChangedEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateFailedEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent.TargletsChangedEvent;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor.UpdateProblem;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -125,7 +124,7 @@ import java.util.Set;
  * @author Eike Stepper
  */
 @SuppressWarnings("restriction")
-public class TargletContainer extends AbstractBundleContainer
+public class TargletContainer extends AbstractBundleContainer implements ITargletContainer
 {
   public static final String TYPE = "Targlet";
 
@@ -225,7 +224,8 @@ public class TargletContainer extends AbstractBundleContainer
       id = newID;
 
       TargletContainerDescriptor descriptor = updateTargetDefinition();
-      TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new IDChangedEvent(this, descriptor, oldID), new NullProgressMonitor());
+      TargletContainerEvent event = new TargletContainerEvent.IDChangedEvent(this, descriptor, oldID);
+      TargletContainerListenerRegistry.INSTANCE.notifyListeners(event, new NullProgressMonitor());
     }
   }
 
@@ -330,7 +330,8 @@ public class TargletContainer extends AbstractBundleContainer
     basicSetTarglets(targlets);
 
     TargletContainerDescriptor descriptor = updateTargetDefinition();
-    TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new TargletsChangedEvent(this, descriptor), new NullProgressMonitor());
+    TargletContainerEvent event = new TargletContainerEvent.TargletsChangedEvent(this, descriptor);
+    TargletContainerListenerRegistry.INSTANCE.notifyListeners(event, new NullProgressMonitor());
   }
 
   private void basicSetTarglets(Collection<? extends Targlet> targlets)
@@ -611,7 +612,7 @@ public class TargletContainer extends AbstractBundleContainer
       // Clear the resolution statuses of the involved targlet containers.
       for (ITargetLocation targetLocation : targetDefinition.getTargetLocations())
       {
-        if (targetLocation instanceof TargletContainer)
+        if (targetLocation instanceof ITargletContainer)
         {
           TargletContainer targletContainer = (TargletContainer)targetLocation;
           targletContainer.clearResolutionStatus();
@@ -709,9 +710,9 @@ public class TargletContainer extends AbstractBundleContainer
       Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
       descriptor.commitUpdateTransaction(digest, requiredProjects.values(), progress.newChild());
 
-      ProfileUpdateSucceededEvent event = new ProfileUpdateSucceededEvent(this, descriptor, profile, commitContext.getMetadataRepositories(),
+      TargletContainerEvent event = new TargletContainerEvent.ProfileUpdateSucceededEvent(this, descriptor, profile, commitContext.getMetadataRepositories(),
           commitContext.getProvisioningPlan(), requiredProjects);
-      TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(event, progress.newChild());
+      TargletContainerListenerRegistry.INSTANCE.notifyListeners(event, progress.newChild());
 
       monitor.subTask("Targlet container profile update completed");
     }
@@ -722,7 +723,8 @@ public class TargletContainer extends AbstractBundleContainer
       UpdateProblem updateProblem = descriptor.getUpdateProblem();
       if (updateProblem != null)
       {
-        TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(new ProfileUpdateFailedEvent(this, descriptor, updateProblem), new NullProgressMonitor());
+        TargletContainerEvent event = new TargletContainerEvent.ProfileUpdateFailedEvent(this, descriptor, updateProblem);
+        TargletContainerListenerRegistry.INSTANCE.notifyListeners(event, new NullProgressMonitor());
       }
 
       TargletsCorePlugin.INSTANCE.coreException(t);
@@ -1287,7 +1289,7 @@ public class TargletContainer extends AbstractBundleContainer
       XML_OPTIONS = Collections.unmodifiableMap(options);
     }
 
-    public TargletContainer getTargetLocation(String type, String serializedXML) throws CoreException
+    public ITargletContainer getTargetLocation(String type, String serializedXML) throws CoreException
     {
       if (TYPE.equals(type))
       {
@@ -1297,7 +1299,7 @@ public class TargletContainer extends AbstractBundleContainer
       return null;
     }
 
-    public static TargletContainer fromXML(String xml) throws CoreException
+    public static ITargletContainer fromXML(String xml) throws CoreException
     {
       try
       {

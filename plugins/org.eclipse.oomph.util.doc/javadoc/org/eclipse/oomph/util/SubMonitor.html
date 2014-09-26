@@ -1,0 +1,1091 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+
+<title>SubMonitor (Oomph Utilities Documentation)</title>
+<meta name="date" content="">
+<link rel="stylesheet" type="text/css" href="../../../../../html/book.css" title="Style">
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SubMonitor (Oomph Utilities Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/SubMonitor.html">Use</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/eclipse/oomph/util/StringUtil.html" title="class in org.eclipse.oomph.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/eclipse/oomph/util/SubMonitor.html" target="_top">Frames</a></li>
+<li><a href="SubMonitor.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.eclipse.oomph.util</div>
+<h2 title="Class SubMonitor" class="title">Class SubMonitor</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>org.eclipse.oomph.util.SubMonitor</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>, <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitorWithBlocking</a></dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html" title="class in org.eclipse.oomph.util">ProbingSubMonitor</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">SubMonitor</span>
+extends <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitorWithBlocking</a></pre>
+<div class="block">A <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true" title="class or interface in org.eclipse.core.runtime"><code>progress monitor</code></a> that uses a given amount of work ticks from a parent monitor.
+ This is intended as a safer, easier-to-use alternative to <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/SubProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime"><code>SubProgressMonitor</code></a>.
+ <p>
+ Progress monitoring is generally quite invasive to the code that is monitored.
+ At the same time progress monitoring itself is typically very hard to implement correctly.
+ This class aims at reducing the invasiveness as much as possible while offering all the functionality needed
+ to do the job right.
+ <p>
+ The following aspects of this class help to keep the progress monitoring code short and nice and to avoid common monitoring mistakes:
+ <ul>
+ <li> It offers the full functionality of <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/SubMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime"><code>SubMonitor</code></a>, which already makes progress monitoring a lot easier.
+      Refer to the <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/SubMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime"><code>SubMonitor</code></a> documentation or to this <a href="https://wiki.eclipse.org/Progress_Reporting">article</a> for details and examples.
+
+ <li> In addition to the <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setWorkRemaining(int)"><code>setWorkRemaining(int)</code></a> method it offers a <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped(int)"><code>skipped(int)</code></a> method, which redistributes the remaining work
+      according to the last skipped <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked(int)"><code>worked(int)</code></a> or <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild(int)"><code>newChild(int)</code></a> call rather than on the sum of all subsequent calls.
+
+ <li> It reduces the need to specify <code>work</code> arguments by using the default value <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#DEFAULT_WORK"><code>1</code></a> with the overloaded
+      <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked()"><code>worked()</code></a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped()"><code>skipped()</code></a> and <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild()"><code>newChild()</code></a> calls.
+
+ <li> Basically all methods of this class can implicitely check for cancelation, thereby ensuring that the monitored code is always cancelable by the user
+      without cluttering the code with repetitions of the following idiom:
+      <pre>
+if (monitor.isCanceled())
+{
+  throw new OperationCanceledException();
+}
+      </pre>
+      For details about automatic cancelation detection refer to <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#detectCancelation()"><code>detectCancelation()</code></a>.
+
+ <li> It is normally very challenging to find out how much time a program really spends in the different parts of the monitored methods or how often these
+      parts get executed. Stepping through the program with a debugger obviously leads to distortion that renders the observations meaningless and adding
+      extra code to measure a runtime scenario realisticly is not nice from a maintenance point of view.
+      <p>
+      As a solution to this problem this class offers the possibility to transparently instrument <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util"><code>SubMonitor</code></a> instances such that they automatically
+      collect and report all kinds of statistics that may help to enhance the user experience. Sometimes it would even indicate to remove some progress monitoring
+      because it turns out that almost no time is being spent in a particular part of the program. Another typical result from the analysis is the understanding of
+      <i>one time effects</i> that might need special consideration.
+      <p>
+      For details about this <i>probing</i> mode refer to <a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html" title="class in org.eclipse.oomph.util"><code>ProbingSubMonitor</code></a>.
+ </ul>
+ <p>
+ The following example shows how to monitor progress while recursing through a tree of folders:
+ <pre>
+public void recurse(IContainer container, IProgressMonitor monitor) throws Exception
+{
+  IResource[] members = container.members();
+
+  SubMonitor progress = SubMonitor.convert(monitor, members.length).detectCancelation();
+  progress.subTask(container.getFullPath().toString());
+
+  for (IResource member : members)
+  {
+    if (member instanceof IContainer)
+    {
+      Thread.sleep(5);
+      recurse((IContainer)member, progress.newChild());
+    }
+    else
+    {
+      progress.skipped();
+    }
+  }
+}
+ </pre></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Eike Stepper</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a></strong></code>
+<div class="block">Enumerates the possible probing mode values <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html#OFF"><code>SubMonitor.ProbingMode.OFF</code></a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html#STANDARD"><code>SubMonitor.ProbingMode.STANDARD</code></a> and <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html#FULL"><code>SubMonitor.ProbingMode.FULL</code></a>.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#DEFAULT_WORK">DEFAULT_WORK</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_ALL_LABELS">SUPPRESS_ALL_LABELS</a></strong></code>
+<div class="block">May be passed as a flag to newChild.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_BEGINTASK">SUPPRESS_BEGINTASK</a></strong></code>
+<div class="block">May be passed as a flag to newChild.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_NONE">SUPPRESS_NONE</a></strong></code>
+<div class="block">May be passed as a flag to newChild.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_SETTASKNAME">SUPPRESS_SETTASKNAME</a></strong></code>
+<div class="block">May be passed as a flag to newChild.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_SUBTASK">SUPPRESS_SUBTASK</a></strong></code>
+<div class="block">May be passed as a flag to newChild.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.core.runtime.IProgressMonitor">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.eclipse.core.runtime.<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></h3>
+<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#UNKNOWN" title="class or interface in org.eclipse.core.runtime">UNKNOWN</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#beginTask(java.lang.String,%20int)">beginTask</a></strong>(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+         int&nbsp;totalWork)</code>
+<div class="block">Starts a new main task.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#childDone()">childDone</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#clearBlocked()">clearBlocked</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor)">convert</a></strong>(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor)</code>
+<div class="block">Converts an unknown (possibly null) IProgressMonitor into a SubMonitor.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20int)">convert</a></strong>(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+       int&nbsp;work)</code>
+<div class="block">Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20int,%20org.eclipse.oomph.util.SubMonitor.ProbingMode)">convert</a></strong>(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+       int&nbsp;work,
+       <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a>&nbsp;probingMode)</code>
+<div class="block">Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20java.lang.String,%20int)">convert</a></strong>(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+       <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;taskName,
+       int&nbsp;work)</code>
+<div class="block">Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20java.lang.String,%20int,%20org.eclipse.oomph.util.SubMonitor.ProbingMode)">convert</a></strong>(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+       <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;taskName,
+       int&nbsp;work,
+       <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a>&nbsp;probingMode)</code>
+<div class="block">Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20org.eclipse.oomph.util.SubMonitor.ProbingMode)">convert</a></strong>(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+       <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a>&nbsp;probingMode)</code>
+<div class="block">Converts an unknown (possibly null) IProgressMonitor into a SubMonitor.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#detectCancelation()">detectCancelation</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#detectCancelation(boolean)">detectCancelation</a></strong>(boolean&nbsp;on)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#done()">done</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#eq(java.lang.Object,%20java.lang.Object)">eq</a></strong>(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o1,
+  <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#internalWorked(double)">internalWorked</a></strong>(double&nbsp;work)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#isCanceled()">isCanceled</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild()">newChild</a></strong>()</code>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild(int)"><code>newChild(1)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild(int)">newChild</a></strong>(int&nbsp;totalWork)</code>
+<div class="block">Creates a sub progress monitor that will consume the given number of ticks from the
+ receiver.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild(int,%20int)">newChild</a></strong>(int&nbsp;totalWork,
+        int&nbsp;suppressFlags)</code>
+<div class="block">Creates a sub progress monitor that will consume the given number of ticks from the
+ receiver.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setBlocked(org.eclipse.core.runtime.IStatus)">setBlocked</a></strong>(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IStatus.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IStatus</a>&nbsp;reason)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setCanceled(boolean)">setCanceled</a></strong>(boolean&nbsp;b)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setTaskName(java.lang.String)">setTaskName</a></strong>(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setWorkRemaining(int)">setWorkRemaining</a></strong>(int&nbsp;workRemaining)</code>
+<div class="block">Sets the work remaining for this SubMonitor instance.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped()">skipped</a></strong>()</code>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped(int)"><code>skipped(1)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped(int)">skipped</a></strong>(int&nbsp;ticks)</code>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setWorkRemaining(int)"><code>setWorkRemaining(totalParent - usedForParent)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#subTask(java.lang.String)">subTask</a></strong>(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked()">worked</a></strong>()</code>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked(int)"><code>worked(1)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked(int)">worked</a></strong>(int&nbsp;work)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="DEFAULT_WORK">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_WORK</h4>
+<pre>public static final&nbsp;int DEFAULT_WORK</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.eclipse.oomph.util.SubMonitor.DEFAULT_WORK">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SUPPRESS_SUBTASK">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SUPPRESS_SUBTASK</h4>
+<pre>public static final&nbsp;int SUPPRESS_SUBTASK</pre>
+<div class="block">May be passed as a flag to newChild. Indicates that the calls
+ to subTask on the child should be ignored. Without this flag,
+ calling subTask on the child will result in a call to subTask
+ on its parent.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.eclipse.oomph.util.SubMonitor.SUPPRESS_SUBTASK">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SUPPRESS_BEGINTASK">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SUPPRESS_BEGINTASK</h4>
+<pre>public static final&nbsp;int SUPPRESS_BEGINTASK</pre>
+<div class="block">May be passed as a flag to newChild. Indicates that strings
+ passed into beginTask should be ignored. If this flag is
+ specified, then the progress monitor instance will accept null
+ as the first argument to beginTask. Without this flag, any
+ string passed to beginTask will result in a call to
+ setTaskName on the parent.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.eclipse.oomph.util.SubMonitor.SUPPRESS_BEGINTASK">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SUPPRESS_SETTASKNAME">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SUPPRESS_SETTASKNAME</h4>
+<pre>public static final&nbsp;int SUPPRESS_SETTASKNAME</pre>
+<div class="block">May be passed as a flag to newChild. Indicates that strings
+ passed into setTaskName should be ignored. If this string
+ is omitted, then a call to setTaskName on the child will
+ result in a call to setTaskName on the parent.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.eclipse.oomph.util.SubMonitor.SUPPRESS_SETTASKNAME">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SUPPRESS_ALL_LABELS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SUPPRESS_ALL_LABELS</h4>
+<pre>public static final&nbsp;int SUPPRESS_ALL_LABELS</pre>
+<div class="block">May be passed as a flag to newChild. Indicates that strings
+ passed to setTaskName, subTask, and beginTask should all be ignored.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.eclipse.oomph.util.SubMonitor.SUPPRESS_ALL_LABELS">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SUPPRESS_NONE">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SUPPRESS_NONE</h4>
+<pre>public static final&nbsp;int SUPPRESS_NONE</pre>
+<div class="block">May be passed as a flag to newChild. Indicates that strings
+ passed to setTaskName, subTask, and beginTask should all be propagated
+ to the parent.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.eclipse.oomph.util.SubMonitor.SUPPRESS_NONE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="convert(org.eclipse.core.runtime.IProgressMonitor)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convert</h4>
+<pre>public static&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;convert(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor)</pre>
+<div class="block"><p>Converts an unknown (possibly null) IProgressMonitor into a SubMonitor. It is
+ not necessary to call done() on the result, but the caller is responsible for calling
+ done() on the argument. Calls beginTask on the argument.</p>
+
+ <p>This method should generally be called at the beginning of a method that accepts
+ an IProgressMonitor in order to convert the IProgressMonitor into a SubMonitor.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>monitor</code> - monitor to convert to a SubMonitor instance or null. Treats null
+ as a new instance of <code>NullProgressMonitor</code>.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a SubMonitor instance that adapts the argument</dd></dl>
+</li>
+</ul>
+<a name="convert(org.eclipse.core.runtime.IProgressMonitor, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convert</h4>
+<pre>public static&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;convert(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+                 int&nbsp;work)</pre>
+<div class="block"><p>Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks. It is not necessary to call done() on the result,
+ but the caller is responsible for calling done() on the argument. Calls beginTask
+ on the argument.</p>
+
+ <p>This method should generally be called at the beginning of a method that accepts
+ an IProgressMonitor in order to convert the IProgressMonitor into a SubMonitor.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>monitor</code> - monitor to convert to a SubMonitor instance or null. Treats null
+ as a new instance of <code>NullProgressMonitor</code>.</dd><dd><code>work</code> - number of ticks that will be available in the resulting monitor</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a SubMonitor instance that adapts the argument</dd></dl>
+</li>
+</ul>
+<a name="convert(org.eclipse.core.runtime.IProgressMonitor, java.lang.String, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convert</h4>
+<pre>public static&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;convert(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+                 <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;taskName,
+                 int&nbsp;work)</pre>
+<div class="block"><p>Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks. It is not necessary to call done() on the result,
+ but the caller is responsible for calling done() on the argument. Calls beginTask
+ on the argument.</p>
+
+ <p>This method should generally be called at the beginning of a method that accepts
+ an IProgressMonitor in order to convert the IProgressMonitor into a SubMonitor.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>monitor</code> - to convert into a SubMonitor instance or null. If given a null argument,
+ the resulting SubMonitor will not report its progress anywhere.</dd><dd><code>taskName</code> - user readable name to pass to monitor.beginTask. Never null.</dd><dd><code>work</code> - initial number of ticks to allocate for children of the SubMonitor</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a new SubMonitor instance that is a child of the given monitor</dd></dl>
+</li>
+</ul>
+<a name="convert(org.eclipse.core.runtime.IProgressMonitor, org.eclipse.oomph.util.SubMonitor.ProbingMode)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convert</h4>
+<pre>public static&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;convert(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+                 <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a>&nbsp;probingMode)</pre>
+<div class="block"><p>Converts an unknown (possibly null) IProgressMonitor into a SubMonitor. It is
+ not necessary to call done() on the result, but the caller is responsible for calling
+ done() on the argument. Calls beginTask on the argument.</p>
+
+ <p>This method should generally be called at the beginning of a method that accepts
+ an IProgressMonitor in order to convert the IProgressMonitor into a SubMonitor.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>monitor</code> - monitor to convert to a SubMonitor instance or null. Treats null
+ as a new instance of <code>NullProgressMonitor</code>.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a SubMonitor instance that adapts the argument</dd></dl>
+</li>
+</ul>
+<a name="convert(org.eclipse.core.runtime.IProgressMonitor, int, org.eclipse.oomph.util.SubMonitor.ProbingMode)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convert</h4>
+<pre>public static&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;convert(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+                 int&nbsp;work,
+                 <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a>&nbsp;probingMode)</pre>
+<div class="block"><p>Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks. It is not necessary to call done() on the result,
+ but the caller is responsible for calling done() on the argument. Calls beginTask
+ on the argument.</p>
+
+ <p>This method should generally be called at the beginning of a method that accepts
+ an IProgressMonitor in order to convert the IProgressMonitor into a SubMonitor.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>monitor</code> - monitor to convert to a SubMonitor instance or null. Treats null
+ as a new instance of <code>NullProgressMonitor</code>.</dd><dd><code>work</code> - number of ticks that will be available in the resulting monitor</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a SubMonitor instance that adapts the argument</dd></dl>
+</li>
+</ul>
+<a name="convert(org.eclipse.core.runtime.IProgressMonitor, java.lang.String, int, org.eclipse.oomph.util.SubMonitor.ProbingMode)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convert</h4>
+<pre>public static&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;convert(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>&nbsp;monitor,
+                 <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;taskName,
+                 int&nbsp;work,
+                 <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a>&nbsp;probingMode)</pre>
+<div class="block"><p>Converts an unknown (possibly null) IProgressMonitor into a SubMonitor allocated
+ with the given number of ticks. It is not necessary to call done() on the result,
+ but the caller is responsible for calling done() on the argument. Calls beginTask
+ on the argument.</p>
+
+ <p>This method should generally be called at the beginning of a method that accepts
+ an IProgressMonitor in order to convert the IProgressMonitor into a SubMonitor.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>monitor</code> - to convert into a SubMonitor instance or null. If given a null argument,
+ the resulting SubMonitor will not report its progress anywhere.</dd><dd><code>taskName</code> - user readable name to pass to monitor.beginTask. Never null.</dd><dd><code>work</code> - initial number of ticks to allocate for children of the SubMonitor</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a new SubMonitor instance that is a child of the given monitor</dd></dl>
+</li>
+</ul>
+<a name="detectCancelation()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>detectCancelation</h4>
+<pre>public final&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;detectCancelation()</pre>
+</li>
+</ul>
+<a name="detectCancelation(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>detectCancelation</h4>
+<pre>public final&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;detectCancelation(boolean&nbsp;on)</pre>
+</li>
+</ul>
+<a name="setWorkRemaining(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setWorkRemaining</h4>
+<pre>public final&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;setWorkRemaining(int&nbsp;workRemaining)</pre>
+<div class="block"><p>Sets the work remaining for this SubMonitor instance. This is the total number
+ of ticks that may be reported by all subsequent calls to worked(int), newChild(int), etc.
+ This may be called many times for the same SubMonitor instance. When this method
+ is called, the remaining space on the progress monitor is redistributed into the given
+ number of ticks.</p>
+
+ <p>It doesn't matter how much progress has already been reported with this SubMonitor
+ instance. If you call setWorkRemaining(100), you will be able to report 100 more ticks of
+ work before the progress meter reaches 100%.</p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workRemaining</code> - total number of remaining ticks</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the receiver</dd></dl>
+</li>
+</ul>
+<a name="isCanceled()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCanceled</h4>
+<pre>public final&nbsp;boolean&nbsp;isCanceled()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#isCanceled()" title="class or interface in org.eclipse.core.runtime">isCanceled</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="setTaskName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTaskName</h4>
+<pre>public final&nbsp;void&nbsp;setTaskName(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#setTaskName(java.lang.String)" title="class or interface in org.eclipse.core.runtime">setTaskName</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="beginTask(java.lang.String, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>beginTask</h4>
+<pre>public final&nbsp;void&nbsp;beginTask(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+             int&nbsp;totalWork)</pre>
+<div class="block">Starts a new main task. The string argument is ignored
+ if and only if the SUPPRESS_BEGINTASK flag has been set on this SubMonitor
+ instance.
+
+ <p>This method is equivalent calling setWorkRemaining(...) on the receiver. Unless
+ the SUPPRESS_BEGINTASK flag is set, this will also be equivalent to calling
+ setTaskName(...) on the parent.</p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#beginTask(java.lang.String,%20int)" title="class or interface in org.eclipse.core.runtime">beginTask</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - new main task name</dd><dd><code>totalWork</code> - number of ticks to allocate</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#beginTask(java.lang.String,%20int)" title="class or interface in org.eclipse.core.runtime"><code>IProgressMonitor.beginTask(java.lang.String, int)</code></a></dd></dl>
+</li>
+</ul>
+<a name="done()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>done</h4>
+<pre>public&nbsp;void&nbsp;done()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#done()" title="class or interface in org.eclipse.core.runtime">done</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="internalWorked(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>internalWorked</h4>
+<pre>public final&nbsp;void&nbsp;internalWorked(double&nbsp;work)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#internalWorked(double)" title="class or interface in org.eclipse.core.runtime">internalWorked</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="subTask(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>subTask</h4>
+<pre>public final&nbsp;void&nbsp;subTask(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#subTask(java.lang.String)" title="class or interface in org.eclipse.core.runtime">subTask</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="worked()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>worked</h4>
+<pre>public final&nbsp;void&nbsp;worked()</pre>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked(int)"><code>worked(1)</code></a>.</div>
+</li>
+</ul>
+<a name="worked(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>worked</h4>
+<pre>public&nbsp;void&nbsp;worked(int&nbsp;work)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#worked(int)" title="class or interface in org.eclipse.core.runtime">worked</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="skipped(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>skipped</h4>
+<pre>public final&nbsp;void&nbsp;skipped(int&nbsp;ticks)</pre>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setWorkRemaining(int)"><code>setWorkRemaining(totalParent - usedForParent)</code></a>.</div>
+</li>
+</ul>
+<a name="skipped()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>skipped</h4>
+<pre>public final&nbsp;void&nbsp;skipped()</pre>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped(int)"><code>skipped(1)</code></a>.</div>
+</li>
+</ul>
+<a name="setCanceled(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCanceled</h4>
+<pre>public final&nbsp;void&nbsp;setCanceled(boolean&nbsp;b)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#setCanceled(boolean)" title="class or interface in org.eclipse.core.runtime">setCanceled</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="newChild()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>newChild</h4>
+<pre>public final&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;newChild()</pre>
+<div class="block">Same as <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild(int)"><code>newChild(1)</code></a>.</div>
+</li>
+</ul>
+<a name="newChild(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>newChild</h4>
+<pre>public final&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;newChild(int&nbsp;totalWork)</pre>
+<div class="block"><p>Creates a sub progress monitor that will consume the given number of ticks from the
+ receiver. It is not necessary to call <code>beginTask</code> or <code>done</code> on the
+ result. However, the resulting progress monitor will not report any work after the first
+ call to done() or before ticks are allocated. Ticks may be allocated by calling beginTask
+ or setWorkRemaining.</p>
+
+ <p>Each SubMonitor only has one active child at a time. Each time newChild() is called, the
+ result becomes the new active child and any unused progress from the previously-active child is
+ consumed.</p>
+
+ <p>This is property makes it unnecessary to call done() on a SubMonitor instance, since child
+ monitors are automatically cleaned up the next time the parent is touched.</p>
+
+ <code><pre>
+      ////////////////////////////////////////////////////////////////////////////
+      // Example 1: Typical usage of newChild
+      void myMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+          doSomething(progress.newChild(50));
+          doSomethingElse(progress.newChild(50));
+      }
+
+      ////////////////////////////////////////////////////////////////////////////
+      // Example 2: Demonstrates the function of active children. Creating children
+      // is sufficient to smoothly report progress, even if worked(...) and done()
+      // are never called.
+      void myMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+
+          for (int i = 0; i < 100; i++) {
+              // Creating the next child monitor will clean up the previous one,
+              // causing progress to be reported smoothly even if we don't do anything
+              // with the monitors we create
+            progress.newChild(1);
+          }
+      }
+
+      ////////////////////////////////////////////////////////////////////////////
+      // Example 3: Demonstrates a common anti-pattern
+      void wrongMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+
+          // WRONG WAY: Won't have the intended effect, as only one of these progress
+          // monitors may be active at a time and the other will report no progress.
+          callMethod(progress.newChild(50), computeValue(progress.newChild(50)));
+      }
+
+      void rightMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+
+          // RIGHT WAY: Break up method calls so that only one SubMonitor is in use at a time.
+          Object someValue = computeValue(progress.newChild(50));
+          callMethod(progress.newChild(50), someValue);
+      }
+ </pre></code></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>totalWork</code> - number of ticks to consume from the receiver</dd>
+<dt><span class="strong">Returns:</span></dt><dd>new sub progress monitor that may be used in place of a new SubMonitor</dd></dl>
+</li>
+</ul>
+<a name="newChild(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>newChild</h4>
+<pre>public final&nbsp;<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a>&nbsp;newChild(int&nbsp;totalWork,
+                  int&nbsp;suppressFlags)</pre>
+<div class="block"><p>Creates a sub progress monitor that will consume the given number of ticks from the
+ receiver. It is not necessary to call <code>beginTask</code> or <code>done</code> on the
+ result. However, the resulting progress monitor will not report any work after the first
+ call to done() or before ticks are allocated. Ticks may be allocated by calling beginTask
+ or setWorkRemaining.</p>
+
+ <p>Each SubMonitor only has one active child at a time. Each time newChild() is called, the
+ result becomes the new active child and any unused progress from the previously-active child is
+ consumed.</p>
+
+ <p>This is property makes it unnecessary to call done() on a SubMonitor instance, since child
+ monitors are automatically cleaned up the next time the parent is touched.</p>
+
+ <code><pre>
+      ////////////////////////////////////////////////////////////////////////////
+      // Example 1: Typical usage of newChild
+      void myMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+          doSomething(progress.newChild(50));
+          doSomethingElse(progress.newChild(50));
+      }
+
+      ////////////////////////////////////////////////////////////////////////////
+      // Example 2: Demonstrates the function of active children. Creating children
+      // is sufficient to smoothly report progress, even if worked(...) and done()
+      // are never called.
+      void myMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+
+          for (int i = 0; i < 100; i++) {
+              // Creating the next child monitor will clean up the previous one,
+              // causing progress to be reported smoothly even if we don't do anything
+              // with the monitors we create
+            progress.newChild(1);
+          }
+      }
+
+      ////////////////////////////////////////////////////////////////////////////
+      // Example 3: Demonstrates a common anti-pattern
+      void wrongMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+
+          // WRONG WAY: Won't have the intended effect, as only one of these progress
+          // monitors may be active at a time and the other will report no progress.
+          callMethod(progress.newChild(50), computeValue(progress.newChild(50)));
+      }
+
+      void rightMethod(IProgressMonitor parent) {
+          SubMonitor progress = SubMonitor.convert(parent, 100);
+
+          // RIGHT WAY: Break up method calls so that only one SubMonitor is in use at a time.
+          Object someValue = computeValue(progress.newChild(50));
+          callMethod(progress.newChild(50), someValue);
+      }
+ </pre></code></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>totalWork</code> - number of ticks to consume from the receiver</dd>
+<dt><span class="strong">Returns:</span></dt><dd>new sub progress monitor that may be used in place of a new SubMonitor</dd></dl>
+</li>
+</ul>
+<a name="childDone()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>childDone</h4>
+<pre>public&nbsp;void&nbsp;childDone()</pre>
+</li>
+</ul>
+<a name="clearBlocked()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearBlocked</h4>
+<pre>public final&nbsp;void&nbsp;clearBlocked()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true#clearBlocked()" title="class or interface in org.eclipse.core.runtime">clearBlocked</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitorWithBlocking</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="setBlocked(org.eclipse.core.runtime.IStatus)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBlocked</h4>
+<pre>public final&nbsp;void&nbsp;setBlocked(<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IStatus.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IStatus</a>&nbsp;reason)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true#setBlocked(org.eclipse.core.runtime.IStatus)" title="class or interface in org.eclipse.core.runtime">setBlocked</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitorWithBlocking</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="eq(java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>eq</h4>
+<pre>protected static&nbsp;boolean&nbsp;eq(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o1,
+         <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o2)</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/SubMonitor.html">Use</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/eclipse/oomph/util/StringUtil.html" title="class in org.eclipse.oomph.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/eclipse/oomph/util/SubMonitor.html" target="_top">Frames</a></li>
+<li><a href="SubMonitor.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small><i class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</i></small></p>
+</body>
+</html>

@@ -7,27 +7,79 @@
   <topic label="Examples" href="html/examples/index.html">
     <topic label="Connecting To Repositories" href="html/examples/ConnectingToRepositories.html" />
     <topic label="Creating Transport Connections" href="html/examples/CreatingTransportConnections.html" />
-    <topic label="Tree Examples" href="html/examples/TreeExamples.html" />
     <topic label="Embedding XML Snippets" href="html/examples/XmlSnippets.html" />
   </topic>
   <topic label="Reference" href="html/reference/index.html">
     <topic label="API Reference" href="javadoc/overview-summary.html">
-      <topic label="Oomph Resources Model" href="javadoc/org/eclipse/oomph/resources/package-summary.html" icon="plugin">
-        <topic label="org.eclipse.oomph.resources" href="javadoc/org/eclipse/oomph/resources/package-summary.html" icon="package" />
-        <topic label="org.eclipse.oomph.resources.backend" href="javadoc/org/eclipse/oomph/resources/backend/package-summary.html" icon="package" />
-        <topic label="org.eclipse.oomph.resources.impl" href="javadoc/org/eclipse/oomph/resources/impl/package-summary.html" icon="package" />
-        <topic label="org.eclipse.oomph.resources.util" href="javadoc/org/eclipse/oomph/resources/util/package-summary.html" icon="package" />
-      </topic>
       <topic label="Oomph Setup" href="javadoc/org/eclipse/oomph/setup/package-summary.html" icon="plugin">
         <topic label="org.eclipse.oomph.setup" href="javadoc/org/eclipse/oomph/setup/package-summary.html" icon="package" />
         <topic label="org.eclipse.oomph.setup.impl" href="javadoc/org/eclipse/oomph/setup/impl/package-summary.html" icon="package" />
         <topic label="org.eclipse.oomph.setup.log" href="javadoc/org/eclipse/oomph/setup/log/package-summary.html" icon="package" />
         <topic label="org.eclipse.oomph.setup.util" href="javadoc/org/eclipse/oomph/setup/util/package-summary.html" icon="package" />
       </topic>
-    </topic>
-    <topic label="Extension Point Reference" href="html/reference/schema/index.html">
-      <topic label="Oomph Resources Model" href="schemadoc/org_eclipse_oomph_resources_backendSystemFactories.html" icon="plugin">
-        <topic label="backendSystemFactories" href="schemadoc/org_eclipse_oomph_resources_backendSystemFactories.html" icon="extpoint" />
+      <topic label="Oomph Setup Editor" href="javadoc/org/eclipse/oomph/setup/editor/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.editor" href="javadoc/org/eclipse/oomph/setup/editor/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Git" href="javadoc/org/eclipse/oomph/setup/git/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.git" href="javadoc/org/eclipse/oomph/setup/git/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.git.impl" href="javadoc/org/eclipse/oomph/setup/git/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.git.util" href="javadoc/org/eclipse/oomph/setup/git/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup JDT" href="javadoc/org/eclipse/oomph/setup/jdt/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.jdt" href="javadoc/org/eclipse/oomph/setup/jdt/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.jdt.impl" href="javadoc/org/eclipse/oomph/setup/jdt/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.jdt.util" href="javadoc/org/eclipse/oomph/setup/jdt/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Launching" href="javadoc/org/eclipse/oomph/setup/launching/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.launching" href="javadoc/org/eclipse/oomph/setup/launching/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.launching.impl" href="javadoc/org/eclipse/oomph/setup/launching/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.launching.util" href="javadoc/org/eclipse/oomph/setup/launching/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Maven" href="javadoc/org/eclipse/oomph/setup/maven/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.maven" href="javadoc/org/eclipse/oomph/setup/maven/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.maven.impl" href="javadoc/org/eclipse/oomph/setup/maven/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.maven.util" href="javadoc/org/eclipse/oomph/setup/maven/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Mylyn" href="javadoc/org/eclipse/oomph/setup/mylyn/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.mylyn" href="javadoc/org/eclipse/oomph/setup/mylyn/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.mylyn.impl" href="javadoc/org/eclipse/oomph/setup/mylyn/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.mylyn.util" href="javadoc/org/eclipse/oomph/setup/mylyn/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup P2" href="javadoc/org/eclipse/oomph/setup/p2/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.p2" href="javadoc/org/eclipse/oomph/setup/p2/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.p2.impl" href="javadoc/org/eclipse/oomph/setup/p2/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.p2.util" href="javadoc/org/eclipse/oomph/setup/p2/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup PDE" href="javadoc/org/eclipse/oomph/internal/setup/pde/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.internal.setup.pde" href="javadoc/org/eclipse/oomph/internal/setup/pde/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.pde" href="javadoc/org/eclipse/oomph/setup/pde/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.pde.impl" href="javadoc/org/eclipse/oomph/setup/pde/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.pde.util" href="javadoc/org/eclipse/oomph/setup/pde/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Project Sets" href="javadoc/org/eclipse/oomph/setup/projectset/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.projectset" href="javadoc/org/eclipse/oomph/setup/projectset/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.projectset.impl" href="javadoc/org/eclipse/oomph/setup/projectset/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.projectset.util" href="javadoc/org/eclipse/oomph/setup/projectset/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Projects" href="javadoc/org/eclipse/oomph/setup/projects/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.projects" href="javadoc/org/eclipse/oomph/setup/projects/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.projects.impl" href="javadoc/org/eclipse/oomph/setup/projects/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.projects.util" href="javadoc/org/eclipse/oomph/setup/projects/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Targlets" href="javadoc/org/eclipse/oomph/setup/targlets/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.targlets" href="javadoc/org/eclipse/oomph/setup/targlets/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.targlets.impl" href="javadoc/org/eclipse/oomph/setup/targlets/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.targlets.util" href="javadoc/org/eclipse/oomph/setup/targlets/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Workbench" href="javadoc/org/eclipse/oomph/setup/workbench/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.workbench" href="javadoc/org/eclipse/oomph/setup/workbench/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.workbench.impl" href="javadoc/org/eclipse/oomph/setup/workbench/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.workbench.util" href="javadoc/org/eclipse/oomph/setup/workbench/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Setup Working Sets" href="javadoc/org/eclipse/oomph/setup/workingsets/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.setup.workingsets" href="javadoc/org/eclipse/oomph/setup/workingsets/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.workingsets.impl" href="javadoc/org/eclipse/oomph/setup/workingsets/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.setup.workingsets.util" href="javadoc/org/eclipse/oomph/setup/workingsets/util/package-summary.html" icon="package" />
       </topic>
     </topic>
   </topic>

@@ -1,0 +1,13 @@
+org.eclipse.oomph.base
+org.eclipse.oomph.base.impl
+org.eclipse.oomph.base.util
+org.eclipse.oomph.predicates
+org.eclipse.oomph.predicates.impl
+org.eclipse.oomph.predicates.util
+org.eclipse.oomph.resources
+org.eclipse.oomph.resources.backend
+org.eclipse.oomph.resources.impl
+org.eclipse.oomph.resources.util
+org.eclipse.oomph.ui
+org.eclipse.oomph.util
+org.eclipse.oomph.util.pde

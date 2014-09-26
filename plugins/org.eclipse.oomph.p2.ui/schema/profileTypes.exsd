@@ -1,31 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
-  All rights reserved. This program and the accompanying materials
-  are made available under the terms of the Eclipse Public License v1.0
-  which accompanies this distribution, and is available at
-  http://www.eclipse.org/legal/epl-v10.html
-
-  Contributors:
-    Eike Stepper - initial API and implementation
--->
-
 <!-- Schema file written by PDE -->
 <schema targetNamespace="org.eclipse.oomph.p2.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appInfo>
+      <appinfo>
          <meta.schema plugin="org.eclipse.oomph.p2.ui" id="profileTypes" name="Profile Types"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point allows clients to contribute their own profile type icons.
       </documentation>
    </annotation>
 
    <element name="extension">
       <annotation>
-         <appInfo>
+         <appinfo>
             <meta.element />
-         </appInfo>
+         </appinfo>
       </annotation>
       <complexType>
          <sequence>
@@ -50,9 +39,9 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
@@ -79,49 +68,54 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="resource"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="since"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         1.0
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="examples"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter extension point usage example here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="apiinfo"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter API information here.]
       </documentation>
    </annotation>
 
+
    <annotation>
-      <appInfo>
-         <meta.section type="implementation"/>
-      </appInfo>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.&lt;br&gt;
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+
       </documentation>
    </annotation>
-
 
 </schema>

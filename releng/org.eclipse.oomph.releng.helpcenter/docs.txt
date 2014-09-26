@@ -1,1 +1,4 @@
+org.eclipse.oomph.util.doc
+org.eclipse.oomph.p2.doc
+org.eclipse.oomph.targlets.doc
 org.eclipse.oomph.setup.doc

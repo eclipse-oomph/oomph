@@ -12,9 +12,6 @@ package org.eclipse.oomph.targlets.core;
 
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.resources.ResourcesUtil;
-import org.eclipse.oomph.targlets.internal.core.TargletContainer;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
-import org.eclipse.oomph.targlets.internal.core.WorkspaceIUInfo;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
@@ -33,21 +30,21 @@ public class TargletContainerEvent extends EventObject
 {
   private static final long serialVersionUID = 1L;
 
-  private final transient TargletContainerDescriptor descriptor;
+  private final transient ITargletContainerDescriptor descriptor;
 
-  public TargletContainerEvent(TargletContainer source, TargletContainerDescriptor descriptor)
+  public TargletContainerEvent(ITargletContainer source, ITargletContainerDescriptor descriptor)
   {
     super(source);
     this.descriptor = descriptor;
   }
 
   @Override
-  public final TargletContainer getSource()
+  public final ITargletContainer getSource()
   {
-    return (TargletContainer)super.getSource();
+    return (ITargletContainer)super.getSource();
   }
 
-  public final TargletContainerDescriptor getDescriptor()
+  public final ITargletContainerDescriptor getDescriptor()
   {
     return descriptor;
   }
@@ -61,7 +58,7 @@ public class TargletContainerEvent extends EventObject
 
     private final String oldID;
 
-    public IDChangedEvent(TargletContainer source, TargletContainerDescriptor descriptor, String oldID)
+    public IDChangedEvent(ITargletContainer source, ITargletContainerDescriptor descriptor, String oldID)
     {
       super(source, descriptor);
       this.oldID = oldID;
@@ -86,7 +83,7 @@ public class TargletContainerEvent extends EventObject
   {
     private static final long serialVersionUID = 1L;
 
-    public TargletsChangedEvent(TargletContainer source, TargletContainerDescriptor descriptor)
+    public TargletsChangedEvent(ITargletContainer source, ITargletContainerDescriptor descriptor)
     {
       super(source, descriptor);
     }
@@ -113,7 +110,7 @@ public class TargletContainerEvent extends EventObject
 
     private final transient Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos;
 
-    public ProfileUpdateSucceededEvent(TargletContainer source, TargletContainerDescriptor descriptor, Profile profile,
+    public ProfileUpdateSucceededEvent(ITargletContainer source, ITargletContainerDescriptor descriptor, Profile profile,
         List<IMetadataRepository> metadataRepositories, IProvisioningPlan provisioningPlan, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos)
     {
       super(source, descriptor);
@@ -160,7 +157,7 @@ public class TargletContainerEvent extends EventObject
 
     private final transient IStatus updateProblem;
 
-    public ProfileUpdateFailedEvent(TargletContainer source, TargletContainerDescriptor descriptor, IStatus updateProblem)
+    public ProfileUpdateFailedEvent(ITargletContainer source, ITargletContainerDescriptor descriptor, IStatus updateProblem)
     {
       super(source, descriptor);
       this.updateProblem = updateProblem;
@@ -187,7 +184,7 @@ public class TargletContainerEvent extends EventObject
 
     private final transient Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> importResults;
 
-    public WorkspaceUpdateFinishedEvent(TargletContainer source, TargletContainerDescriptor descriptor,
+    public WorkspaceUpdateFinishedEvent(ITargletContainer source, ITargletContainerDescriptor descriptor,
         Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> importResults)
     {
       super(source, descriptor);

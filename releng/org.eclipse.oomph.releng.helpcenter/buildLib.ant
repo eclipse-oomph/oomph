@@ -15,14 +15,31 @@
 	<!-- THIS FILE HAS BEEN GENERATED, DO NOT CHANGE -->
 	<!-- =========================================== -->
 
-	<target name="delegate">
+	<target name="org.eclipse.oomph.util.doc" unless="skip.org.eclipse.oomph.util.doc">
+		<ant antfile="${plugins.dir}/org.eclipse.oomph.util.doc/build.xml" target="${delegate.target}" />
+	</target>
+
+	<target name="org.eclipse.oomph.p2.doc" unless="skip.org.eclipse.oomph.p2.doc">
+		<ant antfile="${plugins.dir}/org.eclipse.oomph.p2.doc/build.xml" target="${delegate.target}" />
+	</target>
+
+	<target name="org.eclipse.oomph.targlets.doc" unless="skip.org.eclipse.oomph.targlets.doc">
+		<ant antfile="${plugins.dir}/org.eclipse.oomph.targlets.doc/build.xml" target="${delegate.target}" />
+	</target>
+
+	<target name="org.eclipse.oomph.setup.doc" unless="skip.org.eclipse.oomph.setup.doc">
 		<ant antfile="${plugins.dir}/org.eclipse.oomph.setup.doc/build.xml" target="${delegate.target}" />
 	</target>
+
+	<target name="delegate" depends="org.eclipse.oomph.util.doc,org.eclipse.oomph.p2.doc,org.eclipse.oomph.targlets.doc,org.eclipse.oomph.setup.doc" />
 
 	<target name="toc">
 		<concat destfile="${helpcenter.project}/html/toc.html">
 			<path path="${releng.project}/html/tocHeader.html" />
 			<path path="${plugins.dir}/org.eclipse.oomph.setup.doc/toc.html" />
+			<path path="${plugins.dir}/org.eclipse.oomph.targlets.doc/toc.html" />
+			<path path="${plugins.dir}/org.eclipse.oomph.p2.doc/toc.html" />
+			<path path="${plugins.dir}/org.eclipse.oomph.util.doc/toc.html" />
 			<path path="${releng.project}/html/tocFooter.html" />
 		</concat>
 	</target>

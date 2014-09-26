@@ -14,6 +14,8 @@ import org.eclipse.oomph.p2.P2Exception;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
@@ -215,7 +217,7 @@ public final class TargletContainerDescriptorManager
     }
   }
 
-  public IProfileChangeRequest createProfileChangeRequest(TargletContainerDescriptor descriptor, IProfile profile)
+  public IProfileChangeRequest createProfileChangeRequest(ITargletContainerDescriptor descriptor, IProfile profile)
   {
     return descriptor.getBundlePool().getAgent().getPlanner().createChangeRequest(profile);
   }
@@ -242,9 +244,9 @@ public final class TargletContainerDescriptorManager
       EObjectOutputStream stream = new BinaryResourceImpl.EObjectOutputStream(outputStream, options);
       stream.writeInt(descriptors.size());
 
-      for (TargletContainerDescriptor descriptor : descriptors.values())
+      for (ITargletContainerDescriptor descriptor : descriptors.values())
       {
-        descriptor.write(stream);
+        ((TargletContainerDescriptor)descriptor).write(stream);
 
         String id = descriptor.getWorkingProfileID();
         if (id != null)
@@ -333,9 +335,9 @@ public final class TargletContainerDescriptorManager
               {
                 for (ITargetLocation location : targetLocations)
                 {
-                  if (location instanceof TargletContainer)
+                  if (location instanceof ITargletContainer)
                   {
-                    TargletContainer targletContainer = (TargletContainer)location;
+                    ITargletContainer targletContainer = (ITargletContainer)location;
                     String id = targletContainer.getID();
                     ids.add(id);
                   }
@@ -359,13 +361,13 @@ public final class TargletContainerDescriptorManager
     }
   }
 
-  public static TargletContainer getContainer(final String id)
+  public static ITargletContainer getContainer(final String id)
   {
     try
     {
-      return TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<TargletContainer>()
+      return TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<ITargletContainer>()
       {
-        public TargletContainer run(ITargetPlatformService service) throws CoreException
+        public ITargletContainer run(ITargetPlatformService service) throws CoreException
         {
           for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))
           {
@@ -377,9 +379,9 @@ public final class TargletContainerDescriptorManager
               {
                 for (ITargetLocation location : targetLocations)
                 {
-                  if (location instanceof TargletContainer)
+                  if (location instanceof ITargletContainer)
                   {
-                    final TargletContainer targletContainer = (TargletContainer)location;
+                    final ITargletContainer targletContainer = (ITargletContainer)location;
                     if (targletContainer.getID().equals(id))
                     {
                       return targletContainer;

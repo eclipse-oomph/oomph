@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Oomph Targlets Documentation" topic="html/Overview.html">
+  <topic label="Overview" href="html/Overview.html" />
+  <topic label="Programmer's Guide" href="html/guide/index.html">
+    <topic label="Understanding Targlet Containers" href="html/guide/UnderstandingTargletContainers.html" />
+    <topic label="Listening To Targlet Container Events" href="html/guide/ListeningToEvents.html" />
+  </topic>
+  <topic label="Reference" href="html/reference/index.html">
+    <topic label="API Reference" href="javadoc/overview-summary.html">
+      <topic label="Oomph Targlets" href="javadoc/org/eclipse/oomph/targlets/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.targlets" href="javadoc/org/eclipse/oomph/targlets/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.targlets.impl" href="javadoc/org/eclipse/oomph/targlets/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.targlets.util" href="javadoc/org/eclipse/oomph/targlets/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Targlets Core" href="javadoc/org/eclipse/oomph/targlets/core/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.targlets.core" href="javadoc/org/eclipse/oomph/targlets/core/package-summary.html" icon="package" />
+      </topic>
+    </topic>
+    <topic label="Extension Point Reference" href="html/reference/schema/index.html">
+      <topic label="Oomph Targlets Core" href="schemadoc/org_eclipse_oomph_targlets_core_targletContainerListeners.html" icon="plugin">
+        <topic label="targletContainerListeners" href="schemadoc/org_eclipse_oomph_targlets_core_targletContainerListeners.html" icon="extpoint" />
+      </topic>
+    </topic>
+  </topic>
+  <topic label="Online Docs" href="html/online/index.html">
+    <topic label="Homepage" href="http://www.eclipse.org/oomph" icon="external" />
+    <topic label="Wiki" href="https://wiki.eclipse.org/Eclipse_Oomph_Installer" icon="external" />
+  </topic>
+  <topic label="Legal" href="about.html" />
+</toc>

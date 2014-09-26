@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Oomph P2 Management Documentation" topic="html/Overview.html">
+  <topic label="Overview" href="html/Overview.html" />
+  <topic label="Reference" href="html/reference/index.html">
+    <topic label="API Reference" href="javadoc/overview-summary.html">
+      <topic label="Oomph P2 Management" href="javadoc/org/eclipse/oomph/p2/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.p2" href="javadoc/org/eclipse/oomph/p2/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.p2.impl" href="javadoc/org/eclipse/oomph/p2/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.p2.util" href="javadoc/org/eclipse/oomph/p2/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph P2 Management Core" href="javadoc/org/eclipse/oomph/p2/core/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.p2.core" href="javadoc/org/eclipse/oomph/p2/core/package-summary.html" icon="package" />
+      </topic>
+    </topic>
+    <topic label="Extension Point Reference" href="html/reference/schema/index.html">
+      <topic label="Oomph P2 Management UI" href="schemadoc/org_eclipse_oomph_p2_ui_profileTypes.html" icon="plugin">
+        <topic label="profileTypes" href="schemadoc/org_eclipse_oomph_p2_ui_profileTypes.html" icon="extpoint" />
+      </topic>
+    </topic>
+  </topic>
+  <topic label="Online Docs" href="html/online/index.html">
+    <topic label="Homepage" href="http://www.eclipse.org/oomph" icon="external" />
+    <topic label="Wiki" href="https://wiki.eclipse.org/Eclipse_Oomph_Installer" icon="external" />
+  </topic>
+  <topic label="Legal" href="about.html" />
+</toc>

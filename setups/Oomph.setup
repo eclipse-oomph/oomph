@@ -62,14 +62,6 @@
         url="${oomph.update.url}"/>
   </setupTask>
   <setupTask
-      xsi:type="setup.p2:P2Task">
-    <requirement
-        name="org.eclipse.oomph.releng.doc"/>
-    <repository
-        url="http://estepper-build.github.io/oomphup/updates"/>
-    <description>Install the org.eclipse.osgi.compatibility.plugins fragment (see bug 407312)</description>
-  </setupTask>
-  <setupTask
       xsi:type="setup:CompoundTask"
       name="org.eclipse.ant.ui">
     <setupTask

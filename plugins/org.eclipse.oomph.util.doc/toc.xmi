@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:article="http://www.eclipse.org/ARTICLE/1.0">
+  <article:Plugin name="org.eclipse.oomph.base" label="Oomph Base Model">
+    <packages name="org.eclipse.oomph.base"/>
+    <packages name="org.eclipse.oomph.base.impl"/>
+    <packages name="org.eclipse.oomph.base.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.ui" label="Oomph Common UI">
+    <packages name="org.eclipse.oomph.ui"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.util" label="Oomph Common Utilities">
+    <packages name="org.eclipse.oomph.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.util.pde" label="Oomph PDE Utilities">
+    <packages name="org.eclipse.oomph.util.pde"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.predicates" label="Oomph Predicates Model">
+    <packages name="org.eclipse.oomph.predicates"/>
+    <packages name="org.eclipse.oomph.predicates.impl"/>
+    <packages name="org.eclipse.oomph.predicates.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.resources" label="Oomph Resources Model">
+    <packages name="org.eclipse.oomph.resources"/>
+    <packages name="org.eclipse.oomph.resources.backend"/>
+    <packages name="org.eclipse.oomph.resources.impl"/>
+    <packages name="org.eclipse.oomph.resources.util"/>
+    <extensionPoints name="backendSystemFactories"/>
+  </article:Plugin>
+</xmi:XMI>

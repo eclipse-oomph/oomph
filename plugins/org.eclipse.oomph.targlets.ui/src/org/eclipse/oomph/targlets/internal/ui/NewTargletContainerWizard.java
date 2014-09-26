@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.ui;
 
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -22,7 +23,7 @@ import org.eclipse.pde.ui.target.ITargetLocationWizard;
  */
 public class NewTargletContainerWizard extends Wizard implements ITargetLocationWizard
 {
-  private TargletContainer targletContainer;
+  private ITargletContainer targletContainer;
 
   private NewTargletContainerWizardPage page;
 

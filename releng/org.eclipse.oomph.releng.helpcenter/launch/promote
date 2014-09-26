@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Must be run in the clone directory!
+
+rm -rf ../help
+mkdir ../help
+
+cp releng/org.eclipse.oomph.releng.helpcenter/html/* ../help
+cp releng/org.eclipse.oomph.releng.helpcenter/docs.txt ../help/.docs
+
+for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
+  unzip -qq plugins/$i/target/$i-*-SNAPSHOT.jar \
+    "javadoc/*" \
+    "schemadoc/*" \
+    "html/*" \
+    "images/*" \
+    "about.html" \
+    "plugin.properties" \
+    -d ../help/$i || echo "Ok" 2> /dev/null
+
+  for j in $( find ../help/$i/html -name "*.html" ); do
+    sed -e 's/<!-- \(<div class="help_breadcrumbs">.*\) -->/\1/g' $j > $j.tmp
+    mv $j.tmp $j
+  done
+done
+

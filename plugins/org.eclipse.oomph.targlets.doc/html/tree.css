@@ -1,0 +1,66 @@
+.te {
+  white-space: nowrap;
+  margin-bottom: 1px;
+}
+
+.pe {
+  white-space: nowrap;
+  margin-bottom: -1px;
+  padding-right: 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e3e3e3;
+}
+
+a:link.nosel, a:visited.nosel {
+  text-decoration: none;
+  color: #000000;
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-bottom: 1px;
+}
+
+a:hover.nosel {
+  text-decoration: none;
+  color: #000000;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-bottom: 1px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #b9d7fc;
+  background-color: #f7faff;
+}
+
+a:link.sel, a:visited.sel {
+  text-decoration: none;
+  color: #000000;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-bottom: 1px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #84acdd;
+  background-color: #dfeeff;
+}
+
+a:hover.sel {
+  text-decoration: none;
+  color: #000000;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-bottom: 1px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #7da2ce;
+  background-color: #d1e4fd;
+}

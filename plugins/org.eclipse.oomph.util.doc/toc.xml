@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Oomph Utilities Documentation" topic="html/Overview.html">
+  <topic label="Overview" href="html/Overview.html" />
+  <topic label="Reference" href="html/reference/index.html">
+    <topic label="API Reference" href="javadoc/overview-summary.html">
+      <topic label="Oomph Base Model" href="javadoc/org/eclipse/oomph/base/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.base" href="javadoc/org/eclipse/oomph/base/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.base.impl" href="javadoc/org/eclipse/oomph/base/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.base.util" href="javadoc/org/eclipse/oomph/base/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Common UI" href="javadoc/org/eclipse/oomph/ui/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.ui" href="javadoc/org/eclipse/oomph/ui/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Common Utilities" href="javadoc/org/eclipse/oomph/util/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.util" href="javadoc/org/eclipse/oomph/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph PDE Utilities" href="javadoc/org/eclipse/oomph/util/pde/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.util.pde" href="javadoc/org/eclipse/oomph/util/pde/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Predicates Model" href="javadoc/org/eclipse/oomph/predicates/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.predicates" href="javadoc/org/eclipse/oomph/predicates/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.predicates.impl" href="javadoc/org/eclipse/oomph/predicates/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.predicates.util" href="javadoc/org/eclipse/oomph/predicates/util/package-summary.html" icon="package" />
+      </topic>
+      <topic label="Oomph Resources Model" href="javadoc/org/eclipse/oomph/resources/package-summary.html" icon="plugin">
+        <topic label="org.eclipse.oomph.resources" href="javadoc/org/eclipse/oomph/resources/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.resources.backend" href="javadoc/org/eclipse/oomph/resources/backend/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.resources.impl" href="javadoc/org/eclipse/oomph/resources/impl/package-summary.html" icon="package" />
+        <topic label="org.eclipse.oomph.resources.util" href="javadoc/org/eclipse/oomph/resources/util/package-summary.html" icon="package" />
+      </topic>
+    </topic>
+    <topic label="Extension Point Reference" href="html/reference/schema/index.html">
+      <topic label="Oomph Resources Model" href="schemadoc/org_eclipse_oomph_resources_backendSystemFactories.html" icon="plugin">
+        <topic label="backendSystemFactories" href="schemadoc/org_eclipse_oomph_resources_backendSystemFactories.html" icon="extpoint" />
+      </topic>
+    </topic>
+  </topic>
+  <topic label="Online Docs" href="html/online/index.html">
+    <topic label="Homepage" href="http://www.eclipse.org/oomph" icon="external" />
+    <topic label="Wiki" href="https://wiki.eclipse.org/Eclipse_Oomph_Installer" icon="external" />
+  </topic>
+  <topic label="Legal" href="about.html" />
+</toc>

@@ -14,11 +14,11 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
-import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
-import org.eclipse.oomph.targlets.internal.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.XMLUtil.ElementUpdater;
 
@@ -56,7 +56,7 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
   protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
       WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
   {
-    TargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
+    ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
     for (Targlet targlet : targletContainer.getTarglets())
     {
       Annotation annotation = targlet.getAnnotation(ANNOTATION);

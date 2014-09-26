@@ -228,4 +228,31 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.eclipse.oomph.p2.doc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.targlets.doc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.util.doc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.releng.helpcenter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
 </feature>

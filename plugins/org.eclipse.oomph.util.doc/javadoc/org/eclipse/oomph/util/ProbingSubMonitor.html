@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+
+<title>ProbingSubMonitor (Oomph Utilities Documentation)</title>
+<meta name="date" content="">
+<link rel="stylesheet" type="text/css" href="../../../../../html/book.css" title="Style">
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="ProbingSubMonitor (Oomph Utilities Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ProbingSubMonitor.html">Use</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/eclipse/oomph/util/Predicates.UniquePredicate.html" title="class in org.eclipse.oomph.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/eclipse/oomph/util/PropertiesUtil.html" title="class in org.eclipse.oomph.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/eclipse/oomph/util/ProbingSubMonitor.html" target="_top">Frames</a></li>
+<li><a href="ProbingSubMonitor.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_org.eclipse.oomph.util.SubMonitor">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.eclipse.oomph.util.SubMonitor">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.eclipse.oomph.util</div>
+<h2 title="Class ProbingSubMonitor" class="title">Class ProbingSubMonitor</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">org.eclipse.oomph.util.SubMonitor</a></li>
+<li>
+<ul class="inheritance">
+<li>org.eclipse.oomph.util.ProbingSubMonitor</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a>, <a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitorWithBlocking.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitorWithBlocking</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public final class <span class="strong">ProbingSubMonitor</span>
+extends <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></pre>
+<div class="block">An instrumented <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util"><code>sub monitor</code></a> that automatically collects and reports usage statistics.
+ <p>
+ It is normally very challenging to find out how much time a program really spends in the different parts of the monitored methods or how often these
+ parts get executed. Stepping through the program with a debugger obviously leads to distortion that renders the observations meaningless and adding
+ extra code to measure a runtime scenario realisticly is not nice from a maintenance point of view.
+ <p>
+ As a solution to this problem this class offers the possibility to transparently instrument <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util"><code>SubMonitor</code></a> instances such that they automatically
+ collect and report all kinds of statistics that may help to enhance the user experience. Sometimes it would even indicate to remove some progress monitoring
+ because it turns out that almost no time is being spent in a particular part of the program. Another typical result from the analysis is the understanding of
+ <i>one time effects</i> that might need special consideration.
+ <p>
+ Instances of this class can be created explicitely with the <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20org.eclipse.oomph.util.SubMonitor.ProbingMode)"><code>Progress.progress()</code></a> factory methods
+ that take a <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util"><code>SubMonitor.ProbingMode</code></a> argument. Implicit (automatic) instrumentation can be controlled with the "<code>submonitor.probing</code>"
+ <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/System.html?is-external=true#setProperty(java.lang.String,%20java.lang.String)" title="class or interface in java.lang"><code>system property</code></a> as follows:
+ <dl>
+ <dt> <code>off</code>
+ <dd> All <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util"><code>monitors</code></a> that are not created with an explicit probing mode will <b>not</b> collect any usage information. No extra heap space
+      or CPU time is allocated to these monitors.
+ <dt> <code>standard</code>
+ <dd> All <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util"><code>monitors</code></a> that are not created with an explicit probing mode will collect and report only statistical usage information.
+      The amount of heap space allocated for this information is constant over time.
+ <dt> <code>full</code>
+ <dd> All <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util"><code>monitors</code></a> that are not created with an explicit probing mode will store and report all collected probes.
+      The amount of heap space allocated for this information scales with the number of <a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util"><code>monitor</code></a> instances that are created over time.
+ </dl>
+ <p>
+ This class registers a <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Runtime.html?is-external=true#addShutdownHook(java.lang.Thread)" title="class or interface in java.lang"><code>shutdown hook</code></a> that dumps the probing results to the console when the program ends.
+ By setting the "<code>submonitor.probing.trace</code>" <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/System.html?is-external=true#setProperty(java.lang.String,%20java.lang.String)" title="class or interface in java.lang"><code>system property</code></a> to the value "<code>true</code>"
+ probing results are continuously dumped as they become available.
+ <p>
+ The probing results are formatted as tables per monitored method. Each row of a table corresponds to a call to the <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked()"><code>SubMonitor.worked()</code></a> or <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild()"><code>SubMonitor.newChild()</code></a>
+ method. The first column of a table displays the location of that call, the content of the following columns depends on the probing mode used for a monitored method.
+ <p>
+ Example of the probing mode <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html#STANDARD"><code>STANDARD</code></a>:
+ <p>
+ <img src="doc-files/standard.png">
+ <p>
+ Example of the probing mode <a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html#FULL"><code>FULL</code></a>:
+ <p>
+ <img src="doc-files/full.png">
+ <p>
+ The tables in the two examples above have smooth borders that can only be displayed correctly in consoles with UTF-8 encoding. The console encoding
+ can be configured on the <i>Common</i> tab of the launch configuration dialog. In addition the rendering of smooth table borders must be explicitely enabled
+ by setting the "<code>submonitor.probing.borders</code>" <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/System.html?is-external=true#setProperty(java.lang.String,%20java.lang.String)" title="class or interface in java.lang"><code>system property</code></a> to the value "<code>smooth</code>".
+ Without this setting tables are rendered with "-", "+" and "|" characters that display correctly regardless of the console encoding.
+ <p>
+ Quick navigation from the table cells to the corresponding code locations is supported by clickable links in the console tables. This way the
+ collected information can be converted into real enhancements of the monitoring code quickly and easily.
+ <p>
+ <b>Important note</b>: Avoid to load this class (i.e., to call any of its methods) unless you intend to actually use probing monitors. When this class
+ is loaded it spawns a thread to collect unused progress monitors and to free up the heap space allocated to their probes. The shutdown hook mentioned above
+ is also registered when this class is loaded.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Eike Stepper</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_org.eclipse.oomph.util.SubMonitor">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;org.eclipse.oomph.util.<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></h3>
+<code><a href="../../../../org/eclipse/oomph/util/SubMonitor.ProbingMode.html" title="enum in org.eclipse.oomph.util">SubMonitor.ProbingMode</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.oomph.util.SubMonitor">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.eclipse.oomph.util.<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></h3>
+<code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#DEFAULT_WORK">DEFAULT_WORK</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_ALL_LABELS">SUPPRESS_ALL_LABELS</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_BEGINTASK">SUPPRESS_BEGINTASK</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_NONE">SUPPRESS_NONE</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_SETTASKNAME">SUPPRESS_SETTASKNAME</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#SUPPRESS_SUBTASK">SUPPRESS_SUBTASK</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.core.runtime.IProgressMonitor">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.eclipse.core.runtime.<a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></h3>
+<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#UNKNOWN" title="class or interface in org.eclipse.core.runtime">UNKNOWN</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html#childDone()">childDone</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html#done()">done</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html#reportStatistics()">reportStatistics</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html#resetStatistics()">resetStatistics</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html#toString()">toString</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/eclipse/oomph/util/ProbingSubMonitor.html#worked(int)">worked</a></strong>(int&nbsp;work)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.oomph.util.SubMonitor">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.eclipse.oomph.util.<a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></h3>
+<code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#beginTask(java.lang.String,%20int)">beginTask</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#clearBlocked()">clearBlocked</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor)">convert</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20int)">convert</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20int,%20org.eclipse.oomph.util.SubMonitor.ProbingMode)">convert</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20java.lang.String,%20int)">convert</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20java.lang.String,%20int,%20org.eclipse.oomph.util.SubMonitor.ProbingMode)">convert</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#convert(org.eclipse.core.runtime.IProgressMonitor,%20org.eclipse.oomph.util.SubMonitor.ProbingMode)">convert</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#detectCancelation()">detectCancelation</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#detectCancelation(boolean)">detectCancelation</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#eq(java.lang.Object,%20java.lang.Object)">eq</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#internalWorked(double)">internalWorked</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#isCanceled()">isCanceled</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild()">newChild</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild(int)">newChild</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#newChild(int,%20int)">newChild</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setBlocked(org.eclipse.core.runtime.IStatus)">setBlocked</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setCanceled(boolean)">setCanceled</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setTaskName(java.lang.String)">setTaskName</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#setWorkRemaining(int)">setWorkRemaining</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped()">skipped</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#skipped(int)">skipped</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#subTask(java.lang.String)">subTask</a>, <a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked()">worked</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="worked(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>worked</h4>
+<pre>public&nbsp;void&nbsp;worked(int&nbsp;work)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#worked(int)" title="class or interface in org.eclipse.core.runtime">worked</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#worked(int)">worked</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="done()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>done</h4>
+<pre>public&nbsp;void&nbsp;done()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true#done()" title="class or interface in org.eclipse.core.runtime">done</a></code>&nbsp;in interface&nbsp;<code><a href="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api/org/eclipse/core/runtime/IProgressMonitor.html?is-external=true" title="class or interface in org.eclipse.core.runtime">IProgressMonitor</a></code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#done()">done</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="childDone()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>childDone</h4>
+<pre>public&nbsp;void&nbsp;childDone()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html#childDone()">childDone</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/eclipse/oomph/util/SubMonitor.html" title="class in org.eclipse.oomph.util">SubMonitor</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="reportStatistics()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reportStatistics</h4>
+<pre>public static&nbsp;void&nbsp;reportStatistics()</pre>
+</li>
+</ul>
+<a name="resetStatistics()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>resetStatistics</h4>
+<pre>public static&nbsp;void&nbsp;resetStatistics()</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ProbingSubMonitor.html">Use</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/eclipse/oomph/util/Predicates.UniquePredicate.html" title="class in org.eclipse.oomph.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/eclipse/oomph/util/PropertiesUtil.html" title="class in org.eclipse.oomph.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/eclipse/oomph/util/ProbingSubMonitor.html" target="_top">Frames</a></li>
+<li><a href="ProbingSubMonitor.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_org.eclipse.oomph.util.SubMonitor">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.eclipse.oomph.util.SubMonitor">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small><i class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</i></small></p>
+</body>
+</html>

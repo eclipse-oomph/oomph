@@ -1,6 +1,7 @@
 package org.eclipse.oomph.targlets.internal.core;
 
 import org.eclipse.oomph.targlets.TargletFactory;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -29,7 +30,7 @@ public class TargletContainerResourceFactory implements Factory
   public Resource createResource(URI uri)
   {
     final String id = uri.opaquePart();
-    final TargletContainer targletContainer = TargletContainerDescriptorManager.getContainer(id);
+    final ITargletContainer targletContainer = TargletContainerDescriptorManager.getContainer(id);
     final org.eclipse.oomph.targlets.TargletContainer wrapper = TargletFactory.eINSTANCE.createTargletContainer();
     wrapper.setID(id);
 

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Backend System Factories</title>
+<style type="text/css">@import url("book.css");</style>
+<style type="text/css">@import url("schema.css");</style>
+</HEAD>
+<BODY>
+<H1 style="text-align:center">Backend System Factories</H1>
+<p></p>
+<h6 class="CaptionFigColumn SchemaHeader">Identifier: </h6>org.eclipse.oomph.resources.backendSystemFactories<p></p>
+<h6 class="CaptionFigColumn SchemaHeader">Since: </h6>1.0
+<p></p>
+
+<h6 class="CaptionFigColumn SchemaHeader">Description: </h6>This extension point allows clients to contribute their own implementations of backend system factories, which provide custom backend systems to source locators and other infra structure.<p></p>
+<h6 class="CaptionFigColumn SchemaHeader">Configuration Markup:</h6>
+<p></p>
+<p class="code SchemaDtd">&lt;!ELEMENT <a name="e.extension">extension</a> (<a href="#e.backendSystemFactory">backendSystemFactory</a>+)&gt;</p>
+<p class="code SchemaDtd">&lt;!ATTLIST extension</p>
+<p class="code SchemaDtdAttlist">point&nbsp;CDATA #REQUIRED</p>
+<p class="code SchemaDtdAttlist">id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #IMPLIED</p>
+<p class="code SchemaDtdAttlist">name&nbsp;&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<ul class="ConfigMarkupAttlistDesc">
+</ul>
+<br><p class="code SchemaDtd">&lt;!ELEMENT <a name="e.backendSystemFactory">backendSystemFactory</a> EMPTY&gt;</p>
+<p class="code SchemaDtd">&lt;!ATTLIST backendSystemFactory</p>
+<p class="code SchemaDtdAttlist">scheme&nbsp;CDATA #REQUIRED</p>
+<p class="code SchemaDtdAttlist">class&nbsp;&nbsp;CDATA #REQUIRED&gt;</p>
+<p></p>
+<ul class="ConfigMarkupAttlistDesc">
+<li><b>scheme</b> - </li>
+<li><b>class</b> - </li>
+</ul>
+<br><h6 class="CaptionFigColumn SchemaHeader">Examples: </h6>[Enter extension point usage example here.]
+<p></p>
+
+<h6 class="CaptionFigColumn SchemaHeader">API Information: </h6>[Enter API information here.]
+<p></p>
+
+<br>
+<p class="note SchemaCopyright">
+Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+
+</p>
+</BODY>
+</HTML>

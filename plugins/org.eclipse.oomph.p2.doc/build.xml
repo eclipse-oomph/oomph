@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+<project name="JavaDoc" default="build">
+
+	<!-- =========================================== -->
+	<!-- THIS FILE HAS BEEN GENERATED, DO NOT CHANGE -->
+	<!-- =========================================== -->
+
+  <property file="${user.home}/org.eclipse.oomph.doc_1.0.properties" />
+
+  <property name="jdk.link" value="http://download.oracle.com/javase/1.5.0/docs/api" />
+  <property name="emf.link" value="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0" />
+  <property name="platform.link" value="http://help.eclipse.org/topic//org.eclipse.platform.doc.isv/reference/api" />
+  <property name="platform.api" location="${releng.project}/package-lists/platform" />
+
+  <property name="project.path" value="${plugins.dir}/org.eclipse.oomph.p2.doc" />
+  <property file="${project.path}/plugin.properties" />
+  <property file="${project.path}/build.properties" />
+  <property name="javadoc.name" value="${pluginName}" />
+  <property name="javadoc.destdir" value="${project.path}/javadoc" />
+  <property name="schemadoc.destdir" value="${project.path}/schemadoc" />
+  <property name="article.destdir" value="${project.path}/html" />
+  <property name="article.sources" value="${project.path}/src" />
+
+  <loadfile property="tp.classpath" srcfile="${tp.classpath.file}" />
+  <path id="javadoc.classpath" path="${tp.classpath}">
+    <fileset dir="${plugins.dir}">
+      <exclude name="*/target/**/*.jar" />
+      <include name="**/*.jar" />
+    </fileset>
+    <dirset dir="${plugins.dir}">
+      <include name="*/bin" />
+    </dirset>
+    <fileset dir="${releng.project}">
+      <include name="*.jar" />
+      <include name="lib/*.jar" />
+    </fileset>
+    <dirset dir="${releng.project}">
+      <include name="bin" />
+    </dirset>
+  </path>
+
+  <fileset dir="${javadoc.destdir}" id="desthtml">
+    <include name="**/*.html" />
+  </fileset>
+
+  <taskdef name="pde.convertSchemaToHTML"
+           classname="org.eclipse.pde.internal.core.ant.ConvertSchemaToHTML"
+           classpathref="javadoc.classpath"/>
+
+  <target name="build.java" unless="skip.javadoc">
+    <echo message="Building JavaDoc for org.eclipse.oomph.p2.doc" />
+
+    <delete includeemptydirs="true" failonerror="false">
+      <fileset dir="${javadoc.destdir}" defaultexcludes="true">
+        <include name="**/*" />
+      </fileset>
+    </delete>
+
+    <copy todir="${helpcenter.project}/debug" verbose="true" failonerror="false" overwrite="true">
+      <fileset dir="${releng.project}/html/debug" defaultexcludes="true">
+        <include name="**/*" />
+      </fileset>
+    </copy>
+
+    <property name="warningsfile"
+              location="${helpcenter.project}/debug/org.eclipse.oomph.p2.doc.warnings" />
+
+    <javadoc locale="en"
+             destdir="${javadoc.destdir}"
+             encoding="UTF-8"
+             classpathref="javadoc.classpath"
+             maxmemory="1024m"
+             source="1.5"
+             useexternalfile="true"
+             failonerror="true"
+             docfilessubdirs="true"
+             includenosourcepackages="true"
+             author="true"
+             version="true"
+             use="true"
+             notree="true"
+             windowtitle="${javadoc.name}"
+             doctitle="&lt;h1>${javadoc.name}&lt;/h1>"
+             overview="${project.path}/overview.html"
+             bottom="&lt;i class=&quot;copyright&quot;>Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.&lt;br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html&lt;/i>">
+
+    	<!-- Disable APIviz UML diagram generation
+      <doclet name="org.jboss.apiviz.APIviz" path="${releng.project}/bin">
+        <param name="-nopackagediagram" />
+        <param name="-nosubtypes" />
+        <param name="-warningsfile" value="${warningsfile}" />
+      </doclet>
+      -->
+
+      <fileset dir="${plugins.dir}" defaultexcludes="yes">
+				<include name="org.eclipse.oomph.p2.core/src/org/eclipse/oomph/p2/core/*.java" />
+				<include name="org.eclipse.oomph.p2/src/org/eclipse/oomph/p2/*.java" />
+				<include name="org.eclipse.oomph.p2/src/org/eclipse/oomph/p2/impl/*.java" />
+				<include name="org.eclipse.oomph.p2/src/org/eclipse/oomph/p2/util/*.java" />
+      </fileset>
+
+			<group title="Oomph P2 Management">
+				<package name="org.eclipse.oomph.p2" />
+				<package name="org.eclipse.oomph.p2.impl" />
+				<package name="org.eclipse.oomph.p2.util" />
+			</group>
+			<group title="Oomph P2 Management Core">
+				<package name="org.eclipse.oomph.p2.core" />
+			</group>
+
+      <link href="${jdk.link}" />
+      <link href="${emf.link}" />
+      <link href="${platform.link}" offline="true" packagelistloc="${platform.api}" />
+			<link href="MAKE-RELATIVE/org.eclipse.oomph.util.doc/javadoc" offline="true" packagelistloc="${plugins.dir}/org.eclipse.oomph.util.doc/javadoc" />
+
+      <tag name="ADDED" description="Added" />
+      <tag name="Singleton" description="Singleton" />
+      <tag name="generated" description="Generated" />
+      <tag name="extends" description="Extends" />
+      <tag name="model" description="Model" />
+      <tag name="ordered" description="Ordered" />
+      <tag name="category" description="Category" />
+      <tag name="noimplement" description="No Implement" />
+      <tag name="noextend" description="No Extend" />
+      <tag name="noinstantiate" description="No Instantiate" />
+      <tag name="noreference" description="No Reference" />
+      <tag name="apiviz.exclude" description="Exclude from diagram" />
+    </javadoc>
+
+    <copy todir="${javadoc.destdir}/resources" verbose="true" failonerror="false" overwrite="true">
+      <fileset dir="${project.path}/resources" defaultexcludes="true">
+        <include name="**/*" />
+        <exclude name="README.txt" />
+      </fileset>
+      <fileset dir="${releng.project}/resources" defaultexcludes="true">
+        <include name="**/*" />
+        <exclude name="README.txt" />
+      </fileset>
+    </copy>
+
+    <!-- Copy javadoc.css -->
+    <copy todir="${javadoc.destdir}" verbose="true" failonerror="false" overwrite="true">
+      <fileset dir="${releng.project}/html" defaultexcludes="true">
+        <include name="stylesheet.css" />
+      </fileset>
+    </copy>
+
+    <!-- Remove generation dates that clutter the Git dirty states -->
+    <replaceregexp match="&lt;!-- Generated by javadoc .*--&gt;" replace="">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+    <replaceregexp match="content=&quot;[^&quot;]+&quot;" replace="content=&quot;&quot;">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+
+    <!-- Add book.css -->
+    <replaceregexp match="(&lt;LINK REL=&quot;stylesheet&quot; TYPE=&quot;text/css&quot; HREF=&quot;([\./]*)stylesheet.css&quot; TITLE=&quot;Style&quot;&gt;)"
+                   replace="&lt;LINK REL=&quot;stylesheet&quot; TYPE=&quot;text/css&quot; HREF=&quot;\2../html/book.css&quot; TITLE=&quot;Style&quot;&gt;${line.separator}\1">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+    <replaceregexp match="(&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;([\./]*)stylesheet.css&quot; title=&quot;Style&quot;&gt;)"
+                   replace="&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;\2../html/book.css&quot; title=&quot;Style&quot;&gt;${line.separator}\1">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+
+    <!-- Remove malicious PRE blocks -->
+    <replaceregexp match="&lt;HR&gt;\s+?&lt;DL&gt;\s+?&lt;DT&gt;&lt;PRE&gt;(.*?)&lt;/DL&gt;\s+?&lt;/PRE&gt;"
+                   replace="&lt;HR&gt;${line.separator}&lt;DL&gt;${line.separator}  &lt;DT&gt;\1${line.separator}&lt;/DL&gt;${line.separator}${line.separator}">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+    <replaceregexp match="&lt;hr&gt;\s+?&lt;dl&gt;\s+?&lt;dt&gt;&lt;pre&gt;(.*?)&lt;/dl&gt;\s+?&lt;/pre&gt;"
+                   replace="&lt;hr&gt;${line.separator}&lt;dl&gt;${line.separator}  &lt;dt&gt;\1${line.separator}&lt;/dl&gt;${line.separator}${line.separator}">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+
+    <!-- Change DT to DD -->
+    <replaceregexp match="&lt;DT&gt;extends " replace="${line.separator}  &lt;DD&gt;extends ">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+    <replaceregexp match="&lt;dt&gt;extends " replace="${line.separator}  &lt;dd&gt;extends ">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+    <replaceregexp match="&lt;DT&gt;implements " replace="${line.separator}  &lt;DD&gt;implements ">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+    <replaceregexp match="&lt;dt&gt;implements " replace="${line.separator}  &lt;dd&gt;implements ">
+      <fileset refid="desthtml" />
+    </replaceregexp>
+
+    <java classname="org.eclipse.oomph.releng.doc.java.MakeHrefsRelative"
+          dir="${basedir}"
+          fork="true"
+          failonerror="true"
+          id="MakeHrefsRelative">
+      <classpath path="${releng.project}/bin;${releng.project}/org.eclipse.oomph.releng.doc.jar" />
+      <arg value="${javadoc.destdir}" />
+    </java>
+
+    <java classname="org.eclipse.oomph.releng.doc.java.MovePackageDescriptions"
+          dir="${basedir}"
+          fork="true"
+          failonerror="true"
+          id="MovePackageDescriptions">
+      <classpath path="${releng.project}/bin;${releng.project}/org.eclipse.oomph.releng.doc.jar" />
+      <arg value="${javadoc.destdir}" />
+    </java>
+  </target>
+
+  <target name="build.schema" unless="skip.schemadoc">
+    <echo message="Building SchemaDoc for org.eclipse.oomph.p2.doc" />
+
+    <delete includeemptydirs="true" failonerror="false">
+      <fileset dir="${schemadoc.destdir}" defaultexcludes="true">
+        <include name="**/*" />
+      </fileset>
+    </delete>
+
+    <mkdir dir="${schemadoc.destdir}" />
+    <copy todir="${schemadoc.destdir}" failonerror="true" verbose="true">
+      <fileset dir="${releng.project}/html">
+        <include name="schema.css" />
+      </fileset>
+    </copy>
+
+		<pde.convertSchemaToHTML destination="${schemadoc.destdir}" manifest="${plugins.dir}/org.eclipse.oomph.p2.ui/plugin.xml" />
+
+    <replaceregexp match="\.\./\.\./(.*?)\.css" replace="\1.css" byline="true">
+      <fileset dir="${schemadoc.destdir}">
+        <include name="*.html" />
+      </fileset>
+    </replaceregexp>
+  </target>
+
+  <target name="build.article" unless="skip.articledoc">
+    <echo message="Building Articles for org.eclipse.oomph.p2.doc" />
+
+    <tstamp>
+      <format property="start.time" pattern="y-M-D-H-m-s-S" />
+    </tstamp>
+
+    <delete includeemptydirs="true" failonerror="false">
+      <fileset dir="${article.destdir}" defaultexcludes="true">
+        <include name="**/*" />
+      </fileset>
+    </delete>
+    <mkdir dir="${article.destdir}" />
+
+    <delete includeemptydirs="true" failonerror="false">
+      <fileset dir="${project.path}/images" defaultexcludes="true">
+        <include name="copies/**/*" />
+      </fileset>
+    </delete>
+
+    <copy todir="${project.path}/images" verbose="true" failonerror="false">
+      <fileset dir="${releng.project}/html/images" defaultexcludes="true">
+        <include name="**/*" />
+      </fileset>
+    </copy>
+
+    <copy todir="${project.path}/html" verbose="true" failonerror="false">
+      <fileset dir="${releng.project}/html" defaultexcludes="true">
+        <include name="book.css" />
+        <include name="editor.css" />
+        <include name="tree.css" />
+      </fileset>
+    </copy>
+
+    <javadoc locale="en"
+             encoding="UTF-8"
+             classpathref="javadoc.classpath"
+             maxmemory="1024m"
+             source="1.5"
+             useexternalfile="true"
+             failonerror="true"
+             private="true">
+
+      <doclet name="org.eclipse.oomph.releng.doc.article.impl.ArticleDoclet"
+                path="${releng.project}/bin;${releng.project}/org.eclipse.oomph.releng.doc.jar;${tp.classpath};${releng.project}/lib/dom4j-1.6.1.jar;${releng.project}/lib/poi-3.8-beta4-20110826.jar;${releng.project}/lib/poi-ooxml-3.8-beta4-20110826.jar;${releng.project}/lib/poi-ooxml-schemas-3.8-beta4-20110826.jar;${releng.project}/lib/xmlbeans-2.3.0.jar">
+        <param name="-starttime" value="${start.time}" />
+        <param name="-basefolder" value="${plugins.dir}/.." />
+        <param name="-project" value="org.eclipse.oomph.p2.doc" />
+        <param name="-externals" value="${jdk.link};${platform.link};${emf.link}" />
+
+      </doclet>
+
+      <fileset dir="${plugins.dir}">
+        <include name="org.eclipse.oomph.p2.doc/src/**/*.java" />
+				<include name="org.eclipse.oomph.util.doc/src/**/*.java" />
+      </fileset>
+
+			<package name="org.eclipse.oomph.p2.doc" />
+			<package name="org.eclipse.oomph.p2.doc.online" />
+			<package name="org.eclipse.oomph.p2.doc.reference" />
+			<package name="org.eclipse.oomph.p2.doc.reference.api" />
+			<package name="org.eclipse.oomph.p2.doc.reference.schema" />
+			<package name="org.eclipse.oomph.util.doc" />
+			<package name="org.eclipse.oomph.util.doc.online" />
+			<package name="org.eclipse.oomph.util.doc.reference" />
+			<package name="org.eclipse.oomph.util.doc.reference.api" />
+			<package name="org.eclipse.oomph.util.doc.reference.schema" />
+    </javadoc>
+  </target>
+
+  <target name="build" depends="build.java, build.schema, build.article">
+    <fixcrlf srcdir="${project.path}" includes="**/*.html **/*.css" />
+    <fixcrlf srcdir="${helpcenter.project}" includes="**/*.html **/*.css" />
+  </target>
+
+</project>

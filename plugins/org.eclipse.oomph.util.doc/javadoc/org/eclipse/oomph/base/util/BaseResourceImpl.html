@@ -1,0 +1,505 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+
+<title>BaseResourceImpl (Oomph Utilities Documentation)</title>
+<meta name="date" content="">
+<link rel="stylesheet" type="text/css" href="../../../../../../html/book.css" title="Style">
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="BaseResourceImpl (Oomph Utilities Documentation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BaseResourceImpl.html">Use</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceFactoryImpl.html" title="class in org.eclipse.oomph.base.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/eclipse/oomph/base/util/BaseSwitch.html" title="class in org.eclipse.oomph.base.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/eclipse/oomph/base/util/BaseResourceImpl.html" target="_top">Frames</a></li>
+<li><a href="BaseResourceImpl.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_org.eclipse.emf.ecore.resource.impl.ResourceImpl">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.eclipse.oomph.base.util</div>
+<h2 title="Class BaseResourceImpl" class="title">Class BaseResourceImpl</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">org.eclipse.emf.common.notify.impl.BasicNotifierImpl</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">org.eclipse.emf.common.notify.impl.NotifierImpl</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource.impl">org.eclipse.emf.ecore.resource.impl.ResourceImpl</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl</a></li>
+<li>
+<ul class="inheritance">
+<li>org.eclipse.oomph.base.util.BaseResourceImpl</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/Notifier.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify">Notifier</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.Internal.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource.Internal</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMIResource</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource</a>, <a href="../../../../../org/eclipse/oomph/base/util/BaseResource.html" title="interface in org.eclipse.oomph.base.util">BaseResource</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">BaseResourceImpl</span>
+extends <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMIResourceImpl</a>
+implements <a href="../../../../../org/eclipse/oomph/base/util/BaseResource.html" title="interface in org.eclipse.oomph.base.util">BaseResource</a></pre>
+<div class="block"><!-- begin-user-doc -->
+ The <b>Resource </b> associated with the package.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceFactoryImpl.html" title="class in org.eclipse.oomph.base.util"><code>BaseResourceFactoryImpl</code></a></dd><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_org.eclipse.emf.ecore.resource.impl.ResourceImpl">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;org.eclipse.emf.ecore.resource.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource.impl">ResourceImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.ContentsEList.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource.impl">ResourceImpl.ContentsEList</a>&lt;<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.ContentsEList.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource.impl">E</a> extends <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> & <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/EObject.html?is-external=true" title="class or interface in org.eclipse.emf.ecore">EObject</a>&gt;, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.ModificationTrackingAdapter.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource.impl">ResourceImpl.ModificationTrackingAdapter</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_org.eclipse.emf.common.notify.impl.BasicNotifierImpl">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;org.eclipse.emf.common.notify.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">BasicNotifierImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.EAdapterList.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">BasicNotifierImpl.EAdapterList</a>&lt;<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.EAdapterList.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">E</a> extends <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> & <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/Adapter.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify">Adapter</a>&gt;, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.EObservableAdapterList.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">BasicNotifierImpl.EObservableAdapterList</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_org.eclipse.emf.ecore.xmi.XMLResource">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;org.eclipse.emf.ecore.xmi.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.ElementHandler.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource.ElementHandler</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.MissingPackageHandler.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource.MissingPackageHandler</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.ResourceEntityHandler.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource.ResourceEntityHandler</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.ResourceHandler.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource.ResourceHandler</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.URIHandler.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource.URIHandler</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.XMLInfo.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource.XMLInfo</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.XMLMap.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource.XMLMap</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_org.eclipse.emf.ecore.resource.Resource">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;org.eclipse.emf.ecore.resource.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.Diagnostic.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource.Diagnostic</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.Factory.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource.Factory</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.Internal.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource.Internal</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.IOWrappedException.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource.IOWrappedException</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.eclipse.emf.ecore.xmi.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMLResourceImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#DETACHED_EOBJECT_TO_ID_MAP" title="class or interface in org.eclipse.emf.ecore.xmi.impl">DETACHED_EOBJECT_TO_ID_MAP</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#domHandler" title="class or interface in org.eclipse.emf.ecore.xmi.impl">domHandler</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#encoding" title="class or interface in org.eclipse.emf.ecore.xmi.impl">encoding</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#eObjectToExtensionMap" title="class or interface in org.eclipse.emf.ecore.xmi.impl">eObjectToExtensionMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#eObjectToIDMap" title="class or interface in org.eclipse.emf.ecore.xmi.impl">eObjectToIDMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#idToEObjectMap" title="class or interface in org.eclipse.emf.ecore.xmi.impl">idToEObjectMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#publicId" title="class or interface in org.eclipse.emf.ecore.xmi.impl">publicId</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#systemId" title="class or interface in org.eclipse.emf.ecore.xmi.impl">systemId</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#useZip" title="class or interface in org.eclipse.emf.ecore.xmi.impl">useZip</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#xmlVersion" title="class or interface in org.eclipse.emf.ecore.xmi.impl">xmlVersion</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.emf.ecore.resource.impl.ResourceImpl">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.eclipse.emf.ecore.resource.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource.impl">ResourceImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#contents" title="class or interface in org.eclipse.emf.ecore.resource.impl">contents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#defaultDeleteOptions" title="class or interface in org.eclipse.emf.ecore.resource.impl">defaultDeleteOptions</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#defaultLoadOptions" title="class or interface in org.eclipse.emf.ecore.resource.impl">defaultLoadOptions</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#defaultSaveOptions" title="class or interface in org.eclipse.emf.ecore.resource.impl">defaultSaveOptions</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#errors" title="class or interface in org.eclipse.emf.ecore.resource.impl">errors</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#intrinsicIDToEObjectMap" title="class or interface in org.eclipse.emf.ecore.resource.impl">intrinsicIDToEObjectMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isLoaded" title="class or interface in org.eclipse.emf.ecore.resource.impl">isLoaded</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isLoading" title="class or interface in org.eclipse.emf.ecore.resource.impl">isLoading</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isModified" title="class or interface in org.eclipse.emf.ecore.resource.impl">isModified</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#modificationTrackingAdapter" title="class or interface in org.eclipse.emf.ecore.resource.impl">modificationTrackingAdapter</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#resourceSet" title="class or interface in org.eclipse.emf.ecore.resource.impl">resourceSet</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#timeStamp" title="class or interface in org.eclipse.emf.ecore.resource.impl">timeStamp</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#unloadingContents" title="class or interface in org.eclipse.emf.ecore.resource.impl">unloadingContents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#uri" title="class or interface in org.eclipse.emf.ecore.resource.impl">uri</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#warnings" title="class or interface in org.eclipse.emf.ecore.resource.impl">warnings</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.emf.common.notify.impl.NotifierImpl">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.eclipse.emf.common.notify.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">NotifierImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#eAdapters" title="class or interface in org.eclipse.emf.common.notify.impl">eAdapters</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#EDELIVER" title="class or interface in org.eclipse.emf.common.notify.impl">EDELIVER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#eFlags" title="class or interface in org.eclipse.emf.common.notify.impl">eFlags</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#ELAST_NOTIFIER_FLAG" title="class or interface in org.eclipse.emf.common.notify.impl">ELAST_NOTIFIER_FLAG</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.emf.ecore.xmi.XMIResource">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.eclipse.emf.ecore.xmi.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMIResource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#OPTION_SUPPRESS_XMI" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SUPPRESS_XMI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#OPTION_USE_XMI_TYPE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_XMI_TYPE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#VERSION_2_1_VALUE" title="class or interface in org.eclipse.emf.ecore.xmi">VERSION_2_1_VALUE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#VERSION_NAME" title="class or interface in org.eclipse.emf.ecore.xmi">VERSION_NAME</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#VERSION_VALUE" title="class or interface in org.eclipse.emf.ecore.xmi">VERSION_VALUE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#XMI_2_1_URI" title="class or interface in org.eclipse.emf.ecore.xmi">XMI_2_1_URI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#XMI_2_4_NAMESPACE_PREFIX" title="class or interface in org.eclipse.emf.ecore.xmi">XMI_2_4_NAMESPACE_PREFIX</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#XMI_ID" title="class or interface in org.eclipse.emf.ecore.xmi">XMI_ID</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#XMI_NAMESPACE_PREFIX" title="class or interface in org.eclipse.emf.ecore.xmi">XMI_NAMESPACE_PREFIX</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#XMI_NS" title="class or interface in org.eclipse.emf.ecore.xmi">XMI_NS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#XMI_TAG_NAME" title="class or interface in org.eclipse.emf.ecore.xmi">XMI_TAG_NAME</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#XMI_URI" title="class or interface in org.eclipse.emf.ecore.xmi">XMI_URI</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.emf.ecore.xmi.XMLResource">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.eclipse.emf.ecore.xmi.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#HREF" title="class or interface in org.eclipse.emf.ecore.xmi">HREF</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#NIL" title="class or interface in org.eclipse.emf.ecore.xmi">NIL</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#NO_NAMESPACE_SCHEMA_LOCATION" title="class or interface in org.eclipse.emf.ecore.xmi">NO_NAMESPACE_SCHEMA_LOCATION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_ANY_SIMPLE_TYPE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_ANY_SIMPLE_TYPE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_ANY_TYPE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_ANY_TYPE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_BINARY" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_BINARY</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_CONFIGURATION_CACHE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_CONFIGURATION_CACHE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_DECLARE_XML" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_DECLARE_XML</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_DEFER_ATTACHMENT" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_DEFER_ATTACHMENT</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_DEFER_IDREF_RESOLUTION" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_DEFER_IDREF_RESOLUTION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_DISABLE_NOTIFY" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_DISABLE_NOTIFY</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_DOM_USE_NAMESPACES_IN_SCOPE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_DOM_USE_NAMESPACES_IN_SCOPE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_ELEMENT_HANDLER" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_ELEMENT_HANDLER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_ENCODING" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_ENCODING</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_ESCAPE_USING_CDATA" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_ESCAPE_USING_CDATA</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_EXTENDED_META_DATA" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_EXTENDED_META_DATA</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_FLUSH_THRESHOLD" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_FLUSH_THRESHOLD</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_FORMATTED" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_FORMATTED</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_KEEP_DEFAULT_CONTENT" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_KEEP_DEFAULT_CONTENT</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_LAX_FEATURE_PROCESSING" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_LAX_FEATURE_PROCESSING</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_LAX_WILDCARD_PROCESSING" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_LAX_WILDCARD_PROCESSING</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_LINE_WIDTH" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_LINE_WIDTH</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_MISSING_PACKAGE_HANDLER" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_MISSING_PACKAGE_HANDLER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_PARSER_FEATURES" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_PARSER_FEATURES</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_PARSER_PROPERTIES" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_PARSER_PROPERTIES</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_PROCESS_DANGLING_HREF" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_PROCESS_DANGLING_HREF</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_PROCESS_DANGLING_HREF_DISCARD" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_PROCESS_DANGLING_HREF_DISCARD</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_PROCESS_DANGLING_HREF_RECORD" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_PROCESS_DANGLING_HREF_RECORD</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_PROCESS_DANGLING_HREF_THROW" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_PROCESS_DANGLING_HREF_THROW</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_PROXY_ATTRIBUTES" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_PROXY_ATTRIBUTES</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_RECORD_ANY_TYPE_NAMESPACE_DECLARATIONS" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_RECORD_ANY_TYPE_NAMESPACE_DECLARATIONS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_RECORD_UNKNOWN_FEATURE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_RECORD_UNKNOWN_FEATURE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_RESOURCE_ENTITY_HANDLER" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_RESOURCE_ENTITY_HANDLER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_RESOURCE_HANDLER" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_RESOURCE_HANDLER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_ROOT_OBJECTS" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_ROOT_OBJECTS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_SAVE_DOCTYPE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SAVE_DOCTYPE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_SAVE_TYPE_INFORMATION" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SAVE_TYPE_INFORMATION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_SCHEMA_LOCATION" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SCHEMA_LOCATION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_SCHEMA_LOCATION_IMPLEMENTATION" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SCHEMA_LOCATION_IMPLEMENTATION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_SKIP_ESCAPE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SKIP_ESCAPE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_SKIP_ESCAPE_URI" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SKIP_ESCAPE_URI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_SUPPRESS_DOCUMENT_ROOT" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_SUPPRESS_DOCUMENT_ROOT</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_URI_HANDLER" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_URI_HANDLER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_CACHED_LOOKUP_TABLE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_CACHED_LOOKUP_TABLE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_DEPRECATED_METHODS" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_DEPRECATED_METHODS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_ENCODED_ATTRIBUTE_STYLE" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_ENCODED_ATTRIBUTE_STYLE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_FILE_BUFFER" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_FILE_BUFFER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_LEXICAL_HANDLER" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_LEXICAL_HANDLER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_PACKAGE_NS_URI_AS_LOCATION" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_PACKAGE_NS_URI_AS_LOCATION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_PARSER_POOL" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_PARSER_POOL</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_USE_XML_NAME_TO_FEATURE_MAP" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_USE_XML_NAME_TO_FEATURE_MAP</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_XML_MAP" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_XML_MAP</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_XML_OPTIONS" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_XML_OPTIONS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#OPTION_XML_VERSION" title="class or interface in org.eclipse.emf.ecore.xmi">OPTION_XML_VERSION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#SCHEMA_LOCATION" title="class or interface in org.eclipse.emf.ecore.xmi">SCHEMA_LOCATION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#TYPE" title="class or interface in org.eclipse.emf.ecore.xmi">TYPE</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#XML_NS" title="class or interface in org.eclipse.emf.ecore.xmi">XML_NS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#XML_SCHEMA_URI" title="class or interface in org.eclipse.emf.ecore.xmi">XML_SCHEMA_URI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#XSI_NS" title="class or interface in org.eclipse.emf.ecore.xmi">XSI_NS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#XSI_URI" title="class or interface in org.eclipse.emf.ecore.xmi">XSI_URI</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.eclipse.emf.ecore.resource.Resource">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.eclipse.emf.ecore.resource.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#OPTION_CIPHER" title="class or interface in org.eclipse.emf.ecore.resource">OPTION_CIPHER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#OPTION_LINE_DELIMITER" title="class or interface in org.eclipse.emf.ecore.resource">OPTION_LINE_DELIMITER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#OPTION_LINE_DELIMITER_UNSPECIFIED" title="class or interface in org.eclipse.emf.ecore.resource">OPTION_LINE_DELIMITER_UNSPECIFIED</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#OPTION_SAVE_ONLY_IF_CHANGED" title="class or interface in org.eclipse.emf.ecore.resource">OPTION_SAVE_ONLY_IF_CHANGED</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#OPTION_SAVE_ONLY_IF_CHANGED_FILE_BUFFER" title="class or interface in org.eclipse.emf.ecore.resource">OPTION_SAVE_ONLY_IF_CHANGED_FILE_BUFFER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER" title="class or interface in org.eclipse.emf.ecore.resource">OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#OPTION_ZIP" title="class or interface in org.eclipse.emf.ecore.resource">OPTION_ZIP</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__CONTENTS" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__CONTENTS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__ERRORS" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__ERRORS</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__IS_LOADED" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__IS_LOADED</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__IS_MODIFIED" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__IS_MODIFIED</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__IS_TRACKING_MODIFICATION" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__IS_TRACKING_MODIFICATION</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__RESOURCE_SET" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__RESOURCE_SET</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__TIME_STAMP" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__TIME_STAMP</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__URI" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__URI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#RESOURCE__WARNINGS" title="class or interface in org.eclipse.emf.ecore.resource">RESOURCE__WARNINGS</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceImpl.html#BaseResourceImpl(org.eclipse.emf.common.util.URI)">BaseResourceImpl</a></strong>(<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/URI.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">URI</a>&nbsp;uri)</code>
+<div class="block">Creates an instance of the resource.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLHelper.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLHelper</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceImpl.html#createXMLHelper()">createXMLHelper</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLLoad.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLLoad</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceImpl.html#createXMLLoad()">createXMLLoad</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLSave.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLSave</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceImpl.html#createXMLSave()">createXMLSave</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceImpl.html#doLoad(java.io.InputStream,%20java.util.Map)">doLoad</a></strong>(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;inputStream,
+      <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;options)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.eclipse.emf.ecore.xmi.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMIResourceImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#createXMLLoad(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">createXMLLoad</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#createXMLSave(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">createXMLSave</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#getXMINamespace()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getXMINamespace</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#getXMIVersion()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getXMIVersion</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#setXMINamespace(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">setXMINamespace</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#setXMIVersion(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">setXMIVersion</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#useIDs()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">useIDs</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.eclipse.emf.ecore.xmi.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMLResourceImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#assignIDsWhileLoading()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">assignIDsWhileLoading</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#attachedHelper(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">attachedHelper</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#createEObjectInputStream(java.io.InputStream,%20java.util.Map,%20org.eclipse.emf.ecore.xmi.XMLResource.URIHandler)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">createEObjectInputStream</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#createEObjectOutputStream(java.io.OutputStream,%20java.util.Map,%20org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.BinaryIO.Version,%20org.eclipse.emf.ecore.xmi.XMLResource.URIHandler)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">createEObjectOutputStream</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#detachedHelper(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">detachedHelper</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#doLoad(org.xml.sax.InputSource,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">doLoad</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#doLoad(org.w3c.dom.Node,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">doLoad</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#doSave(java.io.OutputStream,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">doSave</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#doSave(java.io.Writer,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">doSave</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#doUnload()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">doUnload</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getDefaultLoadOptions()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getDefaultLoadOptions</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getDefaultSaveOptions()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getDefaultSaveOptions</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getDOMHelper()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getDOMHelper</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getEncoding()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getEncoding</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getEObjectByID(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getEObjectByID</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getEObjectToExtensionMap()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getEObjectToExtensionMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getEObjectToIDMap()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getEObjectToIDMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getID(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getID</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getIDToEObjectMap()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getIDToEObjectMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getPublicId()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getPublicId</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getSystemId()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getSystemId</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getURIFragment(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getURIFragment</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#getXMLVersion()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">getXMLVersion</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#init()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">init</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#isAttachedDetachedHelperRequired()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">isAttachedDetachedHelperRequired</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#isPath(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">isPath</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#load(org.xml.sax.InputSource,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#load(org.w3c.dom.Node,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#save(org.w3c.dom.Document,%20java.util.Map,%20org.eclipse.emf.ecore.xmi.DOMHandler)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#save(java.io.Writer,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#setDoctypeInfo(java.lang.String,%20java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">setDoctypeInfo</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#setEncoding(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">setEncoding</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#setID(org.eclipse.emf.ecore.EObject,%20java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">setID</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#setUseZip(boolean)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">setUseZip</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#setXMLVersion(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">setXMLVersion</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#toKeyString()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">toKeyString</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#useIDAttributes()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">useIDAttributes</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#useUUIDs()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">useUUIDs</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#useZip()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">useZip</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.ecore.resource.impl.ResourceImpl">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.eclipse.emf.ecore.resource.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource.impl">ResourceImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#addModificationTrackingAdapters(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.resource.impl">addModificationTrackingAdapters</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#attached(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.resource.impl">attached</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#basicSetResourceSet(org.eclipse.emf.ecore.resource.ResourceSet,%20org.eclipse.emf.common.notify.NotificationChain)" title="class or interface in org.eclipse.emf.ecore.resource.impl">basicSetResourceSet</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#createModificationTrackingAdapter()" title="class or interface in org.eclipse.emf.ecore.resource.impl">createModificationTrackingAdapter</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#delete(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">delete</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#detached(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.resource.impl">detached</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getAllContents()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getAllContents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getAllProperContents(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.resource.impl">getAllProperContents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getAllProperContents(java.util.List)" title="class or interface in org.eclipse.emf.ecore.resource.impl">getAllProperContents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getContents()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getContents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getDefaultURIConverter()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getDefaultURIConverter</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getEObject(java.util.List)" title="class or interface in org.eclipse.emf.ecore.resource.impl">getEObject</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getEObject(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.resource.impl">getEObject</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getEObjectForURIFragmentRootSegment(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.resource.impl">getEObjectForURIFragmentRootSegment</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getErrors()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getErrors</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getIntrinsicIDToEObjectMap()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getIntrinsicIDToEObjectMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getResourceSet()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getResourceSet</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getTimeStamp()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getTimeStamp</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getURI()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getURI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getURIConverter()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getURIConverter</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getURIFragmentRootSegment(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.resource.impl">getURIFragmentRootSegment</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#getWarnings()" title="class or interface in org.eclipse.emf.ecore.resource.impl">getWarnings</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#handleLoadResponse(java.util.Map,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">handleLoadResponse</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#handleSaveResponse(java.util.Map,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">handleSaveResponse</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isContentZipEntry(java.util.zip.ZipEntry)" title="class or interface in org.eclipse.emf.ecore.resource.impl">isContentZipEntry</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isLoaded()" title="class or interface in org.eclipse.emf.ecore.resource.impl">isLoaded</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isLoading()" title="class or interface in org.eclipse.emf.ecore.resource.impl">isLoading</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isModified()" title="class or interface in org.eclipse.emf.ecore.resource.impl">isModified</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#isTrackingModification()" title="class or interface in org.eclipse.emf.ecore.resource.impl">isTrackingModification</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#load(java.io.InputStream,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#load(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#mergeMaps(java.util.Map,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">mergeMaps</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#newContentZipEntry()" title="class or interface in org.eclipse.emf.ecore.resource.impl">newContentZipEntry</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#removeModificationTrackingAdapters(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.resource.impl">removeModificationTrackingAdapters</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#save(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#save(java.io.OutputStream,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#saveOnlyIfChangedWithFileBuffer(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">saveOnlyIfChangedWithFileBuffer</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#saveOnlyIfChangedWithMemoryBuffer(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">saveOnlyIfChangedWithMemoryBuffer</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#setIntrinsicIDToEObjectMap(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource.impl">setIntrinsicIDToEObjectMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#setLoaded(boolean)" title="class or interface in org.eclipse.emf.ecore.resource.impl">setLoaded</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#setModified(boolean)" title="class or interface in org.eclipse.emf.ecore.resource.impl">setModified</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#setTimeStamp(long)" title="class or interface in org.eclipse.emf.ecore.resource.impl">setTimeStamp</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#setTrackingModification(boolean)" title="class or interface in org.eclipse.emf.ecore.resource.impl">setTrackingModification</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#setURI(org.eclipse.emf.common.util.URI)" title="class or interface in org.eclipse.emf.ecore.resource.impl">setURI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#toString()" title="class or interface in org.eclipse.emf.ecore.resource.impl">toString</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#unload()" title="class or interface in org.eclipse.emf.ecore.resource.impl">unload</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/impl/ResourceImpl.html?is-external=true#unloaded(org.eclipse.emf.ecore.InternalEObject)" title="class or interface in org.eclipse.emf.ecore.resource.impl">unloaded</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.common.notify.impl.NotifierImpl">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.eclipse.emf.common.notify.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">NotifierImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#eAdapters()" title="class or interface in org.eclipse.emf.common.notify.impl">eAdapters</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#eBasicAdapters()" title="class or interface in org.eclipse.emf.common.notify.impl">eBasicAdapters</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#eDeliver()" title="class or interface in org.eclipse.emf.common.notify.impl">eDeliver</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/NotifierImpl.html?is-external=true#eSetDeliver(boolean)" title="class or interface in org.eclipse.emf.common.notify.impl">eSetDeliver</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.common.notify.impl.BasicNotifierImpl">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.eclipse.emf.common.notify.impl.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify.impl">BasicNotifierImpl</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.html?is-external=true#eBasicAdapterArray()" title="class or interface in org.eclipse.emf.common.notify.impl">eBasicAdapterArray</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.html?is-external=true#eBasicHasAdapters()" title="class or interface in org.eclipse.emf.common.notify.impl">eBasicHasAdapters</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.html?is-external=true#eNotificationRequired()" title="class or interface in org.eclipse.emf.common.notify.impl">eNotificationRequired</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/impl/BasicNotifierImpl.html?is-external=true#eNotify(org.eclipse.emf.common.notify.Notification)" title="class or interface in org.eclipse.emf.common.notify.impl">eNotify</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.ecore.xmi.XMIResource">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.eclipse.emf.ecore.xmi.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMIResource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#getXMINamespace()" title="class or interface in org.eclipse.emf.ecore.xmi">getXMINamespace</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#getXMIVersion()" title="class or interface in org.eclipse.emf.ecore.xmi">getXMIVersion</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#setXMINamespace(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi">setXMINamespace</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMIResource.html?is-external=true#setXMIVersion(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi">setXMIVersion</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.ecore.xmi.XMLResource">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.eclipse.emf.ecore.xmi.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLResource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getDefaultLoadOptions()" title="class or interface in org.eclipse.emf.ecore.xmi">getDefaultLoadOptions</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getDefaultSaveOptions()" title="class or interface in org.eclipse.emf.ecore.xmi">getDefaultSaveOptions</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getDOMHelper()" title="class or interface in org.eclipse.emf.ecore.xmi">getDOMHelper</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getEncoding()" title="class or interface in org.eclipse.emf.ecore.xmi">getEncoding</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getEObjectToExtensionMap()" title="class or interface in org.eclipse.emf.ecore.xmi">getEObjectToExtensionMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getEObjectToIDMap()" title="class or interface in org.eclipse.emf.ecore.xmi">getEObjectToIDMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getID(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.xmi">getID</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getIDToEObjectMap()" title="class or interface in org.eclipse.emf.ecore.xmi">getIDToEObjectMap</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getPublicId()" title="class or interface in org.eclipse.emf.ecore.xmi">getPublicId</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getSystemId()" title="class or interface in org.eclipse.emf.ecore.xmi">getSystemId</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#getXMLVersion()" title="class or interface in org.eclipse.emf.ecore.xmi">getXMLVersion</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#load(org.xml.sax.InputSource,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#load(org.w3c.dom.Node,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#save(org.w3c.dom.Document,%20java.util.Map,%20org.eclipse.emf.ecore.xmi.DOMHandler)" title="class or interface in org.eclipse.emf.ecore.xmi">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#save(java.io.Writer,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#setDoctypeInfo(java.lang.String,%20java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi">setDoctypeInfo</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#setEncoding(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi">setEncoding</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#setID(org.eclipse.emf.ecore.EObject,%20java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi">setID</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#setUseZip(boolean)" title="class or interface in org.eclipse.emf.ecore.xmi">setUseZip</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#setXMLVersion(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.xmi">setXMLVersion</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLResource.html?is-external=true#useZip()" title="class or interface in org.eclipse.emf.ecore.xmi">useZip</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.ecore.resource.Resource">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.eclipse.emf.ecore.resource.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.resource">Resource</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#delete(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource">delete</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getAllContents()" title="class or interface in org.eclipse.emf.ecore.resource">getAllContents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getContents()" title="class or interface in org.eclipse.emf.ecore.resource">getContents</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getEObject(java.lang.String)" title="class or interface in org.eclipse.emf.ecore.resource">getEObject</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getErrors()" title="class or interface in org.eclipse.emf.ecore.resource">getErrors</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getResourceSet()" title="class or interface in org.eclipse.emf.ecore.resource">getResourceSet</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getTimeStamp()" title="class or interface in org.eclipse.emf.ecore.resource">getTimeStamp</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getURI()" title="class or interface in org.eclipse.emf.ecore.resource">getURI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getURIFragment(org.eclipse.emf.ecore.EObject)" title="class or interface in org.eclipse.emf.ecore.resource">getURIFragment</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#getWarnings()" title="class or interface in org.eclipse.emf.ecore.resource">getWarnings</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#isLoaded()" title="class or interface in org.eclipse.emf.ecore.resource">isLoaded</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#isModified()" title="class or interface in org.eclipse.emf.ecore.resource">isModified</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#isTrackingModification()" title="class or interface in org.eclipse.emf.ecore.resource">isTrackingModification</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#load(java.io.InputStream,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#load(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource">load</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#save(java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#save(java.io.OutputStream,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.resource">save</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#setModified(boolean)" title="class or interface in org.eclipse.emf.ecore.resource">setModified</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#setTimeStamp(long)" title="class or interface in org.eclipse.emf.ecore.resource">setTimeStamp</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#setTrackingModification(boolean)" title="class or interface in org.eclipse.emf.ecore.resource">setTrackingModification</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#setURI(org.eclipse.emf.common.util.URI)" title="class or interface in org.eclipse.emf.ecore.resource">setURI</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/resource/Resource.html?is-external=true#unload()" title="class or interface in org.eclipse.emf.ecore.resource">unload</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.eclipse.emf.common.notify.Notifier">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.eclipse.emf.common.notify.<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/Notifier.html?is-external=true" title="class or interface in org.eclipse.emf.common.notify">Notifier</a></h3>
+<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/Notifier.html?is-external=true#eAdapters()" title="class or interface in org.eclipse.emf.common.notify">eAdapters</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/Notifier.html?is-external=true#eDeliver()" title="class or interface in org.eclipse.emf.common.notify">eDeliver</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/Notifier.html?is-external=true#eNotify(org.eclipse.emf.common.notify.Notification)" title="class or interface in org.eclipse.emf.common.notify">eNotify</a>, <a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/notify/Notifier.html?is-external=true#eSetDeliver(boolean)" title="class or interface in org.eclipse.emf.common.notify">eSetDeliver</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="BaseResourceImpl(org.eclipse.emf.common.util.URI)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>BaseResourceImpl</h4>
+<pre>public&nbsp;BaseResourceImpl(<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/common/util/URI.html?is-external=true" title="class or interface in org.eclipse.emf.common.util">URI</a>&nbsp;uri)</pre>
+<div class="block">Creates an instance of the resource.
+ <!-- begin-user-doc -->
+ <!-- end-user-doc --></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>uri</code> - the URI of the new resource.</dd><dt><span class="strong">Generated</span></dt>
+  <dd></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="doLoad(java.io.InputStream, java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>doLoad</h4>
+<pre>public&nbsp;void&nbsp;doLoad(<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;inputStream,
+          <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;options)
+            throws <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true#doLoad(java.io.InputStream,%20java.util.Map)" title="class or interface in org.eclipse.emf.ecore.xmi.impl">doLoad</a></code>&nbsp;in class&nbsp;<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMLResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMLResourceImpl</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://download.oracle.com/javase/1.5.0/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="createXMLLoad()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createXMLLoad</h4>
+<pre>protected&nbsp;<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLLoad.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLLoad</a>&nbsp;createXMLLoad()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#createXMLLoad()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">createXMLLoad</a></code>&nbsp;in class&nbsp;<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMIResourceImpl</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="createXMLSave()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createXMLSave</h4>
+<pre>protected&nbsp;<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLSave.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLSave</a>&nbsp;createXMLSave()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#createXMLSave()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">createXMLSave</a></code>&nbsp;in class&nbsp;<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMIResourceImpl</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="createXMLHelper()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>createXMLHelper</h4>
+<pre>protected&nbsp;<a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/XMLHelper.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi">XMLHelper</a>&nbsp;createXMLHelper()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true#createXMLHelper()" title="class or interface in org.eclipse.emf.ecore.xmi.impl">createXMLHelper</a></code>&nbsp;in class&nbsp;<code><a href="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/org/eclipse/emf/ecore/xmi/impl/XMIResourceImpl.html?is-external=true" title="class or interface in org.eclipse.emf.ecore.xmi.impl">XMIResourceImpl</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BaseResourceImpl.html">Use</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/eclipse/oomph/base/util/BaseResourceFactoryImpl.html" title="class in org.eclipse.oomph.base.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/eclipse/oomph/base/util/BaseSwitch.html" title="class in org.eclipse.oomph.base.util"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/eclipse/oomph/base/util/BaseResourceImpl.html" target="_top">Frames</a></li>
+<li><a href="BaseResourceImpl.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_org.eclipse.emf.ecore.resource.impl.ResourceImpl">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small><i class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</i></small></p>
+</body>
+</html>

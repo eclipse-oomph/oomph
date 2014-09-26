@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.targlets.presentation;
 
-import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -45,7 +45,7 @@ public final class TargletContainerEditorInput extends URIEditorInput
   public String getToolTipText()
   {
     String id = getContainerID();
-    TargletContainer targletContainer = TargletContainerDescriptorManager.getContainer(id);
+    ITargletContainer targletContainer = TargletContainerDescriptorManager.getContainer(id);
 
     ITargetDefinition targetDefinition = targletContainer.getTargetDefinition();
     boolean active = TargetPlatformUtil.isActiveTargetDefinition(targetDefinition);
@@ -58,7 +58,7 @@ public final class TargletContainerEditorInput extends URIEditorInput
     return TargletEditorPlugin.INSTANCE.getSymbolicName();
   }
 
-  public static String getContainerLabel(TargletContainer targletContainer, boolean active)
+  public static String getContainerLabel(ITargletContainer targletContainer, boolean active)
   {
     return targletContainer.getID() + " (" + targletContainer.getTargetDefinition().getName() + (active ? ", active" : "") + ")";
   }

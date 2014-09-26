@@ -11,7 +11,10 @@
 package org.eclipse.oomph.targlets.internal.core;
 
 import org.eclipse.oomph.resources.ResourcesUtil;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.pde.TargetPlatformListener;
@@ -69,7 +72,7 @@ public final class WorkspaceIUImporter
       public Object run(ITargetPlatformService service) throws CoreException
       {
         Set<WorkspaceIUInfo> workspaceIUInfos = new HashSet<WorkspaceIUInfo>();
-        List<Pair<TargletContainer, TargletContainerDescriptor>> targletContainerInfos = new ArrayList<Pair<TargletContainer, TargletContainerDescriptor>>();
+        List<Pair<ITargletContainer, ITargletContainerDescriptor>> targletContainerInfos = new ArrayList<Pair<ITargletContainer, ITargletContainerDescriptor>>();
 
         ITargetDefinition targetDefinition = TargetPlatformUtil.getActiveTargetDefinition(service);
         if (targetDefinition != null)
@@ -79,10 +82,10 @@ public final class WorkspaceIUImporter
           {
             for (ITargetLocation location : targetLocations)
             {
-              if (location instanceof TargletContainer)
+              if (location instanceof ITargletContainer)
               {
-                TargletContainer container = (TargletContainer)location;
-                TargletContainerDescriptor descriptor = container.getDescriptor();
+                ITargletContainer container = (ITargletContainer)location;
+                ITargletContainerDescriptor descriptor = container.getDescriptor();
                 if (descriptor != null && descriptor.getUpdateProblem() == null)
                 {
                   targletContainerInfos.add(Pair.create(container, descriptor));
@@ -108,10 +111,10 @@ public final class WorkspaceIUImporter
           importResults = updateWorkspace(workspaceIUInfos, monitor);
         }
 
-        for (Pair<TargletContainer, TargletContainerDescriptor> pair : targletContainerInfos)
+        for (Pair<ITargletContainer, ITargletContainerDescriptor> pair : targletContainerInfos)
         {
-          TargletContainer container = pair.getElement1();
-          TargletContainerDescriptor descriptor = pair.getElement2();
+          ITargletContainer container = pair.getElement1();
+          ITargletContainerDescriptor descriptor = pair.getElement2();
 
           Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> containerImportResults = new HashMap<WorkspaceIUInfo, ResourcesUtil.ImportResult>();
           Collection<WorkspaceIUInfo> workingProjects = descriptor.getWorkingProjects();
@@ -122,7 +125,7 @@ public final class WorkspaceIUImporter
           }
 
           TargletContainerEvent event = new WorkspaceUpdateFinishedEvent(container, descriptor, containerImportResults);
-          TargletContainerListenerRegistryImpl.INSTANCE.notifyListeners(event, monitor);
+          TargletContainerListenerRegistry.INSTANCE.notifyListeners(event, monitor);
         }
 
         return null;

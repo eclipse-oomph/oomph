@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+
+<HEAD>
+<TITLE>Listening To Targlet Container Events (Oomph Targlets Documentation)</TITLE>
+
+<LINK REL="STYLESHEET" HREF="../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
+
+<NOSCRIPT></NOSCRIPT>
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Listening To Targlet Container Events (Oomph Targlets Documentation)";
+    }
+}
+</SCRIPT>
+
+<link rel="stylesheet" href="../editor.css" charset="UTF-8" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
+<script>
+$(function() {
+$( ".resizable" ).resizable({ handles:"s,e,se", autoHide:true });
+});
+</script>
+
+<script type="text/javascript">
+function maximize(id)
+{
+  e = document.getElementById('max_' + id);
+  c1 = document.getElementById('editor_content_1_' + id);
+  c2 = document.getElementById('editor_content_2_' + id);
+  pv = document.getElementById('max_pv_' + id);
+  if (e.className == 'max')
+  {
+    e.className = 'rst';
+    e.setAttribute('title', 'Restore');
+    c1.setAttribute('style_orig', c1.getAttribute('style'));
+    c1.setAttribute('style', 'border:2px solid #99b4d1; border-top:none;');
+    c2.setAttribute('style', '');
+    if (pv != null)
+    {
+      pv.setAttribute('width_orig', pv.getAttribute('width'));
+      pv.setAttribute('width', '');
+    }
+  }
+  else
+  {
+    e.className = 'max';
+    e.setAttribute('title', 'Maximize');
+    c1.setAttribute('style', c1.getAttribute('style_orig'));
+    c1.setAttribute('style_orig', '');
+    c2.setAttribute('style', 'overflow:scroll; width:100%; height:100%;');
+    if (pv != null)
+    {
+      pv.setAttribute('width', pv.getAttribute('width_orig'));
+      pv.setAttribute('width_orig', '');
+    }
+  }
+}
+</script>
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs"><a href="../Overview.html" title="Oomph Targlets Documentation">Oomph Targlets Documentation</a> > <a href="index.html" title="Category in Oomph Targlets Documentation">Programmer's Guide</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Listening To Targlet Container Events</h1></td>
+		<td align="right" valign="middle" nowrap><a href="UnderstandingTargletContainers.html" title="Backward to Understanding Targlet Containers"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="../reference/index.html" title="Forward to Reference"><img src="../../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p class="author">Author: Eike Stepper</p>
+<p>
+ When the state of a <a href="../../javadoc/org/eclipse/oomph/targlets/core/ITargletContainer.html" title="Interface in org.eclipse.oomph.targlets.core"><code>targlet container</code></a> changes registered <a href="../../javadoc/org/eclipse/oomph/targlets/core/ITargletContainerListener.html" title="Interface in org.eclipse.oomph.targlets.core"><code>listeners</code></a> are sent one of the following <a href="../../javadoc/org/eclipse/oomph/targlets/core/TargletContainerEvent.html" title="Class in org.eclipse.oomph.targlets.core"><code>events</code></a>:
+ <p>
+ <ul>
+ <li> <a href="../../javadoc/org/eclipse/oomph/targlets/core/TargletContainerEvent.IDChangedEvent.html" title="Class in org.eclipse.oomph.targlets.core.TargletContainerEvent"><code>IDChangedEvent</code></a>
+ <li> <a href="../../javadoc/org/eclipse/oomph/targlets/core/TargletContainerEvent.TargletsChangedEvent.html" title="Class in org.eclipse.oomph.targlets.core.TargletContainerEvent"><code>TargletsChangedEvent</code></a>
+ <li> <a href="../../javadoc/org/eclipse/oomph/targlets/core/TargletContainerEvent.ProfileUpdateSucceededEvent.html" title="Class in org.eclipse.oomph.targlets.core.TargletContainerEvent"><code>ProfileUpdateSucceededEvent</code></a>
+ <li> <a href="../../javadoc/org/eclipse/oomph/targlets/core/TargletContainerEvent.ProfileUpdateFailedEvent.html" title="Class in org.eclipse.oomph.targlets.core.TargletContainerEvent"><code>ProfileUpdateFailedEvent</code></a>
+ <li> <a href="../../javadoc/org/eclipse/oomph/targlets/core/TargletContainerEvent.WorkspaceUpdateFinishedEvent.html" title="Class in org.eclipse.oomph.targlets.core.TargletContainerEvent"><code>WorkspaceUpdateFinishedEvent</code></a>
+ </ul>
+ <p>
+ Listeners can be registered programmatically or declaratively:
+ <p>
+ <ul>
+ <li> The <a href="../../javadoc/org/eclipse/oomph/targlets/core/ITargletContainerListener.Registry.html" title="Interface in org.eclipse.oomph.targlets.core.ITargletContainerListener"><code>listener registry</code></a> provides methods to add or remove listeners.
+ <li> The <a href="../../schemadoc/org_eclipse_oomph_targlets_core_targletContainerListeners.html"><code>org.eclipse.oomph.targlets.core.targletContainerListeners</code></a> extension point accepts declarative listener contributions.
+ </ul>
+ <p>
+ The following example shows a listener that prints information about all received events to the console:
+ <p>
+ 
+
+<div class="snippet" style="margin-left:24px;" align="left">
+  <a name="snippet_TargletContainerEventLogger"></a>
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="25px"><div style="position:relative;"><img src="../../images/editor-1.png"><img style="position:absolute; top:5px; left:5px;" src="../../images/formatter-java.gif"></div></td>
+      <td style="background-image:url(../../images/editor-2.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">TargletContainerEventLogger.java</font></td>
+      <td width="1px"><img src="../../images/editor-3.png"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="right"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('TargletContainerEventLogger')" id="max_TargletContainerEventLogger" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td width="6px"><img src="../../images/editor-5.png"></td>
+    </tr>
+    <tr>
+      <td colspan="6" align="left" valign="top" style="border:1px solid #a0a0a0; border-top:none;" nowrap>
+        <div id="editor_content_1_TargletContainerEventLogger" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
+          <div id="editor_content_2_TargletContainerEventLogger" style="overflow:scroll; width:100%; height:100%;">
+            <code>
+            <font color="#7f0055"><b>class&nbsp;</b></font>TargletContainerEventLogger&nbsp;<font color="#7f0055"><b>implements&nbsp;</b></font>ITargletContainerListener<br/>
+            {<br/>
+            &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font>TargletContainerEventLogger()<br/>
+            &nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;}<br/>
+            <br/>
+            &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font>handleTargletContainerEvent(TargletContainerEvent&nbsp;event,&nbsp;IProgressMonitor&nbsp;monitor)&nbsp;<font color="#7f0055"><b>throws&nbsp;</b></font>Exception<br/>
+            &nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;ITargletContainer&nbsp;container&nbsp;=&nbsp;event.getSource();<br/>
+            <br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>if&nbsp;</b></font>(event&nbsp;<font color="#7f0055"><b>instanceof&nbsp;</b></font>IDChangedEvent)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;IDChangedEvent:&nbsp;&#34;&nbsp;</font>+&nbsp;container);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;&nbsp;&nbsp;oldID:&nbsp;&#34;&nbsp;</font>+&nbsp;((IDChangedEvent)event).getOldID());<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font>(event&nbsp;<font color="#7f0055"><b>instanceof&nbsp;</b></font>TargletsChangedEvent)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;TargletsChangedEvent:&nbsp;&#34;&nbsp;</font>+&nbsp;container);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font>(event&nbsp;<font color="#7f0055"><b>instanceof&nbsp;</b></font>ProfileUpdateSucceededEvent)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;ProfileUpdateSucceededEvent:&nbsp;&#34;&nbsp;</font>+&nbsp;container);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;&nbsp;&nbsp;metadataRepositories:&nbsp;&#34;&nbsp;</font>+&nbsp;((ProfileUpdateSucceededEvent)event).getMetadataRepositories());<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;&nbsp;&nbsp;workspaceIUInfos:&nbsp;&#34;&nbsp;</font>+&nbsp;((ProfileUpdateSucceededEvent)event).getWorkspaceIUInfos());<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;&nbsp;&nbsp;provisioningPlan:&nbsp;&#34;&nbsp;</font>+&nbsp;((ProfileUpdateSucceededEvent)event).getProvisioningPlan());<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;&nbsp;&nbsp;profile:&nbsp;&#34;&nbsp;</font>+&nbsp;((ProfileUpdateSucceededEvent)event).getProfile());<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font>(event&nbsp;<font color="#7f0055"><b>instanceof&nbsp;</b></font>ProfileUpdateFailedEvent)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;ProfileUpdateFailedEvent:&nbsp;&#34;&nbsp;</font>+&nbsp;container);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;&nbsp;&nbsp;updateProblem:&nbsp;&#34;&nbsp;</font>+&nbsp;((ProfileUpdateFailedEvent)event).getUpdateProblem());<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font>(event&nbsp;<font color="#7f0055"><b>instanceof&nbsp;</b></font>WorkspaceUpdateFinishedEvent)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;WorkspaceUpdateFinishedEvent:&nbsp;&#34;&nbsp;</font>+&nbsp;container);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<font color="#2a00ff">&#34;&nbsp;&nbsp;importResults:&nbsp;&#34;&nbsp;</font>+&nbsp;((WorkspaceUpdateFinishedEvent)event).getImportResults());<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>else</b></font><br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(event);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+            &nbsp;&nbsp;}<br/>
+            }            </code>
+
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<p>
+.
+ <p><p><b>See Also:</b></p>
+<ul>
+	<li><a href="UnderstandingTargletContainers.html" title="Article in Oomph Targlets Documentation">Understanding Targlet Containers</a></li>
+</ul>
+
+
+<p align="right">
+<a href="UnderstandingTargletContainers.html" title="Backward to Understanding Targlet Containers"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="../reference/index.html" title="Forward to Reference"><img src="../../images/forward.png" border="0"></a></p>
+<HR>
+<small><i class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</i><small>
+</BODY>
+</HTML>

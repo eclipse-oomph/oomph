@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Targlet Container Listeners</title>
+<style type="text/css">@import url("book.css");</style>
+<style type="text/css">@import url("schema.css");</style>
+</HEAD>
+<BODY>
+<H1 style="text-align:center">Targlet Container Listeners</H1>
+<p></p>
+<h6 class="CaptionFigColumn SchemaHeader">Identifier: </h6>org.eclipse.oomph.targlets.core.targletContainerListeners<p></p>
+<h6 class="CaptionFigColumn SchemaHeader">Since: </h6>1.0
+<p></p>
+
+<h6 class="CaptionFigColumn SchemaHeader">Description: </h6>This extension point allows clients to contribute targlet container listeners, which handle targlet container events such as profile updates.<p></p>
+<h6 class="CaptionFigColumn SchemaHeader">Configuration Markup:</h6>
+<p></p>
+<p class="code SchemaDtd">&lt;!ELEMENT <a name="e.extension">extension</a> (<a href="#e.targletListener">targletListener</a>+)&gt;</p>
+<p class="code SchemaDtd">&lt;!ATTLIST extension</p>
+<p class="code SchemaDtdAttlist">point&nbsp;CDATA #REQUIRED</p>
+<p class="code SchemaDtdAttlist">id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #IMPLIED</p>
+<p class="code SchemaDtdAttlist">name&nbsp;&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<ul class="ConfigMarkupAttlistDesc">
+</ul>
+<br><p class="code SchemaDtd">&lt;!ELEMENT <a name="e.targletListener">targletListener</a> EMPTY&gt;</p>
+<p class="code SchemaDtd">&lt;!ATTLIST targletListener</p>
+<p class="code SchemaDtdAttlist">class&nbsp;CDATA #REQUIRED&gt;</p>
+<p></p>
+<ul class="ConfigMarkupAttlistDesc">
+<li><b>class</b> - </li>
+</ul>
+<br><h6 class="CaptionFigColumn SchemaHeader">Examples: </h6>The following example of a <code>targletContainerListeners</code> extension contributes one targlet container listener:
+
+<pre class="Example"><span class="code SchemaTag">
+   &lt;extension point=</span><span class="code SchemaCstring">&quot;org.eclipse.oomph.targlets.core.targletContainerListeners&quot;</span><span class="code SchemaTag">&gt;
+      &lt;targletListener class=</span><span class="code SchemaCstring">&quot;com.foo.bar.TargletContainerEventLogger&quot;</span><span class="code SchemaTag">/&gt;
+   &lt;/extension&gt;
+</span></pre>
+
+Refer to <a href="../html/guide/ListeningToEvents.html">Listening To Targlet Container Events</a> for a code example of a listener implementation.
+<p></p>
+
+<h6 class="CaptionFigColumn SchemaHeader">API Information: </h6>A contributions must provide a class implementing <a href="../javadoc/org/eclipse/oomph/targlets/core/TargletContainerListener.html">org.eclipse.oomph.targlets.core.TargletContainerListener</a>.
+<p></p>
+
+<h6 class="CaptionFigColumn SchemaHeader">Supplied Implementation: </h6>The following listener implementations are contributed by Oomph internally:
+
+<pre class="Example"><span class="code SchemaTag">
+   &lt;extension point=</span><span class="code SchemaCstring">&quot;org.eclipse.oomph.targlets.core.targletContainerListeners&quot;</span><span class="code SchemaTag">&gt;
+      &lt;targletListener class=</span><span class="code SchemaCstring">&quot;org.eclipse.oomph.targlets.internal.core.listeners.PomArtifactUpdater&quot;</span><span class="code SchemaTag">/&gt;
+      &lt;targletListener class=</span><span class="code SchemaCstring">&quot;org.eclipse.oomph.targlets.internal.core.listeners.PomModulesUpdater&quot;</span><span class="code SchemaTag">/&gt;
+      &lt;targletListener class=</span><span class="code SchemaCstring">&quot;org.eclipse.oomph.targlets.internal.core.listeners.TargetDefinitionGenerator&quot;</span><span class="code SchemaTag">/&gt;
+   &lt;/extension&gt;
+</span></pre>
+<p></p>
+
+<br>
+<p class="note SchemaCopyright">
+Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+
+</p>
+</BODY>
+</HTML>

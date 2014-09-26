@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:article="http://www.eclipse.org/ARTICLE/1.0">
+  <article:Plugin name="org.eclipse.oomph.targlets" label="Oomph Targlets">
+    <packages name="org.eclipse.oomph.targlets"/>
+    <packages name="org.eclipse.oomph.targlets.impl"/>
+    <packages name="org.eclipse.oomph.targlets.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.targlets.core" label="Oomph Targlets Core">
+    <packages name="org.eclipse.oomph.targlets.core"/>
+    <extensionPoints name="targletContainerListeners"/>
+  </article:Plugin>
+</xmi:XMI>

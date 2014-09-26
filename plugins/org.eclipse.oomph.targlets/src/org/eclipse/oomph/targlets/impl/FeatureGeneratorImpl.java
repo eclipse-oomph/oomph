@@ -142,7 +142,7 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
   /**
    * @author Eike Stepper
    */
-  public static final class FeatureGeneratorAction extends FeaturesAction
+  private static final class FeatureGeneratorAction extends FeaturesAction
   {
     public FeatureGeneratorAction()
     {

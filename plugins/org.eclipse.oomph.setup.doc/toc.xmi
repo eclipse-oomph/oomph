@@ -1,16 +1,76 @@
 <?xml version="1.0" encoding="ASCII"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:article="http://www.eclipse.org/ARTICLE/1.0">
-  <article:Plugin name="org.eclipse.oomph.resources" label="Oomph Resources Model">
-    <packages name="org.eclipse.oomph.resources"/>
-    <packages name="org.eclipse.oomph.resources.backend"/>
-    <packages name="org.eclipse.oomph.resources.impl"/>
-    <packages name="org.eclipse.oomph.resources.util"/>
-    <extensionPoints name="backendSystemFactories"/>
-  </article:Plugin>
   <article:Plugin name="org.eclipse.oomph.setup" label="Oomph Setup">
     <packages name="org.eclipse.oomph.setup"/>
     <packages name="org.eclipse.oomph.setup.impl"/>
     <packages name="org.eclipse.oomph.setup.log"/>
     <packages name="org.eclipse.oomph.setup.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.core" label="Oomph Setup Core"/>
+  <article:Plugin name="org.eclipse.oomph.setup.editor" label="Oomph Setup Editor">
+    <packages name="org.eclipse.oomph.setup.editor"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.git" label="Oomph Setup Git">
+    <packages name="org.eclipse.oomph.setup.git"/>
+    <packages name="org.eclipse.oomph.setup.git.impl"/>
+    <packages name="org.eclipse.oomph.setup.git.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.jdt" label="Oomph Setup JDT">
+    <packages name="org.eclipse.oomph.setup.jdt"/>
+    <packages name="org.eclipse.oomph.setup.jdt.impl"/>
+    <packages name="org.eclipse.oomph.setup.jdt.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.launching" label="Oomph Setup Launching">
+    <packages name="org.eclipse.oomph.setup.launching"/>
+    <packages name="org.eclipse.oomph.setup.launching.impl"/>
+    <packages name="org.eclipse.oomph.setup.launching.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.maven" label="Oomph Setup Maven">
+    <packages name="org.eclipse.oomph.setup.maven"/>
+    <packages name="org.eclipse.oomph.setup.maven.impl"/>
+    <packages name="org.eclipse.oomph.setup.maven.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.mylyn" label="Oomph Setup Mylyn">
+    <packages name="org.eclipse.oomph.setup.mylyn"/>
+    <packages name="org.eclipse.oomph.setup.mylyn.impl"/>
+    <packages name="org.eclipse.oomph.setup.mylyn.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.p2" label="Oomph Setup P2">
+    <packages name="org.eclipse.oomph.setup.p2"/>
+    <packages name="org.eclipse.oomph.setup.p2.impl"/>
+    <packages name="org.eclipse.oomph.setup.p2.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.pde" label="Oomph Setup PDE">
+    <packages name="org.eclipse.oomph.internal.setup.pde"/>
+    <packages name="org.eclipse.oomph.setup.pde"/>
+    <packages name="org.eclipse.oomph.setup.pde.impl"/>
+    <packages name="org.eclipse.oomph.setup.pde.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.projectset" label="Oomph Setup Project Sets">
+    <packages name="org.eclipse.oomph.setup.projectset"/>
+    <packages name="org.eclipse.oomph.setup.projectset.impl"/>
+    <packages name="org.eclipse.oomph.setup.projectset.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.projects" label="Oomph Setup Projects">
+    <packages name="org.eclipse.oomph.setup.projects"/>
+    <packages name="org.eclipse.oomph.setup.projects.impl"/>
+    <packages name="org.eclipse.oomph.setup.projects.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.targlets" label="Oomph Setup Targlets">
+    <packages name="org.eclipse.oomph.setup.targlets"/>
+    <packages name="org.eclipse.oomph.setup.targlets.impl"/>
+    <packages name="org.eclipse.oomph.setup.targlets.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.ui" label="Oomph Setup UI"/>
+  <article:Plugin name="org.eclipse.oomph.setup.ui.ide" label="Oomph Setup UI IDE"/>
+  <article:Plugin name="org.eclipse.oomph.setup.workbench" label="Oomph Setup Workbench">
+    <packages name="org.eclipse.oomph.setup.workbench"/>
+    <packages name="org.eclipse.oomph.setup.workbench.impl"/>
+    <packages name="org.eclipse.oomph.setup.workbench.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.setup.workingsets" label="Oomph Setup Working Sets">
+    <packages name="org.eclipse.oomph.setup.workingsets"/>
+    <packages name="org.eclipse.oomph.setup.workingsets.impl"/>
+    <packages name="org.eclipse.oomph.setup.workingsets.util"/>
   </article:Plugin>
 </xmi:XMI>

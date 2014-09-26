@@ -11,9 +11,9 @@
 package org.eclipse.oomph.targlets.internal.ui;
 
 import org.eclipse.oomph.p2.internal.core.P2Index;
-import org.eclipse.oomph.targlets.internal.core.TargletContainer;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor.UpdateProblem;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
+import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor.UpdateProblem;
 import org.eclipse.oomph.targlets.presentation.TargletEditor;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.UIUtil;
@@ -83,7 +83,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
   public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType)
   {
-    if (adaptableObject instanceof TargletContainer)
+    if (adaptableObject instanceof ITargletContainer)
     {
       if (adapterType == ITreeContentProvider.class)
       {
@@ -111,13 +111,13 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
   public boolean canEdit(ITargetDefinition target, ITargetLocation targetLocation)
   {
-    return targetLocation instanceof TargletContainer;
+    return targetLocation instanceof ITargletContainer;
   }
 
   public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
   {
     IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-    TargletEditor.open(page, ((TargletContainer)targetLocation).getID());
+    TargletEditor.open(page, ((ITargletContainer)targetLocation).getID());
 
     simulateEscapeKey();
     simulateEscapeKey();
@@ -127,12 +127,12 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
   public boolean canUpdate(ITargetDefinition target, ITargetLocation targetLocation)
   {
-    return targetLocation instanceof TargletContainer;
+    return targetLocation instanceof ITargletContainer;
   }
 
   public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
   {
-    return ((TargletContainer)targetLocation).updateProfile(monitor);
+    return ((ITargletContainer)targetLocation).updateProfile(monitor);
   }
 
   private static void simulateEscapeKey()
@@ -191,12 +191,12 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
     public Object[] getChildren(Object element)
     {
-      if (element instanceof TargletContainer)
+      if (element instanceof ITargletContainer)
       {
-        TargletContainer location = (TargletContainer)element;
+        ITargletContainer location = (ITargletContainer)element;
         List<Object> children = new ArrayList<Object>();
 
-        TargletContainerDescriptor descriptor = location.getDescriptor();
+        ITargletContainerDescriptor descriptor = location.getDescriptor();
         if (descriptor != null)
         {
           UpdateProblem updateProblem = descriptor.getUpdateProblem();
@@ -301,12 +301,12 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     @Override
     public Image getImage(Object element)
     {
-      if (element instanceof TargletContainer)
+      if (element instanceof ITargletContainer)
       {
-        TargletContainer location = (TargletContainer)element;
+        ITargletContainer location = (ITargletContainer)element;
         String key = "targlet_container";
 
-        TargletContainerDescriptor descriptor = location.getDescriptor();
+        ITargletContainerDescriptor descriptor = location.getDescriptor();
         if (descriptor != null)
         {
           UpdateProblem updateProblem = descriptor.getUpdateProblem();
@@ -325,9 +325,9 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     @Override
     public String getText(Object element)
     {
-      if (element instanceof TargletContainer)
+      if (element instanceof ITargletContainer)
       {
-        return ((TargletContainer)element).toString();
+        return ((ITargletContainer)element).toString();
       }
 
       return super.getText(element);

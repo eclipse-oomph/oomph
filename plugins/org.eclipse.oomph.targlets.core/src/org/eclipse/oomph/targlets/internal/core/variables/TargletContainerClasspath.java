@@ -11,8 +11,9 @@
 package org.eclipse.oomph.targlets.internal.core.variables;
 
 import org.eclipse.oomph.p2.core.Profile;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
+import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
+import org.eclipse.oomph.util.internal.pde.TargetPlatformClasspathFile;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -23,15 +24,12 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 
-import org.osgi.framework.Constants;
-
 import java.io.File;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("restriction")
 public class TargletContainerClasspath implements IDynamicVariableResolver
 {
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
@@ -43,7 +41,7 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
   {
     StringBuilder builder = new StringBuilder();
 
-    TargletContainerDescriptor descriptor = TargletContainerDescriptorManager.getInstance().getDescriptor(containerID, new NullProgressMonitor());
+    ITargletContainerDescriptor descriptor = TargletContainerDescriptorManager.getInstance().getDescriptor(containerID, new NullProgressMonitor());
     if (descriptor != null)
     {
       Profile profile = descriptor.getWorkingProfile();
@@ -58,17 +56,7 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
             if ("osgi.bundle".equals(artifactKey.getClassifier()) && !artifactKey.getId().endsWith(".source"))
             {
               File file = artifactRepository.getArtifactFile(artifactKey);
-              if (file != null)
-              {
-                if (file.isDirectory())
-                {
-                  appendBundleClasspath(builder, file);
-                }
-                else
-                {
-                  appendFile(builder, file);
-                }
-              }
+              TargetPlatformClasspathFile.appendBundleClasspath(builder, file);
             }
           }
         }
@@ -76,38 +64,5 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
     }
 
     return builder.toString();
-  }
-
-  @SuppressWarnings("restriction")
-  private static void appendBundleClasspath(StringBuilder builder, File bundleFolder) throws CoreException
-  {
-    Map<String, String> manifest = org.eclipse.pde.internal.core.util.ManifestUtils.loadManifest(bundleFolder);
-    String bundleClasspath = manifest.get(Constants.BUNDLE_CLASSPATH);
-    if (bundleClasspath != null)
-    {
-      StringTokenizer tokenizer = new StringTokenizer(bundleClasspath, ",");
-      while (tokenizer.hasMoreTokens())
-      {
-        String token = tokenizer.nextToken();
-        if (".".equals(token))
-        {
-          appendFile(builder, bundleFolder);
-        }
-        else
-        {
-          appendFile(builder, new File(bundleFolder, token));
-        }
-      }
-    }
-  }
-
-  private static void appendFile(StringBuilder builder, File file)
-  {
-    if (builder.length() != 0)
-    {
-      builder.append(";");
-    }
-
-    builder.append(file.getAbsolutePath());
   }
 }

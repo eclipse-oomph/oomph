@@ -60,6 +60,7 @@
     <module>plugins/org.eclipse.oomph.manifests</module>
     <module>plugins/org.eclipse.oomph.p2</module>
     <module>plugins/org.eclipse.oomph.p2.core</module>
+    <module>plugins/org.eclipse.oomph.p2.doc</module>
     <module>plugins/org.eclipse.oomph.p2.edit</module>
     <module>plugins/org.eclipse.oomph.p2.tests</module>
     <module>plugins/org.eclipse.oomph.p2.ui</module>
@@ -109,6 +110,7 @@
     <module>plugins/org.eclipse.oomph.setup.workingsets.edit</module>
     <module>plugins/org.eclipse.oomph.targlets</module>
     <module>plugins/org.eclipse.oomph.targlets.core</module>
+    <module>plugins/org.eclipse.oomph.targlets.doc</module>
     <module>plugins/org.eclipse.oomph.targlets.edit</module>
     <module>plugins/org.eclipse.oomph.targlets.editor</module>
     <module>plugins/org.eclipse.oomph.targlets.tests</module>
@@ -116,6 +118,7 @@
     <module>plugins/org.eclipse.oomph.tests</module>
     <module>plugins/org.eclipse.oomph.ui</module>
     <module>plugins/org.eclipse.oomph.util</module>
+    <module>plugins/org.eclipse.oomph.util.doc</module>
     <module>plugins/org.eclipse.oomph.util.pde</module>
     <module>plugins/org.eclipse.oomph.version</module>
     <module>plugins/org.eclipse.oomph.version.digest</module>

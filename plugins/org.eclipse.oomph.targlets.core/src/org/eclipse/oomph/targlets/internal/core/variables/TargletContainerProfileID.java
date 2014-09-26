@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.core.variables;
 
-import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptor;
+import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
 
 import org.eclipse.core.runtime.CoreException;
@@ -25,7 +25,7 @@ public class TargletContainerProfileID implements IDynamicVariableResolver
 {
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
   {
-    TargletContainerDescriptor descriptor = TargletContainerDescriptorManager.getInstance().getDescriptor(containerID, new NullProgressMonitor());
+    ITargletContainerDescriptor descriptor = TargletContainerDescriptorManager.getInstance().getDescriptor(containerID, new NullProgressMonitor());
     if (descriptor != null)
     {
       return descriptor.getWorkingProfileID();

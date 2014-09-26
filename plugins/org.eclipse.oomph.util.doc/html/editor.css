@@ -1,0 +1,27 @@
+a:link.max, a:visited.max {
+  text-decoration: none;
+  background-image: url(../images/editor-max.png);
+  background-repeat: no-repeat;
+  background-position: right top;
+}
+
+a:hover.max {
+  text-decoration: none;
+  background-image: url(../images/editor-max-hover.png);
+  background-repeat: no-repeat;
+  background-position: right top;
+}
+
+a:link.rst, a:visited.rst {
+  text-decoration: none;
+  background-image: url(../images/editor-rst.png);
+  background-repeat: no-repeat;
+  background-position: right top;
+}
+
+a:hover.rst {
+  text-decoration: none;
+  background-image: url(../images/editor-rst-hover.png);
+  background-repeat: no-repeat;
+  background-position: right top;
+}

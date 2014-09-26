@@ -19,6 +19,7 @@ import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.resources.backend.BackendContainer;
 import org.eclipse.oomph.resources.impl.SourceLocatorImpl;
 import org.eclipse.oomph.targlets.IUGenerator;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
 
 import org.eclipse.emf.common.util.EList;

@@ -18,7 +18,7 @@ import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactor
 import org.eclipse.oomph.resources.provider.ResourcesItemProviderAdapterFactory;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.IDChangedEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerListener;
+import org.eclipse.oomph.targlets.core.ITargletContainerListener;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
@@ -535,7 +535,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     }
   };
 
-  private TargletContainerListener targletContainerListener = new TargletContainerListener()
+  private ITargletContainerListener targletContainerListener = new ITargletContainerListener()
   {
     public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
     {
@@ -1549,7 +1549,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
   {
     initGen(site, editorInput);
     TargetPlatformUtil.addListener(targetPlatformListener);
-    TargletContainerListener.Registry.INSTANCE.addListener(targletContainerListener);
+    ITargletContainerListener.Registry.INSTANCE.addListener(targletContainerListener);
   }
 
   /**
@@ -1755,7 +1755,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
   @Override
   public void dispose()
   {
-    TargletContainerListener.Registry.INSTANCE.removeListener(targletContainerListener);
+    ITargletContainerListener.Registry.INSTANCE.removeListener(targletContainerListener);
     TargetPlatformUtil.removeListener(targetPlatformListener);
     disposeGen();
   }

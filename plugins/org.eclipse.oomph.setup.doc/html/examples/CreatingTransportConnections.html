@@ -6,6 +6,7 @@
 
 <LINK REL="STYLESHEET" HREF="../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
 
+<NOSCRIPT></NOSCRIPT>
 <SCRIPT type="text/javascript">
 function windowTitle()
 {
@@ -14,7 +15,56 @@ function windowTitle()
     }
 }
 </SCRIPT>
-<NOSCRIPT></NOSCRIPT>
+
+<link rel="stylesheet" href="../editor.css" charset="UTF-8" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
+<script>
+$(function() {
+$( ".resizable" ).resizable({ handles:"s,e,se", autoHide:true });
+});
+</script>
+
+<script type="text/javascript">
+function maximize(id)
+{
+  e = document.getElementById('max_' + id);
+  c1 = document.getElementById('editor_content_1_' + id);
+  c2 = document.getElementById('editor_content_2_' + id);
+  pv = document.getElementById('max_pv_' + id);
+  if (e.className == 'max')
+  {
+    e.className = 'rst';
+    e.setAttribute('title', 'Restore');
+    c1.setAttribute('style_orig', c1.getAttribute('style'));
+    c1.setAttribute('style', 'border:2px solid #99b4d1; border-top:none;');
+    c2.setAttribute('style', '');
+    if (pv != null)
+    {
+      pv.setAttribute('width_orig', pv.getAttribute('width'));
+      pv.setAttribute('width', '');
+    }
+  }
+  else
+  {
+    e.className = 'max';
+    e.setAttribute('title', 'Maximize');
+    c1.setAttribute('style', c1.getAttribute('style_orig'));
+    c1.setAttribute('style_orig', '');
+    c2.setAttribute('style', 'overflow:scroll; width:100%; height:100%;');
+    if (pv != null)
+    {
+      pv.setAttribute('width', pv.getAttribute('width_orig'));
+      pv.setAttribute('width_orig', '');
+    }
+  }
+}
+</script>
 </HEAD>
 
 <BODY BGCOLOR="white" onload="windowTitle();">
@@ -77,17 +127,18 @@ function windowTitle()
   <a name="snippet_snippet1"></a>
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td><img src="../../images/editor-top-left-java.png"></td>
-      <td style="background-image:url(../../images/editor-top1.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">ContainerSetup.java</font></td>
-      <td width="1px"><img src="../../images/editor-close.png"></td>
-      <td style="background-image:url(../../images/editor-top2.png); background-repeat:repeat-x;">&nbsp;</td>
-      <td><img src="../../images/editor-top-right.png"></td>
+      <td width="25px"><div style="position:relative;"><img src="../../images/editor-1.png"><img style="position:absolute; top:5px; left:5px;" src="../../images/formatter-java.gif"></div></td>
+      <td style="background-image:url(../../images/editor-2.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">ContainerSetup.java</font></td>
+      <td width="1px"><img src="../../images/editor-3.png"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="right"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('snippet1')" id="max_snippet1" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td width="6px"><img src="../../images/editor-5.png"></td>
     </tr>
     <tr>
-      <td style="background-image:url(../../images/editor-left.png); background-repeat:repeat-y;">&nbsp;</td>
-      <td colspan="3" align="left" valign="top" nowrap>
-        <div style="margin:10px 0px 10px 0px;">
-          <code>
+      <td colspan="6" align="left" valign="top" style="border:1px solid #a0a0a0; border-top:none;" nowrap>
+        <div id="editor_content_1_snippet1" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
+          <div id="editor_content_2_snippet1" style="overflow:scroll; width:100%; height:100%;">
+            <code>
             <font color="#3f7f5f">//&nbsp;Create&nbsp;a&nbsp;dedicated&nbsp;container&nbsp;instance</font><br/>
             User&nbsp;user&nbsp;=&nbsp;<a name="callout_snippet1_1_code" href="#callout_snippet1_1" alt="Create a separate User." title="Create a separate User."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;SetupFactory.eINSTANCE.createUser();<br/>
             <br/>
@@ -103,16 +154,11 @@ function windowTitle()
             });<br/>
             <br/>
             <font color="#3f7f5f">//&nbsp;Do&nbsp;not&nbsp;forget&nbsp;to&nbsp;activate&nbsp;the&nbsp;container&nbsp;before&nbsp;you&nbsp;use&nbsp;it</font><br/>
-            <a name="callout_snippet1_4_code" href="#callout_snippet1_4" alt="The new container can not be used when inactive." title="The new container can not be used when inactive."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;user.getDescription();
-          </code>
+            <a name="callout_snippet1_4_code" href="#callout_snippet1_4" alt="The new container can not be used when inactive." title="The new container can not be used when inactive."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;user.getDescription();            </code>
+
+          </div>
         </div>
       </td>
-      <td style="background-image:url(../../images/editor-right.png); background-repeat:repeat-y;">&nbsp;</td>
-    </tr>
-    <tr>
-      <td><img src="../../images/editor-bottom-left.png"></td>
-      <td style="background-image:url(../../images/editor-bottom.png); background-repeat:repeat-x;" colspan="3">&nbsp;</td>
-      <td><img src="../../images/editor-bottom-right.png"></td>
     </tr>
   </table>
 </div>
@@ -153,17 +199,18 @@ function windowTitle()
   <a name="snippet_JMSConnector"></a>
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td><img src="../../images/editor-top-left-java.png"></td>
-      <td style="background-image:url(../../images/editor-top1.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">JMSConnector.java</font></td>
-      <td width="1px"><img src="../../images/editor-close.png"></td>
-      <td style="background-image:url(../../images/editor-top2.png); background-repeat:repeat-x;">&nbsp;</td>
-      <td><img src="../../images/editor-top-right.png"></td>
+      <td width="25px"><div style="position:relative;"><img src="../../images/editor-1.png"><img style="position:absolute; top:5px; left:5px;" src="../../images/formatter-java.gif"></div></td>
+      <td style="background-image:url(../../images/editor-2.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">JMSConnector.java</font></td>
+      <td width="1px"><img src="../../images/editor-3.png"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="right"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('JMSConnector')" id="max_JMSConnector" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td width="6px"><img src="../../images/editor-5.png"></td>
     </tr>
     <tr>
-      <td style="background-image:url(../../images/editor-left.png); background-repeat:repeat-y;">&nbsp;</td>
-      <td colspan="3" align="left" valign="top" nowrap>
-        <div style="margin:10px 0px 10px 0px;">
-          <code>
+      <td colspan="6" align="left" valign="top" style="border:1px solid #a0a0a0; border-top:none;" nowrap>
+        <div id="editor_content_1_JMSConnector" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
+          <div id="editor_content_2_JMSConnector" style="overflow:scroll; width:100%; height:100%;">
+            <code>
             <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font>JMSConnector&nbsp;<font color="#7f0055"><b>extends&nbsp;</b></font>UserImpl<br/>
             {<br/>
             &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font>JMSConnector(String&nbsp;description)<br/>
@@ -177,16 +224,11 @@ function windowTitle()
             &nbsp;&nbsp;}<br/>
             <br/>
             &nbsp;&nbsp;&hellip;<br/>
-            }
-          </code>
+            }            </code>
+
+          </div>
         </div>
       </td>
-      <td style="background-image:url(../../images/editor-right.png); background-repeat:repeat-y;">&nbsp;</td>
-    </tr>
-    <tr>
-      <td><img src="../../images/editor-bottom-left.png"></td>
-      <td style="background-image:url(../../images/editor-bottom.png); background-repeat:repeat-x;" colspan="3">&nbsp;</td>
-      <td><img src="../../images/editor-bottom-right.png"></td>
     </tr>
   </table>
 </div>
@@ -212,6 +254,6 @@ function windowTitle()
 <p align="right">
 <a href="ConnectingToRepositories.html" title="Backward to Connecting To Repositories"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="XmlSnippets.html" title="Forward to Embedding XML Snippets"><img src="../../images/forward.png" border="0"></a></p>
 <HR>
-<i>Copyright (c) 2011, 2012 Eike Stepper (Berlin, Germany) and others.</i>
+<small><i class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</i><small>
 </BODY>
 </HTML>

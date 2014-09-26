@@ -23,6 +23,7 @@ import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -62,7 +63,7 @@ public class TargletTests extends AbstractP2Test
 
   private ITargetDefinition target;
 
-  private TargletContainer targletContainer;
+  private ITargletContainer targletContainer;
 
   private File getTestFolder()
   {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:article="http://www.eclipse.org/ARTICLE/1.0">
+  <article:Plugin name="org.eclipse.oomph.p2" label="Oomph P2 Management">
+    <packages name="org.eclipse.oomph.p2"/>
+    <packages name="org.eclipse.oomph.p2.impl"/>
+    <packages name="org.eclipse.oomph.p2.util"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.p2.core" label="Oomph P2 Management Core">
+    <packages name="org.eclipse.oomph.p2.core"/>
+  </article:Plugin>
+  <article:Plugin name="org.eclipse.oomph.p2.ui" label="Oomph P2 Management UI">
+    <extensionPoints name="profileTypes"/>
+  </article:Plugin>
+</xmi:XMI>

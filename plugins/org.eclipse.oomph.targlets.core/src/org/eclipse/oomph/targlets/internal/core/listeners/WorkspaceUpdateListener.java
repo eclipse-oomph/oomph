@@ -10,11 +10,11 @@
  */
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
-import org.eclipse.oomph.targlets.core.TargletContainerListener;
-import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainerListener;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public abstract class WorkspaceUpdateListener implements TargletContainerListener
+public abstract class WorkspaceUpdateListener implements ITargletContainerListener
 {
   private final Map<String, ProfileUpdateSucceededEvent> profileUpdateSucceededEvents = new HashMap<String, ProfileUpdateSucceededEvent>();
 
@@ -38,14 +38,14 @@ public abstract class WorkspaceUpdateListener implements TargletContainerListene
     {
       ProfileUpdateSucceededEvent profileUpdateSucceededEvent = (ProfileUpdateSucceededEvent)event;
 
-      TargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
+      ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
       profileUpdateSucceededEvents.put(targletContainer.getID(), profileUpdateSucceededEvent);
     }
     else if (event instanceof WorkspaceUpdateFinishedEvent)
     {
       WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent = (WorkspaceUpdateFinishedEvent)event;
 
-      TargletContainer targletContainer = workspaceUpdateFinishedEvent.getSource();
+      ITargletContainer targletContainer = workspaceUpdateFinishedEvent.getSource();
       ProfileUpdateSucceededEvent profileUpdateSucceededEvent = profileUpdateSucceededEvents.remove(targletContainer.getID());
 
       if (profileUpdateSucceededEvent != null)

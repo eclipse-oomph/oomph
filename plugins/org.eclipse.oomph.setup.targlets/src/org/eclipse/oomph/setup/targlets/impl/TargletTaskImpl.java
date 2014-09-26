@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.targlets.internal.core.WorkspaceIUImporter;
@@ -178,7 +179,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    */
   protected String locale = LOCALE_EDEFAULT;
 
-  private TargletContainer targletContainer;
+  private ITargletContainer targletContainer;
 
   private ITargetDefinition targetDefinition;
 
@@ -745,16 +746,16 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     return null;
   }
 
-  private TargletContainer getTargletContainer()
+  private ITargletContainer getTargletContainer()
   {
     ITargetLocation[] locations = targetDefinition.getTargetLocations();
     if (locations != null)
     {
       for (ITargetLocation location : locations)
       {
-        if (location instanceof TargletContainer)
+        if (location instanceof ITargletContainer)
         {
-          TargletContainer targletContainer = (TargletContainer)location;
+          ITargletContainer targletContainer = (ITargletContainer)location;
           if (TARGLET_CONTAINER_ID.equals(targletContainer.getID()))
           {
             return targletContainer;

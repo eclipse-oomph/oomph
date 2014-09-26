@@ -6,6 +6,7 @@
 
 <LINK REL="STYLESHEET" HREF="../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
 
+<NOSCRIPT></NOSCRIPT>
 <SCRIPT type="text/javascript">
 function windowTitle()
 {
@@ -14,7 +15,56 @@ function windowTitle()
     }
 }
 </SCRIPT>
-<NOSCRIPT></NOSCRIPT>
+
+<link rel="stylesheet" href="../editor.css" charset="UTF-8" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
+<script>
+$(function() {
+$( ".resizable" ).resizable({ handles:"s,e,se", autoHide:true });
+});
+</script>
+
+<script type="text/javascript">
+function maximize(id)
+{
+  e = document.getElementById('max_' + id);
+  c1 = document.getElementById('editor_content_1_' + id);
+  c2 = document.getElementById('editor_content_2_' + id);
+  pv = document.getElementById('max_pv_' + id);
+  if (e.className == 'max')
+  {
+    e.className = 'rst';
+    e.setAttribute('title', 'Restore');
+    c1.setAttribute('style_orig', c1.getAttribute('style'));
+    c1.setAttribute('style', 'border:2px solid #99b4d1; border-top:none;');
+    c2.setAttribute('style', '');
+    if (pv != null)
+    {
+      pv.setAttribute('width_orig', pv.getAttribute('width'));
+      pv.setAttribute('width', '');
+    }
+  }
+  else
+  {
+    e.className = 'max';
+    e.setAttribute('title', 'Maximize');
+    c1.setAttribute('style', c1.getAttribute('style_orig'));
+    c1.setAttribute('style_orig', '');
+    c2.setAttribute('style', 'overflow:scroll; width:100%; height:100%;');
+    if (pv != null)
+    {
+      pv.setAttribute('width', pv.getAttribute('width_orig'));
+      pv.setAttribute('width_orig', '');
+    }
+  }
+}
+</script>
 </HEAD>
 
 <BODY BGCOLOR="white" onload="windowTitle();">
@@ -43,17 +93,18 @@ function windowTitle()
   <a name="snippet_testXml"></a>
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td><img src="../../images/editor-top-left-xml.png"></td>
-      <td style="background-image:url(../../images/editor-top1.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">test.xml</font></td>
-      <td width="1px"><img src="../../images/editor-close.png"></td>
-      <td style="background-image:url(../../images/editor-top2.png); background-repeat:repeat-x;">&nbsp;</td>
-      <td><img src="../../images/editor-top-right.png"></td>
+      <td width="25px"><div style="position:relative;"><img src="../../images/editor-1.png"><img style="position:absolute; top:5px; left:5px;" src="../../images/formatter-xml.gif"></div></td>
+      <td style="background-image:url(../../images/editor-2.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">test.xml</font></td>
+      <td width="1px"><img src="../../images/editor-3.png"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="right"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('testXml')" id="max_testXml" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td width="6px"><img src="../../images/editor-5.png"></td>
     </tr>
     <tr>
-      <td style="background-image:url(../../images/editor-left.png); background-repeat:repeat-y;">&nbsp;</td>
-      <td colspan="3" align="left" valign="top" nowrap>
-        <div style="margin:10px 0px 10px 0px;">
-          <code>
+      <td colspan="6" align="left" valign="top" style="border:1px solid #a0a0a0; border-top:none;" nowrap>
+        <div id="editor_content_1_testXml" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
+          <div id="editor_content_2_testXml" style="overflow:scroll; width:100%; height:100%;">
+            <code>
 <font color="#0000e1">&lt;?xml version=<font color="#000080">'1.0'</font> encoding=<font color="#000080">'UTF-8'</font>?&gt;</font><br/>
 <font color="#3f7f5f">&lt;!--<br/>
 &nbsp;&nbsp;Copyright&nbsp;(c)&nbsp;2014&nbsp;Eike&nbsp;Stepper&nbsp;(Berlin,&nbsp;Germany)&nbsp;and&nbsp;others.<br/>
@@ -91,16 +142,11 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;/resources&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;/build&gt;</font><br/>
 <br/>
-<font color="#0000e1">&lt;/project&gt;</font>
-          </code>
+<font color="#0000e1">&lt;/project&gt;</font>            </code>
+
+          </div>
         </div>
       </td>
-      <td style="background-image:url(../../images/editor-right.png); background-repeat:repeat-y;">&nbsp;</td>
-    </tr>
-    <tr>
-      <td><img src="../../images/editor-bottom-left.png"></td>
-      <td style="background-image:url(../../images/editor-bottom.png); background-repeat:repeat-x;" colspan="3">&nbsp;</td>
-      <td><img src="../../images/editor-bottom-right.png"></td>
     </tr>
   </table>
 </div>
@@ -120,17 +166,18 @@ function windowTitle()
   <a name="snippet_companyEcore"></a>
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td><img src="../../images/editor-top-left-xml.png"></td>
-      <td style="background-image:url(../../images/editor-top1.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">Setup.ecore</font></td>
-      <td width="1px"><img src="../../images/editor-close.png"></td>
-      <td style="background-image:url(../../images/editor-top2.png); background-repeat:repeat-x;">&nbsp;</td>
-      <td><img src="../../images/editor-top-right.png"></td>
+      <td width="25px"><div style="position:relative;"><img src="../../images/editor-1.png"><img style="position:absolute; top:5px; left:5px;" src="../../images/formatter-xml.gif"></div></td>
+      <td style="background-image:url(../../images/editor-2.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">Setup.ecore</font></td>
+      <td width="1px"><img src="../../images/editor-3.png"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="right"></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('companyEcore')" id="max_companyEcore" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td width="6px"><img src="../../images/editor-5.png"></td>
     </tr>
     <tr>
-      <td style="background-image:url(../../images/editor-left.png); background-repeat:repeat-y;">&nbsp;</td>
-      <td colspan="3" align="left" valign="top" nowrap>
-        <div style="margin:10px 0px 10px 0px;">
-          <code>
+      <td colspan="6" align="left" valign="top" style="border:1px solid #a0a0a0; border-top:none;" nowrap>
+        <div id="editor_content_1_companyEcore" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
+          <div id="editor_content_2_companyEcore" style="overflow:scroll; width:100%; height:100%;">
+            <code>
 <font color="#0000e1">&lt;?xml version=<font color="#000080">'1.0'</font> encoding=<font color="#000080">'UTF-8'</font>?&gt;</font><br/>
 <font color="#0000e1">&lt;ecore:EPackage&nbsp;xmi:version<font color="#000080">="2.0"</font>&nbsp;xmlns:xmi<font color="#000080">="http://www.omg.org/XMI"</font>&nbsp;xmlns:xsi<font color="#000080">="http://www.w3.org/2001/XMLSchema-instance"</font>&nbsp;xmlns:ecore<font color="#000080">="http://www.eclipse.org/emf/2002/Ecore"</font>&nbsp;name<font color="#000080">="setup"</font>&nbsp;nsURI<font color="#000080">="http://www.eclipse.org/oomph/setup/1.0"</font>&nbsp;nsPrefix<font color="#000080">="setup"</font>&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;eAnnotations&nbsp;source<font color="#000080">="http://www.eclipse.org/oomph/base/LabelProvider"</font>&gt;</font><br/>
@@ -550,16 +597,11 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eLiterals&nbsp;name<font color="#000080">="ACCEPT"</font>&nbsp;value<font color="#000080">="1"</font>/&gt;</font><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000e1">&lt;eLiterals&nbsp;name<font color="#000080">="DECLINE"</font>&nbsp;value<font color="#000080">="2"</font>/&gt;</font><br/>
 &nbsp;&nbsp;<font color="#0000e1">&lt;/eClassifiers&gt;</font><br/>
-<font color="#0000e1">&lt;/ecore:EPackage&gt;</font>
-          </code>
+<font color="#0000e1">&lt;/ecore:EPackage&gt;</font>            </code>
+
+          </div>
         </div>
       </td>
-      <td style="background-image:url(../../images/editor-right.png); background-repeat:repeat-y;">&nbsp;</td>
-    </tr>
-    <tr>
-      <td><img src="../../images/editor-bottom-left.png"></td>
-      <td style="background-image:url(../../images/editor-bottom.png); background-repeat:repeat-x;" colspan="3">&nbsp;</td>
-      <td><img src="../../images/editor-bottom-right.png"></td>
     </tr>
   </table>
 </div>
@@ -569,6 +611,6 @@ function windowTitle()
 <p align="right">
 <a href="CreatingTransportConnections.html" title="Backward to Creating Transport Connections"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="../reference/index.html" title="Forward to Reference"><img src="../../images/forward.png" border="0"></a></p>
 <HR>
-<i>Copyright (c) 2011, 2012 Eike Stepper (Berlin, Germany) and others.</i>
+<small><i class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</i><small>
 </BODY>
 </HTML>

@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.oomph.targlets.core" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.oomph.targlets.core" id="targletContainerListeners" name="Targlet Container Listeners"/>
+      </appInfo>
+      <documentation>
+         This extension point allows clients to contribute targlet container listeners, which handle targlet container events such as profile updates.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="targletListener" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="targletListener">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.oomph.targlets.core.TargletListener"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         1.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         The following example of a &lt;code&gt;targletContainerListeners&lt;/code&gt; extension contributes one targlet container listener:
+
+&lt;pre&gt;
+   &lt;extension point=&quot;org.eclipse.oomph.targlets.core.targletContainerListeners&quot;&gt;
+      &lt;targletListener class=&quot;com.foo.bar.TargletContainerEventLogger&quot;/&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+
+Refer to &lt;a href=&quot;../html/guide/ListeningToEvents.html&quot;&gt;Listening To Targlet Container Events&lt;/a&gt; for a code example of a listener implementation.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiinfo"/>
+      </appInfo>
+      <documentation>
+         A contributions must provide a class implementing &lt;a href=&quot;../javadoc/org/eclipse/oomph/targlets/core/TargletContainerListener.html&quot;&gt;org.eclipse.oomph.targlets.core.TargletContainerListener&lt;/a&gt;.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         The following listener implementations are contributed by Oomph internally:
+
+&lt;pre&gt;
+   &lt;extension point=&quot;org.eclipse.oomph.targlets.core.targletContainerListeners&quot;&gt;
+      &lt;targletListener class=&quot;org.eclipse.oomph.targlets.internal.core.listeners.PomArtifactUpdater&quot;/&gt;
+      &lt;targletListener class=&quot;org.eclipse.oomph.targlets.internal.core.listeners.PomModulesUpdater&quot;/&gt;
+      &lt;targletListener class=&quot;org.eclipse.oomph.targlets.internal.core.listeners.TargetDefinitionGenerator&quot;/&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.&lt;br&gt;
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+      </documentation>
+   </annotation>
+
+</schema>

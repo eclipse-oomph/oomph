@@ -50,7 +50,7 @@ public final class TargletsCorePlugin extends OomphPlugin
     public void start(BundleContext context) throws Exception
     {
       super.start(context);
-      TargletContainerListenerRegistryImpl.INSTANCE.start();
+      TargletContainerListenerRegistry.INSTANCE.start();
       WorkspaceIUImporter.INSTANCE.start();
     }
 
@@ -58,7 +58,7 @@ public final class TargletsCorePlugin extends OomphPlugin
     public void stop(BundleContext context) throws Exception
     {
       WorkspaceIUImporter.INSTANCE.stop();
-      TargletContainerListenerRegistryImpl.INSTANCE.stop();
+      TargletContainerListenerRegistry.INSTANCE.stop();
       super.stop(context);
     }
   }

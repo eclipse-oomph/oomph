@@ -16,9 +16,9 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
-import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
 import org.eclipse.oomph.util.StringUtil;
@@ -85,7 +85,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
       WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
   {
-    TargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
+    ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
     for (Targlet targlet : targletContainer.getTarglets())
     {
       Annotation annotation = targlet.getAnnotation(ANNOTATION);
