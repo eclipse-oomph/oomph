@@ -167,7 +167,11 @@ import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Reorder;
  * </p>
  * <p>
  * Here is the setup model:
- * {@link #setupModel()}
+ * {@link #setupGenModel()}
+ * {@link #setupEcoreModel()}
+ * {@link #oomphSetup()}
+ * {@link #index()}
+ * {@link #packageExplorer()}
  * </p>
  *
  * @number 2
@@ -175,16 +179,34 @@ import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Reorder;
 public abstract class Everything
 {
   /**
-   * @snippet tree org.eclipse.setup.tree http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup
+   * @snippet tree org.eclipse.setup.tree /setups/org.eclipse.setup
    * @title org.eclipse.setup
    */
   protected abstract void index();
 
   /**
-   * @snippet tree Setup.genmodel.tree /org.eclipse.oomph.setup/model/Setup.genmodel
+   * @snippet tree Oomph.setup.tree /setups/Oomph.setup?editor://org.eclipse.oomph.setup.presentation.SetupEditorID/Outline
+   * @title Oomph.setup
+   */
+  protected abstract void oomphSetup();
+
+  /**
+   * @snippet tree Setup.genmodel.tree#/org.eclipse.oomph.setup/model/Setup.genmodel#//SetupTask /org.eclipse.oomph.setup/model/Setup.genmodel?editor://org.eclipse.emf.codegen.ecore.genmodel.presentation.GenModelEditorID
    * @title Setup.genmodel
    */
-  protected abstract void setupModel();
+  protected abstract void setupGenModel();
+
+  /**
+   * @snippet tree Setup.ecore.tree /org.eclipse.oomph.setup/model/Setup.ecore?editor://org.eclipse.emf.ecore.presentation.EcoreEditorID
+   * @title Setup.genmodel
+   */
+  protected abstract void setupEcoreModel();
+
+  /**
+   * @snippet tree PackageExplorer.tree viewer://org.eclipse.jdt.ui.PackageExplorer?/org.eclipse.jdt.core:org.eclipse.jdt.internal.core.JarPackageFragmentRoot/org.eclipse.jdt.core:org.eclipse.jdt.internal.core.ExternalPackageFragmentRoot
+   * @title Package Explorer
+   */
+  protected abstract void packageExplorer();
 
   /**
    * Tasks
