@@ -152,7 +152,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.jdt.ui/sp_cleanup.correct_indentation"
-          value="true"/>
+          value="false"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.jdt.ui/sp_cleanup.always_use_parentheses_in_expressions"
@@ -1347,6 +1347,11 @@
       xsi:type="setup:VariableTask"
       name="train.url"
       value="http://download.eclipse.org/releases/luna"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      id="eclipse.target.platform"
+      name="eclipse.target.platform"
+      value="None"/>
   <project name="core"
       label="Core">
     <setupTask
@@ -1378,6 +1383,12 @@
     <setupTask
         xsi:type="setup.workingsets:WorkingSetTask">
       <workingSet
+          name="Plugins">
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/plugins/.*"/>
+      </workingSet>
+      <workingSet
           name="Tests">
         <predicate
             xsi:type="predicates:LocationPredicate"
@@ -1390,19 +1401,23 @@
             pattern=".*/features/.*"/>
       </workingSet>
       <workingSet
-          name="Plugins">
-        <predicate
-            xsi:type="predicates:LocationPredicate"
-            pattern=".*/plugins/.*"/>
-      </workingSet>
-      <workingSet
-          name="Releng">
+          name="Targets Definitions"
+          id="">
         <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/targets/.*"/>
+      </workingSet>
+      <workingSet
+          name="Update Sites">
         <predicate
             xsi:type="predicates:LocationPredicate"
             pattern=".*/repositories/.*"/>
+      </workingSet>
+      <workingSet
+          name="Release Engineering">
+        <predicate
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/releng/.*"/>
       </workingSet>
     </setupTask>
     <setupTask
@@ -1415,7 +1430,10 @@
           name="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
           name="org.eclipse.xtend.sdk.feature.group"
-          versionRange="[2.7.0,2.8.0)"/>
+          versionRange="[2.7.2.v201409160908,2.7.2.v201409160908]"/>
+      <requirement
+          name="org.eclipse.xtext.sdk.feature.group"
+          versionRange="[2.7.2.v201409160908,2.7.2.v201409160908]"/>
       <requirement
           name="org.eclipse.epp.mpc.feature.group"/>
       <requirement
@@ -1446,7 +1464,9 @@
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
       <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/milestones/"/>
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
+      <repository
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/releases/maintenance/R201409160908/"/>
       <repository
           url="http://download.eclipse.org/modeling/emf/emf/updates/milestones/"/>
       <repository
@@ -1830,15 +1850,13 @@
       <requirement
           name="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
-          name="org.eclipse.xtend.sdk.feature.group"
-          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
+          name="org.eclipse.xtend.sdk.feature.group"/>
       <requirement
           name="org.eclipse.epp.mpc.feature.group"/>
       <requirement
           name="org.sonatype.tycho.m2e.feature.feature.group"/>
       <requirement
-          name="org.eclipse.xtext.sdk.feature.group"
-          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
+          name="org.eclipse.xtext.sdk.feature.group"/>
       <repository
           url="http://download.eclipse.org/recommenders/updates/milestones/"/>
       <repository
@@ -1846,7 +1864,7 @@
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
       <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/maintenance/releases/"/>
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
     </setupTask>
     <stream
         name="master"/>
@@ -1882,8 +1900,7 @@
       <requirement
           name="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
-          name="org.eclipse.xtend.sdk.feature.group"
-          versionRange="[2.5.4.v201404100756,2.5.4.v201404100756]"/>
+          name="org.eclipse.xtend.sdk.feature.group"/>
       <requirement
           name="org.eclipse.epp.mpc.feature.group"/>
       <requirement
@@ -1905,7 +1922,7 @@
       <repository
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
       <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/maintenance/releases/"/>
+          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
       <repository
           url="http://download.eclipse.org/recommenders/updates/milestones"/>
     </setupTask>
