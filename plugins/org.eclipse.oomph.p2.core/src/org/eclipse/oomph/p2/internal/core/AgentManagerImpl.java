@@ -221,44 +221,50 @@ public class AgentManagerImpl implements AgentManager
 
   public BundlePool getBundlePool(File location) throws P2Exception
   {
-    for (Agent agent : getAgents())
+    if (location.isDirectory())
     {
-      BundlePool bundlePool = agent.getBundlePool(location);
-      if (bundlePool != null)
+      for (Agent agent : getAgents())
       {
-        return bundlePool;
+        BundlePool bundlePool = agent.getBundlePool(location);
+        if (bundlePool != null)
+        {
+          return bundlePool;
+        }
       }
     }
 
-    throw new P2Exception("Bundle pool " + location + " could not be loaded");
+    return null;
   }
 
   public BundlePool getDefaultBundlePool(String client) throws P2Exception
   {
     Properties defaults = loadDefaults();
     String location = (String)defaults.get(client);
-    if (location == null)
+    if (location != null)
     {
-      if (defaults.isEmpty())
+      BundlePool bundlePool = getBundlePool(new File(location));
+      if (bundlePool != null)
       {
-        Collection<BundlePool> bundlePools = getBundlePools();
-        if (bundlePools.isEmpty())
-        {
-          return null;
-        }
-
-        location = bundlePools.iterator().next().getLocation().getAbsolutePath();
+        return bundlePool;
       }
-      else
-      {
-        location = (String)defaults.values().iterator().next();
-      }
-
-      defaults.put(client, location);
-      saveDefaults(defaults);
     }
 
-    return getBundlePool(new File(location));
+    for (Object value : defaults.values())
+    {
+      BundlePool bundlePool = getBundlePool(new File((String)value));
+      if (bundlePool != null)
+      {
+        return bundlePool;
+      }
+    }
+
+    Collection<BundlePool> bundlePools = getBundlePools();
+    if (!bundlePools.isEmpty())
+    {
+      return bundlePools.iterator().next();
+    }
+
+    return null;
   }
 
   public void setDefaultBundlePool(String client, BundlePool bundlePool)
