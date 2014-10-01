@@ -12,6 +12,7 @@ package org.eclipse.oomph.p2.internal.ui;
 
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManagerElement;
+import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.AgentManagerElementImpl;
 import org.eclipse.oomph.ui.UIUtil;
@@ -99,8 +100,9 @@ public class AgentManagerComposite extends Composite
         String path = openDirectoryDialog("Select the location of the new agent.", PropertiesUtil.USER_HOME);
         if (path != null)
         {
-          P2Util.getAgentManager().addAgent(new File(path));
-          treeViewer.refresh();
+          Agent agent = P2Util.getAgentManager().addAgent(new File(path));
+          BundlePool bundlePool = agent.addBundlePool(new File(path, "pool"));
+          refreshFor(bundlePool);
         }
       }
     });
@@ -118,8 +120,8 @@ public class AgentManagerComposite extends Composite
         String path = openDirectoryDialog("Select the location of the new pool.", selectedAgent.getLocation().getAbsolutePath());
         if (path != null)
         {
-          selectedAgent.addBundlePool(new File(path));
-          treeViewer.refresh();
+          BundlePool bundlePool = selectedAgent.addBundlePool(new File(path));
+          refreshFor(bundlePool);
         }
       }
     });
@@ -136,7 +138,8 @@ public class AgentManagerComposite extends Composite
         AgentManagerElementImpl agentManagerElement = (AgentManagerElementImpl)selectedElement;
         String type = agentManagerElement.getElementType();
 
-        if (MessageDialog.openQuestion(getShell(), AgentManagerDialog.TITLE, "Are you sure to delete " + type + " " + agentManagerElement + "?"))
+        if (MessageDialog.openQuestion(getShell(), AgentManagerDialog.TITLE, "Are you sure to delete " + type + " " + agentManagerElement
+            + "?\n\nThe physical " + type + " files will remain on disk even if you answer Yes."))
         {
           try
           {
@@ -227,5 +230,13 @@ public class AgentManagerComposite extends Composite
     dialog.setMessage(message);
     dialog.setFilterPath(path);
     return dialog.open();
+  }
+
+  private void refreshFor(BundlePool bundlePool)
+  {
+    treeViewer.refresh();
+    treeViewer.setExpandedState(bundlePool.getAgent(), true);
+    treeViewer.setSelection(new StructuredSelection(bundlePool));
+    treeViewer.getTree().setFocus();
   }
 }

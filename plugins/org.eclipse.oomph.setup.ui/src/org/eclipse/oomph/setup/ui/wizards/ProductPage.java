@@ -591,7 +591,10 @@ public class ProductPage extends SetupWizardPage
       dialog.setSelectedElement(pool);
     }
 
-    if (dialog.open() == AgentManagerDialog.OK)
+    int result = dialog.open();
+    poolComboViewer.refresh();
+
+    if (result == AgentManagerDialog.OK)
     {
       pool = (BundlePool)dialog.getSelectedElement();
       poolComboViewer.setSelection(pool == null ? StructuredSelection.EMPTY : new StructuredSelection(pool));
