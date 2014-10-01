@@ -12,7 +12,7 @@
 /**
  * The generated EMF utilities of the preferences model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.preferences.util;
 

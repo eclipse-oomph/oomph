@@ -12,7 +12,7 @@
 /**
  * The generated EMF edit support of the preferences model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.preferences.provider;
 

@@ -12,8 +12,8 @@
 /**
  * The generated EMF API of the setup model.
  *
- * @apiviz.exclude .*\.SetupPackage.*
- * @apiviz.exclude .*\.SetupFactory.*
+ * \.SetupPackage.*
+ * \.SetupFactory.*
  */
 package org.eclipse.oomph.setup;
 

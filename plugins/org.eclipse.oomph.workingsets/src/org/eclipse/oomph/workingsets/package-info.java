@@ -12,8 +12,8 @@
 /**
  * The generated EMF API of the dynamic working sets model.
  *
- * @apiviz.exclude .*\.WorkingSetsPackage.*
- * @apiviz.exclude .*\.WorkingSetsFactory.*
+ * \.WorkingSetsPackage.*
+ * \.WorkingSetsFactory.*
  */
 package org.eclipse.oomph.workingsets;
 

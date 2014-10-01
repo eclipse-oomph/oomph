@@ -12,7 +12,7 @@
 /**
  * The generated EMF utilities of the project configuration model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.projectconfig.util;
 

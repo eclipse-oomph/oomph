@@ -12,7 +12,7 @@
 /**
  * The generated EMF implementation of the project configuration model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.projectconfig.impl;
 

@@ -12,7 +12,7 @@
 /**
  * The generated EMF implementation of the preferences model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.preferences.impl;
 

@@ -12,8 +12,8 @@
 /**
  * The generated EMF API of the preferences model.
  *
- * @apiviz.exclude .*\.PreferencesPackage.*
- * @apiviz.exclude .*\.PreferencesFactory.*
+ * \.PreferencesPackage.*
+ * \.PreferencesFactory.*
  */
 package org.eclipse.oomph.preferences;
 

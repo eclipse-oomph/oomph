@@ -12,7 +12,7 @@
 /**
  * The generated EMF edit support of the setup model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.setup.provider;
 

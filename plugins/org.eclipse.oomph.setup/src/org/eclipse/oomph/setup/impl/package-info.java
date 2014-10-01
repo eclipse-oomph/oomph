@@ -12,7 +12,7 @@
 /**
  * The generated EMF implementation of the setup model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.setup.impl;
 

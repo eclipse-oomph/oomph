@@ -94,14 +94,6 @@
              overview="${project.path}/overview.html"
              bottom="&lt;i class=&quot;copyright&quot;>Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.&lt;br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html&lt;/i>">
 
-    	<!-- Disable APIviz UML diagram generation
-      <doclet name="org.jboss.apiviz.APIviz" path="${releng.project}/bin">
-        <param name="-nopackagediagram" />
-        <param name="-nosubtypes" />
-        <param name="-warningsfile" value="${warningsfile}" />
-      </doclet>
-      -->
-
       <fileset dir="${plugins.dir}" defaultexcludes="yes">
 				<include name="org.eclipse.oomph.targlets.core/src/org/eclipse/oomph/targlets/core/*.java" />
 				<include name="org.eclipse.oomph.targlets/src/org/eclipse/oomph/targlets/*.java" />
@@ -164,54 +156,11 @@
       <fileset refid="desthtml" />
     </replaceregexp>
 
-    <!-- Add book.css -->
-    <replaceregexp match="(&lt;LINK REL=&quot;stylesheet&quot; TYPE=&quot;text/css&quot; HREF=&quot;([\./]*)stylesheet.css&quot; TITLE=&quot;Style&quot;&gt;)"
-                   replace="&lt;LINK REL=&quot;stylesheet&quot; TYPE=&quot;text/css&quot; HREF=&quot;\2../html/book.css&quot; TITLE=&quot;Style&quot;&gt;${line.separator}\1">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-    <replaceregexp match="(&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;([\./]*)stylesheet.css&quot; title=&quot;Style&quot;&gt;)"
-                   replace="&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;\2../html/book.css&quot; title=&quot;Style&quot;&gt;${line.separator}\1">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-
-    <!-- Remove malicious PRE blocks -->
-    <replaceregexp match="&lt;HR&gt;\s+?&lt;DL&gt;\s+?&lt;DT&gt;&lt;PRE&gt;(.*?)&lt;/DL&gt;\s+?&lt;/PRE&gt;"
-                   replace="&lt;HR&gt;${line.separator}&lt;DL&gt;${line.separator}  &lt;DT&gt;\1${line.separator}&lt;/DL&gt;${line.separator}${line.separator}">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-    <replaceregexp match="&lt;hr&gt;\s+?&lt;dl&gt;\s+?&lt;dt&gt;&lt;pre&gt;(.*?)&lt;/dl&gt;\s+?&lt;/pre&gt;"
-                   replace="&lt;hr&gt;${line.separator}&lt;dl&gt;${line.separator}  &lt;dt&gt;\1${line.separator}&lt;/dl&gt;${line.separator}${line.separator}">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-
-    <!-- Change DT to DD -->
-    <replaceregexp match="&lt;DT&gt;extends " replace="${line.separator}  &lt;DD&gt;extends ">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-    <replaceregexp match="&lt;dt&gt;extends " replace="${line.separator}  &lt;dd&gt;extends ">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-    <replaceregexp match="&lt;DT&gt;implements " replace="${line.separator}  &lt;DD&gt;implements ">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-    <replaceregexp match="&lt;dt&gt;implements " replace="${line.separator}  &lt;dd&gt;implements ">
-      <fileset refid="desthtml" />
-    </replaceregexp>
-
     <java classname="org.eclipse.oomph.releng.doc.java.MakeHrefsRelative"
           dir="${basedir}"
           fork="true"
           failonerror="true"
           id="MakeHrefsRelative">
-      <classpath path="${releng.project}/bin;${releng.project}/org.eclipse.oomph.releng.doc.jar" />
-      <arg value="${javadoc.destdir}" />
-    </java>
-
-    <java classname="org.eclipse.oomph.releng.doc.java.MovePackageDescriptions"
-          dir="${basedir}"
-          fork="true"
-          failonerror="true"
-          id="MovePackageDescriptions">
       <classpath path="${releng.project}/bin;${releng.project}/org.eclipse.oomph.releng.doc.jar" />
       <arg value="${javadoc.destdir}" />
     </java>

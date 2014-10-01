@@ -12,7 +12,7 @@
 /**
  * The generated EMF edit support of the dynamic working sets model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.workingsets.provider;
 

@@ -12,7 +12,7 @@
 /**
  * The generated EMF utilities of the predicates model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.predicates.util;
 

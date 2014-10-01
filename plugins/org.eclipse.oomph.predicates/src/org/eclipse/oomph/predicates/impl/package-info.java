@@ -12,7 +12,7 @@
 /**
  * The generated EMF implementation of the predicates model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.predicates.impl;
 

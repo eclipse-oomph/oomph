@@ -12,7 +12,7 @@
 /**
  * The generated EMF edit support of the project configuration model.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.projectconfig.provider;
 

@@ -12,7 +12,7 @@
 /**
  * The generated EMF utilities of the setup model and other utility classes.
  *
- * @apiviz.exclude .*
+ * 
  */
 package org.eclipse.oomph.setup.util;
 

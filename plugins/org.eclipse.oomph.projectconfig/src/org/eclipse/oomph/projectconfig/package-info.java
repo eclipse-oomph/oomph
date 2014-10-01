@@ -12,8 +12,8 @@
 /**
  * The generated EMF API of the project configuration model.
  *
- * @apiviz.exclude .*\.ProjectConfigPackage.*
- * @apiviz.exclude .*\.ProjectConfigFactory.*
+ * \.ProjectConfigPackage.*
+ * \.ProjectConfigFactory.*
  */
 package org.eclipse.oomph.projectconfig;
 

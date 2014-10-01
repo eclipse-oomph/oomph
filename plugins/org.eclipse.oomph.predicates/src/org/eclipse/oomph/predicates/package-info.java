@@ -12,8 +12,8 @@
 /**
  * The generated EMF API of the predicates model.
  *
- * @apiviz.exclude .*\.PredicatesPackage.*
- * @apiviz.exclude .*\.PredicatesFactory.*
+ * \.PredicatesPackage.*
+ * \.PredicatesFactory.*
  */
 package org.eclipse.oomph.predicates;
 
