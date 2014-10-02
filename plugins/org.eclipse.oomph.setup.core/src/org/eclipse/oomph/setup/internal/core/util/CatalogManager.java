@@ -51,6 +51,11 @@ public class CatalogManager
     selectionResource.getContents().add(selection);
   }
 
+  public Index getIndex()
+  {
+    return index;
+  }
+
   public CatalogSelection getSelection()
   {
     return selection;

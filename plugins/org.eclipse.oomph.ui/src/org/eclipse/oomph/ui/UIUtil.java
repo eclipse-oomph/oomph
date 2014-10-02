@@ -256,6 +256,60 @@ public final class UIUtil
     }
   }
 
+  public static void timerExec(int milliseconds, final Runnable runnable)
+  {
+    final Display display = getDisplay();
+    if (display != null)
+    {
+      timerExec(milliseconds, display, runnable);
+    }
+  }
+
+  public static void timerExec(int milliseconds, final Display display, final Runnable runnable)
+  {
+    try
+    {
+      if (display.isDisposed())
+      {
+        return;
+      }
+
+      display.timerExec(milliseconds, new Runnable()
+      {
+        public void run()
+        {
+          if (display.isDisposed())
+          {
+            return;
+          }
+
+          try
+          {
+            runnable.run();
+          }
+          catch (SWTException ex)
+          {
+            if (ex.code != SWT.ERROR_WIDGET_DISPOSED)
+            {
+              throw ex;
+            }
+
+            //$FALL-THROUGH$
+          }
+        }
+      });
+    }
+    catch (SWTException ex)
+    {
+      if (ex.code != SWT.ERROR_WIDGET_DISPOSED)
+      {
+        throw ex;
+      }
+
+      //$FALL-THROUGH$
+    }
+  }
+
   public static void syncExec(final Runnable runnable)
   {
     final Display display = getDisplay();

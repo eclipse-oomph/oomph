@@ -177,6 +177,16 @@ public final class ReflectUtil
     }
   }
 
+  public static Object getValue(String fieldName, Object target)
+  {
+    if (target instanceof Class)
+    {
+      return getValue(getField((Class<?>)target, fieldName), null);
+    }
+
+    return getValue(getField(target.getClass(), fieldName), target);
+  }
+
   public static void setValue(Field field, Object target, Object value)
   {
     setValue(field, target, value, false);

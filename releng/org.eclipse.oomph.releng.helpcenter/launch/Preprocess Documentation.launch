@@ -18,7 +18,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms1024m&#13;&#10;-Xmx2500m&#13;&#10;-XX:MaxPermSize=512m&#13;&#10;-Dpreprocessor.projects=${resource_loc:/org.eclipse.oomph.setup.doc}"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms1024m&#13;&#10;-Xmx2500m&#13;&#10;-XX:MaxPermSize=512m&#13;&#10;-Dpreprocessor.projects=${resource_loc:/org.eclipse.oomph.setup.doc}&#13;&#10;-Dpreprocessor.workspace=${resource_loc:/setups}&#13;&#10;-Dpreprocessor.replacement.pool=${bundle_location:org.eclipse.emf.common}/../../.."/>
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="org.eclipse.sdk.ide"/>
 <booleanAttribute key="show_selected_only" value="false"/>
