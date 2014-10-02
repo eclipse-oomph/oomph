@@ -107,7 +107,59 @@ div.revision { border-left-style: solid; border-left-width: thin;
 				   border-left-color: #7B68EE; padding-left:5 }
 th	     { font-weight: bold }
 
-.author { color:#888888; font-style:italic; font-weight:bold; font-size:83%; margin-left:6px; margin-bottom:16px }
+.author {
+  color:#888888;
+  font-style:italic;
+  font-weight:bold;
+  font-size:83%;
+  margin-left:6px;
+  margin-bottom:16px
+}
+
+div.copyright {
+  font-size: 75%;
+  font-style: italic;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+div.help_breadcrumbs {
+  background-repeat: repeat-x;
+  color: #FFFFFF;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+div.breadcrumbs_top {
+  background-image: url(../images/background-1.gif);
+  margin-top: -10px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #9eadc0;
+}
+
+div.breadcrumbs_bottom {
+  background-image: url(../images/background-2.gif);
+  padding-left: 10px;
+  padding-top: 15px;
+  padding-bottom: 5px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #9eadc0;
+}
+
+div.help_breadcrumbs a:link, div.help_breadcrumbs a:visited {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+div.help_breadcrumbs a:hover {
+  text-decoration: underline;
+  color: #FFFFFF;
+}
 
 span.keycap {
   font-family: "KeystrokeRegular","Courier New",cursive;
