@@ -124,37 +124,37 @@ function maximize(id)
  
 
 <div class="snippet" style="margin-left:24px;" align="left">
-  <a name="snippet_snippet1"></a>
+  <a name="snippet_SetupWiringContainer_1"></a>
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td width="25px"><div style="position:relative;"><img src="../../images/editor-1.png"><img style="position:absolute; top:5px; left:5px;" src="../../images/formatter-java.gif"></div></td>
       <td style="background-image:url(../../images/editor-2.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">ContainerSetup.java</font></td>
       <td width="1px"><img src="../../images/editor-3.png"></td>
       <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="right"></td>
-      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('snippet1')" id="max_snippet1" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('SetupWiringContainer_1')" id="max_SetupWiringContainer_1" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
       <td width="6px"><img src="../../images/editor-5.png"></td>
     </tr>
     <tr>
       <td colspan="6" align="left" valign="top" style="border:1px solid #a0a0a0; border-top:none;" nowrap>
-        <div id="editor_content_1_snippet1" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
-          <div id="editor_content_2_snippet1" style="overflow:scroll; width:100%; height:100%;">
+        <div id="editor_content_1_SetupWiringContainer_1" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
+          <div id="editor_content_2_SetupWiringContainer_1" style="overflow:scroll; width:100%; height:100%;">
             <code>
             <font color="#3f7f5f">//&nbsp;Create&nbsp;a&nbsp;dedicated&nbsp;container&nbsp;instance</font><br/>
-            User&nbsp;user&nbsp;=&nbsp;<a name="callout_snippet1_1_code" href="#callout_snippet1_1" alt="Create a separate User." title="Create a separate User."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;SetupFactory.eINSTANCE.createUser();<br/>
+            User&nbsp;user&nbsp;=&nbsp;<a name="callout_SetupWiringContainer_1_1_code" href="#callout_SetupWiringContainer_1_1" alt="Create a separate User." title="Create a separate User."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;SetupFactory.eINSTANCE.createUser();<br/>
             <br/>
             <font color="#3f7f5f">//&nbsp;Register&nbsp;your&nbsp;custom&nbsp;factories</font><br/>
-            user.eAdapters().add(&nbsp;<a name="callout_snippet1_2_code" href="#callout_snippet1_2" alt="Create a factory of type &quot;jms&quot; in the productGroup &quot;org.eclipse.net4j.connectors&quot;." title="Create a factory of type &quot;jms&quot; in the productGroup &quot;org.eclipse.net4j.connectors&quot;."><img src="../../images/callout-2.png" width="16" height="16" border="0" align="top"></a>&nbsp;<font color="#7f0055"><b>new&nbsp;</b></font>AdapterImpl()<br/>
+            user.eAdapters().add(&nbsp;<a name="callout_SetupWiringContainer_1_2_code" href="#callout_SetupWiringContainer_1_2" alt="Create a factory of type &quot;jms&quot; in the productGroup &quot;org.eclipse.net4j.connectors&quot;." title="Create a factory of type &quot;jms&quot; in the productGroup &quot;org.eclipse.net4j.connectors&quot;."><img src="../../images/callout-2.png" width="16" height="16" border="0" align="top"></a>&nbsp;<font color="#7f0055"><b>new&nbsp;</b></font>AdapterImpl()<br/>
             {<br/>
             &nbsp;&nbsp;<font color="#646464">@Override</font><br/>
             &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font>notifyChanged(Notification&nbsp;msg)<br/>
             &nbsp;&nbsp;{<br/>
             &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>super</b></font>.notifyChanged(msg);<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<a name="callout_snippet1_3_code" href="#callout_snippet1_3" alt="Create a JMS connector." title="Create a JMS connector."><img src="../../images/callout-3.png" width="16" height="16" border="0" align="top"></a>&nbsp;<font color="#2a00ff">&#34;org.eclipse.net4j.connectors&#34;&nbsp;</font>+&nbsp;<font color="#2a00ff">&#34;jms&#34;</font>);<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<a name="callout_SetupWiringContainer_1_3_code" href="#callout_SetupWiringContainer_1_3" alt="Create a JMS connector." title="Create a JMS connector."><img src="../../images/callout-3.png" width="16" height="16" border="0" align="top"></a>&nbsp;<font color="#2a00ff">&#34;org.eclipse.net4j.connectors&#34;&nbsp;</font>+&nbsp;<font color="#2a00ff">&#34;jms&#34;</font>);<br/>
             &nbsp;&nbsp;}<br/>
             });<br/>
             <br/>
             <font color="#3f7f5f">//&nbsp;Do&nbsp;not&nbsp;forget&nbsp;to&nbsp;activate&nbsp;the&nbsp;container&nbsp;before&nbsp;you&nbsp;use&nbsp;it</font><br/>
-            <a name="callout_snippet1_4_code" href="#callout_snippet1_4" alt="The new container can not be used when inactive." title="The new container can not be used when inactive."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;user.getDescription();            </code>
+            <a name="callout_SetupWiringContainer_1_4_code" href="#callout_SetupWiringContainer_1_4" alt="The new container can not be used when inactive." title="The new container can not be used when inactive."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;user.getDescription();            </code>
 
           </div>
         </div>
@@ -163,16 +163,16 @@ function maximize(id)
   </table>
 </div>
 <p>
-<div style="margin-left:24px;"><a name="callout_snippet1_1" href="#callout_snippet1_1_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a separate <a href="../../javadoc/org/eclipse/oomph/setup/User.html" title="Interface in org.eclipse.oomph.setup"><code>User</code></a>.
+<div style="margin-left:24px;"><a name="callout_SetupWiringContainer_1_1" href="#callout_SetupWiringContainer_1_1_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a separate <a href="../../javadoc/org/eclipse/oomph/setup/User.html" title="Interface in org.eclipse.oomph.setup"><code>User</code></a>.
 
 </div>
-<div style="margin-left:24px;"><a name="callout_snippet1_2" href="#callout_snippet1_2_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-2.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a factory of <i>type</i> "jms" in the <i>productGroup</i> "org.eclipse.net4j.connectors".
+<div style="margin-left:24px;"><a name="callout_SetupWiringContainer_1_2" href="#callout_SetupWiringContainer_1_2_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-2.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a factory of <i>type</i> "jms" in the <i>productGroup</i> "org.eclipse.net4j.connectors".
 
 </div>
-<div style="margin-left:24px;"><a name="callout_snippet1_3" href="#callout_snippet1_3_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-3.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a JMS connector.
+<div style="margin-left:24px;"><a name="callout_SetupWiringContainer_1_3" href="#callout_SetupWiringContainer_1_3_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-3.png" width="16" height="16" border="0" align="top"></a>&nbsp;Create a JMS connector.
 
 </div>
-<div style="margin-left:24px;"><a name="callout_snippet1_4" href="#callout_snippet1_4_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;The new container can not be used when inactive.
+<div style="margin-left:24px;"><a name="callout_SetupWiringContainer_1_4" href="#callout_SetupWiringContainer_1_4_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-4.png" width="16" height="16" border="0" align="top"></a>&nbsp;The new container can not be used when inactive.
 
 </div>
 <p>
@@ -196,20 +196,20 @@ function maximize(id)
  
 
 <div class="snippet" style="margin-left:24px;" align="left">
-  <a name="snippet_JMSConnector"></a>
+  <a name="snippet_SetBufferCapacity_1"></a>
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td width="25px"><div style="position:relative;"><img src="../../images/editor-1.png"><img style="position:absolute; top:5px; left:5px;" src="../../images/formatter-java.gif"></div></td>
       <td style="background-image:url(../../images/editor-2.png); background-repeat:repeat-x;" width="1px"><font face="Segoe UI,Arial" size="-1">JMSConnector.java</font></td>
       <td width="1px"><img src="../../images/editor-3.png"></td>
       <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="right"></td>
-      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('JMSConnector')" id="max_JMSConnector" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td style="background-image:url(../../images/editor-4.png); background-repeat:repeat-x;" align="center" width="16"><a href="javascript:maximize('SetBufferCapacity_1')" id="max_SetBufferCapacity_1" class="max" title="Maximize">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
       <td width="6px"><img src="../../images/editor-5.png"></td>
     </tr>
     <tr>
       <td colspan="6" align="left" valign="top" style="border:1px solid #a0a0a0; border-top:none;" nowrap>
-        <div id="editor_content_1_JMSConnector" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
-          <div id="editor_content_2_JMSConnector" style="overflow:scroll; width:100%; height:100%;">
+        <div id="editor_content_1_SetBufferCapacity_1" class="ui-widget-content resizable" style="width:600px; height:300px; border:2px solid #99b4d1; border-top:none;">
+          <div id="editor_content_2_SetBufferCapacity_1" style="overflow:scroll; width:100%; height:100%;">
             <code>
             <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font>JMSConnector&nbsp;<font color="#7f0055"><b>extends&nbsp;</b></font>UserImpl<br/>
             {<br/>
@@ -218,7 +218,7 @@ function maximize(id)
             &nbsp;&nbsp;}<br/>
             <br/>
             &nbsp;&nbsp;<font color="#646464">@Override</font><br/>
-            &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font>NotificationChain&nbsp;eBasicRemoveFromContainer(NotificationChain&nbsp;<a name="callout_JMSConnector_1_code" href="#callout_JMSConnector_1" alt="The channel must not be null." title="The channel must not be null."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;msgs)<br/>
+            &nbsp;&nbsp;<font color="#7f0055"><b>public&nbsp;</b></font>NotificationChain&nbsp;eBasicRemoveFromContainer(NotificationChain&nbsp;<a name="callout_SetBufferCapacity_1_1_code" href="#callout_SetBufferCapacity_1_1" alt="The channel must not be null." title="The channel must not be null."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;msgs)<br/>
             &nbsp;&nbsp;{<br/>
             &nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f0055"><b>return&nbsp;super</b></font>.eBasicRemoveFromContainer(msgs);<br/>
             &nbsp;&nbsp;}<br/>
@@ -233,7 +233,7 @@ function maximize(id)
   </table>
 </div>
 <p>
-<div style="margin-left:24px;"><a name="callout_JMSConnector_1" href="#callout_JMSConnector_1_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;The channel must not be <code>null</code>.
+<div style="margin-left:24px;"><a name="callout_SetBufferCapacity_1_1" href="#callout_SetBufferCapacity_1_1_code" alt="Jump to snippet..." title="Jump to snippet..."><img src="../../images/callout-1.png" width="16" height="16" border="0" align="top"></a>&nbsp;The channel must not be <code>null</code>.
 
 </div>
 <p>

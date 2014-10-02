@@ -82,19 +82,19 @@ pre, code		{ font-family: "Courier New", Courier, monospace;}
 }
 
 body	     { font-size: 83%; background: #FFFFFF; margin-bottom: 1em }
-h1           { font-size: 180%; margin-top: 5px; margin-bottom: 1px }	
+h1           { font-size: 180%; margin-top: 5px; margin-bottom: 1px }
 h2           { font-size: 140%; margin-top: 25px; margin-bottom: 3px }
 h3           { font-size: 110%; margin-top: 20px; margin-bottom: 3px }
 h4           { font-size: 100%; margin-top: 20px; margin-bottom: 3px; font-style: italic }
 p            { margin-top: 10px; margin-bottom: 10px }
 pre          { font-size: 93%; margin-left: 6 }
-code         { font-size: 93%; } 
+code         { font-size: 93%; }
 table        { font-size: 100% } /* needed for quirks mode */
 a:link	     { color: #0000FF }
 a:hover	     { color: #000080 }
 a:visited    { text-decoration: underline }
 ul	     { margin-top: 10px; margin-bottom: 10px; }
-li	     { margin-top: 5px; margin-bottom: 5px; } 
+li	     { margin-top: 5px; margin-bottom: 5px; }
 li p	     { margin-top: 5px; margin-bottom: 5px; }
 ol	     { margin-top: 10px; margin-bottom: 10px; }
 dl	     { margin-top: 10px; margin-bottom: 10px; }
@@ -103,8 +103,31 @@ dd	     { margin-top: 5px; margin-bottom: 5px; }
 strong	     { font-weight: bold}
 em	     { font-style: italic}
 var	     { font-style: italic}
-div.revision { border-left-style: solid; border-left-width: thin; 
+div.revision { border-left-style: solid; border-left-width: thin;
 				   border-left-color: #7B68EE; padding-left:5 }
 th	     { font-weight: bold }
 
 .author { color:#888888; font-style:italic; font-weight:bold; font-size:83%; margin-left:6px; margin-bottom:16px }
+
+span.keycap {
+  font-family: "KeystrokeRegular","Courier New",cursive;
+  font-size: 80%;
+  vertical-align: text-bottom;
+  color: #000000;
+  background-color: #F4F4F4;
+  line-height:1.3em;
+  padding-left: 2px;
+  padding-right: 2px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #A0A0A0;
+}
+
+span.selectstep {
+  font-variant: small-caps;
+  vertical-align: text-bottom;
+  color: #000000;
+}
