@@ -100,7 +100,7 @@ public class ErrorDialog extends MessageDialog
   {
     if (Display.getCurrent() == Display.getDefault())
     {
-      new ErrorDialog("Error", detail).open();
+      openWithDetail(detail);
     }
     else
     {
@@ -108,9 +108,15 @@ public class ErrorDialog extends MessageDialog
       {
         public void run()
         {
-          new ErrorDialog("Error", detail).open();
+          openWithDetail(detail);
         }
       });
     }
+  }
+
+  private static void openWithDetail(Throwable detail)
+  {
+    ErrorDialog dialog = new ErrorDialog("Error", detail);
+    dialog.open();
   }
 }

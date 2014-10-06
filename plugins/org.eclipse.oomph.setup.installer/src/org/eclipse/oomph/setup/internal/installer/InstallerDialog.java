@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -36,6 +37,7 @@ import org.eclipse.oomph.util.IRunnable;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.core.runtime.CoreException;
@@ -221,7 +223,7 @@ public final class InstallerDialog extends SetupWizardDialog
   {
     updateSearching = true;
 
-    Thread updateIconSetter = new UpdateIconSetter();
+    Thread updateIconSetter = new UpdateIconAnimator();
     updateIconSetter.start();
 
     Thread updateSearcher = new UpdateSearcher();
@@ -302,7 +304,7 @@ public final class InstallerDialog extends SetupWizardDialog
     versionLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER));
     versionLink.setToolTipText("About");
 
-    Thread thread = new ProductVersionSetter();
+    Thread thread = new ProductVersionInitializer();
     thread.start();
   }
 
@@ -329,13 +331,13 @@ public final class InstallerDialog extends SetupWizardDialog
   /**
    * @author Eike Stepper
    */
-  private final class ProductVersionSetter extends Thread
+  private final class ProductVersionInitializer extends Thread
   {
     private boolean selfHosting;
 
-    public ProductVersionSetter()
+    public ProductVersionInitializer()
     {
-      super("Product Version Setter");
+      super("Product Version Initializer");
     }
 
     @Override
@@ -457,11 +459,11 @@ public final class InstallerDialog extends SetupWizardDialog
   /**
    * @author Eike Stepper
    */
-  private final class UpdateIconSetter extends Thread
+  private final class UpdateIconAnimator extends Thread
   {
-    public UpdateIconSetter()
+    public UpdateIconAnimator()
     {
-      super("Update Icon Setter");
+      super("Update Icon Animator");
     }
 
     @Override
@@ -509,12 +511,7 @@ public final class InstallerDialog extends SetupWizardDialog
         Profile profile = agent.getCurrentProfile();
         ProfileTransaction transaction = profile.change();
 
-        EList<Repository> repositories = transaction.getProfileDefinition().getRepositories();
-        final boolean firstTime = repositories.isEmpty();
-        if (firstTime)
-        {
-          repositories.add(P2Factory.eINSTANCE.createRepository(InstallerDialog.INSTALLER_UPDATE_URL));
-        }
+        final boolean repositoryChanged = changeRepositoryIfNeeded(transaction);
 
         CommitContext commitContext = new CommitContext()
         {
@@ -524,7 +521,7 @@ public final class InstallerDialog extends SetupWizardDialog
           public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
               Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
           {
-            if (firstTime && iuDeltas.isEmpty() && propertyDeltas.size() <= 1)
+            if (repositoryChanged && iuDeltas.isEmpty() && propertyDeltas.size() <= 1)
             {
               // Cancel if only the repository addition would be committed.
               return false;
@@ -555,6 +552,21 @@ public final class InstallerDialog extends SetupWizardDialog
       {
         updateSearching = false;
       }
+    }
+
+    private boolean changeRepositoryIfNeeded(ProfileTransaction transaction)
+    {
+      ProfileDefinition profileDefinition = transaction.getProfileDefinition();
+
+      EList<Repository> repositories = profileDefinition.getRepositories();
+      if (repositories.size() != 1 || !InstallerDialog.INSTALLER_UPDATE_URL.equals(repositories.get(0).getURL()))
+      {
+        Repository repository = P2Factory.eINSTANCE.createRepository(InstallerDialog.INSTALLER_UPDATE_URL);
+        profileDefinition.setRepositories(ECollections.singletonEList(repository));
+        return true;
+      }
+
+      return false;
     }
   }
 }

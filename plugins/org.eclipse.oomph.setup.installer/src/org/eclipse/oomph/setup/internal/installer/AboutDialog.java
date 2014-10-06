@@ -13,11 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
-import org.eclipse.oomph.setup.internal.core.SetupContext;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
-
-import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -55,9 +51,7 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    URI uri = SetupContext.INDEX_SETUP_URI;
-    uri = SetupUtil.createResourceSet().getURIConverter().normalize(uri);
-    return "The current product version is " + version + ".\n" + uri;
+    return "Installer version: " + version + ".\nUpdate channel: " + InstallerDialog.INSTALLER_UPDATE_URL;
   }
 
   @Override

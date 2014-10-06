@@ -77,18 +77,16 @@ public final class BaseUtil
     {
       return ((InternalEObject)eObject).eProxyURI();
     }
-    else
-    {
-      EObject rootContainer = EcoreUtil.getRootContainer(eObject);
-      URI uri = EcoreUtil.getURI(rootContainer);
-      String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(rootContainer, eObject);
-      if (relativeURIFragmentPath.length() != 0)
-      {
-        uri = uri.trimFragment().appendFragment(uri.fragment() + "/" + relativeURIFragmentPath);
-      }
 
-      return uri;
+    EObject rootContainer = EcoreUtil.getRootContainer(eObject);
+    URI uri = EcoreUtil.getURI(rootContainer);
+    String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(rootContainer, eObject);
+    if (relativeURIFragmentPath.length() != 0)
+    {
+      uri = uri.trimFragment().appendFragment(uri.fragment() + "/" + relativeURIFragmentPath);
     }
+
+    return uri;
   }
 
   public static EStructuralFeature getFeature(EClass eClass, String xmlName)
@@ -141,8 +139,8 @@ public final class BaseUtil
     }
     finally
     {
-      IOUtil.closeSilent(input);
       IOUtil.closeSilent(output);
+      IOUtil.closeSilent(input);
     }
   }
 
