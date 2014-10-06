@@ -32,6 +32,8 @@ public final class PropertiesUtil
 
   public static final String[] EXPERT_FILTER = { "org.eclipse.ui.views.properties.expert" };
 
+  private static final String TRUE = Boolean.TRUE.toString();
+
   private PropertiesUtil()
   {
   }
@@ -41,7 +43,7 @@ public final class PropertiesUtil
     String property = getProperty(key);
     if (property != null)
     {
-      return "true".equalsIgnoreCase(property);
+      return TRUE.equalsIgnoreCase(property);
     }
 
     return null;
@@ -52,7 +54,7 @@ public final class PropertiesUtil
     String property = getProperty(key);
     if (property != null)
     {
-      return "true".equalsIgnoreCase(property);
+      return TRUE.equalsIgnoreCase(property);
     }
 
     return false;
