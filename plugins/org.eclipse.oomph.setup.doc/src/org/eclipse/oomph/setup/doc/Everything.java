@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.doc;
 
+import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.internal.ui.Capture;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.LocationCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -49,6 +51,19 @@ import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Consolida
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Filter;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.InitialPhase;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Reorder;
+import org.eclipse.oomph.setup.internal.installer.InstallerDialog;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
+import org.eclipse.oomph.util.ReflectUtil;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * Outline
@@ -166,47 +181,63 @@ import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Reorder;
  * it never again needs to be downloaded from the Internet.
  * </p>
  * <p>
- * Here is the setup model:
- * {@link #setupGenModel()}
- * {@link #setupEcoreModel()}
- * {@link #oomphSetup()}
- * {@link #index()}
- * {@link #packageExplorer()}
+ * This document provides a general overview of the concepts that underly Oomph's Setup model:
+ * {@link #setupOverviewDiagram()}
  * </p>
  *
  * @number 2
  */
+@SuppressWarnings("restriction")
 public abstract class Everything
 {
   /**
-   * snippet tree org.eclipse.setup.tree /setups/org.eclipse.setup
+   * @image SetupOverview.svg /org.eclipse.oomph.setup/model/Setup.aird?editor://org.eclipse.sirius.diagram.ui.part.SiriusDiagramEditorID?diagram#_hZdg0dbXEeOQ1Kyul5ZC9g
+   */
+  protected abstract void setupOverviewDiagram();
+
+  /*
+   * @snippet tree org.eclipse.setup.tree /setups/org.eclipse.setup?prune:/org.eclipse.oomph.setup.Project
    * @title org.eclipse.setup
    */
   protected abstract void index();
 
-  /**
-   * snippet tree Oomph.setup.tree /setups/Oomph.setup?editor://org.eclipse.oomph.setup.presentation.SetupEditorID/Outline
+  /*
+   * @snippet tree Oomph.setup.tree /setups/Oomph.setup?editor://org.eclipse.oomph.setup.presentation.SetupEditorID/Outline?/org.eclipse.oomph.setup.Project
    * @title Oomph.setup
    */
   protected abstract void oomphSetup();
 
-  /**
-   * snippet tree Setup.genmodel.tree#/org.eclipse.oomph.setup/model/Setup.genmodel#//SetupTask /org.eclipse.oomph.setup/model/Setup.genmodel?editor://org.eclipse.emf.codegen.ecore.genmodel.presentation.GenModelEditorID
+  /*
+   * @snippet tree Setup.genmodel.tree /org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask
+   * /org.eclipse.oomph.setup/model/Setup.genmodel?editor://org.eclipse.emf.codegen.ecore.genmodel.presentation.GenModelEditorID
    * @title Setup.genmodel
    */
   protected abstract void setupGenModel();
 
-  /**
-   * snippet tree Setup.ecore.tree /org.eclipse.oomph.setup/model/Setup.ecore?editor://org.eclipse.emf.ecore.presentation.EcoreEditorID
+  /*
+   * @snippet tree Setup.ecore.tree /org.eclipse.oomph.setup/model/Setup.ecore?editor://org.eclipse.emf.ecore.presentation.EcoreEditorID
    * @title Setup.genmodel
    */
   protected abstract void setupEcoreModel();
 
-  /**
-   * snippet tree PackageExplorer.tree viewer://org.eclipse.jdt.ui.PackageExplorer?/org.eclipse.jdt.core:org.eclipse.jdt.internal.core.JarPackageFragmentRoot/org.eclipse.jdt.core:org.eclipse.jdt.internal.core.ExternalPackageFragmentRoot
+  /*
+   * @snippet tree PackageExplorer.tree
+   * viewer://org.eclipse.jdt.ui.PackageExplorer?/org.eclipse.jdt.core:org.eclipse.jdt.internal.core.JarPackageFragmentRoot/org
+   * .eclipse.jdt.core:org.eclipse.jdt.internal.core.ExternalPackageFragmentRoot
    * @title Package Explorer
    */
   protected abstract void packageExplorer();
+
+  /*
+   * @image PackageExplorerView.jpg viewer://org.eclipse.jdt.ui.PackageExplorer
+   */
+  protected abstract void packageExplorerView();
+
+  /*
+   * @image SetupOverviewEditor.png
+   * /org.eclipse.oomph.setup/model/Setup.aird?editor://org.eclipse.sirius.diagram.ui.part.SiriusDiagramEditorID#_hZdg0dbXEeOQ1Kyul5ZC9g
+   */
+  protected abstract void setupOverviewDiagramEditor();
 
   /**
    * Tasks
@@ -440,6 +471,7 @@ public abstract class Everything
     public static String description;
 
     /**
+     * </ul>
      * </p>
      */
     public static String footer;
@@ -709,7 +741,7 @@ public abstract class Everything
      * <li>
      * The {@link org.eclipse.oomph.setup.CatalogSelection#getProjectCatalogs() selected subset} of the {@link Index index}'s available {@link ProjectCatalog project catalogs} displayed in the {@linkplain ProjectPage project page}.
      * </li>
-     * The {@link org.eclipse.oomph.setup.CatalogSelection#getDefaultStreams() most recently selected} {@link Stream stream} of each {@linkplain Project project} every chosen in the {@linkplain ProjectPage project  page}.
+     * The {@link org.eclipse.oomph.setup.CatalogSelection#getDefaultStreams() most recently selected} {@link Stream stream} of each {@linkplain Project project} ever chosen in the {@linkplain ProjectPage project  page}.
      * </li>
      * </li>
      * The {@link org.eclipse.oomph.setup.CatalogSelection#getSelectedStreams() most recently selected} {@link Stream streams} chosen by the {@linkplain ProjectPage project  page}.
@@ -729,21 +761,37 @@ public abstract class Everything
    * <p>
    * All the information for managing the automated installation and provisioning is maintained in resources.
    * Because Oomph is modeled using <a href="http://www.eclipse.org/emf">EMF</a>,
-   * these resources are stored in XMI format.
+   * these resources are stored in XMI format,
+   * for example,
+   * The {@link IndexResource index resource} is serialized as follows:
+   * {@link #indexXMI()}
    * </p>
    */
-  public static class SetupResource
+  public abstract static class SetupResource
   {
+    /**
+     * @snippet xml org.eclipse.setup /setups/org.eclipse.setup
+     */
+    public abstract void indexXMI();
+
     /**
      * Index
      * <p>
      * The <code><a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup">index:/org.eclipse.setup</a></code> resource maintains the {@linkplain Index index},
      * where <code>index:/</code> is redirected to <code>http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/</code>.
      * It generally consists of references to {@link ProductCatalogResource product catalog} resources and {@link ProjectCatalogResource project catalog} resources.
+     * {@link #index()}
      * </p>
      */
-    public static class IndexResource
+    public abstract static class IndexResource
     {
+      /**
+       * @snippet tree org.eclipse.setup.tree /setups/org.eclipse.setup?prune:/org.eclipse.oomph.setup.Project#/
+       * @title org.eclipse.setup
+       * @expandTo 1
+       */
+      protected abstract void index();
+
       /**
        * Product Catalogs
        * <p>
@@ -1349,7 +1397,10 @@ public abstract class Everything
    * Setup Wizards
    * <p>
    * Oomph provides three wizards to drive the automated installation and provisioning process.
-   * These wizards reuse the same underlying pages.
+   * These wizards reuse the same underlying pages as follows:
+   * <figure>
+   * {@image WizardDiagram.svg}
+   * </figure>
    * They makes heavy use of Internet-hosted {@linkplain SetupResource resources},
    * but these resources are cached locally on each download,
    * so once cached,
@@ -1378,6 +1429,9 @@ public abstract class Everything
      * Installer Wizard
      * <p>
      * The installer wizard is the basis for Oomph's bootstrap-{@link Trigger triggered}, automated installation and provisioning process.
+     * <br/>
+     * {@link #installer()}
+     * <br/>
      * The following downloads are available for this Eclipse RCP application.
      * <ul>
      * <li>
@@ -1392,6 +1446,7 @@ public abstract class Everything
      * <li>
      * <a rel="nofollow" class="external text" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86_64.zip">Linux 64 bit</a>
      * </li>
+     * <li>
      * <a rel="nofollow" class="external text" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86.zip">Linux 32 bit</a>
      * </li>
      * </ul>
@@ -1432,6 +1487,52 @@ public abstract class Everything
        * </p>
        */
       public static String wizardFooter;
+
+      /**
+       * @image InstallerWizard.png invoke://
+       */
+      public static Image installer()
+      {
+        return new Capture.Window<InstallerDialog>()
+        {
+          @Override
+          protected InstallerDialog create(Shell shell)
+          {
+            return new InstallerDialog(shell, false);
+          }
+
+          @Override
+          protected boolean isReady(InstallerDialog installerDialog)
+          {
+            SetupWizardPage page = (SetupWizardPage)installerDialog.getCurrentPage();
+            return page.getCatalogManager().getIndex() != null;
+          }
+
+          @Override
+          protected void postProcess(InstallerDialog installerDialog)
+          {
+            org.eclipse.oomph.setup.ui.wizards.ProductPage page = (org.eclipse.oomph.setup.ui.wizards.ProductPage)installerDialog.getCurrentPage();
+            ResourceSet resourceSet = page.getWizard().getResourceSet();
+            ProductVersion luna = (ProductVersion)resourceSet
+                .getEObject(
+                    URI.createURI("index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.standard']/@versions[name='luna']"),
+                    false);
+            TreeViewer productViewer = (TreeViewer)ReflectUtil.getValue("productViewer", page);
+            productViewer.setSelection(new StructuredSelection(luna.getProduct()));
+            AccessUtil.busyWait(1000);
+            ComboViewer versionComboViewer = (ComboViewer)ReflectUtil.getValue("versionComboViewer", page);
+            versionComboViewer.setSelection(new StructuredSelection(luna));
+            ComboViewer poolComboViewer = (ComboViewer)ReflectUtil.getValue("poolComboViewer", page);
+            poolComboViewer.getCombo().select(0);
+          }
+
+          @SuppressWarnings("unused")
+          protected Control getPageControl(InstallerDialog installerDialog)
+          {
+            return installerDialog.getCurrentPage().getControl().getParent();
+          }
+        }.capture();
+      }
     }
 
     /**

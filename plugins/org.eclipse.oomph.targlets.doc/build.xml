@@ -255,6 +255,16 @@
 			<package name="org.eclipse.oomph.targlets.doc.reference" />
 			<package name="org.eclipse.oomph.targlets.doc.reference.api" />
 			<package name="org.eclipse.oomph.targlets.doc.reference.schema" />
+			<package name="org.eclipse.oomph.p2.doc" />
+			<package name="org.eclipse.oomph.p2.doc.online" />
+			<package name="org.eclipse.oomph.p2.doc.reference" />
+			<package name="org.eclipse.oomph.p2.doc.reference.api" />
+			<package name="org.eclipse.oomph.p2.doc.reference.schema" />
+			<package name="org.eclipse.oomph.util.doc" />
+			<package name="org.eclipse.oomph.util.doc.online" />
+			<package name="org.eclipse.oomph.util.doc.reference" />
+			<package name="org.eclipse.oomph.util.doc.reference.api" />
+			<package name="org.eclipse.oomph.util.doc.reference.schema" />
     </javadoc>
   </target>
 
