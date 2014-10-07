@@ -60,8 +60,6 @@
         name="org.eclipse.emf.sdk.feature.group"/>
     <requirement
         name="org.eclipse.emf.ecoretools.sdk.feature.group"/>
-    <repository
-        url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
@@ -113,12 +111,12 @@
       <repositoryList
           name="Mars">
         <repository
-            url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
-            url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
@@ -220,11 +218,27 @@
       </predicate>
     </workingSet>
   </setupTask>
-  <stream name="master"/>
+  <stream name="master">
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <repository
+          url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
+      <repository
+          url="http://download.eclipse.org/ecoretools/updates/nightly/3.0.x/luna"/>
+    </setupTask>
+  </stream>
   <stream name="R2_10_maintenance"
-      label="2.10"/>
+      label="2.10">
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <repository
+          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x"/>
+      <repository
+          url="http://download.eclipse.org/ecoretools/updates/nightly/2.0.x/luna"/>
+    </setupTask>
+  </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.projects.setup#/"/>
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
   <description>The development environment for XSD</description>
 </setup:Project>

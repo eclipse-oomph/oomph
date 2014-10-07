@@ -103,19 +103,7 @@
         <repository
             url="http://download.eclipse.org/releases/mars"/>
         <repository
-            url="${xtext.nightly.composite}"/>
-        <repository
             url="http://download.itemis.com/updates/releases/2.1.0/"/>
-        <repository
-            url="http://download.eclipse.org/tools/gef/updates/milestones"/>
-        <repository
-            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
-        <repository
-            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
-        <repository
-            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
-        <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
         <repository
             url="http://download.eclipse.org/rt/rap/2.3"/>
         <repository
@@ -125,28 +113,16 @@
         <repository
             url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         <repository
-            url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
-        <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
             url="http://download.eclipse.org/releases/luna"/>
         <repository
-            url="${xtext.nightly.composite}"/>
-        <repository
             url="http://download.itemis.com/updates/releases/2.1.0/"/>
-        <repository
-            url="http://download.eclipse.org/tools/gef/updates/milestones"/>
-        <repository
-            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
-        <repository
-            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
-        <repository
-            url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
-        <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
         <repository
             url="http://download.eclipse.org/rt/rap/2.2"/>
         <repository
@@ -156,9 +132,9 @@
         <repository
             url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         <repository
-            url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/releases/maintenance"/>
         <repository
-            url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
@@ -167,13 +143,7 @@
         <repository
             url="http://download.itemis.com/updates/releases/2.1.0/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/releases/1.0/"/>
-        <repository
-            url="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
-        <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
-        <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
       <repositoryList
           name="Juno">
@@ -249,8 +219,6 @@
           name="org.eclipse.emf.ecoretools.sdk.feature.group"/>
       <requirement
           name="org.eclipse.xsd.sdk.feature.group"/>
-      <repository
-          url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
     </setupTask>
     <setupTask
         xsi:type="projects:ProjectsImportTask">
@@ -441,10 +409,26 @@
       </workingSet>
     </setupTask>
     <stream
-        name="master"/>
+        name="master">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
+        <repository
+            url="http://download.eclipse.org/ecoretools/updates/nightly/3.0.x/luna"/>
+      </setupTask>
+    </stream>
     <stream
         name="R2_10_maintenance"
-        label="2.10"/>
+        label="2.10">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x"/>
+        <repository
+            url="http://download.eclipse.org/ecoretools/updates/nightly/2.0.x/luna"/>
+      </setupTask>
+    </stream>
     <description>The development environment for the EMF Core</description>
   </project>
   <project name="xcore"
@@ -477,16 +461,6 @@
           name="org.eclipse.xtend.sdk.feature.group"/>
       <requirement
           name="org.eclipse.xsd.sdk.feature.group"/>
-      <repository
-          url="http://download.eclipse.org/modeling/emf/updates/"/>
-      <repository
-          url="http://download.eclipse.org/modeling/emft/mwe/updates/"/>
-      <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
-      <repository
-          url="http://hudson.eclipse.org/xtext/job/emf-core/lastSuccessfulBuild/artifact/build-result/p2.repository"/>
-      <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
     </setupTask>
     <setupTask
         xsi:type="projects:ProjectsImportTask">
@@ -584,10 +558,30 @@
       </workingSet>
     </setupTask>
     <stream
-        name="master"/>
+        name="master">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
+        <repository
+            url="http://download.eclipse.org/ecoretools/updates/nightly/3.0.x/luna"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
+      </setupTask>
+    </stream>
     <stream
         name="R2_10_maintenance"
-        label="2.10"/>
+        label="2.10">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x"/>
+        <repository
+            url="http://download.eclipse.org/ecoretools/updates/nightly/2.0.x/luna"/>
+        <repository
+            url="http://download.eclipse.org/modeling/tmf/xtext/updates/releases/maintenance"/>
+      </setupTask>
+    </stream>
     <description>The development environment for EMF Xcore</description>
   </project>
   <project name="gwt"
@@ -676,10 +670,26 @@
       </workingSet>
     </setupTask>
     <stream
-        name="master"/>
+        name="master">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
+        <repository
+            url="http://download.eclipse.org/ecoretools/updates/nightly/3.0.x/luna"/>
+      </setupTask>
+    </stream>
     <stream
         name="R2_10_maintenance"
-        label="2.10"/>
+        label="2.10">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x"/>
+        <repository
+            url="http://download.eclipse.org/ecoretools/updates/nightly/2.0.x/luna"/>
+      </setupTask>
+    </stream>
     <description>The development environment for EMF GWT</description>
   </project>
   <project name="rap"
@@ -756,10 +766,26 @@
       </workingSet>
     </setupTask>
     <stream
-        name="master"/>
+        name="master">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
+        <repository
+            url="http://download.eclipse.org/rt/rap/tools/3.0"/>
+      </setupTask>
+    </stream>
     <stream
         name="R2_10_maintenance"
-        label="2.10"/>
+        label="2.10">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x"/>
+        <repository
+            url="http://download.eclipse.org/rt/rap/tools/2.3"/>
+      </setupTask>
+    </stream>
   </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
