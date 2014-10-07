@@ -247,6 +247,11 @@ public class ReleaseManager implements IReleaseManager
     if (element.getType() == IElement.Type.PLUGIN)
     {
       IPluginModelBase model = PluginRegistry.findModel(name);
+      if (name.endsWith(".source") && model != null && model.getUnderlyingResource() == null)
+      {
+        return null;
+      }
+
       if (!element.isVersionUnresolved())
       {
         Version pluginVersion = VersionUtil.normalize(model.getBundleDescription().getVersion());
@@ -267,6 +272,11 @@ public class ReleaseManager implements IReleaseManager
     {
       featureModels = manager.getExternalModels();
       featureModel = getFeatureModel(name, featureModels);
+    }
+
+    if (name.endsWith(".source") && featureModel != null && featureModel.getUnderlyingResource() == null)
+    {
+      return null;
     }
 
     if (!element.isVersionUnresolved())
