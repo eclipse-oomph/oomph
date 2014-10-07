@@ -21,7 +21,6 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.internal.p2.repository.Transport;
-import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
@@ -74,8 +73,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   private IPlanner planner;
 
   private CachingTransport cachingTransport;
-
-  private IProfileRegistry originalProfileRegistry;
 
   private Transport originalTransport;
 
@@ -146,12 +143,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   {
     if (provisioningAgent != null)
     {
-      if (originalProfileRegistry != null)
-      {
-        profileRegistry.stop();
-        provisioningAgent.registerService(IProfileRegistry.SERVICE_NAME, originalProfileRegistry);
-      }
-
       if (originalTransport != null)
       {
         provisioningAgent.registerService(Transport.SERVICE_NAME, originalTransport);
@@ -436,12 +427,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   {
     if (this.provisioningAgent == null)
     {
-      IAgentLocation agentLocation = (IAgentLocation)provisioningAgent.getService(IAgentLocation.SERVICE_NAME);
-      File directory = LazyProfileRegistry.getDefaultRegistryDirectory(agentLocation);
-
-      originalProfileRegistry = (IProfileRegistry)provisioningAgent.getService(IProfileRegistry.SERVICE_NAME);
-      profileRegistry = new LazyProfileRegistry(provisioningAgent, directory);
-      provisioningAgent.registerService(IProfileRegistry.SERVICE_NAME, profileRegistry);
+      profileRegistry = (LazyProfileRegistry)provisioningAgent.getService(IProfileRegistry.SERVICE_NAME);
 
       if (!PropertiesUtil.isProperty("oomph.p2.disable.offline"))
       {
