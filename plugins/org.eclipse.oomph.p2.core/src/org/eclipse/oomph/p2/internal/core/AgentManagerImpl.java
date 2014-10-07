@@ -221,16 +221,24 @@ public class AgentManagerImpl implements AgentManager
 
   public BundlePool getBundlePool(File location) throws P2Exception
   {
+    for (Agent agent : getAgents())
+    {
+      BundlePool bundlePool = agent.getBundlePool(location);
+      if (bundlePool != null)
+      {
+        return bundlePool;
+      }
+    }
+
+    return null;
+  }
+
+  private BundlePool getBundlePool(String path) throws P2Exception
+  {
+    File location = new File(path);
     if (location.isDirectory())
     {
-      for (Agent agent : getAgents())
-      {
-        BundlePool bundlePool = agent.getBundlePool(location);
-        if (bundlePool != null)
-        {
-          return bundlePool;
-        }
-      }
+      return getBundlePool(location);
     }
 
     return null;
@@ -242,7 +250,7 @@ public class AgentManagerImpl implements AgentManager
     String location = (String)defaults.get(client);
     if (location != null)
     {
-      BundlePool bundlePool = getBundlePool(new File(location));
+      BundlePool bundlePool = getBundlePool(location);
       if (bundlePool != null)
       {
         return bundlePool;
@@ -251,7 +259,7 @@ public class AgentManagerImpl implements AgentManager
 
     for (Object value : defaults.values())
     {
-      BundlePool bundlePool = getBundlePool(new File((String)value));
+      BundlePool bundlePool = getBundlePool((String)value);
       if (bundlePool != null)
       {
         return bundlePool;
