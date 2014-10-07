@@ -67,10 +67,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import org.osgi.framework.Bundle;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -401,23 +404,55 @@ public final class InstallerDialog extends SetupWizardDialog
         return "Self Hosting";
       }
 
-      String buildID = null;
-      InputStream source = null;
+      String firstBuildID = null;
+      int highestBuildID = 0;
 
       try
       {
-        URL url = SetupInstallerPlugin.INSTANCE.getBundle().getResource("about.mappings");
-        if (url != null)
+        Bundle bundle = SetupInstallerPlugin.INSTANCE.getBundle();
+        Enumeration<URL> resources = bundle.getResources("about.mappings");
+
+        while (resources.hasMoreElements())
         {
-          source = url.openStream();
+          InputStream source = null;
 
-          Properties properties = new Properties();
-          properties.load(source);
-
-          buildID = (String)properties.get("0");
-          if (buildID != null && buildID.startsWith("$"))
+          try
           {
-            buildID = null;
+            URL url = resources.nextElement();
+            source = url.openStream();
+
+            Properties properties = new Properties();
+            properties.load(source);
+
+            String buildID = (String)properties.get("0");
+            if (buildID != null && !buildID.startsWith("$"))
+            {
+              if (firstBuildID == null)
+              {
+                firstBuildID = buildID;
+              }
+
+              try
+              {
+                int id = Integer.parseInt(buildID);
+                if (id > highestBuildID)
+                {
+                  highestBuildID = id;
+                }
+              }
+              catch (NumberFormatException ex)
+              {
+                //$FALL-THROUGH$
+              }
+            }
+          }
+          catch (IOException ex)
+          {
+            //$FALL-THROUGH$
+          }
+          finally
+          {
+            IOUtil.closeSilent(source);
           }
         }
       }
@@ -425,10 +460,8 @@ public final class InstallerDialog extends SetupWizardDialog
       {
         //$FALL-THROUGH$
       }
-      finally
-      {
-        IOUtil.closeSilent(source);
-      }
+
+      String buildID = highestBuildID != 0 ? Integer.toString(highestBuildID) : firstBuildID;
 
       for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null)))
       {
