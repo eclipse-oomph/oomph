@@ -49,7 +49,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -75,7 +75,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -101,7 +101,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -127,7 +127,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -153,7 +153,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -179,7 +179,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -208,7 +208,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -234,7 +234,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -260,7 +260,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -286,7 +286,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -312,7 +312,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -338,7 +338,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -361,7 +361,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -381,7 +381,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -401,7 +401,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -421,7 +421,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -441,7 +441,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -461,7 +461,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -490,7 +490,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -516,7 +516,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
   </product>
@@ -542,7 +542,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -565,7 +565,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -588,7 +588,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -611,7 +611,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -634,7 +634,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -657,7 +657,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -686,7 +686,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -712,7 +712,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -738,7 +738,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -764,7 +764,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -790,7 +790,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -816,7 +816,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -845,7 +845,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -871,7 +871,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -897,7 +897,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -923,7 +923,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -949,7 +949,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -975,7 +975,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -998,7 +998,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1018,7 +1018,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1038,7 +1038,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1058,7 +1058,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
   </product>
@@ -1087,7 +1087,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1113,7 +1113,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1139,7 +1139,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1165,7 +1165,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1191,7 +1191,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -1217,7 +1217,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -1246,7 +1246,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1272,7 +1272,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1298,7 +1298,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1324,7 +1324,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1350,7 +1350,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
   </product>
@@ -1373,7 +1373,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1393,7 +1393,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1413,7 +1413,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1433,7 +1433,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1453,7 +1453,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -1473,7 +1473,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -1502,7 +1502,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1528,7 +1528,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1554,7 +1554,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1580,7 +1580,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1606,7 +1606,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -1632,7 +1632,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -1661,7 +1661,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1687,7 +1687,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1713,7 +1713,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1739,7 +1739,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1765,7 +1765,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -1791,7 +1791,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -1814,7 +1814,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1834,7 +1834,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1854,7 +1854,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201410031000"/>
+            url="http://download.eclipse.org/releases/mars"/>
       </setupTask>
     </version>
     <version
@@ -1874,7 +1874,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna"/>
       </setupTask>
     </version>
     <version
@@ -1894,7 +1894,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -1914,7 +1914,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
@@ -1940,7 +1940,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -1963,7 +1963,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -1986,7 +1986,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler"/>
       </setupTask>
     </version>
     <version
@@ -2009,7 +2009,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno"/>
       </setupTask>
     </version>
   </product>
