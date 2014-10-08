@@ -105,7 +105,7 @@
         <repository
             url="http://download.itemis.com/updates/releases/2.1.0/"/>
         <repository
-            url="http://download.eclipse.org/rt/rap/2.3"/>
+            url="http://download.eclipse.org/rt/rap/3.0"/>
         <repository
             url="http://download.eclipse.org/rt/rap/nightly/runtime/"/>
         <repository
@@ -124,7 +124,7 @@
         <repository
             url="http://download.itemis.com/updates/releases/2.1.0/"/>
         <repository
-            url="http://download.eclipse.org/rt/rap/2.2"/>
+            url="http://download.eclipse.org/rt/rap/2.3"/>
         <repository
             url="http://download.eclipse.org/rt/rap/nightly/runtime/"/>
         <repository
