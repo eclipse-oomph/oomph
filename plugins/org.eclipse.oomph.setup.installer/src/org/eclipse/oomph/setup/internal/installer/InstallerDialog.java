@@ -443,14 +443,12 @@ public final class InstallerDialog extends SetupWizardDialog
                 }
                 catch (NumberFormatException ex)
                 {
-                  ex.printStackTrace();
                   //$FALL-THROUGH$
                 }
               }
             }
             catch (IOException ex)
             {
-              ex.printStackTrace();
               //$FALL-THROUGH$
             }
             finally
