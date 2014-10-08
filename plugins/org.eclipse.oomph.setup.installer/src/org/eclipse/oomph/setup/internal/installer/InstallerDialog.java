@@ -68,6 +68,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -409,50 +410,56 @@ public final class InstallerDialog extends SetupWizardDialog
 
       try
       {
-        Bundle bundle = SetupInstallerPlugin.INSTANCE.getBundle();
-        Enumeration<URL> resources = bundle.getResources("about.mappings");
-
-        while (resources.hasMoreElements())
+        BundleContext bundleContext = SetupInstallerPlugin.INSTANCE.getBundleContext();
+        for (Bundle bundle : bundleContext.getBundles())
         {
-          InputStream source = null;
-
-          try
+          String symbolicName = bundle.getSymbolicName();
+          if (symbolicName.startsWith("org.eclipse.oomph"))
           {
-            URL url = resources.nextElement();
-            source = url.openStream();
-
-            Properties properties = new Properties();
-            properties.load(source);
-
-            String buildID = (String)properties.get("0");
-            if (buildID != null && !buildID.startsWith("$"))
+            Enumeration<URL> resources = bundle.getResources("about.mappings");
+            while (resources.hasMoreElements())
             {
-              if (firstBuildID == null)
-              {
-                firstBuildID = buildID;
-              }
+              InputStream source = null;
 
               try
               {
-                int id = Integer.parseInt(buildID);
-                if (id > highestBuildID)
+                URL url = resources.nextElement();
+                source = url.openStream();
+
+                Properties properties = new Properties();
+                properties.load(source);
+
+                String buildID = (String)properties.get("0");
+                if (buildID != null && !buildID.startsWith("$"))
                 {
-                  highestBuildID = id;
+                  if (firstBuildID == null)
+                  {
+                    firstBuildID = buildID;
+                  }
+
+                  try
+                  {
+                    int id = Integer.parseInt(buildID);
+                    if (id > highestBuildID)
+                    {
+                      highestBuildID = id;
+                    }
+                  }
+                  catch (NumberFormatException ex)
+                  {
+                    //$FALL-THROUGH$
+                  }
                 }
               }
-              catch (NumberFormatException ex)
+              catch (IOException ex)
               {
                 //$FALL-THROUGH$
               }
+              finally
+              {
+                IOUtil.closeSilent(source);
+              }
             }
-          }
-          catch (IOException ex)
-          {
-            //$FALL-THROUGH$
-          }
-          finally
-          {
-            IOUtil.closeSilent(source);
           }
         }
       }
