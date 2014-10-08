@@ -230,6 +230,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
   private OpenInSetupEditorAction openInSetupEditorAction = new OpenInSetupEditorAction();
 
+  private OpenInTextEditorAction openInTextEditorAction = new OpenInTextEditorAction();
+
   /**
    * This creates an instance of the contributor.
    * <!-- begin-user-doc -->
@@ -337,6 +339,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     editorTableAction.setActivePart(part);
     revertAction.setActiveWorkbenchPart(part);
     openInSetupEditorAction.setActiveWorkbenchPart(part);
+    openInTextEditorAction.setActiveWorkbenchPart(part);
 
     // Switch to the new selection provider.
     //
@@ -422,6 +425,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     selectionChangedGen(event);
     // recordPreferencesAction.selectionChanged(event);
     openInSetupEditorAction.selectionChanged(event);
+    openInTextEditorAction.selectionChanged(event);
     // testInstallAction.selectionChanged(event);
   }
 
@@ -846,6 +850,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     });
 
     menuManager.insertBefore("ui-actions", openInSetupEditorAction);
+    menuManager.insertBefore("ui-actions", openInTextEditorAction);
   }
 
   /**
@@ -1276,6 +1281,9 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     }
   }
 
+  /**
+   * @author Ed Merks
+   */
   private static final class OpenInSetupEditorAction extends Action
   {
     private URI uri;
@@ -1299,7 +1307,6 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       {
         setupEditor = (SetupEditor)workbenchPart;
         setEnabled(true);
-        setChecked(setupEditor.selectionViewer.getInput() instanceof ResourceSet);
       }
       else
       {
@@ -1328,6 +1335,69 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
             {
               uri = EcoreUtil.getURI(eObject);
             }
+          }
+        }
+        else if (object instanceof Resource)
+        {
+          Resource resource = (Resource)object;
+          uri = resource.getURI();
+        }
+      }
+
+      setEnabled(uri != null);
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static final class OpenInTextEditorAction extends Action
+  {
+    private URI uri;
+
+    private SetupEditor setupEditor;
+
+    public OpenInTextEditorAction()
+    {
+      setText("Open in Text Editor");
+    }
+
+    @Override
+    public void run()
+    {
+      SetupEditorSupport.getTextEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri);
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)workbenchPart;
+        setEnabled(true);
+      }
+      else
+      {
+        setEnabled(false);
+        setupEditor = null;
+      }
+    }
+
+    public final void selectionChanged(SelectionChangedEvent event)
+    {
+      uri = null;
+
+      IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+      if (selection.size() == 1)
+      {
+        Object object = selection.getFirstElement();
+        object = AdapterFactoryEditingDomain.unwrap(object);
+        if (object instanceof EObject)
+        {
+          EObject eObject = (EObject)object;
+          Resource resource = eObject.eResource();
+          if (resource != null)
+          {
+            uri = resource.getURI();
           }
         }
         else if (object instanceof Resource)

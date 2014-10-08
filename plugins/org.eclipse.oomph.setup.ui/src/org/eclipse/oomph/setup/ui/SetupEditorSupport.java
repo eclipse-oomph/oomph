@@ -23,21 +23,33 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +67,8 @@ public final class SetupEditorSupport
 
   public static final String EDITOR_ID = "org.eclipse.oomph.setup.presentation.SetupEditorID";
 
+  public static final String TEXT_EDITOR_ID = "org.eclipse.ui.DefaultTextEditor";
+
   public static IEditorPart getEditor(final IWorkbenchPage page, final URI uri, boolean force, LoadHandler... loadHandlers)
   {
     try
@@ -64,14 +78,14 @@ public final class SetupEditorSupport
       final URI normalizedURI = uriConverter.normalize(uri.trimFragment());
 
       final IEditorInput editorInput = getEditorInput(normalizedURI);
-      IEditorPart editor = findEditor(page, uriConverter, editorInput);
+      IEditorPart editor = findEditor(EDITOR_ID, page, uriConverter, editorInput);
       if (editor != null)
       {
         page.activate(editor);
       }
       else if (force)
       {
-        editor = page.openEditor(editorInput, EDITOR_ID);
+        editor = page.openEditor(editorInput, EDITOR_ID, true, IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
       }
 
       // If there is an editor...
@@ -150,13 +164,41 @@ public final class SetupEditorSupport
     return null;
   }
 
-  private static IEditorPart findEditor(IWorkbenchPage page, URIConverter uriConverter, IEditorInput input)
+  public static IEditorPart getTextEditor(final IWorkbenchPage page, final URI uri)
+  {
+    try
+    {
+      URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
+      final URI normalizedURI = uriConverter.normalize(uri.trimFragment());
+
+      final IEditorInput editorInput = getTextEditorInput(normalizedURI);
+      IEditorPart editor = findEditor(TEXT_EDITOR_ID, page, uriConverter, editorInput);
+      if (editor != null)
+      {
+        page.activate(editor);
+      }
+      else
+      {
+        editor = page.openEditor(editorInput, TEXT_EDITOR_ID, true, IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
+      }
+
+      return editor;
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
+    }
+
+    return null;
+  }
+
+  private static IEditorPart findEditor(String editorID, IWorkbenchPage page, URIConverter uriConverter, IEditorInput input)
   {
     URI resourceURI = EditUIUtil.getURI(input);
 
     for (IEditorReference editorReference : page.getEditorReferences())
     {
-      if (editorReference.getId().equals(EDITOR_ID))
+      if (editorReference.getId().equals(editorID))
       {
         try
         {
@@ -181,6 +223,98 @@ public final class SetupEditorSupport
     return null;
   }
 
+  private static IEditorInput getTextEditorInput(final URI normalizedURI)
+  {
+    IEditorInput editorInput = getEditorInput(normalizedURI);
+    if (editorInput instanceof URIEditorInput)
+    {
+      URIEditorInput uriEditorInput = (URIEditorInput)editorInput;
+      final URI uri = uriEditorInput.getURI();
+      if (uri.isFile())
+      {
+        IFileStore store = EFS.getLocalFileSystem().getStore(new Path(uri.toFileString()));
+        return new FileStoreEditorInput(store);
+      }
+
+      return new IStorageEditorInput()
+      {
+        @SuppressWarnings("rawtypes")
+        public Object getAdapter(Class adapter)
+        {
+          return null;
+        }
+
+        public String getToolTipText()
+        {
+          return uri.toString();
+        }
+
+        public IPersistableElement getPersistable()
+        {
+          return null;
+        }
+
+        public String getName()
+        {
+          return uri.lastSegment();
+        }
+
+        public ImageDescriptor getImageDescriptor()
+        {
+          return null;
+        }
+
+        public boolean exists()
+        {
+          return true;
+        }
+
+        public IStorage getStorage() throws CoreException
+        {
+          return new IStorage()
+          {
+            @SuppressWarnings("rawtypes")
+            public Object getAdapter(Class adapter)
+            {
+              return null;
+            }
+
+            public boolean isReadOnly()
+            {
+              return true;
+            }
+
+            public String getName()
+            {
+              return uri.lastSegment();
+            }
+
+            public IPath getFullPath()
+            {
+              return new Path(uri.toString());
+            }
+
+            public InputStream getContents() throws CoreException
+            {
+              URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
+              try
+              {
+                return uriConverter.createInputStream(uri);
+              }
+              catch (IOException ex)
+              {
+                SetupUIPlugin.INSTANCE.coreException(ex);
+                return null;
+              }
+            }
+          };
+        }
+      };
+    }
+
+    return editorInput;
+  }
+
   private static IEditorInput getEditorInput(final URI normalizedURI)
   {
     if ("user".equals(normalizedURI.scheme()))
@@ -199,6 +333,15 @@ public final class SetupEditorSupport
       if (editorInput != null)
       {
         return editorInput;
+      }
+    }
+
+    if (normalizedURI.isPlatformResource())
+    {
+      IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(normalizedURI.toPlatformString(true)));
+      if (file.isAccessible())
+      {
+        return new FileEditorInput(file);
       }
     }
 
@@ -242,7 +385,7 @@ public final class SetupEditorSupport
     {
       loaded(editor, ((IEditingDomainProvider)editor).getEditingDomain(), uri);
     }
-  
+
     protected void loaded(IEditorPart editorPart, EditingDomain domain, URI uri)
     {
       Resource resource = domain.getResourceSet().getResource(uri, false);
@@ -251,7 +394,7 @@ public final class SetupEditorSupport
         loaded(editorPart, domain, resource);
       }
     }
-  
+
     protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
     {
     }
