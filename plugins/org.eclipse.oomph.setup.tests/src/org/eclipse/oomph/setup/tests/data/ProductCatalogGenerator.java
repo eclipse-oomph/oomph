@@ -19,7 +19,6 @@ import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
-import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -133,12 +132,6 @@ public class ProductCatalogGenerator implements IApplication
       p2Task.getRepositories().add(oomphRepository);
       p2Task.getRepositories().add(emfRepository);
       productCatalog.getSetupTasks().add(p2Task);
-
-      EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
-      eclipseIniTask.setOption("-D" + SetupProperties.PROP_SETUP);
-      eclipseIniTask.setValue("=true");
-      eclipseIniTask.setVm(true);
-      productCatalog.getSetupTasks().add(eclipseIniTask);
 
       File agentLocation = File.createTempFile("test-", "-agent");
       agentLocation.delete();
@@ -372,6 +365,7 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println();
 
       checkVersionRanges(productCatalog);
+      postProcess(productCatalog);
 
       Resource resource = new BaseResourceFactoryImpl().createResource(uri == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup")
           : uri);
@@ -429,6 +423,27 @@ public class ProductCatalogGenerator implements IApplication
             }
           }
         }
+      }
+    }
+  }
+
+  private void postProcess(ProductCatalog productCatalog)
+  {
+    for (Product product : productCatalog.getProducts())
+    {
+      if ("epp.package.standard".equals(product.getName()))
+      {
+        for (ProductVersion version : product.getVersions())
+        {
+          if (version.getLabel().contains("Mars"))
+          {
+            P2Task task = (P2Task)version.getSetupTasks().get(0);
+            Requirement requirement = task.getRequirements().get(0);
+            requirement.setName("epp.package.committers");
+          }
+        }
+
+        return;
       }
     }
   }
