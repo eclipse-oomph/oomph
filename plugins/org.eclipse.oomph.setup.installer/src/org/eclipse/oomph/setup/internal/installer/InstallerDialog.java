@@ -74,7 +74,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -408,64 +407,58 @@ public final class InstallerDialog extends SetupWizardDialog
       String firstBuildID = null;
       int highestBuildID = 0;
 
-      try
+      BundleContext bundleContext = SetupInstallerPlugin.INSTANCE.getBundleContext();
+      for (Bundle bundle : bundleContext.getBundles())
       {
-        BundleContext bundleContext = SetupInstallerPlugin.INSTANCE.getBundleContext();
-        for (Bundle bundle : bundleContext.getBundles())
+        String symbolicName = bundle.getSymbolicName();
+        if (symbolicName.startsWith("org.eclipse.oomph"))
         {
-          String symbolicName = bundle.getSymbolicName();
-          if (symbolicName.startsWith("org.eclipse.oomph"))
+          URL url = bundle.getResource("about.mappings");
+          if (url != null)
           {
-            Enumeration<URL> resources = bundle.getResources("about.mappings");
-            while (resources.hasMoreElements())
+            InputStream source = null;
+
+            try
             {
-              InputStream source = null;
+              source = url.openStream();
 
-              try
+              Properties properties = new Properties();
+              properties.load(source);
+
+              String buildID = (String)properties.get("0");
+              if (buildID != null && !buildID.startsWith("$"))
               {
-                URL url = resources.nextElement();
-                source = url.openStream();
-
-                Properties properties = new Properties();
-                properties.load(source);
-
-                String buildID = (String)properties.get("0");
-                if (buildID != null && !buildID.startsWith("$"))
+                if (firstBuildID == null)
                 {
-                  if (firstBuildID == null)
-                  {
-                    firstBuildID = buildID;
-                  }
+                  firstBuildID = buildID;
+                }
 
-                  try
+                try
+                {
+                  int id = Integer.parseInt(buildID);
+                  if (id > highestBuildID)
                   {
-                    int id = Integer.parseInt(buildID);
-                    if (id > highestBuildID)
-                    {
-                      highestBuildID = id;
-                    }
-                  }
-                  catch (NumberFormatException ex)
-                  {
-                    //$FALL-THROUGH$
+                    highestBuildID = id;
                   }
                 }
+                catch (NumberFormatException ex)
+                {
+                  ex.printStackTrace();
+                  //$FALL-THROUGH$
+                }
               }
-              catch (IOException ex)
-              {
-                //$FALL-THROUGH$
-              }
-              finally
-              {
-                IOUtil.closeSilent(source);
-              }
+            }
+            catch (IOException ex)
+            {
+              ex.printStackTrace();
+              //$FALL-THROUGH$
+            }
+            finally
+            {
+              IOUtil.closeSilent(source);
             }
           }
         }
-      }
-      catch (IOException ex)
-      {
-        //$FALL-THROUGH$
       }
 
       String buildID = highestBuildID != 0 ? Integer.toString(highestBuildID) : firstBuildID;
