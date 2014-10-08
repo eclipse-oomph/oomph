@@ -241,9 +241,9 @@ public class ConfirmationPage extends SetupWizardPage
 
       validate();
 
-      if (PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP))
+      if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP))
       {
-        System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
+        System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
         advanceToNextPage();
       }
     }
@@ -733,7 +733,7 @@ public class ConfirmationPage extends SetupWizardPage
 
   private boolean isOffline()
   {
-    if (PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_OFFLINE_STARTUP))
+    if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP))
     {
       return true;
     }
@@ -748,7 +748,7 @@ public class ConfirmationPage extends SetupWizardPage
 
   private boolean isMirrors()
   {
-    if (PropertiesUtil.isProperty(ProgressPage.PROP_SETUP_MIRRORS_STARTUP))
+    if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP))
     {
       return true;
     }

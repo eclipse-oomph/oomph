@@ -9,7 +9,7 @@
   Contributors:
     Eike Stepper - initial API and implementation
 -->
-<project name="CDO">
+<project name="CDO" default="deploy">
 
 	<property name="source" location="${git.clone.location}\products\org.eclipse.oomph.setup.installer.product\target\products\org.eclipse.oomph.setup.installer.product-win32.win32.x86_64.zip" />
 	<property name="target" location="/develop/installer-test" />
@@ -36,8 +36,16 @@
 		<echo message="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8123${line.separator}" file="${launcher.ini}" append="true" />
 	</target>
 
-	<target name="execute">
+	<target name="run">
 		<exec executable="${launcher.exe}" />
+	</target>
+
+	<target name="debug">
+		<exec executable="${launcher.exe}">
+			<arg value="-vmargs"/>
+			<arg value="-Xdebug"/>
+			<arg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8123"/>
+		</exec>
 	</target>
 
 </project>

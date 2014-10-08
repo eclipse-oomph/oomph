@@ -15,9 +15,13 @@ package org.eclipse.oomph.internal.setup;
  */
 public interface SetupProperties
 {
-  public static final String PROP_SETUP = "oomph.setup";
-
   public static final String PROP_SETUP_SKIP = "oomph.setup.skip";
+
+  public static final String PROP_SETUP_CONFIRM_SKIP = "oomph.setup.confirm.skip";
+
+  public static final String PROP_SETUP_OFFLINE_STARTUP = "oomph.setup.offline.startup";
+
+  public static final String PROP_SETUP_MIRRORS_STARTUP = "oomph.setup.mirrors.startup";
 
   public static final String PROP_SETUP_OFFLINE = "oomph.setup.offline";
 

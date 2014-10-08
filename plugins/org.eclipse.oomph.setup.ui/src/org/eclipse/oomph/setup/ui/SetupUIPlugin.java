@@ -22,7 +22,6 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
-import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
@@ -70,7 +69,13 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder";
 
-  public static final boolean SETUP_IDE = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP);
+  private static final String RESTARTING_FILE_NAME = "restarting";
+
+  private static final String ANNOTATION_SOURCE_INITIAL = "initial";
+
+  private static final String ANNOTATION_DETAILS_KEY_OFFLINE = "offline";
+
+  private static final String ANNOTATION_DETAILS_KEY_MIRRORS = "mirrors";
 
   private static final boolean SETUP_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SKIP);
 
@@ -94,15 +99,36 @@ public final class SetupUIPlugin extends OomphUIPlugin
     return plugin;
   }
 
+  public static void initialStart(File ws, boolean offline, boolean mirrors)
+  {
+    Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
+    annotation.setSource(ANNOTATION_SOURCE_INITIAL);
+    annotation.getDetails().put(ANNOTATION_DETAILS_KEY_OFFLINE, Boolean.toString(offline));
+    annotation.getDetails().put(ANNOTATION_DETAILS_KEY_MIRRORS, Boolean.toString(mirrors));
+
+    File file = new File(ws, ".metadata/.plugins/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/" + RESTARTING_FILE_NAME);
+    saveRestartFile(file, annotation);
+  }
+
   public static void restart(Trigger trigger, EList<SetupTask> setupTasks)
   {
-    try
+    if (!setupTasks.isEmpty())
     {
       Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
       annotation.setSource(trigger.toString());
       annotation.getReferences().addAll(setupTasks);
 
-      Resource resource = SetupUtil.createResourceSet().createResource(URI.createFileURI(getRestartingFile().toString()));
+      saveRestartFile(getRestartingFile(), annotation);
+    }
+
+    PlatformUI.getWorkbench().restart();
+  }
+
+  private static void saveRestartFile(File file, Annotation annotation)
+  {
+    try
+    {
+      Resource resource = SetupUtil.createResourceSet().createResource(URI.createFileURI(file.toString()));
       resource.getContents().add(annotation);
       resource.save(null);
     }
@@ -110,8 +136,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
     {
       // Ignore
     }
-
-    PlatformUI.getWorkbench().restart();
   }
 
   public static boolean isSkipStartupTasks()
@@ -121,7 +145,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static File getRestartingFile()
   {
-    return new File(INSTANCE.getStateLocation().toString(), "restarting");
+    return new File(INSTANCE.getStateLocation().toString(), RESTARTING_FILE_NAME);
   }
 
   private static void performStartup()
@@ -150,7 +174,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
             RecorderManager.Lifecycle.start(display);
 
-            if (SETUP_IDE && !SETUP_SKIP && !isSkipStartupTasks())
+            if (!SETUP_SKIP && !isSkipStartupTasks())
             {
               new Job("Setup check...")
               {
@@ -213,20 +237,34 @@ public final class SetupUIPlugin extends OomphUIPlugin
         monitor.subTask("Reading restart tasks");
         Resource resource = SetupUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
-        IOUtil.deleteBestEffort(restartingFile);
-
         Annotation annotation = (Annotation)EcoreUtil.getObjectByType(resource.getContents(), BasePackage.Literals.ANNOTATION);
         resource.getContents().remove(annotation);
 
-        for (EObject eObject : annotation.getReferences())
+        if (ANNOTATION_SOURCE_INITIAL.equals(annotation.getSource()))
         {
-          neededRestartTasks.add(EcoreUtil.getURI(eObject));
+          if ("true".equals(annotation.getDetails().get(ANNOTATION_DETAILS_KEY_OFFLINE)))
+          {
+            System.setProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP, "true");
+          }
+
+          if ("true".equals(annotation.getDetails().get(ANNOTATION_DETAILS_KEY_MIRRORS)))
+          {
+            System.setProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP, "true");
+          }
+        }
+        else
+        {
+          for (EObject eObject : annotation.getReferences())
+          {
+            neededRestartTasks.add(EcoreUtil.getURI(eObject));
+          }
+
+          trigger = Trigger.get(annotation.getSource());
+          restarting = true;
         }
 
-        trigger = Trigger.get(annotation.getSource());
-
-        System.setProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP, "true");
-        restarting = true;
+        IOUtil.deleteBestEffort(restartingFile);
+        System.setProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP, "true");
       }
     }
     catch (Exception ex)
@@ -279,7 +317,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
         if (neededTasks.isEmpty())
         {
           // No tasks are needed, either. Nothing to do.
-          System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
+          System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
           return;
         }
       }
@@ -291,7 +329,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     }
     else
     {
-      System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
+      System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
     }
 
     if (performer == null)

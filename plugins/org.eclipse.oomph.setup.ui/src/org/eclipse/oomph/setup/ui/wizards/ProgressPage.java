@@ -108,12 +108,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ProgressPage extends SetupWizardPage
 {
-  public static final String PROP_SETUP_CONFIRM_SKIP = "oomph.setup.confirm.skip";
-
-  public static final String PROP_SETUP_OFFLINE_STARTUP = "oomph.setup.offline.startup";
-
-  public static final String PROP_SETUP_MIRRORS_STARTUP = "oomph.setup.mirrors.startup";
-
   private static final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm:ss");
 
   private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
@@ -752,21 +746,17 @@ public class ProgressPage extends SetupWizardPage
       String eclipseExecutable = os.getEclipseExecutable();
       String eclipsePath = new File(performer.getInstallationLocation(), eclipseDir + "/" + eclipseExecutable).getAbsolutePath();
 
+      File ws = performer.getWorkspaceLocation();
+      SetupUIPlugin.initialStart(ws, performer.isOffline(), performer.isMirrors());
+
       List<String> command = new ArrayList<String>();
       command.add(eclipsePath);
 
-      File ws = performer.getWorkspaceLocation();
       if (ws != null)
       {
         command.add("-data");
         command.add(ws.toString());
       }
-
-      command.add("--launcher.appendVmargs");
-      command.add("-vmargs");
-      command.add("-D" + PROP_SETUP_CONFIRM_SKIP + "=true");
-      command.add("-D" + PROP_SETUP_OFFLINE_STARTUP + "=" + performer.isOffline());
-      command.add("-D" + PROP_SETUP_MIRRORS_STARTUP + "=" + performer.isMirrors());
 
       ProcessBuilder builder = new ProcessBuilder(command);
       Process process = builder.start();

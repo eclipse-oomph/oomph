@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -286,7 +287,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
 
     isCanceled = true;
-    System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
+    clearStartupProperties();
 
     return true;
   }
@@ -294,13 +295,20 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public boolean performFinish()
   {
-    System.clearProperty(ProgressPage.PROP_SETUP_CONFIRM_SKIP);
+    clearStartupProperties();
     if (finishAction != null)
     {
       UIUtil.syncExec(finishAction);
     }
 
     return true;
+  }
+
+  private void clearStartupProperties()
+  {
+    System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
+    System.clearProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP);
+    System.clearProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP);
   }
 
   public int openDialog(Shell parentShell)
