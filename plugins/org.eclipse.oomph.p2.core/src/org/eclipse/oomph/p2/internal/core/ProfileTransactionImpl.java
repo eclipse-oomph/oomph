@@ -31,11 +31,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.director.SimplePlanner;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
@@ -44,6 +46,9 @@ import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.PropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
+import org.eclipse.equinox.internal.p2.touchpoint.natives.BackupStore;
+import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
+import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
@@ -70,7 +75,10 @@ import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.osgi.service.datalocation.Location;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.security.cert.Certificate;
@@ -397,6 +405,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
             initUnsignedContentConfirmer(context, agent, cleanup);
 
             IEngine engine = agent.getEngine();
+            ensureSameBackupDevice(provisioningPlan);
+
             IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
 
             context.handleExecutionResult(status);
@@ -816,6 +826,103 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
 
     return new VersionRange(version.toString());
+  }
+
+  private void ensureSameBackupDevice(final IProvisioningPlan provisioningPlan) throws CoreException
+  {
+    // This is to handle the special case in Windows where the backup store tries to move the *.exe to a different device.
+    // This fails when the *.exe is currently in use.
+    // The strategy then copies the file instead and then to delete it, but that always fails.
+    // If the backup store is on the same device, the move is successful and the *.exe can be successfully updated.
+    // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=427148 for more details.
+    if (profile.isCurrent() && Platform.OS_WIN32.equals(Platform.getOS()))
+    {
+      try
+      {
+        Location location = Platform.getInstallLocation();
+        org.eclipse.emf.common.util.URI installationLocation = org.eclipse.emf.common.util.URI.createURI(FileLocator.resolve(location.getURL()).toString());
+        org.eclipse.emf.common.util.URI tempDir = org.eclipse.emf.common.util.URI.createFileURI(System.getProperty("java.io.tmpdir"));
+        if (!ObjectUtil.equals(installationLocation.device(), tempDir.device()))
+        {
+          Field field = ReflectUtil.getField(NativeTouchpoint.class, "backups");
+          @SuppressWarnings("unchecked")
+          Map<IProfile, IBackupStore> backups = (Map<IProfile, IBackupStore>)ReflectUtil.getValue(field, null);
+          final File localTempFolder = new File(installationLocation.toFileString(), "backup");
+          final IProfile planProfile = provisioningPlan.getProfile();
+          backups.put(planProfile, new IBackupStore()
+          {
+            private BackupStore delegate;
+
+            public boolean backup(File file) throws IOException
+            {
+              loadDelegate();
+              return delegate.backup(file);
+            }
+
+            public boolean backupDirectory(File file) throws IOException
+            {
+              loadDelegate();
+              return delegate.backupDirectory(file);
+            }
+
+            public void discard()
+            {
+              if (delegate == null)
+              {
+                return;
+              }
+              delegate.discard();
+            }
+
+            public void restore() throws IOException
+            {
+              if (delegate == null)
+              {
+                return;
+              }
+              delegate.restore();
+            }
+
+            private void loadDelegate()
+            {
+              if (delegate != null)
+              {
+                return;
+              }
+              delegate = new BackupStore(localTempFolder, NativeTouchpoint.escape(planProfile.getProfileId()));
+            }
+
+            public String getBackupName()
+            {
+              loadDelegate();
+              return delegate.getBackupName();
+            }
+
+            public boolean backupCopy(File file) throws IOException
+            {
+              loadDelegate();
+              return delegate.backupCopy(file);
+            }
+
+            public void backupCopyAll(File file) throws IOException
+            {
+              loadDelegate();
+              delegate.backupCopyAll(file);
+            }
+
+            public void backupAll(File file) throws IOException
+            {
+              loadDelegate();
+              delegate.backupAll(file);
+            }
+          });
+        }
+      }
+      catch (IOException ex)
+      {
+        P2CorePlugin.INSTANCE.coreException(ex);
+      }
+    }
   }
 
   private static void cleanup(List<Runnable> cleanup)
