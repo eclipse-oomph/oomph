@@ -514,8 +514,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
           }
         }
 
-        if (cacheHandling != CacheHandling.CACHE_IGNORE && uriConverter.exists(cacheURI, options))
+        if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling)
+            && uriConverter.exists(cacheURI, options)
+            && (!(transferListener.exception instanceof IncomingFileTransferException) || ((IncomingFileTransferException)transferListener.exception)
+                .getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND))
         {
+          setExpectedETag(uri, transferListener.eTag);
           return uriConverter.createInputStream(cacheURI, options);
         }
 
