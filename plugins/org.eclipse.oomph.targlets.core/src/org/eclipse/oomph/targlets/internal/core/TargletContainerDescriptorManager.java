@@ -28,10 +28,7 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStrea
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.pde.core.target.ITargetDefinition;
@@ -81,28 +78,17 @@ public final class TargletContainerDescriptorManager
 
   private TargletContainerDescriptorManager() throws CoreException
   {
-    new Job("Initialize Targlet Containers")
-    {
-      @Override
-      protected IStatus run(IProgressMonitor monitor)
-      {
-        try
-        {
-          initialize(monitor);
-        }
-        catch (Throwable t)
-        {
-          initializationProblem = t;
-          TargletsCorePlugin.INSTANCE.log(t);
-        }
-        finally
-        {
-          initialized.countDown();
-        }
+    initializeSync(null);
 
-        return Status.OK_STATUS;
-      }
-    }.schedule();
+    // new Job("Initialize Targlet Containers")
+    // {
+    // @Override
+    // protected IStatus run(IProgressMonitor monitor)
+    // {
+    // initializeSync(monitor);
+    // return Status.OK_STATUS;
+    // }
+    // }.schedule();
   }
 
   private void initialize(IProgressMonitor monitor) throws CoreException
@@ -270,6 +256,23 @@ public final class TargletContainerDescriptorManager
 
     WORKSPACE_REFERENCER_FILE.getParentFile().mkdirs();
     IOUtil.writeLines(WORKSPACE_REFERENCER_FILE, null, ids);
+  }
+
+  private void initializeSync(IProgressMonitor monitor)
+  {
+    try
+    {
+      initialize(monitor);
+    }
+    catch (Throwable t)
+    {
+      initializationProblem = t;
+      TargletsCorePlugin.INSTANCE.log(t);
+    }
+    finally
+    {
+      initialized.countDown();
+    }
   }
 
   private static Map<String, TargletContainerDescriptor> loadDescriptors(File file)
