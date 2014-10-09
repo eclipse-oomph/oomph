@@ -2959,7 +2959,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     for (Stream stream : streams)
     {
-      if (!stream.eIsProxy())
+      if (stream == null || !stream.eIsProxy())
       {
         SetupTaskPerformer performer = new SetupTaskPerformer(uriConverter, prompter, null, setupContext, stream);
         Set<String> undeclaredVariables = performer.getUndeclaredVariables();
