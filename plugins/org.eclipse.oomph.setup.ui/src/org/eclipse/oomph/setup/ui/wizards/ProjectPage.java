@@ -843,6 +843,16 @@ public class ProjectPage extends SetupWizardPage
 
     CatalogSelection selection = catalogSelector.getSelection();
     projectViewer.setInput(selection);
+
+    for (Iterator<Stream> it = workspace.getStreams().iterator(); it.hasNext();)
+    {
+      Stream stream = it.next();
+      if (stream.eIsProxy())
+      {
+        it.remove();
+      }
+    }
+
     streamViewer.setInput(workspace);
 
     collapseAllButton.addSelectionListener(new SelectionAdapter()
