@@ -1091,33 +1091,44 @@ public final class PreferencesUtil
     {
       PreferenceNode preferenceNode = (PreferenceNode)target;
       Resource resource = preferenceNode.eResource();
-      ResourceSet resourceSet = resource.getResourceSet();
-
-      synchronized (resource)
+      if (resource == null)
       {
-        synchronized (resourceSet)
+        handleAdded(event, preferenceNode);
+      }
+      else
+      {
+        synchronized (resource)
         {
-          Preferences childNode = event.getChild();
-          String name = childNode.name();
-          if (preferenceNode.getNode(name) == null)
+          ResourceSet resourceSet = resource.getResourceSet();
+          synchronized (resourceSet)
           {
-            PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
-            childPreferenceNode.setName(name);
-            EList<PreferenceNode> children = preferenceNode.getChildren();
-            int index = 0;
-            for (int size = children.size(); index < size; ++index)
-            {
-              PreferenceNode otherChildPreferenceNode = children.get(index);
-              if (otherChildPreferenceNode.getName().compareTo(name) >= 0)
-              {
-                break;
-              }
-            }
-
-            children.add(index, childPreferenceNode);
-            traverse(childPreferenceNode, childNode, true);
+            handleAdded(event, preferenceNode);
           }
         }
+      }
+    }
+
+    private void handleAdded(NodeChangeEvent event, PreferenceNode preferenceNode)
+    {
+      Preferences childNode = event.getChild();
+      String name = childNode.name();
+      if (preferenceNode.getNode(name) == null)
+      {
+        PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
+        childPreferenceNode.setName(name);
+        EList<PreferenceNode> children = preferenceNode.getChildren();
+        int index = 0;
+        for (int size = children.size(); index < size; ++index)
+        {
+          PreferenceNode otherChildPreferenceNode = children.get(index);
+          if (otherChildPreferenceNode.getName().compareTo(name) >= 0)
+          {
+            break;
+          }
+        }
+
+        children.add(index, childPreferenceNode);
+        traverse(childPreferenceNode, childNode, true);
       }
     }
 
