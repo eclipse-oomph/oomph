@@ -308,12 +308,16 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   private static final Map<URI, String> EXPECTED_ETAGS = new HashMap<URI, String>();
 
-  public static void clearExpectedETags()
+  public static int clearExpectedETags()
   {
+    int size;
     synchronized (EXPECTED_ETAGS)
     {
+      size = EXPECTED_ETAGS.size();
       EXPECTED_ETAGS.clear();
     }
+
+    return size;
   }
 
   private static String getExpectedETag(URI uri)

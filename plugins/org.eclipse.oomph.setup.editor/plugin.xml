@@ -90,9 +90,20 @@
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
+            id="org.eclipse.oomph.setup.editor.importProjects"
+            name="Import Projects">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenLogHandler"
             id="org.eclipse.oomph.setup.editor.openLog"
-            name="Open Log File">
+            name="Open Setup Log">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ResetCacheHandler"
+            id="org.eclipse.oomph.setup.editor.resetCache"
+            name="Reset Remote Cache">
       </command>
       <!--
       <command
@@ -102,11 +113,6 @@
             name="Change Product">
       </command>
       -->
-      <command
-            categoryId="org.eclipse.oomph.setup.category"
-            id="org.eclipse.oomph.setup.editor.importProjects"
-            name="Import Projects">
-      </command>
    </extension>
 
    <extension
@@ -145,7 +151,7 @@
          </enabledWhen>
       </handler>
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
@@ -184,15 +190,27 @@
                style="push">
          </command>
          <command
-               commandId="org.eclipse.oomph.setup.editor.openLog"
-               icon="icons/Log.gif"
-               label="Open Log File"
+               commandId="org.eclipse.oomph.setup.editor.importProjects"
+               icon="icons/Project.gif"
+               label="Import Projects..."
                style="push">
          </command>
          <separator
-               name="org.eclipse.oomph.setup.perform.menu.separator"
+               name="org.eclipse.oomph.setup.perform.menu.separator1"
                visible="true">
          </separator>
+         <command
+               commandId="org.eclipse.oomph.setup.editor.openLog"
+               icon="icons/Log.gif"
+               label="Open Setup Log"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.oomph.setup.editor.resetCache"
+               icon="icons/ResetCache.gif"
+               label="Reset Remote Cache"
+               style="push">
+         </command>
          <!--
          <command
                commandId="org.eclipse.oomph.setup.editor.changeProduct"
@@ -201,12 +219,6 @@
                style="push">
          </command>
          -->
-         <command
-               commandId="org.eclipse.oomph.setup.editor.importProjects"
-               icon="icons/Project.gif"
-               label="Import Projects..."
-               style="push">
-         </command>
       </menuContribution>
    </extension>
 

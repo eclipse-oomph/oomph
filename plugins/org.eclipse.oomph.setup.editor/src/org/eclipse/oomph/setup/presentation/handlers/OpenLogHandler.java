@@ -28,7 +28,7 @@ public class OpenLogHandler extends AbstractDropdownItemHandler
 {
   public OpenLogHandler()
   {
-    super("Log", "Open Log File");
+    super("Log", "Open Setup Log");
   }
 
   public void run()
