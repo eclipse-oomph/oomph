@@ -66,7 +66,10 @@ import java.util.Set;
  */
 public final class SetupUtil
 {
+  public static final String OOMPH_NAMESPACE = "org.eclipse.oomph";
+
   private static final ECFURIHandlerImpl.AuthorizationHandlerImpl AUTHORIZATION_HANDLER;
+
   static
   {
     IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper.getService(
@@ -74,7 +77,7 @@ public final class SetupUtil
     UIServices uiServices = (UIServices)agent.getService(UIServices.SERVICE_NAME);
 
     ISecurePreferences root = PreferencesUtil.getSecurePreferences();
-    ISecurePreferences securePreferences = root.node("org.eclipse.oomph").node("hosts");
+    ISecurePreferences securePreferences = root.node(OOMPH_NAMESPACE).node("hosts");
 
     AUTHORIZATION_HANDLER = new ECFURIHandlerImpl.AuthorizationHandlerImpl(uiServices, securePreferences);
   }

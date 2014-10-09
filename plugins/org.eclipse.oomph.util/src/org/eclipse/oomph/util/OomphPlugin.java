@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Eike Stepper
@@ -201,7 +202,7 @@ public abstract class OomphPlugin extends EMFPlugin
     return new Status(IStatus.INFO, getSymbolicName(), obj.toString(), null);
   }
 
-  public void coreException(IStatus status) throws CoreException
+  public final void coreException(IStatus status) throws CoreException
   {
     if (status != null)
     {
@@ -251,12 +252,18 @@ public abstract class OomphPlugin extends EMFPlugin
     throw new CoreException(status);
   }
 
-  public BundleFile getRootFile()
+  public final String getBuildID()
+  {
+    Bundle bundle = getBundle();
+    return getBuildID(bundle);
+  }
+
+  public final BundleFile getRootFile()
   {
     return new BundleFile.Root(getBundle());
   }
 
-  public File exportResources(String entry)
+  public final File exportResources(String entry)
   {
     Bundle bundle = getBundle();
     File target = new File(PropertiesUtil.getProperty("java.io.tmpdir"), bundle.getSymbolicName() + "_" + bundle.getVersion());
@@ -268,7 +275,7 @@ public abstract class OomphPlugin extends EMFPlugin
     return target;
   }
 
-  public void exportResources(String entry, File target)
+  public final void exportResources(String entry, File target)
   {
     Bundle bundle = getBundle();
     exportResources(bundle, entry, target);
@@ -495,6 +502,39 @@ public abstract class OomphPlugin extends EMFPlugin
     {
       stream.print("  ");
     }
+  }
+
+  public static String getBuildID(Bundle bundle)
+  {
+    URL url = bundle.getResource("about.mappings");
+    if (url != null)
+    {
+      InputStream source = null;
+
+      try
+      {
+        source = url.openStream();
+
+        Properties properties = new Properties();
+        properties.load(source);
+
+        String buildID = (String)properties.get("0");
+        if (buildID != null && !buildID.startsWith("$"))
+        {
+          return buildID;
+        }
+      }
+      catch (IOException ex)
+      {
+        //$FALL-THROUGH$
+      }
+      finally
+      {
+        IOUtil.closeSilent(source);
+      }
+    }
+
+    return null;
   }
 
   /**

@@ -21,6 +21,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
@@ -32,8 +33,8 @@ import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.util.Confirmer;
-import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.IRunnable;
+import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -70,13 +71,9 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author Eike Stepper
@@ -411,49 +408,27 @@ public final class InstallerDialog extends SetupWizardDialog
       for (Bundle bundle : bundleContext.getBundles())
       {
         String symbolicName = bundle.getSymbolicName();
-        if (symbolicName.startsWith("org.eclipse.oomph"))
+        if (symbolicName.startsWith(SetupUtil.OOMPH_NAMESPACE))
         {
-          URL url = bundle.getResource("about.mappings");
-          if (url != null)
+          String buildID = OomphPlugin.getBuildID(bundle);
+          if (buildID != null)
           {
-            InputStream source = null;
+            if (firstBuildID == null)
+            {
+              firstBuildID = buildID;
+            }
 
             try
             {
-              source = url.openStream();
-
-              Properties properties = new Properties();
-              properties.load(source);
-
-              String buildID = (String)properties.get("0");
-              if (buildID != null && !buildID.startsWith("$"))
+              int id = Integer.parseInt(buildID);
+              if (id > highestBuildID)
               {
-                if (firstBuildID == null)
-                {
-                  firstBuildID = buildID;
-                }
-
-                try
-                {
-                  int id = Integer.parseInt(buildID);
-                  if (id > highestBuildID)
-                  {
-                    highestBuildID = id;
-                  }
-                }
-                catch (NumberFormatException ex)
-                {
-                  //$FALL-THROUGH$
-                }
+                highestBuildID = id;
               }
             }
-            catch (IOException ex)
+            catch (NumberFormatException ex)
             {
               //$FALL-THROUGH$
-            }
-            finally
-            {
-              IOUtil.closeSilent(source);
             }
           }
         }

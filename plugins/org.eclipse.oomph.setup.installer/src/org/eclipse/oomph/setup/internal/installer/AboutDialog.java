@@ -13,8 +13,11 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.util.OomphPlugin;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -30,6 +33,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+
+import org.osgi.framework.Bundle;
 
 import java.util.Arrays;
 
@@ -90,12 +95,34 @@ public final class AboutDialog extends AbstractSetupDialog
         item.setText(0, id);
 
         String version = installedUnits[i].getVersion().toString();
-        item.setText(ECLIPSE_VERSION_COLUMN_INDEX, version);
 
-        if (id.startsWith("org.eclipse.oomph"))
+        if (id.startsWith(SetupUtil.OOMPH_NAMESPACE))
         {
           item.setForeground(blue);
+
+          try
+          {
+            Bundle[] bundles = Platform.getBundles(id, version);
+            if (bundles != null)
+            {
+              for (Bundle bundle : bundles)
+              {
+                String buildID = OomphPlugin.getBuildID(bundle);
+                if (buildID != null)
+                {
+                  version += " Build " + buildID;
+                  break;
+                }
+              }
+            }
+          }
+          catch (Exception ex)
+          {
+            SetupInstallerPlugin.INSTANCE.log(ex);
+          }
         }
+
+        item.setText(ECLIPSE_VERSION_COLUMN_INDEX, version);
       }
 
       final ControlAdapter columnResizer = new ControlAdapter()
