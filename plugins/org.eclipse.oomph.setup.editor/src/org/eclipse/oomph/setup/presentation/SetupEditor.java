@@ -1502,7 +1502,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     URI resourceURI = EditUIUtil.getURI(getEditorInput());
     final ResourceSet resourceSet = editingDomain.getResourceSet();
 
-    resourceMirror.mirror(resourceURI);
+    resourceMirror.perform(resourceURI);
 
     final Resource mainResource = editingDomain.getResourceSet().getResource(resourceURI, false);
     EList<EObject> contents = mainResource.getContents();
@@ -1512,7 +1512,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       rootObject = contents.get(0);
       if (!(rootObject instanceof Index))
       {
-        resourceMirror.mirror(SetupContext.INDEX_SETUP_URI);
+        resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
       }
     }
 
@@ -1716,10 +1716,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         final ResourceSet resourceSet = editingDomain.getResourceSet();
 
-        final ResourceMirror resourceMirror = new ResourceMirror.WithProgress(resourceSet, monitor)
+        final ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
         {
           @Override
-          public void run()
+          protected void run(String taskName, IProgressMonitor monitor)
           {
             SetupEditor.this.resourceMirror = this;
             createModel();
@@ -1727,6 +1727,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             SetupEditor.this.resourceMirror = null;
           }
         };
+
+        resourceMirror.begin(monitor);
 
         display.asyncExec(new Runnable()
         {

@@ -101,9 +101,9 @@
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
-            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ResetCacheHandler"
-            id="org.eclipse.oomph.setup.editor.resetCache"
-            name="Reset Remote Cache">
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.RefreshCacheHandler"
+            id="org.eclipse.oomph.setup.editor.refreshCache"
+            name="Referehs Remote Cache">
       </command>
       <!--
       <command
@@ -206,9 +206,9 @@
                style="push">
          </command>
          <command
-               commandId="org.eclipse.oomph.setup.editor.resetCache"
-               icon="icons/ResetCache.gif"
-               label="Reset Remote Cache"
+               commandId="org.eclipse.oomph.setup.editor.refreshCache"
+               icon="icons/RefreshCache.gif"
+               label="Refresh Remote Cache"
                style="push">
          </command>
          <!--

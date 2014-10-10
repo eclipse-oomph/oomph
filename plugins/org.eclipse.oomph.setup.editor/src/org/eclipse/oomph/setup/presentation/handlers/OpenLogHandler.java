@@ -15,11 +15,10 @@ import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
 
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-
-import java.net.URI;
 
 /**
  * @author Eike Stepper
@@ -41,7 +40,7 @@ public class OpenLogHandler extends AbstractDropdownItemHandler
       }
 
       IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-      IDE.openEditor(page, new URI(SetupContext.SETUP_LOG_URI.toString()), "org.eclipse.ui.DefaultTextEditor", true);
+      IDE.openEditor(page, URIUtil.fromString(SetupContext.SETUP_LOG_URI.toString()), "org.eclipse.ui.DefaultTextEditor", true);
     }
     catch (Exception ex)
     {

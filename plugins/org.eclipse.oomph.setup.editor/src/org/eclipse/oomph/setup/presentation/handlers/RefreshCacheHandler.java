@@ -12,30 +12,35 @@ package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
-import org.eclipse.oomph.ui.UIUtil;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.emf.common.util.URI;
+
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
+
+import java.util.Set;
 
 /**
  * @author Eike Stepper
  */
-public class ResetCacheHandler extends AbstractDropdownItemHandler
+public class RefreshCacheHandler extends AbstractDropdownItemHandler
 {
-  public ResetCacheHandler()
+  public RefreshCacheHandler()
   {
-    super("ResetCache", "Reset Remote Cache");
+    super("RefreshCache", "Refresh Remote Cache");
   }
 
   public void run()
   {
     try
     {
-      int size = ECFURIHandlerImpl.clearExpectedETags();
-
-      String pluralS = size == 1 ? "" : "s";
-      String pluralHave = size == 1 ? "has" : "have";
-      String message = "The eTag" + pluralS + " of " + size + " cache file" + pluralS + " " + pluralHave + " been reset.";
-      MessageDialog.openInformation(UIUtil.getShell(), "Remote Cache", message);
+      Set<? extends URI> uris = ECFURIHandlerImpl.clearExpectedETags();
+      Job mirror = ECFURIHandlerImpl.mirror(uris);
+      IWorkbench workbench = PlatformUI.getWorkbench();
+      IProgressService progressService = workbench.getProgressService();
+      progressService.showInDialog(null, mirror);
     }
     catch (Exception ex)
     {

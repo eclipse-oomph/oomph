@@ -383,14 +383,16 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       {
         public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
-          ResourceMirror resourceMirror = new ResourceMirror.WithProgress(resourceSet, monitor)
+          ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
           {
             @Override
-            public void run()
+            protected void run(String taskName, IProgressMonitor monitor)
             {
-              mirror(uris);
+              perform(uris);
             }
           };
+
+          resourceMirror.begin(monitor);
 
           if (resourceMirror.isCanceled())
           {

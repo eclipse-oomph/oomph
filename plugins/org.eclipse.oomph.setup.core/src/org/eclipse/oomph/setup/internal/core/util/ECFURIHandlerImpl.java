@@ -19,10 +19,15 @@ import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.ContainerFactory;
 import org.eclipse.ecf.core.IContainer;
@@ -58,6 +63,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -308,16 +314,32 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   private static final Map<URI, String> EXPECTED_ETAGS = new HashMap<URI, String>();
 
-  public static int clearExpectedETags()
+  public static Set<? extends URI> clearExpectedETags()
   {
-    int size;
+    Set<URI> result;
     synchronized (EXPECTED_ETAGS)
     {
-      size = EXPECTED_ETAGS.size();
+      result = new HashSet<URI>(EXPECTED_ETAGS.keySet());
       EXPECTED_ETAGS.clear();
     }
 
-    return size;
+    return result;
+  }
+
+  public static Job mirror(final Set<? extends URI> uris)
+  {
+    Job job = new Job("ETag Mirror")
+    {
+      @Override
+      protected IStatus run(IProgressMonitor monitor)
+      {
+        new ETagMirror().begin(uris, monitor);
+        return Status.OK_STATUS;
+      }
+    };
+
+    job.schedule();
+    return job;
   }
 
   private static String getExpectedETag(URI uri)
@@ -726,6 +748,80 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         }
 
         receiveLatch.countDown();
+      }
+    }
+  }
+
+  private static class ETagMirror extends WorkerPool<ETagMirror, URI, ETagMirror.Worker>
+  {
+    private static final Map<Object, Object> OPTIONS;
+
+    private static final URIConverter URI_CONVERTER;
+
+    static
+    {
+      ResourceSet resourceSet = SetupUtil.createResourceSet();
+      OPTIONS = resourceSet.getLoadOptions();
+      OPTIONS.put(OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITH_ETAG_CHECKING);
+      URI_CONVERTER = resourceSet.getURIConverter();
+    }
+
+    private Set<? extends URI> uris;
+
+    @Override
+    protected Worker createWorker(URI key, int workerID, boolean secondary)
+    {
+      return new Worker("ETag Mirror " + key, this, key, workerID, secondary);
+    }
+
+    public void begin(Set<? extends URI> uris, final IProgressMonitor monitor)
+    {
+      this.uris = uris;
+      int size = uris.size();
+      monitor.beginTask("Mirroring " + size + " resource" + (size == 1 ? "" : "s"), uris.size());
+      super.begin("Mirroring", monitor);
+    }
+
+    @Override
+    protected void run(String taskName, IProgressMonitor monitor)
+    {
+      perform(uris);
+    }
+
+    private static class Worker extends WorkerPool.Worker<URI, ETagMirror>
+    {
+      protected Worker(String name, ETagMirror workPool, URI key, int id, boolean secondary)
+      {
+        super(name, workPool, key, id, secondary);
+      }
+
+      @Override
+      protected IStatus perform(IProgressMonitor monitor)
+      {
+        ETagMirror workPool = getWorkPool();
+        IProgressMonitor workPoolMonitor = workPool.getMonitor();
+        workPoolMonitor.subTask("Mirroring " + getKey().toString());
+        try
+        {
+          URI_CONVERTER.createInputStream(getKey(), OPTIONS).close();
+          try
+          {
+            Thread.sleep(0);
+          }
+          catch (InterruptedException ex)
+          {
+            ex.printStackTrace();
+          }
+        }
+        catch (IOException ex)
+        {
+          ex.printStackTrace();
+        }
+        finally
+        {
+          workPoolMonitor.worked(1);
+        }
+        return Status.OK_STATUS;
       }
     }
   }

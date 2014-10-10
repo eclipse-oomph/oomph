@@ -205,7 +205,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
                 protected IStatus run(IProgressMonitor monitor)
                 {
                   ResourceMirror resourceMirror = new ResourceMirror();
-                  resourceMirror.mirror(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
+                  resourceMirror.perform(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
                       SetupContext.USER_SETUP_URI }));
 
                   ResourceSet resourceSet = resourceMirror.getResourceSet();
