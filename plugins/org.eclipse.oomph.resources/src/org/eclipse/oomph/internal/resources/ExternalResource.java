@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
 import java.net.URI;
@@ -207,10 +208,10 @@ public abstract class ExternalResource extends PlatformObject implements IResour
     {
       if (backendResource.isLocal())
       {
-        return new URI(backendResource.getLocation().toString());
+        return URIUtil.fromString(backendResource.getLocation().toString());
       }
 
-      return new URI(backendResource.getAbsoluteURI().toString());
+      return URIUtil.fromString(backendResource.getAbsoluteURI().toString());
     }
     catch (URISyntaxException ex)
     {
