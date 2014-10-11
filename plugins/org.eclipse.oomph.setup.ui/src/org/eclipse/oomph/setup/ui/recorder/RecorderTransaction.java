@@ -52,6 +52,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import java.io.IOException;
@@ -457,22 +458,27 @@ public abstract class RecorderTransaction
       final IEditorPart[] editor = { null };
       final CountDownLatch editorLoadedLatch = new CountDownLatch(1);
 
-      UIUtil.syncExec(new Runnable()
+      IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+      final IWorkbenchPage page = window != null ? window.getActivePage() : null;
+
+      if (page != null)
       {
-        public void run()
+        UIUtil.syncExec(new Runnable()
         {
-          IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-          editor[0] = SetupEditorSupport.getEditor(page, SetupContext.USER_SETUP_URI, false, new SetupEditorSupport.LoadHandler()
+          public void run()
           {
-            @Override
-            protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
+            editor[0] = SetupEditorSupport.getEditor(page, SetupContext.USER_SETUP_URI, false, new SetupEditorSupport.LoadHandler()
             {
-              instance = new RecorderTransaction.EditorTransaction(editor, domain, resource);
-              editorLoadedLatch.countDown();
-            }
-          });
-        }
-      });
+              @Override
+              protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
+              {
+                instance = new RecorderTransaction.EditorTransaction(editor, domain, resource);
+                editorLoadedLatch.countDown();
+              }
+            });
+          }
+        });
+      }
 
       if (editor[0] != null)
       {
