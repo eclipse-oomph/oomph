@@ -27,6 +27,7 @@ import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.targlets.internal.core.WorkspaceIUImporter;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
@@ -548,7 +549,8 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     LOOP: for (Iterator<Targlet> it = getTarglets().iterator(); it.hasNext();)
     {
       Targlet targlet = it.next();
-      if (!targletNames.add(targlet.getName()))
+      String name = targlet.getName();
+      if (StringUtil.isEmpty(name) || !targletNames.add(name))
       {
         it.remove();
       }
