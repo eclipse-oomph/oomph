@@ -27,9 +27,9 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
-import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
+import org.eclipse.oomph.workingsets.WorkingSetsPackage;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog;
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
@@ -38,6 +38,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -832,9 +833,10 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
               {
                 for (EObject eObject = (EObject)object; eObject != null; eObject = eObject.eContainer())
                 {
-                  if (eObject instanceof WorkingSetTask)
+                  List<WorkingSet> workingSets = getWorkingSets(eObject);
+                  if (workingSets != null)
                   {
-                    workingSets = ((WorkingSetTask)eObject).getWorkingSets();
+                    this.workingSets = workingSets;
                     break LOOP;
                   }
                 }
@@ -842,6 +844,21 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
             }
 
             return workingSets;
+          }
+
+          private List<WorkingSet> getWorkingSets(EObject eObject)
+          {
+            for (EReference eReference : eObject.eClass().getEAllReferences())
+            {
+              if (eReference.isMany() && eReference.getEType() == WorkingSetsPackage.Literals.WORKING_SET)
+              {
+                @SuppressWarnings("unchecked")
+                EList<WorkingSet> value = (EList<WorkingSet>)eObject.eGet(eReference);
+                return value;
+              }
+            }
+
+            return null;
           }
         };
 

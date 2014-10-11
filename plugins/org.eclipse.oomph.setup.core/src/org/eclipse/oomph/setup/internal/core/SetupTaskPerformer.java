@@ -2364,30 +2364,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       performEclipseIniTask(false, "--launcher.appendVmargs", null);
       performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))));
 
-      URI indexURI = SetupContext.INDEX_SETUP_URI;
-      URI redirectedURI = redirect(indexURI);
-      if (!redirectedURI.equals(indexURI))
-      {
-        URI baseURI = indexURI.trimSegments(1).appendSegment("");
-        URI redirectedBaseURI = redirect(baseURI);
-        if (!redirectedBaseURI.equals(baseURI))
-        {
-          URI baseBaseURI = baseURI.trimSegments(1).appendSegment("");
-          URI redirectedBaseBaseURI = redirect(baseBaseURI);
-          if (!redirectedBaseBaseURI.equals(baseBaseURI))
-          {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index.redirection", "=" + baseBaseURI + "->" + redirectedBaseBaseURI);
-          }
-          else
-          {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index.redirection", "=" + baseURI + "->" + redirectedBaseURI);
-          }
-        }
-        else
-        {
-          performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index.redirection", "=" + indexURI + "->" + redirectedURI);
-        }
-      }
+      performIndexRediction(SetupContext.INDEX_SETUP_URI, "");
+      performIndexRediction(SetupContext.INDEX_SETUP_LOCATION_URI, ".location");
 
       if (REMOTE_DEBUG)
       {
@@ -2410,6 +2388,37 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     hasSuccessfullyPerformed = true;
+  }
+
+  private void performIndexRediction(URI indexURI, String name) throws Exception
+  {
+    {
+      URI redirectedURI = redirect(indexURI);
+      if (!redirectedURI.equals(indexURI))
+      {
+        URI baseURI = indexURI.trimSegments(1).appendSegment("");
+        URI redirectedBaseURI = redirect(baseURI);
+        if (!redirectedBaseURI.equals(baseURI))
+        {
+          URI baseBaseURI = baseURI.trimSegments(1).appendSegment("");
+          URI redirectedBaseBaseURI = redirect(baseBaseURI);
+          if (!redirectedBaseBaseURI.equals(baseBaseURI))
+          {
+            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseBaseURI + "->"
+                + redirectedBaseBaseURI);
+          }
+          else
+          {
+            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseURI + "->"
+                + redirectedBaseURI);
+          }
+        }
+        else
+        {
+          performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI);
+        }
+      }
+    }
   }
 
   private void performTriggeredSetupTasks() throws Exception
