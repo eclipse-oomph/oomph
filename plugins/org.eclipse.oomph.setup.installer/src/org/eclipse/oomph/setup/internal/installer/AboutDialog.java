@@ -84,7 +84,7 @@ public final class AboutDialog extends AbstractSetupDialog
     }
   };
 
-  private Color blue;
+  private Color gray;
 
   public AboutDialog(Shell parentShell, String theVersion)
   {
@@ -121,7 +121,7 @@ public final class AboutDialog extends AbstractSetupDialog
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
     profile = agent.getCurrentProfile();
 
-    blue = getShell().getDisplay().getSystemColor(SWT.COLOR_BLUE);
+    gray = getShell().getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE);
 
     fillTable();
   }
@@ -142,8 +142,6 @@ public final class AboutDialog extends AbstractSetupDialog
 
       if (id.startsWith(SetupUtil.OOMPH_NAMESPACE))
       {
-        item.setForeground(blue);
-
         try
         {
           Bundle[] bundles = Platform.getBundles(id, version);
@@ -164,6 +162,10 @@ public final class AboutDialog extends AbstractSetupDialog
         {
           SetupInstallerPlugin.INSTANCE.log(ex);
         }
+      }
+      else
+      {
+        item.setForeground(gray);
       }
 
       item.setText(ECLIPSE_VERSION_COLUMN_INDEX, version);
