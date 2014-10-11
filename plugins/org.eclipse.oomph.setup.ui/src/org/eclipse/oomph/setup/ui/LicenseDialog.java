@@ -183,35 +183,27 @@ public class LicenseDialog extends AbstractConfirmDialog
 
   private int[] getSashWeights()
   {
-    IDialogSettings settings = SetupUIPlugin.INSTANCE.getDialogSettings();
-    IDialogSettings section = settings.getSection(getDialogSettingsName());
-    if (section != null)
+    try
     {
-      try
+      int[] weights = new int[2];
+
+      IDialogSettings settings = getDialogSettings();
+      if (settings.get(LIST_WEIGHT) != null)
       {
-        int[] weights = new int[2];
-        if (section.get(LIST_WEIGHT) != null)
+        weights[0] = settings.getInt(LIST_WEIGHT);
+        if (settings.get(LICENSE_WEIGHT) != null)
         {
-          weights[0] = section.getInt(LIST_WEIGHT);
-          if (section.get(LICENSE_WEIGHT) != null)
-          {
-            weights[1] = section.getInt(LICENSE_WEIGHT);
-            return weights;
-          }
+          weights[1] = settings.getInt(LICENSE_WEIGHT);
+          return weights;
         }
       }
-      catch (NumberFormatException ex)
-      {
-        // Ignore if there actually was a value that didn't parse.
-      }
+    }
+    catch (NumberFormatException ex)
+    {
+      // Ignore if there actually was a value that didn't parse.
     }
 
     return new int[] { 50, 50 };
-  }
-
-  private String getDialogSettingsName()
-  {
-    return getClass().getName();
   }
 
   private static String getIUName(IInstallableUnit iu)

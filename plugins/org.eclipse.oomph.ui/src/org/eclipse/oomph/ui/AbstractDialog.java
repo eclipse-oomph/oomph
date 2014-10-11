@@ -15,6 +15,7 @@ import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.dialogs.DialogTray;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.resource.JFaceResources;
@@ -304,6 +305,13 @@ public abstract class AbstractDialog extends TitleAreaDialog
   }
 
   protected abstract String getImagePath();
+
+  protected IDialogSettings getDialogSettings()
+  {
+    String sectionName = getClass().getName();
+    OomphUIPlugin plugin = this.plugin != null ? this.plugin : UIPlugin.INSTANCE;
+    return plugin.getDialogSettings(sectionName);
+  }
 
   @Override
   protected final Point getInitialSize()

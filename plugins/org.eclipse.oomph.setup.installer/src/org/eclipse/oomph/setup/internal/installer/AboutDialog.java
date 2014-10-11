@@ -19,14 +19,19 @@ import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
@@ -36,7 +41,9 @@ import org.eclipse.swt.widgets.TableItem;
 
 import org.osgi.framework.Bundle;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -45,12 +52,45 @@ public final class AboutDialog extends AbstractSetupDialog
 {
   private static final int ECLIPSE_VERSION_COLUMN_INDEX = 1;
 
+  private static final String SHOW_ALL_PLUGINS = "SHOW_ALL_PLUGINS";
+
+  private final IDialogSettings dialogSettings = getDialogSettings();
+
   private final String version;
+
+  private boolean showAllPlugins;
+
+  private Profile profile;
+
+  private Table table;
+
+  private TableColumn idColumn;
+
+  private TableColumn versionColumn;
+
+  private ControlAdapter columnResizer = new ControlAdapter()
+  {
+    @Override
+    public void controlResized(ControlEvent e)
+    {
+      Point size = table.getSize();
+      ScrollBar bar = table.getVerticalBar();
+      if (bar != null && bar.isVisible())
+      {
+        size.x -= bar.getSize().x;
+      }
+
+      idColumn.setWidth(size.x - versionColumn.getWidth());
+    }
+  };
+
+  private Color blue;
 
   public AboutDialog(Shell parentShell, String theVersion)
   {
     super(parentShell, "About " + SHELL_TEXT, 700, 500, SetupInstallerPlugin.INSTANCE, null);
     version = theVersion;
+    showAllPlugins = dialogSettings.getBoolean(SHOW_ALL_PLUGINS);
   }
 
   @Override
@@ -62,106 +102,124 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected void createUI(Composite parent)
   {
-    final Table table = new Table(parent, SWT.FULL_SELECTION | SWT.NO_SCROLL | SWT.V_SCROLL);
+    table = new Table(parent, SWT.FULL_SELECTION | SWT.NO_SCROLL | SWT.V_SCROLL);
     table.setHeaderVisible(true);
     table.setLinesVisible(true);
     table.setLayoutData(new GridData(GridData.FILL_BOTH));
+    table.addControlListener(columnResizer);
 
-    final TableColumn idColumn = new TableColumn(table, SWT.NONE);
-    idColumn.setText("Installed Unit");
+    idColumn = new TableColumn(table, SWT.NONE);
+    idColumn.setText("Plugin");
     idColumn.setResizable(false);
     idColumn.setMoveable(false);
 
-    final TableColumn versionColumn = new TableColumn(table, SWT.NONE);
+    versionColumn = new TableColumn(table, SWT.NONE);
     versionColumn.setText("Version");
     versionColumn.setResizable(false);
     versionColumn.setMoveable(false);
 
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
-    Profile profile = agent.getCurrentProfile();
+    profile = agent.getCurrentProfile();
 
-    try
+    blue = getShell().getDisplay().getSystemColor(SWT.COLOR_BLUE);
+
+    fillTable();
+  }
+
+  private void fillTable()
+  {
+    List<IInstallableUnit> plugins = getPlugins();
+    Collections.sort(plugins);
+
+    for (IInstallableUnit plugin : plugins)
     {
-      IInstallableUnit[] installedUnits = profile.query(QueryUtil.createIUAnyQuery(), null).toArray(IInstallableUnit.class);
-      Arrays.sort(installedUnits);
+      TableItem item = new TableItem(table, SWT.NONE);
 
-      Color blue = getShell().getDisplay().getSystemColor(SWT.COLOR_BLUE);
+      String id = plugin.getId();
+      item.setText(0, id);
 
-      for (int i = 0; i < installedUnits.length; i++)
+      String version = plugin.getVersion().toString();
+
+      if (id.startsWith(SetupUtil.OOMPH_NAMESPACE))
       {
-        TableItem item = new TableItem(table, SWT.NONE);
+        item.setForeground(blue);
 
-        String id = installedUnits[i].getId();
-        item.setText(0, id);
-
-        String version = installedUnits[i].getVersion().toString();
-
-        if (id.startsWith(SetupUtil.OOMPH_NAMESPACE))
+        try
         {
-          item.setForeground(blue);
-
-          try
+          Bundle[] bundles = Platform.getBundles(id, version);
+          if (bundles != null)
           {
-            Bundle[] bundles = Platform.getBundles(id, version);
-            if (bundles != null)
+            for (Bundle bundle : bundles)
             {
-              for (Bundle bundle : bundles)
+              String buildID = OomphPlugin.getBuildID(bundle);
+              if (buildID != null)
               {
-                String buildID = OomphPlugin.getBuildID(bundle);
-                if (buildID != null)
-                {
-                  version += " Build " + buildID;
-                  break;
-                }
+                version += " Build " + buildID;
+                break;
               }
             }
           }
-          catch (Exception ex)
-          {
-            SetupInstallerPlugin.INSTANCE.log(ex);
-          }
         }
-
-        item.setText(ECLIPSE_VERSION_COLUMN_INDEX, version);
+        catch (Exception ex)
+        {
+          SetupInstallerPlugin.INSTANCE.log(ex);
+        }
       }
 
-      final ControlAdapter columnResizer = new ControlAdapter()
-      {
-        @Override
-        public void controlResized(ControlEvent e)
-        {
-          Point size = table.getSize();
-          ScrollBar bar = table.getVerticalBar();
-          if (bar != null && bar.isVisible())
-          {
-            size.x -= bar.getSize().x;
-          }
-
-          idColumn.setWidth(size.x - versionColumn.getWidth());
-        }
-      };
-
-      versionColumn.pack();
-      versionColumn.setWidth(versionColumn.getWidth() + 10);
-
-      table.addControlListener(columnResizer);
-      table.getDisplay().asyncExec(new Runnable()
-      {
-        public void run()
-        {
-          columnResizer.controlResized(null);
-        }
-      });
+      item.setText(ECLIPSE_VERSION_COLUMN_INDEX, version);
     }
-    finally
+
+    versionColumn.pack();
+    versionColumn.setWidth(versionColumn.getWidth() + 10);
+
+    table.getDisplay().asyncExec(new Runnable()
     {
-      SetupInstallerPlugin.INSTANCE.ungetService(agent);
+      public void run()
+      {
+        columnResizer.controlResized(null);
+      }
+    });
+  }
+
+  private List<IInstallableUnit> getPlugins()
+  {
+    List<IInstallableUnit> plugins = new ArrayList<IInstallableUnit>();
+    for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), null))
+    {
+      if (showAllPlugins || iu.getId().startsWith(SetupUtil.OOMPH_NAMESPACE))
+      {
+        for (IProvidedCapability capability : iu.getProvidedCapabilities())
+        {
+          if ("osgi.bundle".equals(capability.getNamespace()))
+          {
+            plugins.add(iu);
+            break;
+          }
+        }
+      }
     }
+
+    return plugins;
   }
 
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
+    final Button showAllPluginsButton = createCheckbox(parent, "Show all plugins");
+    showAllPluginsButton.setSelection(showAllPlugins);
+    showAllPluginsButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        showAllPlugins = showAllPluginsButton.getSelection();
+        dialogSettings.put(SHOW_ALL_PLUGINS, showAllPlugins);
+
+        table.removeAll();
+        fillTable();
+      }
+    });
+
     createButton(parent, IDialogConstants.OK_ID, "Close", true);
   }
 }
