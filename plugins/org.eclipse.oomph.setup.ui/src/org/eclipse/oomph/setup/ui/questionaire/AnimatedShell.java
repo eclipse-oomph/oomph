@@ -1,6 +1,6 @@
 package org.eclipse.oomph.setup.ui.questionaire;
 
-import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.ImagePage;
+import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.QuestionPage;
 import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Page;
 
 import org.eclipse.swt.SWT;
@@ -146,9 +146,9 @@ public class AnimatedShell extends Shell
           GearAnimator animator = getAnimator();
           Page page = animator.getSelectedPage();
 
-          if (page instanceof ImagePage)
+          if (page instanceof QuestionPage)
           {
-            ImagePage imagePage = (ImagePage)page;
+            QuestionPage imagePage = (QuestionPage)page;
 
             if (e.keyCode == SWT.ARROW_RIGHT)
             {
