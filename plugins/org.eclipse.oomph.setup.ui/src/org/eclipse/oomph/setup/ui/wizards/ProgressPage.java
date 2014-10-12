@@ -108,6 +108,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ProgressPage extends SetupWizardPage
 {
+  public static final String PAGE_NAME = "ProgressPage";
+
   private static final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm:ss");
 
   private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
@@ -231,7 +233,7 @@ public class ProgressPage extends SetupWizardPage
 
   public ProgressPage()
   {
-    super("ProgressPage");
+    super(PAGE_NAME);
     setTitle("Progress");
     setDescription("Wait for the setup to complete, or cancel the progress indictor and press Back to make changes.");
   }
