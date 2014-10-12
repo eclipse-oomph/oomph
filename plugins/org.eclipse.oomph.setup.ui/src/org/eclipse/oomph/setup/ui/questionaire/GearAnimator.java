@@ -22,13 +22,13 @@ public final class GearAnimator extends Animator
 
   public static final int PAGE_HEIGHT = 420;
 
+  public static final int BORDER = 30;
+
   private static final int GEARS = 7;
 
   private static final int TEETH = 8;
 
   private static final float ANGLE = 360 / TEETH;
-
-  private static final int BORDER = 30;
 
   private static final double RADIAN = 2 * Math.PI / 360;
 
@@ -76,6 +76,8 @@ public final class GearAnimator extends Animator
 
   private boolean pageBufferUpdated;
 
+  private boolean oldShowOverlay;
+
   public GearAnimator(final Display display, Font font)
   {
     super(display);
@@ -98,144 +100,13 @@ public final class GearAnimator extends Animator
 
     purple = new Color(display, 43, 34, 84);
 
-    class TestPage extends Page
-    {
-      private final Image image;
-
-      public TestPage(int index, String title, String... answers)
-      {
-        super(index, title, answers);
-
-        if (index != 0)
-        {
-          image = new Image(display, "questionaire/page" + index + ".png");
-        }
-        else
-        {
-          image = null;
-        }
-      }
-
-      public TestPage(int index, String title)
-      {
-        this(index, title, "Yes, Please", "No, Thanks");
-      }
-
-      @Override
-      protected void dispose()
-      {
-        if (image != null)
-        {
-          image.dispose();
-        }
-      }
-
-      @Override
-      protected int onMouseMove(int x, int y)
-      {
-        int i = getAnswer(x, y);
-        if (i != -1)
-        {
-          pageBufferUpdated = false;
-          return -2 - i;
-        }
-
-        if (hover < -1)
-        {
-          pageBufferUpdated = false;
-        }
-
-        return super.onMouseMove(x, y);
-      }
-
-      @Override
-      protected boolean onMouseDown(int x, int y)
-      {
-        int i = getAnswer(x, y);
-        if (i != -1)
-        {
-          setChoice(i);
-          updatePage();
-          setSelection(getSelection() + 1);
-          return true;
-        }
-
-        return super.onMouseDown(x, y);
-      }
-
-      @Override
-      protected void draw(GC gc)
-      {
-        String title = getTitle();
-        String[] answers = getAnswers();
-        Rectangle[] answerBoxes = getAnswerBoxes();
-
-        Font oldFont = gc.getFont();
-        gc.setFont(bigFont);
-
-        Point extent = gc.stringExtent(title);
-        gc.setForeground(purple);
-        gc.drawText(title, (PAGE_WIDTH - extent.x) / 2, 0, true);
-
-        if (image != null)
-        {
-          Rectangle bounds = image.getBounds();
-          gc.drawImage(image, (PAGE_WIDTH - bounds.width) / 2, (PAGE_HEIGHT - bounds.height) / 2);
-        }
-
-        double answerWidth = PAGE_WIDTH / answers.length;
-        for (int i = 0; i < answers.length; i++)
-        {
-          String answer = answers[i];
-          boolean hovered = false;
-          if (-2 - i == hover)
-          {
-            oldHover = hover;
-            hovered = true;
-          }
-
-          gc.setFont(hovered ? hoverFont : bigFont);
-          gc.setForeground(i == getChoice() ? purple : display.getSystemColor(SWT.COLOR_DARK_GRAY));
-
-          extent = gc.stringExtent(answer);
-          int x = (int)((i + .5) * answerWidth - extent.x / 2);
-          int y = PAGE_HEIGHT - extent.y;
-          gc.drawText(answer, x, y, true);
-
-          answerBoxes[i] = new Rectangle(x, y, extent.x, extent.y);
-        }
-
-        gc.setFont(oldFont);
-      }
-
-      private int getAnswer(int x, int y)
-      {
-        x -= BORDER;
-        y -= pageY;
-
-        String[] answers = getAnswers();
-        Rectangle[] answerBoxes = getAnswerBoxes();
-
-        for (int i = 0; i < answers.length; i++)
-        {
-          Rectangle box = answerBoxes[i];
-          if (box.contains(x, y))
-          {
-            return i;
-          }
-        }
-
-        return -1;
-      }
-    }
-
-    pages[0] = new TestPage(0, "Welcome to Eclipse Oomph", "Proceed", "Cancel");
-    pages[1] = new TestPage(1, "Refresh Resources Automatically?");
-    pages[2] = new TestPage(2, "Show Line Numbers in Editors?");
-    pages[3] = new TestPage(3, "Check Spelling in Text Editors?");
-    pages[4] = new TestPage(4, "Execute Jobs in Background?");
-    pages[5] = new TestPage(5, "Encode Text Files with UTF-8?");
-    pages[6] = new TestPage(6, "Enable Preference Recorder?");
+    pages[0] = new ImagePage(0, "Welcome to Eclipse Oomph", 0, 0, "Proceed", "Cancel");
+    pages[1] = new ImagePage(1, "Refresh Resources Automatically?", 5, 29);
+    pages[2] = new ImagePage(2, "Show Line Numbers in Editors?", 19, 30);
+    pages[3] = new ImagePage(3, "Check Spelling in Text Editors?", 186, 37);
+    pages[4] = new ImagePage(4, "Execute Jobs in Background?", 23, 160);
+    pages[5] = new ImagePage(5, "Encode Text Files with UTF-8?", 181, 95);
+    pages[6] = new ImagePage(6, "Enable Preference Recorder?", 57, 82);
   }
 
   @Override
@@ -357,6 +228,11 @@ public final class GearAnimator extends Animator
     return oldSelection;
   }
 
+  public Page getSelectedPage()
+  {
+    return pages[selection];
+  }
+
   @Override
   protected boolean onMouseMove(int x, int y)
   {
@@ -379,7 +255,7 @@ public final class GearAnimator extends Animator
           }
         }
 
-        Page page = pages[selection];
+        Page page = getSelectedPage();
         if (page != null)
         {
           hover = page.onMouseMove(x, y);
@@ -417,7 +293,7 @@ public final class GearAnimator extends Animator
           }
         }
 
-        Page page = pages[selection];
+        Page page = getSelectedPage();
         if (page != null)
         {
           if (page.onMouseDown(x, y))
@@ -438,6 +314,14 @@ public final class GearAnimator extends Animator
     if (overflow)
     {
       overflow = false;
+      needsRedraw = true;
+    }
+
+    boolean showOverlay = showOverlay();
+    if (showOverlay != oldShowOverlay)
+    {
+      oldShowOverlay = showOverlay;
+      updatePage();
       needsRedraw = true;
     }
 
@@ -663,13 +547,35 @@ public final class GearAnimator extends Animator
     gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
     gc.fillRectangle(pageBuffer.getBounds());
 
-    Page page = pages[selection];
+    Page page = getSelectedPage();
     if (page != null)
     {
       page.draw(gc);
     }
 
     gc.dispose();
+  }
+
+  private boolean showOverlay()
+  {
+    long millis2 = (int)(System.currentTimeMillis() / 1000);
+    return (millis2 & 1) == 1;
+  }
+
+  void updateOverlay(int x, int y)
+  {
+    Page page = getSelectedPage();
+    if (page instanceof ImagePage)
+    {
+      ImagePage imagePage = (ImagePage)page;
+      imagePage.overlayX += x;
+      imagePage.overlayY += y;
+
+      System.out.println("" + imagePage.overlayX + ", " + imagePage.overlayY);
+
+      updatePage();
+      overflow = true;
+    }
   }
 
   /**
@@ -710,6 +616,26 @@ public final class GearAnimator extends Animator
       return answers;
     }
 
+    public final int getAnswer(int x, int y)
+    {
+      x -= BORDER;
+      y -= pageY;
+
+      String[] answers = getAnswers();
+      Rectangle[] answerBoxes = getAnswerBoxes();
+
+      for (int i = 0; i < answers.length; i++)
+      {
+        Rectangle box = answerBoxes[i];
+        if (box.contains(x, y))
+        {
+          return i;
+        }
+      }
+
+      return -1;
+    }
+
     public final Rectangle[] getAnswerBoxes()
     {
       return answerBoxes;
@@ -731,14 +657,149 @@ public final class GearAnimator extends Animator
 
     protected int onMouseMove(int x, int y)
     {
+      int i = getAnswer(x, y);
+      if (i != -1)
+      {
+        pageBufferUpdated = false;
+        return -2 - i;
+      }
+
+      if (hover < -1)
+      {
+        pageBufferUpdated = false;
+      }
+
       return -1;
     }
 
     protected boolean onMouseDown(int x, int y)
     {
+      int i = getAnswer(x, y);
+      if (i != -1)
+      {
+        setChoice(i);
+        updatePage();
+        setSelection(getSelection() + 1);
+        return true;
+      }
+
       return false;
     }
 
-    protected abstract void draw(GC gc);
+    protected final void draw(GC gc)
+    {
+      String title = getTitle();
+      String[] answers = getAnswers();
+      Rectangle[] answerBoxes = getAnswerBoxes();
+
+      Font oldFont = gc.getFont();
+      gc.setFont(bigFont);
+
+      Point extent = gc.stringExtent(title);
+      gc.setForeground(purple);
+      gc.drawText(title, (PAGE_WIDTH - extent.x) / 2, 0, true);
+
+      drawContent(gc);
+
+      double answerWidth = PAGE_WIDTH / answers.length;
+      for (int i = 0; i < answers.length; i++)
+      {
+        String answer = answers[i];
+        boolean hovered = false;
+        if (-2 - i == hover)
+        {
+          oldHover = hover;
+          hovered = true;
+        }
+
+        gc.setFont(hovered ? hoverFont : bigFont);
+        gc.setForeground(i == getChoice() ? purple : getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+
+        extent = gc.stringExtent(answer);
+        int x = (int)((i + .5) * answerWidth - extent.x / 2);
+        int y = PAGE_HEIGHT - extent.y;
+        gc.drawText(answer, x, y, true);
+
+        answerBoxes[i] = new Rectangle(x, y, extent.x, extent.y);
+      }
+
+      gc.setFont(oldFont);
+    }
+
+    protected abstract void drawContent(GC gc);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public class ImagePage extends Page
+  {
+    private final Image image;
+
+    private final Image overlay;
+
+    private int overlayX;
+
+    private int overlayY;
+
+    public ImagePage(int index, String title, int overlayX, int overlayY, String... answers)
+    {
+      super(index, title, answers);
+
+      Display display = getDisplay();
+      image = loadImage(display, index, "");
+      overlay = loadImage(display, index, "ovr");
+
+      this.overlayX = overlayX;
+      this.overlayY = overlayY;
+    }
+
+    private Image loadImage(final Display display, int index, String suffix)
+    {
+      try
+      {
+        return new Image(display, "questionaire/page" + index + suffix + ".png");
+      }
+      catch (Exception ex)
+      {
+        return null;
+      }
+    }
+
+    public ImagePage(int index, String title, int overlayX, int overlayY)
+    {
+      this(index, title, overlayX, overlayY, "Yes, Please", "No, Thanks");
+    }
+
+    @Override
+    protected void dispose()
+    {
+      if (image != null)
+      {
+        image.dispose();
+      }
+
+      if (overlay != null)
+      {
+        overlay.dispose();
+      }
+    }
+
+    @Override
+    protected void drawContent(GC gc)
+    {
+      if (image != null)
+      {
+        Rectangle bounds = image.getBounds();
+        int x = (PAGE_WIDTH - bounds.width) / 2;
+        int y = (PAGE_HEIGHT - bounds.height) / 2;
+        gc.drawImage(image, x, y);
+
+        if (overlay != null && showOverlay())
+        {
+          gc.drawImage(overlay, x + overlayX, y + overlayY);
+        }
+      }
+    }
   }
 }
