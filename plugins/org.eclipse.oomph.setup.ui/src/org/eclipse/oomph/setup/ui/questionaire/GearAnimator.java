@@ -34,13 +34,21 @@ public final class GearAnimator extends Animator
 
   private static final int BIG_FONT_PX = 48;
 
+  private static final int NONE = -1;
+
+  private static final int EXIT = NONE - 1;
+
+  private static final int CHOICES = EXIT - 1;
+
   private final Font font;
 
   private final Font bigFont;
 
   private final Font hoverFont;
 
-  private final Image logo;
+  private final Image exit;
+
+  private final Image exitHover;
 
   private final Page[] pages = new Page[GEARS];
 
@@ -64,11 +72,11 @@ public final class GearAnimator extends Animator
 
   private int selection;
 
-  private int oldSelection = -1;
+  private int oldSelection = NONE;
 
-  private int hover = -1;
+  private int hover = NONE;
 
-  private int oldHover = -1;
+  private int oldHover = NONE;
 
   private Image pageBuffer;
 
@@ -78,13 +86,16 @@ public final class GearAnimator extends Animator
 
   private boolean oldShowOverlay;
 
+  private Rectangle exitBox;
+
   public GearAnimator(final Display display, Font font)
   {
     super(display);
     this.font = font;
     bigFont = createFont(display, font, BIG_FONT_PX);
     hoverFont = createFont(display, font, BIG_FONT_PX + 6);
-    logo = new Image(display, "questionaire/logo.png");
+    exit = new Image(display, "questionaire/exit.png");
+    exitHover = new Image(display, "questionaire/exithover.png");
 
     radius = 32;
     setSize((int)(GEARS * 2 * radius), (int)(2 * radius));
@@ -100,7 +111,7 @@ public final class GearAnimator extends Animator
 
     purple = new Color(display, 43, 34, 84);
 
-    pages[0] = new ImagePage(0, "Welcome to Eclipse Oomph", 0, 0, "Proceed", "Cancel");
+    pages[0] = new ImagePage(0, "Welcome to Eclipse Oomph", 0, 0, "Proceed");
     pages[1] = new ImagePage(1, "Refresh Resources Automatically?", 5, 29);
     pages[2] = new ImagePage(2, "Show Line Numbers in Editors?", 19, 30);
     pages[3] = new ImagePage(3, "Check Spelling in Text Editors?", 186, 37);
@@ -137,7 +148,7 @@ public final class GearAnimator extends Animator
     hoverFont.dispose();
     bigFont.dispose();
     font.dispose();
-    logo.dispose();
+    exit.dispose();
     super.dispose();
   }
 
@@ -255,11 +266,18 @@ public final class GearAnimator extends Animator
           }
         }
 
+        if (exitBox != null && exitBox.contains(x, y))
+        {
+          System.out.println("X");
+          hover = EXIT;
+          return true;
+        }
+
         Page page = getSelectedPage();
         if (page != null)
         {
           hover = page.onMouseMove(x, y);
-          if (hover < -1)
+          if (hover < NONE)
           {
             return true;
           }
@@ -267,7 +285,7 @@ public final class GearAnimator extends Animator
       }
     }
 
-    hover = -1;
+    hover = NONE;
     return false;
   }
 
@@ -359,6 +377,26 @@ public final class GearAnimator extends Animator
 
     paint(gc, display, selection);
 
+    Image exitImage = exit;
+    if (hover == EXIT)
+    {
+      exitImage = exitHover;
+      oldHover = hover;
+    }
+
+    int centerX = BORDER + PAGE_WIDTH - exit.getBounds().width / 2;
+    int centerY = BORDER + exit.getBounds().height / 2;
+
+    exitBox = exitImage.getBounds();
+    exitBox.x = centerX - exitImage.getBounds().width / 2;
+    exitBox.y = centerY - exitImage.getBounds().height / 2;
+    gc.drawImage(exitImage, exitBox.x, exitBox.y);
+
+    if (hover == NONE)
+    {
+      oldHover = NONE;
+    }
+
     if (!pageBufferUpdated)
     {
       updatePage();
@@ -366,8 +404,7 @@ public final class GearAnimator extends Animator
     }
 
     int alpha = Math.min((int)(255 * speed / ANGLE), 255);
-
-    if (oldSelection == -1)
+    if (oldSelection == NONE)
     {
       gc.setAlpha(alpha);
       gc.drawImage(pageBuffer, BORDER, pageY);
@@ -394,8 +431,6 @@ public final class GearAnimator extends Animator
 
       gc.setAlpha(255);
     }
-
-    gc.drawImage(logo, BORDER + PAGE_WIDTH - logo.getBounds().width, BORDER);
   }
 
   private void paint(GC gc, Display display, int i)
@@ -438,10 +473,6 @@ public final class GearAnimator extends Animator
         hovered = true;
       }
     }
-    else if (hover == -1)
-    {
-      oldHover = -1;
-    }
 
     double outerR = factor * radius;
     double innerR = factor * r2;
@@ -474,7 +505,7 @@ public final class GearAnimator extends Animator
     else
     {
       Page page = pages[i];
-      if (page != null && page.getChoice() != -1)
+      if (page != null && page.getChoice() != NONE)
       {
         gc.setForeground(purple);
       }
@@ -591,7 +622,7 @@ public final class GearAnimator extends Animator
 
     private final Rectangle[] answerBoxes;
 
-    private int choice = -1;
+    private int choice = NONE;
 
     public Page(int index, String title, String... answers)
     {
@@ -633,7 +664,7 @@ public final class GearAnimator extends Animator
         }
       }
 
-      return -1;
+      return NONE;
     }
 
     public final Rectangle[] getAnswerBoxes()
@@ -658,24 +689,24 @@ public final class GearAnimator extends Animator
     protected int onMouseMove(int x, int y)
     {
       int i = getAnswer(x, y);
-      if (i != -1)
+      if (i != NONE)
       {
         pageBufferUpdated = false;
-        return -2 - i;
+        return CHOICES - i;
       }
 
-      if (hover < -1)
+      if (hover <= CHOICES)
       {
         pageBufferUpdated = false;
       }
 
-      return -1;
+      return NONE;
     }
 
     protected boolean onMouseDown(int x, int y)
     {
       int i = getAnswer(x, y);
-      if (i != -1)
+      if (i != NONE)
       {
         setChoice(i);
         updatePage();
@@ -706,7 +737,7 @@ public final class GearAnimator extends Animator
       {
         String answer = answers[i];
         boolean hovered = false;
-        if (-2 - i == hover)
+        if (CHOICES - i == hover)
         {
           oldHover = hover;
           hovered = true;
