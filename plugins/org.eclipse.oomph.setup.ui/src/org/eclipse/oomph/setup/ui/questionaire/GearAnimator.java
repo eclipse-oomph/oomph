@@ -38,7 +38,11 @@ public final class GearAnimator extends Animator
 
   private static final int EXIT = NONE - 1;
 
-  private static final int CHOICES = EXIT - 1;
+  private static final int BACK = EXIT - 1;
+
+  private static final int NEXT = BACK - 1;
+
+  private static final int CHOICES = NEXT - 1;
 
   private final Font baseFont;
 
@@ -51,6 +55,8 @@ public final class GearAnimator extends Animator
   private final Image exit;
 
   private final Image exitHover;
+
+  private final Image question;
 
   private final Image[] yesImages = new Image[5];
 
@@ -104,6 +110,7 @@ public final class GearAnimator extends Animator
 
     exit = new Image(display, "questionaire/exit.png");
     exitHover = new Image(display, "questionaire/exit_hover.png");
+    question = new Image(display, "questionaire/question.png");
 
     yesImages[0] = new Image(display, "questionaire/yes.png");
     yesImages[1] = new Image(display, "questionaire/yes_select.png");
@@ -165,6 +172,10 @@ public final class GearAnimator extends Animator
       noImages[i].dispose();
     }
 
+    exit.dispose();
+    exitHover.dispose();
+    question.dispose();
+
     purple.dispose();
     gearForeground[0].dispose();
     gearBackground[0].dispose();
@@ -176,7 +187,6 @@ public final class GearAnimator extends Animator
     bigFont.dispose();
     baseFont.dispose();
 
-    exit.dispose();
     super.dispose();
   }
 
@@ -414,10 +424,29 @@ public final class GearAnimator extends Animator
       oldHover = NONE;
     }
 
-    if (!pageBufferUpdated)
+    Page page = getSelectedPage();
+    if (page != null)
     {
-      updatePage();
-      pageBufferUpdated = true;
+      int y = 3 * BORDER + PAGE_HEIGHT / 2;
+      if (page.showBack())
+      {
+        int x = BORDER - 8;
+        gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
+        gc.fillPolygon(new int[] { x, y, x, y + 60, x - 14, y + 30 });
+      }
+
+      if (page.showNext())
+      {
+        int x = BORDER + PAGE_WIDTH + 8;
+        gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
+        gc.fillPolygon(new int[] { x, y, x, y + 60, x + 14, y + 30 });
+      }
+
+      if (!pageBufferUpdated)
+      {
+        updatePage();
+        pageBufferUpdated = true;
+      }
     }
 
     if (oldSelection == NONE)
@@ -596,7 +625,7 @@ public final class GearAnimator extends Animator
     return path;
   }
 
-  private void updatePage()
+  private Page updatePage()
   {
     Display display = getDisplay();
     if (pageBuffer == null)
@@ -615,6 +644,7 @@ public final class GearAnimator extends Animator
     }
 
     gc.dispose();
+    return page;
   }
 
   private Font createFont(Display display, int pixelHeight)
@@ -819,6 +849,8 @@ public final class GearAnimator extends Animator
 
     private Rectangle[] answerBoxes;
 
+    private Rectangle[] arrowBoxes;
+
     private int choice = NONE;
 
     public Page(int index, String title)
@@ -884,6 +916,16 @@ public final class GearAnimator extends Animator
 
     protected void dispose()
     {
+    }
+
+    protected boolean showBack()
+    {
+      return index > 0;
+    }
+
+    protected boolean showNext()
+    {
+      return index < GEARS;
     }
 
     protected int onMouseMove(int x, int y)
@@ -1063,6 +1105,12 @@ public final class GearAnimator extends Animator
     }
 
     @Override
+    protected boolean showNext()
+    {
+      return false;
+    }
+
+    @Override
     protected int onMouseMove(int x, int y)
     {
       if (boxes != null)
@@ -1136,6 +1184,7 @@ public final class GearAnimator extends Animator
         }
         else
         {
+          gc.drawImage(question, x, y + 8);
           gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
         }
 

@@ -109,16 +109,15 @@ public class AnimatedShell extends Shell
       return true;
     }
 
-    if (e.keyCode == SWT.END)
-    {
-      int selection = animator.getPages()[GearAnimator.GEARS - 1].getIndex();
-      animator.setSelection(selection);
-      return true;
-    }
-
     if (e.keyCode == SWT.HOME)
     {
       animator.setSelection(1);
+      return true;
+    }
+
+    if (e.keyCode == SWT.END)
+    {
+      animator.setSelection(GearAnimator.GEARS);
       return true;
     }
 
