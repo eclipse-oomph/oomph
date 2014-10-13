@@ -19,6 +19,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -377,5 +378,17 @@ public final class UIUtil
     }
 
     return section;
+  }
+
+  public static void dispose(Resource... resources)
+  {
+    for (int i = 0; i < resources.length; i++)
+    {
+      Resource resource = resources[i];
+      if (resource != null && !resource.isDisposed())
+      {
+        resource.dispose();
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 package org.eclipse.oomph.setup.ui.questionaire;
 
 import org.eclipse.oomph.setup.ui.questionaire.AnimatedCanvas.Animator;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -58,6 +59,10 @@ public final class GearAnimator extends Animator
 
   private final Image question;
 
+  private final Image[] backImages = new Image[2];
+
+  private final Image[] nextImages = new Image[2];
+
   private final Image[] yesImages = new Image[5];
 
   private final Image[] noImages = new Image[5];
@@ -100,6 +105,8 @@ public final class GearAnimator extends Animator
 
   private Rectangle exitBox;
 
+  private int answerY;
+
   public GearAnimator(final Display display, Font baseFont)
   {
     super(display);
@@ -112,11 +119,18 @@ public final class GearAnimator extends Animator
     exitHover = new Image(display, "questionaire/exit_hover.png");
     question = new Image(display, "questionaire/question.png");
 
+    backImages[0] = new Image(display, "questionaire/back.png");
+    backImages[1] = new Image(display, "questionaire/back_hover.png");
+
+    nextImages[0] = new Image(display, "questionaire/next.png");
+    nextImages[1] = new Image(display, "questionaire/next_hover.png");
+
     yesImages[0] = new Image(display, "questionaire/yes.png");
     yesImages[1] = new Image(display, "questionaire/yes_select.png");
     yesImages[2] = new Image(display, "questionaire/yes_hover.png");
     yesImages[3] = new Image(display, "questionaire/yes_big.png");
     yesImages[4] = new Image(display, "questionaire/yes_badge.png");
+
     noImages[0] = new Image(display, "questionaire/no.png");
     noImages[1] = new Image(display, "questionaire/no_select.png");
     noImages[2] = new Image(display, "questionaire/no_hover.png");
@@ -137,7 +151,7 @@ public final class GearAnimator extends Animator
 
     purple = new Color(display, 43, 34, 84);
 
-    pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer("Proceed"));
+    pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new Answer[0]);
     pages[1] = new QuestionPage(1, "Refresh Resources Automatically?", 0, 5, 29);
     pages[2] = new QuestionPage(2, "Show Line Numbers in Editors?", 1, 19, 30);
     pages[3] = new QuestionPage(3, "Check Spelling in Text Editors?", 1, 186, 37);
@@ -166,26 +180,20 @@ public final class GearAnimator extends Animator
       }
     }
 
-    for (int i = 0; i < yesImages.length; i++)
-    {
-      yesImages[i].dispose();
-      noImages[i].dispose();
-    }
+    // Images
+    UIUtil.dispose(nextImages);
+    UIUtil.dispose(backImages);
+    UIUtil.dispose(yesImages);
+    UIUtil.dispose(noImages);
+    UIUtil.dispose(exit, exitHover, question);
 
-    exit.dispose();
-    exitHover.dispose();
-    question.dispose();
+    // Colors
+    UIUtil.dispose(purple);
+    UIUtil.dispose(gearForeground);
+    UIUtil.dispose(gearBackground);
 
-    purple.dispose();
-    gearForeground[0].dispose();
-    gearBackground[0].dispose();
-    gearForeground[1].dispose();
-    gearBackground[1].dispose();
-
-    normalFont.dispose();
-    hoverFont.dispose();
-    bigFont.dispose();
-    baseFont.dispose();
+    // Fonts
+    UIUtil.dispose(normalFont, hoverFont, bigFont, baseFont);
 
     super.dispose();
   }
@@ -424,29 +432,10 @@ public final class GearAnimator extends Animator
       oldHover = NONE;
     }
 
-    Page page = getSelectedPage();
-    if (page != null)
+    if (!pageBufferUpdated)
     {
-      int y = 3 * BORDER + PAGE_HEIGHT / 2;
-      if (page.showBack())
-      {
-        int x = BORDER - 8;
-        gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
-        gc.fillPolygon(new int[] { x, y, x, y + 60, x - 14, y + 30 });
-      }
-
-      if (page.showNext())
-      {
-        int x = BORDER + PAGE_WIDTH + 8;
-        gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
-        gc.fillPolygon(new int[] { x, y, x, y + 60, x + 14, y + 30 });
-      }
-
-      if (!pageBufferUpdated)
-      {
-        updatePage();
-        pageBufferUpdated = true;
-      }
+      answerY = updatePage();
+      pageBufferUpdated = true;
     }
 
     if (oldSelection == NONE)
@@ -475,6 +464,20 @@ public final class GearAnimator extends Animator
       }
 
       gc.setAlpha(255);
+
+      Page page = getSelectedPage();
+      Image image = backImages[hover == BACK ? 1 : 0];
+      int y = 4 * BORDER + 4 + answerY - image.getBounds().height / 2;
+      if (page.showBack())
+      {
+        gc.drawImage(image, BORDER, y);
+      }
+
+      if (page.showNext())
+      {
+        image = nextImages[hover == NEXT ? 1 : 0];
+        gc.drawImage(image, PAGE_WIDTH + BORDER - image.getBounds().width, y);
+      }
     }
   }
 
@@ -625,7 +628,7 @@ public final class GearAnimator extends Animator
     return path;
   }
 
-  private Page updatePage()
+  private int updatePage()
   {
     Display display = getDisplay();
     if (pageBuffer == null)
@@ -638,13 +641,10 @@ public final class GearAnimator extends Animator
     gc.fillRectangle(pageBuffer.getBounds());
 
     Page page = getSelectedPage();
-    if (page != null)
-    {
-      page.draw(gc);
-    }
+    int answerY = page.draw(gc);
 
     gc.dispose();
-    return page;
+    return answerY;
   }
 
   private Font createFont(Display display, int pixelHeight)
@@ -814,7 +814,7 @@ public final class GearAnimator extends Animator
       }
       else
       {
-        if (page instanceof QuestionPage)
+        if (page instanceof QuestionPage && images.length > 3)
         {
           int overlayChoice = ((QuestionPage)page).getOverlayChoice();
           boolean overlayChoiceYes = overlayChoice == index;
@@ -839,6 +839,28 @@ public final class GearAnimator extends Animator
   /**
    * @author Eike Stepper
    */
+  public class BackButton extends ImageAnswer
+  {
+    public BackButton()
+    {
+      super(backImages);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public class NextButton extends ImageAnswer
+  {
+    public NextButton()
+    {
+      super(nextImages);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
   public abstract class Page
   {
     private final int index;
@@ -848,8 +870,6 @@ public final class GearAnimator extends Animator
     private Answer[] answers;
 
     private Rectangle[] answerBoxes;
-
-    private Rectangle[] arrowBoxes;
 
     private int choice = NONE;
 
@@ -892,11 +912,6 @@ public final class GearAnimator extends Animator
       }
 
       return NONE;
-    }
-
-    public final Rectangle[] getAnswerBoxes()
-    {
-      return answerBoxes;
     }
 
     public final Answer getChoiceAnswer()
@@ -959,7 +974,7 @@ public final class GearAnimator extends Animator
       return false;
     }
 
-    protected final void draw(GC gc)
+    protected final int draw(GC gc)
     {
       String title = getTitle();
 
@@ -1003,6 +1018,8 @@ public final class GearAnimator extends Animator
         answerBoxes[i] = answer.draw(gc, this, i, x, y, hovereds[i], selecteds[i]);
         x += BORDER + sizes[i].x;
       }
+
+      return y;
     }
 
     protected abstract void drawContent(GC gc);
