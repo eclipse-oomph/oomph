@@ -105,6 +105,10 @@ public final class GearAnimator extends Animator
 
   private Rectangle exitBox;
 
+  private Rectangle backBox;
+
+  private Rectangle nextBox;
+
   private int answerY;
 
   public GearAnimator(final Display display, Font baseFont)
@@ -151,7 +155,7 @@ public final class GearAnimator extends Animator
 
     purple = new Color(display, 43, 34, 84);
 
-    pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new Answer[0]);
+    pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer(""));
     pages[1] = new QuestionPage(1, "Refresh Resources Automatically?", 0, 5, 29);
     pages[2] = new QuestionPage(2, "Show Line Numbers in Editors?", 1, 19, 30);
     pages[3] = new QuestionPage(3, "Check Spelling in Text Editors?", 1, 186, 37);
@@ -294,6 +298,18 @@ public final class GearAnimator extends Animator
         Page page = getSelectedPage();
         if (page != null)
         {
+          if (page.showBack() && backBox != null && backBox.contains(x, y))
+          {
+            hover = BACK;
+            return true;
+          }
+
+          if (page.showNext() && nextBox != null && nextBox.contains(x, y))
+          {
+            hover = NEXT;
+            return true;
+          }
+
           x -= BORDER;
           y -= pageY;
 
@@ -465,19 +481,21 @@ public final class GearAnimator extends Animator
 
       gc.setAlpha(255);
 
+      int x = backImages[0].getBounds().width / 2;
+      int y = 4 * BORDER + 4 + answerY;
+
       Page page = getSelectedPage();
-      Image image = backImages[hover == BACK ? 1 : 0];
-      int y = 4 * BORDER + 4 + answerY - image.getBounds().height / 2;
       if (page.showBack())
       {
-        gc.drawImage(image, BORDER, y);
+        backBox = drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + +x, y);
       }
 
       if (page.showNext())
       {
-        image = nextImages[hover == NEXT ? 1 : 0];
-        gc.drawImage(image, PAGE_WIDTH + BORDER - image.getBounds().width, y);
+        nextBox = drawImage(gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - x, y);
       }
+
+      oldHover = hover;
     }
   }
 
@@ -647,42 +665,6 @@ public final class GearAnimator extends Animator
     return answerY;
   }
 
-  private Font createFont(Display display, int pixelHeight)
-  {
-    GC fontGC = new GC(display);
-
-    try
-    {
-      FontData[] fontData = baseFont.getFontData();
-      int fontSize = 40;
-      while (fontSize > 0)
-      {
-        for (int i = 0; i < fontData.length; i++)
-        {
-          fontData[i].setHeight(fontSize);
-          fontData[i].setStyle(SWT.BOLD);
-        }
-
-        Font font = new Font(display, fontData);
-        fontGC.setFont(font);
-        int height = fontGC.stringExtent("Ag").y;
-        if (height <= pixelHeight)
-        {
-          return font;
-        }
-
-        font.dispose();
-        --fontSize;
-      }
-
-      throw new RuntimeException("Could not create a big font");
-    }
-    finally
-    {
-      fontGC.dispose();
-    }
-  }
-
   private boolean showOverlay()
   {
     Page page = getSelectedPage();
@@ -721,6 +703,52 @@ public final class GearAnimator extends Animator
       updatePage();
       overflow = true;
     }
+  }
+
+  private Font createFont(Display display, int pixelHeight)
+  {
+    GC fontGC = new GC(display);
+
+    try
+    {
+      FontData[] fontData = baseFont.getFontData();
+      int fontSize = 40;
+      while (fontSize > 0)
+      {
+        for (int i = 0; i < fontData.length; i++)
+        {
+          fontData[i].setHeight(fontSize);
+          fontData[i].setStyle(SWT.BOLD);
+        }
+
+        Font font = new Font(display, fontData);
+        fontGC.setFont(font);
+        int height = fontGC.stringExtent("Ag").y;
+        if (height <= pixelHeight)
+        {
+          return font;
+        }
+
+        font.dispose();
+        --fontSize;
+      }
+
+      throw new RuntimeException("Could not create a big font");
+    }
+    finally
+    {
+      fontGC.dispose();
+    }
+  }
+
+  private static Rectangle drawImage(GC gc, Image image, int x, int y)
+  {
+    Rectangle bounds = image.getBounds();
+    x -= bounds.width / 2;
+    y -= bounds.height / 2;
+    gc.drawImage(image, x, y);
+
+    return new Rectangle(x, y, bounds.width, bounds.height);
   }
 
   /**
@@ -827,12 +855,7 @@ public final class GearAnimator extends Animator
         }
       }
 
-      Rectangle bounds = image.getBounds();
-      x -= bounds.width / 2;
-      y -= bounds.height / 2;
-      gc.drawImage(image, x, y);
-
-      return new Rectangle(x, y, bounds.width, bounds.height);
+      return drawImage(gc, image, x, y);
     }
   }
 
