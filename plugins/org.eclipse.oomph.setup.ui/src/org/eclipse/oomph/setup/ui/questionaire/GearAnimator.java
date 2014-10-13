@@ -502,6 +502,7 @@ public final class GearAnimator extends Animator
     Page page = getSelectedPage();
     if (page.showBack())
     {
+      // gc.fillRectangle(BORDER, answerY - buttonR - 5, 3 * buttonR, 2 * buttonR + 10);
       backBox = drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY);
     }
 
@@ -1220,6 +1221,7 @@ public final class GearAnimator extends Animator
       }
 
       int width = (minWidth + maxWidth) / 2 + offsetX;
+      Color gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 
       for (int i = 1; i < GEARS; i++)
       {
@@ -1236,7 +1238,7 @@ public final class GearAnimator extends Animator
         else
         {
           gc.drawImage(question, x, y + 8);
-          gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+          gc.setForeground(gray);
         }
 
         String title = page.getTitle();
