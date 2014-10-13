@@ -81,6 +81,10 @@ public final class GearAnimator extends Animator
 
   private final int pageY;
 
+  private final int answerY;
+
+  private final int buttonR;
+
   private float angle;
 
   private float speed;
@@ -109,8 +113,6 @@ public final class GearAnimator extends Animator
 
   private Rectangle nextBox;
 
-  private int answerY;
-
   public GearAnimator(final Display display, Font baseFont)
   {
     super(display);
@@ -128,6 +130,9 @@ public final class GearAnimator extends Animator
 
     nextImages[0] = new Image(display, "questionaire/next.png");
     nextImages[1] = new Image(display, "questionaire/next_hover.png");
+
+    buttonR = nextImages[0].getBounds().height / 2;
+    answerY = PAGE_HEIGHT + 4 * BORDER - buttonR;
 
     yesImages[0] = new Image(display, "questionaire/yes.png");
     yesImages[1] = new Image(display, "questionaire/yes_select.png");
@@ -357,6 +362,18 @@ public final class GearAnimator extends Animator
         Page page = getSelectedPage();
         if (page != null)
         {
+          if (page.showBack() && backBox != null && backBox.contains(x, y))
+          {
+            setSelection(getSelection() - 1);
+            return true;
+          }
+
+          if (page.showNext() && nextBox != null && nextBox.contains(x, y))
+          {
+            setSelection(getSelection() + 1);
+            return true;
+          }
+
           x -= BORDER;
           y -= pageY;
 
@@ -450,7 +467,7 @@ public final class GearAnimator extends Animator
 
     if (!pageBufferUpdated)
     {
-      answerY = updatePage();
+      updatePage();
       pageBufferUpdated = true;
     }
 
@@ -480,23 +497,20 @@ public final class GearAnimator extends Animator
       }
 
       gc.setAlpha(255);
-
-      int x = backImages[0].getBounds().width / 2;
-      int y = 4 * BORDER + 4 + answerY;
-
-      Page page = getSelectedPage();
-      if (page.showBack())
-      {
-        backBox = drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + +x, y);
-      }
-
-      if (page.showNext())
-      {
-        nextBox = drawImage(gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - x, y);
-      }
-
-      oldHover = hover;
     }
+
+    Page page = getSelectedPage();
+    if (page.showBack())
+    {
+      backBox = drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY);
+    }
+
+    if (page.showNext())
+    {
+      nextBox = drawImage(gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - buttonR, answerY);
+    }
+
+    oldHover = hover; // TODO Remove the other oldHover assignments?
   }
 
   private void paint(GC gc, Display display, int alpha, int i)
@@ -646,7 +660,7 @@ public final class GearAnimator extends Animator
     return path;
   }
 
-  private int updatePage()
+  private void updatePage()
   {
     Display display = getDisplay();
     if (pageBuffer == null)
@@ -659,10 +673,9 @@ public final class GearAnimator extends Animator
     gc.fillRectangle(pageBuffer.getBounds());
 
     Page page = getSelectedPage();
-    int answerY = page.draw(gc);
+    page.draw(gc);
 
     gc.dispose();
-    return answerY;
   }
 
   private boolean showOverlay()
@@ -997,7 +1010,7 @@ public final class GearAnimator extends Animator
       return false;
     }
 
-    protected final int draw(GC gc)
+    protected final void draw(GC gc)
     {
       String title = getTitle();
 
@@ -1033,7 +1046,7 @@ public final class GearAnimator extends Animator
       }
 
       int x = (PAGE_WIDTH - width) / 2;
-      int y = PAGE_HEIGHT - height / 2 - 1;
+      int y = answerY - pageY;
 
       for (int i = 0; i < answers.length; i++)
       {
@@ -1041,8 +1054,6 @@ public final class GearAnimator extends Animator
         answerBoxes[i] = answer.draw(gc, this, i, x, y, hovereds[i], selecteds[i]);
         x += BORDER + sizes[i].x;
       }
-
-      return y;
     }
 
     protected abstract void drawContent(GC gc);
