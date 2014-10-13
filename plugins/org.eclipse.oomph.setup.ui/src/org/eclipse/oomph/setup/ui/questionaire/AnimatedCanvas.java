@@ -127,7 +127,7 @@ public class AnimatedCanvas extends Canvas
   {
     synchronized (animators)
     {
-      animator.canvas = this;
+      animator.setCanvas(this);
       animators.add(animator);
     }
   }
@@ -137,7 +137,7 @@ public class AnimatedCanvas extends Canvas
     synchronized (animators)
     {
       animators.remove(animator);
-      animator.canvas = null;
+      animator.setCanvas(null);
     }
   }
 
@@ -295,6 +295,11 @@ public class AnimatedCanvas extends Canvas
 
     public void dispose()
     {
+    }
+
+    private void setCanvas(AnimatedCanvas canvas)
+    {
+      this.canvas = canvas;
     }
 
     protected final void setSize(int width, int height)

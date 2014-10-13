@@ -24,7 +24,7 @@ public final class GearAnimator extends Animator
 
   public static final int BORDER = 30;
 
-  private static final int GEARS = 7;
+  public static final int GEARS = 7;
 
   private static final int TEETH = 8;
 
@@ -40,11 +40,13 @@ public final class GearAnimator extends Animator
 
   private static final int CHOICES = EXIT - 1;
 
-  private final Font font;
+  private final Font baseFont;
 
   private final Font bigFont;
 
   private final Font hoverFont;
+
+  private final Font normalFont;
 
   private final Image exit;
 
@@ -54,7 +56,7 @@ public final class GearAnimator extends Animator
 
   private final Image[] noImages = new Image[5];
 
-  private final Page[] pages = new Page[GEARS];
+  private final Page[] pages = new Page[GEARS + 1];
 
   private final Path[] gearPaths = new Path[GEARS];
 
@@ -92,12 +94,13 @@ public final class GearAnimator extends Animator
 
   private Rectangle exitBox;
 
-  public GearAnimator(final Display display, Font font)
+  public GearAnimator(final Display display, Font baseFont)
   {
     super(display);
-    this.font = font;
-    bigFont = createFont(display, font, BIG_FONT_PX);
-    hoverFont = createFont(display, font, BIG_FONT_PX + 6);
+    this.baseFont = baseFont;
+    bigFont = createFont(display, BIG_FONT_PX);
+    hoverFont = createFont(display, BIG_FONT_PX + 6);
+    normalFont = createFont(display, (int)(BIG_FONT_PX * .75));
 
     exit = new Image(display, "questionaire/exit.png");
     exitHover = new Image(display, "questionaire/exit_hover.png");
@@ -134,6 +137,7 @@ public final class GearAnimator extends Animator
     pages[4] = new QuestionPage(4, "Execute Jobs in Background?", 0, 23, 160);
     pages[5] = new QuestionPage(5, "Encode Text Files with UTF-8?", 0, 181, 95);
     pages[6] = new QuestionPage(6, "Enable Preference Recorder?", 1, 57, 82);
+    pages[7] = new SummaryPage(6, "Summary");
   }
 
   @Override
@@ -167,47 +171,13 @@ public final class GearAnimator extends Animator
     gearForeground[1].dispose();
     gearBackground[1].dispose();
 
+    normalFont.dispose();
     hoverFont.dispose();
     bigFont.dispose();
-    font.dispose();
+    baseFont.dispose();
+
     exit.dispose();
     super.dispose();
-  }
-
-  private Font createFont(Display display, Font baseFont, int pixelHeight)
-  {
-    GC fontGC = new GC(display);
-
-    try
-    {
-      FontData[] fontData = baseFont.getFontData();
-      int fontSize = 40;
-      while (fontSize > 0)
-      {
-        for (int i = 0; i < fontData.length; i++)
-        {
-          fontData[i].setHeight(fontSize);
-          fontData[i].setStyle(SWT.BOLD);
-        }
-
-        Font font = new Font(display, fontData);
-        fontGC.setFont(font);
-        int height = fontGC.stringExtent("Ag").y;
-        if (height <= pixelHeight)
-        {
-          return font;
-        }
-
-        font.dispose();
-        --fontSize;
-      }
-
-      throw new RuntimeException("Could not create a big font");
-    }
-    finally
-    {
-      fontGC.dispose();
-    }
   }
 
   public void restart()
@@ -216,12 +186,17 @@ public final class GearAnimator extends Animator
     speed = 0;
   }
 
-  public int getSelection()
+  public final Page[] getPages()
+  {
+    return pages;
+  }
+
+  public final int getSelection()
   {
     return selection;
   }
 
-  public void setSelection(int selection)
+  public final void setSelection(int selection)
   {
     hover = NONE;
     oldHover = NONE;
@@ -231,9 +206,9 @@ public final class GearAnimator extends Animator
       selection = 0;
       overflow = true;
     }
-    else if (selection > GEARS - 1)
+    else if (selection > pages.length - 1)
     {
-      selection = GEARS - 1;
+      selection = pages.length - 1;
       overflow = true;
     }
 
@@ -242,6 +217,7 @@ public final class GearAnimator extends Animator
       overflow = false;
       while (advance())
       {
+        // Just advance.
       }
 
       overflow = true;
@@ -259,12 +235,12 @@ public final class GearAnimator extends Animator
     restart();
   }
 
-  public int getOldSelection()
+  public final int getOldSelection()
   {
     return oldSelection;
   }
 
-  public Page getSelectedPage()
+  public final Page getSelectedPage()
   {
     return pages[selection];
   }
@@ -300,8 +276,11 @@ public final class GearAnimator extends Animator
         Page page = getSelectedPage();
         if (page != null)
         {
+          x -= BORDER;
+          y -= pageY;
+
           hover = page.onMouseMove(x, y);
-          if (hover < NONE)
+          if (hover != NONE)
           {
             return true;
           }
@@ -335,9 +314,18 @@ public final class GearAnimator extends Animator
           }
         }
 
+        if (exitBox != null && exitBox.contains(x, y))
+        {
+          hover = EXIT;
+          return true;
+        }
+
         Page page = getSelectedPage();
         if (page != null)
         {
+          x -= BORDER;
+          y -= pageY;
+
           if (page.onMouseDown(x, y))
           {
             return true;
@@ -387,19 +375,24 @@ public final class GearAnimator extends Animator
   protected void paint(Image buffer, GC gc)
   {
     Display display = getDisplay();
-    gc.setFont(font);
+    gc.setFont(baseFont);
     gc.setLineWidth(3);
     gc.setAntialias(SWT.ON);
+
+    int alpha = Math.min((int)(255 * speed / ANGLE), 255);
 
     for (int i = 0; i < GEARS; i++)
     {
       if (i != selection)
       {
-        paint(gc, display, i);
+        paint(gc, display, alpha, i);
       }
     }
 
-    paint(gc, display, selection);
+    if (selection < GEARS)
+    {
+      paint(gc, display, alpha, selection);
+    }
 
     Image exitImage = exit;
     if (hover == EXIT)
@@ -427,7 +420,6 @@ public final class GearAnimator extends Animator
       pageBufferUpdated = true;
     }
 
-    int alpha = Math.min((int)(255 * speed / ANGLE), 255);
     if (oldSelection == NONE)
     {
       gc.setAlpha(alpha);
@@ -457,7 +449,7 @@ public final class GearAnimator extends Animator
     }
   }
 
-  private void paint(GC gc, Display display, int i)
+  private void paint(GC gc, Display display, int alpha, int i)
   {
     double offset = 2 * i * radius;
     double x = BORDER + radius + offset;
@@ -536,6 +528,15 @@ public final class GearAnimator extends Animator
     int cY = (int)(y - 2 - extent.y / 2);
     gc.drawText(number, cX, cY, true);
 
+    if (selection >= GEARS)
+    {
+      gc.setAlpha(255 - alpha);
+    }
+    else if (oldSelection >= GEARS)
+    {
+      gc.setAlpha(alpha);
+    }
+
     Answer answer = page.getChoiceAnswer();
     if (answer instanceof ImageAnswer)
     {
@@ -543,6 +544,8 @@ public final class GearAnimator extends Animator
       Image image = imageAnswer.getImages()[4];
       gc.drawImage(image, (int)(x - image.getBounds().width / 2), (int)(y - outerR - 12));
     }
+
+    gc.setAlpha(255);
   }
 
   private Path drawGear(GC gc, double cx, double cy, double outerR, double innerR, float angleOffset)
@@ -612,6 +615,42 @@ public final class GearAnimator extends Animator
     }
 
     gc.dispose();
+  }
+
+  private Font createFont(Display display, int pixelHeight)
+  {
+    GC fontGC = new GC(display);
+
+    try
+    {
+      FontData[] fontData = baseFont.getFontData();
+      int fontSize = 40;
+      while (fontSize > 0)
+      {
+        for (int i = 0; i < fontData.length; i++)
+        {
+          fontData[i].setHeight(fontSize);
+          fontData[i].setStyle(SWT.BOLD);
+        }
+
+        Font font = new Font(display, fontData);
+        fontGC.setFont(font);
+        int height = fontGC.stringExtent("Ag").y;
+        if (height <= pixelHeight)
+        {
+          return font;
+        }
+
+        font.dispose();
+        --fontSize;
+      }
+
+      throw new RuntimeException("Could not create a big font");
+    }
+    finally
+    {
+      fontGC.dispose();
+    }
   }
 
   private boolean showOverlay()
@@ -811,9 +850,6 @@ public final class GearAnimator extends Animator
 
     public final int getAnswer(int x, int y)
     {
-      x -= BORDER;
-      y -= pageY;
-
       for (int i = 0; i < answers.length; i++)
       {
         Rectangle box = answerBoxes[i];
@@ -892,6 +928,7 @@ public final class GearAnimator extends Animator
       gc.setForeground(purple);
       gc.drawText(title, (PAGE_WIDTH - extent.x) / 2, 0, true);
 
+      gc.setFont(oldFont);
       drawContent(gc);
 
       boolean selecteds[] = new boolean[answers.length];
@@ -924,8 +961,6 @@ public final class GearAnimator extends Animator
         answerBoxes[i] = answer.draw(gc, this, i, x, y, hovereds[i], selecteds[i]);
         x += BORDER + sizes[i].x;
       }
-
-      gc.setFont(oldFont);
     }
 
     protected abstract void drawContent(GC gc);
@@ -1010,6 +1045,109 @@ public final class GearAnimator extends Animator
       catch (Exception ex)
       {
         return null;
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public class SummaryPage extends Page
+  {
+    private Rectangle[] boxes;
+
+    public SummaryPage(int index, String title)
+    {
+      super(index, title);
+      setAnswers(new Answer[] { new TextAnswer("Finish") });
+    }
+
+    @Override
+    protected int onMouseMove(int x, int y)
+    {
+      if (boxes != null)
+      {
+        for (int i = 0; i < boxes.length; i++)
+        {
+          Rectangle box = boxes[i];
+          if (box.contains(x, y))
+          {
+            return i + 1;
+          }
+        }
+      }
+
+      return super.onMouseMove(x, y);
+    }
+
+    @Override
+    protected boolean onMouseDown(int x, int y)
+    {
+      if (boxes != null)
+      {
+        for (int i = 0; i < boxes.length; i++)
+        {
+          Rectangle box = boxes[i];
+          if (box.contains(x, y))
+          {
+            setSelection(i + 1);
+            return true;
+          }
+        }
+      }
+
+      return super.onMouseDown(x, y);
+    }
+
+    @Override
+    protected void drawContent(GC gc)
+    {
+      gc.setFont(normalFont);
+
+      boxes = new Rectangle[GEARS - 1];
+      int offsetX = yesImages[4].getBounds().width + 12;
+      int minWidth = Integer.MAX_VALUE;
+      int maxWidth = 0;
+
+      for (int i = 1; i < GEARS; i++)
+      {
+        Page page = pages[i];
+        Point extent = gc.stringExtent(page.getTitle());
+        int width = extent.x;
+        minWidth = Math.min(minWidth, width);
+        maxWidth = Math.max(maxWidth, width);
+
+        boxes[i - 1] = new Rectangle(0, 0, offsetX + width, extent.y + 4);
+      }
+
+      int width = (minWidth + maxWidth) / 2 + offsetX;
+
+      for (int i = 1; i < GEARS; i++)
+      {
+        int x = (PAGE_WIDTH - width) / 2;
+        int y = 40 * (1 + i);
+
+        QuestionPage page = (QuestionPage)pages[i];
+        ImageAnswer answer = (ImageAnswer)page.getChoiceAnswer();
+        if (answer != null)
+        {
+          gc.drawImage(answer.images[4], x, y + 8);
+          gc.setForeground(purple);
+        }
+        else
+        {
+          gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+        }
+
+        String title = page.getTitle();
+        if (title.endsWith("?"))
+        {
+          title = title.substring(0, title.length() - 1);
+        }
+
+        gc.drawText(title, x + offsetX, y);
+        boxes[i - 1].x = x;
+        boxes[i - 1].y = y + 4;
       }
     }
   }
