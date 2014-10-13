@@ -50,9 +50,9 @@ public final class GearAnimator extends Animator
 
   private final Image exitHover;
 
-  private final Image[] yesImages = new Image[4];
+  private final Image[] yesImages = new Image[5];
 
-  private final Image[] noImages = new Image[4];
+  private final Image[] noImages = new Image[5];
 
   private final Page[] pages = new Page[GEARS];
 
@@ -105,11 +105,13 @@ public final class GearAnimator extends Animator
     yesImages[0] = new Image(display, "questionaire/yes.png");
     yesImages[1] = new Image(display, "questionaire/yes_select.png");
     yesImages[2] = new Image(display, "questionaire/yes_hover.png");
-    yesImages[3] = new Image(display, "questionaire/yes_badge.png");
+    yesImages[3] = new Image(display, "questionaire/yes_big.png");
+    yesImages[4] = new Image(display, "questionaire/yes_badge.png");
     noImages[0] = new Image(display, "questionaire/no.png");
     noImages[1] = new Image(display, "questionaire/no_select.png");
     noImages[2] = new Image(display, "questionaire/no_hover.png");
-    noImages[3] = new Image(display, "questionaire/no_badge.png");
+    noImages[3] = new Image(display, "questionaire/no_big.png");
+    noImages[4] = new Image(display, "questionaire/no_badge.png");
 
     radius = 32;
     setSize((int)(GEARS * 2 * radius), (int)(2 * radius));
@@ -125,13 +127,13 @@ public final class GearAnimator extends Animator
 
     purple = new Color(display, 43, 34, 84);
 
-    pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, new TextAnswer("Proceed"));
-    pages[1] = new QuestionPage(1, "Refresh Resources Automatically?", 5, 29);
-    pages[2] = new QuestionPage(2, "Show Line Numbers in Editors?", 19, 30);
-    pages[3] = new QuestionPage(3, "Check Spelling in Text Editors?", 186, 37);
-    pages[4] = new QuestionPage(4, "Execute Jobs in Background?", 23, 160);
-    pages[5] = new QuestionPage(5, "Encode Text Files with UTF-8?", 181, 95);
-    pages[6] = new QuestionPage(6, "Enable Preference Recorder?", 57, 82);
+    pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer("Proceed"));
+    pages[1] = new QuestionPage(1, "Refresh Resources Automatically?", 0, 5, 29);
+    pages[2] = new QuestionPage(2, "Show Line Numbers in Editors?", 1, 19, 30);
+    pages[3] = new QuestionPage(3, "Check Spelling in Text Editors?", 1, 186, 37);
+    pages[4] = new QuestionPage(4, "Execute Jobs in Background?", 0, 23, 160);
+    pages[5] = new QuestionPage(5, "Encode Text Files with UTF-8?", 0, 181, 95);
+    pages[6] = new QuestionPage(6, "Enable Preference Recorder?", 1, 57, 82);
   }
 
   @Override
@@ -151,6 +153,12 @@ public final class GearAnimator extends Animator
       {
         page.dispose();
       }
+    }
+
+    for (int i = 0; i < yesImages.length; i++)
+    {
+      yesImages[i].dispose();
+      noImages[i].dispose();
     }
 
     purple.dispose();
@@ -215,6 +223,9 @@ public final class GearAnimator extends Animator
 
   public void setSelection(int selection)
   {
+    hover = NONE;
+    oldHover = NONE;
+
     if (selection < 0)
     {
       selection = 0;
@@ -245,8 +256,6 @@ public final class GearAnimator extends Animator
     pageBuffer = tmpPageBuffer;
     pageBufferUpdated = false;
 
-    hover = NONE;
-    oldHover = NONE;
     restart();
   }
 
@@ -531,7 +540,7 @@ public final class GearAnimator extends Animator
     if (answer instanceof ImageAnswer)
     {
       ImageAnswer imageAnswer = (ImageAnswer)answer;
-      Image image = imageAnswer.getImages()[3];
+      Image image = imageAnswer.getImages()[4];
       gc.drawImage(image, (int)(x - image.getBounds().width / 2), (int)(y - outerR - 12));
     }
   }
@@ -607,6 +616,24 @@ public final class GearAnimator extends Animator
 
   private boolean showOverlay()
   {
+    Page page = getSelectedPage();
+    if (page instanceof QuestionPage)
+    {
+      QuestionPage questionPage = (QuestionPage)page;
+
+      if (hover <= CHOICES)
+      {
+        int hoveredChoice = -hover + CHOICES;
+        return hoveredChoice == questionPage.getOverlayChoice();
+      }
+
+      int choice = questionPage.getChoice();
+      if (choice != NONE)
+      {
+        return choice == questionPage.getOverlayChoice();
+      }
+    }
+
     long millis2 = (int)(System.currentTimeMillis() / 1000);
     return (millis2 & 1) == 1;
   }
@@ -616,11 +643,11 @@ public final class GearAnimator extends Animator
     Page page = getSelectedPage();
     if (page instanceof QuestionPage)
     {
-      QuestionPage imagePage = (QuestionPage)page;
-      imagePage.overlayX += x;
-      imagePage.overlayY += y;
+      QuestionPage questionPage = (QuestionPage)page;
+      questionPage.overlayX += x;
+      questionPage.overlayY += y;
 
-      System.out.println("" + imagePage.overlayX + ", " + imagePage.overlayY);
+      System.out.println("" + questionPage.overlayX + ", " + questionPage.overlayY);
 
       updatePage();
       overflow = true;
@@ -632,9 +659,13 @@ public final class GearAnimator extends Animator
    */
   public abstract class Answer
   {
-    public abstract Point getSize(GC gc, int i);
+    public Answer()
+    {
+    }
 
-    public abstract Rectangle draw(GC gc, int i, int x, int y, boolean hovered, boolean selected);
+    public abstract Point getSize(GC gc, Page page);
+
+    public abstract Rectangle draw(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected);
   }
 
   /**
@@ -655,14 +686,14 @@ public final class GearAnimator extends Animator
     }
 
     @Override
-    public Point getSize(GC gc, int i)
+    public Point getSize(GC gc, Page page)
     {
       gc.setFont(hoverFont);
       return gc.stringExtent(text);
     }
 
     @Override
-    public Rectangle draw(GC gc, int i, int x, int y, boolean hovered, boolean selected)
+    public Rectangle draw(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected)
     {
       gc.setFont(hovered ? hoverFont : bigFont);
       gc.setForeground(selected ? purple : getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
@@ -694,16 +725,16 @@ public final class GearAnimator extends Animator
     }
 
     @Override
-    public Point getSize(GC gc, int i)
+    public Point getSize(GC gc, Page page)
     {
       Rectangle bounds = images[2].getBounds();
       return new Point(bounds.width, bounds.height);
     }
 
     @Override
-    public Rectangle draw(GC gc, int i, int x, int y, boolean hovered, boolean selected)
+    public Rectangle draw(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected)
     {
-      Image image;
+      Image image = images[0];
       if (hovered)
       {
         image = images[2];
@@ -714,7 +745,17 @@ public final class GearAnimator extends Animator
       }
       else
       {
-        image = images[0];
+        if (page instanceof QuestionPage)
+        {
+          int overlayChoice = ((QuestionPage)page).getOverlayChoice();
+          boolean overlayChoiceYes = overlayChoice == index;
+          boolean showOverlay = showOverlay();
+
+          if (showOverlay == overlayChoiceYes)
+          {
+            image = images[3];
+          }
+        }
       }
 
       Rectangle bounds = image.getBounds();
@@ -762,7 +803,7 @@ public final class GearAnimator extends Animator
       return answers;
     }
 
-    public void setAnswers(Answer[] answers)
+    public final void setAnswers(Answer[] answers)
     {
       this.answers = answers;
       answerBoxes = new Rectangle[answers.length];
@@ -776,7 +817,7 @@ public final class GearAnimator extends Animator
       for (int i = 0; i < answers.length; i++)
       {
         Rectangle box = answerBoxes[i];
-        if (box.contains(x, y))
+        if (box != null && box.contains(x, y))
         {
           return i;
         }
@@ -869,7 +910,7 @@ public final class GearAnimator extends Animator
           hovereds[i] = true;
         }
 
-        sizes[i] = answers[i].getSize(gc, i);
+        sizes[i] = answers[i].getSize(gc, this);
         width += sizes[i].x;
         height = Math.max(height, sizes[i].y);
       }
@@ -880,7 +921,7 @@ public final class GearAnimator extends Animator
       for (int i = 0; i < answers.length; i++)
       {
         Answer answer = answers[i];
-        answerBoxes[i] = answer.draw(gc, i, x, y, hovereds[i], selecteds[i]);
+        answerBoxes[i] = answer.draw(gc, this, i, x, y, hovereds[i], selecteds[i]);
         x += BORDER + sizes[i].x;
       }
 
@@ -899,13 +940,16 @@ public final class GearAnimator extends Animator
 
     private final Image overlay;
 
+    private final int overlayChoice;
+
     private int overlayX;
 
     private int overlayY;
 
-    public QuestionPage(int index, String title, int overlayX, int overlayY, Answer... answers)
+    public QuestionPage(int index, String title, int overlayChoice, int overlayX, int overlayY, Answer... answers)
     {
       super(index, title);
+      this.overlayChoice = overlayChoice;
       setAnswers(answers);
 
       Display display = getDisplay();
@@ -916,9 +960,14 @@ public final class GearAnimator extends Animator
       this.overlayY = overlayY;
     }
 
-    public QuestionPage(int index, String title, int overlayX, int overlayY)
+    public QuestionPage(int index, String title, int overlayChoice, int overlayX, int overlayY)
     {
-      this(index, title, overlayX, overlayY, new Answer[] { new ImageAnswer(yesImages), new ImageAnswer(noImages) });
+      this(index, title, overlayChoice, overlayX, overlayY, new Answer[] { new ImageAnswer(yesImages), new ImageAnswer(noImages) });
+    }
+
+    public final int getOverlayChoice()
+    {
+      return overlayChoice;
     }
 
     @Override

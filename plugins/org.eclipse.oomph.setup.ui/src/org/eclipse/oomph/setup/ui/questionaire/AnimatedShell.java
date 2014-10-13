@@ -1,7 +1,7 @@
 package org.eclipse.oomph.setup.ui.questionaire;
 
-import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.QuestionPage;
 import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Page;
+import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.QuestionPage;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -148,8 +148,6 @@ public class AnimatedShell extends Shell
 
           if (page instanceof QuestionPage)
           {
-            QuestionPage imagePage = (QuestionPage)page;
-
             if (e.keyCode == SWT.ARROW_RIGHT)
             {
               animator.updateOverlay(1, 0);
