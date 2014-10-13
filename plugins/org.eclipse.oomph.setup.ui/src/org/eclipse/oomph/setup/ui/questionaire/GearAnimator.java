@@ -69,7 +69,7 @@ public final class GearAnimator extends Animator
 
   private final Page[] pages = new Page[GEARS + 1];
 
-  private final Path[] gearPaths = new Path[GEARS];
+  private final Path[] gearPaths = new Path[GEARS + 1];
 
   private final Color[] gearBackground = new Color[2];
 
@@ -106,6 +106,8 @@ public final class GearAnimator extends Animator
   private boolean pageBufferUpdated;
 
   private boolean oldShowOverlay;
+
+  private boolean summaryShown;
 
   private Rectangle exitBox;
 
@@ -253,6 +255,10 @@ public final class GearAnimator extends Animator
 
     oldSelection = this.selection;
     this.selection = selection;
+    if (getSelectedPage() instanceof SummaryPage)
+    {
+      summaryShown = true;
+    }
 
     Image tmpPageBuffer = oldPageBuffer;
     oldPageBuffer = pageBuffer;
@@ -430,20 +436,18 @@ public final class GearAnimator extends Animator
     gc.setLineWidth(3);
     gc.setAntialias(SWT.ON);
 
+    Page page = getSelectedPage();
     int alpha = Math.min((int)(255 * speed / ANGLE), 255);
 
-    for (int i = 0; i < GEARS; i++)
+    for (int i = 0; i < GEARS + 1; i++)
     {
-      if (i != selection)
+      if (i != selection && (i < GEARS || summaryShown))
       {
         paint(gc, display, alpha, i);
       }
     }
 
-    if (selection < GEARS)
-    {
-      paint(gc, display, alpha, selection);
-    }
+    paint(gc, display, alpha, selection);
 
     Image exitImage = exit;
     if (hover == EXIT)
@@ -499,10 +503,8 @@ public final class GearAnimator extends Animator
       gc.setAlpha(255);
     }
 
-    Page page = getSelectedPage();
     if (page.showBack())
     {
-      // gc.fillRectangle(BORDER, answerY - buttonR - 5, 3 * buttonR, 2 * buttonR + 10);
       backBox = drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY);
     }
 
@@ -576,7 +578,7 @@ public final class GearAnimator extends Animator
     gc.fillOval(ovalX, ovalY, ovalR, ovalR);
     gc.drawOval(ovalX, ovalY, ovalR, ovalR);
 
-    String number = Integer.toString(i);
+    String number = i == 0 ? "W" : i == GEARS ? "S" : Integer.toString(i);
     Point extent = gc.stringExtent(number);
     Page page = pages[i];
 
