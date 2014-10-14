@@ -1,7 +1,10 @@
 package org.eclipse.oomph.setup.ui.questionaire;
 
+import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Answer;
+import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Listener;
 import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Page;
 import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.QuestionPage;
+import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.SummaryPage;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -15,7 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-public class AnimatedShell extends Shell
+public class AnimatedShell extends Shell implements Listener
 {
   private GearAnimator animator;
 
@@ -65,6 +68,14 @@ public class AnimatedShell extends Shell
     return animator;
   }
 
+  public void onAnswer(GearAnimator animator, Page page, Answer answer)
+  {
+  }
+
+  public void onExit(GearAnimator animator, Page page)
+  {
+  }
+
   private void init()
   {
     Display display = getDisplay();
@@ -79,6 +90,7 @@ public class AnimatedShell extends Shell
 
     Font newFont = new Font(display, fontData);
     animator = new GearAnimator(display, newFont);
+    animator.addListener(this);
 
     int width = Math.max(animator.getWidth(), GearAnimator.PAGE_WIDTH) + 2 * GearAnimator.BORDER;
     int height = animator.getHeight() + GearAnimator.PAGE_HEIGHT + 3 * GearAnimator.BORDER;
@@ -146,7 +158,7 @@ public class AnimatedShell extends Shell
 
   public static void main(String[] args)
   {
-    Display display = new Display();
+    final Display display = new Display();
 
     AnimatedShell shell = new AnimatedShell(display, SWT.NONE)
     {
@@ -187,6 +199,22 @@ public class AnimatedShell extends Shell
         }
 
         return super.onKeyPressed(e);
+      }
+
+      @Override
+      public void onAnswer(GearAnimator animator, Page page, Answer answer)
+      {
+        if (page instanceof SummaryPage)
+        {
+          System.out.println("Finish:");
+          Page[] pages = animator.getPages();
+          for (int i = 1; i < GearAnimator.GEARS; i++)
+          {
+            System.out.println("  " + pages[i].getTitle() + " = " + pages[i].getChoice());
+          }
+
+          display.dispose();
+        }
       }
     };
 

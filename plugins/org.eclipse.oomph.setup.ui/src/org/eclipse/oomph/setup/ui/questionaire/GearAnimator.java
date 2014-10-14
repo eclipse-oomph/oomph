@@ -14,6 +14,9 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Eike Stepper
  */
@@ -50,6 +53,8 @@ public final class GearAnimator extends Animator
   private static Color GRAY;
 
   private static Color DARK_GRAY;
+
+  private final List<Listener> listeners = new ArrayList<Listener>();
 
   private final Color purple;
 
@@ -231,6 +236,30 @@ public final class GearAnimator extends Animator
     UIUtil.dispose(numberFont, normalFont, hoverFont, bigFont, baseFont);
 
     super.dispose();
+  }
+
+  public final void addListener(Listener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.add(listener);
+    }
+  }
+
+  public final Listener[] getListeners()
+  {
+    synchronized (listeners)
+    {
+      return listeners.toArray(new Listener[listeners.size()]);
+    }
+  }
+
+  public final void removeListener(Listener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.remove(listener);
+    }
   }
 
   public void restart()
@@ -646,7 +675,7 @@ public final class GearAnimator extends Animator
     gc.setAlpha(255);
   }
 
-  private void updatePage()
+  private Page updatePage()
   {
     Display display = getDisplay();
     if (pageBuffer == null)
@@ -662,6 +691,7 @@ public final class GearAnimator extends Animator
     page.paint(gc);
 
     gc.dispose();
+    return page;
   }
 
   private boolean showOverlay()
@@ -804,6 +834,16 @@ public final class GearAnimator extends Animator
     gc.drawImage(image, x, y);
 
     return new Rectangle(x, y, bounds.width, bounds.height);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface Listener
+  {
+    public void onAnswer(GearAnimator animator, Page page, Answer answer);
+
+    public void onExit(GearAnimator animator, Page page);
   }
 
   /**
@@ -1045,7 +1085,18 @@ public final class GearAnimator extends Animator
       {
         setChoice(i);
         updatePage();
-        setSelection(getSelection() + 1);
+
+        for (Listener listener : getListeners())
+        {
+          listener.onAnswer(GearAnimator.this, this, answers[i]);
+        }
+
+        int selection = getSelection();
+        if (selection < GEARS)
+        {
+          setSelection(selection + 1);
+        }
+
         return true;
       }
 
