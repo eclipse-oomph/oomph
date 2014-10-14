@@ -47,11 +47,13 @@ public class AnimatedCanvas extends Canvas
 
   private int timerInterval;
 
-  private Image buffer;
-
   private GC bufferGC;
 
+  private Image buffer;
+
   private Point shellMoveStart;
+
+  private boolean hasFocus = true;
 
   public AnimatedCanvas(Composite parent, int style)
   {
@@ -151,6 +153,21 @@ public class AnimatedCanvas extends Canvas
     this.timerInterval = timerInterval;
   }
 
+  public void setFocus(boolean hasFocus)
+  {
+    this.hasFocus = hasFocus;
+
+    try
+    {
+      GC canvasGC = new GC(this);
+      doPaint(canvasGC);
+    }
+    catch (Exception ex)
+    {
+      // Ignore.
+    }
+  }
+
   @Override
   public synchronized void dispose()
   {
@@ -248,6 +265,13 @@ public class AnimatedCanvas extends Canvas
     }
 
     canvasGC.drawImage(buffer, 0, 0);
+
+    if (!hasFocus)
+    {
+      canvasGC.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+      canvasGC.setAlpha(200);
+      canvasGC.fillRectangle(getBounds());
+    }
   }
 
   /**

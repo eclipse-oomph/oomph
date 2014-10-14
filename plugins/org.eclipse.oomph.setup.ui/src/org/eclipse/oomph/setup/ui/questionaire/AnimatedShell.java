@@ -7,6 +7,8 @@ import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.QuestionPage;
 import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.SummaryPage;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Font;
@@ -20,6 +22,8 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class AnimatedShell extends Shell implements Listener
 {
+  private AnimatedCanvas canvas;
+
   private GearAnimator animator;
 
   public AnimatedShell()
@@ -109,8 +113,21 @@ public class AnimatedShell extends Shell implements Listener
       }
     });
 
-    AnimatedCanvas canvas = new AnimatedCanvas(this, SWT.NONE);
+    canvas = new AnimatedCanvas(this, SWT.NONE);
     canvas.addAnimator(animator);
+
+    addFocusListener(new FocusListener()
+    {
+      public void focusGained(FocusEvent e)
+      {
+        canvas.setFocus(true);
+      }
+
+      public void focusLost(FocusEvent e)
+      {
+        canvas.setFocus(false);
+      }
+    });
   }
 
   protected boolean onKeyPressed(KeyEvent e)
