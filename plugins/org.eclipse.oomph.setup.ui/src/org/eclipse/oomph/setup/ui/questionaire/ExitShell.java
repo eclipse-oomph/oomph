@@ -224,7 +224,7 @@ public class ExitShell extends AnimatedShell<Boolean>
 
     private static boolean showOverlay()
     {
-      return (System.currentTimeMillis() / 700 & 1) == 1;
+      return (System.currentTimeMillis() / 500 & 1) == 1;
     }
   }
 }
