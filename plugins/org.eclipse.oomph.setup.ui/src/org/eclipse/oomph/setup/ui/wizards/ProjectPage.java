@@ -74,7 +74,10 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -533,6 +536,8 @@ public class ProjectPage extends SetupWizardPage
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
     catalogSelector.configure(catalogsButton);
 
+    final Object projectFilterJobFamily = new Object();
+
     FilteredTree filteredTree = new FilteredTree(upperComposite, SWT.BORDER | SWT.MULTI, new PatternFilter(), true)
     {
       @Override
@@ -665,6 +670,12 @@ public class ProjectPage extends SetupWizardPage
           {
             return true;
           }
+
+          @Override
+          public boolean belongsTo(Object family)
+          {
+            return family == projectFilterJobFamily;
+          }
         };
       }
     };
@@ -700,20 +711,36 @@ public class ProjectPage extends SetupWizardPage
       {
         super.notifyChanged(notification);
 
-        getShell().getDisplay().asyncExec(new Runnable()
+        if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS)
         {
-          public void run()
+          getShell().getDisplay().asyncExec(new Runnable()
           {
-            if (projectViewer.getExpandedElements().length == 0)
+            public void run()
             {
-              final Object[] elements = getElements(projectViewer.getInput());
-              if (elements.length > 0)
+              try
               {
-                projectViewer.expandToLevel(elements[0], 1);
+                Job.getJobManager().join(projectFilterJobFamily, new NullProgressMonitor());
+              }
+              catch (OperationCanceledException ex)
+              {
+                SetupUIPlugin.INSTANCE.log(ex);
+              }
+              catch (InterruptedException ex)
+              {
+                SetupUIPlugin.INSTANCE.log(ex);
+              }
+
+              if (projectViewer.getExpandedElements().length == 0)
+              {
+                final Object[] elements = getElements(projectViewer.getInput());
+                if (elements.length > 0)
+                {
+                  projectViewer.setExpandedState(elements[0], true);
+                }
               }
             }
-          }
-        });
+          });
+        }
       }
     });
 
@@ -1061,7 +1088,7 @@ public class ProjectPage extends SetupWizardPage
   @Override
   protected void createCheckButtons()
   {
-    if (existingStreams.isEmpty())
+    if (existingStreams.isEmpty() && getPreviousPage() instanceof ProductPage)
     {
       skipButton = addCheckButton("Skip Project Selection", "Enable the Next button to proceed without provisioning projects", false, "skipButton");
       skipButton.addSelectionListener(new SelectionAdapter()
