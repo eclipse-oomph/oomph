@@ -331,7 +331,7 @@ public class GearAnimator extends Animator
   {
     if (e.keyCode == SWT.ESC)
     {
-      onExit();
+      exit();
       return true;
     }
 
@@ -451,7 +451,7 @@ public class GearAnimator extends Animator
 
         if (exitBox != null && exitBox.contains(x, y))
         {
-          onExit();
+          exit();
           return true;
         }
 
@@ -484,7 +484,7 @@ public class GearAnimator extends Animator
     return false;
   }
 
-  protected void onExit()
+  protected void exit()
   {
     hover = EXIT;
 
@@ -509,7 +509,7 @@ public class GearAnimator extends Animator
     }
   }
 
-  protected boolean showOverlay()
+  protected boolean shouldShowOverlay()
   {
     Page page = getSelectedPage();
     if (page instanceof QuestionPage)
@@ -542,7 +542,7 @@ public class GearAnimator extends Animator
       needsRedraw = true;
     }
 
-    boolean showOverlay = showOverlay();
+    boolean showOverlay = shouldShowOverlay();
     if (showOverlay != oldShowOverlay)
     {
       oldShowOverlay = showOverlay;
@@ -947,7 +947,7 @@ public class GearAnimator extends Animator
         {
           int overlayChoice = ((QuestionPage)page).getOverlayChoice();
           boolean overlayChoiceYes = overlayChoice == index;
-          boolean showOverlay = showOverlay();
+          boolean showOverlay = shouldShowOverlay();
 
           if (showOverlay == overlayChoiceYes)
           {
@@ -1232,7 +1232,7 @@ public class GearAnimator extends Animator
         int y = (PAGE_HEIGHT - bounds.height) / 2;
         gc.drawImage(image, x, y);
 
-        if (overlay != null && showOverlay())
+        if (overlay != null && shouldShowOverlay())
         {
           gc.drawImage(overlay, x + overlayX, y + overlayY);
         }

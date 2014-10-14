@@ -169,7 +169,7 @@ public class ExitShell extends AnimatedShell<Boolean>
         return true;
       }
 
-      return showOverlay() != oldShowOverlay;
+      return shouldShowOverlay() != oldShowOverlay;
     }
 
     @Override
@@ -190,7 +190,7 @@ public class ExitShell extends AnimatedShell<Boolean>
       int y = 2 * BORDER + BIG_FONT_PX + 2 * NORMAL_FONT_PX;
       gc.drawImage(image, x, y);
 
-      oldShowOverlay = showOverlay();
+      oldShowOverlay = shouldShowOverlay();
       if (oldShowOverlay)
       {
         gc.drawImage(image_ovr, x + 133, y + 105);
@@ -222,7 +222,7 @@ public class ExitShell extends AnimatedShell<Boolean>
       return NONE;
     }
 
-    private static boolean showOverlay()
+    private static boolean shouldShowOverlay()
     {
       return (System.currentTimeMillis() / 500 & 1) == 1;
     }

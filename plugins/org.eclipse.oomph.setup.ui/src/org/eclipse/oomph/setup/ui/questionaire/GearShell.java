@@ -104,14 +104,14 @@ public class GearShell extends AnimatedShell<Object> implements Listener
       }
 
       @Override
-      protected boolean showOverlay()
+      protected boolean shouldShowOverlay()
       {
         if (TEST_OVERLAYS)
         {
           return true;
         }
 
-        return super.showOverlay();
+        return super.shouldShowOverlay();
       }
     };
 
