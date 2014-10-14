@@ -12,7 +12,8 @@
     xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
     xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/setup/mylyn/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/resources/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore"
+    xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/setup/mylyn/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/resources/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
     name="oomph"
     label="Oomph">
   <setupTask
@@ -252,7 +253,7 @@
         <repositoryList
             name="Mars">
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
           <repository
               url="http://download.eclipse.org/tools/gef/updates/milestones"/>
           <repository
@@ -275,7 +276,7 @@
           <repository
               url="http://download.eclipse.org/sirius/updates/releases/1.0.1/luna"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
           <repository
               url="http://download.eclipse.org/tools/gef/updates/milestones"/>
           <repository
@@ -292,7 +293,7 @@
         <repositoryList
             name="Kepler">
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
           <repository
               url="http://download.eclipse.org/tools/gef/updates/milestones"/>
           <repository
@@ -309,7 +310,7 @@
         <repositoryList
             name="Juno">
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
           <repository
               url="http://download.eclipse.org/tools/gef/updates/milestones"/>
           <repository
@@ -331,7 +332,19 @@
           name="Oomph Setup">
         <predicate
             xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.setup.*"/>
+            pattern="org\.eclipse\.oomph\.setup(\.(util|core|doc|edit|editor|ui|ui\.ide|tests|installer))?(-feature)?"/>
+      </workingSet>
+      <workingSet
+          name="Oomph Setup Extensions">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:NamePredicate"
+              pattern="org\.eclipse\.oomph\.setup.*"/>
+          <operand
+              xsi:type="workingsets:ExclusionPredicate"
+              excludedWorkingSet="//@streams[name='master']/@setupTasks.4/@workingSets.0"/>
+        </predicate>
       </workingSet>
       <workingSet
           name="Oomph Setup Models">

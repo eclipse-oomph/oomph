@@ -17,7 +17,7 @@
     <repository
         url="${oomph.update.url}"/>
     <repository
-        url="http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339"/>
+        url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201410130308"/>
   </setupTask>
   <product name="epp.package.dsl"
       label="Eclipse DSL Tools">
@@ -1072,7 +1072,7 @@
             versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,5.0.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
@@ -1124,7 +1124,7 @@
             versionRange="[4.5.0,4.6.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.6.0)"/>
+            versionRange="[4.5.0,4.6.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.11.0,3.12.0)"/>

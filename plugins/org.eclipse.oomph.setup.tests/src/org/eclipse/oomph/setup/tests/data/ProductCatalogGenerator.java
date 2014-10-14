@@ -35,6 +35,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.OSGiVersion;
+import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
@@ -50,6 +51,7 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -123,22 +125,24 @@ public class ProductCatalogGenerator implements IApplication
       installationTask.setID("installation");
       productCatalog.getSetupTasks().add(installationTask);
 
-      Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
-      Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
-      Repository emfRepository = P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/modeling/emf/emf/updates/2.10/core/R201405190339");
-
-      P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
-      p2Task.getRequirements().add(oomphRequirement);
-      p2Task.getRepositories().add(oomphRepository);
-      p2Task.getRepositories().add(emfRepository);
-      productCatalog.getSetupTasks().add(p2Task);
-
       File agentLocation = File.createTempFile("test-", "-agent");
       agentLocation.delete();
       agentLocation.mkdirs();
 
       Agent agent = new AgentImpl(null, agentLocation);
       IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
+
+      Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
+
+      Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
+      Repository emfRepository = P2Factory.eINSTANCE.createRepository(trimEmptyTrailingSegment(
+          loadLatestRepository(manager, null, new URI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core")).getLocation()).toString());
+
+      P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+      p2Task.getRequirements().add(oomphRequirement);
+      p2Task.getRepositories().add(oomphRepository);
+      p2Task.getRepositories().add(emfRepository);
+      productCatalog.getSetupTasks().add(p2Task);
 
       final Map<String, List<TrainAndVersion>> trainsAndVersions = new HashMap<String, List<TrainAndVersion>>();
       final Map<String, String> labels = new HashMap<String, String>();
@@ -152,34 +156,10 @@ public class ProductCatalogGenerator implements IApplication
         Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
 
         URI releaseURI = new URI(RELEASES + "/" + train);
-        System.out.println(releaseURI);
-        IMetadataRepository releaseMetaDataRepository = manager.loadRepository(releaseURI, null);
-
-        if (releaseMetaDataRepository instanceof ICompositeRepository<?>)
-        {
-          ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)releaseMetaDataRepository;
-          long latest = Integer.MIN_VALUE;
-          for (URI childURI : compositeRepository.getChildren())
-          {
-            String childURIString = childURI.toString();
-            if (childURIString.endsWith("/"))
-            {
-              childURI = new URI(childURIString.substring(0, childURIString.length() - 1));
-            }
-
-            if (!childURI.equals(eppURI))
-            {
-              IMetadataRepository childRepository = manager.loadRepository(childURI, null);
-              String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
-              long timestamp = Long.parseLong(value);
-              if (timestamp > latest)
-              {
-                releaseURI = childURI;
-                latest = timestamp;
-              }
-            }
-          }
-        }
+        System.out.print(releaseURI);
+        IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, eppURI, releaseURI);
+        releaseURI = trimEmptyTrailingSegment(releaseMetaDataRepository.getLocation());
+        System.out.println(" -> " + releaseURI);
 
         for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createIUAnyQuery(), null)))
         {
@@ -381,6 +361,46 @@ public class ProductCatalogGenerator implements IApplication
     {
       ex.printStackTrace();
     }
+  }
+
+  private URI trimEmptyTrailingSegment(URI uri) throws URISyntaxException
+  {
+    String value = uri.toString();
+    if (value.endsWith("/"))
+    {
+      return new URI(value.substring(0, value.length() - 1));
+    }
+
+    return uri;
+  }
+
+  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException,
+      ProvisionException
+  {
+    IMetadataRepository releaseMetaDataRepository = manager.loadRepository(releaseURI, null);
+    IMetadataRepository result = releaseMetaDataRepository;
+    if (releaseMetaDataRepository instanceof ICompositeRepository<?>)
+    {
+      ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)releaseMetaDataRepository;
+      long latest = Integer.MIN_VALUE;
+      for (URI childURI : compositeRepository.getChildren())
+      {
+        childURI = trimEmptyTrailingSegment(childURI);
+        if (!childURI.equals(eppURI))
+        {
+          IMetadataRepository childRepository = manager.loadRepository(childURI, null);
+          String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
+          long timestamp = Long.parseLong(value);
+          if (timestamp > latest)
+          {
+            result = childRepository;
+            latest = timestamp;
+          }
+        }
+      }
+    }
+
+    return result;
   }
 
   private void checkVersionRanges(ProductCatalog productCatalog)
