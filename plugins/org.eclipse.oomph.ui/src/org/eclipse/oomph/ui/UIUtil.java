@@ -45,7 +45,7 @@ public final class UIUtil
     {
       workbench = PlatformUI.getWorkbench();
     }
-    catch (Exception ex)
+    catch (Throwable ex)
     {
       // Workbench has not been created.
     }

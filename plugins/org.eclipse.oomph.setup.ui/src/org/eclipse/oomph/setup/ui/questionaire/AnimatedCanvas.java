@@ -11,6 +11,10 @@
 package org.eclipse.oomph.setup.ui.questionaire;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -20,6 +24,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -53,8 +58,6 @@ public class AnimatedCanvas extends Canvas
 
   private Point shellMoveStart;
 
-  private boolean hasFocus = true;
-
   public AnimatedCanvas(Composite parent, int style)
   {
     this(parent, style, DEFAULT_TIMER_INTERVAL);
@@ -67,12 +70,37 @@ public class AnimatedCanvas extends Canvas
     Display display = getDisplay();
     setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 
+    addFocusListener(new FocusListener()
+    {
+      public void focusGained(FocusEvent e)
+      {
+        redraw();
+      }
+
+      public void focusLost(FocusEvent e)
+      {
+        redraw();
+      }
+    });
+
     addPaintListener(new PaintListener()
     {
       public void paintControl(PaintEvent event)
       {
         GC canvasGC = event.gc;
         doPaint(canvasGC);
+      }
+    });
+
+    addKeyListener(new KeyAdapter()
+    {
+      @Override
+      public void keyPressed(KeyEvent e)
+      {
+        if (!onKeyPressed(e))
+        {
+          super.keyPressed(e);
+        }
       }
     });
 
@@ -130,6 +158,7 @@ public class AnimatedCanvas extends Canvas
     synchronized (animators)
     {
       animator.setCanvas(this);
+      animator.init();
       animators.add(animator);
     }
   }
@@ -139,6 +168,7 @@ public class AnimatedCanvas extends Canvas
     synchronized (animators)
     {
       animators.remove(animator);
+      animator.dispose();
       animator.setCanvas(null);
     }
   }
@@ -153,19 +183,12 @@ public class AnimatedCanvas extends Canvas
     this.timerInterval = timerInterval;
   }
 
-  public void setFocus(boolean hasFocus)
+  public void cover(GC gc, int alpha)
   {
-    this.hasFocus = hasFocus;
-
-    try
-    {
-      GC canvasGC = new GC(this);
-      doPaint(canvasGC);
-    }
-    catch (Exception ex)
-    {
-      // Ignore.
-    }
+    gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+    gc.setAlpha(alpha);
+    gc.fillRectangle(getBounds());
+    gc.setAlpha(255);
   }
 
   @Override
@@ -187,7 +210,22 @@ public class AnimatedCanvas extends Canvas
     super.dispose();
   }
 
-  private void onMouseMove(int x, int y)
+  protected boolean onKeyPressed(KeyEvent e)
+  {
+    Animator[] animators = getAnimators();
+    for (int i = animators.length - 1; i >= 0; --i)
+    {
+      Animator animator = animators[i];
+      if (animator.onKeyPressed(e))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  protected void onMouseMove(int x, int y)
   {
     if (shellMoveStart != null)
     {
@@ -209,7 +247,7 @@ public class AnimatedCanvas extends Canvas
     }
   }
 
-  private void onMouseDown(int x, int y)
+  protected void onMouseDown(int x, int y)
   {
     Animator[] animators = getAnimators();
     for (int i = animators.length - 1; i >= 0; --i)
@@ -224,7 +262,7 @@ public class AnimatedCanvas extends Canvas
     shellMoveStart = new Point(x, y);
   }
 
-  private synchronized void doRun()
+  protected synchronized void doRun()
   {
     if (isDisposed())
     {
@@ -248,7 +286,7 @@ public class AnimatedCanvas extends Canvas
     getDisplay().timerExec(timerInterval, runnable);
   }
 
-  private void doPaint(GC canvasGC)
+  protected void doPaint(GC canvasGC)
   {
     if (buffer == null)
     {
@@ -266,11 +304,9 @@ public class AnimatedCanvas extends Canvas
 
     canvasGC.drawImage(buffer, 0, 0);
 
-    if (!hasFocus)
+    if (!isFocusControl())
     {
-      canvasGC.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-      canvasGC.setAlpha(200);
-      canvasGC.fillRectangle(getBounds());
+      cover(canvasGC, 200);
     }
   }
 
@@ -317,7 +353,11 @@ public class AnimatedCanvas extends Canvas
       return height;
     }
 
-    public void dispose()
+    protected void init()
+    {
+    }
+
+    protected void dispose()
     {
     }
 
@@ -330,6 +370,11 @@ public class AnimatedCanvas extends Canvas
     {
       this.width = width;
       this.height = height;
+    }
+
+    protected boolean onKeyPressed(KeyEvent e)
+    {
+      return false;
     }
 
     protected boolean onMouseMove(int x, int y)
@@ -345,5 +390,25 @@ public class AnimatedCanvas extends Canvas
     protected abstract boolean advance();
 
     protected abstract void paint(GC gc, Image buffer);
+
+    public static Point drawText(GC gc, double x, double y, String text)
+    {
+      Point extent = gc.stringExtent(text);
+      int cX = (int)(x - extent.x / 2);
+      int cY = (int)(y - extent.y / 2);
+      gc.drawText(text, cX, cY, true);
+
+      return extent;
+    }
+
+    public static Rectangle drawImage(GC gc, Image image, int x, int y)
+    {
+      Rectangle bounds = image.getBounds();
+      x -= bounds.width / 2;
+      y -= bounds.height / 2;
+      gc.drawImage(image, x, y);
+
+      return new Rectangle(x, y, bounds.width, bounds.height);
+    }
   }
 }

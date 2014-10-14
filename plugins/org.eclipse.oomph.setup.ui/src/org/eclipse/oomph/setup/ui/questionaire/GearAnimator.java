@@ -1,9 +1,20 @@
+/*
+ * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
+ */
 package org.eclipse.oomph.setup.ui.questionaire;
 
 import org.eclipse.oomph.setup.ui.questionaire.AnimatedCanvas.Animator;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -20,7 +31,7 @@ import java.util.List;
 /**
  * @author Eike Stepper
  */
-public final class GearAnimator extends Animator
+public class GearAnimator extends Animator
 {
   public static final int PAGE_WIDTH = 620;
 
@@ -56,23 +67,23 @@ public final class GearAnimator extends Animator
 
   private final List<Listener> listeners = new ArrayList<Listener>();
 
-  private final Color purple;
+  private Color purple;
 
-  private final Font baseFont;
+  private Font baseFont;
 
-  private final Font bigFont;
+  private Font bigFont;
 
-  private final Font hoverFont;
+  private Font hoverFont;
 
-  private final Font normalFont;
+  private Font normalFont;
 
-  private final Font numberFont;
+  private Font numberFont;
 
-  private final Image exit;
+  private Image exit;
 
-  private final Image exitHover;
+  private Image exitHover;
 
-  private final Image question;
+  private Image question;
 
   private final Image[] welcomeImages = new Image[2];
 
@@ -94,13 +105,13 @@ public final class GearAnimator extends Animator
 
   private final Color[] gearForeground = new Color[2];
 
-  private final float radius;
+  private float radius;
 
-  private final int pageY;
+  private int pageY;
 
-  private final int answerY;
+  private int answerY;
 
-  private final int buttonR;
+  private int buttonR;
 
   private float angle;
 
@@ -132,10 +143,26 @@ public final class GearAnimator extends Animator
 
   private Rectangle nextBox;
 
-  public GearAnimator(final Display display, Font baseFont)
+  public GearAnimator(Display display)
   {
     super(display);
-    this.baseFont = baseFont;
+  }
+
+  @Override
+  protected void init()
+  {
+    Display display = getDisplay();
+
+    Font initialFont = getCanvas().getFont();
+    FontData[] fontData = initialFont.getFontData();
+    for (int i = 0; i < fontData.length; i++)
+    {
+      fontData[i].setHeight(16);
+      fontData[i].setStyle(SWT.BOLD);
+    }
+
+    baseFont = new Font(display, fontData);
+
     bigFont = createFont(BIG_FONT_PX);
     hoverFont = createFont(BIG_FONT_PX + 6);
     normalFont = createFont((int)(BIG_FONT_PX * .75));
@@ -196,11 +223,11 @@ public final class GearAnimator extends Animator
     pages[4] = new QuestionPage(4, "Execute Jobs in Background?", 0, 23, 160);
     pages[5] = new QuestionPage(5, "Encode Text Files with UTF-8?", 0, 181, 95);
     pages[6] = new QuestionPage(6, "Enable Preference Recorder?", 1, 57, 82);
-    pages[7] = new SummaryPage(6, "Summary");
+    pages[7] = new SummaryPage(7, "Summary");
   }
 
   @Override
-  public void dispose()
+  protected void dispose()
   {
     for (Path path : gearPaths)
     {
@@ -332,6 +359,48 @@ public final class GearAnimator extends Animator
   }
 
   @Override
+  protected boolean onKeyPressed(KeyEvent e)
+  {
+    if (e.keyCode == SWT.ESC)
+    {
+      onExit();
+      return true;
+    }
+
+    if (e.keyCode == SWT.HOME)
+    {
+      setSelection(0);
+      return true;
+    }
+
+    if (e.keyCode == SWT.END)
+    {
+      setSelection(GearAnimator.GEARS);
+      return true;
+    }
+
+    if (e.keyCode == SWT.ARROW_RIGHT || e.keyCode == SWT.PAGE_DOWN)
+    {
+      setSelection(getSelection() + 1);
+      return true;
+    }
+
+    if (e.keyCode == SWT.ARROW_LEFT || e.keyCode == SWT.PAGE_UP)
+    {
+      setSelection(getSelection() - 1);
+      return true;
+    }
+
+    if (e.character >= '0' && e.character <= '6')
+    {
+      setSelection(e.character - '0');
+      return true;
+    }
+
+    return false;
+  }
+
+  @Override
   protected boolean onMouseMove(int x, int y)
   {
     if (x != Integer.MIN_VALUE && y != Integer.MIN_VALUE)
@@ -414,12 +483,7 @@ public final class GearAnimator extends Animator
 
         if (exitBox != null && exitBox.contains(x, y))
         {
-          hover = EXIT;
-          for (Listener listener : getListeners())
-          {
-            listener.onExit(GearAnimator.this, getSelectedPage());
-          }
-
+          onExit();
           return true;
         }
 
@@ -450,6 +514,32 @@ public final class GearAnimator extends Animator
     }
 
     return false;
+  }
+
+  protected void onExit()
+  {
+    hover = EXIT;
+    getCanvas().redraw();
+
+    UIUtil.asyncExec(new Runnable()
+    {
+      public void run()
+      {
+        ExitShell exitShell = new ExitShell(getCanvas().getShell());
+        exitShell.openModal();
+
+        // if (MessageDialog.openQuestion(getCanvas().getShell(), "Questionnaire", "Do you really want to exit?"))
+        // {
+        // for (Listener listener : getListeners())
+        // {
+        // listener.onExit(GearAnimator.this, getSelectedPage());
+        // }
+        // }
+
+        hover = NONE;
+        getCanvas().redraw();
+      }
+    });
   }
 
   @Override
@@ -562,12 +652,12 @@ public final class GearAnimator extends Animator
 
     if (page.showBack())
     {
-      backBox = drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY);
+      backBox = Animator.drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY);
     }
 
     if (page.showNext())
     {
-      nextBox = drawImage(gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - buttonR, answerY);
+      nextBox = Animator.drawImage(gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - buttonR, answerY);
     }
 
     oldHover = hover; // TODO Remove the other oldHover assignments?
@@ -640,18 +730,18 @@ public final class GearAnimator extends Animator
 
     if (i == 0)
     {
-      drawImage(gc, welcomeImages[selected], (int)x, (int)y);
+      Animator.drawImage(gc, welcomeImages[selected], (int)x, (int)y);
     }
     else if (i < GEARS)
     {
       String number = Integer.toString(i);
       gc.setForeground(selected == 1 ? gearForeground[1] : GRAY);
       gc.setFont(numberFont);
-      drawText(gc, x, y - 1, number);
+      Animator.drawText(gc, x, y - 1, number);
     }
     else
     {
-      drawImage(gc, summaryImages[selected], (int)x, (int)y);
+      Animator.drawImage(gc, summaryImages[selected], (int)x, (int)y);
     }
 
     paintBadge(gc, x, y, outerR, i, alpha);
@@ -823,24 +913,6 @@ public final class GearAnimator extends Animator
     return path;
   }
 
-  private static void drawText(GC gc, double x, double y, String text)
-  {
-    Point extent = gc.stringExtent(text);
-    int cX = (int)(x - extent.x / 2);
-    int cY = (int)(y - extent.y / 2);
-    gc.drawText(text, cX, cY, true);
-  }
-
-  private static Rectangle drawImage(GC gc, Image image, int x, int y)
-  {
-    Rectangle bounds = image.getBounds();
-    x -= bounds.width / 2;
-    y -= bounds.height / 2;
-    gc.drawImage(image, x, y);
-
-    return new Rectangle(x, y, bounds.width, bounds.height);
-  }
-
   /**
    * @author Eike Stepper
    */
@@ -955,7 +1027,7 @@ public final class GearAnimator extends Animator
         }
       }
 
-      return drawImage(gc, image, x, y);
+      return Animator.drawImage(gc, image, x, y);
     }
   }
 
@@ -1142,6 +1214,11 @@ public final class GearAnimator extends Animator
 
     protected abstract void paintContent(GC gc);
 
+    protected int getAnswerY()
+    {
+      return answerY;
+    }
+
     private void paintAnswers(GC gc)
     {
       boolean selecteds[] = new boolean[answers.length];
@@ -1166,7 +1243,7 @@ public final class GearAnimator extends Animator
       }
 
       int x = (PAGE_WIDTH - width) / 2;
-      int y = answerY - pageY;
+      int y = getAnswerY() - pageY;
 
       for (int i = 0; i < answers.length; i++)
       {
