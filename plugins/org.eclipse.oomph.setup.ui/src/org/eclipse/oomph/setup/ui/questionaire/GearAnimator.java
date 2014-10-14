@@ -45,6 +45,14 @@ public final class GearAnimator extends Animator
 
   private static final int CHOICES = NEXT - 1;
 
+  private static Color WHITE;
+
+  private static Color GRAY;
+
+  private static Color DARK_GRAY;
+
+  private final Color purple;
+
   private final Font baseFont;
 
   private final Font bigFont;
@@ -52,6 +60,8 @@ public final class GearAnimator extends Animator
   private final Font hoverFont;
 
   private final Font normalFont;
+
+  private final Font numberFont;
 
   private final Image exit;
 
@@ -74,8 +84,6 @@ public final class GearAnimator extends Animator
   private final Color[] gearBackground = new Color[2];
 
   private final Color[] gearForeground = new Color[2];
-
-  private Color purple;
 
   private final float radius;
 
@@ -119,9 +127,10 @@ public final class GearAnimator extends Animator
   {
     super(display);
     this.baseFont = baseFont;
-    bigFont = createFont(display, BIG_FONT_PX);
-    hoverFont = createFont(display, BIG_FONT_PX + 6);
-    normalFont = createFont(display, (int)(BIG_FONT_PX * .75));
+    bigFont = createFont(BIG_FONT_PX);
+    hoverFont = createFont(BIG_FONT_PX + 6);
+    normalFont = createFont((int)(BIG_FONT_PX * .75));
+    numberFont = createFont(22);
 
     exit = new Image(display, "questionaire/exit.png");
     exitHover = new Image(display, "questionaire/exit_hover.png");
@@ -161,6 +170,9 @@ public final class GearAnimator extends Animator
     gearForeground[1] = new Color(display, 207, 108, 0);
 
     purple = new Color(display, 43, 34, 84);
+    WHITE = display.getSystemColor(SWT.COLOR_WHITE);
+    GRAY = display.getSystemColor(SWT.COLOR_GRAY);
+    DARK_GRAY = display.getSystemColor(SWT.COLOR_DARK_GRAY);
 
     pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer(""));
     pages[1] = new QuestionPage(1, "Refresh Resources Automatically?", 0, 5, 29);
@@ -204,7 +216,7 @@ public final class GearAnimator extends Animator
     UIUtil.dispose(gearBackground);
 
     // Fonts
-    UIUtil.dispose(normalFont, hoverFont, bigFont, baseFont);
+    UIUtil.dispose(numberFont, normalFont, hoverFont, bigFont, baseFont);
 
     super.dispose();
   }
@@ -429,9 +441,8 @@ public final class GearAnimator extends Animator
   }
 
   @Override
-  protected void paint(Image buffer, GC gc)
+  protected void paint(GC gc, Image buffer)
   {
-    Display display = getDisplay();
     gc.setFont(baseFont);
     gc.setLineWidth(3);
     gc.setAntialias(SWT.ON);
@@ -443,11 +454,11 @@ public final class GearAnimator extends Animator
     {
       if (i != selection && (i < GEARS || summaryShown))
       {
-        paint(gc, display, alpha, i);
+        paintGear(gc, i, alpha);
       }
     }
 
-    paint(gc, display, alpha, selection);
+    paintGear(gc, selection, alpha);
 
     Image exitImage = exit;
     if (hover == EXIT)
@@ -516,7 +527,7 @@ public final class GearAnimator extends Animator
     oldHover = hover; // TODO Remove the other oldHover assignments?
   }
 
-  private void paint(GC gc, Display display, int alpha, int i)
+  private void paintGear(GC gc, int i, int alpha)
   {
     double offset = 2 * i * radius;
     double x = BORDER + radius + offset;
@@ -560,9 +571,12 @@ public final class GearAnimator extends Animator
     double outerR = factor * radius;
     double innerR = factor * r2;
     float angleOffset = (angle + i * ANGLE) * (i % 2 == 1 ? -1 : 1);
-    gc.setForeground(hovered ? display.getSystemColor(SWT.COLOR_DARK_GRAY) : gearForeground[selected]);
-    gc.setBackground(hovered ? display.getSystemColor(SWT.COLOR_GRAY) : gearBackground[selected]);
-    Path path = drawGear(gc, x, y, outerR, innerR, angleOffset);
+
+    gc.setForeground(hovered ? DARK_GRAY : gearForeground[selected]);
+    gc.setBackground(hovered ? GRAY : gearBackground[selected]);
+
+    Display display = getDisplay();
+    Path path = drawGear(gc, display, x, y, outerR, innerR, angleOffset);
 
     if (gearPaths[i] != null)
     {
@@ -574,27 +588,19 @@ public final class GearAnimator extends Animator
     int ovalX = (int)(x - factor * r3);
     int ovalY = (int)(y - factor * r3);
     int ovalR = (int)(2 * factor * r3);
-    gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+    gc.setBackground(WHITE);
     gc.fillOval(ovalX, ovalY, ovalR, ovalR);
     gc.drawOval(ovalX, ovalY, ovalR, ovalR);
 
     String number = i == 0 ? "W" : i == GEARS ? "S" : Integer.toString(i);
-    Point extent = gc.stringExtent(number);
-    Page page = pages[i];
+    Color color = selected == 1 ? gearForeground[1] : GRAY;
+    drawText(gc, x, y, number, color);
 
-    if (selected == 1)
-    {
-      gc.setForeground(gearForeground[1]);
-    }
-    else
-    {
-      gc.setForeground(display.getSystemColor(SWT.COLOR_GRAY));
-    }
+    paintGearBadge(gc, x, y, outerR, i, alpha);
+  }
 
-    int cX = (int)(x - extent.x / 2);
-    int cY = (int)(y - 2 - extent.y / 2);
-    gc.drawText(number, cX, cY, true);
-
+  private void paintGearBadge(GC gc, double x, double y, double outerR, int i, int alpha)
+  {
     if (selection >= GEARS)
     {
       gc.setAlpha(255 - alpha);
@@ -604,6 +610,7 @@ public final class GearAnimator extends Animator
       gc.setAlpha(alpha);
     }
 
+    Page page = pages[i];
     Answer answer = page.getChoiceAnswer();
     if (answer instanceof ImageAnswer)
     {
@@ -615,54 +622,6 @@ public final class GearAnimator extends Animator
     gc.setAlpha(255);
   }
 
-  private Path drawGear(GC gc, double cx, double cy, double outerR, double innerR, float angleOffset)
-  {
-    double radian2 = ANGLE / 2 * RADIAN;
-    double radian3 = .06;
-
-    Display display = getDisplay();
-    Path path = new Path(display);
-
-    for (int i = 0; i < TEETH; i++)
-    {
-      double radian = (i * ANGLE + angleOffset) * RADIAN;
-
-      double x = cx + outerR * Math.cos(radian);
-      double y = cy - outerR * Math.sin(radian);
-
-      if (i == 0)
-      {
-        path.moveTo((int)x, (int)y);
-      }
-
-      double r1 = radian + radian3;
-      double r3 = radian + radian2;
-      double r2 = r3 - radian3;
-      double r4 = r3 + radian2;
-
-      x = cx + innerR * Math.cos(r1);
-      y = cy - innerR * Math.sin(r1);
-      path.lineTo((int)x, (int)y);
-
-      x = cx + innerR * Math.cos(r2);
-      y = cy - innerR * Math.sin(r2);
-      path.lineTo((int)x, (int)y);
-
-      x = cx + outerR * Math.cos(r3);
-      y = cy - outerR * Math.sin(r3);
-      path.lineTo((int)x, (int)y);
-
-      x = cx + outerR * Math.cos(r4);
-      y = cy - outerR * Math.sin(r4);
-      path.lineTo((int)x, (int)y);
-    }
-
-    path.close();
-    gc.fillPath(path);
-    gc.drawPath(path);
-    return path;
-  }
-
   private void updatePage()
   {
     Display display = getDisplay();
@@ -672,11 +631,11 @@ public final class GearAnimator extends Animator
     }
 
     GC gc = new GC(pageBuffer);
-    gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+    gc.setBackground(WHITE);
     gc.fillRectangle(pageBuffer.getBounds());
 
     Page page = getSelectedPage();
-    page.draw(gc);
+    page.paint(gc);
 
     gc.dispose();
   }
@@ -721,8 +680,9 @@ public final class GearAnimator extends Animator
     }
   }
 
-  private Font createFont(Display display, int pixelHeight)
+  private Font createFont(int pixelHeight)
   {
+    Display display = getDisplay();
     GC fontGC = new GC(display);
 
     try
@@ -757,6 +717,63 @@ public final class GearAnimator extends Animator
     }
   }
 
+  private static Path drawGear(GC gc, Display display, double cx, double cy, double outerR, double innerR, float angleOffset)
+  {
+    double radian2 = ANGLE / 2 * RADIAN;
+    double radian3 = .06;
+
+    Path path = new Path(display);
+
+    for (int i = 0; i < TEETH; i++)
+    {
+      double radian = (i * ANGLE + angleOffset) * RADIAN;
+
+      double x = cx + outerR * Math.cos(radian);
+      double y = cy - outerR * Math.sin(radian);
+
+      if (i == 0)
+      {
+        path.moveTo((int)x, (int)y);
+      }
+
+      double r1 = radian + radian3;
+      double r3 = radian + radian2;
+      double r2 = r3 - radian3;
+      double r4 = r3 + radian2;
+
+      x = cx + innerR * Math.cos(r1);
+      y = cy - innerR * Math.sin(r1);
+      path.lineTo((int)x, (int)y);
+
+      x = cx + innerR * Math.cos(r2);
+      y = cy - innerR * Math.sin(r2);
+      path.lineTo((int)x, (int)y);
+
+      x = cx + outerR * Math.cos(r3);
+      y = cy - outerR * Math.sin(r3);
+      path.lineTo((int)x, (int)y);
+
+      x = cx + outerR * Math.cos(r4);
+      y = cy - outerR * Math.sin(r4);
+      path.lineTo((int)x, (int)y);
+    }
+
+    path.close();
+    gc.fillPath(path);
+    gc.drawPath(path);
+    return path;
+  }
+
+  private static void drawText(GC gc, double x, double y, String text, Color color)
+  {
+    Point extent = gc.stringExtent(text);
+    int cX = (int)(x - extent.x / 2);
+    int cY = (int)(y - 2 - extent.y / 2);
+
+    gc.setForeground(color);
+    gc.drawText(text, cX, cY, true);
+  }
+
   private static Rectangle drawImage(GC gc, Image image, int x, int y)
   {
     Rectangle bounds = image.getBounds();
@@ -778,7 +795,7 @@ public final class GearAnimator extends Animator
 
     public abstract Point getSize(GC gc, Page page);
 
-    public abstract Rectangle draw(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected);
+    public abstract Rectangle paint(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected);
   }
 
   /**
@@ -806,10 +823,10 @@ public final class GearAnimator extends Animator
     }
 
     @Override
-    public Rectangle draw(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected)
+    public Rectangle paint(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected)
     {
       gc.setFont(hovered ? hoverFont : bigFont);
-      gc.setForeground(selected ? purple : getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+      gc.setForeground(selected ? purple : DARK_GRAY);
 
       Point extent = gc.stringExtent(text);
       x -= extent.x / 2 - 60; // TODO -60 is a hack!
@@ -845,7 +862,7 @@ public final class GearAnimator extends Animator
     }
 
     @Override
-    public Rectangle draw(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected)
+    public Rectangle paint(GC gc, Page page, int index, int x, int y, boolean hovered, boolean selected)
     {
       Image image = images[0];
       if (hovered)
@@ -1013,7 +1030,7 @@ public final class GearAnimator extends Animator
       return false;
     }
 
-    protected final void draw(GC gc)
+    protected final void paint(GC gc)
     {
       String title = getTitle();
 
@@ -1025,8 +1042,15 @@ public final class GearAnimator extends Animator
       gc.drawText(title, (PAGE_WIDTH - extent.x) / 2, 0, true);
 
       gc.setFont(oldFont);
-      drawContent(gc);
+      paintContent(gc);
 
+      paintAnswers(gc);
+    }
+
+    protected abstract void paintContent(GC gc);
+
+    private void paintAnswers(GC gc)
+    {
       boolean selecteds[] = new boolean[answers.length];
       boolean hovereds[] = new boolean[answers.length];
       Point sizes[] = new Point[answers.length];
@@ -1054,12 +1078,10 @@ public final class GearAnimator extends Animator
       for (int i = 0; i < answers.length; i++)
       {
         Answer answer = answers[i];
-        answerBoxes[i] = answer.draw(gc, this, i, x, y, hovereds[i], selecteds[i]);
+        answerBoxes[i] = answer.paint(gc, this, i, x, y, hovereds[i], selecteds[i]);
         x += BORDER + sizes[i].x;
       }
     }
-
-    protected abstract void drawContent(GC gc);
   }
 
   /**
@@ -1116,7 +1138,7 @@ public final class GearAnimator extends Animator
     }
 
     @Override
-    protected void drawContent(GC gc)
+    protected void paintContent(GC gc)
     {
       if (image != null)
       {
@@ -1202,7 +1224,7 @@ public final class GearAnimator extends Animator
     }
 
     @Override
-    protected void drawContent(GC gc)
+    protected void paintContent(GC gc)
     {
       gc.setFont(normalFont);
 
@@ -1223,7 +1245,6 @@ public final class GearAnimator extends Animator
       }
 
       int width = (minWidth + maxWidth) / 2 + offsetX;
-      Color gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 
       for (int i = 1; i < GEARS; i++)
       {
@@ -1240,7 +1261,7 @@ public final class GearAnimator extends Animator
         else
         {
           gc.drawImage(question, x, y + 8);
-          gc.setForeground(gray);
+          gc.setForeground(DARK_GRAY);
         }
 
         String title = page.getTitle();

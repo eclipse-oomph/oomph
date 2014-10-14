@@ -244,7 +244,7 @@ public class AnimatedCanvas extends Canvas
 
     for (Animator animator : getAnimators())
     {
-      animator.paint(buffer, bufferGC);
+      animator.paint(bufferGC, buffer);
     }
 
     canvasGC.drawImage(buffer, 0, 0);
@@ -320,6 +320,6 @@ public class AnimatedCanvas extends Canvas
 
     protected abstract boolean advance();
 
-    protected abstract void paint(Image buffer, GC gc);
+    protected abstract void paint(GC gc, Image buffer);
   }
 }
