@@ -69,6 +69,10 @@ public final class GearAnimator extends Animator
 
   private final Image question;
 
+  private final Image[] welcomeImages = new Image[2];
+
+  private final Image[] summaryImages = new Image[2];
+
   private final Image[] backImages = new Image[2];
 
   private final Image[] nextImages = new Image[2];
@@ -130,11 +134,17 @@ public final class GearAnimator extends Animator
     bigFont = createFont(BIG_FONT_PX);
     hoverFont = createFont(BIG_FONT_PX + 6);
     normalFont = createFont((int)(BIG_FONT_PX * .75));
-    numberFont = createFont(22);
+    numberFont = createFont(24);
 
     exit = new Image(display, "questionaire/exit.png");
     exitHover = new Image(display, "questionaire/exit_hover.png");
     question = new Image(display, "questionaire/question.png");
+
+    welcomeImages[0] = new Image(display, "questionaire/welcome.png");
+    welcomeImages[1] = new Image(display, "questionaire/welcome_select.png");
+
+    summaryImages[0] = new Image(display, "questionaire/summary.png");
+    summaryImages[1] = new Image(display, "questionaire/summary_select.png");
 
     backImages[0] = new Image(display, "questionaire/back.png");
     backImages[1] = new Image(display, "questionaire/back_hover.png");
@@ -204,6 +214,8 @@ public final class GearAnimator extends Animator
     }
 
     // Images
+    UIUtil.dispose(welcomeImages);
+    UIUtil.dispose(summaryImages);
     UIUtil.dispose(nextImages);
     UIUtil.dispose(backImages);
     UIUtil.dispose(yesImages);
@@ -592,14 +604,26 @@ public final class GearAnimator extends Animator
     gc.fillOval(ovalX, ovalY, ovalR, ovalR);
     gc.drawOval(ovalX, ovalY, ovalR, ovalR);
 
-    String number = i == 0 ? "W" : i == GEARS ? "S" : Integer.toString(i);
-    Color color = selected == 1 ? gearForeground[1] : GRAY;
-    drawText(gc, x, y, number, color);
+    if (i == 0)
+    {
+      drawImage(gc, welcomeImages[selected], (int)x, (int)y);
+    }
+    else if (i < GEARS)
+    {
+      String number = Integer.toString(i);
+      gc.setForeground(selected == 1 ? gearForeground[1] : GRAY);
+      gc.setFont(numberFont);
+      drawText(gc, x, y - 1, number);
+    }
+    else
+    {
+      drawImage(gc, summaryImages[selected], (int)x, (int)y);
+    }
 
-    paintGearBadge(gc, x, y, outerR, i, alpha);
+    paintBadge(gc, x, y, outerR, i, alpha);
   }
 
-  private void paintGearBadge(GC gc, double x, double y, double outerR, int i, int alpha)
+  private void paintBadge(GC gc, double x, double y, double outerR, int i, int alpha)
   {
     if (selection >= GEARS)
     {
@@ -764,13 +788,11 @@ public final class GearAnimator extends Animator
     return path;
   }
 
-  private static void drawText(GC gc, double x, double y, String text, Color color)
+  private static void drawText(GC gc, double x, double y, String text)
   {
     Point extent = gc.stringExtent(text);
     int cX = (int)(x - extent.x / 2);
-    int cY = (int)(y - 2 - extent.y / 2);
-
-    gc.setForeground(color);
+    int cY = (int)(y - extent.y / 2);
     gc.drawText(text, cX, cY, true);
   }
 
@@ -1042,8 +1064,8 @@ public final class GearAnimator extends Animator
       gc.drawText(title, (PAGE_WIDTH - extent.x) / 2, 0, true);
 
       gc.setFont(oldFont);
-      paintContent(gc);
 
+      paintContent(gc);
       paintAnswers(gc);
     }
 

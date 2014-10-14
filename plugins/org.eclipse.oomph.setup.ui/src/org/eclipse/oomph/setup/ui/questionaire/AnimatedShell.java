@@ -111,7 +111,7 @@ public class AnimatedShell extends Shell
 
     if (e.keyCode == SWT.HOME)
     {
-      animator.setSelection(1);
+      animator.setSelection(0);
       return true;
     }
 
