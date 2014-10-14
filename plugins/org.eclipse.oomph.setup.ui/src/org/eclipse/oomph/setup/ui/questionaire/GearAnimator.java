@@ -11,13 +11,11 @@
 package org.eclipse.oomph.setup.ui.questionaire;
 
 import org.eclipse.oomph.setup.ui.questionaire.AnimatedCanvas.Animator;
-import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Path;
@@ -47,8 +45,6 @@ public class GearAnimator extends Animator
 
   private static final double RADIAN = 2 * Math.PI / 360;
 
-  private static final int BIG_FONT_PX = 48;
-
   private static final int NONE = -1;
 
   private static final int EXIT = NONE - 1;
@@ -59,6 +55,8 @@ public class GearAnimator extends Animator
 
   private static final int CHOICES = NEXT - 1;
 
+  static final int BIG_FONT_PX = 48;
+
   private static Color WHITE;
 
   private static Color GRAY;
@@ -68,8 +66,6 @@ public class GearAnimator extends Animator
   private final List<Listener> listeners = new ArrayList<Listener>();
 
   private Color purple;
-
-  private Font baseFont;
 
   private Font bigFont;
 
@@ -146,75 +142,64 @@ public class GearAnimator extends Animator
   public GearAnimator(Display display)
   {
     super(display);
+    WHITE = display.getSystemColor(SWT.COLOR_WHITE);
+    GRAY = display.getSystemColor(SWT.COLOR_GRAY);
+    DARK_GRAY = display.getSystemColor(SWT.COLOR_DARK_GRAY);
   }
 
   @Override
   protected void init()
   {
-    Display display = getDisplay();
-
-    Font initialFont = getCanvas().getFont();
-    FontData[] fontData = initialFont.getFontData();
-    for (int i = 0; i < fontData.length; i++)
-    {
-      fontData[i].setHeight(16);
-      fontData[i].setStyle(SWT.BOLD);
-    }
-
-    baseFont = new Font(display, fontData);
-
+    super.init();
     bigFont = createFont(BIG_FONT_PX);
     hoverFont = createFont(BIG_FONT_PX + 6);
     normalFont = createFont((int)(BIG_FONT_PX * .75));
     numberFont = createFont(24);
 
-    exit = new Image(display, "questionaire/exit.png");
-    exitHover = new Image(display, "questionaire/exit_hover.png");
-    question = new Image(display, "questionaire/question.png");
+    exit = loadImage("questionaire/exit.png");
+    exitHover = loadImage("questionaire/exit_hover.png");
+    question = loadImage("questionaire/question.png");
 
-    welcomeImages[0] = new Image(display, "questionaire/welcome.png");
-    welcomeImages[1] = new Image(display, "questionaire/welcome_select.png");
+    welcomeImages[0] = loadImage("questionaire/welcome.png");
+    welcomeImages[1] = loadImage("questionaire/welcome_select.png");
 
-    summaryImages[0] = new Image(display, "questionaire/summary.png");
-    summaryImages[1] = new Image(display, "questionaire/summary_select.png");
+    summaryImages[0] = loadImage("questionaire/summary.png");
+    summaryImages[1] = loadImage("questionaire/summary_select.png");
 
-    backImages[0] = new Image(display, "questionaire/back.png");
-    backImages[1] = new Image(display, "questionaire/back_hover.png");
+    backImages[0] = loadImage("questionaire/back.png");
+    backImages[1] = loadImage("questionaire/back_hover.png");
 
-    nextImages[0] = new Image(display, "questionaire/next.png");
-    nextImages[1] = new Image(display, "questionaire/next_hover.png");
+    nextImages[0] = loadImage("questionaire/next.png");
+    nextImages[1] = loadImage("questionaire/next_hover.png");
 
     buttonR = nextImages[0].getBounds().height / 2;
     answerY = PAGE_HEIGHT + 4 * BORDER - buttonR;
 
-    yesImages[0] = new Image(display, "questionaire/yes.png");
-    yesImages[1] = new Image(display, "questionaire/yes_select.png");
-    yesImages[2] = new Image(display, "questionaire/yes_hover.png");
-    yesImages[3] = new Image(display, "questionaire/yes_big.png");
-    yesImages[4] = new Image(display, "questionaire/yes_badge.png");
+    yesImages[0] = loadImage("questionaire/yes.png");
+    yesImages[1] = loadImage("questionaire/yes_select.png");
+    yesImages[2] = loadImage("questionaire/yes_hover.png");
+    yesImages[3] = loadImage("questionaire/yes_big.png");
+    yesImages[4] = loadImage("questionaire/yes_badge.png");
 
-    noImages[0] = new Image(display, "questionaire/no.png");
-    noImages[1] = new Image(display, "questionaire/no_select.png");
-    noImages[2] = new Image(display, "questionaire/no_hover.png");
-    noImages[3] = new Image(display, "questionaire/no_big.png");
-    noImages[4] = new Image(display, "questionaire/no_badge.png");
+    noImages[0] = loadImage("questionaire/no.png");
+    noImages[1] = loadImage("questionaire/no_select.png");
+    noImages[2] = loadImage("questionaire/no_hover.png");
+    noImages[3] = loadImage("questionaire/no_big.png");
+    noImages[4] = loadImage("questionaire/no_badge.png");
 
     radius = 32;
     setSize((int)(GEARS * 2 * radius), (int)(2 * radius));
     pageY = getHeight() + 2 * BORDER;
 
     // Not selected.
-    gearBackground[0] = new Color(display, 169, 171, 202);
-    gearForeground[0] = new Color(display, 140, 132, 171);
+    gearBackground[0] = createColor(169, 171, 202);
+    gearForeground[0] = createColor(140, 132, 171);
 
     // Selected.
-    gearBackground[1] = new Color(display, 247, 148, 30);
-    gearForeground[1] = new Color(display, 207, 108, 0);
+    gearBackground[1] = createColor(247, 148, 30);
+    gearForeground[1] = createColor(207, 108, 0);
 
-    purple = new Color(display, 43, 34, 84);
-    WHITE = display.getSystemColor(SWT.COLOR_WHITE);
-    GRAY = display.getSystemColor(SWT.COLOR_GRAY);
-    DARK_GRAY = display.getSystemColor(SWT.COLOR_DARK_GRAY);
+    purple = createColor(43, 34, 84);
 
     pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer(""));
     pages[1] = new QuestionPage(1, "Refresh Resources Automatically?", 0, 5, 29);
@@ -244,23 +229,6 @@ public class GearAnimator extends Animator
         page.dispose();
       }
     }
-
-    // Images
-    UIUtil.dispose(welcomeImages);
-    UIUtil.dispose(summaryImages);
-    UIUtil.dispose(nextImages);
-    UIUtil.dispose(backImages);
-    UIUtil.dispose(yesImages);
-    UIUtil.dispose(noImages);
-    UIUtil.dispose(exit, exitHover, question);
-
-    // Colors
-    UIUtil.dispose(purple);
-    UIUtil.dispose(gearForeground);
-    UIUtil.dispose(gearBackground);
-
-    // Fonts
-    UIUtil.dispose(numberFont, normalFont, hoverFont, bigFont, baseFont);
 
     super.dispose();
   }
@@ -379,7 +347,7 @@ public class GearAnimator extends Animator
       return true;
     }
 
-    if (e.keyCode == SWT.ARROW_RIGHT || e.keyCode == SWT.PAGE_DOWN)
+    if (e.keyCode == SWT.ARROW_RIGHT || e.keyCode == SWT.PAGE_DOWN || e.character == 13)
     {
       setSelection(getSelection() + 1);
       return true;
@@ -519,27 +487,49 @@ public class GearAnimator extends Animator
   protected void onExit()
   {
     hover = EXIT;
-    getCanvas().redraw();
 
-    UIUtil.asyncExec(new Runnable()
+    AnimatedCanvas canvas = getCanvas();
+    canvas.redraw();
+
+    ExitShell exitShell = new ExitShell(canvas.getShell());
+    Boolean result = exitShell.openModal();
+
+    if (result == true)
     {
-      public void run()
+      for (Listener listener : getListeners())
       {
-        ExitShell exitShell = new ExitShell(getCanvas().getShell());
-        exitShell.openModal();
-
-        // if (MessageDialog.openQuestion(getCanvas().getShell(), "Questionnaire", "Do you really want to exit?"))
-        // {
-        // for (Listener listener : getListeners())
-        // {
-        // listener.onExit(GearAnimator.this, getSelectedPage());
-        // }
-        // }
-
-        hover = NONE;
-        getCanvas().redraw();
+        listener.onExit(GearAnimator.this, getSelectedPage());
       }
-    });
+    }
+
+    hover = NONE;
+    if (!canvas.isDisposed())
+    {
+      canvas.redraw();
+    }
+  }
+
+  protected boolean showOverlay()
+  {
+    Page page = getSelectedPage();
+    if (page instanceof QuestionPage)
+    {
+      QuestionPage questionPage = (QuestionPage)page;
+
+      if (hover <= CHOICES)
+      {
+        int hoveredChoice = -hover + CHOICES;
+        return hoveredChoice == questionPage.getOverlayChoice();
+      }
+
+      int choice = questionPage.getChoice();
+      if (choice != NONE)
+      {
+        return choice == questionPage.getOverlayChoice();
+      }
+    }
+
+    return (System.currentTimeMillis() / 1000 & 1) == 1;
   }
 
   @Override
@@ -579,7 +569,7 @@ public class GearAnimator extends Animator
   @Override
   protected void paint(GC gc, Image buffer)
   {
-    gc.setFont(baseFont);
+    gc.setFont(getBaseFont());
     gc.setLineWidth(3);
     gc.setAntialias(SWT.ON);
 
@@ -789,30 +779,6 @@ public class GearAnimator extends Animator
     return page;
   }
 
-  private boolean showOverlay()
-  {
-    Page page = getSelectedPage();
-    if (page instanceof QuestionPage)
-    {
-      QuestionPage questionPage = (QuestionPage)page;
-
-      if (hover <= CHOICES)
-      {
-        int hoveredChoice = -hover + CHOICES;
-        return hoveredChoice == questionPage.getOverlayChoice();
-      }
-
-      int choice = questionPage.getChoice();
-      if (choice != NONE)
-      {
-        return choice == questionPage.getOverlayChoice();
-      }
-    }
-
-    long millis2 = (int)(System.currentTimeMillis() / 1000);
-    return (millis2 & 1) == 1;
-  }
-
   void updateOverlay(int x, int y)
   {
     Page page = getSelectedPage();
@@ -826,43 +792,6 @@ public class GearAnimator extends Animator
 
       updatePage();
       overflow = true;
-    }
-  }
-
-  private Font createFont(int pixelHeight)
-  {
-    Display display = getDisplay();
-    GC fontGC = new GC(display);
-
-    try
-    {
-      FontData[] fontData = baseFont.getFontData();
-      int fontSize = 40;
-      while (fontSize > 0)
-      {
-        for (int i = 0; i < fontData.length; i++)
-        {
-          fontData[i].setHeight(fontSize);
-          fontData[i].setStyle(SWT.BOLD);
-        }
-
-        Font font = new Font(display, fontData);
-        fontGC.setFont(font);
-        int height = fontGC.stringExtent("Ag").y;
-        if (height <= pixelHeight)
-        {
-          return font;
-        }
-
-        font.dispose();
-        --fontSize;
-      }
-
-      throw new RuntimeException("Could not create a big font");
-    }
-    finally
-    {
-      fontGC.dispose();
     }
   }
 
@@ -1276,8 +1205,8 @@ public class GearAnimator extends Animator
       setAnswers(answers);
 
       Display display = getDisplay();
-      image = loadImage(display, index, "");
-      overlay = loadImage(display, index, "_ovr");
+      image = doLoadImage(display, index, "");
+      overlay = doLoadImage(display, index, "_ovr");
 
       this.overlayX = overlayX;
       this.overlayY = overlayY;
@@ -1291,20 +1220,6 @@ public class GearAnimator extends Animator
     public final int getOverlayChoice()
     {
       return overlayChoice;
-    }
-
-    @Override
-    protected void dispose()
-    {
-      if (image != null)
-      {
-        image.dispose();
-      }
-
-      if (overlay != null)
-      {
-        overlay.dispose();
-      }
     }
 
     @Override
@@ -1324,11 +1239,11 @@ public class GearAnimator extends Animator
       }
     }
 
-    private Image loadImage(final Display display, int index, String suffix)
+    private Image doLoadImage(final Display display, int index, String suffix)
     {
       try
       {
-        return new Image(display, "questionaire/page" + index + suffix + ".png");
+        return loadImage("questionaire/page" + index + suffix + ".png");
       }
       catch (Exception ex)
       {

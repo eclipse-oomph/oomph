@@ -623,17 +623,39 @@ public abstract class OomphPlugin extends EMFPlugin
       return children;
     }
 
-    public BundleFile getChild(String name)
+    public BundleFile getChild(String path)
     {
-      for (BundleFile child : getChildren())
+      String name;
+      String remainder;
+
+      int slash = path.indexOf('/');
+      if (slash != -1)
       {
-        if (child.getName().equals(name))
+        name = path.substring(0, slash);
+        remainder = path.substring(slash + 1);
+      }
+      else
+      {
+        name = path;
+        remainder = null;
+      }
+
+      BundleFile child = null;
+      for (BundleFile c : getChildren())
+      {
+        if (c.getName().equals(name))
         {
-          return child;
+          child = c;
+          break;
         }
       }
 
-      return null;
+      if (child != null && remainder != null)
+      {
+        child = child.getChild(remainder);
+      }
+
+      return child;
     }
 
     public BundleFile addChild(String name, boolean directory) throws IOException

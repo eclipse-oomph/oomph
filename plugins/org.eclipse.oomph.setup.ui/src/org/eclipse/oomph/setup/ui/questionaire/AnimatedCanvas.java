@@ -10,6 +10,11 @@
  */
 package org.eclipse.oomph.setup.ui.questionaire;
 
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OomphPlugin.BundleFile;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -21,15 +26,20 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,7 +167,7 @@ public class AnimatedCanvas extends Canvas
   {
     synchronized (animators)
     {
-      animator.setCanvas(this);
+      animator.canvas = this;
       animator.init();
       animators.add(animator);
     }
@@ -169,7 +179,7 @@ public class AnimatedCanvas extends Canvas
     {
       animators.remove(animator);
       animator.dispose();
-      animator.setCanvas(null);
+      animator.canvas = null;
     }
   }
 
@@ -315,6 +325,8 @@ public class AnimatedCanvas extends Canvas
    */
   public static abstract class Animator
   {
+    private final List<Resource> resources = new ArrayList<Resource>();
+
     private final Display display;
 
     private AnimatedCanvas canvas;
@@ -322,6 +334,8 @@ public class AnimatedCanvas extends Canvas
     private int width;
 
     private int height;
+
+    private Font baseFont;
 
     public Animator(Display display)
     {
@@ -353,17 +367,103 @@ public class AnimatedCanvas extends Canvas
       return height;
     }
 
+    public final Font getBaseFont()
+    {
+      return baseFont;
+    }
+
     protected void init()
     {
+      Font initialFont = getCanvas().getFont();
+      FontData[] fontData = initialFont.getFontData();
+      for (int i = 0; i < fontData.length; i++)
+      {
+        fontData[i].setHeight(16);
+        fontData[i].setStyle(SWT.BOLD);
+      }
+
+      baseFont = new Font(display, fontData);
     }
 
     protected void dispose()
     {
+      UIUtil.dispose(resources.toArray(new Resource[resources.size()]));
     }
 
-    private void setCanvas(AnimatedCanvas canvas)
+    protected final Image loadImage(String name)
     {
-      this.canvas = canvas;
+      Display display = getDisplay();
+      Image image;
+
+      if (SetupUIPlugin.INSTANCE.isOSGiRunning())
+      {
+        InputStream stream = null;
+
+        try
+        {
+          BundleFile rootFile = SetupUIPlugin.INSTANCE.getRootFile();
+          BundleFile file = rootFile.getChild(name);
+          stream = file.getContents();
+          image = new Image(display, stream);
+        }
+        finally
+        {
+          IOUtil.close(stream);
+        }
+      }
+      else
+      {
+        image = new Image(display, name);
+      }
+
+      resources.add(image);
+      return image;
+    }
+
+    protected final Color createColor(int r, int g, int b)
+    {
+      Display display = getDisplay();
+      Color color = new Color(display, r, g, b);
+      resources.add(color);
+      return color;
+    }
+
+    protected final Font createFont(int pixelHeight)
+    {
+      Display display = getDisplay();
+      GC fontGC = new GC(display);
+
+      try
+      {
+        FontData[] fontData = baseFont.getFontData();
+        int fontSize = 40;
+        while (fontSize > 0)
+        {
+          for (int i = 0; i < fontData.length; i++)
+          {
+            fontData[i].setHeight(fontSize);
+            fontData[i].setStyle(SWT.BOLD);
+          }
+
+          Font font = new Font(display, fontData);
+          fontGC.setFont(font);
+          int height = fontGC.stringExtent("Ag").y;
+          if (height <= pixelHeight)
+          {
+            resources.add(font);
+            return font;
+          }
+
+          font.dispose();
+          --fontSize;
+        }
+
+        throw new RuntimeException("Could not create font: " + pixelHeight);
+      }
+      finally
+      {
+        fontGC.dispose();
+      }
     }
 
     protected final void setSize(int width, int height)
@@ -391,24 +491,22 @@ public class AnimatedCanvas extends Canvas
 
     protected abstract void paint(GC gc, Image buffer);
 
-    public static Point drawText(GC gc, double x, double y, String text)
+    public static Rectangle drawText(GC gc, double cX, double cY, String text)
     {
       Point extent = gc.stringExtent(text);
-      int cX = (int)(x - extent.x / 2);
-      int cY = (int)(y - extent.y / 2);
-      gc.drawText(text, cX, cY, true);
-
-      return extent;
+      int x = (int)(cX - extent.x / 2);
+      int y = (int)(cY - extent.y / 2);
+      gc.drawText(text, x, y, true);
+      return new Rectangle(x, y, extent.x, extent.y);
     }
 
-    public static Rectangle drawImage(GC gc, Image image, int x, int y)
+    public static Rectangle drawImage(GC gc, Image image, int cX, int cY)
     {
       Rectangle bounds = image.getBounds();
-      x -= bounds.width / 2;
-      y -= bounds.height / 2;
-      gc.drawImage(image, x, y);
-
-      return new Rectangle(x, y, bounds.width, bounds.height);
+      cX -= bounds.width / 2;
+      cY -= bounds.height / 2;
+      gc.drawImage(image, cX, cY);
+      return new Rectangle(cX, cY, bounds.width, bounds.height);
     }
   }
 }

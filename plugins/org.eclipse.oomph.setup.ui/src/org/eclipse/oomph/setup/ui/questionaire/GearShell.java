@@ -17,13 +17,15 @@ import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.SummaryPage;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
  */
-public class GearShell extends AnimatedShell implements Listener
+public class GearShell extends AnimatedShell<Object> implements Listener
 {
   private static final boolean TEST_OVERLAYS = false;
 
@@ -100,6 +102,17 @@ public class GearShell extends AnimatedShell implements Listener
 
         return super.onKeyPressed(e);
       }
+
+      @Override
+      protected boolean showOverlay()
+      {
+        if (TEST_OVERLAYS)
+        {
+          return true;
+        }
+
+        return super.showOverlay();
+      }
     };
 
     animator.addListener(this);
@@ -109,6 +122,13 @@ public class GearShell extends AnimatedShell implements Listener
     int width = Math.max(animator.getWidth(), GearAnimator.PAGE_WIDTH) + 2 * GearAnimator.BORDER;
     int height = animator.getHeight() + GearAnimator.PAGE_HEIGHT + 3 * GearAnimator.BORDER;
     setSize(width, height);
+
+    Composite parent = getParent();
+    if (parent != null)
+    {
+      Rectangle bounds = parent.getBounds();
+      setLocation(bounds.x + (bounds.width - width) / 2, bounds.y + (bounds.height - height) / 2);
+    }
   }
 
   public static void main(String[] args)

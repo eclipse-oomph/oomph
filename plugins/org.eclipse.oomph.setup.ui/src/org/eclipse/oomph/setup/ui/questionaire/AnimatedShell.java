@@ -18,9 +18,11 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-public class AnimatedShell extends Shell
+public class AnimatedShell<T> extends Shell
 {
   private AnimatedCanvas canvas;
+
+  private T result;
 
   public AnimatedShell()
   {
@@ -62,7 +64,17 @@ public class AnimatedShell extends Shell
     return canvas;
   }
 
-  public final void openModal()
+  public T getResult()
+  {
+    return result;
+  }
+
+  public void setResult(T result)
+  {
+    this.result = result;
+  }
+
+  public final T openModal()
   {
     open();
 
@@ -74,6 +86,8 @@ public class AnimatedShell extends Shell
         display.sleep();
       }
     }
+
+    return result;
   }
 
   @Override
