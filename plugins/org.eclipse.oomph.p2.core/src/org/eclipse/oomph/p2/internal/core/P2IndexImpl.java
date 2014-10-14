@@ -48,6 +48,8 @@ public class P2IndexImpl implements P2Index
 
   private static final String INDEX_BASE = "http://download.eclipse.org/oomph/index/";
 
+  private long timeStamp;
+
   private Map<Integer, RepositoryImpl> repositories;
 
   private Repository[] repositoriesArray;
@@ -83,6 +85,7 @@ public class P2IndexImpl implements P2Index
 
         EObjectInputStream stream = new BinaryResourceImpl.EObjectInputStream(inputStream, options);
 
+        timeStamp = stream.readLong();
         int refreshHours = stream.readInt();
         int repositoryCount = stream.readInt();
 
@@ -190,8 +193,6 @@ public class P2IndexImpl implements P2Index
     namespace = URI.encodeSegment(namespace, false);
     name = URI.encodeSegment(name, false);
 
-    initRepositories();
-
     Map<Repository, Set<Version>> capabilities = new HashMap<Repository, Set<Version>>();
     BufferedReader reader = null;
 
@@ -200,7 +201,20 @@ public class P2IndexImpl implements P2Index
       InputStream inputStream = new URL(INDEX_BASE + namespace + "/" + name).openStream();
       reader = new BufferedReader(new InputStreamReader(inputStream));
 
-      String line;
+      String line = reader.readLine();
+      if (line == null)
+      {
+        return capabilities;
+      }
+
+      long timeStamp = Long.parseLong(line);
+      if (timeStamp != this.timeStamp)
+      {
+        repositories = null;
+      }
+
+      initRepositories();
+
       while ((line = reader.readLine()) != null)
       {
         String[] tokens = line.split(",");

@@ -78,6 +78,48 @@ public class AnimatedShell extends Shell implements Listener
 
   public void onExit(GearAnimator animator, Page page)
   {
+    dispose();
+  }
+
+  protected boolean onKeyPressed(KeyEvent e)
+  {
+    if (e.keyCode == SWT.ESC)
+    {
+      AnimatedShell.this.dispose();
+      return true;
+    }
+
+    if (e.keyCode == SWT.HOME)
+    {
+      animator.setSelection(0);
+      return true;
+    }
+
+    if (e.keyCode == SWT.END)
+    {
+      animator.setSelection(GearAnimator.GEARS);
+      return true;
+    }
+
+    if (e.keyCode == SWT.ARROW_RIGHT || e.keyCode == SWT.PAGE_DOWN)
+    {
+      animator.setSelection(animator.getSelection() + 1);
+      return true;
+    }
+
+    if (e.keyCode == SWT.ARROW_LEFT || e.keyCode == SWT.PAGE_UP)
+    {
+      animator.setSelection(animator.getSelection() - 1);
+      return true;
+    }
+
+    if (e.character >= '0' && e.character <= '6')
+    {
+      animator.setSelection(e.character - '0');
+      return true;
+    }
+
+    return false;
   }
 
   private void init()
@@ -128,47 +170,6 @@ public class AnimatedShell extends Shell implements Listener
         canvas.setFocus(false);
       }
     });
-  }
-
-  protected boolean onKeyPressed(KeyEvent e)
-  {
-    if (e.keyCode == SWT.ESC)
-    {
-      AnimatedShell.this.dispose();
-      return true;
-    }
-
-    if (e.keyCode == SWT.HOME)
-    {
-      animator.setSelection(0);
-      return true;
-    }
-
-    if (e.keyCode == SWT.END)
-    {
-      animator.setSelection(GearAnimator.GEARS);
-      return true;
-    }
-
-    if (e.keyCode == SWT.ARROW_RIGHT)
-    {
-      animator.setSelection(animator.getSelection() + 1);
-      return true;
-    }
-
-    if (e.keyCode == SWT.ARROW_LEFT)
-    {
-      animator.setSelection(animator.getSelection() - 1);
-      return true;
-    }
-
-    if (e.character >= '0' && e.character <= '6')
-    {
-      animator.setSelection(e.character - '0');
-      return true;
-    }
-
-    return false;
   }
 
   private static final boolean TEST_OVERLAYS = false;

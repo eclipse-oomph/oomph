@@ -415,6 +415,11 @@ public final class GearAnimator extends Animator
         if (exitBox != null && exitBox.contains(x, y))
         {
           hover = EXIT;
+          for (Listener listener : getListeners())
+          {
+            listener.onExit(GearAnimator.this, getSelectedPage());
+          }
+
           return true;
         }
 
@@ -1083,18 +1088,33 @@ public final class GearAnimator extends Animator
       int i = getAnswer(x, y);
       if (i != NONE)
       {
-        setChoice(i);
+        Answer answer = answers[i];
+
+        if (i == choice)
+        {
+          hover = NONE;
+          choice = NONE;
+          answer = null;
+        }
+        else
+        {
+          setChoice(i);
+        }
+
         updatePage();
 
         for (Listener listener : getListeners())
         {
-          listener.onAnswer(GearAnimator.this, this, answers[i]);
+          listener.onAnswer(GearAnimator.this, this, answer);
         }
 
-        int selection = getSelection();
-        if (selection < GEARS)
+        if (answer != null)
         {
-          setSelection(selection + 1);
+          int selection = getSelection();
+          if (selection < GEARS)
+          {
+            setSelection(selection + 1);
+          }
         }
 
         return true;
