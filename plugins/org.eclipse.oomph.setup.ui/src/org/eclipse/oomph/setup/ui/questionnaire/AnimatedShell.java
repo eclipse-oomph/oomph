@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.questionaire;
+package org.eclipse.oomph.setup.ui.questionnaire;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;

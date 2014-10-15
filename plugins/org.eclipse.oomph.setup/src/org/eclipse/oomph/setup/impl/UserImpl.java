@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,6 +40,8 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getUnsignedPolicy <em>Unsigned Policy</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getQuestionnaireDate <em>Questionnaire Date</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}</li>
  * </ul>
  * </p>
  *
@@ -85,6 +88,46 @@ public class UserImpl extends ScopeImpl implements User
    * @ordered
    */
   protected UnsignedPolicy unsignedPolicy = UNSIGNED_POLICY_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getQuestionnaireDate() <em>Questionnaire Date</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getQuestionnaireDate()
+   * @generated
+   * @ordered
+   */
+  protected static final Date QUESTIONNAIRE_DATE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getQuestionnaireDate() <em>Questionnaire Date</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getQuestionnaireDate()
+   * @generated
+   * @ordered
+   */
+  protected Date questionnaireDate = QUESTIONNAIRE_DATE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isPreferenceRecorderDefault() <em>Preference Recorder Default</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isPreferenceRecorderDefault()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean PREFERENCE_RECORDER_DEFAULT_EDEFAULT = true;
+
+  /**
+   * The cached value of the '{@link #isPreferenceRecorderDefault() <em>Preference Recorder Default</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isPreferenceRecorderDefault()
+   * @generated
+   * @ordered
+   */
+  protected boolean preferenceRecorderDefault = PREFERENCE_RECORDER_DEFAULT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -151,6 +194,57 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  public Date getQuestionnaireDate()
+  {
+    return questionnaireDate;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setQuestionnaireDate(Date newQuestionnaireDate)
+  {
+    Date oldQuestionnaireDate = questionnaireDate;
+    questionnaireDate = newQuestionnaireDate;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.USER__QUESTIONNAIRE_DATE, oldQuestionnaireDate, questionnaireDate));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isPreferenceRecorderDefault()
+  {
+    return preferenceRecorderDefault;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setPreferenceRecorderDefault(boolean newPreferenceRecorderDefault)
+  {
+    boolean oldPreferenceRecorderDefault = preferenceRecorderDefault;
+    preferenceRecorderDefault = newPreferenceRecorderDefault;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT, oldPreferenceRecorderDefault,
+          preferenceRecorderDefault));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EList<AttributeRule> getAttributeRules()
   {
     if (attributeRules == null)
@@ -203,6 +297,10 @@ public class UserImpl extends ScopeImpl implements User
         return getAcceptedLicenses();
       case SetupPackage.USER__UNSIGNED_POLICY:
         return getUnsignedPolicy();
+      case SetupPackage.USER__QUESTIONNAIRE_DATE:
+        return getQuestionnaireDate();
+      case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
+        return isPreferenceRecorderDefault();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -229,6 +327,12 @@ public class UserImpl extends ScopeImpl implements User
       case SetupPackage.USER__UNSIGNED_POLICY:
         setUnsignedPolicy((UnsignedPolicy)newValue);
         return;
+      case SetupPackage.USER__QUESTIONNAIRE_DATE:
+        setQuestionnaireDate((Date)newValue);
+        return;
+      case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
+        setPreferenceRecorderDefault((Boolean)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -252,6 +356,12 @@ public class UserImpl extends ScopeImpl implements User
       case SetupPackage.USER__UNSIGNED_POLICY:
         setUnsignedPolicy(UNSIGNED_POLICY_EDEFAULT);
         return;
+      case SetupPackage.USER__QUESTIONNAIRE_DATE:
+        setQuestionnaireDate(QUESTIONNAIRE_DATE_EDEFAULT);
+        return;
+      case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
+        setPreferenceRecorderDefault(PREFERENCE_RECORDER_DEFAULT_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -272,6 +382,10 @@ public class UserImpl extends ScopeImpl implements User
         return acceptedLicenses != null && !acceptedLicenses.isEmpty();
       case SetupPackage.USER__UNSIGNED_POLICY:
         return unsignedPolicy != UNSIGNED_POLICY_EDEFAULT;
+      case SetupPackage.USER__QUESTIONNAIRE_DATE:
+        return QUESTIONNAIRE_DATE_EDEFAULT == null ? questionnaireDate != null : !QUESTIONNAIRE_DATE_EDEFAULT.equals(questionnaireDate);
+      case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
+        return preferenceRecorderDefault != PREFERENCE_RECORDER_DEFAULT_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -294,6 +408,10 @@ public class UserImpl extends ScopeImpl implements User
     result.append(acceptedLicenses);
     result.append(", unsignedPolicy: ");
     result.append(unsignedPolicy);
+    result.append(", questionnaireDate: ");
+    result.append(questionnaireDate);
+    result.append(", preferenceRecorderDefault: ");
+    result.append(preferenceRecorderDefault);
     result.append(')');
     return result.toString();
   }

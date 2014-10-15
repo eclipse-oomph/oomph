@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.setup.ui;
 
-import org.eclipse.oomph.setup.ui.questionaire.GearShell;
-
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferencePageContainer;
@@ -73,8 +71,7 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
           parentShell = ((IShellProvider)container).getShell();
         }
 
-        GearShell shell = new GearShell(parentShell);
-        shell.openModal();
+        SetupUIPlugin.performQuestionnaire(parentShell, true);
       }
     });
   }

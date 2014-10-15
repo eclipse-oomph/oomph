@@ -137,6 +137,12 @@
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
       </genFeatures>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/unsignedPolicy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/questionnaireDate">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/preferenceRecorderDefault">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//AttributeRule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//AttributeRule/attributeURI"/>

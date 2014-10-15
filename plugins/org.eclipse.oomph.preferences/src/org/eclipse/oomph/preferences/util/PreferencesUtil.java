@@ -418,6 +418,9 @@ public final class PreferencesUtil
     return CIPHER.decrypt(value);
   }
 
+  /**
+   * @author Ed Merks
+   */
   public static class PreferenceProperty
   {
     private Preferences node;
@@ -567,6 +570,9 @@ public final class PreferencesUtil
     }
   }
 
+  /**
+   * @author Ed Merks
+   */
   private static class SecurePreferenceWapper implements IEclipsePreferences, ISecurePreferences
   {
     private static final WeakHashMap<ISecurePreferences, SecurePreferenceWapper> WRAPPERS = new WeakHashMap<ISecurePreferences, PreferencesUtil.SecurePreferenceWapper>();
@@ -1006,6 +1012,9 @@ public final class PreferencesUtil
     }
   }
 
+  /**
+   * @author Ed Merks
+   */
   private static class PreferencesAdapter extends AdapterImpl implements IEclipsePreferences.INodeChangeListener, IEclipsePreferences.IPreferenceChangeListener
   {
     protected IEclipsePreferences preferences;

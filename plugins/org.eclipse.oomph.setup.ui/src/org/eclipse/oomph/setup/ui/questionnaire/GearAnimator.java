@@ -8,9 +8,12 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.questionaire;
+package org.eclipse.oomph.setup.ui.questionnaire;
 
-import org.eclipse.oomph.setup.ui.questionaire.AnimatedCanvas.Animator;
+import org.eclipse.oomph.preferences.PreferencesFactory;
+import org.eclipse.oomph.setup.ui.questionnaire.AnimatedCanvas.Animator;
+
+import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -31,6 +34,10 @@ import java.util.List;
  */
 public class GearAnimator extends Animator
 {
+  public static final String RECORDER_PREFERENCE_KEY = "RECORDER_PREFERENCE_KEY";
+
+  public static final int NONE = -1;
+
   public static final int PAGE_WIDTH = 620;
 
   public static final int PAGE_HEIGHT = 420;
@@ -44,8 +51,6 @@ public class GearAnimator extends Animator
   private static final float ANGLE = 360 / TEETH;
 
   private static final double RADIAN = 2 * Math.PI / 360;
-
-  private static final int NONE = -1;
 
   private static final int EXIT = NONE - 1;
 
@@ -156,36 +161,36 @@ public class GearAnimator extends Animator
     normalFont = createFont((int)(BIG_FONT_PX * .75));
     numberFont = createFont(24);
 
-    exit = loadImage("questionaire/exit.png");
-    exitHover = loadImage("questionaire/exit_hover.png");
-    question = loadImage("questionaire/question.png");
+    exit = loadImage("questionnaire/exit.png");
+    exitHover = loadImage("questionnaire/exit_hover.png");
+    question = loadImage("questionnaire/question.png");
 
-    welcomeImages[0] = loadImage("questionaire/welcome.png");
-    welcomeImages[1] = loadImage("questionaire/welcome_select.png");
+    welcomeImages[0] = loadImage("questionnaire/welcome.png");
+    welcomeImages[1] = loadImage("questionnaire/welcome_select.png");
 
-    summaryImages[0] = loadImage("questionaire/summary.png");
-    summaryImages[1] = loadImage("questionaire/summary_select.png");
+    summaryImages[0] = loadImage("questionnaire/summary.png");
+    summaryImages[1] = loadImage("questionnaire/summary_select.png");
 
-    backImages[0] = loadImage("questionaire/back.png");
-    backImages[1] = loadImage("questionaire/back_hover.png");
+    backImages[0] = loadImage("questionnaire/back.png");
+    backImages[1] = loadImage("questionnaire/back_hover.png");
 
-    nextImages[0] = loadImage("questionaire/next.png");
-    nextImages[1] = loadImage("questionaire/next_hover.png");
+    nextImages[0] = loadImage("questionnaire/next.png");
+    nextImages[1] = loadImage("questionnaire/next_hover.png");
 
     buttonR = nextImages[0].getBounds().height / 2;
     answerY = PAGE_HEIGHT + 4 * BORDER - buttonR;
 
-    yesImages[0] = loadImage("questionaire/yes.png");
-    yesImages[1] = loadImage("questionaire/yes_select.png");
-    yesImages[2] = loadImage("questionaire/yes_hover.png");
-    yesImages[3] = loadImage("questionaire/yes_big.png");
-    yesImages[4] = loadImage("questionaire/yes_badge.png");
+    yesImages[0] = loadImage("questionnaire/yes.png");
+    yesImages[1] = loadImage("questionnaire/yes_select.png");
+    yesImages[2] = loadImage("questionnaire/yes_hover.png");
+    yesImages[3] = loadImage("questionnaire/yes_big.png");
+    yesImages[4] = loadImage("questionnaire/yes_badge.png");
 
-    noImages[0] = loadImage("questionaire/no.png");
-    noImages[1] = loadImage("questionaire/no_select.png");
-    noImages[2] = loadImage("questionaire/no_hover.png");
-    noImages[3] = loadImage("questionaire/no_big.png");
-    noImages[4] = loadImage("questionaire/no_badge.png");
+    noImages[0] = loadImage("questionnaire/no.png");
+    noImages[1] = loadImage("questionnaire/no_select.png");
+    noImages[2] = loadImage("questionnaire/no_hover.png");
+    noImages[3] = loadImage("questionnaire/no_big.png");
+    noImages[4] = loadImage("questionnaire/no_badge.png");
 
     radius = 32;
     setSize((int)(GEARS * 2 * radius), (int)(2 * radius));
@@ -201,13 +206,13 @@ public class GearAnimator extends Animator
 
     purple = createColor(43, 34, 84);
 
-    pages[0] = new QuestionPage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer(""));
-    pages[1] = new QuestionPage(1, "Refresh Resources Automatically?", 0, 5, 29);
-    pages[2] = new QuestionPage(2, "Show Line Numbers in Editors?", 1, 19, 30);
-    pages[3] = new QuestionPage(3, "Check Spelling in Text Editors?", 1, 186, 37);
-    pages[4] = new QuestionPage(4, "Execute Jobs in Background?", 0, 23, 160);
-    pages[5] = new QuestionPage(5, "Encode Text Files with UTF-8?", 0, 181, 95);
-    pages[6] = new QuestionPage(6, "Enable Preference Recorder?", 1, 57, 82);
+    pages[0] = new ImagePage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer(""));
+    pages[1] = new PreferencePage(1, "Refresh Resources Automatically?", 0, 5, 29, "/instance/org.eclipse.core.resources/refresh.lightweight.enabled");
+    pages[2] = new PreferencePage(2, "Show Line Numbers in Editors?", 1, 19, 30, "/instance/org.eclipse.ui.editors/lineNumberRuler");
+    pages[3] = new PreferencePage(3, "Check Spelling in Text Editors?", 1, 186, 37, "/instance/org.eclipse.ui.editors/spellingEnabled");
+    pages[4] = new PreferencePage(4, "Execute Jobs in Background?", 0, 23, 160, "/instance/org.eclipse.ui.workbench/RUN_IN_BACKGROUND");
+    pages[5] = new PreferencePage(5, "Encode Text Files with UTF-8?", 0, 181, 95, "/instance/org.eclipse.core.resources/encoding", "UTF-8", null);
+    pages[6] = new PreferencePage(6, "Enable Preference Recorder?", 1, 57, 82, RECORDER_PREFERENCE_KEY);
     pages[7] = new SummaryPage(7, "Summary");
   }
 
@@ -347,7 +352,7 @@ public class GearAnimator extends Animator
       return true;
     }
 
-    if (e.keyCode == SWT.ARROW_RIGHT || e.keyCode == SWT.PAGE_DOWN || e.character == 13)
+    if (e.keyCode == SWT.ARROW_RIGHT || e.keyCode == SWT.PAGE_DOWN)
     {
       setSelection(getSelection() + 1);
       return true;
@@ -362,6 +367,43 @@ public class GearAnimator extends Animator
     if (e.character >= '0' && e.character <= '6')
     {
       setSelection(e.character - '0');
+      return true;
+    }
+
+    if (e.character == 13)
+    {
+      Page page = getSelectedPage();
+      if (page instanceof SummaryPage)
+      {
+        page.doAnswer(0);
+      }
+      else
+      {
+        setSelection(getSelection() + 1);
+      }
+
+      return true;
+    }
+
+    if (e.character == 'y' || e.character == 'Y' || e.character == '+')
+    {
+      Page page = getSelectedPage();
+      if (page instanceof PreferencePage)
+      {
+        page.doAnswer(0);
+      }
+
+      return true;
+    }
+
+    if (e.character == 'n' || e.character == 'N' || e.character == '-')
+    {
+      Page page = getSelectedPage();
+      if (page instanceof PreferencePage)
+      {
+        page.doAnswer(1);
+      }
+
       return true;
     }
 
@@ -512,9 +554,9 @@ public class GearAnimator extends Animator
   protected boolean shouldShowOverlay()
   {
     Page page = getSelectedPage();
-    if (page instanceof QuestionPage)
+    if (page instanceof ImagePage)
     {
-      QuestionPage questionPage = (QuestionPage)page;
+      ImagePage questionPage = (ImagePage)page;
 
       if (hover <= CHOICES)
       {
@@ -782,9 +824,9 @@ public class GearAnimator extends Animator
   void updateOverlay(int x, int y)
   {
     Page page = getSelectedPage();
-    if (page instanceof QuestionPage)
+    if (page instanceof ImagePage)
     {
-      QuestionPage questionPage = (QuestionPage)page;
+      ImagePage questionPage = (ImagePage)page;
       questionPage.overlayX += x;
       questionPage.overlayY += y;
 
@@ -943,9 +985,9 @@ public class GearAnimator extends Animator
       }
       else
       {
-        if (page instanceof QuestionPage && images.length > 3)
+        if (page instanceof ImagePage && images.length > 3)
         {
-          int overlayChoice = ((QuestionPage)page).getOverlayChoice();
+          int overlayChoice = ((ImagePage)page).getOverlayChoice();
           boolean overlayChoiceYes = overlayChoice == index;
           boolean showOverlay = shouldShowOverlay();
 
@@ -1089,35 +1131,7 @@ public class GearAnimator extends Animator
       int i = getAnswer(x, y);
       if (i != NONE)
       {
-        Answer answer = answers[i];
-
-        if (i == choice)
-        {
-          hover = NONE;
-          choice = NONE;
-          answer = null;
-        }
-        else
-        {
-          setChoice(i);
-        }
-
-        updatePage();
-
-        for (Listener listener : getListeners())
-        {
-          listener.onAnswer(GearAnimator.this, this, answer);
-        }
-
-        if (answer != null)
-        {
-          int selection = getSelection();
-          if (selection < GEARS)
-          {
-            setSelection(selection + 1);
-          }
-        }
-
+        doAnswer(i);
         return true;
       }
 
@@ -1146,6 +1160,38 @@ public class GearAnimator extends Animator
     protected int getAnswerY()
     {
       return answerY;
+    }
+
+    private void doAnswer(int i)
+    {
+      Answer answer = answers[i];
+
+      if (i == choice)
+      {
+        hover = NONE;
+        choice = NONE;
+        answer = null;
+      }
+      else
+      {
+        setChoice(i);
+      }
+
+      updatePage();
+
+      for (Listener listener : getListeners())
+      {
+        listener.onAnswer(GearAnimator.this, this, answer);
+      }
+
+      if (answer != null)
+      {
+        int selection = getSelection();
+        if (selection < GEARS)
+        {
+          setSelection(selection + 1);
+        }
+      }
     }
 
     private void paintAnswers(GC gc)
@@ -1186,7 +1232,7 @@ public class GearAnimator extends Animator
   /**
    * @author Eike Stepper
    */
-  public class QuestionPage extends Page
+  public class ImagePage extends Page
   {
     private final Image image;
 
@@ -1198,7 +1244,7 @@ public class GearAnimator extends Animator
 
     private int overlayY;
 
-    public QuestionPage(int index, String title, int overlayChoice, int overlayX, int overlayY, Answer... answers)
+    public ImagePage(int index, String title, int overlayChoice, int overlayX, int overlayY, Answer... answers)
     {
       super(index, title);
       this.overlayChoice = overlayChoice;
@@ -1212,7 +1258,7 @@ public class GearAnimator extends Animator
       this.overlayY = overlayY;
     }
 
-    public QuestionPage(int index, String title, int overlayChoice, int overlayX, int overlayY)
+    public ImagePage(int index, String title, int overlayChoice, int overlayX, int overlayY)
     {
       this(index, title, overlayChoice, overlayX, overlayY, new Answer[] { new ImageAnswer(yesImages), new ImageAnswer(noImages) });
     }
@@ -1243,12 +1289,52 @@ public class GearAnimator extends Animator
     {
       try
       {
-        return loadImage("questionaire/page" + index + suffix + ".png");
+        return loadImage("questionnaire/page" + index + suffix + ".png");
       }
       catch (Exception ex)
       {
         return null;
       }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public class PreferencePage extends ImagePage
+  {
+    private final URI preferenceKey;
+
+    private final String yesValue;
+
+    private final String noValue;
+
+    public PreferencePage(int index, String title, int overlayChoice, int overlayX, int overlayY, String preferenceKey, String yesValue, String noValue)
+    {
+      super(index, title, overlayChoice, overlayX, overlayY, new Answer[] { new ImageAnswer(yesImages), new ImageAnswer(noImages) });
+      this.preferenceKey = PreferencesFactory.eINSTANCE.createURI(preferenceKey);
+      this.yesValue = yesValue;
+      this.noValue = noValue;
+    }
+
+    public PreferencePage(int index, String title, int overlayChoice, int overlayX, int overlayY, String preferenceKey)
+    {
+      this(index, title, overlayChoice, overlayX, overlayY, preferenceKey, "true", "false");
+    }
+
+    public final URI getPreferenceKey()
+    {
+      return preferenceKey;
+    }
+
+    public final String getYesValue()
+    {
+      return yesValue;
+    }
+
+    public final String getNoValue()
+    {
+      return noValue;
     }
   }
 
@@ -1336,7 +1422,7 @@ public class GearAnimator extends Animator
         int x = (PAGE_WIDTH - width) / 2;
         int y = 40 * (1 + i);
 
-        QuestionPage page = (QuestionPage)pages[i];
+        ImagePage page = (ImagePage)pages[i];
         ImageAnswer answer = (ImageAnswer)page.getChoiceAnswer();
         if (answer != null)
         {

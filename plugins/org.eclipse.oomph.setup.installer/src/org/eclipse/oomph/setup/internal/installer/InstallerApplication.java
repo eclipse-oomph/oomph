@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.ErrorDialog;
 
@@ -72,6 +73,8 @@ public class InstallerApplication implements IApplication
           context.applicationRunning();
         }
       });
+
+      SetupUIPlugin.performQuestionnaire(null, false);
 
       P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
 

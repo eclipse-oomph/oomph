@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.questionaire;
+package org.eclipse.oomph.setup.ui.questionnaire;
 
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
@@ -403,6 +403,11 @@ public class AnimatedCanvas extends Canvas
         {
           BundleFile rootFile = SetupUIPlugin.INSTANCE.getRootFile();
           BundleFile file = rootFile.getChild(name);
+          if (file == null)
+          {
+            throw new IllegalStateException("Couldn't load " + name);
+          }
+
           stream = file.getContents();
           image = new Image(display, stream);
         }

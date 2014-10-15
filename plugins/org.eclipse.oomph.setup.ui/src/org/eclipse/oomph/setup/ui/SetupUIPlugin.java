@@ -15,13 +15,21 @@ import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.preferences.PreferencesFactory;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator;
+import org.eclipse.oomph.setup.ui.questionnaire.GearShell;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
+import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
@@ -40,11 +48,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
@@ -52,8 +62,12 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -62,6 +76,8 @@ import java.util.Set;
 public final class SetupUIPlugin extends OomphUIPlugin
 {
   public static final SetupUIPlugin INSTANCE = new SetupUIPlugin();
+
+  public static final String PLUGIN_ID = INSTANCE.getSymbolicName();
 
   public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
@@ -272,6 +288,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Ignore
     }
 
+    performQuestionnaire(UIUtil.getShell(), false);
+
     monitor.subTask("Creating a task performer");
 
     // This performer is only used to detect a need to update or to open the setup wizard.
@@ -355,6 +373,74 @@ public final class SetupUIPlugin extends OomphUIPlugin
         updater.openDialog(UIUtil.getShell());
       }
     });
+  }
+
+  public static void performQuestionnaire(final Shell parentShell, boolean force)
+  {
+    // Temporarily disable the automatic questionaire until we got feedback from Mac (Retina) users.
+    if (!force || Platform.OS_MACOSX.equals(Platform.getOS()))
+    {
+      return;
+    }
+
+    RecorderTransaction transaction = RecorderTransaction.open();
+
+    try
+    {
+      SetupTaskContainer rootObject = transaction.getRootObject();
+      if (rootObject instanceof User)
+      {
+        User user = (User)rootObject;
+        if (user.getQuestionnaireDate() == null || force)
+        {
+          final Map<URI, String> preferences = new HashMap<URI, String>();
+          UIUtil.syncExec(new Runnable()
+          {
+            public void run()
+            {
+              GearShell shell = new GearShell(parentShell);
+              Map<URI, String> result = shell.openModal();
+              if (result != null)
+              {
+                preferences.putAll(result);
+              }
+            }
+          });
+
+          URI uri = PreferencesFactory.eINSTANCE.createURI(GearAnimator.RECORDER_PREFERENCE_KEY);
+          if (preferences.containsKey(uri))
+          {
+            boolean enabled = Boolean.parseBoolean(preferences.remove(uri));
+            user.setPreferenceRecorderDefault(enabled);
+          }
+
+          if (!preferences.isEmpty())
+          {
+            for (Entry<URI, String> entry : preferences.entrySet())
+            {
+              String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
+              transaction.setPolicy(path, true);
+
+              if (!isInstallerProduct())
+              {
+                PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);
+                property.set(entry.getValue());
+              }
+            }
+
+            transaction.setPreferences(preferences);
+          }
+
+          user.setQuestionnaireDate(new Date());
+          transaction.setForceDirty(true);
+          transaction.commit();
+        }
+      }
+    }
+    finally
+    {
+      transaction.close();
+    }
   }
 
   private static boolean isInstallerProduct()

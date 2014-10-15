@@ -198,6 +198,9 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="unsignedPolicy" eType="#//UnsignedPolicy"
         defaultValueLiteral="PROMPT"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="questionnaireDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preferenceRecorderDefault"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeRule" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeURI" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"/>

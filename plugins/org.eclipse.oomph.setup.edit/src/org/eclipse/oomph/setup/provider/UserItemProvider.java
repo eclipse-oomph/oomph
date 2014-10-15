@@ -59,6 +59,8 @@ public class UserItemProvider extends ScopeItemProvider
 
       addAcceptedLicensesPropertyDescriptor(object);
       addUnsignedPolicyPropertyDescriptor(object);
+      addQuestionnaireDatePropertyDescriptor(object);
+      addPreferenceRecorderDefaultPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -88,6 +90,35 @@ public class UserItemProvider extends ScopeItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_User_unsignedPolicy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_unsignedPolicy_feature", "_UI_User_type"),
         SetupPackage.Literals.USER__UNSIGNED_POLICY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Questionnaire Date feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addQuestionnaireDatePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_User_questionnaireDate_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_User_questionnaireDate_feature", "_UI_User_type"), SetupPackage.Literals.USER__QUESTIONNAIRE_DATE,
+        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+  }
+
+  /**
+   * This adds a property descriptor for the Preference Recorder Default feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addPreferenceRecorderDefaultPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_User_preferenceRecorderDefault_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_User_preferenceRecorderDefault_feature", "_UI_User_type"),
+        SetupPackage.Literals.USER__PREFERENCE_RECORDER_DEFAULT, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**
@@ -182,6 +213,8 @@ public class UserItemProvider extends ScopeItemProvider
     {
       case SetupPackage.USER__ACCEPTED_LICENSES:
       case SetupPackage.USER__UNSIGNED_POLICY:
+      case SetupPackage.USER__QUESTIONNAIRE_DATE:
+      case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case SetupPackage.USER__ATTRIBUTE_RULES:

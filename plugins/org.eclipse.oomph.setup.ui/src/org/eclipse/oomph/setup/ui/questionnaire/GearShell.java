@@ -8,12 +8,15 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.questionaire;
+package org.eclipse.oomph.setup.ui.questionnaire;
 
-import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Answer;
-import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Listener;
-import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.Page;
-import org.eclipse.oomph.setup.ui.questionaire.GearAnimator.SummaryPage;
+import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.Answer;
+import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.Listener;
+import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.Page;
+import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.PreferencePage;
+import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.SummaryPage;
+
+import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -22,10 +25,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Eike Stepper
  */
-public class GearShell extends AnimatedShell<Object> implements Listener
+public class GearShell extends AnimatedShell<Map<URI, String>> implements Listener
 {
   private static final boolean TEST_OVERLAYS = false;
 
@@ -48,7 +54,29 @@ public class GearShell extends AnimatedShell<Object> implements Listener
 
   public void onAnswer(GearAnimator animator, Page page, Answer answer)
   {
-    // Do nothing.
+    if (page instanceof SummaryPage)
+    {
+      HashMap<URI, String> preferences = new HashMap<URI, String>();
+
+      Page[] pages = animator.getPages();
+      for (Page p : pages)
+      {
+        if (p instanceof PreferencePage)
+        {
+          PreferencePage preferencePage = (PreferencePage)p;
+          int choice = preferencePage.getChoice();
+          if (choice != GearAnimator.NONE)
+          {
+            URI key = preferencePage.getPreferenceKey();
+            String value = choice == 0 ? preferencePage.getYesValue() : preferencePage.getNoValue();
+            preferences.put(key, value);
+          }
+        }
+      }
+
+      setResult(preferences);
+      dispose();
+    }
   }
 
   public void onExit(GearAnimator animator, Page page)
@@ -72,7 +100,7 @@ public class GearShell extends AnimatedShell<Object> implements Listener
           GearAnimator animator = getAnimator();
           Page page = animator.getSelectedPage();
 
-          if (page instanceof QuestionPage)
+          if (page instanceof ImagePage)
           {
             if (e.keyCode == SWT.ARROW_RIGHT)
             {

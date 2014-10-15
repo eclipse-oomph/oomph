@@ -8,9 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.questionaire;
+package org.eclipse.oomph.setup.ui.questionnaire;
 
-import org.eclipse.oomph.setup.ui.questionaire.AnimatedCanvas.Animator;
+import org.eclipse.oomph.setup.ui.questionnaire.AnimatedCanvas.Animator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -107,8 +107,8 @@ public class ExitShell extends AnimatedShell<Boolean>
 
       purple = createColor(43, 34, 84);
 
-      image = loadImage("questionaire/exit_page.png");
-      image_ovr = loadImage("questionaire/exit_page_ovr.png");
+      image = loadImage("questionnaire/exit_page.png");
+      image_ovr = loadImage("questionnaire/exit_page_ovr.png");
     }
 
     @Override
@@ -183,8 +183,8 @@ public class ExitShell extends AnimatedShell<Boolean>
 
       gc.setForeground(DARK_GRAY);
       gc.setFont(normalFont);
-      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX, "This one-time questionnaire will not pop up anymore by itself.");
-      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX + NORMAL_FONT_PX, "You can restart it later through the Oomph Setup preferences:");
+      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX, "This one-time questionnaire will not automatically pop up again.");
+      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX + NORMAL_FONT_PX, "You can take the questionnaire later via the Oomph Setup preferences:");
 
       int x = cX - image.getBounds().width / 2;
       int y = 2 * BORDER + BIG_FONT_PX + 2 * NORMAL_FONT_PX;

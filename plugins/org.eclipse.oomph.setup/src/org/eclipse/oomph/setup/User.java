@@ -12,6 +12,8 @@ package org.eclipse.oomph.setup;
 
 import org.eclipse.emf.common.util.EList;
 
+import java.util.Date;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Preferences</b></em>'.
@@ -23,6 +25,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.User#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#getUnsignedPolicy <em>Unsigned Policy</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.User#getQuestionnaireDate <em>Questionnaire Date</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.User#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,6 +82,59 @@ public interface User extends Scope
    * @generated
    */
   void setUnsignedPolicy(UnsignedPolicy value);
+
+  /**
+   * Returns the value of the '<em><b>Questionnaire Date</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Questionnaire Date</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Questionnaire Date</em>' attribute.
+   * @see #setQuestionnaireDate(Date)
+   * @see org.eclipse.oomph.setup.SetupPackage#getUser_QuestionnaireDate()
+   * @model
+   * @generated
+   */
+  Date getQuestionnaireDate();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.User#getQuestionnaireDate <em>Questionnaire Date</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Questionnaire Date</em>' attribute.
+   * @see #getQuestionnaireDate()
+   * @generated
+   */
+  void setQuestionnaireDate(Date value);
+
+  /**
+   * Returns the value of the '<em><b>Preference Recorder Default</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Preference Recorder Default</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Preference Recorder Default</em>' attribute.
+   * @see #setPreferenceRecorderDefault(boolean)
+   * @see org.eclipse.oomph.setup.SetupPackage#getUser_PreferenceRecorderDefault()
+   * @model default="true"
+   * @generated
+   */
+  boolean isPreferenceRecorderDefault();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.User#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Preference Recorder Default</em>' attribute.
+   * @see #isPreferenceRecorderDefault()
+   * @generated
+   */
+  void setPreferenceRecorderDefault(boolean value);
 
   /**
    * Returns the value of the '<em><b>Attribute Rules</b></em>' containment reference list.

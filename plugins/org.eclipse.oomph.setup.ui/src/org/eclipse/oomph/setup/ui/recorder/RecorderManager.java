@@ -12,10 +12,14 @@ package org.eclipse.oomph.setup.ui.recorder;
 
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.util.PreferencesRecorder;
+import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -48,8 +52,6 @@ public final class RecorderManager
 {
   public static final RecorderManager INSTANCE = new RecorderManager();
 
-  private static final String SETUP_UI_NAME = SetupUIPlugin.INSTANCE.getSymbolicName();
-
   private static final IEclipsePreferences SETUP_UI_PREFERENCES = (IEclipsePreferences)SetupUIPlugin.INSTANCE.getInstancePreferences();
 
   private static ToolItem toolItem;
@@ -66,22 +68,28 @@ public final class RecorderManager
 
   public boolean isRecorderEnabled()
   {
-    return SETUP_UI_PREFERENCES.getBoolean(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, true);
+    String value = SETUP_UI_PREFERENCES.get(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, null);
+    if (value == null)
+    {
+      ResourceSet resourceSet = SetupUtil.createResourceSet();
+      SetupContext setupContext = SetupContext.createUserOnly(resourceSet);
+      User user = setupContext.getUser();
+
+      boolean enabled = user.isPreferenceRecorderDefault();
+      doSetRecorderEnabled(enabled);
+      return enabled;
+    }
+
+    return Boolean.parseBoolean(value);
   }
 
   public void setRecorderEnabled(boolean enabled)
   {
     if (isRecorderEnabled() != enabled)
     {
-      SETUP_UI_PREFERENCES.putBoolean(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, enabled);
-
       try
       {
-        SETUP_UI_PREFERENCES.flush();
-      }
-      catch (BackingStoreException ex)
-      {
-        SetupUIPlugin.INSTANCE.log(ex);
+        doSetRecorderEnabled(enabled);
       }
       finally
       {
@@ -104,6 +112,20 @@ public final class RecorderManager
           }
         }
       }
+    }
+  }
+
+  private void doSetRecorderEnabled(boolean enabled)
+  {
+    SETUP_UI_PREFERENCES.putBoolean(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, enabled);
+
+    try
+    {
+      SETUP_UI_PREFERENCES.flush();
+    }
+    catch (BackingStoreException ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
     }
   }
 
@@ -308,7 +330,7 @@ public final class RecorderManager
                 URI uri = it.next();
                 String pluginID = uri.segment(0);
 
-                if (SETUP_UI_NAME.equals(pluginID))
+                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID))
                 {
                   it.remove();
                 }

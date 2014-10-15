@@ -1531,6 +1531,26 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getUser_QuestionnaireDate()
+  {
+    return (EAttribute)userEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getUser_PreferenceRecorderDefault()
+  {
+    return (EAttribute)userEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getWorkspace()
   {
     return workspaceEClass;
@@ -1791,6 +1811,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEReference(userEClass, USER__ATTRIBUTE_RULES);
     createEAttribute(userEClass, USER__ACCEPTED_LICENSES);
     createEAttribute(userEClass, USER__UNSIGNED_POLICY);
+    createEAttribute(userEClass, USER__QUESTIONNAIRE_DATE);
+    createEAttribute(userEClass, USER__PREFERENCE_RECORDER_DEFAULT);
 
     attributeRuleEClass = createEClass(ATTRIBUTE_RULE);
     createEAttribute(attributeRuleEClass, ATTRIBUTE_RULE__ATTRIBUTE_URI);
@@ -2091,6 +2113,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getUser_UnsignedPolicy(), getUnsignedPolicy(), "unsignedPolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getUser_QuestionnaireDate(), ecorePackage.getEDate(), "questionnaireDate", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getUser_PreferenceRecorderDefault(), ecorePackage.getEBoolean(), "preferenceRecorderDefault", "true", 0, 1, User.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(attributeRuleEClass, AttributeRule.class, "AttributeRule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getAttributeRule_AttributeURI(), theBasePackage.getURI(), "attributeURI", null, 0, 1, AttributeRule.class, !IS_TRANSIENT, !IS_VOLATILE,

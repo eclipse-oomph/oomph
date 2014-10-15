@@ -1276,13 +1276,31 @@ public interface SetupPackage extends EPackage
   int USER__UNSIGNED_POLICY = SCOPE_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Questionnaire Date</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int USER__QUESTIONNAIRE_DATE = SCOPE_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Preference Recorder Default</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int USER__PREFERENCE_RECORDER_DEFAULT = SCOPE_FEATURE_COUNT + 4;
+
+  /**
    * The number of structural features of the '<em>User</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int USER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 3;
+  int USER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -4380,6 +4398,28 @@ public interface SetupPackage extends EPackage
   EAttribute getUser_UnsignedPolicy();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.User#getQuestionnaireDate <em>Questionnaire Date</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Questionnaire Date</em>'.
+   * @see org.eclipse.oomph.setup.User#getQuestionnaireDate()
+   * @see #getUser()
+   * @generated
+   */
+  EAttribute getUser_QuestionnaireDate();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.User#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Preference Recorder Default</em>'.
+   * @see org.eclipse.oomph.setup.User#isPreferenceRecorderDefault()
+   * @see #getUser()
+   * @generated
+   */
+  EAttribute getUser_PreferenceRecorderDefault();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Workspace <em>Workspace</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5532,6 +5572,22 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute USER__UNSIGNED_POLICY = eINSTANCE.getUser_UnsignedPolicy();
+
+    /**
+     * The meta object literal for the '<em><b>Questionnaire Date</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute USER__QUESTIONNAIRE_DATE = eINSTANCE.getUser_QuestionnaireDate();
+
+    /**
+     * The meta object literal for the '<em><b>Preference Recorder Default</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute USER__PREFERENCE_RECORDER_DEFAULT = eINSTANCE.getUser_PreferenceRecorderDefault();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.WorkspaceImpl <em>Workspace</em>}' class.

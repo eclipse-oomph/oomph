@@ -51,6 +51,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -76,9 +77,6 @@ public abstract class RecorderTransaction
 
   private static final String POLICY_IGNORE = "ignore";
 
-  private static final IFile workspacePoliciesFile = ResourcesPlugin.getWorkspace().getRoot().getProject("org.eclipse.oomph.setup.ui")
-      .getFile(POLICIES_FILE_NAME);
-
   private static RecorderTransaction instance;
 
   private static boolean policiesInitialized;
@@ -96,6 +94,8 @@ public abstract class RecorderTransaction
   private Annotation recorderAnnotation;
 
   private SetupTaskContainer rootObject;
+
+  private boolean forceDirty;
 
   RecorderTransaction(Resource resource)
   {
@@ -132,8 +132,18 @@ public abstract class RecorderTransaction
     return resource;
   }
 
+  public SetupTaskContainer getRootObject()
+  {
+    return rootObject;
+  }
+
   public boolean isDirty()
   {
+    if (forceDirty)
+    {
+      return true;
+    }
+
     if (!policies.isEmpty())
     {
       return true;
@@ -145,6 +155,16 @@ public abstract class RecorderTransaction
     }
 
     return false;
+  }
+
+  public boolean isForceDirty()
+  {
+    return forceDirty;
+  }
+
+  public void setForceDirty(boolean forceDirty)
+  {
+    this.forceDirty = forceDirty;
   }
 
   public Map<String, Boolean> getPolicies(boolean clean)
@@ -223,6 +243,7 @@ public abstract class RecorderTransaction
 
       Map<String, String> workspacePolicies = null;
       boolean workspacePoliciesChanged = false;
+      IFile workspacePoliciesFile = getWorkspacePropertiesFile();
 
       for (Map.Entry<String, Boolean> entry : policies.entrySet())
       {
@@ -232,7 +253,7 @@ public abstract class RecorderTransaction
         details.put(key, policy ? POLICY_RECORD : POLICY_IGNORE);
         cleanPolicies.put(key, policy);
 
-        if (!policy)
+        if (!policy && workspacePoliciesFile != null)
         {
           if (workspacePolicies == null && workspacePoliciesFile.isAccessible())
           {
@@ -451,6 +472,18 @@ public abstract class RecorderTransaction
     return task;
   }
 
+  private static IFile getWorkspacePropertiesFile()
+  {
+    try
+    {
+      return ResourcesPlugin.getWorkspace().getRoot().getProject("org.eclipse.oomph.setup.ui").getFile(POLICIES_FILE_NAME);
+    }
+    catch (Throwable ex)
+    {
+      return null;
+    }
+  }
+
   public static RecorderTransaction open()
   {
     if (instance == null)
@@ -458,26 +491,48 @@ public abstract class RecorderTransaction
       final IEditorPart[] editor = { null };
       final CountDownLatch editorLoadedLatch = new CountDownLatch(1);
 
-      IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-      final IWorkbenchPage page = window != null ? window.getActivePage() : null;
+      IWorkbench workbench = null;
 
-      if (page != null)
+      try
       {
-        UIUtil.syncExec(new Runnable()
+        workbench = PlatformUI.getWorkbench();
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+
+      if (workbench != null)
+      {
+        IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+        if (window == null)
         {
-          public void run()
+          IWorkbenchWindow[] windows = workbench.getWorkbenchWindows();
+          if (windows.length != 0)
           {
-            editor[0] = SetupEditorSupport.getEditor(page, SetupContext.USER_SETUP_URI, false, new SetupEditorSupport.LoadHandler()
-            {
-              @Override
-              protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
-              {
-                instance = new RecorderTransaction.EditorTransaction(editor, domain, resource);
-                editorLoadedLatch.countDown();
-              }
-            });
+            window = windows[0];
           }
-        });
+        }
+
+        final IWorkbenchPage page = window != null ? window.getActivePage() : null;
+        if (page != null)
+        {
+          UIUtil.syncExec(new Runnable()
+          {
+            public void run()
+            {
+              editor[0] = SetupEditorSupport.getEditor(page, SetupContext.USER_SETUP_URI, false, new SetupEditorSupport.LoadHandler()
+              {
+                @Override
+                protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
+                {
+                  instance = new RecorderTransaction.EditorTransaction(editor, domain, resource);
+                  editorLoadedLatch.countDown();
+                }
+              });
+            }
+          });
+        }
       }
 
       if (editor[0] != null)

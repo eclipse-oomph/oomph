@@ -563,7 +563,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         {
           EObject eObject = (EObject)value;
           EClass eClass = eObject.eClass();
-          if (eClass.eResource().getResourceSet() == resourceSet)
+          Resource eResource = eClass.eResource();
+          if (eResource != null && eResource.getResourceSet() == resourceSet)
           {
             EList<SetupTask> enablementTasks = SetupTaskPerformer.createEnablementTasks(eClass, true);
             if (enablementTasks != null)
