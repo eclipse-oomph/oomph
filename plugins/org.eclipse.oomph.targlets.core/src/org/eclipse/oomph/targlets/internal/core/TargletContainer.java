@@ -37,6 +37,7 @@ import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -160,8 +161,15 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   {
     this.id = id;
 
-    // Make the Targlets UI active.
-    Platform.getAdapterManager().loadAdapter(this, "org.eclipse.jface.viewers.ITreeContentProvider");
+    // Make the Targlets UI active so that PDE can use Platform.getAdapterManager() to load our registered adapters.
+    try
+    {
+      CommonPlugin.loadClass("org.eclipse.oomph.targlets.ui", "org.eclipse.oomph.targlets.internal.ui.TargletsUIPlugin");
+    }
+    catch (Throwable ex)
+    {
+      // Ignore.
+    }
   }
 
   /**
