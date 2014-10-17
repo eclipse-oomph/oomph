@@ -62,10 +62,6 @@ public class AnimatedCanvas extends Canvas
 
   private int timerInterval;
 
-  private GC bufferGC;
-
-  private Image buffer;
-
   private Point shellMoveStart;
 
   public AnimatedCanvas(Composite parent, int style)
@@ -97,8 +93,7 @@ public class AnimatedCanvas extends Canvas
     {
       public void paintControl(PaintEvent event)
       {
-        GC canvasGC = event.gc;
-        doPaint(canvasGC);
+        doPaint(event.gc);
       }
     });
 
@@ -211,12 +206,6 @@ public class AnimatedCanvas extends Canvas
       animator.dispose();
     }
 
-    if (buffer != null)
-    {
-      bufferGC.dispose();
-      buffer.dispose();
-    }
-
     super.dispose();
   }
 
@@ -298,12 +287,9 @@ public class AnimatedCanvas extends Canvas
 
   protected void doPaint(GC canvasGC)
   {
-    if (buffer == null)
-    {
-      buffer = new Image(getDisplay(), getBounds());
-      bufferGC = new GC(buffer);
-    }
+    Image buffer = new Image(getDisplay(), getBounds());
 
+    GC bufferGC = new GC(buffer);
     bufferGC.setBackground(canvasGC.getBackground());
     bufferGC.fillRectangle(buffer.getBounds());
 
@@ -313,6 +299,8 @@ public class AnimatedCanvas extends Canvas
     }
 
     canvasGC.drawImage(buffer, 0, 0);
+    bufferGC.dispose();
+    buffer.dispose();
 
     if (!isFocusControl())
     {
@@ -350,11 +338,6 @@ public class AnimatedCanvas extends Canvas
     public final AnimatedCanvas getCanvas()
     {
       return canvas;
-    }
-
-    public final GC getBufferGC()
-    {
-      return canvas.bufferGC;
     }
 
     public final int getWidth()

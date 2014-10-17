@@ -415,52 +415,49 @@ public class GearAnimator extends Animator
   {
     if (x != Integer.MIN_VALUE && y != Integer.MIN_VALUE)
     {
-      GC gc = getBufferGC();
-      if (gc != null)
+      GC gc = new GC(getCanvas());
+      for (int i = 0; i < gearPaths.length; i++)
       {
-        for (int i = 0; i < gearPaths.length; i++)
+        Path path = gearPaths[i];
+        if (path != null && path.contains(x, y, gc, false))
         {
-          Path path = gearPaths[i];
-          if (path != null && path.contains(x, y, gc, false))
+          if (i != hover)
           {
-            if (i != hover)
-            {
-              hover = i;
-            }
-
-            return true;
+            hover = i;
           }
-        }
 
-        if (exitBox != null && exitBox.contains(x, y))
+          return true;
+        }
+      }
+
+      if (exitBox != null && exitBox.contains(x, y))
+      {
+        hover = EXIT;
+        return true;
+      }
+
+      Page page = getSelectedPage();
+      if (page != null)
+      {
+        if (page.showBack() && backBox != null && backBox.contains(x, y))
         {
-          hover = EXIT;
+          hover = BACK;
           return true;
         }
 
-        Page page = getSelectedPage();
-        if (page != null)
+        if (page.showNext() && nextBox != null && nextBox.contains(x, y))
         {
-          if (page.showBack() && backBox != null && backBox.contains(x, y))
-          {
-            hover = BACK;
-            return true;
-          }
+          hover = NEXT;
+          return true;
+        }
 
-          if (page.showNext() && nextBox != null && nextBox.contains(x, y))
-          {
-            hover = NEXT;
-            return true;
-          }
+        x -= BORDER;
+        y -= pageY;
 
-          x -= BORDER;
-          y -= pageY;
-
-          hover = page.onMouseMove(x, y);
-          if (hover != NONE)
-          {
-            return true;
-          }
+        hover = page.onMouseMove(x, y);
+        if (hover != NONE)
+        {
+          return true;
         }
       }
     }
@@ -474,51 +471,48 @@ public class GearAnimator extends Animator
   {
     if (x != Integer.MIN_VALUE && y != Integer.MIN_VALUE)
     {
-      GC gc = getBufferGC();
-      if (gc != null)
+      GC gc = new GC(getCanvas());
+      for (int i = 0; i < gearPaths.length; i++)
       {
-        for (int i = 0; i < gearPaths.length; i++)
+        Path path = gearPaths[i];
+        if (path != null && path.contains(x, y, gc, false))
         {
-          Path path = gearPaths[i];
-          if (path != null && path.contains(x, y, gc, false))
+          if (i != getSelection())
           {
-            if (i != getSelection())
-            {
-              setSelection(i);
-            }
-
-            return true;
+            setSelection(i);
           }
-        }
 
-        if (exitBox != null && exitBox.contains(x, y))
+          return true;
+        }
+      }
+
+      if (exitBox != null && exitBox.contains(x, y))
+      {
+        exit();
+        return true;
+      }
+
+      Page page = getSelectedPage();
+      if (page != null)
+      {
+        if (page.showBack() && backBox != null && backBox.contains(x, y))
         {
-          exit();
+          setSelection(getSelection() - 1);
           return true;
         }
 
-        Page page = getSelectedPage();
-        if (page != null)
+        if (page.showNext() && nextBox != null && nextBox.contains(x, y))
         {
-          if (page.showBack() && backBox != null && backBox.contains(x, y))
-          {
-            setSelection(getSelection() - 1);
-            return true;
-          }
+          setSelection(getSelection() + 1);
+          return true;
+        }
 
-          if (page.showNext() && nextBox != null && nextBox.contains(x, y))
-          {
-            setSelection(getSelection() + 1);
-            return true;
-          }
+        x -= BORDER;
+        y -= pageY;
 
-          x -= BORDER;
-          y -= pageY;
-
-          if (page.onMouseDown(x, y))
-          {
-            return true;
-          }
+        if (page.onMouseDown(x, y))
+        {
+          return true;
         }
       }
     }
@@ -811,6 +805,7 @@ public class GearAnimator extends Animator
     }
 
     GC gc = new GC(pageBuffer);
+    gc.setAdvanced(true);
     gc.setBackground(WHITE);
     gc.fillRectangle(pageBuffer.getBounds());
 
