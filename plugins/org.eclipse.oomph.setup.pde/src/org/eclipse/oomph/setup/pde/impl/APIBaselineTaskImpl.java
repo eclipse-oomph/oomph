@@ -132,8 +132,6 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
    */
   protected String remoteURI = REMOTE_URI_EDEFAULT;
 
-  private transient String remoteURIRedirected;
-
   private transient File remoteURIFile;
 
   private transient String baselineName;
@@ -396,8 +394,6 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
 
     baselineName = getName() + "-" + getVersion();
     baselineDir = new File(getLocation());
-
-    remoteURIRedirected = context.redirect(getRemoteURI());
     remoteURIFile = new File(baselineDir, "remoteURI.txt");
 
     IApiBaselineManager baselineManager = apiPlugin.getApiBaselineManager();
@@ -446,7 +442,7 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
         downloadAndUnzip(context);
       }
 
-      IOUtil.writeFile(remoteURIFile, remoteURIRedirected.getBytes("UTF-8"));
+      IOUtil.writeFile(remoteURIFile, getRemoteURI().getBytes("UTF-8"));
 
       String location = baselineDir.toString();
       context.log("Creating API baseline from " + location);
@@ -465,7 +461,7 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
     if (remoteURIFile.exists())
     {
       String zipLocationURL = new String(IOUtil.readFile(remoteURIFile), "UTF-8");
-      if (!ObjectUtil.equals(zipLocationURL, remoteURIRedirected))
+      if (!ObjectUtil.equals(zipLocationURL, getRemoteURI()))
       {
         return true;
       }
@@ -476,7 +472,7 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
 
   private void downloadAndUnzip(final SetupTaskContext context) throws Exception
   {
-    File zipFile = DownloadUtil.downloadURL(remoteURIRedirected, context);
+    File zipFile = DownloadUtil.downloadURL(getRemoteURI(), context);
 
     baselineDir.mkdirs();
     ZIPUtil.unzip(zipFile, new ZIPUtil.FileSystemUnzipHandler(baselineDir, ZIPUtil.DEFAULT_BUFFER_SIZE)

@@ -15,7 +15,7 @@ import org.eclipse.emf.common.util.URI;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Context Variable Task</b></em>'.
+ * A representation of the model object '<em><b>Variable Task</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>

@@ -15,6 +15,10 @@ package org.eclipse.oomph.setup;
  */
 public final class EAnnotationConstants
 {
+  public static final String ANNOTATION_NO_EXPAND = "http://www.eclipse.org/oomph/setup/NoExpand";
+
+  public static final String ANNOTATION_REDIRECT = "http://www.eclipse.org/oomph/setup/Redirect";
+
   public static final String ANNOTATION_VALID_TRIGGERS = "http://www.eclipse.org/oomph/setup/ValidTriggers";
 
   public static final String KEY_TRIGGERS = "triggers";

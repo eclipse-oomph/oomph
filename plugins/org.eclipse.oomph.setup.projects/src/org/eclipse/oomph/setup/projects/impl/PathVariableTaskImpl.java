@@ -260,14 +260,13 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
   {
     IPathVariableManager pathVariableManager = ResourcesPlugin.getWorkspace().getPathVariableManager();
     URI value = pathVariableManager.getURIValue(getName());
-    String uri = context.redirect(getURI());
-    return !ObjectUtil.equals(value == null ? null : value.toString(), uri);
+    return !ObjectUtil.equals(value == null ? null : value.toString(), getURI());
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
     String name = getName();
-    String uri = context.redirect(getURI());
+    String uri = getURI();
     context.log("Setting path variable " + name + " = " + uri);
 
     IPathVariableManager pathVariableManager = ResourcesPlugin.getWorkspace().getPathVariableManager();

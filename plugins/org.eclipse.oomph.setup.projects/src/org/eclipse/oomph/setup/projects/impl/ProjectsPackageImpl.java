@@ -271,6 +271,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     createValidTriggersAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
+    // http://www.eclipse.org/oomph/setup/Redirect
+    createRedirectAnnotations();
   }
 
   /**
@@ -335,6 +337,18 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getProjectsImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
     addAnnotation(getPathVariableTask_URI(), source, new String[] { "kind", "attribute", "name", "uri" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Redirect</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRedirectAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    addAnnotation(getPathVariableTask_URI(), source, new String[] {});
   }
 
 } // ProjectsPackageImpl

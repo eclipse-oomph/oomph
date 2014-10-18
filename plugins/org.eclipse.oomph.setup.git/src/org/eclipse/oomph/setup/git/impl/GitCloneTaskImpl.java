@@ -499,8 +499,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       Repository repository = git.getRepository();
       String checkoutBranch = getCheckoutBranch();
       String remoteName = getRemoteName();
-      String remoteURI = context.redirect(getRemoteURI());
-      String pushURI = context.redirect(getPushURI());
+      String remoteURI = getRemoteURI();
+      String pushURI = getPushURI();
       configureRepository(context, repository, checkoutBranch, remoteName, remoteURI, pushURI);
 
       hasCheckout = repository.getAllRefs().containsKey("refs/heads/" + checkoutBranch);
@@ -565,7 +565,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
       String checkoutBranch = getCheckoutBranch();
       String remoteName = getRemoteName();
-      String remoteURI = context.redirect(getRemoteURI());
+      String remoteURI = getRemoteURI();
 
       if (cachedGit == null)
       {
@@ -574,7 +574,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
         if (!URI.createURI(remoteURI).isFile())
         {
-          String pushURI = context.redirect(getPushURI());
+          String pushURI = getPushURI();
           configureRepository(context, cachedRepository, checkoutBranch, remoteName, remoteURI, pushURI);
         }
       }

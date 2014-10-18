@@ -35,6 +35,7 @@
         <details key="kind" value="attribute"/>
         <details key="name" value="uri"/>
       </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/Redirect"/>
     </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

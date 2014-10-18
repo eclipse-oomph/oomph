@@ -163,6 +163,79 @@ public interface P2Package extends EPackage
   int PROFILE_DEFINITION_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 2;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.p2.impl.ConfigurationImpl <em>Configuration</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.p2.impl.ConfigurationImpl
+   * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getConfiguration()
+   * @generated
+   */
+  int CONFIGURATION = 1;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>WS</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__WS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>OS</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__OS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Arch</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__ARCH = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>Configuration</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION___GET_ANNOTATION__STRING = BasePackage.MODEL_ELEMENT___GET_ANNOTATION__STRING;
+
+  /**
+   * The number of operations of the '<em>Configuration</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+  /**
    * The meta object id for the '{@link org.eclipse.oomph.p2.impl.RequirementImpl <em>Requirement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -170,7 +243,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getRequirement()
    * @generated
    */
-  int REQUIREMENT = 1;
+  int REQUIREMENT = 2;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -279,7 +352,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getRepositoryList()
    * @generated
    */
-  int REPOSITORY_LIST = 2;
+  int REPOSITORY_LIST = 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.p2.impl.RepositoryImpl <em>Repository</em>}' class.
@@ -289,7 +362,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getRepository()
    * @generated
    */
-  int REPOSITORY = 3;
+  int REPOSITORY = 4;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -407,7 +480,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getRepositoryType()
    * @generated
    */
-  int REPOSITORY_TYPE = 4;
+  int REPOSITORY_TYPE = 5;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.p2.VersionSegment <em>Version Segment</em>}' enum.
@@ -417,7 +490,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getVersionSegment()
    * @generated
    */
-  int VERSION_SEGMENT = 5;
+  int VERSION_SEGMENT = 6;
 
   /**
    * The meta object id for the '<em>Version</em>' data type.
@@ -427,7 +500,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getVersion()
    * @generated
    */
-  int VERSION = 6;
+  int VERSION = 7;
 
   /**
    * The meta object id for the '<em>Version Range</em>' data type.
@@ -437,7 +510,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getVersionRange()
    * @generated
    */
-  int VERSION_RANGE = 7;
+  int VERSION_RANGE = 8;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.p2.ProfileDefinition <em>Profile Definition</em>}'.
@@ -501,6 +574,49 @@ public interface P2Package extends EPackage
    * @generated
    */
   EOperation getProfileDefinition__SetRepositories__EList();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.p2.Configuration <em>Configuration</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Configuration</em>'.
+   * @see org.eclipse.oomph.p2.Configuration
+   * @generated
+   */
+  EClass getConfiguration();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Configuration#getWS <em>WS</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>WS</em>'.
+   * @see org.eclipse.oomph.p2.Configuration#getWS()
+   * @see #getConfiguration()
+   * @generated
+   */
+  EAttribute getConfiguration_WS();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Configuration#getOS <em>OS</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>OS</em>'.
+   * @see org.eclipse.oomph.p2.Configuration#getOS()
+   * @see #getConfiguration()
+   * @generated
+   */
+  EAttribute getConfiguration_OS();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Configuration#getArch <em>Arch</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Arch</em>'.
+   * @see org.eclipse.oomph.p2.Configuration#getArch()
+   * @see #getConfiguration()
+   * @generated
+   */
+  EAttribute getConfiguration_Arch();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.p2.Requirement <em>Requirement</em>}'.
@@ -767,6 +883,40 @@ public interface P2Package extends EPackage
      * @generated
      */
     EOperation PROFILE_DEFINITION___SET_REPOSITORIES__ELIST = eINSTANCE.getProfileDefinition__SetRepositories__EList();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.p2.impl.ConfigurationImpl <em>Configuration</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.p2.impl.ConfigurationImpl
+     * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getConfiguration()
+     * @generated
+     */
+    EClass CONFIGURATION = eINSTANCE.getConfiguration();
+
+    /**
+     * The meta object literal for the '<em><b>WS</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIGURATION__WS = eINSTANCE.getConfiguration_WS();
+
+    /**
+     * The meta object literal for the '<em><b>OS</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIGURATION__OS = eINSTANCE.getConfiguration_OS();
+
+    /**
+     * The meta object literal for the '<em><b>Arch</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIGURATION__ARCH = eINSTANCE.getConfiguration_Arch();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.p2.impl.RequirementImpl <em>Requirement</em>}' class.

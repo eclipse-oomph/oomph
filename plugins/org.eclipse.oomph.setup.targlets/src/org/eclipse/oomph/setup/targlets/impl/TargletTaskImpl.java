@@ -576,18 +576,6 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
     copyTarglets = TargletFactory.eINSTANCE.copyTarglets(getTarglets());
-    for (Targlet targlet : copyTarglets)
-    {
-      for (RepositoryList repositoryList : targlet.getRepositoryLists())
-      {
-        for (Repository repository : repositoryList.getRepositories())
-        {
-          String url = repository.getURL();
-          url = context.redirect(url);
-          repository.setURL(url);
-        }
-      }
-    }
 
     if (context.getTrigger() == Trigger.MANUAL)
     {

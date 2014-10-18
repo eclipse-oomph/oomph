@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.impl;
 
+import org.eclipse.oomph.p2.Configuration;
 import org.eclipse.oomph.p2.P2Exception;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
@@ -84,6 +85,8 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     {
       case P2Package.PROFILE_DEFINITION:
         return createProfileDefinition();
+      case P2Package.CONFIGURATION:
+        return createConfiguration();
       case P2Package.REQUIREMENT:
         return createRequirement();
       case P2Package.REPOSITORY_LIST:
@@ -150,6 +153,17 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
   {
     ProfileDefinitionImpl profileDefinition = new ProfileDefinitionImpl();
     return profileDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Configuration createConfiguration()
+  {
+    ConfigurationImpl configuration = new ConfigurationImpl();
+    return configuration;
   }
 
   /**

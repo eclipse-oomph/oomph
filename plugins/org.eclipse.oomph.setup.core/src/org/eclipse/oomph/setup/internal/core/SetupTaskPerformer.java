@@ -35,6 +35,7 @@ import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
+import org.eclipse.oomph.setup.RedirectionTask;
 import org.eclipse.oomph.setup.ResourceCopyTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
@@ -1621,6 +1622,85 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return undeclaredVariables;
   }
 
+  public void redirectTriggeredSetupTasks()
+  {
+    Map<URI, URI> uriMap = getURIConverter().getURIMap();
+    for (Iterator<SetupTask> it = triggeredSetupTasks.iterator(); it.hasNext();)
+    {
+      SetupTask setupTask = it.next();
+      if (setupTask instanceof RedirectionTask)
+      {
+        RedirectionTask redirectionTask = (RedirectionTask)setupTask;
+        URI sourceURI = URI.createURI(redirectionTask.getSourceURL());
+        URI targetURI = URI.createURI(redirectionTask.getTargetURL());
+
+        uriMap.put(sourceURI, targetURI);
+        it.remove();
+      }
+    }
+
+    for (SetupTask setupTask : triggeredSetupTasks)
+    {
+      for (Iterator<EObject> it = EcoreUtil.getAllContents(setupTask, false); it.hasNext();)
+      {
+        redirectStrings(it.next());
+      }
+    }
+  }
+
+  private void redirectStrings(EObject eObject)
+  {
+    EClass eClass = eObject.eClass();
+
+    for (EAttribute attribute : eClass.getEAllAttributes())
+    {
+      if (attribute.isChangeable() && attribute.getEAnnotation(EAnnotationConstants.ANNOTATION_REDIRECT) != null)
+      {
+        String instanceClassName = attribute.getEAttributeType().getInstanceClassName();
+        ValueConverter valueConverter = CONVERTERS.get(instanceClassName);
+        if (valueConverter != null)
+        {
+          if (attribute.isMany())
+          {
+            List<?> values = (List<?>)eObject.eGet(attribute);
+            List<Object> newValues = new ArrayList<Object>();
+            boolean changed = false;
+
+            for (Object value : values)
+            {
+              String convertedValue = valueConverter.convertToString(value);
+              String redirectedValue = redirect(convertedValue);
+              if (!ObjectUtil.equals(convertedValue, redirectedValue))
+              {
+                changed = true;
+              }
+
+              newValues.add(valueConverter.createFromString(redirectedValue));
+            }
+
+            if (changed)
+            {
+              eObject.eSet(attribute, newValues);
+            }
+          }
+          else
+          {
+            Object value = eObject.eGet(attribute);
+            if (value != null)
+            {
+              String convertedValue = valueConverter.convertToString(value);
+              String redirectedValue = redirect(convertedValue);
+              if (!ObjectUtil.equals(convertedValue, redirectedValue))
+              {
+                eObject.eSet(attribute, valueConverter.createFromString(redirectedValue));
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   private void expandStrings(EList<SetupTask> setupTasks)
   {
     Set<String> keys = new LinkedHashSet<String>();
@@ -2269,7 +2349,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     EClass eClass = eObject.eClass();
     for (EAttribute attribute : eClass.getEAllAttributes())
     {
-      if (attribute.isChangeable() && attribute.getEAnnotation("http://www.eclipse.org/oomph/setup/NoExpand") == null)
+      if (attribute.isChangeable() && attribute.getEAnnotation(EAnnotationConstants.ANNOTATION_NO_EXPAND) == null)
       {
         String instanceClassName = attribute.getEAttributeType().getInstanceClassName();
         ValueConverter valueConverter = CONVERTERS.get(instanceClassName);
@@ -3110,6 +3190,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     composedPerformer.getUnresolvedVariables().addAll(allUnresolvedVariables);
     composedPerformer.getPasswordVariables().addAll(allPasswordVariables);
     composedPerformer.getRuleAttributes().putAll(allRuleAttributes);
+    composedPerformer.redirectTriggeredSetupTasks();
+
     File workspaceLocation = composedPerformer.getWorkspaceLocation();
     if (workspaceLocation != null)
     {

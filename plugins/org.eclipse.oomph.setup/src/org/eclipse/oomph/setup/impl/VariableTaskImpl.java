@@ -46,7 +46,7 @@ import java.util.Set;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Context Variable Task</b></em>'.
+ * An implementation of the model object '<em><b>Variable Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -647,7 +647,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    throw new UnsupportedOperationException("Context variable task can't be executed");
+    throw new UnsupportedOperationException("Variable task can't be executed");
   }
 
   protected void eMigrate()

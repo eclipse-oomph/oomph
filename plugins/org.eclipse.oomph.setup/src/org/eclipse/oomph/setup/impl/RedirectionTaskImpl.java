@@ -15,7 +15,6 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -252,16 +251,12 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    URI sourceURI = URI.createURI(getSourceURL());
-    URI targetURI = URI.createURI(getTargetURL());
-
-    context.getURIConverter().getURIMap().put(sourceURI, targetURI);
     return false;
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    // Do nothing
+    throw new UnsupportedOperationException("Redirection task can't be executed");
   }
 
 } // RedirectionTaskImpl

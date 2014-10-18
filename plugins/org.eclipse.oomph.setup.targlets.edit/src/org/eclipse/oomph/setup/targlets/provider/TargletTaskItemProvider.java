@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.targlets.provider;
 
+import org.eclipse.oomph.p2.Configuration;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
@@ -27,7 +28,6 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
@@ -109,12 +109,10 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
             "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, true, false, true,
         ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
-      private static final String OS_EXTRA = "org.eclipse.pde.os.extra";
-
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        return getChoices(Platform.knownOSValues(), OS_EXTRA);
+        return Configuration.Choices.forOS();
       }
     });
   }
@@ -132,12 +130,10 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
             "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, true, false, true,
         ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
-      private static final String WS_EXTRA = "org.eclipse.pde.ws.extra";
-
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        return getChoices(Platform.knownWSValues(), WS_EXTRA);
+        return Configuration.Choices.forWS();
       }
     });
   }
@@ -155,12 +151,10 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
             "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
         null, null)
     {
-      private static final String ARCH_EXTRA = "org.eclipse.pde.arch.extra";
-
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        return getChoices(Platform.knownOSArchValues(), ARCH_EXTRA);
+        return Configuration.Choices.forArch();
       }
     });
   }

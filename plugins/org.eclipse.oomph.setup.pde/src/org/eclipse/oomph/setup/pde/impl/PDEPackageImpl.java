@@ -296,6 +296,8 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     createRuleVariableAnnotations();
     // http://www.eclipse.org/oomph/setup/RemoteResource
     createRemoteResourceAnnotations();
+    // http://www.eclipse.org/oomph/setup/Redirect
+    createRedirectAnnotations();
   }
 
   /**
@@ -397,6 +399,18 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
   protected void createRemoteResourceAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/RemoteResource";
+    addAnnotation(getAPIBaselineTask_RemoteURI(), source, new String[] {});
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Redirect</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRedirectAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Redirect";
     addAnnotation(getAPIBaselineTask_RemoteURI(), source, new String[] {});
   }
 

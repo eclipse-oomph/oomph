@@ -2286,7 +2286,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
           SetupContext setupContext = SetupContext.create(version, stream);
           URIConverter uriConverter = getEditingDomain().getResourceSet().getURIConverter();
+
           SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(uriConverter, SetupPrompter.CANCEL, trigger, setupContext, stream);
+          setupTaskPerformer.redirectTriggeredSetupTasks();
+
           List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
 
           if (!triggeredSetupTasks.isEmpty())

@@ -43,6 +43,15 @@ public interface P2Factory extends EFactory
   ProfileDefinition createProfileDefinition();
 
   /**
+   * Returns a new object of class '<em>Configuration</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Configuration</em>'.
+   * @generated
+   */
+  Configuration createConfiguration();
+
+  /**
    * Returns a new object of class '<em>Requirement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

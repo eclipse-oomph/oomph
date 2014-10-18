@@ -126,6 +126,31 @@ public class P2ItemProviderAdapterFactory extends P2AdapterFactory implements Co
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.p2.Configuration} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ConfigurationItemProvider configurationItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.p2.Configuration}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createConfigurationAdapter()
+  {
+    if (configurationItemProvider == null)
+    {
+      configurationItemProvider = new ConfigurationItemProvider(this);
+    }
+
+    return configurationItemProvider;
+  }
+
+  /**
    * This keeps track of the one adapter used for all {@link org.eclipse.oomph.p2.Requirement} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -345,6 +370,10 @@ public class P2ItemProviderAdapterFactory extends P2AdapterFactory implements Co
     {
       profileDefinitionItemProvider.dispose();
     }
+    if (configurationItemProvider != null)
+    {
+      configurationItemProvider.dispose();
+    }
     if (requirementItemProvider != null)
     {
       requirementItemProvider.dispose();
@@ -412,6 +441,8 @@ public class P2ItemProviderAdapterFactory extends P2AdapterFactory implements Co
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, P2Factory.eINSTANCE.createProfileDefinition()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, P2Factory.eINSTANCE.createConfiguration()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, P2Factory.eINSTANCE.createRequirement()));
 

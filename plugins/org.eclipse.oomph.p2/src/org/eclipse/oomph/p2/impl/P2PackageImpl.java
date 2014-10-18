@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.impl;
 
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.p2.Configuration;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.ProfileDefinition;
@@ -46,6 +47,13 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * @generated
    */
   private EClass profileDefinitionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass configurationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -223,6 +231,46 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
   public EOperation getProfileDefinition__SetRepositories__EList()
   {
     return profileDefinitionEClass.getEOperations().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getConfiguration()
+  {
+    return configurationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getConfiguration_WS()
+  {
+    return (EAttribute)configurationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getConfiguration_OS()
+  {
+    return (EAttribute)configurationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getConfiguration_Arch()
+  {
+    return (EAttribute)configurationEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -445,6 +493,11 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     createEOperation(profileDefinitionEClass, PROFILE_DEFINITION___SET_REQUIREMENTS__ELIST);
     createEOperation(profileDefinitionEClass, PROFILE_DEFINITION___SET_REPOSITORIES__ELIST);
 
+    configurationEClass = createEClass(CONFIGURATION);
+    createEAttribute(configurationEClass, CONFIGURATION__WS);
+    createEAttribute(configurationEClass, CONFIGURATION__OS);
+    createEAttribute(configurationEClass, CONFIGURATION__ARCH);
+
     requirementEClass = createEClass(REQUIREMENT);
     createEAttribute(requirementEClass, REQUIREMENT__ID);
     createEAttribute(requirementEClass, REQUIREMENT__NAME);
@@ -507,6 +560,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
 
     // Add supertypes to classes
     profileDefinitionEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    configurationEClass.getESuperTypes().add(theBasePackage.getModelElement());
     requirementEClass.getESuperTypes().add(theBasePackage.getModelElement());
     repositoryListEClass.getESuperTypes().add(theBasePackage.getModelElement());
     repositoryEClass.getESuperTypes().add(theBasePackage.getModelElement());
@@ -525,6 +579,14 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
 
     op = initEOperation(getProfileDefinition__SetRepositories__EList(), null, "setRepositories", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getRepository(), "repositories", 0, -1, IS_UNIQUE, IS_ORDERED);
+
+    initEClass(configurationEClass, Configuration.class, "Configuration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getConfiguration_WS(), ecorePackage.getEString(), "wS", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getConfiguration_OS(), ecorePackage.getEString(), "oS", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getConfiguration_Arch(), ecorePackage.getEString(), "arch", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(requirementEClass, Requirement.class, "Requirement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getRequirement_ID(), ecorePackage.getEString(), "iD", null, 1, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE,
@@ -580,6 +642,8 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     createLabelProviderAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
+    // http://www.eclipse.org/oomph/setup/Redirect
+    createRedirectAnnotations();
   }
 
   /**
@@ -606,9 +670,23 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getProfileDefinition_Requirements(), source, new String[] { "name", "requirement" });
     addAnnotation(getProfileDefinition_Repositories(), source, new String[] { "name", "repository" });
+    addAnnotation(getConfiguration_WS(), source, new String[] { "kind", "attribute", "name", "ws" });
+    addAnnotation(getConfiguration_OS(), source, new String[] { "kind", "attribute", "name", "os" });
     addAnnotation(getRequirement_ID(), source, new String[] { "kind", "attribute", "name", "id" });
     addAnnotation(getRepositoryList_Repositories(), source, new String[] { "name", "repository" });
     addAnnotation(getRepository_URL(), source, new String[] { "kind", "attribute", "name", "url" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Redirect</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRedirectAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    addAnnotation(getRepository_URL(), source, new String[] {});
   }
 
 } // P2PackageImpl
