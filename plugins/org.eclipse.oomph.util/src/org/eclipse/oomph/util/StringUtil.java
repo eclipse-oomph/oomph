@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.util;
 
+import org.eclipse.emf.common.util.URI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -224,5 +226,19 @@ public final class StringUtil
     }
 
     return builder.toString();
+  }
+
+  public static String toOSString(String uri)
+  {
+    if (!isEmpty(uri))
+    {
+      URI emfURI = URI.createURI(uri);
+      if (emfURI.isFile())
+      {
+        uri = emfURI.toFileString();
+      }
+    }
+
+    return uri;
   }
 }
