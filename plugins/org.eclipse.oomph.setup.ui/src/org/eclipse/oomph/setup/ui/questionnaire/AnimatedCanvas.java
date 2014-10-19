@@ -290,11 +290,13 @@ public class AnimatedCanvas extends Canvas
     Image buffer = new Image(getDisplay(), getBounds());
 
     GC bufferGC = new GC(buffer);
+    bufferGC.setAdvanced(true);
     bufferGC.setBackground(canvasGC.getBackground());
     bufferGC.fillRectangle(buffer.getBounds());
 
     for (Animator animator : getAnimators())
     {
+      bufferGC.setTextAntialias(SWT.ON);
       animator.paint(bufferGC, buffer);
     }
 
@@ -418,6 +420,17 @@ public class AnimatedCanvas extends Canvas
 
     protected final Font createFont(int pixelHeight)
     {
+      return createFont(pixelHeight, 0);
+    }
+
+    protected final Font createFont(int pixelHeight, int pixelWidth, String... testStrings)
+    {
+      if (testStrings.length == 0)
+      {
+        pixelWidth = Integer.MAX_VALUE;
+        testStrings = new String[] { "Ag" };
+      }
+
       Display display = getDisplay();
       GC fontGC = new GC(display);
 
@@ -435,8 +448,8 @@ public class AnimatedCanvas extends Canvas
 
           Font font = new Font(display, fontData);
           fontGC.setFont(font);
-          int height = fontGC.stringExtent("Ag").y;
-          if (height <= pixelHeight)
+
+          if (isFontSmallEnough(pixelHeight, pixelWidth, fontGC, testStrings))
           {
             resources.add(font);
             return font;
@@ -452,6 +465,20 @@ public class AnimatedCanvas extends Canvas
       {
         fontGC.dispose();
       }
+    }
+
+    private boolean isFontSmallEnough(int pixelHeight, int pixelWidth, GC fontGC, String[] testStrings)
+    {
+      for (String testString : testStrings)
+      {
+        Point extent = fontGC.stringExtent(testString);
+        if (extent.y > pixelHeight || extent.x > pixelWidth)
+        {
+          return false;
+        }
+      }
+
+      return true;
     }
 
     protected final void setSize(int width, int height)

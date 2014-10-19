@@ -20,22 +20,33 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
  */
 public class ExitShell extends AnimatedShell<Boolean>
 {
+  public static final int NONE = -1;
+
   private static final int WIDTH = 550;
 
   private static final int HEIGHT = 450;
 
-  public ExitShell(Shell parent)
-  {
-    super(parent, SWT.APPLICATION_MODAL);
+  private static final int BORDER = 30;
 
-    Rectangle bounds = parent.getBounds();
+  private static final int BIG_FONT_PX = GearAnimator.BIG_FONT_PX;
+
+  private static final String[] LINES = { "This one-time questionnaire will not automatically pop up again.",
+      "You can take the questionnaire later via the Oomph Setup preferences:" };
+
+  private final GearAnimator gearAnimator;
+
+  public ExitShell(GearAnimator gearAnimator)
+  {
+    super(gearAnimator.getCanvas().getShell(), SWT.APPLICATION_MODAL);
+    this.gearAnimator = gearAnimator;
+
+    Rectangle bounds = gearAnimator.getCanvas().getShell().getBounds();
     setLocation(bounds.x + (bounds.width - WIDTH) / 2, bounds.y + (bounds.height - HEIGHT) / 2);
     setSize(WIDTH, HEIGHT);
   }
@@ -49,28 +60,21 @@ public class ExitShell extends AnimatedShell<Boolean>
     getCanvas().addAnimator(animator);
   }
 
+  private static boolean shouldShowOverlay()
+  {
+    return (System.currentTimeMillis() / 500 & 1) == 1;
+  }
+
   /**
    * @author Eike Stepper
    */
-  public static class ExitAnimator extends Animator
+  public class ExitAnimator extends Animator
   {
-    public static final int NONE = -1;
-
-    private static final int BORDER = 30;
-
-    private static final int BIG_FONT_PX = GearAnimator.BIG_FONT_PX;
-
-    private static final int NORMAL_FONT_PX = 20;
-
-    private static Color DARK_GRAY;
-
     private boolean oldShowOverlay;
 
-    private Font bigFont;
+    private Font font;
 
-    private Font hoverFont;
-
-    private Font normalFont;
+    private int fontPx;
 
     private Color purple;
 
@@ -89,7 +93,6 @@ public class ExitShell extends AnimatedShell<Boolean>
     public ExitAnimator(Display display)
     {
       super(display);
-      DARK_GRAY = display.getSystemColor(SWT.COLOR_DARK_GRAY);
     }
 
     public final int getChoice()
@@ -101,12 +104,10 @@ public class ExitShell extends AnimatedShell<Boolean>
     protected void init()
     {
       super.init();
-      bigFont = createFont(BIG_FONT_PX);
-      hoverFont = createFont(BIG_FONT_PX + 6);
-      normalFont = createFont(NORMAL_FONT_PX);
+      font = createFont(GearAnimator.NORMAL_FONT_PX + 6, WIDTH - 2 * BORDER, LINES);
+      fontPx = font.getFontData()[0].getHeight();
 
       purple = createColor(43, 34, 84);
-
       image = loadImage("questionnaire/exit_page.png");
       image_ovr = loadImage("questionnaire/exit_page_ovr.png");
     }
@@ -178,16 +179,15 @@ public class ExitShell extends AnimatedShell<Boolean>
       int cX = WIDTH / 2;
 
       gc.setForeground(purple);
-      gc.setFont(bigFont);
-      drawText(gc, cX, BORDER + NORMAL_FONT_PX, "Exit Questionnaire?");
+      gc.setFont(gearAnimator.getBigFont());
+      drawText(gc, cX, BORDER + fontPx, "Exit Questionnaire?");
 
-      gc.setForeground(DARK_GRAY);
-      gc.setFont(normalFont);
-      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX, "This one-time questionnaire will not automatically pop up again.");
-      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX + NORMAL_FONT_PX, "You can take the questionnaire later via the Oomph Setup preferences:");
+      gc.setFont(font);
+      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX, LINES[0]);
+      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX + fontPx + 8, LINES[1]);
 
       int x = cX - image.getBounds().width / 2;
-      int y = 2 * BORDER + BIG_FONT_PX + 2 * NORMAL_FONT_PX;
+      int y = 2 * BORDER + BIG_FONT_PX + 2 * (fontPx + 8);
       gc.drawImage(image, x, y);
 
       oldShowOverlay = shouldShowOverlay();
@@ -196,13 +196,13 @@ public class ExitShell extends AnimatedShell<Boolean>
         gc.drawImage(image_ovr, x + 133, y + 105);
       }
 
-      int answerY = HEIGHT - BORDER - NORMAL_FONT_PX;
+      int answerY = HEIGHT - BORDER - fontPx;
       gc.setForeground(purple);
 
-      gc.setFont(hover == 0 ? hoverFont : bigFont);
+      gc.setFont(hover == 0 ? gearAnimator.getHoverFont() : gearAnimator.getBigFont());
       boxes[0] = drawText(gc, cX - 3 * BORDER, answerY, "Exit Now");
 
-      gc.setFont(hover == 1 ? hoverFont : bigFont);
+      gc.setFont(hover == 1 ? gearAnimator.getHoverFont() : gearAnimator.getBigFont());
       boxes[1] = drawText(gc, cX + 3 * BORDER, answerY, "Go Back");
 
       oldHover = hover;
@@ -220,11 +220,6 @@ public class ExitShell extends AnimatedShell<Boolean>
       }
 
       return NONE;
-    }
-
-    private static boolean shouldShowOverlay()
-    {
-      return (System.currentTimeMillis() / 500 & 1) == 1;
     }
   }
 }

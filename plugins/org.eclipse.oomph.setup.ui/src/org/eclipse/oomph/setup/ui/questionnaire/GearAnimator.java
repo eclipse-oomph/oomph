@@ -60,7 +60,12 @@ public class GearAnimator extends Animator
 
   private static final int CHOICES = NEXT - 1;
 
+  private static final String[] TITLES = { "Welcome to Eclipse Oomph", "Refresh Resources Automatically?", "Show Line Numbers in Editors?",
+      "Check Spelling in Text Editors?", "Execute Jobs in Background?", "Encode Text Files with UTF-8?", "Enable Preference Recorder?" };
+
   static final int BIG_FONT_PX = 48;
+
+  static final int NORMAL_FONT_PX = (int)(BIG_FONT_PX * .75);
 
   private static Color WHITE;
 
@@ -156,9 +161,9 @@ public class GearAnimator extends Animator
   protected void init()
   {
     super.init();
-    bigFont = createFont(BIG_FONT_PX);
-    hoverFont = createFont(BIG_FONT_PX + 6);
-    normalFont = createFont((int)(BIG_FONT_PX * .75));
+    bigFont = createFont(BIG_FONT_PX, PAGE_WIDTH, TITLES);
+    hoverFont = createFont(BIG_FONT_PX + 6, PAGE_WIDTH, TITLES);
+    normalFont = createFont(NORMAL_FONT_PX, PAGE_WIDTH, TITLES);
     numberFont = createFont(24);
 
     exit = loadImage("questionnaire/exit.png");
@@ -206,13 +211,13 @@ public class GearAnimator extends Animator
 
     purple = createColor(43, 34, 84);
 
-    pages[0] = new ImagePage(0, "Welcome to Eclipse Oomph", 0, 0, 0, new TextAnswer(""));
-    pages[1] = new PreferencePage(1, "Refresh Resources Automatically?", 0, 5, 29, "/instance/org.eclipse.core.resources/refresh.lightweight.enabled");
-    pages[2] = new PreferencePage(2, "Show Line Numbers in Editors?", 1, 19, 30, "/instance/org.eclipse.ui.editors/lineNumberRuler");
-    pages[3] = new PreferencePage(3, "Check Spelling in Text Editors?", 1, 186, 37, "/instance/org.eclipse.ui.editors/spellingEnabled");
-    pages[4] = new PreferencePage(4, "Execute Jobs in Background?", 0, 23, 160, "/instance/org.eclipse.ui.workbench/RUN_IN_BACKGROUND");
-    pages[5] = new PreferencePage(5, "Encode Text Files with UTF-8?", 0, 181, 95, "/instance/org.eclipse.core.resources/encoding", "UTF-8", null);
-    pages[6] = new PreferencePage(6, "Enable Preference Recorder?", 1, 57, 82, RECORDER_PREFERENCE_KEY);
+    pages[0] = new ImagePage(0, TITLES[0], 0, 0, 0, new TextAnswer(""));
+    pages[1] = new PreferencePage(1, TITLES[1], 0, 5, 29, "/instance/org.eclipse.core.resources/refresh.lightweight.enabled");
+    pages[2] = new PreferencePage(2, TITLES[2], 1, 19, 30, "/instance/org.eclipse.ui.editors/lineNumberRuler");
+    pages[3] = new PreferencePage(3, TITLES[3], 1, 186, 37, "/instance/org.eclipse.ui.editors/spellingEnabled");
+    pages[4] = new PreferencePage(4, TITLES[4], 0, 23, 160, "/instance/org.eclipse.ui.workbench/RUN_IN_BACKGROUND");
+    pages[5] = new PreferencePage(5, TITLES[5], 0, 181, 95, "/instance/org.eclipse.core.resources/encoding", "UTF-8", null);
+    pages[6] = new PreferencePage(6, TITLES[6], 1, 57, 82, RECORDER_PREFERENCE_KEY);
     pages[7] = new SummaryPage(7, "Summary");
   }
 
@@ -236,6 +241,21 @@ public class GearAnimator extends Animator
     }
 
     super.dispose();
+  }
+
+  public Font getBigFont()
+  {
+    return bigFont;
+  }
+
+  public Font getHoverFont()
+  {
+    return hoverFont;
+  }
+
+  public Font getNormalFont()
+  {
+    return normalFont;
   }
 
   public final void addListener(Listener listener)
@@ -527,7 +547,7 @@ public class GearAnimator extends Animator
     AnimatedCanvas canvas = getCanvas();
     canvas.redraw();
 
-    ExitShell exitShell = new ExitShell(canvas.getShell());
+    ExitShell exitShell = new ExitShell(this);
     Boolean result = exitShell.openModal();
 
     if (result == true)
