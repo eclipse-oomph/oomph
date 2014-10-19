@@ -90,6 +90,11 @@
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
+            id="org.eclipse.oomph.setup.editor.perform.startup"
+            name="Perform Setup Tasks (Startup)">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
             id="org.eclipse.oomph.setup.editor.importProjects"
             name="Import Projects">
       </command>
@@ -131,6 +136,17 @@
       <handler
             class="org.eclipse.oomph.setup.presentation.handlers.PerformHandler"
             commandId="org.eclipse.oomph.setup.editor.perform">
+         <enabledWhen>
+            <test
+                  forcePluginActivation="true"
+                  property="org.eclipse.oomph.setup.ui.starting"
+                  value="false">
+            </test>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="org.eclipse.oomph.setup.presentation.handlers.PerformHandler$StartupPerformHandler"
+            commandId="org.eclipse.oomph.setup.editor.perform.startup">
          <enabledWhen>
             <test
                   forcePluginActivation="true"
@@ -188,6 +204,19 @@
                icon="icons/update.gif"
                label="Perform Setup Tasks..."
                style="push">
+         </command>
+         <command
+               commandId="org.eclipse.oomph.setup.editor.perform.startup"
+               icon="icons/update.gif"
+               label="Perform Setup Tasks (Startup)..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <systemTest
+                     property="oomph.setup.show.perform.startup"
+                     value="true">
+               </systemTest>
+            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.oomph.setup.editor.importProjects"

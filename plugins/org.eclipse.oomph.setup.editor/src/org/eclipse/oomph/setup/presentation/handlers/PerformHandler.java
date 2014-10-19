@@ -18,14 +18,28 @@ import org.eclipse.oomph.ui.UIUtil;
  */
 public class PerformHandler extends AbstractDropdownItemHandler
 {
+  protected boolean manual;
+
   public PerformHandler()
   {
     super("update", "Perform Setup Tasks...");
+    manual = true;
   }
 
   public void run()
   {
-    SetupWizard updater = new SetupWizard.Updater(true);
+    SetupWizard updater = new SetupWizard.Updater(manual);
     updater.openDialog(UIUtil.getShell());
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class StartupPerformHandler extends PerformHandler
+  {
+    public StartupPerformHandler()
+    {
+      manual = false;
+    }
   }
 }

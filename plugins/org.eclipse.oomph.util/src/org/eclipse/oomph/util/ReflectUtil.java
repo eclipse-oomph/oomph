@@ -130,6 +130,16 @@ public final class ReflectUtil
     }
   }
 
+  public static Object invokeMethod(String methodName, Object target)
+  {
+    if (target instanceof Class)
+    {
+      return invokeMethod(getMethod((Class<?>)target, methodName), null);
+    }
+
+    return invokeMethod(getMethod(target.getClass(), methodName), target);
+  }
+
   public static Field getField(Class<?> c, String fieldName)
   {
     try
@@ -185,6 +195,18 @@ public final class ReflectUtil
     }
 
     return getValue(getField(target.getClass(), fieldName), target);
+  }
+
+  public static void setValue(String fieldName, Object target, Object value)
+  {
+    if (target instanceof Class)
+    {
+      setValue(getField((Class<?>)target, fieldName), null, value);
+    }
+    else
+    {
+      setValue(getField(target.getClass(), fieldName), target, value);
+    }
   }
 
   public static void setValue(Field field, Object target, Object value)
