@@ -376,12 +376,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static void performQuestionnaire(final Shell parentShell, boolean force)
   {
-    // Temporarily disable the automatic questionaire until we got feedback from Mac (Retina) users.
-    if (!force)
-    {
-      return;
-    }
-
     RecorderTransaction transaction = RecorderTransaction.open();
 
     try
