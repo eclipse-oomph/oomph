@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.p2.core;
 
+import org.eclipse.oomph.p2.RepositoryType;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.repository.IRepository;
@@ -44,14 +47,29 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
 
   public final synchronized R getRepository(URI location)
   {
-    RepositoryProvider<M, R, T> provider = providers.get(location);
-    if (provider == null)
-    {
-      provider = createProvider(repositoryManager, location);
-      providers.put(location, provider);
-    }
-
+    RepositoryProvider<M, R, T> provider = getProvider(location);
     return provider.getRepository();
+  }
+
+  public final synchronized R createRepository(URI location, String name, String type, Map<String, String> properties)
+  {
+    RepositoryProvider<M, R, T> provider = createProvider(location);
+    return provider.createRepository(name, type, properties);
+  }
+
+  public final void removeAllContent(URI location, IProgressMonitor monitor)
+  {
+    RepositoryProvider<M, R, T> provider = getProvider(location);
+    provider.removeAllContent(monitor);
+  }
+
+  public final void dispose(URI location)
+  {
+    RepositoryProvider<M, R, T> provider = providers.remove(location);
+    if (provider != null)
+    {
+      provider.dispose();
+    }
   }
 
   public final void dispose()
@@ -64,7 +82,29 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
     providers.clear();
   }
 
+  public abstract RepositoryType getRepositoryType();
+
   protected abstract RepositoryProvider<M, R, T> createProvider(M repositoryManager, URI location);
+
+  private RepositoryProvider<M, R, T> createProvider(URI location)
+  {
+    dispose(location);
+
+    RepositoryProvider<M, R, T> provider = createProvider(repositoryManager, location);
+    providers.put(location, provider);
+    return provider;
+  }
+
+  private RepositoryProvider<M, R, T> getProvider(URI location)
+  {
+    RepositoryProvider<M, R, T> provider = providers.get(location);
+    if (provider == null)
+    {
+      provider = createProvider(location);
+    }
+
+    return provider;
+  }
 
   /**
    * @author Eike Stepper
@@ -74,6 +114,12 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
     public Metadata(IMetadataRepositoryManager repositoryManager)
     {
       super(repositoryManager);
+    }
+
+    @Override
+    public RepositoryType getRepositoryType()
+    {
+      return RepositoryType.METADATA;
     }
 
     @Override
@@ -92,6 +138,12 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
     public Artifact(IArtifactRepositoryManager repositoryManager)
     {
       super(repositoryManager);
+    }
+
+    @Override
+    public RepositoryType getRepositoryType()
+    {
+      return RepositoryType.ARTIFACT;
     }
 
     @Override

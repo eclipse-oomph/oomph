@@ -11,7 +11,9 @@
 package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.P2Exception;
+import org.eclipse.oomph.p2.RepositoryType;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
@@ -24,6 +26,7 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.net.URI;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -72,6 +75,40 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
     return repository;
   }
 
+  public final synchronized R createRepository(String name, String type, Map<String, String> properties)
+  {
+    try
+    {
+      existing = repositoryManager.contains(location);
+      repository = createRepository(repositoryManager, location, name, type, properties);
+    }
+    catch (ProvisionException ex)
+    {
+      throw new P2Exception(ex);
+    }
+
+    return repository;
+  }
+
+  public void removeAllContent(IProgressMonitor monitor)
+  {
+    R repository = null;
+
+    try
+    {
+      repository = getRepository();
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    if (repository != null)
+    {
+      removeAllContent(repository, monitor);
+    }
+  }
+
   public final boolean isExisting()
   {
     return existing;
@@ -85,7 +122,14 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
     }
   }
 
+  public abstract RepositoryType getRepositoryType();
+
   protected abstract R loadRepository(M repositoryManager, URI location) throws ProvisionException, OperationCanceledException;
+
+  protected abstract R createRepository(M repositoryManager, URI location, String name, String type, Map<String, String> properties) throws ProvisionException,
+      OperationCanceledException;
+
+  protected abstract void removeAllContent(R repository, IProgressMonitor monitor);
 
   /**
    * @author Eike Stepper
@@ -98,10 +142,29 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
     }
 
     @Override
+    public RepositoryType getRepositoryType()
+    {
+      return RepositoryType.METADATA;
+    }
+
+    @Override
     protected IMetadataRepository loadRepository(IMetadataRepositoryManager repositoryManager, URI location) throws ProvisionException,
         OperationCanceledException
     {
       return repositoryManager.loadRepository(location, null);
+    }
+
+    @Override
+    protected IMetadataRepository createRepository(IMetadataRepositoryManager repositoryManager, URI location, String name, String type,
+        Map<String, String> properties) throws ProvisionException, OperationCanceledException
+    {
+      return repositoryManager.createRepository(location, name, type, properties);
+    }
+
+    @Override
+    protected void removeAllContent(IMetadataRepository repository, IProgressMonitor monitor)
+    {
+      repository.removeAll();
     }
   }
 
@@ -116,10 +179,29 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
     }
 
     @Override
+    public RepositoryType getRepositoryType()
+    {
+      return RepositoryType.ARTIFACT;
+    }
+
+    @Override
     protected IArtifactRepository loadRepository(IArtifactRepositoryManager repositoryManager, URI location) throws ProvisionException,
         OperationCanceledException
     {
       return repositoryManager.loadRepository(location, null);
+    }
+
+    @Override
+    protected IArtifactRepository createRepository(IArtifactRepositoryManager repositoryManager, URI location, String name, String type,
+        Map<String, String> properties) throws ProvisionException, OperationCanceledException
+    {
+      return repositoryManager.createRepository(location, name, type, properties);
+    }
+
+    @Override
+    protected void removeAllContent(IArtifactRepository repository, IProgressMonitor monitor)
+    {
+      repository.removeAll(monitor);
     }
   }
 }
