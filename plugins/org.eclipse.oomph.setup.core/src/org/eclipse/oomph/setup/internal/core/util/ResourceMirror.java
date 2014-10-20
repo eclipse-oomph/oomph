@@ -120,6 +120,11 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
   @Override
   protected boolean isCompleted(URI uri)
   {
+    if (resourceSet == null)
+    {
+      return true;
+    }
+
     synchronized (resourceSet)
     {
       Resource resource = resourceSet.getResource(uri, false);
