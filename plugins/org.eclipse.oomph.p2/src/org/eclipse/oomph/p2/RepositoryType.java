@@ -252,4 +252,14 @@ public enum RepositoryType implements Enumerator
     return literal;
   }
 
+  public boolean isMetadata()
+  {
+    return this == METADATA || this == COMBINED;
+  }
+
+  public boolean isArtifact()
+  {
+    return this == ARTIFACT || this == COMBINED;
+  }
+
 } // RepositoryType

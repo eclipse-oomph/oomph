@@ -103,6 +103,23 @@ public final class P2Util
     return result;
   }
 
+  @SuppressWarnings("all")
+  public static <T> Iterable<T> asIterable(final IQueryResult<T> queryResult)
+  {
+    if (queryResult instanceof Iterable<?>)
+    {
+      return queryResult;
+    }
+  
+    return new Iterable<T>()
+    {
+      public Iterator<T> iterator()
+      {
+        return queryResult.iterator();
+      }
+    };
+  }
+
   public static void mirrorRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
   {
     mirrorMetadataRepository(sourceURI, targetURI, filter, monitor);
@@ -150,23 +167,6 @@ public final class P2Util
         manager.removeRepository(uri);
       }
     }
-  }
-
-  @SuppressWarnings("all")
-  public static <T> Iterable<T> asIterable(final IQueryResult<T> queryResult)
-  {
-    if (queryResult instanceof Iterable<?>)
-    {
-      return queryResult;
-    }
-
-    return new Iterable<T>()
-    {
-      public Iterator<T> iterator()
-      {
-        return queryResult.iterator();
-      }
-    };
   }
 
   public static void mirrorArtifactRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
