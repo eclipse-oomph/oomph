@@ -10,10 +10,12 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -49,52 +51,111 @@ public abstract class Capture<T>
       }
     };
 
-    display.asyncExec(new Runnable()
+    UIUtil.asyncExec(new Runnable()
     {
       public void run()
       {
-        final Shell backgroundShell = backgroundDialog.getShell();
+        backgroundDialog.open();
+      }
+    });
+
+    while (backgroundDialog.getShell() == null)
+    {
+      try
+      {
+        Thread.sleep(100);
+      }
+      catch (InterruptedException ex)
+      {
+        // Ignore.
+      }
+    }
+
+    final Shell backgroundShell = backgroundDialog.getShell();
+
+    final T element = new WorkUnit<T, RuntimeException>()
+    {
+      @Override
+      protected T doExecute()
+      {
         backgroundShell.setMaximized(true);
+        return create(backgroundShell);
+      }
+    }.execute();
 
-        final T element = create(backgroundShell);
-        display.asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            preprocess(element);
-            AccessUtil.busyWait(2000, new Runnable()
-            {
-              public void run()
-              {
-                while (!isReady(element))
-                {
-                  try
-                  {
-                    Thread.sleep(1000);
-                  }
-                  catch (InterruptedException ex)
-                  {
-                    // Ignore.
-                  }
-                }
-              }
-            });
-
-            postProcess(element);
-            AccessUtil.busyWait(1000);
-
-            image.set(capture(element));
-
-            getShell(element).close();
-            backgroundShell.close();
-          }
-        });
-
+    UIUtil.asyncExec(new Runnable()
+    {
+      public void run()
+      {
         open(element);
       }
     });
 
-    backgroundDialog.open();
+    while (!new WorkUnit<Boolean, RuntimeException>()
+    {
+      @Override
+      protected Boolean doExecute()
+      {
+        return isReady(element);
+      }
+    }.execute())
+    {
+      try
+      {
+        Thread.sleep(100);
+      }
+      catch (InterruptedException ex)
+      {
+        // Ignore.
+      }
+    }
+
+    try
+    {
+      Thread.sleep(1000);
+    }
+    catch (InterruptedException ex)
+    {
+      // Ignore.
+    }
+
+    new WorkUnit.Void<RuntimeException>()
+    {
+      @Override
+      protected void doProcess()
+      {
+        preprocess(element);
+      }
+    }.execute();
+
+    new WorkUnit.Void<RuntimeException>()
+    {
+      @Override
+      protected void doProcess()
+      {
+        postProcess(element);
+      }
+    }.execute();
+
+    new WorkUnit.Void<RuntimeException>()
+    {
+      @Override
+      protected void doProcess()
+      {
+        image.set(capture(element));
+      }
+    }.execute();
+
+    new WorkUnit.Void<RuntimeException>()
+    {
+      @Override
+      protected void doProcess()
+      {
+        close(element);
+
+        backgroundShell.close();
+      }
+    }.execute();
 
     return image.get();
   }
@@ -106,7 +167,7 @@ public abstract class Capture<T>
 
   protected Image capture(T element)
   {
-    return AccessUtil.captureControl(getControl(element));
+    return AccessUtil.capture(getControl(element));
   }
 
   protected void preprocess(T element)
@@ -115,11 +176,32 @@ public abstract class Capture<T>
 
   protected boolean isReady(T element)
   {
+    Shell shell = getShell(element);
+    if (shell == null)
+    {
+      return false;
+    }
+
+    if (shell.getShells().length > 1)
+    {
+      return false;
+    }
+
     return true;
   }
 
   protected void postProcess(T element)
   {
+    Button defaultButton = getShell(element).getDefaultButton();
+    if (defaultButton != null)
+    {
+      ReflectUtil.invokeMethod(ReflectUtil.getMethod(Button.class, "setDefault", boolean.class), defaultButton, false);
+    }
+  }
+
+  protected void close(T element)
+  {
+    getShell(element).close();
   }
 
   public static abstract class Window<W extends org.eclipse.jface.window.Window> extends Capture<W>
