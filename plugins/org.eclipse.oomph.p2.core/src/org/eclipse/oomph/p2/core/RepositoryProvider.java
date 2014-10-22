@@ -15,9 +15,11 @@ import org.eclipse.oomph.p2.RepositoryType;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.repository.ICompositeRepository;
 import org.eclipse.equinox.p2.repository.IRepository;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
@@ -26,6 +28,7 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -112,6 +115,29 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
   public final boolean isExisting()
   {
     return existing;
+  }
+
+  public final boolean hasChild(URI childURI)
+  {
+    R repository = getRepository();
+    if (repository instanceof ICompositeRepository<?>)
+    {
+      ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)repository;
+      List<URI> children = compositeRepository.getChildren();
+
+      if (children.contains(childURI))
+      {
+        return true;
+      }
+
+      URI absolute = URIUtil.makeAbsolute(childURI, getLocation());
+      if (children.contains(absolute))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public final void dispose()

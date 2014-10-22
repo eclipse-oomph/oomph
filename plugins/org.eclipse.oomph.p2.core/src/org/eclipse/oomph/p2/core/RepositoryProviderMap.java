@@ -29,9 +29,9 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R extends IRepository<T>, T>
+public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R extends IRepository<T>, T, P extends RepositoryProvider<M, R, T>>
 {
-  private final Map<URI, RepositoryProvider<M, R, T>> providers = new HashMap<URI, RepositoryProvider<M, R, T>>();
+  private final Map<URI, P> providers = new HashMap<URI, P>();
 
   private final M repositoryManager;
 
@@ -45,36 +45,50 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
     return repositoryManager;
   }
 
+  public final P getRepositoryProvider(URI location)
+  {
+    P provider = providers.get(location);
+    if (provider == null)
+    {
+      provider = createProvider(location);
+    }
+
+    return provider;
+  }
+
   public final synchronized R getRepository(URI location)
   {
-    RepositoryProvider<M, R, T> provider = getProvider(location);
+    P provider = getRepositoryProvider(location);
     return provider.getRepository();
   }
 
   public final synchronized R createRepository(URI location, String name, String type, Map<String, String> properties)
   {
-    RepositoryProvider<M, R, T> provider = createProvider(location);
+    P provider = createProvider(location);
     return provider.createRepository(name, type, properties);
   }
 
-  public final void removeAllContent(URI location, IProgressMonitor monitor)
+  public final P removeAllContent(URI location, IProgressMonitor monitor)
   {
-    RepositoryProvider<M, R, T> provider = getProvider(location);
+    P provider = getRepositoryProvider(location);
     provider.removeAllContent(monitor);
+    return provider;
   }
 
-  public final void dispose(URI location)
+  public final P dispose(URI location)
   {
-    RepositoryProvider<M, R, T> provider = providers.remove(location);
+    P provider = providers.remove(location);
     if (provider != null)
     {
       provider.dispose();
     }
+
+    return provider;
   }
 
   public final void dispose()
   {
-    for (RepositoryProvider<M, R, T> provider : providers.values())
+    for (P provider : providers.values())
     {
       provider.dispose();
     }
@@ -84,32 +98,22 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
 
   public abstract RepositoryType getRepositoryType();
 
-  protected abstract RepositoryProvider<M, R, T> createProvider(M repositoryManager, URI location);
+  protected abstract P createProvider(M repositoryManager, URI location);
 
-  private RepositoryProvider<M, R, T> createProvider(URI location)
+  private P createProvider(URI location)
   {
     dispose(location);
 
-    RepositoryProvider<M, R, T> provider = createProvider(repositoryManager, location);
+    P provider = createProvider(repositoryManager, location);
     providers.put(location, provider);
-    return provider;
-  }
-
-  private RepositoryProvider<M, R, T> getProvider(URI location)
-  {
-    RepositoryProvider<M, R, T> provider = providers.get(location);
-    if (provider == null)
-    {
-      provider = createProvider(location);
-    }
-
     return provider;
   }
 
   /**
    * @author Eike Stepper
    */
-  public static final class Metadata extends RepositoryProviderMap<IMetadataRepositoryManager, IMetadataRepository, IInstallableUnit>
+  public static final class Metadata extends
+      RepositoryProviderMap<IMetadataRepositoryManager, IMetadataRepository, IInstallableUnit, RepositoryProvider.Metadata>
   {
     public Metadata(IMetadataRepositoryManager repositoryManager)
     {
@@ -123,8 +127,7 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
     }
 
     @Override
-    protected RepositoryProvider<IMetadataRepositoryManager, IMetadataRepository, IInstallableUnit> createProvider(
-        IMetadataRepositoryManager repositoryManager, URI location)
+    protected RepositoryProvider.Metadata createProvider(IMetadataRepositoryManager repositoryManager, URI location)
     {
       return new RepositoryProvider.Metadata(repositoryManager, location);
     }
@@ -133,7 +136,7 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
   /**
    * @author Eike Stepper
    */
-  public static final class Artifact extends RepositoryProviderMap<IArtifactRepositoryManager, IArtifactRepository, IArtifactKey>
+  public static final class Artifact extends RepositoryProviderMap<IArtifactRepositoryManager, IArtifactRepository, IArtifactKey, RepositoryProvider.Artifact>
   {
     public Artifact(IArtifactRepositoryManager repositoryManager)
     {
@@ -147,8 +150,7 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
     }
 
     @Override
-    protected RepositoryProvider<IArtifactRepositoryManager, IArtifactRepository, IArtifactKey> createProvider(IArtifactRepositoryManager repositoryManager,
-        URI location)
+    protected RepositoryProvider.Artifact createProvider(IArtifactRepositoryManager repositoryManager, URI location)
     {
       return new RepositoryProvider.Artifact(repositoryManager, location);
     }
