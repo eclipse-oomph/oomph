@@ -48,6 +48,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
@@ -376,6 +377,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static void performQuestionnaire(final Shell parentShell, boolean force)
   {
+    if (!force && Platform.OS_LINUX.equals(Platform.getOS()))
+    {
+      return;
+    }
+
     RecorderTransaction transaction = RecorderTransaction.open();
 
     try
