@@ -119,9 +119,11 @@ public class GearAnimator extends Animator
 
   private int buttonR;
 
-  private float angle;
+  private long startAnimation;
 
   private float speed;
+
+  private float angle;
 
   private boolean overflow;
 
@@ -135,7 +137,11 @@ public class GearAnimator extends Animator
 
   private Image pageBuffer;
 
+  private GC pageGC;
+
   private Image oldPageBuffer;
+
+  private GC oldPageGC;
 
   private boolean pageBufferUpdated;
 
@@ -161,6 +167,8 @@ public class GearAnimator extends Animator
   protected void init()
   {
     super.init();
+    Display display = getDisplay();
+
     bigFont = createFont(BIG_FONT_PX, PAGE_WIDTH, TITLES);
     hoverFont = createFont(BIG_FONT_PX + 6, PAGE_WIDTH, TITLES);
     normalFont = createFont(NORMAL_FONT_PX, PAGE_WIDTH, TITLES);
@@ -219,6 +227,14 @@ public class GearAnimator extends Animator
     pages[5] = new PreferencePage(5, TITLES[5], 0, 181, 95, "/instance/org.eclipse.core.resources/encoding", "UTF-8", null);
     pages[6] = new PreferencePage(6, TITLES[6], 1, 57, 82, RECORDER_PREFERENCE_KEY);
     pages[7] = new SummaryPage(7, "Summary");
+
+    pageBuffer = new Image(display, PAGE_WIDTH, PAGE_HEIGHT);
+    pageGC = new GC(pageBuffer);
+    pageGC.setAdvanced(true);
+
+    oldPageBuffer = new Image(display, PAGE_WIDTH, PAGE_HEIGHT);
+    oldPageGC = new GC(oldPageBuffer);
+    oldPageGC.setAdvanced(true);
   }
 
   @Override
@@ -240,6 +256,10 @@ public class GearAnimator extends Animator
       }
     }
 
+    pageGC.dispose();
+    pageBuffer.dispose();
+    oldPageGC.dispose();
+    oldPageBuffer.dispose();
     super.dispose();
   }
 
@@ -336,6 +356,11 @@ public class GearAnimator extends Animator
     Image tmpPageBuffer = oldPageBuffer;
     oldPageBuffer = pageBuffer;
     pageBuffer = tmpPageBuffer;
+
+    GC tmpPageGC = oldPageGC;
+    oldPageGC = pageGC;
+    pageGC = tmpPageGC;
+
     pageBufferUpdated = false;
 
     restart();
@@ -613,13 +638,20 @@ public class GearAnimator extends Animator
 
     if (speed >= ANGLE)
     {
+      startAnimation = 0;
       return needsRedraw;
     }
 
-    needsRedraw = true;
-    speed += .4f;
+    long now = System.currentTimeMillis();
+    if (startAnimation == 0)
+    {
+      startAnimation = now;
+    }
+
+    long timeSinceStart = now - startAnimation;
+    speed = timeSinceStart * ANGLE / 1900;
     angle += speed;
-    return needsRedraw;
+    return true;
   }
 
   @Override
@@ -818,21 +850,11 @@ public class GearAnimator extends Animator
 
   private Page updatePage()
   {
-    Display display = getDisplay();
-    if (pageBuffer == null)
-    {
-      pageBuffer = new Image(display, PAGE_WIDTH, PAGE_HEIGHT);
-    }
-
-    GC gc = new GC(pageBuffer);
-    gc.setAdvanced(true);
-    gc.setBackground(WHITE);
-    gc.fillRectangle(pageBuffer.getBounds());
+    pageGC.setBackground(WHITE);
+    pageGC.fillRectangle(pageBuffer.getBounds());
 
     Page page = getSelectedPage();
-    page.paint(gc);
-
-    gc.dispose();
+    page.paint(pageGC);
     return page;
   }
 

@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class AnimatedCanvas extends Canvas
 {
-  private static final int DEFAULT_TIMER_INTERVAL = 10;
+  private static final int DEFAULT_TIMER_INTERVAL = 0;
 
   private final Runnable runnable = new Runnable()
   {
@@ -281,8 +281,10 @@ public class AnimatedCanvas extends Canvas
     {
       redraw();
     }
-
-    getDisplay().timerExec(timerInterval, runnable);
+    else
+    {
+      scheduleRun();
+    }
   }
 
   protected void doPaint(GC canvasGC)
@@ -308,6 +310,13 @@ public class AnimatedCanvas extends Canvas
     {
       cover(canvasGC, 200);
     }
+
+    scheduleRun();
+  }
+
+  private void scheduleRun()
+  {
+    getDisplay().timerExec(timerInterval, runnable);
   }
 
   /**
