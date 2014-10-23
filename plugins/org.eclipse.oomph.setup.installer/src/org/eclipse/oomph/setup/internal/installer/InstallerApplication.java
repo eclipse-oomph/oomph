@@ -65,6 +65,34 @@ public class InstallerApplication implements IApplication
     try
     {
       final Display display = Display.getDefault();
+      Display.setAppName("Oomph-Installer");
+
+      // if (Platform.WS_COCOA.equals(Platform.getWS()))
+      // {
+      // Runnable about = new Runnable()
+      // {
+      // public void run()
+      // {
+      // }
+      // };
+      //
+      // Runnable preferences = new Runnable()
+      // {
+      // public void run()
+      // {
+      // }
+      // };
+      //
+      // Runnable quit = new Runnable()
+      // {
+      // public void run()
+      // {
+      // }
+      // };
+      //
+      // CocoaUtil.register(display, about, preferences, quit);
+      // }
+
       display.asyncExec(new Runnable()
       {
         public void run()
