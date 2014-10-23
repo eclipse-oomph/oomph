@@ -235,7 +235,7 @@ public class ProgressPage extends SetupWizardPage
   {
     super(PAGE_NAME);
     setTitle("Progress");
-    setDescription("Wait for the setup to complete, or cancel the progress indictor and press Back to make changes.");
+    setDescription("Wait for the setup to complete, or cancel the progress indicator and press Back to make changes.");
   }
 
   @Override
