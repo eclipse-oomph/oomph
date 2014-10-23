@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class AnimatedCanvas extends Canvas
 {
-  private static final int DEFAULT_TIMER_INTERVAL = 0;
+  private static final int DEFAULT_TIMER_INTERVAL = 10;
 
   private final Runnable runnable = new Runnable()
   {
