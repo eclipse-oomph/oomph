@@ -23,7 +23,7 @@
 	</target>
 
 	<target name="init.macosx" if="os.macosx">
-		<property name="launcher.exe" location="${target}/oomph" />
+		<property name="launcher.exe" location="${target}/oomph.app/Contents/MacOS/oomph" />
 		<property name="launcher.ini" location="${target}/oomph.app/Contents/MacOS/oomph.ini" />
 	</target>
 
@@ -50,6 +50,7 @@
 		<unzip dest="${target}" src="${source}" />
 		<echo message="-Doomph.installer.update.url=${git.clone.uri}/products/org.eclipse.oomph.setup.installer.product/target/repository${line.separator}" file="${launcher.ini}" append="true" />
 		<echo message="-Doomph.update.url=${git.clone.uri}/sites/org.eclipse.oomph.site/target/repository${line.separator}" file="${launcher.ini}" append="true" />
+		<chmod file="${launcher.exe}" perm="a+x" />
 	</target>
 
 	<target name="run" depends="init">
