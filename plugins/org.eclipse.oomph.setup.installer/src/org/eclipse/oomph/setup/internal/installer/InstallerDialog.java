@@ -100,6 +100,8 @@ public final class InstallerDialog extends SetupWizardDialog
 
   private IStatus updateError;
 
+  private String version;
+
   private Link versionLink;
 
   public InstallerDialog(Shell parentShell, boolean restarted)
@@ -308,6 +310,11 @@ public final class InstallerDialog extends SetupWizardDialog
     thread.start();
   }
 
+  public void showAbout()
+  {
+    new AboutDialog(getShell(), version).open();
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -345,7 +352,7 @@ public final class InstallerDialog extends SetupWizardDialog
     {
       try
       {
-        final String version = getProductVersion();
+        version = getProductVersion();
         if (version != null)
         {
           if (selfHosting)
@@ -369,7 +376,7 @@ public final class InstallerDialog extends SetupWizardDialog
                   @Override
                   public void widgetSelected(SelectionEvent e)
                   {
-                    new AboutDialog(getShell(), version).open();
+                    showAbout();
                   }
                 });
 

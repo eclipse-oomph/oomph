@@ -12,10 +12,12 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.ErrorDialog;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -65,33 +67,47 @@ public class InstallerApplication implements IApplication
     try
     {
       final Display display = Display.getDefault();
-      Display.setAppName("Oomph-Installer");
+      Display.setAppName(AbstractSetupDialog.SHELL_TEXT);
 
-      // if (Platform.WS_COCOA.equals(Platform.getWS()))
-      // {
-      // Runnable about = new Runnable()
-      // {
-      // public void run()
-      // {
-      // }
-      // };
-      //
-      // Runnable preferences = new Runnable()
-      // {
-      // public void run()
-      // {
-      // }
-      // };
-      //
-      // Runnable quit = new Runnable()
-      // {
-      // public void run()
-      // {
-      // }
-      // };
-      //
-      // CocoaUtil.register(display, about, preferences, quit);
-      // }
+      final InstallerDialog[] installerDialog = { null };
+      if (Platform.WS_COCOA.equals(Platform.getWS()))
+      {
+        Runnable about = new Runnable()
+        {
+          public void run()
+          {
+            if (installerDialog[0] != null)
+            {
+              installerDialog[0].showAbout();
+            }
+          }
+        };
+
+        Runnable preferences = new Runnable()
+        {
+          public void run()
+          {
+            if (installerDialog[0] != null)
+            {
+              ProxyPreferenceDialog proxyPreferenceDialog = new ProxyPreferenceDialog(installerDialog[0].getShell());
+              proxyPreferenceDialog.open();
+            }
+          }
+        };
+
+        Runnable quit = new Runnable()
+        {
+          public void run()
+          {
+            if (installerDialog[0] != null)
+            {
+              display.dispose();
+            }
+          }
+        };
+
+        CocoaUtil.register(display, about, preferences, quit);
+      }
 
       display.asyncExec(new Runnable()
       {
@@ -111,8 +127,8 @@ public class InstallerApplication implements IApplication
           org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
       agent.registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
 
-      InstallerDialog dialog = new InstallerDialog(null, restarted);
-      final int retcode = dialog.open();
+      installerDialog[0] = new InstallerDialog(null, restarted);
+      final int retcode = installerDialog[0].open();
       if (retcode == InstallerDialog.RETURN_RESTART)
       {
         try

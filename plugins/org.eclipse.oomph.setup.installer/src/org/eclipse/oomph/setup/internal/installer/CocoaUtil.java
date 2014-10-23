@@ -22,9 +22,6 @@ import java.lang.reflect.Method;
  */
 public final class CocoaUtil
 {
-  @SuppressWarnings("restriction")
-  private static final boolean LONG_POINTERS = org.eclipse.swt.internal.C.PTR_SIZEOF == 8;
-
   private static final int ABOUT_ITEM_INDEX = 0;
 
   private static final int PREFERENCES_ITEM_INDEX = 2;
@@ -38,36 +35,13 @@ public final class CocoaUtil
     return ReflectUtil.invokeMethod(method, target, arguments);
   }
 
-  private static long pointer(Method method, Object target, Object... arguments)
-  {
-    Object pointer = invoke(method, target, arguments);
-    if (pointer instanceof Long)
-    {
-      return (Long)pointer;
-    }
-
-    if (pointer instanceof Integer)
-    {
-      return (Integer)pointer;
-    }
-
-    return 0;
-  }
-
-  private static Object adjust(long value)
-  {
-    if (LONG_POINTERS)
-    {
-      return value;
-    }
-
-    return (int)value;
-  }
-
   public static void register(Display display, final Runnable about, final Runnable preferences, final Runnable quit)
   {
     try
     {
+      final Class<?> NSString = Class.forName("org.eclipse.swt.internal.cocoa.NSString");
+      final Method NSString_stringWith = ReflectUtil.getMethod(NSString, "stringWith", String.class);
+
       final Class<?> Callback = Class.forName("org.eclipse.swt.internal.Callback");
       final Method Callback_getAddress = ReflectUtil.getMethod(Callback, "getAddress");
       final Method Callback_dispose = ReflectUtil.getMethod(Callback, "dispose");
@@ -83,24 +57,21 @@ public final class CocoaUtil
 
       final Class<?> NSMenu = Class.forName("org.eclipse.swt.internal.cocoa.NSMenu");
       final Method NSMenu_itemAtIndex = ReflectUtil.getMethod(NSMenu, "itemAtIndex", long.class);
-      final Method NSMenu_submenu = ReflectUtil.getMethod(NSMenu, "submenu");
-
-      final Class<?> NSString = Class.forName("org.eclipse.swt.internal.cocoa.NSString");
-      final Method NSString_stringWith = ReflectUtil.getMethod(NSString, "stringWith", String.class);
 
       final Class<?> NSMenuItem = Class.forName("org.eclipse.swt.internal.cocoa.NSMenuItem");
-      final Method NSMenuItem_setTitle = ReflectUtil.getMethod(NSMenuItem, "setTitle", String.class);
+      final Method NSMenuItem_submenu = ReflectUtil.getMethod(NSMenuItem, "submenu");
+      final Method NSMenuItem_setTitle = ReflectUtil.getMethod(NSMenuItem, "setTitle", NSString);
       final Method NSMenuItem_setEnabled = ReflectUtil.getMethod(NSMenuItem, "setEnabled", boolean.class);
       final Method NSMenuItem_setAction = ReflectUtil.getMethod(NSMenuItem, "setAction", long.class);
 
-      final long aboutItemSelected = pointer(OS_sel_registerName, null, "aboutMenuItemSelected:");
-      final long preferencesItemSelected = pointer(OS_sel_registerName, null, "preferencesMenuItemSelected:");
-      final long quitItemSelected = pointer(OS_sel_registerName, null, "quitMenuItemSelected:");
+      final long aboutItemSelected = (Long)invoke(OS_sel_registerName, null, "aboutMenuItemSelected:");
+      final long preferencesItemSelected = (Long)invoke(OS_sel_registerName, null, "preferencesMenuItemSelected:");
+      final long quitItemSelected = (Long)invoke(OS_sel_registerName, null, "quitMenuItemSelected:");
 
-      Object target = new Object()
+      Object callbackTarget = new Object()
       {
         @SuppressWarnings("unused")
-        int actionProc(int id, int sel, int arg2)
+        long actionProc(long id, long sel, long arg2)
         {
           if (sel == aboutItemSelected)
           {
@@ -129,26 +100,26 @@ public final class CocoaUtil
       };
 
       @SuppressWarnings("restriction")
-      final org.eclipse.swt.internal.Callback callback = new org.eclipse.swt.internal.Callback(target, "actionProc", 3);
-      final long callbackPointer = pointer(Callback_getAddress, callback);
+      final org.eclipse.swt.internal.Callback callback = new org.eclipse.swt.internal.Callback(callbackTarget, "actionProc", 3);
+      final long callbackPointer = (Long)invoke(Callback_getAddress, callback);
       if (callbackPointer == 0)
       {
         throw new SWTException("No more callbacks");
       }
 
-      final long classPointer = pointer(OS_objc_lookUpClass, null, "SWTApplicationDelegate");
-      invoke(OS_class_addMethod, null, adjust(classPointer), adjust(aboutItemSelected), adjust(callbackPointer), TYPES);
-      invoke(OS_class_addMethod, null, adjust(classPointer), adjust(preferencesItemSelected), adjust(callbackPointer), TYPES);
-      invoke(OS_class_addMethod, null, adjust(classPointer), adjust(quitItemSelected), adjust(callbackPointer), TYPES);
+      final long classPointer = (Long)invoke(OS_objc_lookUpClass, null, "SWTApplicationDelegate");
+      invoke(OS_class_addMethod, null, classPointer, aboutItemSelected, callbackPointer, TYPES);
+      invoke(OS_class_addMethod, null, classPointer, preferencesItemSelected, callbackPointer, TYPES);
+      invoke(OS_class_addMethod, null, classPointer, quitItemSelected, callbackPointer, TYPES);
 
       final Object application = invoke(NSApplication_sharedApplication, null);
       final Object mainMenu = invoke(NSApplication_mainMenu, application);
-      final Object mainItem = invoke(NSMenu_itemAtIndex, mainMenu, adjust(0));
-      final Object appMenu = invoke(NSMenu_submenu, mainItem);
+      final Object mainItem = invoke(NSMenu_itemAtIndex, mainMenu, (long)0);
+      final Object appMenu = invoke(NSMenuItem_submenu, mainItem);
 
-      final Object aboutItem = invoke(NSMenu_itemAtIndex, appMenu, adjust(ABOUT_ITEM_INDEX));
-      final Object preferencesItem = invoke(NSMenu_itemAtIndex, appMenu, adjust(PREFERENCES_ITEM_INDEX));
-      final Object quitItem = invoke(NSMenu_itemAtIndex, appMenu, adjust(QUIT_ITEM_INDEX));
+      final Object aboutItem = invoke(NSMenu_itemAtIndex, appMenu, (long)ABOUT_ITEM_INDEX);
+      final Object preferencesItem = invoke(NSMenu_itemAtIndex, appMenu, (long)PREFERENCES_ITEM_INDEX);
+      final Object quitItem = invoke(NSMenu_itemAtIndex, appMenu, (long)QUIT_ITEM_INDEX);
 
       final String appName = Display.getAppName();
       if (appName != null)
@@ -160,9 +131,9 @@ public final class CocoaUtil
         invoke(NSMenuItem_setTitle, quitItem, quitLabel);
       }
 
-      invoke(NSMenuItem_setAction, aboutItem, adjust(aboutItemSelected));
-      invoke(NSMenuItem_setAction, preferencesItem, adjust(preferencesItemSelected));
-      invoke(NSMenuItem_setAction, quitItem, adjust(quitItemSelected));
+      invoke(NSMenuItem_setAction, aboutItem, aboutItemSelected);
+      invoke(NSMenuItem_setAction, preferencesItem, preferencesItemSelected);
+      invoke(NSMenuItem_setAction, quitItem, quitItemSelected);
 
       invoke(NSMenuItem_setEnabled, preferencesItem, true);
       invoke(NSMenuItem_setEnabled, quitItem, true);
