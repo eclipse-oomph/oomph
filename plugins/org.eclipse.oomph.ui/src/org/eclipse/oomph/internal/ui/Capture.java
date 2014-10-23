@@ -36,6 +36,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * @author Ed Merks
+ */
 public abstract class Capture<T>
 {
   protected abstract T create(Shell shell);
@@ -164,7 +167,6 @@ public abstract class Capture<T>
       protected void doProcess()
       {
         close(element);
-
         backgroundShell.close();
       }
     }.execute();
@@ -269,8 +271,9 @@ public abstract class Capture<T>
 
         gc.drawImage(decoration, imageBounds.x, imageBounds.y);
 
-        gc.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-        gc.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+        Display display = parent.getDisplay();
+        gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
+        gc.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
       }
     }
 
@@ -310,12 +313,14 @@ public abstract class Capture<T>
       Image image = toolItem.getImage();
       return new Image(image.getDevice(), image.getImageData());
     }
-    else if (widget instanceof Button)
+
+    if (widget instanceof Button)
     {
       Button button = (Button)widget;
       Shell shell = button.getShell();
       Color background = button.getBackground();
       boolean isEnabled = button.isEnabled();
+
       try
       {
         int style = button.getStyle();
@@ -334,32 +339,37 @@ public abstract class Capture<T>
         button.setEnabled(isEnabled);
       }
     }
-    else if (widget instanceof Text)
+
+    if (widget instanceof Text)
     {
       Text text = (Text)widget;
       return getImage(text);
     }
-    else if (widget instanceof Combo)
+
+    if (widget instanceof Combo)
     {
       Combo combo = (Combo)widget;
       return getImage(combo);
     }
-    else if (widget instanceof Control)
+
+    if (widget instanceof Control)
     {
       Control control = (Control)widget;
       return AccessUtil.capture(control);
     }
-    else
-    {
-      throw new UnsupportedOperationException("Unexpected widget " + widget);
-    }
+
+    throw new UnsupportedOperationException("Unexpected widget " + widget);
   }
 
   protected void close(T element)
   {
-    getShell(element).close();
+    Shell shell = getShell(element);
+    shell.close();
   }
 
+  /**
+   * @author Ed Merks
+   */
   public static abstract class Window<W extends org.eclipse.jface.window.Window> extends Capture<W>
   {
     @Override
@@ -375,6 +385,9 @@ public abstract class Capture<T>
     }
   }
 
+  /**
+   * @author Ed Merks
+   */
   public static abstract class Dialog<D extends org.eclipse.swt.widgets.Dialog> extends Capture<D>
   {
     @Override
