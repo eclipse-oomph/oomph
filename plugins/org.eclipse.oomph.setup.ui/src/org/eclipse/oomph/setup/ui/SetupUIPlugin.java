@@ -96,7 +96,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static Implementation plugin;
 
-  @SuppressWarnings("restriction")
   public SetupUIPlugin()
   {
     super(new ResourceLocator[] { org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE });

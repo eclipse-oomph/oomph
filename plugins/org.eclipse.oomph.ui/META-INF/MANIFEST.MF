@@ -18,6 +18,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.oomph.util;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
  org.eclipse.emf.edit.ui;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
  org.eclipse.emf.ecore.xmi;bundle-version="[2.10.0,3.0.0)"
-Export-Package: org.eclipse.oomph.internal.ui;version="1.0.0";x-friends:="org.eclipse.oomph.setup.editor,org.eclipse.oomph.targlets.editor",
+Export-Package: org.eclipse.oomph.internal.ui;version="1.0.0";
+  x-friends:="org.eclipse.oomph.setup.editor,
+   org.eclipse.oomph.targlets.editor,
+   org.eclipse.oomph.setup.installer,
+   org.eclipse.oomph.setup.ui",
  org.eclipse.oomph.ui;version="1.0.0"
 Eclipse-BuddyPolicy: dependent

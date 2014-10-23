@@ -52,18 +52,33 @@ import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Filter;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.InitialPhase;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Reorder;
 import org.eclipse.oomph.setup.internal.installer.InstallerDialog;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Outline
@@ -190,8 +205,10 @@ import org.eclipse.swt.widgets.Shell;
 @SuppressWarnings("restriction")
 public abstract class Everything
 {
-  /**
-   * @image SetupOverview.svg /org.eclipse.oomph.setup/model/Setup.aird?editor://org.eclipse.sirius.diagram.ui.part.SiriusDiagramEditorID?diagram#_hZdg0dbXEeOQ1Kyul5ZC9g
+  /*
+   * // TODO
+   * @image SetupOverview.svg
+   * /org.eclipse.oomph.setup/model/Setup.aird?editor://org.eclipse.sirius.diagram.ui.part.SiriusDiagramEditorID?diagram#_hZdg0dbXEeOQ1Kyul5ZC9g
    */
   protected abstract void setupOverviewDiagram();
 
@@ -1407,31 +1424,148 @@ public abstract class Everything
    * the wizards can function offline based on these cached instances.
    * </p>
    */
-  public static class SetupWizard
+  public abstract static class SetupWizard
   {
     /**
-     * <p>
-     * All the wizard's footers contain the following:
-     * <ul>
-     * <li>
-     * A <em>help</em> button
-     * to bring up this help.
-     * </li>
-     * <li>
-     * The usual wizard navigation buttons for back, next, finish, and cancel.
-     * </li>
-     * </ul>
-     * </p>
+     * @snippet image WizardFooter.images
+     * @description The wizard's footer contain the following controls:
+     * @callout
+     * {@link #helpDescription()}
+     * @callout
+     * {@link #backDescription()}
+     * @callout
+     * {@link #nextDescription()}
+     * @callout
+     * {@link #finishDescription()}
+     * @callout
+     * {@link #cancelDescription()}
      */
-    public static String wizardFooter;
+    public static Image[] wizardFooter()
+    {
+      InstallerWizard.CaptureInstallerWizard footer = InstallerWizard.CaptureInstallerWizard.getInstance();
+      return new Image[] { null, footer.helpImage, footer.backImage, footer.nextImage, footer.finishImage, footer.cancelImage };
+    }
+
+    /**
+     * @snippet html
+     * @description
+     * Brings up this help.
+     */
+    public abstract void helpDescription();
+
+    /**
+     * @snippet html
+     * @description
+     * Navigates to the previous page.
+     */
+    public abstract void backDescription();
+
+    /**
+     * @snippet html
+     * @description
+     * Navigates to the next page.
+     */
+    public abstract void nextDescription();
+
+    /**
+     * @snippet html
+     * @description
+     * Completes the wizard, performing any final actions.
+     */
+    public abstract void finishDescription();
+
+    /**
+     * @snippet html
+     * @description
+     * Closes the wizard, taking no further action.
+     */
+    public abstract void cancelDescription();
+
+    /**
+     * @ignore
+     */
+    public static abstract class CaptureSetupWizard extends Capture.Window<WizardDialog>
+    {
+      protected void postProcessProductPage(WizardDialog wizardDialog)
+      {
+        IWizardPage page = wizardDialog.getCurrentPage();
+
+        ((TreeViewer)ReflectUtil.getValue("productViewer", page)).getControl().setFocus();
+
+        ResourceSet resourceSet = ((org.eclipse.oomph.setup.ui.wizards.SetupWizard)page.getWizard()).getResourceSet();
+        ProductVersion luna = (ProductVersion)resourceSet
+            .getEObject(
+                URI.createURI("index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.standard']/@versions[name='luna']"),
+                false);
+        TreeViewer productViewer = (TreeViewer)ReflectUtil.getValue("productViewer", page);
+        productViewer.setSelection(new StructuredSelection(luna.getProduct()));
+        AccessUtil.busyWait(10);
+        ComboViewer versionComboViewer = (ComboViewer)ReflectUtil.getValue("versionComboViewer", page);
+        versionComboViewer.setSelection(new StructuredSelection(luna));
+        ComboViewer poolComboViewer = (ComboViewer)ReflectUtil.getValue("poolComboViewer", page);
+        poolComboViewer.getCombo().select(0);
+
+        Link link = AccessUtil.getWidget(wizardDialog.getShell(), "version");
+        link.setText("<a>1.0.0 Build 1234</a>");
+        link.getParent().layout(true);
+      }
+
+      protected void postProcessProjectPage(WizardDialog wizardDialog)
+      {
+        IWizardPage page = wizardDialog.getCurrentPage();
+        ResourceSet resourceSet = ((org.eclipse.oomph.setup.ui.wizards.SetupWizard)page.getWizard()).getResourceSet();
+        org.eclipse.oomph.setup.ProjectCatalog projectCatalog = (org.eclipse.oomph.setup.ProjectCatalog)resourceSet
+            .getResource(URI.createURI("index:/org.eclipse.projects.setup"), false).getContents().get(0);
+
+        TreeViewer projectViewer = (TreeViewer)ReflectUtil.getValue("projectViewer", page);
+        projectViewer.getControl().setFocus();
+
+        for (Iterator<org.eclipse.oomph.setup.Project> it = projectCatalog.getProjects().iterator(); it.hasNext();)
+        {
+          org.eclipse.oomph.setup.Project project = it.next();
+          String label = project.getLabel();
+          if (!"Oomph".equals(label))
+          {
+            if (!"<User>".equals(label))
+            {
+              it.remove();
+            }
+          }
+          else
+          {
+            projectViewer.setSelection(new StructuredSelection(project));
+          }
+        }
+
+        ReflectUtil.invokeMethod(ReflectUtil.getMethod(projectViewer, "fireDoubleClick", DoubleClickEvent.class), projectViewer, (Object)null);
+
+        super.postProcess(wizardDialog);
+      }
+
+      @Override
+      protected void postProcess(WizardDialog wizardDialog)
+      {
+        super.postProcess(wizardDialog);
+      }
+
+      protected Image getCalloutImage(int index)
+      {
+        Image image = ExtendedImageRegistry.INSTANCE.getImage(URI
+            .createPlatformPluginURI("org.eclipse.oomph.setup.doc/images/callout-" + index + ".png", false));
+        return new Image(image.getDevice(), image.getImageData());
+      }
+    }
 
     /**
      * Installer Wizard
      * <p>
      * The installer wizard is the basis for Oomph's bootstrap-{@link Trigger triggered}, automated installation and provisioning process.
-     * <br/>
      * {@link #installer()}
-     * <br/>
+     * </p>
+     * <p>
+     * {@link #installerFooter()}
+     * </p>
+     * <p>
      * The following downloads are available for this Eclipse RCP application.
      * <ul>
      * <li>
@@ -1456,82 +1590,170 @@ public abstract class Everything
     public static class InstallerWizard
     {
       /**
-       * <p>
-       * In addition to {@link SetupWizard#wizardFooter usual} controls,
-       * installer's footer contains the following:
-       * <ul>
-       * <li>
-       * A <em>network proxy settings</em> button
-       * to bring up the equivalent of Eclipse's <em>Window->Preferences...->General->Network Connections</em> preferences.
+       * @snippet image InstallerFooter.images
+       * @description The wizards's footer contains the following:
+       * @callout
+       * {@link #helpDescription()}
+       * @callout
+       * {@link #backDescription()}
+       * @callout
+       * {@link #nextDescription()}
+       * @callout
+       * {@link #finishDescription()}
+       * @callout
+       * {@link #cancelDescription()}
+       * @callout
+       * Brings up the equivalent of Eclipse's <em>Window->Preferences...->General->Network Connections</em> preferences.
        * Configuration the network proxies is a necessary first step for users working in an environment behind a fire wall,
        * none of Oomph's Internet-hosed resources will be accessible without that configuration.
        * Note that all the configured network settings will be propagated to the installed product.
-       * </li>
-       * <li>
-       * An <em>SSH2 settings</em> button
-       * to bring up the equivalent of Eclipse's <em>Window->Preferences...->General->Network Connections->SSH2</em> preferences.
+       * @callout
+       * Brings up the equivalent of Eclipse's <em>Window->Preferences...->General->Network Connections->SSH2</em> preferences.
        * Confirming the SSH2 settings during initial installation is a good idea when using any technologies that are based on SSH access,
        * i.e., if you plan to clone Git projects via public-key encryption.
        * Note that all the configured SSH2 settings will be propagated to the installed product.
-       * </li>
-       * <li>
-       * An <em>self update</em> button
-       * to update the installer itself to the last Internet-hosted version.
-       * The wizard always check whether updates are available.
+       * @callout
+       * Updates the installer itself to the last Internet-hosted version.
+       * The wizard always checks whether updates are available.
        * If so, the button is animated, otherwise it's disabled.
-       * </li>
-       * <li>
-       * A <em>build identifier</em> so you know which version you're currently using and can provide that information for problem reports.
-       * </li>
-       * </ul>
-       * </p>
+       * @callout
+       * Indicates which version, along with which build of that version, you're currently using.
+       * This is particularly useful when reporting problems.
        */
-      public static String wizardFooter;
+      public static Image[] installerFooter()
+      {
+        InstallerWizard.CaptureInstallerWizard instance = InstallerWizard.CaptureInstallerWizard.getInstance();
+        return new Image[] { null, instance.helpImage, instance.backImage, instance.nextImage, instance.finishImage, instance.cancelImage, instance.proxyImage,
+            instance.sshImage, instance.updateImage, instance.versionImage };
+      }
 
       /**
-       * @image InstallerWizard.png invoke://
+       * @ignore
+       */
+      private static class CaptureInstallerWizard extends CaptureSetupWizard
+      {
+        private static CaptureInstallerWizard instance;
+
+        public Image dialogImage;
+
+        public Image helpImage;
+
+        public Image backImage;
+
+        public Image nextImage;
+
+        public Image finishImage;
+
+        public Image cancelImage;
+
+        public Image proxyImage;
+
+        public Image sshImage;
+
+        public Image updateImage;
+
+        public Image versionImage;
+
+        public Image productPage;
+
+        protected Image refreshImage;
+
+        protected Image collapseImage;
+
+        protected Image catalogsImage;
+
+        protected Image filterImage;
+
+        protected Image versionChoiceImage;
+
+        protected Image poolsImage;
+
+        protected Image poolChoiceImage;
+
+        protected Image managePoolsImage;
+
+        protected Image productVersionImage;
+
+        protected Image productIDImage;
+
+        protected Image productNameImage;
+
+        protected Image treeImageDecoration;
+
+        public static CaptureInstallerWizard getInstance()
+        {
+          if (instance == null)
+          {
+            instance = new CaptureInstallerWizard();
+            instance.dialogImage = instance.capture();
+          }
+
+          return instance;
+        }
+
+        @Override
+        protected InstallerDialog create(Shell shell)
+        {
+          return new InstallerDialog(shell, false);
+        }
+
+        @Override
+        protected void postProcess(WizardDialog wizardDialog)
+        {
+          super.postProcess(wizardDialog);
+
+          postProcessProductPage(wizardDialog);
+        }
+
+        @Override
+        protected Image capture(WizardDialog wizardDialog)
+        {
+          Image result = super.capture(wizardDialog);
+
+          IWizardPage page = wizardDialog.getCurrentPage();
+
+          treeImageDecoration = getCalloutImage(1);
+          Control tree = ((TreeViewer)ReflectUtil.getValue("productViewer", page)).getControl();
+          productPage = capture(page, Collections.singletonMap(tree, instance.treeImageDecoration));
+
+          helpImage = getImage(wizardDialog, "help");
+
+          backImage = getImage(wizardDialog, "back");
+          nextImage = getImage(wizardDialog, "next");
+          finishImage = getImage(wizardDialog, "finish");
+          cancelImage = getImage(wizardDialog, "cancel");
+
+          proxyImage = getImage(wizardDialog, "proxy");
+          sshImage = getImage(wizardDialog, "ssh");
+          updateImage = getImage(wizardDialog, "update");
+
+          versionImage = getImage(wizardDialog, "version");
+
+          filterImage = getImage(wizardDialog, "filter");
+
+          collapseImage = getImage(wizardDialog, "collapse");
+          refreshImage = getImage(wizardDialog, "refresh");
+          catalogsImage = getImage(wizardDialog, "catalogs");
+
+          productIDImage = getImage(wizardDialog, "productID");
+          productVersionImage = getImage(wizardDialog, "productVersion");
+          productNameImage = getImage(wizardDialog, "productName");
+
+          versionChoiceImage = getImage(wizardDialog, "versionChoice");
+          poolsImage = getImage(wizardDialog, "pools");
+          poolChoiceImage = getImage(wizardDialog, "poolChoice");
+          managePoolsImage = getImage(wizardDialog, "managePools");
+
+          return result;
+        }
+      }
+
+      /**
+       * @snippet image InstallerWizard.images
        */
       public static Image installer()
       {
-        return new Capture.Window<InstallerDialog>()
-        {
-          @Override
-          protected InstallerDialog create(Shell shell)
-          {
-            return new InstallerDialog(shell, false);
-          }
-
-          @Override
-          protected boolean isReady(InstallerDialog installerDialog)
-          {
-            SetupWizardPage page = (SetupWizardPage)installerDialog.getCurrentPage();
-            return page.getCatalogManager().getIndex() != null;
-          }
-
-          @Override
-          protected void postProcess(InstallerDialog installerDialog)
-          {
-            org.eclipse.oomph.setup.ui.wizards.ProductPage page = (org.eclipse.oomph.setup.ui.wizards.ProductPage)installerDialog.getCurrentPage();
-            ResourceSet resourceSet = page.getWizard().getResourceSet();
-            ProductVersion luna = (ProductVersion)resourceSet
-                .getEObject(
-                    URI.createURI("index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.standard']/@versions[name='luna']"),
-                    false);
-            TreeViewer productViewer = (TreeViewer)ReflectUtil.getValue("productViewer", page);
-            productViewer.setSelection(new StructuredSelection(luna.getProduct()));
-            AccessUtil.busyWait(1000);
-            ComboViewer versionComboViewer = (ComboViewer)ReflectUtil.getValue("versionComboViewer", page);
-            versionComboViewer.setSelection(new StructuredSelection(luna));
-            ComboViewer poolComboViewer = (ComboViewer)ReflectUtil.getValue("poolComboViewer", page);
-            poolComboViewer.getCombo().select(0);
-          }
-
-          @SuppressWarnings("unused")
-          protected Control getPageControl(InstallerDialog installerDialog)
-          {
-            return installerDialog.getCurrentPage().getControl().getParent();
-          }
-        }.capture();
+        return CaptureInstallerWizard.getInstance().dialogImage;
       }
     }
 
@@ -1539,21 +1761,73 @@ public abstract class Everything
      * Project Import Wizard
      * <p>
      * The project wizard is the basis for Oomph's manually-{@link Trigger triggered}, updates to the automated installation and provisioning process.
-     * It is available in any running Eclipse product with Oomph installed
+     * {@link #projectImporter()}
+     * <p>
+     * {@link #wizardFooter()}
+     * </p>
+     * <p>
+     * The project wizard is available in any running Eclipse product with Oomph installed
      * via the <em>File->Import...->Oomph->Projects into Workspace</em>
      * and the <em>execution</em> tool bar button.
-     * It's purpose is to augment the {@link WorkspaceResource workspace}'s set of {@link Stream streams}.
+     * Its purpose is to augment the {@link WorkspaceResource workspace}'s set of {@link Stream streams}.
      * </p>
      */
     public static class ProjectWizard
     {
+      /**
+       * @snippet image ProjectImportWizard.images
+       */
+      public static Image projectImporter()
+      {
+        return CaptureProjectWizard.getInstance().projectWizard;
+      }
+
+      /**
+       * @ignore
+       */
+      public static class CaptureProjectWizard extends CaptureSetupWizard
+      {
+        private static CaptureProjectWizard instance;
+
+        public Image projectWizard;
+
+        public static CaptureProjectWizard getInstance()
+        {
+          if (instance == null)
+          {
+            instance = new CaptureProjectWizard();
+            instance.projectWizard = instance.capture();
+          }
+          return instance;
+        }
+
+        @Override
+        protected WizardDialog create(Shell shell)
+        {
+          return new WizardDialog(shell, new org.eclipse.oomph.setup.ui.wizards.SetupWizard.Importer());
+        }
+
+        @Override
+        protected void postProcess(WizardDialog wizardDialog)
+        {
+          super.postProcess(wizardDialog);
+          postProcessProjectPage(wizardDialog);
+        }
+      }
+
     }
 
     /**
      * Execution Wizard
      * <p>
-     * The execution wizard is the basis for Oomph's manually-{@link Trigger triggered}, automated installation and provisioning process.
-     * It's also used for startup-triggered, installation and provisioning,
+     * The execution wizard is the basis for Oomph's startup- and manually-{@link Trigger triggered}, automated installation and provisioning process.
+     * {@link #updater()}
+     * </p>
+     * <p>
+     * {@link #wizardFooter()}
+     * </p>
+     * <p>
+     * The execution wizard is also used for startup-triggered, installation and provisioning,
      * i.e., when the Eclipse product starts
      * and the <em>Window->Preferences...->Oomph->Setup->Skip automatic task execution at startup time</em> preference permits,
      * tasks are {@linkplain TaskComposition gathered},
@@ -1563,6 +1837,20 @@ public abstract class Everything
      */
     public static class ExecutionWizard
     {
+      /**
+       * @image UpdaterWizard.png invoke://
+       */
+      public static Image updater()
+      {
+        return new Capture.Window<WizardDialog>()
+        {
+          @Override
+          protected WizardDialog create(Shell shell)
+          {
+            return new WizardDialog(shell, new org.eclipse.oomph.setup.ui.wizards.SetupWizard.Updater(true));
+          }
+        }.capture();
+      }
     }
 
     /**
@@ -1572,33 +1860,49 @@ public abstract class Everything
      * with a specific {@link Version product version}.
      * Its secondary purpose is to manage Oomph's {@linkplain BundlePool bundle pools}.
      * The product page is used exclusively by the {@linkplain Installation installation wizard}.
-     * </p>
-     * <p>
-     * The tree viewer of the page displays the {@linkplain CatalogSelection selected} {@linkplain ProductCatalog product catalogs}.
-     * The <em>product catalog selection</em> tool bar button
-     * is used to choose which of the product catalogs available in the {@link Index index} are displayed.
-     * The <em>filter text</em> can be used to filter which of the {@link Product products} are displayed.
-     * The <em>collapse button</em> can be used to collapse the tree;
-     * initially it's fully expanded.
-     * The <em>refresh</em> button can be used to update the locally-cached versions of all the {@link SetupResource resources} used in the wizard.
-     * </p>
-     * <p>
-     * Selecting a specific product displays its ID, name, and version.
-     * The <em>Product Version</em> drop-down determines which specific version of the available product versions to install.
-     * The {@link CatalogSelectionResource selected product} is remembered,
-     * as well as the selected version of that product,
-     * so when the wizard comes up the next time,
-     * these will be the defaults initially available.
-     * Double-clicking a product automatically advances the {@linkplain ProjectPage project page}.
-     * </p>
-     * <p>
-     * The <em>Bundle Pool</em> check-box determines whether the installation will use {@link BundlePool bundle pools},
-     * and the adjacent drop-down determines which specific bundle pool to use.
-     * The <em>Manage Bundle Pools</em> button brings up the {@linkplain BundlePoolManager bundle pool management} dialog.
+     * {@link #productPage()}
      * </p>
      */
     public static class ProductPage
     {
+      /**
+       * @snippet image ProductPage.images
+       * @style box
+       * @description The page contains the following controls:
+       * @callout
+       * Filters which of the {@link Product products} are displayed.
+       * @callout
+       * Collapses the tree;
+       * initially the tree is fully expanded.
+       * @callout
+       * Updates the locally-cached versions of all the {@link SetupResource resources} used in the wizard.
+       * @callout
+       * Chooses which of the product catalogs available in the {@link Index index} to display.
+       * @callout
+       * Displays the {@linkplain CatalogSelection selected} {@linkplain ProductCatalog product catalogs}.
+       * Double-clicking a product automatically advances to the {@linkplain ProjectPage project page}.
+       * @callout
+       * Displays the p2 installable unit ID of the selected product.
+       * @callout
+       * Displays the p2 installable unit name of the selected product.
+       * @callout
+       * Displays the currently selected product version.
+       * @callout
+       * Determines which specific version of the available product versions to install.
+       * @callout
+       * Determines whether the installation will use {@link BundlePool bundle pools}.
+       * @callout
+       * Determines which specific bundle pool to use.
+       * @callout
+       * Brings up the {@linkplain BundlePoolManager bundle pool management} dialog.
+       */
+      public static Image[] productPage()
+      {
+        InstallerWizard.CaptureInstallerWizard instance = InstallerWizard.CaptureInstallerWizard.getInstance();
+        return new Image[] { instance.productPage, instance.filterImage, instance.collapseImage, instance.refreshImage, instance.catalogsImage,
+            instance.treeImageDecoration, instance.productIDImage, instance.productNameImage, instance.productVersionImage, instance.versionChoiceImage,
+            instance.poolsImage, instance.poolChoiceImage, instance.managePoolsImage };
+      }
     }
 
     /**
@@ -1606,53 +1910,168 @@ public abstract class Everything
      * <p>
      * The primary purpose of the project page is to create (or update) a {@linkplain WorkspaceResource workspace}
      * with one or more specific {@link Stream project streams}.
-     * </p>
-     * <p>
-     * The tree viewer of the page displays the {@linkplain CatalogSelection selected} {@linkplain ProjectCatalog project catalogs}.
-     * The <em>project catalog selection</em> tool bar button
-     * is used to choose which of the project catalogs available in the {@link Index index} are displayed.
-     * The <em>filter text</em> can be used to filter which of the {@link Project projects} are displayed.
-     * The <em>collapse button</em> can be used to collapse the tree;
-     * initially it's expanded to the second level.
-     * The <em>refresh</em> button can be used to update the locally-cached versions of all the {@link SetupResource resources} used in the wizard.
-     * TODO need buttons to add and remove user projects and explain how they work
-     * </p>
-     * <p>
-     * Choosing a specific project displays it in the table viewer.
-     * There are two ways add a project to the table viewer:
-     * <ul>
-     * <li>
-     * Double-clicking the project.
-     * </li>
-     * <li>
-     * Selecting one or more projects
-     * and then clicking  the <em>down arrow</em>.
-     * </li>
-     * </ul>
-     * </p>
-     * </p>
-     * Selecting streams is optional, except in {@linkplain ProjectWizard project import wizard}.
-     * In the {@link InstallerWizard installer wizard},
-     * the <em>Skip project selection</em> check-box can be used enabled advancement to the {@link PromptPage prompt page}
-     * without selecting any project streams.
-     * This is useful for installing a product without workspace provisioning.
-     * <p>
-     * The table viewer determines which stream of the project will be provisioned.
-     * The cell editor of the <em>Stream</em> column selects which specific stream of the project's available streams to provision.
-     * There are two ways remove a project from the table viewer:
-     * <ul>
-     * <li>
-     * Double-clicking the project.
-     * </li>
-     * <li>
-     * Selecting one or more projects
-     * and then clicking the <em>up arrow</em>.
-     * </li>
-     * </ul>
+     * {@link #projectPage()}
      * </p>
      */
-    public static class ProjectPage
+    public abstract static class ProjectPage
     {
+      /**
+       * @snippet image ProjectPage.images
+       * @style box
+       * @description
+       * The page contains the following controls:
+       * @callout
+       * Filters which of the {@link Project projects} are displayed.
+       * @callout
+       * Adds a project to the &lt;User> project of selected {@link ProjectCatalogResource project catalog}.
+       * If the &lt;User> project is empty, it's not displayed in the tree,
+       * but you can still add a project to the catalog,
+       * and then it will be displayed.
+       * @callout
+       * Removes the selected project from the<&lt;User> project.
+       * It is only enabled for a project within a &lt;User> project.
+       * @callout
+       * Collapses the tree;
+       * initially the tree roots are expanded.
+       * @callout
+       * Updates the locally-cached versions of all the {@link SetupResource resources} used in the wizard.
+       * @callout
+       * Chooses which of the project catalogs available in the {@link Index index} to display.
+       * @callout
+       * Displays the {@linkplain CatalogSelection selected} {@linkplain ProductCatalog project catalogs}.
+       * Double-clicking a project automatically adds its stream to the table of chosen streams,
+       * or, if one of it's streams is already in the table of chosen streams,
+       * removes it from the table.
+       * The project of the chosen streams are shown in bold font.
+       * Of course only a project with at least one stream can be added to the table of chosen streams.
+       * For projects without streams,
+       * presumably projects that contain only nested projects,
+       * double-clicking expands or collapses the project in the tree.
+       * @callout
+       * Adds the steams of selected projects of the tree to the table of chosen streams.
+       * @callout
+       * Removes the selected streams of the table of chosen streams from the table,
+       * and leaves them their corresponding projects selected in the tree.
+       * @callout
+       * Displays the chosen streams.
+       * Double clicking removes the chosen stream from the table
+       * and leaves its corresponding project selected in the tree.
+       * The stream column supports cell editing:
+       * use it to choose which stream of the project's available streams to provision.
+       * @callout
+       * Determines whether any streams are to be provisioned.
+       * This control is visible only in the {@link InstallerWizard installer} wizard.
+       * When enabled,
+       * any selected streams are removed from the table
+       * and the wizard's next button is enabled to proceed
+       * without choosing any streams to provision.
+       */
+      public static Image[] projectPage()
+      {
+        CaptureProjectPage instance = CaptureProjectPage.getInstance();
+        return new Image[] { instance.projectPage, instance.filter, instance.addProject, instance.removeProject, instance.collapse, instance.refresh,
+            instance.catalogs, instance.treeImageDecoration, instance.choose, instance.unchoose, instance.tableImageDecoration, instance.skip };
+      }
+
+      /**
+       * @ignore
+       */
+      public static class CaptureProjectPage extends CaptureSetupWizard
+      {
+        private static CaptureProjectPage instance;
+
+        private Image addProject;
+
+        private Image removeProject;
+
+        private Image collapse;
+
+        private Image refresh;
+
+        private Image catalogs;
+
+        private Image treeImageDecoration;
+
+        private Image projectPage;
+
+        private Image filter;
+
+        private Image choose;
+
+        private Image unchoose;
+
+        private Image tableImageDecoration;
+
+        private Image skip;
+
+        public static CaptureProjectPage getInstance()
+        {
+          if (instance == null)
+          {
+            instance = new CaptureProjectPage();
+            instance.projectPage = instance.capture();
+          }
+          return instance;
+        }
+
+        @Override
+        protected WizardDialog create(Shell shell)
+        {
+          return new InstallerDialog(shell, false);
+        }
+
+        @Override
+        protected void postProcess(WizardDialog wizardDialog)
+        {
+          super.postProcess(wizardDialog);
+
+          postProcessProductPage(wizardDialog);
+
+          ((org.eclipse.oomph.setup.ui.wizards.SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+
+          postProcessProjectPage(wizardDialog);
+        }
+
+        @Override
+        protected Image capture(WizardDialog wizardDialog)
+        {
+          IWizardPage page = wizardDialog.getCurrentPage();
+
+          treeImageDecoration = getCalloutImage(1);
+          Control tree = ((TreeViewer)ReflectUtil.getValue("projectViewer", page)).getControl();
+
+          tableImageDecoration = getCalloutImage(2);
+          Control table = ((TableViewer)ReflectUtil.getValue("streamViewer", page)).getControl();
+          Event event = new Event();
+          event.button = 1;
+          event.count = 1;
+          event.type = 3;
+          event.x = 605;
+          event.y = 40;
+          table.notifyListeners(SWT.MouseDown, event);
+          AccessUtil.busyWait(1000);
+
+          Map<Control, Image> decorations = new LinkedHashMap<Control, Image>();
+          decorations.put(tree, treeImageDecoration);
+          decorations.put(table, tableImageDecoration);
+          Image result = capture(page, decorations);
+
+          filter = getImage(wizardDialog, "filter");
+
+          addProject = getImage(wizardDialog, "addProject");
+          removeProject = getImage(wizardDialog, "removeProject");
+          collapse = getImage(wizardDialog, "collapse");
+          refresh = getImage(wizardDialog, "refresh");
+          catalogs = getImage(wizardDialog, "catalogs");
+
+          choose = getImage(wizardDialog, "choose");
+          unchoose = getImage(wizardDialog, "unchoose");
+
+          skip = getImage(wizardDialog, "skip");
+
+          return result;
+        }
+      }
     }
 
     /**
@@ -1664,6 +2083,7 @@ public abstract class Everything
      * That process induces variables and evaluates and expands variables.
      * Any variable with an empty value requires the user's input.
      * Information related to those variables is displayed on this page in a three column format:
+     * {@link #promptPage()}
      * <ul>
      * <li>
      * A <em>label</em> column displaying the label for the variable
@@ -1686,6 +2106,247 @@ public abstract class Everything
      */
     public static class PromptPage
     {
+      /**
+       * @snippet image PromptPage.images
+       * @style box
+       * @description
+       * The page has the following controls:
+       * @callout
+       * Displays the label for the rule that determines where installations are installed.
+       * @callout
+       * Displays the value for the installation location rule.
+       * In this case, each installation will end up in a uniquely named subfolder of the specified root folder.
+       * @callout
+       * Displays the label for the uniquely named subfolder for the installation.
+       * @callout
+       * Displays the value for the subfolder name.
+       * @callout
+       * Displays the label for the root folder for all installations.
+       * @callout
+       * Displays the value for the root folder.
+       * In this case the installation will end up in the 'D:/sandbox/oomph' folder.
+       * @callout
+       * Browses the file system for a root folder location.
+       * @callout
+       * Displays the label for the rule that determines where workspaces are provisioned.
+       * @callout
+       * Displays the value of the workspace location rule.
+       * In this case, the workspace will be located in a folder named 'ws' nested in the installation folder.
+       * @callout
+       * Displays the label for the rule that determines where Git clones will be provisioned.
+       * @callout
+       * Displays the value of the git location rule.
+       * In this case the clone is stored in the "git" subfolder of the installation folder with a name derived from the repository URI.
+       * @callout
+       * Displays the label for the target platform choice.
+       * @callout
+       * Displays the value for the target platform.
+       * Project authors are encouraged to make use of this common variable so that multiple projects will materialize a cohesive target platform.
+       * @callout
+       * Displays the label for the choice of Oomph's Git remote URI.
+       * There are typically several different URIs for accessing the same underlying repository
+       * depending on whether one wants Gerrit access or direct Git access,
+       * whether ones wants to use SSH, HTTPS, or anonymous access.
+       * @callout
+       * Displays the value for the remote URI choice.
+       * In this case, Gerrit access via SSH is chosen.
+       * @callout
+       * Displays the label for the JRE location.
+       * Standard variables are defined for various levels of the JDK.
+       * @callout
+       * Displays the value for the JRE location.
+       * The value specicified should be compatible with the verion specified in the label.
+       * Generally a JDK is preferred over a JRE.
+       * In this case, a Java 1.7 JDK is specified.
+       * @callout
+       * Browses the file system for a JRE or JDK location.
+       * @callout
+       * Displays the label for the Bugzilla/Hudson ID.
+       * @callout
+       * Displays the value for the ID.
+       * This is generally an email address.
+       * If one doesn't have such a registered ID, 'anonymous' should be specified.
+       * @callout
+       * Displays the label for the Eclipse password.
+       * @callout
+       * Displays the obscurred value of the password.
+       * @callout
+       * Authenticates that the password is valid with respect to the Bugzilla/Hudson ID and the Git/ID.
+       * @callout
+       * Displays the label for the Git/Gerrit user ID.
+       * @callout
+       * Displays the value of the ID.
+       * If one doesn't have such a registered ID, 'anonymous' should be specified.
+       * @callout
+       * Determines whether all variables are displayed
+       * or just the ones that are strictly required to proceed.
+       * In this case, all variables are being shown.
+       */
+      public static Image[] promptPage()
+      {
+        CapturePromptPage instance = CapturePromptPage.getInstance();
+        return new Image[] { instance.progressPage, instance.installationRuleLabel, instance.installationRuleControl, instance.installationIDLabel,
+            instance.installationIDControl, instance.installationRootLabel, instance.installationRootControl, instance.installationRootHelper,
+            instance.workspaceRuleLabel, instance.workspaceRuleControl, instance.gitCloneRuleLabel, instance.gitCloneRuleControl, instance.targetPlatformLabel,
+            instance.targetPlatformControl, instance.oomphRemoteURILabel, instance.oomphRemoteURIControl, instance.jreLocationLabel,
+            instance.jreLocationControl, instance.jreLocationHelper, instance.bugzillaLabel, instance.bugzillaControl, instance.passwordLabel,
+            instance.passwordControl, instance.passwordHelper, instance.userIDLabel, instance.userIDControl, instance.showAll };
+      }
+
+      /**
+       * @ignore
+       */
+      public static class CapturePromptPage extends CaptureSetupWizard
+      {
+        private static CapturePromptPage instance;
+
+        private Image progressPage;
+
+        private Image showAll;
+
+        private Image installationIDLabel;
+
+        private Image installationIDControl;
+
+        private Image gitCloneRuleLabel;
+
+        private Image gitCloneRuleControl;
+
+        private Image installationRuleLabel;
+
+        private Image installationRuleControl;
+
+        private Image installationRootLabel;
+
+        private Image installationRootControl;
+
+        private Image workspaceRuleLabel;
+
+        private Image workspaceRuleControl;
+
+        private Image installationRootHelper;
+
+        private Image targetPlatformLabel;
+
+        private Image targetPlatformControl;
+
+        private Image oomphRemoteURILabel;
+
+        private Image oomphRemoteURIControl;
+
+        private Image jreLocationLabel;
+
+        private Image jreLocationControl;
+
+        private Image jreLocationHelper;
+
+        private Image bugzillaLabel;
+
+        private Image bugzillaControl;
+
+        private Image passwordLabel;
+
+        private Image passwordControl;
+
+        private Image passwordHelper;
+
+        private Image userIDLabel;
+
+        private Image userIDControl;
+
+        public static CapturePromptPage getInstance()
+        {
+          if (instance == null)
+          {
+            instance = new CapturePromptPage();
+            instance.progressPage = instance.capture();
+          }
+          return instance;
+        }
+
+        @Override
+        protected WizardDialog create(Shell shell)
+        {
+          return new InstallerDialog(shell, false);
+        }
+
+        @Override
+        protected void postProcess(WizardDialog wizardDialog)
+        {
+          super.postProcess(wizardDialog);
+
+          postProcessProductPage(wizardDialog);
+
+          ((org.eclipse.oomph.setup.ui.wizards.SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+
+          postProcessProjectPage(wizardDialog);
+
+          ((org.eclipse.oomph.setup.ui.wizards.SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+        }
+
+        @Override
+        protected Image capture(WizardDialog wizardDialog)
+        {
+          IWizardPage page = wizardDialog.getCurrentPage();
+
+          showAll = getImage(wizardDialog, "showAll");
+          Button showAllButton = getWidget(wizardDialog, "showAll");
+          showAllButton.setSelection(true);
+          showAllButton.notifyListeners(SWT.Selection, new Event());
+
+          AccessUtil.busyWait(100);
+
+          Text text = getWidget(wizardDialog, "installation.id.control");
+          text.setText("oomph");
+          text.notifyListeners(SWT.Modify, null);
+
+          Combo combo = getWidget(wizardDialog, "git.clone.oomph.remoteURI.control");
+          combo.setText("ssh://${git.user.id}@git.eclipse.org:29418/oomph/org.eclipse.oomph");
+          combo.notifyListeners(SWT.Modify, null);
+
+          AccessUtil.busyWait(100);
+
+          Image result = capture(page, null);
+
+          installationRuleLabel = getImage(wizardDialog, "InstallationTask.label");
+          installationRuleControl = getImage(wizardDialog, "InstallationTask.control");
+
+          installationIDLabel = getImage(wizardDialog, "installation.id.label");
+          installationIDControl = getImage(wizardDialog, "installation.id.control");
+
+          installationRootLabel = getImage(wizardDialog, "install.root.label");
+          installationRootControl = getImage(wizardDialog, "install.root.control");
+          installationRootHelper = getImage(wizardDialog, "install.root.helper");
+
+          workspaceRuleLabel = getImage(wizardDialog, "WorkspaceTask.label");
+          workspaceRuleControl = getImage(wizardDialog, "WorkspaceTask.control");
+
+          gitCloneRuleLabel = getImage(wizardDialog, "GitCloneTask.label");
+          gitCloneRuleControl = getImage(wizardDialog, "GitCloneTask.control");
+
+          targetPlatformLabel = getImage(wizardDialog, "eclipse.target.platform.label");
+          targetPlatformControl = getImage(wizardDialog, "eclipse.target.platform.control");
+
+          oomphRemoteURILabel = getImage(wizardDialog, "git.clone.oomph.remoteURI.label");
+          oomphRemoteURIControl = getImage(wizardDialog, "git.clone.oomph.remoteURI.control");
+
+          jreLocationLabel = getImage(wizardDialog, "jre.location-1.5.label");
+          jreLocationControl = getImage(wizardDialog, "jre.location-1.5.control");
+          jreLocationHelper = getImage(wizardDialog, "jre.location-1.5.helper");
+
+          bugzillaLabel = getImage(wizardDialog, "bugzilla.id.label");
+          bugzillaControl = getImage(wizardDialog, "bugzilla.id.control");
+
+          passwordLabel = getImage(wizardDialog, "eclipse.user.password.label");
+          passwordControl = getImage(wizardDialog, "eclipse.user.password.control");
+          passwordHelper = getImage(wizardDialog, "eclipse.user.password.helper");
+
+          userIDLabel = getImage(wizardDialog, "git.user.id.label");
+          userIDControl = getImage(wizardDialog, "git.user.id.control");
+
+          return result;
+        }
+      }
     }
 
     /**

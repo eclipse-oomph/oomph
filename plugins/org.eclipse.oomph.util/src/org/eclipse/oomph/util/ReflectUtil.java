@@ -73,6 +73,11 @@ public final class ReflectUtil
     }
   }
 
+  public static Method getMethod(Object target, String methodName, Class<?>... parameterTypes)
+  {
+    return getMethod(target.getClass(), methodName, parameterTypes);
+  }
+
   public static Method getMethod(Class<?> c, String methodName, Class<?>... parameterTypes)
   {
     try

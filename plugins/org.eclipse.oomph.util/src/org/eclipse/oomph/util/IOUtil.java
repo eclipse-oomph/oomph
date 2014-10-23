@@ -569,15 +569,30 @@ public final class IOUtil
 
   public static void writeLines(File file, String charsetName, List<String> lines)
   {
+    mkdirs(file.getParentFile());
     OutputStream out = null;
+    try
+    {
+      out = new FileOutputStream(file);
+      writeLines(out, charsetName, lines);
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
+    finally
+    {
+      closeSilent(out);
+    }
+  }
+
+  public static void writeLines(OutputStream out, String charsetName, List<String> lines)
+  {
     Writer writer = null;
     BufferedWriter bufferedWriter = null;
 
     try
     {
-      mkdirs(file.getParentFile());
-
-      out = new FileOutputStream(file);
       writer = charsetName == null ? new OutputStreamWriter(out) : new OutputStreamWriter(out, charsetName);
       bufferedWriter = new BufferedWriter(writer);
 
@@ -595,7 +610,6 @@ public final class IOUtil
     {
       closeSilent(bufferedWriter);
       closeSilent(writer);
-      closeSilent(out);
     }
   }
 

@@ -28,6 +28,12 @@ public class SSH2PreferenceDialog extends AbstractPreferenceDialog
   }
 
   @Override
+  protected String getShellText()
+  {
+    return "Oomph SSH Preferences";
+  }
+
+  @Override
   protected String getDefaultMessage()
   {
     return "Adjust your SSH2 settings.";

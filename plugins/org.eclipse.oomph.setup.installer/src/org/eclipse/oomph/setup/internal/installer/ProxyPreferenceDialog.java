@@ -40,6 +40,12 @@ public class ProxyPreferenceDialog extends AbstractPreferenceDialog
   }
 
   @Override
+  protected String getShellText()
+  {
+    return "Oomph Network Proxy Preferences";
+  }
+
+  @Override
   protected String getDefaultMessage()
   {
     return "Adjust your network proxy settings.";

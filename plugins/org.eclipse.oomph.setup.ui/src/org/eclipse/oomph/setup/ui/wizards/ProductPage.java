@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -166,19 +167,23 @@ public class ProductPage extends SetupWizardPage
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
     collapseAllButton.setToolTipText("Collapse All");
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
+    AccessUtil.setKey(collapseAllButton, "collapse");
 
     final ToolItem refreshButton = new ToolItem(filterToolBar, SWT.NONE);
     refreshButton.setToolTipText("Refresh");
     refreshButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("refresh"));
+    AccessUtil.setKey(refreshButton, "refresh");
 
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
     catalogSelector.configure(catalogsButton);
+    AccessUtil.setKey(catalogsButton, "catalogs");
 
     FilteredTree filteredTree = new FilteredTree(mainComposite, SWT.BORDER, new PatternFilter(), true);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
+    AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
 
     productViewer = filteredTree.getViewer();
     productViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
@@ -233,6 +238,7 @@ public class ProductPage extends SetupWizardPage
     idLabel = new Label(installationPane, SWT.NONE);
     idLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
     idLabel.setText("Product ID:");
+    AccessUtil.setKey(idLabel, "productID");
 
     idText = new Text(installationPane, SWT.READ_ONLY);
     idText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -240,6 +246,7 @@ public class ProductPage extends SetupWizardPage
     nameLabel = new Label(installationPane, SWT.NONE);
     nameLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
     nameLabel.setText("Product Name:");
+    AccessUtil.setKey(nameLabel, "productName");
 
     nameText = new Text(installationPane, SWT.READ_ONLY);
     nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -247,6 +254,7 @@ public class ProductPage extends SetupWizardPage
     versionLabel = new Label(installationPane, SWT.NONE);
     versionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
     versionLabel.setText("Product Version:");
+    AccessUtil.setKey(versionLabel, "productVersion");
 
     versionComboViewer = new ComboViewer(installationPane, SWT.READ_ONLY);
     versionComboViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
@@ -266,12 +274,14 @@ public class ProductPage extends SetupWizardPage
 
     Combo versionCombo = versionComboViewer.getCombo();
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    AccessUtil.setKey(versionCombo, "versionChoice");
 
     if (SHOW_BUNDLE_POOL_UI)
     {
       initBundlePool();
 
       poolButton = new PersistentButton(installationPane, SWT.CHECK, true, new DialogSettingsPersistence(getDialogSettings(), "useBundlePool"));
+      AccessUtil.setKey(poolButton, "pools");
       poolButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       poolButton.setText("Bundle Pool:");
 
@@ -341,6 +351,7 @@ public class ProductPage extends SetupWizardPage
 
       Combo poolCombo = poolComboViewer.getCombo();
       poolCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      AccessUtil.setKey(poolCombo, "poolChoice");
 
       managePoolsButton = new Button(poolComposite, SWT.PUSH);
       managePoolsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
@@ -353,6 +364,7 @@ public class ProductPage extends SetupWizardPage
           manageBundlePools();
         }
       });
+      AccessUtil.setKey(managePoolsButton, "managePools");
     }
 
     collapseAllButton.addSelectionListener(new SelectionAdapter()

@@ -42,6 +42,12 @@ public class UnsignedContentDialog extends AbstractConfirmDialog
   }
 
   @Override
+  protected String getShellText()
+  {
+    return "Ooomph Unsigned Content Confirmation";
+  }
+
+  @Override
   protected String getDefaultMessage()
   {
     return "Accept unsigned content before the software can be installed.";

@@ -10,11 +10,13 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.AbstractDialog;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.jface.dialogs.DialogTray;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.TrayDialog;
@@ -180,8 +182,20 @@ public class SetupWizardDialog extends WizardDialog
     });
 
     ToolBar toolBar = (ToolBar)super.createHelpControl(parent);
+    AccessUtil.setKey(toolBar.getItems()[0], "help");
     createToolItemsForToolBar(toolBar);
     return toolBar;
+  }
+
+  @Override
+  protected void createButtonsForButtonBar(Composite parent)
+  {
+    super.createButtonsForButtonBar(parent);
+
+    AccessUtil.setKey(getButton(IDialogConstants.BACK_ID), "back");
+    AccessUtil.setKey(getButton(IDialogConstants.NEXT_ID), "next");
+    AccessUtil.setKey(getButton(IDialogConstants.FINISH_ID), "finish");
+    AccessUtil.setKey(getButton(IDialogConstants.CANCEL_ID), "cancel");
   }
 
   protected void createToolItemsForToolBar(ToolBar toolBar)

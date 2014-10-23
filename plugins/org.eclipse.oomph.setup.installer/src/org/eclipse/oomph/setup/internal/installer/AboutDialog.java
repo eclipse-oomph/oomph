@@ -88,7 +88,7 @@ public final class AboutDialog extends AbstractSetupDialog
 
   public AboutDialog(Shell parentShell, String theVersion)
   {
-    super(parentShell, "About " + SHELL_TEXT, 700, 500, SetupInstallerPlugin.INSTANCE, null);
+    super(parentShell, "About " + parentShell.getText(), 700, 500, SetupInstallerPlugin.INSTANCE, null);
     version = theVersion;
     showAllPlugins = dialogSettings.getBoolean(SHOW_ALL_PLUGINS);
   }

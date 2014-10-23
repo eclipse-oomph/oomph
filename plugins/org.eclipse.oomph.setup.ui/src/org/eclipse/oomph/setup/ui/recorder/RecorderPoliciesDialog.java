@@ -66,6 +66,12 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
   }
 
   @Override
+  protected String getShellText()
+  {
+    return "Oomph Preference Recorder";
+  }
+
+  @Override
   protected String getDefaultMessage()
   {
     return "Define whether to record preference tasks for the listed preferences from now on.";

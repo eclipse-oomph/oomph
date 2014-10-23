@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.util.BaseResource;
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
@@ -244,6 +245,7 @@ public class ProjectPage extends SetupWizardPage
     addProjectButton.setToolTipText("Add a project to the user project of the selected catalog");
     addProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project"));
     addProjectButton.setEnabled(false);
+    AccessUtil.setKey(addProjectButton, "addProject");
 
     final List<ProjectCatalog> projectCatalogs = new ArrayList<ProjectCatalog>();
     addProjectButton.addSelectionListener(new SelectionAdapter()
@@ -475,6 +477,7 @@ public class ProjectPage extends SetupWizardPage
     removeProjectButton.setToolTipText("Remove the select project from the user project");
     removeProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove_project"));
     removeProjectButton.setEnabled(false);
+    AccessUtil.setKey(removeProjectButton, "removeProject");
 
     final List<Project> projects = new ArrayList<Project>();
     final List<Project> userProjects = new ArrayList<Project>();
@@ -526,15 +529,18 @@ public class ProjectPage extends SetupWizardPage
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
     collapseAllButton.setToolTipText("Collapse All");
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
+    AccessUtil.setKey(collapseAllButton, "collapse");
 
     final ToolItem refreshButton = new ToolItem(filterToolBar, SWT.NONE);
     refreshButton.setToolTipText("Refresh");
     refreshButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("refresh"));
+    AccessUtil.setKey(refreshButton, "refresh");
 
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
     catalogSelector.configure(catalogsButton);
+    AccessUtil.setKey(catalogsButton, "catalogs");
 
     final Object projectFilterJobFamily = new Object();
 
@@ -554,7 +560,7 @@ public class ProjectPage extends SetupWizardPage
             }
 
             String text = getFilterString();
-            if (text == null)
+            if (StringUtil.isEmpty(text))
             {
               return Status.OK_STATUS;
             }
@@ -681,6 +687,7 @@ public class ProjectPage extends SetupWizardPage
     };
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
+    AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
 
     projectViewer = filteredTree.getViewer();
     labelProvider = new AdapterFactoryLabelProvider.FontProvider(adapterFactory, projectViewer)
@@ -723,11 +730,11 @@ public class ProjectPage extends SetupWizardPage
               }
               catch (OperationCanceledException ex)
               {
-                SetupUIPlugin.INSTANCE.log(ex);
+                // Ignore.
               }
               catch (InterruptedException ex)
               {
-                SetupUIPlugin.INSTANCE.log(ex);
+                // Ignore.
               }
 
               if (projectViewer.getExpandedElements().length == 0)
@@ -800,11 +807,13 @@ public class ProjectPage extends SetupWizardPage
     addButton.setToolTipText("Add Project (or double-click in upper tree)");
     addButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add"));
     addButton.setEnabled(false);
+    AccessUtil.setKey(addButton, "choose");
 
     final ToolItem removeButton = new ToolItem(bucketToolBar, SWT.PUSH);
     removeButton.setToolTipText("Remove Project (or double-click in lower table)");
     removeButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove"));
     removeButton.setEnabled(false);
+    AccessUtil.setKey(removeButton, "unchoose");
 
     addButton.addSelectionListener(new SelectionAdapter()
     {
@@ -1114,6 +1123,7 @@ public class ProjectPage extends SetupWizardPage
           }
         }
       });
+      AccessUtil.setKey(skipButton, "skip");
 
       setPageComplete(skipButton.getSelection());
     }

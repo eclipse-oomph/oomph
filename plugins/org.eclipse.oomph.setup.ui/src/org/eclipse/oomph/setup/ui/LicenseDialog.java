@@ -64,6 +64,12 @@ public class LicenseDialog extends AbstractConfirmDialog
   }
 
   @Override
+  protected String getShellText()
+  {
+    return "Oomph License Confirmation";
+  }
+
+  @Override
   protected String getDefaultMessage()
   {
     return "Review and accept licenses before the software can be installed.";

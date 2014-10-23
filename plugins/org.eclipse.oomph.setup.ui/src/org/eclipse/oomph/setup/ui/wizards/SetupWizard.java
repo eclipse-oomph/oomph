@@ -25,7 +25,6 @@ import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 
@@ -120,7 +119,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   private void initUI()
   {
-    setWindowTitle(AbstractSetupDialog.SHELL_TEXT);
     setDefaultPageImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("install_wiz.png"));
     setNeedsProgressMonitor(false);
   }
@@ -468,6 +466,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       super();
       setTrigger(Trigger.BOOTSTRAP);
       setSetupContext(SetupContext.createUserOnly(getResourceSet()));
+      setWindowTitle("Oomph Installer");
     }
 
     @Override
@@ -514,11 +513,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       setTrigger(Trigger.MANUAL);
       setSetupContext(SetupContext.create(getResourceSet()));
+      setWindowTitle("Oomph Importer");
     }
 
     public void init(IWorkbench workbench, IStructuredSelection selection)
     {
-      setWindowTitle("Setup Import Wizard");
     }
 
     @Override
@@ -553,6 +552,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       setTrigger(manual ? Trigger.MANUAL : Trigger.STARTUP);
       setSetupContext(SetupContext.create(getResourceSet()));
+      setWindowTitle("Oomph Updater");
     }
 
     public Updater(SetupTaskPerformer performer)
