@@ -52,11 +52,11 @@
 		<echo message="-Doomph.update.url=${git.clone.uri}/sites/org.eclipse.oomph.site/target/repository${line.separator}" file="${launcher.ini}" append="true" />
 	</target>
 
-	<target name="run">
+	<target name="run" depends="init">
 		<exec executable="${launcher.exe}" />
 	</target>
 
-	<target name="debug">
+	<target name="debug" depends="init">
 		<exec executable="${launcher.exe}">
 			<arg value="-vmargs" />
 			<arg value="-Xdebug" />
