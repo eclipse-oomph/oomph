@@ -19,9 +19,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
 import java.util.ArrayList;
@@ -93,10 +93,10 @@ public abstract class AbstractResolution extends WorkbenchMarkerResolution
   @Override
   public void run(final IMarker[] markers, IProgressMonitor monitor)
   {
-    new Job("Applying Fixes")
+    new UIJob("Applying Fixes")
     {
       @Override
-      protected IStatus run(IProgressMonitor monitor)
+      public IStatus runInUIThread(IProgressMonitor monitor)
       {
         try
         {
