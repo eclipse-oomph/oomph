@@ -1,0 +1,3 @@
+# Copy this file into a new file "deploy.properties" and THEN adjust the following property in the new file:
+
+target = /develop/installer-test

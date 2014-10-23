@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+<project name="Oomph" default="deploy">
+
+	<property file="${user.home}/org.eclipse.oomph.releng.deploy_1.0.properties" />
+	<property file="deploy.properties" />
+	<property file="deploy.properties.template" />
+
+	<property name="source" location="${git.clone.location}\products\org.eclipse.oomph.setup.installer.product\target\products\org.eclipse.oomph.setup.installer.product-${platform.suffix}.zip" />
+
+	<target name="init.win32" if="os.win32">
+		<property name="launcher.exe" location="${target}/oomph.exe" />
+		<property name="launcher.ini" location="${target}/oomph.ini" />
+	</target>
+
+	<target name="init.macosx" if="os.macosx">
+		<property name="launcher.exe" location="${target}/oomph" />
+		<property name="launcher.ini" location="${target}/oomph.app/Contents/MacOS/oomph.ini" />
+	</target>
+
+	<target name="init.linux" if="os.linux">
+		<property name="launcher.exe" location="${target}/oomph" />
+		<property name="launcher.ini" location="${target}/oomph.ini" />
+	</target>
+
+	<target name="init" depends="init.win32,init.macosx,init.linux">
+		<echo message="Source: ${source}" />
+		<echo message="Launcher: ${launcher.exe}" />
+		<echo message="Ini-file: ${launcher.ini}" />
+	</target>
+
+	<target name="clean" depends="init">
+		<delete verbose="false" failonerror="false">
+			<fileset dir="${target}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="deploy" depends="clean">
+		<unzip dest="${target}" src="${source}" />
+		<echo message="-Doomph.installer.update.url=${git.clone.uri}/products/org.eclipse.oomph.setup.installer.product/target/repository${line.separator}" file="${launcher.ini}" append="true" />
+		<echo message="-Doomph.update.url=${git.clone.uri}/sites/org.eclipse.oomph.site/target/repository${line.separator}" file="${launcher.ini}" append="true" />
+	</target>
+
+	<target name="run">
+		<exec executable="${launcher.exe}" />
+	</target>
+
+	<target name="debug">
+		<exec executable="${launcher.exe}">
+			<arg value="-vmargs" />
+			<arg value="-Xdebug" />
+			<arg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8123" />
+		</exec>
+	</target>
+
+</project>
