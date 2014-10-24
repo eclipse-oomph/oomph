@@ -62,7 +62,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -181,6 +181,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         });
       }
     });
+
     AccessUtil.setKey(fullPromptButton, "showAll");
   }
 
@@ -336,29 +337,29 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     parent.getParent().layout();
     parent.setRedraw(true);
 
-    for (FieldHolder fieldHolder : manager)
-    {
-      Control control = fieldHolder.getControl();
-      PropertyField field = fieldHolder.field;
-      Label label = field.getLabel();
-      Control helper = field.getHelper();
-      for (VariableTask variable : fieldHolder.getVariables())
-      {
-        String name = variable.getName();
-        if (name.startsWith("@<id>"))
-        {
-          name = name.substring(name.indexOf("name: ") + 6, name.indexOf(')'));
-        }
-
-        System.err.println("###'" + name + "'");
-
-        AccessUtil.setKey(label, name + ".label");
-        AccessUtil.setKey(control, name + ".control");
-        AccessUtil.setKey(helper, name + ".helper");
-
-        break;
-      }
-    }
+    // for (FieldHolder fieldHolder : manager)
+    // {
+    // Control control = fieldHolder.getControl();
+    // PropertyField field = fieldHolder.field;
+    // Label label = field.getLabel();
+    // Control helper = field.getHelper();
+    // for (VariableTask variable : fieldHolder.getVariables())
+    // {
+    // String name = variable.getName();
+    // if (name.startsWith("@<id>"))
+    // {
+    // name = name.substring(name.indexOf("name: ") + 6, name.indexOf(')'));
+    // }
+    //
+    // System.err.println("###'" + name + "'");
+    //
+    // AccessUtil.setKey(label, name + ".label");
+    // AccessUtil.setKey(control, name + ".control");
+    // AccessUtil.setKey(helper, name + ".helper");
+    //
+    // break;
+    // }
+    // }
 
     if (!isPageComplete() && firstEmptyField == null)
     {
@@ -381,8 +382,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     try
     {
       performer = null;
-
       String errorMessage = null;
+
       try
       {
         incompletePerformers.clear();
@@ -623,7 +624,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   public UserCallback getUserCallback()
   {
-    return new UICallback(getShell(), getShell().getText());
+    Shell shell = getShell();
+    return new UICallback(shell, shell.getText());
   }
 
   /**
