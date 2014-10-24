@@ -1786,7 +1786,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             }
             finally
             {
-              tree.setRedraw(true);
+              if (!tree.isDisposed())
+              {
+                tree.setRedraw(true);
+              }
             }
           }
         });
