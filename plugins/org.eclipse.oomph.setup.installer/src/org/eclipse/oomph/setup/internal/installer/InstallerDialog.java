@@ -58,6 +58,8 @@ import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -114,6 +116,26 @@ public final class InstallerDialog extends SetupWizardDialog
   public Installer getInstaller()
   {
     return (Installer)getWizard();
+  }
+
+  @Override
+  public void create()
+  {
+    super.create();
+
+    final Shell shell = getShell();
+    shell.addTraverseListener(new TraverseListener()
+    {
+      public void keyTraversed(TraverseEvent e)
+      {
+        if (e.detail == SWT.TRAVERSE_ESCAPE)
+        {
+          shell.close();
+          e.detail = SWT.TRAVERSE_NONE;
+          e.doit = false;
+        }
+      }
+    });
   }
 
   @Override
