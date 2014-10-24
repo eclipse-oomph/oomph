@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.ui.PropertyField.AuthenticatedField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
@@ -62,7 +63,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -624,8 +624,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   public UserCallback getUserCallback()
   {
-    Shell shell = getShell();
-    return new UICallback(shell, shell.getText());
+    return new UICallback(getShell(), AbstractSetupDialog.SHELL_TEXT);
   }
 
   /**
