@@ -68,7 +68,8 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="org.eclipse.oomph.ui.toolbars.sampleToolbar">
+               id="org.eclipse.oomph.ui.toolbars.offline"
+               label="Offline Control">
             <command
                   commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
                   icon="icons/offline.gif"

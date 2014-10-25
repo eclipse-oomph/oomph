@@ -173,7 +173,8 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="org.eclipse.oomph.setup.toolbar">
+               id="org.eclipse.oomph.setup.toolbar"
+               label="Setup">
             <command
                   commandId="org.eclipse.oomph.setup.editor.performDropdown"
                   icon="icons/update.gif"
