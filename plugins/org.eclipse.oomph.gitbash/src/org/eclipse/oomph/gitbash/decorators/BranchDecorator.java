@@ -18,7 +18,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.swt.graphics.Image;
 
-import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * @author Eike Stepper
@@ -27,6 +27,8 @@ import java.io.IOException;
 public class BranchDecorator implements ILabelDecorator
 {
   private static final String DEFAULT_PATH = "refs/heads/";
+
+  private static final Method FORMAT_METHOD = getFormatMethod();
 
   public BranchDecorator()
   {
@@ -56,17 +58,24 @@ public class BranchDecorator implements ILabelDecorator
 
   public String decorateText(String text, Object element)
   {
-    if (element instanceof org.eclipse.egit.ui.internal.repository.tree.RefNode)
+    try
     {
-      org.eclipse.egit.ui.internal.repository.tree.RefNode node = (org.eclipse.egit.ui.internal.repository.tree.RefNode)element;
-      if (node.getType() == org.eclipse.egit.ui.internal.repository.tree.RepositoryTreeNodeType.REF && isLocal(node))
+      if (element instanceof org.eclipse.egit.ui.internal.repository.tree.RefNode)
       {
-        String decoration = getDecoration(node);
-        if (decoration != null)
+        org.eclipse.egit.ui.internal.repository.tree.RefNode node = (org.eclipse.egit.ui.internal.repository.tree.RefNode)element;
+        if (node.getType() == org.eclipse.egit.ui.internal.repository.tree.RepositoryTreeNodeType.REF && isLocal(node))
         {
-          return text + " [" + decoration + "]";
+          String decoration = getDecoration(node);
+          if (decoration != null)
+          {
+            return text + " [" + decoration + "]";
+          }
         }
       }
+    }
+    catch (Throwable t)
+    {
+      //$FALL-THROUGH$
     }
 
     return null;
@@ -115,10 +124,10 @@ public class BranchDecorator implements ILabelDecorator
         BranchTrackingStatus trackingStatus = BranchTrackingStatus.of(repository, branchName);
         if (trackingStatus != null && (trackingStatus.getAheadCount() != 0 || trackingStatus.getBehindCount() != 0))
         {
-          result += " " + org.eclipse.egit.ui.internal.GitLabelProvider.formatBranchTrackingStatus(trackingStatus);
+          result += " " + formatBranchTrackingStatus(trackingStatus);
         }
       }
-      catch (IOException ex)
+      catch (Throwable t)
       {
         //$FALL-THROUGH$
       }
@@ -127,5 +136,46 @@ public class BranchDecorator implements ILabelDecorator
     }
 
     return null;
+  }
+
+  private static String formatBranchTrackingStatus(BranchTrackingStatus status) throws Exception
+  {
+    // A possible NPE or other exceptions will be caught by the caller.
+    return (String)FORMAT_METHOD.invoke(null, status);
+  }
+
+  private static Method getFormatMethod()
+  {
+    Class<?> c = null;
+
+    try
+    {
+      c = Class.forName("org.eclipse.egit.ui.internal.GitLabels"); // EGit 3.6++
+    }
+    catch (Throwable t)
+    {
+      //$FALL-THROUGH$
+    }
+
+    if (c == null)
+    {
+      try
+      {
+        c = Class.forName("org.eclipse.egit.ui.internal.GitLabelProvider"); // EGit 3.5--
+      }
+      catch (Throwable t)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    try
+    {
+      return c.getDeclaredMethod("formatBranchTrackingStatus", c, BranchTrackingStatus.class);
+    }
+    catch (Throwable t)
+    {
+      return null;
+    }
   }
 }
