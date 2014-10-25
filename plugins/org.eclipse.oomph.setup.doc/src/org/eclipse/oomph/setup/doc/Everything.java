@@ -13,10 +13,13 @@ package org.eclipse.oomph.setup.doc;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.Capture;
 import org.eclipse.oomph.setup.CatalogSelection;
+import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.LocationCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.ResourceCreationTask;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.doc.Everything.Infrastructure.Index;
 import org.eclipse.oomph.setup.doc.Everything.Scope.Installation;
 import org.eclipse.oomph.setup.doc.Everything.Scope.ProductCatalog;
@@ -51,21 +54,33 @@ import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Consolida
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Filter;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.InitialPhase;
 import org.eclipse.oomph.setup.doc.Everything.TaskComposition.TaskList.Reorder;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.installer.InstallerDialog;
+import org.eclipse.oomph.setup.log.ProgressLog;
+import org.eclipse.oomph.setup.p2.P2Task;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -75,9 +90,12 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -402,7 +420,7 @@ public abstract class Everything
       /**
        * <li>
        * {@link org.eclipse.oomph.setup.Trigger#STARTUP Startup} applies when a product is first launched, automated task performance is enabled, and there are tasks that need to be performed,
-       * at which point the {@linkplain ExecutionWizard execution wizard} will be opened on the {@link ConfirmationPage confirmation page}.
+       * at which point the {@linkplain ExecutionWizard execution wizard} will be opened on the {@link ConfirmationPage progressPage page}.
        * </li>
        */
       public static String startup;
@@ -482,7 +500,7 @@ public abstract class Everything
     /**
      * <li>
      * An optional {@link org.eclipse.oomph.setup.Scope#getDescription() description} attribute
-     * which description can be arbitrary descriptive text.
+     * which description can be arbitrary descriptive log.
      * </li>
      */
     public static String description;
@@ -1393,14 +1411,14 @@ public abstract class Everything
    * Task Execution
    * <p>
    * The {@link TaskComposition gathered} task list is prepared to {@link Task#performance perform} the specified tasks.
-   * This list is presented to the user on the setup wizard's {@link ConfirmationPage confirmation page}.
+   * This list is presented to the user on the setup wizard's {@link ConfirmationPage progressPage page}.
    * Initially,
    * each task in the list is visited
    * to determine if it needs to perform.
    * That determination is generally influenced by the {@link Trigger trigger}.
    * Tasks that don't need to perform are logically removed from the list
    * to induce the so called needed task list.
-   * The confirmation page allows the user to see either the full list or the needed task list.
+   * The progressPage page allows the user to see either the full list or the needed task list.
    *
    * Each task remaining in the reduced list of needed tasks
    * is then performed.
@@ -1486,38 +1504,76 @@ public abstract class Everything
      */
     public static abstract class CaptureSetupWizard extends Capture.Window<WizardDialog>
     {
+      protected org.eclipse.oomph.setup.ui.wizards.SetupWizard getSetupWizard(WizardDialog wizardDialog)
+      {
+        return (org.eclipse.oomph.setup.ui.wizards.SetupWizard)wizardDialog.getCurrentPage().getWizard();
+      }
+
+      protected SetupContext getSetupContext(WizardDialog wizardDialog)
+      {
+        return getSetupWizard(wizardDialog).getSetupContext();
+      }
+
+      protected ResourceSet getResourceSet(WizardDialog wizardDialog)
+      {
+        return getSetupWizard(wizardDialog).getResourceSet();
+      }
+
+      protected SetupTaskPerformer getPerformer(WizardDialog wizardDialog)
+      {
+        return getSetupWizard(wizardDialog).getPerformer();
+      }
+
+      protected void advanceToNextPage(WizardDialog wizardDialog)
+      {
+        ((org.eclipse.oomph.setup.ui.wizards.SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+      }
+
+      @SuppressWarnings("unchecked")
+      protected <T extends Viewer> T getViewer(WizardDialog wizardDialog, String fieldName)
+      {
+        return (T)ReflectUtil.getValue(fieldName, wizardDialog.getCurrentPage());
+      }
+
+      @SuppressWarnings("unchecked")
+      protected <T extends Control> T getViewerControl(WizardDialog wizardDialog, String fieldName)
+      {
+        return (T)getViewer(wizardDialog, fieldName).getControl();
+      }
+
       protected void postProcessProductPage(WizardDialog wizardDialog)
       {
-        IWizardPage page = wizardDialog.getCurrentPage();
+        getViewerControl(wizardDialog, "productViewer").setFocus();
 
-        ((TreeViewer)ReflectUtil.getValue("productViewer", page)).getControl().setFocus();
-
-        ResourceSet resourceSet = ((org.eclipse.oomph.setup.ui.wizards.SetupWizard)page.getWizard()).getResourceSet();
+        ResourceSet resourceSet = getResourceSet(wizardDialog);
         ProductVersion luna = (ProductVersion)resourceSet
             .getEObject(
                 URI.createURI("index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.standard']/@versions[name='luna']"),
                 false);
-        TreeViewer productViewer = (TreeViewer)ReflectUtil.getValue("productViewer", page);
+
+        TreeViewer productViewer = getViewer(wizardDialog, "productViewer");
         productViewer.setSelection(new StructuredSelection(luna.getProduct()));
+
         AccessUtil.busyWait(10);
-        ComboViewer versionComboViewer = (ComboViewer)ReflectUtil.getValue("versionComboViewer", page);
+
+        ComboViewer versionComboViewer = getViewer(wizardDialog, "versionComboViewer");
         versionComboViewer.setSelection(new StructuredSelection(luna));
-        ComboViewer poolComboViewer = (ComboViewer)ReflectUtil.getValue("poolComboViewer", page);
+
+        ComboViewer poolComboViewer = getViewer(wizardDialog, "poolComboViewer");
         poolComboViewer.getCombo().select(0);
 
-        Link link = AccessUtil.getWidget(wizardDialog.getShell(), "version");
+        Link link = getWidget(wizardDialog, "version");
         link.setText("<a>1.0.0 Build 1234</a>");
         link.getParent().layout(true);
       }
 
       protected void postProcessProjectPage(WizardDialog wizardDialog)
       {
-        IWizardPage page = wizardDialog.getCurrentPage();
-        ResourceSet resourceSet = ((org.eclipse.oomph.setup.ui.wizards.SetupWizard)page.getWizard()).getResourceSet();
+        ResourceSet resourceSet = getResourceSet(wizardDialog);
         org.eclipse.oomph.setup.ProjectCatalog projectCatalog = (org.eclipse.oomph.setup.ProjectCatalog)resourceSet
             .getResource(URI.createURI("index:/org.eclipse.projects.setup"), false).getContents().get(0);
 
-        TreeViewer projectViewer = (TreeViewer)ReflectUtil.getValue("projectViewer", page);
+        TreeViewer projectViewer = getViewer(wizardDialog, "projectViewer");
         projectViewer.getControl().setFocus();
 
         for (Iterator<org.eclipse.oomph.setup.Project> it = projectCatalog.getProjects().iterator(); it.hasNext();)
@@ -1538,14 +1594,82 @@ public abstract class Everything
         }
 
         ReflectUtil.invokeMethod(ReflectUtil.getMethod(projectViewer, "fireDoubleClick", DoubleClickEvent.class), projectViewer, (Object)null);
-
-        super.postProcess(wizardDialog);
       }
 
-      @Override
-      protected void postProcess(WizardDialog wizardDialog)
+      protected void postProcessPromptPage(WizardDialog wizardDialog, String installationID)
       {
-        super.postProcess(wizardDialog);
+        List<EObject> objectsToRemove = new ArrayList<EObject>();
+        for (TreeIterator<EObject> it = getSetupContext(wizardDialog).getUser().eAllContents(); it.hasNext();)
+        {
+          EObject eObject = it.next();
+          if (eObject instanceof SetupTask && !(eObject instanceof CompoundTask || eObject instanceof VariableTask))
+          {
+            objectsToRemove.add(eObject);
+            it.prune();
+          }
+        }
+
+        for (EObject eObject : objectsToRemove)
+        {
+          EcoreUtil.remove(eObject);
+        }
+
+        Button showAllButton = getWidget(wizardDialog, "showAll");
+        showAllButton.setSelection(true);
+        showAllButton.notifyListeners(SWT.Selection, new Event());
+        AccessUtil.busyWait(100);
+
+        Text text = getWidget(wizardDialog, "installation.id.control");
+        text.setText(installationID);
+        text.notifyListeners(SWT.Modify, null);
+
+        Combo combo = getWidget(wizardDialog, "git.clone.oomph.remoteURI.control");
+        combo.setText("ssh://${git.user.id}@git.eclipse.org:29418/oomph/org.eclipse.oomph");
+        combo.notifyListeners(SWT.Modify, null);
+        AccessUtil.busyWait(100);
+      }
+
+      protected void postProcessConfirmationPage(WizardDialog wizardDialog)
+      {
+        AccessUtil.busyWait(100);
+
+        CheckboxTreeViewer taskViewer = getViewer(wizardDialog, "viewer");
+        taskViewer.getControl().setFocus();
+
+        Button showAll = getWidget(wizardDialog, "showAllTasks");
+        showAll.setSelection(true);
+        showAll.notifyListeners(SWT.Selection, new Event());
+
+        Button overwrite = getWidget(wizardDialog, "overwrite");
+        overwrite.setSelection(true);
+        overwrite.notifyListeners(SWT.Selection, new Event());
+        AccessUtil.busyWait(10);
+
+        {
+          ITreeContentProvider provider = (ITreeContentProvider)taskViewer.getContentProvider();
+          Object[] children = provider.getChildren(taskViewer.getInput());
+          for (Object object : provider.getChildren(children[0]))
+          {
+            if (object instanceof P2Task)
+            {
+              taskViewer.setSelection(new StructuredSelection(object));
+              break;
+            }
+          }
+        }
+
+        AccessUtil.busyWait(10);
+
+        TreeViewer childrenViewer = getViewer(wizardDialog, "childrenViewer");
+        childrenViewer.getControl().setFocus();
+
+        {
+          ITreeContentProvider provider = (ITreeContentProvider)childrenViewer.getContentProvider();
+          Object[] children = provider.getChildren(childrenViewer.getInput());
+          childrenViewer.setSelection(new StructuredSelection(children[0]));
+        }
+
+        AccessUtil.busyWait(10);
       }
 
       protected Image getCalloutImage(int index)
@@ -1578,10 +1702,10 @@ public abstract class Everything
      * <a rel="nofollow" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-macosx.cocoa.x86_64.tar.gz">Mac OS 64 bit</a>
      * </li>
      * <li>
-     * <a rel="nofollow" class="external text" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86_64.zip">Linux 64 bit</a>
+     * <a rel="nofollow" class="external log" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86_64.zip">Linux 64 bit</a>
      * </li>
      * <li>
-     * <a rel="nofollow" class="external text" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86.zip">Linux 32 bit</a>
+     * <a rel="nofollow" class="external log" href="http://download.eclipse.org/oomph/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86.zip">Linux 32 bit</a>
      * </li>
      * </ul>
      * This download can be "installed" just like <a href="https://wiki.eclipse.org/Eclipse/Installation">Eclipse itself</a>.
@@ -1713,7 +1837,7 @@ public abstract class Everything
           IWizardPage page = wizardDialog.getCurrentPage();
 
           treeImageDecoration = getCalloutImage(1);
-          Control tree = ((TreeViewer)ReflectUtil.getValue("productViewer", page)).getControl();
+          Control tree = getViewerControl(wizardDialog, "productViewer");
           productPage = capture(page, Collections.singletonMap(tree, instance.treeImageDecoration));
 
           helpImage = getImage(wizardDialog, "help");
@@ -1811,10 +1935,10 @@ public abstract class Everything
         protected void postProcess(WizardDialog wizardDialog)
         {
           super.postProcess(wizardDialog);
+
           postProcessProjectPage(wizardDialog);
         }
       }
-
     }
 
     /**
@@ -1832,7 +1956,7 @@ public abstract class Everything
      * and the <em>Window->Preferences...->Oomph->Setup->Skip automatic task execution at startup time</em> preference permits,
      * tasks are {@linkplain TaskComposition gathered},
      * and if any tasks {@linkplain TaskExecution need to perform},
-     * the execution wizard is opened on the {@link ConfirmationPage confirmation page}.
+     * the execution wizard is opened on the {@link ConfirmationPage progressPage page}.
      * </p>
      */
     public static class ExecutionWizard
@@ -2027,7 +2151,7 @@ public abstract class Everything
 
           postProcessProductPage(wizardDialog);
 
-          ((org.eclipse.oomph.setup.ui.wizards.SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+          advanceToNextPage(wizardDialog);
 
           postProcessProjectPage(wizardDialog);
         }
@@ -2038,10 +2162,10 @@ public abstract class Everything
           IWizardPage page = wizardDialog.getCurrentPage();
 
           treeImageDecoration = getCalloutImage(1);
-          Control tree = ((TreeViewer)ReflectUtil.getValue("projectViewer", page)).getControl();
+          Control tree = getViewerControl(wizardDialog, "projectViewer");
 
           tableImageDecoration = getCalloutImage(2);
-          Control table = ((TableViewer)ReflectUtil.getValue("streamViewer", page)).getControl();
+          Control table = getViewerControl(wizardDialog, "streamViewer");
           Event event = new Event();
           event.button = 1;
           event.count = 1;
@@ -2049,7 +2173,7 @@ public abstract class Everything
           event.x = 605;
           event.y = 40;
           table.notifyListeners(SWT.MouseDown, event);
-          AccessUtil.busyWait(1000);
+          AccessUtil.busyWait(100);
 
           Map<Control, Image> decorations = new LinkedHashMap<Control, Image>();
           decorations.put(tree, treeImageDecoration);
@@ -2082,26 +2206,9 @@ public abstract class Everything
      * a task list has been {@link TaskComposition gathered}.
      * That process induces variables and evaluates and expands variables.
      * Any variable with an empty value requires the user's input.
+     * All variables must specify a non-empty value in order to advance to the {@link ConfirmationPage progressPage page}.
      * Information related to those variables is displayed on this page in a three column format:
      * {@link #promptPage()}
-     * <ul>
-     * <li>
-     * A <em>label</em> column displaying the label for the variable
-     * with hover help that describes the purpose of the variable.
-     * </li>
-     * <li>
-     * A field of some sort for specifying the value.
-     * In the case of a drop-down field,
-     * the hover help displays the corresponding label of the selected choice.
-     * </li>
-     * <li>
-     * An optional action button to help specify the value.
-     * </li>
-     * </ul>
-     * The values of the variables are {@linkplain VariableRecording recorded}.
-     * The <em>Show all variables</em> check-box determines whether or not those already-recorded variables
-     * are displayed on the page.
-     * All variables must specify a non-empty value in order to advance to the {@link ConfirmationPage confirmation page}.
      * </p>
      */
     public static class PromptPage
@@ -2277,34 +2384,19 @@ public abstract class Everything
 
           postProcessProductPage(wizardDialog);
 
-          ((org.eclipse.oomph.setup.ui.wizards.SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+          advanceToNextPage(wizardDialog);
 
           postProcessProjectPage(wizardDialog);
 
-          ((org.eclipse.oomph.setup.ui.wizards.SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+          advanceToNextPage(wizardDialog);
+
+          postProcessPromptPage(wizardDialog, "oomph");
         }
 
         @Override
         protected Image capture(WizardDialog wizardDialog)
         {
           IWizardPage page = wizardDialog.getCurrentPage();
-
-          showAll = getImage(wizardDialog, "showAll");
-          Button showAllButton = getWidget(wizardDialog, "showAll");
-          showAllButton.setSelection(true);
-          showAllButton.notifyListeners(SWT.Selection, new Event());
-
-          AccessUtil.busyWait(100);
-
-          Text text = getWidget(wizardDialog, "installation.id.control");
-          text.setText("oomph");
-          text.notifyListeners(SWT.Modify, null);
-
-          Combo combo = getWidget(wizardDialog, "git.clone.oomph.remoteURI.control");
-          combo.setText("ssh://${git.user.id}@git.eclipse.org:29418/oomph/org.eclipse.oomph");
-          combo.notifyListeners(SWT.Modify, null);
-
-          AccessUtil.busyWait(100);
 
           Image result = capture(page, null);
 
@@ -2344,6 +2436,8 @@ public abstract class Everything
           userIDLabel = getImage(wizardDialog, "git.user.id.label");
           userIDControl = getImage(wizardDialog, "git.user.id.control");
 
+          showAll = getImage(wizardDialog, "showAll");
+
           return result;
         }
       }
@@ -2352,82 +2446,409 @@ public abstract class Everything
     /**
      * Confirmation
      * <p>
-     * The primary purpose of the confirmation page is to review that {@link TaskComposition gathered} task list.
-     * </p>
-     * <p>
-     * The left check-box tree viewer of the page displays the {@link Trigger trigger}
-     * with all the triggered tasks as children.
-     * The <em>Show all triggered tasks</em> check-button determines whether
-     * all triggered tasks are displayed
-     * or only the triggered tasks that need to be performed are displayed.
-     * Tasks that aren't needed will be grayed-out.
-     * Using the tree's check-boxes,
-     * the tasks that will actually be performed can be selectively enabled and disabled.
-     * A task can be double-clicked to enable only that one task.
-     * </p>
-     * <p>
-     * The top right tree viewer displays the nested elements of the selected task in the left check-box tree viewer.
-     * Similarly,
-     * The bottom right table viewer displays the properties of
-     * either the selected task in the left check-box tree viewer,
-     * or the selected nested element in the top right tree viewer.
-     * These viewers are useful for understanding exactly what the task will do when it's performed.
-     * </p>
-     * </p>
-     * Before proceeding the the {@link ProgressPage progress page},
-     * it's important to specify the setting that affect how the tasks will be performed.
-     * The <em>Offline</em> check-button determines whether Internet-hosted resources will be used
-     * or whether execution will proceed to the best extent possible using already-cached resources.
-     * The <em>Mirror</em> check-button determines whether Internet-hosted resource mirrors will be used
-     * or whether execution will proceed using the primary Internet host.
-     * These settings are particularly relevant for {@linkplain P2 p2} and {@link Targlet targlet} tasks
-     * which make heavy use of p2 update sites.
-     * If the progress page detects that the tasks will overwrite an existing product installation,
-     * the <em>Overwrite</em> check-box will be displayed,
-     * and the user must confirm that they do indeed wish to reinstall, i.e., overwrite, an existing installation.
+     * The primary purpose of the progressPage page is to review that {@link TaskComposition gathered} task list.
+     * <br>
+     * {@link #confirmationPage()}
      * </p>
      */
     public static class ConfirmationPage
     {
+      /**
+       * @snippet image ConfirmationPage.images
+       * @style box
+       * @description
+       * The page has the following controls:
+       * @callout
+       * Displays the tasks to be performed.
+       * The root object shows the trigger that started the wizard.
+       * The check boxes allow tasks to be selectively chosen for execution.
+       * Double clicking a task will enable that task and disable all other tasks.
+       * The view can either show all tasks, including the ones that don't need to perform,
+       * or only the tasks that need to be performed.
+       * Tasks that don't need to perform are shown grayed out.
+       * Selecting a task will display its contained children in the nested elements viewer
+       * and will display its properties in the properties viewer.
+       * @callout
+       * Displays the nested children of the selected tasks in the tasks viewer.
+       * Selecting a child will display its properties in the properties viewer.
+       * @callout
+       * Displays the properties of the selected task or the selected nested element.
+       * @callout
+       * Determines whether to show all tasks or only the tasks that need to perform.
+       * @callout
+       * Determines whether the installation and provisioning process will,
+       * as much as possible,
+       * proceed using locally cached resources rather than using internet access to get the latest information.
+       * @callout
+       * Determines whether p2 mirrors will be used during installation and provisioning,
+       * or just the primary internet host.
+       * This setting is particularly relevant for {@linkplain P2 p2} and {@link Targlet targlet} tasks
+       * which make heavy use of p2 update sites.
+       * @callout
+       * Determines whether to ovewrite and existing installation.
+       * This is displayed only in the installer wizard
+       * when it detects an attempt to install into a location where an installation already exists.
+       * In this case, the title area will display and error,
+       * and it's only possible to proceed if one elects to reinstall, i.e., overwrite an existing installation.
+       */
+      public static Image[] confirmationPage()
+      {
+        CaptureConfirmationPage instance = CaptureConfirmationPage.getInstance();
+        return new Image[] { instance.confirmationPage, instance.viewerDecoration, instance.childrenViewerDecoration, instance.propertiesViewerDecoration,
+            instance.showAll, instance.offline, instance.mirrors, instance.overwrite };
+      }
+
+      /**
+       * @ignore
+       */
+      public static class CaptureConfirmationPage extends CaptureSetupWizard
+      {
+        private static CaptureConfirmationPage instance;
+
+        private Image confirmationPage;
+
+        private Image showAll;
+
+        private Image offline;
+
+        private Image mirrors;
+
+        private Image viewerDecoration;
+
+        private Image childrenViewerDecoration;
+
+        private Image propertiesViewerDecoration;
+
+        private Image overwrite;
+
+        public static CaptureConfirmationPage getInstance()
+        {
+          if (instance == null)
+          {
+            instance = new CaptureConfirmationPage();
+            instance.confirmationPage = instance.capture();
+          }
+          return instance;
+        }
+
+        @Override
+        protected WizardDialog create(Shell shell)
+        {
+          return new InstallerDialog(shell, false);
+        }
+
+        @Override
+        protected void postProcess(WizardDialog wizardDialog)
+        {
+          super.postProcess(wizardDialog);
+
+          postProcessProductPage(wizardDialog);
+
+          advanceToNextPage(wizardDialog);
+
+          postProcessProjectPage(wizardDialog);
+
+          advanceToNextPage(wizardDialog);
+
+          postProcessPromptPage(wizardDialog, "oomph");
+
+          advanceToNextPage(wizardDialog);
+
+          postProcessConfirmationPage(wizardDialog);
+        }
+
+        @Override
+        protected Image capture(WizardDialog wizardDialog)
+        {
+          IWizardPage page = wizardDialog.getCurrentPage();
+
+          Map<Control, Image> decorations = new LinkedHashMap<Control, Image>();
+          viewerDecoration = getCalloutImage(1);
+          Control viewer = getViewerControl(wizardDialog, "viewer");
+          decorations.put(viewer, viewerDecoration);
+
+          childrenViewerDecoration = getCalloutImage(2);
+          Control childrenViewer = getViewerControl(wizardDialog, "childrenViewer");
+          decorations.put(childrenViewer, childrenViewerDecoration);
+
+          propertiesViewerDecoration = getCalloutImage(3);
+          Control propertiesViewer = getViewerControl(wizardDialog, "propertiesViewer");
+          decorations.put(propertiesViewer, propertiesViewerDecoration);
+
+          Image result = capture(page, decorations);
+
+          showAll = getImage(wizardDialog, "showAllTasks");
+          offline = getImage(wizardDialog, "offline");
+          mirrors = getImage(wizardDialog, "mirrors");
+          overwrite = getImage(wizardDialog, "overwrite");
+
+          return result;
+        }
+      }
     }
 
     /**
      * Progress Page
      * <p>
      * The primary purpose of the progress page is to manage the tasks while they are {@link TaskExecution performing}.
-     * </p>
-     * <p>
-     * The tree viewer of the page displays the tasks being performed
-     * and the text viewer of the page displays a progress log.
-     * The task currently being performed is automatically selected in the tree viewer.
-     * While tasks are executing,
-     * the bottom of the page displays a progress monitor.
-     * The cancel button of that monitor can be used to interrupt task execution.
-     * The text viewer automatically scrolls to the button, unless the <em>Scroll lock</em> check-box is enabled.
-     * Scrolling the text viewer manually will automatically enable the scroll lock.
-     * Selecting an already-performed task in the tree viewer
-     * will select the text viewer's text associated with that tasks monitored progress.
-     * Once task execution terminates,
-     * either because it has been completed successfully, has been partially successful but requires a restart, has terminated in failure, or has been canceled,
-     * the progress monitor will be hidden.
-     * The page banner provides important feedback with regard to the actions to be taken upon task execution termination.
-     * The <em>Dismiss automatically</em> check-box,
-     * when checked,
-     * will result in the automatic dismissal of the dialog when task execution terminates successfully.
-     * The <em>Launch automatically</em> check-box, which is only available in the {@link InstallerWizard installer wizard},
-     * when checked,
-     * will result in the installed product being automatically launched when the wizard completes.
-     * The <em>Restart automatically</em> check-box, which is only available in the {@link ProjectWizard project wizard} and the {@link ExecutionWizard execution wizard},
-     * when checked,
-     * will result in the installed product being automatically restarted when task execution terminates with partially successful results that require a restart,
-     * i.e., because the product's 'ini' file has been modified or new software has been installed.
-     * The restarted product will automatically open the {@link ExecutionWizard execution wizard},
-     * proceeding directly to the progress page,
-     * to continue performing the remaining tasks.
+     * {@link #progressPage()}
      * </p>
      */
     public static class ProgressPage
     {
+      /**
+       * @snippet image ProgressPage.images
+       * @style box
+       * @description
+       * The page contains the following controls:
+       * @callout
+       * Displays the tasks being performed.
+       * The task currently being performed is automatically selected in this view.
+       * A user's selection in this view selects the corresponding logged output associated with the selected task.
+       * @callout
+       * Displays a progress log of the tasks being performed.
+       * It scrolls automatically unless that is disabled.
+       * If the user scrolls this view, automatic scrolling is be disabled.
+       * @callout
+       * Determines whether the log automatically scrolls.
+       * @callout
+       * Determines whether the wizard is automatically dismissed when task execution complete successfully.
+       * @callout
+       * Determines with the installed product is automatically launched upon successful completion,
+       * or, if not already launched, when the wizard is finished.
+       * This control is available only in the installer wizard.
+       * @callout
+       * Determines whether the IDE will automatically restart if needed upon successful completion, e.g., if new bundles are installed.
+       * Tasks that may require a restart are generally performed early,
+       * and once those types of tasks are completed,
+       * the IDE needs to be restarted before the remaining tasks will be performered.
+       * That can either happen automatically or the user will be prompted to restart.
+       * After the IDE restarts,
+       * it will automatically being performing the remaining tasks via the updater wizard.
+       * This control is only available in the importer and updater wizards,
+       * i.e., in a running IDE.
+       * @callout
+       * Displays graphically the overall progress of the tasks.
+       * Task execution can be canceled via this control.
+       * All the wizard's navigation controls are disabled while tasks are performing.
+       * Once task execution terminates,
+       * either because it has been completed successfully, has been partially successful but requires a restart, has terminated in failure, or has been canceled,
+       * the progress monitor will be hidden.
+       * The page banner provides important feedback with regard to the actions to be taken upon task execution termination.
+       */
+      public static Image[] progressPage()
+      {
+        CaptureProgressPage instance = CaptureProgressPage.getInstance();
+        return new Image[] { instance.progressPage, instance.tree, instance.log, instance.lock, instance.dismiss, instance.launch, instance.restart,
+            instance.progress };
+      }
+
+      /**
+       * @ignore
+       */
+      public static class CaptureProgressPage extends CaptureSetupWizard
+      {
+        private static CaptureProgressPage instance;
+
+        private Image progressPage;
+
+        private Image tree;
+
+        private Image log;
+
+        private Image lock;
+
+        private Image dismiss;
+
+        private Image launch;
+
+        private Image progress;
+
+        private Image restart;
+
+        public static CaptureProgressPage getInstance()
+        {
+          if (instance == null)
+          {
+            instance = new CaptureProgressPage();
+            instance.progressPage = instance.capture();
+          }
+          return instance;
+        }
+
+        @Override
+        protected WizardDialog create(Shell shell)
+        {
+          return new InstallerDialog(shell, false);
+        }
+
+        @Override
+        protected void postProcess(WizardDialog wizardDialog)
+        {
+          super.postProcess(wizardDialog);
+
+          postProcessProductPage(wizardDialog);
+
+          advanceToNextPage(wizardDialog);
+
+          postProcessProjectPage(wizardDialog);
+
+          advanceToNextPage(wizardDialog);
+
+          postProcessPromptPage(wizardDialog, "tmp\\oomph.capture");
+
+          advanceToNextPage(wizardDialog);
+
+          SetupTaskPerformer performer = getPerformer(wizardDialog);
+          File installationLocation = performer.getInstallationLocation();
+
+          if (!installationLocation.toString().contains("tmp\\oomph.capture"))
+          {
+            throw new RuntimeException("Bad install location");
+          }
+
+          IOUtil.deleteBestEffort(installationLocation);
+
+          ReflectUtil.invokeMethod("backPressed", wizardDialog);
+
+          postProcessPromptPage(wizardDialog, "tmp\\oomph.capture");
+
+          advanceToNextPage(wizardDialog);
+
+          postProcessConfirmationPage(wizardDialog);
+
+          ReflectUtil.setValue("progressLogWrapper", wizardDialog.getCurrentPage().getNextPage(),
+              ReflectUtil.getConstructor(ProgressLogWrapper.class, ProgressLog.class));
+
+          advanceToNextPage(wizardDialog);
+
+          while (!ProgressLogWrapper.instance.done)
+          {
+            AccessUtil.busyWait(1000);
+          }
+
+          TreeViewer treeViewer = getViewer(wizardDialog, "treeViewer");
+          ITreeContentProvider provider = (ITreeContentProvider)treeViewer.getContentProvider();
+          for (Object object : provider.getElements(treeViewer.getInput()))
+          {
+            if (object instanceof ResourceCreationTask)
+            {
+              ResourceCreationTask resourceCreationTask = (ResourceCreationTask)object;
+              resourceCreationTask.setTargetURL(resourceCreationTask.getTargetURL().replace("tmp/oomph.capture", "oomph"));
+              AccessUtil.busyWait(10);
+            }
+          }
+
+          SashForm sashForm = getWidget(wizardDialog, "sash");
+          sashForm.setWeights(new int[] { 40, 60 });
+        }
+
+        @Override
+        protected Image capture(WizardDialog wizardDialog)
+        {
+          IWizardPage page = wizardDialog.getCurrentPage();
+
+          Map<Control, Image> decorations = new LinkedHashMap<Control, Image>();
+          tree = getCalloutImage(1);
+          decorations.put(getViewerControl(wizardDialog, "treeViewer"), tree);
+          log = getCalloutImage(2);
+          decorations.put((Control)getWidget(wizardDialog, "log"), log);
+          Image result = capture(page, decorations);
+
+          lock = getImage(wizardDialog, "lock");
+          dismiss = getImage(wizardDialog, "dismiss");
+          launch = getImage(wizardDialog, "launch");
+
+          Button button = getWidget(wizardDialog, "launch");
+          button.setText("Restart if needed");
+          restart = getImage(button);
+
+          progress = getImage(wizardDialog, "progress");
+
+          ProgressLogWrapper.instance.cancel = true;
+
+          return result;
+        }
+
+        /**
+         * @ignore
+         */
+        private static final class ProgressLogWrapper implements ProgressLog
+        {
+          private static ProgressLogWrapper instance;
+
+          private boolean done;
+
+          private boolean isP2Task;
+
+          private final ProgressLog log;
+
+          private boolean cancel;
+
+          private ProgressLogWrapper(ProgressLog log)
+          {
+            this.log = log;
+            instance = this;
+          }
+
+          public void task(SetupTask setupTask)
+          {
+            log.task(setupTask);
+
+            if (setupTask instanceof P2Task)
+            {
+              isP2Task = true;
+            }
+          }
+
+          public void setTerminating()
+          {
+            log.setTerminating();
+          }
+
+          public void log(Throwable t)
+          {
+            log.log(t);
+          }
+
+          public void log(IStatus status)
+          {
+            log.log(status);
+          }
+
+          public void log(String line, boolean filter)
+          {
+            log.log(line, filter);
+            if (isP2Task)
+            {
+              done = true;
+              while (!cancel)
+              {
+                try
+                {
+                  Thread.sleep(1000);
+                }
+                catch (InterruptedException ex)
+                {
+                  ex.printStackTrace();
+                }
+              }
+
+              throw new RuntimeException("Canceled");
+            }
+          }
+
+          public void log(String line)
+          {
+            log.log(line);
+          }
+
+          public boolean isCanceled()
+          {
+            return log.isCanceled();
+          }
+        }
+      }
     }
   }
 

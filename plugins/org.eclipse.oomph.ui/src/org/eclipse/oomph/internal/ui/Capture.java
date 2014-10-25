@@ -14,6 +14,7 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.jface.dialogs.IDialogPage;
+import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -254,7 +255,7 @@ public abstract class Capture<T>
 
         int border = control.getBorderWidth();
 
-        Point controlLocation = control.toDisplay(controlBounds.x + controlBounds.width - 1 - border, controlBounds.y - border);
+        Point controlLocation = control.getParent().toDisplay(controlBounds.x + controlBounds.width - 1 - border, controlBounds.y - border);
         Point relativeControlLocation = parent.toControl(controlLocation);
 
         Rectangle imageBounds = decoration.getBounds();
@@ -270,17 +271,13 @@ public abstract class Capture<T>
         }
 
         gc.drawImage(decoration, imageBounds.x, imageBounds.y);
-
-        Display display = parent.getDisplay();
-        gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-        gc.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
       }
     }
 
     gc.dispose();
   }
 
-  private Image getImage(final Control control)
+  protected Image getImage(final Control control)
   {
     Point size = control.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 
@@ -338,6 +335,14 @@ public abstract class Capture<T>
         button.setBackground(background);
         button.setEnabled(isEnabled);
       }
+    }
+    
+    if (widget instanceof ProgressMonitorPart)
+    {
+      ProgressMonitorPart progressMonitorPart = (ProgressMonitorPart)widget;
+      progressMonitorPart.setSize(170, progressMonitorPart.getSize().y);
+      AccessUtil.busyWait(10);
+      return AccessUtil.capture(progressMonitorPart);
     }
 
     if (widget instanceof Text)

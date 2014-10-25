@@ -310,10 +310,15 @@ public final class AccessUtil
     }
   }
 
+  public static Object getKey(Widget widget)
+  {
+    return widget.getData(DATA_KEY);
+  }
+
   @SuppressWarnings("unchecked")
   public static <T extends Widget> T getWidget(Widget widget, Object key)
   {
-    Object data = widget.getData(DATA_KEY);
+    Object data = getKey(widget);
     if (key.equals(data))
     {
       return (T)widget;

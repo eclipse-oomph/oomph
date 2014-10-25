@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
@@ -174,18 +175,21 @@ public class ConfirmationPage extends SetupWizardPage
         viewer.refresh();
       }
     });
+    AccessUtil.setKey(showAllButton, "showAllTasks");
 
     offlineProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
     if (offlineProperty == null)
     {
       offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false,
           "toggleCommand:org.eclipse.oomph.ui.ToggleOfflineMode");
+      AccessUtil.setKey(offlineButton, "offline");
     }
 
     mirrorsProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);
     if (mirrorsProperty == null)
     {
       mirrorsButton = addCheckButton("Mirrors", "Make use of p2 mirrors during the installation process", true, "mirrors");
+      AccessUtil.setKey(mirrorsButton, "mirrors");
     }
 
     if (getTrigger() == Trigger.BOOTSTRAP)
@@ -199,6 +203,7 @@ public class ConfirmationPage extends SetupWizardPage
           validate();
         }
       });
+      AccessUtil.setKey(overwriteButton, "overwrite");
     }
     else if (getWorkspace() != null)
     {
@@ -211,6 +216,7 @@ public class ConfirmationPage extends SetupWizardPage
           validate();
         }
       });
+      AccessUtil.setKey(switchWorkspaceButton, "switch");
     }
   }
 

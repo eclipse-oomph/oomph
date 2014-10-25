@@ -176,11 +176,13 @@ public final class ReflectUtil
     }
   }
 
-  public static Object getValue(Field field, Object target)
+  public static <T> T getValue(Field field, Object target)
   {
     try
     {
-      return field.get(target);
+      @SuppressWarnings("unchecked")
+      T value = (T)field.get(target);
+      return value;
     }
     catch (RuntimeException ex)
     {
@@ -192,7 +194,7 @@ public final class ReflectUtil
     }
   }
 
-  public static Object getValue(String fieldName, Object target)
+  public static <T> T getValue(String fieldName, Object target)
   {
     if (target instanceof Class)
     {

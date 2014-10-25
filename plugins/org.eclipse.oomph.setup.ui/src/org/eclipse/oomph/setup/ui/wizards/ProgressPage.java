@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
@@ -92,6 +93,7 @@ import org.eclipse.ui.internal.progress.JobInfo;
 import org.eclipse.ui.internal.progress.ProgressManager;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.security.cert.Certificate;
 import java.text.SimpleDateFormat;
@@ -113,6 +115,8 @@ public class ProgressPage extends SetupWizardPage
   private static final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm:ss");
 
   private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
+
+  private Constructor<? extends ProgressLog> progressLogWrapper;
 
   private TreeViewer treeViewer;
 
@@ -250,6 +254,7 @@ public class ProgressPage extends SetupWizardPage
 
     SashForm sashForm = new SashForm(mainComposite, SWT.VERTICAL);
     sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
+    AccessUtil.setKey(sashForm, "sash");
 
     treeViewer = new TreeViewer(sashForm, SWT.BORDER);
     Tree tree = treeViewer.getTree();
@@ -296,6 +301,8 @@ public class ProgressPage extends SetupWizardPage
       }
     });
 
+    AccessUtil.setKey(logText, "log");
+
     return mainComposite;
   }
 
@@ -312,6 +319,7 @@ public class ProgressPage extends SetupWizardPage
         scrollLock = scrollLockButton.getSelection();
       }
     });
+    AccessUtil.setKey(scrollLockButton, "lock");
 
     dismissButton = addCheckButton("Dismiss automatically", "Dismiss this wizard when all setup tasks have performed successfully", false,
         "dismissAutomatically");
@@ -324,6 +332,7 @@ public class ProgressPage extends SetupWizardPage
         dismissAutomatically = dismissButton.getSelection();
       }
     });
+    AccessUtil.setKey(dismissButton, "dismiss");
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
@@ -345,6 +354,7 @@ public class ProgressPage extends SetupWizardPage
         launchAutomatically = launchButton.getSelection();
       }
     });
+    AccessUtil.setKey(launchButton, "launch");
   }
 
   @Override
@@ -377,6 +387,7 @@ public class ProgressPage extends SetupWizardPage
     };
 
     progressMonitorPart.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    AccessUtil.setKey(progressMonitorPart, "progress");
   }
 
   @Override
@@ -392,8 +403,22 @@ public class ProgressPage extends SetupWizardPage
       progressPageLog = new ProgressPageLog(progressMonitorPart);
       logDocument.set("");
 
+      // This is a private hook so we can monitor progress for documentation capture.
+      ProgressLog progressLog = progressPageLog;
+      if (progressLogWrapper != null)
+      {
+        try
+        {
+          progressLog = progressLogWrapper.newInstance(progressLog);
+        }
+        catch (Throwable ex)
+        {
+          // Ignore.
+        }
+      }
+
       final SetupTaskPerformer performer = getPerformer();
-      performer.setProgress(progressPageLog);
+      performer.setProgress(progressLog);
       performer.put(ILicense.class, LICENSE_CONFIRMER);
       performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performer.getUser(), false));
 
@@ -846,6 +871,8 @@ public class ProgressPage extends SetupWizardPage
 
     private ProgressMonitorPart progressMonitorPart;
 
+    private int time;
+
     public ProgressPageLog(ProgressMonitorPart progressMonitorPart)
     {
       this.progressMonitorPart = progressMonitorPart;
@@ -974,7 +1001,20 @@ public class ProgressPage extends SetupWizardPage
       boolean wasEmpty = queue.length() == 0;
 
       queue.append('[');
-      queue.append(TIME.format(date));
+      if (progressLogWrapper == null)
+      {
+        queue.append(TIME.format(date));
+      }
+      else
+      {
+        queue.append("12:00:");
+        if (time < 10)
+        {
+          queue.append('0');
+        }
+        queue.append(time++);
+      }
+
       queue.append("] ");
       queue.append(line);
       queue.append('\n');

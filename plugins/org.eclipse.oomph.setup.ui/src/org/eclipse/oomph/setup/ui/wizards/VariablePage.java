@@ -14,6 +14,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.internal.ui.WorkUnit;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
@@ -26,7 +27,6 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.ui.PropertyField.AuthenticatedField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
@@ -63,6 +63,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -337,29 +338,30 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     parent.getParent().layout();
     parent.setRedraw(true);
 
-    // for (FieldHolder fieldHolder : manager)
-    // {
-    // Control control = fieldHolder.getControl();
-    // PropertyField field = fieldHolder.field;
-    // Label label = field.getLabel();
-    // Control helper = field.getHelper();
-    // for (VariableTask variable : fieldHolder.getVariables())
-    // {
-    // String name = variable.getName();
-    // if (name.startsWith("@<id>"))
-    // {
-    // name = name.substring(name.indexOf("name: ") + 6, name.indexOf(')'));
-    // }
-    //
-    // System.err.println("###'" + name + "'");
-    //
-    // AccessUtil.setKey(label, name + ".label");
-    // AccessUtil.setKey(control, name + ".control");
-    // AccessUtil.setKey(helper, name + ".helper");
-    //
-    // break;
-    // }
-    // }
+    for (FieldHolder fieldHolder : manager)
+    {
+      if (!fieldHolder.isDisposed())
+      {
+        Control control = fieldHolder.getControl();
+        PropertyField field = fieldHolder.field;
+        Label label = field.getLabel();
+        Control helper = field.getHelper();
+        for (VariableTask variable : fieldHolder.getVariables())
+        {
+          String name = variable.getName();
+          if (name.startsWith("@<id>"))
+          {
+            name = name.substring(name.indexOf("name: ") + 6, name.indexOf(')'));
+          }
+
+          AccessUtil.setKey(label, name + ".label");
+          AccessUtil.setKey(control, name + ".control");
+          AccessUtil.setKey(helper, name + ".helper");
+
+          break;
+        }
+      }
+    }
 
     if (!isPageComplete() && firstEmptyField == null)
     {
@@ -624,7 +626,14 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   public UserCallback getUserCallback()
   {
-    return new UICallback(getShell(), AbstractSetupDialog.SHELL_TEXT);
+    return new UICallback(getShell(), new WorkUnit<String, RuntimeException>()
+    {
+      @Override
+      protected String doExecute()
+      {
+        return getShell().getText();
+      }
+    }.execute());
   }
 
   /**
