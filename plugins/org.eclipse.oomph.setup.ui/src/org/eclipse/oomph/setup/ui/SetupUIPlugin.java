@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator;
 import org.eclipse.oomph.setup.ui.questionnaire.GearShell;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
@@ -98,7 +99,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public SetupUIPlugin()
   {
-    super(new ResourceLocator[] { org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE });
+    super(new ResourceLocator[] { org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE, SetupEditPlugin.INSTANCE });
   }
 
   public void refreshCache()

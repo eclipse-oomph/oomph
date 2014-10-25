@@ -61,6 +61,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -513,11 +514,24 @@ public class ConfirmationPage extends SetupWizardPage
       {
         if (object == ROOT_ELEMENT)
         {
-          String trigger = getText(getTrigger()).toLowerCase();
-          return StringUtil.cap(trigger) + " Tasks";
+          Trigger trigger = getTrigger();
+          return StringUtil.cap(getText(trigger).toLowerCase()) + " Tasks";
         }
 
         return super.getText(object);
+      }
+
+      @Override
+      public Image getImage(Object object)
+      {
+        if (object == ROOT_ELEMENT)
+        {
+          Trigger trigger = getTrigger();
+          String key = StringUtil.cap(trigger.toString().toLowerCase()) + "Trigger";
+          return SetupUIPlugin.INSTANCE.getSWTImage(key);
+        }
+
+        return super.getImage(object);
       }
 
       @Override

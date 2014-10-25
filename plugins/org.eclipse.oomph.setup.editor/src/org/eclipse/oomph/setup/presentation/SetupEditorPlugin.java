@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
-import org.eclipse.oomph.base.provider.BaseEditPlugin;
+import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -50,11 +50,11 @@ public final class SetupEditorPlugin extends OomphUIPlugin
    * Create the instance.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public SetupEditorPlugin()
   {
-    super(new ResourceLocator[] { BaseEditPlugin.INSTANCE, });
+    super(new ResourceLocator[] { SetupEditPlugin.INSTANCE, });
   }
 
   /**
