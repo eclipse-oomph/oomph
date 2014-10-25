@@ -1,0 +1,152 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Context (Oomph Setup Documentation)</title>
+
+<link rel="stylesheet" href="../book.css" charset="ISO-8859-1" type="text/css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Context (Oomph Setup Documentation)";
+    }
+}
+</script>
+</head>
+
+<body bgcolor="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs breadcrumbs_top"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Concepts</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Context</h1></td>
+		<td align="right" valign="middle" nowrap><a href="index.html" title="Backward to Concepts"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="DocScope.html" title="Forward to Scopes"><img src="../../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p>
+ Consider the steps involved in setting up a fresh Eclipse development environment to work with the source code of a particular version of a specific project:
+ <ul>
+ <li>
+ Install a project-specific IDE with appropriate tooling,
+ i.e., an IDE configured with all the settings and tools needed for editing, compiling, debugging, and testing the project's artifacts.
+ </li>
+ <li>
+ Materialize the workspace with the project's bundles and features by importing their workspace projects from various source code repositories,
+ organizing those workspace projects into meaningful working sets.
+ </li>
+ <li>
+ Materialize the target platform to contain all the bundles and features needed to compile the project's source code, run the project's tests, and exercise the project's end-user functionality.
+ </li>
+ </ul>
+
+ The instructions for all these steps must be well-documented and generally evolve from release to release.
+ As such, one should consider the following salient questions:
+ <ul>
+ <li>
+ Who writes and maintains these instructions?
+ </li>
+ <li>
+ How do contributors find these instructions for each specific project?
+ </li>
+ <li>
+ How many contributors must follow these instructions, how often, and with how much invested time?
+ </li>
+ </ul>
+ The most fundamental question is, why is anyone doing this manually?
+ The overall process is tedious, error-prone, and time consuming,
+ i.e., it's a complete waste of human resource.
+ With Oomph, all these instructions are formalized as setup <a href="DocTask.html" title="Article in Oomph Setup Documentation">tasks</a> that are <a href="DocTaskExecution.html" title="Article in Oomph Setup Documentation">performed</a> automatically.
+ </p>
+ <p>
+ In addition to the project-specific setup process,
+ each user typically has her own personal favorite tools she wants installed
+ as well as has her own personal preferences,
+ such as key bindings,
+ she wants uniformly applied to each installation and workspace.
+ With Oomph Setup, this too is formalized and automated.
+ </p>
+
+ <p>
+ The process of setting up a development environment involves two phases.
+ The first, or bootstrap phase, involves installing a functional product on disk.
+ Using the traditional manual approach one achieves this goal by as follows:
+ <ul>
+ <li>
+ Download a product, i.e., a package, from Eclipse's download page.
+ </li>
+ <li>
+ Unzip that download to the desired location on disk using an unzip tool that can handle Eclipse's zip files.
+ </li>
+ <li>
+ Ensure that a bit-appropriate JRE version is installed and visible on the execution path.
+ </li>
+ <li>
+ Run the executable.
+ </li>
+ </ul>
+ </p>
+ <p>
+ The second phase involves activities performed in the running product itself:
+ <ul>
+ <li>
+ Install additional tools not included in the downloaded product.
+ </li>
+ <li>
+ Configure various preferences appropriately, ideally by importing those preferences from a carefully-crafted Eclipse preference file.
+ </li>
+ <li>
+ Import workspace projects, ideally by importing those projects from a carefully-crafted project set file.
+ </li>
+ <li>
+ Activate the required target platform, ideally by activating a carefully-crafted target platform description file.
+ </li>
+ </ul>
+ </p>
+ <p>
+ To automate this setup process, Oomph provides the following:
+ <ul>
+ <li>
+ An <a href="../user/wizard/DocInstallWizard.html" title="Article in Oomph Setup Documentation">installer wizard</a> that automates the both phases of setting up a development environment.
+ </li>
+ <li>
+ A <a href="../user/wizard/DocImportWizard.html" title="Article in Oomph Setup Documentation">project wizard</a> that automates the second phase of setting up a development environment.
+ <li>
+ An <a href="../user/wizard/DocImportWizard.html" title="Article in Oomph Setup Documentation">execution wizard</a> that automates updating the development environment,
+ including the provisioning of personal favorite tools and personal preferences.
+ </li>
+ </ul>
+ Oomph helps ensure that each developer works with the same uniformly-provisioned development environment
+ and that each user has her personal tools and preferences uniformly available across all installations and workspaces.
+ Note that Oomph can be installed into an existing IDE, i.e., one not installed by Oomph,
+ via Oomph's <a rel="nofollow" href="http://download.eclipse.org/oomph/updates">update site</a>
+ or via Oomph's <a rel="nofollow" href="http://download.eclipse.org/oomph/updates/org.eclipse.oomph.site.zip">site archive</a>.</p>
+ </p>
+ <p>
+ To understand how best to exploit Oomph in order to save time and spare aggravation,
+ some basic concepts need to be well understood.
+ Automation is achieved by specifying setup <a href="DocTask.html" title="Article in Oomph Setup Documentation">tasks</a> organized into <a href="DocScope.html" title="Article in Oomph Setup Documentation">scopes</a> stored in <a href="DocSetupResource.html" title="Article in Oomph Setup Documentation">resources</a>.
+ </p>
+ <p>
+ An important footnote is that Oomph makes heavy use of <a href="DocBundlePool.html" title="Article in Oomph Setup Documentation">bundle pooling</a>
+ so it highly disk-space efficient to install many products and provision many target platforms
+ because they can all share a common bundle pool such that for each installable unit, there is only on jar file on disk.
+ Not only is this space efficient,
+ it also dramatically improves installation and provisioning performance
+ because once an installable unit is in the pool,
+ it never again needs to be downloaded from the Internet.
+ </p>
+ <p>
+ This document provides a general overview of the concepts that underly Oomph's Setup model:
+ <a href="" title="Article in Oomph Setup Documentation">Context</a>
+ </p>
+
+<p align="right">
+<a href="index.html" title="Backward to Concepts"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="DocScope.html" title="Forward to Scopes"><img src="../../images/forward.png" border="0"></a></p>
+<!-- <div class="help_breadcrumbs breadcrumbs_bottom"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Concepts</a></div> -->
+
+<div class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</div>
+</body>
+</html>

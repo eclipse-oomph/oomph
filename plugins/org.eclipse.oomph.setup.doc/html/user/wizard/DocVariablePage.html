@@ -1,0 +1,305 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Variables Page (Oomph Setup Documentation)</title>
+
+<link rel="stylesheet" href="../../book.css" charset="ISO-8859-1" type="text/css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Variables Page (Oomph Setup Documentation)";
+    }
+}
+</script>
+
+<link rel="stylesheet" href="../../editor.css" charset="UTF-8" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
+<script>
+$(function() {
+$( ".resizable" ).resizable({ handles:"s,e,se", autoHide:true });
+});
+</script>
+
+<script type="text/javascript">
+function maximize(id)
+{
+  e = document.getElementById('max_' + id);
+  c1 = document.getElementById('editor_content_1_' + id);
+  c2 = document.getElementById('editor_content_2_' + id);
+  pv = document.getElementById('max_pv_' + id);
+  if (e.className == 'max')
+  {
+    e.className = 'rst';
+    e.setAttribute('title', 'Restore');
+    c1.setAttribute('style_orig', c1.getAttribute('style'));
+    c1.setAttribute('style', 'border:2px solid #99b4d1; border-top:none;');
+    c2.setAttribute('style', '');
+    if (pv != null)
+    {
+      pv.setAttribute('width_orig', pv.getAttribute('width'));
+      pv.setAttribute('width', '');
+    }
+  }
+  else
+  {
+    e.className = 'max';
+    e.setAttribute('title', 'Maximize');
+    c1.setAttribute('style', c1.getAttribute('style_orig'));
+    c1.setAttribute('style_orig', '');
+    c2.setAttribute('style', 'overflow:scroll; width:100%; height:100%;');
+    if (pv != null)
+    {
+      pv.setAttribute('width', pv.getAttribute('width_orig'));
+      pv.setAttribute('width_orig', '');
+    }
+  }
+}
+</script>
+</head>
+
+<body bgcolor="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs breadcrumbs_top"><a href="../../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="../index.html" title="Category in Oomph Setup Documentation">User Guide</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Wizards and Wizard Pages</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Variables Page</h1></td>
+		<td align="right" valign="middle" nowrap><a href="DocProjectPage.html" title="Backward to Projects Page"><img src="../../../images/backward.png" border="0"></a>&nbsp;<a href="DocConfirmationPage.html" title="Forward to Confirmation Page"><img src="../../../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p>
+ The primary purpose of the variables page is to specify the values for <a href="../../concepts/DocTask.html#DocVariableTask" title="Chapter in Oomph Setup Documentation">variables</a>.
+ At this point in the wizard's work flow,
+ a task list has been <a href="../../concepts/DocTaskComposition.html" title="Article in Oomph Setup Documentation">gathered</a>.
+ That process induces variables and evaluates and expands variables.
+ Any variable with an empty value requires the user's input.
+ All variables must specify a non-empty value in order to advance to the <a href="DocConfirmationPage.html" title="Article in Oomph Setup Documentation">confirmation page</a>.
+ Information related to those variables is displayed on this page in a three column format:
+ 
+
+<div class="box" style="display: inline-block"><img src="..\..\..\images\trees\FiR7xpBhD4uS7EbWF6GkbbRCn-I=.png"/></div>
+<p>
+The page has the following controls:
+
+<table class="bullets">
+<tr>
+<td><img src="../../../images/trees/uYb4nWf_x4iPtp0TP9sPGZwIPLM=.png"/></td>
+<td>
+Displays the label for the rule that determines where installations are installed.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/YaOySXQyJjqyuPq39ogKjlenhOg=.png"/></td>
+<td>
+Displays the value for the installation location rule.
+ In this case, each installation will end up in a uniquely named subfolder of the specified root folder.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/9f9gYhtHH9GGAGMrAngvTSlsgEs=.png"/></td>
+<td>
+Displays the label for the uniquely named subfolder for the installation.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/QIEwsY4cC5fMCf7Im86QfzKDTY0=.png"/></td>
+<td>
+Displays the value for the subfolder name.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/JUvWOxggsr1jdWyG37PRowxIBQo=.png"/></td>
+<td>
+Displays the label for the root folder for all installations.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/SLODCq1oyTyRTp_45wwxJ8KaA9k=.png"/></td>
+<td>
+Displays the value for the root folder.
+ In this case the installation will end up in the 'D:/sandbox/oomph' folder.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/GgbjK-yq4E38L6FLWgSCGDIDbMk=.png"/></td>
+<td>
+Browses the file system for a root folder location.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/CFQnYaz5SWFYqU9HbRhlDDtKPq8=.png"/></td>
+<td>
+Displays the label for the rule that determines where workspaces are provisioned.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/QpAOam018_69U-ixHblBSLSelug=.png"/></td>
+<td>
+Displays the value of the workspace location rule.
+ In this case, the workspace will be located in a folder named 'ws' nested in the installation folder.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/VHNqLZSGOPVfcDa8ypCyD-uiwIk=.png"/></td>
+<td>
+Displays the label for the rule that determines where Git clones will be provisioned.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/Ca1VUVpcqqBwWc0sZb3Cz-qSuDw=.png"/></td>
+<td>
+Displays the value of the git location rule.
+ In this case the clone is stored in the "git" subfolder of the installation folder with a name derived from the repository URI.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/lqeMXKkEMwWpA-eFaB0ClwL0UGY=.png"/></td>
+<td>
+Displays the label for the target platform choice.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/5HWtOiDz9aUfSmbp92roYK9oNDw=.png"/></td>
+<td>
+Displays the value for the target platform.
+ Project authors are encouraged to make use of this common variable so that multiple projects will materialize a cohesive target platform.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/8e5IrwgzVvR4OMsSnWfydvsCyWg=.png"/></td>
+<td>
+Displays the label for the choice of Oomph's Git remote URI.
+ There are typically several different URIs for accessing the same underlying repository
+ depending on whether one wants Gerrit access or direct Git access,
+ whether ones wants to use SSH, HTTPS, or anonymous access.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/H7cJ4njpdj9yES3e8MVU4uZvvPI=.png"/></td>
+<td>
+Displays the value for the remote URI choice.
+ In this case, Gerrit access via SSH is chosen.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/XtqwLFCebwJ1D2gyXkeCI9E-ptA=.png"/></td>
+<td>
+Displays the label for the JRE location.
+ Standard variables are defined for various levels of the JDK.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/Mxq_81JQshh6-jI-EneaxdlC4qo=.png"/></td>
+<td>
+Displays the value for the JRE location.
+ The value specicified should be compatible with the verion specified in the label.
+ Generally a JDK is preferred over a JRE.
+ In this case, a Java 1.7 JDK is specified.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/GgbjK-yq4E38L6FLWgSCGDIDbMk=.png"/></td>
+<td>
+Browses the file system for a JRE or JDK location.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/r9XcxN1ix5YQS24vZc_dRgq6U18=.png"/></td>
+<td>
+Displays the label for the Bugzilla/Hudson ID.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/zGNfGcap-v_d63X57F0cimiz9C4=.png"/></td>
+<td>
+Displays the value for the ID.
+ This is generally an email address.
+ If one doesn't have such a registered ID, 'anonymous' should be specified.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/5Tm3mcFfg_kubhXg7h6iTU2hJ8k=.png"/></td>
+<td>
+Displays the label for the Eclipse password.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/VKQY52NAUoicXMTjFMuOupLmB18=.png"/></td>
+<td>
+Displays the obscurred value of the password.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/KD6edj8ieVN60Ezz2NeSuhXfrro=.png"/></td>
+<td>
+Authenticates that the password is valid with respect to the Bugzilla/Hudson ID and the Git/ID.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/Xf4Ep1VclhbwML0ziywr3bJ9xTY=.png"/></td>
+<td>
+Displays the label for the Git/Gerrit user ID.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/F5uDPZiGfLRsm6c4lnP4qSyzFXw=.png"/></td>
+<td>
+Displays the value of the ID.
+ If one doesn't have such a registered ID, 'anonymous' should be specified.
+
+</td>
+</tr>
+<tr>
+<td><img src="../../../images/trees/HwrL0FO6xc4s5SD8nmEMn2G1xPU=.png"/></td>
+<td>
+Determines whether all variables are displayed
+ or just the ones that are strictly required to proceed.
+ In this case, all variables are being shown.
+
+</td>
+</tr>
+</table>
+<p>
+
+ </p>
+
+<p align="right">
+<a href="DocProjectPage.html" title="Backward to Projects Page"><img src="../../../images/backward.png" border="0"></a>&nbsp;<a href="DocConfirmationPage.html" title="Forward to Confirmation Page"><img src="../../../images/forward.png" border="0"></a></p>
+<!-- <div class="help_breadcrumbs breadcrumbs_bottom"><a href="../../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="../index.html" title="Category in Oomph Setup Documentation">User Guide</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Wizards and Wizard Pages</a></div> -->
+
+<div class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</div>
+</body>
+</html>

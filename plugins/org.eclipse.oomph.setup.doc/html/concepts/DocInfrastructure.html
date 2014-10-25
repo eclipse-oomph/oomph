@@ -1,0 +1,93 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Infrastructure (Oomph Setup Documentation)</title>
+
+<link rel="stylesheet" href="../book.css" charset="ISO-8859-1" type="text/css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Infrastructure (Oomph Setup Documentation)";
+    }
+}
+</script>
+</head>
+
+<body bgcolor="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs breadcrumbs_top"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Concepts</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Infrastructure</h1></td>
+		<td align="right" valign="middle" nowrap><a href="DocScope.html" title="Backward to Scopes"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="DocSetupResource.html" title="Forward to Setup Resources"><img src="../../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p>
+ In addition to <a href="DocScope.html" title="Article in Oomph Setup Documentation">scopes</a> there are several other important structural elements for organizing and maintaining setup information.
+ </p>
+
+<h2><a name="DocIndex"></a>1&nbsp;&nbsp;Index</h2>
+<p>
+ An <a href="../../javadoc/org/eclipse/oomph/setup/Index.html" title="Interface in org.eclipse.oomph.setup"><code>index</code></a> is a <a href="../../javadoc/org/eclipse/oomph/setup/Index.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="DocScope.html#DocProductCatalog" title="Chapter in Oomph Setup Documentation">product catalogs</a>
+ as well as a <a href="../../javadoc/org/eclipse/oomph/setup/Index.html#getProjectCatalogs()" title="Method in org.eclipse.oomph.setup.Index"><code>container</code></a> for <a href="DocScope.html#DocProductCatalog" title="Chapter in Oomph Setup Documentation">project catalogs</a>.
+ It also <a href="../../javadoc/org/eclipse/oomph/setup/Index.html#getDiscoverablePackages()" title="Method in org.eclipse.oomph.setup.Index"><code>provides access</code></a> to all task models.
+ All available <a href="DocScope.html#DocProduct" title="Chapter in Oomph Setup Documentation">products</a> and <a href="DocScope.html#DocProject" title="Chapter in Oomph Setup Documentation">projects</a> are reachable from the index.
+ All the <a href="../user/wizard/index.html" title="Category in Oomph Setup Documentation">setup wizards</a> are driven by this information.
+ The index also <a href="../../javadoc/org/eclipse/oomph/setup/Index.html#getDiscoverablePackages()" title="Method in org.eclipse.oomph.setup.Index"><code>maintains references</code></a> to dynamic Ecore models that provide additional <a href="DocTask.html" title="Article in Oomph Setup Documentation">task</a> implementations.
+ It is stored in the <a href="DocSetupResource.html#DocInstallationResource" title="Chapter in Oomph Setup Documentation">installation resource</a>.
+ </p>
+
+<h2><a name="DocLocationCatalog"></a>2&nbsp;&nbsp;Location Catalog</h2>
+<p>
+ A <a href="../../javadoc/org/eclipse/oomph/setup/LocationCatalog.html" title="Interface in org.eclipse.oomph.setup"><code>location catalog</code></a> maintains an index of all <a href="DocScope.html#DocInstallation" title="Chapter in Oomph Setup Documentation">installations</a> and <a href="DocScope.html#DocWorkspace" title="Chapter in Oomph Setup Documentation">workspaces</a>
+ installed and provisioned by Oomph,
+ including any installation where Oomph is installed,
+ and any workspace opened by any installation with Oomph installed.
+ It maintains a two-way map,
+ i.e., for each installation, the workspaces it has opened are <a href="../../javadoc/org/eclipse/oomph/setup/LocationCatalog.html#getInstallations()" title="Method in org.eclipse.oomph.setup.LocationCatalog"><code>recorded</code></a>
+ and for each workspace, the installations that have opened it are <a href="../../javadoc/org/eclipse/oomph/setup/LocationCatalog.html#getWorkspaces()" title="Method in org.eclipse.oomph.setup.LocationCatalog"><code>recorded</code></a>.
+ Each time a product with Oomph installed is started,
+ its installation-workspace pair is added to the maps.
+ The installation-to-workspace map is ordered,
+ so the most recently installed or started installation is moved to the front
+ and its workspace is moved to the front of the list associated with that installation.
+ Similarly, the workspace-to-installation map is ordered,
+ so the most recently provisioned or opened workspace is moved to the front
+ and the installation that opened it is moved to the front of the list associated with that workspace.
+ It is stored in the <a href="DocSetupResource.html#DocLocationResource" title="Chapter in Oomph Setup Documentation">location resource</a>.
+ </p>
+
+<h2><a name="DocCatalogSelection"></a>3&nbsp;&nbsp;Catalog Selection</h2>
+<p>
+ A <a href="../../javadoc/org/eclipse/oomph/setup/CatalogSelection.html" title="Interface in org.eclipse.oomph.setup"><code>catalog selection</code></a> maintains an installation and provisioning history for the <a href="../user/wizard/index.html" title="Category in Oomph Setup Documentation">setup wizards</a>.
+ It maintains the following:
+ <ul>
+ <li>
+ The <a href="../../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getProductCatalogs()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>selected subset</code></a> of the <a href="DocInfrastructure.html#DocIndex" title="Chapter in Oomph Setup Documentation">index</a>'s available <a href="DocScope.html#DocProductCatalog" title="Chapter in Oomph Setup Documentation">product catalogs</a> displayed in the <a href="../user/wizard/DocProductPage.html" title="Article in Oomph Setup Documentation">product page</a>.
+ </li>
+ The <a href="../../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getDefaultProductVersions()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>most recently selected</code></a> <a href="DocScope.html#DocVersion" title="Chapter in Oomph Setup Documentation">product version</a> of each <a href="DocScope.html#DocProduct" title="Chapter in Oomph Setup Documentation">product</a> displayed in the <a href="../user/wizard/DocProductPage.html" title="Article in Oomph Setup Documentation">product product page</a>.
+ </li>
+ <li>
+ The <a href="../../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getProjectCatalogs()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>selected subset</code></a> of the <a href="DocInfrastructure.html#DocIndex" title="Chapter in Oomph Setup Documentation">index</a>'s available <a href="DocScope.html#DocProjectCatalog" title="Chapter in Oomph Setup Documentation">project catalogs</a> displayed in the <a href="../user/wizard/DocProjectPage.html" title="Article in Oomph Setup Documentation">project page</a>.
+ </li>
+ The <a href="../../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getDefaultStreams()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>most recently selected</code></a> <a href="DocScope.html#DocStream" title="Chapter in Oomph Setup Documentation">stream</a> of each <a href="DocScope.html#DocProject" title="Chapter in Oomph Setup Documentation">project</a> ever chosen in the <a href="../user/wizard/DocProjectPage.html" title="Article in Oomph Setup Documentation">project  page</a>.
+ </li>
+ </li>
+ The <a href="../../javadoc/org/eclipse/oomph/setup/CatalogSelection.html#getSelectedStreams()" title="Method in org.eclipse.oomph.setup.CatalogSelection"><code>most recently selected</code></a> <a href="DocScope.html#DocStream" title="Chapter in Oomph Setup Documentation">streams</a> chosen by the <a href="../user/wizard/DocProjectPage.html" title="Article in Oomph Setup Documentation">project  page</a>.
+ </li>
+ </ul>
+ In other words, it maintains a persistent initial state for all the <a href="../user/wizard/index.html" title="Category in Oomph Setup Documentation">setup wizards</a>.
+ It is stored in the <a href="DocSetupResource.html#DocCatalogSelectionResource" title="Chapter in Oomph Setup Documentation">catalog selection resource</a>.
+ </p>
+
+<p align="right">
+<a href="DocScope.html" title="Backward to Scopes"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="DocSetupResource.html" title="Forward to Setup Resources"><img src="../../images/forward.png" border="0"></a></p>
+<!-- <div class="help_breadcrumbs breadcrumbs_bottom"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Concepts</a></div> -->
+
+<div class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</div>
+</body>
+</html>

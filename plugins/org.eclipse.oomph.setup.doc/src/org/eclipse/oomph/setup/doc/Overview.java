@@ -10,11 +10,13 @@
  */
 package org.eclipse.oomph.setup.doc;
 
+import org.eclipse.oomph.setup.doc.concepts.DocTask;
+
 /**
  * Overview
  * <p>
  * Oomph Setup provides support for installing Eclipse applications and for provisioning Eclipse workspaces.
- * {@link Everything.Task Tasks} describing the setup process are composed to orchestrate the automated process.
+ * {@link DocTask Tasks} describing the setup process are composed to orchestrate the automated process.
  * </p>
  * <p>
  * {@toc}

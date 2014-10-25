@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Index
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name="index"
+    label="Index">
+  <discoverablePackage
+      href="models/Git.ecore#/"/>
+  <discoverablePackage
+      href="models/Launching.ecore#/"/>
+  <discoverablePackage
+      href="models/JDT.ecore#/"/>
+  <discoverablePackage
+      href="models/Maven.ecore#/"/>
+  <discoverablePackage
+      href="models/Mylyn.ecore#/"/>
+  <discoverablePackage
+      href="models/PDE.ecore#/"/>
+  <discoverablePackage
+      href="models/Predicates.ecore#/"/>
+  <discoverablePackage
+      href="models/Projects.ecore#/"/>
+  <discoverablePackage
+      href="models/ProjectSet.ecore#/"/>
+  <discoverablePackage
+      href="models/Resources.ecore#/"/>
+  <discoverablePackage
+      href="models/SetupTarglets.ecore#/"/>
+  <discoverablePackage
+      href="models/SetupWorkingSets.ecore#/"/>
+  <discoverablePackage
+      href="models/Targlets.ecore#/"/>
+  <discoverablePackage
+      href="models/Workbench.ecore#/"/>
+  <discoverablePackage
+      href="models/WorkingSets.ecore#/"/>
+  <productCatalog
+      href="catalog:/self-product-catalog.setup#/"/>
+  <productCatalog
+      href="org.eclipse.products.setup#/"/>
+  <projectCatalog
+      href="org.eclipse.projects.setup#/"/>
+  <projectCatalog
+      href="com.github.projects.setup#/"/>
+</setup:Index>

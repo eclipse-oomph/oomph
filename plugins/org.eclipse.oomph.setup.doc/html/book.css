@@ -193,3 +193,32 @@ span.selectstep {
   vertical-align: text-bottom;
   color: #000000;
 }
+
+table.bullets {
+  padding-left: 10px;
+  border: 1px solid white;  
+  border-collapse: collapse;
+}
+
+table.bullets tr {
+  border: 1px solid white;  
+}
+
+table.bullets tr td {
+  border: 1px solid white;  
+}
+
+table.bullets tr td:nth-child(1) {
+  min-height: 28px;
+  text-align: right;
+}
+
+table.bullets tr td:nth-child(2) {
+  padding-left: 10px;
+  width: 90%
+}
+
+div.box {
+  border: 1px solid DarkGray;
+}
+

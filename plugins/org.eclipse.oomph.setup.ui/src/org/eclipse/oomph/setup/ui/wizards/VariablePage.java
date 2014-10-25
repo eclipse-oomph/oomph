@@ -106,6 +106,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private SetupContext originalContext;
 
+  private boolean save = true;
+
   private FocusListener focusListener = new FocusAdapter()
   {
     @Override
@@ -540,9 +542,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       getWizard().setSetupContext(SetupContext.create(copiedInstallation, copiedWorkspace, copiedUser));
       setPerformer(performer);
 
-      BaseUtil.saveEObject(copiedUser);
+      if (save)
+      {
+        BaseUtil.saveEObject(copiedUser);
 
-      performer.savePasswords();
+        performer.savePasswords();
+      }
 
       installationResource.setURI(installationResourceURI);
       if (workspaceResource != null)

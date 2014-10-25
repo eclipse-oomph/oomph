@@ -352,11 +352,13 @@
       </fileset>
 
 			<package name="org.eclipse.oomph.setup.doc" />
-			<package name="org.eclipse.oomph.setup.doc.examples" />
+			<package name="org.eclipse.oomph.setup.doc.concepts" />
 			<package name="org.eclipse.oomph.setup.doc.online" />
 			<package name="org.eclipse.oomph.setup.doc.reference" />
 			<package name="org.eclipse.oomph.setup.doc.reference.api" />
 			<package name="org.eclipse.oomph.setup.doc.reference.schema" />
+			<package name="org.eclipse.oomph.setup.doc.user" />
+			<package name="org.eclipse.oomph.setup.doc.user.wizard" />
 			<package name="org.eclipse.oomph.p2.doc" />
 			<package name="org.eclipse.oomph.p2.doc.online" />
 			<package name="org.eclipse.oomph.p2.doc.reference" />

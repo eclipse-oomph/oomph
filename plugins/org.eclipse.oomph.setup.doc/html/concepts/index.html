@@ -1,0 +1,168 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Concepts (Oomph Setup Documentation)</title>
+
+<link rel="stylesheet" href="../book.css" charset="ISO-8859-1" type="text/css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Concepts (Oomph Setup Documentation)";
+    }
+}
+</script>
+
+<link rel="stylesheet" href="../editor.css" charset="UTF-8" type="text/css">
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
+<script>
+$(function() {
+$( ".resizable" ).resizable({ handles:"s,e,se", autoHide:true });
+});
+</script>
+
+<script type="text/javascript">
+function maximize(id)
+{
+  e = document.getElementById('max_' + id);
+  c1 = document.getElementById('editor_content_1_' + id);
+  c2 = document.getElementById('editor_content_2_' + id);
+  pv = document.getElementById('max_pv_' + id);
+  if (e.className == 'max')
+  {
+    e.className = 'rst';
+    e.setAttribute('title', 'Restore');
+    c1.setAttribute('style_orig', c1.getAttribute('style'));
+    c1.setAttribute('style', 'border:2px solid #99b4d1; border-top:none;');
+    c2.setAttribute('style', '');
+    if (pv != null)
+    {
+      pv.setAttribute('width_orig', pv.getAttribute('width'));
+      pv.setAttribute('width', '');
+    }
+  }
+  else
+  {
+    e.className = 'max';
+    e.setAttribute('title', 'Maximize');
+    c1.setAttribute('style', c1.getAttribute('style_orig'));
+    c1.setAttribute('style_orig', '');
+    c2.setAttribute('style', 'overflow:scroll; width:100%; height:100%;');
+    if (pv != null)
+    {
+      pv.setAttribute('width', pv.getAttribute('width_orig'));
+      pv.setAttribute('width_orig', '');
+    }
+  }
+}
+</script>
+
+<script type="text/javascript">
+function toggle(id)
+{
+  e = document.getElementById(id);
+  e.style.display = (e.style.display == '' ? 'none' : '');
+  img = document.getElementById('img_' + id);
+  img.src = (e.style.display == 'none' ? '../../images/plus.gif' : '../../images/minus.gif');
+}
+</script>
+
+<script type="text/javascript">
+function select(selectionDiv, id)
+{
+  s = document.getElementById(selectionDiv);
+  if (s.textContent)
+  {
+    e = document.getElementById('href_' + s.textContent);
+    e.className = 'nosel';
+    e = document.getElementById('pk_' + s.textContent);
+    if (e != null) e.style.display = 'none';
+    e = document.getElementById('pv_' + s.textContent);
+    if (e != null) e.style.display = 'none';
+  }
+  e = document.getElementById('href_' + id);
+  e.className = 'sel';
+  e = document.getElementById('pk_' + id);
+  if (e != null) e.style.display = '';
+  e = document.getElementById('pv_' + id);
+  if (e != null) e.style.display = '';
+  s.textContent = id;
+}
+</script>
+
+<link rel="stylesheet" href="../tree.css" charset="UTF-8" type="text/css">
+</head>
+
+<body bgcolor="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs breadcrumbs_top"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Concepts</h1></td>
+		<td align="right" valign="middle" nowrap><a href="../Overview.html" title="Backward to Overview"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="DocConceptOverview.html" title="Forward to Context"><img src="../../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p>
+<table border="0">
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocConceptOverview.html" title="Article in Oomph Setup Documentation">Context</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocScope.html" title="Article in Oomph Setup Documentation">Scopes</a></td></tr>
+<tr><td></td><td>1&nbsp;</td><td class="te" colspan="5"><a href="DocScope.html#DocProductCatalog" title="Chapter in Oomph Setup Documentation">Product Catalogs</a></td></tr>
+<tr><td></td><td></td><td>1.1&nbsp;</td><td class="te" colspan="4"><a href="DocScope.html#DocProduct" title="Chapter in Oomph Setup Documentation">Products</a></td></tr>
+<tr><td></td><td></td><td></td><td>1.1.1&nbsp;</td><td class="te" colspan="3"><a href="DocScope.html#DocVersion" title="Chapter in Oomph Setup Documentation">Product Versions</a></td></tr>
+<tr><td></td><td>2&nbsp;</td><td class="te" colspan="5"><a href="DocScope.html#DocProjectCatalog" title="Chapter in Oomph Setup Documentation">Project Catalogs</a></td></tr>
+<tr><td></td><td></td><td>2.1&nbsp;</td><td class="te" colspan="4"><a href="DocScope.html#DocProject" title="Chapter in Oomph Setup Documentation">Projects</a></td></tr>
+<tr><td></td><td></td><td></td><td>2.1.1&nbsp;</td><td class="te" colspan="3"><a href="DocScope.html#DocStream" title="Chapter in Oomph Setup Documentation">Streams</a></td></tr>
+<tr><td></td><td>3&nbsp;</td><td class="te" colspan="5"><a href="DocScope.html#DocInstallation" title="Chapter in Oomph Setup Documentation">Installations</a></td></tr>
+<tr><td></td><td>4&nbsp;</td><td class="te" colspan="5"><a href="DocScope.html#DocWorkspace" title="Chapter in Oomph Setup Documentation">Workspaces</a></td></tr>
+<tr><td></td><td>5&nbsp;</td><td class="te" colspan="5"><a href="DocScope.html#DocUser" title="Chapter in Oomph Setup Documentation">Users</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocInfrastructure.html" title="Article in Oomph Setup Documentation">Infrastructure</a></td></tr>
+<tr><td></td><td>1&nbsp;</td><td class="te" colspan="5"><a href="DocInfrastructure.html#DocIndex" title="Chapter in Oomph Setup Documentation">Index</a></td></tr>
+<tr><td></td><td>2&nbsp;</td><td class="te" colspan="5"><a href="DocInfrastructure.html#DocLocationCatalog" title="Chapter in Oomph Setup Documentation">Location Catalog</a></td></tr>
+<tr><td></td><td>3&nbsp;</td><td class="te" colspan="5"><a href="DocInfrastructure.html#DocCatalogSelection" title="Chapter in Oomph Setup Documentation">Catalog Selection</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocSetupResource.html" title="Article in Oomph Setup Documentation">Setup Resources</a></td></tr>
+<tr><td></td><td>1&nbsp;</td><td class="te" colspan="5"><a href="DocSetupResource.html#DocIndexResource" title="Chapter in Oomph Setup Documentation">Index</a></td></tr>
+<tr><td></td><td></td><td>1.1&nbsp;</td><td class="te" colspan="4"><a href="DocSetupResource.html#ProductCatalogResource" title="Chapter in Oomph Setup Documentation">Product Catalogs</a></td></tr>
+<tr><td></td><td></td><td>1.2&nbsp;</td><td class="te" colspan="4"><a href="DocSetupResource.html#ProjectCatalogResource" title="Chapter in Oomph Setup Documentation">Project Catalogs</a></td></tr>
+<tr><td></td><td></td><td></td><td>1.2.1&nbsp;</td><td class="te" colspan="3"><a href="DocSetupResource.html#ProjectResource" title="Chapter in Oomph Setup Documentation">Project Resources</a></td></tr>
+<tr><td></td><td>2&nbsp;</td><td class="te" colspan="5"><a href="DocSetupResource.html#DocLocationResource" title="Chapter in Oomph Setup Documentation">Location Catalog</a></td></tr>
+<tr><td></td><td>3&nbsp;</td><td class="te" colspan="5"><a href="DocSetupResource.html#DocCatalogSelectionResource" title="Chapter in Oomph Setup Documentation">Catalog Selection</a></td></tr>
+<tr><td></td><td>4&nbsp;</td><td class="te" colspan="5"><a href="DocSetupResource.html#DocInstallationResource" title="Chapter in Oomph Setup Documentation">Installation</a></td></tr>
+<tr><td></td><td>5&nbsp;</td><td class="te" colspan="5"><a href="DocSetupResource.html#DocWorkspaceResource" title="Chapter in Oomph Setup Documentation">Workspace</a></td></tr>
+<tr><td></td><td>6&nbsp;</td><td class="te" colspan="5"><a href="DocSetupResource.html#DocUserResource" title="Chapter in Oomph Setup Documentation">User</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocTaskComposition.html" title="Article in Oomph Setup Documentation">Task Composition</a></td></tr>
+<tr><td></td><td>1&nbsp;</td><td class="te" colspan="5"><a href="DocTaskComposition.html#ScopeList" title="Chapter in Oomph Setup Documentation">Scope List</a></td></tr>
+<tr><td></td><td>2&nbsp;</td><td class="te" colspan="5"><a href="DocTaskComposition.html#TaskList" title="Chapter in Oomph Setup Documentation">Task List</a></td></tr>
+<tr><td></td><td></td><td>2.1&nbsp;</td><td class="te" colspan="4"><a href="DocTaskComposition.html#InitialPhase" title="Chapter in Oomph Setup Documentation">Initial Phase</a></td></tr>
+<tr><td></td><td></td><td>2.2&nbsp;</td><td class="te" colspan="4"><a href="DocTaskComposition.html#FinalPhase" title="Chapter in Oomph Setup Documentation">Final Phase</a></td></tr>
+<tr><td></td><td></td><td>2.3&nbsp;</td><td class="te" colspan="4"><a href="DocTaskComposition.html#Reorder" title="Chapter in Oomph Setup Documentation">Reordering</a></td></tr>
+<tr><td></td><td></td><td>2.4&nbsp;</td><td class="te" colspan="4"><a href="DocTaskComposition.html#Filter" title="Chapter in Oomph Setup Documentation">Trigger Filtering</a></td></tr>
+<tr><td></td><td></td><td>2.5&nbsp;</td><td class="te" colspan="4"><a href="DocTaskComposition.html#Consolidation" title="Chapter in Oomph Setup Documentation">Consolidation</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocTaskExecution.html" title="Article in Oomph Setup Documentation">Task Execution</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocTask.html" title="Article in Oomph Setup Documentation">Tasks</a></td></tr>
+<tr><td></td><td>1&nbsp;</td><td class="te" colspan="5"><a href="DocTask.html#DocTrigger" title="Chapter in Oomph Setup Documentation">Trigger</a></td></tr>
+<tr><td></td><td>2&nbsp;</td><td class="te" colspan="5"><a href="DocTask.html#DocVariableTask" title="Chapter in Oomph Setup Documentation">Variable Task</a></td></tr>
+<tr><td></td><td>3&nbsp;</td><td class="te" colspan="5"><a href="DocTask.html#DocCompoundTask" title="Chapter in Oomph Setup Documentation">Compound Task</a></td></tr>
+<tr><td></td><td>4&nbsp;</td><td class="te" colspan="5"><a href="DocTask.html#DocP2Task" title="Chapter in Oomph Setup Documentation">P2 Task</a></td></tr>
+<tr><td></td><td>5&nbsp;</td><td class="te" colspan="5"><a href="DocTask.html#DocTargletTask" title="Chapter in Oomph Setup Documentation">Targlet Task</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocVariableRecording.html" title="Article in Oomph Setup Documentation">Variable Recording</a></td></tr>
+<tr><td><img src="../../images/article.gif">&nbsp;</td><td class="te" colspan="6"><a href="DocBundlePool.html" title="Article in Oomph Setup Documentation">Bundle Pools</a></td></tr>
+</table>
+</p>
+
+
+<p align="right">
+<a href="../Overview.html" title="Backward to Overview"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="DocConceptOverview.html" title="Forward to Context"><img src="../../images/forward.png" border="0"></a></p>
+<!-- <div class="help_breadcrumbs breadcrumbs_bottom"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a></div> -->
+
+<div class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</div>
+</body>
+</html>

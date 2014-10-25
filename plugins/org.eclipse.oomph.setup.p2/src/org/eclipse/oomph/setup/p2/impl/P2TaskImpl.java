@@ -107,6 +107,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 {
   private static final boolean SKIP = "true".equals(PropertiesUtil.getProperty(PROP_SKIP));
 
+  // This is used only for documentation capture.
+  private static final boolean FORCE = "true".equals(PropertiesUtil.getProperty("oomph.setup.p2.force"));
+
   private static final Object FIRST_CALL_DETECTION_KEY = new Object();
 
   @SuppressWarnings("unused")
@@ -565,7 +568,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   {
     if (SKIP)
     {
-      return false;
+      return FORCE;
     }
 
     Trigger trigger = context.getTrigger();
@@ -579,7 +582,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     if (profile == null)
     {
       // We're most likely in self hosting mode, where software updates are not really well supported.
-      return false;
+      return FORCE;
     }
 
     IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();

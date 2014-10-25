@@ -144,10 +144,12 @@ public class ConfirmationPage extends SetupWizardPage
 
     SashForm horizontalSash = new SashForm(mainComposite, SWT.HORIZONTAL);
     UIUtil.grabVertical(UIUtil.applyGridData(horizontalSash));
+    AccessUtil.setKey(horizontalSash, "hsash");
 
     fillCheckPane(horizontalSash);
 
     SashForm verticalSash = new SashForm(horizontalSash, SWT.VERTICAL);
+    AccessUtil.setKey(verticalSash, "vsash");
 
     fillChildrenPane(verticalSash);
 

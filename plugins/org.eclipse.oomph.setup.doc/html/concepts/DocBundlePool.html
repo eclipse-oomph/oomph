@@ -1,0 +1,47 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Bundle Pools (Oomph Setup Documentation)</title>
+
+<link rel="stylesheet" href="../book.css" charset="ISO-8859-1" type="text/css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Bundle Pools (Oomph Setup Documentation)";
+    }
+}
+</script>
+</head>
+
+<body bgcolor="white" onload="windowTitle();">
+<!-- <div class="help_breadcrumbs breadcrumbs_top"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Concepts</a></div> -->
+
+<table border="0">
+	<tr>
+		<td width="100%"><h1>Bundle Pools</h1></td>
+		<td align="right" valign="middle" nowrap><a href="DocVariableRecording.html" title="Backward to Variable Recording"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="../user/index.html" title="Forward to User Guide"><img src="../../images/forward.png" border="0"></a></td>
+	</tr>
+</table>
+<p>
+ Eclipse's p2 technology supports the concept of a <a href="http://wiki.eclipse.org/Equinox/p2/Getting_Started#Bundle_pooling">bundle pool</a>.
+ Bundle pools help to dramatically reduce disk footprint
+ and to eliminate repeated downloads of the same bundles and features,
+ thereby dramatically improving the performance of software updates and target platform provisioning.
+ Oomph makes heavy use of this technology for both its <a href="DocTask.html#DocP2Task" title="Chapter in Oomph Setup Documentation">p2</a> tasks and it <a href="DocTask.html#DocTargletTask" title="Chapter in Oomph Setup Documentation">targlet</a> tasks.
+ Further,
+ Oomph provides a technology layer on top of p2
+ to improve the behavior and performance of caching
+ allowing Oomph to provide offline support for installing and updating installations and target platforms.
+ </p>
+
+<p align="right">
+<a href="DocVariableRecording.html" title="Backward to Variable Recording"><img src="../../images/backward.png" border="0"></a>&nbsp;<a href="../user/index.html" title="Forward to User Guide"><img src="../../images/forward.png" border="0"></a></p>
+<!-- <div class="help_breadcrumbs breadcrumbs_bottom"><a href="../Overview.html" title="Oomph Setup Documentation">Oomph Setup Documentation</a> > <a href="index.html" title="Category in Oomph Setup Documentation">Concepts</a></div> -->
+
+<div class="copyright">Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.<br>All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html</div>
+</body>
+</html>

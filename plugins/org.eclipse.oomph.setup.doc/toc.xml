@@ -3,11 +3,29 @@
 
 <toc label="Oomph Setup Documentation" topic="html/Overview.html">
   <topic label="Overview" href="html/Overview.html" />
-  <topic label="Outline" href="html/Everything.html" />
-  <topic label="Examples" href="html/examples/index.html">
-    <topic label="Connecting To Repositories" href="html/examples/ConnectingToRepositories.html" />
-    <topic label="Creating Transport Connections" href="html/examples/CreatingTransportConnections.html" />
-    <topic label="Embedding XML Snippets" href="html/examples/XmlSnippets.html" />
+  <topic label="Concepts" href="html/concepts/index.html">
+    <topic label="Context" href="html/concepts/DocConceptOverview.html" />
+    <topic label="Scopes" href="html/concepts/DocScope.html" />
+    <topic label="Infrastructure" href="html/concepts/DocInfrastructure.html" />
+    <topic label="Setup Resources" href="html/concepts/DocSetupResource.html" />
+    <topic label="Task Composition" href="html/concepts/DocTaskComposition.html" />
+    <topic label="Task Execution" href="html/concepts/DocTaskExecution.html" />
+    <topic label="Tasks" href="html/concepts/DocTask.html" />
+    <topic label="Variable Recording" href="html/concepts/DocVariableRecording.html" />
+    <topic label="Bundle Pools" href="html/concepts/DocBundlePool.html" />
+  </topic>
+  <topic label="User Guide" href="html/user/index.html">
+    <topic label="Wizards and Wizard Pages" href="html/user/wizard/index.html">
+      <topic label="Install Wizard" href="html/user/wizard/DocInstallWizard.html" />
+      <topic label="Import Wizard" href="html/user/wizard/DocImportWizard.html" />
+      <topic label="Update Wizard" href="html/user/wizard/DocUpdateWizard.html" />
+      <topic label="Product Page" href="html/user/wizard/DocProductPage.html" />
+      <topic label="Projects Page" href="html/user/wizard/DocProjectPage.html" />
+      <topic label="Variables Page" href="html/user/wizard/DocVariablePage.html" />
+      <topic label="Confirmation Page" href="html/user/wizard/DocConfirmationPage.html" />
+      <topic label="Progress Page" href="html/user/wizard/DocProgressPage.html" />
+    </topic>
+    <topic label="Bundle Pool Management" href="html/user/DocBundlePoolManager.html" />
   </topic>
   <topic label="Reference" href="html/reference/index.html">
     <topic label="API Reference" href="javadoc/overview-summary.html">

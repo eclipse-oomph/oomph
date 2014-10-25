@@ -28,8 +28,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Scrollable;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
@@ -104,6 +106,18 @@ public abstract class Capture<T>
       public void run()
       {
         open(element);
+      }
+    });
+
+    UIUtil.asyncExec(new Runnable()
+    {
+      public void run()
+      {
+        Shell shell = getShell(element);
+        Rectangle bounds = shell.getBounds();
+        bounds.x = 30;
+        bounds.y = 50;
+        shell.setBounds(bounds);
       }
     });
 
@@ -267,7 +281,18 @@ public abstract class Capture<T>
         {
           Scrollable scrollable = (Scrollable)control;
           Rectangle clientArea = scrollable.getClientArea();
+
           imageBounds.x -= controlBounds.width - clientArea.width - 2 * border;
+
+          if (control instanceof Tree)
+          {
+            imageBounds.y += ((Tree)control).getHeaderHeight();
+          }
+
+          if (control instanceof Table)
+          {
+            imageBounds.y += ((Table)control).getHeaderHeight();
+          }
         }
 
         gc.drawImage(decoration, imageBounds.x, imageBounds.y);
@@ -336,7 +361,7 @@ public abstract class Capture<T>
         button.setEnabled(isEnabled);
       }
     }
-    
+
     if (widget instanceof ProgressMonitorPart)
     {
       ProgressMonitorPart progressMonitorPart = (ProgressMonitorPart)widget;
