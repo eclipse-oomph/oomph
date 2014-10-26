@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
-import org.eclipse.oomph.ui.AbstractDialog;
+import org.eclipse.oomph.ui.OomphDialog;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-public class AgentManagerDialog extends AbstractDialog
+public class AgentManagerDialog extends OomphDialog
 {
   public static final String TITLE = "Bundle Pool Management";
 
@@ -31,7 +31,7 @@ public class AgentManagerDialog extends AbstractDialog
 
   public AgentManagerDialog(Shell parentShell)
   {
-    super(parentShell, TITLE, 500, 350, P2UIPlugin.INSTANCE, null);
+    super(parentShell, TITLE, 500, 350, P2UIPlugin.INSTANCE, false);
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
   }
 

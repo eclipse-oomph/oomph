@@ -50,7 +50,7 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
 
   public RecorderPoliciesDialog(Shell parentShell, RecorderTransaction transaction, Map<URI, String> preferences)
   {
-    super(parentShell, "Preference Recorder", 600, 400, SetupUIPlugin.INSTANCE, null);
+    super(parentShell, "Preference Recorder", 600, 400, SetupUIPlugin.INSTANCE, false);
     this.transaction = transaction;
     this.preferences = preferences;
   }

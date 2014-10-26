@@ -10,7 +10,7 @@
     Eike Stepper - initial API and implementation
 -->
 <feature
-      id="org.eclipse.oomph.targlets"
+      id="org.eclipse.oomph.util"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName"
@@ -35,42 +35,21 @@
    </url>
 
    <plugin
-         id="org.eclipse.oomph.targlets"
+         id="org.eclipse.oomph.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.oomph.targlets.core"
+         id="org.eclipse.oomph.util"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.oomph.targlets.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.oomph.targlets.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.oomph.targlets.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.oomph.targlets.doc"
+         id="org.eclipse.oomph.util.doc"
          download-size="0"
          install-size="0"
          version="0.0.0"

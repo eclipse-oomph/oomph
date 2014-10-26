@@ -794,6 +794,7 @@ public class ProjectPage extends SetupWizardPage
 
     final Tree projectTree = projectViewer.getTree();
     projectTree.setLayoutData(new GridData(GridData.FILL_BOTH));
+    addHelpCallout(projectTree, 1);
 
     GridLayout bucketCompositeLayout = new GridLayout();
     bucketCompositeLayout.marginWidth = 0;
@@ -852,6 +853,7 @@ public class ProjectPage extends SetupWizardPage
     streamTable.setLinesVisible(true);
     streamTable.setHeaderVisible(true);
     streamTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+    addHelpCallout(streamTable, 2);
 
     TableViewerColumn catalogViewerColumn = new TableViewerColumn(streamViewer, SWT.NONE);
     catalogViewerColumn.setLabelProvider(new CatalogColumnLabelProvider());

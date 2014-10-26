@@ -471,7 +471,7 @@ public final class InstallerDialog extends SetupWizardDialog
 
       String buildID = highestBuildID != 0 ? Integer.toString(highestBuildID) : firstBuildID;
 
-      for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.INSTALLER_PRODUCT_ID), null)))
+      for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.PRODUCT_ID), null)))
       {
         String label;
 

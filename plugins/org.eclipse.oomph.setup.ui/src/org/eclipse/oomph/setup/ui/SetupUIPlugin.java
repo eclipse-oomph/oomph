@@ -79,7 +79,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PLUGIN_ID = INSTANCE.getSymbolicName();
 
-  public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
+  public static final String PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
 
@@ -440,7 +440,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
   private static boolean isInstallerProduct()
   {
     String productID = PropertiesUtil.getProperty("eclipse.product");
-    return INSTALLER_PRODUCT_ID.equals(productID);
+    return PRODUCT_ID.equals(productID);
   }
 
   /**

@@ -63,6 +63,8 @@ import java.util.Set;
  */
 public abstract class SetupWizard extends Wizard implements IPageChangedListener
 {
+  public static final String HELP_FOLDER = "/org.eclipse.oomph.setup.doc/html/user/wizard/";
+
   static boolean ecfWorkAround;
 
   private Trigger trigger;
@@ -123,10 +125,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     setNeedsProgressMonitor(false);
   }
 
-  public String getHelpPath()
-  {
-    return "/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/help/installer/InstallerDialog.html";
-  }
+  public abstract String getHelpPath();
 
   public ComposedAdapterFactory getAdapterFactory()
   {
@@ -311,7 +310,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public int openDialog(Shell parentShell)
   {
-    WizardDialog dialog = new WizardDialog(parentShell, this);
+    WizardDialog dialog = new SetupWizardDialog(parentShell, this);
     return dialog.open();
   }
 
@@ -470,6 +469,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
 
     @Override
+    public String getHelpPath()
+    {
+      return HELP_FOLDER + "DocInstallWizard.html";
+    }
+
+    @Override
     public void addPages()
     {
       addPage(new ProductPage());
@@ -514,6 +519,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       setTrigger(Trigger.MANUAL);
       setSetupContext(SetupContext.create(getResourceSet()));
       setWindowTitle("Oomph Importer");
+    }
+
+    @Override
+    public String getHelpPath()
+    {
+      return HELP_FOLDER + "DocImportWizard.html";
     }
 
     public void init(IWorkbench workbench, IStructuredSelection selection)
@@ -563,6 +574,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     public Updater(SetupContext setupContext)
     {
       super(setupContext);
+    }
+
+    @Override
+    public String getHelpPath()
+    {
+      return HELP_FOLDER + "DocUpdateWizard.html";
     }
   }
 }

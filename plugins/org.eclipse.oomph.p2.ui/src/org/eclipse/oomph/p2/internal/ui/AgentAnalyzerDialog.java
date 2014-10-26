@@ -11,7 +11,7 @@
 package org.eclipse.oomph.p2.internal.ui;
 
 import org.eclipse.oomph.p2.core.Agent;
-import org.eclipse.oomph.ui.AbstractDialog;
+import org.eclipse.oomph.ui.OomphDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-public class AgentAnalyzerDialog extends AbstractDialog
+public class AgentAnalyzerDialog extends OomphDialog
 {
   public static final String TITLE = "Bundle Pool Analysis";
 
@@ -30,7 +30,7 @@ public class AgentAnalyzerDialog extends AbstractDialog
 
   public AgentAnalyzerDialog(Shell parentShell, Agent agent)
   {
-    super(parentShell, TITLE, 750, 750, P2UIPlugin.INSTANCE, null);
+    super(parentShell, TITLE, 750, 750, P2UIPlugin.INSTANCE, false);
     this.agent = agent;
 
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);

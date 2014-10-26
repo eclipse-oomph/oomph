@@ -119,12 +119,6 @@ public class ProductPage extends SetupWizardPage
     setDescription("Select the product and choose the version you want to install.");
   }
 
-  // @Override
-  // public String getHelpPath()
-  // {
-  // return "/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/help/installer/ProductPage.html";
-  // }
-
   @Override
   protected Control createUI(final Composite parent)
   {
@@ -184,6 +178,7 @@ public class ProductPage extends SetupWizardPage
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
+    addHelpCallout(filteredTree.getViewer().getTree(), 1);
 
     productViewer = filteredTree.getViewer();
     productViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));

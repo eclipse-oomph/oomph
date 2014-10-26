@@ -11,7 +11,7 @@
 package org.eclipse.oomph.p2.internal.ui;
 
 import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.Artifact;
-import org.eclipse.oomph.ui.AbstractDialog;
+import org.eclipse.oomph.ui.OomphDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * @author Eike Stepper
  */
-public final class AdditionalURIPrompterDialog extends AbstractDialog implements ICheckStateListener
+public final class AdditionalURIPrompterDialog extends OomphDialog implements ICheckStateListener
 {
   private final Set<URI> checkedRepositories = new HashSet<URI>();
 
@@ -59,7 +59,7 @@ public final class AdditionalURIPrompterDialog extends AbstractDialog implements
 
   public AdditionalURIPrompterDialog(Shell parentShell, boolean firstTime, List<Artifact> artifacts, Set<URI> repositories)
   {
-    super(parentShell, AgentAnalyzerDialog.TITLE, 600, 500, P2UIPlugin.INSTANCE, null);
+    super(parentShell, AgentAnalyzerDialog.TITLE, 600, 500, P2UIPlugin.INSTANCE, false);
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
     this.firstTime = firstTime;
     this.artifacts = artifacts;

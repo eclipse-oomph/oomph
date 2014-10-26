@@ -38,6 +38,10 @@
          id="org.eclipse.oomph.setup.core"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.oomph.p2"
+         version="0.0.0"/>
+
    <plugin
          id="org.eclipse.oomph.setup.editor"
          download-size="0"
@@ -47,6 +51,13 @@
 
    <plugin
          id="org.eclipse.oomph.setup.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.oomph.setup.doc"
          download-size="0"
          install-size="0"
          version="0.0.0"

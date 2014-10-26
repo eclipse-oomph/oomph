@@ -30,7 +30,7 @@ public abstract class AbstractConfirmDialog extends AbstractSetupDialog
 
   public AbstractConfirmDialog(Shell parentShell, String title, int width, int height, String rememberButtonText)
   {
-    super(parentShell, title, width, height, SetupUIPlugin.INSTANCE, null);
+    super(parentShell, title, width, height, SetupUIPlugin.INSTANCE, false);
     this.rememberButtonText = rememberButtonText;
   }
 

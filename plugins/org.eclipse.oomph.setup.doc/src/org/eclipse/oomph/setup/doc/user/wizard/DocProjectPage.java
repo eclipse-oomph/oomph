@@ -13,7 +13,7 @@ package org.eclipse.oomph.setup.doc.user.wizard;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.doc.concepts.DocInfrastructure.DocIndex;
-import org.eclipse.oomph.setup.doc.concepts.DocScope.DocProductCatalog;
+import org.eclipse.oomph.setup.doc.concepts.DocScope.DocProjectCatalog;
 import org.eclipse.oomph.setup.doc.concepts.DocScope.DocProjectCatalog.DocProject;
 import org.eclipse.oomph.setup.doc.concepts.DocScope.DocProjectCatalog.DocProject.DocStream;
 import org.eclipse.oomph.setup.doc.concepts.DocSetupResource;
@@ -67,7 +67,7 @@ public abstract class DocProjectPage
    * @callout
    * Chooses which of the project catalogs available in the {@link DocIndex index} to display.
    * @callout
-   * Displays the {@linkplain CatalogSelection selected} {@linkplain DocProductCatalog project catalogs}.
+   * Displays the {@linkplain CatalogSelection selected} {@linkplain DocProjectCatalog project catalogs}.
    * Double-clicking a project automatically adds its stream to the table of chosen streams,
    * or, if one of its streams is already in the table of chosen streams,
    * removes that stream from the table.
@@ -90,7 +90,7 @@ public abstract class DocProjectPage
    * use the cell editor's down-down to choose which stream of the project's available streams to provision.
    * @callout
    * Determines whether any streams are to be provisioned.
-   * This control is visible only in the {@link DocInstallWizard installation} wizard.
+   * This control is visible only in the {@link DocInstallWizard install} wizard.
    * When enabled,
    * any selected streams are removed from the table
    * and the wizard's next button is enabled to proceed

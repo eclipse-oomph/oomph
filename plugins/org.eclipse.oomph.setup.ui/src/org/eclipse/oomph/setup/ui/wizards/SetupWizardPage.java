@@ -16,6 +16,8 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
+import org.eclipse.oomph.ui.HelpSupport.HelpProvider;
+import org.eclipse.oomph.ui.OomphWizardDialog;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -24,6 +26,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -37,7 +40,7 @@ import org.eclipse.swt.widgets.Control;
 /**
  * @author Eike Stepper
  */
-public abstract class SetupWizardPage extends WizardPage
+public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 {
   private static final String TOGGLE_COMMAND_PREFIX = "toggleCommand:";
 
@@ -69,7 +72,7 @@ public abstract class SetupWizardPage extends WizardPage
 
   public String getHelpPath()
   {
-    return getWizard().getHelpPath();
+    return SetupWizard.HELP_FOLDER + "Doc" + getClass().getSimpleName() + ".html";
   }
 
   public ResourceSet getResourceSet()
@@ -152,7 +155,6 @@ public abstract class SetupWizardPage extends WizardPage
     ui.setLayoutData(layoutData);
 
     createCheckButtons();
-
     createFooter(pageControl);
   }
 
@@ -236,5 +238,15 @@ public abstract class SetupWizardPage extends WizardPage
 
   protected void createFooter(Composite parent)
   {
+  }
+
+  protected final void addHelpCallout(Control control, int number)
+  {
+    IWizardContainer container = getContainer();
+    if (container instanceof OomphWizardDialog)
+    {
+      OomphWizardDialog dialog = (OomphWizardDialog)container;
+      dialog.getHelpSupport().addHelpCallout(control, number);
+    }
   }
 }

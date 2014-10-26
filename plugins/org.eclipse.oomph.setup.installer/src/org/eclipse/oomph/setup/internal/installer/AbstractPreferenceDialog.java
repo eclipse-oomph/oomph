@@ -33,7 +33,7 @@ public abstract class AbstractPreferenceDialog extends AbstractSetupDialog imple
 
   public AbstractPreferenceDialog(Shell parentShell, String title)
   {
-    super(parentShell, title, 600, 600, SetupInstallerPlugin.INSTANCE, null);
+    super(parentShell, title, 600, 600, SetupInstallerPlugin.INSTANCE, false);
   }
 
   public IPreferenceStore getPreferenceStore()

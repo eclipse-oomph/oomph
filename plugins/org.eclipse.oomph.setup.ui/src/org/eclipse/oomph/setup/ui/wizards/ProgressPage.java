@@ -258,6 +258,7 @@ public class ProgressPage extends SetupWizardPage
 
     treeViewer = new TreeViewer(sashForm, SWT.BORDER);
     Tree tree = treeViewer.getTree();
+    addHelpCallout(tree, 1);
 
     ILabelProvider labelProvider = createLabelProvider();
     treeViewer.setLabelProvider(labelProvider);
@@ -301,6 +302,7 @@ public class ProgressPage extends SetupWizardPage
       }
     });
 
+    addHelpCallout(logText, 2);
     AccessUtil.setKey(logText, "log");
 
     return mainComposite;

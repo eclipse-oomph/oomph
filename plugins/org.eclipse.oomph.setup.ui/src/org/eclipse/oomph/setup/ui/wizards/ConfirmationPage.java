@@ -154,6 +154,7 @@ public class ConfirmationPage extends SetupWizardPage
     fillChildrenPane(verticalSash);
 
     propertiesViewer = new PropertiesViewer(verticalSash, SWT.BORDER);
+    addHelpCallout(propertiesViewer.getTable(), 3);
 
     connectMasterDetail(viewer, childrenViewer);
     connectMasterDetail(viewer, propertiesViewer);
@@ -458,6 +459,7 @@ public class ConfirmationPage extends SetupWizardPage
 
     final Tree tree = viewer.getTree();
     tree.setLayoutData(new GridData(GridData.FILL_BOTH));
+    addHelpCallout(tree, 1);
 
     viewer.setContentProvider(new ITreeContentProvider()
     {
@@ -609,6 +611,7 @@ public class ConfirmationPage extends SetupWizardPage
 
     final Tree tree = childrenViewer.getTree();
     tree.setHeaderVisible(true);
+    addHelpCallout(tree, 2);
 
     final TreeColumn column = new TreeColumn(tree, SWT.NONE);
     column.setText("Nested Elements");

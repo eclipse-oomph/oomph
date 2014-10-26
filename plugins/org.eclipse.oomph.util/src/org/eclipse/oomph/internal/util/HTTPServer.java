@@ -1,6 +1,5 @@
-package org.eclipse.oomph.setup.ui.wizards;
+package org.eclipse.oomph.internal.util;
 
-import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
@@ -23,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -240,7 +240,7 @@ public final class HTTPServer
             return;
           }
 
-          SetupUIPlugin.INSTANCE.log(ex);
+          UtilPlugin.INSTANCE.log(ex);
         }
       }
     }
@@ -290,7 +290,7 @@ public final class HTTPServer
             return;
           }
 
-          SetupUIPlugin.INSTANCE.log(ex);
+          UtilPlugin.INSTANCE.log(ex);
         }
 
         if (inputStream != null && outputStream != null)
@@ -309,7 +309,11 @@ public final class HTTPServer
               return;
             }
 
-            SetupUIPlugin.INSTANCE.log(ex);
+            if (DEBUG || !(ex instanceof SocketException))
+            {
+              UtilPlugin.INSTANCE.log(ex);
+            }
+
             Context.sendResponse(output, STATUS_INTERNAL_SERVER_ERROR, null, true);
           }
 
@@ -319,7 +323,10 @@ public final class HTTPServer
           }
           catch (IOException ex)
           {
-            SetupUIPlugin.INSTANCE.log(ex);
+            if (DEBUG)
+            {
+              UtilPlugin.INSTANCE.log(ex);
+            }
           }
         }
       }
@@ -630,7 +637,7 @@ public final class HTTPServer
       {
         if (!ignoreExceptions)
         {
-          SetupUIPlugin.INSTANCE.log(ex);
+          UtilPlugin.INSTANCE.log(ex);
         }
       }
     }
@@ -845,7 +852,7 @@ public final class HTTPServer
       if (path.length() == 1)
       {
         // The context root is a directory of the resolved plugins.
-        Bundle[] bundles = SetupUIPlugin.INSTANCE.getBundleContext().getBundles();
+        Bundle[] bundles = UtilPlugin.INSTANCE.getBundleContext().getBundles();
 
         result = new String[bundles.length];
         for (int i = 0; i < bundles.length; i++)

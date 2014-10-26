@@ -49,6 +49,7 @@
     <module>features/org.eclipse.oomph.setup.workbench-feature</module>
     <module>features/org.eclipse.oomph.setup.workingsets-feature</module>
     <module>features/org.eclipse.oomph.targlets-feature</module>
+    <module>features/org.eclipse.oomph.util-feature</module>
     <module>features/org.eclipse.oomph.version-feature</module>
     <module>features/org.eclipse.oomph.version.headless-feature</module>
     <module>features/org.eclipse.oomph.winexplorer-feature</module>
