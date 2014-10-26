@@ -349,48 +349,50 @@ public class HelpSupport
     public void run()
     {
       Shell shell = dialog.getShell();
-
-      try
+      if (shell != null && !shell.isDisposed())
       {
-        if (images == null)
+        try
         {
-          initImages(shell);
-        }
-
-        if (inactivityDetector.isInactive() && !isHelpOpen())
-        {
-          helpButton.setImage(images[Math.max(0, index)]);
-
-          if (backward)
+          if (images == null)
           {
-            if (--index == -10)
+            initImages(shell);
+          }
+
+          if (inactivityDetector.isInactive() && !isHelpOpen())
+          {
+            helpButton.setImage(images[Math.max(0, index)]);
+
+            if (backward)
             {
-              backward = false;
+              if (--index == -10)
+              {
+                backward = false;
+              }
             }
+            else
+            {
+              if (++index == images.length)
+              {
+                index = images.length - 2;
+                backward = true;
+              }
+            }
+
+            shell.getDisplay().timerExec(40, this);
           }
           else
           {
-            if (++index == images.length)
-            {
-              index = images.length - 2;
-              backward = true;
-            }
+            index = 0;
+            backward = false;
+            helpButton.setImage(images[index]);
           }
-
-          shell.getDisplay().timerExec(40, this);
         }
-        else
+        catch (SWTException ex)
         {
-          index = 0;
-          backward = false;
-          helpButton.setImage(images[index]);
-        }
-      }
-      catch (SWTException ex)
-      {
-        if (!shell.isDisposed())
-        {
-          throw ex;
+          if (!shell.isDisposed())
+          {
+            throw ex;
+          }
         }
       }
     }

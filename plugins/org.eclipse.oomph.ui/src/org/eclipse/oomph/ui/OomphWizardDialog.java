@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.ui;
 
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.ui.HelpSupport.HelpProvider;
 
 import org.eclipse.jface.dialogs.DialogTray;
@@ -100,6 +101,7 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
     if (helpSupport != null)
     {
       ToolItem helpButton = toolBar.getItems()[0];
+      AccessUtil.setKey(helpButton, "help");
       helpSupport.hook(helpButton);
     }
 

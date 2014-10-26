@@ -42,70 +42,55 @@ public class DocVariablePage
    * @description
    * The page has the following controls:
    * @callout
-   * Displays the label for the rule that determines where installations are installed.
-   * @callout
-   * Displays the value for the installation location rule.
+   * Displays the installation location rule that determines where installations are installed.
+   * <br/>{@link #promptPageExtras() @1}<br/>
    * In this case, each installation will end up in a uniquely named subfolder of the specified root folder.
    * @callout
-   * Displays the label for the uniquely named subfolder for the installation.
+   * Displays the uniquely named subfolder for the installation.
+   * <br/>{@link #promptPageExtras() @2}<br/>
+   * This may be a relative path within the root folder.
    * @callout
-   * Displays the value for the subfolder name.
-   * @callout
-   * Displays the label for the root folder for all installations.
-   * @callout
-   * Displays the value for the root folder.
+   * Displays the root folder for all installations.
+   * <br/>{@link #promptPageExtras() @3 @4}<br/>
    * In this case the installation will end up in the 'D:/sandbox/oomph' folder.
    * @callout
-   * Browses the file system for a root folder location.
-   * @callout
-   * Displays the label for the rule that determines where workspaces are provisioned.
-   * @callout
-   * Displays the value of the workspace location rule.
+   * Displays the workspace location rule that determines where workspaces are provisioned.
+   * <br/>{@link #promptPageExtras() @5}<br/>
    * In this case, the workspace will be located in a folder named 'ws' nested in the installation folder.
    * @callout
-   * Displays the label for the rule that determines where Git clones will be provisioned.
-   * @callout
-   * Displays the value of the git location rule.
+   * Displays the Git location rule that determines where Git clones are provisioned.
+   * <br/>{@link #promptPageExtras() @6}<br/>
    * In this case the clone is stored in the "git" subfolder of the installation folder with a name derived from the repository URI.
    * @callout
-   * Displays the label for the target platform choice.
-   * @callout
-   * Displays the value for the target platform.
+   * Displays the target platform choice.
+   * <br/>{@link #promptPageExtras() @7}<br/>
    * Project authors are encouraged to make use of this common variable so that multiple projects will materialize a cohesive target platform.
    * @callout
-   * Displays the label for the choice of Oomph's Git remote URI.
+   * Displays the choice of Oomph's Git remote URI.
+   * <br/>{@link #promptPageExtras() @8}<br/>
    * There are typically several different URIs for accessing the same underlying repository
    * depending on whether one wants Gerrit access or direct Git access,
-   * whether ones wants to use SSH, HTTPS, or anonymous access.
-   * @callout
-   * Displays the value for the remote URI choice.
+   * and whether ones wants to use SSH, HTTPS, or anonymous access.
    * In this case, Gerrit access via SSH is chosen.
    * @callout
-   * Displays the label for the JRE location.
+   * Displays the JRE 1.5 location.
+   * <br/>{@link #promptPageExtras() @9 @10}<br/>
    * Standard variables are defined for various levels of the JDK.
-   * @callout
-   * Displays the value for the JRE location.
-   * The value specicified should be compatible with the verion specified in the label.
+   * The value specified JRE should be compatible with the version specified in the label.
    * Generally a JDK is preferred over a JRE.
    * In this case, a Java 1.7 JDK is specified.
    * @callout
-   * Browses the file system for a JRE or JDK location.
-   * @callout
-   * Displays the label for the Bugzilla/Hudson ID.
-   * @callout
-   * Displays the value for the ID.
+   * Displays the Bugzilla/Hudson ID.
+   * <br/>{@link #promptPageExtras() @11}<br/>
    * This is generally an email address.
    * If one doesn't have such a registered ID, 'anonymous' should be specified.
    * @callout
-   * Displays the label for the Eclipse password.
-   * @callout
-   * Displays the obscurred value of the password.
-   * @callout
+   * Displays the obscured Eclipse password.
+   * <br/>{@link #promptPageExtras() @12 @13}<br/>
    * Authenticates that the password is valid with respect to the Bugzilla/Hudson ID and the Git/ID.
    * @callout
-   * Displays the label for the Git/Gerrit user ID.
-   * @callout
-   * Displays the value of the ID.
+   * Displays the Git/Gerrit user ID.
+   * <br/>{@link #promptPageExtras() @14}<br/>
    * If one doesn't have such a registered ID, 'anonymous' should be specified.
    * @callout
    * Determines whether all variables are displayed
@@ -115,12 +100,21 @@ public class DocVariablePage
   public static Image[] promptPage()
   {
     DocVariablePage.CapturePromptPage instance = CapturePromptPage.getInstance();
-    return new Image[] { instance.progressPage, instance.installationRuleLabel, instance.installationRuleControl, instance.installationIDLabel,
-        instance.installationIDControl, instance.installationRootLabel, instance.installationRootControl, instance.installationRootHelper,
-        instance.workspaceRuleLabel, instance.workspaceRuleControl, instance.gitCloneRuleLabel, instance.gitCloneRuleControl, instance.targetPlatformLabel,
-        instance.targetPlatformControl, instance.oomphRemoteURILabel, instance.oomphRemoteURIControl, instance.jreLocationLabel, instance.jreLocationControl,
-        instance.jreLocationHelper, instance.bugzillaLabel, instance.bugzillaControl, instance.passwordLabel, instance.passwordControl,
-        instance.passwordHelper, instance.userIDLabel, instance.userIDControl, instance.showAll };
+    return new Image[] { instance.progressPage, instance.installationRuleLabel, instance.installationIDLabel, instance.installationRootLabel,
+        instance.workspaceRuleLabel, instance.gitCloneRuleLabel, instance.targetPlatformLabel, instance.oomphRemoteURILabel, instance.jreLocationLabel,
+        instance.bugzillaLabel, instance.passwordLabel, instance.userIDLabel, instance.showAll };
+  }
+
+  /**
+   * @snippet image VariablePageExtras.images
+   */
+  public static Image[] promptPageExtras()
+  {
+    DocVariablePage.CapturePromptPage instance = CapturePromptPage.getInstance();
+    return new Image[] { null, instance.installationRuleControl, instance.installationIDControl, instance.installationRootControl,
+        instance.installationRootHelper, instance.workspaceRuleControl, instance.gitCloneRuleControl, instance.targetPlatformControl,
+        instance.oomphRemoteURIControl, instance.jreLocationControl, instance.jreLocationHelper, instance.bugzillaControl, instance.passwordControl,
+        instance.passwordHelper, instance.userIDControl };
   }
 
   /**

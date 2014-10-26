@@ -183,7 +183,7 @@ public abstract class CaptureSetupWizard extends Capture.Window<WizardDialog>
     Button showAllButton = getWidget(wizardDialog, "showAll");
     showAllButton.setSelection(true);
     showAllButton.notifyListeners(SWT.Selection, new Event());
-    AccessUtil.busyWait(100);
+    AccessUtil.busyWait(300);
 
     Text text = getWidget(wizardDialog, "installation.id.control");
     text.setText(installationID);

@@ -215,6 +215,8 @@ table.bullets tr td:nth-child(1) {
 
 table.bullets tr td:nth-child(2) {
   padding-left: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   width: 90%
 }
 
