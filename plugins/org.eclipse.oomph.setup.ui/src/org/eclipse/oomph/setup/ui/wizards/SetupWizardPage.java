@@ -72,7 +72,8 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 
   public String getHelpPath()
   {
-    return SetupWizard.HELP_FOLDER + "Doc" + getClass().getSimpleName() + ".html";
+    String id = "Doc" + getClass().getSimpleName();
+    return SetupWizard.HELP_FOLDER + id + ".html#" + id + "_1_table";
   }
 
   public ResourceSet getResourceSet()
