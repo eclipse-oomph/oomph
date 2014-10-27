@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.internal.p2.repository.AuthenticationFailedException;
 import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
+import org.eclipse.equinox.internal.provisional.p2.repository.IStateful;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -94,26 +95,53 @@ public class CachingTransport extends Transport
     }
 
     OutputStream oldTarget = target;
-    target = new ByteArrayOutputStream();
 
-    IStatus status = delegate.download(uri, target, startPos, monitor);
-    if (status.isOK())
+    class StatfulByteArrayOutputStream extends ByteArrayOutputStream implements IStateful
     {
-      byte[] content = ((ByteArrayOutputStream)target).toByteArray();
-      IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
+      private IStatus status;
 
-      if (loadingRepository)
+      public IStatus getStatus()
       {
-        File cacheFile = getCacheFile(uri);
-        IOUtil.writeFile(cacheFile, content);
+        return status;
+      }
 
-        DownloadStatus downloadStatus = (DownloadStatus)status;
-        long lastModified = downloadStatus.getLastModified();
-        cacheFile.setLastModified(lastModified);
+      public void setStatus(IStatus status)
+      {
+        this.status = status;
       }
     }
 
-    return status;
+    StatfulByteArrayOutputStream statefulTarget = new StatfulByteArrayOutputStream();
+    target = statefulTarget;
+
+    try
+    {
+      IStatus status = delegate.download(uri, target, startPos, monitor);
+      if (status.isOK())
+      {
+        byte[] content = ((ByteArrayOutputStream)target).toByteArray();
+        IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
+
+        if (loadingRepository)
+        {
+          File cacheFile = getCacheFile(uri);
+          IOUtil.writeFile(cacheFile, content);
+
+          DownloadStatus downloadStatus = (DownloadStatus)status;
+          long lastModified = downloadStatus.getLastModified();
+          cacheFile.setLastModified(lastModified);
+        }
+      }
+
+      return status;
+    }
+    finally
+    {
+      if (oldTarget instanceof IStateful)
+      {
+        ((IStateful)oldTarget).setStatus(statefulTarget.getStatus());
+      }
+    }
   }
 
   @Override
