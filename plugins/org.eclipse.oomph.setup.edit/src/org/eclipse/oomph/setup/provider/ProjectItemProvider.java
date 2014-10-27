@@ -17,11 +17,14 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -65,14 +68,36 @@ public class ProjectItemProvider extends ScopeItemProvider
    * This adds a property descriptor for the Logical Project Container feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected void addLogicalProjectContainerPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Project_logicalProjectContainer_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Project_logicalProjectContainer_feature", "_UI_Project_type"),
-        SetupPackage.Literals.PROJECT__LOGICAL_PROJECT_CONTAINER, true, false, true, null, null, null));
+    itemPropertyDescriptors.add(new HierarchicalPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Project_logicalProjectContainer_feature"), getString("_UI_PropertyDescriptor_description",
+            "_UI_Project_logicalProjectContainer_feature", "_UI_Project_type"), SetupPackage.Literals.PROJECT__LOGICAL_PROJECT_CONTAINER, true, false, true,
+        null, null, null)
+    {
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        Project project = (Project)object;
+        Collection<?> choiceOfValues = new ArrayList<Object>(super.getChoiceOfValues(object));
+        for (Iterator<?> it = choiceOfValues.iterator(); it.hasNext();)
+        {
+          Object value = it.next();
+          if (value instanceof Project)
+          {
+            Project otherProject = (Project)value;
+            if (EcoreUtil.isAncestor(project, otherProject) || otherProject.getProjectCatalog() == null)
+            {
+              it.remove();
+            }
+          }
+        }
+
+        return choiceOfValues;
+      }
+    });
   }
 
   /**
