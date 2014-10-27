@@ -255,7 +255,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   @Override
   public int getPriority()
   {
-    return getKey().startsWith("/project") ? PRIORITY_LATE : PRIORITY_EARLY;
+    String key = getKey();
+    return key != null && key.startsWith("/project") ? PRIORITY_LATE : PRIORITY_EARLY;
   }
 
   @Override
