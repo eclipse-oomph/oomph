@@ -690,9 +690,11 @@
           <requirement
               name="org.eclipse.xtend.bootstrapdoc"/>
           <requirement
-              name="org.eclipse.xtext.doc.xdoc"/>
+              name="org.eclipse.xtext.doc.xdoc"
+              optional="true"/>
           <requirement
-              name="org.eclipse.xtend.doc.xdoc"/>
+              name="org.eclipse.xtend.doc.xdoc"
+              optional="true"/>
           <requirement
               name="org.eclipse.xtend.tests.feature.group"/>
           <requirement
@@ -798,7 +800,8 @@
                 source="This_has_the_problem_that_it_requires_a_Mac-specific_fragment."/>
           </requirement>
           <requirement
-              name="org.xtext.sevenlanguages.doc.xdoc"/>
+              name="org.xtext.sevenlanguages.doc.xdoc"
+              optional="true"/>
           <requirement
               name="xtend.website.generator"/>
           <requirement
