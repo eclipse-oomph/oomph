@@ -380,7 +380,7 @@
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+            url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
       <repositoryList
           name="Luna">
@@ -397,7 +397,7 @@
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+            url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
@@ -412,7 +412,7 @@
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+            url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
       <repositoryList
           name="Juno">
@@ -427,7 +427,7 @@
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+            url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
       <repositoryList
           name="Indigo">
@@ -442,7 +442,7 @@
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+            url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
       <repositoryList
           name="Helios">
@@ -457,7 +457,7 @@
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+            url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
       <repositoryList
           name="Galileo">
@@ -476,7 +476,7 @@
         <repository
             url="http://download.eclipse.org/modeling/tmf/xtext/updates/orbit/"/>
         <repository
-            url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+            url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -680,8 +680,6 @@
           <requirement
               name="org.eclipse.xtext.bootstrap"/>
           <requirement
-              name="org.eclipse.xtext.doc.xdoc"/>
-          <requirement
               name="org.eclipse.xtext.language-generator"/>
           <requirement
               name="org.eclipse.xtext.ui.codetemplates.tests"/>
@@ -691,6 +689,8 @@
               name="org.eclipse.xtext.xtext.ui.examples-container"/>
           <requirement
               name="org.eclipse.xtend.bootstrapdoc"/>
+          <requirement
+              name="org.eclipse.xtext.doc.xdoc"/>
           <requirement
               name="org.eclipse.xtend.doc.xdoc"/>
           <requirement
@@ -808,7 +808,7 @@
           <repositoryList
               name="External">
             <repository
-                url="https://extern.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
+                url="https://xtext-builds.itemis.de/jenkins/job/xdoc/lastSuccessfulBuild/artifact/site/"/>
           </repositoryList>
         </targlet>
       </setupTask>
