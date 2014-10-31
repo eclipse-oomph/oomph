@@ -233,11 +233,7 @@ public class HelpSupport
 
     for (int i = 0; i < calloutImages.length; i++)
     {
-      if (calloutImages[i] != null)
-      {
-        calloutImages[i].dispose();
-        calloutImages[i] = null;
-      }
+      calloutImages[i] = null;
     }
   }
 
@@ -290,6 +286,7 @@ public class HelpSupport
       {
         if (!url.equals(helpBrowser.getUrl()))
         {
+          Browser.clearSessions();
           helpBrowser.setUrl(url);
         }
       }
