@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis:Analysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:analysis="http://www.levitasoft.com/p2/analysis/1.0"
+    title="Oomph">
+  <providers
+      xsi:type="analysis:Repository"
+      url="http://download.eclipse.org/oomph/updates"/>
+  <providers
+      xsi:type="analysis:Repository"
+      url="http://download.eclipse.org/releases/mars"/>
+</analysis:Analysis>
