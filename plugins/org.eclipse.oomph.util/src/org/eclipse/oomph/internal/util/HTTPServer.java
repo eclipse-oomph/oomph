@@ -3,6 +3,7 @@ package org.eclipse.oomph.internal.util;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.Platform;
 
@@ -44,6 +45,10 @@ import java.util.concurrent.Executors;
 public final class HTTPServer
 {
   private static final boolean DEBUG = false;
+
+  private static final boolean DEBUG_REQUEST = false;
+
+  private static final boolean DEBUG_RESPONSE = false;
 
   private static final Map<String, String> CONTENT_TYPES = new HashMap<String, String>();
 
@@ -346,13 +351,16 @@ public final class HTTPServer
         return;
       }
 
-      // System.out.println();
-      // String l = line;
-      // while (!StringUtil.isEmpty(l))
-      // {
-      // System.out.println(l);
-      // l = input.readLine();
-      // }
+      if (DEBUG_REQUEST)
+      {
+        System.out.println();
+        String l = line;
+        while (!StringUtil.isEmpty(l))
+        {
+          System.out.println(l);
+          l = input.readLine();
+        }
+      }
 
       line = line.replace(" ", " ");
       String[] tokens = line.split(" ");
@@ -787,7 +795,21 @@ public final class HTTPServer
     @Override
     protected InputStream getContents(String path) throws IOException
     {
-      return new FileInputStream(getFile(path));
+      File file = getFile(path);
+      if (DEBUG_RESPONSE /* && path.endsWith(".html") */)
+      {
+        try
+        {
+          String contents = IOUtil.readUTF8(file);
+          System.out.println(contents);
+        }
+        catch (Exception ex)
+        {
+          ex.printStackTrace();
+        }
+      }
+
+      return new FileInputStream(file);
     }
 
     private File getFile(String path)
@@ -879,6 +901,19 @@ public final class HTTPServer
     protected InputStream getContents(String path) throws IOException
     {
       BundleFile file = getFile(path);
+      if (DEBUG_RESPONSE /* && path.endsWith(".html") */)
+      {
+        try
+        {
+          String contents = file.getContentsString();
+          System.out.println(contents);
+        }
+        catch (Exception ex)
+        {
+          ex.printStackTrace();
+        }
+      }
+
       return file.getContents();
     }
 
