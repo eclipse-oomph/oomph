@@ -198,7 +198,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
                 {
                   try
                   {
-                    monitor.beginTask("Determing tasks to be performed", IProgressMonitor.UNKNOWN);
+                    monitor.beginTask("Determining tasks to be performed", IProgressMonitor.UNKNOWN);
                     performStartup(workbench, monitor);
                     monitor.done();
                     return Status.OK_STATUS;

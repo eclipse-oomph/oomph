@@ -168,14 +168,8 @@ public class ProjectPage extends SetupWizardPage
   {
     super("ProjectPage");
     setTitle("Projects");
-    setDescription("Double click the projects you want to provision, and for each choose its Stream in the table column.");
+    setDescription("Double click the projects you want to provision, and for each choose its stream in the table column.");
   }
-
-  // @Override
-  // public String getHelpPath()
-  // {
-  // return "/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/help/installer/ProjectPage.html";
-  // }
 
   @Override
   protected Control createUI(final Composite parent)
@@ -213,6 +207,7 @@ public class ProjectPage extends SetupWizardPage
         });
       }
     }, resourceSet);
+
     resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(editingDomain));
 
     SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
