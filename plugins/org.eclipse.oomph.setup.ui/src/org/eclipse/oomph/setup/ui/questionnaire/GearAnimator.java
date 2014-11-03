@@ -740,7 +740,7 @@ public class GearAnimator extends Animator
       gc.setBackground(tooltipColor);
       Rectangle rectangle = drawText(gc, point.x, point.y + 14, title, 2);
 
-      gc.setForeground(DARK_GRAY);
+      gc.setForeground(GRAY);
       gc.setLineWidth(1);
       gc.drawRectangle(rectangle);
     }
