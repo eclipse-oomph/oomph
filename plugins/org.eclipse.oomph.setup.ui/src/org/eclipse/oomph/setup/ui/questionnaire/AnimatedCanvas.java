@@ -517,11 +517,32 @@ public class AnimatedCanvas extends Canvas
 
     public static Rectangle drawText(GC gc, double cX, double cY, String text)
     {
+      return drawText(gc, cX, cY, text, 0);
+    }
+
+    public static Rectangle drawText(GC gc, double cX, double cY, String text, int box)
+    {
       Point extent = gc.stringExtent(text);
       int x = (int)(cX - extent.x / 2);
       int y = (int)(cY - extent.y / 2);
+
+      if (x < box)
+      {
+        x = box;
+      }
+
+      Rectangle rectangle = new Rectangle(x, y, extent.x, extent.y);
+      if (box > 0)
+      {
+        rectangle.x -= box;
+        rectangle.y -= box;
+        rectangle.width += 2 * box;
+        rectangle.height += 2 * box;
+        gc.fillRectangle(rectangle);
+      }
+
       gc.drawText(text, x, y, true);
-      return new Rectangle(x, y, extent.x, extent.y);
+      return rectangle;
     }
 
     public static Rectangle drawImage(GC gc, Image image, int cX, int cY)

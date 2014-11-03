@@ -77,6 +77,10 @@ public class GearAnimator extends Animator
 
   private Color purple;
 
+  private Color tooltipColor;
+
+  private Font tooltipFont;
+
   private Font bigFont;
 
   private Font hoverFont;
@@ -104,6 +108,8 @@ public class GearAnimator extends Animator
   private final Image[] noImages = new Image[5];
 
   private final Page[] pages = new Page[GEARS + 1];
+
+  private final Point[] tooltipPoints = new Point[pages.length];
 
   private final Path[] gearPaths = new Path[GEARS + 1];
 
@@ -173,6 +179,7 @@ public class GearAnimator extends Animator
     hoverFont = createFont(BIG_FONT_PX + 6, PAGE_WIDTH, TITLES);
     normalFont = createFont(NORMAL_FONT_PX, PAGE_WIDTH, TITLES);
     numberFont = createFont(24);
+    tooltipFont = createFont(16);
 
     exit = loadImage("questionnaire/exit.png");
     exitHover = loadImage("questionnaire/exit_hover.png");
@@ -218,6 +225,7 @@ public class GearAnimator extends Animator
     gearForeground[1] = createColor(207, 108, 0);
 
     purple = createColor(43, 34, 84);
+    tooltipColor = createColor(253, 232, 206);
 
     pages[0] = new ImagePage(0, TITLES[0], 0, 0, 0, new TextAnswer(""));
     pages[1] = new PreferencePage(1, TITLES[1], 0, 5, 29, "/instance/org.eclipse.core.resources/refresh.lightweight.enabled");
@@ -661,6 +669,7 @@ public class GearAnimator extends Animator
     gc.setLineWidth(3);
     gc.setAntialias(SWT.ON);
 
+    // Unselected gears
     Page page = getSelectedPage();
     int alpha = Math.min((int)(255 * speed / ANGLE), 255);
 
@@ -668,32 +677,24 @@ public class GearAnimator extends Animator
     {
       if (i != selection && (i < GEARS || summaryShown))
       {
-        paintGear(gc, i, alpha);
+        tooltipPoints[i] = paintGear(gc, i, alpha);
       }
     }
 
-    paintGear(gc, selection, alpha);
+    // Selected gear
+    tooltipPoints[selection] = paintGear(gc, selection, alpha);
 
-    Image exitImage = exit;
-    if (hover == EXIT)
-    {
-      exitImage = exitHover;
-      oldHover = hover;
-    }
-
+    // Exit button
     int centerX = BORDER + PAGE_WIDTH - exit.getBounds().width / 2;
     int centerY = BORDER + exit.getBounds().height / 2;
+    Image exitImage = hover == EXIT ? exitHover : exit;
 
     exitBox = exitImage.getBounds();
     exitBox.x = centerX - exitImage.getBounds().width / 2;
     exitBox.y = centerY - exitImage.getBounds().height / 2;
     gc.drawImage(exitImage, exitBox.x, exitBox.y);
 
-    if (hover == NONE)
-    {
-      oldHover = NONE;
-    }
-
+    // Selected page
     if (!pageBufferUpdated)
     {
       updatePage();
@@ -728,20 +729,38 @@ public class GearAnimator extends Animator
       gc.setAlpha(255);
     }
 
+    // Gear tooltip
+    if (hover >= 0 && hover < tooltipPoints.length)
+    {
+      Point point = tooltipPoints[hover];
+      String title = pages[hover].getTitle();
+
+      gc.setFont(tooltipFont);
+      gc.setForeground(DARK_GRAY);
+      gc.setBackground(tooltipColor);
+      Rectangle rectangle = drawText(gc, point.x, point.y + 14, title, 2);
+
+      gc.setForeground(DARK_GRAY);
+      gc.setLineWidth(1);
+      gc.drawRectangle(rectangle);
+    }
+
+    // Back button
     if (page.showBack())
     {
       backBox = Animator.drawImage(gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY);
     }
 
+    // Next button
     if (page.showNext())
     {
       nextBox = Animator.drawImage(gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - buttonR, answerY);
     }
 
-    oldHover = hover; // TODO Remove the other oldHover assignments?
+    oldHover = hover;
   }
 
-  private void paintGear(GC gc, int i, int alpha)
+  private Point paintGear(GC gc, int i, int alpha)
   {
     double offset = 2 * i * radius;
     double x = BORDER + radius + offset;
@@ -822,10 +841,10 @@ public class GearAnimator extends Animator
       Animator.drawImage(gc, summaryImages[selected], (int)x, (int)y);
     }
 
-    paintBadge(gc, x, y, outerR, i, alpha);
+    return paintBadge(gc, x, y, outerR, i, alpha);
   }
 
-  private void paintBadge(GC gc, double x, double y, double outerR, int i, int alpha)
+  private Point paintBadge(GC gc, double x, double y, double outerR, int i, int alpha)
   {
     if (selection >= GEARS)
     {
@@ -846,6 +865,7 @@ public class GearAnimator extends Animator
     }
 
     gc.setAlpha(255);
+    return new Point((int)x, (int)(y + outerR));
   }
 
   private Page updatePage()
