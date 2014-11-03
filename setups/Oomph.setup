@@ -452,16 +452,16 @@
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <query
-          summary="Bugs in ${bugzilla.version}"
+          summary="Oomph Bugs in ${bugzilla.version}"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
       <query
-          summary="Features in ${bugzilla.version}"
+          summary="Oomph Features in ${bugzilla.version}"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=enhancement"/>
       <query
-          summary="Resolved in ${bugzilla.version}"
+          summary="Oomph Resolved in ${bugzilla.version}"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=${bugzilla.version}"/>
       <query
-          summary="Unspecified Version"
+          summary="Oomph Unspecified Version"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;version=unspecified"/>
     </setupTask>
     <setupTask
@@ -471,7 +471,7 @@
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <query
-          summary="Reviews in ${git.clone.oomph.checkoutBranch}">
+          summary="Oomph Reviews in ${git.clone.oomph.checkoutBranch}">
         <attribute
             key="gerrit query type"
             value="custom"/>
