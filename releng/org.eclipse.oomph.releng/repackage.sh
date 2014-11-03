@@ -7,10 +7,12 @@ mkdir updates
 cp -a git/sites/org.eclipse.oomph.site/target/repository/* updates
 
 cd updates
-zip -r -9 -q org.eclipse.oomph.site.zip *
+echo "Zipping update site..."
+zip -r -9 -qq org.eclipse.oomph.site.zip *
 cd ..
 
 for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip; do
+  echo "Repackaging $f..."
   rm -rf tmp
   mkdir tmp
 
@@ -31,7 +33,7 @@ for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/
     tar -czf ../$f *
     rename .zip .tar.gz ../$f
   else
-    zip -r -9 -q --symlinks ../$f *
+    zip -r -9 -qq --symlinks ../$f *
   fi
   cd ..
 done
@@ -45,7 +47,8 @@ ls * > index.txt
 
 cp -a ../git/products/org.eclipse.oomph.setup.installer.product/target/repository .
 cd repository
-zip -r -9 -q repository.zip *
+echo "Zipping product repository..."
+zip -r -9 -qq repository.zip *
 
 cd ../..
 rm -rf help.zip
@@ -57,7 +60,8 @@ cp releng/org.eclipse.oomph.releng.helpcenter/html/* ../help
 cp releng/org.eclipse.oomph.releng.helpcenter/docs.txt ../help/.docs
 
 for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
-  unzip plugins/$i/target/$i-*-SNAPSHOT.jar \
+  echo "Unzipping $i..."
+  unzip -qq plugins/$i/target/$i-*-SNAPSHOT.jar \
     "javadoc/*" \
     "schemadoc/*" \
     "html/*" \
@@ -73,4 +77,6 @@ for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
 done
 
 cd ..
-zip -r -9 -q help.zip help
+
+echo "Zipping help center..."
+zip -r -9 -qq help.zip help
