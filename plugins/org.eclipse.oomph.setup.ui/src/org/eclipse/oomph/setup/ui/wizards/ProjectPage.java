@@ -31,6 +31,7 @@ import org.eclipse.oomph.setup.provider.ProjectItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -122,6 +123,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
@@ -147,6 +149,11 @@ import java.util.Set;
  */
 public class ProjectPage extends SetupWizardPage
 {
+  /**
+   * Cannot be removed from {@link #streamViewer}.
+   */
+  private final Set<URI> existingStreams = new HashSet<URI>();
+
   private ComposedAdapterFactory adapterFactory;
 
   private AdapterFactoryLabelProvider labelProvider;
@@ -159,10 +166,11 @@ public class ProjectPage extends SetupWizardPage
 
   private Button skipButton;
 
-  /**
-   * Cannot be removed from {@link #streamViewer}.
-   */
-  private final Set<URI> existingStreams = new HashSet<URI>();
+  private AddButtonAnimator addButtonAnimator;
+
+  private boolean projectsChanged;
+
+  private boolean inactive;
 
   public ProjectPage()
   {
@@ -800,13 +808,14 @@ public class ProjectPage extends SetupWizardPage
     bucketToolBar.setSize(46, 22);
 
     final ToolItem addButton = new ToolItem(bucketToolBar, SWT.PUSH);
-    addButton.setToolTipText("Add Project (or double-click in upper tree)");
+    addButton.setToolTipText("Add Projects (or double-click in upper tree)");
     addButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add"));
     addButton.setEnabled(false);
     AccessUtil.setKey(addButton, "choose");
+    addButtonAnimator = new AddButtonAnimator(addButton);
 
     final ToolItem removeButton = new ToolItem(bucketToolBar, SWT.PUSH);
-    removeButton.setToolTipText("Remove Project (or double-click in lower table)");
+    removeButton.setToolTipText("Remove Projects (or double-click in lower table)");
     removeButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove"));
     removeButton.setEnabled(false);
     AccessUtil.setKey(removeButton, "unchoose");
@@ -1120,9 +1129,19 @@ public class ProjectPage extends SetupWizardPage
           }
         }
       });
-      AccessUtil.setKey(skipButton, "skip");
 
+      AccessUtil.setKey(skipButton, "skip");
       setPageComplete(skipButton.getSelection());
+    }
+  }
+
+  @Override
+  protected void handleInactivity(Display display, boolean inactive)
+  {
+    this.inactive = inactive;
+    if (addButtonAnimator.shouldAnimate())
+    {
+      display.asyncExec(addButtonAnimator);
     }
   }
 
@@ -1232,8 +1251,27 @@ public class ProjectPage extends SetupWizardPage
     });
   }
 
+  private boolean isSelected(Project project)
+  {
+    Workspace workspace = getWorkspace();
+    if (workspace != null)
+    {
+      for (Stream stream : workspace.getStreams())
+      {
+        if (project == stream.getProject())
+        {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   private void addSelectedProjects()
   {
+    projectsChanged = true;
+
     List<Project> addedProjects = new ArrayList<Project>();
     List<Stream> addedStreams = new ArrayList<Stream>();
 
@@ -1287,7 +1325,6 @@ public class ProjectPage extends SetupWizardPage
       catalogManager.saveSelection();
 
       streamViewer.setSelection(new StructuredSelection(addedStreams));
-
       projectViewer.update(addedProjects.toArray(), null);
 
       setPageComplete(true);
@@ -1298,25 +1335,10 @@ public class ProjectPage extends SetupWizardPage
     }
   }
 
-  private boolean isSelected(Project project)
-  {
-    Workspace workspace = getWorkspace();
-    if (workspace != null)
-    {
-      for (Stream stream : workspace.getStreams())
-      {
-        if (project == stream.getProject())
-        {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
   private void removeSelectedStreams()
   {
+    projectsChanged = true;
+
     Workspace workspace = getWorkspace();
     if (workspace != null)
     {
@@ -1822,6 +1844,29 @@ public class ProjectPage extends SetupWizardPage
     public Image getImage(Object element)
     {
       return image;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class AddButtonAnimator extends ButtonAnimator
+  {
+    public AddButtonAnimator(ToolItem addButton)
+    {
+      super(SetupUIPlugin.INSTANCE, addButton, "add", 7);
+    }
+
+    @Override
+    public Shell getShell()
+    {
+      return getContainer().getShell();
+    }
+
+    @Override
+    protected boolean doAnimate()
+    {
+      return inactive && !projectsChanged;
     }
   }
 }

@@ -16,7 +16,6 @@ import org.eclipse.oomph.internal.util.HTTPServer;
 import org.eclipse.jface.dialogs.DialogTray;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -48,6 +47,8 @@ import java.util.Set;
  */
 public class HelpSupport
 {
+  private static final int INACTIVITY_SECONDS = 5;
+
   private static final String HELP_CONTEXT = "/help";
 
   private final TitleAreaDialog dialog;
@@ -56,7 +57,7 @@ public class HelpSupport
 
   private final Image[] calloutImages = new Image[10];
 
-  private final InactivityDetector inactivityDetector = new InactivityDetector(1000, 10000)
+  private final InactivityDetector inactivityDetector = new InactivityDetector(1000, INACTIVITY_SECONDS * 1000)
   {
     @Override
     protected void handleInactivity(Display display, boolean inactive)
@@ -65,12 +66,12 @@ public class HelpSupport
       {
         display.asyncExec(helpAnimator);
       }
+
+      HelpSupport.this.handleInactivity(display, inactive);
     }
   };
 
-  private final HelpAnimator helpAnimator = new HelpAnimator();
-
-  private ToolItem helpButton;
+  private HelpAnimator helpAnimator;
 
   private HTTPServer helpServer;
 
@@ -84,7 +85,7 @@ public class HelpSupport
 
   public final void hook(final ToolItem helpButton)
   {
-    this.helpButton = helpButton;
+    helpAnimator = new HelpAnimator(helpButton);
 
     Shell shell = dialog.getShell();
     shell.addHelpListener(new HelpListener()
@@ -237,6 +238,10 @@ public class HelpSupport
     }
   }
 
+  protected void handleInactivity(Display display, boolean inactive)
+  {
+  }
+
   private Image getCalloutImage(int number)
   {
     if (calloutImages[number] == null)
@@ -335,84 +340,23 @@ public class HelpSupport
   /**
    * @author Eike Stepper
    */
-  private final class HelpAnimator implements Runnable
+  private final class HelpAnimator extends ButtonAnimator
   {
-    private Image[] images;
-
-    private int index;
-
-    private boolean backward;
-
-    public void run()
+    public HelpAnimator(ToolItem helpButton)
     {
-      Shell shell = dialog.getShell();
-      if (shell != null && !shell.isDisposed())
-      {
-        try
-        {
-          if (images == null)
-          {
-            initImages(shell);
-          }
-
-          if (inactivityDetector.isInactive() && !isHelpOpen())
-          {
-            helpButton.setImage(images[Math.max(0, index)]);
-
-            if (backward)
-            {
-              if (--index == -10)
-              {
-                backward = false;
-              }
-            }
-            else
-            {
-              if (++index == images.length)
-              {
-                index = images.length - 2;
-                backward = true;
-              }
-            }
-
-            shell.getDisplay().timerExec(40, this);
-          }
-          else
-          {
-            index = 0;
-            backward = false;
-            helpButton.setImage(images[index]);
-          }
-        }
-        catch (SWTException ex)
-        {
-          if (!shell.isDisposed())
-          {
-            throw ex;
-          }
-        }
-      }
+      super(UIPlugin.INSTANCE, helpButton, "help", 10);
     }
 
-    private void initImages(Shell shell)
+    @Override
+    public Shell getShell()
     {
-      images = new Image[11];
-      images[0] = helpButton.getImage();
-      for (int i = 0; i < images.length - 1; i++)
-      {
-        images[i + 1] = UIPlugin.INSTANCE.getSWTImage("help" + i);
-      }
+      return dialog.getShell();
+    }
 
-      shell.addDisposeListener(new DisposeListener()
-      {
-        public void widgetDisposed(DisposeEvent e)
-        {
-          for (int i = 0; i < images.length - 1; i++)
-          {
-            images[i + 1].dispose();
-          }
-        }
-      });
+    @Override
+    protected boolean doAnimate()
+    {
+      return inactivityDetector.isInactive() && !isHelpOpen();
     }
   }
 }

@@ -22,6 +22,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -41,7 +42,15 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
 
     if (helpAvailable)
     {
-      helpSupport = new HelpSupport(this);
+      helpSupport = new HelpSupport(this)
+      {
+        @Override
+        protected void handleInactivity(Display display, boolean inactive)
+        {
+          OomphWizardDialog.this.handleInactivity(display, inactive);
+        }
+      };
+
       pageChangedListener = new IPageChangedListener()
       {
         public void pageChanged(PageChangedEvent event)
@@ -119,6 +128,10 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
     final Control contents = super.createContents(parent);
     OomphDialog.fixTitleImageLayout(this);
     return contents;
+  }
+
+  protected void handleInactivity(Display display, boolean inactive)
+  {
   }
 
   @Override

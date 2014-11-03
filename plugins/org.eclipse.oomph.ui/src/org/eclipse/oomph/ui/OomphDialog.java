@@ -30,6 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -67,7 +68,14 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
     if (helpAvailable)
     {
-      helpSupport = new HelpSupport(this);
+      helpSupport = new HelpSupport(this)
+      {
+        @Override
+        protected void handleInactivity(Display display, boolean inactive)
+        {
+          OomphDialog.this.handleInactivity(display, inactive);
+        }
+      };
     }
   }
 
@@ -233,6 +241,10 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     String sectionName = getClass().getName();
     OomphUIPlugin plugin = this.plugin != null ? this.plugin : UIPlugin.INSTANCE;
     return plugin.getDialogSettings(sectionName);
+  }
+
+  protected void handleInactivity(Display display, boolean inactive)
+  {
   }
 
   @Override

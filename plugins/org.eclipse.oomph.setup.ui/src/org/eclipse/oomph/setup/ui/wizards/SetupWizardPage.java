@@ -36,6 +36,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Eike Stepper
@@ -119,6 +120,10 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   public boolean performCancel()
   {
     return true;
+  }
+
+  protected void handleInactivity(Display display, boolean inactive)
+  {
   }
 
   public void enterPage(boolean forward)
