@@ -11,8 +11,6 @@
 package org.eclipse.oomph.ui;
 
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolItem;
@@ -113,16 +111,5 @@ public abstract class ButtonAnimator implements Runnable
     {
       images[i + 1] = plugin.getSWTImage(imagePrefix + i);
     }
-
-    button.addDisposeListener(new DisposeListener()
-    {
-      public void widgetDisposed(DisposeEvent e)
-      {
-        for (int i = 1; i < images.length; i++)
-        {
-          images[i].dispose();
-        }
-      }
-    });
   }
 }
