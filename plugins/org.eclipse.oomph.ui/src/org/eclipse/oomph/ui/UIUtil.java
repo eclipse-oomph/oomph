@@ -40,11 +40,11 @@ public final class UIUtil
 {
   public static final IWorkbench WORKBENCH;
 
-  private static final Image ERROR_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+  private static Image ERROR_IMAGE;
 
-  private static final Image WARNING_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
+  private static Image WARNING_IMAGE;
 
-  private static final Image INFO_IMAGE = UIPlugin.INSTANCE.getSWTImage("info");
+  private static Image INFO_IMAGE;
 
   static
   {
@@ -204,12 +204,27 @@ public final class UIUtil
   {
     if (severity == IStatus.ERROR)
     {
+      if (ERROR_IMAGE == null)
+      {
+        ERROR_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+      }
+
       return ERROR_IMAGE;
     }
 
     if (severity == IStatus.WARNING)
     {
+      if (WARNING_IMAGE == null)
+      {
+        WARNING_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
+      }
+
       return WARNING_IMAGE;
+    }
+
+    if (INFO_IMAGE == null)
+    {
+      INFO_IMAGE = UIPlugin.INSTANCE.getSWTImage("info");
     }
 
     return INFO_IMAGE;
