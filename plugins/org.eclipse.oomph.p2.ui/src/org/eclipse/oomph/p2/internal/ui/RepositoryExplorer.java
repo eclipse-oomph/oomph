@@ -22,6 +22,7 @@ import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.RepositoryProvider;
 import org.eclipse.oomph.p2.internal.ui.RepositoryManager.RepositoryManagerListener;
+import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -379,6 +380,7 @@ public class RepositoryExplorer extends ViewPart
               Requirement requirement = P2Factory.eINSTANCE.createRequirement();
               requirement.setNamespace(namespace);
               requirement.setName(item.getName());
+
               Version version = item.getVersion();
               if (version != null && !Version.emptyVersion.equals(version))
               {
@@ -747,7 +749,7 @@ public class RepositoryExplorer extends ViewPart
                       }
                     }
 
-                    child = new FeatureItem();
+                    child = new FeatureItem(requiredID);
                   }
                   else
                   {
@@ -762,10 +764,10 @@ public class RepositoryExplorer extends ViewPart
                       }
                     }
 
-                    child = new PluginItem();
+                    child = new PluginItem(requiredID);
                   }
 
-                  child.setName(name);
+                  child.setLabel(name);
                   children.put(requiredID, child);
                 }
 
@@ -794,7 +796,7 @@ public class RepositoryExplorer extends ViewPart
     }
 
     CategoryItem categoryItem = new CategoryItem();
-    categoryItem.setName(names.get(id));
+    categoryItem.setLabel(names.get(id));
     categoryItem.setChildren(children.values().toArray(new ContainerItem[children.size()]));
     return categoryItem;
   }
@@ -822,8 +824,8 @@ public class RepositoryExplorer extends ViewPart
     for (int i = 0; i < sortedIDs.length; i++)
     {
       String id = sortedIDs[i];
-      FeatureItem featureItem = new FeatureItem();
-      featureItem.setName(names.get(id));
+      FeatureItem featureItem = new FeatureItem(id);
+      featureItem.setLabel(names.get(id));
       featureItems[i] = featureItem;
 
       Version[] sortedVersions = sortVersions(versions.get(id));
@@ -852,6 +854,7 @@ public class RepositoryExplorer extends ViewPart
 
   private void analyzeCapabilities(IQueryResult<IInstallableUnit> query, IProgressMonitor monitor)
   {
+    final Set<String> flavors = new HashSet<String>();
     final Set<String> namespaces = new HashSet<String>();
     Map<String, Set<Version>> versions = new HashMap<String, Set<Version>>();
 
@@ -862,11 +865,33 @@ public class RepositoryExplorer extends ViewPart
         P2UIPlugin.checkCancelation(monitor);
 
         String namespace = capability.getNamespace();
-        namespaces.add(namespace);
+        if ("org.eclipse.equinox.p2.flavor".equals(namespace))
+        {
+          flavors.add(capability.getName());
+        }
+        else if (!"A.PDE.Target.Platform".equalsIgnoreCase(namespace))
+        {
+          namespaces.add(namespace);
+        }
 
         if (ObjectUtil.equals(namespace, currentNamespace))
         {
           CollectionUtil.add(versions, capability.getName(), capability.getVersion());
+        }
+      }
+    }
+
+    String[] flavorIDs = getMinimalFlavors(flavors);
+    for (Iterator<String> it = namespaces.iterator(); it.hasNext();)
+    {
+      String namespace = it.next();
+      for (int i = 0; i < flavorIDs.length; i++)
+      {
+        String flavor = flavorIDs[i];
+        if (namespace.startsWith(flavor))
+        {
+          it.remove();
+          break;
         }
       }
     }
@@ -879,7 +904,7 @@ public class RepositoryExplorer extends ViewPart
       String id = sortedIDs[i];
       CapabilityItem capabilityItem = new CapabilityItem();
       capabilityItem.setNamespace(currentNamespace);
-      capabilityItem.setName(id);
+      capabilityItem.setLabel(id);
       capabilityItems[i] = capabilityItem;
 
       Version[] sortedVersions = sortVersions(versions.get(id));
@@ -914,6 +939,35 @@ public class RepositoryExplorer extends ViewPart
         });
       }
     });
+  }
+
+  private static String[] getMinimalFlavors(final Set<String> flavors)
+  {
+    String[] flavorIDs = sortStrings(flavors);
+    int start = 0;
+
+    while (start < flavorIDs.length)
+    {
+      boolean changed = false;
+      for (int i = start + 1; i < flavorIDs.length; i++)
+      {
+        String flavorID = flavorIDs[i];
+        if (flavorID.startsWith(flavorIDs[start]))
+        {
+          flavors.remove(flavorID);
+          changed = true;
+        }
+      }
+
+      if (changed)
+      {
+        flavorIDs = sortStrings(flavors);
+      }
+
+      ++start;
+    }
+
+    return flavorIDs;
   }
 
   private static String getName(IInstallableUnit iu)
@@ -1250,7 +1304,7 @@ public class RepositoryExplorer extends ViewPart
    */
   private static abstract class Item
   {
-    private String name;
+    private String label;
 
     public Item()
     {
@@ -1263,12 +1317,17 @@ public class RepositoryExplorer extends ViewPart
 
     public String getName()
     {
-      return name;
+      return getLabel();
     }
 
-    public void setName(String name)
+    public String getLabel()
     {
-      this.name = name;
+      return label;
+    }
+
+    public void setLabel(String label)
+    {
+      this.label = label;
     }
 
     public Version getVersion()
@@ -1289,7 +1348,7 @@ public class RepositoryExplorer extends ViewPart
     @Override
     public String toString()
     {
-      return name;
+      return label;
     }
 
     @Override
@@ -1359,10 +1418,23 @@ public class RepositoryExplorer extends ViewPart
   {
     private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature");
 
+    private final String id;
+
+    public FeatureItem(String id)
+    {
+      this.id = id;
+    }
+
     @Override
     public Image getImage()
     {
       return IMAGE;
+    }
+
+    @Override
+    public String getName()
+    {
+      return id;
     }
   }
 
@@ -1373,10 +1445,23 @@ public class RepositoryExplorer extends ViewPart
   {
     private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin");
 
+    private final String id;
+
+    public PluginItem(String id)
+    {
+      this.id = id;
+    }
+
     @Override
     public Image getImage()
     {
       return IMAGE;
+    }
+
+    @Override
+    public String getName()
+    {
+      return id;
     }
   }
 
@@ -1401,6 +1486,12 @@ public class RepositoryExplorer extends ViewPart
   {
     private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/capability");
 
+    private static final Image FEATURE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature");
+
+    private static final Image PLUGIN_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin");
+
+    private static final Image PACKAGE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Package");
+
     private String namespace;
 
     @Override
@@ -1417,6 +1508,21 @@ public class RepositoryExplorer extends ViewPart
     @Override
     public Image getImage()
     {
+      if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+      {
+        if (getLabel().endsWith(FEATURE_SUFFIX))
+        {
+          return FEATURE_IMAGE;
+        }
+
+        return PLUGIN_IMAGE;
+      }
+
+      if (RequirementItemProvider.NAMESPACE_PACKAGE_ID.equals(namespace))
+      {
+        return PACKAGE_IMAGE;
+      }
+
       return IMAGE;
     }
   }
@@ -1433,7 +1539,7 @@ public class RepositoryExplorer extends ViewPart
     public VersionItem(Item parent, Version version)
     {
       this.parent = parent;
-      setName(version.toString());
+      setLabel(version.toString());
     }
 
     @Override
@@ -1449,21 +1555,21 @@ public class RepositoryExplorer extends ViewPart
     }
 
     @Override
-    public String getName()
+    public String getLabel()
     {
-      return parent.getName();
+      return parent.getLabel();
     }
 
     @Override
     public Version getVersion()
     {
-      return Version.parseVersion(super.getName());
+      return Version.parseVersion(super.getLabel());
     }
 
     @Override
     public String toString()
     {
-      return super.getName();
+      return super.getLabel();
     }
   }
 }

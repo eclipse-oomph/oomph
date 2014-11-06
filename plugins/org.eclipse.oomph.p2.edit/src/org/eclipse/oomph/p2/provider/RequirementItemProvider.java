@@ -42,6 +42,8 @@ import java.util.List;
  */
 public class RequirementItemProvider extends ModelElementItemProvider
 {
+  public static final String NAMESPACE_PACKAGE_ID = "java.package";
+
   private static final String FEATURE_SUFFIX = ".feature.group";
 
   /**
@@ -166,7 +168,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
         {
           requirement.setNamespace(IInstallableUnit.NAMESPACE_IU_ID);
         }
-        else if (!"org.eclipse.equinox.p2.iu".equals(namespace) && !"java.package".equals(namespace))
+        else if (!"org.eclipse.equinox.p2.iu".equals(namespace) && !NAMESPACE_PACKAGE_ID.equals(namespace))
         {
           continue;
         }
@@ -194,7 +196,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
   {
     if (feature == P2Package.Literals.REQUIREMENT__NAMESPACE)
     {
-      return Arrays.asList(new String[] { "org.eclipse.equinox.p2.iu", "java.package" });
+      return Arrays.asList(new String[] { IInstallableUnit.NAMESPACE_IU_ID, NAMESPACE_PACKAGE_ID });
     }
 
     return super.filterChoices(choices, feature, object);
@@ -212,9 +214,21 @@ public class RequirementItemProvider extends ModelElementItemProvider
     String key = "full/obj16/Requirement";
 
     Requirement requirement = (Requirement)object;
-    if (requirement.isFeature())
+    String namespace = requirement.getNamespace();
+    if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
     {
-      key += "_Feature";
+      if (requirement.isFeature())
+      {
+        key += "_Feature";
+      }
+      else
+      {
+        key += "_Plugin";
+      }
+    }
+    else if (NAMESPACE_PACKAGE_ID.equals(namespace))
+    {
+      key += "_Package";
     }
 
     if (requirement.isOptional())
