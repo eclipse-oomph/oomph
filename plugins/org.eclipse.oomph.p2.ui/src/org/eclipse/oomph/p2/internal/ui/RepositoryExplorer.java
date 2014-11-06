@@ -311,7 +311,7 @@ public class RepositoryExplorer extends ViewPart
 
     categorizeItemsButton = new Button(modeComposite, SWT.CHECK);
     categorizeItemsButton.setText("Group items by category");
-    categorizeItemsButton.setToolTipText("Whether to show items in categories or in a plain list");
+    categorizeItemsButton.setToolTipText("Whether to show items in categories or in a complete list");
     categorizeItemsButton.setSelection(categorizeItems);
     categorizeItemsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -325,7 +325,7 @@ public class RepositoryExplorer extends ViewPart
     });
 
     namespaceViewer = new ComboViewer(modeComposite, SWT.READ_ONLY);
-    namespaceViewer.getCombo().setToolTipText("Select the namespace of the capabilities to show in the filtered tree");
+    namespaceViewer.getCombo().setToolTipText("Select the namespace of the capabilities to show");
     namespaceViewer.setSorter(new ViewerSorter());
     namespaceViewer.setContentProvider(new ArrayContentProvider());
     namespaceViewer.setLabelProvider(new LabelProvider());
@@ -1552,6 +1552,12 @@ public class RepositoryExplorer extends ViewPart
     public String getNamespace()
     {
       return parent.getNamespace();
+    }
+
+    @Override
+    public String getName()
+    {
+      return parent.getName();
     }
 
     @Override
