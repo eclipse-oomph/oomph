@@ -41,7 +41,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
@@ -414,17 +413,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
     public Image getImage(Object element)
     {
-      if (severity == IStatus.WARNING)
-      {
-        return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
-      }
-
-      if (severity == IStatus.ERROR)
-      {
-        return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
-      }
-
-      return TargletsUIPlugin.INSTANCE.getSWTImage("info");
+      return UIUtil.getStatusImage(severity);
     }
 
     public String getText(Object element)

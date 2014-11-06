@@ -60,14 +60,19 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
     return location;
   }
 
-  public final synchronized R getRepository()
+  public final R getRepository()
+  {
+    return getRepository(null);
+  }
+
+  public final synchronized R getRepository(IProgressMonitor monitor)
   {
     if (repository == null)
     {
       try
       {
         existing = repositoryManager.contains(location);
-        repository = loadRepository(repositoryManager, location);
+        repository = loadRepository(repositoryManager, location, monitor);
       }
       catch (ProvisionException ex)
       {
@@ -150,7 +155,7 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
 
   public abstract RepositoryType getRepositoryType();
 
-  protected abstract R loadRepository(M repositoryManager, URI location) throws ProvisionException, OperationCanceledException;
+  protected abstract R loadRepository(M repositoryManager, URI location, IProgressMonitor monitor) throws ProvisionException, OperationCanceledException;
 
   protected abstract R createRepository(M repositoryManager, URI location, String name, String type, Map<String, String> properties) throws ProvisionException,
       OperationCanceledException;
@@ -174,10 +179,10 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
     }
 
     @Override
-    protected IMetadataRepository loadRepository(IMetadataRepositoryManager repositoryManager, URI location) throws ProvisionException,
-        OperationCanceledException
+    protected IMetadataRepository loadRepository(IMetadataRepositoryManager repositoryManager, URI location, IProgressMonitor monitor)
+        throws ProvisionException, OperationCanceledException
     {
-      return repositoryManager.loadRepository(location, null);
+      return repositoryManager.loadRepository(location, monitor);
     }
 
     @Override
@@ -211,10 +216,10 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
     }
 
     @Override
-    protected IArtifactRepository loadRepository(IArtifactRepositoryManager repositoryManager, URI location) throws ProvisionException,
-        OperationCanceledException
+    protected IArtifactRepository loadRepository(IArtifactRepositoryManager repositoryManager, URI location, IProgressMonitor monitor)
+        throws ProvisionException, OperationCanceledException
     {
-      return repositoryManager.loadRepository(location, null);
+      return repositoryManager.loadRepository(location, monitor);
     }
 
     @Override

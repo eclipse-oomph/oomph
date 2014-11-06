@@ -55,6 +55,7 @@ public class NavigateHandler extends AbstractHandler
     {
       viewer.setSelection(targetSelection, true);
     }
+
     return null;
   }
 
@@ -67,6 +68,7 @@ public class NavigateHandler extends AbstractHandler
     {
       viewer = ((IViewerProvider)activeEditorPart).getViewer();
     }
+
     Object selection = evaluationContext2.getVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME);
     if (selection instanceof IStructuredSelection)
     {

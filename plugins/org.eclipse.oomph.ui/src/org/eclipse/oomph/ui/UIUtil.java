@@ -12,18 +12,21 @@ package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.internal.ui.UIPlugin;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -36,6 +39,12 @@ import java.lang.reflect.InvocationTargetException;
 public final class UIUtil
 {
   public static final IWorkbench WORKBENCH;
+
+  private static final Image ERROR_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+
+  private static final Image WARNING_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
+
+  private static final Image INFO_IMAGE = UIPlugin.INSTANCE.getSWTImage("info");
 
   static
   {
@@ -189,6 +198,21 @@ public final class UIUtil
   {
     UIPlugin.INSTANCE.log(ex);
     ErrorDialog.open(ex);
+  }
+
+  public static Image getStatusImage(int severity)
+  {
+    if (severity == IStatus.ERROR)
+    {
+      return ERROR_IMAGE;
+    }
+
+    if (severity == IStatus.WARNING)
+    {
+      return WARNING_IMAGE;
+    }
+
+    return INFO_IMAGE;
   }
 
   public static void exec(Display display, boolean async, Runnable runnable)

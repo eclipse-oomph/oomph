@@ -24,9 +24,10 @@ public final class P2UIPlugin extends OomphUIPlugin
 
   private static Implementation plugin;
 
+  @SuppressWarnings("restriction")
   public P2UIPlugin()
   {
-    super(new ResourceLocator[] { org.eclipse.oomph.p2.provider.P2EditPlugin.INSTANCE });
+    super(new ResourceLocator[] { org.eclipse.oomph.p2.provider.P2EditPlugin.INSTANCE, org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE });
   }
 
   @Override

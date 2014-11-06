@@ -73,7 +73,7 @@
             <command
                   commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
                   icon="icons/offline.gif"
-                  id="org.eclipse.oomph.ui.toolbars.sampleCommand"
+                  id="org.eclipse.oomph.ui.toolbars.offline.toggle"
                   style="toggle"
                   tooltip="Offline">
             </command>

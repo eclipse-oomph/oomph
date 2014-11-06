@@ -36,4 +36,72 @@
             name="Targlet"/>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.eclipse.oomph.views"
+            class="org.eclipse.oomph.p2.internal.ui.RepositoryExplorer"
+            icon="icons/obj16/repository.gif"
+            id="org.eclipse.oomph.p2.ui.RepositoryExplorer"
+            name="Repository Explorer">
+      </view>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Oomph"
+            id="org.eclipse.oomph">
+      </category>
+      <command
+            categoryId="org.eclipse.oomph"
+            id="org.eclipse.oomph.p2.ui.ExploreRepository"
+            name="Explore Repository">
+      </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.eclipse.oomph.p2.ui.ExploreRepository">
+         <class
+               class="org.eclipse.oomph.p2.internal.ui.ExploreRepositoryHandler">
+         </class>
+         <activeWhen>
+             <iterate>
+                <instanceof
+                      value="org.eclipse.oomph.p2.Repository">
+                </instanceof>
+             </iterate>
+         </activeWhen>
+      </handler>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any">
+         <command
+               commandId="org.eclipse.oomph.p2.ui.ExploreRepository"
+               icon="icons/obj16/repository.gif"
+               label="Explore"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.oomph.p2.ui.RepositoryExplorer?after=end">
+          <command
+                commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
+                icon="icons/offline.gif"
+                id="org.eclipse.oomph.p2.ui.RepositoryExplorer.offline"
+                style="toggle"
+                tooltip="Offline">
+          </command>
+      </menuContribution>
+   </extension>
+
 </plugin>
