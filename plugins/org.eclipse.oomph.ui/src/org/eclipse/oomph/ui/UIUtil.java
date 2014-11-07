@@ -26,7 +26,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -206,7 +205,7 @@ public final class UIUtil
     {
       if (ERROR_IMAGE == null)
       {
-        ERROR_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+        ERROR_IMAGE = UIPlugin.INSTANCE.getSWTImage("error");
       }
 
       return ERROR_IMAGE;
@@ -216,7 +215,7 @@ public final class UIUtil
     {
       if (WARNING_IMAGE == null)
       {
-        WARNING_IMAGE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
+        WARNING_IMAGE = UIPlugin.INSTANCE.getSWTImage("warning");
       }
 
       return WARNING_IMAGE;
