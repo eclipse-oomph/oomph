@@ -21,6 +21,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 
@@ -47,6 +48,7 @@ import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
@@ -276,7 +278,8 @@ public final class SetupUtil
       T value = values.get(i);
       if (count == size)
       {
-        throw new IllegalArgumentException("Circular dependencies " + value);
+        SetupCorePlugin.INSTANCE.log("Circular dependencies " + value, IStatus.WARNING);
+        return;
       }
 
       boolean changed = false;
