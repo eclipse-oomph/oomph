@@ -49,7 +49,6 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -416,9 +415,8 @@ public class RepositoryExplorer extends ViewPart
   private void hookActions()
   {
     IActionBars actionBars = getViewSite().getActionBars();
-    IToolBarManager toolbarManager = actionBars.getToolBarManager();
-    IMenuManager menuManager = actionBars.getMenuManager();
 
+    IToolBarManager toolbarManager = actionBars.getToolBarManager();
     toolbarManager.add(new Separator("additions"));
     toolbarManager.add(new Action("Collapse All", P2UIPlugin.INSTANCE.getImageDescriptor("collapse-all"))
     {
@@ -451,27 +449,11 @@ public class RepositoryExplorer extends ViewPart
       }
     });
 
-    toolbarManager.add(new Separator("end"));
-
-    menuManager.add(new Action("Manage Repositories...", P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/RepositoryList"))
+    toolbarManager.add(new Separator("modes"));
+    toolbarManager.add(new Action("Expert Mode", IAction.AS_CHECK_BOX)
     {
       {
-        setToolTipText("Open the dialog for the management of the repository drop down history");
-      }
-
-      @Override
-      public void run()
-      {
-      }
-    });
-
-    menuManager.add(new Separator("additions"));
-    menuManager.add(new Separator());
-
-    menuManager.add(new Action("Expert Mode", IAction.AS_CHECK_BOX)
-    {
-      {
-        setToolTipText("Toggle between the expert and the simple mode");
+        setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("obj16/capability"));
         setChecked(expertMode);
       }
 
@@ -484,6 +466,24 @@ public class RepositoryExplorer extends ViewPart
         triggerReload();
       }
     });
+
+    toolbarManager.add(new Separator("end"));
+
+    // IMenuManager menuManager = actionBars.getMenuManager();
+    // menuManager.add(new Action("Manage Repositories...", P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/RepositoryList"))
+    // {
+    // {
+    // setToolTipText("Open the dialog for the management of the repository drop down history");
+    // }
+    //
+    // @Override
+    // public void run()
+    // {
+    // }
+    // });
+    //
+    // menuManager.add(new Separator("additions"));
+    // menuManager.add(new Separator());
   }
 
   private void updateExpertMode()

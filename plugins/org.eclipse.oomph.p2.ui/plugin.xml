@@ -93,13 +93,13 @@
          </command>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:org.eclipse.oomph.p2.ui.RepositoryExplorer?after=end">
+            locationURI="toolbar:org.eclipse.oomph.p2.ui.RepositoryExplorer?after=modes">
           <command
                 commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
                 icon="icons/offline.gif"
                 id="org.eclipse.oomph.p2.ui.RepositoryExplorer.offline"
                 style="toggle"
-                tooltip="Offline">
+                tooltip="Offline Mode">
           </command>
       </menuContribution>
    </extension>
