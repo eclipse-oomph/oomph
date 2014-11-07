@@ -7,12 +7,12 @@ mkdir updates
 cp -a git/sites/org.eclipse.oomph.site/target/repository/* updates
 
 cd updates
-echo "Zipping update site..."
+echo "Zipping update site"
 zip -r -9 -qq org.eclipse.oomph.site.zip *
 cd ..
 
 for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip; do
-  echo "Repackaging $f..."
+  echo "Repackaging $f"
   rm -rf tmp
   mkdir tmp
 
@@ -52,7 +52,7 @@ ls * > index.txt
 
 cp -a ../git/products/org.eclipse.oomph.setup.installer.product/target/repository .
 cd repository
-echo "Zipping product repository..."
+echo "Zipping product repository"
 zip -r -9 -qq repository.zip *
 
 cd ../..
@@ -65,7 +65,7 @@ cp releng/org.eclipse.oomph.releng.helpcenter/html/* ../help
 cp releng/org.eclipse.oomph.releng.helpcenter/docs.txt ../help/.docs
 
 for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
-  echo "Unzipping $i..."
+  echo "Unzipping $i"
   unzip -qq plugins/$i/target/$i-*-SNAPSHOT.jar \
     "javadoc/*" \
     "schemadoc/*" \
@@ -83,5 +83,5 @@ done
 
 cd ..
 
-echo "Zipping help center..."
+echo "Zipping help center"
 zip -r -9 -qq help.zip help
