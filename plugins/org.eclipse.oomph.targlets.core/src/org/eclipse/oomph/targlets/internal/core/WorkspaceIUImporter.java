@@ -14,8 +14,8 @@ import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
-import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.pde.TargetPlatformListener;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
@@ -26,12 +26,16 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetPlatformService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -140,8 +144,29 @@ public final class WorkspaceIUImporter
 
     ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
     {
+      @SuppressWarnings("restriction")
       public void run(IProgressMonitor monitor) throws CoreException
       {
+        // JDT lazily creates the external folder links,
+        // but if many projects are imported, the resource deltas are processed early,
+        // and then JDT creates ExternalPackageFragmentRoot instances for which linkedFolder.getLocation() is null,
+        // which causes null pointer exceptions in that class' hashCode method, this.externalPath.hashCode(),
+        // which completely screws up PDEs own notification handling
+        // causing it to handle the same deltas more the once, making a mess of the PDE's model.
+        // JDT doesn't create the links until the AutoBuildJob runs, which happens very late in the overall processing cycle.
+        org.eclipse.jdt.internal.core.ExternalFoldersManager externalFoldersManager = org.eclipse.jdt.internal.core.ExternalFoldersManager.getExternalFoldersManager();
+        for (IPluginModelBase pluginModelBase : PluginRegistry.getExternalModels())
+        {
+          String installLocation = pluginModelBase.getInstallLocation();
+          if (installLocation != null)
+          {
+            if (new File(installLocation).isDirectory())
+            {
+              externalFoldersManager.createLinkFolder(new Path(installLocation), false, null);
+            }
+          }
+        }
+
         for (WorkspaceIUInfo info : workspaceIUInfos)
         {
           ResourcesUtil.ImportResult result = info.importIntoWorkspace(monitor);

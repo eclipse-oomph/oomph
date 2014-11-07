@@ -69,6 +69,7 @@ import org.eclipse.equinox.internal.p2.engine.phases.Collect;
 import org.eclipse.equinox.internal.p2.engine.phases.Install;
 import org.eclipse.equinox.internal.p2.engine.phases.Property;
 import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
+import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -77,12 +78,18 @@ import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.engine.spi.ProvisioningAction;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.metadata.expression.ExpressionUtil;
+import org.eclipse.equinox.p2.metadata.expression.IExpression;
+import org.eclipse.equinox.p2.metadata.expression.IFilterExpression;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
@@ -120,6 +127,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -712,7 +721,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       WorkspaceIUAnalyzer workspaceIUAnalyzer = analyzeWorkspaceIUs(rootRequirements, progress);
 
-      TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer);
+      TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms());
       transaction.commit(commitContext, progress.newChild());
 
       Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
@@ -913,6 +922,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
    */
   private static final class TargletCommitContext extends CommitContext
   {
+    private static final Pattern OSGI_PROPERTY_FILTER = Pattern.compile("(!?)\\((osgi.arch|osgi.os|osgi.ws)=([^)]+)\\)");
+
     private static final String NATIVE_ARTIFACTS = "nativeArtifacts"; //$NON-NLS-1$
 
     private final Profile profile;
@@ -923,10 +934,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private List<IMetadataRepository> metadataRepositories;
 
-    public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer)
+    private boolean isIncludeAllPlatforms;
+
+    public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer, boolean isIncludeAllPlatforms)
     {
       this.profile = profile;
       this.workspaceIUAnalyzer = workspaceIUAnalyzer;
+      this.isIncludeAllPlatforms = isIncludeAllPlatforms;
     }
 
     public IProvisioningPlan getProvisioningPlan()
@@ -956,7 +970,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             Map<String, Version> workspaceIUVersions = workspaceIUAnalyzer.getIUVersions();
 
             List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
-            Map<String, IInstallableUnit> idToIUMap = new HashMap<String, IInstallableUnit>();
+            Map<IU, IInstallableUnit> idToIUMap = new HashMap<IU, IInstallableUnit>();
             generateWorkspaceSourceIUs(ius, workspaceIUVersions, idToIUMap, monitor);
 
             ius.add(createPDETargetPlatformIU());
@@ -967,11 +981,15 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             {
               TargletsCorePlugin.checkCancelation(monitor);
 
-              ius.add(iu);
+              ius.add(createGeneralizedIU(iu));
 
               // If the binary IU corresponds to a synthetic source IU...
-              String id = iu.getId();
-              IInstallableUnit workspaceIU = idToIUMap.get(id);
+              IInstallableUnit workspaceIU = idToIUMap.get(new IU(iu));
+              if (workspaceIU == null)
+              {
+                workspaceIU = idToIUMap.get(new IU(iu.getId(), Version.emptyVersion));
+              }
+
               if (workspaceIU != null)
               {
                 // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
@@ -1026,7 +1044,161 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           return metadata;
         }
 
-        private void generateWorkspaceSourceIUs(List<IInstallableUnit> ius, Map<String, Version> ids, Map<String, IInstallableUnit> idToIUMap,
+        private IInstallableUnit createGeneralizedIU(IInstallableUnit iu)
+        {
+          // If we're not including all platform, no generalization is needed.
+          if (!isIncludeAllPlatforms)
+          {
+            return iu;
+          }
+
+          // Determine the generalized IU filter.
+          IMatchExpression<IInstallableUnit> filter = iu.getFilter();
+          IMatchExpression<IInstallableUnit> generalizedFilter = generalize(filter);
+          boolean needsGeneralization = filter != generalizedFilter;
+
+          // Determine the generalized requirement filters.
+          Collection<IRequirement> requirements = iu.getRequirements();
+          IRequirement[] generalizedRequirements = requirements.toArray(new IRequirement[requirements.size()]);
+          for (int i = 0; i < generalizedRequirements.length; ++i)
+          {
+            IRequirement requirement = generalizedRequirements[i];
+            IMatchExpression<IInstallableUnit> requirementFilter = requirement.getFilter();
+            IMatchExpression<IInstallableUnit> generalizedRequirementFilter = generalize(requirementFilter);
+
+            // If the filter needs generalization, create a clone of the requirement, with the generalized filter replacement.
+            if (requirementFilter != filter)
+            {
+              needsGeneralization = true;
+              IRequirement generalizedRequirement = MetadataFactory.createRequirement(requirement.getMatches(), generalizedRequirementFilter,
+                  requirement.getMin(), requirement.getMax(), requirement.isGreedy(), requirement.getDescription());
+              generalizedRequirements[i] = generalizedRequirement;
+            }
+          }
+
+          // If none of the filters need generalization, the original IU can be used.
+          if (!needsGeneralization)
+          {
+            return iu;
+          }
+
+          // Create a description that clone the IU with the generalized filter replacements.
+          InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
+
+          description.setId(iu.getId());
+
+          description.setVersion(iu.getVersion());
+
+          Collection<IArtifactKey> artifacts = iu.getArtifacts();
+          description.setArtifacts(artifacts.toArray(new IArtifactKey[artifacts.size()]));
+
+          Collection<IProvidedCapability> providedCapabilities = iu.getProvidedCapabilities();
+          description.setCapabilities(providedCapabilities.toArray(new IProvidedCapability[providedCapabilities.size()]));
+
+          description.setCopyright(iu.getCopyright());
+
+          description.setFilter(generalizedFilter);
+
+          Collection<ILicense> licenses = iu.getLicenses();
+          description.setLicenses(licenses.toArray(new ILicense[licenses.size()]));
+
+          Collection<IRequirement> metaRequirements = iu.getMetaRequirements();
+          description.setMetaRequirements(metaRequirements.toArray(new IRequirement[metaRequirements.size()]));
+
+          description.setRequirements(generalizedRequirements);
+
+          description.setSingleton(iu.isSingleton());
+
+          description.setTouchpointType(iu.getTouchpointType());
+          description.setUpdateDescriptor(iu.getUpdateDescriptor());
+
+          for (Iterator<Map.Entry<String, String>> iterator = iu.getProperties().entrySet().iterator(); iterator.hasNext();)
+          {
+            Map.Entry<String, String> entry = iterator.next();
+            description.setProperty(entry.getKey(), entry.getValue());
+          }
+
+          for (ITouchpointData touchpointData : iu.getTouchpointData())
+          {
+            description.addTouchpointData(touchpointData);
+          }
+
+          return MetadataFactory.createInstallableUnit(description);
+        }
+
+        private IMatchExpression<IInstallableUnit> generalize(IMatchExpression<IInstallableUnit> filter)
+        {
+          if (filter == null)
+          {
+            return null;
+          }
+
+          // Lazily determine if any parameter needs generalization.
+          Object[] generalizedParameters = null;
+          Object[] parameters = filter.getParameters();
+          for (int i = 0; i < parameters.length; ++i)
+          {
+            Object parameter = parameters[i];
+            if (parameter instanceof LDAPFilter)
+            {
+              String value = parameter.toString();
+              Matcher matcher = OSGI_PROPERTY_FILTER.matcher(value);
+              if (matcher.find())
+              {
+                // If the pattern matches, we need to generalize the parameters.
+                if (generalizedParameters == null)
+                {
+                  // Copy over all the parameters.
+                  // The ones that need generalization will be replaced.
+                  generalizedParameters = new Object[parameters.length];
+                  System.arraycopy(parameters, 0, generalizedParameters, 0, parameters.length);
+                }
+
+                // Build the replacement expression
+                StringBuffer result = new StringBuffer();
+                if (matcher.group(1).length() == 0)
+                {
+                  matcher.appendReplacement(result, "($2=*)");
+                }
+                else
+                {
+                  matcher.appendReplacement(result, "!($2=nothing)");
+                }
+
+                // Handle all the remaining matches the same way.
+                while (matcher.find())
+                {
+                  if (matcher.group(1).length() == 0)
+                  {
+                    matcher.appendReplacement(result, "($2=*)");
+                  }
+                  else
+                  {
+                    matcher.appendReplacement(result, "!($2=nothing)");
+                  }
+                }
+
+                // Complete the replacements, parse it back into an LDAP filter, and replace this parameter.
+                matcher.appendTail(result);
+                IFilterExpression ldap = ExpressionUtil.parseLDAP(result.toString());
+                generalizedParameters[i] = ldap;
+              }
+            }
+          }
+
+          // If one of the parameters needed to be generalized...
+          if (generalizedParameters != null)
+          {
+            // Parse the filter expression and create a new match expressions with the same filter but the generalized parameters.
+            IExpression expression = ExpressionUtil.parse(filter.toString());
+            return ExpressionUtil.getFactory().matchExpression(expression, generalizedParameters);
+          }
+
+          // Otherwise, return the original filter.
+          return filter;
+        }
+
+        private void generateWorkspaceSourceIUs(List<IInstallableUnit> ius, Map<String, Version> ids, Map<IU, IInstallableUnit> idToIUMap,
             IProgressMonitor monitor)
         {
           Map<IInstallableUnit, WorkspaceIUInfo> workspaceSourceIUInfos = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
@@ -1037,8 +1209,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             TargletsCorePlugin.checkCancelation(monitor);
 
             String id = iu.getId();
-            ius.add(iu);
-            idToIUMap.put(id, iu);
+            ius.add(createGeneralizedIU(iu));
+            idToIUMap.put(new IU(iu), iu);
 
             String suffix = "";
             if (id.endsWith(FEATURE_SUFFIX))
@@ -1076,7 +1248,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             ius.add(workspaceSourceIU);
             ids.put(workspaceSourceID, version);
 
-            idToIUMap.put(workspaceSourceID, workspaceSourceIU);
+            idToIUMap.put(new IU(workspaceSourceIU), workspaceSourceIU);
             WorkspaceIUInfo info = workspaceIUInfos.get(iu);
             if (info != null) // Extra IUs from p2.inf files have no separate workspace project
             {
@@ -1359,6 +1531,63 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       resource.save(writer, XML_OPTIONS);
 
       return writer;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class IU
+  {
+    private final String id;
+
+    private final Version version;
+
+    public IU(IInstallableUnit iu)
+    {
+      this(iu.getId(), iu.getVersion());
+    }
+
+    public IU(String id, Version version)
+    {
+      this.id = id;
+      this.version = P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MICRO).getMinimum();
+    }
+
+    public String getId()
+    {
+      return id;
+    }
+
+    public Version getVersion()
+    {
+      return version;
+    }
+
+    @Override
+    public int hashCode()
+    {
+      return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+      if (obj instanceof IU)
+      {
+        IU iu = (IU)obj;
+
+        if (id.equals(iu.getId()))
+        {
+          Version version = iu.getVersion();
+          if (this.version.equals(version) || Version.emptyVersion.equals(version) || Version.emptyVersion.equals(this.version))
+          {
+            return true;
+          }
+        }
+      }
+
+      return false;
     }
   }
 }

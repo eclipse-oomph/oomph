@@ -343,6 +343,7 @@
   <project href="interim/EGit.setup#/"/>
   <project href="interim/EMF.setup#/"/>
   <project href="interim/EMFCompare.setup#/"/>
+  <project href="interim/JDT.setup#/"/>
   <project href="Oomph.setup#/"/>
   <project href="http://git.eclipse.org/c/papyrus/org.eclipse.papyrus.git/plain/releng/org.eclipse.papyrus.oomph/setups/papyrus.setup#/"/>
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
