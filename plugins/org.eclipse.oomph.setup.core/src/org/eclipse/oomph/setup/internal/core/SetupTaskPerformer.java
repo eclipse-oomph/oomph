@@ -470,28 +470,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        // Replace predecessor references to refer to the direct substitution.
-        for (SetupTask setupTask : triggeredSetupTasks)
-        {
-          EList<SetupTask> predecessors = setupTask.getPredecessors();
-          for (ListIterator<SetupTask> it = predecessors.listIterator(); it.hasNext();)
-          {
-            SetupTask predecessor = it.next();
-            SetupTask overridingSetupTask = directSubstitutions.get(predecessor);
-            if (overridingSetupTask != null)
-            {
-              if (predecessors.contains(overridingSetupTask))
-              {
-                it.remove();
-              }
-              else
-              {
-                it.set(overridingSetupTask);
-              }
-            }
-          }
-        }
-
         EList<SetupTask> remainingSetupTasks = new UniqueEList.FastCompare<SetupTask>();
         for (SetupTask setupTask : triggeredSetupTasks)
         {
@@ -503,6 +481,28 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           else
           {
             remainingSetupTasks.add(setupTask);
+          }
+        }
+
+        // Replace predecessor references to refer to the direct substitution.
+        for (SetupTask setupTask : remainingSetupTasks)
+        {
+          EList<SetupTask> predecessors = setupTask.getPredecessors();
+          for (ListIterator<SetupTask> it = predecessors.listIterator(); it.hasNext();)
+          {
+            SetupTask predecessor = it.next();
+            SetupTask overridingSetupTask = directSubstitutions.get(predecessor);
+            if (overridingSetupTask != null)
+            {
+              if (predecessors.contains(overridingSetupTask) || overridingSetupTask.requires(predecessor))
+              {
+                it.remove();
+              }
+              else
+              {
+                it.set(overridingSetupTask);
+              }
+            }
           }
         }
 
