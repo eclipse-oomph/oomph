@@ -22,6 +22,9 @@ for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/
     inifile=oomph.app/Contents/MacOS/$inifile
   fi
 
+  sed -e 's/Oomph.Installer/Oomph Installer/' tmp/$inifile > tmp/$inifile.tmp
+  mv tmp/$inifile.tmp tmp/$inifile
+
   echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> tmp/$inifile
   echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> tmp/$inifile
 
