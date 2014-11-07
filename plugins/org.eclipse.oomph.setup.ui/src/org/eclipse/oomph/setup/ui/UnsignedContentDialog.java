@@ -112,15 +112,18 @@ public class UnsignedContentDialog extends AbstractConfirmDialog
       return propPolicy ? Confirmer.ACCEPT : Confirmer.DECLINE;
     }
 
-    UnsignedPolicy userPolicy = user.getUnsignedPolicy();
-    if (userPolicy == UnsignedPolicy.ACCEPT)
+    if (user != null)
     {
-      return Confirmer.ACCEPT;
-    }
+      UnsignedPolicy userPolicy = user.getUnsignedPolicy();
+      if (userPolicy == UnsignedPolicy.ACCEPT)
+      {
+        return Confirmer.ACCEPT;
+      }
 
-    if (userPolicy == UnsignedPolicy.DECLINE)
-    {
-      return Confirmer.DECLINE;
+      if (userPolicy == UnsignedPolicy.DECLINE)
+      {
+        return Confirmer.DECLINE;
+      }
     }
 
     return new AbstractDialogConfirmer()
@@ -129,7 +132,7 @@ public class UnsignedContentDialog extends AbstractConfirmDialog
       public Confirmation confirm(boolean defaultConfirmed, Object info)
       {
         Confirmation confirmation = super.confirm(defaultConfirmed, info);
-        if (confirmation.isRemember())
+        if (user != null && confirmation.isRemember())
         {
           UnsignedPolicy unsignedPolicy = confirmation.isConfirmed() ? UnsignedPolicy.ACCEPT : UnsignedPolicy.DECLINE;
           user.setUnsignedPolicy(unsignedPolicy);

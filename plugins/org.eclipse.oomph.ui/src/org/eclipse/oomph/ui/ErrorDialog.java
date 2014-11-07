@@ -29,19 +29,24 @@ import java.io.StringWriter;
  */
 public class ErrorDialog extends MessageDialog
 {
-  private static final int DETAILS_BUTTON_ID = 1;
-
   private static final int TEXT_LINE_COUNT = 15;
 
-  private Throwable throwable;
+  private final Throwable throwable;
+
+  private final int detailsButtonID;
 
   private Text text;
 
-  private ErrorDialog(String title, Throwable detail)
+  private ErrorDialog(String title, Throwable throwable)
   {
-    super(null, title, null, "Internal error" + StringUtil.NL + detail.getMessage(), MessageDialog.ERROR, new String[] { IDialogConstants.OK_LABEL,
-        IDialogConstants.SHOW_DETAILS_LABEL }, 0);
-    throwable = detail;
+    this(title, throwable, 0, 1, IDialogConstants.OK_LABEL, IDialogConstants.SHOW_DETAILS_LABEL);
+  }
+
+  protected ErrorDialog(String title, Throwable throwable, int defaultButtonID, int detailsButtonID, String... dialogButtonLabels)
+  {
+    super(null, title, null, "Internal error:" + StringUtil.NL + getMessage(throwable), MessageDialog.ERROR, dialogButtonLabels, defaultButtonID);
+    this.throwable = throwable;
+    this.detailsButtonID = detailsButtonID;
     setShellStyle(SWT.SHELL_TRIM | SWT.BORDER | SWT.APPLICATION_MODAL);
   }
 
@@ -65,7 +70,7 @@ public class ErrorDialog extends MessageDialog
   @Override
   protected void buttonPressed(int buttonId)
   {
-    if (buttonId == DETAILS_BUTTON_ID)
+    if (buttonId == detailsButtonID)
     {
       toggleDetailsArea();
     }
@@ -84,16 +89,55 @@ public class ErrorDialog extends MessageDialog
     {
       text.dispose();
       text = null;
-      getButton(DETAILS_BUTTON_ID).setText(IDialogConstants.SHOW_DETAILS_LABEL);
+      getButton(detailsButtonID).setText(IDialogConstants.SHOW_DETAILS_LABEL);
     }
     else
     {
       createDropDownText((Composite)getContents());
-      getButton(DETAILS_BUTTON_ID).setText(IDialogConstants.HIDE_DETAILS_LABEL);
+      getButton(detailsButtonID).setText(IDialogConstants.HIDE_DETAILS_LABEL);
     }
 
     Point newSize = getContents().computeSize(SWT.DEFAULT, SWT.DEFAULT);
     getShell().setSize(new Point(windowSize.x, windowSize.y + newSize.y - oldSize.y));
+  }
+
+  private static String getMessage(Throwable t)
+  {
+    try
+    {
+      String message = getMessageRecursively(t);
+      if (!StringUtil.isEmpty(message))
+      {
+        return message;
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return t.getClass().getSimpleName();
+  }
+
+  private static String getMessageRecursively(Throwable t)
+  {
+    String message = t.getMessage();
+    if (StringUtil.isEmpty(message))
+    {
+      Throwable cause = t.getCause();
+      if (cause != null)
+      {
+        return getMessageRecursively(cause);
+      }
+    }
+
+    return message;
+  }
+
+  private static void openWithDetail(Throwable detail)
+  {
+    ErrorDialog dialog = new ErrorDialog("Error", detail);
+    dialog.open();
   }
 
   public static void open(final Throwable detail)
@@ -114,9 +158,4 @@ public class ErrorDialog extends MessageDialog
     }
   }
 
-  private static void openWithDetail(Throwable detail)
-  {
-    ErrorDialog dialog = new ErrorDialog("Error", detail);
-    dialog.open();
-  }
 }

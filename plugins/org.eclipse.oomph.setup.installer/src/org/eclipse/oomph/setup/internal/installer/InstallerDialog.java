@@ -11,47 +11,27 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
-import org.eclipse.oomph.p2.P2Factory;
-import org.eclipse.oomph.p2.ProfileDefinition;
-import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
-import org.eclipse.oomph.p2.core.Profile;
-import org.eclipse.oomph.p2.core.ProfileTransaction;
-import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
-import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
-import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
-import org.eclipse.oomph.ui.UICallback;
-import org.eclipse.oomph.util.Confirmer;
-import org.eclipse.oomph.util.IRunnable;
+import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.OomphPlugin;
-import org.eclipse.oomph.util.Pair;
-import org.eclipse.oomph.util.PropertiesUtil;
-
-import org.eclipse.emf.common.util.ECollections;
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
-import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.query.QueryUtil;
-import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -73,21 +53,11 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author Eike Stepper
  */
 public final class InstallerDialog extends SetupWizardDialog
 {
-  private static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url";
-
-  private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
-
-  public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL).replace('\\', '/');
-
   public static final int RETURN_RESTART = -4;
 
   private final IPageChangedListener pageChangedListener = new PageChangedListener();
@@ -214,37 +184,33 @@ public final class InstallerDialog extends SetupWizardDialog
     }
     else
     {
-      final UICallback callback = new UICallback(getShell(), getShell().getText() + " Update");
-      callback.runInProgressDialog(false, new IRunnable()
+      final Runnable successRunnable = new Runnable()
       {
-        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        public void run()
         {
-          try
-          {
-            updateResolution.commit(monitor);
-
-            callback.execInUI(true, new Runnable()
-            {
-              public void run()
-              {
-                callback.information(false, "Updates were installed. Press OK to restart.");
-
-                close();
-                setReturnCode(RETURN_RESTART);
-              }
-            });
-          }
-          catch (CoreException ex)
-          {
-            updateError = ex.getStatus();
-          }
-          finally
-          {
-            updateResolution = null;
-            setUpdateIcon(0);
-          }
+          close();
+          setReturnCode(RETURN_RESTART);
         }
-      });
+      };
+
+      final ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
+      {
+        public void handleException(CoreException ex)
+        {
+          updateError = ex.getStatus();
+        }
+      };
+
+      final Runnable finalRunnable = new Runnable()
+      {
+        public void run()
+        {
+          updateResolution = null;
+          setUpdateIcon(0);
+        }
+      };
+
+      SelfUpdate.update(getShell(), updateResolution, successRunnable, exceptionHandler, finalRunnable);
     }
   }
 
@@ -548,42 +514,8 @@ public final class InstallerDialog extends SetupWizardDialog
     {
       try
       {
-        Agent agent = P2Util.getAgentManager().getCurrentAgent();
-        Profile profile = agent.getCurrentProfile();
-        ProfileTransaction transaction = profile.change();
-
-        final boolean repositoryChanged = changeRepositoryIfNeeded(transaction);
-
-        CommitContext commitContext = new CommitContext()
-        {
-          private IProvisioningPlan provisioningPlan;
-
-          @Override
-          public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
-              Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
-          {
-            if (repositoryChanged && iuDeltas.isEmpty() && propertyDeltas.size() <= 1)
-            {
-              // Cancel if only the repository addition would be committed.
-              return false;
-            }
-
-            this.provisioningPlan = provisioningPlan;
-            return true;
-          }
-
-          @Override
-          public Confirmer getUnsignedContentConfirmer()
-          {
-            User user = getInstaller().getUser();
-            P2TaskImpl.processLicenses(provisioningPlan, ProgressPage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
-            provisioningPlan = null;
-
-            return UnsignedContentDialog.createUnsignedContentConfirmer(user, true);
-          }
-        };
-
-        updateResolution = transaction.resolve(commitContext, null);
+        User user = getInstaller().getUser();
+        updateResolution = SelfUpdate.resolve(user, null);
       }
       catch (CoreException ex)
       {
@@ -593,21 +525,6 @@ public final class InstallerDialog extends SetupWizardDialog
       {
         updateSearching = false;
       }
-    }
-
-    private boolean changeRepositoryIfNeeded(ProfileTransaction transaction)
-    {
-      ProfileDefinition profileDefinition = transaction.getProfileDefinition();
-
-      EList<Repository> repositories = profileDefinition.getRepositories();
-      if (repositories.size() != 1 || !InstallerDialog.INSTALLER_UPDATE_URL.equals(repositories.get(0).getURL()))
-      {
-        Repository repository = P2Factory.eINSTANCE.createRepository(InstallerDialog.INSTALLER_UPDATE_URL);
-        profileDefinition.setRepositories(ECollections.singletonEList(repository));
-        return true;
-      }
-
-      return false;
     }
   }
 }

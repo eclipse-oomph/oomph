@@ -824,7 +824,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   public static void processLicenses(IProvisioningPlan provisioningPlan, Confirmer licenseConfirmer, final User user, boolean saveChangedUser,
       IProgressMonitor monitor)
   {
-    Set<LicenseInfo> acceptedLicenses = new HashSet<LicenseInfo>(user.getAcceptedLicenses());
+    Set<LicenseInfo> acceptedLicenses = new HashSet<LicenseInfo>();
+    if (user != null)
+    {
+      acceptedLicenses.addAll(user.getAcceptedLicenses());
+    }
 
     final Map<ILicense, List<IInstallableUnit>> licensesToIUs = new HashMap<ILicense, List<IInstallableUnit>>();
     Set<Pair<ILicense, String>> set = new HashSet<Pair<ILicense, String>>();
@@ -877,7 +881,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         throw new UnsupportedOperationException("Licenses have been declined");
       }
 
-      if (confirmation.isRemember())
+      if (user != null && confirmation.isRemember())
       {
         for (ILicense license : licensesToIUs.keySet())
         {

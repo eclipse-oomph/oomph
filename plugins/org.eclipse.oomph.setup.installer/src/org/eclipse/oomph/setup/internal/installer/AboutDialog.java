@@ -96,7 +96,7 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Installer version: " + version + "\n" + InstallerDialog.INSTALLER_UPDATE_URL;
+    return "Installer version: " + version + "\n" + SelfUpdate.INSTALLER_UPDATE_URL;
   }
 
   @Override

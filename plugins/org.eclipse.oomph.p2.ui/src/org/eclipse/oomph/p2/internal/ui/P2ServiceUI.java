@@ -269,6 +269,13 @@ public class P2ServiceUI extends UIServices
 
   protected Shell getShell()
   {
-    return UIUtil.getShell();
+    try
+    {
+      return UIUtil.getShell();
+    }
+    catch (Throwable ex)
+    {
+      return null;
+    }
   }
 }
