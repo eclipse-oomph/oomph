@@ -17,6 +17,8 @@ for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/
   mkdir tmp
 
   unzip -qq $f -d tmp
+  zip --delete tmp/plugins/com.ibm.icu_*.zip com/*
+
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
     inifile=oomph.app/Contents/MacOS/$inifile

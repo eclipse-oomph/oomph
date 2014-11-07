@@ -78,6 +78,7 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.service.datalocation.Location;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -713,10 +714,43 @@ public class ProfileTransactionImpl implements ProfileTransaction
     for (BundlePool bundlePool : agent.getAgentManager().getBundlePools())
     {
       P2CorePlugin.checkCancelation(monitor);
-      artifactURIs.add(bundlePool.getLocation().toURI());
+      File location = bundlePool.getLocation();
+
+      if (!isLocationWithCrippledICU(location))
+      {
+        artifactURIs.add(location.toURI());
+      }
     }
 
     return metadataURIs;
+  }
+
+  private boolean isLocationWithCrippledICU(File location)
+  {
+    File plugins = new File(location, "plugins");
+    if (plugins.isDirectory())
+    {
+      File[] files = plugins.listFiles(new FilenameFilter()
+      {
+        public boolean accept(File dir, String name)
+        {
+          return name.startsWith("com.ibm.icu_") && name.endsWith(".jar");
+        }
+      });
+
+      if (files != null)
+      {
+        for (File file : files)
+        {
+          if (file.length() < 1000000)
+          {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   private IInstallableUnit adjustProfileChangeRequest(final IProfileChangeRequest request, IProgressMonitor monitor) throws CoreException
