@@ -73,11 +73,14 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -131,41 +134,11 @@ public class RepositoryExplorer extends ViewPart
 
   private static final String ERROR_INPUT = "Error";
 
+  private final Object loadJobLock = new LoadJobLock();
+
+  private final RepositoryFocusListener repositoryFocusListener = new RepositoryFocusListener();
+
   private final RepositoryHistoryListener repositoryHistoryListener = new RepositoryHistoryListener();
-
-  private final FocusListener focusListener = new FocusListener()
-  {
-    private Color originalForeground;
-
-    public void focusGained(FocusEvent e)
-    {
-      if (originalForeground != null)
-      {
-        repositoryCombo.setText("");
-        repositoryCombo.setForeground(originalForeground);
-        originalForeground = null;
-      }
-    }
-
-    public void focusLost(FocusEvent e)
-    {
-      if (RepositoryManager.INSTANCE.getActiveRepository() == null)
-      {
-        originalForeground = repositoryCombo.getForeground();
-        repositoryCombo.setText("type repository url, drag and drop, or pick from list");
-        repositoryCombo.setForeground(gray);
-      }
-    }
-  };
-
-  private final Object loadJobLock = new Object()
-  {
-    @Override
-    public String toString()
-    {
-      return RepositoryExplorer.this.getClass().getSimpleName() + ".loadJobLock";
-    }
-  };
 
   private final IDialogSettings settings;
 
@@ -257,8 +230,25 @@ public class RepositoryExplorer extends ViewPart
     repositoryCombo = repositoryViewer.getCombo();
     repositoryCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     repositoryCombo.setToolTipText("Repository location (type a URL, drop a repository or pick from the drop down history)");
-    repositoryCombo.addFocusListener(focusListener);
+    repositoryCombo.addFocusListener(repositoryFocusListener);
     repositoryCombo.addKeyListener(repositoryHistoryListener);
+    repositoryCombo.addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseDown(MouseEvent e)
+      {
+        if (repositoryCombo.getListVisible())
+        {
+          Rectangle comboArea = repositoryCombo.getClientArea();
+          comboArea.width -= 24;
+
+          if (comboArea.contains(e.x, e.y))
+          {
+            repositoryCombo.setListVisible(false);
+          }
+        }
+      }
+    });
 
     repositoryViewer.setContentProvider(new RepositoryContentProvider());
     repositoryViewer.setLabelProvider(new LabelProvider());
@@ -401,7 +391,7 @@ public class RepositoryExplorer extends ViewPart
     if (activeRepository == null)
     {
       // Force hint to be shown.
-      focusListener.focusLost(null);
+      repositoryFocusListener.focusLost(null);
     }
     else
     {
@@ -1041,6 +1031,46 @@ public class RepositoryExplorer extends ViewPart
   /**
    * @author Eike Stepper
    */
+  private static final class LoadJobLock
+  {
+    @Override
+    public String toString()
+    {
+      return RepositoryExplorer.class.getSimpleName() + ".loadJobLock";
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class RepositoryFocusListener implements FocusListener
+  {
+    private Color originalForeground;
+
+    public void focusGained(FocusEvent e)
+    {
+      if (originalForeground != null)
+      {
+        repositoryCombo.setText("");
+        repositoryCombo.setForeground(originalForeground);
+        originalForeground = null;
+      }
+    }
+
+    public void focusLost(FocusEvent e)
+    {
+      if (RepositoryManager.INSTANCE.getActiveRepository() == null)
+      {
+        originalForeground = repositoryCombo.getForeground();
+        repositoryCombo.setText("type repository url, drag and drop, or pick from list");
+        repositoryCombo.setForeground(gray);
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
   private final class RepositoryHistoryListener extends KeyAdapter implements ISelectionChangedListener
   {
     private boolean listVisible;
@@ -1060,7 +1090,7 @@ public class RepositoryExplorer extends ViewPart
         }
       }
 
-      if (e.keyCode == SWT.DEL && currentListVisible)
+      if (currentListVisible && (e.keyCode == SWT.DEL || e.keyCode == SWT.BS))
       {
         RepositoryManager.INSTANCE.removeRepository(listRepository);
       }
