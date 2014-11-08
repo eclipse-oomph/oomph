@@ -343,8 +343,8 @@ public class ProgressPage extends SetupWizardPage
     }
     else
     {
-      launchButton = addCheckButton("Restart if needed", "Restart the current product if the installation has been changed by setup tasks", false,
-          "restartIfNeeded");
+      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks",
+          false, "restartIfNeeded");
     }
 
     launchAutomatically = launchButton.getSelection();
