@@ -41,6 +41,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -128,6 +129,18 @@ public final class SetupUtil
       }
 
       @Override
+      protected Resource delegatedGetResource(URI uri, boolean loadOnDemand)
+      {
+        Resource result = super.delegatedGetResource(uri, loadOnDemand);
+        if (result == null)
+        {
+          result = super.delegatedGetResource(uriConverter.normalize(uri), loadOnDemand);
+        }
+
+        return result;
+      }
+
+      @Override
       public Resource getResource(URI uri, boolean loadOnDemand)
       {
         try
@@ -196,7 +209,15 @@ public final class SetupUtil
           if (redirectedEPackage != null)
           {
             packageRegistry.put(resource.getURI().toString(), redirectedEPackage);
+            packageRegistry.put(uriConverter.normalize(resource.getURI()).toString(), redirectedEPackage);
           }
+          else
+          {
+            packageRegistry.put(resource.getURI().toString(), ePackage);
+            packageRegistry.put(uriConverter.normalize(resource.getURI()).toString(), ePackage);
+          }
+
+          ((EPackageImpl)ePackage).freeze();
         }
       }
     }
