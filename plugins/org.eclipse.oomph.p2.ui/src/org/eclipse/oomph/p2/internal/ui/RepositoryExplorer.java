@@ -19,10 +19,13 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.RepositoryProvider;
 import org.eclipse.oomph.p2.internal.ui.RepositoryManager.RepositoryManagerListener;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
+import org.eclipse.oomph.ui.SearchField;
+import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -37,7 +40,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
@@ -62,29 +64,28 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -93,8 +94,6 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.dialogs.FilteredTree;
-import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.part.ViewPart;
 
 import java.io.File;
@@ -113,10 +112,18 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-@SuppressWarnings("restriction")
-public class RepositoryExplorer extends ViewPart
+public class RepositoryExplorer extends ViewPart implements FilterHandler
 {
   public static final String ID = "org.eclipse.oomph.p2.ui.RepositoryExplorer"; //$NON-NLS-1$
+
+  private static final IDialogSettings SETTINGS = P2UIPlugin.INSTANCE.getDialogSettings(RepositoryExplorer.class.getSimpleName());
+
+  private static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+
+  private static final Transfer[] DND_TRANSFERS = OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES).toArray(
+      new Transfer[OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES).size()]);
+
+  private static final String DEFAULT_CAPABILITY_NAMESPACE = IInstallableUnit.NAMESPACE_IU_ID;
 
   private static final String CURRENT_NAMESPACE_KEY = "currentNamespace";
 
@@ -124,43 +131,53 @@ public class RepositoryExplorer extends ViewPart
 
   private static final String CATEGORIZE_ITEMS_KEY = "categorizeItems";
 
+  private static final String VERSION_SEGMENT_KEY = "versionSegment";
+
   private static final String SOURCE_SUFFIX = ".source";
 
   private static final String FEATURE_SUFFIX = ".feature.group";
 
   private static final String SOURCE_FEATURE_SUFFIX = SOURCE_SUFFIX + FEATURE_SUFFIX;
 
-  private static final String LOADING_INPUT = "Loading";
+  private static final Object[] NO_ELEMENTS = new Object[0];
 
-  private static final String ERROR_INPUT = "Error";
+  private static final Color WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 
-  private final Object loadJobLock = new LoadJobLock();
+  private final LoadJob loadJob = new LoadJob();
+
+  private final AnalyzeJob analyzeJob = new AnalyzeJob();
+
+  private final Mode categoriesMode = new CategoriesMode();
+
+  private final Mode featuresMode = new FeaturesMode();
+
+  private final Mode capabilitiesMode = new CapabilitiesMode();
 
   private final RepositoryFocusListener repositoryFocusListener = new RepositoryFocusListener();
 
   private final RepositoryHistoryListener repositoryHistoryListener = new RepositoryHistoryListener();
 
-  private final IDialogSettings settings;
+  private final VersionProvider versionProvider = new VersionProvider();
+
+  private final CollapseAllAction collapseAllAction = new CollapseAllAction();
 
   private Color gray;
 
   private ComboViewer repositoryViewer;
 
-  private Combo repositoryCombo;
+  private CCombo repositoryCombo;
 
   private RepositoryProvider.Metadata repositoryProvider;
 
-  private Composite filterComposite;
+  private Composite selectorComposite;
 
-  private Composite modeComposite;
+  private Composite itemsComposite;
 
-  private StackLayout modeLayout;
+  private StructuredViewer itemsViewer;
 
-  private Button categorizeItemsButton;
+  private CategoryItem itemsViewerInput;
 
-  private ComboViewer namespaceViewer;
-
-  private TreeViewer itemViewer;
+  private TableViewer versionsViewer;
 
   private String currentNamespace;
 
@@ -168,23 +185,22 @@ public class RepositoryExplorer extends ViewPart
 
   private boolean categorizeItems;
 
-  private URI loadingLocation;
+  private Mode mode;
 
-  private IStatus loadError;
+  private IQueryResult<IInstallableUnit> installableUnits;
 
-  private Job loadJob;
+  private String filter;
 
   public RepositoryExplorer()
   {
-    settings = P2UIPlugin.INSTANCE.getDialogSettings(getClass().getSimpleName());
-    currentNamespace = settings.get(CURRENT_NAMESPACE_KEY);
+    currentNamespace = SETTINGS.get(CURRENT_NAMESPACE_KEY);
     if (currentNamespace == null)
     {
-      currentNamespace = IInstallableUnit.NAMESPACE_IU_ID;
+      currentNamespace = DEFAULT_CAPABILITY_NAMESPACE;
     }
 
-    expertMode = settings.getBoolean(EXPERT_MODE_KEY);
-    categorizeItems = settings.getBoolean(CATEGORIZE_ITEMS_KEY);
+    expertMode = SETTINGS.getBoolean(EXPERT_MODE_KEY);
+    categorizeItems = SETTINGS.getBoolean(CATEGORIZE_ITEMS_KEY);
   }
 
   @Override
@@ -215,51 +231,122 @@ public class RepositoryExplorer extends ViewPart
     }
   }
 
+  private void updateMode()
+  {
+    Mode mode = expertMode ? capabilitiesMode : categorizeItems ? categoriesMode : featuresMode;
+    if (this.mode != mode)
+    {
+      this.mode = mode;
+
+      selectorComposite.setLayout(new FillLayout());
+      mode.fillSelector(selectorComposite);
+      selectorComposite.layout();
+      selectorComposite.getParent().layout();
+
+      mode.fillItems(itemsComposite);
+      itemsComposite.layout();
+
+      itemsViewer.addSelectionChangedListener(new ISelectionChangedListener()
+      {
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+          IStructuredSelection selection = (IStructuredSelection)itemsViewer.getSelection();
+          if (selection.size() == 1)
+          {
+            versionsViewer.setInput(selection.getFirstElement());
+          }
+          else
+          {
+            versionsViewer.setInput(null);
+          }
+        }
+      });
+
+      analyzeJob.reschedule();
+      collapseAllAction.updateEnablement();
+    }
+  }
+
+  private void setItems(Item... items)
+  {
+    versionsViewer.setInput(null);
+
+    itemsViewerInput = new CategoryItem();
+    itemsViewerInput.setChildren(items);
+    itemsViewer.setInput(itemsViewerInput);
+
+    if (itemsViewer instanceof TreeViewer && filter != null)
+    {
+      TreeViewer treeViewer = (TreeViewer)itemsViewer;
+      treeViewer.expandAll();
+    }
+  }
+
+  private boolean isFiltered(String string)
+  {
+    return filter == null || string == null || string.toLowerCase().contains(filter);
+  }
+
+  public void handleFilter(String filter)
+  {
+    if (filter == null || filter.length() == 0)
+    {
+      this.filter = null;
+    }
+    else
+    {
+      this.filter = filter.toLowerCase();
+    }
+
+    analyzeJob.reschedule();
+  }
+
   @Override
   public void createPartControl(Composite parent)
   {
     final Display display = parent.getDisplay();
-    final Color white = display.getSystemColor(SWT.COLOR_WHITE);
     gray = new Color(display, 70, 70, 70);
 
     Composite container = new Composite(parent, SWT.NONE);
-    container.setBackground(white);
+    container.setBackground(WHITE);
     container.setLayout(new GridLayout(1, false));
 
-    repositoryViewer = new ComboViewer(container, SWT.NONE);
-    repositoryCombo = repositoryViewer.getCombo();
-    repositoryCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    createRepositoriesArea(container);
+    createItemsArea(container);
+    createVersionsArea(container);
+
+    updateMode();
+
+    String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
+    if (activeRepository == null)
+    {
+      // Force hint to be shown.
+      repositoryFocusListener.focusLost(null);
+    }
+    else
+    {
+      repositoryCombo.setText(activeRepository);
+      triggerLoad(activeRepository);
+    }
+
+    hookActions();
+  }
+
+  private void createRepositoriesArea(Composite container)
+  {
+    repositoryCombo = new CCombo(container, SWT.BORDER);
+    repositoryCombo.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
     repositoryCombo.setToolTipText("Repository location (type a URL, drop a repository or pick from the drop down history)");
     repositoryCombo.addFocusListener(repositoryFocusListener);
     repositoryCombo.addKeyListener(repositoryHistoryListener);
-    repositoryCombo.addMouseListener(new MouseAdapter()
-    {
-      @Override
-      public void mouseDown(MouseEvent e)
-      {
-        if (repositoryCombo.getListVisible())
-        {
-          Rectangle comboArea = repositoryCombo.getClientArea();
-          comboArea.width -= 24;
 
-          if (comboArea.contains(e.x, e.y))
-          {
-            repositoryCombo.setListVisible(false);
-          }
-        }
-      }
-    });
-
+    repositoryViewer = new ComboViewer(repositoryCombo);
     repositoryViewer.setContentProvider(new RepositoryContentProvider());
     repositoryViewer.setLabelProvider(new LabelProvider());
     repositoryViewer.setInput(RepositoryManager.INSTANCE);
     repositoryViewer.addSelectionChangedListener(repositoryHistoryListener);
 
-    int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-    List<? extends Transfer> transfersList = OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES);
-    Transfer[] transfers = transfersList.toArray(new Transfer[transfersList.size()]);
-
-    repositoryViewer.addDropSupport(dndOperations, transfers, new GeneralDropAdapter(repositoryViewer, P2Factory.eINSTANCE.createRepositoryList(),
+    repositoryViewer.addDropSupport(DND_OPERATIONS, DND_TRANSFERS, new GeneralDropAdapter(repositoryViewer, P2Factory.eINSTANCE.createRepositoryList(),
         P2Package.Literals.REPOSITORY_LIST__REPOSITORIES, new DroppedObjectHandler()
         {
           public void handleDroppedObject(Object object) throws Exception
@@ -275,131 +362,105 @@ public class RepositoryExplorer extends ViewPart
             }
           }
         }));
+  }
 
-    // ------------------------------------------------
+  private void createItemsArea(Composite parent)
+  {
+    GridLayout containerLayout = new GridLayout(2, false);
+    containerLayout.marginWidth = 0;
+    containerLayout.marginHeight = 0;
 
-    GridLayout filterLayout = new GridLayout(2, false);
-    filterLayout.marginWidth = 0;
-    filterLayout.marginHeight = 0;
+    Composite container = new Composite(parent, SWT.NONE);
+    container.setBackground(WHITE);
+    container.setLayout(containerLayout);
+    container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-    filterComposite = new Composite(container, SWT.NONE);
-    filterComposite.setLayout(filterLayout);
-    filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    SearchField searchField = new SearchField(container, this)
+    {
+      @Override
+      protected void finishFilter()
+      {
+        itemsViewer.getControl().setFocus();
+        selectFirstLeaf(itemsViewerInput);
+      }
 
-    GridLayout filterPlaceholderLayout = new GridLayout();
-    filterPlaceholderLayout.marginWidth = 0;
-    filterPlaceholderLayout.marginHeight = 0;
+      private void selectFirstLeaf(CategoryItem category)
+      {
+        Item[] children = category.getChildren();
+        if (children != null && children.length != 0)
+        {
+          Item firstChild = children[0];
+          if (firstChild instanceof CategoryItem)
+          {
+            CategoryItem firstCategory = (CategoryItem)firstChild;
+            selectFirstLeaf(firstCategory);
+          }
+          else
+          {
+            itemsViewer.setSelection(new StructuredSelection(firstChild));
+          }
+        }
+      }
+    };
 
-    Composite filterPlaceholder = new Composite(filterComposite, SWT.NONE);
-    filterPlaceholder.setLayout(filterPlaceholderLayout);
-    filterPlaceholder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    searchField.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
 
-    modeLayout = new StackLayout();
-    modeComposite = new Composite(filterComposite, SWT.NONE);
-    modeComposite.setLayout(modeLayout);
+    selectorComposite = new Composite(container, SWT.NONE);
+    selectorComposite.setBackground(WHITE);
 
-    categorizeItemsButton = new Button(modeComposite, SWT.CHECK);
-    categorizeItemsButton.setText("Group items by category");
-    categorizeItemsButton.setToolTipText("Whether to show items in categories or in a complete list");
-    categorizeItemsButton.setSelection(categorizeItems);
-    categorizeItemsButton.addSelectionListener(new SelectionAdapter()
+    itemsComposite = new Composite(container, SWT.NONE);
+    itemsComposite.setBackground(WHITE);
+    itemsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+    itemsComposite.setLayout(new FillLayout());
+  }
+
+  private void createVersionsArea(Composite container)
+  {
+    Composite versionsComposite = new Composite(container, SWT.NONE);
+    versionsComposite.setBackground(WHITE);
+    GridLayout gl_versionsComposite = new GridLayout(2, false);
+    gl_versionsComposite.marginWidth = 0;
+    gl_versionsComposite.marginHeight = 0;
+    versionsComposite.setLayout(gl_versionsComposite);
+    versionsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+    versionsViewer = new TableViewer(versionsComposite, SWT.BORDER);
+    versionsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+    versionsViewer.setContentProvider(versionProvider);
+    versionsViewer.setLabelProvider(versionProvider);
+    addDragSupport(versionsViewer);
+
+    Composite versionsGroup = new Composite(versionsComposite, SWT.NONE);
+    versionsGroup.setBackground(WHITE);
+    versionsGroup.setLayout(new GridLayout(1, false));
+    versionsGroup.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+
+    addVersionSegmentButton(versionsGroup, "Major", "Show major versions", VersionSegment.MAJOR);
+    addVersionSegmentButton(versionsGroup, "Minor", "Show minor versions", VersionSegment.MINOR);
+    addVersionSegmentButton(versionsGroup, "Micro", "Show micro versions", VersionSegment.MICRO);
+    addVersionSegmentButton(versionsGroup, "Qualifier", "Show qualified versions", VersionSegment.QUALIFIER);
+  }
+
+  private Button addVersionSegmentButton(Composite parent, String text, String toolTip, final VersionSegment versionSegment)
+  {
+    Button button = new Button(parent, SWT.RADIO);
+    button.setText(text);
+    button.setToolTipText(toolTip);
+    button.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        categorizeItems = categorizeItemsButton.getSelection();
-        settings.put(CATEGORIZE_ITEMS_KEY, categorizeItems);
-        triggerReload();
+        versionProvider.setVersionSegment(versionSegment);
       }
     });
 
-    namespaceViewer = new ComboViewer(modeComposite, SWT.READ_ONLY);
-    namespaceViewer.getCombo().setToolTipText("Select the namespace of the capabilities to show");
-    namespaceViewer.setSorter(new ViewerSorter());
-    namespaceViewer.setContentProvider(new ArrayContentProvider());
-    namespaceViewer.setLabelProvider(new LabelProvider());
-    namespaceViewer.setInput(new String[] { currentNamespace });
-    namespaceViewer.addSelectionChangedListener(new ISelectionChangedListener()
+    if (versionSegment == versionProvider.getVersionSegment())
     {
-      public void selectionChanged(SelectionChangedEvent event)
-      {
-        IStructuredSelection selection = (IStructuredSelection)namespaceViewer.getSelection();
-        String newNamespace = (String)selection.getFirstElement();
-        if (!ObjectUtil.equals(newNamespace, currentNamespace))
-        {
-          settings.put(CURRENT_NAMESPACE_KEY, newNamespace);
-          currentNamespace = newNamespace;
-
-          triggerReload();
-        }
-      }
-    });
-
-    updateExpertMode();
-
-    PatternFilter filter = new PatternFilter();
-    filter.setIncludeLeadingWildcard(true);
-
-    // ------------------------------------------------
-
-    FilteredTree filteredTree = new FilteredTree(container, SWT.BORDER | SWT.MULTI, filter, true);
-    Control filterControl = filteredTree.getChildren()[0];
-    filterControl.setParent(filterPlaceholder);
-
-    itemViewer = filteredTree.getViewer();
-    itemViewer.setSorter(new ViewerSorter());
-    itemViewer.setContentProvider(new ItemContentProvider());
-    itemViewer.setLabelProvider(new ItemLabelProvider());
-    itemViewer.addDragSupport(dndOperations, transfers, new GeneralDragAdapter(itemViewer, new GeneralDragAdapter.DraggedObjectsFactory()
-    {
-      public List<EObject> createDraggedObjects(ISelection selection) throws Exception
-      {
-        List<EObject> result = new ArrayList<EObject>();
-
-        IStructuredSelection ssel = (IStructuredSelection)selection;
-        for (Iterator<?> it = ssel.iterator(); it.hasNext();)
-        {
-          Object element = it.next();
-          if (element instanceof Item)
-          {
-            Item item = (Item)element;
-            String namespace = item.getNamespace();
-            if (namespace != null)
-            {
-              Requirement requirement = P2Factory.eINSTANCE.createRequirement();
-              requirement.setNamespace(namespace);
-              requirement.setName(item.getName());
-
-              Version version = item.getVersion();
-              if (version != null && !Version.emptyVersion.equals(version))
-              {
-                requirement.setVersionRange(new VersionRange(version.toString()));
-              }
-
-              result.add(requirement);
-            }
-          }
-        }
-
-        return result;
-      }
-    }));
-
-    hookActions();
-
-    String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
-    if (activeRepository == null)
-    {
-      // Force hint to be shown.
-      repositoryFocusListener.focusLost(null);
-    }
-    else
-    {
-      repositoryCombo.setText(activeRepository);
-      triggerLoad(activeRepository);
+      button.setSelection(true);
     }
 
-    namespaceViewer.setSelection(new StructuredSelection(currentNamespace));
+    return button;
   }
 
   private void hookActions()
@@ -408,18 +469,7 @@ public class RepositoryExplorer extends ViewPart
 
     IToolBarManager toolbarManager = actionBars.getToolBarManager();
     toolbarManager.add(new Separator("additions"));
-    toolbarManager.add(new Action("Collapse All", P2UIPlugin.INSTANCE.getImageDescriptor("collapse-all"))
-    {
-      {
-        setToolTipText("Collapse all tree items");
-      }
-
-      @Override
-      public void run()
-      {
-        itemViewer.collapseAll();
-      }
-    });
+    toolbarManager.add(collapseAllAction);
 
     toolbarManager.add(new Action("Refresh", P2UIPlugin.INSTANCE.getImageDescriptor("refresh"))
     {
@@ -451,35 +501,12 @@ public class RepositoryExplorer extends ViewPart
       public void run()
       {
         expertMode = isChecked();
-        settings.put(EXPERT_MODE_KEY, expertMode);
-        updateExpertMode();
-        triggerReload();
+        SETTINGS.put(EXPERT_MODE_KEY, expertMode);
+        updateMode();
       }
     });
 
     toolbarManager.add(new Separator("end"));
-
-    // IMenuManager menuManager = actionBars.getMenuManager();
-    // menuManager.add(new Action("Manage Repositories...", P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/RepositoryList"))
-    // {
-    // {
-    // setToolTipText("Open the dialog for the management of the repository drop down history");
-    // }
-    //
-    // @Override
-    // public void run()
-    // {
-    // }
-    // });
-    //
-    // menuManager.add(new Separator("additions"));
-    // menuManager.add(new Separator());
-  }
-
-  private void updateExpertMode()
-  {
-    modeLayout.topControl = expertMode ? namespaceViewer.getControl() : categorizeItemsButton;
-    modeComposite.layout();
   }
 
   private void activateAndLoadRepository(String repository)
@@ -487,15 +514,6 @@ public class RepositoryExplorer extends ViewPart
     if (RepositoryManager.INSTANCE.setActiveRepository(repository))
     {
       triggerLoad(repository);
-    }
-  }
-
-  private void triggerReload()
-  {
-    String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
-    if (activeRepository != null)
-    {
-      triggerLoad(activeRepository);
     }
   }
 
@@ -518,417 +536,62 @@ public class RepositoryExplorer extends ViewPart
 
     if (location != null)
     {
-      triggerLoad(location);
+      loadJob.reschedule(location);
     }
   }
 
-  private void triggerLoad(final URI location)
+  private void addDragSupport(StructuredViewer viewer)
   {
-    loadError = null;
-    loadingLocation = location;
-    itemViewer.setInput(LOADING_INPUT);
-
-    synchronized (loadJobLock)
+    viewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, new GeneralDragAdapter(viewer, new GeneralDragAdapter.DraggedObjectsFactory()
     {
-      final Job oldJob = loadJob;
-      loadJob = new Job("Loading " + location)
+      public List<EObject> createDraggedObjects(ISelection selection) throws Exception
       {
-        @Override
-        protected IStatus run(IProgressMonitor monitor)
+        List<EObject> result = new ArrayList<EObject>();
+
+        IStructuredSelection ssel = (IStructuredSelection)selection;
+        for (Iterator<?> it = ssel.iterator(); it.hasNext();)
         {
-          if (oldJob != null)
-          {
-            oldJob.cancel();
+          Object element = it.next();
 
-            try
-            {
-              oldJob.join();
-            }
-            catch (InterruptedException ex)
-            {
-              return Status.CANCEL_STATUS;
-            }
+          VersionRange versionRange = VersionRange.emptyRange;
+          if (element instanceof VersionProvider.ItemVersion)
+          {
+            VersionProvider.ItemVersion itemVersion = (VersionProvider.ItemVersion)element;
+            Version version = itemVersion.getVersion();
+
+            VersionSegment versionSegment = versionProvider.getVersionSegment();
+            versionRange = P2Factory.eINSTANCE.createVersionRange(version, versionSegment);
+
+            element = ((IStructuredSelection)itemsViewer.getSelection()).getFirstElement();
           }
 
-          try
+          if (element instanceof Item)
           {
-            SubMonitor progress = SubMonitor.convert(monitor, 2);
+            Item item = (Item)element;
 
-            if (repositoryProvider == null || !repositoryProvider.getLocation().equals(location))
+            String namespace = item.getNamespace();
+            if (namespace != null)
             {
-              disposeRepositoryProvider();
+              Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+              requirement.setNamespace(namespace);
+              requirement.setName(item.getName());
+              requirement.setVersionRange(versionRange);
 
-              IMetadataRepositoryManager repositoryManager = P2Util.getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
-              repositoryProvider = new RepositoryProvider.Metadata(repositoryManager, location);
-            }
-
-            IMetadataRepository repository = repositoryProvider.getRepository(progress.newChild(1));
-            IQueryResult<IInstallableUnit> query = repository.query(QueryUtil.createIUAnyQuery(), progress.newChild(1));
-
-            if (expertMode)
-            {
-              analyzeCapabilities(query, progress);
-            }
-            else if (categorizeItems)
-            {
-              analyzeCategories(query, progress);
-            }
-            else
-            {
-              analyzeFeatures(query, progress);
-            }
-
-            return Status.OK_STATUS;
-          }
-          catch (OperationCanceledException ex)
-          {
-            return Status.CANCEL_STATUS;
-          }
-          catch (Exception ex)
-          {
-            if (ex instanceof P2Exception)
-            {
-              Throwable cause = ex.getCause();
-              if (cause instanceof CoreException)
-              {
-                ex = (CoreException)cause;
-              }
-            }
-
-            loadError = P2UIPlugin.INSTANCE.getStatus(ex);
-            UIUtil.asyncExec(new Runnable()
-            {
-              public void run()
-              {
-                itemViewer.setInput(ERROR_INPUT);
-              }
-            });
-
-            return Status.OK_STATUS;
-          }
-          catch (Throwable t)
-          {
-            return P2UIPlugin.INSTANCE.getStatus(t);
-          }
-          finally
-          {
-            loadingLocation = null;
-            synchronized (loadJobLock)
-            {
-              loadJob = null;
+              result.add(requirement);
             }
           }
         }
-      };
 
-      loadJob.schedule();
-    }
+        return result;
+      }
+    }));
   }
 
-  private void analyzeCategories(IQueryResult<IInstallableUnit> query, IProgressMonitor monitor)
+  private static String[] sortStrings(Collection<String> c)
   {
-    // IU.id -> value
-    Map<String, String> names = new HashMap<String, String>();
-    Map<String, Set<IInstallableUnit>> ius = new HashMap<String, Set<IInstallableUnit>>();
-    Map<String, Set<IRequirement>> categories = new HashMap<String, Set<IRequirement>>();
-
-    for (IInstallableUnit iu : query)
-    {
-      P2UIPlugin.checkCancelation(monitor);
-      String id = iu.getId();
-
-      names.put(id, getName(iu));
-      CollectionUtil.add(ius, id, iu);
-
-      if (isCategory(iu))
-      {
-        CollectionUtil.addAll(categories, id, iu.getRequirements());
-      }
-    }
-
-    Set<String> rootIDs = new HashSet<String>();
-
-    for (String categoryID : categories.keySet())
-    {
-      P2UIPlugin.checkCancelation(monitor);
-      rootIDs.add(categoryID);
-    }
-
-    for (Set<IRequirement> requirements : categories.values())
-    {
-      for (IRequirement requirement : requirements)
-      {
-        P2UIPlugin.checkCancelation(monitor);
-
-        if (requirement instanceof IRequiredCapability)
-        {
-          IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
-          if (IInstallableUnit.NAMESPACE_IU_ID.equals(requiredCapability.getNamespace()))
-          {
-            rootIDs.remove(requiredCapability.getName());
-          }
-        }
-      }
-    }
-
-    final CategoryItem[] roots = new CategoryItem[rootIDs.size()];
-    int i = 0;
-
-    for (String id : rootIDs)
-    {
-      P2UIPlugin.checkCancelation(monitor);
-      roots[i++] = analyzeCategory(names, ius, categories, id, monitor);
-    }
-
-    UIUtil.asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        itemViewer.setInput(roots);
-      }
-    });
-  }
-
-  private CategoryItem analyzeCategory(Map<String, String> names, Map<String, Set<IInstallableUnit>> ius, Map<String, Set<IRequirement>> categories, String id,
-      IProgressMonitor monitor)
-  {
-    Map<String, ContainerItem> children = new HashMap<String, ContainerItem>();
-    Map<ContainerItem, Set<Version>> versions = new HashMap<ContainerItem, Set<Version>>();
-
-    for (IRequirement requirement : categories.get(id))
-    {
-      P2UIPlugin.checkCancelation(monitor);
-
-      if (requirement instanceof IRequiredCapability)
-      {
-        IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
-        if (IInstallableUnit.NAMESPACE_IU_ID.equals(requiredCapability.getNamespace()))
-        {
-          String requiredID = requiredCapability.getName();
-          if (categories.containsKey(requiredID))
-          {
-            CategoryItem child = analyzeCategory(names, ius, categories, requiredID, monitor);
-            children.put(requiredID, child);
-          }
-          else
-          {
-            VersionRange range = requiredCapability.getRange();
-            ContainerItem child = children.get(requiredID);
-
-            Set<IInstallableUnit> set = ius.get(requiredID);
-            for (IInstallableUnit iu : set)
-            {
-              P2UIPlugin.checkCancelation(monitor);
-              Version version = iu.getVersion();
-
-              if (range.isIncluded(version))
-              {
-                if (child == null)
-                {
-                  String name = names.get(requiredID);
-                  if (isFeature(iu))
-                  {
-                    if (requiredID.endsWith(SOURCE_FEATURE_SUFFIX))
-                    {
-                      String mainID = requiredID.substring(0, requiredID.length() - SOURCE_FEATURE_SUFFIX.length()) + FEATURE_SUFFIX;
-                      String mainName = names.get(mainID);
-
-                      if (ObjectUtil.equals(name, mainName))
-                      {
-                        name += " (Source)";
-                      }
-                    }
-
-                    child = new FeatureItem(requiredID);
-                  }
-                  else
-                  {
-                    if (requiredID.endsWith(SOURCE_SUFFIX))
-                    {
-                      String mainID = requiredID.substring(0, requiredID.length() - SOURCE_SUFFIX.length());
-                      String mainName = names.get(mainID);
-
-                      if (ObjectUtil.equals(name, mainName))
-                      {
-                        name += " (Source)";
-                      }
-                    }
-
-                    child = new PluginItem(requiredID);
-                  }
-
-                  child.setLabel(name);
-                  children.put(requiredID, child);
-                }
-
-                CollectionUtil.add(versions, child, version);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    for (Map.Entry<ContainerItem, Set<Version>> entry : versions.entrySet())
-    {
-      ContainerItem child = entry.getKey();
-      List<VersionItem> versionItems = new ArrayList<VersionItem>();
-
-      for (Version version : sortVersions(entry.getValue()))
-      {
-        P2UIPlugin.checkCancelation(monitor);
-
-        VersionItem versionItem = new VersionItem(child, version);
-        versionItems.add(versionItem);
-      }
-
-      child.setChildren(versionItems.toArray(new VersionItem[versionItems.size()]));
-    }
-
-    CategoryItem categoryItem = new CategoryItem();
-    categoryItem.setLabel(names.get(id));
-    categoryItem.setChildren(children.values().toArray(new ContainerItem[children.size()]));
-    return categoryItem;
-  }
-
-  private void analyzeFeatures(IQueryResult<IInstallableUnit> query, IProgressMonitor monitor)
-  {
-    Map<String, String> names = new HashMap<String, String>();
-    Map<String, Set<Version>> versions = new HashMap<String, Set<Version>>();
-
-    for (IInstallableUnit iu : query)
-    {
-      P2UIPlugin.checkCancelation(monitor);
-      String id = iu.getId();
-
-      if (id.endsWith(FEATURE_SUFFIX) && !id.endsWith(SOURCE_FEATURE_SUFFIX))
-      {
-        names.put(id, getName(iu));
-        CollectionUtil.add(versions, id, iu.getVersion());
-      }
-    }
-
-    String[] sortedIDs = sortStrings(versions.keySet()); // TODO Sort by name later!
-    final FeatureItem[] featureItems = new FeatureItem[sortedIDs.length];
-
-    for (int i = 0; i < sortedIDs.length; i++)
-    {
-      String id = sortedIDs[i];
-      FeatureItem featureItem = new FeatureItem(id);
-      featureItem.setLabel(names.get(id));
-      featureItems[i] = featureItem;
-
-      Version[] sortedVersions = sortVersions(versions.get(id));
-      VersionItem[] versionItems = new VersionItem[sortedVersions.length];
-
-      for (int j = 0; j < sortedVersions.length; j++)
-      {
-        P2UIPlugin.checkCancelation(monitor);
-        Version version = sortedVersions[j];
-
-        VersionItem versionItem = new VersionItem(featureItem, version);
-        versionItems[j] = versionItem;
-      }
-
-      featureItem.setChildren(versionItems);
-    }
-
-    UIUtil.asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        itemViewer.setInput(featureItems);
-      }
-    });
-  }
-
-  private void analyzeCapabilities(IQueryResult<IInstallableUnit> query, IProgressMonitor monitor)
-  {
-    final Set<String> flavors = new HashSet<String>();
-    final Set<String> namespaces = new HashSet<String>();
-    Map<String, Set<Version>> versions = new HashMap<String, Set<Version>>();
-
-    for (IInstallableUnit iu : query)
-    {
-      for (IProvidedCapability capability : iu.getProvidedCapabilities())
-      {
-        P2UIPlugin.checkCancelation(monitor);
-
-        String namespace = capability.getNamespace();
-        if ("org.eclipse.equinox.p2.flavor".equals(namespace))
-        {
-          flavors.add(capability.getName());
-        }
-        else if (!"A.PDE.Target.Platform".equalsIgnoreCase(namespace))
-        {
-          namespaces.add(namespace);
-        }
-
-        if (ObjectUtil.equals(namespace, currentNamespace))
-        {
-          CollectionUtil.add(versions, capability.getName(), capability.getVersion());
-        }
-      }
-    }
-
-    String[] flavorIDs = getMinimalFlavors(flavors);
-    for (Iterator<String> it = namespaces.iterator(); it.hasNext();)
-    {
-      String namespace = it.next();
-      for (int i = 0; i < flavorIDs.length; i++)
-      {
-        String flavor = flavorIDs[i];
-        if (namespace.startsWith(flavor))
-        {
-          it.remove();
-          break;
-        }
-      }
-    }
-
-    String[] sortedIDs = sortStrings(versions.keySet());
-    final CapabilityItem[] capabilityItems = new CapabilityItem[sortedIDs.length];
-
-    for (int i = 0; i < sortedIDs.length; i++)
-    {
-      String id = sortedIDs[i];
-      CapabilityItem capabilityItem = new CapabilityItem();
-      capabilityItem.setNamespace(currentNamespace);
-      capabilityItem.setLabel(id);
-      capabilityItems[i] = capabilityItem;
-
-      Version[] sortedVersions = sortVersions(versions.get(id));
-      VersionItem[] versionItems = new VersionItem[sortedVersions.length];
-
-      for (int j = 0; j < sortedVersions.length; j++)
-      {
-        P2UIPlugin.checkCancelation(monitor);
-        Version version = sortedVersions[j];
-
-        VersionItem versionItem = new VersionItem(capabilityItem, version);
-        versionItems[j] = versionItem;
-      }
-
-      capabilityItem.setChildren(versionItems);
-    }
-
-    UIUtil.asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        itemViewer.setInput(capabilityItems);
-
-        namespaceViewer.setInput(namespaces);
-        UIUtil.asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            namespaceViewer.setSelection(new StructuredSelection(currentNamespace));
-            filterComposite.layout();
-          }
-        });
-      }
-    });
+    String[] array = c.toArray(new String[c.size()]);
+    Arrays.sort(array);
+    return array;
   }
 
   private static String[] getMinimalFlavors(final Set<String> flavors)
@@ -981,20 +644,6 @@ public class RepositoryExplorer extends ViewPart
     return iu.getId().endsWith(FEATURE_SUFFIX);
   }
 
-  private static String[] sortStrings(Collection<String> c)
-  {
-    String[] array = c.toArray(new String[c.size()]);
-    Arrays.sort(array);
-    return array;
-  }
-
-  private static Version[] sortVersions(Collection<Version> c)
-  {
-    Version[] array = c.toArray(new Version[c.size()]);
-    Arrays.sort(array);
-    return array;
-  }
-
   public static boolean explore(String repository)
   {
     IWorkbenchWindow window = UIUtil.WORKBENCH.getActiveWorkbenchWindow();
@@ -1031,12 +680,635 @@ public class RepositoryExplorer extends ViewPart
   /**
    * @author Eike Stepper
    */
-  private static final class LoadJobLock
+  private final class CollapseAllAction extends Action
+  {
+    public CollapseAllAction()
+    {
+      super("Collapse All", P2UIPlugin.INSTANCE.getImageDescriptor("collapse-all"));
+      setToolTipText("Collapse all tree items");
+      updateEnablement();
+    }
+
+    public void updateEnablement()
+    {
+      setEnabled(itemsViewer instanceof TreeViewer);
+    }
+
+    @Override
+    public void run()
+    {
+      if (itemsViewer instanceof TreeViewer)
+      {
+        TreeViewer treeViewer = (TreeViewer)itemsViewer;
+        treeViewer.collapseAll();
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private abstract class SafeJob extends Job
+  {
+    public SafeJob(String name)
+    {
+      super(name);
+    }
+
+    @Override
+    protected final IStatus run(IProgressMonitor monitor)
+    {
+      try
+      {
+        doSafe(monitor);
+        return Status.OK_STATUS;
+      }
+      catch (OperationCanceledException ex)
+      {
+        return Status.CANCEL_STATUS;
+      }
+      catch (Exception ex)
+      {
+        if (ex instanceof P2Exception)
+        {
+          Throwable cause = ex.getCause();
+          if (cause instanceof CoreException)
+          {
+            ex = (CoreException)cause;
+          }
+        }
+
+        final IStatus status = P2UIPlugin.INSTANCE.getStatus(ex);
+        UIUtil.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            setItems(new ErrorItem(status));
+          }
+        });
+
+        return Status.OK_STATUS;
+      }
+      catch (Throwable t)
+      {
+        return P2UIPlugin.INSTANCE.getStatus(t);
+      }
+    }
+
+    protected abstract void doSafe(IProgressMonitor monitor) throws Throwable;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class LoadJob extends SafeJob
+  {
+    private URI location;
+
+    public LoadJob()
+    {
+      super("Loading repository");
+    }
+
+    public void reschedule(URI location)
+    {
+      this.location = location;
+      setItems(new LoadingItem(location));
+
+      cancel();
+      schedule();
+    }
+
+    @Override
+    protected void doSafe(IProgressMonitor monitor) throws Throwable
+    {
+      analyzeJob.cancel();
+      installableUnits = null;
+
+      if (repositoryProvider == null || !repositoryProvider.getLocation().equals(location))
+      {
+        disposeRepositoryProvider();
+
+        IMetadataRepositoryManager repositoryManager = P2Util.getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
+        repositoryProvider = new RepositoryProvider.Metadata(repositoryManager, location);
+      }
+
+      SubMonitor progress = SubMonitor.convert(monitor, 101);
+
+      IMetadataRepository repository = repositoryProvider.getRepository(progress.newChild(100));
+      installableUnits = repository.query(QueryUtil.createIUAnyQuery(), progress.newChild(1));
+      analyzeJob.reschedule();
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class AnalyzeJob extends SafeJob
+  {
+    public AnalyzeJob()
+    {
+      super("Analyzing repository");
+    }
+
+    public void reschedule()
+    {
+      cancel();
+
+      if (installableUnits != null)
+      {
+        schedule();
+      }
+    }
+
+    @Override
+    protected void doSafe(IProgressMonitor monitor) throws Throwable
+    {
+      mode.analyzeInstallableUnits(monitor);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private abstract class Mode
+  {
+    protected final void disposeChildren(Composite parent)
+    {
+      for (Control child : parent.getChildren())
+      {
+        child.dispose();
+      }
+    }
+
+    protected final void fillCategorySelector(Composite parent)
+    {
+      Control[] children = parent.getChildren();
+      if (children.length == 1 && children[0] instanceof Button)
+      {
+        ((Button)children[0]).setSelection(categorizeItems);
+        return;
+      }
+
+      disposeChildren(parent);
+
+      final Button button = new Button(parent, SWT.CHECK);
+      button.setText("Group items by category");
+      button.setToolTipText("Whether to show items in categories or in a complete list");
+      button.setSelection(categorizeItems);
+      button.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          categorizeItems = button.getSelection();
+          SETTINGS.put(CATEGORIZE_ITEMS_KEY, categorizeItems);
+
+          updateMode();
+        }
+      });
+    }
+
+    public abstract void fillSelector(Composite parent);
+
+    public abstract void fillItems(Composite parent);
+
+    public abstract void analyzeInstallableUnits(IProgressMonitor monitor);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class CategoriesMode extends Mode
   {
     @Override
-    public String toString()
+    public void fillSelector(Composite parent)
     {
-      return RepositoryExplorer.class.getSimpleName() + ".loadJobLock";
+      fillCategorySelector(parent);
+    }
+
+    @Override
+    public void fillItems(Composite parent)
+    {
+      disposeChildren(parent);
+
+      TreeViewer categoriesViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
+      categoriesViewer.setUseHashlookup(true);
+      categoriesViewer.setContentProvider(new ItemContentProvider());
+      categoriesViewer.setLabelProvider(new ItemLabelProvider());
+      addDragSupport(categoriesViewer);
+
+      itemsViewer = categoriesViewer;
+    }
+
+    @SuppressWarnings("restriction")
+    @Override
+    public void analyzeInstallableUnits(IProgressMonitor monitor)
+    {
+      // IU.id -> value
+      Map<String, String> names = new HashMap<String, String>();
+      Map<String, Set<IInstallableUnit>> ius = new HashMap<String, Set<IInstallableUnit>>();
+      Map<String, Set<IRequirement>> categories = new HashMap<String, Set<IRequirement>>();
+
+      for (IInstallableUnit iu : installableUnits)
+      {
+        P2UIPlugin.checkCancelation(monitor);
+        String id = iu.getId();
+
+        names.put(id, getName(iu));
+        CollectionUtil.add(ius, id, iu);
+
+        if (isCategory(iu))
+        {
+          CollectionUtil.addAll(categories, id, iu.getRequirements());
+        }
+      }
+
+      Set<String> rootIDs = new HashSet<String>();
+
+      for (String categoryID : categories.keySet())
+      {
+        P2UIPlugin.checkCancelation(monitor);
+        rootIDs.add(categoryID);
+      }
+
+      for (Set<IRequirement> requirements : categories.values())
+      {
+        for (IRequirement requirement : requirements)
+        {
+          P2UIPlugin.checkCancelation(monitor);
+
+          if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+          {
+            org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
+            if (IInstallableUnit.NAMESPACE_IU_ID.equals(requiredCapability.getNamespace()))
+            {
+              rootIDs.remove(requiredCapability.getName());
+            }
+          }
+        }
+      }
+
+      Set<CategoryItem> rootCategories = new HashSet<CategoryItem>();
+      for (String rootID : rootIDs)
+      {
+        P2UIPlugin.checkCancelation(monitor);
+
+        CategoryItem rootCategory = analyzeCategory(names, ius, categories, rootID, monitor);
+        if (rootCategory != null)
+        {
+          rootCategories.add(rootCategory);
+        }
+      }
+
+      final CategoryItem[] roots = rootCategories.toArray(new CategoryItem[rootCategories.size()]);
+      UIUtil.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          setItems(roots);
+        }
+      });
+    }
+
+    @SuppressWarnings("restriction")
+    private CategoryItem analyzeCategory(Map<String, String> names, Map<String, Set<IInstallableUnit>> ius, Map<String, Set<IRequirement>> categories,
+        String categoryID, IProgressMonitor monitor)
+    {
+      Map<String, Item> children = new HashMap<String, Item>();
+      Map<Item, Set<Version>> versions = new HashMap<Item, Set<Version>>();
+
+      for (IRequirement requirement : categories.get(categoryID))
+      {
+        P2UIPlugin.checkCancelation(monitor);
+
+        if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+        {
+          org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
+          if (IInstallableUnit.NAMESPACE_IU_ID.equals(requiredCapability.getNamespace()))
+          {
+            String requiredID = requiredCapability.getName();
+            if (categories.containsKey(requiredID))
+            {
+              CategoryItem child = analyzeCategory(names, ius, categories, requiredID, monitor);
+              if (child != null)
+              {
+                children.put(requiredID, child);
+              }
+            }
+            else
+            {
+              VersionRange range = requiredCapability.getRange();
+              Item child = children.get(requiredID);
+
+              Set<IInstallableUnit> set = ius.get(requiredID);
+              for (IInstallableUnit iu : set)
+              {
+                P2UIPlugin.checkCancelation(monitor);
+                Version version = iu.getVersion();
+
+                if (range.isIncluded(version))
+                {
+                  if (child == null)
+                  {
+                    String name = names.get(requiredID);
+                    if (isFiltered(name))
+                    {
+                      if (isFeature(iu))
+                      {
+                        if (requiredID.endsWith(SOURCE_FEATURE_SUFFIX))
+                        {
+                          String mainID = requiredID.substring(0, requiredID.length() - SOURCE_FEATURE_SUFFIX.length()) + FEATURE_SUFFIX;
+                          String mainName = names.get(mainID);
+
+                          if (ObjectUtil.equals(name, mainName))
+                          {
+                            name += " (Source)";
+                          }
+                        }
+
+                        child = new FeatureItem(requiredID);
+                      }
+                      else
+                      {
+                        if (requiredID.endsWith(SOURCE_SUFFIX))
+                        {
+                          String mainID = requiredID.substring(0, requiredID.length() - SOURCE_SUFFIX.length());
+                          String mainName = names.get(mainID);
+
+                          if (ObjectUtil.equals(name, mainName))
+                          {
+                            name += " (Source)";
+                          }
+                        }
+
+                        child = new PluginItem(requiredID);
+                      }
+
+                      child.setLabel(name);
+                      children.put(requiredID, child);
+                    }
+                  }
+
+                  CollectionUtil.add(versions, child, version);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      for (Map.Entry<Item, Set<Version>> entry : versions.entrySet())
+      {
+        P2UIPlugin.checkCancelation(monitor);
+
+        Item child = entry.getKey();
+        if (child instanceof VersionedItem)
+        {
+          VersionedItem versionedItem = (VersionedItem)child;
+          versionedItem.setVersions(entry.getValue());
+        }
+      }
+
+      if (children.isEmpty())
+      {
+        return null;
+      }
+
+      CategoryItem categoryItem = new CategoryItem();
+      categoryItem.setLabel(names.get(categoryID));
+      categoryItem.setChildren(children.values().toArray(new Item[children.size()]));
+      return categoryItem;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class FeaturesMode extends Mode
+  {
+    @Override
+    public void fillSelector(Composite parent)
+    {
+      fillCategorySelector(parent);
+    }
+
+    @Override
+    public void fillItems(Composite parent)
+    {
+      disposeChildren(parent);
+
+      TableViewer featuresViewer = new TableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.VIRTUAL);
+      featuresViewer.setUseHashlookup(true);
+      featuresViewer.setContentProvider(new ItemContentProvider());
+      featuresViewer.setLabelProvider(new ItemLabelProvider());
+      addDragSupport(featuresViewer);
+
+      itemsViewer = featuresViewer;
+    }
+
+    @Override
+    public void analyzeInstallableUnits(IProgressMonitor monitor)
+    {
+      Map<String, String> names = new HashMap<String, String>();
+      Map<String, Set<Version>> versions = new HashMap<String, Set<Version>>();
+
+      for (IInstallableUnit iu : installableUnits)
+      {
+        P2UIPlugin.checkCancelation(monitor);
+        String id = iu.getId();
+
+        if (id.endsWith(FEATURE_SUFFIX) && !id.endsWith(SOURCE_FEATURE_SUFFIX))
+        {
+          String name = getName(iu);
+          if (isFiltered(name))
+          {
+            names.put(id, name);
+            CollectionUtil.add(versions, id, iu.getVersion());
+          }
+        }
+      }
+
+      final FeatureItem[] featureItems = new FeatureItem[versions.size()];
+      Iterator<String> iterator = versions.keySet().iterator();
+
+      for (int i = 0; i < featureItems.length; i++)
+      {
+        P2UIPlugin.checkCancelation(monitor);
+        String id = iterator.next();
+
+        FeatureItem featureItem = new FeatureItem(id);
+        featureItem.setVersions(versions.get(id));
+        featureItem.setLabel(names.get(id));
+        featureItems[i] = featureItem;
+      }
+
+      UIUtil.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          setItems(featureItems);
+        }
+      });
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class CapabilitiesMode extends Mode
+  {
+    private ComboViewer namespaceViewer;
+
+    @Override
+    public void fillSelector(Composite parent)
+    {
+      disposeChildren(parent);
+
+      CCombo namespaceCombo = new CCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT);
+      namespaceCombo.setToolTipText("Select the namespace of the capabilities to show");
+
+      namespaceViewer = new ComboViewer(namespaceCombo);
+      namespaceViewer.setSorter(new ViewerSorter());
+      namespaceViewer.setContentProvider(new ArrayContentProvider());
+      namespaceViewer.setLabelProvider(new LabelProvider());
+      namespaceViewer.setInput(new String[] { currentNamespace });
+      namespaceViewer.addSelectionChangedListener(new ISelectionChangedListener()
+      {
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+          IStructuredSelection selection = (IStructuredSelection)namespaceViewer.getSelection();
+          String newNamespace = (String)selection.getFirstElement();
+          if (!ObjectUtil.equals(newNamespace, currentNamespace))
+          {
+            SETTINGS.put(CURRENT_NAMESPACE_KEY, newNamespace);
+            currentNamespace = newNamespace;
+            analyzeJob.reschedule();
+          }
+        }
+      });
+
+      namespaceViewer.setSelection(new StructuredSelection(currentNamespace));
+    }
+
+    @Override
+    public void fillItems(Composite parent)
+    {
+      disposeChildren(parent);
+
+      TableViewer capabilitiesViewer = new TableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.VIRTUAL);
+      capabilitiesViewer.setUseHashlookup(true);
+      capabilitiesViewer.setContentProvider(new ItemContentProvider());
+      capabilitiesViewer.setLabelProvider(new ItemLabelProvider());
+      addDragSupport(capabilitiesViewer);
+
+      itemsViewer = capabilitiesViewer;
+    }
+
+    @Override
+    public void analyzeInstallableUnits(IProgressMonitor monitor)
+    {
+      final Set<String> flavors = new HashSet<String>();
+      final Set<String> namespaces = new HashSet<String>();
+      Map<String, Set<Version>> versions = new HashMap<String, Set<Version>>();
+
+      for (IInstallableUnit iu : installableUnits)
+      {
+        for (IProvidedCapability capability : iu.getProvidedCapabilities())
+        {
+          P2UIPlugin.checkCancelation(monitor);
+
+          String namespace = capability.getNamespace();
+          String name = capability.getName();
+
+          if ("org.eclipse.equinox.p2.flavor".equals(namespace))
+          {
+            flavors.add(name);
+          }
+          else if (!"A.PDE.Target.Platform".equalsIgnoreCase(namespace))
+          {
+            namespaces.add(namespace);
+          }
+
+          if (ObjectUtil.equals(namespace, currentNamespace) && isFiltered(name))
+          {
+            Version version = capability.getVersion();
+            if (version != null && !Version.emptyVersion.equals(version))
+            {
+              CollectionUtil.add(versions, name, version);
+            }
+          }
+        }
+      }
+
+      String[] flavorIDs = getMinimalFlavors(flavors);
+      for (Iterator<String> it = namespaces.iterator(); it.hasNext();)
+      {
+        String namespace = it.next();
+        for (int i = 0; i < flavorIDs.length; i++)
+        {
+          String flavor = flavorIDs[i];
+          if (namespace.startsWith(flavor))
+          {
+            it.remove();
+            break;
+          }
+        }
+      }
+
+      if (!namespaces.contains(currentNamespace))
+      {
+        String newCurrentNamespace = null;
+        if (namespaces.contains(DEFAULT_CAPABILITY_NAMESPACE))
+        {
+          newCurrentNamespace = DEFAULT_CAPABILITY_NAMESPACE;
+        }
+        else if (!namespaces.isEmpty())
+        {
+          newCurrentNamespace = namespaces.iterator().next();
+        }
+
+        if (newCurrentNamespace != null)
+        {
+          currentNamespace = newCurrentNamespace;
+          analyzeInstallableUnits(monitor);
+          return;
+        }
+      }
+
+      final CapabilityItem[] capabilityItems = new CapabilityItem[versions.size()];
+      Iterator<String> iterator = versions.keySet().iterator();
+
+      for (int i = 0; i < capabilityItems.length; i++)
+      {
+        String id = iterator.next();
+
+        CapabilityItem capabilityItem = new CapabilityItem();
+        capabilityItem.setVersions(versions.get(id));
+        capabilityItem.setNamespace(currentNamespace);
+        capabilityItem.setLabel(id);
+        capabilityItems[i] = capabilityItem;
+      }
+
+      UIUtil.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          setItems(capabilityItems);
+
+          namespaceViewer.setInput(namespaces);
+          namespaceViewer.getCCombo().pack();
+          selectorComposite.getParent().layout();
+
+          UIUtil.asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              namespaceViewer.setSelection(new StructuredSelection(currentNamespace));
+            }
+          });
+        }
+      });
     }
   }
 
@@ -1059,11 +1331,19 @@ public class RepositoryExplorer extends ViewPart
 
     public void focusLost(FocusEvent e)
     {
-      if (RepositoryManager.INSTANCE.getActiveRepository() == null)
+      String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
+      if (activeRepository == null)
       {
         originalForeground = repositoryCombo.getForeground();
         repositoryCombo.setText("type repository url, drag and drop, or pick from list");
         repositoryCombo.setForeground(gray);
+      }
+      else
+      {
+        if (!activeRepository.equals(repositoryCombo.getText()))
+        {
+          repositoryCombo.setText(activeRepository);
+        }
       }
     }
   }
@@ -1096,7 +1376,7 @@ public class RepositoryExplorer extends ViewPart
       }
       else if (e.keyCode == SWT.CR && listVisible && !currentListVisible)
       {
-        selected();
+        selectRepository();
       }
 
       listVisible = currentListVisible;
@@ -1107,11 +1387,11 @@ public class RepositoryExplorer extends ViewPart
       listVisible = repositoryCombo.getListVisible();
       if (!listVisible)
       {
-        selected();
+        selectRepository();
       }
     }
 
-    private void selected()
+    private void selectRepository()
     {
       String newRepository = getSelectedRepository();
       activateAndLoadRepository(newRepository);
@@ -1190,18 +1470,12 @@ public class RepositoryExplorer extends ViewPart
    */
   private final class ItemContentProvider implements ITreeContentProvider
   {
-    private final Object[] NO_ELEMENTS = new Object[0];
-
-    private Object input;
-
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
-      input = newInput;
     }
 
     public void dispose()
     {
-      input = null;
     }
 
     public Object getParent(Object element)
@@ -1216,37 +1490,6 @@ public class RepositoryExplorer extends ViewPart
 
     public Object[] getChildren(Object element)
     {
-      if (element == LOADING_INPUT)
-      {
-        return new String[] { "Loading " + loadingLocation + " ..." };
-      }
-
-      if (element == ERROR_INPUT)
-      {
-        return new IStatus[] { loadError };
-      }
-
-      if (element instanceof String)
-      {
-        return NO_ELEMENTS;
-      }
-
-      if (element instanceof IStatus)
-      {
-        IStatus status = (IStatus)element;
-        if (status.isMultiStatus())
-        {
-          return status.getChildren();
-        }
-
-        return NO_ELEMENTS;
-      }
-
-      if (element == input)
-      {
-        return (Object[])input;
-      }
-
       Item[] children = ((Item)element).getChildren();
       if (children != null)
       {
@@ -1258,37 +1501,6 @@ public class RepositoryExplorer extends ViewPart
 
     public boolean hasChildren(Object element)
     {
-      if (element == LOADING_INPUT)
-      {
-        return true;
-      }
-
-      if (element == ERROR_INPUT)
-      {
-        return true;
-      }
-
-      if (element instanceof String)
-      {
-        return false;
-      }
-
-      if (element instanceof IStatus)
-      {
-        IStatus status = (IStatus)element;
-        if (status.isMultiStatus() && status.getChildren().length != 0)
-        {
-          return true;
-        }
-
-        return false;
-      }
-
-      if (element == input)
-      {
-        return ((Object[])input).length != 0;
-      }
-
       return ((Item)element).hasChildren();
     }
   }
@@ -1301,44 +1513,203 @@ public class RepositoryExplorer extends ViewPart
     @Override
     public Image getImage(Object element)
     {
-      if (element instanceof IStatus)
-      {
-        IStatus status = (IStatus)element;
-        return UIUtil.getStatusImage(status.getSeverity());
-      }
-
-      if (element instanceof Item)
-      {
-        Item item = (Item)element;
-        return item.getImage();
-      }
-
-      return super.getImage(element);
+      Item item = (Item)element;
+      return item.getImage();
     }
 
     @Override
     public String getText(Object element)
     {
-      if (element instanceof IStatus)
-      {
-        IStatus status = (IStatus)element;
-        return status.getMessage();
-      }
-
-      return super.getText(element);
+      Item item = (Item)element;
+      return item.getLabel();
     }
   }
 
   /**
    * @author Eike Stepper
    */
-  private static abstract class Item
+  private static final class VersionProvider extends LabelProvider implements IStructuredContentProvider
   {
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/version");
+
+    private TableViewer versionsViewer;
+
+    private VersionSegment versionSegment;
+
+    public VersionProvider()
+    {
+      try
+      {
+        versionSegment = VersionSegment.get(SETTINGS.get(VERSION_SEGMENT_KEY));
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+
+      if (versionSegment == null)
+      {
+        versionSegment = VersionSegment.QUALIFIER;
+      }
+    }
+
+    public VersionSegment getVersionSegment()
+    {
+      return versionSegment;
+    }
+
+    public void setVersionSegment(VersionSegment versionSegment)
+    {
+      if (this.versionSegment != versionSegment)
+      {
+        this.versionSegment = versionSegment;
+        SETTINGS.put(VERSION_SEGMENT_KEY, versionSegment.getLiteral());
+
+        if (versionsViewer != null)
+        {
+          versionsViewer.refresh();
+        }
+      }
+    }
+
+    public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
+    {
+      versionsViewer = (TableViewer)viewer;
+    }
+
+    @Override
+    public void dispose()
+    {
+    }
+
+    public Object[] getElements(Object inputElement)
+    {
+      if (inputElement instanceof VersionedItem)
+      {
+        VersionedItem versionedItem = (VersionedItem)inputElement;
+        Set<Version> versions = versionedItem.getVersions();
+        if (versions != null)
+        {
+          Set<ItemVersion> itemVersions = new HashSet<ItemVersion>();
+          for (Version version : versions)
+          {
+            ItemVersion itemVersion = getItemVersion(version);
+            itemVersions.add(itemVersion);
+          }
+
+          ItemVersion[] array = itemVersions.toArray(new ItemVersion[itemVersions.size()]);
+          Arrays.sort(array);
+          return array;
+        }
+      }
+
+      return NO_ELEMENTS;
+    }
+
+    @Override
+    public Image getImage(Object element)
+    {
+      return IMAGE;
+    }
+
+    private ItemVersion getItemVersion(Version version)
+    {
+      int segments = version.getSegmentCount();
+      if (segments == 0)
+      {
+        return new ItemVersion(version, "0.0.0");
+      }
+
+      segments = Math.min(segments, versionSegment.ordinal() + 1);
+      StringBuilder builder = new StringBuilder();
+
+      for (int i = 0; i < segments; i++)
+      {
+        String segment = version.getSegment(i).toString();
+        if (StringUtil.isEmpty(segment))
+        {
+          break;
+        }
+
+        if (builder.length() != 0)
+        {
+          builder.append('.');
+        }
+
+        builder.append(segment);
+      }
+
+      version = Version.create(builder.toString());
+
+      if (segments < 3)
+      {
+        builder.append(".x");
+      }
+
+      return new ItemVersion(version, builder.toString());
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    public static final class ItemVersion implements Comparable<ItemVersion>
+    {
+      private final Version version;
+
+      private final String label;
+
+      public ItemVersion(Version version, String label)
+      {
+        this.version = version;
+        this.label = label;
+      }
+
+      public Version getVersion()
+      {
+        return version;
+      }
+
+      public int compareTo(ItemVersion o)
+      {
+        return version.compareTo(o.version);
+      }
+
+      @Override
+      public int hashCode()
+      {
+        return version.hashCode();
+      }
+
+      @Override
+      public boolean equals(Object obj)
+      {
+        return version.equals(((ItemVersion)obj).version);
+      }
+
+      @Override
+      public String toString()
+      {
+        return label;
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static abstract class Item implements Comparable<Item>
+  {
+    protected static final Integer CATEGORY_ORDER = 0;
+
+    protected static final Integer NON_CATEGORY_ORDER = 1;
+
     private String label;
 
     public Item()
     {
     }
+
+    public abstract Image getImage();
 
     public String getNamespace()
     {
@@ -1358,11 +1729,6 @@ public class RepositoryExplorer extends ViewPart
     public void setLabel(String label)
     {
       this.label = label;
-    }
-
-    public Version getVersion()
-    {
-      return null;
     }
 
     public Item[] getChildren()
@@ -1393,15 +1759,94 @@ public class RepositoryExplorer extends ViewPart
       return super.equals(obj);
     }
 
-    public abstract Image getImage();
+    public int compareTo(Item o)
+    {
+      Integer category1 = getCategoryOrder();
+      Integer category2 = o.getCategoryOrder();
+
+      int result = category1.compareTo(category2);
+      if (result == 0)
+      {
+        String label1 = label.toLowerCase();
+        String label2 = o.label.toLowerCase();
+        result = label1.compareTo(label2);
+      }
+
+      return result;
+    }
+
+    protected Integer getCategoryOrder()
+    {
+      return NON_CATEGORY_ORDER;
+    }
   }
 
   /**
    * @author Eike Stepper
    */
-  private static abstract class ContainerItem extends Item
+  private static final class LoadingItem extends Item
   {
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/repository");
+
+    private final URI location;
+
+    public LoadingItem(URI location)
+    {
+      this.location = location;
+    }
+
+    @Override
+    public Image getImage()
+    {
+      return IMAGE;
+    }
+
+    @Override
+    public String getLabel()
+    {
+      return "Loading " + location;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class ErrorItem extends Item
+  {
+    private final IStatus status;
+
+    public ErrorItem(IStatus status)
+    {
+      this.status = status;
+    }
+
+    @Override
+    public Image getImage()
+    {
+      return UIUtil.getStatusImage(status.getSeverity());
+    }
+
+    @Override
+    public String getLabel()
+    {
+      return status.getMessage();
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class CategoryItem extends Item
+  {
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/category");
+
     private Item[] children;
+
+    @Override
+    public Image getImage()
+    {
+      return IMAGE;
+    }
 
     @Override
     public boolean hasChildren()
@@ -1417,16 +1862,9 @@ public class RepositoryExplorer extends ViewPart
 
     public void setChildren(Item[] children)
     {
+      Arrays.sort(children);
       this.children = children;
     }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static final class CategoryItem extends ContainerItem
-  {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/category");
 
     @Override
     public String getNamespace()
@@ -1435,16 +1873,34 @@ public class RepositoryExplorer extends ViewPart
     }
 
     @Override
-    public Image getImage()
+    protected Integer getCategoryOrder()
     {
-      return IMAGE;
+      return CATEGORY_ORDER;
     }
   }
 
   /**
    * @author Eike Stepper
    */
-  private static final class FeatureItem extends ContainerItem
+  private static abstract class VersionedItem extends Item
+  {
+    private Set<Version> versions;
+
+    public Set<Version> getVersions()
+    {
+      return versions;
+    }
+
+    public void setVersions(Set<Version> versions)
+    {
+      this.versions = versions;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class FeatureItem extends VersionedItem
   {
     private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature");
 
@@ -1471,7 +1927,7 @@ public class RepositoryExplorer extends ViewPart
   /**
    * @author Eike Stepper
    */
-  private static final class PluginItem extends ContainerItem
+  private static final class PluginItem extends VersionedItem
   {
     private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin");
 
@@ -1495,24 +1951,10 @@ public class RepositoryExplorer extends ViewPart
     }
   }
 
-  // /**
-  // * @author Eike Stepper
-  // */
-  // private static final class PatchItem extends ContainerItem
-  // {
-  // private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/patch");
-  //
-  // @Override
-  // public Image getImage()
-  // {
-  // return IMAGE;
-  // }
-  // }
-
   /**
    * @author Eike Stepper
    */
-  private static final class CapabilityItem extends ContainerItem
+  private static final class CapabilityItem extends VersionedItem
   {
     private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/capability");
 
@@ -1554,58 +1996,6 @@ public class RepositoryExplorer extends ViewPart
       }
 
       return IMAGE;
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static final class VersionItem extends Item
-  {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/version");
-
-    private final Item parent;
-
-    public VersionItem(Item parent, Version version)
-    {
-      this.parent = parent;
-      setLabel(version.toString());
-    }
-
-    @Override
-    public Image getImage()
-    {
-      return IMAGE;
-    }
-
-    @Override
-    public String getNamespace()
-    {
-      return parent.getNamespace();
-    }
-
-    @Override
-    public String getName()
-    {
-      return parent.getName();
-    }
-
-    @Override
-    public String getLabel()
-    {
-      return parent.getLabel();
-    }
-
-    @Override
-    public Version getVersion()
-    {
-      return Version.parseVersion(super.getLabel());
-    }
-
-    @Override
-    public String toString()
-    {
-      return super.getLabel();
     }
   }
 }

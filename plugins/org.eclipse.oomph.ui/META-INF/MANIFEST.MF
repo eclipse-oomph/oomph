@@ -23,6 +23,7 @@ Export-Package: org.eclipse.oomph.internal.ui;version="1.0.0";
    org.eclipse.oomph.targlets.editor,
    org.eclipse.oomph.setup.installer,
    org.eclipse.oomph.setup.ui,
-   org.eclipse.oomph.setup.doc",
+   org.eclipse.oomph.setup.doc,
+   org.eclipse.oomph.p2.ui",
  org.eclipse.oomph.ui;version="1.0.0"
 Eclipse-BuddyPolicy: dependent

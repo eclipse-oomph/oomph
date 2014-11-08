@@ -299,6 +299,11 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
 
   public VersionRange createVersionRange(Version version, VersionSegment segment)
   {
+    if (version.equals(Version.emptyVersion))
+    {
+      return VersionRange.emptyRange;
+    }
+
     if (segment == null || segment == VersionSegment.QUALIFIER)
     {
       return new VersionRange(version, true, version, true);
