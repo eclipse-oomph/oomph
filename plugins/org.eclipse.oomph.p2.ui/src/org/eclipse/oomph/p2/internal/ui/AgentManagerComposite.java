@@ -101,7 +101,7 @@ public class AgentManagerComposite extends Composite
         if (path != null)
         {
           Agent agent = P2Util.getAgentManager().addAgent(new File(path));
-          BundlePool bundlePool = agent.addBundlePool(new File(path, "pool"));
+          BundlePool bundlePool = agent.addBundlePool(new File(path, BundlePool.DEFAULT_NAME));
           refreshFor(bundlePool);
         }
       }

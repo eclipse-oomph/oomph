@@ -46,6 +46,8 @@ public class AgentManagerImpl implements AgentManager
 
   private final PersistentMap<Agent> agentMap;
 
+  private final File defaultAgentLocation;
+
   private final File defaultsFile;
 
   private Agent currentAgent;
@@ -59,6 +61,8 @@ public class AgentManagerImpl implements AgentManager
 
   public AgentManagerImpl(final File userHome)
   {
+    defaultAgentLocation = new File(userHome, ".p2");
+
     File folder = P2CorePlugin.getUserStateFolder(userHome);
     File infoFile = new File(folder, "agents.info");
     defaultsFile = new File(folder, "defaults.info");
@@ -74,34 +78,32 @@ public class AgentManagerImpl implements AgentManager
       @Override
       protected void initializeFirstTime()
       {
-        File defaultLocation = new File(userHome, ".p2");
-
-        initializeFirstTime(defaultLocation);
+        initializeFirstTime(defaultAgentLocation);
         initializeFirstTime(new File(userHome, "p2"));
         initializeFirstTime(new File(userHome, ".eclipse"));
         initializeFirstTime(new File(userHome, "eclipse"));
 
         if (getElements().isEmpty())
         {
-          addAgent(defaultLocation);
+          addAgent(defaultAgentLocation);
         }
 
         if (getBundlePools().isEmpty())
         {
-          Agent agent = getAgent(defaultLocation);
+          Agent agent = getAgent(defaultAgentLocation);
           if (agent == null)
           {
             agent = getAgents().iterator().next();
           }
 
-          File poolLocation = new File(agent.getLocation(), "pool");
+          File poolLocation = new File(agent.getLocation(), BundlePool.DEFAULT_NAME);
           agent.addBundlePool(poolLocation);
         }
       }
 
       private void initializeFirstTime(File location)
       {
-        if (location.isDirectory())
+        if (IOUtil.isValidFolder(location))
         {
           if (AgentImpl.isValid(location))
           {
@@ -174,6 +176,11 @@ public class AgentManagerImpl implements AgentManager
     }
 
     return currentAgent;
+  }
+
+  public File getDefaultAgentLocation()
+  {
+    return defaultAgentLocation;
   }
 
   public Set<File> getAgentLocations()

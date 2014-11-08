@@ -84,6 +84,18 @@ public final class IOUtil
     }
   }
 
+  public static boolean isValidFolder(File folder)
+  {
+    try
+    {
+      return folder.isDirectory() && folder.getAbsoluteFile().equals(folder.getCanonicalFile());
+    }
+    catch (IOException ex)
+    {
+      return false;
+    }
+  }
+
   public static boolean isSerializeable(Object object)
   {
     try

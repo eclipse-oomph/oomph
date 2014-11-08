@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
-import org.eclipse.oomph.p2.P2Exception;
+import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -418,7 +418,23 @@ public final class TargletContainerDescriptorManager
     BundlePool bundlePool = agentManager.getDefaultBundlePool(client);
     if (bundlePool == null)
     {
-      throw new P2Exception("No default bundle pool configured for " + client);
+      File agentLocation = agentManager.getDefaultAgentLocation();
+      Agent agent = agentManager.getAgent(agentLocation);
+      if (agent == null)
+      {
+        // Create default agent if needed.
+        agent = agentManager.addAgent(agentLocation);
+      }
+
+      for (BundlePool pool : agent.getBundlePools())
+      {
+        // Return any pool if one exists.
+        return pool.getLocation();
+      }
+
+      // Create and return default pool if agent is empty.
+      File poolLocation = new File(agentLocation, BundlePool.DEFAULT_NAME);
+      bundlePool = agent.addBundlePool(poolLocation);
     }
 
     return bundlePool.getLocation();

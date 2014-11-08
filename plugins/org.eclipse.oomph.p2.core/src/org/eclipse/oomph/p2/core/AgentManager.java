@@ -25,6 +25,8 @@ public interface AgentManager
 
   public Agent getCurrentAgent();
 
+  public File getDefaultAgentLocation();
+
   public Set<File> getAgentLocations();
 
   public Collection<Agent> getAgents();

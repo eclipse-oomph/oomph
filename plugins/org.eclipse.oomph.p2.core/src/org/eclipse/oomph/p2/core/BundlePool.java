@@ -19,6 +19,8 @@ import java.util.Set;
  */
 public interface BundlePool extends AgentElement, ProfileContainer
 {
+  public static final String DEFAULT_NAME = "pool";
+
   public IFileArtifactRepository getFileArtifactRepository();
 
   public Set<String> getClients();
