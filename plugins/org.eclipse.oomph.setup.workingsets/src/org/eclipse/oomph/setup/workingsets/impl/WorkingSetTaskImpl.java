@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.workingsets.impl;
 
-import org.eclipse.oomph.predicates.Predicate;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Stream;
@@ -251,11 +250,9 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
       }
       else
       {
-        index = workingSets.indexOf(existingIds) + 1;
-
-        EList<Predicate> predicates = existingWorkingSet.getPredicates();
-        predicates.clear();
-        predicates.addAll(workingSet.getPredicates());
+        index = workingSets.indexOf(existingWorkingSet);
+        workingSets.set(index, workingSet);
+        ++index;
       }
     }
 
