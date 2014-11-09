@@ -298,7 +298,7 @@ public final class RecorderManager
       if (event.widget instanceof Shell)
       {
         final Shell shell = (Shell)event.widget;
-        if (isPreferenceDialog(shell))
+        if (isPreferenceDialog(shell) && toolItem == null)
         {
           UIUtil.asyncExec(display, new Runnable()
           {
