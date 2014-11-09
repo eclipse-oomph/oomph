@@ -15,16 +15,16 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
-import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.XMLUtil.ElementUpdater;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.VersionRange;
@@ -34,6 +34,7 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -95,7 +96,7 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
         new FileUpdater()
         {
           @Override
-          protected String createNewContents(String oldContents, String nl)
+          protected String createNewContents(String oldContents, String encoding, String nl)
           {
             try
             {
@@ -136,12 +137,11 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
           }
 
           @Override
-          protected void setContents(File file, IFile iFile, String contents) throws Exception
+          protected void setContents(URI uri, String encoding, String contents) throws IOException
           {
-            monitor.subTask("Updating " + (iFile != null ? iFile.getFullPath() : file));
-            super.setContents(file, iFile, contents);
+            monitor.subTask("Updating " + (uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
+            super.setContents(uri, encoding, contents);
           }
-
         }.update(pom);
       }
     }

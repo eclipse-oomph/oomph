@@ -24,9 +24,9 @@ import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
@@ -35,6 +35,7 @@ import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -126,16 +127,19 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       private int sequenceNumber;
 
       @Override
-      protected String createNewContents(String oldContents, String nl)
+      protected String createNewContents(String oldContents, String encoding, String nl)
       {
-        Matcher matcher = SEQUENCE_NUMBER_PATTERN.matcher(oldContents);
-        if (matcher.find())
+        if (oldContents != null)
         {
-          sequenceNumber = Integer.parseInt(matcher.group(1));
+          Matcher matcher = SEQUENCE_NUMBER_PATTERN.matcher(oldContents);
+          if (matcher.find())
+          {
+            sequenceNumber = Integer.parseInt(matcher.group(1));
+          }
         }
 
         StringBuilder builder = new StringBuilder();
-        builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+        builder.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"no\"?>");
         builder.append(nl);
         builder.append("<?pde version=\"3.8\"?>");
         builder.append(nl);
@@ -195,11 +199,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       }
 
       @Override
-      protected void setContents(File file, IFile iFile, String contents) throws Exception
+      protected void setContents(URI uri, String encoding, String contents) throws IOException
       {
-        monitor.subTask("Updating " + (iFile != null ? iFile.getFullPath() : file));
+        monitor.subTask("Updating " + (uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
         contents = contents.replace("sequenceNumber=\"" + sequenceNumber + "\"", "sequenceNumber=\"" + (sequenceNumber + 1) + "\"");
-        super.setContents(file, iFile, contents);
+        super.setContents(uri, encoding, contents);
       }
 
     }.update(targetDefinition);

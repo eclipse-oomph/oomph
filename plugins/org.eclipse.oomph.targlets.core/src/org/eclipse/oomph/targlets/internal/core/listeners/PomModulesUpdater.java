@@ -13,20 +13,20 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
-import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -84,7 +84,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
     new FileUpdater()
     {
       @Override
-      protected String createNewContents(String oldContents, String nl)
+      protected String createNewContents(String oldContents, String encoding, String nl)
       {
         Matcher matcher = MODULES_PATTERN.matcher(oldContents);
         if (matcher.find())
@@ -121,10 +121,10 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
       }
 
       @Override
-      protected void setContents(File file, IFile iFile, String contents) throws Exception
+      protected void setContents(URI uri, String encoding, String contents) throws IOException
       {
-        monitor.subTask("Updating " + (iFile != null ? iFile.getFullPath() : file));
-        super.setContents(file, iFile, contents);
+        monitor.subTask("Updating " + (uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
+        super.setContents(uri, encoding, contents);
       }
     }.update(mainPom);
   }

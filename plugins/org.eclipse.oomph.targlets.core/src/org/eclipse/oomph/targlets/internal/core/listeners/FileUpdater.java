@@ -11,96 +11,86 @@
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.PropertiesUtil;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ContentHandler;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.URIHandler;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.PlatformContentHandlerImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLContentHandlerImpl;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-
-import org.osgi.service.prefs.Preferences;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
  */
 public abstract class FileUpdater
 {
+  private static final URIConverter URI_CONVERTER = new ExtensibleURIConverterImpl(URIHandler.DEFAULT_HANDLERS, Arrays.asList(new ContentHandler[] {
+      new PlatformContentHandlerImpl(), new XMLContentHandlerImpl() }));
+
   public FileUpdater()
   {
   }
 
-  public boolean update(File file) throws Exception
-  {
-    IFile iFile = getIFile(file);
-    String nl = getLineSeparator(iFile);
-
-    String oldContents = getContents(file, iFile);
-    String newContents = createNewContents(oldContents, nl);
-    if (newContents != null && !newContents.equals(oldContents))
-    {
-      setContents(file, iFile, newContents);
-      return true;
-    }
-
-    return false;
-  }
-
-  protected abstract String createNewContents(String oldContents, String nl);
-
-  private static IFile getIFile(File file)
+  private URI getURI(File file)
   {
     for (IFile iFile : ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(file.toURI()))
     {
       IProject project = iFile.getProject();
       if (project.isOpen())
       {
-        return iFile;
+        return URI.createPlatformResourceURI(iFile.getFullPath().toString(), true);
       }
     }
 
-    return null;
+    return URI.createFileURI(file.toString());
   }
 
-  private static String getLineSeparator(IFile iFile)
+  protected Map<String, ?> getDescription(URI uri) throws IOException
   {
-    try
-    {
-      if (iFile != null)
-      {
-        String projectName = iFile.getProject().getName();
-
-        Preferences node = Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(projectName);
-        if (node.nodeExists(Platform.PI_RUNTIME))
-        {
-          String value = node.node(Platform.PI_RUNTIME).get(Platform.PREF_LINE_SEPARATOR, null);
-          if (value != null)
-          {
-            return value;
-          }
-        }
-      }
-    }
-    catch (Exception e)
-    {
-      // Ignore
-    }
-
-    return PropertiesUtil.getProperty(Platform.PREF_LINE_SEPARATOR);
+    return URI_CONVERTER.contentDescription(uri, null);
   }
 
-  protected String getContents(File file, IFile iFile) throws Exception
+  public boolean update(File file) throws Exception
   {
-    InputStream inputStream = iFile == null ? new FileInputStream(file) : iFile.getContents();
+    URI uri = getURI(file);
+    Map<String, ?> description = getDescription(uri);
+    String nl = (String)description.get(ContentHandler.LINE_DELIMITER_PROPERTY);
+    String encoding = (String)description.get(ContentHandler.CHARSET_PROPERTY);
+    if (encoding == null)
+    {
+      encoding = "UTF-8";
+    }
+
+    String oldContents = URI_CONVERTER.exists(uri, null) ? getContents(uri, encoding) : null;
+    String newContents = createNewContents(oldContents, encoding, nl);
+    if (newContents != null && !newContents.equals(oldContents))
+    {
+      setContents(uri, encoding, newContents);
+      return true;
+    }
+
+    return false;
+  }
+
+  protected abstract String createNewContents(String oldContents, String encoding, String nl);
+
+  protected String getContents(URI uri, String encoding) throws IOException
+  {
+    InputStream inputStream = URI_CONVERTER.createInputStream(uri);
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     try
@@ -112,28 +102,21 @@ public abstract class FileUpdater
       IOUtil.close(inputStream);
     }
 
-    return new String(outputStream.toByteArray(), "UTF-8");
+    return new String(outputStream.toByteArray(), encoding);
   }
 
-  protected void setContents(File file, IFile iFile, String contents) throws Exception
+  protected void setContents(URI uri, String encoding, String contents) throws IOException
   {
-    InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
-    if (iFile != null)
-    {
-      iFile.setContents(inputStream, true, true, new NullProgressMonitor());
-    }
-    else
-    {
-      OutputStream outputStream = new FileOutputStream(file);
+    InputStream inputStream = new ByteArrayInputStream(contents.getBytes(encoding));
+    OutputStream outputStream = URI_CONVERTER.createOutputStream(uri);
 
-      try
-      {
-        IOUtil.copy(inputStream, outputStream);
-      }
-      finally
-      {
-        IOUtil.close(outputStream);
-      }
+    try
+    {
+      IOUtil.copy(inputStream, outputStream);
+    }
+    finally
+    {
+      IOUtil.close(outputStream);
     }
   }
 }
