@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstallType;
@@ -275,8 +277,16 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         if ("org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType".equals(type.getId()))
         {
           context.log("Configurating a " + version + " JRE for location " + location);
+          File installLocation = new File(location);
+
+          IStatus validationStatus = type.validateInstallLocation(installLocation);
+          if (!validationStatus.isOK())
+          {
+            throw new CoreException(validationStatus);
+          }
+
           VMStandin vmStandin = new VMStandin(type, EcoreUtil.generateUUID());
-          vmStandin.setInstallLocation(new File(location));
+          vmStandin.setInstallLocation(installLocation);
           vmStandin.setName("JRE for " + version);
           IVMInstall realVM = vmStandin.convertToRealVM();
 
@@ -307,21 +317,14 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
 
     public static boolean isNeeded(SetupTaskContext context, String version, String location) throws Exception
     {
-      IExecutionEnvironment[] executionEnvironments = JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
-
-      for (IExecutionEnvironment executionEnvironment : executionEnvironments)
+      for (IVMInstallType vmInstallType : JavaRuntime.getVMInstallTypes())
       {
-        String id = executionEnvironment.getId();
-        if (id.equals(version))
+        for (IVMInstall vmInstall : vmInstallType.getVMInstalls())
         {
-          IVMInstall[] compatibleVMs = executionEnvironment.getCompatibleVMs();
-          for (IVMInstall vmInstall : compatibleVMs)
+          File installLocation = vmInstall.getInstallLocation();
+          if (new File(location).equals(installLocation))
           {
-            File installLocation = vmInstall.getInstallLocation();
-            if (new File(location).equals(installLocation))
-            {
-              return false;
-            }
+            return false;
           }
         }
       }
