@@ -80,6 +80,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -332,10 +333,21 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     hookActions();
   }
 
+  private static CCombo createCombo(Composite parent, int style, boolean grabExcessHorizontalSpace)
+  {
+    CCombo combo = new CCombo(parent, style);
+    FontData[] fontData = combo.getFont().getFontData();
+
+    GridData layoutData = new GridData(SWT.FILL, SWT.FILL, grabExcessHorizontalSpace, false);
+    layoutData.heightHint = 2 * fontData[0].getHeight();
+
+    combo.setLayoutData(layoutData);
+    return combo;
+  }
+
   private void createRepositoriesArea(Composite container)
   {
-    repositoryCombo = new CCombo(container, SWT.BORDER);
-    repositoryCombo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+    repositoryCombo = createCombo(container, SWT.BORDER, true);
     repositoryCombo.setToolTipText("Repository location (type a URL, drop a repository or pick from the drop down history)");
     repositoryCombo.addFocusListener(repositoryFocusListener);
     repositoryCombo.addKeyListener(repositoryHistoryListener);
