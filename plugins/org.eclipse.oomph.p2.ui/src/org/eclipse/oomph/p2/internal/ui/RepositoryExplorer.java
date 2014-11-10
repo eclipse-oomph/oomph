@@ -239,7 +239,11 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
       this.mode = mode;
 
-      selectorComposite.setLayout(new FillLayout());
+      GridLayout selectorLayout = new GridLayout();
+      selectorLayout.marginWidth = 0;
+      selectorLayout.marginHeight = 0;
+
+      selectorComposite.setLayout(selectorLayout);
       mode.fillSelector(selectorComposite);
       selectorComposite.layout();
       selectorComposite.getParent().layout();
@@ -339,7 +343,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     FontData[] fontData = combo.getFont().getFontData();
 
     GridData layoutData = new GridData(SWT.FILL, SWT.FILL, grabExcessHorizontalSpace, false);
-    layoutData.heightHint = 2 * fontData[0].getHeight();
+    layoutData.heightHint = fontData[0].getHeight() + 7;
 
     combo.setLayoutData(layoutData);
     return combo;
@@ -418,7 +422,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
     selectorComposite = new Composite(container, SWT.NONE);
-    selectorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+    selectorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     selectorComposite.setBackground(WHITE);
 
     itemsComposite = new Composite(container, SWT.NONE);
@@ -868,6 +872,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       final Button button = new Button(parent, SWT.CHECK);
       button.setText("Group items by category");
       button.setToolTipText("Whether to show items in categories or in a complete list");
+      button.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
       button.setSelection(categorizeItems);
       button.addSelectionListener(new SelectionAdapter()
       {
@@ -1178,7 +1183,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
       disposeChildren(parent);
 
-      CCombo namespaceCombo = new CCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT);
+      CCombo namespaceCombo =
+      // new CCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT);
+      createCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT, false);
       namespaceCombo.setToolTipText("Select the namespace of the capabilities to show");
 
       namespaceViewer = new ComboViewer(namespaceCombo);
