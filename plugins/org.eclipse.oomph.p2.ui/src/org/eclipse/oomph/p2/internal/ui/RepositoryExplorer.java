@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
@@ -340,10 +341,24 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   private static CCombo createCombo(Composite parent, int style, boolean grabExcessHorizontalSpace)
   {
     CCombo combo = new CCombo(parent, style);
-    FontData[] fontData = combo.getFont().getFontData();
-
     GridData layoutData = new GridData(SWT.FILL, SWT.FILL, grabExcessHorizontalSpace, false);
-    layoutData.heightHint = fontData[0].getHeight() + 7;
+
+    int increaseHeight = 0;
+    String ws = Platform.getWS();
+    if (Platform.WS_COCOA.equals(ws))
+    {
+      increaseHeight = 7;
+    }
+    else if (Platform.WS_GTK.equals(ws))
+    {
+      increaseHeight = 9;
+    }
+
+    if (increaseHeight != 0)
+    {
+      FontData[] fontData = combo.getFont().getFontData();
+      layoutData.heightHint = fontData[0].getHeight() + increaseHeight;
+    }
 
     combo.setLayoutData(layoutData);
     return combo;
