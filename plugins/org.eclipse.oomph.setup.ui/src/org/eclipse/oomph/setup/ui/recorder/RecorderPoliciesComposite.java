@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -148,9 +149,9 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     viewer.removeSelectionChangedListener(listener);
   }
 
-  public ISelection getSelection()
+  public IStructuredSelection getSelection()
   {
-    return viewer.getSelection();
+    return (IStructuredSelection)viewer.getSelection();
   }
 
   public void setSelection(ISelection selection)

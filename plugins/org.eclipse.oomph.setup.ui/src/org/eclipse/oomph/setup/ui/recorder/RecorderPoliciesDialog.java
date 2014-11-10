@@ -100,6 +100,8 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
 
     sashForm.setWeights(new int[] { 4, 1 });
     Dialog.applyDialogFont(sashForm);
+
+    updateValue(recorderPoliciesComposite.getSelection());
   }
 
   @Override
