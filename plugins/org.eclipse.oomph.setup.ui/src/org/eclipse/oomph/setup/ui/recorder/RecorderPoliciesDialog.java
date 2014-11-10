@@ -25,9 +25,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -95,8 +99,30 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
       }
     });
 
-    valueText = new Text(sashForm, SWT.READ_ONLY);
+    valueText = new Text(sashForm, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL);
     valueText.setBackground(getShell().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+    Listener scrollBarListener = new Listener()
+    {
+      protected boolean changing;
+
+      public void handleEvent(Event event)
+      {
+        if (!changing)
+        {
+          changing = true;
+          Rectangle clientArea = valueText.getClientArea();
+          Rectangle trimArea = valueText.computeTrim(clientArea.x, clientArea.y, clientArea.width, clientArea.height);
+          Point size = valueText.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+          valueText.getHorizontalBar().setVisible(trimArea.width <= size.x);
+          valueText.getVerticalBar().setVisible(trimArea.height <= size.y);
+          changing = false;
+        }
+      }
+    };
+
+    valueText.addListener(SWT.Resize, scrollBarListener);
+    valueText.addListener(SWT.Modify, scrollBarListener);
 
     sashForm.setWeights(new int[] { 4, 1 });
     Dialog.applyDialogFont(sashForm);
