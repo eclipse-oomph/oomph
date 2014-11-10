@@ -406,7 +406,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
     selectorComposite = new Composite(container, SWT.NONE);
-    selectorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    selectorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
     selectorComposite.setBackground(WHITE);
 
     itemsComposite = new Composite(container, SWT.NONE);
