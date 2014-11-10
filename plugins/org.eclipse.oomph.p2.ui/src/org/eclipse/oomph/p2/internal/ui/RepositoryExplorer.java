@@ -135,6 +135,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final String VERSION_SEGMENT_KEY = "versionSegment";
 
+  private static final String COMPATIBLE_VERSION_KEY = "compatibleVersion";
+
   private static final String SOURCE_SUFFIX = ".source";
 
   private static final String FEATURE_SUFFIX = ".feature.group";
@@ -187,6 +189,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private boolean categorizeItems;
 
+  private boolean compatibleVersion;
+
   private Mode mode;
 
   private IQueryResult<IInstallableUnit> installableUnits;
@@ -202,7 +206,18 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
 
     expertMode = SETTINGS.getBoolean(EXPERT_MODE_KEY);
-    categorizeItems = SETTINGS.getBoolean(CATEGORIZE_ITEMS_KEY);
+
+    String value = SETTINGS.get(CATEGORIZE_ITEMS_KEY);
+    if (value == null || value.length() == 0)
+    {
+      categorizeItems = true;
+    }
+    else
+    {
+      categorizeItems = "true".equals(value);
+    }
+
+    compatibleVersion = SETTINGS.getBoolean(COMPATIBLE_VERSION_KEY);
   }
 
   @Override
@@ -311,7 +326,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   public void createPartControl(Composite parent)
   {
     final Display display = parent.getDisplay();
-    gray = new Color(display, 70, 70, 70);
+    gray = new Color(display, 75, 75, 75);
 
     Composite container = new Composite(parent, SWT.NONE);
     container.setBackground(WHITE);
@@ -457,7 +472,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     versionsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     versionsViewer = new TableViewer(versionsComposite, SWT.BORDER);
-    versionsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+    versionsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
     versionsViewer.setContentProvider(versionProvider);
     versionsViewer.setLabelProvider(versionProvider);
     addDragSupport(versionsViewer);
@@ -467,10 +482,39 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     versionsGroup.setLayout(new GridLayout(1, false));
     versionsGroup.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
-    addVersionSegmentButton(versionsGroup, "Major", "Show major versions", VersionSegment.MAJOR);
-    addVersionSegmentButton(versionsGroup, "Minor", "Show minor versions", VersionSegment.MINOR);
+    final Button compatibleButton = new Button(versionsGroup, SWT.CHECK);
+    compatibleButton.setText("Compatible");
+    compatibleButton.setToolTipText("Show compatible versions");
+    compatibleButton.setSelection(compatibleVersion);
+
+    final Button majorButton = addVersionSegmentButton(versionsGroup, "Major", "Show major versions", VersionSegment.MAJOR);
+    final Button minorButton = addVersionSegmentButton(versionsGroup, "Minor", "Show minor versions", VersionSegment.MINOR);
     addVersionSegmentButton(versionsGroup, "Micro", "Show micro versions", VersionSegment.MICRO);
     addVersionSegmentButton(versionsGroup, "Qualifier", "Show qualified versions", VersionSegment.QUALIFIER);
+
+    majorButton.setEnabled(!compatibleVersion);
+    compatibleButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        boolean compatible = compatibleButton.getSelection();
+        if (compatibleVersion != compatible)
+        {
+          compatibleVersion = compatible;
+          SETTINGS.put(COMPATIBLE_VERSION_KEY, compatibleVersion);
+
+          majorButton.setEnabled(!compatible);
+
+          if (compatible && versionProvider.getVersionSegment() == VersionSegment.MAJOR)
+          {
+            majorButton.setSelection(false);
+            minorButton.setSelection(true);
+            versionProvider.setVersionSegment(VersionSegment.MINOR);
+          }
+        }
+      }
+    });
   }
 
   private Button addVersionSegmentButton(Composite parent, String text, String toolTip, final VersionSegment versionSegment)
@@ -592,7 +636,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             Version version = itemVersion.getVersion();
 
             VersionSegment versionSegment = versionProvider.getVersionSegment();
-            versionRange = P2Factory.eINSTANCE.createVersionRange(version, versionSegment);
+            versionRange = P2Factory.eINSTANCE.createVersionRange(version, versionSegment, compatibleVersion);
 
             element = ((IStructuredSelection)itemsViewer.getSelection()).getFirstElement();
           }

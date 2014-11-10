@@ -88,6 +88,8 @@ public interface P2Factory extends EFactory
 
   VersionRange createVersionRange(Version version, VersionSegment segment);
 
+  VersionRange createVersionRange(Version version, VersionSegment segment, boolean compatible);
+
   /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
