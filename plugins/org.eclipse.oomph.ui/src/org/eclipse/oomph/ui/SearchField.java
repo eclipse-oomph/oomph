@@ -12,11 +12,9 @@ package org.eclipse.oomph.ui;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
@@ -33,17 +31,7 @@ public class SearchField extends Composite
   public SearchField(Composite parent, final FilterHandler filterHandler)
   {
     super(parent, SWT.NONE);
-    StackLayout stackLayout = new StackLayout();
-    setLayout(stackLayout);
-
-    GridLayout treeContainerLayout = new GridLayout();
-    treeContainerLayout.marginWidth = 0;
-    treeContainerLayout.marginHeight = 0;
-    treeContainerLayout.horizontalSpacing = 0;
-    treeContainerLayout.verticalSpacing = 0;
-
-    final Composite treeContainer = new Composite(this, SWT.NONE);
-    treeContainer.setLayout(treeContainerLayout);
+    setLayout(new FirstChildLayout());
 
     PatternFilter patternFilter = new PatternFilter()
     {
@@ -69,15 +57,13 @@ public class SearchField extends Composite
         super.createControl(SearchField.this, treeStyle);
 
         Tree tree = treeViewer.getTree();
-        tree.setParent(treeContainer);
+        tree.setParent(SearchField.this);
         tree.setLayoutData(new GridData(0, 0));
 
         treeComposite.dispose();
         treeComposite = null;
       }
     };
-
-    stackLayout.topControl = filteredTree;
 
     final Text filterControl = filteredTree.getFilterControl();
     filterControl.addKeyListener(new KeyAdapter()

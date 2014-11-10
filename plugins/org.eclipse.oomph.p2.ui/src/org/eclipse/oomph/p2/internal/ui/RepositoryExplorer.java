@@ -335,7 +335,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   private void createRepositoriesArea(Composite container)
   {
     repositoryCombo = new CCombo(container, SWT.BORDER);
-    repositoryCombo.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
+    repositoryCombo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
     repositoryCombo.setToolTipText("Repository location (type a URL, drop a repository or pick from the drop down history)");
     repositoryCombo.addFocusListener(repositoryFocusListener);
     repositoryCombo.addKeyListener(repositoryHistoryListener);
@@ -403,9 +403,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     };
 
-    searchField.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
+    searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
     selectorComposite = new Composite(container, SWT.NONE);
+    selectorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     selectorComposite.setBackground(WHITE);
 
     itemsComposite = new Composite(container, SWT.NONE);
