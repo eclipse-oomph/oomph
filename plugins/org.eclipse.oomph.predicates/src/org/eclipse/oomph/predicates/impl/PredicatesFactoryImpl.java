@@ -81,13 +81,30 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
     super();
   }
 
+  @Override
+  public EObject create(EClass eClass)
+  {
+    if (eClass == PredicatesPackage.Literals.PREDICATE)
+    {
+      return new PredicateImpl()
+      {
+        @Override
+        public boolean matches(IResource resource)
+        {
+          return false;
+        }
+      };
+    }
+
+    return createGen(eClass);
+  }
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public EObject create(EClass eClass)
+  public EObject createGen(EClass eClass)
   {
     switch (eClass.getClassifierID())
     {
