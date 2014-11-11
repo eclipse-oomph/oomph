@@ -15,6 +15,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
@@ -28,6 +29,8 @@ import java.util.Set;
  */
 public class OomphDropAdapter extends EditingDomainViewerDropAdapter
 {
+  private static final boolean HAS_EARLY_DRAG_SOURCE = "win32".equals(SWT.getPlatform());
+
   protected OomphTransferDelegate[] delegates;
 
   protected Set<OomphTransferDelegate> unavailableDelegates;
@@ -47,7 +50,7 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
   public void dragEnter(DropTargetEvent event)
   {
     // Transfer data in't available immediate for Motif, but elsewhere it's immediately available.
-    if (IS_MOTIF)
+    if (!HAS_EARLY_DRAG_SOURCE)
     {
       unavailableDelegates = null;
     }
@@ -63,7 +66,7 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
   public void dropAccept(DropTargetEvent event)
   {
     // Transfer data isn't available until the drop accept phase for Motif.
-    if (IS_MOTIF)
+    if (!HAS_EARLY_DRAG_SOURCE)
     {
       unavailableDelegates = new HashSet<OomphTransferDelegate>();
     }
