@@ -15,22 +15,14 @@ import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.preferences.PreferencesFactory;
-import org.eclipse.oomph.preferences.util.PreferencesUtil;
-import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
 import org.eclipse.oomph.setup.SetupTask;
-import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.Trigger;
-import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
-import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator;
-import org.eclipse.oomph.setup.ui.questionnaire.GearShell;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
-import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
@@ -54,7 +46,6 @@ import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
@@ -62,12 +53,8 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -84,6 +71,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
 
   public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder";
+
+  public static final boolean QUESTIONNAIRE_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_QUESTIONNAIRE_SKIP);
 
   private static final String RESTARTING_FILE_NAME = "restarting";
 
@@ -102,16 +91,16 @@ public final class SetupUIPlugin extends OomphUIPlugin
     super(new ResourceLocator[] { org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE, SetupEditPlugin.INSTANCE });
   }
 
-  public void refreshCache()
-  {
-    // compute the setup context again.
-    // reset the ECF cache map.
-  }
-
   @Override
   public ResourceLocator getPluginResourceLocator()
   {
     return plugin;
+  }
+
+  public static boolean isInstallerProduct()
+  {
+    String productID = PropertiesUtil.getProperty("eclipse.product");
+    return PRODUCT_ID.equals(productID);
   }
 
   public static void initialStart(File ws, boolean offline, boolean mirrors)
@@ -287,7 +276,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Ignore
     }
 
-    performQuestionnaire(UIUtil.getShell(), false);
+    if (!QUESTIONNAIRE_SKIP)
+    {
+      Questionnaire.perform(UIUtil.getShell(), false);
+    }
 
     monitor.subTask("Creating a task performer");
 
@@ -372,75 +364,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
         updater.openDialog(UIUtil.getShell());
       }
     });
-  }
-
-  public static void performQuestionnaire(final Shell parentShell, boolean force)
-  {
-    RecorderTransaction transaction = RecorderTransaction.open();
-
-    try
-    {
-      SetupTaskContainer rootObject = transaction.getRootObject();
-      if (rootObject instanceof User)
-      {
-        User user = (User)rootObject;
-        if (user.getQuestionnaireDate() == null || force)
-        {
-          final Map<URI, String> preferences = new HashMap<URI, String>();
-          UIUtil.syncExec(new Runnable()
-          {
-            public void run()
-            {
-              GearShell shell = new GearShell(parentShell);
-              Map<URI, String> result = shell.openModal();
-              if (result != null)
-              {
-                preferences.putAll(result);
-              }
-            }
-          });
-
-          URI uri = PreferencesFactory.eINSTANCE.createURI(GearAnimator.RECORDER_PREFERENCE_KEY);
-          if (preferences.containsKey(uri))
-          {
-            boolean enabled = Boolean.parseBoolean(preferences.remove(uri));
-            user.setPreferenceRecorderDefault(enabled);
-          }
-
-          if (!preferences.isEmpty())
-          {
-            boolean inIDE = !isInstallerProduct();
-            for (Entry<URI, String> entry : preferences.entrySet())
-            {
-              String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
-              transaction.setPolicy(path, true);
-
-              if (inIDE)
-              {
-                PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);
-                property.set(entry.getValue());
-              }
-            }
-
-            transaction.setPreferences(preferences);
-          }
-
-          user.setQuestionnaireDate(new Date());
-          transaction.setForceDirty(true);
-          transaction.commit();
-        }
-      }
-    }
-    finally
-    {
-      transaction.close();
-    }
-  }
-
-  private static boolean isInstallerProduct()
-  {
-    String productID = PropertiesUtil.getProperty("eclipse.product");
-    return PRODUCT_ID.equals(productID);
   }
 
   /**

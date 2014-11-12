@@ -14,6 +14,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.setup.ui.Questionnaire;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.ErrorDialog;
@@ -130,7 +131,10 @@ public class InstallerApplication implements IApplication
       }
     });
 
-    SetupUIPlugin.performQuestionnaire(null, false);
+    if (!SetupUIPlugin.QUESTIONNAIRE_SKIP)
+    {
+      Questionnaire.perform(null, false);
+    }
 
     P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
 

@@ -105,6 +105,7 @@
     <module>plugins/org.eclipse.oomph.setup.tests</module>
     <module>plugins/org.eclipse.oomph.setup.ui</module>
     <module>plugins/org.eclipse.oomph.setup.ui.ide</module>
+    <module>plugins/org.eclipse.oomph.setup.ui.questionnaire</module>
     <module>plugins/org.eclipse.oomph.setup.workbench</module>
     <module>plugins/org.eclipse.oomph.setup.workbench.edit</module>
     <module>plugins/org.eclipse.oomph.setup.workingsets</module>

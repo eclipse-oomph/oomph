@@ -56,23 +56,36 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
     editor.fillIntoGrid(parent, 2);
     addField(editor);
 
-    Button questionnaireButton = new Button(parent, SWT.PUSH);
-    questionnaireButton.setText("Start Welcome Questionnaire...");
-    questionnaireButton.addSelectionListener(new SelectionAdapter()
+    if (Questionnaire.exists())
     {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      Button questionnaireButton = new Button(parent, SWT.PUSH);
+      questionnaireButton.setText("Start Welcome Questionnaire...");
+      questionnaireButton.addSelectionListener(new SelectionAdapter()
       {
-        Shell parentShell = workbench.getActiveWorkbenchWindow().getShell();
-
-        IPreferencePageContainer container = getContainer();
-        if (container instanceof IShellProvider)
+        @Override
+        public void widgetSelected(SelectionEvent e)
         {
-          parentShell = ((IShellProvider)container).getShell();
-        }
+          Shell shell = workbench.getActiveWorkbenchWindow().getShell();
 
-        SetupUIPlugin.performQuestionnaire(parentShell, true);
-      }
-    });
+          IPreferencePageContainer container = getContainer();
+          if (container instanceof IShellProvider)
+          {
+            shell = ((IShellProvider)container).getShell();
+          }
+
+          final Shell parentShell = shell;
+
+          // Don't perform the questionnaire on the UI thread or RecorderTransaction.open() will deadlock.
+          new Thread("Questionnaire")
+          {
+            @Override
+            public void run()
+            {
+              Questionnaire.perform(parentShell, true);
+            }
+          }.start();
+        }
+      });
+    }
   }
 }

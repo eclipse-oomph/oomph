@@ -13,6 +13,8 @@
 
 <plugin>
 
+   <extension-point id="questionnaire" name="Questionnaire" schema="schema/questionnaire.exsd"/>
+
    <extension
          point="org.eclipse.ui.startup">
       <startup
