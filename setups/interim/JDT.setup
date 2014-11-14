@@ -338,7 +338,7 @@
         </detail>
         <detail
             key="label">
-          <value>JDT Features Git or Gerrit Repository</value>
+          <value>JDT Debug Git or Gerrit Repository</value>
         </detail>
         <detail
             key="target">
@@ -470,7 +470,7 @@
         </detail>
         <detail
             key="label">
-          <value>JDT Features Git or Gerrit Repository</value>
+          <value>JDT UI Git or Gerrit Repository</value>
         </detail>
         <detail
             key="target">
@@ -680,7 +680,7 @@
         </detail>
         <detail
             key="label">
-          <value>JDT Features Git or Gerrit Repository</value>
+          <value>JDT Binaries Git or Gerrit Repository</value>
         </detail>
         <detail
             key="target">
