@@ -20,7 +20,7 @@
 
   <properties>
     <tycho.scmUrl>scm:git:https://git.eclipse.org/r/p/oomph/org.eclipse.oomph.git</tycho.scmUrl>
-    <tycho-version>0.20.0</tycho-version>
+    <tycho-version>0.21.0</tycho-version>
     <os-jvm-flags />
   </properties>
 
