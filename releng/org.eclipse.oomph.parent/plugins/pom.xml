@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.eclipse.oomph</groupId>
+    <artifactId>org.eclipse.oomph.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+
+  <groupId>org.eclipse.oomph</groupId>
+  <artifactId>org.eclipse.oomph.plugins</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>../../../plugins/org.eclipse.oomph.base</module>
+    <module>../../../plugins/org.eclipse.oomph.base.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.gitbash</module>
+    <module>../../../plugins/org.eclipse.oomph.launches</module>
+    <module>../../../plugins/org.eclipse.oomph.manifests</module>
+    <module>../../../plugins/org.eclipse.oomph.p2</module>
+    <module>../../../plugins/org.eclipse.oomph.p2.core</module>
+    <module>../../../plugins/org.eclipse.oomph.p2.doc</module>
+    <module>../../../plugins/org.eclipse.oomph.p2.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.p2.tests</module>
+    <module>../../../plugins/org.eclipse.oomph.p2.ui</module>
+    <module>../../../plugins/org.eclipse.oomph.predicates</module>
+    <module>../../../plugins/org.eclipse.oomph.predicates.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.preferences</module>
+    <module>../../../plugins/org.eclipse.oomph.preferences.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.preferences.editor</module>
+    <module>../../../plugins/org.eclipse.oomph.projectconfig</module>
+    <module>../../../plugins/org.eclipse.oomph.projectconfig.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.projectconfig.editor</module>
+    <module>../../../plugins/org.eclipse.oomph.projectcopy</module>
+    <module>../../../plugins/org.eclipse.oomph.resources</module>
+    <module>../../../plugins/org.eclipse.oomph.resources.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.core</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.doc</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.editor</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.git</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.git.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.installer</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.jdt</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.jdt.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.launching</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.launching.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.maven</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.maven.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.mylyn</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.mylyn.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.p2</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.p2.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.pde</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.pde.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.projects</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.projects.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.projectset</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.projectset.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.targlets</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.targlets.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.tests</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.ui</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.ui.ide</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.ui.questionnaire</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.workbench</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.workbench.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.workingsets</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.workingsets.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.targlets</module>
+    <module>../../../plugins/org.eclipse.oomph.targlets.core</module>
+    <module>../../../plugins/org.eclipse.oomph.targlets.doc</module>
+    <module>../../../plugins/org.eclipse.oomph.targlets.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.targlets.editor</module>
+    <module>../../../plugins/org.eclipse.oomph.targlets.tests</module>
+    <module>../../../plugins/org.eclipse.oomph.targlets.ui</module>
+    <module>../../../plugins/org.eclipse.oomph.tests</module>
+    <module>../../../plugins/org.eclipse.oomph.ui</module>
+    <module>../../../plugins/org.eclipse.oomph.util</module>
+    <module>../../../plugins/org.eclipse.oomph.util.doc</module>
+    <module>../../../plugins/org.eclipse.oomph.util.pde</module>
+    <module>../../../plugins/org.eclipse.oomph.version</module>
+    <module>../../../plugins/org.eclipse.oomph.version.digest</module>
+    <module>../../../plugins/org.eclipse.oomph.version.tests</module>
+    <module>../../../plugins/org.eclipse.oomph.version.ui</module>
+    <module>../../../plugins/org.eclipse.oomph.winexplorer</module>
+    <module>../../../plugins/org.eclipse.oomph.workingsets</module>
+    <module>../../../plugins/org.eclipse.oomph.workingsets.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.workingsets.editor</module>
+  </modules>
+
+ <build>
+  <plugins>
+   <!-- 1. -->
+   <plugin>
+    <groupId>org.eclipse.tycho</groupId>
+    <artifactId>tycho-source-plugin</artifactId>
+    <executions>
+     <execution>
+      <id>attach-source</id>
+      <goals>
+       <goal>plugin-source</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+  </plugins>
+ </build>
+ <profiles>
+  <!-- 2. -->
+  <profile>
+   <id>build-server</id>
+   <build>
+    <plugins>
+     <!-- 3.a -->
+     <plugin>
+      <groupId>org.eclipse.tycho.extras</groupId>
+      <artifactId>tycho-pack200a-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>pack200-normalize</id>
+        <goals>
+         <goal>normalize</goal>
+        </goals>
+       </execution>
+      </executions>
+     </plugin>
+     <plugin>
+      <groupId>org.eclipse.cbi.maven.plugins</groupId>
+      <artifactId>eclipse-jarsigner-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>sign</id>
+        <goals>
+         <goal>sign</goal>
+        </goals>
+       </execution>
+      </executions>
+     </plugin>
+     <!-- 3.b -->
+     <plugin>
+      <groupId>org.eclipse.tycho.extras</groupId>
+      <artifactId>tycho-pack200b-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>pack200-pack</id>
+        <goals>
+         <goal>pack</goal>
+        </goals>
+       </execution>
+      </executions>
+     </plugin>
+     <!-- 4. -->
+     <plugin>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-p2-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>attach-p2-metadata</id>
+        <phase>package</phase>
+        <goals>
+         <goal>p2-metadata</goal>
+        </goals>
+       </execution>
+      </executions>
+      <configuration>
+       <defaultP2Metadata>false</defaultP2Metadata>
+      </configuration>
+     </plugin>
+    </plugins>
+   </build>
+  </profile>
+ </profiles>
+
+</project>
