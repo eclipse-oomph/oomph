@@ -57,53 +57,61 @@ Eike Stepper - initial API and implementation
     <module>../../../features/org.eclipse.oomph.workingsets-feature</module>
   </modules>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho.extras</groupId>
-        <artifactId>tycho-source-feature-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-source-feature</id>
-            <goals>
-              <goal>source-feature</goal>
-            </goals>
-            <configuration>
-              <excludes>
-                <plugin id="org.eclipse.oomph.releng.helpcenter"/>
-              </excludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-p2-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-p2-metadata-default</id>
-            <configuration>
-              <attachP2Metadata>false</attachP2Metadata>
-            </configuration>
-          </execution>
-          <execution>
-            <id>attach-p2-metadata</id>
-            <phase>package</phase>
-            <goals>
-              <goal>p2-metadata</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
   <profiles>
     <profile>
-      <id>build-server</id>
+      <id>generate-source</id>
       <activation>
         <property>
-          <name>SIGN</name>
+          <name>GENERATE_SOURCE</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.tycho.extras</groupId>
+            <artifactId>tycho-source-feature-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-source-feature</id>
+                <goals>
+                  <goal>source-feature</goal>
+                </goals>
+                <configuration>
+                  <excludes>
+                    <plugin id="org.eclipse.oomph.releng.helpcenter"/>
+                  </excludes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.eclipse.tycho</groupId>
+            <artifactId>tycho-p2-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-p2-metadata-default</id>
+                <configuration>
+                  <attachP2Metadata>false</attachP2Metadata>
+                </configuration>
+              </execution>
+              <execution>
+                <id>attach-p2-metadata</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>p2-metadata</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>pack-and-sign</id>
+      <activation>
+        <property>
+          <name>PACK_AND_SIGN</name>
           <value>true</value>
         </property>
       </activation>
