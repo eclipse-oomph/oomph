@@ -8,7 +8,7 @@ cp -a git/sites/org.eclipse.oomph.site/target/repository/* updates
 
 cd updates
 echo "Zipping update site"
-zip -r -9 -qq org.eclipse.oomph.site.zip *
+zip -r -9 -qq org.eclipse.oomph.site.zip * -x plugins/*.pack.gz
 cd ..
 
 for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip; do
