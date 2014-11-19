@@ -123,6 +123,12 @@
   <profiles>
     <profile>
       <id>build-server</id>
+      <activation>
+        <property>
+          <name>SIGN</name>
+          <value>true</value>
+        </property>
+      </activation>
       <build>
         <plugins>
           <plugin>
