@@ -50,11 +50,6 @@ cp -a git/products/org.eclipse.oomph.setup.installer.product/target/products/*.z
 cd products
 ls * > index.txt
 
-cp -a ../git/products/org.eclipse.oomph.setup.installer.product/target/repository .
-cd repository
-echo "Zipping product repository"
-zip -r -9 -qq repository.zip *
-
 cd ../..
 rm -rf help.zip
 rm -rf help
