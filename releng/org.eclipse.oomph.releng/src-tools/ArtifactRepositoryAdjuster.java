@@ -11,6 +11,7 @@
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,6 +25,8 @@ import java.util.regex.Pattern;
  */
 public final class ArtifactRepositoryAdjuster
 {
+  private static final String DOWNLOAD_PREFIX = "/home/data/httpd/download.eclipse.org/";
+
   private static final Pattern REPOSITORY_PATTERN = Pattern.compile("\\s*<repository.*?>\\s*");
 
   private static final Pattern FEATURE_PATTERN = Pattern
@@ -33,21 +36,24 @@ public final class ArtifactRepositoryAdjuster
   {
   }
 
-  // public static void main(String[] args) throws Exception
-  // {
-  // _main(new String[] { "artifacts.xml", "artifacts2.xml", "Oomph Updates", "/oomph/updates/release/1.0.0" });
-  // }
-
   public static void main(String[] args) throws Exception
   {
-    BufferedReader reader = new BufferedReader(new FileReader(args[0]));
-    BufferedWriter writer = new BufferedWriter(new FileWriter(args[1]));
+    File repositoryFolder = new File(args[0]).getCanonicalFile();
+    String repositoryName = args[1];
+    System.out.println(repositoryFolder);
 
-    String repositoryName = args[2];
-    String repositoryPath = args[3];
-    if (!repositoryPath.startsWith("/"))
+    BufferedReader reader = new BufferedReader(new FileReader(new File(repositoryFolder, "artifacts.xml")));
+    BufferedWriter writer = new BufferedWriter(new FileWriter(new File(repositoryFolder, "artifacts.out")));
+
+    String relativePath = repositoryFolder.getAbsolutePath();
+    if (relativePath.startsWith(DOWNLOAD_PREFIX))
     {
-      repositoryPath = "/" + repositoryPath;
+      relativePath = relativePath.substring(DOWNLOAD_PREFIX.length());
+    }
+
+    if (relativePath.startsWith("/"))
+    {
+      relativePath = relativePath.substring(1);
     }
 
     boolean repositoryFound = false;
@@ -64,8 +70,8 @@ public final class ArtifactRepositoryAdjuster
           writeLine(writer, line);
 
           Properties properties = new Properties(reader);
-          properties.put("p2.mirrorsURL", "http://www.eclipse.org/downloads/download.php?file=" + repositoryPath + "&amp;format=xml");
-          properties.put("p2.statsURI", "http://download.eclipse.org" + repositoryPath);
+          properties.put("p2.mirrorsURL", "http://www.eclipse.org/downloads/download.php?file=/" + relativePath + "&amp;format=xml");
+          properties.put("p2.statsURI", "http://download.eclipse.org/" + relativePath);
           properties.write(writer);
 
           repositoryFound = true;
