@@ -1,6 +1,8 @@
 #!/bin/bash
 
 rm *.zip *.log
+echo $HUDSON_URL
+echo $JOB_URL
 
 # Prepare archiving of the build results
 
