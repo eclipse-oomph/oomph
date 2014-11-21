@@ -35,6 +35,7 @@ if [[ "$BUILD_LABEL" == "" ]]; then
   BUILD_LABEL=`echo $BUILD_ID | sed 's/\([0-9]*\)-\([0-9]*\)-\([0-9]*\)_\([0-9]*\)-\([0-9]*\)-[0-9]*/N\1\2\3-\4\5/g'`
 fi
 
+RELENG=$WORKSPACE/git/org.eclipse.oomph/releng/org.eclipse.oomph.releng/hudson
 DOWNLOADS=/home/data/httpd/download.eclipse.org/oomph/promotest
 HELP=$DOWNLOADS/help
 UPDATES=$DOWNLOADS/updates
@@ -43,28 +44,28 @@ DROPS=$DOWNLOADS/drops
 DROP=$DROPS/$BUILD_TYPE/$BUILD_LABEL
 
 echo "Promoting $WORKSPACE/updates"
-rm -rf $DROP
-mkdir $DROP
-cp -a $WORKSPACE/updates $DROP
-/bin/bash $WORKSPACE/git/org.eclipse.oomph/releng/org.eclipse.oomph.releng/hudson/adjustArtifactRepository.sh $DROP/updates "Oomph Updates $BUILD_LABEL"
+rm -rf "$DROP"
+mkdir "$DROP"
+cp -a "$WORKSPACE/updates" "$DROP"
+/bin/bash "$RELENG/adjustArtifactRepository.sh" "$DROP/updates" "Oomph Updates $BUILD_LABEL"
 
-rm -rf $PRODUCTS.tmp
-mkdir $PRODUCTS.tmp
+rm -rf "$PRODUCTS.tmp"
+mkdir "$PRODUCTS.tmp"
 
-for f in $WORKSPACE/products/*; do
+for f in "$WORKSPACE/products/*"; do
   echo "Promoting $f"
-  rm -rf $WORKSPACE/tmp
-  mkdir $WORKSPACE/tmp
-  cd $WORKSPACE/tmp
+  rm -rf "$WORKSPACE/tmp"
+  mkdir "$WORKSPACE/tmp"
+  cd "$WORKSPACE/tmp"
 
-  if [[ $f == *.zip ]]; then
-    unzip -qq $f
+  if [[ "$f" == "*.zip" ]]; then
+    unzip -qq "$f"
   else
-    tar -xzf $f
+    tar -xzf "$f"
   fi
 
   inifile=oomph.ini
-  if [[ $f == *macosx* ]]; then
+  if [[ "$f" == "*macosx*" ]]; then
     inifile=oomph.app/Contents/MacOS/$inifile
   fi
 

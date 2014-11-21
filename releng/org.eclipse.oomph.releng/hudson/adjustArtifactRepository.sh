@@ -12,6 +12,6 @@ java -cp "$WORKSPACE/git/releng/org.eclipse.oomph.releng/buildTools.jar" Artifac
 
 cd "$REPO"
 mv artifacts.out artifacts.xml
-zip -r -9 -q artifacts.jar artifacts.xml
+zip -r -9 -qq artifacts.jar artifacts.xml
 rm artifacts.xml
 cd "$CURDIR"
