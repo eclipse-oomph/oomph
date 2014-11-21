@@ -40,10 +40,15 @@ public final class ArtifactRepositoryAdjuster
   {
     File repositoryFolder = new File(args[0]).getCanonicalFile();
     String repositoryName = args[1];
-    System.out.println(repositoryFolder);
 
-    BufferedReader reader = new BufferedReader(new FileReader(new File(repositoryFolder, "artifacts.xml")));
-    BufferedWriter writer = new BufferedWriter(new FileWriter(new File(repositoryFolder, "artifacts.out")));
+    File input = new File(repositoryFolder, "artifacts.xml");
+    File output = new File(repositoryFolder, "artifacts.out");
+
+    System.out.println("Adjusting " + input);
+    System.out.println("  repository.name = " + repositoryName);
+
+    BufferedReader reader = new BufferedReader(new FileReader(input));
+    BufferedWriter writer = new BufferedWriter(new FileWriter(output));
 
     String relativePath = repositoryFolder.getAbsolutePath();
     if (relativePath.startsWith(DOWNLOAD_PREFIX))
@@ -69,9 +74,15 @@ public final class ArtifactRepositoryAdjuster
           line = line.replaceFirst("name=['\"].*?['\"]", "name='" + repositoryName + "'");
           writeLine(writer, line);
 
+          String mirrorsURL = "http://www.eclipse.org/downloads/download.php?file=/" + relativePath + "&amp;format=xml";
+          String statsURI = "http://download.eclipse.org/" + relativePath;
+
+          System.out.println("  p2.mirrorsURL = " + mirrorsURL);
+          System.out.println("  p2.statsURI = " + statsURI);
+
           Properties properties = new Properties(reader);
-          properties.put("p2.mirrorsURL", "http://www.eclipse.org/downloads/download.php?file=/" + relativePath + "&amp;format=xml");
-          properties.put("p2.statsURI", "http://download.eclipse.org/" + relativePath);
+          properties.put("p2.mirrorsURL", mirrorsURL);
+          properties.put("p2.statsURI", statsURI);
           properties.write(writer);
 
           repositoryFound = true;
@@ -84,7 +95,9 @@ public final class ArtifactRepositoryAdjuster
         if (matcher.matches())
         {
           writeLine(writer, line);
+
           String id = matcher.group(1);
+          System.out.println("  download.stats = " + id);
 
           Properties properties = new Properties(reader);
           properties.put("download.stats", id);

@@ -35,25 +35,18 @@ if [[ "$BUILD_LABEL" == "" ]]; then
   BUILD_LABEL=`echo $BUILD_ID | sed 's/\([0-9]*\)-\([0-9]*\)-\([0-9]*\)_\([0-9]*\)-\([0-9]*\)-[0-9]*/N\1\2\3-\4\5/g'`
 fi
 
-STREAM=integration
 DOWNLOADS=/home/data/httpd/download.eclipse.org/oomph/promotest
-
-DROPS=$DOWNLOADS/drops
+HELP=$DOWNLOADS/help
 UPDATES=$DOWNLOADS/updates
 PRODUCTS=$DOWNLOADS/products
-HELP=$DOWNLOADS/help
-
-if [[ "$BUILD_TYPE" == "release" ]]; then
-  DROP=$DROPS/$STREAM/$BUILD_LABEL
-else
-  DROP=$DROPS/$STREAM/$BUILD_TYPE/$BUILD_LABEL
-fi
+DROPS=$DOWNLOADS/drops
+DROP=$DROPS/$BUILD_TYPE/$BUILD_LABEL
 
 echo "Promoting $WORKSPACE/updates"
 rm -rf $DROP
 mkdir $DROP
 cp -a $WORKSPACE/updates $DROP
-/bin/bash $0/../adjustMirroring.sh $DROP/updates
+/bin/bash $WORKSPACE/git/org.eclipse.oomph/releng/org.eclipse.oomph.releng/hudson/adjustArtifactRepository.sh $DROP/updates "Oomph Updates $BUILD_LABEL"
 
 rm -rf $PRODUCTS.tmp
 mkdir $PRODUCTS.tmp
