@@ -10,7 +10,8 @@ cd $WORKSPACE/updates
 echo "Zipping update site"
 zip -r -9 -qq org.eclipse.oomph.site.zip * -x plugins/*.pack.gz
 
-for f in $WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip; do
+cd $WORKSPACE
+for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip; do
   echo "Repackaging $f"
   rm -rf $WORKSPACE/tmp
   mkdir $WORKSPACE/tmp
@@ -29,7 +30,9 @@ for f in $WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/targe
   echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> $WORKSPACE/tmp/$inifile
   echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> $WORKSPACE/tmp/$inifile
 
+  cd $WORKSPACE
   rm $f
+
   cd $WORKSPACE/tmp
   if [[ $f == *macosx* ]]; then
     rm oomph
@@ -53,12 +56,13 @@ cp -a \
 rm -rf $WORKSPACE/help
 mkdir $WORKSPACE/help
 
-cp $WORKSPACE/git/releng/org.eclipse.oomph.releng.helpcenter/html/* $WORKSPACE/help
-cp $WORKSPACE/git/releng/org.eclipse.oomph.releng.helpcenter/docs.txt $WORKSPACE/help/.docs
+cd $WORKSPACE/git
+cp releng/org.eclipse.oomph.releng.helpcenter/html/* $WORKSPACE/help
+cp releng/org.eclipse.oomph.releng.helpcenter/docs.txt $WORKSPACE/help/.docs
 
 for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
   echo "Unzipping $i"
-  unzip -qq $WORKSPACE/plugins/$i/target/$i-*-SNAPSHOT.jar \
+  unzip -qq plugins/$i/target/$i-*-SNAPSHOT.jar \
     "javadoc/*" \
     "schemadoc/*" \
     "html/*" \
