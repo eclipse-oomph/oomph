@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm *.zip *.log
+
 # Prepare archiving of the build results
 
 rm -rf $WORKSPACE/updates
@@ -10,48 +12,48 @@ cd $WORKSPACE/updates
 echo "Zipping update site"
 zip -r -9 -qq org.eclipse.oomph.site.zip * -x plugins/*.pack.gz
 
-cd $WORKSPACE
-for f in git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip; do
-  echo "Repackaging $f"
-  rm -rf $WORKSPACE/tmp
-  mkdir $WORKSPACE/tmp
+PRODUCTS=$WORKSPACE/products
+rm -rf $PRODUCTS
+mkdir $PRODUCTS
 
-  unzip -qq $f -d $WORKSPACE/tmp
-  zip --delete -qq $WORKSPACE/tmp/plugins/com.ibm.icu_*.jar 'com/*'
+SOURCE=$WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/target/products
+cd $SOURCE
+
+for f in *.zip; do
+  echo "Repackaging $f"
+
+  rm -rf $PRODUCTS.tmp
+  mkdir $PRODUCTS.tmp
+  cd $PRODUCTS.tmp
+
+  unzip -qq $SOURCE/$f
+  zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
+echo 1
 
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
     inifile=oomph.app/Contents/MacOS/$inifile
   fi
 
-  sed -e 's/^Oomph.*Installer$/Oomph Installer/' $WORKSPACE/tmp/$inifile > $WORKSPACE/tmp/$inifile.tmp
-  mv $WORKSPACE/tmp/$inifile.tmp $WORKSPACE/tmp/$inifile
+  sed -e 's/^Oomph.*Installer$/Oomph Installer/' $SOURCE/$f$inifile > $SOURCE/$f$inifile.tmp
+  mv $SOURCE/$f$inifile.tmp $SOURCE/$f$inifile
+echo 2
 
-  echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> $WORKSPACE/tmp/$inifile
-  echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> $WORKSPACE/tmp/$inifile
+  echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> $SOURCE/$f$inifile
+  echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> $SOURCE/$f$inifile
 
-  cd $WORKSPACE
-  rm $f
-
-  cd $WORKSPACE/tmp
   if [[ $f == *macosx* ]]; then
     rm oomph
     ln -s oomph.app/Contents/MacOS/oomph oomph
-    tar -czf ../$f *
-    rename .zip .tar.gz ../$f
+    tar -czf $PRODUCTS/$f *
+    rename .zip .tar.gz $PRODUCTS/$f
   else
-    zip -r -9 -qq --symlinks ../$f *
+    zip -r -9 -qq --symlinks $PRODUCTS/$f *
   fi
+echo 3
 done
 
-rm -rf $WORKSPACE/tmp
-
-rm -rf $WORKSPACE/products
-mkdir $WORKSPACE/products
-cp -a \
-  $WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip \
-  $WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/target/products/*.tar.gz \
-  $WORKSPACE/products
+rm -rf $PRODUCTS.tmp
 
 rm -rf $WORKSPACE/help
 mkdir $WORKSPACE/help
