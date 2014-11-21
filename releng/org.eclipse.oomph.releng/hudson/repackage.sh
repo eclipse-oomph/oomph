@@ -9,9 +9,8 @@ cp -a "$WORKSPACE/git/sites/org.eclipse.oomph.site/target/repository/*" "$WORKSP
 cd "$WORKSPACE/updates"
 echo "Zipping update site"
 zip -r -9 -qq org.eclipse.oomph.site.zip * -x plugins/*.pack.gz
-cd ..
 
-for f in "$WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip"; do
+for f in $WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/target/products/*.zip; do
   echo "Repackaging $f"
   rm -rf "$WORKSPACE/tmp"
   mkdir "$WORKSPACE/tmp"
