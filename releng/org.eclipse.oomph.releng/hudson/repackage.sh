@@ -35,12 +35,12 @@ echo 1
     inifile=oomph.app/Contents/MacOS/$inifile
   fi
 
-  sed -e 's/^Oomph.*Installer$/Oomph Installer/' $SOURCE/$f$inifile > $SOURCE/$f$inifile.tmp
-  mv $SOURCE/$f$inifile.tmp $SOURCE/$f$inifile
+  sed -e 's/^Oomph.*Installer$/Oomph Installer/' $inifile > $inifile.tmp
+  mv $inifile.tmp $inifile
 echo 2
 
-  echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> $SOURCE/$f$inifile
-  echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> $SOURCE/$f$inifile
+  echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> $inifile
+  echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> $inifile
 
   if [[ $f == *macosx* ]]; then
     rm oomph
