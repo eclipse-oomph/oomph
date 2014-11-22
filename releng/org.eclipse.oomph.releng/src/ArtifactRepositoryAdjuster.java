@@ -39,7 +39,9 @@ public final class ArtifactRepositoryAdjuster
   public static void main(String[] args) throws Exception
   {
     File repositoryFolder = new File(args[0]).getCanonicalFile();
-    String repositoryName = args[1];
+    File repositoryFolderFinal = new File(args[1]).getCanonicalFile();
+    String repositoryName = args[2];
+    String buildType = args[3];
 
     File input = new File(repositoryFolder, "artifacts.xml");
     File output = new File(repositoryFolder, "artifacts.out");
@@ -50,7 +52,7 @@ public final class ArtifactRepositoryAdjuster
     BufferedReader reader = new BufferedReader(new FileReader(input));
     BufferedWriter writer = new BufferedWriter(new FileWriter(output));
 
-    String relativePath = repositoryFolder.getAbsolutePath();
+    String relativePath = repositoryFolderFinal.getAbsolutePath();
     if (relativePath.startsWith(DOWNLOAD_PREFIX))
     {
       relativePath = relativePath.substring(DOWNLOAD_PREFIX.length());
@@ -74,17 +76,25 @@ public final class ArtifactRepositoryAdjuster
           line = line.replaceFirst("name=['\"].*?['\"]", "name='" + repositoryName + "'");
           writeLine(writer, line);
 
-          String mirrorsURL = "http://www.eclipse.org/downloads/download.php?file=/" + relativePath + "&amp;format=xml";
-          String statsURI = "http://download.eclipse.org/" + relativePath;
-
-          System.out.println("  p2.mirrorsURL = " + mirrorsURL);
-          System.out.println("  p2.statsURI = " + statsURI);
-
           Properties properties = new Properties(reader);
-          properties.put("p2.mirrorsURL", mirrorsURL);
-          properties.put("p2.statsURI", statsURI);
-          properties.write(writer);
 
+          boolean mirrored = !"nightly".equals(buildType);
+          if (mirrored)
+          {
+            String mirrorsURL = "http://www.eclipse.org/downloads/download.php?file=/" + relativePath + "&amp;format=xml";
+            System.out.println("  p2.mirrorsURL = " + mirrorsURL);
+            properties.put("p2.mirrorsURL", mirrorsURL);
+          }
+          else
+          {
+            properties.remove("p2.mirrorsURL");
+          }
+
+          String statsURI = "http://download.eclipse.org/" + relativePath;
+          System.out.println("  p2.statsURI = " + statsURI);
+          properties.put("p2.statsURI", statsURI);
+
+          properties.write(writer);
           repositoryFound = true;
           continue;
         }

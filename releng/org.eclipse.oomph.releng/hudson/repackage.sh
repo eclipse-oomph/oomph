@@ -1,14 +1,18 @@
 #!/bin/bash
 
-rm *.zip *.log
-echo $HUDSON_URL
-echo $JOB_URL
+if [[ "$GIT" == "" ]]; then
+  GIT=$WORKSPACE/git
+fi
 
-# Prepare archiving of the build results
+set -o nounset
+set -o errexit
+
+###########################################################################
+echo ""
 
 rm -rf $WORKSPACE/updates
 mkdir $WORKSPACE/updates
-cp -a $WORKSPACE/git/sites/org.eclipse.oomph.site/target/repository/* $WORKSPACE/updates
+cp -a $GIT/sites/org.eclipse.oomph.site/target/repository/* $WORKSPACE/updates
 
 cd $WORKSPACE/updates
 echo "Zipping update site"
@@ -18,7 +22,7 @@ PRODUCTS=$WORKSPACE/products
 rm -rf $PRODUCTS
 mkdir $PRODUCTS
 
-SOURCE=$WORKSPACE/git/products/org.eclipse.oomph.setup.installer.product/target/products
+SOURCE=$GIT/products/org.eclipse.oomph.setup.installer.product/target/products
 cd $SOURCE
 
 for f in *.zip; do
@@ -30,7 +34,6 @@ for f in *.zip; do
 
   unzip -qq $SOURCE/$f
   zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
-echo 1
 
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
@@ -39,7 +42,6 @@ echo 1
 
   sed -e 's/^Oomph.*Installer$/Oomph Installer/' $inifile > $inifile.tmp
   mv $inifile.tmp $inifile
-echo 2
 
   echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> $inifile
   echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> $inifile
@@ -52,15 +54,15 @@ echo 2
   else
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
   fi
-echo 3
 done
 
 rm -rf $PRODUCTS.tmp
+cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repository $PRODUCTS
 
 rm -rf $WORKSPACE/help
 mkdir $WORKSPACE/help
 
-cd $WORKSPACE/git
+cd $GIT
 cp releng/org.eclipse.oomph.releng.helpcenter/html/* $WORKSPACE/help
 cp releng/org.eclipse.oomph.releng.helpcenter/docs.txt $WORKSPACE/help/.docs
 

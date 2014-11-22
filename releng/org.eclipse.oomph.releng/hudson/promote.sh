@@ -1,5 +1,37 @@
 #!/bin/bash
 
+if [[ "$BUILD_KEY" == "" ]]; then
+  if [[ "$BUILD_TYPE" == milestone ]]; then
+    TYPE="S"
+  elif [[ "$BUILD_TYPE" == nightly ]]; then
+    TYPE="N"
+  fi
+  
+  if [[ "$TYPE" != "" ]]; then
+    BUILD_KEY=$TYPE`echo $BUILD_ID | sed 's/\([0-9]*\)-\([0-9]*\)-\([0-9]*\)_\([0-9]*\)-\([0-9]*\)-\([0-9]*\)/\1\2\3-\4\5\6/g'`
+  fi
+fi
+
+if [[ "$BUILD_LABEL" == "" ]]; then
+  BUILD_LABEL=""
+fi
+
+FOLDER=$BUILD_KEY
+if [[ "$BUILD_LABEL" != "" ]]; then
+  FOLDER=$FOLDER-$BUILD_LABEL
+fi
+
+if [[ "$GIT" == "" ]]; then
+  GIT=$WORKSPACE/git
+fi
+
+if [[ "$DOWNLOADS" == "" ]]; then
+  DOWNLOADS=/home/data/httpd/download.eclipse.org/oomph/promotest
+fi
+
+set -o nounset
+set -o errexit
+
 ##################################################################################################
 #
 # At this point $WORKSPACE points to the following build folder structure:
@@ -15,7 +47,6 @@
 #   $WORKSPACE/updates/org.eclipse.oomph.site.zip
 #
 #   $WORKSPACE/products/
-#   $WORKSPACE/products/index.txt
 #   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86.zip
 #   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86_64.zip
 #   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-macosx.cocoa.x86_64.tar.gz
@@ -30,49 +61,73 @@
 #
 ##################################################################################################
 
+echo ""
 
-if [[ "$BUILD_LABEL" == "" ]]; then
-  BUILD_LABEL=`echo $BUILD_ID | sed 's/\([0-9]*\)-\([0-9]*\)-\([0-9]*\)_\([0-9]*\)-\([0-9]*\)-[0-9]*/N\1\2\3-\4\5/g'`
-fi
+PROPERTIES=$WORKSPACE/updates/repository.properties
+echo "key = $BUILD_KEY" >> $PROPERTIES 
+echo "label = $BUILD_LABEL" >> $PROPERTIES
 
-RELENG=$WORKSPACE/git/org.eclipse.oomph/releng/org.eclipse.oomph.releng/hudson
-DOWNLOADS=/home/data/httpd/download.eclipse.org/oomph/promotest
+RELENG=$GIT/releng/org.eclipse.oomph.releng/hudson
 HELP=$DOWNLOADS/help
 UPDATES=$DOWNLOADS/updates
 PRODUCTS=$DOWNLOADS/products
 DROPS=$DOWNLOADS/drops
-DROP=$DROPS/$BUILD_TYPE/$BUILD_LABEL
+DROP_TYPE=$DROPS/$BUILD_TYPE
+DROP=$DROP_TYPE/$FOLDER
+
+mkdir -p $DOWNLOADS
+mkdir -p $HELP
+mkdir -p $UPDATES
+mkdir -p $PRODUCTS
+mkdir -p $DROPS
+mkdir -p $DROP_TYPE
+
+###################
+# DOWNLOADS/DROPS #
+###################
 
 echo "Promoting $WORKSPACE/updates"
-rm -rf "$DROP"
-mkdir "$DROP"
-cp -a "$WORKSPACE/updates" "$DROP"
-/bin/bash "$RELENG/adjustArtifactRepository.sh" "$DROP/updates" "Oomph Updates $BUILD_LABEL"
+rm -rf $DROP
+mkdir $DROP
+cp -a $WORKSPACE/updates/* $DROP
+$BASH $RELENG/adjustArtifactRepository.sh \
+  $DROP \
+  $DROP \
+  "Oomph Updates $FOLDER" \
+  $BUILD_TYPE
 
-rm -rf "$PRODUCTS.tmp"
-mkdir "$PRODUCTS.tmp"
+######################
+# DOWNLOADS/PRODUCTS #
+######################
 
-for f in "$WORKSPACE/products/*"; do
+cd $WORKSPACE
+rm -rf $PRODUCTS.tmp
+mkdir $PRODUCTS.tmp
+
+cd $WORKSPACE/products
+for f in *.zip *.tar.gz; do
   echo "Promoting $f"
-  rm -rf "$WORKSPACE/tmp"
-  mkdir "$WORKSPACE/tmp"
-  cd "$WORKSPACE/tmp"
+  
+  cd $WORKSPACE
+  rm -rf $WORKSPACE/tmp
+  mkdir $WORKSPACE/tmp
+  cd $WORKSPACE/tmp
 
-  if [[ "$f" == "*.zip" ]]; then
-    unzip -qq "$f"
+  if [[ $f == *.zip ]]; then
+    unzip -qq $WORKSPACE/products/$f
   else
-    tar -xzf "$f"
+    tar -xzf $WORKSPACE/products/$f
   fi
 
   inifile=oomph.ini
-  if [[ "$f" == "*macosx*" ]]; then
+  if [[ $f == *macosx* ]]; then
     inifile=oomph.app/Contents/MacOS/$inifile
   fi
 
   head -n -2 $inifile > $inifile.tmp
   mv $inifile.tmp $inifile
   echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/repository" >> $inifile
-  echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates" >> $inifile
+  echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> $inifile
 
   if [[ $f == *.zip ]]; then
     zip -r -9 -q $PRODUCTS.tmp/$f *
@@ -81,29 +136,66 @@ for f in "$WORKSPACE/products/*"; do
   fi
 done
 
+cd $WORKSPACE
 rm -rf $WORKSPACE/tmp
 
-echo "Promoting $WORKSPACE/help"
-cp -a $WORKSPACE/help $HELP.tmp
+cp -a $WORKSPACE/products/repository $PRODUCTS.tmp
+$BASH $RELENG/adjustArtifactRepository.sh \
+  $PRODUCTS.tmp/repository \
+  $PRODUCTS/repository \
+  "Oomph Product Updates" \
+  $BUILD_TYPE
 
-if [[ "$BUILD_TYPE" == "release" ]]; then
+
+##################
+# DOWNLOADS/HELP #
+##################
+
+echo "Promoting $WORKSPACE/help"
+cd $WORKSPACE
+rm -rf $HELP.tmp
+mkdir $HELP.tmp
+cp -a $WORKSPACE/help/* $HELP.tmp
+
+#####################
+# DOWNLOADS/UPDATES #
+#####################
+
+cd $WORKSPACE
+rm -rf $UPDATES.tmp
+cp -a $UPDATES $UPDATES.tmp
+
+if [[ "$BUILD_TYPE" == release ]]; then
   echo "Releasing $DROP/products"
   mkdir $DROP/products
   cp -a $PRODUCTS.tmp/* $DROP/products
+  $BASH $RELENG/adjustArtifactRepository.sh \
+    $DROP/products/repository \
+    $DROP/products/repository \
+    "Oomph $FOLDER Product Updates" \
+    $BUILD_TYPE
 
   echo "Releasing $DROP/help"
   mkdir $DROP/help
   cp -a $HELP.tmp/* $DROP/help
 fi
 
-rm -rf $UPDATES.tmp
-mkdir $UPDATES.tmp
+$BASH $RELENG/composeRepositories.sh "$DOWNLOADS" "$BUILD_TYPE" "$BUILD_KEY" "$BUILD_LABEL"
 
+mv $UPDATES $UPDATES.bak; mv $UPDATES.tmp $UPDATES
+mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS.tmp $PRODUCTS
+mv $HELP $HELP.bak; mv $HELP.tmp $HELP
 
+cd $WORKSPACE
+rm -rf $UPDATES.bak
+rm -rf $PRODUCTS.bak
+rm -rf $HELP.bak
 
-
-
-
-mv $UPDATES.tmp $UPDATES
-mv $PRODUCTS.tmp $PRODUCTS
-mv $HELP.tmp $HELP
+for t in nightly milestone; do
+  for f in $DROPS/$t/*; do
+    if [[ -f $f/REMOVE ]]; then
+      echo "Deleting $f"
+      rm -rf $f
+    fi
+  done
+done

@@ -1,14 +1,27 @@
 #!/bin/bash
 
+if [[ "$GIT" == "" ]]; then
+  GIT=$WORKSPACE/git
+fi
+
+set -o nounset
+set -o errexit
+
 REPO=$1
-REPO_NAME=$2
+REPO_FINAL=$2
+REPO_NAME=$3
+BUILD_TYPE=$4
 CURDIR=`pwd -P`
 
 cd "$REPO"
 unzip -qq artifacts.jar
 cd "$CURDIR"
 
-java -cp "$WORKSPACE/git/releng/org.eclipse.oomph.releng/buildTools.jar" ArtifactRepositoryAdjuster "$REPO" "$REPO_NAME"
+java -cp "$GIT/releng/org.eclipse.oomph.releng/buildTools.jar" ArtifactRepositoryAdjuster \
+  "$REPO" \
+  "$REPO_FINAL" \
+  "$REPO_NAME"\
+  "$BUILD_TYPE"
 
 cd "$REPO"
 mv artifacts.out artifacts.xml
