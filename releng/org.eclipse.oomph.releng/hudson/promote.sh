@@ -6,7 +6,7 @@ if [[ "$BUILD_KEY" == "" ]]; then
   elif [[ "$BUILD_TYPE" == nightly ]]; then
     TYPE="N"
   fi
-  
+
   if [[ "$TYPE" != "" ]]; then
     BUILD_KEY=$TYPE`echo $BUILD_ID | sed 's/\([0-9]*\)-\([0-9]*\)-\([0-9]*\)_\([0-9]*\)-\([0-9]*\)-\([0-9]*\)/\1\2\3-\4\5\6/g'`
   fi
@@ -26,7 +26,7 @@ if [[ "$GIT" == "" ]]; then
 fi
 
 if [[ "$DOWNLOADS" == "" ]]; then
-  DOWNLOADS=/home/data/httpd/download.eclipse.org/oomph/promotest
+  DOWNLOADS=/home/data/httpd/download.eclipse.org/oomph
 fi
 
 set -o nounset
@@ -64,7 +64,10 @@ set -o errexit
 echo ""
 
 PROPERTIES=$WORKSPACE/updates/repository.properties
-echo "key = $BUILD_KEY" >> $PROPERTIES 
+echo "branch = $GIT_BRANCH" >> $PROPERTIES
+echo "commit = $GIT_COMMIT" >> $PROPERTIES
+echo "number = $BUILD_NUMBER" >> $PROPERTIES
+echo "key = $BUILD_KEY" >> $PROPERTIES
 echo "label = $BUILD_LABEL" >> $PROPERTIES
 
 RELENG=$GIT/releng/org.eclipse.oomph.releng/hudson
@@ -107,7 +110,7 @@ mkdir $PRODUCTS.tmp
 cd $WORKSPACE/products
 for f in *.zip *.tar.gz; do
   echo "Promoting $f"
-  
+
   cd $WORKSPACE
   rm -rf $WORKSPACE/tmp
   mkdir $WORKSPACE/tmp
