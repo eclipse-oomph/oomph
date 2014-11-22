@@ -577,11 +577,6 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     copyTarglets = TargletFactory.eINSTANCE.copyTarglets(getTarglets());
 
-    if (context.getTrigger() == Trigger.MANUAL)
-    {
-      return true;
-    }
-
     return TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Boolean>()
     {
       public Boolean run(ITargetPlatformService service) throws CoreException
@@ -590,6 +585,30 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
         targetDefinition = getTargetDefinition(context, service);
         if (targetDefinition == null)
+        {
+          return hasRequirements(copyTarglets);
+        }
+
+        targletContainer = getTargletContainer();
+        if (targletContainer == null)
+        {
+          return hasRequirements(copyTarglets);
+        }
+        else if (!hasRequirements(copyTarglets) && !hasRequirements(targletContainer.getTarglets()))
+        {
+          return false;
+        }
+
+        for (Targlet targlet : copyTarglets)
+        {
+          Targlet existingTarglet = targletContainer.getTarglet(targlet.getName());
+          if (existingTarglet == null || !EcoreUtil.equals(existingTarglet, targlet))
+          {
+            return true;
+          }
+        }
+
+        if (context.getTrigger() == Trigger.MANUAL)
         {
           return true;
         }
@@ -607,22 +626,20 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           environmentNeedsUpdate = false;
         }
 
-        targletContainer = getTargletContainer();
-        if (targletContainer == null)
-        {
-          return true;
-        }
+        return targetNeedsActivation || environmentNeedsUpdate;
+      }
 
-        for (Targlet targlet : copyTarglets)
+      private boolean hasRequirements(EList<Targlet> targlets)
+      {
+        for (Targlet targlet : targlets)
         {
-          Targlet existingTarglet = targletContainer.getTarglet(targlet.getName());
-          if (existingTarglet == null || !EcoreUtil.equals(existingTarglet, targlet))
+          if (!targlet.getRequirements().isEmpty())
           {
             return true;
           }
         }
 
-        return targetNeedsActivation || environmentNeedsUpdate;
+        return false;
       }
     });
   }
