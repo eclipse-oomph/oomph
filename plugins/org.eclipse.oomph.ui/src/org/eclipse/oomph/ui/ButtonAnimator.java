@@ -26,26 +26,34 @@ public abstract class ButtonAnimator implements Runnable
 
   private final String imagePrefix;
 
-  private final int additionalImages;
+  protected final int additionalImages;
 
-  private Image[] images;
+  private final boolean rotate;
 
   private int index;
 
   private boolean backward;
 
+  protected Image[] images;
+
   public ButtonAnimator(OomphUIPlugin plugin, ToolItem button, String imagePrefix, int additionalImages)
+  {
+    this(plugin, button, imagePrefix, additionalImages, false);
+  }
+
+  public ButtonAnimator(OomphUIPlugin plugin, ToolItem button, String imagePrefix, int additionalImages, boolean rotate)
   {
     this.plugin = plugin;
     this.button = button;
     this.imagePrefix = imagePrefix;
     this.additionalImages = additionalImages;
+    this.rotate = rotate;
   }
 
   public void run()
   {
     Shell shell = getShell();
-    if (shell != null && !shell.isDisposed())
+    if (!button.isDisposed() && shell != null && !shell.isDisposed())
     {
       try
       {
@@ -69,12 +77,19 @@ public abstract class ButtonAnimator implements Runnable
           {
             if (++index == images.length)
             {
-              index = images.length - 2;
-              backward = true;
+              if (rotate)
+              {
+                index = 0;
+              }
+              else
+              {
+                index = images.length - 2;
+                backward = true;
+              }
             }
           }
 
-          shell.getDisplay().timerExec(40, this);
+          shell.getDisplay().timerExec(rotate ? 80 : 40, this);
         }
         else
         {

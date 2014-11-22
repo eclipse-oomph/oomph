@@ -161,7 +161,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       {
         if (!isInstallerProduct())
         {
-          StartingPropertyTester.setStarting(true);
+          SetupPropertyTester.setStarting(true);
 
           final IWorkbench workbench = PlatformUI.getWorkbench();
           IExtensionTracker extensionTracker = workbench.getExtensionTracker();
@@ -194,30 +194,35 @@ public final class SetupUIPlugin extends OomphUIPlugin
                   }
                   finally
                   {
-                    StartingPropertyTester.setStarting(false);
+                    SetupPropertyTester.setStarting(false);
                   }
                 }
               }.schedule();
             }
             else
             {
-              StartingPropertyTester.setStarting(false);
-
               new Job("Refresh Setup Cache")
               {
                 @Override
                 protected IStatus run(IProgressMonitor monitor)
                 {
-                  ResourceMirror resourceMirror = new ResourceMirror();
-                  resourceMirror.perform(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
-                      SetupContext.USER_SETUP_URI }));
+                  try
+                  {
+                    ResourceMirror resourceMirror = new ResourceMirror();
+                    resourceMirror.perform(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
+                        SetupContext.USER_SETUP_URI }));
 
-                  ResourceSet resourceSet = resourceMirror.getResourceSet();
-                  resourceMirror.dispose();
+                    ResourceSet resourceSet = resourceMirror.getResourceSet();
+                    resourceMirror.dispose();
 
-                  SetupContext.setSelf(SetupContext.createSelf(resourceSet));
+                    SetupContext.setSelf(SetupContext.createSelf(resourceSet));
 
-                  return Status.OK_STATUS;
+                    return Status.OK_STATUS;
+                  }
+                  finally
+                  {
+                    SetupPropertyTester.setStarting(false);
+                  }
                 }
               }.schedule();
             }
@@ -268,7 +273,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
         }
 
         IOUtil.deleteBestEffort(restartingFile);
-        System.setProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP, "true");
       }
     }
     catch (Exception ex)
@@ -326,7 +330,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
         if (neededTasks.isEmpty())
         {
           // No tasks are needed, either. Nothing to do.
-          System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
           return;
         }
       }
@@ -335,10 +338,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
         INSTANCE.log(ex);
         return;
       }
-    }
-    else
-    {
-      System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
     }
 
     if (performer == null)

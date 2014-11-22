@@ -20,6 +20,7 @@ import org.eclipse.oomph.ui.HelpSupport.HelpProvider;
 import org.eclipse.oomph.ui.OomphWizardDialog;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -38,6 +39,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
+import java.lang.reflect.Method;
+
 /**
  * @author Eike Stepper
  */
@@ -50,6 +53,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   public SetupWizardPage(String pageName)
   {
     super(pageName);
+    setPageComplete(false);
   }
 
   @Override
@@ -253,6 +257,22 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     {
       OomphWizardDialog dialog = (OomphWizardDialog)container;
       dialog.getHelpSupport().addHelpCallout(control, number);
+    }
+  }
+
+  protected void setButtonState(int buttonID, boolean enabled)
+  {
+    try
+    {
+      IWizardContainer container = getContainer();
+      Method method = ReflectUtil.getMethod(container.getClass(), "getButton", int.class);
+      method.setAccessible(true);
+      Button button = (Button)method.invoke(container, buttonID);
+      button.setEnabled(enabled);
+    }
+    catch (Throwable ex)
+    {
+      // Ignore
     }
   }
 }

@@ -25,6 +25,7 @@ import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 
@@ -48,6 +49,7 @@ import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -220,6 +222,17 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   }
 
   @Override
+  public void createPageControls(Composite pageContainer)
+  {
+    super.createPageControls(pageContainer);
+
+    if (SetupPropertyTester.getHandlingShell() == null)
+    {
+      SetupPropertyTester.setHandlingShell(pageContainer.getShell());
+    }
+  }
+
+  @Override
   public void addPages()
   {
     IDialogSettings wizardSection = SetupUIPlugin.INSTANCE.getDialogSettings(getClass().getSimpleName());
@@ -290,20 +303,44 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   }
 
   @Override
-  public boolean performFinish()
+  public boolean canFinish()
   {
-    clearStartupProperties();
-    if (finishAction != null)
+    for (IWizardPage page : getPages())
     {
-      UIUtil.syncExec(finishAction);
+      if (!page.isPageComplete())
+      {
+        if (page instanceof ProgressPage && lastPage instanceof ConfirmationPage)
+        {
+          break;
+        }
+
+        return false;
+      }
     }
 
     return true;
   }
 
+  @Override
+  public boolean performFinish()
+  {
+    if (lastPage instanceof ProgressPage)
+    {
+      clearStartupProperties();
+      if (finishAction != null)
+      {
+        UIUtil.syncExec(finishAction);
+      }
+
+      return true;
+    }
+
+    ((SetupWizardPage)lastPage).advanceToNextPage();
+    return false;
+  }
+
   private void clearStartupProperties()
   {
-    System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
     System.clearProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP);
     System.clearProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP);
   }

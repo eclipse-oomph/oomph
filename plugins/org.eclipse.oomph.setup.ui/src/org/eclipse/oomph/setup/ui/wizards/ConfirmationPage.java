@@ -43,6 +43,7 @@ import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -232,7 +233,7 @@ public class ConfirmationPage extends SetupWizardPage
 
       viewer.setInput(INPUT);
       viewer.setSubtreeChecked(ROOT_ELEMENT, true);
-      someTaskChecked = true;
+      someTaskChecked = getPerformer().getTriggeredSetupTasks().size() > 0;
 
       checkOverwrite();
 
@@ -251,9 +252,8 @@ public class ConfirmationPage extends SetupWizardPage
 
       validate();
 
-      if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP))
+      if (getTrigger() == Trigger.STARTUP)
       {
-        System.clearProperty(SetupProperties.PROP_SETUP_CONFIRM_SKIP);
         advanceToNextPage();
       }
     }
@@ -730,8 +730,15 @@ public class ConfirmationPage extends SetupWizardPage
 
     if (!someTaskChecked)
     {
-      // setMessage("Please check one or more tasks to continue with the installation process.", IMessageProvider.WARNING);
-      setErrorMessage("Please check one or more tasks to continue with the installation process.");
+      if (getWizard().getPerformer().getNeededTasks().size() == 0)
+      {
+        setMessage("No tasks need to perform.", IMessageProvider.WARNING);
+      }
+      else
+      {
+        setErrorMessage("Please check one or more tasks to continue with the installation process.");
+      }
+
       return;
     }
 
@@ -749,6 +756,7 @@ public class ConfirmationPage extends SetupWizardPage
     }
 
     setPageComplete(true);
+    setButtonState(IDialogConstants.NEXT_ID, false);
   }
 
   private boolean isShowAll()

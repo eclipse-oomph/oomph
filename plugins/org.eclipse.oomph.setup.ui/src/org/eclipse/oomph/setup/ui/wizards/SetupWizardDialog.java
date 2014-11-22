@@ -11,10 +11,12 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.ui.OomphWizardDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -29,6 +31,11 @@ public class SetupWizardDialog extends OomphWizardDialog
   public SetupWizardDialog(Shell parentShell, SetupWizard wizard)
   {
     super(parentShell, wizard, true);
+
+    if (wizard.getTrigger() != Trigger.BOOTSTRAP)
+    {
+      setShellStyle(SWT.CLOSE | SWT.MAX | SWT.TITLE | SWT.BORDER | SWT.RESIZE | getDefaultOrientation());
+    }
   }
 
   @Override

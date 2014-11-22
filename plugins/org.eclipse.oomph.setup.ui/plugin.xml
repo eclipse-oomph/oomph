@@ -72,10 +72,24 @@
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
-            class="org.eclipse.oomph.setup.ui.StartingPropertyTester"
-            id="org.eclipse.oomph.setup.ui.propertyTester"
+            class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
+            id="org.eclipse.oomph.setup.ui.starting.propertyTester"
             namespace="org.eclipse.oomph.setup.ui"
             properties="starting"
+            type="java.lang.Object">
+      </propertyTester>
+      <propertyTester
+            class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
+            id="org.eclipse.oomph.setup.ui.performing.propertyTester"
+            namespace="org.eclipse.oomph.setup.ui"
+            properties="performing"
+            type="java.lang.Object">
+      </propertyTester>
+      <propertyTester
+            class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
+            id="org.eclipse.oomph.setup.ui.handling.propertyTester"
+            namespace="org.eclipse.oomph.setup.ui"
+            properties="handling"
             type="java.lang.Object">
       </propertyTester>
    </extension>

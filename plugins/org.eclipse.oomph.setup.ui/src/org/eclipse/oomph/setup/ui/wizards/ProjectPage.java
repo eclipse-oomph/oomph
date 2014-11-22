@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.provider.ProjectCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProjectItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
+import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
@@ -1150,7 +1151,12 @@ public class ProjectPage extends SetupWizardPage
   {
     if (forward)
     {
-      if (projectViewer.getSelection().isEmpty())
+      if (SetupPropertyTester.getHandlingShell() != getShell())
+      {
+        setErrorMessage("Another setup wizard is already open.  Complete that interaction before importing projects.");
+        projectViewer.getTree().setEnabled(false);
+      }
+      else if (projectViewer.getSelection().isEmpty())
       {
         CatalogSelection selection = catalogSelector.getSelection();
         List<Project> projects = new ArrayList<Project>();

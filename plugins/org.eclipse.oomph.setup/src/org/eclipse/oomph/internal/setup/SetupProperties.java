@@ -19,8 +19,6 @@ public interface SetupProperties
 
   public static final String PROP_SETUP_QUESTIONNAIRE_SKIP = "oomph.setup.questionnaire.skip";
 
-  public static final String PROP_SETUP_CONFIRM_SKIP = "oomph.setup.confirm.skip";
-
   public static final String PROP_SETUP_OFFLINE_STARTUP = "oomph.setup.offline.startup";
 
   public static final String PROP_SETUP_MIRRORS_STARTUP = "oomph.setup.mirrors.startup";
