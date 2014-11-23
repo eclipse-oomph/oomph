@@ -129,12 +129,15 @@ for f in *.zip *.tar.gz; do
   if [[ $f == *macosx* ]]; then
     inifile=oomph.app/Contents/MacOS/$inifile
 
-    echo "  Signing oomph.app"
-    zip -r -q unsigned.zip oomph.app
-    rm -rf oomph.app
-    curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
-    unzip -qq signed.zip
-    rm -f signed.zip
+    # MacOS executable signing is currently broken!
+    # See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
+    #
+    #echo "  Signing oomph.app"
+    #zip -r -q unsigned.zip oomph.app
+    #rm -rf oomph.app
+    #curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
+    #unzip -qq signed.zip
+    #rm -f signed.zip
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
 
