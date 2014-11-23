@@ -25,6 +25,10 @@ if [[ "$GIT" == "" ]]; then
   GIT=$WORKSPACE/git
 fi
 
+if [[ "$SCRIPTS" == "" ]]; then
+  SCRIPTS=$GIT/releng/org.eclipse.oomph.releng/hudson
+fi
+
 if [[ "$DOWNLOADS" == "" ]]; then
   DOWNLOADS=/home/data/httpd/download.eclipse.org/oomph
 fi
@@ -70,7 +74,6 @@ echo "number = $BUILD_NUMBER" >> $PROPERTIES
 echo "key = $BUILD_KEY" >> $PROPERTIES
 echo "label = $BUILD_LABEL" >> $PROPERTIES
 
-RELENG=$GIT/releng/org.eclipse.oomph.releng/hudson
 HELP=$DOWNLOADS/help
 UPDATES=$DOWNLOADS/updates
 PRODUCTS=$DOWNLOADS/products
@@ -93,7 +96,7 @@ echo "Promoting $WORKSPACE/updates"
 rm -rf $DROP
 mkdir $DROP
 cp -a $WORKSPACE/updates/* $DROP
-$BASH $RELENG/adjustArtifactRepository.sh \
+$BASH $SCRIPTS/adjustArtifactRepository.sh \
   $DROP \
   $DROP \
   "Oomph Updates $FOLDER" \
@@ -125,6 +128,19 @@ for f in *.zip *.tar.gz; do
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
     inifile=oomph.app/Contents/MacOS/$inifile
+
+    echo "  Signing oomph.app"
+    zip -r -9 -q unsigned.zip oomph.app
+    rm -rf oomph.app
+    curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
+    unzip -qq signed.zip
+    rm -f signed.zip
+  elif [[ $f == *win32* ]]; then
+    rm -f eclipsec.exe
+
+    echo "  Signing oomph.exe"
+    curl -o signed.exe -F filedata=@oomph.exe http://build.eclipse.org:31338/winsign.php
+    mv signed.exe oomph.exe
   fi
 
   head -n -2 $inifile > $inifile.tmp
@@ -143,7 +159,7 @@ cd $WORKSPACE
 rm -rf $WORKSPACE/tmp
 
 cp -a $WORKSPACE/products/repository $PRODUCTS.tmp
-$BASH $RELENG/adjustArtifactRepository.sh \
+$BASH $SCRIPTS/adjustArtifactRepository.sh \
   $PRODUCTS.tmp/repository \
   $PRODUCTS/repository \
   "Oomph Product Updates" \
@@ -172,7 +188,7 @@ if [[ "$BUILD_TYPE" == release ]]; then
   echo "Releasing $DROP/products"
   mkdir $DROP/products
   cp -a $PRODUCTS.tmp/* $DROP/products
-  $BASH $RELENG/adjustArtifactRepository.sh \
+  $BASH $SCRIPTS/adjustArtifactRepository.sh \
     $DROP/products/repository \
     $DROP/products/repository \
     "Oomph $FOLDER Product Updates" \
@@ -183,7 +199,11 @@ if [[ "$BUILD_TYPE" == release ]]; then
   cp -a $HELP.tmp/* $DROP/help
 fi
 
-$BASH $RELENG/composeRepositories.sh "$DOWNLOADS" "$BUILD_TYPE" "$BUILD_KEY" "$BUILD_LABEL"
+$BASH $SCRIPTS/composeRepositories.sh \
+  "$DOWNLOADS" \
+  "$BUILD_TYPE" \
+  "$BUILD_KEY" \
+  "$BUILD_LABEL"
 
 mv $UPDATES $UPDATES.bak; mv $UPDATES.tmp $UPDATES
 mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS.tmp $PRODUCTS
@@ -202,3 +222,5 @@ for t in nightly milestone; do
     fi
   done
 done
+
+echo ""

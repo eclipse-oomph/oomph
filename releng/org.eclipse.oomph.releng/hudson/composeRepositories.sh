@@ -12,7 +12,7 @@ BUILD_TYPE=$2;
 BUILD_KEY=$3;
 BUILD_LABEL=$4;
 
-java -cp "$GIT/releng/org.eclipse.oomph.releng/buildTools.jar" RepositoryComposer \
+java -cp "$GIT/releng/org.eclipse.oomph.releng/bin/" RepositoryComposer \
   "$DOWNLOADS_FOLDER" \
   "$BUILD_TYPE" \
   "$BUILD_KEY" \

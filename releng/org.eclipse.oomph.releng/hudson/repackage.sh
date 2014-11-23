@@ -82,3 +82,6 @@ for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
     mv $j.tmp $j
   done
 done
+
+echo ""
+
