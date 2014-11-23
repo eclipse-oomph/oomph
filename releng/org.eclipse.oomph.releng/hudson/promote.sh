@@ -130,7 +130,7 @@ for f in *.zip *.tar.gz; do
     inifile=oomph.app/Contents/MacOS/$inifile
 
     echo "  Signing oomph.app"
-    zip -r -9 -q unsigned.zip oomph.app
+    zip -r -q unsigned.zip oomph.app
     rm -rf oomph.app
     curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
     unzip -qq signed.zip
