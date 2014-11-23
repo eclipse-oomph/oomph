@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ "$BUILD_TYPE" == "" || "$BUILD_TYPE" == none ]]; then
+  BUILD_TYPE=nightly
+fi
+
 if [[ "$BUILD_KEY" == "" ]]; then
   if [[ "$BUILD_TYPE" == milestone ]]; then
     TYPE="S"

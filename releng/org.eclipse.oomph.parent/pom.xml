@@ -25,15 +25,6 @@ Eike Stepper - initial API and implementation
     <os-jvm-flags/>
   </properties>
 
-  <modules>
-    <module>features</module>
-    <module>plugins</module>
-    <module>../../products/org.eclipse.oomph.setup.installer.product</module>
-    <module>../../releng/org.eclipse.oomph.releng</module>
-    <module>../../releng/org.eclipse.oomph.releng.helpcenter</module>
-    <module>../../sites/org.eclipse.oomph.site</module>
-  </modules>
-
   <pluginRepositories>
     <pluginRepository>
       <id>eclipse-maven-releases</id>
@@ -145,6 +136,23 @@ Eike Stepper - initial API and implementation
   </build>
 
   <profiles>
+    <profile>
+      <id>modules</id>
+      <activation>
+        <property>
+          <name>MAVEN_BUILD</name>
+          <value>!false</value>
+        </property>
+      </activation>
+      <modules>
+        <module>features</module>
+        <module>plugins</module>
+        <module>../../products/org.eclipse.oomph.setup.installer.product</module>
+        <module>../../releng/org.eclipse.oomph.releng</module>
+        <module>../../releng/org.eclipse.oomph.releng.helpcenter</module>
+        <module>../../sites/org.eclipse.oomph.site</module>
+      </modules>
+    </profile>
     <profile>
       <id>env-win32</id>
       <activation>
