@@ -46,9 +46,6 @@ import java.util.Map;
  */
 public class ProjectCatalogGenerator
 {
-  public static final URI DATA_WEB_URI = URI.createURI(PropertiesUtil.getProperty("oomph.setup.tests.data.root.uri",
-      "http://download.eclipse.org/oomph/.tests/setup/data"));
-
   public static final File DATA = new File(PropertiesUtil.getProperty("test.data.dir", "data")).getAbsoluteFile();
 
   public static final File PRODUCT_CATALOGS = new File(DATA, "product_catalogs");

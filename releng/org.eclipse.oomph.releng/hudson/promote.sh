@@ -212,6 +212,9 @@ $BASH $SCRIPTS/composeRepositories.sh \
   "$BUILD_KEY" \
   "$BUILD_LABEL"
 
+mkdir -p $UPDATES.tmp/latest
+cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/latest
+
 mv $UPDATES $UPDATES.bak; mv $UPDATES.tmp $UPDATES
 mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS.tmp $PRODUCTS
 mv $HELP $HELP.bak; mv $HELP.tmp $HELP
