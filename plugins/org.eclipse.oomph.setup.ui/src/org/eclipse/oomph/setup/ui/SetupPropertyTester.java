@@ -10,15 +10,15 @@
  */
 package org.eclipse.oomph.setup.ui;
 
-import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.internal.ui.UIPropertyTester;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.services.IEvaluationService;
+
+import org.osgi.service.prefs.Preferences;
 
 /**
  * @author Ed Merks
@@ -31,10 +31,28 @@ public class SetupPropertyTester extends PropertyTester
 
   private static Shell performingShell;
 
+  public static final String SHOW_TOOL_BAR_CONTRIBUTIONS = "showToolBarContributions";
+
+  private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
+
+  public SetupPropertyTester()
+  {
+    ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
+    {
+      public void preferenceChange(final IEclipsePreferences.PreferenceChangeEvent event)
+      {
+        if (SHOW_TOOL_BAR_CONTRIBUTIONS.equals(event.getKey()))
+        {
+          UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui." + SHOW_TOOL_BAR_CONTRIBUTIONS, "true".equals(event.getNewValue()));
+        }
+      }
+    });
+  }
+
   public static void setStarting(boolean starting)
   {
     SetupPropertyTester.starting = starting;
-    requestEvaluation("org.eclipse.oomph.setup.ui.starting");
+    UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.starting", false);
   }
 
   private boolean testStarting(Object receiver, Object[] args, Object expectedValue)
@@ -68,7 +86,7 @@ public class SetupPropertyTester extends PropertyTester
       });
     }
 
-    requestEvaluation("org.eclipse.oomph.setup.ui.performing");
+    UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.performing", shell != null);
   }
 
   private boolean testPerforming(Object receiver, Object[] args, Object expectedValue)
@@ -101,7 +119,7 @@ public class SetupPropertyTester extends PropertyTester
       });
     }
 
-    requestEvaluation("org.eclipse.oomph.setup.ui.handling");
+    UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.handling", false);
   }
 
   private boolean testHandling(Object receiver, Object[] args, Object expectedValue)
@@ -112,28 +130,6 @@ public class SetupPropertyTester extends PropertyTester
     }
 
     return expectedValue.equals(handlingShell != null);
-  }
-
-  private static void requestEvaluation(String id)
-  {
-    if (PlatformUI.isWorkbenchRunning())
-    {
-      UIUtil.syncExec(new Runnable()
-      {
-        public void run()
-        {
-          final IWorkbench workbench = PlatformUI.getWorkbench();
-          if (workbench != null)
-          {
-            IEvaluationService service = (IEvaluationService)workbench.getService(IEvaluationService.class);
-            if (service != null)
-            {
-              service.requestEvaluation("org.eclipse.oomph.setup.ui.performing");
-            }
-          }
-        }
-      });
-    }
   }
 
   public boolean test(Object receiver, String property, Object[] args, Object expectedValue)
@@ -151,6 +147,16 @@ public class SetupPropertyTester extends PropertyTester
     if ("handling".equals(property))
     {
       return testHandling(receiver, args, expectedValue);
+    }
+
+    if (SHOW_TOOL_BAR_CONTRIBUTIONS.equals(property))
+    {
+      if (expectedValue == null)
+      {
+        expectedValue = Boolean.TRUE;
+      }
+
+      return expectedValue.equals(PREFERENCES.getBoolean(SHOW_TOOL_BAR_CONTRIBUTIONS, false));
     }
 
     return false;

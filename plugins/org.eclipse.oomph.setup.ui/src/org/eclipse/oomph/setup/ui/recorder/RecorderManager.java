@@ -330,7 +330,7 @@ public final class RecorderManager
                 URI uri = it.next();
                 String pluginID = uri.segment(0);
 
-                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID))
+                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID) && SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(uri.lastSegment()))
                 {
                   it.remove();
                 }

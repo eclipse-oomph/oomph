@@ -20,6 +20,12 @@
             id="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             name="Oomph">
       </page>
+      <page
+            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
+            class="org.eclipse.oomph.internal.ui.RemoteResourcesPreferencePage"
+            id="org.eclipse.oomph.ui.preferences.RemoteResourcesPreferencePage"
+            name="Remote Resources">
+      </page>
    </extension>
 
    <extension
@@ -76,9 +82,27 @@
                   id="org.eclipse.oomph.ui.toolbars.offline.toggle"
                   style="toggle"
                   tooltip="Offline">
+               <visibleWhen>
+                  <test
+                        forcePluginActivation="true"
+                        property="org.eclipse.oomph.ui.showOffline"
+                        value="true">
+                  </test>
+               </visibleWhen>
             </command>
          </toolbar>
       </menuContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.eclipse.oomph.internal.ui.UIPropertyTester"
+            id="org.eclipse.oomph.ui.offline.propertyTester"
+            namespace="org.eclipse.oomph.ui"
+            properties="showOffline"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>
 
 </plugin>

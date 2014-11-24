@@ -92,6 +92,13 @@
             properties="handling"
             type="java.lang.Object">
       </propertyTester>
+      <propertyTester
+            class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
+            id="org.eclipse.oomph.setup.ui.toolbar.propertyTester"
+            namespace="org.eclipse.oomph.setup.ui"
+            properties="showToolBarContributions"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>
 
 </plugin>

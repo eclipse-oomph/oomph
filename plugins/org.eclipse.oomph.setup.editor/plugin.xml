@@ -209,6 +209,13 @@
                   id="org.eclipse.oomph.setup.perform.menu"
                   style="pulldown"
                   tooltip="Perform Setup Tasks...">
+               <visibleWhen>
+                  <test
+                        forcePluginActivation="true"
+                        property="org.eclipse.oomph.setup.ui.showToolBarContributions"
+                        value="true">
+                  </test>
+               </visibleWhen>
             </command>
             <command
                   commandId="org.eclipse.oomph.setup.editor.openEditorDropdown"
@@ -216,6 +223,13 @@
                   id="org.eclipse.oomph.setup.editor.menu"
                   style="pulldown"
                   tooltip="Open User">
+               <visibleWhen>
+                  <test
+                        forcePluginActivation="true"
+                        property="org.eclipse.oomph.setup.ui.showToolBarContributions"
+                        value="true">
+                  </test>
+               </visibleWhen>
             </command>
          </toolbar>
       </menuContribution>
@@ -295,6 +309,41 @@
                style="push">
          </command>
          -->
+      </menuContribution>
+
+      <menuContribution
+            locationURI="menu:help?before=org.eclipse.equinox.p2.ui.sdk.update">
+         <command
+               commandId="org.eclipse.oomph.setup.editor.perform"
+               icon="icons/update.gif"
+               label="Perform Setup Tasks..."
+               style="push">
+         </command>
+         <separator
+               name="org.eclipse.oomph.setup.editor.perform.separator"
+               visible="true">
+         </separator>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:navigate?after=open.ext3">
+         <separator
+               name="org.eclipse.oomph.setup.editor.open.separator"
+               visible="true">
+         </separator>
+         <menu
+               icon="icons/full/obj16/SetupModelFile.gif"
+               label="Open Setup">
+            <dynamic
+                  class="org.eclipse.oomph.setup.presentation.handlers.OpenEditorDropdownFactory"
+                  id="org.eclipse.oomph.setup.editor.open.menu.dynamic">
+            </dynamic>
+         </menu>
+         <command
+               commandId="org.eclipse.oomph.setup.editor.openLog"
+               icon="icons/Log.gif"
+               label="Open Setup Log"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
 

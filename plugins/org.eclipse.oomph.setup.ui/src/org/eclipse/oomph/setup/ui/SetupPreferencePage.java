@@ -33,7 +33,6 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
 
   public SetupPreferencePage()
   {
-    noDefaultAndApplyButton();
   }
 
   public void init(IWorkbench workbench)
@@ -52,9 +51,16 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
   {
     Composite parent = getFieldEditorParent();
 
-    BooleanFieldEditor editor = new BooleanFieldEditor(SetupUIPlugin.PREF_SKIP_STARTUP_TASKS, "Skip automatic task execution at startup time", parent);
-    editor.fillIntoGrid(parent, 2);
-    addField(editor);
+    BooleanFieldEditor skipAutomaticTaskExecution = new BooleanFieldEditor(SetupUIPlugin.PREF_SKIP_STARTUP_TASKS,
+        "Skip automatic task execution at startup time", parent);
+    skipAutomaticTaskExecution.fillIntoGrid(parent, 2);
+    addField(skipAutomaticTaskExecution);
+    skipAutomaticTaskExecution.getDescriptionControl(parent).setToolTipText("Don't automatically perform setup tasks when a new workspace is opened");
+
+    BooleanFieldEditor showToolBars = new BooleanFieldEditor(SetupPropertyTester.SHOW_TOOL_BAR_CONTRIBUTIONS, "Show tool bar contributions", parent);
+    showToolBars.fillIntoGrid(parent, 2);
+    addField(showToolBars);
+    showToolBars.getDescriptionControl(parent).setToolTipText("Show the 'Perform Setup Tasks' and 'Open Setups' tool bar contributions on the main tool bar");
 
     if (Questionnaire.exists())
     {
