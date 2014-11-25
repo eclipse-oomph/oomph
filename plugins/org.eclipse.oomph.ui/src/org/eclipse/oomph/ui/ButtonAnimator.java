@@ -68,7 +68,7 @@ public abstract class ButtonAnimator implements Runnable
 
           if (backward)
           {
-            if (--index == -10)
+            if (--index == -getQuietCycles())
             {
               backward = false;
             }
@@ -79,7 +79,7 @@ public abstract class ButtonAnimator implements Runnable
             {
               if (rotate)
               {
-                index = 0;
+                index = -getQuietCycles();
               }
               else
               {
@@ -106,6 +106,16 @@ public abstract class ButtonAnimator implements Runnable
         }
       }
     }
+  }
+
+  protected int getQuietCycles()
+  {
+    if (rotate)
+    {
+      return 8;
+    }
+
+    return 10;
   }
 
   public abstract Shell getShell();

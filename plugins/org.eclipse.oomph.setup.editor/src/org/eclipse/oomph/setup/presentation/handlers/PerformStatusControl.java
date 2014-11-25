@@ -87,6 +87,8 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     // Create an animator to indicate the a setup is being performed, and to provide feedback once it's done.
     final ButtonAnimator buttonAnimator = new ButtonAnimator(SetupEditorPlugin.INSTANCE, toolItem, "progress", 7, true)
     {
+      private boolean done;
+
       @Override
       public void run()
       {
@@ -153,10 +155,23 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
             {
               images[i] = SetupEditorPlugin.INSTANCE.getSWTImage(i >= 4 ? statusImage : "progress");
             }
+
+            done = true;
           }
         }
 
         return shell;
+      }
+
+      @Override
+      protected int getQuietCycles()
+      {
+        if (done)
+        {
+          return 2;
+        }
+
+        return super.getQuietCycles();
       }
 
       private void delayedDispose(final Shell shell)
@@ -206,6 +221,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
   private void fixPosition()
   {
     IWorkbenchWindow workbenchWindow = getWorkbenchWindow();
+
     try
     {
       // Use the model service to move the perform status control before the progress bar.
@@ -231,5 +247,4 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
       // Ignore.
     }
   }
-
 }
