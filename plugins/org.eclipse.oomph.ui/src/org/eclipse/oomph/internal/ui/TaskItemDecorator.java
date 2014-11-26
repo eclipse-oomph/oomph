@@ -90,6 +90,11 @@ public class TaskItemDecorator
   private void update(Shell shell, String label)
   {
     TaskItem item = SYSTEM_TASK_BAR.getItem(shell);
+    if (item == null)
+    {
+      item = SYSTEM_TASK_BAR.getItem(null);
+    }
+
     if (item != null)
     {
       item.setOverlayText(label);
