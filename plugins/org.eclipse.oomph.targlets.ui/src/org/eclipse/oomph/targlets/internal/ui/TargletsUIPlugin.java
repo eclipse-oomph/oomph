@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.ui;
 
+import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -24,10 +25,9 @@ public final class TargletsUIPlugin extends OomphUIPlugin
 
   private static Implementation plugin;
 
-  @SuppressWarnings("restriction")
   public TargletsUIPlugin()
   {
-    super(new ResourceLocator[] { org.eclipse.oomph.p2.internal.ui.P2UIPlugin.INSTANCE });
+    super(new ResourceLocator[] { P2UIPlugin.INSTANCE });
   }
 
   @Override

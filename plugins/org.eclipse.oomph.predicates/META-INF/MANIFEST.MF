@@ -17,6 +17,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.eclipse.oomph.internal.predicates;version="1.0.0";x-internal:=true,
- org.eclipse.oomph.predicates;version="1.0.0",
- org.eclipse.oomph.predicates.impl;version="1.0.0",
- org.eclipse.oomph.predicates.util;version="1.0.0"
+ org.eclipse.oomph.predicates;version="1.0.0";x-internal:=true,
+ org.eclipse.oomph.predicates.impl;version="1.0.0";x-internal:=true,
+ org.eclipse.oomph.predicates.util;version="1.0.0";x-internal:=true

@@ -29,7 +29,6 @@ import java.io.File;
 /**
  * @author Eike Stepper
  */
-@SuppressWarnings("restriction")
 public class TargletContainerClasspath implements IDynamicVariableResolver
 {
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
