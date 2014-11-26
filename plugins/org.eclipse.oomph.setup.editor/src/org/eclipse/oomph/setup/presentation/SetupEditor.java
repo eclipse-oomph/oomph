@@ -2575,7 +2575,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * This is for implementing {@link IEditorPart} and simply saves the model file.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public void doSaveGen(IProgressMonitor progressMonitor)
   {
@@ -2597,8 +2597,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         // Save the resources to the file system.
         //
         boolean first = true;
-        for (Resource resource : editingDomain.getResourceSet().getResources())
+        EList<Resource> resources = editingDomain.getResourceSet().getResources();
+        for (int i = 0; i < resources.size(); ++i)
         {
+          Resource resource = resources.get(i);
           if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource))
           {
             try

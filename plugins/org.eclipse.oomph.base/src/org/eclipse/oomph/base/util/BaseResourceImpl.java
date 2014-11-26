@@ -11,6 +11,7 @@
 package org.eclipse.oomph.base.util;
 
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -287,6 +288,10 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
       {
         // Walk up the containers.
         InternalEObject internalEObject = (InternalEObject)obj;
+
+        EObject basisObject = null;
+        boolean checkedID = false;
+        String id = null;
         for (InternalEObject container = internalEObject.eInternalContainer(); container != null; container = container.eInternalContainer())
         {
           // If the object is contained by this helper's resource, we want a normal "downward" pointing href.
@@ -296,19 +301,83 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
             return super.getHREF(otherResource, obj);
           }
 
+          if (eDirectResource != null && basisObject == null)
+          {
+            if (!checkedID)
+            {
+              checkedID = true;
+              id = EcoreUtil.getID(obj);
+            }
+
+            if (id != null && container instanceof ModelElement)
+            {
+              basisObject = container;
+            }
+          }
+
           internalEObject = container;
         }
 
         Resource rootContainerResource = internalEObject.eResource();
         if (rootContainerResource != otherResource)
         {
-          String fragmentPath = EcoreUtil.getRelativeURIFragmentPath(internalEObject, obj);
+          String fragmentPath = EcoreUtil.getRelativeURIFragmentPath(internalEObject, basisObject == null ? obj : basisObject);
           URI proxyURI = super.getHREF(rootContainerResource, internalEObject);
-          return proxyURI.appendFragment(proxyURI.fragment() + '/' + fragmentPath);
+          StringBuilder fragment = new StringBuilder(proxyURI.fragment());
+          fragment.append('/');
+          fragment.append(fragmentPath);
+          if (basisObject != null)
+          {
+            fragment.append("/'");
+            encode(fragment, id);
+            fragment.append('\'');
+          }
+
+          return proxyURI.appendFragment(fragment.toString());
         }
 
         return super.getHREF(otherResource, obj);
       }
     };
+  }
+
+  private static final String[] ESCAPE = { "%00", "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09", "%0A", "%0B", "%0C", "%0D", "%0E", "%0F",
+      "%10", "%11", "%12", "%13", "%14", "%15", "%16", "%17", "%18", "%19", "%1A", "%1B", "%1C", "%1D", "%1E", "%1F", "%20", null, "%22", "%23", null, "%25",
+      "%26", "%27", null, null, null, null, "%2C", null, null, "%2F", null, null, null, null, null, null, null, null, null, null, "%3A", null, "%3C", null,
+      "%3E", null, };
+
+  private static void encode(StringBuilder result, String value)
+  {
+    int length = value.length();
+    boolean encode = false;
+    for (int i = 0; i < length; ++i)
+    {
+      char character = value.charAt(i);
+      if (character < ESCAPE.length)
+      {
+        String escape = ESCAPE[character];
+        if (escape != null)
+        {
+          if (!encode)
+          {
+            encode = true;
+            result.append(value, 0, i);
+          }
+
+          result.append(escape);
+          continue;
+        }
+      }
+
+      if (encode)
+      {
+        result.append(character);
+      }
+    }
+
+    if (!encode)
+    {
+      result.append(value);
+    }
   }
 } // SetupResourceImpl

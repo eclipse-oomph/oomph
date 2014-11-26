@@ -17,9 +17,12 @@ import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -220,6 +223,27 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
         return getAnnotation((String)arguments.get(0));
     }
     return super.eInvoke(operationID, arguments);
+  }
+
+  @Override
+  public EObject eObjectForURIFragmentSegment(String uriFragmentSegment)
+  {
+    char firstChar = uriFragmentSegment.charAt(0);
+    if (firstChar == '\'')
+    {
+      int lastIndex = uriFragmentSegment.length() - 1;
+      char lastChar = uriFragmentSegment.charAt(lastIndex);
+      if (lastChar == '\'')
+      {
+        Resource eDirectResource = eDirectResource();
+        if (eDirectResource != null)
+        {
+          return eDirectResource.getEObject(URI.decode(uriFragmentSegment.substring(1, lastIndex)));
+        }
+      }
+    }
+
+    return super.eObjectForURIFragmentSegment(uriFragmentSegment);
   }
 
 } // ModelElementImpl
