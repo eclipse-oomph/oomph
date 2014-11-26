@@ -42,6 +42,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
@@ -177,7 +178,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
               MessageDialog.openInformation(UIUtil.getShell(), "Remote Debug Pause", "The setup tasks are paused to allow you to attach a remote debugger");
             }
 
-            new TaskItemDecorator();
+            if (Platform.OS_MACOSX.equals(Platform.getOS()))
+            {
+              new TaskItemDecorator();
+            }
 
             RecorderManager.Lifecycle.start(display);
 

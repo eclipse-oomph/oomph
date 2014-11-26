@@ -27,52 +27,60 @@ import org.eclipse.ui.PlatformUI;
  */
 public class TaskItemDecorator
 {
-  public static final String IDE_NODE = "org.eclipse.ui.ide";
-
-  public static final String WORKSPACE_NAME = "WORKSPACE_NAME";
-
   private static final IWorkbench WORKBENCH = PlatformUI.getWorkbench();
 
   private static final TaskBar SYSTEM_TASK_BAR = WORKBENCH.getDisplay().getSystemTaskBar();
+
+  public static final String IDE_NODE = "org.eclipse.ui.ide";
+
+  public static final String WORKSPACE_NAME = "WORKSPACE_NAME";
 
   private static final IEclipsePreferences IDE_PREFERENCES = InstanceScope.INSTANCE.getNode(IDE_NODE);
 
   public TaskItemDecorator()
   {
-    IDE_PREFERENCES.addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
+    if (SYSTEM_TASK_BAR != null)
     {
-      public void preferenceChange(PreferenceChangeEvent event)
+      IDE_PREFERENCES.addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
       {
-        Object value = event.getNewValue();
-        update(value == null ? "" : value.toString());
-      }
-    });
-
-    WORKBENCH.addWindowListener(new IWindowListener()
-    {
-      public void windowOpened(IWorkbenchWindow window)
-      {
-        Shell shell = window.getShell();
-        if (shell != null && !shell.isDisposed())
+        public void preferenceChange(PreferenceChangeEvent event)
         {
-          update(shell, IDE_PREFERENCES.get(WORKSPACE_NAME, ""));
+          Object value = event.getNewValue();
+          update(value == null ? "" : value.toString());
         }
-      }
+      });
 
-      public void windowDeactivated(IWorkbenchWindow window)
+      WORKBENCH.addWindowListener(new IWindowListener()
       {
-      }
+        public void windowOpened(IWorkbenchWindow window)
+        {
+          Shell shell = window.getShell();
+          if (shell != null && !shell.isDisposed())
+          {
+            update(shell, getWorkspaceName());
+          }
+        }
 
-      public void windowClosed(IWorkbenchWindow window)
-      {
-      }
+        public void windowDeactivated(IWorkbenchWindow window)
+        {
+        }
 
-      public void windowActivated(IWorkbenchWindow window)
-      {
-      }
-    });
+        public void windowClosed(IWorkbenchWindow window)
+        {
+        }
 
-    update(IDE_PREFERENCES.get(WORKSPACE_NAME, ""));
+        public void windowActivated(IWorkbenchWindow window)
+        {
+        }
+      });
+
+      update(getWorkspaceName());
+    }
+  }
+
+  private String getWorkspaceName()
+  {
+    return IDE_PREFERENCES.get(WORKSPACE_NAME, "");
   }
 
   private void update(String label)
