@@ -41,7 +41,7 @@ public class OfflineMode
     }
   }
 
-  public static void setEnabled(boolean enabled)
+  public static boolean setEnabled(boolean enabled)
   {
     if (!initializedToggleStateAccessor)
     {
@@ -52,11 +52,11 @@ public class OfflineMode
     try
     {
       ToggleStateAccessor toggleStateAccessor = UtilPlugin.getToggleStateAccessor();
-      toggleStateAccessor.setEnabled(COMMAND_ID, enabled);
+      return toggleStateAccessor.setEnabled(COMMAND_ID, enabled);
     }
     catch (Exception ex)
     {
-      UtilPlugin.DEFAULT_TOGGLE_STATE_ACCESSOR.setEnabled(COMMAND_ID, enabled);
+      return UtilPlugin.DEFAULT_TOGGLE_STATE_ACCESSOR.setEnabled(COMMAND_ID, enabled);
     }
   }
 

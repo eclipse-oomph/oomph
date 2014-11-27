@@ -37,13 +37,19 @@ public class ToggleCommandHandler extends AbstractHandler
   public static boolean getToggleState(String commandID)
   {
     State commandState = getCommandState(commandID);
-    return ((Boolean)commandState.getValue()).booleanValue();
+    return getValue(commandState);
   }
 
-  public static void setToggleState(String commandID, boolean toggleState)
+  public static boolean setToggleState(String commandID, boolean toggleState)
   {
     State commandState = getCommandState(commandID);
-    commandState.setValue(toggleState);
+    boolean oldValue = getValue(commandState);
+    if (oldValue != toggleState)
+    {
+      commandState.setValue(toggleState);
+    }
+
+    return oldValue;
   }
 
   private static State getCommandState(String commandID)
@@ -51,5 +57,10 @@ public class ToggleCommandHandler extends AbstractHandler
     ICommandService commandService = (ICommandService)PlatformUI.getWorkbench().getService(ICommandService.class);
     Command command = commandService.getCommand(commandID);
     return command.getState("org.eclipse.ui.commands.toggleState");
+  }
+
+  private static boolean getValue(State commandState)
+  {
+    return ((Boolean)commandState.getValue()).booleanValue();
   }
 }

@@ -35,14 +35,27 @@ public final class UtilPlugin extends OomphPlugin
       return "/instance/org.eclipse.ui.workbench//org.eclipse.ui.commands/state/" + id + "/org.eclipse.ui.commands.toggleState";
     }
 
-    public void setEnabled(String id, boolean enabled)
+    public boolean setEnabled(String id, boolean enabled)
     {
-      preferences.putBoolean(getPreferenceKey(id), enabled);
+      String key = getPreferenceKey(id);
+      boolean oldValue = getValue(key);
+      if (oldValue != enabled)
+      {
+        preferences.putBoolean(key, enabled);
+      }
+
+      return oldValue;
     }
 
     public boolean isEnabled(String id)
     {
-      return preferences.getBoolean(getPreferenceKey(id), false);
+      String key = getPreferenceKey(id);
+      return getValue(key);
+    }
+
+    private boolean getValue(String key)
+    {
+      return preferences.getBoolean(key, false);
     }
   };
 
@@ -87,6 +100,6 @@ public final class UtilPlugin extends OomphPlugin
   {
     public boolean isEnabled(String id);
 
-    public void setEnabled(String id, boolean enabled);
+    public boolean setEnabled(String id, boolean enabled);
   }
 }
