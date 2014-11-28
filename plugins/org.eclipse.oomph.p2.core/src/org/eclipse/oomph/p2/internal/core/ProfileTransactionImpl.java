@@ -99,6 +99,8 @@ import java.util.Set;
 @SuppressWarnings("restriction")
 public class ProfileTransactionImpl implements ProfileTransaction
 {
+  private static final String OSGI_RESOLVER_USES_MODE = "osgi.resolver.usesMode";
+
   private static final String SOURCE_IU_ID = "org.eclipse.oomph.p2.source.container"; //$NON-NLS-1$
 
   private static final IRequirement BUNDLE_REQUIREMENT = MetadataFactory.createRequirement(
@@ -312,6 +314,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return false;
   }
 
+  public Resolution resolve(IProgressMonitor monitor) throws CoreException
+  {
+    return resolve(null, monitor);
+  }
+
   public Resolution resolve(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
   {
     final CommitContext context = commitContext == null ? new CommitContext() : commitContext;
@@ -399,6 +406,22 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
         public boolean commit(IProgressMonitor monitor) throws CoreException
         {
+          final String oldUsesMode = System.setProperty(OSGI_RESOLVER_USES_MODE, "ignore");
+          cleanup.add(new Runnable()
+          {
+            public void run()
+            {
+              if (oldUsesMode == null)
+              {
+                System.clearProperty(OSGI_RESOLVER_USES_MODE);
+              }
+              else
+              {
+                System.setProperty(OSGI_RESOLVER_USES_MODE, oldUsesMode);
+              }
+            }
+          });
+
           try
           {
             IPhaseSet phaseSet = context.getPhaseSet(ProfileTransactionImpl.this);
@@ -787,11 +810,12 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       P2CorePlugin.checkCancelation(monitor);
 
-      String id = requirement.getName();
+      String namespace = requirement.getNamespace();
+      String name = requirement.getName();
       VersionRange versionRange = requirement.getVersionRange();
       boolean optional = requirement.isOptional();
 
-      IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, null, optional, false);
+      IRequirement rootRequirement = MetadataFactory.createRequirement(namespace, name, versionRange, null, optional, false);
       rootRequirements.add(rootRequirement);
     }
 

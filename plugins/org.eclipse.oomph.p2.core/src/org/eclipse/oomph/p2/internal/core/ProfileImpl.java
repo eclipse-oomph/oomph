@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -214,6 +215,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
       String xml = getDelegate().getProperty(PROP_PROFILE_DEFINITION);
       if (xml == null)
       {
+        // TODO This is also called via ProfileTransactionImpl() for new profiles. Should it be empty then?
         definition = definitionFromRootIUs(this, VersionSegment.MINOR);
       }
       else
@@ -386,8 +388,21 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
       EList<Repository> repositories = definition.getRepositories();
       for (java.net.URI knownRepository : knownRepositories)
       {
-        Repository repository = P2Factory.eINSTANCE.createRepository(knownRepository.toString());
-        repositories.add(repository);
+        if (metadataRepositoryManager.isEnabled(knownRepository))
+        {
+          if (URIUtil.isFileURI(knownRepository))
+          {
+            File file = URIUtil.toFile(knownRepository);
+            if (!file.isDirectory())
+            {
+              metadataRepositoryManager.setEnabled(knownRepository, false);
+              continue;
+            }
+          }
+
+          Repository repository = P2Factory.eINSTANCE.createRepository(knownRepository.toString());
+          repositories.add(repository);
+        }
       }
     }
 

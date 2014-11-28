@@ -65,6 +65,8 @@ public interface ProfileTransaction
 
   public boolean commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException;
 
+  public Resolution resolve(IProgressMonitor monitor) throws CoreException;
+
   public Resolution resolve(CommitContext commitContext, IProgressMonitor monitor) throws CoreException;
 
   /**
