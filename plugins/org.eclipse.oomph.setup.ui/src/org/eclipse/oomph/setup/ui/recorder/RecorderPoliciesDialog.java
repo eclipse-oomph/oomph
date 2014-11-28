@@ -89,7 +89,7 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
     SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
     sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-    recorderPoliciesComposite = new RecorderPoliciesComposite(sashForm, SWT.NONE, transaction, false);
+    recorderPoliciesComposite = new RecorderPoliciesComposite(sashForm, SWT.FULL_SELECTION, transaction, false);
     recorderPoliciesComposite.setFocus();
     recorderPoliciesComposite.addSelectionChangedListener(new ISelectionChangedListener()
     {

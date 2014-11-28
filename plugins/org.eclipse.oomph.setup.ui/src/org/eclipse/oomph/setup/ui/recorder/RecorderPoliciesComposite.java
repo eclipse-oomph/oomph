@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,11 +42,13 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
 
   private final CheckboxTableViewer viewer;
 
+  private ViewerFilter filter;
+
   private String[] sortedKeys;
 
   public RecorderPoliciesComposite(Composite parent, int style, RecorderTransaction transaction, boolean clean)
   {
-    super(parent, style);
+    super(parent, SWT.NONE);
     this.transaction = transaction;
     this.clean = clean;
 
@@ -55,16 +58,16 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     Composite composite = new Composite(this, SWT.NONE);
     composite.setLayout(tableLayout);
 
-    viewer = CheckboxTableViewer.newCheckList(composite, SWT.FULL_SELECTION);
+    viewer = CheckboxTableViewer.newCheckList(composite, style);
     viewer.setContentProvider(new ArrayContentProvider());
     viewer.setLabelProvider(new LabelProvider());
     viewer.addCheckStateListener(new ICheckStateListener()
     {
       public void checkStateChanged(CheckStateChangedEvent event)
       {
-        String key = (String)event.getElement();
+        String path = (String)event.getElement();
         boolean policy = event.getChecked();
-        RecorderPoliciesComposite.this.transaction.setPolicy(key, policy);
+        RecorderPoliciesComposite.this.transaction.setPolicy(path, policy);
       }
     });
 
@@ -97,11 +100,73 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     }
   }
 
+  public final void setFilter(ViewerFilter filter)
+  {
+    this.filter = filter;
+    viewer.setFilters(filter == null ? new ViewerFilter[0] : new ViewerFilter[] { filter });
+  }
+
   @Override
   public void setEnabled(boolean enabled)
   {
     super.setEnabled(enabled);
     viewer.getTable().setEnabled(enabled);
+  }
+
+  public CheckboxTableViewer getViewer()
+  {
+    return viewer;
+  }
+
+  public String getFirstVisiblePolicy()
+  {
+    if (sortedKeys != null && sortedKeys.length != 0)
+    {
+      if (filter == null)
+      {
+        return sortedKeys[0];
+      }
+
+      for (String key : sortedKeys)
+      {
+        if (filter.select(viewer, sortedKeys, key))
+        {
+          return key;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  public void selectFirstPolicy()
+  {
+    viewer.getTable().setSelection(0);
+  }
+
+  public void addSelectionChangedListener(ISelectionChangedListener listener)
+  {
+    viewer.addSelectionChangedListener(listener);
+  }
+
+  public void removeSelectionChangedListener(ISelectionChangedListener listener)
+  {
+    viewer.removeSelectionChangedListener(listener);
+  }
+
+  public IStructuredSelection getSelection()
+  {
+    return (IStructuredSelection)viewer.getSelection();
+  }
+
+  public void setSelection(ISelection selection)
+  {
+    viewer.setSelection(selection);
+  }
+
+  public void setSelection(ISelection selection, boolean reveal)
+  {
+    viewer.setSelection(selection, reveal);
   }
 
   public void addCheckStateListener(ICheckStateListener listener)
@@ -137,31 +202,6 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
   public void setCheckedElements(Object[] elements)
   {
     viewer.setCheckedElements(elements);
-  }
-
-  public void addSelectionChangedListener(ISelectionChangedListener listener)
-  {
-    viewer.addSelectionChangedListener(listener);
-  }
-
-  public void removeSelectionChangedListener(ISelectionChangedListener listener)
-  {
-    viewer.removeSelectionChangedListener(listener);
-  }
-
-  public IStructuredSelection getSelection()
-  {
-    return (IStructuredSelection)viewer.getSelection();
-  }
-
-  public void setSelection(ISelection selection)
-  {
-    viewer.setSelection(selection);
-  }
-
-  public void setSelection(ISelection selection, boolean reveal)
-  {
-    viewer.setSelection(selection, reveal);
   }
 
   @Override

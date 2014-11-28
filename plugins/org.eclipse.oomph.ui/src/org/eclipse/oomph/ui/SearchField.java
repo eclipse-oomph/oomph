@@ -14,6 +14,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -66,17 +68,27 @@ public class SearchField extends Composite
     };
 
     final Text filterControl = filteredTree.getFilterControl();
+    filterControl.addTraverseListener(new TraverseListener()
+    {
+      public void keyTraversed(TraverseEvent e)
+      {
+        if (e.keyCode == SWT.ESC)
+        {
+          if (!"".equals(filterControl.getText()))
+          {
+            filterControl.setText("");
+            e.doit = false;
+          }
+        }
+      }
+    });
+
     filterControl.addKeyListener(new KeyAdapter()
     {
       @Override
       public void keyPressed(KeyEvent e)
       {
-        if (e.keyCode == SWT.ESC)
-        {
-          filterControl.setText("");
-          e.doit = false;
-        }
-        else if (e.keyCode == SWT.CR || e.keyCode == SWT.ARROW_DOWN)
+        if (e.keyCode == SWT.CR || e.keyCode == SWT.ARROW_DOWN)
         {
           finishFilter();
           e.doit = false;
@@ -126,6 +138,7 @@ public class SearchField extends Composite
 
   /**
    * Subclasses may override.
+   * @param e
    */
   protected void finishFilter()
   {

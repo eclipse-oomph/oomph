@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.ui.recorder;
 
+import org.eclipse.oomph.ui.SearchField;
+import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,6 +21,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,6 +47,8 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
   private Button enableButton;
 
   private Label policiesLabel;
+
+  private SearchField searchField;
 
   private RecorderPoliciesComposite policiesComposite;
 
@@ -85,6 +91,11 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
         boolean recorderEnabled = enableButton.getSelection();
         RecorderManager.INSTANCE.setRecorderEnabled(recorderEnabled);
 
+        if (!recorderEnabled)
+        {
+          searchField.getFilterControl().setText("");
+        }
+
         updateEnablement();
         RecorderManager.updateRecorderCheckboxState();
       }
@@ -101,10 +112,48 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
         {
           public void run()
           {
-            policiesLabel = new Label(composite, SWT.NONE);
-            policiesLabel.setText("Policies:");
+            Label separator = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
+            separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-            policiesComposite = new RecorderPoliciesComposite(composite, SWT.BORDER, transaction, true);
+            policiesLabel = new Label(composite, SWT.NONE);
+            policiesLabel.setText("Policies define whether to record or ignore preference changes:");
+
+            FilterHandler filterHandler = new FilterHandler()
+            {
+              public void handleFilter(String filter)
+              {
+                ViewerFilter viewerFilter = null;
+                if (filter.length() != 0)
+                {
+                  final String subString = filter.toLowerCase();
+                  viewerFilter = new ViewerFilter()
+                  {
+                    @Override
+                    public boolean select(Viewer viewer, Object parentElement, Object element)
+                    {
+                      return ((String)element).toLowerCase().contains(subString);
+                    }
+                  };
+                }
+
+                policiesComposite.setFilter(viewerFilter);
+                policiesComposite.selectFirstPolicy();
+              }
+            };
+
+            searchField = new SearchField(composite, filterHandler)
+            {
+              @Override
+              protected void finishFilter()
+              {
+                policiesComposite.setFocus();
+                policiesComposite.selectFirstPolicy();
+              }
+            };
+
+            searchField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+            policiesComposite = new RecorderPoliciesComposite(composite, SWT.BORDER | SWT.FULL_SELECTION, transaction, true);
             policiesComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
             policiesComposite.addCheckStateListener(new ICheckStateListener()
             {
@@ -169,13 +218,14 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
       {
         instance.enableButton.setSelection(recorderEnabled);
       }
-  
+
       if (instance.policiesComposite != null)
       {
         instance.policiesLabel.setEnabled(recorderEnabled);
+        instance.searchField.setEnabled(recorderEnabled);
         instance.policiesComposite.setEnabled(recorderEnabled);
       }
-  
+
       Button applyButton = instance.getApplyButton();
       if (applyButton != null)
       {

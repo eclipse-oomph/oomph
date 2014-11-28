@@ -62,8 +62,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -77,6 +79,8 @@ public abstract class RecorderTransaction
 
   private static final String POLICY_IGNORE = "ignore";
 
+  private static final String REMOVE_PREFERENCE_MARKER = "REMOVE_PREFERENCE_MARKER";
+
   private static RecorderTransaction instance;
 
   private static boolean policiesInitialized;
@@ -86,6 +90,8 @@ public abstract class RecorderTransaction
   private final Map<String, Boolean> cleanPolicies = new HashMap<String, Boolean>();
 
   private final Map<String, Boolean> policies = new HashMap<String, Boolean>();
+
+  private final Set<URI> preferencesToRemove = new HashSet<URI>();
 
   private Map<URI, String> preferences;
 
@@ -211,6 +217,11 @@ public abstract class RecorderTransaction
     this.preferences = preferences;
   }
 
+  public void removePreferences(Collection<URI> keys)
+  {
+    preferencesToRemove.addAll(keys);
+  }
+
   public void commit()
   {
     if (isDirty())
@@ -247,23 +258,29 @@ public abstract class RecorderTransaction
 
       for (Map.Entry<String, Boolean> entry : policies.entrySet())
       {
-        String key = entry.getKey();
+        String path = entry.getKey();
         boolean policy = entry.getValue();
 
-        details.put(key, policy ? POLICY_RECORD : POLICY_IGNORE);
-        cleanPolicies.put(key, policy);
+        details.put(path, policy ? POLICY_RECORD : POLICY_IGNORE);
+        cleanPolicies.put(path, policy);
 
-        if (!policy && workspacePoliciesFile != null)
+        if (!policy)
         {
-          if (workspacePolicies == null && workspacePoliciesFile.isAccessible())
-          {
-            workspacePolicies = PropertiesUtil.loadProperties(workspacePoliciesFile.getLocation().toFile());
-          }
+          URI key = PreferencesFactory.eINSTANCE.createURI(path);
+          preferencesToRemove.add(key);
 
-          if (workspacePolicies != null && !POLICY_IGNORE.equals(workspacePolicies.get(key)))
+          if (workspacePoliciesFile != null)
           {
-            workspacePolicies.put(key, POLICY_IGNORE);
-            workspacePoliciesChanged = true;
+            if (workspacePolicies == null && workspacePoliciesFile.isAccessible())
+            {
+              workspacePolicies = PropertiesUtil.loadProperties(workspacePoliciesFile.getLocation().toFile());
+            }
+
+            if (workspacePolicies != null && !POLICY_IGNORE.equals(workspacePolicies.get(path)))
+            {
+              workspacePolicies.put(path, POLICY_IGNORE);
+              workspacePoliciesChanged = true;
+            }
           }
         }
       }
@@ -284,6 +301,19 @@ public abstract class RecorderTransaction
       policies.clear();
     }
 
+    if (!preferencesToRemove.isEmpty())
+    {
+      if (preferences == null)
+      {
+        preferences = new HashMap<URI, String>();
+      }
+
+      for (URI key : preferencesToRemove)
+      {
+        preferences.put(key, REMOVE_PREFERENCE_MARKER);
+      }
+    }
+
     if (preferences != null)
     {
       for (Map.Entry<URI, String> entry : preferences.entrySet())
@@ -294,17 +324,42 @@ public abstract class RecorderTransaction
         String pluginID = key.segment(0).toString();
         String path = PreferencesFactory.eINSTANCE.convertURI(key);
 
-        CompoundTask pluginCompound = (CompoundTask)findOrCreateTask(preferenceCompound.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME, pluginID);
+        boolean remove = value == REMOVE_PREFERENCE_MARKER;
 
-        PreferenceTask preferenceTask = (PreferenceTask)findOrCreateTask(pluginCompound.getSetupTasks(), SetupPackage.Literals.PREFERENCE_TASK__KEY, path);
-        preferenceTask.setValue(SetupUtil.escape(value));
-
-        recorderObjects.add(preferenceTask);
+        CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(preferenceCompound.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME, pluginID,
+            !remove);
+        if (pluginCompound != null)
+        {
+          PreferenceTask preferenceTask = (PreferenceTask)getPreferenceTask(pluginCompound.getSetupTasks(), SetupPackage.Literals.PREFERENCE_TASK__KEY, path,
+              !remove);
+          if (preferenceTask != null)
+          {
+            if (remove)
+            {
+              EcoreUtil.remove(preferenceTask);
+              if (pluginCompound.getSetupTasks().isEmpty())
+              {
+                recorderObjects.add(pluginCompound.eContainer());
+                EcoreUtil.remove(pluginCompound);
+              }
+              else
+              {
+                recorderObjects.add(pluginCompound);
+              }
+            }
+            else
+            {
+              preferenceTask.setValue(SetupUtil.escape(value));
+              recorderObjects.add(preferenceTask);
+            }
+          }
+        }
       }
 
       preferences = null;
     }
 
+    preferencesToRemove.clear();
     return recorderObjects;
   }
 
@@ -421,7 +476,8 @@ public abstract class RecorderTransaction
         EObject eContainer = preferenceTask.eContainer();
 
         String pluginID = URI.createURI(preferenceTask.getKey()).segment(1).toString();
-        CompoundTask pluginCompound = (CompoundTask)findOrCreateTask(preferenceCompound.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME, pluginID);
+        CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(preferenceCompound.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME, pluginID,
+            true);
         pluginCompound.getSetupTasks().add(preferenceTask);
 
         while (eContainer instanceof CompoundTask)
@@ -445,7 +501,7 @@ public abstract class RecorderTransaction
     }
   }
 
-  private static SetupTask findOrCreateTask(EList<SetupTask> tasks, EAttribute key, String value)
+  private static SetupTask getPreferenceTask(EList<SetupTask> tasks, EAttribute key, String value, boolean createOnDemand)
   {
     int position = 0;
     String value1 = StringUtil.safe(value).toLowerCase();
@@ -463,6 +519,11 @@ public abstract class RecorderTransaction
       {
         ++position;
       }
+    }
+
+    if (!createOnDemand)
+    {
+      return null;
     }
 
     EClass eClass = key.getEContainingClass();
