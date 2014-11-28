@@ -61,9 +61,9 @@ public final class UIPlugin extends OomphUIPlugin
           return ToggleCommandHandler.getToggleState(id);
         }
 
-        public boolean setEnabled(String id, boolean enabled)
+        public void setEnabled(String id, boolean enabled)
         {
-          return ToggleCommandHandler.setToggleState(id, enabled);
+          ToggleCommandHandler.setToggleState(id, enabled);
         }
       });
     }
