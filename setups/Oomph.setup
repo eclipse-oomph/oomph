@@ -491,7 +491,11 @@
       <buildPlan
           name="integration"/>
       <buildPlan
-          name="promotion"/>
+          name="integration-nightly"/>
+      <buildPlan
+          name="integration-milestone"/>
+      <buildPlan
+          name="integration-release"/>
     </setupTask>
   </stream>
   <logicalProjectContainer
