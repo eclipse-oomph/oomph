@@ -108,55 +108,64 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
       public Shell getShell()
       {
         Shell shell = SetupPropertyTester.getPerformingShell();
-        if (shell != null && !shell.isDisposed() && status == null)
+        if (shell != null && !shell.isDisposed())
         {
-          // If there is a status, reflect the feedback into the images.
-          status = (IStatus)shell.getData(ProgressPage.PROGRESS_STATUS);
-          if (status != null)
+          boolean visible = shell.isVisible();
+          if (toolItem.getSelection() != visible)
           {
-            String statusImage;
-            switch (status.getSeverity())
-            {
-              case IStatus.OK:
-              {
-                statusImage = "progress_success";
-                delayedDispose(shell);
-                break;
-              }
-              case IStatus.WARNING:
-              {
-                statusImage = "progress_warning";
-                break;
-              }
-              case IStatus.ERROR:
-              {
-                statusImage = "progress_error";
-                break;
-              }
-              case IStatus.CANCEL:
-              {
-                statusImage = "progress_cancel";
-                delayedDispose(shell);
-                break;
-              }
-              default:
-              {
-                statusImage = "progress";
-                break;
-              }
-            }
+            toolItem.setSelection(visible);
+          }
 
-            if (images == null)
+          if (status == null)
+          {
+            // If there is a status, reflect the feedback into the images.
+            status = (IStatus)shell.getData(ProgressPage.PROGRESS_STATUS);
+            if (status != null)
             {
-              images = new Image[1 + additionalImages];
-            }
+              String statusImage;
+              switch (status.getSeverity())
+              {
+                case IStatus.OK:
+                {
+                  statusImage = "progress_success";
+                  delayedDispose(shell);
+                  break;
+                }
+                case IStatus.WARNING:
+                {
+                  statusImage = "progress_warning";
+                  break;
+                }
+                case IStatus.ERROR:
+                {
+                  statusImage = "progress_error";
+                  break;
+                }
+                case IStatus.CANCEL:
+                {
+                  statusImage = "progress_cancel";
+                  delayedDispose(shell);
+                  break;
+                }
+                default:
+                {
+                  statusImage = "progress";
+                  break;
+                }
+              }
 
-            for (int i = 0; i < images.length; ++i)
-            {
-              images[i] = SetupEditorPlugin.INSTANCE.getSWTImage(i >= 4 ? statusImage : "progress");
-            }
+              if (images == null)
+              {
+                images = new Image[1 + additionalImages];
+              }
 
-            done = true;
+              for (int i = 0; i < images.length; ++i)
+              {
+                images[i] = SetupEditorPlugin.INSTANCE.getSWTImage(i >= 4 ? statusImage : "progress");
+              }
+
+              done = true;
+            }
           }
         }
 
