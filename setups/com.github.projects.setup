@@ -90,6 +90,5 @@
     </modification>
   </setupTask>
   <project href="user:/com.github.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Github.com project catalog'#/"/>
-  <project href="interim/ESON.setup#/"/>
   <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>

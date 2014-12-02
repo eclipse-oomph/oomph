@@ -343,6 +343,7 @@
   <project href="interim/EGit.setup#/"/>
   <project href="interim/EMF.setup#/"/>
   <project href="interim/EMFCompare.setup#/"/>
+  <project href="interim/ESON.setup#/"/>
   <project href="interim/Equinox.setup#/"/>
   <project href="interim/JDT.setup#/"/>
   <project href="Oomph.setup#/"/>
