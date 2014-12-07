@@ -51,7 +51,9 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getDescription <em>Description</em>}</li>
@@ -62,7 +64,6 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getSuccessors <em>Successors</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getRestrictions <em>Restrictions</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -442,6 +442,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
       case SetupPackage.SETUP_TASK__SCOPE_TYPE:
       case SetupPackage.SETUP_TASK__EXCLUDED_TRIGGERS:
       case SetupPackage.SETUP_TASK__DISABLED:
+      case SetupPackage.SETUP_TASK__RESTRICTIONS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

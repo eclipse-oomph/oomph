@@ -25,6 +25,7 @@ import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
@@ -1632,8 +1633,55 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         return super.getParent(object);
       }
     });
+
     selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer), new DiagnosticDecorator(
-        editingDomain, selectionViewer, dialogSettings)));
+        editingDomain, selectionViewer, dialogSettings))
+    {
+      @Override
+      public String getText(Object element)
+      {
+        String text = super.getText(element);
+
+        if (element instanceof SetupTask)
+        {
+          SetupTask setupTask = (SetupTask)element;
+          EList<Scope> restrictions = setupTask.getRestrictions();
+          if (!restrictions.isEmpty())
+          {
+            StringBuilder builder = new StringBuilder();
+            for (Scope restriction : restrictions)
+            {
+              if (builder.length() != 0)
+              {
+                builder.append(", ");
+              }
+
+              String label = restriction.getLabel();
+              if (StringUtil.isEmpty(label))
+              {
+                label = restriction.getName();
+              }
+
+              builder.append(label);
+            }
+
+            String string = builder.toString();
+            if (text.contains(string))
+            {
+              string = "";
+            }
+            else
+            {
+              string = ": " + string;
+            }
+
+            text += "  [restricted" + string + "]";
+          }
+        }
+
+        return text;
+      }
+    });
 
     selectionViewer.setInput(loadingResourceInput);
 

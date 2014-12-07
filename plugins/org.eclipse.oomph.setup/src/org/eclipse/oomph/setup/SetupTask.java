@@ -23,6 +23,7 @@ import java.util.Set;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.SetupTask#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.SetupTask#getDescription <em>Description</em>}</li>
@@ -33,7 +34,6 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.SetupTask#getSuccessors <em>Successors</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.SetupTask#getRestrictions <em>Restrictions</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask()
  * @model abstract="true"
