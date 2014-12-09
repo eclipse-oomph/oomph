@@ -122,6 +122,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   public void setOffline(boolean offline)
   {
+    // Make sure to change this plugin (so that the build qualifier is incremented) when the return type of OfflineMode.setEnabled() changes.
     OfflineMode.setEnabled(offline);
   }
 
