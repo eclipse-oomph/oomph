@@ -381,8 +381,8 @@ public class ConfirmationPage extends SetupWizardPage
         try
         {
           SetupTaskPerformer performer = getPerformer();
-          performer.setOffline(isOffline());
           performer.setMirrors(isMirrors());
+          performer.setOffline(isOffline());
 
           Set<SetupTask> checkedTasks = getCheckedTasks();
 
