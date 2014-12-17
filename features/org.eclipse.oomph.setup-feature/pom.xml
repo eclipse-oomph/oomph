@@ -15,11 +15,11 @@
   <parent>
     <groupId>org.eclipse.oomph</groupId>
     <artifactId>org.eclipse.oomph.features</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../../releng/org.eclipse.oomph.parent/features</relativePath>
   </parent>
   <groupId>org.eclipse.oomph.features</groupId>
   <artifactId>org.eclipse.oomph.setup</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-feature</packaging>
 </project>

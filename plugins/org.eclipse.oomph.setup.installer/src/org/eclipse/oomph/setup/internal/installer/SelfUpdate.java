@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
@@ -21,6 +22,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.ui.ErrorDialog;
@@ -40,6 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.swt.widgets.Shell;
 
@@ -63,6 +66,21 @@ public class SelfUpdate
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
     Profile profile = agent.getCurrentProfile();
     ProfileTransaction transaction = profile.change();
+
+    // TODO Remove this temporary range conversion when all users can be expected to have a major range.
+    VersionRange deprecatedVersionRange = new VersionRange("[1.0.0,1.1.0)");
+    ProfileDefinition profileDefinition = transaction.getProfileDefinition();
+    for (Requirement requirement : profileDefinition.getRequirements())
+    {
+      if (IInstallableUnit.NAMESPACE_IU_ID.equals(requirement.getNamespace()) && SetupUIPlugin.PRODUCT_ID.equals(requirement.getName())
+          && deprecatedVersionRange.equals(requirement.getVersionRange()))
+      {
+        requirement.setVersionRange(new VersionRange("[1.0.0,2.0.0)"));
+        transaction.commit(monitor);
+        transaction = profile.change();
+        break;
+      }
+    }
 
     final boolean repositoryChanged = changeRepositoryIfNeeded(transaction);
 

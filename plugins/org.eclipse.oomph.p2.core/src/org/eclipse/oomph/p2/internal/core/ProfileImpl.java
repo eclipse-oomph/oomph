@@ -373,7 +373,29 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     {
       if ("true".equals(profile.getInstallableUnitProperty(iu, Profile.PROP_PROFILE_ROOT_IU)))
       {
-        VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), compatibility);
+        VersionSegment iuCompatibility = null;
+
+        String iuProperty = profile.getInstallableUnitProperty(iu, Profile.PROP_IU_COMPATIBILITY);
+        if (iuProperty != null)
+        {
+          iuCompatibility = VersionSegment.get(iuProperty);
+        }
+
+        if (iuCompatibility == null)
+        {
+          iuProperty = iu.getProperty(Profile.PROP_IU_COMPATIBILITY);
+          if (iuProperty != null)
+          {
+            iuCompatibility = VersionSegment.get(iuProperty);
+          }
+        }
+
+        if (iuCompatibility == null)
+        {
+          iuCompatibility = compatibility;
+        }
+
+        VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), iuCompatibility);
 
         Requirement requirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
         requirement.setVersionRange(versionRange);
