@@ -431,6 +431,9 @@
           name="Oomph Releng">
         <predicate
             xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.simrel\.build"/>
+        <predicate
+            xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.all-feature"/>
         <predicate
             xsi:type="predicates:NamePredicate"
