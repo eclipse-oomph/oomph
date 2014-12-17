@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+<project name="Oomph" default="change-version">
+
+	<property name="version.from" value="1.0.0" />
+	<property name="version.to" value="1.1.0" />
+
+	<target name="change-version">
+
+		<replaceregexp match="&lt;version>${version.from}-SNAPSHOT&lt;/version>" replace="&lt;version>${version.to}-SNAPSHOT&lt;/version>" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="**/pom.xml" />
+				<exclude name="**/target/**" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="version=&quot;${version.from}.qualifier&quot;" replace="version=&quot;${version.to}.qualifier&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="features/*/feature.xml" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="Bundle-Version: ${version.from}.qualifier" replace="Bundle-Version: ${version.to}.qualifier" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="plugins/*/META-INF/MANIFEST.MF" />
+				<include name="releng/*/META-INF/MANIFEST.MF" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match=";version=&quot;${version.from}&quot;" replace=";version=&quot;${version.to}&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="plugins/*/META-INF/MANIFEST.MF" />
+				<include name="releng/*/META-INF/MANIFEST.MF" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="version=&quot;${version.from}&quot;" replace="version=&quot;${version.to}&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="**/component.def" />
+				<exclude name="**/target/**" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="_${version.from}.qualifier.jar&quot;" replace="_${version.to}.qualifier.jar&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="sites/**/category.xml" />
+				<exclude name="**/target/**" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="version=&quot;${version.from}.qualifier&quot;" replace="version=&quot;${version.to}.qualifier&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="sites/**/category.xml" />
+				<exclude name="**/target/**" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="version=&quot;${version.from}.qualifier&quot;" replace="version=&quot;${version.to}.qualifier&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="products/**/*.product" />
+				<exclude name="**/target/**" />
+			</fileset>
+		</replaceregexp>
+
+	</target>
+
+</project>

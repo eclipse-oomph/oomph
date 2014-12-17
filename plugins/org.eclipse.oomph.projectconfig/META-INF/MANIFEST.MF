@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.projectconfig;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.oomph.projectconfig.impl.ProjectConfigPlugin$Implementation
 Bundle-Name: %pluginName
@@ -18,6 +18,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.oomph.util;bundle-version="[1.0.0,2.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.oomph.projectconfig;version="1.0.0";x-internal:=true,
- org.eclipse.oomph.projectconfig.impl;version="1.0.0";x-internal:=true,
- org.eclipse.oomph.projectconfig.util;version="1.0.0";x-internal:=true
+Export-Package: org.eclipse.oomph.projectconfig;version="1.1.0";x-internal:=true,
+ org.eclipse.oomph.projectconfig.impl;version="1.1.0";x-internal:=true,
+ org.eclipse.oomph.projectconfig.util;version="1.1.0";x-internal:=true
