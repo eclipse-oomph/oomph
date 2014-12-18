@@ -38,7 +38,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Status;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -515,63 +514,60 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     final BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(sourceLocator);
     if (rootContainer == null)
     {
-      status
-          .add(new Status(IStatus.ERROR, ResourcesPlugin.INSTANCE.getSymbolicName(), "The root folder '" + sourceLocator.getRootFolder() + "' doesn't exist"));
-
+      monitor.setTaskName("Skipping root folder '" + sourceLocator.getRootFolder() + "' because it doesn't exist");
+      return;
     }
-    else
-    {
-      final Set<URI> excludedURIs = new HashSet<URI>();
-      for (String path : sourceLocator.getExcludedPaths())
-      {
-        while (path.startsWith("/"))
-        {
-          path = path.substring(1);
-        }
 
-        excludedURIs.add(URI.createURI(path));
+    final Set<URI> excludedURIs = new HashSet<URI>();
+    for (String path : sourceLocator.getExcludedPaths())
+    {
+      while (path.startsWith("/"))
+      {
+        path = path.substring(1);
       }
 
-      rootContainer.accept(new BackendResource.Visitor.Default()
-      {
-        @Override
-        public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
-        {
-          ResourcesPlugin.checkCancelation(monitor);
+      excludedURIs.add(URI.createURI(path));
+    }
 
-          if (isExcludedPath(rootContainer, container))
+    rootContainer.accept(new BackendResource.Visitor.Default()
+    {
+      @Override
+      public boolean visitContainer(BackendContainer container, IProgressMonitor monitor) throws BackendException
+      {
+        ResourcesPlugin.checkCancelation(monitor);
+
+        if (isExcludedPath(rootContainer, container))
+        {
+          return false;
+        }
+
+        IProject project = loadProject(sourceLocator, defaultProjectFactories, rootContainer, container, monitor);
+        if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
+        {
+          try
+          {
+            projectHandler.handleProject(project, container);
+          }
+          catch (Exception ex)
+          {
+            SourceLocatorImpl.addStatus(status, ResourcesPlugin.INSTANCE, project.getName(), ex);
+          }
+
+          if (!sourceLocator.isLocateNestedProjects())
           {
             return false;
           }
-
-          IProject project = loadProject(sourceLocator, defaultProjectFactories, rootContainer, container, monitor);
-          if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
-          {
-            try
-            {
-              projectHandler.handleProject(project, container);
-            }
-            catch (Exception ex)
-            {
-              SourceLocatorImpl.addStatus(status, ResourcesPlugin.INSTANCE, project.getName(), ex);
-            }
-
-            if (!sourceLocator.isLocateNestedProjects())
-            {
-              return false;
-            }
-          }
-
-          return true;
         }
 
-        private boolean isExcludedPath(BackendContainer rootContainer, BackendContainer backendContainer)
-        {
-          URI relativeURI = backendContainer.getRelativeURI(rootContainer);
-          return relativeURI != null && excludedURIs.contains(relativeURI);
-        }
-      }, monitor);
-    }
+        return true;
+      }
+
+      private boolean isExcludedPath(BackendContainer rootContainer, BackendContainer backendContainer)
+      {
+        URI relativeURI = backendContainer.getRelativeURI(rootContainer);
+        return relativeURI != null && excludedURIs.contains(relativeURI);
+      }
+    }, monitor);
   }
 
 } // SourceLocatorImpl
