@@ -147,10 +147,6 @@
   <stream name="master"
       label="Master">
     <setupTask
-        xsi:type="setup:VariableTask"
-        name="bugzilla.version"
-        value="1.0.0"/>
-    <setupTask
         xsi:type="jdt:JRETask"
         version="J2SE-1.5"
         location="${jre.location-1.5}"/>
@@ -343,7 +339,7 @@
               pattern="org\.eclipse\.oomph\.setup.*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@streams[name='master']/@setupTasks.4/@workingSets.0"/>
+              excludedWorkingSet="//@streams[name='master']/@setupTasks.3/@workingSets.0"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -455,14 +451,17 @@
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <query
-          summary="Oomph Bugs in ${bugzilla.version}"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
+          summary="Oomph Bugs"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
       <query
-          summary="Oomph Features in ${bugzilla.version}"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;version=${bugzilla.version}&amp;bug_severity=enhancement"/>
+          summary="Oomph Features"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=enhancement"/>
       <query
-          summary="Oomph Resolved in ${bugzilla.version}"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=${bugzilla.version}"/>
+          summary="Oomph Resolved in 1.1.0"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.1.0"/>
+      <query
+          summary="Oomph Resolved in 1.0.0"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.0.0"/>
       <query
           summary="Oomph Unspecified Version"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;version=unspecified"/>
