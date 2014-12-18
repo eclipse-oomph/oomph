@@ -131,7 +131,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <description>Platform Platform</description>
+      <description>Platform Base, Update, and Ant</description>
     </setupTask>
     <setupTask
         xsi:type="setup:PreferenceTask"
@@ -263,14 +263,14 @@
         </detail>
         <detail
             key="label">
-          <value>Platform Common Git or Gerrit Repository</value>
+          <value>Platform Documentation Git or Gerrit Repository</value>
         </detail>
         <detail
             key="target">
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <description>Platform Common</description>
+      <description>Platform Documentation</description>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
@@ -635,7 +635,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <description>Platform Runtime</description>
+      <description>Platform SWT</description>
     </setupTask>
     <setupTask
         xsi:type="setup:ResourceCopyTask"
@@ -914,7 +914,7 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <description>Platform Team</description>
+      <description>Platform Text</description>
     </setupTask>
     <setupTask
         xsi:type="setup:PreferenceTask"
@@ -1138,7 +1138,7 @@
         </detail>
         <detail
             key="label">
-          <value>Platform UA Git or Gerrit Repository</value>
+          <value>Platform UI Git or Gerrit Repository</value>
         </detail>
         <detail
             key="target">
