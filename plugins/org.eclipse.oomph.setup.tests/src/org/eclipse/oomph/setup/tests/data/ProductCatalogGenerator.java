@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.tests.data;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
@@ -19,6 +21,7 @@ import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -27,8 +30,11 @@ import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.XMLUtil;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import org.eclipse.equinox.app.IApplication;
@@ -49,9 +55,16 @@ import org.eclipse.equinox.p2.repository.IRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -71,6 +84,12 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String RELEASES = "http://download.eclipse.org/releases";
 
+  private static final String ICON_URL_PREFIX = "http://www.eclipse.org/downloads/images/";
+
+  private static final String ICON_DEFAULT_KEY = "<default>";
+
+  private static final Map<String, String> ICONS = new HashMap<String, String>();
+
   public Object start(IApplicationContext context) throws Exception
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
@@ -79,6 +98,23 @@ public class ProductCatalogGenerator implements IApplication
     {
       uri = org.eclipse.emf.common.util.URI.createURI(arguments[1]);
     }
+
+    ICONS.put(ICON_DEFAULT_KEY, ICON_URL_PREFIX + "classic2.jpg");
+    ICONS.put("reporting", ICON_URL_PREFIX + "birt-icon_48x48.png");
+    ICONS.put("cpp", ICON_URL_PREFIX + "cdt.png");
+    ICONS.put("automotive", ICON_URL_PREFIX + "classic.jpg");
+    ICONS.put("committers", ICON_URL_PREFIX + "classic2.jpg");
+    ICONS.put("dsl", ICON_URL_PREFIX + "dsl-package.jpg");
+    ICONS.put("java", ICON_URL_PREFIX + "java.png");
+    ICONS.put("jee", ICON_URL_PREFIX + "javaee.png");
+    // ICONS.put("?", ICON_URL_PREFIX+"JRebel-42x42-dark.png");
+    ICONS.put("modeling", ICON_URL_PREFIX + "modeling.png");
+    ICONS.put("parallel", ICON_URL_PREFIX + "parallel.png");
+    ICONS.put("php", ICON_URL_PREFIX + "php.png");
+    ICONS.put("rcp", ICON_URL_PREFIX + "rcp.jpg");
+    ICONS.put("scout", ICON_URL_PREFIX + "scout.jpg");
+    ICONS.put("testing", ICON_URL_PREFIX + "testing.png");
+    ICONS.put("mobile", ICON_URL_PREFIX + "mobile.jpg");
 
     generate(uri);
     return null;
@@ -301,11 +337,12 @@ public class ProductCatalogGenerator implements IApplication
           label += " (unreleased before " + latestTrainLabel + ")";
         }
 
-        System.out.println(label);
+        System.out.println(label + " (" + id + ")");
 
         Product product = SetupFactory.eINSTANCE.createProduct();
         product.setName(id);
         product.setLabel(label);
+        attachBrandingInfos(product);
         productCatalog.getProducts().add(product);
 
         addProductVersion(product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrain, "latest", "Latest ("
@@ -350,7 +387,7 @@ public class ProductCatalogGenerator implements IApplication
       Resource resource = new BaseResourceFactoryImpl().createResource(uri == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup")
           : uri);
       resource.getContents().add(productCatalog);
-      resource.save(System.out, null);
+      // resource.save(System.out, null);
 
       if (uri != null)
       {
@@ -582,6 +619,128 @@ public class ProductCatalogGenerator implements IApplication
   private String getTrainLabel(String train)
   {
     return Character.toString((char)(train.charAt(0) + 'A' - 'a')) + train.substring(1);
+  }
+
+  private void attachBrandingInfos(final Product product)
+  {
+    String name = product.getName();
+    if (name.startsWith("epp.package."))
+    {
+      name = name.substring("epp.package.".length());
+    }
+
+    final String staticIconURL = ICONS.get(name);
+    if (staticIconURL != null)
+    {
+      EMap<String, String> brandingInfos = getBrandingInfos(product);
+      brandingInfos.put("iconurl", staticIconURL);
+    }
+
+    String[] trains = getTrains();
+    for (int i = trains.length; i >= 0; --i)
+    {
+      InputStream in = null;
+
+      try
+      {
+        String branch = i == trains.length ? "master" : trains[i].toUpperCase();
+        String url = "http://git.eclipse.org/c/epp/org.eclipse.epp.packages.git/plain/packages/org.eclipse.epp.package." + name + ".feature/epp.website.xml"
+            + "?h=" + branch;
+        in = new URL(url).openStream();
+        System.out.println(url);
+
+        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+        Element rootElement = XMLUtil.loadRootElement(documentBuilder, in);
+        XMLUtil.handleElementsByTagName(rootElement, "packageMetaData", new XMLUtil.ElementHandler()
+        {
+          public void handleElement(Element element) throws Exception
+          {
+            if (staticIconURL != null)
+            {
+              System.out.println(staticIconURL);
+            }
+            else
+            {
+              String iconurl = element.getAttribute("iconurl");
+              if (iconurl == null)
+              {
+                iconurl = ICONS.get(ICON_DEFAULT_KEY);
+              }
+
+              if (iconurl != null)
+              {
+                EMap<String, String> brandingInfos = getBrandingInfos(product);
+                brandingInfos.put("iconurl", iconurl);
+                System.out.println(iconurl);
+              }
+            }
+
+            XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
+            {
+              public void handleElement(Element childElement) throws Exception
+              {
+                String localName = childElement.getLocalName();
+                if ("description".equals(localName))
+                {
+                  String description = childElement.getTextContent();
+                  if (description != null)
+                  {
+                    EMap<String, String> brandingInfos = getBrandingInfos(product);
+                    brandingInfos.put("description", description);
+                  }
+
+                }
+              }
+            });
+          }
+        });
+
+        return;
+      }
+      catch (FileNotFoundException ex)
+      {
+        System.out.println(ex.getMessage() + " (FAILED)");
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+      finally
+      {
+        IOUtil.closeSilent(in);
+      }
+    }
+
+    String iconurl;
+    if (staticIconURL == null)
+    {
+      iconurl = ICONS.get(ICON_DEFAULT_KEY);
+      if (iconurl == null)
+      {
+        return;
+      }
+
+      EMap<String, String> brandingInfos = getBrandingInfos(product);
+      brandingInfos.put("iconurl", iconurl);
+    }
+    else
+    {
+      iconurl = staticIconURL;
+    }
+
+    System.out.println(iconurl);
+  }
+
+  private EMap<String, String> getBrandingInfos(Product product)
+  {
+    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    if (annotation == null)
+    {
+      annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      product.getAnnotations().add(annotation);
+    }
+
+    return annotation.getDetails();
   }
 
   /**

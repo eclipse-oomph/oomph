@@ -21,6 +21,17 @@
   </setupTask>
   <product name="epp.package.dsl"
       label="Eclipse DSL Tools">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/dsl-package.jpg</value>
+      </detail>
+      <detail
+          key="description">
+        <value>The essential tools for Java and DSL developers, including a Java &amp; Xtend IDE, a DSL Framework (Xtext), a Git client, XML Editor, and Maven integration.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -44,7 +55,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -96,7 +107,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -180,6 +191,17 @@
   </product>
   <product name="epp.package.automotive"
       label="Eclipse IDE for Automotive Software Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/classic.jpg</value>
+      </detail>
+      <detail
+          key="description">
+        <value>This package contains frameworks and tools used for the development of embedded automotive software: In addition to Eclipse Platform, Java Development Tools, and Plug-in Development Environment, it includes EMF, Sphinx, GMF, Xtext, Xtend, Xpand, UML2, selected other modeling components, C/C++ development tools, and XML/XSD editors and tools. To keep the package at a reasonable size, it includes only the runtime binaries but no source code and no developer documentation.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -203,7 +225,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -255,7 +277,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -339,6 +361,17 @@
   </product>
   <product name="epp.package.cpp"
       label="Eclipse IDE for C/C++ Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/cdt.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>An IDE for C/C++ developers with Mylyn integration.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -356,7 +389,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -396,7 +429,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -462,6 +495,24 @@
   </product>
   <product name="epp.package.committers"
       label="Eclipse IDE for Eclipse Committers (unreleased before Mars)">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/classic2.jpg</value>
+      </detail>
+      <detail
+          key="description">
+        <value>
+
+          Package suited for development of Eclipse itself at Eclipse.org; based on the Eclipse Platform adding PDE, Git, Marketplace Client, source code and developer documentation.&lt;br/>
+          &lt;br/>
+          Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
+          Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EGit&quot;>here&lt;/a> to file a bug against Eclipse Git team provider.
+
+        </value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -485,7 +536,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -511,12 +562,23 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
   </product>
   <product name="epp.package.java"
       label="Eclipse IDE for Java Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/java.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>The essential tools for any Java developer, including a Java IDE, a CVS client, Git client, XML Editor, Mylyn, Maven integration and WindowBuilder</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -537,7 +599,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -583,7 +645,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -658,6 +720,17 @@
   </product>
   <product name="epp.package.jee"
       label="Eclipse IDE for Java EE Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/javaee.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>Tools for Java developers creating Java EE and Web applications, including a Java IDE, tools for Java EE, JPA, JSF, Mylyn, EGit and others.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -681,7 +754,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -733,7 +806,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -817,6 +890,17 @@
   </product>
   <product name="epp.package.reporting"
       label="Eclipse IDE for Java and Report Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/birt-icon_48x48.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>Java EE tools and BIRT reporting tool for Java developers to create Java EE and Web applications that also have reporting needs.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -840,7 +924,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -892,7 +976,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -976,6 +1060,17 @@
   </product>
   <product name="epp.package.php"
       label="Eclipse IDE for PHP Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/php.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -993,7 +1088,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1033,7 +1128,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1059,6 +1154,21 @@
   </product>
   <product name="epp.package.modeling"
       label="Eclipse Modeling Tools">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/modeling.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>
+          The Modeling package provides tools and runtimes for building model-based applications.
+                  You can use it to graphically design domain models, to leverage those models at design time by creating and editing dynamic instances, to collaborate via Eclipse's team support with facilities for comparing and merging models and model instances structurally, and finally to generate Java code from those models to produce complete applications.
+                  In addition, via the package's discover catalog, you can easily install a wide range of additional powerful, model-based tools and runtimes to suit your specific needs.
+        </value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -1082,7 +1192,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1134,7 +1244,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1216,141 +1326,19 @@
       </setupTask>
     </version>
   </product>
-  <product name="epp.package.standard"
-      label="Eclipse Standard/SDK">
-    <version
-        name="latest"
-        label="Latest (Mars)">
-      <setupTask
-          xsi:type="setup.p2:P2Task">
-        <requirement
-            name="epp.package.committers"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
-      </setupTask>
-    </version>
-    <version
-        name="latest.released"
-        label="Latest Release (Luna)">
-      <setupTask
-          xsi:type="setup.p2:P2Task">
-        <requirement
-            name="epp.package.standard"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars">
-      <setupTask
-          xsi:type="setup.p2:P2Task">
-        <requirement
-            name="epp.package.committers"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
-      </setupTask>
-    </version>
-    <version
-        name="luna"
-        label="Luna">
-      <setupTask
-          xsi:type="setup.p2:P2Task">
-        <requirement
-            name="epp.package.standard"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
-      </setupTask>
-    </version>
-    <version
-        name="kepler"
-        label="Kepler">
-      <setupTask
-          xsi:type="setup.p2:P2Task">
-        <requirement
-            name="epp.package.standard"
-            versionRange="[2.0.0,2.1.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
-      </setupTask>
-    </version>
-  </product>
   <product name="epp.package.parallel"
       label="Eclipse for Parallel Application Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/parallel.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -1368,7 +1356,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1408,7 +1396,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1474,6 +1462,17 @@
   </product>
   <product name="epp.package.rcp"
       label="Eclipse for RCP and RAP Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/rcp.jpg</value>
+      </detail>
+      <detail
+          key="description">
+        <value>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Mylyn, the m2e Maven integration, and an XML editor. In addition to the CVS Eclipse Team provider, it also contains the EGit tooling for accessing Git version control systems.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -1497,7 +1496,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1549,7 +1548,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1633,6 +1632,17 @@
   </product>
   <product name="epp.package.scout"
       label="Eclipse for Scout Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/scout.jpg</value>
+      </detail>
+      <detail
+          key="description">
+        <value>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a framework to develop Java/Eclipse based business applications that run on the desktop, in browsers, and on mobile devices. This package includes a complete SDK, useful developer tools and source code.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -1656,7 +1666,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1708,7 +1718,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1792,6 +1802,17 @@
   </product>
   <product name="epp.package.testing"
       label="Eclipse for Testers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/testing.png</value>
+      </detail>
+      <detail
+          key="description">
+        <value>This package contains Eclipse features that support the software development quality assurance process, such as Jubula and Mylyn.</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -1809,7 +1830,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1849,7 +1870,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201411141000"/>
+            url="http://download.eclipse.org/releases/mars/201412191000"/>
       </setupTask>
     </version>
     <version
@@ -1913,8 +1934,140 @@
       </setupTask>
     </version>
   </product>
+  <product name="epp.package.standard"
+      label="Eclipse IDE for Eclipse Committers (discontinued after Luna)">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/classic2.jpg</value>
+      </detail>
+      <detail
+          key="description">
+        <value>
+
+          Package suited for development of Eclipse itself at Eclipse.org; based on the Eclipse Platform adding PDE, Git, Marketplace Client, source code and developer documentation.&lt;br/>
+          &lt;br/>
+          Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
+          Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EGit&quot;>here&lt;/a> to file a bug against Eclipse Git team provider.
+
+        </value>
+      </detail>
+    </annotation>
+    <version
+        name="latest"
+        label="Latest (Luna)">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[4.4.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,4.0.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,4.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201409261001"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201409261001"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[4.4.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.12.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.12.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201409261001"/>
+      </setupTask>
+    </version>
+    <version
+        name="kepler"
+        label="Kepler">
+      <setupTask
+          xsi:type="setup.p2:P2Task">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[2.0.0,2.1.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
+        <repository
+            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+      </setupTask>
+    </version>
+  </product>
   <product name="epp.package.mobile"
       label="Eclipse IDE for Mobile Developers (discontinued after Kepler)">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="iconurl">
+        <value>http://www.eclipse.org/downloads/images/mobile.jpg</value>
+      </detail>
+    </annotation>
     <version
         name="latest"
         label="Latest (Kepler)">

@@ -15,6 +15,8 @@ package org.eclipse.oomph.setup;
  */
 public final class AnnotationConstants
 {
+  public static final String ANNOTATION_BRANDING_INFO = "http://www.eclipse.org/oomph/setup/BrandingInfo";
+
   public static final String ANNOTATION_USER_PREFERENCES = "http://www.eclipse.org/oomph/setup/UserPreferences";
 
   public static final String ANNOTATION_INHERITED_CHOICES = "http://www.eclipse.org/oomph/setup/InheritedChoices";
