@@ -230,7 +230,7 @@ public class ProductPage extends SetupWizardPage
     installationPane.setLayout(installationPaneLayout);
 
     GridData descriptionLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-    descriptionLayoutData.heightHint = 120;
+    descriptionLayoutData.heightHint = 105;
 
     Composite descriptionComposite = new Composite(installationPane, SWT.BORDER);
     descriptionComposite.setLayoutData(descriptionLayoutData);
@@ -578,17 +578,11 @@ public class ProductPage extends SetupWizardPage
       label = product.getName();
     }
 
-    return "<img src=\""
+    return "<html><body style=\"margin:5px;\"><img src=\""
         + imageURI
         + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
-        + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description) + "</span>";
-    //
-    // return "<table border=\"0\"><tr><td valign=\"top\"><img src=\""
-    // + imageURI
-    // +
-    // "\" width=\"42\" height=\"42\"></img>&nbsp;</td><td valign=\"top\" width=\"100%\"><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:85%\">"
-    // + safe(label) + "<br/><br/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
-    // + "</span></td></tr></table>";
+        + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
+        + "</span></body></html>";
   }
 
   private void setCurrentBundlePool(BundlePool pool)
