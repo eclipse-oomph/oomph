@@ -633,7 +633,7 @@ public class ProductCatalogGenerator implements IApplication
     if (staticIconURL != null)
     {
       EMap<String, String> brandingInfos = getBrandingInfos(product);
-      brandingInfos.put("iconurl", staticIconURL);
+      brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, staticIconURL);
     }
 
     String[] trains = getTrains();
@@ -670,7 +670,7 @@ public class ProductCatalogGenerator implements IApplication
               if (iconurl != null)
               {
                 EMap<String, String> brandingInfos = getBrandingInfos(product);
-                brandingInfos.put("iconurl", iconurl);
+                brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, iconurl);
                 System.out.println(iconurl);
               }
             }
@@ -685,8 +685,7 @@ public class ProductCatalogGenerator implements IApplication
                   String description = childElement.getTextContent();
                   if (description != null)
                   {
-                    EMap<String, String> brandingInfos = getBrandingInfos(product);
-                    brandingInfos.put("description", description);
+                    product.setDescription(description.trim());
                   }
 
                 }
@@ -721,7 +720,7 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       EMap<String, String> brandingInfos = getBrandingInfos(product);
-      brandingInfos.put("iconurl", iconurl);
+      brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, iconurl);
     }
     else
     {
