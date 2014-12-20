@@ -212,6 +212,11 @@ public class ProductCatalogGenerator implements IApplication
           }
 
           String id = iu.getId();
+          if ("epp.package.standard".equals(id))
+          {
+            label = "Eclipse Standard";
+          }
+
           IInstallableUnit existingIU = ius.get(id);
           if (existingIU == null || existingIU.getVersion().compareTo(iu.getVersion()) < 0)
           {
@@ -484,6 +489,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
+  @Deprecated
   private void postProcess(ProductCatalog productCatalog)
   {
     for (Product product : productCatalog.getProducts())
