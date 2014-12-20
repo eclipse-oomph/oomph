@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.p2.core.AgentManager;
@@ -18,6 +19,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.p2.internal.ui.P2ContentProvider;
 import org.eclipse.oomph.p2.internal.ui.P2LabelProvider;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -35,6 +37,7 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -56,8 +59,12 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationAdapter;
+import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -65,13 +72,13 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -90,13 +97,7 @@ public class ProductPage extends SetupWizardPage
 
   private TreeViewer productViewer;
 
-  private Label idLabel;
-
-  private Text idText;
-
-  private Label nameLabel;
-
-  private Text nameText;
+  private Browser descriptionBrowser;
 
   private Label versionLabel;
 
@@ -135,7 +136,6 @@ public class ProductPage extends SetupWizardPage
 
     GridLayout mainLayout = new GridLayout();
     mainLayout.marginHeight = 0;
-    mainLayout.marginBottom = 5;
 
     Composite mainComposite = new Composite(parent, SWT.NONE);
     mainComposite.setLayout(mainLayout);
@@ -222,7 +222,6 @@ public class ProductPage extends SetupWizardPage
     productViewer.setInput(selection);
 
     GridLayout installationPaneLayout = new GridLayout(2, false);
-    installationPaneLayout.marginTop = 5;
     installationPaneLayout.marginWidth = 0;
     installationPaneLayout.marginHeight = 0;
 
@@ -230,21 +229,37 @@ public class ProductPage extends SetupWizardPage
     installationPane.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     installationPane.setLayout(installationPaneLayout);
 
-    idLabel = new Label(installationPane, SWT.NONE);
-    idLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-    idLabel.setText("Product ID:");
-    AccessUtil.setKey(idLabel, "productID");
+    GridData descriptionLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
+    descriptionLayoutData.heightHint = 120;
 
-    idText = new Text(installationPane, SWT.READ_ONLY);
-    idText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    Composite descriptionComposite = new Composite(installationPane, SWT.BORDER);
+    descriptionComposite.setLayoutData(descriptionLayoutData);
+    descriptionComposite.setLayout(new FillLayout());
 
-    nameLabel = new Label(installationPane, SWT.NONE);
-    nameLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-    nameLabel.setText("Product Name:");
-    AccessUtil.setKey(nameLabel, "productName");
+    descriptionBrowser = new Browser(descriptionComposite, SWT.NONE);
+    descriptionBrowser.addLocationListener(new LocationAdapter()
+    {
+      @Override
+      public void changing(LocationEvent event)
+      {
+        if (!"about:blank".equals(event.location))
+        {
+          try
+          {
+            // java.awt.Desktop was introduced with Java 1.6!
+            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+            desktop.browse(new URI(event.location));
+          }
+          catch (Throwable ex)
+          {
+            //$FALL-THROUGH$
+          }
 
-    nameText = new Text(installationPane, SWT.READ_ONLY);
-    nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+          event.doit = false;
+        }
+      }
+    });
+    AccessUtil.setKey(descriptionBrowser, "description");
 
     versionLabel = new Label(installationPane, SWT.NONE);
     versionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
@@ -443,8 +458,6 @@ public class ProductPage extends SetupWizardPage
       product = NO_PRODUCT;
     }
 
-    idText.setText(safe(product.getName()));
-    nameText.setText(safe(product.getLabel()));
     versionComboViewer.setInput(product);
 
     ProductVersion version = catalogSelector.getCatalogManager().getSelection().getDefaultProductVersions().get(product);
@@ -497,10 +510,9 @@ public class ProductPage extends SetupWizardPage
     boolean productSelected = product != NO_PRODUCT;
     String error = productSelected ? null : "Select a product from the catalogs and choose the product version.";
 
-    idLabel.setEnabled(productSelected);
-    idText.setEnabled(productSelected);
-    nameLabel.setEnabled(productSelected);
-    nameText.setEnabled(productSelected);
+    descriptionBrowser.setEnabled(productSelected);
+    descriptionBrowser.setText(safe(productSelected ? getDescriptionHTML(product) : null));
+
     versionLabel.setEnabled(productSelected);
     versionComboViewer.getControl().setEnabled(productSelected);
 
@@ -542,6 +554,41 @@ public class ProductPage extends SetupWizardPage
       setErrorMessage(error);
       setPageComplete(error == null);
     }
+  }
+
+  private String getDescriptionHTML(Product product)
+  {
+    String imageURI = null;
+
+    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    if (annotation != null)
+    {
+      imageURI = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+    }
+
+    if (imageURI == null)
+    {
+      imageURI = "http://www.eclipse.org/downloads/images/classic2.jpg";
+    }
+
+    String description = product.getDescription();
+    String label = product.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = product.getName();
+    }
+
+    return "<img src=\""
+        + imageURI
+        + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
+        + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description) + "</span>";
+    //
+    // return "<table border=\"0\"><tr><td valign=\"top\"><img src=\""
+    // + imageURI
+    // +
+    // "\" width=\"42\" height=\"42\"></img>&nbsp;</td><td valign=\"top\" width=\"100%\"><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:85%\">"
+    // + safe(label) + "<br/><br/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
+    // + "</span></td></tr></table>";
   }
 
   private void setCurrentBundlePool(BundlePool pool)
