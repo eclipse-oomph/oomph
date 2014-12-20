@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.ui.Questionnaire;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.ErrorDialog;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -74,9 +75,9 @@ public class InstallerApplication implements IApplication
         }
       }
     }
-    catch (Exception ex)
+    catch (Throwable ex)
     {
-      // Ignore
+      //$FALL-THROUGH$
     }
 
     final Display display = Display.getDefault();
@@ -151,9 +152,24 @@ public class InstallerApplication implements IApplication
       {
         restarting.createNewFile();
       }
-      catch (Exception ex)
+      catch (Throwable ex)
       {
-        // Ignore
+        //$FALL-THROUGH$
+      }
+
+      String launcher = getLauncher();
+      if (launcher != null)
+      {
+        try
+        {
+          // EXIT_RESTART often makes the new process come up behind other windows, so try a fresh native process first.
+          Runtime.getRuntime().exec(launcher);
+          return EXIT_OK;
+        }
+        catch (Throwable ex)
+        {
+          //$FALL-THROUGH$
+        }
       }
 
       return EXIT_RESTART;
@@ -246,7 +262,7 @@ public class InstallerApplication implements IApplication
             }
             catch (OperationCanceledException ex)
             {
-              // Ignore.
+              //$FALL-THROUGH$
             }
             catch (InvocationTargetException ex)
             {
@@ -272,5 +288,24 @@ public class InstallerApplication implements IApplication
 
   public void stop()
   {
+    // Do nothing.
+  }
+
+  public static String getLauncher()
+  {
+    try
+    {
+      String launcher = PropertiesUtil.getProperty("eclipse.launcher");
+      if (launcher != null && new File(launcher).isFile())
+      {
+        return launcher;
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
   }
 }
