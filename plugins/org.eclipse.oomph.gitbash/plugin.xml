@@ -110,6 +110,15 @@
                state="true"
                style="push"
                tooltip="Open Git Bash"/>
+         <action
+               class="org.eclipse.oomph.gitbash.repository.PushDirectAction"
+               enablesFor="1"
+               icon="icons/push_directly.gif"
+               id="org.eclipse.oomph.gitbash.PushDirectAction"
+               label="Push Directly"
+               menubarPath="additions"
+               state="true"
+               style="push"/>
       </objectContribution>
       <objectContribution
             adaptable="false"

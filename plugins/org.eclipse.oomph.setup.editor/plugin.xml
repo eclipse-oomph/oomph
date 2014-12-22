@@ -49,24 +49,6 @@
    </extension>
 
    <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="true"
-            id="org.eclipse.oomph.setup.editor.contribution1"
-            objectClass="org.eclipse.egit.ui.internal.repository.tree.RepositoryNode">
-         <action
-               class="org.eclipse.oomph.setup.presentation.actions.PushDirectAction"
-               enablesFor="1"
-               icon="icons/push_directly.gif"
-               id="org.eclipse.oomph.setup.editor.PushDirectAction"
-               label="Push Directly"
-               menubarPath="additions"
-               state="true"
-               style="push"/>
-      </objectContribution>
-   </extension>
-
-   <extension
          point="org.eclipse.ui.commands">
       <category
             id="org.eclipse.oomph.setup.category"
