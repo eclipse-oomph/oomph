@@ -178,7 +178,7 @@ public class ProjectPage extends SetupWizardPage
     super("ProjectPage");
     setTitle("Projects");
     setDescription("Double click the projects you want to provision, and for each choose its stream in the table column.");
-  }
+      }
 
   @Override
   protected Control createUI(final Composite parent)
@@ -219,7 +219,7 @@ public class ProjectPage extends SetupWizardPage
 
     resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(editingDomain));
 
-    SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
+    SashForm sashForm = new SashForm(parent, SWT.SMOOTH | SWT.VERTICAL);
 
     GridLayout upperLayout = new GridLayout();
     upperLayout.marginHeight = 0;
@@ -882,8 +882,6 @@ public class ProjectPage extends SetupWizardPage
     streamColumn.setText("Stream");
     streamTableLayout.setColumnData(streamColumn, new ColumnWeightData(30, true));
 
-    sashForm.setWeights(new int[] { 3, 1 });
-
     CatalogSelection selection = catalogSelector.getSelection();
     projectViewer.setInput(selection);
 
@@ -1098,6 +1096,7 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
+    sashForm.setWeights(new int[] { 3, 1 });
     return sashForm;
   }
 

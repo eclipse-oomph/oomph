@@ -259,7 +259,7 @@ public class ProgressPage extends SetupWizardPage
     mainLayout.marginBottom = 5;
     mainComposite.setLayout(mainLayout);
 
-    SashForm sashForm = new SashForm(mainComposite, SWT.VERTICAL);
+    SashForm sashForm = new SashForm(mainComposite, SWT.SMOOTH | SWT.VERTICAL);
     sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
     AccessUtil.setKey(sashForm, "sash");
 

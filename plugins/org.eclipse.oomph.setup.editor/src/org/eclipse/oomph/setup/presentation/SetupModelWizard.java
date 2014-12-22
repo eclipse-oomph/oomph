@@ -722,7 +722,7 @@ public class SetupModelWizard extends Wizard implements INewWizard
           Point shellSize = shell.getSize();
           if (sash == null)
           {
-            sash = new SashForm(composite, SWT.VERTICAL);
+            sash = new SashForm(composite, SWT.SMOOTH | SWT.VERTICAL);
             UIUtil.grabVertical(UIUtil.applyGridData(sash));
 
             previewer = new TreeViewer(sash, SWT.BORDER | SWT.MULTI);

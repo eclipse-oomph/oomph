@@ -62,6 +62,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -135,16 +136,27 @@ public class ProductPage extends SetupWizardPage
     catalogSelector = new CatalogSelector(catalogManager, true);
 
     GridLayout mainLayout = new GridLayout();
+    mainLayout.marginWidth = 5;
     mainLayout.marginHeight = 0;
 
     Composite mainComposite = new Composite(parent, SWT.NONE);
     mainComposite.setLayout(mainLayout);
 
+    SashForm sashForm = new SashForm(mainComposite, SWT.SMOOTH | SWT.VERTICAL);
+    sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+    GridLayout upperLayout = new GridLayout();
+    upperLayout.marginWidth = 0;
+    upperLayout.marginHeight = 0;
+
+    Composite upperComposite = new Composite(sashForm, SWT.NONE);
+    upperComposite.setLayout(upperLayout);
+
     GridLayout filterLayout = new GridLayout(2, false);
     filterLayout.marginWidth = 0;
     filterLayout.marginHeight = 0;
 
-    Composite filterComposite = new Composite(mainComposite, SWT.NONE);
+    Composite filterComposite = new Composite(upperComposite, SWT.NONE);
     filterComposite.setLayout(filterLayout);
     filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
@@ -174,7 +186,7 @@ public class ProductPage extends SetupWizardPage
     catalogSelector.configure(catalogsButton);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
-    FilteredTree filteredTree = new FilteredTree(mainComposite, SWT.BORDER, new PatternFilter(), true);
+    FilteredTree filteredTree = new FilteredTree(upperComposite, SWT.BORDER, new PatternFilter(), true);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
@@ -225,15 +237,11 @@ public class ProductPage extends SetupWizardPage
     installationPaneLayout.marginWidth = 0;
     installationPaneLayout.marginHeight = 0;
 
-    Composite installationPane = new Composite(mainComposite, SWT.NONE);
-    installationPane.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    Composite installationPane = new Composite(sashForm, SWT.NONE);
     installationPane.setLayout(installationPaneLayout);
 
-    GridData descriptionLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-    descriptionLayoutData.heightHint = 105;
-
     Composite descriptionComposite = new Composite(installationPane, SWT.BORDER);
-    descriptionComposite.setLayoutData(descriptionLayoutData);
+    descriptionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
     descriptionComposite.setLayout(new FillLayout());
 
     descriptionBrowser = new Browser(descriptionComposite, SWT.NONE);
@@ -437,6 +445,8 @@ public class ProductPage extends SetupWizardPage
     });
 
     updateInstallationPane(true);
+
+    sashForm.setWeights(new int[] { 7, 3 });
     return mainComposite;
   }
 

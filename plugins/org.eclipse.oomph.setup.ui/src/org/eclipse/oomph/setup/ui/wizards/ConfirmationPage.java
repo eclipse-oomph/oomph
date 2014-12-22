@@ -143,13 +143,13 @@ public class ConfirmationPage extends SetupWizardPage
     Composite mainComposite = new Composite(parent, SWT.NONE);
     mainComposite.setLayout(mainLayout);
 
-    SashForm horizontalSash = new SashForm(mainComposite, SWT.HORIZONTAL);
+    SashForm horizontalSash = new SashForm(mainComposite, SWT.SMOOTH | SWT.HORIZONTAL);
     UIUtil.grabVertical(UIUtil.applyGridData(horizontalSash));
     AccessUtil.setKey(horizontalSash, "hsash");
 
     fillCheckPane(horizontalSash);
 
-    SashForm verticalSash = new SashForm(horizontalSash, SWT.VERTICAL);
+    SashForm verticalSash = new SashForm(horizontalSash, SWT.SMOOTH | SWT.VERTICAL);
     AccessUtil.setKey(verticalSash, "vsash");
 
     fillChildrenPane(verticalSash);

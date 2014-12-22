@@ -89,7 +89,7 @@ public class LicenseDialog extends AbstractConfirmDialog
     }
     else
     {
-      sashForm = new SashForm(parent, SWT.HORIZONTAL);
+      sashForm = new SashForm(parent, SWT.SMOOTH | SWT.HORIZONTAL);
       sashForm.setLayout(new GridLayout());
       GridData gd = new GridData(GridData.FILL_BOTH);
       sashForm.setLayoutData(gd);
