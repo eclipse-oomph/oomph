@@ -86,7 +86,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String ICON_URL_PREFIX = "http://www.eclipse.org/downloads/images/";
 
-  private static final String ICON_DEFAULT_KEY = "<default>";
+  private static final String ICON_DEFAULT = ICON_URL_PREFIX + "classic2.jpg";
 
   private static final Map<String, String> ICONS = new HashMap<String, String>();
 
@@ -99,7 +99,6 @@ public class ProductCatalogGenerator implements IApplication
       uri = org.eclipse.emf.common.util.URI.createURI(arguments[1]);
     }
 
-    ICONS.put(ICON_DEFAULT_KEY, ICON_URL_PREFIX + "classic2.jpg");
     ICONS.put("reporting", ICON_URL_PREFIX + "birt-icon_48x48.png");
     ICONS.put("cpp", ICON_URL_PREFIX + "cdt.png");
     ICONS.put("automotive", ICON_URL_PREFIX + "classic.jpg");
@@ -638,8 +637,7 @@ public class ProductCatalogGenerator implements IApplication
     final String staticIconURL = ICONS.get(name);
     if (staticIconURL != null)
     {
-      EMap<String, String> brandingInfos = getBrandingInfos(product);
-      brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, staticIconURL);
+      addImageURI(product, staticIconURL);
     }
 
     String[] trains = getTrains();
@@ -668,15 +666,9 @@ public class ProductCatalogGenerator implements IApplication
             else
             {
               String iconurl = element.getAttribute("iconurl");
-              if (iconurl == null)
-              {
-                iconurl = ICONS.get(ICON_DEFAULT_KEY);
-              }
-
               if (iconurl != null)
               {
-                EMap<String, String> brandingInfos = getBrandingInfos(product);
-                brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, iconurl);
+                addImageURI(product, iconurl);
                 System.out.println(iconurl);
               }
             }
@@ -716,24 +708,23 @@ public class ProductCatalogGenerator implements IApplication
       }
     }
 
-    String iconurl;
-    if (staticIconURL == null)
+    if (staticIconURL != null)
     {
-      iconurl = ICONS.get(ICON_DEFAULT_KEY);
-      if (iconurl == null)
-      {
-        return;
-      }
-
-      EMap<String, String> brandingInfos = getBrandingInfos(product);
-      brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, iconurl);
+      System.out.println(staticIconURL);
     }
-    else
+  }
+
+  private void addImageURI(Product product, String imageURI)
+  {
+    if (ICON_DEFAULT.equals(imageURI))
     {
-      iconurl = staticIconURL;
+      return;
     }
 
-    System.out.println(iconurl);
+    // imageURI = IOUtil.encodeImageData(imageURI);
+
+    EMap<String, String> brandingInfos = getBrandingInfos(product);
+    brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, imageURI);
   }
 
   private EMap<String, String> getBrandingInfos(Product product)

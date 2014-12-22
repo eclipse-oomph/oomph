@@ -486,13 +486,6 @@
   </product>
   <product name="epp.package.committers"
       label="Eclipse IDE for Eclipse Committers (unreleased before Mars)">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/classic2.jpg</value>
-      </detail>
-    </annotation>
     <version
         name="latest"
         label="Latest (Mars)">
@@ -1895,13 +1888,6 @@
   </product>
   <product name="epp.package.standard"
       label="Eclipse Standard (discontinued after Luna)">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/classic2.jpg</value>
-      </detail>
-    </annotation>
     <version
         name="latest"
         label="Latest (Luna)">

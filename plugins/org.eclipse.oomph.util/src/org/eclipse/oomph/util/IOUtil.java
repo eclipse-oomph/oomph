@@ -44,6 +44,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -59,6 +60,8 @@ public final class IOUtil
   private static final byte[] BUFFER = new byte[8192];
 
   private static final ObjectOutputStream DEV_NULL = createDevNull();
+
+  private static final String IMAGE_DATA_PREFIX = "imagedata:";
 
   private IOUtil()
   {
@@ -289,6 +292,80 @@ public final class IOUtil
     }
 
     return result;
+  }
+
+  public static String encodeImageData(String imageURI)
+  {
+    if (!imageURI.startsWith(IMAGE_DATA_PREFIX))
+    {
+      int lastDot = imageURI.lastIndexOf('.');
+      if (lastDot != -1)
+      {
+        String extension = imageURI.substring(lastDot);
+        InputStream in = null;
+  
+        try
+        {
+          in = new URL(imageURI).openStream();
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          copy(in, baos);
+  
+          String data = HexUtil.bytesToHex(baos.toByteArray());
+          imageURI = IMAGE_DATA_PREFIX + data + extension;
+        }
+        catch (Exception ex)
+        {
+          //$FALL-THROUGH$
+        }
+        finally
+        {
+          closeSilent(in);
+        }
+      }
+    }
+  
+    return imageURI;
+  }
+
+  public static String decodeImageData(String imageURI)
+  {
+    if (imageURI.startsWith(IMAGE_DATA_PREFIX))
+    {
+      String data = imageURI.substring(IMAGE_DATA_PREFIX.length());
+      OutputStream out = null;
+
+      try
+      {
+        byte[] digest = getSHA1(data);
+
+        int lastDot = data.lastIndexOf('.');
+        if (lastDot != -1)
+        {
+          String extension = data.substring(lastDot);
+          data = data.substring(0, lastDot);
+
+          File iconFile = new File(PropertiesUtil.getProperty("java.io.tmpdir"), "icon-" + HexUtil.bytesToHex(digest) + extension);
+          if (!iconFile.exists())
+          {
+            ByteArrayInputStream bais = new ByteArrayInputStream(HexUtil.hexToBytes(data));
+            out = new FileOutputStream(iconFile);
+            copy(bais, out);
+          }
+
+          imageURI = "file:/" + iconFile.getAbsolutePath().replace('\\', '/');
+        }
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+      finally
+      {
+        closeSilent(out);
+      }
+    }
+
+    return imageURI;
   }
 
   public static FileInputStream openInputStream(File file) throws IORuntimeException

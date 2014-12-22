@@ -23,6 +23,7 @@ import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -899,7 +900,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       {
         Location location = Platform.getInstallLocation();
         org.eclipse.emf.common.util.URI installationLocation = org.eclipse.emf.common.util.URI.createURI(FileLocator.resolve(location.getURL()).toString());
-        org.eclipse.emf.common.util.URI tempDir = org.eclipse.emf.common.util.URI.createFileURI(System.getProperty("java.io.tmpdir"));
+        org.eclipse.emf.common.util.URI tempDir = org.eclipse.emf.common.util.URI.createFileURI(PropertiesUtil.getProperty("java.io.tmpdir"));
         if (!ObjectUtil.equals(installationLocation.device(), tempDir.device()))
         {
           Field field = ReflectUtil.getField(NativeTouchpoint.class, "backups");

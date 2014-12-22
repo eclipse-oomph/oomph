@@ -36,6 +36,8 @@ import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -79,6 +81,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -578,7 +581,18 @@ public class ProductPage extends SetupWizardPage
 
     if (imageURI == null)
     {
-      imageURI = "http://www.eclipse.org/downloads/images/classic2.jpg";
+      File iconFile = new File(PropertiesUtil.getProperty("java.io.tmpdir"), "classic2.jpg");
+      if (!iconFile.exists())
+      {
+        BundleFile bundleFile = SetupUIPlugin.INSTANCE.getRootFile().getChild("icons/classic2.jpg");
+        bundleFile.export(iconFile);
+      }
+
+      imageURI = "file:/" + iconFile.getAbsolutePath().replace('\\', '/');
+    }
+    else
+    {
+      imageURI = IOUtil.decodeImageData(imageURI);
     }
 
     String description = product.getDescription();
