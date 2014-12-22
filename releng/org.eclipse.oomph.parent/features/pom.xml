@@ -46,6 +46,7 @@ Eike Stepper - initial API and implementation
     <module>../../../features/org.eclipse.oomph.setup.pde-feature</module>
     <module>../../../features/org.eclipse.oomph.setup.projects-feature</module>
     <module>../../../features/org.eclipse.oomph.setup.projectset-feature</module>
+    <module>../../../features/org.eclipse.oomph.setup.sdk-feature</module>
     <module>../../../features/org.eclipse.oomph.setup.targlets-feature</module>
     <module>../../../features/org.eclipse.oomph.setup.workbench-feature</module>
     <module>../../../features/org.eclipse.oomph.setup.workingsets-feature</module>

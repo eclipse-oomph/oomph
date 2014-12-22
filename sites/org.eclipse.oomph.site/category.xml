@@ -18,6 +18,9 @@
    <feature url="features/org.eclipse.oomph.projectcopy_1.0.0.qualifier.jar" id="org.eclipse.oomph.projectcopy" version="1.0.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
+   <feature url="features/org.eclipse.oomph.setup.sdk_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.sdk" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
    <feature url="features/org.eclipse.oomph.setup_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup" version="1.0.0.qualifier">
       <category name="org.eclipse.oomph.setup.category"/>
    </feature>
