@@ -118,7 +118,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -178,7 +177,7 @@ public class ProjectPage extends SetupWizardPage
     super("ProjectPage");
     setTitle("Projects");
     setDescription("Double click the projects you want to provision, and for each choose its stream in the table column.");
-      }
+  }
 
   @Override
   protected Control createUI(final Composite parent)
@@ -221,26 +220,15 @@ public class ProjectPage extends SetupWizardPage
 
     SashForm sashForm = new SashForm(parent, SWT.SMOOTH | SWT.VERTICAL);
 
-    GridLayout upperLayout = new GridLayout();
-    upperLayout.marginHeight = 0;
-
     Composite upperComposite = new Composite(sashForm, SWT.NONE);
-    upperComposite.setLayout(upperLayout);
-
-    GridLayout filterLayout = new GridLayout(2, false);
-    filterLayout.marginWidth = 0;
-    filterLayout.marginHeight = 0;
+    upperComposite.setLayout(createGridLayout(1));
 
     Composite filterComposite = new Composite(upperComposite, SWT.NONE);
-    filterComposite.setLayout(filterLayout);
+    filterComposite.setLayout(createGridLayout(2));
     filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-    GridLayout filterPlaceholderLayout = new GridLayout();
-    filterPlaceholderLayout.marginWidth = 0;
-    filterPlaceholderLayout.marginHeight = 0;
-
     Composite filterPlaceholder = new Composite(filterComposite, SWT.NONE);
-    filterPlaceholder.setLayout(filterPlaceholderLayout);
+    filterPlaceholder.setLayout(createGridLayout(1));
     filterPlaceholder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
@@ -800,10 +788,6 @@ public class ProjectPage extends SetupWizardPage
     projectTree.setLayoutData(new GridData(GridData.FILL_BOTH));
     addHelpCallout(projectTree, 1);
 
-    GridLayout bucketCompositeLayout = new GridLayout();
-    bucketCompositeLayout.marginWidth = 0;
-    bucketCompositeLayout.marginHeight = 0;
-
     ToolBar bucketToolBar = new ToolBar(upperComposite, SWT.FLAT | SWT.CENTER);
     bucketToolBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
     bucketToolBar.setSize(46, 22);
@@ -841,10 +825,7 @@ public class ProjectPage extends SetupWizardPage
     });
 
     Composite lowerComposite = new Composite(sashForm, SWT.NONE);
-    GridLayout lowerLayout = new GridLayout();
-    lowerLayout.marginHeight = 0;
-    lowerLayout.marginBottom = 5;
-    lowerComposite.setLayout(lowerLayout);
+    lowerComposite.setLayout(createGridLayout(1));
 
     TableColumnLayout streamTableLayout = new TableColumnLayout();
     Composite streamComposite = new Composite(lowerComposite, SWT.NONE);

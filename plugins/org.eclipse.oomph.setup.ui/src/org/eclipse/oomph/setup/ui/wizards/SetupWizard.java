@@ -499,7 +499,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     public Installer()
     {
-      super();
       setTrigger(Trigger.BOOTSTRAP);
       setSetupContext(SetupContext.createUserOnly(getResourceSet()));
       setWindowTitle("Oomph Installer");

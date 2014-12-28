@@ -66,7 +66,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -136,12 +135,8 @@ public class ConfirmationPage extends SetupWizardPage
   @Override
   protected Control createUI(final Composite parent)
   {
-    GridLayout mainLayout = new GridLayout();
-    mainLayout.marginHeight = 0;
-    mainLayout.marginBottom = 5;
-
     Composite mainComposite = new Composite(parent, SWT.NONE);
-    mainComposite.setLayout(mainLayout);
+    mainComposite.setLayout(createGridLayout(1));
 
     SashForm horizontalSash = new SashForm(mainComposite, SWT.SMOOTH | SWT.HORIZONTAL);
     UIUtil.grabVertical(UIUtil.applyGridData(horizontalSash));

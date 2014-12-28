@@ -69,7 +69,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -134,41 +133,161 @@ public class ProductPage extends SetupWizardPage
     ResourceSet resourceSet = getResourceSet();
     resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(new AdapterFactoryEditingDomain(adapterFactory, null, resourceSet)));
 
-    final CatalogManager catalogManager = getCatalogManager();
+    Composite mainComposite = new Composite(parent, SWT.NONE);
+    mainComposite.setLayout(createGridLayout(1));
 
+    Control productSash = createProductSash(mainComposite);
+    productSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+    Composite lowerComposite = new Composite(mainComposite, SWT.NONE);
+    lowerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+    lowerComposite.setLayout(createGridLayout(2));
+
+    versionLabel = new Label(lowerComposite, SWT.NONE);
+    versionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+    versionLabel.setText("Product Version:");
+    AccessUtil.setKey(versionLabel, "productVersion");
+
+    versionComboViewer = new ComboViewer(lowerComposite, SWT.READ_ONLY);
+    versionComboViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+    versionComboViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+    {
+      @Override
+      public Object[] getElements(Object object)
+      {
+        if (object != NO_PRODUCT)
+        {
+          return ((Product)object).getVersions().toArray();
+        }
+
+        return super.getElements(object);
+      }
+    });
+
+    Combo versionCombo = versionComboViewer.getCombo();
+    versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    AccessUtil.setKey(versionCombo, "versionChoice");
+
+    if (SHOW_BUNDLE_POOL_UI)
+    {
+      initBundlePool();
+
+      poolButton = new PersistentButton(lowerComposite, SWT.CHECK, true, new DialogSettingsPersistence(getDialogSettings(), "useBundlePool"));
+      AccessUtil.setKey(poolButton, "pools");
+      poolButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+      poolButton.setText("Bundle Pool:");
+
+      poolButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          if (poolButton.getSelection())
+          {
+            IStructuredSelection selection = (IStructuredSelection)poolComboViewer.getSelection();
+            BundlePool pool = (BundlePool)selection.getFirstElement();
+            if (pool != null)
+            {
+              setCurrentBundlePool(pool);
+            }
+            else
+            {
+              initBundlePool();
+            }
+          }
+          else
+          {
+            setCurrentBundlePool(null);
+          }
+
+          updateDetails(false);
+        }
+      });
+
+      Composite poolComposite = new Composite(lowerComposite, SWT.NONE);
+      poolComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      poolComposite.setLayout(createGridLayout(2));
+
+      P2LabelProvider labelProvider = new P2LabelProvider();
+      labelProvider.setAbsolutePools(true);
+
+      poolComboViewer = new ComboViewer(poolComposite, SWT.READ_ONLY);
+      poolComboViewer.setLabelProvider(labelProvider);
+      poolComboViewer.setContentProvider(new P2ContentProvider.AllBundlePools());
+      poolComboViewer.setInput(P2Util.getAgentManager());
+      poolComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
+      {
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+          if (currentBundlePoolChanging)
+          {
+            return;
+          }
+
+          if (poolButton.getSelection())
+          {
+            IStructuredSelection selection = (IStructuredSelection)poolComboViewer.getSelection();
+            BundlePool pool = (BundlePool)selection.getFirstElement();
+            if (pool != currentBundlePool)
+            {
+              setCurrentBundlePool(pool);
+              updateDetails(false);
+            }
+          }
+        }
+      });
+
+      Combo poolCombo = poolComboViewer.getCombo();
+      poolCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      AccessUtil.setKey(poolCombo, "poolChoice");
+
+      managePoolsButton = new Button(poolComposite, SWT.PUSH);
+      managePoolsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+      managePoolsButton.setText("Manage Bundle Pools...");
+      managePoolsButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          manageBundlePools();
+        }
+      });
+      AccessUtil.setKey(managePoolsButton, "managePools");
+    }
+
+    versionComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
+    {
+      public void selectionChanged(SelectionChangedEvent event)
+      {
+        ProductVersion version = getSelectedProductVersion();
+        if (version != null)
+        {
+          saveProductVersionSelection(version);
+        }
+      }
+    });
+
+    updateDetails(true);
+
+    return mainComposite;
+  }
+
+  private SashForm createProductSash(Composite composite)
+  {
+    SashForm sashForm = new SashForm(composite, SWT.SMOOTH | SWT.VERTICAL);
+
+    Composite treeComposite = new Composite(sashForm, SWT.NONE);
+    treeComposite.setLayout(createGridLayout(1));
+
+    final CatalogManager catalogManager = getCatalogManager();
     catalogSelector = new CatalogSelector(catalogManager, true);
 
-    GridLayout mainLayout = new GridLayout();
-    mainLayout.marginWidth = 5;
-    mainLayout.marginHeight = 0;
-
-    Composite mainComposite = new Composite(parent, SWT.NONE);
-    mainComposite.setLayout(mainLayout);
-
-    SashForm sashForm = new SashForm(mainComposite, SWT.SMOOTH | SWT.VERTICAL);
-    sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-    GridLayout upperLayout = new GridLayout();
-    upperLayout.marginWidth = 0;
-    upperLayout.marginHeight = 0;
-
-    Composite upperComposite = new Composite(sashForm, SWT.NONE);
-    upperComposite.setLayout(upperLayout);
-
-    GridLayout filterLayout = new GridLayout(2, false);
-    filterLayout.marginWidth = 0;
-    filterLayout.marginHeight = 0;
-
-    Composite filterComposite = new Composite(upperComposite, SWT.NONE);
-    filterComposite.setLayout(filterLayout);
+    Composite filterComposite = new Composite(treeComposite, SWT.NONE);
+    filterComposite.setLayout(createGridLayout(2));
     filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-    GridLayout filterPlaceholderLayout = new GridLayout();
-    filterPlaceholderLayout.marginWidth = 0;
-    filterPlaceholderLayout.marginHeight = 0;
-
     Composite filterPlaceholder = new Composite(filterComposite, SWT.NONE);
-    filterPlaceholder.setLayout(filterPlaceholderLayout);
+    filterPlaceholder.setLayout(createGridLayout(1));
     filterPlaceholder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
@@ -189,7 +308,7 @@ public class ProductPage extends SetupWizardPage
     catalogSelector.configure(catalogsButton);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
-    FilteredTree filteredTree = new FilteredTree(upperComposite, SWT.BORDER, new PatternFilter(), true);
+    FilteredTree filteredTree = new FilteredTree(treeComposite, SWT.BORDER, new PatternFilter(), true);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
@@ -233,18 +352,7 @@ public class ProductPage extends SetupWizardPage
     final Tree productTree = productViewer.getTree();
     productTree.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-    CatalogSelection selection = catalogManager.getSelection();
-    productViewer.setInput(selection);
-
-    GridLayout installationPaneLayout = new GridLayout(2, false);
-    installationPaneLayout.marginWidth = 0;
-    installationPaneLayout.marginHeight = 0;
-
-    Composite installationPane = new Composite(sashForm, SWT.NONE);
-    installationPane.setLayout(installationPaneLayout);
-
-    Composite descriptionComposite = new Composite(installationPane, SWT.BORDER);
-    descriptionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+    Composite descriptionComposite = new Composite(sashForm, SWT.BORDER);
     descriptionComposite.setLayout(new FillLayout());
 
     descriptionBrowser = new Browser(descriptionComposite, SWT.NONE);
@@ -272,121 +380,20 @@ public class ProductPage extends SetupWizardPage
     });
     AccessUtil.setKey(descriptionBrowser, "description");
 
-    versionLabel = new Label(installationPane, SWT.NONE);
-    versionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-    versionLabel.setText("Product Version:");
-    AccessUtil.setKey(versionLabel, "productVersion");
+    sashForm.setWeights(new int[] { 7, 2 });
 
-    versionComboViewer = new ComboViewer(installationPane, SWT.READ_ONLY);
-    versionComboViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
-    versionComboViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
-    {
-      @Override
-      public Object[] getElements(Object object)
-      {
-        if (object != NO_PRODUCT)
-        {
-          return ((Product)object).getVersions().toArray();
-        }
+    final CatalogSelection selection = catalogManager.getSelection();
+    productViewer.setInput(selection);
 
-        return super.getElements(object);
-      }
-    });
-
-    Combo versionCombo = versionComboViewer.getCombo();
-    versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    AccessUtil.setKey(versionCombo, "versionChoice");
-
-    if (SHOW_BUNDLE_POOL_UI)
-    {
-      initBundlePool();
-
-      poolButton = new PersistentButton(installationPane, SWT.CHECK, true, new DialogSettingsPersistence(getDialogSettings(), "useBundlePool"));
-      AccessUtil.setKey(poolButton, "pools");
-      poolButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-      poolButton.setText("Bundle Pool:");
-
-      poolButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          if (poolButton.getSelection())
-          {
-            IStructuredSelection selection = (IStructuredSelection)poolComboViewer.getSelection();
-            BundlePool pool = (BundlePool)selection.getFirstElement();
-            if (pool != null)
-            {
-              setCurrentBundlePool(pool);
-            }
-            else
-            {
-              initBundlePool();
-            }
-          }
-          else
-          {
-            setCurrentBundlePool(null);
-          }
-
-          updateInstallationPane(false);
-        }
-      });
-
-      GridLayout poolLayout = new GridLayout(2, false);
-      poolLayout.marginWidth = 0;
-      poolLayout.marginHeight = 0;
-
-      Composite poolComposite = new Composite(installationPane, SWT.NONE);
-      poolComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-      poolComposite.setLayout(poolLayout);
-
-      P2LabelProvider labelProvider = new P2LabelProvider();
-      labelProvider.setAbsolutePools(true);
-
-      poolComboViewer = new ComboViewer(poolComposite, SWT.READ_ONLY);
-      poolComboViewer.setLabelProvider(labelProvider);
-      poolComboViewer.setContentProvider(new P2ContentProvider.AllBundlePools());
-      poolComboViewer.setInput(P2Util.getAgentManager());
-      poolComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
-      {
-        public void selectionChanged(SelectionChangedEvent event)
-        {
-          if (currentBundlePoolChanging)
-          {
-            return;
-          }
-
-          if (poolButton.getSelection())
-          {
-            IStructuredSelection selection = (IStructuredSelection)poolComboViewer.getSelection();
-            BundlePool pool = (BundlePool)selection.getFirstElement();
-            if (pool != currentBundlePool)
-            {
-              setCurrentBundlePool(pool);
-              updateInstallationPane(false);
-            }
-          }
-        }
-      });
-
-      Combo poolCombo = poolComboViewer.getCombo();
-      poolCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-      AccessUtil.setKey(poolCombo, "poolChoice");
-
-      managePoolsButton = new Button(poolComposite, SWT.PUSH);
-      managePoolsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-      managePoolsButton.setText("Manage Bundle Pools...");
-      managePoolsButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          manageBundlePools();
-        }
-      });
-      AccessUtil.setKey(managePoolsButton, "managePools");
-    }
+    // productTree.setFocus();
+    // UIUtil.timerExec(1000, new Runnable()
+    // {
+    // public void run()
+    // {
+    // ITreeContentProvider contentProvider = (ITreeContentProvider)productViewer.getContentProvider();
+    // selectFirstLeaf(selection, contentProvider);
+    // }
+    // });
 
     collapseAllButton.addSelectionListener(new SelectionAdapter()
     {
@@ -431,27 +438,26 @@ public class ProductPage extends SetupWizardPage
     {
       public void selectionChanged(SelectionChangedEvent event)
       {
-        updateInstallationPane(false);
+        updateDetails(false);
       }
     });
 
-    versionComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
-    {
-      public void selectionChanged(SelectionChangedEvent event)
-      {
-        ProductVersion version = getSelectedProductVersion();
-        if (version != null)
-        {
-          saveProductVersionSelection(version);
-        }
-      }
-    });
-
-    updateInstallationPane(true);
-
-    sashForm.setWeights(new int[] { 7, 3 });
-    return mainComposite;
+    return sashForm;
   }
+
+  // private void selectFirstLeaf(Object object, ITreeContentProvider contentProvider)
+  // {
+  // Object[] children = contentProvider.getChildren(object);
+  // if (children != null && children.length != 0)
+  // {
+  // Object firstChild = children[0];
+  // selectFirstLeaf(firstChild, contentProvider);
+  // }
+  // else
+  // {
+  // productViewer.setSelection(new StructuredSelection(object));
+  // }
+  // }
 
   @Override
   public void leavePage(boolean forward)
@@ -463,7 +469,7 @@ public class ProductPage extends SetupWizardPage
     }
   }
 
-  private void updateInstallationPane(boolean initial)
+  private void updateDetails(boolean initial)
   {
     Product product = getSelectedProduct();
     if (product == null)

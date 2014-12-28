@@ -128,7 +128,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   protected Control createUI(Composite parent)
   {
     Composite mainComposite = new Composite(parent, SWT.NONE);
-    mainComposite.setLayout(new GridLayout(1, false));
+    mainComposite.setLayout(createGridLayout(1));
     mainComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
     scrolledComposite = new ScrolledComposite(mainComposite, SWT.VERTICAL);
@@ -136,9 +136,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     scrolledComposite.setExpandVertical(true);
     scrolledComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-    GridLayout layout = new GridLayout(3, false);
-    layout.marginWidth = 0;
-    layout.marginHeight = 0;
+    GridLayout layout = createGridLayout(3);
     layout.horizontalSpacing = 10;
     layout.verticalSpacing = 10;
 

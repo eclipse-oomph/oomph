@@ -83,7 +83,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -253,11 +252,7 @@ public class ProgressPage extends SetupWizardPage
   protected Control createUI(final Composite parent)
   {
     Composite mainComposite = new Composite(parent, SWT.NONE);
-
-    GridLayout mainLayout = new GridLayout();
-    mainLayout.marginHeight = 0;
-    mainLayout.marginBottom = 5;
-    mainComposite.setLayout(mainLayout);
+    mainComposite.setLayout(createGridLayout(1));
 
     SashForm sashForm = new SashForm(mainComposite, SWT.SMOOTH | SWT.VERTICAL);
     sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));

@@ -146,14 +146,17 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 
   public final void createControl(Composite parent)
   {
-    GridLayout layout = new GridLayout();
-    layout.marginWidth = 0;
-    layout.marginHeight = 0;
+    GridLayout gridLayout = createGridLayout(1);
+    gridLayout.marginWidth = 5;
 
     Composite pageControl = new Composite(parent, SWT.NONE);
-    pageControl.setLayout(layout);
+    pageControl.setLayout(gridLayout);
     super.setControl(pageControl);
     setPageComplete(false);
+
+    Composite uiContainer = new Composite(pageControl, SWT.NONE);
+    uiContainer.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+    uiContainer.setLayout(createGridLayout(1));
 
     Point sizeHint = getSizeHint();
 
@@ -161,11 +164,12 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     layoutData.widthHint = sizeHint.x;
     layoutData.heightHint = sizeHint.y;
 
-    final Control ui = createUI(pageControl);
+    Control ui = createUI(uiContainer);
     ui.setLayoutData(layoutData);
 
     createCheckButtons();
     createFooter(pageControl);
+    parent.layout(true, true);
   }
 
   protected void createFooter(Composite parent)
@@ -180,12 +184,8 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   {
     if (checkComposite == null)
     {
-      GridLayout checkLayout = new GridLayout();
-      checkLayout.marginWidth = 5;
-      checkLayout.marginHeight = 0;
-
       checkComposite = new Composite((Composite)getControl(), SWT.NONE);
-      checkComposite.setLayout(checkLayout);
+      checkComposite.setLayout(createGridLayout(1));
       checkComposite.setLayoutData(new GridData());
     }
     else
@@ -274,5 +274,13 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     {
       // Ignore
     }
+  }
+
+  protected static GridLayout createGridLayout(int numColumns)
+  {
+    GridLayout layout = new GridLayout(numColumns, false);
+    layout.marginWidth = 0;
+    layout.marginHeight = 0;
+    return layout;
   }
 }
