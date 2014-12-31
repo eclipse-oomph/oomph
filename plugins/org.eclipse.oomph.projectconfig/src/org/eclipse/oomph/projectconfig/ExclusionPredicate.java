@@ -21,10 +21,10 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.ExclusionPredicate#getExcludedPreferenceProfiles <em>Excluded Preference Profiles</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getExclusionPredicate()
  * @model

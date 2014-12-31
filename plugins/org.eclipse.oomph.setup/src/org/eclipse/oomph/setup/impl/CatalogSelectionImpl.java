@@ -49,7 +49,9 @@ import java.util.Map;
  * An implementation of the model object '<em><b>Catalog Selection</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.CatalogSelectionImpl#getProductCatalogs <em>Product Catalogs</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.CatalogSelectionImpl#getProjectCatalogs <em>Project Catalogs</em>}</li>
@@ -57,7 +59,6 @@ import java.util.Map;
  *   <li>{@link org.eclipse.oomph.setup.impl.CatalogSelectionImpl#getDefaultStreams <em>Default Streams</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.CatalogSelectionImpl#getSelectedStreams <em>Selected Streams</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -43,11 +43,12 @@ import java.util.List;
  * An implementation of the model object '<em><b>Project Set Import Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.projectset.impl.ProjectSetImportTaskImpl#getURL <em>URL</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

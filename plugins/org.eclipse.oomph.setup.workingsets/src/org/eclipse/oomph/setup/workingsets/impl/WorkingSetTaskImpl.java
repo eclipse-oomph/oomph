@@ -41,11 +41,12 @@ import java.util.Map;
  * An implementation of the model object '<em><b>Set Working Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workingsets.impl.WorkingSetTaskImpl#getWorkingSets <em>Working Sets</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

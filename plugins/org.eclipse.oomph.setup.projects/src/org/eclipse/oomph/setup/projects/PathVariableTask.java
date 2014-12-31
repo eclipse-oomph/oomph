@@ -19,11 +19,11 @@ import org.eclipse.oomph.setup.SetupTask;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.projects.PathVariableTask#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.PathVariableTask#getURI <em>URI</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.projects.ProjectsPackage#getPathVariableTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"

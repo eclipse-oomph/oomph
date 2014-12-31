@@ -26,11 +26,12 @@ import java.util.regex.Pattern;
  * An implementation of the model object '<em><b>Name Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.impl.NamePredicateImpl#getPattern <em>Pattern</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

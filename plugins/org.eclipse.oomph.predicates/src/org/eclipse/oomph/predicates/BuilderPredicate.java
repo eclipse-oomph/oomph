@@ -17,10 +17,10 @@ package org.eclipse.oomph.predicates;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.BuilderPredicate#getBuilder <em>Builder</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.predicates.PredicatesPackage#getBuilderPredicate()
  * @model

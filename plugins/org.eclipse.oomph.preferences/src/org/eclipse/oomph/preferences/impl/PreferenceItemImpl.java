@@ -28,7 +28,9 @@ import java.lang.reflect.InvocationTargetException;
  * An implementation of the model object '<em><b>Preference Item</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceItemImpl#getRoot <em>Root</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceItemImpl#getScope <em>Scope</em>}</li>
@@ -37,7 +39,6 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceItemImpl#getRelativePath <em>Relative Path</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceItemImpl#getAncestor <em>Ancestor</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

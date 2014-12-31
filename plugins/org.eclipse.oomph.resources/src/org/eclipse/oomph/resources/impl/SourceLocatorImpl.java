@@ -49,7 +49,9 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Source Locator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#getRootFolder <em>Root Folder</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#getExcludedPaths <em>Excluded Paths</em>}</li>
@@ -57,7 +59,6 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#getPredicates <em>Predicates</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.impl.SourceLocatorImpl#isLocateNestedProjects <em>Locate Nested Projects</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

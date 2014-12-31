@@ -52,7 +52,9 @@ import java.util.Map;
  * An implementation of the model object '<em><b>Key Binding Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.KeyBindingTaskImpl#getScheme <em>Scheme</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.KeyBindingTaskImpl#getContexts <em>Contexts</em>}</li>
@@ -62,7 +64,6 @@ import java.util.Map;
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.KeyBindingTaskImpl#getCommand <em>Command</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.KeyBindingTaskImpl#getCommandParameters <em>Command Parameters</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

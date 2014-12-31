@@ -28,13 +28,14 @@ import java.util.List;
  * An implementation of the model object '<em><b>Eclipse Ini Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl#getOption <em>Option</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl#isVm <em>Vm</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

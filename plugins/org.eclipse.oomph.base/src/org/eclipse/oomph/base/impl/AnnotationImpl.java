@@ -36,7 +36,9 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Annotation</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.base.impl.AnnotationImpl#getModelElement <em>Model Element</em>}</li>
  *   <li>{@link org.eclipse.oomph.base.impl.AnnotationImpl#getSource <em>Source</em>}</li>
@@ -44,7 +46,6 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.base.impl.AnnotationImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link org.eclipse.oomph.base.impl.AnnotationImpl#getReferences <em>References</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -23,12 +23,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Variable Choice</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableChoiceImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableChoiceImpl#getLabel <em>Label</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

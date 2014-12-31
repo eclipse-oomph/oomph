@@ -19,11 +19,11 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.Product#getProductCatalog <em>Product Catalog</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Product#getVersions <em>Versions</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getProduct()
  * @model

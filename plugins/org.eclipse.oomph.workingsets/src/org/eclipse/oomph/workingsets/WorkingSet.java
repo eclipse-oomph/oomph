@@ -24,12 +24,12 @@ import org.eclipse.core.resources.IResource;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.workingsets.WorkingSet#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.workingsets.WorkingSet#getPredicates <em>Predicates</em>}</li>
  *   <li>{@link org.eclipse.oomph.workingsets.WorkingSet#getID <em>ID</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.workingsets.WorkingSetsPackage#getWorkingSet()
  * @model

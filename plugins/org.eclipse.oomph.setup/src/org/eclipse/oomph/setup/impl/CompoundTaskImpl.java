@@ -32,12 +32,13 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Compound Setup Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.CompoundTaskImpl#getSetupTasks <em>Setup Tasks</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.CompoundTaskImpl#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

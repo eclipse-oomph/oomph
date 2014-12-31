@@ -35,7 +35,9 @@ import java.util.Date;
  * An implementation of the model object '<em><b>Preferences</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
@@ -43,7 +45,6 @@ import java.util.Date;
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getQuestionnaireDate <em>Questionnaire Date</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

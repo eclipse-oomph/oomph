@@ -21,11 +21,11 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.RepositoryList#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.RepositoryList#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.p2.P2Package#getRepositoryList()
  * @model

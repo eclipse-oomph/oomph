@@ -25,10 +25,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.resources.ProjectFactory#getExcludedPaths <em>Excluded Paths</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.resources.ResourcesPackage#getProjectFactory()
  * @model abstract="true"

@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.EMap;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getProductCatalogs <em>Product Catalogs</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getProjectCatalogs <em>Project Catalogs</em>}</li>
@@ -29,7 +30,6 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getDefaultStreams <em>Default Streams</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.CatalogSelection#getSelectedStreams <em>Selected Streams</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getCatalogSelection()
  * @model

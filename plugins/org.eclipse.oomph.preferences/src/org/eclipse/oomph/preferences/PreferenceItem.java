@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.URI;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceItem#getRoot <em>Root</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceItem#getScope <em>Scope</em>}</li>
@@ -29,7 +30,6 @@ import org.eclipse.emf.common.util.URI;
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceItem#getRelativePath <em>Relative Path</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceItem#getAncestor <em>Ancestor</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.preferences.PreferencesPackage#getPreferenceItem()
  * @model abstract="true"

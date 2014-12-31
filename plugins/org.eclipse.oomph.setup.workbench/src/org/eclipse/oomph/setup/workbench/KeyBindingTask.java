@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workbench.KeyBindingTask#getScheme <em>Scheme</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.KeyBindingTask#getContexts <em>Contexts</em>}</li>
@@ -30,7 +31,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.workbench.KeyBindingTask#getCommand <em>Command</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.KeyBindingTask#getCommandParameters <em>Command Parameters</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.workbench.WorkbenchPackage#getKeyBindingTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"

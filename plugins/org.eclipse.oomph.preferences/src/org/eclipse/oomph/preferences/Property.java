@@ -17,13 +17,13 @@ package org.eclipse.oomph.preferences;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.preferences.Property#getParent <em>Parent</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.Property#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.Property#isNonDefault <em>Non Default</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.Property#isSecure <em>Secure</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.preferences.PreferencesPackage#getProperty()
  * @model

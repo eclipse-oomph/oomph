@@ -29,13 +29,14 @@ import java.io.Writer;
  * An implementation of the model object '<em><b>Resource Creation Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getContent <em>Content</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getTargetURL <em>Target URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getEncoding <em>Encoding</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

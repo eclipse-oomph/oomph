@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceFilter#getPreferenceNode <em>Preference Node</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceFilter#getPreferenceProfile <em>Preference Profile</em>}</li>
@@ -32,7 +33,6 @@ import java.util.regex.Pattern;
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceFilter#getExclusions <em>Exclusions</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceFilter#getProperties <em>Properties</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getPreferenceFilter()
  * @model

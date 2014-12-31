@@ -17,12 +17,12 @@ package org.eclipse.oomph.setup;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getContent <em>Content</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getTargetURL <em>Target URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getEncoding <em>Encoding</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getResourceCreationTask()
  * @model

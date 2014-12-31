@@ -28,13 +28,14 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * An implementation of the model object '<em><b>Project To Stream Map Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectToStreamMapEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectToStreamMapEntryImpl#getTypedValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectToStreamMapEntryImpl#isSelection <em>Selection</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

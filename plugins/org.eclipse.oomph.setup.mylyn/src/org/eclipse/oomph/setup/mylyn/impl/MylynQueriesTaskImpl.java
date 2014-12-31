@@ -51,7 +51,9 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Mylyn Queries Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.MylynQueriesTaskImpl#getConnectorKind <em>Connector Kind</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.MylynQueriesTaskImpl#getRepositoryURL <em>Repository URL</em>}</li>
@@ -59,7 +61,6 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.MylynQueriesTaskImpl#getPassword <em>Password</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.MylynQueriesTaskImpl#getQueries <em>Queries</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -31,14 +31,15 @@ import java.lang.reflect.InvocationTargetException;
  * An implementation of the model object '<em><b>Property</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#isNonDefault <em>Non Default</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PropertyImpl#isSecure <em>Secure</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

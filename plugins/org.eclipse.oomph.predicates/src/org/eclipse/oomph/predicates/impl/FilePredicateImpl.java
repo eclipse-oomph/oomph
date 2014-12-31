@@ -34,12 +34,13 @@ import java.util.regex.PatternSyntaxException;
  * An implementation of the model object '<em><b>File Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.impl.FilePredicateImpl#getFilePattern <em>File Pattern</em>}</li>
  *   <li>{@link org.eclipse.oomph.predicates.impl.FilePredicateImpl#getContentPattern <em>Content Pattern</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -28,7 +28,6 @@ import java.util.regex.PatternSyntaxException;
  * An implementation of the model object '<em><b>Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * </p>
  *
  * @generated
  */

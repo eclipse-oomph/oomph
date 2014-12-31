@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.MylynQueriesTask#getConnectorKind <em>Connector Kind</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.MylynQueriesTask#getRepositoryURL <em>Repository URL</em>}</li>
@@ -28,7 +29,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.mylyn.MylynQueriesTask#getPassword <em>Password</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.MylynQueriesTask#getQueries <em>Queries</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getMylynQueriesTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/Enablement installableUnits='org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui'"

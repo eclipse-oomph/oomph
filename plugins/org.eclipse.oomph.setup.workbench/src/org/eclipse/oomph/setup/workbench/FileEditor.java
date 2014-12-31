@@ -19,10 +19,10 @@ import org.eclipse.oomph.base.ModelElement;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workbench.FileEditor#getID <em>ID</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.workbench.WorkbenchPackage#getFileEditor()
  * @model

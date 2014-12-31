@@ -32,12 +32,13 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Workspace To Installations Map Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.WorkspaceToInstallationsMapEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.WorkspaceToInstallationsMapEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

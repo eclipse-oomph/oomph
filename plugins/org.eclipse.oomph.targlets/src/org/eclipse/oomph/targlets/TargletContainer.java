@@ -21,11 +21,11 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.TargletContainer#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.TargletContainer#getTarglets <em>Targlets</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getTargletContainer()
  * @model

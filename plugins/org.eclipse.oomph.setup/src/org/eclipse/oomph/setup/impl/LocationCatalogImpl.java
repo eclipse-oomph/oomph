@@ -30,12 +30,13 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * An implementation of the model object '<em><b>Location Catalog</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.LocationCatalogImpl#getInstallations <em>Installations</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.LocationCatalogImpl#getWorkspaces <em>Workspaces</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

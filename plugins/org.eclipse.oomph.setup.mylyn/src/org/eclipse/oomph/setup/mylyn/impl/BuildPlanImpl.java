@@ -23,11 +23,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Build Plan</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.BuildPlanImpl#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

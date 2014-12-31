@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getTarglets <em>Targlets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getTargletURIs <em>Targlet UR Is</em>}</li>
@@ -30,7 +31,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getArchitecture <em>Architecture</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getLocale <em>Locale</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"

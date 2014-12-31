@@ -24,12 +24,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Attribute Rule</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.AttributeRuleImpl#getAttributeURI <em>Attribute URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.AttributeRuleImpl#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

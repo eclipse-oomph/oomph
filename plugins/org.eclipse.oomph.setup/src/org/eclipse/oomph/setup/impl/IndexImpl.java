@@ -32,13 +32,14 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Index</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.IndexImpl#getDiscoverablePackages <em>Discoverable Packages</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.IndexImpl#getProductCatalogs <em>Product Catalogs</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.IndexImpl#getProjectCatalogs <em>Project Catalogs</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

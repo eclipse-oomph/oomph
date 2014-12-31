@@ -25,11 +25,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Installation</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.InstallationImpl#getProductVersion <em>Product Version</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

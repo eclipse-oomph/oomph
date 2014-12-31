@@ -21,13 +21,13 @@ import org.eclipse.emf.common.util.EMap;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.Query#getTask <em>Task</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.Query#getSummary <em>Summary</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.Query#getURL <em>URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.Query#getAttributes <em>Attributes</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getQuery()
  * @model

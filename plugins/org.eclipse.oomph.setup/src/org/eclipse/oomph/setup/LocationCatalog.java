@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.LocationCatalog#getInstallations <em>Installations</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.LocationCatalog#getWorkspaces <em>Workspaces</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getLocationCatalog()
  * @model

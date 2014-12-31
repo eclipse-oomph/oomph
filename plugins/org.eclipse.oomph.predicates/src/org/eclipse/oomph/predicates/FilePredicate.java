@@ -17,11 +17,11 @@ package org.eclipse.oomph.predicates;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.FilePredicate#getFilePattern <em>File Pattern</em>}</li>
  *   <li>{@link org.eclipse.oomph.predicates.FilePredicate#getContentPattern <em>Content Pattern</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.predicates.PredicatesPackage#getFilePredicate()
  * @model

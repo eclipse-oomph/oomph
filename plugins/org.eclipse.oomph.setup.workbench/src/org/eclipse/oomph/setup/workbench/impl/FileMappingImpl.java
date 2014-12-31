@@ -31,13 +31,14 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>File Mapping</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.FileMappingImpl#getFilePattern <em>File Pattern</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.FileMappingImpl#getDefaultEditorID <em>Default Editor ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.FileMappingImpl#getEditors <em>Editors</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

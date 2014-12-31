@@ -34,12 +34,13 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Product</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProductImpl#getProductCatalog <em>Product Catalog</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProductImpl#getVersions <em>Versions</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -21,12 +21,12 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workbench.FileMapping#getFilePattern <em>File Pattern</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.FileMapping#getDefaultEditorID <em>Default Editor ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.FileMapping#getEditors <em>Editors</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.workbench.WorkbenchPackage#getFileMapping()
  * @model

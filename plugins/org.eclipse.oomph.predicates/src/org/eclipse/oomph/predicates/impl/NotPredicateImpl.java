@@ -27,11 +27,12 @@ import org.eclipse.core.resources.IResource;
  * An implementation of the model object '<em><b>Not Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.impl.NotPredicateImpl#getOperand <em>Operand</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

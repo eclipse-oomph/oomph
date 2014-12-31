@@ -27,12 +27,13 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Text Modification</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.TextModificationImpl#getPattern <em>Pattern</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.TextModificationImpl#getSubstitutions <em>Substitutions</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

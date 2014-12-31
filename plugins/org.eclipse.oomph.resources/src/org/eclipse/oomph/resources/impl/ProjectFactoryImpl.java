@@ -33,11 +33,12 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Project Factory</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.resources.impl.ProjectFactoryImpl#getExcludedPaths <em>Excluded Paths</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

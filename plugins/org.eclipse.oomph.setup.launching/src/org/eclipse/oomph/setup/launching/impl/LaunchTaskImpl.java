@@ -39,11 +39,12 @@ import org.eclipse.debug.core.model.IStreamsProxy;
  * An implementation of the model object '<em><b>Launch Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.launching.impl.LaunchTaskImpl#getLauncher <em>Launcher</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

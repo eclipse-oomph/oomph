@@ -36,7 +36,9 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Targlet</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getRequirements <em>Requirements</em>}</li>
@@ -49,7 +51,6 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

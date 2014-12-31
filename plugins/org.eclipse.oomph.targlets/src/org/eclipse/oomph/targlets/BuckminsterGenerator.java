@@ -17,10 +17,10 @@ package org.eclipse.oomph.targlets;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.BuckminsterGenerator#isSaveAsComponent <em>Save As Component</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getBuckminsterGenerator()
  * @model

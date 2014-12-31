@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.MultiStatus;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getRootFolder <em>Root Folder</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getExcludedPaths <em>Excluded Paths</em>}</li>
@@ -34,7 +35,6 @@ import org.eclipse.core.runtime.MultiStatus;
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#getPredicates <em>Predicates</em>}</li>
  *   <li>{@link org.eclipse.oomph.resources.SourceLocator#isLocateNestedProjects <em>Locate Nested Projects</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.resources.ResourcesPackage#getSourceLocator()
  * @model

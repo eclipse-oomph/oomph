@@ -22,12 +22,12 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.WorkspaceConfiguration#getProjects <em>Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.WorkspaceConfiguration#getDefaultPreferenceNode <em>Default Preference Node</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.WorkspaceConfiguration#getInstancePreferenceNode <em>Instance Preference Node</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getWorkspaceConfiguration()
  * @model

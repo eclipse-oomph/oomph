@@ -31,14 +31,15 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * An implementation of the model object '<em><b>Query</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.QueryImpl#getTask <em>Task</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.QueryImpl#getSummary <em>Summary</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.QueryImpl#getURL <em>URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.mylyn.impl.QueryImpl#getAttributes <em>Attributes</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -28,11 +28,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * An implementation of the model object '<em><b>Eclipse Version</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProductVersionImpl#getProduct <em>Product</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

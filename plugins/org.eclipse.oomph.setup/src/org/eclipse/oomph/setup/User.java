@@ -21,6 +21,7 @@ import java.util.Date;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.User#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
@@ -28,7 +29,6 @@ import java.util.Date;
  *   <li>{@link org.eclipse.oomph.setup.User#getQuestionnaireDate <em>Questionnaire Date</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getUser()
  * @model

@@ -34,7 +34,9 @@ import java.lang.reflect.InvocationTargetException;
  * An implementation of the model object '<em><b>Requirement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getName <em>Name</em>}</li>
@@ -43,7 +45,6 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isFeature <em>Feature</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

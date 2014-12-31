@@ -34,13 +34,14 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Working Set</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.workingsets.impl.WorkingSetImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.workingsets.impl.WorkingSetImpl#getPredicates <em>Predicates</em>}</li>
  *   <li>{@link org.eclipse.oomph.workingsets.impl.WorkingSetImpl#getID <em>ID</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

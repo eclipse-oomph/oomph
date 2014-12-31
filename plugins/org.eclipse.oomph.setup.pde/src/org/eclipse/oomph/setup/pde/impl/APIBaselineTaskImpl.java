@@ -39,14 +39,15 @@ import java.io.InputStream;
  * An implementation of the model object '<em><b>Api Baseline Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getVersion <em>Version</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getRemoteURI <em>Remote URI</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

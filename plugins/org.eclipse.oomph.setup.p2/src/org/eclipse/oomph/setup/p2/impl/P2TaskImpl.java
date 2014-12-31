@@ -91,7 +91,9 @@ import java.util.regex.Pattern;
  * An implementation of the model object '<em><b>Install Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getRequirements <em>Requirements</em>}</li>
@@ -99,7 +101,6 @@ import java.util.regex.Pattern;
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#isLicenseConfirmationDisabled <em>License Confirmation Disabled</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#isMergeDisabled <em>Merge Disabled</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

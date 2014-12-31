@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.base.Annotation#getModelElement <em>Model Element</em>}</li>
  *   <li>{@link org.eclipse.oomph.base.Annotation#getSource <em>Source</em>}</li>
@@ -28,7 +29,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.oomph.base.Annotation#getContents <em>Contents</em>}</li>
  *   <li>{@link org.eclipse.oomph.base.Annotation#getReferences <em>References</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.base.BasePackage#getAnnotation()
  * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='WellFormedSourceURI'"

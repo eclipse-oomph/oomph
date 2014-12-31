@@ -28,12 +28,13 @@ import org.eclipse.core.variables.VariablesPlugin;
  * An implementation of the model object '<em><b>String Substitution Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.StringSubstitutionTaskImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.StringSubstitutionTaskImpl#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

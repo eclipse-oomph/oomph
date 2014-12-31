@@ -48,11 +48,12 @@ import java.util.Set;
  * An implementation of the model object '<em><b>File Associations Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.FileAssociationsTaskImpl#getMappings <em>Mappings</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

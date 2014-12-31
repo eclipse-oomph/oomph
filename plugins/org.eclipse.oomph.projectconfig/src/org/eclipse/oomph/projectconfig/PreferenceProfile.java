@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IProject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceProfile#getPreferenceFilters <em>Preference Filters</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceProfile#getReferentProjects <em>Referent Projects</em>}</li>
@@ -33,7 +34,6 @@ import org.eclipse.core.resources.IProject;
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceProfile#getProject <em>Project</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.PreferenceProfile#getPredicates <em>Predicates</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getPreferenceProfile()
  * @model

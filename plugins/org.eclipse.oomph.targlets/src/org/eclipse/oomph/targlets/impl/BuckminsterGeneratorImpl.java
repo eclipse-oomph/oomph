@@ -49,11 +49,12 @@ import java.util.Map;
  * An implementation of the model object '<em><b>Buckminster Generator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.impl.BuckminsterGeneratorImpl#isSaveAsComponent <em>Save As Component</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

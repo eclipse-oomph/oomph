@@ -22,6 +22,7 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getNamespace <em>Namespace</em>}</li>
@@ -29,7 +30,6 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isOptional <em>Optional</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isFeature <em>Feature</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.p2.P2Package#getRequirement()
  * @model features="iD"

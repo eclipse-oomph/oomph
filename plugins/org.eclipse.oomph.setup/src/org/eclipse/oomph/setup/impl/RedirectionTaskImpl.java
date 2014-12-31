@@ -23,12 +23,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Redirection Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.RedirectionTaskImpl#getSourceURL <em>Source URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.RedirectionTaskImpl#getTargetURL <em>Target URL</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

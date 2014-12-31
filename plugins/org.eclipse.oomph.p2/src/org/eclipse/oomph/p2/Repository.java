@@ -19,11 +19,11 @@ import org.eclipse.oomph.base.ModelElement;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.Repository#getURL <em>URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Repository#getType <em>Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.p2.P2Package#getRepository()
  * @model

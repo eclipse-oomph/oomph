@@ -17,10 +17,10 @@ package org.eclipse.oomph.setup;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.CompoundTask#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getCompoundTask()
  * @model

@@ -17,10 +17,10 @@ package org.eclipse.oomph.setup;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.InstallationTask#getLocation <em>Location</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getInstallationTask()
  * @model

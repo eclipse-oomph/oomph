@@ -17,11 +17,11 @@ package org.eclipse.oomph.setup;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.StringSubstitutionTask#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.StringSubstitutionTask#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getStringSubstitutionTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"

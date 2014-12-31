@@ -17,11 +17,11 @@ package org.eclipse.oomph.setup;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCopyTask#getSourceURL <em>Source URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCopyTask#getTargetURL <em>Target URL</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getResourceCopyTask()
  * @model

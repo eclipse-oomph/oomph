@@ -54,12 +54,13 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Maven Import Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getProjectNameTemplate <em>Project Name Template</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

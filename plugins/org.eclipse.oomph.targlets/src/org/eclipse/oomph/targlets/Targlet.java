@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getRequirements <em>Requirements</em>}</li>
@@ -37,7 +38,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet()
  * @model

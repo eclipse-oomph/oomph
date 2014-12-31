@@ -28,12 +28,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * An implementation of the model object '<em><b>Product To Product Version Map Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProductToProductVersionMapEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProductToProductVersionMapEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

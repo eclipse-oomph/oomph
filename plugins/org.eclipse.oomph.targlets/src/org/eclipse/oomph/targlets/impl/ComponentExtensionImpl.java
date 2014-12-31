@@ -29,11 +29,12 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Component Extension</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.impl.ComponentExtensionImpl#getRequirements <em>Requirements</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -42,13 +42,14 @@ import java.util.regex.Pattern;
  * An implementation of the model object '<em><b>Text Modify Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.TextModifyTaskImpl#getURL <em>URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.TextModifyTaskImpl#getModifications <em>Modifications</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.TextModifyTaskImpl#getEncoding <em>Encoding</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -41,14 +41,15 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Preference Node</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceNodeImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceNodeImpl#getChildren <em>Children</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceNodeImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.impl.PreferenceNodeImpl#getLocation <em>Location</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

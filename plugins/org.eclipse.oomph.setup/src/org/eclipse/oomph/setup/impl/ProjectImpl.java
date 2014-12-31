@@ -35,7 +35,9 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Project</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectImpl#getProjects <em>Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectImpl#getStreams <em>Streams</em>}</li>
@@ -44,7 +46,6 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectImpl#getParentProject <em>Parent Project</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProjectImpl#getProjectCatalog <em>Project Catalog</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -26,12 +26,13 @@ import org.eclipse.equinox.p2.metadata.Version;
  * An implementation of the model object '<em><b>Component Definition</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.impl.ComponentDefinitionImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.ComponentDefinitionImpl#getVersion <em>Version</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

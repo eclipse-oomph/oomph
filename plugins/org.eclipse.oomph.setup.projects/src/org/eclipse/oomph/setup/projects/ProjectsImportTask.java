@@ -22,10 +22,10 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#getSourceLocators <em>Source Locators</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.projects.ProjectsPackage#getProjectsImportTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"

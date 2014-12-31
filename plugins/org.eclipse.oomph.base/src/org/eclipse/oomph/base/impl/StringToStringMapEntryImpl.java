@@ -25,12 +25,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * An implementation of the model object '<em><b>String To String Map Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.base.impl.StringToStringMapEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.base.impl.StringToStringMapEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

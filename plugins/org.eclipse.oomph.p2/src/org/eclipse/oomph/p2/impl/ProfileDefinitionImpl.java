@@ -34,13 +34,14 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Profile Definition</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.impl.ProfileDefinitionImpl#getRequirements <em>Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.ProfileDefinitionImpl#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.ProfileDefinitionImpl#isIncludeSourceBundles <em>Include Source Bundles</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

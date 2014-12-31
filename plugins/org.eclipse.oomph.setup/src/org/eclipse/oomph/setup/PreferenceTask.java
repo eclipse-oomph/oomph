@@ -17,11 +17,11 @@ package org.eclipse.oomph.setup;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.PreferenceTask#getKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.PreferenceTask#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getPreferenceTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"

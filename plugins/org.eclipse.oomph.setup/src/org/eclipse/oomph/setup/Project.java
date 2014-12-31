@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.Project#getStreams <em>Streams</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Project#getProjectContainer <em>Project Container</em>}</li>
@@ -26,7 +27,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.Project#getParentProject <em>Parent Project</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Project#getProjectCatalog <em>Project Catalog</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getProject()
  * @model

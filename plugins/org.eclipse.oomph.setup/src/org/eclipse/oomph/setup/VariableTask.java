@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.URI;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getName <em>Name</em>}</li>
@@ -29,7 +30,6 @@ import org.eclipse.emf.common.util.URI;
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getChoices <em>Choices</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask()
  * @model features="storePromptedValue"

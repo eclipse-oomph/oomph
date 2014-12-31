@@ -23,14 +23,15 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Scope</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ScopeImpl#getQualifiedName <em>Qualified Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

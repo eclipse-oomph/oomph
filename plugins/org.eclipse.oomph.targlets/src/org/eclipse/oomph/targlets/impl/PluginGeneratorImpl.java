@@ -44,7 +44,6 @@ import java.util.jar.JarFile;
  * An implementation of the model object '<em><b>Plugin Generator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * </p>
  *
  * @generated
  */

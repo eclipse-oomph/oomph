@@ -30,11 +30,12 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>And Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.impl.AndPredicateImpl#getOperands <em>Operands</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

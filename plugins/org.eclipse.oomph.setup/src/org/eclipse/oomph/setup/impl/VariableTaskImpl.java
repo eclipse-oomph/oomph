@@ -49,7 +49,9 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Variable Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getName <em>Name</em>}</li>
@@ -60,7 +62,6 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getChoices <em>Choices</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

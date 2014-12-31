@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.SetupTask;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getLocation <em>Location</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getRemoteName <em>Remote Name</em>}</li>
@@ -26,7 +27,6 @@ import org.eclipse.oomph.setup.SetupTask;
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getPushURI <em>Push URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getCheckoutBranch <em>Checkout Branch</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask()
  * @model annotation="http://www.eclipse.org/emf/2002/EcoreXXX constraints='IDRequired LocationOptional'"

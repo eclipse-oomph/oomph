@@ -61,7 +61,9 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Targlet Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getTarglets <em>Targlets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getTargletURIs <em>Targlet UR Is</em>}</li>
@@ -70,7 +72,6 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getArchitecture <em>Architecture</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getLocale <em>Locale</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

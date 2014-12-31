@@ -66,11 +66,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * An implementation of the model object '<em><b>Import Project Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsImportTaskImpl#getSourceLocators <em>Source Locators</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

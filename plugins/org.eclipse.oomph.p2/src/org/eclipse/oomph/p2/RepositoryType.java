@@ -122,6 +122,8 @@ public enum RepositoryType implements Enumerator
    * Returns the '<em><b>Repository Type</b></em>' literal with the specified literal value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param literal the literal.
+   * @return the matching enumerator or <code>null</code>.
    * @generated
    */
   public static RepositoryType get(String literal)
@@ -141,6 +143,8 @@ public enum RepositoryType implements Enumerator
    * Returns the '<em><b>Repository Type</b></em>' literal with the specified name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param name the name.
+   * @return the matching enumerator or <code>null</code>.
    * @generated
    */
   public static RepositoryType getByName(String name)
@@ -160,6 +164,8 @@ public enum RepositoryType implements Enumerator
    * Returns the '<em><b>Repository Type</b></em>' literal with the specified integer value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param value the integer value.
+   * @return the matching enumerator or <code>null</code>.
    * @generated
    */
   public static RepositoryType get(int value)

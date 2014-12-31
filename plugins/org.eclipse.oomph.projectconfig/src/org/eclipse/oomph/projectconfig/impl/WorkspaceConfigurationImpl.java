@@ -53,13 +53,14 @@ import java.util.List;
  * An implementation of the model object '<em><b>Workspace Configuration</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.WorkspaceConfigurationImpl#getProjects <em>Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.WorkspaceConfigurationImpl#getDefaultPreferenceNode <em>Default Preference Node</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.WorkspaceConfigurationImpl#getInstancePreferenceNode <em>Instance Preference Node</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

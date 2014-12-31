@@ -23,12 +23,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Command Parameter</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.CommandParameterImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workbench.impl.CommandParameterImpl#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

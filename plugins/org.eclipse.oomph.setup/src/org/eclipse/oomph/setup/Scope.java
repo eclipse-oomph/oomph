@@ -17,13 +17,13 @@ package org.eclipse.oomph.setup;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.Scope#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Scope#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Scope#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Scope#getQualifiedName <em>Qualified Name</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getScope()
  * @model abstract="true"

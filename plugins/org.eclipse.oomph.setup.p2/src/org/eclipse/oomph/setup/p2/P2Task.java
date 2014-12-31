@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#getRequirements <em>Requirements</em>}</li>
@@ -30,7 +31,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#isLicenseConfirmationDisabled <em>License Confirmation Disabled</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#isMergeDisabled <em>Merge Disabled</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.p2.SetupP2Package#getP2Task()
  * @model

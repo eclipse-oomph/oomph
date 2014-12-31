@@ -30,12 +30,13 @@ import java.net.URI;
  * An implementation of the model object '<em><b>Path Variable Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.PathVariableTaskImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.PathVariableTaskImpl#getURI <em>URI</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

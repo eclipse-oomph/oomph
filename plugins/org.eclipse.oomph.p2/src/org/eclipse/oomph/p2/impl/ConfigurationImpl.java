@@ -23,13 +23,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * An implementation of the model object '<em><b>Configuration</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.impl.ConfigurationImpl#getWS <em>WS</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.ConfigurationImpl#getOS <em>OS</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.ConfigurationImpl#getArch <em>Arch</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

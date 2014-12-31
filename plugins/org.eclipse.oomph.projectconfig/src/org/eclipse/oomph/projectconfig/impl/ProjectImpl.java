@@ -40,14 +40,15 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Project</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.ProjectImpl#getConfiguration <em>Configuration</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.ProjectImpl#getPreferenceProfiles <em>Preference Profiles</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.ProjectImpl#getPreferenceNode <em>Preference Node</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.ProjectImpl#getPreferenceProfileReferences <em>Preference Profile References</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

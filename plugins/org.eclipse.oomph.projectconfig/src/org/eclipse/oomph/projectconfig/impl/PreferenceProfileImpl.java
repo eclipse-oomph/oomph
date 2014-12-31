@@ -42,7 +42,9 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Preference Profile</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceProfileImpl#getPreferenceFilters <em>Preference Filters</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceProfileImpl#getReferentProjects <em>Referent Projects</em>}</li>
@@ -50,7 +52,6 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceProfileImpl#getProject <em>Project</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceProfileImpl#getPredicates <em>Predicates</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

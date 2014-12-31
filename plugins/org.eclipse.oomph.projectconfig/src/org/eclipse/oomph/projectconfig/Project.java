@@ -24,13 +24,13 @@ import org.eclipse.emf.common.util.URI;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.Project#getConfiguration <em>Configuration</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.Project#getPreferenceProfiles <em>Preference Profiles</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.Project#getPreferenceNode <em>Preference Node</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.Project#getPreferenceProfileReferences <em>Preference Profile References</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.projectconfig.ProjectConfigPackage#getProject()
  * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='AllPreferencesManaged PreferenceProfileReferencesSpecifyUniqueProperties AllPropertiesHaveManagedValue'"

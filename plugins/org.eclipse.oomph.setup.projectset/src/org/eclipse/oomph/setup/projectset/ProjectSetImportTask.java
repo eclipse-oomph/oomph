@@ -19,10 +19,10 @@ import org.eclipse.oomph.setup.SetupTask;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.projectset.ProjectSetImportTask#getURL <em>URL</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.projectset.ProjectSetPackage#getProjectSetImportTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"

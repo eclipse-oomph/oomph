@@ -29,12 +29,12 @@ import java.util.StringTokenizer;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.p2.Configuration#getWS <em>WS</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Configuration#getOS <em>OS</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Configuration#getArch <em>Arch</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.p2.P2Package#getConfiguration()
  * @model

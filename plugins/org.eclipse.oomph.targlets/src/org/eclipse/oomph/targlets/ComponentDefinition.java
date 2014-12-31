@@ -19,11 +19,11 @@ import org.eclipse.equinox.p2.metadata.Version;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.ComponentDefinition#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.ComponentDefinition#getVersion <em>Version</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getComponentDefinition()
  * @model

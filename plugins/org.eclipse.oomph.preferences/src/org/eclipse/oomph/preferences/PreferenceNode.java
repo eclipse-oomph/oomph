@@ -20,13 +20,13 @@ import org.eclipse.emf.common.util.URI;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceNode#getParent <em>Parent</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceNode#getChildren <em>Children</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceNode#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.eclipse.oomph.preferences.PreferenceNode#getLocation <em>Location</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.preferences.PreferencesPackage#getPreferenceNode()
  * @model

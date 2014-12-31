@@ -37,7 +37,9 @@ import java.util.regex.Pattern;
  * An implementation of the model object '<em><b>Preference Filter</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceFilterImpl#getPreferenceNode <em>Preference Node</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceFilterImpl#getPreferenceProfile <em>Preference Profile</em>}</li>
@@ -45,7 +47,6 @@ import java.util.regex.Pattern;
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceFilterImpl#getExclusions <em>Exclusions</em>}</li>
  *   <li>{@link org.eclipse.oomph.projectconfig.impl.PreferenceFilterImpl#getProperties <em>Properties</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -29,12 +29,13 @@ import java.io.OutputStream;
  * An implementation of the model object '<em><b>Resource Copy Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
+ * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl#getSourceURL <em>Source URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl#getTargetURL <em>Target URL</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

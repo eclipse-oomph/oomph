@@ -19,13 +19,13 @@ import org.eclipse.oomph.setup.SetupTask;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getVersion <em>Version</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getLocation <em>Location</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getRemoteURI <em>Remote URI</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
