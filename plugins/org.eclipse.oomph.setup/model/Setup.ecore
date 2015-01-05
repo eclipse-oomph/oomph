@@ -146,6 +146,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ProductVersion" eSuperTypes="#//Scope">
     <eStructuralFeatures xsi:type="ecore:EReference" name="product" lowerBound="1"
         eType="#//Product" transient="true" eOpposite="#//Product/versions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requiredJavaVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ProjectContainer" abstract="true" interface="true"
       eSuperTypes="#//Scope">

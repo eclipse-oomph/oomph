@@ -50,6 +50,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -81,11 +82,17 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   private SetupTaskPerformer performer;
 
+  private IndexLoader indexLoader;
+
+  private Runnable indexLoadedAction;
+
   private Runnable finishAction;
 
   private ComposedAdapterFactory adapterFactory;
 
   private boolean isCanceled;
+
+  private Shell simpleShell;
 
   public SetupWizard()
   {
@@ -147,6 +154,18 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public Trigger getTrigger()
   {
     return trigger;
+  }
+
+  public void setIndexLoader(IndexLoader indexLoader)
+  {
+    this.indexLoader = indexLoader;
+    if (indexLoader!=null)
+    indexLoader.setWizard(this);
+  }
+
+  public void setIndexLoadedAction(Runnable indexLoadedAction)
+  {
+    this.indexLoadedAction = indexLoadedAction;
   }
 
   public void setFinishAction(Runnable finishAction)
@@ -219,6 +238,22 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       ((IPageChangeProvider)newContainer).addPageChangedListener(this);
     }
+  }
+
+  @Override
+  public Shell getShell()
+  {
+    if (simpleShell != null)
+    {
+      return simpleShell;
+    }
+
+    return super.getShell();
+  }
+
+  public void setSimpleShell(Shell simpleShell)
+  {
+    this.simpleShell = simpleShell;
   }
 
   @Override
@@ -351,7 +386,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return dialog.open();
   }
 
-  protected void reloadIndex()
+  public void reloadIndex()
   {
     Set<Resource> excludedResources = new HashSet<Resource>();
 
@@ -403,79 +438,21 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
   }
 
-  protected void loadIndex()
+  public void loadIndex()
   {
     loadIndex(SetupContext.INDEX_SETUP_URI, SetupContext.USER_SETUP_URI);
   }
 
-  protected void loadIndex(final URI... uris)
+  protected void loadIndex(URI... uris)
   {
-    ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(getShell());
-    try
+    IndexLoader indexLoader = this.indexLoader;
+    if (indexLoader == null)
     {
-      progressMonitorDialog.run(true, true, new IRunnableWithProgress()
-      {
-        public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-        {
-          ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
-          {
-            @Override
-            protected void run(String taskName, IProgressMonitor monitor)
-            {
-              perform(uris);
-            }
-          };
-
-          resourceMirror.begin(monitor);
-
-          if (resourceMirror.isCanceled())
-          {
-            getShell().getDisplay().asyncExec(new Runnable()
-            {
-              public void run()
-              {
-                resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
-                Set<URI> uris = new LinkedHashSet<URI>();
-                for (Resource resource : resourceSet.getResources())
-                {
-                  URI uri = resource.getURI();
-                  if (!"ecore".equals(uri.fileExtension()))
-                  {
-                    uris.add(resource.getURI());
-                  }
-                }
-
-                loadIndex(uris.toArray(new URI[uris.size()]));
-              }
-            });
-
-          }
-          else
-          {
-            Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
-            final Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
-            if (index != null)
-            {
-              getShell().getDisplay().asyncExec(new Runnable()
-              {
-                public void run()
-                {
-                  indexLoaded(index);
-                }
-              });
-            }
-          }
-        }
-      });
+      indexLoader = new ProgressMonitorDialogIndexLoader();
+      indexLoader.setWizard(this);
     }
-    catch (InvocationTargetException ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex);
-    }
-    catch (InterruptedException ex)
-    {
-      // Ignore.
-    }
+
+    indexLoader.loadIndex(resourceSet, uris);
   }
 
   protected void indexLoaded(Index index)
@@ -488,6 +465,129 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     super.dispose();
 
     adapterFactory.dispose();
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static abstract class IndexLoader
+  {
+    private SetupWizard wizard;
+
+    final void setWizard(SetupWizard wizard)
+    {
+      this.wizard = wizard;
+    }
+
+    public final SetupWizard getWizard()
+    {
+      return wizard;
+    }
+
+    public abstract void loadIndex(ResourceSet resourceSet, URI... uris);
+
+    protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor) throws InvocationTargetException,
+        InterruptedException
+    {
+      ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
+      {
+        @Override
+        protected void run(String taskName, IProgressMonitor monitor)
+        {
+          perform(uris);
+        }
+      };
+
+      resourceMirror.begin(monitor);
+
+      if (resourceMirror.isCanceled())
+      {
+        Display display = wizard.getShell().getDisplay();
+        display.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
+            Set<URI> uris = new LinkedHashSet<URI>();
+            for (Resource resource : resourceSet.getResources())
+            {
+              URI uri = resource.getURI();
+              if (!"ecore".equals(uri.fileExtension()))
+              {
+                uris.add(resource.getURI());
+              }
+            }
+
+            loadIndex(resourceSet, uris.toArray(new URI[uris.size()]));
+          }
+        });
+      }
+      else
+      {
+        Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
+        final Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
+        if (index != null)
+        {
+          Display display = wizard.getShell().getDisplay();
+          display.asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              indexLoaded(index);
+
+              if (wizard.indexLoadedAction != null)
+              {
+                try
+                {
+                  wizard.indexLoadedAction.run();
+                }
+                catch (Exception ex)
+                {
+                  SetupUIPlugin.INSTANCE.log(ex);
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+
+    protected void indexLoaded(final Index index)
+    {
+      wizard.indexLoaded(index);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class ProgressMonitorDialogIndexLoader extends IndexLoader
+  {
+    @Override
+    public void loadIndex(final ResourceSet resourceSet, final URI... uris)
+    {
+      Shell shell = getWizard().getShell();
+      ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(shell);
+
+      try
+      {
+        progressMonitorDialog.run(true, true, new IRunnableWithProgress()
+        {
+          public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+          {
+            loadIndex(resourceSet, uris, monitor);
+          }
+        });
+      }
+      catch (InvocationTargetException ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex);
+      }
+      catch (InterruptedException ex)
+      {
+        // Ignore.
+      }
+    }
   }
 
   /**

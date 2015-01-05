@@ -7,6 +7,13 @@
     xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
     name="org.eclipse.products"
     label="Eclipse.org">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+    <detail
+        key="readmePath">
+      <value>readme/readme_eclipse.html</value>
+    </detail>
+  </annotation>
   <setupTask
       xsi:type="setup:InstallationTask"
       id="installation"/>
@@ -30,7 +37,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -56,7 +64,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -82,7 +91,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -108,7 +118,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -134,7 +145,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -160,7 +172,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -197,7 +210,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -223,7 +237,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -249,7 +264,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -275,7 +291,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -301,7 +318,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -327,7 +345,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -364,7 +383,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -384,7 +404,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -404,7 +425,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -424,7 +446,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -444,7 +467,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -464,7 +488,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -488,7 +513,8 @@
       label="Eclipse IDE for Eclipse Committers (unreleased before Mars)">
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -514,7 +540,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -556,7 +583,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -579,7 +607,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -602,7 +631,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -625,7 +655,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -648,7 +679,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -671,7 +703,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -705,7 +738,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -731,7 +765,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -757,7 +792,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -783,7 +819,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -809,7 +846,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -835,7 +873,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -872,7 +911,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -898,7 +938,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -924,7 +965,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -950,7 +992,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -976,7 +1019,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1002,7 +1046,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1039,7 +1084,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1059,7 +1105,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1079,7 +1126,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1099,7 +1147,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1130,7 +1179,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1156,7 +1206,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1182,7 +1233,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1208,7 +1260,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1234,7 +1287,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1260,7 +1314,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1301,7 +1356,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1321,7 +1377,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1341,7 +1398,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1361,7 +1419,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1381,7 +1440,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1401,7 +1461,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1432,7 +1493,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1458,7 +1520,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1484,7 +1547,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1510,7 +1574,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1536,7 +1601,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1562,7 +1628,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1599,7 +1666,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1625,7 +1693,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1651,7 +1720,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1677,7 +1747,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1703,7 +1774,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1729,7 +1801,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1766,7 +1839,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1786,7 +1860,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1806,7 +1881,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1826,7 +1902,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1846,7 +1923,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1866,7 +1944,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1890,7 +1969,8 @@
       label="Eclipse Standard (discontinued after Luna)">
     <version
         name="latest"
-        label="Latest (Luna)">
+        label="Latest (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1916,7 +1996,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Luna)">
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1942,7 +2023,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -1968,7 +2050,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -2010,7 +2093,8 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Kepler)">
+        label="Latest (Kepler)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -2033,7 +2117,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Kepler)">
+        label="Latest Release (Kepler)"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -2056,7 +2141,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement
@@ -2079,7 +2165,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <setupTask
           xsi:type="setup.p2:P2Task">
         <requirement

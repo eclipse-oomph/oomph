@@ -17,7 +17,9 @@ import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.Questionnaire;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.ErrorDialog;
+import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,6 +50,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InstallerApplication implements IApplication
 {
   public static final Integer EXIT_ERROR = 1;
+
+  private static final Preference PREF_MODE = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("mode");
+
+  private Mode mode = Mode.SIMPLE;
 
   private Integer run(final IApplicationContext context) throws Exception
   {
@@ -83,7 +89,7 @@ public class InstallerApplication implements IApplication
     final Display display = Display.getDefault();
     Display.setAppName(AbstractSetupDialog.SHELL_TEXT);
 
-    final InstallerDialog[] installerDialog = { null };
+    final InstallerUI[] installerDialog = { null };
     if (Platform.WS_COCOA.equals(Platform.getWS()))
     {
       Runnable about = new Runnable()
@@ -144,38 +150,74 @@ public class InstallerApplication implements IApplication
         org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
     agent.registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
 
-    installerDialog[0] = new InstallerDialog(null, restarted);
-    final int retcode = installerDialog[0].open();
-    if (retcode == InstallerDialog.RETURN_RESTART)
+    String modeName = PREF_MODE.get(Mode.SIMPLE.name());
+    mode = Mode.valueOf(modeName);
+
+    for (;;)
     {
-      try
+      Installer installer = new Installer();
+
+      if (mode == Mode.ADVANCED)
       {
-        restarting.createNewFile();
+        installerDialog[0] = new InstallerDialog(null, installer, restarted);
       }
-      catch (Throwable ex)
+      else
       {
-        //$FALL-THROUGH$
+        SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer);
+        installer.setSimpleShell(dialog);
+        installerDialog[0] = dialog;
       }
 
-      String launcher = getLauncher();
-      if (launcher != null)
+      final int retcode = installerDialog[0].show();
+      if (retcode == InstallerUI.RETURN_SIMPLE)
+      {
+        setMode(Mode.SIMPLE);
+        continue;
+      }
+
+      if (retcode == InstallerUI.RETURN_ADVANCED)
+      {
+        setMode(Mode.ADVANCED);
+        continue;
+      }
+
+      if (retcode == InstallerUI.RETURN_RESTART)
       {
         try
         {
-          // EXIT_RESTART often makes the new process come up behind other windows, so try a fresh native process first.
-          Runtime.getRuntime().exec(launcher);
-          return EXIT_OK;
+          restarting.createNewFile();
         }
         catch (Throwable ex)
         {
           //$FALL-THROUGH$
         }
+
+        String launcher = getLauncher();
+        if (launcher != null)
+        {
+          try
+          {
+            // EXIT_RESTART often makes the new process come up behind other windows, so try a fresh native process first.
+            Runtime.getRuntime().exec(launcher);
+            return EXIT_OK;
+          }
+          catch (Throwable ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+
+        return EXIT_RESTART;
       }
 
-      return EXIT_RESTART;
+      return EXIT_OK;
     }
+  }
 
-    return EXIT_OK;
+  private void setMode(Mode mode)
+  {
+    this.mode = mode;
+    PREF_MODE.set(mode.name());
   }
 
   public Object start(IApplicationContext context) throws Exception
@@ -307,5 +349,13 @@ public class InstallerApplication implements IApplication
     }
 
     return null;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static enum Mode
+  {
+    SIMPLE, ADVANCED;
   }
 }

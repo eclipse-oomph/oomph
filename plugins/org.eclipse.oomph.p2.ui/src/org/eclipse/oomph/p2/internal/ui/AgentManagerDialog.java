@@ -14,7 +14,6 @@ import org.eclipse.oomph.ui.OomphDialog;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
@@ -50,6 +49,11 @@ public class AgentManagerDialog extends OomphDialog
     this.selectedElement = selectedElement;
   }
 
+  public final AgentManagerComposite getComposite()
+  {
+    return composite;
+  }
+
   @Override
   protected String getShellText()
   {
@@ -69,6 +73,12 @@ public class AgentManagerDialog extends OomphDialog
   }
 
   @Override
+  protected int getContainerMargin()
+  {
+    return 10;
+  }
+
+  @Override
   protected void createUI(Composite parent)
   {
     getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/agent"));
@@ -84,10 +94,6 @@ public class AgentManagerDialog extends OomphDialog
     };
 
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-    GridLayout layout = (GridLayout)composite.getLayout();
-    layout.marginWidth = 10;
-    layout.marginHeight = 10;
   }
 
   protected void elementChanged(Object element)

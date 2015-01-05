@@ -276,7 +276,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     }
   }
 
-  protected static GridLayout createGridLayout(int numColumns)
+  public static GridLayout createGridLayout(int numColumns)
   {
     GridLayout layout = new GridLayout(numColumns, false);
     layout.marginWidth = 0;

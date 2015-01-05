@@ -711,6 +711,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getProductVersion_RequiredJavaVersion()
+  {
+    return (EAttribute)productVersionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getProjectCatalog()
   {
     return projectCatalogEClass;
@@ -1790,6 +1800,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
 
     productVersionEClass = createEClass(PRODUCT_VERSION);
     createEReference(productVersionEClass, PRODUCT_VERSION__PRODUCT);
+    createEAttribute(productVersionEClass, PRODUCT_VERSION__REQUIRED_JAVA_VERSION);
 
     projectContainerEClass = createEClass(PROJECT_CONTAINER);
     createEReference(projectContainerEClass, PROJECT_CONTAINER__PROJECTS);
@@ -2074,6 +2085,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEClass(productVersionEClass, ProductVersion.class, "ProductVersion", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getProductVersion_Product(), getProduct(), getProduct_Versions(), "product", null, 1, 1, ProductVersion.class, IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProductVersion_RequiredJavaVersion(), ecorePackage.getEString(), "requiredJavaVersion", null, 0, 1, ProductVersion.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(projectContainerEClass, ProjectContainer.class, "ProjectContainer", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getProjectContainer_Projects(), getProject(), getProject_ProjectContainer(), "projects", null, 0, -1, ProjectContainer.class, !IS_TRANSIENT,

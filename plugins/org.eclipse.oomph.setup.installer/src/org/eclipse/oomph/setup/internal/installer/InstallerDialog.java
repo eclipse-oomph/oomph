@@ -56,10 +56,8 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Eike Stepper
  */
-public final class InstallerDialog extends SetupWizardDialog
+public final class InstallerDialog extends SetupWizardDialog implements InstallerUI
 {
-  public static final int RETURN_RESTART = -4;
-
   private final IPageChangedListener pageChangedListener = new PageChangedListener();
 
   private final boolean restarted;
@@ -78,7 +76,12 @@ public final class InstallerDialog extends SetupWizardDialog
 
   public InstallerDialog(Shell parentShell, boolean restarted)
   {
-    super(parentShell, new SetupWizard.Installer());
+    this(parentShell, new SetupWizard.Installer(), restarted);
+  }
+
+  public InstallerDialog(Shell parentShell, Installer installer, boolean restarted)
+  {
+    super(parentShell, installer);
     this.restarted = restarted;
     addPageChangedListener(pageChangedListener);
   }
@@ -142,6 +145,18 @@ public final class InstallerDialog extends SetupWizardDialog
       }
     });
     AccessUtil.setKey(sshSettingsToolItem, "ssh");
+
+    ToolItem simpleToolItem = createToolItem(toolBar, "simple", "Switch to simple mode");
+    simpleToolItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        close();
+        setReturnCode(RETURN_SIMPLE);
+      }
+    });
+    AccessUtil.setKey(simpleToolItem, "simple");
 
     updateToolItem = createToolItem(toolBar, "install_update0", "Update");
     updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching0"));
@@ -304,6 +319,11 @@ public final class InstallerDialog extends SetupWizardDialog
     thread.start();
   }
 
+  public int show()
+  {
+    return open();
+  }
+
   public void showAbout()
   {
     new AboutDialog(getShell(), version).open();
@@ -374,7 +394,7 @@ public final class InstallerDialog extends SetupWizardDialog
                   }
                 });
 
-                versionLink.setText("<a>" + version + "</a>"); //$NON-NLS-1$
+                versionLink.setText("<a>" + version + "</a>");
                 versionLink.getParent().layout();
               }
               catch (Exception ex)

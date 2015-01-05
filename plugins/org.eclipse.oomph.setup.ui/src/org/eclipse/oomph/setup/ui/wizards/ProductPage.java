@@ -37,6 +37,7 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -94,6 +95,8 @@ public class ProductPage extends SetupWizardPage
 
   private static final Product NO_PRODUCT = createNoProduct();
 
+  private static boolean OVERWRITE_TMP_IMAGES = true;
+
   private ComposedAdapterFactory adapterFactory;
 
   private CatalogSelector catalogSelector;
@@ -121,6 +124,14 @@ public class ProductPage extends SetupWizardPage
     super("ProductPage");
     setTitle("Product");
     setDescription("Select the product and choose the version you want to install.");
+  }
+
+  @Override
+  public void dispose()
+  {
+    super.dispose();
+
+    adapterFactory.dispose();
   }
 
   @Override
@@ -262,7 +273,7 @@ public class ProductPage extends SetupWizardPage
         ProductVersion version = getSelectedProductVersion();
         if (version != null)
         {
-          saveProductVersionSelection(version);
+          saveProductVersionSelection(catalogSelector.getCatalogManager(), version);
         }
       }
     });
@@ -479,48 +490,7 @@ public class ProductPage extends SetupWizardPage
 
     versionComboViewer.setInput(product);
 
-    ProductVersion version = catalogSelector.getCatalogManager().getSelection().getDefaultProductVersions().get(product);
-    if (version == null)
-    {
-      ProductVersion firstReleasedProductVersion = null;
-      ProductVersion latestProductVersion = null;
-      ProductVersion latestReleasedProductVersion = null;
-      for (ProductVersion productVersion : product.getVersions())
-      {
-        String versionName = productVersion.getName();
-        if ("latest.released".equals(versionName))
-        {
-          latestReleasedProductVersion = productVersion;
-        }
-        else if ("latest".equals(versionName))
-        {
-          latestProductVersion = productVersion;
-        }
-        else if (firstReleasedProductVersion == null)
-        {
-          firstReleasedProductVersion = productVersion;
-        }
-      }
-
-      if (latestReleasedProductVersion != null)
-      {
-        version = latestReleasedProductVersion;
-      }
-      else if (firstReleasedProductVersion != null)
-      {
-        version = firstReleasedProductVersion;
-      }
-      else
-      {
-        version = latestProductVersion;
-      }
-
-      if (version != null)
-      {
-        saveProductVersionSelection(version);
-      }
-    }
-
+    ProductVersion version = getDefaultProductVersion(catalogSelector.getCatalogManager(), product);
     if (version != null)
     {
       versionComboViewer.setSelection(new StructuredSelection(version));
@@ -577,29 +547,7 @@ public class ProductPage extends SetupWizardPage
 
   private String getDescriptionHTML(Product product)
   {
-    String imageURI = null;
-
-    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-    if (annotation != null)
-    {
-      imageURI = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
-    }
-
-    if (imageURI == null)
-    {
-      File iconFile = new File(PropertiesUtil.getProperty("java.io.tmpdir"), "classic2.jpg");
-      if (!iconFile.exists())
-      {
-        BundleFile bundleFile = SetupUIPlugin.INSTANCE.getRootFile().getChild("icons/classic2.jpg");
-        bundleFile.export(iconFile);
-      }
-
-      imageURI = "file:/" + iconFile.getAbsolutePath().replace('\\', '/');
-    }
-    else
-    {
-      imageURI = IOUtil.decodeImageData(imageURI);
-    }
+    String imageURI = getProductImageURI(product);
 
     String description = product.getDescription();
     String label = product.getLabel();
@@ -703,22 +651,59 @@ public class ProductPage extends SetupWizardPage
     return null;
   }
 
-  private void saveProductVersionSelection(ProductVersion version)
+  public static ProductVersion getDefaultProductVersion(CatalogManager catalogManager, Product product)
   {
-    CatalogManager catalogManager = catalogSelector.getCatalogManager();
+    ProductVersion version = catalogManager.getSelection().getDefaultProductVersions().get(product);
+    if (version == null)
+    {
+      ProductVersion firstReleasedProductVersion = null;
+      ProductVersion latestProductVersion = null;
+      ProductVersion latestReleasedProductVersion = null;
+      for (ProductVersion productVersion : product.getVersions())
+      {
+        String versionName = productVersion.getName();
+        if ("latest.released".equals(versionName))
+        {
+          latestReleasedProductVersion = productVersion;
+        }
+        else if ("latest".equals(versionName))
+        {
+          latestProductVersion = productVersion;
+        }
+        else if (firstReleasedProductVersion == null)
+        {
+          firstReleasedProductVersion = productVersion;
+        }
+      }
+
+      if (latestReleasedProductVersion != null)
+      {
+        version = latestReleasedProductVersion;
+      }
+      else if (firstReleasedProductVersion != null)
+      {
+        version = firstReleasedProductVersion;
+      }
+      else
+      {
+        version = latestProductVersion;
+      }
+
+      if (version != null)
+      {
+        saveProductVersionSelection(catalogManager, version);
+      }
+    }
+    return version;
+  }
+
+  public static void saveProductVersionSelection(CatalogManager catalogManager, ProductVersion version)
+  {
     EMap<Product, ProductVersion> defaultProductVersions = catalogManager.getSelection().getDefaultProductVersions();
     Product product = version.getProduct();
     defaultProductVersions.put(product, version);
     defaultProductVersions.move(0, defaultProductVersions.indexOfKey(product));
     catalogManager.saveSelection();
-  }
-
-  @Override
-  public void dispose()
-  {
-    super.dispose();
-
-    adapterFactory.dispose();
   }
 
   private static Product createNoProduct()
@@ -737,6 +722,42 @@ public class ProductPage extends SetupWizardPage
     }
 
     return string;
+  }
+
+  public static String getProductImageURI(Product product)
+  {
+    String imageURI = null;
+
+    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    if (annotation != null)
+    {
+      imageURI = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+    }
+
+    if (imageURI == null)
+    {
+      imageURI = getImageURI(SetupUIPlugin.INSTANCE, "classic2.jpg");
+    }
+    else
+    {
+      imageURI = IOUtil.decodeImageData(imageURI);
+    }
+
+    return imageURI;
+  }
+
+  public static String getImageURI(OomphPlugin plugin, String iconName)
+  {
+    File iconFile = new File(PropertiesUtil.getProperty("java.io.tmpdir"), iconName);
+    if (OVERWRITE_TMP_IMAGES || !iconFile.exists())
+    {
+      iconFile.getParentFile().mkdirs();
+
+      BundleFile bundleFile = plugin.getRootFile().getChild("icons/" + iconName);
+      bundleFile.export(iconFile);
+    }
+
+    return iconFile.toURI().toString();
   }
 
   /**

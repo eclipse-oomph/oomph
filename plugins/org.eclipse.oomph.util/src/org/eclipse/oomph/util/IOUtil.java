@@ -303,13 +303,13 @@ public final class IOUtil
       {
         String extension = imageURI.substring(lastDot);
         InputStream in = null;
-  
+
         try
         {
           in = new URL(imageURI).openStream();
           ByteArrayOutputStream baos = new ByteArrayOutputStream();
           copy(in, baos);
-  
+
           String data = HexUtil.bytesToHex(baos.toByteArray());
           imageURI = IMAGE_DATA_PREFIX + data + extension;
         }
@@ -323,7 +323,7 @@ public final class IOUtil
         }
       }
     }
-  
+
     return imageURI;
   }
 
@@ -352,7 +352,7 @@ public final class IOUtil
             copy(bais, out);
           }
 
-          imageURI = "file:/" + iconFile.getAbsolutePath().replace('\\', '/');
+          imageURI = iconFile.toURI().toString();
         }
       }
       catch (Exception ex)

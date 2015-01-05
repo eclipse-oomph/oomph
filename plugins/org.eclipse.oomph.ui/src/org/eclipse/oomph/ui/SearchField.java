@@ -10,6 +10,12 @@
  */
 package org.eclipse.oomph.ui;
 
+import org.eclipse.oomph.util.ReflectUtil;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -20,6 +26,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IWorkbenchPreferenceConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
@@ -35,7 +43,7 @@ public class SearchField extends Composite
     super(parent, SWT.NONE);
     setLayout(new FirstChildLayout());
 
-    PatternFilter patternFilter = new PatternFilter()
+    final PatternFilter patternFilter = new PatternFilter()
     {
       @Override
       public Object[] filter(Viewer viewer, Object parent, Object[] elements)
@@ -47,12 +55,45 @@ public class SearchField extends Composite
           filterHandler.handleFilter(filter);
         }
 
-        return super.filter(viewer, parent, elements);
+        return new Object[0];
       }
     };
 
     filteredTree = new FilteredTree(this, SWT.NONE, patternFilter, true)
     {
+      @Override
+      @SuppressWarnings("restriction")
+      protected void init(int treeStyle, PatternFilter filter)
+      {
+        ReflectUtil.setValue("patternFilter", this, filter);
+
+        showFilterControls = PlatformUI.getPreferenceStore().getBoolean(IWorkbenchPreferenceConstants.SHOW_FILTERED_TEXTS);
+        createControl(SearchField.this, treeStyle);
+
+        Job refreshJob = new Job("Refresh Filter")
+        {
+          @Override
+          protected IStatus run(IProgressMonitor monitor)
+          {
+            UIUtil.syncExec(new Runnable()
+            {
+              public void run()
+              {
+                patternFilter.filter(treeViewer, (Object)null, null);
+              }
+            });
+
+            return Status.OK_STATUS;
+          }
+        };
+
+        refreshJob.setSystem(true);
+        ReflectUtil.setValue("refreshJob", this, refreshJob);
+
+        setInitialText(org.eclipse.ui.internal.WorkbenchMessages.FilteredTree_FilterMessage);
+        setFont(SearchField.this.getFont());
+      }
+
       @Override
       protected void createControl(Composite xxx, int treeStyle)
       {

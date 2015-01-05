@@ -10,9 +10,15 @@
  */
 package org.eclipse.oomph.setup.provider;
 
+import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.SetupPackage;
+
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,8 +55,23 @@ public class ProductVersionItemProvider extends ScopeItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addRequiredJavaVersionPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Required Java Version feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addRequiredJavaVersionPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ProductVersion_requiredJavaVersion_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_ProductVersion_requiredJavaVersion_feature", "_UI_ProductVersion_type"),
+        SetupPackage.Literals.PRODUCT_VERSION__REQUIRED_JAVA_VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -100,6 +121,13 @@ public class ProductVersionItemProvider extends ScopeItemProvider
   public void notifyChanged(Notification notification)
   {
     updateChildren(notification);
+
+    switch (notification.getFeatureID(ProductVersion.class))
+    {
+      case SetupPackage.PRODUCT_VERSION__REQUIRED_JAVA_VERSION:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
+    }
     super.notifyChanged(notification);
   }
 

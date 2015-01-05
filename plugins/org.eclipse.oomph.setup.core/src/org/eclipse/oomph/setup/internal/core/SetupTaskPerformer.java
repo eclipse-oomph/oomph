@@ -1181,7 +1181,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return null;
   }
 
-  private URI getAttributeURI(EAttribute eAttribute)
+  public static URI getAttributeURI(EAttribute eAttribute)
   {
     EClass eClass = eAttribute.getEContainingClass();
     EPackage ePackage = eClass.getEPackage();

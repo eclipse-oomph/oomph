@@ -52,6 +52,21 @@ public abstract class OS
     return osgiArch;
   }
 
+  public boolean isWin()
+  {
+    return false;
+  }
+
+  public boolean isMac()
+  {
+    return false;
+  }
+
+  public boolean isLinux()
+  {
+    return false;
+  }
+
   public boolean isCurrent()
   {
     return Platform.getOS().equals(osgiOS) && Platform.getWS().equals(osgiWS) && Platform.getOSArch().equals(osgiArch);
@@ -135,6 +150,12 @@ public abstract class OS
     }
 
     @Override
+    public boolean isWin()
+    {
+      return true;
+    }
+
+    @Override
     public boolean isLineEndingConversionNeeded()
     {
       return true;
@@ -193,6 +214,12 @@ public abstract class OS
     }
 
     @Override
+    public boolean isMac()
+    {
+      return true;
+    }
+
+    @Override
     public String getEclipseExecutable()
     {
       return "Eclipse.app/Contents/MacOS/eclipse";
@@ -225,6 +252,12 @@ public abstract class OS
     public Linux(String osgiWS, String osgiArch)
     {
       super(Platform.OS_LINUX, osgiWS, osgiArch);
+    }
+
+    @Override
+    public boolean isLinux()
+    {
+      return true;
     }
 
     @Override

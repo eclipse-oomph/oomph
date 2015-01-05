@@ -13,15 +13,20 @@ package org.eclipse.oomph.ui;
 import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ColorDescriptor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -100,5 +105,25 @@ public abstract class OomphUIPlugin extends OomphPlugin
   public static Font getBoldItalicFont(Font baseFont)
   {
     return getFont(baseFont, IItemFontProvider.BOLD_ITALIC_FONT);
+  }
+  
+  public static Color getColor(ColorDescriptor colorDescriptor)
+  {
+    return ExtendedColorRegistry.INSTANCE.getColor(null, null, colorDescriptor);
+  }
+
+  public static Color getColor(int r, int g, int b)
+  {
+    return ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/" + r + "/" + g + "/" + b));
+  }
+
+  public static Color getColor(RGB rgb)
+  {
+    return ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/" + rgb.red + "/" + rgb.green + "/" + rgb.blue));
+  }
+
+  public static Color getColor(Color foregroundColor, Color backgroundColor, float h, float s, float b)
+  {
+    return ExtendedColorRegistry.INSTANCE.getColor(foregroundColor, backgroundColor, URI.createURI("color://hsb/" + h + "/" + s + "/" + b));
   }
 }

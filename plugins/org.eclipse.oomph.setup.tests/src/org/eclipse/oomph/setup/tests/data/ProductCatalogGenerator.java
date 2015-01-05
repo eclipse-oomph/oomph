@@ -44,6 +44,8 @@ import org.eclipse.equinox.internal.p2.metadata.OSGiVersion;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.ITouchpointData;
+import org.eclipse.equinox.p2.metadata.ITouchpointInstruction;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.CompoundQueryable;
@@ -66,6 +68,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -80,6 +83,8 @@ import java.util.Set;
  */
 public class ProductCatalogGenerator implements IApplication
 {
+  private static final String JAVA_VERSION_PREFIX = "addJvmArg(jvmArg:-Dosgi.requiredJavaVersion=";
+
   private static final String PACKAGES = "http://download.eclipse.org/technology/epp/packages";
 
   private static final String RELEASES = "http://download.eclipse.org/releases";
@@ -156,6 +161,10 @@ public class ProductCatalogGenerator implements IApplication
       productCatalog.setName("org.eclipse.products");
       productCatalog.setLabel("Eclipse.org");
 
+      Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      annotation.getDetails().put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
+      productCatalog.getAnnotations().add(annotation);
+
       InstallationTask installationTask = SetupFactory.eINSTANCE.createInstallationTask();
       installationTask.setID("installation");
       productCatalog.getSetupTasks().add(installationTask);
@@ -179,6 +188,7 @@ public class ProductCatalogGenerator implements IApplication
       p2Task.getRepositories().add(emfRepository);
       productCatalog.getSetupTasks().add(p2Task);
 
+      final Map<String, IMetadataRepository> eppMetaDataRepositories = new HashMap<String, IMetadataRepository>();
       final Map<String, List<TrainAndVersion>> trainsAndVersions = new HashMap<String, List<TrainAndVersion>>();
       final Map<String, String> labels = new HashMap<String, String>();
 
@@ -186,12 +196,15 @@ public class ProductCatalogGenerator implements IApplication
       {
         URI eppURI = new URI(PACKAGES + "/" + train);
         System.out.println(eppURI);
+
         IMetadataRepository eppMetaDataRepository = manager.loadRepository(eppURI, null);
+        eppMetaDataRepositories.put(train, eppMetaDataRepository);
 
         Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
 
         URI releaseURI = new URI(RELEASES + "/" + train);
         System.out.print(releaseURI);
+
         IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, eppURI, releaseURI);
         releaseURI = trimEmptyTrailingSegment(releaseMetaDataRepository.getLocation());
         System.out.println(" -> " + releaseURI);
@@ -349,8 +362,8 @@ public class ProductCatalogGenerator implements IApplication
         attachBrandingInfos(product);
         productCatalog.getProducts().add(product);
 
-        addProductVersion(product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrain, "latest", "Latest ("
-            + latestTrainLabel + ")", latestTrainsIUs);
+        addProductVersion(product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrain, eppMetaDataRepositories, "latest",
+            "Latest (" + latestTrainLabel + ")", latestTrainsIUs);
 
         if (!latestUnreleased || size != 1)
         {
@@ -365,8 +378,8 @@ public class ProductCatalogGenerator implements IApplication
           String releasedTrainLabel = getTrainLabel(releasedTrain);
           Version releasedVersion = releasedTrainAndVersion.getVersion();
 
-          addProductVersion(product, releasedVersion, VersionSegment.MINOR, releasedTrainAndVersion.getTrainURI(), releasedTrain, "latest.released",
-              "Latest Release (" + releasedTrainLabel + ")", releasedTrainAndVersion.getIUs());
+          addProductVersion(product, releasedVersion, VersionSegment.MINOR, releasedTrainAndVersion.getTrainURI(), releasedTrain, eppMetaDataRepositories,
+              "latest.released", "Latest Release (" + releasedTrainLabel + ")", releasedTrainAndVersion.getIUs());
         }
 
         for (int i = 0; i < size; i++)
@@ -376,7 +389,7 @@ public class ProductCatalogGenerator implements IApplication
           String trainLabel = getTrainLabel(train);
           Version version = entry.getVersion();
 
-          addProductVersion(product, version, VersionSegment.MINOR, entry.getTrainURI(), train, train, trainLabel, entry.getIUs());
+          addProductVersion(product, version, VersionSegment.MINOR, entry.getTrainURI(), train, eppMetaDataRepositories, train, trainLabel, entry.getIUs());
         }
 
         System.out.println();
@@ -549,8 +562,8 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private void addProductVersion(Product product, Version version, VersionSegment versionSegment, URI trainURI, String train, String name, String label,
-      Map<String, Set<IInstallableUnit>> ius)
+  private void addProductVersion(Product product, Version version, VersionSegment versionSegment, URI trainURI, String train,
+      Map<String, IMetadataRepository> eppMetaDataRepositories, String name, String label, Map<String, Set<IInstallableUnit>> ius)
   {
     System.out.println("  " + label);
 
@@ -577,6 +590,71 @@ public class ProductCatalogGenerator implements IApplication
     p2Task.getRepositories().add(packageRepository);
     p2Task.getRepositories().add(releaseRepository);
     productVersion.getSetupTasks().add(p2Task);
+
+    String idPrefix = "tooling" + product.getName() + ".ini.";
+    Version maxJavaVersion = null;
+
+    IMetadataRepository eppMetaDataRepository = eppMetaDataRepositories.get(train);
+    if (eppMetaDataRepository != null)
+    {
+      for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createIUAnyQuery(), null)))
+      {
+        String id = iu.getId();
+        if (id.startsWith(idPrefix) && iu.getVersion().equals(version))
+        {
+          Collection<ITouchpointData> touchpointDatas = iu.getTouchpointData();
+          if (touchpointDatas != null)
+          {
+            for (ITouchpointData touchpointData : touchpointDatas)
+            {
+              ITouchpointInstruction instruction = touchpointData.getInstruction("configure");
+              if (instruction != null)
+              {
+                String body = instruction.getBody();
+                if (body != null)
+                {
+                  int pos = body.indexOf(JAVA_VERSION_PREFIX);
+                  if (pos != -1)
+                  {
+                    pos += JAVA_VERSION_PREFIX.length();
+                    Version javaVersion = Version.parseVersion(body.substring(pos, body.indexOf(')', pos)));
+                    if (maxJavaVersion == null || maxJavaVersion.compareTo(javaVersion) < 0)
+                    {
+                      maxJavaVersion = javaVersion;
+                    }
+
+                    // IMatchExpression<IInstallableUnit> filter = iu.getFilter();
+                    // Object[] parameters = filter.getParameters();
+                    // if (parameters != null)
+                    // {
+                    // for (Object parameter : parameters)
+                    // {
+                    // if (parameter instanceof IFilterExpression)
+                    // {
+                    // IFilterExpression filterExpression = (IFilterExpression)parameter;
+                    // System.out.println("    " + filterExpression.toString() + " --> " + javaVersion);
+                    // }
+                    // }
+                    // }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (maxJavaVersion != null)
+    {
+      String javaVersion = maxJavaVersion.toString();
+      while (javaVersion.endsWith(".0"))
+      {
+        javaVersion = javaVersion.substring(0, javaVersion.length() - 2);
+      }
+      
+      productVersion.setRequiredJavaVersion(javaVersion);
+    }
   }
 
   private VersionRange createVersionRange(Version version, VersionSegment versionSegment)

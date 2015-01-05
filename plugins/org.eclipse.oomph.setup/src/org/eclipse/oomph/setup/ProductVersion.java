@@ -20,6 +20,7 @@ package org.eclipse.oomph.setup;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.ProductVersion#getProduct <em>Product</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.ProductVersion#getRequiredJavaVersion <em>Required Java Version</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getProductVersion()
@@ -55,5 +56,31 @@ public interface ProductVersion extends Scope
    * @generated
    */
   void setProduct(Product value);
+
+  /**
+   * Returns the value of the '<em><b>Required Java Version</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Required Java Version</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Required Java Version</em>' attribute.
+   * @see #setRequiredJavaVersion(String)
+   * @see org.eclipse.oomph.setup.SetupPackage#getProductVersion_RequiredJavaVersion()
+   * @model
+   * @generated
+   */
+  String getRequiredJavaVersion();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.ProductVersion#getRequiredJavaVersion <em>Required Java Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Required Java Version</em>' attribute.
+   * @see #getRequiredJavaVersion()
+   * @generated
+   */
+  void setRequiredJavaVersion(String value);
 
 } // Eclipse

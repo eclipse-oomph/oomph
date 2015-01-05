@@ -54,6 +54,8 @@ public class AgentManagerComposite extends Composite
 
   private Button analyzeButton;
 
+  private Button showProfilesButton;
+
   public AgentManagerComposite(Composite parent, int style, final Object selection)
   {
     super(parent, style);
@@ -170,7 +172,7 @@ public class AgentManagerComposite extends Composite
       }
     });
 
-    final Button showProfilesButton = new Button(buttonComposite, SWT.CHECK);
+    showProfilesButton = new Button(buttonComposite, SWT.CHECK);
     showProfilesButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
     showProfilesButton.setText("Show Profiles");
     showProfilesButton.addSelectionListener(new SelectionAdapter()
@@ -208,6 +210,17 @@ public class AgentManagerComposite extends Composite
   public Object getSelectedElement()
   {
     return selectedElement;
+  }
+
+  @Override
+  public void setEnabled(boolean enabled)
+  {
+    treeViewer.getTree().setEnabled(enabled);
+    newAgentButton.setEnabled(enabled);
+    newPoolButton.setEnabled(enabled);
+    deleteButton.setEnabled(enabled);
+    analyzeButton.setEnabled(enabled);
+    super.setEnabled(enabled);
   }
 
   @Override

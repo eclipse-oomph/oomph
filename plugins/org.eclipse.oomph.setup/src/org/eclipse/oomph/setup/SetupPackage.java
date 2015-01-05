@@ -834,13 +834,22 @@ public interface SetupPackage extends EPackage
   int PRODUCT_VERSION__PRODUCT = SCOPE_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Required Java Version</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_VERSION__REQUIRED_JAVA_VERSION = SCOPE_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Product Version</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PRODUCT_VERSION_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 1;
+  int PRODUCT_VERSION_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.ProjectContainer <em>Project Container</em>}' class.
@@ -3508,6 +3517,17 @@ public interface SetupPackage extends EPackage
   EReference getProductVersion_Product();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.ProductVersion#getRequiredJavaVersion <em>Required Java Version</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Required Java Version</em>'.
+   * @see org.eclipse.oomph.setup.ProductVersion#getRequiredJavaVersion()
+   * @see #getProductVersion()
+   * @generated
+   */
+  EAttribute getProductVersion_RequiredJavaVersion();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.ProjectCatalog <em>Project Catalog</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4864,6 +4884,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EReference PRODUCT_VERSION__PRODUCT = eINSTANCE.getProductVersion_Product();
+
+    /**
+     * The meta object literal for the '<em><b>Required Java Version</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PRODUCT_VERSION__REQUIRED_JAVA_VERSION = eINSTANCE.getProductVersion_RequiredJavaVersion();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.ProjectCatalogImpl <em>Project Catalog</em>}' class.

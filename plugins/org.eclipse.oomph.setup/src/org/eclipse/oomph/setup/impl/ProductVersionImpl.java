@@ -33,12 +33,33 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.ProductVersionImpl#getProduct <em>Product</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ProductVersionImpl#getRequiredJavaVersion <em>Required Java Version</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ProductVersionImpl extends ScopeImpl implements ProductVersion
 {
+  /**
+   * The default value of the '{@link #getRequiredJavaVersion() <em>Required Java Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRequiredJavaVersion()
+   * @generated
+   * @ordered
+   */
+  protected static final String REQUIRED_JAVA_VERSION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getRequiredJavaVersion() <em>Required Java Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRequiredJavaVersion()
+   * @generated
+   * @ordered
+   */
+  protected String requiredJavaVersion = REQUIRED_JAVA_VERSION_EDEFAULT;
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -138,6 +159,31 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getRequiredJavaVersion()
+  {
+    return requiredJavaVersion;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRequiredJavaVersion(String newRequiredJavaVersion)
+  {
+    String oldRequiredJavaVersion = requiredJavaVersion;
+    requiredJavaVersion = newRequiredJavaVersion;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.PRODUCT_VERSION__REQUIRED_JAVA_VERSION, oldRequiredJavaVersion, requiredJavaVersion));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -201,6 +247,8 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
           return getProduct();
         }
         return basicGetProduct();
+      case SetupPackage.PRODUCT_VERSION__REQUIRED_JAVA_VERSION:
+        return getRequiredJavaVersion();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -217,6 +265,9 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
     {
       case SetupPackage.PRODUCT_VERSION__PRODUCT:
         setProduct((Product)newValue);
+        return;
+      case SetupPackage.PRODUCT_VERSION__REQUIRED_JAVA_VERSION:
+        setRequiredJavaVersion((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -235,6 +286,9 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
       case SetupPackage.PRODUCT_VERSION__PRODUCT:
         setProduct((Product)null);
         return;
+      case SetupPackage.PRODUCT_VERSION__REQUIRED_JAVA_VERSION:
+        setRequiredJavaVersion(REQUIRED_JAVA_VERSION_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -251,8 +305,30 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
     {
       case SetupPackage.PRODUCT_VERSION__PRODUCT:
         return basicGetProduct() != null;
+      case SetupPackage.PRODUCT_VERSION__REQUIRED_JAVA_VERSION:
+        return REQUIRED_JAVA_VERSION_EDEFAULT == null ? requiredJavaVersion != null : !REQUIRED_JAVA_VERSION_EDEFAULT.equals(requiredJavaVersion);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (requiredJavaVersion: ");
+    result.append(requiredJavaVersion);
+    result.append(')');
+    return result.toString();
   }
 
   @Override

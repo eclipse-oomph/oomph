@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.util;
 
+import org.eclipse.oomph.internal.util.UtilPlugin;
+
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -29,6 +31,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 import java.io.ByteArrayInputStream;
@@ -93,9 +96,19 @@ public abstract class OomphPlugin extends EMFPlugin
     return getPreferences("instance");
   }
 
+  public final Preference getInstancePreference(String key)
+  {
+    return new Preference(getInstancePreferences(), key);
+  }
+
   public final Preferences getConfigurationPreferences()
   {
     return getPreferences("configuration");
+  }
+
+  public final Preference getConfigurationPreference(String key)
+  {
+    return new Preference(getConfigurationPreferences(), key);
   }
 
   private Preferences getPreferences(String scope)
@@ -833,6 +846,133 @@ public abstract class OomphPlugin extends EMFPlugin
       public String getPath()
       {
         return "";
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class Preference
+  {
+    private final Preferences preferences;
+
+    private final String key;
+
+    public Preference(Preferences preferences, String key)
+    {
+      this.preferences = preferences;
+      this.key = key;
+    }
+
+    public final Preferences preferences()
+    {
+      return preferences;
+    }
+
+    public final String key()
+    {
+      return key;
+    }
+
+    public void remove()
+    {
+      preferences.remove(key);
+      flush();
+    }
+
+    public String get(String def)
+    {
+      return preferences.get(key, def);
+    }
+
+    public void set(String value)
+    {
+      preferences.put(key, value);
+      flush();
+    }
+
+    public int get(int def)
+    {
+      return preferences.getInt(key, def);
+    }
+
+    public void set(int value)
+    {
+      preferences.putInt(key, value);
+      flush();
+    }
+
+    public long get(long def)
+    {
+      return preferences.getLong(key, def);
+    }
+
+    public void set(long value)
+    {
+      preferences.putLong(key, value);
+      flush();
+    }
+
+    public boolean get(boolean def)
+    {
+      return preferences.getBoolean(key, def);
+    }
+
+    public void set(boolean value)
+    {
+      preferences.putBoolean(key, value);
+      flush();
+    }
+
+    public float get(float def)
+    {
+      return preferences.getFloat(key, def);
+    }
+
+    public void set(float value)
+    {
+      preferences.putFloat(key, value);
+      flush();
+    }
+
+    public double get(double def)
+    {
+      return preferences.getDouble(key, def);
+    }
+
+    public void set(double value)
+    {
+      preferences.putDouble(key, value);
+      flush();
+    }
+
+    public byte[] get(byte[] def)
+    {
+      return preferences.getByteArray(key, def);
+    }
+
+    public void set(byte[] value)
+    {
+      preferences.putByteArray(key, value);
+      flush();
+    }
+
+    @Override
+    public String toString()
+    {
+      return getClass().getSimpleName() + "[" + key + "]";
+    }
+
+    private void flush()
+    {
+      try
+      {
+        preferences.flush();
+      }
+      catch (BackingStoreException ex)
+      {
+        UtilPlugin.INSTANCE.log(ex);
       }
     }
   }

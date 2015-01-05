@@ -618,7 +618,7 @@ public class ProgressPage extends SetupWizardPage
 
                 if (launchAutomatically && trigger == Trigger.BOOTSTRAP)
                 {
-                  launchProduct(performer);
+                  hasLaunched = launchProduct(performer);
                 }
 
                 success = true;
@@ -703,7 +703,7 @@ public class ProgressPage extends SetupWizardPage
                           {
                             try
                             {
-                              launchProduct(getPerformer());
+                              hasLaunched = launchProduct(getPerformer());
                             }
                             catch (Exception ex)
                             {
@@ -820,7 +820,7 @@ public class ProgressPage extends SetupWizardPage
     }
   }
 
-  private void launchProduct(SetupTaskPerformer performer) throws Exception
+  public static boolean launchProduct(SetupTaskPerformer performer) throws Exception
   {
     OS os = performer.getOS();
     if (os.isCurrent())
@@ -832,6 +832,7 @@ public class ProgressPage extends SetupWizardPage
       String eclipsePath = new File(performer.getInstallationLocation(), eclipseDir + "/" + eclipseExecutable).getAbsolutePath();
 
       File ws = performer.getWorkspaceLocation();
+      int xxx; // TODO ws can be null?
       SetupUIPlugin.initialStart(ws, performer.isOffline(), performer.isMirrors());
 
       List<String> command = new ArrayList<String>();
@@ -849,12 +850,11 @@ public class ProgressPage extends SetupWizardPage
       process.getOutputStream().close();
       process.getErrorStream().close();
 
-      hasLaunched = true;
+      return true;
     }
-    else
-    {
-      performer.log("Launching the installed product is not possible for cross-platform installs. Skipping.");
-    }
+
+    performer.log("Launching the installed product is not possible for cross-platform installs. Skipping.");
+    return false;
   }
 
   private void saveLocalFiles(SetupTaskPerformer performer)
@@ -878,8 +878,10 @@ public class ProgressPage extends SetupWizardPage
     }
 
     SetupContext setupContext = getWizard().getSetupContext();
+
     Installation installation = setupContext.getInstallation();
     BaseUtil.saveEObject(installation);
+
     Workspace workspace = setupContext.getWorkspace();
     if (workspace != null)
     {
