@@ -346,6 +346,7 @@
   <project href="interim/ESON.setup#/"/>
   <project href="interim/Equinox.setup#/"/>
   <project href="interim/JDT.setup#/"/>
+  <project href="http://git.eclipse.org/c/ocl/org.eclipse.ocl.git/plain/releng/org.eclipse.ocl.oomph/setups/ocl.setup#/"/>
   <project href="Oomph.setup#/"/>
   <project href="http://git.eclipse.org/c/papyrus/org.eclipse.papyrus.git/plain/releng/org.eclipse.papyrus.oomph/setups/papyrus.setup#/"/>
   <project href="interim/PDE.setup#/"/>
