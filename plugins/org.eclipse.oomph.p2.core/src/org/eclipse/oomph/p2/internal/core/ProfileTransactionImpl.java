@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.director.SimplePlanner;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
@@ -304,11 +305,21 @@ public class ProfileTransactionImpl implements ProfileTransaction
     if (!committed)
     {
       committed = true;
+      monitor.beginTask("", 2);
 
-      Resolution resolution = resolve(commitContext, monitor);
-      if (resolution != null)
+      try
       {
-        return resolution.commit(monitor);
+        Resolution resolution = resolve(commitContext, new SubProgressMonitor(monitor, 1));
+        if (resolution != null)
+        {
+          return resolution.commit(new SubProgressMonitor(monitor, 1));
+        }
+
+        monitor.worked(1);
+      }
+      finally
+      {
+        monitor.done();
       }
     }
 
@@ -331,13 +342,16 @@ public class ProfileTransactionImpl implements ProfileTransaction
     final Agent agent = profile.getAgent();
     final List<Runnable> cleanup = new ArrayList<Runnable>();
 
+    boolean includeSourceBundles = profileDefinition.isIncludeSourceBundles();
+    monitor.beginTask("", includeSourceBundles ? 75 : 70);
+
     try
     {
       initMirrors(cleanup);
 
       List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
       Set<URI> artifactURIs = new HashSet<URI>();
-      URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, monitor);
+      URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, new SubProgressMonitor(monitor, 50));
 
       final ProfileImpl profileImpl = (ProfileImpl)profile;
       final IProfile delegate = profileImpl.getDelegate();
@@ -345,15 +359,15 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       IPlanner planner = agent.getPlanner();
       IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
-      IInstallableUnit rootIU = adjustProfileChangeRequest(profileChangeRequest, monitor);
+      IInstallableUnit rootIU = adjustProfileChangeRequest(profileChangeRequest, new SubProgressMonitor(monitor, 5));
 
       final ProvisioningContext provisioningContext = context.createProvisioningContext(this, profileChangeRequest);
       provisioningContext.setMetadataRepositories(metadataURIs);
       provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
 
-      IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(monitor);
+      IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(new SubProgressMonitor(monitor, 5));
 
-      final IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, monitor);
+      final IProvisioningPlan provisioningPlan = planner.getProvisioningPlan(profileChangeRequest, provisioningContext, new SubProgressMonitor(monitor, 10));
       P2CorePlugin.INSTANCE.coreException(provisioningPlan.getStatus());
 
       IQueryable<IInstallableUnit> futureState = provisioningPlan.getFutureState();
@@ -372,9 +386,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
         }
       }
 
-      if (profileDefinition.isIncludeSourceBundles())
+      if (includeSourceBundles)
       {
-        IInstallableUnit sourceContainerIU = generateSourceContainerIU(provisioningPlan, metadata, monitor);
+        IInstallableUnit sourceContainerIU = generateSourceContainerIU(provisioningPlan, metadata, new SubProgressMonitor(monitor, 5));
         provisioningPlan.addInstallableUnit(sourceContainerIU);
         provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
       }
@@ -457,6 +471,10 @@ public class ProfileTransactionImpl implements ProfileTransaction
       cleanup(cleanup);
       P2CorePlugin.INSTANCE.coreException(t);
       return null;
+    }
+    finally
+    {
+      monitor.done();
     }
   }
 
@@ -694,45 +712,54 @@ public class ProfileTransactionImpl implements ProfileTransaction
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
 
-    for (int i = 0; i < metadataURIs.length; i++)
+    monitor.beginTask("", metadataURIs.length);
+
+    try
     {
-      P2CorePlugin.checkCancelation(monitor);
-
-      try
+      for (int i = 0; i < metadataURIs.length; i++)
       {
-        Repository repository = repositories.get(i);
-        String url = repository.getURL();
-        final URI uri = new URI(url);
+        P2CorePlugin.checkCancelation(monitor);
 
-        if (!knownRepositories.contains(url))
+        try
         {
-          cleanup.add(new Runnable()
+          Repository repository = repositories.get(i);
+          String url = repository.getURL();
+          final URI uri = new URI(url);
+
+          if (!knownRepositories.contains(url))
           {
-            public void run()
+            cleanup.add(new Runnable()
             {
-              manager.removeRepository(uri);
-            }
-          });
+              public void run()
+              {
+                manager.removeRepository(uri);
+              }
+            });
+          }
+
+          IMetadataRepository metadataRepository = manager.loadRepository(uri, new SubProgressMonitor(monitor, 1));
+          metadataRepositories.add(metadataRepository);
+
+          metadataURIs[i] = uri;
+          artifactURIs.add(uri);
         }
-
-        IMetadataRepository metadataRepository = manager.loadRepository(uri, monitor);
-        metadataRepositories.add(metadataRepository);
-
-        metadataURIs[i] = uri;
-        artifactURIs.add(uri);
+        catch (OperationCanceledException ex)
+        {
+          throw ex;
+        }
+        catch (CoreException ex)
+        {
+          throw ex;
+        }
+        catch (Exception ex)
+        {
+          throw new P2Exception(ex);
+        }
       }
-      catch (OperationCanceledException ex)
-      {
-        throw ex;
-      }
-      catch (CoreException ex)
-      {
-        throw ex;
-      }
-      catch (Exception ex)
-      {
-        throw new P2Exception(ex);
-      }
+    }
+    finally
+    {
+      monitor.done();
     }
 
     for (BundlePool bundlePool : agent.getAgentManager().getBundlePools())

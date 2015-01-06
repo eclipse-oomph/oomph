@@ -55,6 +55,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -726,17 +727,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
           performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
           performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
           performer.setProgress(progress);
-
-          progress.beginTask("Installing", performer.initNeededSetupTasks().size() + 1);
-
-          performer.perform();
+          performer.perform(progress);
           performer.recordVariables(installation, null, user);
           performer.savePasswords();
 
-          progress.task(null);
-
-          installation.eResource().setURI(
-              URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup").toString()));
+          File configurationLocation = performer.getProductConfigurationLocation();
+          installation.eResource().setURI(URI.createFileURI(new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup").toString()));
           BaseUtil.saveEObject(installation);
 
           userAdjuster.undo();
@@ -972,7 +968,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimpleProgress implements ProgressLog, Runnable
+  private final class SimpleProgress implements ProgressLog, IProgressMonitor, Runnable
   {
     private volatile String name;
 
@@ -1020,11 +1016,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         name = null;
       }
-
-      if (++work == totalWork)
-      {
-        done = true;
-      }
     }
 
     public void setTerminating()
@@ -1043,12 +1034,38 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     public synchronized void beginTask(String name, int totalWork)
     {
-      this.name = name;
+      performer.log(name);
       if (this.totalWork == 0)
       {
         this.totalWork = totalWork;
         schedule();
       }
+    }
+
+    public synchronized void done()
+    {
+      work = totalWork;
+      done = true;
+    }
+
+    public synchronized void internalWorked(double work)
+    {
+      this.work += work;
+    }
+
+    public synchronized void setTaskName(String name)
+    {
+      performer.log(name);
+    }
+
+    public synchronized void subTask(String name)
+    {
+      performer.log(name);
+    }
+
+    public void worked(int work)
+    {
+      internalWorked(work);
     }
 
     public void run()

@@ -194,9 +194,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
                 {
                   try
                   {
-                    monitor.beginTask("Determining tasks to be performed", IProgressMonitor.UNKNOWN);
                     performStartup(workbench, monitor);
-                    monitor.done();
                     return Status.OK_STATUS;
                   }
                   finally
@@ -250,7 +248,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
-        monitor.subTask("Reading restart tasks");
         Resource resource = SetupUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
         Annotation annotation = (Annotation)EcoreUtil.getObjectByType(resource.getContents(), BasePackage.Literals.ANNOTATION);
@@ -292,8 +289,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
       Questionnaire.perform(UIUtil.getShell(), false);
     }
 
-    monitor.subTask("Creating a task performer");
-
     // This performer is only used to detect a need to update or to open the setup wizard.
     SetupTaskPerformer performer = null;
     final ResourceSet resourceSet = SetupUtil.createResourceSet();
@@ -321,7 +316,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       try
       {
         // At this point we know that no prompt was needed.
-        EList<SetupTask> neededTasks = performer.initNeededSetupTasks();
+        EList<SetupTask> neededTasks = performer.initNeededSetupTasks(monitor);
         if (restarting)
         {
           for (Iterator<SetupTask> it = neededTasks.iterator(); it.hasNext();)
@@ -345,15 +340,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
         INSTANCE.log(ex);
         return;
       }
-    }
-
-    if (performer == null)
-    {
-      monitor.setTaskName("Performing tasks that need prompted variables");
-    }
-    else
-    {
-      monitor.setTaskName("Performing " + performer.getTriggeredSetupTasks().size() + " tasks");
     }
 
     final SetupTaskPerformer finalPerfomer = performer;

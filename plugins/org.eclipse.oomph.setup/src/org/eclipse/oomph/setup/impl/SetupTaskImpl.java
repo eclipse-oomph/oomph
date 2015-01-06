@@ -570,6 +570,11 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   {
   }
 
+  public int getProgressMonitorWork()
+  {
+    return 1;
+  }
+
   /**
    * Subclasses may override to reset this task to its initial state.
    */

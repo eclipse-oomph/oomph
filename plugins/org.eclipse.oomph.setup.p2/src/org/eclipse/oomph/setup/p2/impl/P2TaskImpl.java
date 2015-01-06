@@ -537,6 +537,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 100;
+  }
+
   private void addUnknownRepository(IRepositoryManager<?> repositoryManager, Set<String> knownRepositories, String url)
   {
     if (!knownRepositories.contains(url))
@@ -628,8 +634,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
   public void perform(final SetupTaskContext context) throws Exception
   {
-    final IProgressMonitor monitor = new ProgressLogMonitor(context);
-
     File eclipseDir = context.getProductLocation();
     File eclipseIni = new File(eclipseDir, "eclipse.ini");
     boolean eclipseIniExisted = eclipseIni.exists();
@@ -671,7 +675,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       {
         try
         {
-          processLicenses(context, provisioningPlan, monitor);
+          processLicenses(context, provisioningPlan, new ProgressLogMonitor(context));
         }
         catch (Exception ex)
         {
@@ -690,7 +694,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     transaction.setMirrors(mirrors);
 
-    boolean profileChanged = transaction.commit(commitContext, monitor);
+    boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor());
     if (context.getTrigger() != Trigger.BOOTSTRAP)
     {
       if (profileChanged)

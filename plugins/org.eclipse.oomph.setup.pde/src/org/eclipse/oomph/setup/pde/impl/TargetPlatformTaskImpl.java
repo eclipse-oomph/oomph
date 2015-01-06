@@ -202,8 +202,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
       return true;
     }
 
-    IProgressMonitor monitor = new ProgressLogMonitor(context);
-    targetDefinition = TargetPlatformUtil.getTargetDefinition(getName(), monitor);
+    targetDefinition = TargetPlatformUtil.getTargetDefinition(getName(), context.getProgressMonitor());
 
     ITargetDefinition activeTargetDefinition = TargetPlatformUtil.getActiveTargetDefinition();
     return targetDefinition == null || activeTargetDefinition == null || !targetDefinition.getHandle().equals(activeTargetDefinition.getHandle());

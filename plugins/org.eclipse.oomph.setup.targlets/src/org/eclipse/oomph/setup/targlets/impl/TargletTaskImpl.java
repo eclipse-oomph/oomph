@@ -17,7 +17,6 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 import org.eclipse.oomph.targlets.Targlet;
@@ -45,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
@@ -574,6 +574,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     }
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 100;
+  }
+
   public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
     copyTarglets = TargletFactory.eINSTANCE.copyTarglets(getTarglets());
@@ -584,7 +590,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       {
         ITargetHandle activeTargetHandle = service.getWorkspaceTargetHandle();
 
-        targetDefinition = getTargetDefinition(context, service);
+        targetDefinition = getTargetDefinition(service, context.getProgressMonitor());
         if (targetDefinition == null)
         {
           return hasRequirements(copyTarglets);
@@ -659,90 +665,99 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     {
       public Object run(ITargetPlatformService service) throws CoreException
       {
-        if (targetDefinition == null)
-        {
-          targetDefinition = getTargetDefinition(context, service);
-        }
-
-        if (targetDefinition == null)
-        {
-          targetDefinition = service.newTarget();
-          targetDefinition.setName(TARGET_DEFINITION_NAME);
-        }
-
-        targetDefinition.setOS(getOperatingSystem());
-        targetDefinition.setWS(getWindowingSystem());
-        targetDefinition.setArch(getArchitecture());
-        targetDefinition.setNL(getLocale());
-
-        if (targletContainer == null)
-        {
-          targletContainer = getTargletContainer();
-        }
-
-        EList<Targlet> targlets;
-        if (targletContainer == null)
-        {
-          targletContainer = new TargletContainer(TARGLET_CONTAINER_ID);
-
-          ITargetLocation[] newLocations;
-          ITargetLocation[] oldLocations = targetDefinition.getTargetLocations();
-          if (oldLocations != null && oldLocations.length != 0)
-          {
-            newLocations = new ITargetLocation[oldLocations.length + 1];
-            System.arraycopy(oldLocations, 0, newLocations, 0, oldLocations.length);
-            newLocations[oldLocations.length] = targletContainer;
-          }
-          else
-          {
-            newLocations = new ITargetLocation[] { targletContainer };
-          }
-
-          targetDefinition.setTargetLocations(newLocations);
-
-          targlets = copyTarglets;
-        }
-        else
-        {
-          targlets = targletContainer.getTarglets();
-          for (Targlet targlet : copyTarglets)
-          {
-            int index = targletContainer.getTargletIndex(targlet.getName());
-            if (index != -1)
-            {
-              targlets.set(index, targlet);
-            }
-            else
-            {
-              targlets.add(targlet);
-            }
-          }
-        }
-
-        IProgressMonitor monitor = new ProgressLogMonitor(context);
-        boolean mirrors = context.isMirrors();
-
-        targletContainer.setTarglets(targlets);
-        targletContainer.forceUpdate(true, mirrors, monitor);
+        IProgressMonitor monitor = context.getProgressMonitor();
+        monitor.beginTask("", 100 + (targetDefinition == null ? 1 : 0));
 
         try
         {
-          Job.getJobManager().join(WorkspaceIUImporter.WORKSPACE_IU_IMPORT_FAMILY, monitor);
-        }
-        catch (InterruptedException ex)
-        {
-          TargletsCorePlugin.INSTANCE.coreException(ex);
-        }
+          if (targetDefinition == null)
+          {
+            targetDefinition = getTargetDefinition(service, new SubProgressMonitor(monitor, 1));
+          }
 
-        return null;
+          if (targetDefinition == null)
+          {
+            targetDefinition = service.newTarget();
+            targetDefinition.setName(TARGET_DEFINITION_NAME);
+          }
+
+          targetDefinition.setOS(getOperatingSystem());
+          targetDefinition.setWS(getWindowingSystem());
+          targetDefinition.setArch(getArchitecture());
+          targetDefinition.setNL(getLocale());
+
+          if (targletContainer == null)
+          {
+            targletContainer = getTargletContainer();
+          }
+
+          EList<Targlet> targlets;
+          if (targletContainer == null)
+          {
+            targletContainer = new TargletContainer(TARGLET_CONTAINER_ID);
+
+            ITargetLocation[] newLocations;
+            ITargetLocation[] oldLocations = targetDefinition.getTargetLocations();
+            if (oldLocations != null && oldLocations.length != 0)
+            {
+              newLocations = new ITargetLocation[oldLocations.length + 1];
+              System.arraycopy(oldLocations, 0, newLocations, 0, oldLocations.length);
+              newLocations[oldLocations.length] = targletContainer;
+            }
+            else
+            {
+              newLocations = new ITargetLocation[] { targletContainer };
+            }
+
+            targetDefinition.setTargetLocations(newLocations);
+
+            targlets = copyTarglets;
+          }
+          else
+          {
+            targlets = targletContainer.getTarglets();
+            for (Targlet targlet : copyTarglets)
+            {
+              int index = targletContainer.getTargletIndex(targlet.getName());
+              if (index != -1)
+              {
+                targlets.set(index, targlet);
+              }
+              else
+              {
+                targlets.add(targlet);
+              }
+            }
+          }
+
+          boolean mirrors = context.isMirrors();
+
+          targletContainer.setTarglets(targlets);
+          targletContainer.forceUpdate(true, mirrors, new SubProgressMonitor(monitor, 90));
+
+          try
+          {
+            Job.getJobManager().join(WorkspaceIUImporter.WORKSPACE_IU_IMPORT_FAMILY, new SubProgressMonitor(monitor, 10));
+          }
+          catch (InterruptedException ex)
+          {
+            TargletsCorePlugin.INSTANCE.coreException(ex);
+          }
+
+          return null;
+        }
+        finally
+        {
+          monitor.done();
+        }
       }
     });
 
   }
 
-  private ITargetDefinition getTargetDefinition(SetupTaskContext context, ITargetPlatformService service) throws CoreException
+  private ITargetDefinition getTargetDefinition(ITargetPlatformService service, IProgressMonitor monitor) throws CoreException
   {
-    for (ITargetHandle targetHandle : service.getTargets(new ProgressLogMonitor(context)))
+    for (ITargetHandle targetHandle : service.getTargets(monitor))
     {
       ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
       if (TARGET_DEFINITION_NAME.equals(targetDefinition.getName()))

@@ -450,10 +450,6 @@ public class ProgressPage extends SetupWizardPage
       performer.put(ILicense.class, LICENSE_CONFIRMER);
       performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performer.getUser(), false));
 
-      // Because the worked is incremented at the start of the task, behave as if there is one more task than there really is
-      // so we don't have full progress until the final task is completed.
-      progressMonitorPart.beginTask("", performer.getNeededTasks().size() + 1);
-
       File renamed = null;
       if (getTrigger() == Trigger.BOOTSTRAP)
       {
@@ -473,7 +469,7 @@ public class ProgressPage extends SetupWizardPage
           {
             progressPageLog.log(ex);
             setErrorMessage("Could not rename '" + configurationLocation + "'.  Press Back twice to choose a different installation location.");
-            progressPageLog.setFinished();
+            progressPageLog.done();
 
             throw new IORuntimeException(ex);
           }
@@ -524,7 +520,7 @@ public class ProgressPage extends SetupWizardPage
 
           try
           {
-            performer.perform();
+            performer.perform(progressPageLog);
             return performer.getRestartReasons();
           }
           finally
@@ -558,7 +554,7 @@ public class ProgressPage extends SetupWizardPage
   @Override
   public boolean performCancel()
   {
-    return progressPageLog == null || progressPageLog.isFinished() || progressPageLog.isCanceled();
+    return progressPageLog == null || progressPageLog.isDone() || progressPageLog.isCanceled();
   }
 
   private ILabelProvider createLabelProvider()
@@ -609,11 +605,9 @@ public class ProgressPage extends SetupWizardPage
 
               try
               {
-                SetupTaskPerformer performer = getPerformer();
-                monitor.beginTask("", performer.getNeededTasks().size() + 1);
-
                 restartReasons = runnable.run(progressLog);
 
+                SetupTaskPerformer performer = getPerformer();
                 saveLocalFiles(performer);
 
                 if (launchAutomatically && trigger == Trigger.BOOTSTRAP)
@@ -636,24 +630,24 @@ public class ProgressPage extends SetupWizardPage
               {
                 long seconds = (System.currentTimeMillis() - start) / 1000;
                 progressLog.setTerminating();
-                progressLog.log("Took " + seconds + " seconds.");
+                progressLog.message("Took " + seconds + " seconds.");
 
                 final AtomicBoolean disableCancelButton = new AtomicBoolean(true);
 
                 final boolean restart = restartReasons != null && !restartReasons.isEmpty() && trigger != Trigger.BOOTSTRAP;
                 if (restart)
                 {
-                  progressLog.log("A restart is needed for the following reasons:");
+                  progressLog.message("A restart is needed for the following reasons:");
                   for (String reason : restartReasons)
                   {
-                    progressLog.log("  - " + reason);
+                    progressLog.message("  - " + reason);
                   }
 
                   wizard.setFinishAction(new Runnable()
                   {
                     public void run()
                     {
-                      progressLog.setFinished();
+                      progressLog.done();
                       SetupUIPlugin.restart(trigger, getPerformer().getNeededTasks());
                     }
                   });
@@ -664,7 +658,7 @@ public class ProgressPage extends SetupWizardPage
                     return Status.OK_STATUS;
                   }
 
-                  progressLog.log("Press Finish to restart now or Cancel to restart later.");
+                  progressLog.message("Press Finish to restart now or Cancel to restart later.");
                   disableCancelButton.set(false);
                 }
                 else
@@ -679,7 +673,7 @@ public class ProgressPage extends SetupWizardPage
                         if (container instanceof WizardDialog)
                         {
                           WizardDialog dialog = (WizardDialog)container;
-                          progressLog.setFinished();
+                          progressLog.done();
                           dialog.close();
                         }
                       }
@@ -691,7 +685,7 @@ public class ProgressPage extends SetupWizardPage
 
                   if (success)
                   {
-                    progressLog.log("Press Finish to close the dialog.");
+                    progressLog.message("Press Finish to close the dialog.");
 
                     if (launchButton != null && !hasLaunched && trigger == Trigger.BOOTSTRAP)
                     {
@@ -718,14 +712,14 @@ public class ProgressPage extends SetupWizardPage
                   {
                     if (progressLog.isCanceled())
                     {
-                      progressLog.log("Task execution was canceled.");
+                      progressLog.message("Task execution was canceled.");
                     }
                     else
                     {
-                      progressLog.log("There are failed tasks.");
+                      progressLog.message("There are failed tasks.");
                     }
 
-                    progressLog.log("Press Back to choose different settings or Cancel to abort.");
+                    progressLog.message("Press Back to choose different settings or Cancel to abort.");
                   }
                 }
 
@@ -736,7 +730,7 @@ public class ProgressPage extends SetupWizardPage
                 {
                   public void run()
                   {
-                    progressLog.setFinished();
+                    progressLog.done();
                     setPageComplete(finalSuccess);
                     setButtonState(IDialogConstants.BACK_ID, true);
 
@@ -911,19 +905,19 @@ public class ProgressPage extends SetupWizardPage
   /**
    * @author Eike Stepper
    */
-  private class ProgressPageLog implements ProgressLog
+  private class ProgressPageLog implements ProgressLog, IProgressMonitor
   {
     private final StringBuilder queue = new StringBuilder();
 
-    private boolean finished;
-
-    private boolean terminating;
-
-    private ProgressMonitorPart progressMonitorPart;
+    private final ProgressMonitorPart progressMonitorPart;
 
     private IProgressMonitor progressMonitor;
 
-    private boolean isCanceled;
+    private boolean canceled;
+
+    private boolean terminating;
+
+    private boolean done;
 
     private int time;
 
@@ -948,28 +942,111 @@ public class ProgressPage extends SetupWizardPage
 
     public boolean isCanceled()
     {
-      if (isCanceled)
+      if (!canceled)
       {
-        return true;
+        if (progressMonitorPart.isCanceled() || progressMonitor != null && progressMonitor.isCanceled())
+        {
+          canceled = true;
+        }
       }
 
-      if (progressMonitorPart.isCanceled() || progressMonitor != null && progressMonitor.isCanceled())
+      return canceled;
+    }
+
+    public boolean isDone()
+    {
+      return done;
+    }
+
+    public void done()
+    {
+      done = true;
+
+      UIUtil.syncExec(new Runnable()
       {
-        isCanceled = true;
+        public void run()
+        {
+          progressMonitorPart.done();
+        }
+      });
+
+      if (progressMonitor != null)
+      {
+        progressMonitor.done();
       }
-
-      return isCanceled;
     }
 
-    public void setFinished()
+    public void beginTask(final String name, final int totalWork)
     {
-      finished = true;
-      task(null);
+      UIUtil.syncExec(new Runnable()
+      {
+        public void run()
+        {
+          progressMonitorPart.beginTask(name, totalWork);
+        }
+      });
+
+      setTaskName(name);
+
+      if (progressMonitor != null)
+      {
+        progressMonitor.beginTask(name, totalWork);
+      }
     }
 
-    public boolean isFinished()
+    public void internalWorked(final double work)
     {
-      return finished;
+      UIUtil.syncExec(new Runnable()
+      {
+        public void run()
+        {
+          progressMonitorPart.internalWorked(work);
+        }
+      });
+
+      if (progressMonitor != null)
+      {
+        progressMonitor.internalWorked(work);
+      }
+    }
+
+    public void setCanceled(boolean canceled)
+    {
+      this.canceled = canceled;
+      if (progressMonitor != null)
+      {
+        progressMonitor.setCanceled(canceled);
+      }
+    }
+
+    public void setTaskName(String name)
+    {
+      SetupTaskPerformer performer = getPerformer();
+      if (performer != null)
+      {
+        performer.log(name);
+      }
+    }
+
+    public void subTask(String name)
+    {
+      setTaskName(name);
+    }
+
+    public void worked(final int work)
+    {
+      UIUtil.syncExec(new Runnable()
+      {
+        public void run()
+        {
+          progressMonitorPart.worked(work);
+        }
+      });
+
+      if (progressMonitor != null)
+      {
+        progressMonitor.internalWorked(work);
+      }
     }
 
     public void task(final SetupTask setupTask)
@@ -978,23 +1055,6 @@ public class ProgressPage extends SetupWizardPage
       {
         public void run()
         {
-          if (setupTask == null)
-          {
-            progressMonitorPart.done();
-            if (progressMonitor != null)
-            {
-              progressMonitor.done();
-            }
-          }
-          else
-          {
-            progressMonitorPart.worked(1);
-            if (progressMonitor != null)
-            {
-              progressMonitor.worked(1);
-            }
-          }
-
           SetupTask previousCurrentTask = currentTask;
           currentTask = setupTask;
 
@@ -1039,11 +1099,21 @@ public class ProgressPage extends SetupWizardPage
 
     public void log(String line, boolean filter)
     {
-      if (finished)
+      if (done)
       {
         return;
       }
 
+      message(line, filter);
+    }
+
+    public void message(String line)
+    {
+      message(line, true);
+    }
+
+    private void message(String line, boolean filter)
+    {
       if (!terminating && isCanceled())
       {
         throw new OperationCanceledException();

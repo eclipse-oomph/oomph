@@ -57,6 +57,7 @@ import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
+import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.setup.util.StringExpander;
@@ -109,7 +110,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
@@ -187,6 +190,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private PrintStream logStream;
 
   private ProgressLogFilter logFilter = new ProgressLogFilter();
+
+  private IProgressMonitor progressMonitor;
 
   private List<EStructuralFeature.Setting> unresolvedSettings = new ArrayList<EStructuralFeature.Setting>();
 
@@ -1410,7 +1415,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  public EList<SetupTask> initNeededSetupTasks() throws Exception
+  public EList<SetupTask> initNeededSetupTasks(IProgressMonitor monitor) throws Exception
   {
     if (neededSetupTasks == null)
     {
@@ -1428,23 +1433,38 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (triggeredSetupTasks != null)
       {
-        for (Iterator<SetupTask> it = triggeredSetupTasks.iterator(); it.hasNext();)
-        {
-          SetupTask setupTask = it.next();
-          checkCancelation();
+        monitor.beginTask("", triggeredSetupTasks.size());
 
-          try
+        try
+        {
+          for (Iterator<SetupTask> it = triggeredSetupTasks.iterator(); it.hasNext();)
           {
-            if (setupTask.isNeeded(this))
+            SetupTask setupTask = it.next();
+            checkCancelation();
+            progressMonitor = new SubProgressMonitor(monitor, 1);
+
+            try
             {
-              neededSetupTasks.add(setupTask);
+              if (setupTask.isNeeded(this))
+              {
+                neededSetupTasks.add(setupTask);
+              }
+            }
+            catch (NoClassDefFoundError ex)
+            {
+              // Don't perform tasks that can't load their enabling dependencies
+              SetupCorePlugin.INSTANCE.log(ex);
+            }
+            finally
+            {
+              progressMonitor.done();
+              progressMonitor = null;
             }
           }
-          catch (NoClassDefFoundError ex)
-          {
-            // Don't perform tasks that can't load their enabling dependencies
-            SetupCorePlugin.INSTANCE.log(ex);
-          }
+        }
+        finally
+        {
+          monitor.done();
         }
       }
     }
@@ -1460,6 +1480,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public Map<EObject, EObject> getCopyMap()
   {
     return copyMap;
+  }
+
+  public IProgressMonitor getProgressMonitor()
+  {
+    if (progressMonitor == null)
+    {
+      return new ProgressLogMonitor(this);
+    }
+
+    return progressMonitor;
   }
 
   public boolean isCanceled()
@@ -1493,6 +1523,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void task(SetupTask setupTask)
   {
     progress.task(setupTask);
+    log("Performing setup task " + getLabel(setupTask));
   }
 
   public void log(Throwable t)
@@ -2439,60 +2470,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  private void performEclipseIniTask(boolean vm, String option, String value) throws Exception
+  private void performEclipseIniTask(boolean vm, String option, String value, IProgressMonitor monitor) throws Exception
   {
     EclipseIniTask task = SetupFactory.eINSTANCE.createEclipseIniTask();
     task.setVm(vm);
     task.setOption(option);
     task.setValue(value);
-    performTask(task);
+    performTask(task, monitor);
   }
 
-  private void performTask(SetupTask task) throws Exception
-  {
-    if (task.isNeeded(this))
-    {
-      task.perform(this);
-    }
-  }
-
-  public void perform() throws Exception
-  {
-    performTriggeredSetupTasks();
-
-    if (getTrigger() == Trigger.BOOTSTRAP)
-    {
-
-      performEclipseIniTask(false, "--launcher.appendVmargs", null);
-      performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))));
-
-      performIndexRediction(SetupContext.INDEX_SETUP_URI, "");
-      performIndexRediction(SetupContext.INDEX_SETUP_LOCATION_URI, ".location");
-
-      if (REMOTE_DEBUG)
-      {
-        performEclipseIniTask(true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true");
-        performEclipseIniTask(true, "-Xdebug", "");
-        performEclipseIniTask(true, "-Xrunjdwp", ":transport=dt_socket,server=y,suspend=n,address=8123");
-      }
-
-      String[] networkPreferences = new String[] { ".settings", "org.eclipse.core.net.prefs" };
-      URI sourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
-      if (getURIConverter().exists(sourceLocation, null))
-      {
-        URI targetURI = URI.createFileURI(getProductConfigurationLocation().toString()).appendSegments(networkPreferences);
-
-        ResourceCopyTask resourceCopyTask = SetupFactory.eINSTANCE.createResourceCopyTask();
-        resourceCopyTask.setSourceURL(sourceLocation.toString());
-        resourceCopyTask.setTargetURL(targetURI.toString());
-        performTask(resourceCopyTask);
-      }
-    }
-
-    hasSuccessfullyPerformed = true;
-  }
-
-  private void performIndexRediction(URI indexURI, String name) throws Exception
+  private void performIndexRediction(URI indexURI, String name, IProgressMonitor monitor) throws Exception
   {
     {
       URI redirectedURI = redirect(indexURI);
@@ -2507,53 +2494,147 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           if (!redirectedBaseBaseURI.equals(baseBaseURI))
           {
             performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseBaseURI + "->"
-                + redirectedBaseBaseURI);
+                + redirectedBaseBaseURI, monitor);
           }
           else
           {
             performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseURI + "->"
-                + redirectedBaseURI);
+                + redirectedBaseURI, monitor);
           }
         }
         else
         {
-          performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI);
+          performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI,
+              monitor);
         }
       }
     }
   }
 
-  private void performTriggeredSetupTasks() throws Exception
+  private void performTask(SetupTask task, IProgressMonitor monitor) throws Exception
   {
-    initNeededSetupTasks();
-    if (!neededSetupTasks.isEmpty())
+    monitor.beginTask("", 101);
+
+    try
     {
-      performNeededSetupTasks();
+      progressMonitor = new SubProgressMonitor(monitor, 1);
+      if (task.isNeeded(this))
+      {
+        progressMonitor.done();
+        progressMonitor = new SubProgressMonitor(monitor, 100);
+        task.perform(this);
+      }
+      else
+      {
+        progressMonitor.done();
+        monitor.worked(100);
+      }
+    }
+    finally
+    {
+      progressMonitor.done();
+      progressMonitor = null;
+
+      monitor.done();
     }
   }
 
-  private void performNeededSetupTasks() throws Exception
+  public void perform(IProgressMonitor monitor) throws Exception
+  {
+    boolean bootstrap = getTrigger() == Trigger.BOOTSTRAP;
+    monitor.beginTask("", bootstrap ? 105 : 100);
+
+    try
+    {
+      performTriggeredSetupTasks(new SubProgressMonitor(monitor, 100));
+
+      if (bootstrap)
+      {
+
+        performEclipseIniTask(false, "--launcher.appendVmargs", null, new SubProgressMonitor(monitor, 1));
+        performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))),
+            new SubProgressMonitor(monitor, 1));
+
+        performIndexRediction(SetupContext.INDEX_SETUP_URI, "", new SubProgressMonitor(monitor, 1));
+        performIndexRediction(SetupContext.INDEX_SETUP_LOCATION_URI, ".location", new SubProgressMonitor(monitor, 1));
+
+        if (REMOTE_DEBUG)
+        {
+          performEclipseIniTask(true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true", new NullProgressMonitor());
+          performEclipseIniTask(true, "-Xdebug", "", new NullProgressMonitor());
+          performEclipseIniTask(true, "-Xrunjdwp", ":transport=dt_socket,server=y,suspend=n,address=8123", new NullProgressMonitor());
+        }
+
+        String[] networkPreferences = new String[] { ".settings", "org.eclipse.core.net.prefs" };
+        URI sourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
+        if (getURIConverter().exists(sourceLocation, null))
+        {
+          URI targetURI = URI.createFileURI(getProductConfigurationLocation().toString()).appendSegments(networkPreferences);
+
+          ResourceCopyTask resourceCopyTask = SetupFactory.eINSTANCE.createResourceCopyTask();
+          resourceCopyTask.setSourceURL(sourceLocation.toString());
+          resourceCopyTask.setTargetURL(targetURI.toString());
+          performTask(resourceCopyTask, new SubProgressMonitor(monitor, 1));
+        }
+        else
+        {
+          monitor.worked(1);
+        }
+      }
+    }
+    finally
+    {
+      monitor.done();
+    }
+
+    hasSuccessfullyPerformed = true;
+  }
+
+  private void performTriggeredSetupTasks(IProgressMonitor monitor) throws Exception
+  {
+    monitor.beginTask("", 101);
+
+    try
+    {
+      initNeededSetupTasks(new SubProgressMonitor(monitor, 1));
+
+      if (!neededSetupTasks.isEmpty())
+      {
+        performNeededSetupTasks(new SubProgressMonitor(monitor, 100));
+      }
+      else
+      {
+        monitor.worked(100);
+      }
+    }
+    finally
+    {
+      monitor.done();
+    }
+  }
+
+  private void performNeededSetupTasks(IProgressMonitor monitor) throws Exception
   {
     setPerforming(true);
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
-      doPerformNeededSetupTasks();
+      doPerformNeededSetupTasks(monitor);
     }
     else
     {
       if (CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE)
       {
-        WorkspaceUtil.performNeededSetupTasks(this);
+        WorkspaceUtil.performNeededSetupTasks(this, monitor);
       }
       else
       {
-        doPerformNeededSetupTasks();
+        doPerformNeededSetupTasks(monitor);
       }
     }
   }
 
-  private void doPerformNeededSetupTasks() throws Exception
+  private void doPerformNeededSetupTasks(IProgressMonitor monitor) throws Exception
   {
     Boolean autoBuilding = null;
 
@@ -2567,6 +2648,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       logBundleInfos();
 
+      int totalWork = 0;
+      for (SetupTask neededTask : neededSetupTasks)
+      {
+        int work = Math.max(1, neededTask.getProgressMonitorWork());
+        totalWork += work;
+      }
+
+      monitor.beginTask("", totalWork);
+
       for (SetupTask neededTask : neededSetupTasks)
       {
         checkCancelation();
@@ -2578,7 +2668,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
 
         task(neededTask);
-        log("Performing setup task " + getLabel(neededTask));
+
+        int work = Math.max(1, neededTask.getProgressMonitorWork());
+        progressMonitor = new SubProgressMonitor(monitor, work);
 
         try
         {
@@ -2589,6 +2681,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           log(ex);
         }
+        finally
+        {
+          progressMonitor.done();
+          progressMonitor = null;
+        }
       }
     }
     catch (Exception ex)
@@ -2598,6 +2695,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
     finally
     {
+      monitor.done();
+
       if (Boolean.TRUE.equals(autoBuilding))
       {
         // Disable the PDE's API analysis builder, if it's installed, and remember its previously current state.
@@ -3561,7 +3660,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    private static void performNeededSetupTasks(final SetupTaskPerformer performer) throws Exception
+    private static void performNeededSetupTasks(final SetupTaskPerformer performer, IProgressMonitor monitor) throws Exception
     {
       ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
       {
@@ -3569,14 +3668,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           try
           {
-            performer.doPerformNeededSetupTasks();
+            performer.doPerformNeededSetupTasks(monitor);
           }
           catch (Throwable t)
           {
             SetupCorePlugin.INSTANCE.coreException(t);
           }
         }
-      }, null, IWorkspace.AVOID_UPDATE, null);
+      }, null, IWorkspace.AVOID_UPDATE, monitor);
     }
   }
 }

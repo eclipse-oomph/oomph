@@ -41,6 +41,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -318,7 +319,7 @@ public class ConfirmationPage extends SetupWizardPage
   {
     try
     {
-      getPerformer().initNeededSetupTasks();
+      getPerformer().initNeededSetupTasks(new NullProgressMonitor());
     }
     catch (final Exception ex)
     {
@@ -381,7 +382,7 @@ public class ConfirmationPage extends SetupWizardPage
 
           Set<SetupTask> checkedTasks = getCheckedTasks();
 
-          neededSetupTasks = performer.initNeededSetupTasks();
+          neededSetupTasks = performer.initNeededSetupTasks(new NullProgressMonitor());
           neededSetupTasks.retainAll(checkedTasks);
         }
         catch (Exception ex)

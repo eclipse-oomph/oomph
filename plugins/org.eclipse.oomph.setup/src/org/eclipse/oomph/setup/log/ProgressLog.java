@@ -14,15 +14,11 @@ import org.eclipse.oomph.setup.SetupTask;
 
 import org.eclipse.core.runtime.IStatus;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * @author Eike Stepper
  */
 public interface ProgressLog
 {
-  public static final AtomicReference<ProgressLog> INSTANCE = new AtomicReference<ProgressLog>();
-
   public boolean isCanceled();
 
   public void log(String line);

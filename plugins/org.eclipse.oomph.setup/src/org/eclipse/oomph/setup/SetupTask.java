@@ -265,9 +265,12 @@ public interface SetupTask extends ModelElement
 
   void consolidate();
 
+  int getProgressMonitorWork();
+
   boolean isNeeded(SetupTaskContext context) throws Exception;
 
   void perform(SetupTaskContext context) throws Exception;
 
   void dispose();
+
 } // SetupTask

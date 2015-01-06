@@ -29,7 +29,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.egit.core.EclipseGitProgressTransformer;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -43,7 +46,6 @@ import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.CoreConfig.AutoCRLF;
-import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.ReflogEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
@@ -468,6 +470,37 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     return result.toString();
   }
 
+  @Override
+  public Object getOverrideToken()
+  {
+    String token = getLocation();
+    if (StringUtil.isEmpty(token))
+    {
+      token = getRemoteURI();
+    }
+
+    return createToken(token);
+  }
+
+  @Override
+  public void overrideFor(SetupTask overriddenSetupTask)
+  {
+    super.overrideFor(overriddenSetupTask);
+    // Just ignore the overrides for the same location as long as the checkout branch is identical
+    GitCloneTask gitCloneTask = (GitCloneTask)overriddenSetupTask;
+    if (!ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
+    {
+      Annotation errorAnnotation = BaseFactory.eINSTANCE.createErrorAnnotation("Multiple different Git clones cannot be at the same location");
+      getAnnotations().add(errorAnnotation);
+    }
+  }
+
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 100;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     String location = getLocation();
@@ -525,31 +558,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
   }
 
-  @Override
-  public Object getOverrideToken()
-  {
-    String token = getLocation();
-    if (StringUtil.isEmpty(token))
-    {
-      token = getRemoteURI();
-    }
-
-    return createToken(token);
-  }
-
-  @Override
-  public void overrideFor(SetupTask overriddenSetupTask)
-  {
-    super.overrideFor(overriddenSetupTask);
-    // Just ignore the overrides for the same location as long as the checkout branch is identical
-    GitCloneTask gitCloneTask = (GitCloneTask)overriddenSetupTask;
-    if (!ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
-    {
-      Annotation errorAnnotation = BaseFactory.eINSTANCE.createErrorAnnotation("Multiple different Git clones cannot be at the same location");
-      getAnnotations().add(errorAnnotation);
-    }
-  }
-
   public void perform(SetupTaskContext context) throws Exception
   {
     try
@@ -568,23 +576,40 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String remoteName = getRemoteName();
       String remoteURI = getRemoteURI();
 
-      if (cachedGit == null)
-      {
-        cachedGit = cloneRepository(context, workDir, checkoutBranch, remoteName, remoteURI);
-        cachedRepository = cachedGit.getRepository();
+      IProgressMonitor monitor = context.getProgressMonitor();
+      monitor.beginTask("", (cachedGit == null ? 51 : 0) + (!hasCheckout ? 3 : 0));
 
-        if (!URI.createURI(remoteURI).isFile())
+      try
+      {
+        if (cachedGit == null)
         {
-          String pushURI = getPushURI();
-          configureRepository(context, cachedRepository, checkoutBranch, remoteName, remoteURI, pushURI);
+          cachedGit = cloneRepository(context, workDir, checkoutBranch, remoteName, remoteURI, new SubProgressMonitor(monitor, 50));
+          cachedRepository = cachedGit.getRepository();
+
+          if (!URI.createURI(remoteURI).isFile())
+          {
+            String pushURI = getPushURI();
+            configureRepository(context, cachedRepository, checkoutBranch, remoteName, remoteURI, pushURI);
+          }
+
+          monitor.worked(1);
+        }
+
+        if (!hasCheckout)
+        {
+          createBranch(context, cachedGit, checkoutBranch, remoteName);
+          monitor.worked(1);
+
+          checkout(context, cachedGit, checkoutBranch);
+          monitor.worked(1);
+
+          resetHard(context, cachedGit);
+          monitor.worked(1);
         }
       }
-
-      if (!hasCheckout)
+      finally
       {
-        createBranch(context, cachedGit, checkoutBranch, remoteName);
-        checkout(context, cachedGit, checkoutBranch);
-        resetHard(context, cachedGit);
+        monitor.done();
       }
     }
     catch (Throwable ex)
@@ -660,7 +685,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
   }
 
-  private static Git cloneRepository(SetupTaskContext context, File workDir, String checkoutBranch, String remoteName, String remoteURI) throws Exception
+  private static Git cloneRepository(SetupTaskContext context, File workDir, String checkoutBranch, String remoteName, String remoteURI,
+      IProgressMonitor monitor) throws Exception
   {
     context.log("Cloning Git repo " + remoteURI + " to " + workDir);
 
@@ -671,7 +697,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     command.setBranchesToClone(Collections.singleton(checkoutBranch));
     command.setDirectory(workDir);
     command.setTimeout(60);
-    command.setProgressMonitor(new ProgressLogWrapper(context));
+    command.setProgressMonitor(new EclipseGitProgressTransformer(monitor));
     return command.call();
   }
 
@@ -837,69 +863,4 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     command.call();
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  private static final class ProgressLogWrapper implements ProgressMonitor
-  {
-    private SetupTaskContext context;
-
-    private String title;
-
-    private int work;
-
-    private int totalWork;
-
-    public ProgressLogWrapper(SetupTaskContext context)
-    {
-      this.context = context;
-    }
-
-    public void update(int completed)
-    {
-      work += completed;
-      if (totalWork != 0 && title != null)
-      {
-        context.log(title + " (" + Math.round(100f / totalWork * work) + "%)");
-      }
-    }
-
-    public void start(int totalTasks)
-    {
-    }
-
-    public boolean isCancelled()
-    {
-      return context.isCanceled();
-    }
-
-    public void endTask()
-    {
-      if (title != null)
-      {
-        context.log(title + " (100%)");
-      }
-
-      title = null;
-      totalWork = 0;
-      work = 0;
-    }
-
-    public void beginTask(String title, int totalWork)
-    {
-      if (title != null)
-      {
-        if (title.startsWith("remote: "))
-        {
-          title = title.substring(8);
-        }
-
-        context.log(title + " (0%)");
-      }
-
-      this.title = title;
-      this.totalWork = totalWork;
-      work = 0;
-    }
-  }
 } // GitCloneTaskImpl
