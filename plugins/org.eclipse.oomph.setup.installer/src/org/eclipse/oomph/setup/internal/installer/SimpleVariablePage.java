@@ -57,6 +57,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -151,6 +152,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private StackComposite installStack;
 
   private ToolButton installButton;
+
+  private String installError;
 
   private boolean installed;
 
@@ -694,6 +697,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       @Override
       public void run()
       {
+        installError = null;
         performer = null;
         progress = new SimpleProgress();
 
@@ -738,9 +742,25 @@ public class SimpleVariablePage extends SimpleInstallerPage
           userAdjuster.undo();
           BaseUtil.saveEObject(user);
         }
+        catch (InterruptedException ex)
+        {
+          progress.setCanceled(true);
+        }
+        catch (OperationCanceledException ex)
+        {
+          progress.setCanceled(true);
+        }
         catch (Exception ex)
         {
-          ex.printStackTrace();
+          if (!progress.isCanceled())
+          {
+            SetupInstallerPlugin.INSTANCE.log(ex);
+            installError = ex.getMessage();
+            if (StringUtil.isEmpty(installError))
+            {
+              installError = ex.getClass().getName();
+            }
+          }
         }
         finally
         {
@@ -749,32 +769,23 @@ public class SimpleVariablePage extends SimpleInstallerPage
             IOUtil.close(performer.getLogStream());
           }
 
-          UIUtil.syncExec(new Runnable()
+          if (!progress.isCanceled())
           {
-            public void run()
+            UIUtil.syncExec(new Runnable()
             {
-              try
+              public void run()
               {
-                cancelButton.setVisible(false);
-                progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-
-                if (progress.isCanceled())
-                {
-                  installButton.setToolTipText("Install");
-                  progressLabel.setText("Installation canceled");
-                  setEnabled(true);
-                }
-                else
+                try
                 {
                   installFinished();
                 }
+                catch (SWTException ex)
+                {
+                  //$FALL-THROUGH$
+                }
               }
-              catch (SWTException ex)
-              {
-                //$FALL-THROUGH$
-              }
-            }
-          });
+            });
+          }
         }
       }
     };
@@ -795,40 +806,60 @@ public class SimpleVariablePage extends SimpleInstallerPage
       installThread.interrupt();
     }
 
+    setEnabled(true);
+    progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+    // installButton.setToolTipText("Install");
+    progressLabel.setText("Installation canceled");
+
+    cancelButton.setVisible(false);
     installStack.setTopControl(installButton);
   }
 
   private void installFinished()
   {
-    installed = true;
-    installButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/launch.png"));
-    installButton.setToolTipText("Launch");
-
-    String message = "Installation finished successfully\n\n<a>" + TEXT_LOG + "</a>\n";
     readmePath = null;
+    String message;
 
-    Scope scope = selectedProductVersion;
-    while (scope != null)
+    if (installError == null)
     {
-      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      if (annotation != null)
+      installed = true;
+      installButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/launch.png"));
+      installButton.setToolTipText("Launch");
+      progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GREEN));
+
+      message = "Installation finished successfully\n\n<a>" + TEXT_LOG + "</a>\n";
+
+      Scope scope = selectedProductVersion;
+      while (scope != null)
       {
-        readmePath = annotation.getDetails().get(AnnotationConstants.KEY_README_PATH);
-        if (readmePath != null)
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
         {
-          message += "<a>" + TEXT_README + "</a>\n";
-          break;
+          readmePath = annotation.getDetails().get(AnnotationConstants.KEY_README_PATH);
+          if (readmePath != null)
+          {
+            message += "<a>" + TEXT_README + "</a>\n";
+            break;
+          }
         }
+
+        scope = scope.getParentScope();
       }
 
-      scope = scope.getParentScope();
+      message += "<a>" + TEXT_LAUNCH + "</a>";
     }
+    else
+    {
+      setEnabled(true);
 
-    message += "<a>" + TEXT_LAUNCH + "</a>";
+      progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
+      message = installError + "\n\n<a>" + TEXT_LOG + "</a>\n";
+    }
 
     progressLabel.setText(message);
     backButton.setEnabled(true);
 
+    cancelButton.setVisible(false);
     installStack.setTopControl(installButton);
   }
 
