@@ -396,6 +396,9 @@
             pattern="org\.eclipse\.oomph\.base.*"/>
         <predicate
             xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.jreinfo.*"/>
+        <predicate
+            xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.predicates.*"/>
         <predicate
             xsi:type="predicates:NamePredicate"
@@ -433,6 +436,9 @@
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.license-feature"/>
+        <predicate
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.extractor.*"/>
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.parent"/>
