@@ -191,7 +191,7 @@ public class ComponentGeneratorImpl extends ModelElementImpl implements Componen
           namespace = "osgi.bundle";
         }
 
-        requirements.add(MetadataFactory.createRequirement(namespace, id, versionRange, null, false, true, true));
+        requirements.add(MetadataFactory.createRequirement(namespace, id, versionRange, null, requirement.isOptional(), true, true));
       }
 
       iu.setRequiredCapabilities(requirements.toArray(new IRequirement[requirements.size()]));
