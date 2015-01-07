@@ -590,7 +590,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       {
         ITargetHandle activeTargetHandle = service.getWorkspaceTargetHandle();
 
-        targetDefinition = getTargetDefinition(service, context.getProgressMonitor());
+        targetDefinition = getTargetDefinition(service, context.getProgressMonitor(true));
         if (targetDefinition == null)
         {
           return hasRequirements(copyTarglets);
@@ -665,7 +665,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     {
       public Object run(ITargetPlatformService service) throws CoreException
       {
-        IProgressMonitor monitor = context.getProgressMonitor();
+        IProgressMonitor monitor = context.getProgressMonitor(true);
         monitor.beginTask("", 100 + (targetDefinition == null ? 1 : 0));
 
         try

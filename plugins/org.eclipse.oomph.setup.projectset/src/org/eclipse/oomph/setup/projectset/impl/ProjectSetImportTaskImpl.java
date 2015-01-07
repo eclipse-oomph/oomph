@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.projectset.impl;
 
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.projectset.ProjectSetImportTask;
 import org.eclipse.oomph.setup.projectset.ProjectSetPackage;
 import org.eclipse.oomph.setup.projectset.ProjectSetPlugin;
@@ -208,6 +207,12 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
     return result.toString();
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 100;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI uri = createResolvedURI(getURL());
@@ -279,7 +284,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
         {
           return org.eclipse.team.internal.ui.ProjectSetImporter.importProjectSetFromString(content, uri.toString(), getShell(), monitor);
         }
-      }.perform(new ProgressLogMonitor(context));
+      }.perform(context.getProgressMonitor(true));
 
       setProjects(uri, content, projects);
     }

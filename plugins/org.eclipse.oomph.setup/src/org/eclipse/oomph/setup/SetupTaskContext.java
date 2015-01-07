@@ -27,7 +27,7 @@ import java.util.Set;
  */
 public interface SetupTaskContext extends ProgressLog
 {
-  public IProgressMonitor getProgressMonitor();
+  public IProgressMonitor getProgressMonitor(boolean working);
 
   public SetupPrompter getPrompter();
 

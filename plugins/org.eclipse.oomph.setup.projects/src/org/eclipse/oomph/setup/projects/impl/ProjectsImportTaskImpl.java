@@ -20,7 +20,6 @@ import org.eclipse.oomph.resources.impl.SourceLocatorImpl;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 import org.eclipse.oomph.setup.projects.ProjectsPlugin;
@@ -48,6 +47,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.SubProgressMonitor;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -210,6 +210,12 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     return super.eIsSet(featureID);
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 50;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (context.getTrigger() == Trigger.MANUAL)
@@ -239,48 +245,60 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    ProgressLogMonitor monitor = new ProgressLogMonitor(context);
     Map<BackendContainer, IProject> backendContainers = new HashMap<BackendContainer, IProject>();
     MultiStatus status = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, "Projects Import Analysis", null);
 
-    for (SourceLocator sourceLocator : getSourceLocators())
+    EList<SourceLocator> sourceLocators = getSourceLocators();
+    int size = sourceLocators.size();
+
+    IProgressMonitor monitor = context.getProgressMonitor(true);
+    monitor.beginTask("", 2 * size);
+
+    try
     {
-      String rootFolder = sourceLocator.getRootFolder();
-      context.log("Importing projects from " + rootFolder);
-      MultiStatus childStatus = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, "Projects Import Analysis of '" + rootFolder + "'", null);
-
-      try
+      for (SourceLocator sourceLocator : sourceLocators)
       {
-        ProjectHandler.Collector collector = new ProjectHandler.Collector();
-        sourceLocator.handleProjects(EclipseProjectFactory.LIST, collector, childStatus, monitor);
-        if (childStatus.getSeverity() >= IStatus.ERROR)
+        String rootFolder = sourceLocator.getRootFolder();
+        context.log("Importing projects from " + rootFolder);
+        MultiStatus childStatus = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, "Projects Import Analysis of '" + rootFolder + "'", null);
+
+        try
         {
-          status.add(childStatus);
+          ProjectHandler.Collector collector = new ProjectHandler.Collector();
+          sourceLocator.handleProjects(EclipseProjectFactory.LIST, collector, childStatus, new SubProgressMonitor(monitor, 1));
+          if (childStatus.getSeverity() >= IStatus.ERROR)
+          {
+            status.add(childStatus);
+          }
+          else
+          {
+            Map<IProject, BackendContainer> projectMap = collector.getProjectMap();
+            for (Map.Entry<IProject, BackendContainer> entry : projectMap.entrySet())
+            {
+              backendContainers.put(entry.getValue(), entry.getKey());
+            }
+
+            Set<IProject> projects = projectMap.keySet();
+            if (projects.isEmpty())
+            {
+              context.log("No projects were found");
+            }
+
+            setProjects(sourceLocator, projects.toArray(new IProject[projectMap.size()]));
+          }
         }
-        else
+        catch (Exception ex)
         {
-          Map<IProject, BackendContainer> projectMap = collector.getProjectMap();
-          for (Map.Entry<IProject, BackendContainer> entry : projectMap.entrySet())
-          {
-            backendContainers.put(entry.getValue(), entry.getKey());
-          }
-
-          Set<IProject> projects = projectMap.keySet();
-          if (projects.isEmpty())
-          {
-            context.log("No projects were found");
-          }
-
-          setProjects(sourceLocator, projects.toArray(new IProject[projectMap.size()]));
+          SourceLocatorImpl.addStatus(status, ProjectsPlugin.INSTANCE, rootFolder, ex);
         }
       }
-      catch (Exception ex)
-      {
-        SourceLocatorImpl.addStatus(status, ProjectsPlugin.INSTANCE, rootFolder, ex);
-      }
+
+      importProjects(backendContainers, new SubProgressMonitor(monitor, size));
     }
-
-    importProjects(backendContainers, monitor);
+    finally
+    {
+      monitor.done();
+    }
 
     ProjectsPlugin.INSTANCE.coreException(status);
   }

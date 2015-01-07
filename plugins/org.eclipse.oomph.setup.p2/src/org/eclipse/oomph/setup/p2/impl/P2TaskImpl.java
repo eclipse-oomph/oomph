@@ -26,7 +26,6 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.internal.p2.SetupP2Plugin;
-import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.util.DownloadUtil;
@@ -675,7 +674,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       {
         try
         {
-          processLicenses(context, provisioningPlan, new ProgressLogMonitor(context));
+          processLicenses(context, provisioningPlan, context.getProgressMonitor(false));
         }
         catch (Exception ex)
         {
@@ -694,7 +693,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     transaction.setMirrors(mirrors);
 
-    boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor());
+    boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor(true));
     if (context.getTrigger() != Trigger.BOOTSTRAP)
     {
       if (profileChanged)

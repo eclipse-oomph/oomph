@@ -13,7 +13,6 @@ package org.eclipse.oomph.setup.pde.impl;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.pde.PDEPackage;
 import org.eclipse.oomph.setup.pde.TargetPlatformTask;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -22,7 +21,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.pde.core.target.ITargetDefinition;
 
 /**
@@ -202,7 +200,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
       return true;
     }
 
-    targetDefinition = TargetPlatformUtil.getTargetDefinition(getName(), context.getProgressMonitor());
+    targetDefinition = TargetPlatformUtil.getTargetDefinition(getName());
 
     ITargetDefinition activeTargetDefinition = TargetPlatformUtil.getActiveTargetDefinition();
     return targetDefinition == null || activeTargetDefinition == null || !targetDefinition.getHandle().equals(activeTargetDefinition.getHandle());
@@ -210,16 +208,14 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    IProgressMonitor monitor = new ProgressLogMonitor(context);
-
     if (targetDefinition == null)
     {
-      targetDefinition = TargetPlatformUtil.getTargetDefinition(getName(), monitor);
+      targetDefinition = TargetPlatformUtil.getTargetDefinition(getName());
     }
 
     if (targetDefinition != null)
     {
-      TargetPlatformUtil.activateTargetDefinition(targetDefinition, monitor);
+      TargetPlatformUtil.activateTargetDefinition(targetDefinition, context.getProgressMonitor(true));
     }
   }
 

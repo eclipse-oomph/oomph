@@ -17,7 +17,6 @@ import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
 import org.eclipse.oomph.util.StringUtil;
@@ -37,6 +36,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
@@ -47,6 +47,7 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -272,6 +273,12 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     return result.toString();
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 100;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     EList<SourceLocator> sourceLocators = getSourceLocators();
@@ -302,57 +309,129 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    MavenModelManager modelManager = MavenPlugin.getMavenModelManager();
-    IProgressMonitor monitor = new ProgressLogMonitor(context);
+    EList<SourceLocator> sourceLocators = getSourceLocators();
+    int size = sourceLocators.size();
 
-    Set<MavenProjectInfo> projectInfos = new LinkedHashSet<MavenProjectInfo>();
-    for (SourceLocator sourceLocator : getSourceLocators())
+    IProgressMonitor monitor = context.getProgressMonitor(true);
+    monitor.beginTask("", 2 * size);
+
+    try
     {
-      LocalProjectScanner projectScanner = new LocalProjectScanner(null, Collections.singletonList(sourceLocator.getRootFolder()), false, modelManager);
-      projectScanner.run(monitor);
+      MavenModelManager modelManager = MavenPlugin.getMavenModelManager();
 
-      for (MavenProjectInfo projectInfo : projectScanner.getProjects())
+      Set<MavenProjectInfo> projectInfos = new LinkedHashSet<MavenProjectInfo>();
+      for (SourceLocator sourceLocator : sourceLocators)
       {
-        processMavenProject(projectInfo, projectInfos, sourceLocator, monitor);
+        LocalProjectScanner projectScanner = new LocalProjectScanner(null, Collections.singletonList(sourceLocator.getRootFolder()), false, modelManager);
+        processMavenProject(sourceLocator, projectInfos, projectScanner, new SubProgressMonitor(monitor, 1));
+      }
+
+      if (projectInfos.isEmpty())
+      {
+        monitor.worked(size);
+      }
+      else
+      {
+        IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+        ProjectImportConfiguration projectImportConfiguration = new ProjectImportConfiguration();
+
+        String projectNameTemplate = getProjectNameTemplate();
+        if (!StringUtil.isEmpty(projectNameTemplate))
+        {
+          projectImportConfiguration.setProjectNameTemplate(projectNameTemplate);
+        }
+
+        projectConfigurationManager.importProjects(projectInfos, projectImportConfiguration, new SubProgressMonitor(monitor, size));
       }
     }
-
-    if (!projectInfos.isEmpty())
+    finally
     {
-      IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
-      ProjectImportConfiguration projectImportConfiguration = new ProjectImportConfiguration();
-
-      String projectNameTemplate = getProjectNameTemplate();
-      if (!StringUtil.isEmpty(projectNameTemplate))
-      {
-        projectImportConfiguration.setProjectNameTemplate(projectNameTemplate);
-      }
-
-      projectConfigurationManager.importProjects(projectInfos, projectImportConfiguration, monitor);
+      monitor.done();
     }
   }
 
-  private static void processMavenProject(MavenProjectInfo projectInfo, Set<MavenProjectInfo> projectInfos, SourceLocator sourceLocator,
-      IProgressMonitor monitor)
+  private void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, LocalProjectScanner projectScanner, IProgressMonitor monitor)
+      throws InterruptedException
   {
-    String projectFolder = projectInfo.getPomFile().getParent();
-    BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectFolder);
-    IProject project = sourceLocator.loadProject(MavenProjectFactory.LIST, backendContainer, monitor);
-    if (project != null)
+    monitor.beginTask("", 2);
+
+    try
     {
-      if (sourceLocator.matches(project))
+      projectScanner.run(new SubProgressMonitor(monitor, 1));
+
+      List<MavenProjectInfo> projects = projectScanner.getProjects();
+      processMavenProject(sourceLocator, projectInfos, projects, new SubProgressMonitor(monitor, 1));
+    }
+    finally
+    {
+      monitor.done();
+    }
+  }
+
+  private void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, List<MavenProjectInfo> projects, IProgressMonitor monitor)
+  {
+    monitor.beginTask("", projects.size());
+
+    try
+    {
+      for (MavenProjectInfo projectInfo : projects)
       {
-        String projectName = project.getName();
-        if (!ROOT.getProject(projectName).exists())
-        {
-          projectInfos.add(projectInfo);
-        }
+        processMavenProject(sourceLocator, projectInfos, projectInfo, new SubProgressMonitor(monitor, 1));
       }
     }
-
-    for (MavenProjectInfo childProjectInfo : projectInfo.getProjects())
+    finally
     {
-      processMavenProject(childProjectInfo, projectInfos, sourceLocator, monitor);
+      monitor.done();
+    }
+  }
+
+  private static void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, MavenProjectInfo projectInfo,
+      IProgressMonitor monitor)
+  {
+    monitor.beginTask("", 6);
+
+    try
+    {
+      String projectFolder = projectInfo.getPomFile().getParent();
+      BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectFolder);
+
+      IProject project = sourceLocator.loadProject(MavenProjectFactory.LIST, backendContainer, new SubProgressMonitor(monitor, 1));
+      if (project != null)
+      {
+        if (sourceLocator.matches(project))
+        {
+          String projectName = project.getName();
+          if (!ROOT.getProject(projectName).exists())
+          {
+            projectInfos.add(projectInfo);
+          }
+        }
+      }
+
+      Collection<MavenProjectInfo> projects = projectInfo.getProjects();
+      processMavenProject(sourceLocator, projectInfos, projects, new SubProgressMonitor(monitor, 5));
+    }
+    finally
+    {
+      monitor.done();
+    }
+  }
+
+  private static void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, Collection<MavenProjectInfo> projects,
+      IProgressMonitor monitor)
+  {
+    monitor.beginTask("", projects.size());
+
+    try
+    {
+      for (MavenProjectInfo childProjectInfo : projects)
+      {
+        processMavenProject(sourceLocator, projectInfos, childProjectInfo, new SubProgressMonitor(monitor, 1));
+      }
+    }
+    finally
+    {
+      monitor.done();
     }
   }
 

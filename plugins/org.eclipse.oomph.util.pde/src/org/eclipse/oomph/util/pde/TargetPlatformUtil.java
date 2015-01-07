@@ -16,6 +16,7 @@ import org.eclipse.oomph.util.internal.pde.UtilPDEPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
@@ -234,7 +235,7 @@ public final class TargetPlatformUtil
     return null;
   }
 
-  public static ITargetDefinition getTargetDefinition(final String targetDefinitionName, final IProgressMonitor monitor)
+  public static ITargetDefinition getTargetDefinition(final String targetDefinitionName)
   {
     try
     {
@@ -242,7 +243,7 @@ public final class TargetPlatformUtil
       {
         public ITargetDefinition run(ITargetPlatformService service) throws CoreException
         {
-          for (ITargetHandle targetHandle : service.getTargets(monitor))
+          for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))
           {
             try
             {

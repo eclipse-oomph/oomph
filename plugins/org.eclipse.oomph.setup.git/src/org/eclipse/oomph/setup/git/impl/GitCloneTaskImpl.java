@@ -576,7 +576,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String remoteName = getRemoteName();
       String remoteURI = getRemoteURI();
 
-      IProgressMonitor monitor = context.getProgressMonitor();
+      IProgressMonitor monitor = context.getProgressMonitor(true);
       monitor.beginTask("", (cachedGit == null ? 51 : 0) + (!hasCheckout ? 3 : 0));
 
       try

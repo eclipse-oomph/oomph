@@ -1482,9 +1482,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return copyMap;
   }
 
-  public IProgressMonitor getProgressMonitor()
+  public IProgressMonitor getProgressMonitor(boolean working)
   {
-    if (progressMonitor == null)
+    if (!working || progressMonitor == null)
     {
       return new ProgressLogMonitor(this);
     }
