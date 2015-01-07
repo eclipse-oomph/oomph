@@ -40,7 +40,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Mars)">
         <requirement
             name="epp.package.dsl"
             versionRange="[4.5.0,5.0.0)"/>
@@ -67,7 +68,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Luna)">
         <requirement
             name="epp.package.dsl"
             versionRange="[4.4.0,4.5.0)"/>
@@ -94,7 +96,8 @@
         label="Mars"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Mars)">
         <requirement
             name="epp.package.dsl"
             versionRange="[4.5.0,4.6.0)"/>
@@ -121,7 +124,8 @@
         label="Luna"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Luna)">
         <requirement
             name="epp.package.dsl"
             versionRange="[4.4.0,4.5.0)"/>
@@ -148,7 +152,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Kepler)">
         <requirement
             name="epp.package.dsl"
             versionRange="[2.0.0,2.1.0)"/>
@@ -175,7 +180,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Juno)">
         <requirement
             name="epp.package.dsl"
             versionRange="[1.5.0,1.6.0)"/>
@@ -213,7 +219,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Mars)">
         <requirement
             name="epp.package.automotive"
             versionRange="[4.5.0,5.0.0)"/>
@@ -240,7 +247,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Luna)">
         <requirement
             name="epp.package.automotive"
             versionRange="[4.4.0,4.5.0)"/>
@@ -267,7 +275,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Mars)">
         <requirement
             name="epp.package.automotive"
             versionRange="[4.5.0,4.6.0)"/>
@@ -294,7 +303,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Luna)">
         <requirement
             name="epp.package.automotive"
             versionRange="[4.4.0,4.5.0)"/>
@@ -321,7 +331,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Kepler)">
         <requirement
             name="epp.package.automotive"
             versionRange="[2.0.0,2.1.0)"/>
@@ -348,7 +359,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Juno)">
         <requirement
             name="epp.package.automotive"
             versionRange="[1.5.0,1.6.0)"/>
@@ -386,7 +398,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Mars)">
         <requirement
             name="epp.package.cpp"
             versionRange="[4.5.0,5.0.0)"/>
@@ -407,7 +420,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Luna)">
         <requirement
             name="epp.package.cpp"
             versionRange="[4.4.0,4.5.0)"/>
@@ -428,7 +442,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Mars)">
         <requirement
             name="epp.package.cpp"
             versionRange="[4.5.0,4.6.0)"/>
@@ -449,7 +464,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Luna)">
         <requirement
             name="epp.package.cpp"
             versionRange="[4.4.0,4.5.0)"/>
@@ -470,7 +486,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Kepler)">
         <requirement
             name="epp.package.cpp"
             versionRange="[2.0.0,2.1.0)"/>
@@ -491,7 +508,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Juno)">
         <requirement
             name="epp.package.cpp"
             versionRange="[1.5.0,1.6.0)"/>
@@ -516,7 +534,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Eclipse Committers (Mars)">
         <requirement
             name="epp.package.committers"
             versionRange="[4.5.0,5.0.0)"/>
@@ -543,7 +562,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Eclipse Committers (Mars)">
         <requirement
             name="epp.package.committers"
             versionRange="[4.5.0,4.6.0)"/>
@@ -586,7 +606,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Mars)">
         <requirement
             name="epp.package.java"
             versionRange="[4.5.0,5.0.0)"/>
@@ -610,7 +631,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Luna)">
         <requirement
             name="epp.package.java"
             versionRange="[4.4.0,4.5.0)"/>
@@ -634,7 +656,8 @@
         label="Mars"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Mars)">
         <requirement
             name="epp.package.java"
             versionRange="[4.5.0,4.6.0)"/>
@@ -658,7 +681,8 @@
         label="Luna"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Luna)">
         <requirement
             name="epp.package.java"
             versionRange="[4.4.0,4.5.0)"/>
@@ -682,7 +706,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Kepler)">
         <requirement
             name="epp.package.java"
             versionRange="[2.0.0,2.1.0)"/>
@@ -706,7 +731,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Juno)">
         <requirement
             name="epp.package.java"
             versionRange="[1.5.0,1.6.0)"/>
@@ -741,7 +767,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Mars)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.5.0,5.0.0)"/>
@@ -768,7 +795,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Luna)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.4.0,4.5.0)"/>
@@ -795,7 +823,8 @@
         label="Mars"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Mars)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.5.0,4.6.0)"/>
@@ -822,7 +851,8 @@
         label="Luna"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Luna)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.4.0,4.5.0)"/>
@@ -849,7 +879,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Kepler)">
         <requirement
             name="epp.package.jee"
             versionRange="[2.0.0,2.1.0)"/>
@@ -876,7 +907,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Juno)">
         <requirement
             name="epp.package.jee"
             versionRange="[1.5.0,1.6.0)"/>
@@ -914,7 +946,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Mars)">
         <requirement
             name="epp.package.reporting"
             versionRange="[4.5.0,5.0.0)"/>
@@ -941,7 +974,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Luna)">
         <requirement
             name="epp.package.reporting"
             versionRange="[4.4.0,4.5.0)"/>
@@ -968,7 +1002,8 @@
         label="Mars"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Mars)">
         <requirement
             name="epp.package.reporting"
             versionRange="[4.5.0,4.6.0)"/>
@@ -995,7 +1030,8 @@
         label="Luna"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Luna)">
         <requirement
             name="epp.package.reporting"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1022,7 +1058,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Kepler)">
         <requirement
             name="epp.package.reporting"
             versionRange="[2.0.0,2.1.0)"/>
@@ -1049,7 +1086,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Juno)">
         <requirement
             name="epp.package.reporting"
             versionRange="[1.5.0,1.6.0)"/>
@@ -1087,7 +1125,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Mars)">
         <requirement
             name="epp.package.php"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1108,7 +1147,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Luna)">
         <requirement
             name="epp.package.php"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1129,7 +1169,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Mars)">
         <requirement
             name="epp.package.php"
             versionRange="[4.5.0,4.6.0)"/>
@@ -1150,7 +1191,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Luna)">
         <requirement
             name="epp.package.php"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1182,7 +1224,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Mars)">
         <requirement
             name="epp.package.modeling"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1209,7 +1252,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Luna)">
         <requirement
             name="epp.package.modeling"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1236,7 +1280,8 @@
         label="Mars"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Mars)">
         <requirement
             name="epp.package.modeling"
             versionRange="[4.5.0,4.6.0)"/>
@@ -1263,7 +1308,8 @@
         label="Luna"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Luna)">
         <requirement
             name="epp.package.modeling"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1290,7 +1336,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Kepler)">
         <requirement
             name="epp.package.modeling"
             versionRange="[2.0.0,2.1.0)"/>
@@ -1317,7 +1364,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Juno)">
         <requirement
             name="epp.package.modeling"
             versionRange="[1.5.0,1.6.0)"/>
@@ -1359,7 +1407,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Mars)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1380,7 +1429,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Luna)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1401,7 +1451,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Mars)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.5.0,4.6.0)"/>
@@ -1422,7 +1473,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Luna)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1443,7 +1495,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Kepler)">
         <requirement
             name="epp.package.parallel"
             versionRange="[2.0.0,2.1.0)"/>
@@ -1464,7 +1517,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Juno)">
         <requirement
             name="epp.package.parallel"
             versionRange="[1.5.0,1.6.0)"/>
@@ -1496,7 +1550,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Mars)">
         <requirement
             name="epp.package.rcp"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1523,7 +1578,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Luna)">
         <requirement
             name="epp.package.rcp"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1550,7 +1606,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Mars)">
         <requirement
             name="epp.package.rcp"
             versionRange="[4.5.0,4.6.0)"/>
@@ -1577,7 +1634,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Luna)">
         <requirement
             name="epp.package.rcp"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1604,7 +1662,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Kepler)">
         <requirement
             name="epp.package.rcp"
             versionRange="[2.0.0,2.1.0)"/>
@@ -1631,7 +1690,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Juno)">
         <requirement
             name="epp.package.rcp"
             versionRange="[1.5.0,1.6.0)"/>
@@ -1669,7 +1729,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Mars)">
         <requirement
             name="epp.package.scout"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1696,7 +1757,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Luna)">
         <requirement
             name="epp.package.scout"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1723,7 +1785,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Mars)">
         <requirement
             name="epp.package.scout"
             versionRange="[4.5.0,4.6.0)"/>
@@ -1750,7 +1813,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Luna)">
         <requirement
             name="epp.package.scout"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1777,7 +1841,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Kepler)">
         <requirement
             name="epp.package.scout"
             versionRange="[2.0.0,2.1.0)"/>
@@ -1804,7 +1869,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Juno)">
         <requirement
             name="epp.package.scout"
             versionRange="[1.5.0,1.6.0)"/>
@@ -1842,7 +1908,8 @@
         label="Latest (Mars)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Mars)">
         <requirement
             name="epp.package.testing"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1863,7 +1930,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Luna)">
         <requirement
             name="epp.package.testing"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1884,7 +1952,8 @@
         label="Mars"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Mars)">
         <requirement
             name="epp.package.testing"
             versionRange="[4.5.0,4.6.0)"/>
@@ -1905,7 +1974,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Luna)">
         <requirement
             name="epp.package.testing"
             versionRange="[4.4.0,4.5.0)"/>
@@ -1926,7 +1996,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Kepler)">
         <requirement
             name="epp.package.testing"
             versionRange="[2.0.0,2.1.0)"/>
@@ -1947,7 +2018,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Juno)">
         <requirement
             name="epp.package.testing"
             versionRange="[1.5.0,1.6.0)"/>
@@ -1972,7 +2044,8 @@
         label="Latest (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Luna)">
         <requirement
             name="epp.package.standard"
             versionRange="[4.4.0,5.0.0)"/>
@@ -1999,7 +2072,8 @@
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Luna)">
         <requirement
             name="epp.package.standard"
             versionRange="[4.4.0,4.5.0)"/>
@@ -2026,7 +2100,8 @@
         label="Luna"
         requiredJavaVersion="1.7">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Luna)">
         <requirement
             name="epp.package.standard"
             versionRange="[4.4.0,4.6.0)"/>
@@ -2053,7 +2128,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Kepler)">
         <requirement
             name="epp.package.standard"
             versionRange="[2.0.0,2.1.0)"/>
@@ -2096,7 +2172,8 @@
         label="Latest (Kepler)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Mobile Developers (Kepler)">
         <requirement
             name="epp.package.mobile"
             versionRange="[2.0.0,3.0.0)"/>
@@ -2120,7 +2197,8 @@
         label="Latest Release (Kepler)"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Mobile Developers (Kepler)">
         <requirement
             name="epp.package.mobile"
             versionRange="[2.0.0,2.1.0)"/>
@@ -2144,7 +2222,8 @@
         label="Kepler"
         requiredJavaVersion="1.6">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Mobile Developers (Kepler)">
         <requirement
             name="epp.package.mobile"
             versionRange="[2.0.0,2.2.0)"/>
@@ -2168,7 +2247,8 @@
         label="Juno"
         requiredJavaVersion="1.5">
       <setupTask
-          xsi:type="setup.p2:P2Task">
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Mobile Developers (Juno)">
         <requirement
             name="epp.package.mobile"
             versionRange="[1.5.0,1.6.0)"/>

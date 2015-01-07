@@ -333,6 +333,7 @@ public class ProductCatalogGenerator implements IApplication
       for (String id : ids)
       {
         String label = labels.get(id);
+        String p2TaskLabel = label;
 
         List<TrainAndVersion> list = trainsAndVersions.get(id);
         int size = list.size();
@@ -363,7 +364,7 @@ public class ProductCatalogGenerator implements IApplication
         productCatalog.getProducts().add(product);
 
         addProductVersion(product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrain, eppMetaDataRepositories, "latest",
-            "Latest (" + latestTrainLabel + ")", latestTrainsIUs);
+            "Latest (" + latestTrainLabel + ")", p2TaskLabel, latestTrainsIUs);
 
         if (!latestUnreleased || size != 1)
         {
@@ -379,7 +380,7 @@ public class ProductCatalogGenerator implements IApplication
           Version releasedVersion = releasedTrainAndVersion.getVersion();
 
           addProductVersion(product, releasedVersion, VersionSegment.MINOR, releasedTrainAndVersion.getTrainURI(), releasedTrain, eppMetaDataRepositories,
-              "latest.released", "Latest Release (" + releasedTrainLabel + ")", releasedTrainAndVersion.getIUs());
+              "latest.released", "Latest Release (" + releasedTrainLabel + ")", p2TaskLabel, releasedTrainAndVersion.getIUs());
         }
 
         for (int i = 0; i < size; i++)
@@ -389,7 +390,8 @@ public class ProductCatalogGenerator implements IApplication
           String trainLabel = getTrainLabel(train);
           Version version = entry.getVersion();
 
-          addProductVersion(product, version, VersionSegment.MINOR, entry.getTrainURI(), train, eppMetaDataRepositories, train, trainLabel, entry.getIUs());
+          addProductVersion(product, version, VersionSegment.MINOR, entry.getTrainURI(), train, eppMetaDataRepositories, train, trainLabel, p2TaskLabel,
+              entry.getIUs());
         }
 
         System.out.println();
@@ -563,7 +565,7 @@ public class ProductCatalogGenerator implements IApplication
   }
 
   private void addProductVersion(Product product, Version version, VersionSegment versionSegment, URI trainURI, String train,
-      Map<String, IMetadataRepository> eppMetaDataRepositories, String name, String label, Map<String, Set<IInstallableUnit>> ius)
+      Map<String, IMetadataRepository> eppMetaDataRepositories, String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius)
   {
     System.out.println("  " + label);
 
@@ -572,10 +574,11 @@ public class ProductCatalogGenerator implements IApplication
     productVersion.setLabel(label);
     product.getVersions().add(productVersion);
 
+    String productName = product.getName();
     VersionRange versionRange = createVersionRange(version, versionSegment);
 
     Requirement requirement = P2Factory.eINSTANCE.createRequirement();
-    requirement.setName(product.getName());
+    requirement.setName(productName);
     requirement.setVersionRange(versionRange);
 
     Repository packageRepository = P2Factory.eINSTANCE.createRepository();
@@ -585,13 +588,14 @@ public class ProductCatalogGenerator implements IApplication
     releaseRepository.setURL(trainURI.toString());
 
     P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+    p2Task.setLabel(p2TaskLabel + " (" + getTrainLabel(train) + ")");
     p2Task.getRequirements().add(requirement);
     addRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
     p2Task.getRepositories().add(packageRepository);
     p2Task.getRepositories().add(releaseRepository);
     productVersion.getSetupTasks().add(p2Task);
 
-    String idPrefix = "tooling" + product.getName() + ".ini.";
+    String idPrefix = "tooling" + productName + ".ini.";
     Version maxJavaVersion = null;
 
     IMetadataRepository eppMetaDataRepository = eppMetaDataRepositories.get(train);
@@ -652,7 +656,7 @@ public class ProductCatalogGenerator implements IApplication
       {
         javaVersion = javaVersion.substring(0, javaVersion.length() - 2);
       }
-      
+
       productVersion.setRequiredJavaVersion(javaVersion);
     }
   }
@@ -857,6 +861,5 @@ public class ProductCatalogGenerator implements IApplication
     {
       return ius;
     }
-
   }
 }
