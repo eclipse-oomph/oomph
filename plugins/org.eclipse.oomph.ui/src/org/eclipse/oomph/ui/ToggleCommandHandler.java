@@ -48,7 +48,7 @@ public class ToggleCommandHandler extends AbstractHandler
 
   private static State getCommandState(String commandID)
   {
-    ICommandService commandService = (ICommandService)PlatformUI.getWorkbench().getService(ICommandService.class);
+    ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
     Command command = commandService.getCommand(commandID);
     return command.getState("org.eclipse.ui.commands.toggleState");
   }

@@ -112,7 +112,7 @@ public abstract class AbstractDropdownHandler extends AbstractHandler implements
     {
       EAGER_LOAD.set(Boolean.TRUE);
 
-      IHandlerService handlerService = (IHandlerService)window.getService(IHandlerService.class);
+      IHandlerService handlerService = window.getService(IHandlerService.class);
       handlerService.executeCommand(commandID, null);
     }
     catch (Exception ex)
@@ -124,7 +124,7 @@ public abstract class AbstractDropdownHandler extends AbstractHandler implements
       EAGER_LOAD.remove();
     }
 
-    ICommandService commandService = (ICommandService)window.getService(ICommandService.class);
+    ICommandService commandService = window.getService(ICommandService.class);
     commandService.refreshElements(commandID, null);
   }
 

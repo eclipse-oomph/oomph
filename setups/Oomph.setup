@@ -17,7 +17,8 @@
     name="oomph"
     label="Oomph">
   <setupTask
-      xsi:type="setup.p2:P2Task">
+      xsi:type="setup.p2:P2Task"
+      label="Oomph">
     <requirement
         name="org.eclipse.emf.sdk.feature.group"/>
     <requirement
@@ -142,7 +143,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"
+      defaultValue="Mars"
       storageURI="scope://Workspace"/>
   <stream name="master"
       label="Master">
@@ -249,19 +250,17 @@
         <repositoryList
             name="Mars">
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
           <repository
               url="http://download.eclipse.org/egit/updates"/>
           <repository
               url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
           <repository
-              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+              url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
           <repository
-              url="http://download.eclipse.org/webtools/repository/luna"/>
+              url="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/I-latest/repository"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
         </repositoryList>
         <repositoryList
             name="Luna">

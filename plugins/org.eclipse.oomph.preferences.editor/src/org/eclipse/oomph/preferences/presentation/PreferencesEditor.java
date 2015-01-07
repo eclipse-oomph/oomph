@@ -1871,7 +1871,7 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
   public void init(IEditorSite site, IEditorInput editorInput)
   {
     initGen(site, editorInput);
-    IContextService contextService = (IContextService)site.getService(IContextService.class);
+    IContextService contextService = site.getService(IContextService.class);
     contextService.activateContext("org.eclipse.oomph.preferences.editor.context");
   }
 

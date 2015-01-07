@@ -1100,11 +1100,11 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     @Override
     protected String renderHTML()
     {
-      IBindingService bindingService = (IBindingService)PlatformUI.getWorkbench().getService(IBindingService.class);
+      IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
       Binding[] bindings = bindingService.getBindings();
       Map<String, List<Command>> map = new HashMap<String, List<Command>>();
 
-      ICommandService commandService = (ICommandService)PlatformUI.getWorkbench().getService(ICommandService.class);
+      ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
       for (Command command : commandService.getDefinedCommands())
       {
         try

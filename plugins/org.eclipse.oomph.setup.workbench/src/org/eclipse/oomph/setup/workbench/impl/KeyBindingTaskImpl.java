@@ -540,7 +540,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    IBindingService bindingService = (IBindingService)PlatformUI.getWorkbench().getService(IBindingService.class);
+    IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
     Binding[] bindings = bindingService.getBindings();
 
     for (KeyBindingContext keyBindingContext : getContexts())
@@ -616,7 +616,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    final IBindingService bindingService = (IBindingService)PlatformUI.getWorkbench().getService(IBindingService.class);
+    final IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
     final List<Binding> bindings = new ArrayList<Binding>(Arrays.asList(bindingService.getBindings()));
 
     for (KeyBindingContext keyBindingContext : getContexts())
@@ -651,7 +651,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
 
   private ParameterizedCommand getParameterizedCommand() throws NotDefinedException
   {
-    ICommandService commandService = (ICommandService)PlatformUI.getWorkbench().getService(ICommandService.class);
+    ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
     Command command = commandService.getCommand(getCommand());
 
     @SuppressWarnings("rawtypes")

@@ -43,7 +43,7 @@ public class UIPropertyTester extends PropertyTester
           final IWorkbench workbench = PlatformUI.getWorkbench();
           if (workbench != null)
           {
-            IEvaluationService service = (IEvaluationService)workbench.getService(IEvaluationService.class);
+            IEvaluationService service = workbench.getService(IEvaluationService.class);
             if (service != null)
             {
               service.requestEvaluation(id);

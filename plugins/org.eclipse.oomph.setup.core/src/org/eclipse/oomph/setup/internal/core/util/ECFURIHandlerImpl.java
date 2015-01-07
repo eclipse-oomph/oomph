@@ -49,9 +49,6 @@ import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 
-import org.apache.http.impl.cookie.DateParseException;
-import org.apache.http.impl.cookie.DateUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -690,17 +687,14 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
           String lastModifiedValue = (String)responseHeaders.get("Last-Modified");
           if (lastModifiedValue != null)
           {
-            try
+            Date date = parseHTTPDate(lastModifiedValue.toString());
+            if (date != null)
             {
-              Date date = DateUtils.parseDate(lastModifiedValue.toString());
               lastModified = date.getTime();
               if (eTag == null)
               {
                 eTag = Long.toString(lastModified);
               }
-            }
-            catch (DateParseException ex)
-            {
             }
           }
 
@@ -750,6 +744,21 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         receiveLatch.countDown();
       }
     }
+  }
+
+  @SuppressWarnings({ "deprecation", "restriction" })
+  private static Date parseHTTPDate(String string)
+  {
+    try
+    {
+      return org.apache.http.impl.cookie.DateUtils.parseDate(string);
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
   }
 
   private static class ETagMirror extends WorkerPool<ETagMirror, URI, ETagMirror.Worker>
