@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="14">
+<target name="Generated from Oomph" sequenceNumber="15">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.4/R-4.4-201406061215"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.5milestones"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201410130308"/>
+      <repository location="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -22,15 +22,15 @@
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+      <repository location="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.wst.xsd.core" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/webtools/repository/luna"/>
+      <repository location="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/I-latest/repository"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.slf4j.api" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+      <repository location="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
     </location>
   </locations>
 </target>
