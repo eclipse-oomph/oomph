@@ -161,6 +161,11 @@ Eike Stepper - initial API and implementation
           <value>win32</value>
         </property>
       </activation>
+      <properties>
+        <os>win32</os>
+        <ws>win32</ws>
+        <arch>x86</arch>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -170,9 +175,9 @@ Eike Stepper - initial API and implementation
             <configuration>
               <environments>
                 <environment>
-                  <os>win32</os>
-                  <ws>win32</ws>
-                  <arch>x86</arch>
+                  <os>${os}</os>
+                  <ws>${ws}</ws>
+                  <arch>${arch}</arch>
                 </environment>
               </environments>
             </configuration>
@@ -188,6 +193,11 @@ Eike Stepper - initial API and implementation
           <value>win64</value>
         </property>
       </activation>
+      <properties>
+        <os>win32</os>
+        <ws>win32</ws>
+        <arch>x86_64</arch>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -197,9 +207,9 @@ Eike Stepper - initial API and implementation
             <configuration>
               <environments>
                 <environment>
-                  <os>win32</os>
-                  <ws>win32</ws>
-                  <arch>x86_64</arch>
+                  <os>${os}</os>
+                  <ws>${ws}</ws>
+                  <arch>${arch}</arch>
                 </environment>
               </environments>
             </configuration>
