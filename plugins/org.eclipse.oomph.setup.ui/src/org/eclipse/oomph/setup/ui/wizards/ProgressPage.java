@@ -825,15 +825,14 @@ public class ProgressPage extends SetupWizardPage
       String eclipseExecutable = os.getEclipseExecutable();
       String eclipsePath = new File(performer.getInstallationLocation(), eclipseDir + "/" + eclipseExecutable).getAbsolutePath();
 
-      File ws = performer.getWorkspaceLocation();
-      int xxx; // TODO ws can be null?
-      SetupUIPlugin.initialStart(ws, performer.isOffline(), performer.isMirrors());
-
       List<String> command = new ArrayList<String>();
       command.add(eclipsePath);
 
+      File ws = performer.getWorkspaceLocation();
       if (ws != null)
       {
+        SetupUIPlugin.initialStart(ws, performer.isOffline(), performer.isMirrors());
+
         command.add("-data");
         command.add(ws.toString());
       }
