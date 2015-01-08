@@ -327,7 +327,7 @@
           name="Oomph Setup">
         <predicate
             xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.setup(\.(util|core|doc|edit|editor|ui|ui\.ide|ui\.questionnaire|tests|installer|installer\.product))?(-feature)?"/>
+            pattern="org\.eclipse\.oomph\.setup(\.(util|core|doc|edit|editor|ui|ui\.ide|ui\.questionnaire|tests|installer|installer\.product|sdk))?(-feature)?"/>
       </workingSet>
       <workingSet
           name="Oomph Setup Extensions">
