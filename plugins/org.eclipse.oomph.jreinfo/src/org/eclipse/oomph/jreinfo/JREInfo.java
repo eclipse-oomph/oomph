@@ -83,22 +83,29 @@ public final class JREInfo
             if (text != null && "JVMHomePath".equals(text.trim()))
             {
               Node siblingNode = element.getNextSibling();
-              if (siblingNode instanceof Element)
+              while (siblingNode != null)
               {
-                Element sibling = (Element)siblingNode;
-                if ("string".equals(sibling.getNodeName()))
+                if (siblingNode instanceof Element)
                 {
-                  String javaHome = sibling.getTextContent();
-                  if (javaHome != null)
+                  Element sibling = (Element)siblingNode;
+                  if ("string".equals(sibling.getNodeName()))
                   {
-                    JREInfo info = new JREInfo();
-                    info.javaHome = javaHome;
-                    info.jdk = isJDK(javaHome);
-                    info.next = jreInfo[0];
+                    String javaHome = sibling.getTextContent();
+                    if (javaHome != null)
+                    {
+                      JREInfo info = new JREInfo();
+                      info.javaHome = javaHome;
+                      info.jdk = isJDK(javaHome);
+                      info.next = jreInfo[0];
 
-                    jreInfo[0] = info;
+                      jreInfo[0] = info;
+                    }
                   }
+
+                  break;
                 }
+
+                siblingNode = siblingNode.getNextSibling();
               }
             }
           }

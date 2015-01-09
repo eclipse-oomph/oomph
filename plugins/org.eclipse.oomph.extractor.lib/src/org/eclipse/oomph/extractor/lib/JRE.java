@@ -150,6 +150,12 @@ public final class JRE
     return true;
   }
 
+  @Override
+  public String toString()
+  {
+    return major + "." + minor + "." + micro + "/" + bitness;
+  }
+
   private static int parseInt(String string)
   {
     for (int i = 0; i < string.length(); i++)

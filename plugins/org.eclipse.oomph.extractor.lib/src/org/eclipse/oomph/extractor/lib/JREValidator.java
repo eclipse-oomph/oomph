@@ -19,12 +19,18 @@ public final class JREValidator
 {
   public static void main(String[] args) throws IOException
   {
-    JRE requirement = new JRE(args);
-
     JRE jre = new JRE();
-    if (!jre.satisfies(requirement))
+    if (args.length == 0)
     {
-      System.exit(-1);
+      System.out.println(jre);
+    }
+    else
+    {
+      JRE requirement = new JRE(args);
+      if (!jre.satisfies(requirement))
+      {
+        System.exit(-1);
+      }
     }
   }
 }
