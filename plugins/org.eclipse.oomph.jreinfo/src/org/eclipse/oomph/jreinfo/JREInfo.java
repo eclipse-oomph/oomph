@@ -157,7 +157,7 @@ public final class JREInfo
     return OSType.Unsupported;
   }
 
-  private static int isJDK(String javaHome) throws FileNotFoundException
+  static int isJDK(String javaHome) throws FileNotFoundException
   {
     File binFolder = new File(javaHome, "bin");
     if (!binFolder.isDirectory())

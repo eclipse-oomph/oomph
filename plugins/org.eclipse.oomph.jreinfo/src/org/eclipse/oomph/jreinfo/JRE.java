@@ -19,6 +19,8 @@ public final class JRE implements Comparable<JRE>
 {
   private static final String JAVA_EXECUTABLE = JREInfo.OS_TYPE == OSType.Win ? "java.exe" : "java";
 
+  private static final String SEPARATOR = File.pathSeparator;
+
   private final File javaHome;
 
   private final int major;
@@ -31,7 +33,9 @@ public final class JRE implements Comparable<JRE>
 
   private final boolean jdk;
 
-  public JRE(File javaHome, int major, int minor, int micro, int bitness, boolean jdk)
+  private final long lastModified;
+
+  public JRE(File javaHome, int major, int minor, int micro, int bitness, boolean jdk, long lastModified)
   {
     this.javaHome = javaHome;
     this.major = major;
@@ -39,6 +43,30 @@ public final class JRE implements Comparable<JRE>
     this.micro = micro;
     this.bitness = bitness;
     this.jdk = jdk;
+    this.lastModified = lastModified;
+  }
+
+  JRE(File javaHome, JRE info)
+  {
+    this.javaHome = javaHome;
+    major = info.major;
+    minor = info.minor;
+    micro = info.micro;
+    bitness = info.bitness;
+    jdk = info.jdk;
+    lastModified = info.lastModified;
+  }
+
+  JRE(String line)
+  {
+    String[] tokens = line.split(SEPARATOR);
+    javaHome = new File(tokens[0]);
+    major = Integer.parseInt(tokens[1]);
+    minor = Integer.parseInt(tokens[2]);
+    micro = Integer.parseInt(tokens[3]);
+    bitness = Integer.parseInt(tokens[4]);
+    jdk = Boolean.parseBoolean(tokens[5]);
+    lastModified = Long.parseLong(tokens[6]);
   }
 
   public File getJavaHome()
@@ -48,7 +76,7 @@ public final class JRE implements Comparable<JRE>
 
   public File getJavaExecutable()
   {
-    return new File(javaHome, "/bin/" + JAVA_EXECUTABLE);
+    return getExecutable(javaHome);
   }
 
   public int getMajor()
@@ -74,6 +102,22 @@ public final class JRE implements Comparable<JRE>
   public boolean isJDK()
   {
     return jdk;
+  }
+
+  public boolean isValid()
+  {
+    File executable = getJavaExecutable();
+    if (!executable.isFile())
+    {
+      return false;
+    }
+
+    if (executable.lastModified() != lastModified)
+    {
+      return false;
+    }
+
+    return true;
   }
 
   @Override
@@ -146,5 +190,16 @@ public final class JRE implements Comparable<JRE>
   public String toString()
   {
     return javaHome.getAbsolutePath() + " (" + major + "." + minor + "." + micro + "/" + bitness + "bit " + (jdk ? "JDK" : "JRE") + ")";
+  }
+
+  String toLine()
+  {
+    return javaHome.getAbsolutePath() + SEPARATOR + major + SEPARATOR + minor + SEPARATOR + micro + SEPARATOR + bitness + SEPARATOR + jdk + SEPARATOR
+        + lastModified;
+  }
+
+  static File getExecutable(File javaHome)
+  {
+    return new File(javaHome, "/bin/" + JAVA_EXECUTABLE);
   }
 }

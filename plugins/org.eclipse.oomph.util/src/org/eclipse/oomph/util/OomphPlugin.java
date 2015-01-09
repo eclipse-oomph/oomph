@@ -33,6 +33,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -79,6 +82,12 @@ public abstract class OomphPlugin extends EMFPlugin
   public final BundleContext getBundleContext()
   {
     return getBundle().getBundleContext();
+  }
+
+  public final List<File> getClassPath() throws Exception
+  {
+    Bundle bundle = getBundle();
+    return getClassPath(bundle);
   }
 
   public final IPath getStateLocation() throws IllegalStateException
@@ -515,6 +524,46 @@ public abstract class OomphPlugin extends EMFPlugin
     {
       stream.print("  ");
     }
+  }
+
+  public static List<File> getClassPath(Bundle bundle) throws Exception
+  {
+    final List<File> cp = new ArrayList<File>();
+
+    final File file = FileLocator.getBundleFile(bundle);
+    if (file.isFile())
+    {
+      if (file.getName().endsWith(".jar"))
+      {
+        cp.add(file);
+      }
+    }
+    else if (file.isDirectory())
+    {
+      File classpathFile = new File(file, ".classpath");
+      if (classpathFile.isFile())
+      {
+        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+        Element rootElement = XMLUtil.loadRootElement(documentBuilder, classpathFile);
+        XMLUtil.handleElementsByTagName(rootElement, "classpathentry", new XMLUtil.ElementHandler()
+        {
+          public void handleElement(Element element) throws Exception
+          {
+            if ("output".equals(element.getAttribute("kind")))
+            {
+              String path = element.getAttribute("path");
+              cp.add(new File(file, path));
+            }
+          }
+        });
+      }
+      else
+      {
+        cp.add(file);
+      }
+    }
+
+    return cp;
   }
 
   public static String getBuildID(Bundle bundle)
