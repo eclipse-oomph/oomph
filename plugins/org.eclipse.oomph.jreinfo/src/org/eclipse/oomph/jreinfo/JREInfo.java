@@ -10,66 +10,159 @@
  */
 package org.eclipse.oomph.jreinfo;
 
+import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
+import org.eclipse.oomph.util.XMLUtil;
+
 import org.eclipse.core.runtime.Platform;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import javax.xml.parsers.DocumentBuilder;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * @author Stepper
  */
-public final class JREInfo {
-	private static final OSType OS_TYPE = getOSType();
+public final class JREInfo
+{
+  private static final OSType OS_TYPE = getOSType();
 
-	public String javaHome;
+  private static final String JAVA_COMPILER = OS_TYPE == OSType.Win ? "javac.exe" : "javac";
 
-	public int jdk;
+  public String javaHome;
 
-	public JREInfo next;
+  public int jdk;
 
-	public static JREInfo getAll() {
-		switch (OS_TYPE) {
-		case Win:
-			return getAllWin();
+  public JREInfo next;
 
-		case Mac:
-			return getAllMac();
+  public static JREInfo getAll()
+  {
+    switch (OS_TYPE)
+    {
+      case Win:
+        return getAllWin();
 
-		case Linux:
-			return getAllLinux();
+      case Mac:
+        return getAllMac();
 
-		default:
-			//$FALL-THROUGH$
-		}
+      case Linux:
+        return getAllLinux();
 
-		return null;
-	}
+      default:
+        //$FALL-THROUGH$
+    }
 
-	private static native JREInfo getAllWin();
+    return null;
+  }
 
-	private static JREInfo getAllMac() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  private static native JREInfo getAllWin();
 
-	private static JREInfo getAllLinux() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  private static JREInfo getAllMac()
+  {
+    final JREInfo[] jreInfo = { null };
 
-	private static OSType getOSType() {
-		String os = Platform.getOS();
+    try
+    {
+      ProcessBuilder builder = new ProcessBuilder();
+      builder.command("/usr/libexec/java_home", "-X");
 
-		if (Platform.OS_WIN32.equals(os)) {
-			System.loadLibrary("jreinfo.dll");
-			return OSType.Win;
-		}
+      Process process = builder.start();
 
-		if (Platform.OS_MACOSX.equals(os)) {
-			return OSType.Mac;
-		}
+      DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+      Element rootElement = XMLUtil.loadRootElement(documentBuilder, process.getInputStream());
+      XMLUtil.handleElementsByTagName(rootElement, "key", new XMLUtil.ElementHandler()
+      {
+        public void handleElement(Element element) throws Exception
+        {
+          try
+          {
+            String text = element.getTextContent();
+            if (text != null && "JVMHomePath".equals(text.trim()))
+            {
+              Node siblingNode = element.getNextSibling();
+              if (siblingNode instanceof Element)
+              {
+                Element sibling = (Element)siblingNode;
+                if ("string".equals(sibling.getNodeName()))
+                {
+                  String javaHome = sibling.getTextContent();
+                  if (javaHome != null)
+                  {
+                    JREInfo info = new JREInfo();
+                    info.javaHome = javaHome;
+                    info.jdk = isJDK(javaHome);
+                    info.next = jreInfo[0];
 
-		if (Platform.OS_LINUX.equals(os)) {
-			return OSType.Linux;
-		}
+                    jreInfo[0] = info;
+                  }
+                }
+              }
+            }
+          }
+          catch (FileNotFoundException ex)
+          {
+            //$FALL-THROUGH$
+          }
+          catch (Exception ex)
+          {
+            JREInfoPlugin.INSTANCE.log(ex);
+          }
+        }
+      });
+    }
+    catch (Exception ex)
+    {
+      JREInfoPlugin.INSTANCE.log(ex);
+    }
 
-		return OSType.Unsupported;
-	}
+    return jreInfo[0];
+  }
+
+  private static JREInfo getAllLinux()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  private static OSType getOSType()
+  {
+    String os = Platform.getOS();
+
+    if (Platform.OS_WIN32.equals(os))
+    {
+      System.loadLibrary("jreinfo.dll");
+      return OSType.Win;
+    }
+
+    if (Platform.OS_MACOSX.equals(os))
+    {
+      return OSType.Mac;
+    }
+
+    if (Platform.OS_LINUX.equals(os))
+    {
+      return OSType.Linux;
+    }
+
+    return OSType.Unsupported;
+  }
+
+  private static int isJDK(String javaHome) throws FileNotFoundException
+  {
+    File binFolder = new File(javaHome, "bin");
+    if (!binFolder.isDirectory())
+    {
+      throw new FileNotFoundException("Folder does not exist: " + binFolder);
+    }
+
+    if (new File(binFolder, JAVA_COMPILER).isFile())
+    {
+      return 1;
+    }
+
+    return 0;
+  }
 }

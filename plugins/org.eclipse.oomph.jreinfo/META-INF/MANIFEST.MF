@@ -7,6 +7,9 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .
+Bundle-Activator: org.eclipse.oomph.internal.jreinfo.JREInfoPlugin$Implementation
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.core.runtime
-Export-Package: org.eclipse.oomph.jreinfo;version="1.0.0"
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)";resolution:=optional,
+ org.eclipse.oomph.util;bundle-version="[1.0.0,2.0.0)"
+Export-Package: org.eclipse.oomph.internal.jreinfo;version="1.0.0";x-internal:=true,
+ org.eclipse.oomph.jreinfo;version="1.0.0"
