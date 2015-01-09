@@ -351,6 +351,7 @@
   <project href="http://git.eclipse.org/c/papyrus/org.eclipse.papyrus.git/plain/releng/org.eclipse.papyrus.oomph/setups/papyrus.setup#/"/>
   <project href="interim/PDE.setup#/"/>
   <project href="interim/Platform.setup#/"/>
+  <project href="http://git.eclipse.org/c/mmt/org.eclipse.qvtd.git/plain/releng/org.eclipse.qvtd.oomph/setups/qvtd.setup#/"/>
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
   <project href="interim/Xtext.setup#/"/>
   <project href="interim/XSD.setup#/"/>
