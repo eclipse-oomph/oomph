@@ -59,6 +59,11 @@ public final class JRE
     bitness = parseInt(tokens[3]);
   }
 
+  public JRE(String args)
+  {
+    this(args.split(" "));
+  }
+
   public JRE(String[] args)
   {
     major = parseInt(args[0]);
@@ -153,7 +158,7 @@ public final class JRE
   @Override
   public String toString()
   {
-    return major + "." + minor + "." + micro + "/" + bitness;
+    return major + " " + minor + " " + micro + " " + bitness;
   }
 
   private static int parseInt(String string)

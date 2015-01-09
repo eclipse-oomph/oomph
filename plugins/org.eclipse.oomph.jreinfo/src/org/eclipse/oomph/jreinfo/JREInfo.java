@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
  */
 public final class JREInfo
 {
-  private static final OSType OS_TYPE = getOSType();
+  static final OSType OS_TYPE = getOSType();
 
   private static final String JAVA_COMPILER = OS_TYPE == OSType.Win ? "javac.exe" : "javac";
 
