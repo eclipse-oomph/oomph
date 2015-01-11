@@ -81,6 +81,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -89,6 +90,8 @@ import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
 import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -368,7 +371,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         if (dir != null)
         {
           validateFolderText(dir);
-          folderText.setText(dir);
+          setFolderText(dir);
         }
       }
     });
@@ -485,6 +488,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
         installButton.setFocus();
       }
     });
+
+    List<Control> tabList = new ArrayList<Control>(Arrays.asList(getTabList()));
+    tabList.remove(browserComposite);
+    tabList.remove(backButton);
+    tabList.add(backButton);
+    setTabList(tabList.toArray(new Control[tabList.size()]));
   }
 
   protected void productVersionSelected(ProductVersion productVersion)
@@ -562,7 +571,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     productVersionSelected(defaultProductVersion);
 
     installFolder = getDefaultInstallationFolder();
-    folderText.setText(installFolder);
+    setFolderText(installFolder);
 
     installStack.setTopControl(installButton);
     installButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/download_small.png"));
@@ -916,6 +925,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
 
     dialog.exitSelected();
+  }
+
+  private void setFolderText(String dir)
+  {
+    folderText.setText(dir);
+    folderText.setSelection(dir.length());
   }
 
   private void validateFolderText(String dir)
