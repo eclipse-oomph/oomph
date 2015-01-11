@@ -52,7 +52,14 @@ public final class JREManager
 
   private JREManager()
   {
-    loadJavaHomes();
+    try
+    {
+      loadJavaHomes();
+    }
+    catch (Throwable ex)
+    {
+      JREInfoPlugin.INSTANCE.log(ex);
+    }
   }
 
   private void addExtraJavaHomes(List<String> extraJavaHomes, File folder, boolean root, Set<JRE> result, IProgressMonitor monitor)
@@ -269,24 +276,31 @@ public final class JREManager
 
   private static OSType determineOSType()
   {
-    String os = Platform.getOS();
-  
-    if (Platform.OS_WIN32.equals(os))
+    try
     {
-      System.loadLibrary("jreinfo.dll");
-      return OSType.Win;
+      String os = Platform.getOS();
+
+      if (Platform.OS_WIN32.equals(os))
+      {
+        System.loadLibrary("jreinfo.dll");
+        return OSType.Win;
+      }
+
+      if (Platform.OS_MACOSX.equals(os))
+      {
+        return OSType.Mac;
+      }
+
+      if (Platform.OS_LINUX.equals(os))
+      {
+        return OSType.Linux;
+      }
     }
-  
-    if (Platform.OS_MACOSX.equals(os))
+    catch (Throwable ex)
     {
-      return OSType.Mac;
+      JREInfoPlugin.INSTANCE.log(ex);
     }
-  
-    if (Platform.OS_LINUX.equals(os))
-    {
-      return OSType.Linux;
-    }
-  
+
     return OSType.Unsupported;
   }
 
@@ -299,7 +313,8 @@ public final class JREManager
     catch (Throwable ex)
     {
       JREInfoPlugin.INSTANCE.log(ex);
-      return 32;
     }
+
+    return 32;
   }
 }
