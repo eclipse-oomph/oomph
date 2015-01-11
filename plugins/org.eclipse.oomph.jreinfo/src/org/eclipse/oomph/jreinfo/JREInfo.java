@@ -112,7 +112,7 @@ public final class JREInfo
                     {
                       JREInfo info = new JREInfo();
                       info.javaHome = javaHome;
-                      info.jdk = isJDK(javaHome);
+                      info.jdk = isJDK(new File(javaHome));
                       info.next = jreInfo[0];
 
                       jreInfo[0] = info;
@@ -157,18 +157,18 @@ public final class JREInfo
 
   private static JREInfo searchFolder(JREInfo jreInfo, String folder)
   {
-    String[] children = new File(folder).list();
+    File[] children = new File(folder).listFiles();
     if (children != null)
     {
       for (int i = 0; i < children.length; i++)
       {
         try
         {
-          String javaHome = children[i];
+          File javaHome = children[i];
           int jdk = isJDK(javaHome);
 
           JREInfo info = new JREInfo();
-          info.javaHome = javaHome;
+          info.javaHome = javaHome.getAbsolutePath();
           info.jdk = jdk;
           info.next = jreInfo;
 
@@ -184,7 +184,7 @@ public final class JREInfo
     return jreInfo;
   }
 
-  static int isJDK(String javaHome) throws FileNotFoundException
+  static int isJDK(File javaHome) throws FileNotFoundException
   {
     File binFolder = new File(javaHome, "bin");
     if (!binFolder.isDirectory())

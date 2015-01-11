@@ -65,7 +65,7 @@ final class InfoManager
             int micro = result.getMicro();
             int bitness = result.getBitness();
 
-            boolean jdk = JREInfo.isJDK(canonicalJavaHome.getAbsolutePath()) == 1;
+            boolean jdk = JREInfo.isJDK(canonicalJavaHome) == 1;
 
             File executable = JRE.getExecutable(canonicalJavaHome);
             long lastModified = executable.lastModified();
