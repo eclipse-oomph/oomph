@@ -12,7 +12,7 @@ package org.eclipse.oomph.setup;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.setup.log.ProgressLog;
-import org.eclipse.oomph.setup.util.OS;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;

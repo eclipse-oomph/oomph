@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
@@ -53,6 +54,9 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import java.io.File;
+import java.util.LinkedHashMap;
+
 /**
  * @author Eike Stepper
  */
@@ -89,6 +93,11 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   public Installer getInstaller()
   {
     return (Installer)getWizard();
+  }
+
+  public void setJREs(LinkedHashMap<File, JRE> jres)
+  {
+    // TODO
   }
 
   @Override

@@ -11,9 +11,8 @@
 package org.eclipse.oomph.jreinfo;
 
 import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.XMLUtil;
-
-import org.eclipse.core.runtime.Platform;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,9 +27,9 @@ import java.io.FileNotFoundException;
  */
 public final class JREInfo
 {
-  static final OSType OS_TYPE = getOSType();
+  private static final boolean SKIP_USER_HOME = PropertiesUtil.isProperty("oomph.jreinfo.skip.user.home");
 
-  private static final String JAVA_COMPILER = OS_TYPE == OSType.Win ? "javac.exe" : "javac";
+  private static final String[] EXTRA_SEARCH_PATH = PropertiesUtil.getProperty("oomph.jreinfo.extra.search.path", "").split(File.pathSeparator);
 
   public String javaHome;
 
@@ -40,22 +39,40 @@ public final class JREInfo
 
   public static JREInfo getAll()
   {
-    switch (OS_TYPE)
+    JREInfo jreInfo = null;
+
+    switch (JREManager.OS_TYPE)
     {
       case Win:
-        return getAllWin();
+        jreInfo = getAllWin();
+        break;
 
       case Mac:
-        return getAllMac();
+        jreInfo = getAllMac();
+        break;
 
       case Linux:
-        return getAllLinux();
+        jreInfo = getAllLinux();
+        break;
 
       default:
         //$FALL-THROUGH$
     }
 
-    return null;
+    if (!SKIP_USER_HOME)
+    {
+      jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME);
+      jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME + "/java");
+      jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME + "/jvm");
+    }
+
+    for (int i = 0; i < EXTRA_SEARCH_PATH.length; i++)
+    {
+      String search = EXTRA_SEARCH_PATH[i];
+      jreInfo = searchFolder(jreInfo, search);
+    }
+
+    return jreInfo;
   }
 
   private static native JREInfo getAllWin();
@@ -130,31 +147,41 @@ public final class JREInfo
 
   private static JREInfo getAllLinux()
   {
-    // TODO Auto-generated method stub
-    return null;
+    JREInfo jreInfo = null;
+    jreInfo = searchFolder(jreInfo, "/usr/java");
+    jreInfo = searchFolder(jreInfo, "/usr/lib/jvm");
+    jreInfo = searchFolder(jreInfo, "/usr/lib64");
+    jreInfo = searchFolder(jreInfo, "/usr/lib64/jvm");
+    return jreInfo;
   }
 
-  private static OSType getOSType()
+  private static JREInfo searchFolder(JREInfo jreInfo, String folder)
   {
-    String os = Platform.getOS();
-
-    if (Platform.OS_WIN32.equals(os))
+    String[] children = new File(folder).list();
+    if (children != null)
     {
-      System.loadLibrary("jreinfo.dll");
-      return OSType.Win;
+      for (int i = 0; i < children.length; i++)
+      {
+        try
+        {
+          String javaHome = children[i];
+          int jdk = isJDK(javaHome);
+
+          JREInfo info = new JREInfo();
+          info.javaHome = javaHome;
+          info.jdk = jdk;
+          info.next = jreInfo;
+
+          jreInfo = info;
+        }
+        catch (Exception ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
     }
 
-    if (Platform.OS_MACOSX.equals(os))
-    {
-      return OSType.Mac;
-    }
-
-    if (Platform.OS_LINUX.equals(os))
-    {
-      return OSType.Linux;
-    }
-
-    return OSType.Unsupported;
+    return jreInfo;
   }
 
   static int isJDK(String javaHome) throws FileNotFoundException
@@ -165,7 +192,7 @@ public final class JREInfo
       throw new FileNotFoundException("Folder does not exist: " + binFolder);
     }
 
-    if (new File(binFolder, JAVA_COMPILER).isFile())
+    if (new File(binFolder, JREManager.JAVA_COMPILER).isFile())
     {
       return 1;
     }

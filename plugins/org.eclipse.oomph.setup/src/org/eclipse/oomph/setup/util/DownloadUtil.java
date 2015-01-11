@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.util;
 
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ContentHandler;

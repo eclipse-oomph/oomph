@@ -6,8 +6,5 @@ Bundle-Localization: fragment
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Bundle-NativeCode: jreinfo.dll;
- osname=Win32;
- processor=x86
+Bundle-NativeCode: jreinfo.dll;osname=win32;processor=x86,*
 Fragment-Host: org.eclipse.oomph.jreinfo;bundle-version="[1.0.0,2.0.0)"
-Eclipse-PlatformFilter: (&(osgi.os=win32)(osgi.arch=x86))

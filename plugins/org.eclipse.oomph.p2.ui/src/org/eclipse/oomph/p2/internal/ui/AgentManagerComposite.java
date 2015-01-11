@@ -59,10 +59,7 @@ public class AgentManagerComposite extends Composite
   public AgentManagerComposite(Composite parent, int style, final Object selection)
   {
     super(parent, style);
-    GridLayout gridLayout = new GridLayout(2, false);
-    gridLayout.marginWidth = 0;
-    gridLayout.marginHeight = 0;
-    setLayout(gridLayout);
+    setLayout(UIUtil.createGridLayout(2));
 
     final P2ContentProvider contentProvider = new P2ContentProvider();
 

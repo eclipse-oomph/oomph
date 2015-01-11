@@ -34,12 +34,12 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.util.FileUtil;
-import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.ecore.EObject;
@@ -252,7 +252,7 @@ public class ProgressPage extends SetupWizardPage
   protected Control createUI(final Composite parent)
   {
     Composite mainComposite = new Composite(parent, SWT.NONE);
-    mainComposite.setLayout(createGridLayout(1));
+    mainComposite.setLayout(UIUtil.createGridLayout(1));
 
     SashForm sashForm = new SashForm(mainComposite, SWT.SMOOTH | SWT.VERTICAL);
     sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));

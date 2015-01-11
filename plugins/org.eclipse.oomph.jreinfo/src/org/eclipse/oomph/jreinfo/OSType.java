@@ -13,6 +13,7 @@ package org.eclipse.oomph.jreinfo;
 /**
  * @author Stepper
  */
-enum OSType {
-	Unsupported, Win, Mac, Linux
+public enum OSType
+{
+  Unsupported, Win, Mac, Linux
 }

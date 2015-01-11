@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.jreinfo.JRE;
+import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
@@ -42,6 +44,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -55,8 +58,30 @@ public class InstallerApplication implements IApplication
 
   private Mode mode = Mode.SIMPLE;
 
+  private LinkedHashMap<File, JRE> jres;
+
   private Integer run(final IApplicationContext context) throws Exception
   {
+    final InstallerUI[] installerDialog = { null };
+
+    Thread jreInitializer = new Thread("JRE Initializer")
+    {
+      @Override
+      public void run()
+      {
+        jres = JREManager.INSTANCE.getJREs();
+
+        InstallerUI installerUI = installerDialog[0];
+        if (installerUI != null)
+        {
+          installerUI.setJREs(jres);
+        }
+      }
+    };
+
+    jreInitializer.setDaemon(true);
+    jreInitializer.start();
+
     int[] sizes = { 16, 32, 48, 64, 128, 256 };
     Image[] images = new Image[sizes.length];
     for (int i = 0; i < sizes.length; i++)
@@ -89,7 +114,6 @@ public class InstallerApplication implements IApplication
     final Display display = Display.getDefault();
     Display.setAppName(AbstractSetupDialog.SHELL_TEXT);
 
-    final InstallerUI[] installerDialog = { null };
     if (Platform.WS_COCOA.equals(Platform.getWS()))
     {
       Runnable about = new Runnable()
@@ -166,6 +190,11 @@ public class InstallerApplication implements IApplication
         SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer);
         installer.setSimpleShell(dialog);
         installerDialog[0] = dialog;
+      }
+
+      if (jres != null)
+      {
+        installerDialog[0].setJREs(jres);
       }
 
       final int retcode = installerDialog[0].show();

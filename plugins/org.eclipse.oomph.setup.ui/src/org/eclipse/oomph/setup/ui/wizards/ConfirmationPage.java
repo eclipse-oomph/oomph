@@ -137,7 +137,7 @@ public class ConfirmationPage extends SetupWizardPage
   protected Control createUI(final Composite parent)
   {
     Composite mainComposite = new Composite(parent, SWT.NONE);
-    mainComposite.setLayout(createGridLayout(1));
+    mainComposite.setLayout(UIUtil.createGridLayout(1));
 
     SashForm horizontalSash = new SashForm(mainComposite, SWT.SMOOTH | SWT.HORIZONTAL);
     UIUtil.grabVertical(UIUtil.applyGridData(horizontalSash));

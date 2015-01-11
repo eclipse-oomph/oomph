@@ -221,14 +221,14 @@ public class ProjectPage extends SetupWizardPage
     SashForm sashForm = new SashForm(parent, SWT.SMOOTH | SWT.VERTICAL);
 
     Composite upperComposite = new Composite(sashForm, SWT.NONE);
-    upperComposite.setLayout(createGridLayout(1));
+    upperComposite.setLayout(UIUtil.createGridLayout(1));
 
     Composite filterComposite = new Composite(upperComposite, SWT.NONE);
-    filterComposite.setLayout(createGridLayout(2));
+    filterComposite.setLayout(UIUtil.createGridLayout(2));
     filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     Composite filterPlaceholder = new Composite(filterComposite, SWT.NONE);
-    filterPlaceholder.setLayout(createGridLayout(1));
+    filterPlaceholder.setLayout(UIUtil.createGridLayout(1));
     filterPlaceholder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
@@ -825,7 +825,7 @@ public class ProjectPage extends SetupWizardPage
     });
 
     Composite lowerComposite = new Composite(sashForm, SWT.NONE);
-    lowerComposite.setLayout(createGridLayout(1));
+    lowerComposite.setLayout(UIUtil.createGridLayout(1));
 
     TableColumnLayout streamTableLayout = new TableColumnLayout();
     Composite streamComposite = new Composite(lowerComposite, SWT.NONE);

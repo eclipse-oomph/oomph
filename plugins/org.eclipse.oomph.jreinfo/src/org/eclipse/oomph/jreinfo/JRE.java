@@ -17,8 +17,6 @@ import java.io.File;
  */
 public final class JRE implements Comparable<JRE>
 {
-  private static final String JAVA_EXECUTABLE = JREInfo.OS_TYPE == OSType.Win ? "java.exe" : "java";
-
   private static final String SEPARATOR = File.pathSeparator;
 
   private final File javaHome;
@@ -120,6 +118,41 @@ public final class JRE implements Comparable<JRE>
     return true;
   }
 
+  public boolean isMatch(JREFilter filter)
+  {
+    Integer filterMajor = filter.getMajor();
+    if (filterMajor != null && major < filterMajor)
+    {
+      return false;
+    }
+
+    Integer filterMinor = filter.getMinor();
+    if (filterMinor != null && minor < filterMinor)
+    {
+      return false;
+    }
+
+    Integer filterMicro = filter.getMicro();
+    if (filterMicro != null && micro < filterMicro)
+    {
+      return false;
+    }
+
+    Integer filterBitness = filter.getBitness();
+    if (filterBitness != null && bitness != filterBitness.intValue())
+    {
+      return false;
+    }
+
+    Boolean filterJDK = filter.isJDK();
+    if (filterJDK != null && jdk != filterJDK.booleanValue())
+    {
+      return false;
+    }
+
+    return true;
+  }
+
   @Override
   public int hashCode()
   {
@@ -189,7 +222,9 @@ public final class JRE implements Comparable<JRE>
   @Override
   public String toString()
   {
-    return javaHome.getAbsolutePath() + " (" + major + "." + minor + "." + micro + "/" + bitness + "bit " + (jdk ? "JDK" : "JRE") + ")";
+    // return javaHome.getAbsolutePath() + " (" + major + "." + minor + "." + micro + "/" + bitness + "bit " + (jdk ? "JDK" : "JRE") + ")";
+    // return javaHome.getAbsolutePath() + " (" + bitness + " Bit " + (jdk ? "JDK" : "JRE") + ")";
+    return javaHome.getAbsolutePath();
   }
 
   String toLine()
@@ -200,6 +235,6 @@ public final class JRE implements Comparable<JRE>
 
   static File getExecutable(File javaHome)
   {
-    return new File(javaHome, "/bin/" + JAVA_EXECUTABLE);
+    return new File(javaHome, "bin/" + JREManager.JAVA_EXECUTABLE);
   }
 }

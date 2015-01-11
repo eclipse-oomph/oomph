@@ -36,6 +36,7 @@ import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
@@ -145,14 +146,14 @@ public class ProductPage extends SetupWizardPage
     resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(new AdapterFactoryEditingDomain(adapterFactory, null, resourceSet)));
 
     Composite mainComposite = new Composite(parent, SWT.NONE);
-    mainComposite.setLayout(createGridLayout(1));
+    mainComposite.setLayout(UIUtil.createGridLayout(1));
 
     Control productSash = createProductSash(mainComposite);
     productSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
     Composite lowerComposite = new Composite(mainComposite, SWT.NONE);
     lowerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    lowerComposite.setLayout(createGridLayout(2));
+    lowerComposite.setLayout(UIUtil.createGridLayout(2));
 
     versionLabel = new Label(lowerComposite, SWT.NONE);
     versionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
@@ -217,7 +218,7 @@ public class ProductPage extends SetupWizardPage
 
       Composite poolComposite = new Composite(lowerComposite, SWT.NONE);
       poolComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-      poolComposite.setLayout(createGridLayout(2));
+      poolComposite.setLayout(UIUtil.createGridLayout(2));
 
       P2LabelProvider labelProvider = new P2LabelProvider();
       labelProvider.setAbsolutePools(true);
@@ -288,17 +289,17 @@ public class ProductPage extends SetupWizardPage
     SashForm sashForm = new SashForm(composite, SWT.SMOOTH | SWT.VERTICAL);
 
     Composite treeComposite = new Composite(sashForm, SWT.NONE);
-    treeComposite.setLayout(createGridLayout(1));
+    treeComposite.setLayout(UIUtil.createGridLayout(1));
 
     final CatalogManager catalogManager = getCatalogManager();
     catalogSelector = new CatalogSelector(catalogManager, true);
 
     Composite filterComposite = new Composite(treeComposite, SWT.NONE);
-    filterComposite.setLayout(createGridLayout(2));
+    filterComposite.setLayout(UIUtil.createGridLayout(2));
     filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     Composite filterPlaceholder = new Composite(filterComposite, SWT.NONE);
-    filterPlaceholder.setLayout(createGridLayout(1));
+    filterPlaceholder.setLayout(UIUtil.createGridLayout(1));
     filterPlaceholder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);

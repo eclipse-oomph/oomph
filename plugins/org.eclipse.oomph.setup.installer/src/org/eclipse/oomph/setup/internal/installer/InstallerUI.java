@@ -10,8 +10,13 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.jreinfo.JRE;
+
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+
+import java.io.File;
+import java.util.LinkedHashMap;
 
 /**
  * @author Eike Stepper
@@ -20,9 +25,9 @@ public interface InstallerUI
 {
   public static final int RETURN_OK = Window.OK;
 
-  public static final int RETURN_SIMPLE = Window.CANCEL+1;
+  public static final int RETURN_SIMPLE = Window.CANCEL + 1;
 
-  public static final int RETURN_ADVANCED = Window.CANCEL+2;
+  public static final int RETURN_ADVANCED = Window.CANCEL + 2;
 
   public static final int RETURN_RESTART = -4;
 
@@ -31,4 +36,6 @@ public interface InstallerUI
   public void showAbout();
 
   public Shell getShell();
+
+  public void setJREs(LinkedHashMap<File, JRE> jres);
 }

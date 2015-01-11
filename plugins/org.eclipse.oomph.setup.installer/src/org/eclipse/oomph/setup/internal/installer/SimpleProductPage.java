@@ -18,8 +18,6 @@ import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
-import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.ui.SearchField;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.SpriteAnimator;
@@ -61,6 +59,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   private static final String downloadActiveImageURI = ProductPage.getImageURI(SetupInstallerPlugin.INSTANCE, "simple/download_active.png");
 
+  private static final boolean FANCY = false; // OS.INSTANCE.isWin();
+
   private CatalogSelector catalogSelector;
 
   private SearchField searchField;
@@ -73,11 +73,11 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   {
     super(parent, style, dialog);
 
-    GridLayout layout = ProductPage.createGridLayout(1);
+    GridLayout layout = UIUtil.createGridLayout(1);
     layout.verticalSpacing = 20;
     setLayout(layout);
 
-    GridLayout searchLayout = SetupWizardPage.createGridLayout(2);
+    GridLayout searchLayout = UIUtil.createGridLayout(2);
     searchLayout.marginWidth = SimpleInstallerDialog.MARGIN_WIDTH;
 
     Composite searchComposite = new Composite(this, SWT.NONE);
@@ -217,7 +217,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     builder.append(".col2{width:100%}");
     builder.append(".col3{text-align:center}");
     builder.append(".zebra{background-color:#fafafa}");
-    if (OS.INSTANCE.isWin())
+    if (FANCY)
     {
       builder.append("a.dl{background-image:url('" + downloadImageURI
           + "'); background-repeat:no-repeat; background-position:top left; width:57px; height:56px}");
@@ -330,7 +330,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     if (downloadImageURI != null)
     {
-      if (OS.INSTANCE.isWin())
+      if (FANCY)
       {
         builder.append("<td class=\"col col3\"><a class=\"dl\" href=\"product://" + product.getProductCatalog().getName() + "/" + product.getName()
             + "\" title=\"Select\"/></td>");

@@ -12,11 +12,19 @@ package org.eclipse.oomph.jreinfo;
 
 import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubProgressMonitor;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -28,6 +36,16 @@ import java.util.Set;
  */
 public final class JREManager
 {
+  public static final OSType OS_TYPE = determineOSType();
+
+  public static final int BITNESS = org.eclipse.oomph.extractor.lib.JRE.determineBitness();
+
+  public static final boolean BITNESS_CHANGEABLE = BITNESS == 64 && OS.INSTANCE.is32BitAvailable();
+
+  public static final String JAVA_EXECUTABLE = OS_TYPE == OSType.Win ? "java.exe" : "java";
+
+  public static final String JAVA_COMPILER = OS_TYPE == OSType.Win ? "javac.exe" : "javac";
+
   public static final JREManager INSTANCE = new JREManager();
 
   private final List<String> javaHomes = new ArrayList<String>();
@@ -37,19 +55,85 @@ public final class JREManager
     loadJavaHomes();
   }
 
-  public synchronized void addExtraJavaHomes(String... paths)
+  private void addExtraJavaHomes(List<String> extraJavaHomes, File folder, boolean root, Set<JRE> result, IProgressMonitor monitor)
   {
-    List<String> extraJavaHomes = loadExtraJavaHomes();
-    if (extraJavaHomes.addAll(Arrays.asList(paths)))
+    JREInfoPlugin.checkCancelation(monitor);
+    String path = folder.getAbsolutePath();
+
+    File[] childFolders = folder.listFiles(new FileFilter()
     {
-      saveExtraJavaHomes(extraJavaHomes);
+      public boolean accept(File pathname)
+      {
+        return pathname.isDirectory();
+      }
+    });
+
+    try
+    {
+      int children = childFolders == null ? 0 : childFolders.length;
+      monitor.beginTask(root ? "Searching for VMs in " + path + "..." : "", 1 + children);
+      monitor.subTask(path);
+
+      if (!javaHomes.contains(path) && !extraJavaHomes.contains(path))
+      {
+        File executable = new File(folder, "bin/" + JAVA_EXECUTABLE);
+        if (executable.isFile())
+        {
+          File canonicalFolder = folder.getCanonicalFile();
+
+          JRE info = InfoManager.INSTANCE.getInfo(canonicalFolder);
+          if (info != null && info.isValid())
+          {
+            extraJavaHomes.add(path);
+            result.add(new JRE(folder, info));
+          }
+        }
+      }
+
+      monitor.worked(1);
+
+      for (int i = 0; i < children; i++)
+      {
+        addExtraJavaHomes(extraJavaHomes, childFolders[i], false, result, new SubProgressMonitor(monitor, 1));
+      }
+    }
+    catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+    finally
+    {
+      monitor.done();
     }
   }
 
-  public synchronized void removeExtraJavaHomes(String... paths)
+  public synchronized Set<JRE> addExtraJavaHomes(String rootFolder, IProgressMonitor monitor)
+  {
+    Set<JRE> result = new HashSet<JRE>();
+
+    File folder = new File(rootFolder);
+    if (folder.isDirectory())
+    {
+      List<String> extraJavaHomes = loadExtraJavaHomes();
+      addExtraJavaHomes(extraJavaHomes, folder, true, result, monitor);
+
+      if (!result.isEmpty())
+      {
+        saveExtraJavaHomes(extraJavaHomes);
+      }
+    }
+
+    return result;
+  }
+
+  public synchronized void removeExtraJavaHomes(String... javaHomes)
   {
     List<String> extraJavaHomes = loadExtraJavaHomes();
-    if (extraJavaHomes.removeAll(Arrays.asList(paths)))
+    if (extraJavaHomes.removeAll(Arrays.asList(javaHomes)))
     {
       saveExtraJavaHomes(extraJavaHomes);
     }
@@ -67,83 +151,36 @@ public final class JREManager
 
   public LinkedHashMap<File, JRE> getJREs()
   {
-    return getJREs(0, 0, 0, null, null);
+    return getJREs(null);
   }
 
-  public LinkedHashMap<File, JRE> getJREs(int major, int minor, int micro, Integer bitness, Boolean jdk)
+  public LinkedHashMap<File, JRE> getJREs(JREFilter filter)
   {
-    LinkedHashMap<File, JRE> jres = new LinkedHashMap<File, JRE>();
-    for (JRE jre : getValidJREs())
+    Set<File> folders = getJavaHomes();
+    List<JRE> jres = getJREs(filter, folders);
+
+    LinkedHashMap<File, JRE> result = new LinkedHashMap<File, JRE>();
+    for (JRE jre : jres)
     {
-      if (jre.getMajor() < major)
-      {
-        continue;
-      }
-
-      if (jre.getMinor() < minor)
-      {
-        continue;
-      }
-
-      if (jre.getMicro() < micro)
-      {
-        continue;
-      }
-
-      if (bitness != null && jre.getBitness() != bitness)
-      {
-        continue;
-      }
-
-      if (jdk != null && jre.isJDK() != jdk)
-      {
-        continue;
-      }
-
-      jres.put(jre.getJavaHome(), jre);
+      result.put(jre.getJavaHome(), jre);
     }
 
-    return jres;
+    return result;
   }
 
-  private List<JRE> getValidJREs()
+  public JRE[] getJREs(JREFilter filter, boolean extra)
   {
-    List<JRE> list = new ArrayList<JRE>();
-    for (File javaHome : getJavaHomes())
-    {
-      try
-      {
-        File canonicalJavaHome = javaHome.getCanonicalFile();
-        JRE info = InfoManager.INSTANCE.getInfo(canonicalJavaHome);
-        if (info != null && info.isValid())
-        {
-          list.add(new JRE(javaHome, info));
-        }
-      }
-      catch (IOException ex)
-      {
-        JREInfoPlugin.INSTANCE.log(ex);
-      }
-    }
-
-    Collections.sort(list);
-    return list;
+    Set<File> folders = toFile(extra ? loadExtraJavaHomes() : javaHomes);
+    List<JRE> jres = getJREs(filter, folders);
+    return jres.toArray(new JRE[jres.size()]);
   }
 
   private synchronized Set<File> getJavaHomes()
   {
     Set<File> all = new HashSet<File>();
-    getJavaHomes(all, javaHomes);
-    getJavaHomes(all, loadExtraJavaHomes());
+    all.addAll(toFile(javaHomes));
+    all.addAll(toFile(loadExtraJavaHomes()));
     return all;
-  }
-
-  private void getJavaHomes(Set<File> all, List<String> javaHomes)
-  {
-    for (String javaHome : javaHomes)
-    {
-      all.add(new File(javaHome));
-    }
   }
 
   private void loadJavaHomes()
@@ -172,7 +209,7 @@ public final class JREManager
       }
     }
 
-    return Collections.emptyList();
+    return new ArrayList<String>();
   }
 
   private static void saveExtraJavaHomes(List<String> paths)
@@ -190,5 +227,66 @@ public final class JREManager
   private static File getCacheFile()
   {
     return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("extra.txt").toOSString());
+  }
+
+  private static List<JRE> getJREs(JREFilter filter, Collection<File> javaHomes)
+  {
+    List<JRE> list = new ArrayList<JRE>();
+    for (File javaHome : javaHomes)
+    {
+      try
+      {
+        File canonicalJavaHome = javaHome.getCanonicalFile();
+        JRE info = InfoManager.INSTANCE.getInfo(canonicalJavaHome);
+        if (info != null && info.isValid())
+        {
+          if (filter == null || info.isMatch(filter))
+          {
+            list.add(new JRE(javaHome, info));
+          }
+        }
+      }
+      catch (IOException ex)
+      {
+        JREInfoPlugin.INSTANCE.log(ex);
+      }
+    }
+
+    Collections.sort(list);
+    return list;
+  }
+
+  private static Set<File> toFile(Collection<String> paths)
+  {
+    Set<File> result = new HashSet<File>();
+    for (String javaHome : paths)
+    {
+      result.add(new File(javaHome));
+    }
+
+    return result;
+  }
+
+  static OSType determineOSType()
+  {
+    String os = Platform.getOS();
+
+    if (Platform.OS_WIN32.equals(os))
+    {
+      System.loadLibrary("jreinfo.dll");
+      return OSType.Win;
+    }
+
+    if (Platform.OS_MACOSX.equals(os))
+    {
+      return OSType.Mac;
+    }
+
+    if (Platform.OS_LINUX.equals(os))
+    {
+      return OSType.Linux;
+    }
+
+    return OSType.Unsupported;
   }
 }

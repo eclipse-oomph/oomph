@@ -146,7 +146,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 
   public final void createControl(Composite parent)
   {
-    GridLayout gridLayout = createGridLayout(1);
+    GridLayout gridLayout = UIUtil.createGridLayout(1);
     gridLayout.marginWidth = 5;
 
     Composite pageControl = new Composite(parent, SWT.NONE);
@@ -156,7 +156,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 
     Composite uiContainer = new Composite(pageControl, SWT.NONE);
     uiContainer.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-    uiContainer.setLayout(createGridLayout(1));
+    uiContainer.setLayout(UIUtil.createGridLayout(1));
 
     Point sizeHint = getSizeHint();
 
@@ -185,7 +185,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     if (checkComposite == null)
     {
       checkComposite = new Composite((Composite)getControl(), SWT.NONE);
-      checkComposite.setLayout(createGridLayout(1));
+      checkComposite.setLayout(UIUtil.createGridLayout(1));
       checkComposite.setLayoutData(new GridData());
     }
     else
@@ -274,13 +274,5 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     {
       // Ignore
     }
-  }
-
-  public static GridLayout createGridLayout(int numColumns)
-  {
-    GridLayout layout = new GridLayout(numColumns, false);
-    layout.marginWidth = 0;
-    layout.marginHeight = 0;
-    return layout;
   }
 }

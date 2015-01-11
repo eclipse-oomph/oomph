@@ -8,12 +8,18 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.util;
+package org.eclipse.oomph.util;
+
+import org.eclipse.oomph.internal.util.UtilPlugin;
+
+import org.eclipse.emf.common.CommonPlugin;
 
 import org.eclipse.core.runtime.Platform;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URI;
 
 /**
  * @author Eike Stepper
@@ -21,8 +27,6 @@ import java.io.IOException;
 public abstract class OS
 {
   public static final OS INSTANCE = create();
-
-  // public static final OS INSTANCE = new Mac(Platform.WS_COCOA, Platform.ARCH_X86_64);
 
   private final String osgiOS;
 
@@ -72,6 +76,11 @@ public abstract class OS
     return Platform.getOS().equals(osgiOS) && Platform.getWS().equals(osgiWS) && Platform.getOSArch().equals(osgiArch);
   }
 
+  public boolean is32BitAvailable()
+  {
+    return true;
+  }
+
   public boolean isLineEndingConversionNeeded()
   {
     return false;
@@ -80,6 +89,27 @@ public abstract class OS
   protected String getEncoding()
   {
     return "ISO-8859-1";
+  }
+
+  public boolean openSystemBrowser(String url)
+  {
+    try
+    {
+      // java.awt.Desktop was introduced with Java 1.6!
+      Class<?> desktopClass = CommonPlugin.loadClass(UtilPlugin.INSTANCE.getSymbolicName(), "java.awt.Desktop");
+      Method getDesktopMethod = ReflectUtil.getMethod(desktopClass, "getDesktop");
+      Method browseMethod = ReflectUtil.getMethod(desktopClass, "browse", URI.class);
+
+      Object desktop = getDesktopMethod.invoke(null);
+      browseMethod.invoke(desktop, new URI(url));
+      return true;
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return false;
   }
 
   public final String getEclipseDir()
@@ -241,6 +271,12 @@ public abstract class OS
     public String getJREsRoot()
     {
       return "/";
+    }
+
+    @Override
+    public boolean is32BitAvailable()
+    {
+      return false;
     }
   }
 

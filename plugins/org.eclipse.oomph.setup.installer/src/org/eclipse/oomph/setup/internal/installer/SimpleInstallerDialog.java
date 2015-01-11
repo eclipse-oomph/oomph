@@ -11,14 +11,14 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
-import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.util.URI;
 
@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 
 /**
  * @author Eike Stepper
@@ -83,6 +84,8 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
   private int returnCode = RETURN_OK;
 
+  private LinkedHashMap<File, JRE> jres;
+
   public SimpleInstallerDialog(Display display, final Installer installer)
   {
     super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.BORDER);
@@ -93,7 +96,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
       captureDownloadButton();
     }
 
-    GridLayout verticalLayout = SetupWizardPage.createGridLayout(1);
+    GridLayout verticalLayout = UIUtil.createGridLayout(1);
     verticalLayout.verticalSpacing = 20;
 
     setLayout(verticalLayout);
@@ -117,7 +120,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
       }
     });
 
-    GridLayout horizontalLayout = SetupWizardPage.createGridLayout(3);
+    GridLayout horizontalLayout = UIUtil.createGridLayout(3);
     horizontalLayout.marginTop = 10;
     horizontalLayout.marginWidth = MARGIN_WIDTH;
     horizontalLayout.horizontalSpacing = 10;
@@ -194,6 +197,21 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
   public Installer getInstaller()
   {
     return installer;
+  }
+
+  public LinkedHashMap<File, JRE> getJREs()
+  {
+    return jres;
+  }
+
+  public void setJREs(LinkedHashMap<File, JRE> jres)
+  {
+    this.jres = jres;
+
+    if (variablePage != null)
+    {
+      variablePage.refreshJREs();
+    }
   }
 
   public int show()
@@ -304,20 +322,6 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     event.x = pt.x;
     event.y = pt.y;
     getDisplay().post(event);
-  }
-
-  public static void openSystemBrowser(String url)
-  {
-    try
-    {
-      // java.awt.Desktop was introduced with Java 1.6!
-      java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-      desktop.browse(new java.net.URI(url));
-    }
-    catch (Throwable ex)
-    {
-      //$FALL-THROUGH$
-    }
   }
 
   public static void hook(Control control)

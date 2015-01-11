@@ -20,8 +20,8 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
-import org.eclipse.oomph.setup.util.OS;
 import org.eclipse.oomph.setup.util.StringExpander;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.StringUtil;
 

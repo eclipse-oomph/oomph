@@ -175,7 +175,7 @@ public final class JRE
     return Integer.parseInt(string);
   }
 
-  private static int determineBitness()
+  public static int determineBitness()
   {
     if ("64".equals(System.getProperty("sun.arch.data.model")))
     {
