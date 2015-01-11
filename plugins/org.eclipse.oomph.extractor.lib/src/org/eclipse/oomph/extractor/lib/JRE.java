@@ -10,10 +10,6 @@
  */
 package org.eclipse.oomph.extractor.lib;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
 /**
  * @author Eike Stepper
@@ -34,37 +30,6 @@ public final class JRE
     this.minor = minor;
     this.micro = micro;
     this.bitness = bitness;
-  }
-
-  public JRE(InputStream in) throws IOException
-  {
-    Reader reader = new InputStreamReader(in, "UTF-8");
-
-    StringBuilder builder = new StringBuilder();
-    char[] buf = { 0 };
-    int count = 0;
-
-    while (reader.read(buf) == 1)
-    {
-      if (buf[0] == ' ')
-      {
-        ++count;
-      }
-
-      if (count == 4)
-      {
-        break;
-      }
-
-      builder.append(buf[0]);
-    }
-
-    String[] tokens = builder.toString().split(" ");
-
-    major = parseInt(tokens[0]);
-    minor = parseInt(tokens[1]);
-    micro = parseInt(tokens[2]);
-    bitness = parseInt(tokens[3]);
   }
 
   public JRE(String args)
@@ -169,20 +134,6 @@ public final class JRE
     return major + " " + minor + " " + micro + " " + bitness;
   }
 
-  private static int parseInt(String string)
-  {
-    for (int i = 0; i < string.length(); i++)
-    {
-      if (!Character.isDigit(string.charAt(i)))
-      {
-        string = string.substring(0, i);
-        break;
-      }
-    }
-
-    return Integer.parseInt(string);
-  }
-
   public static int determineBitness()
   {
     if ("64".equals(System.getProperty("sun.arch.data.model")))
@@ -196,5 +147,19 @@ public final class JRE
     }
 
     return 32;
+  }
+
+  private static int parseInt(String string)
+  {
+    for (int i = 0; i < string.length(); i++)
+    {
+      if (!Character.isDigit(string.charAt(i)))
+      {
+        string = string.substring(0, i);
+        break;
+      }
+    }
+
+    return Integer.parseInt(string);
   }
 }
