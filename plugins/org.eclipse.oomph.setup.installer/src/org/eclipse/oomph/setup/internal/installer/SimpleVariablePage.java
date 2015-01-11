@@ -1065,9 +1065,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     private String lastName;
 
-    public synchronized void log(String line, boolean filter)
+    public void setTerminating()
     {
-      name = line;
     }
 
     public void log(String line)
@@ -1087,6 +1086,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
       log(string, false);
     }
 
+    public synchronized void log(String line, boolean filter)
+    {
+      name = line;
+    }
+
     public synchronized void task(SetupTask setupTask)
     {
       if (setupTask != null)
@@ -1097,10 +1101,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         name = null;
       }
-    }
-
-    public void setTerminating()
-    {
     }
 
     public synchronized boolean isCanceled()
@@ -1129,11 +1129,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
       done = true;
     }
 
-    public synchronized void internalWorked(double work)
-    {
-      this.work += work;
-    }
-
     public synchronized void setTaskName(String name)
     {
       performer.log(name);
@@ -1142,6 +1137,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
     public synchronized void subTask(String name)
     {
       performer.log(name);
+    }
+
+    public synchronized void internalWorked(double work)
+    {
+      this.work += work;
     }
 
     public void worked(int work)
@@ -1183,7 +1183,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
           if (!ObjectUtil.equals(name, lastName))
           {
             lastName = name;
-            progressLabel.setText(StringUtil.safe(name));
+            if (!done)
+            {
+              progressLabel.setText(StringUtil.safe(name));
+            }
           }
         }
         catch (SWTException ex)
