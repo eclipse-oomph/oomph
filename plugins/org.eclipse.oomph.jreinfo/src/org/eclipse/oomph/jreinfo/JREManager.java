@@ -38,7 +38,7 @@ public final class JREManager
 {
   public static final OSType OS_TYPE = determineOSType();
 
-  public static final int BITNESS = org.eclipse.oomph.extractor.lib.JRE.determineBitness();
+  public static final int BITNESS = determineBitness();
 
   public static final boolean BITNESS_CHANGEABLE = BITNESS == 64 && OS.INSTANCE.is32BitAvailable();
 
@@ -267,26 +267,39 @@ public final class JREManager
     return result;
   }
 
-  static OSType determineOSType()
+  private static OSType determineOSType()
   {
     String os = Platform.getOS();
-
+  
     if (Platform.OS_WIN32.equals(os))
     {
       System.loadLibrary("jreinfo.dll");
       return OSType.Win;
     }
-
+  
     if (Platform.OS_MACOSX.equals(os))
     {
       return OSType.Mac;
     }
-
+  
     if (Platform.OS_LINUX.equals(os))
     {
       return OSType.Linux;
     }
-
+  
     return OSType.Unsupported;
+  }
+
+  private static int determineBitness()
+  {
+    try
+    {
+      return org.eclipse.oomph.extractor.lib.JRE.determineBitness();
+    }
+    catch (Throwable ex)
+    {
+      JREInfoPlugin.INSTANCE.log(ex);
+      return 32;
+    }
   }
 }
