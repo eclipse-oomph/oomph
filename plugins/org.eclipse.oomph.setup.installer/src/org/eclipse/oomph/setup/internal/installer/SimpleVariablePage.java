@@ -183,7 +183,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     GridLayout layout = UIUtil.createGridLayout(4);
     layout.marginWidth = SimpleInstallerDialog.MARGIN_WIDTH;
-    layout.marginBottom = 20;
+    layout.marginTop = 5;
+    layout.marginBottom = SimpleInstallerDialog.MARGIN_HEIGHT;
     layout.horizontalSpacing = 5;
     layout.verticalSpacing = 5;
     setLayout(layout);

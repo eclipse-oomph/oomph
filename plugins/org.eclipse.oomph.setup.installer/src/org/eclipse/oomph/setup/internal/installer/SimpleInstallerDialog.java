@@ -20,8 +20,6 @@ import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -61,6 +59,8 @@ import java.util.LinkedHashMap;
 public final class SimpleInstallerDialog extends Shell implements InstallerUI
 {
   public static final int MARGIN_WIDTH = 42;
+
+  public static final int MARGIN_HEIGHT = 15;
 
   private static final ShellMove SHELL_MOVE = new ShellMove();
 
@@ -120,8 +120,8 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
       }
     });
 
-    GridLayout titleLayout = UIUtil.createGridLayout(4);
-    titleLayout.marginTop = 10;
+    GridLayout titleLayout = UIUtil.createGridLayout(3);
+    titleLayout.marginTop = 15;
     titleLayout.marginWidth = MARGIN_WIDTH;
     titleLayout.horizontalSpacing = 0;
 
@@ -130,16 +130,11 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     titleComposite.setLayout(titleLayout);
 
     Label titleImage = new Label(titleComposite, SWT.NONE);
-    titleImage.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-    titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("oomph64.png"));
-
-    Label titleText = new Label(titleComposite, SWT.NONE);
-    titleText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-    titleText.setText(" Oomph Installer");
-    titleText.setFont(SetupInstallerPlugin.getFont(getFont(), URI.createURI("font://Helvetica/24///bold")));
+    titleImage.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, true, false));
+    titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png"));
 
     ToolButton advancedButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/advanced.png"), true);
-    advancedButton.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+    advancedButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
     advancedButton.setToolTipText("Switch to advanced mode");
     advancedButton.addSelectionListener(new SelectionAdapter()
     {
@@ -152,7 +147,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     });
 
     ToolButton exitButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit.png"), true);
-    exitButton.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+    exitButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
     exitButton.setToolTipText("Exit");
     exitButton.addSelectionListener(new SelectionAdapter()
     {
