@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.ErrorDialog;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -313,7 +314,14 @@ public class InstallerApplication implements IApplication
                     Resolution resolution = SelfUpdate.resolve(null, progress.newChild(1));
                     if (resolution == null)
                     {
-                      MessageDialog.openInformation(shell, "Update", "No updates were found.");
+                      UIUtil.syncExec(new Runnable()
+                      {
+                        public void run()
+                        {
+                          MessageDialog.openInformation(shell, "Update", "No updates were found.");
+                        }
+                      });
+
                       return;
                     }
 
