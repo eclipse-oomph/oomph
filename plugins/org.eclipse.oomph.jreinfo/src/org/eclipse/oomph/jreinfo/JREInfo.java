@@ -41,35 +41,42 @@ public final class JREInfo
   {
     JREInfo jreInfo = null;
 
-    switch (JREManager.OS_TYPE)
+    try
     {
-      case Win:
-        jreInfo = getAllWin();
-        break;
+      switch (JREManager.OS_TYPE)
+      {
+        case Win:
+          jreInfo = getAllWin();
+          break;
 
-      case Mac:
-        jreInfo = getAllMac();
-        break;
+        case Mac:
+          jreInfo = getAllMac();
+          break;
 
-      case Linux:
-        jreInfo = getAllLinux();
-        break;
+        case Linux:
+          jreInfo = getAllLinux();
+          break;
 
-      default:
-        //$FALL-THROUGH$
+        default:
+          //$FALL-THROUGH$
+      }
+
+      if (!SKIP_USER_HOME)
+      {
+        jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME);
+        jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME + "/java");
+        jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME + "/jvm");
+      }
+
+      for (int i = 0; i < EXTRA_SEARCH_PATH.length; i++)
+      {
+        String search = EXTRA_SEARCH_PATH[i];
+        jreInfo = searchFolder(jreInfo, search);
+      }
     }
-
-    if (!SKIP_USER_HOME)
+    catch (Throwable ex)
     {
-      jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME);
-      jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME + "/java");
-      jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME + "/jvm");
-    }
-
-    for (int i = 0; i < EXTRA_SEARCH_PATH.length; i++)
-    {
-      String search = EXTRA_SEARCH_PATH[i];
-      jreInfo = searchFolder(jreInfo, search);
+      JREInfoPlugin.INSTANCE.log(ex);
     }
 
     return jreInfo;
