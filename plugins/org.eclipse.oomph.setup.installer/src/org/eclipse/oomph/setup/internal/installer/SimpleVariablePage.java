@@ -212,13 +212,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     });
 
     // Row 2
-    if (!OS.INSTANCE.isLinux())
-    {
-      new Label(this, SWT.NONE);
-      new Label(this, SWT.NONE);
-      new Label(this, SWT.NONE);
-      new Label(this, SWT.NONE);
-    }
+    new Label(this, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, layout.numColumns, 1));
 
     // Row 3
     createLabel("Product Version ");
