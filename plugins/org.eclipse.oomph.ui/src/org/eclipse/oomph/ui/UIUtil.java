@@ -11,14 +11,17 @@
 package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.internal.ui.UIPlugin;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Resource;
@@ -27,6 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -166,6 +170,33 @@ public final class UIUtil
     data.grabExcessVerticalSpace = true;
     data.verticalAlignment = GridData.FILL;
     return data;
+  }
+
+  public static void clearTextSelection(Object control)
+  {
+    try
+    {
+      if (control instanceof Viewer)
+      {
+        control = ((Viewer)control).getControl();
+      }
+
+      if (control instanceof CCombo)
+      {
+        CCombo combo = (CCombo)control;
+        control = ReflectUtil.getValue("text", combo);
+      }
+
+      if (control instanceof Text)
+      {
+        Text text = (Text)control;
+        text.clearSelection();
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
   }
 
   public static void runInProgressDialog(Shell shell, IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException

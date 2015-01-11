@@ -234,6 +234,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         String label = versionCombo.getItem(versionCombo.getSelectionIndex());
         productVersionSelected(productVersions.get(label));
+        UIUtil.clearTextSelection(versionCombo);
       }
     });
 

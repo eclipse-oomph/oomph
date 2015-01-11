@@ -179,7 +179,7 @@ public class JREComposite extends Composite
 
     TreeColumn typeColumn = new TreeColumn(tree, SWT.LEFT);
     typeColumn.setText("Type");
-    treeLayout.setColumnData(typeColumn, new ColumnWeightData(1, 45 + EXTRA_WIDTH));
+    treeLayout.setColumnData(typeColumn, new ColumnWeightData(1, 50 + EXTRA_WIDTH));
 
     Composite buttonComposite = new Composite(this, SWT.NONE);
     buttonComposite.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));

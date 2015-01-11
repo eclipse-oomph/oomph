@@ -19,6 +19,7 @@ import org.eclipse.oomph.util.Request;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -119,7 +120,13 @@ public abstract class JREController implements ISelectionChangedListener
   public final void setJRE(JRE jre)
   {
     this.jre = jre;
-    viewer.setSelection(new StructuredSelection(jre));
+    setSelection(new StructuredSelection(jre));
+  }
+
+  public void setSelection(ISelection selection)
+  {
+    viewer.setSelection(selection);
+    UIUtil.clearTextSelection(viewer);
   }
 
   public void configureJREs()
@@ -187,6 +194,7 @@ public abstract class JREController implements ISelectionChangedListener
     if (element instanceof JRE)
     {
       jre = (JRE)element;
+      UIUtil.clearTextSelection(viewer);
     }
     else
     {
@@ -230,11 +238,11 @@ public abstract class JREController implements ISelectionChangedListener
             modelEmpty(false);
             if (oldJRE != null && jres.contains(oldJRE))
             {
-              viewer.setSelection(new StructuredSelection(oldJRE));
+              setSelection(new StructuredSelection(oldJRE));
             }
             else
             {
-              viewer.setSelection(new StructuredSelection(jres.iterator().next()));
+              setSelection(new StructuredSelection(jres.iterator().next()));
             }
           }
         }
@@ -258,7 +266,7 @@ public abstract class JREController implements ISelectionChangedListener
     if (empty)
     {
       viewer.setInput(Collections.singletonList(NO_JRE_FOUND));
-      viewer.setSelection(new StructuredSelection(NO_JRE_FOUND));
+      setSelection(new StructuredSelection(NO_JRE_FOUND));
       control.setForeground(control.getDisplay().getSystemColor(SWT.COLOR_RED));
     }
     else
