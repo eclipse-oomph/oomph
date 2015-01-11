@@ -17,6 +17,7 @@ import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.Request;
 
@@ -64,13 +65,15 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class JREComposite extends Composite
 {
-  private static final String[] GROUPS = { "System", "User" };
-
   private static final Image IMAGE_GROUP = JREInfoUIPlugin.INSTANCE.getSWTImage("group");
 
   private static final Image IMAGE_JRE = JREInfoUIPlugin.INSTANCE.getSWTImage("jre");
 
   private static final Image IMAGE_JDK = JREInfoUIPlugin.INSTANCE.getSWTImage("jdk");
+
+  private static final int EXTRA_WIDTH = OS.INSTANCE.isLinux() ? 10 : 0;
+
+  private static final String[] GROUPS = { "System", "User" };
 
   private static final Object[] EMPTY = new Object[0];
 
@@ -168,15 +171,15 @@ public class JREComposite extends Composite
 
     TreeColumn versionColumn = new TreeColumn(tree, SWT.LEFT);
     versionColumn.setText("Version");
-    treeLayout.setColumnData(versionColumn, new ColumnWeightData(1, 60));
+    treeLayout.setColumnData(versionColumn, new ColumnWeightData(1, 60 + EXTRA_WIDTH));
 
     TreeColumn bitnessColumn = new TreeColumn(tree, SWT.LEFT);
     bitnessColumn.setText("Bitness");
-    treeLayout.setColumnData(bitnessColumn, new ColumnWeightData(1, 60));
+    treeLayout.setColumnData(bitnessColumn, new ColumnWeightData(1, 60 + EXTRA_WIDTH));
 
     TreeColumn typeColumn = new TreeColumn(tree, SWT.LEFT);
     typeColumn.setText("Type");
-    treeLayout.setColumnData(typeColumn, new ColumnWeightData(1, 50));
+    treeLayout.setColumnData(typeColumn, new ColumnWeightData(1, 45 + EXTRA_WIDTH));
 
     Composite buttonComposite = new Composite(this, SWT.NONE);
     buttonComposite.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
