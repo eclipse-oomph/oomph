@@ -28,6 +28,14 @@ public final class JRE
 
   private final int bitness;
 
+  public JRE(int major, int minor, int micro, int bitness)
+  {
+    this.major = major;
+    this.minor = minor;
+    this.micro = micro;
+    this.bitness = bitness;
+  }
+
   public JRE(InputStream in) throws IOException
   {
     Reader reader = new InputStreamReader(in, "UTF-8");

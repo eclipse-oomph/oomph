@@ -10,16 +10,18 @@
  */
 package org.eclipse.oomph.extractor.lib;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
 /**
  * @author Eike Stepper
  */
 public final class BINDescriptor
 {
+  private final int format;
+
   private final JRE jre;
 
   private final int jdk;
@@ -28,17 +30,29 @@ public final class BINDescriptor
 
   private final String iniPath;
 
+  private final String productName;
+
+  private final String productURI;
+
+  private final String imageURI;
+
   public BINDescriptor(InputStream in) throws IOException
   {
-    Reader reader = new InputStreamReader(in, "UTF-8");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
-    String string = readTokens(reader, 5);
-    String[] tokens = string.split(" ");
+    format = readInt(reader);
+    jre = new JRE(readInt(reader), readInt(reader), readInt(reader), readInt(reader));
+    jdk = readInt(reader);
+    launcherPath = reader.readLine();
+    iniPath = reader.readLine();
+    productName = reader.readLine();
+    productURI = reader.readLine();
+    imageURI = reader.readLine();
+  }
 
-    jre = new JRE(tokens);
-    jdk = Integer.parseInt(tokens[4]);
-    launcherPath = readTokens(reader, 1);
-    iniPath = readTokens(reader, 1);
+  public int getFormat()
+  {
+    return format;
   }
 
   public JRE getJRE()
@@ -61,28 +75,23 @@ public final class BINDescriptor
     return iniPath;
   }
 
-  private static String readTokens(Reader reader, int count) throws IOException
+  public String getProductName()
   {
-    StringBuilder builder = new StringBuilder();
-    char[] buf = { 0 };
-    boolean quotes = false;
+    return productName;
+  }
 
-    while (reader.read(buf) == 1)
-    {
-      if (buf[0] == '"')
-      {
-        quotes = !quotes;
-        continue;
-      }
+  public String getProductURI()
+  {
+    return productURI;
+  }
 
-      if (!quotes && Character.isWhitespace(buf[0]) && --count == 0)
-      {
-        break;
-      }
+  public String getImageURI()
+  {
+    return imageURI;
+  }
 
-      builder.append(buf[0]);
-    }
-
-    return builder.toString().trim();
+  private static int readInt(BufferedReader reader) throws IOException
+  {
+    return Integer.parseInt(reader.readLine());
   }
 }
