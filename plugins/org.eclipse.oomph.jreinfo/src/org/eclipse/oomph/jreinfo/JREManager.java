@@ -13,6 +13,7 @@ package org.eclipse.oomph.jreinfo;
 import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -156,6 +158,28 @@ public final class JREManager
     loadJavaHomes();
   }
 
+  public String getDefaultJRE(int bitness, String javaVersion)
+  {
+    File defaultsFile = getDefaultsFile();
+    Map<String, String> properties = PropertiesUtil.getProperties(defaultsFile);
+    String javaHome = properties.get(getDefaultsKey(bitness, javaVersion));
+    if (javaHome == null)
+    {
+      javaHome = properties.get(getDefaultsKey(bitness, javaVersion));
+    }
+
+    return javaHome;
+  }
+
+  public synchronized void setDefaultJRE(int bitness, String javaVersion, String javaHome)
+  {
+    File defaultsFile = getDefaultsFile();
+    Map<String, String> properties = PropertiesUtil.getProperties(defaultsFile);
+    properties.put(getDefaultsKey(bitness, javaVersion), javaHome);
+    properties.put(getDefaultsKey(bitness, "*"), javaHome);
+    PropertiesUtil.saveProperties(defaultsFile, properties, true);
+  }
+
   public LinkedHashMap<File, JRE> getJREs()
   {
     return getJREs(null);
@@ -234,6 +258,21 @@ public final class JREManager
   private static File getCacheFile()
   {
     return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("extra.txt").toOSString());
+  }
+
+  private static File getDefaultsFile()
+  {
+    return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("defaults.properties").toOSString());
+  }
+
+  private static String getDefaultsKey(int bitness, String javaVersion)
+  {
+    return Integer.toString(bitness) + "/" + sanitizeKey(javaVersion);
+  }
+
+  private static String sanitizeKey(String key)
+  {
+    return key.replace(' ', '_').replace('/', '_').replace('\\', '_').replace('=', '_');
   }
 
   private static List<JRE> getJREs(JREFilter filter, Collection<File> javaHomes)

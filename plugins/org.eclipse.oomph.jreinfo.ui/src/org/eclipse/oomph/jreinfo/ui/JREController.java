@@ -31,8 +31,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 
 /**
  * @author Eike Stepper
@@ -119,7 +121,7 @@ public abstract class JREController implements ISelectionChangedListener
 
   public final void setJRE(JRE jre)
   {
-    this.jre = jre;
+    doSetJRE(jre);
     setSelection(new StructuredSelection(jre));
   }
 
@@ -177,7 +179,7 @@ public abstract class JREController implements ISelectionChangedListener
 
     if (dialog.open() == JREDialog.OK)
     {
-      jre = (JRE)dialog.getSelectedElement();
+      doSetJRE((JRE)dialog.getSelectedElement());
     }
 
     refresh();
@@ -193,12 +195,12 @@ public abstract class JREController implements ISelectionChangedListener
     Object element = ((IStructuredSelection)viewer.getSelection()).getFirstElement();
     if (element instanceof JRE)
     {
-      jre = (JRE)element;
+      doSetJRE((JRE)element);
       UIUtil.clearTextSelection(viewer);
     }
     else
     {
-      jre = null;
+      doSetJRE(null);
 
       if (element == NO_JRE_FOUND)
       {
@@ -236,14 +238,23 @@ public abstract class JREController implements ISelectionChangedListener
           else
           {
             modelEmpty(false);
-            if (oldJRE != null && jres.contains(oldJRE))
+
+            JRE selection = getDefaultJRE(javaVersion);
+            if (selection == null || !jres.contains(selection))
             {
-              setSelection(new StructuredSelection(oldJRE));
+              selection = null;
+              if (oldJRE != null && jres.contains(oldJRE))
+              {
+                selection = oldJRE;
+              }
             }
-            else
+
+            if (selection == null || !jres.contains(selection))
             {
-              setSelection(new StructuredSelection(jres.iterator().next()));
+              selection = jres.iterator().next();
             }
+
+            setSelection(new StructuredSelection(selection));
           }
         }
         finally
@@ -276,4 +287,30 @@ public abstract class JREController implements ISelectionChangedListener
   }
 
   protected abstract boolean isModelInitialized();
+
+  private JRE getDefaultJRE(String javaVersion)
+  {
+    if (javaVersion != null)
+    {
+      String javaHome = JREManager.INSTANCE.getDefaultJRE(bitness, javaVersion);
+      if (javaHome != null)
+      {
+        LinkedHashMap<File, JRE> jres = JREManager.INSTANCE.getJREs();
+        return jres.get(new File(javaHome));
+      }
+    }
+
+    return null;
+  }
+
+  private void doSetJRE(JRE jre)
+  {
+    this.jre = jre;
+
+    if (jre != null)
+    {
+      String javaHome = jre.getJavaHome().getAbsolutePath();
+      JREManager.INSTANCE.setDefaultJRE(bitness, javaVersion, javaHome);
+    }
+  }
 }

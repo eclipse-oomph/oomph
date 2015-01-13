@@ -124,14 +124,14 @@ public final class PropertiesUtil
   public static Map<String, String> loadProperties(File file)
   {
     FileReader fileReader = null;
-
+  
     try
     {
       fileReader = new FileReader(file);
       BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+  
       Map<String, String> properties = new LinkedHashMap<String, String>();
-
+  
       String line;
       while ((line = bufferedReader.readLine()) != null)
       {
@@ -141,7 +141,7 @@ public final class PropertiesUtil
         {
           String key = tokens.get(0);
           String value = null;
-
+  
           if (size == 2)
           {
             value = tokens.get(1);
@@ -155,17 +155,17 @@ public final class PropertiesUtil
               {
                 builder.append("=");
               }
-
+  
               builder.append(tokens.get(i));
             }
-
+  
             value = builder.toString();
           }
-
+  
           properties.put(key, value);
         }
       }
-
+  
       return properties;
     }
     catch (IOException ex)
@@ -176,5 +176,15 @@ public final class PropertiesUtil
     {
       IOUtil.closeSilent(fileReader);
     }
+  }
+
+  public static Map<String, String> getProperties(File file)
+  {
+    if (file.isFile())
+    {
+      return loadProperties(file);
+    }
+
+    return new LinkedHashMap<String, String>();
   }
 }
