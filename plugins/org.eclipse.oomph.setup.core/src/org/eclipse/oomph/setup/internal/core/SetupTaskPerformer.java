@@ -217,6 +217,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
+  private String vmPath;
+
   private boolean hasSuccessfullyPerformed;
 
   public SetupTaskPerformer(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext, Stream stream)
@@ -230,6 +232,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     super(uriConverter, prompter, trigger, setupContext);
     this.triggeredSetupTasks = triggeredSetupTasks;
     initTriggeredSetupTasks(null, false);
+  }
+
+  public String getVMPath()
+  {
+    return vmPath;
+  }
+
+  public void setVMPath(String vmPath)
+  {
+    this.vmPath = vmPath;
   }
 
   public boolean hasSuccessfullyPerformed()
@@ -2542,7 +2554,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void perform(IProgressMonitor monitor) throws Exception
   {
     boolean bootstrap = getTrigger() == Trigger.BOOTSTRAP;
-    monitor.beginTask("", bootstrap ? 105 : 100);
+    monitor.beginTask("", (bootstrap ? 105 : 100) + (vmPath == null ? 0 : 1));
 
     try
     {
@@ -2550,8 +2562,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (bootstrap)
       {
-
         performEclipseIniTask(false, "--launcher.appendVmargs", null, new SubProgressMonitor(monitor, 1));
+
+        if (vmPath != null)
+        {
+          performEclipseIniTask(false, "-vm", vmPath, new SubProgressMonitor(monitor, 1));
+        }
+
         performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))),
             new SubProgressMonitor(monitor, 1));
 

@@ -748,44 +748,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
         try
         {
-          if (pool != null)
-          {
-            P2Util.getAgentManager().setDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName(), pool);
-            System.setProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION, pool.getLocation().getAbsolutePath());
-          }
-          else
-          {
-            System.clearProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION);
-          }
-
-          ResourceSet resourceSet = installer.getResourceSet();
-          URIConverter uriConverter = resourceSet.getURIConverter();
-
-          SetupContext setupContext = SetupContext.create(resourceSet, selectedProductVersion);
-          Installation installation = setupContext.getInstallation();
-          User user = setupContext.getUser();
-
-          UserAdjuster userAdjuster = new UserAdjuster();
-          userAdjuster.adjust(user, installFolder);
-          PREF_INSTALL_CONTAINER.set(installContainer);
-
-          SimplePrompter prompter = new SimplePrompter();
-
-          performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
-          performer.getUnresolvedVariables().clear();
-          performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
-          performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
-          performer.setProgress(progress);
-          performer.perform(progress);
-          performer.recordVariables(installation, null, user);
-          performer.savePasswords();
-
-          File configurationLocation = performer.getProductConfigurationLocation();
-          installation.eResource().setURI(URI.createFileURI(new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup").toString()));
-          BaseUtil.saveEObject(installation);
-
-          userAdjuster.undo();
-          BaseUtil.saveEObject(user);
+          installPerform();
         }
         catch (InterruptedException ex)
         {
@@ -839,6 +802,51 @@ public class SimpleVariablePage extends SimpleInstallerPage
     installThread.start();
   }
 
+  private void installPerform() throws Exception
+  {
+    if (pool != null)
+    {
+      P2Util.getAgentManager().setDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName(), pool);
+      System.setProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION, pool.getLocation().getAbsolutePath());
+    }
+    else
+    {
+      System.clearProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION);
+    }
+
+    String vmPath = new File(javaController.getJRE().getJavaHome(), "bin").getAbsolutePath();
+
+    ResourceSet resourceSet = installer.getResourceSet();
+    URIConverter uriConverter = resourceSet.getURIConverter();
+
+    SetupContext setupContext = SetupContext.create(resourceSet, selectedProductVersion);
+    Installation installation = setupContext.getInstallation();
+    User user = setupContext.getUser();
+
+    UserAdjuster userAdjuster = new UserAdjuster();
+    userAdjuster.adjust(user, installFolder);
+    PREF_INSTALL_CONTAINER.set(installContainer);
+
+    SimplePrompter prompter = new SimplePrompter();
+
+    performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
+    performer.getUnresolvedVariables().clear();
+    performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
+    performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
+    performer.setVMPath(vmPath);
+    performer.setProgress(progress);
+    performer.perform(progress);
+    performer.recordVariables(installation, null, user);
+    performer.savePasswords();
+
+    File configurationLocation = performer.getProductConfigurationLocation();
+    installation.eResource().setURI(URI.createFileURI(new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup").toString()));
+    BaseUtil.saveEObject(installation);
+
+    userAdjuster.undo();
+    BaseUtil.saveEObject(user);
+  }
+
   private void installCancel()
   {
     if (progress != null)
@@ -853,7 +861,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     setEnabled(true);
     progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-    // installButton.setToolTipText("Install");
     progressLabel.setText("Installation canceled");
 
     cancelButton.setVisible(false);
