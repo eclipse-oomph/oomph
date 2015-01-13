@@ -16,6 +16,7 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.TaskItemDecorator;
+import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
@@ -90,7 +91,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public SetupUIPlugin()
   {
-    super(new ResourceLocator[] { org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE, SetupEditPlugin.INSTANCE });
+    super(new ResourceLocator[] { JREInfoUIPlugin.INSTANCE, SetupEditPlugin.INSTANCE });
   }
 
   @Override

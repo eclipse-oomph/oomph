@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
-import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
@@ -45,7 +44,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
-import java.util.LinkedHashMap;
 
 /**
  * @author Eike Stepper
@@ -91,8 +89,6 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
   private SimpleVariablePage variablePage;
 
   private int returnCode = RETURN_OK;
-
-  private LinkedHashMap<File, JRE> jres;
 
   public SimpleInstallerDialog(Display display, final Installer installer)
   {
@@ -195,15 +191,8 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     return installer;
   }
 
-  public LinkedHashMap<File, JRE> getJREs()
+  public void refreshJREs()
   {
-    return jres;
-  }
-
-  public void setJREs(LinkedHashMap<File, JRE> jres)
-  {
-    this.jres = jres;
-
     if (variablePage != null)
     {
       variablePage.refreshJREs();

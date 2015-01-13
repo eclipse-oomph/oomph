@@ -10,13 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.jreinfo.JRE;
-
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-
-import java.io.File;
-import java.util.LinkedHashMap;
 
 /**
  * @author Eike Stepper
@@ -37,5 +32,5 @@ public interface InstallerUI
 
   public Shell getShell();
 
-  public void setJREs(LinkedHashMap<File, JRE> jres);
+  public void refreshJREs();
 }

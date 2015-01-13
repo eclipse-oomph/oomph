@@ -26,7 +26,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -148,6 +150,17 @@ public class JREComposite extends Composite
 
         removeButton.setEnabled(removable);
         elementChanged(selectedElement);
+      }
+    });
+
+    treeViewer.addDoubleClickListener(new IDoubleClickListener()
+    {
+      public void doubleClick(DoubleClickEvent event)
+      {
+        if (selectedElement instanceof JRE)
+        {
+          doubleClicked((JRE)selectedElement);
+        }
       }
     });
 
@@ -420,6 +433,11 @@ public class JREComposite extends Composite
   {
     JREManager.INSTANCE.refresh(true);
     treeViewer.refresh();
+  }
+
+  protected void doubleClicked(JRE jre)
+  {
+    // Do nothing.
   }
 
   private boolean isExtraJRE(Object jre)

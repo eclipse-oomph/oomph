@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal.installer;
+package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.setup.AnnotationConstants;
@@ -18,9 +18,9 @@ import org.eclipse.oomph.util.Request;
 /**
  * @author Eike Stepper
  */
-public abstract class DownloadHandler extends Request.Handler.Modifier
+public abstract class JREDownloadHandler extends Request.Handler.Modifier
 {
-  public DownloadHandler()
+  public JREDownloadHandler()
   {
     super(Request.Handler.SYSTEM_BROWSER);
   }

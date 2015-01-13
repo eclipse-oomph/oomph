@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.jreinfo.ui;
 
+import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREFilter;
 import org.eclipse.oomph.ui.OomphDialog;
 import org.eclipse.oomph.ui.UIUtil;
@@ -127,6 +128,12 @@ public class JREDialog extends OomphDialog
       {
         super.elementChanged(element);
         JREDialog.this.elementChanged(element);
+      }
+
+      @Override
+      protected void doubleClicked(JRE jre)
+      {
+        close();
       }
     };
 

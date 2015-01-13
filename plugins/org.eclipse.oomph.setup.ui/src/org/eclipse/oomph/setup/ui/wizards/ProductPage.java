@@ -13,12 +13,16 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.jreinfo.JREManager;
+import org.eclipse.oomph.jreinfo.ui.JREController;
+import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.p2.internal.ui.P2ContentProvider;
 import org.eclipse.oomph.p2.internal.ui.P2LabelProvider;
+import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Product;
@@ -33,9 +37,11 @@ import org.eclipse.oomph.setup.provider.InstallationItemProvider;
 import org.eclipse.oomph.setup.provider.ProductCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProductItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
+import org.eclipse.oomph.setup.ui.JREDownloadHandler;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
+import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin;
@@ -54,11 +60,13 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -92,6 +100,8 @@ import java.util.Collection;
  */
 public class ProductPage extends SetupWizardPage
 {
+  public static final String PAGE_NAME = "ProductPage";
+
   private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null;
 
   private static final Product NO_PRODUCT = createNoProduct();
@@ -110,11 +120,23 @@ public class ProductPage extends SetupWizardPage
 
   private ComboViewer versionComboViewer;
 
+  private ToolButton bitness32Button;
+
+  private ToolButton bitness64Button;
+
+  private JREController javaController;
+
+  private Label javaLabel;
+
+  private ComboViewer javaViewer;
+
+  private ToolButton javaButton;
+
   private Button poolButton;
 
   private ComboViewer poolComboViewer;
 
-  private Button managePoolsButton;
+  private ToolButton managePoolsButton;
 
   private BundlePool currentBundlePool;
 
@@ -122,7 +144,7 @@ public class ProductPage extends SetupWizardPage
 
   public ProductPage()
   {
-    super("ProductPage");
+    super(PAGE_NAME);
     setTitle("Product");
     setDescription("Select the product and choose the version you want to install.");
   }
@@ -153,7 +175,7 @@ public class ProductPage extends SetupWizardPage
 
     Composite lowerComposite = new Composite(mainComposite, SWT.NONE);
     lowerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    lowerComposite.setLayout(UIUtil.createGridLayout(2));
+    lowerComposite.setLayout(UIUtil.createGridLayout(4));
 
     versionLabel = new Label(lowerComposite, SWT.NONE);
     versionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
@@ -179,6 +201,88 @@ public class ProductPage extends SetupWizardPage
     Combo versionCombo = versionComboViewer.getCombo();
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     AccessUtil.setKey(versionCombo, "versionChoice");
+
+    if (JREManager.BITNESS_CHANGEABLE)
+    {
+      bitness32Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("32bit.png"), true);
+      bitness32Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+      bitness32Button.setSelection(false);
+      bitness32Button.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          bitness32Button.setSelection(true);
+          bitness64Button.setSelection(false);
+          javaController.setBitness(32);
+        }
+      });
+
+      bitness64Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("64bit.png"), true);
+      bitness64Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+      bitness64Button.setSelection(true);
+      bitness64Button.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          bitness32Button.setSelection(false);
+          bitness64Button.setSelection(true);
+          javaController.setBitness(64);
+        }
+      });
+    }
+    else
+    {
+      new Label(lowerComposite, SWT.NONE);
+      new Label(lowerComposite, SWT.NONE);
+    }
+
+    javaLabel = new Label(lowerComposite, SWT.RIGHT);
+    javaLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    javaLabel.setText("Java VM:");
+
+    javaViewer = new ComboViewer(lowerComposite, SWT.READ_ONLY);
+    javaViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    javaViewer.setContentProvider(new ArrayContentProvider());
+    javaViewer.setLabelProvider(new LabelProvider());
+
+    javaButton = new ToolButton(lowerComposite, SWT.PUSH, JREInfoUIPlugin.INSTANCE.getSWTImage("jre"), true);
+    javaButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+    javaButton.setToolTipText("Manage Virtual Machines...");
+    javaButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        javaController.configureJREs();
+      }
+    });
+
+    JREDownloadHandler downloadHandler = new JREDownloadHandler()
+    {
+      @Override
+      protected Product getProduct()
+      {
+        return getSelectedProduct();
+      }
+    };
+
+    javaController = new JREController(javaLabel, javaViewer, downloadHandler)
+    {
+      @Override
+      protected void modelEmpty(boolean empty)
+      {
+        super.modelEmpty(empty);
+        setPageComplete(!empty);
+      }
+
+      @Override
+      protected void setLabel(String text)
+      {
+        super.setLabel(text + ":");
+      }
+    };
 
     if (SHOW_BUNDLE_POOL_UI)
     {
@@ -216,14 +320,14 @@ public class ProductPage extends SetupWizardPage
         }
       });
 
-      Composite poolComposite = new Composite(lowerComposite, SWT.NONE);
-      poolComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-      poolComposite.setLayout(UIUtil.createGridLayout(2));
+      // Composite poolComposite = new Composite(lowerComposite, SWT.NONE);
+      // poolComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      // poolComposite.setLayout(UIUtil.createGridLayout(2));
 
       P2LabelProvider labelProvider = new P2LabelProvider();
       labelProvider.setAbsolutePools(true);
 
-      poolComboViewer = new ComboViewer(poolComposite, SWT.READ_ONLY);
+      poolComboViewer = new ComboViewer(lowerComposite, SWT.READ_ONLY);
       poolComboViewer.setLabelProvider(labelProvider);
       poolComboViewer.setContentProvider(new P2ContentProvider.AllBundlePools());
       poolComboViewer.setInput(P2Util.getAgentManager());
@@ -253,9 +357,9 @@ public class ProductPage extends SetupWizardPage
       poolCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
       AccessUtil.setKey(poolCombo, "poolChoice");
 
-      managePoolsButton = new Button(poolComposite, SWT.PUSH);
-      managePoolsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-      managePoolsButton.setText("Manage Bundle Pools...");
+      managePoolsButton = new ToolButton(lowerComposite, SWT.PUSH, P2UIPlugin.INSTANCE.getSWTImage("obj16/agent"), true);
+      managePoolsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+      managePoolsButton.setToolTipText("Manage Bundle Pools...");
       managePoolsButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -274,6 +378,7 @@ public class ProductPage extends SetupWizardPage
         ProductVersion version = getSelectedProductVersion();
         if (version != null)
         {
+          javaController.setJavaVersion(version.getRequiredJavaVersion());
           saveProductVersionSelection(catalogSelector.getCatalogManager(), version);
         }
       }
@@ -479,6 +584,11 @@ public class ProductPage extends SetupWizardPage
       ProductVersion productVersion = getSelectedProductVersion();
       getWizard().setSetupContext(SetupContext.create(getResourceSet(), productVersion));
     }
+  }
+
+  public void refreshJREs()
+  {
+    javaController.refresh();
   }
 
   private void updateDetails(boolean initial)

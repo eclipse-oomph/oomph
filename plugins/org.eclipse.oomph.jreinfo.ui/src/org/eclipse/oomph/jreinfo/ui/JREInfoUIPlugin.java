@@ -26,7 +26,7 @@ public final class JREInfoUIPlugin extends OomphUIPlugin
 
   public JREInfoUIPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { org.eclipse.oomph.internal.ui.UIPlugin.INSTANCE });
   }
 
   @Override

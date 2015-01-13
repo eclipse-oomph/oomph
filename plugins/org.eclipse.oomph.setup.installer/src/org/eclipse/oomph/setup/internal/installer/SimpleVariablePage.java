@@ -36,6 +36,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.setup.ui.JREDownloadHandler;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
@@ -240,7 +241,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       new Label(versionComposite, SWT.NONE);
 
-      bitness32Button = new ToolButton(versionComposite, SWT.RADIO, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit.png"), true);
+      bitness32Button = new ToolButton(versionComposite, SWT.RADIO, SetupInstallerPlugin.INSTANCE.getSWTImage("32bit.png"), true);
       bitness32Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       bitness32Button.setSelection(false);
       bitness32Button.addSelectionListener(new SelectionAdapter()
@@ -254,7 +255,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
       });
 
-      bitness64Button = new ToolButton(versionComposite, SWT.RADIO, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit.png"), true);
+      bitness64Button = new ToolButton(versionComposite, SWT.RADIO, SetupInstallerPlugin.INSTANCE.getSWTImage("64bit.png"), true);
       bitness64Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       bitness64Button.setSelection(true);
       bitness64Button.addSelectionListener(new SelectionAdapter()
@@ -282,8 +283,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
     javaViewer = new ComboViewer(javaCombo);
     javaViewer.setContentProvider(new ArrayContentProvider());
     javaViewer.setLabelProvider(new LabelProvider());
-    // LinkedHashMap<File, JRE> jres = dialog.getJREs();
-    // javaViewer.setInput(jres == null ? null : jres.values());
 
     javaButton = new ToolButton(this, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"), false);
     javaButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
@@ -297,7 +296,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    DownloadHandler downloadHandler = new DownloadHandler()
+    JREDownloadHandler downloadHandler = new JREDownloadHandler()
     {
       @Override
       protected Product getProduct()
@@ -308,12 +307,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     javaController = new JREController(javaLabel, javaViewer, downloadHandler)
     {
-      @Override
-      protected boolean isModelInitialized()
-      {
-        return dialog.getJREs() != null;
-      }
-
       @Override
       protected void modelEmpty(boolean empty)
       {

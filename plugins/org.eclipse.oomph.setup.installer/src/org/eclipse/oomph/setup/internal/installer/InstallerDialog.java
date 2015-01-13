@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
-import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
@@ -20,6 +19,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
+import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
@@ -53,9 +53,6 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-
-import java.io.File;
-import java.util.LinkedHashMap;
 
 /**
  * @author Eike Stepper
@@ -95,9 +92,13 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     return (Installer)getWizard();
   }
 
-  public void setJREs(LinkedHashMap<File, JRE> jres)
+  public void refreshJREs()
   {
-    // TODO
+    ProductPage page = (ProductPage)getWizard().getPage(ProductPage.PAGE_NAME);
+    if (page != null)
+    {
+      page.refreshJREs();
+    }
   }
 
   @Override

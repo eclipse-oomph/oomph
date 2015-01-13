@@ -215,11 +215,6 @@ public abstract class JREController implements ISelectionChangedListener
     {
       public void run()
       {
-        if (!isModelInitialized())
-        {
-          return;
-        }
-
         Object oldElement = ((IStructuredSelection)viewer.getSelection()).getFirstElement();
         JRE oldJRE = oldElement instanceof JRE ? (JRE)oldElement : jre;
 
@@ -285,8 +280,6 @@ public abstract class JREController implements ISelectionChangedListener
       control.setForeground(null);
     }
   }
-
-  protected abstract boolean isModelInitialized();
 
   private JRE getDefaultJRE(String javaVersion)
   {

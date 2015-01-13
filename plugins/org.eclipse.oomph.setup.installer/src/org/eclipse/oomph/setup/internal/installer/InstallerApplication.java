@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
@@ -45,7 +44,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -59,7 +57,7 @@ public class InstallerApplication implements IApplication
 
   private Mode mode = Mode.SIMPLE;
 
-  private LinkedHashMap<File, JRE> jres;
+  private boolean jresInitialized;
 
   private Integer run(final IApplicationContext context) throws Exception
   {
@@ -70,12 +68,13 @@ public class InstallerApplication implements IApplication
       @Override
       public void run()
       {
-        jres = JREManager.INSTANCE.getJREs();
+        JREManager.INSTANCE.getJREs();
+        jresInitialized = true;
 
         InstallerUI installerUI = installerDialog[0];
         if (installerUI != null)
         {
-          installerUI.setJREs(jres);
+          installerUI.refreshJREs();
         }
       }
     };
@@ -193,9 +192,10 @@ public class InstallerApplication implements IApplication
         installerDialog[0] = dialog;
       }
 
-      if (jres != null)
+      if (jresInitialized)
       {
-        installerDialog[0].setJREs(jres);
+        // TODO Do we need to make sure that this takes effect AFTER the UI is visible?
+        installerDialog[0].refreshJREs();
       }
 
       final int retcode = installerDialog[0].show();
