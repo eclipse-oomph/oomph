@@ -16,7 +16,8 @@ import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
-import org.eclipse.oomph.ui.StackComposite;
+import org.eclipse.oomph.ui.ShellMove;
+import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
 
@@ -24,12 +25,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -44,11 +42,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.swt.widgets.Widget;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -62,7 +56,21 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
   public static final int MARGIN_HEIGHT = 15;
 
-  private static final ShellMove SHELL_MOVE = new ShellMove();
+  private static final ShellMove SHELL_MOVE = new ShellMove()
+  {
+    @Override
+    public void hookControl(Control control)
+    {
+      control.setBackground(WHITE);
+      super.hookControl(control);
+    }
+
+    @Override
+    protected boolean shouldHookControl(Control control)
+    {
+      return super.shouldHookControl(control) || control instanceof SimpleInstallerPage;
+    }
+  };
 
   private static final boolean CAPTURE = false;
 
@@ -314,214 +322,6 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
   public static void hook(Control control)
   {
-    control.setBackground(WHITE);
-
-    Class<? extends Control> c = control.getClass();
-    boolean composite = c == Composite.class || c == StackComposite.class || control instanceof Shell || control instanceof SimpleInstallerPage;
-
-    if (composite || c == Label.class || c == Link.class)
-    {
-      control.addMouseTrackListener(SHELL_MOVE);
-      control.addMouseMoveListener(SHELL_MOVE);
-      control.addMouseListener(SHELL_MOVE);
-
-      if (composite)
-      {
-        for (Control child : ((Composite)control).getChildren())
-        {
-          hook(child);
-        }
-      }
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class ToolButton extends ToolBar
-  {
-    private final ToolItem toolItem;
-
-    public ToolButton(Composite parent, int style, Image image, boolean secondary)
-    {
-      super(parent, SWT.FLAT);
-
-      if (secondary)
-      {
-        toolItem = new SecondaryToolItem(this, style, image);
-      }
-      else
-      {
-        toolItem = new ToolItem(this, style);
-        toolItem.setImage(image);
-      }
-    }
-
-    public final ToolItem getToolItem()
-    {
-      return toolItem;
-    }
-
-    public void setImage(Image image)
-    {
-      if (toolItem instanceof SecondaryToolItem)
-      {
-        SecondaryToolItem secondaryToolItem = (SecondaryToolItem)toolItem;
-        secondaryToolItem.init(image);
-      }
-      else
-      {
-        toolItem.setImage(image);
-      }
-    }
-
-    public void addSelectionListener(SelectionListener listener)
-    {
-      toolItem.addSelectionListener(listener);
-    }
-
-    public boolean getSelection()
-    {
-      return toolItem.getSelection();
-    }
-
-    @Override
-    public String getToolTipText()
-    {
-      return toolItem.getToolTipText();
-    }
-
-    public void removeSelectionListener(SelectionListener listener)
-    {
-      toolItem.removeSelectionListener(listener);
-    }
-
-    public void setSelection(boolean selected)
-    {
-      toolItem.setSelection(selected);
-    }
-
-    @Override
-    public void setToolTipText(String string)
-    {
-      toolItem.setToolTipText(string);
-    }
-
-    @Override
-    protected void checkSubclass()
-    {
-      // Do nothing.
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class SecondaryToolItem extends ToolItem
-  {
-    private Image grayImage;
-
-    public SecondaryToolItem(ToolBar parent, int style, Image image)
-    {
-      super(parent, style);
-      init(image);
-    }
-
-    public SecondaryToolItem(ToolBar parent, int style, int index, Image image)
-    {
-      super(parent, style, index);
-      init(image);
-    }
-
-    @Override
-    public void dispose()
-    {
-      grayImage.dispose();
-      super.dispose();
-    }
-
-    @Override
-    protected void checkSubclass()
-    {
-      // Do nothing.
-    }
-
-    public void init(Image image)
-    {
-      if (grayImage != null)
-      {
-        grayImage.dispose();
-      }
-
-      grayImage = new Image(getDisplay(), image, SWT.IMAGE_GRAY);
-      setImage(grayImage);
-      setHotImage(image);
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static final class ShellMove implements MouseTrackListener, MouseMoveListener, MouseListener
-  {
-    private Point start;
-
-    public void mouseDoubleClick(MouseEvent e)
-    {
-      // Do nothing.
-    }
-
-    public void mouseDown(MouseEvent e)
-    {
-      if (e.button == 1)
-      {
-        start = new Point(e.x, e.y);
-      }
-    }
-
-    public void mouseUp(MouseEvent e)
-    {
-      if (start != null)
-      {
-        start = null;
-      }
-    }
-
-    public void mouseMove(MouseEvent e)
-    {
-      onMouseMove(e.widget, e.x, e.y);
-    }
-
-    public void mouseEnter(MouseEvent e)
-    {
-      // Do nothing.
-    }
-
-    public void mouseExit(MouseEvent e)
-    {
-      onMouseMove(e.widget, Integer.MIN_VALUE, Integer.MIN_VALUE);
-    }
-
-    public void mouseHover(MouseEvent e)
-    {
-      // Do nothing.
-    }
-
-    private void onMouseMove(Widget widget, int x, int y)
-    {
-      if (start != null)
-      {
-        if (widget instanceof Control)
-        {
-          Control control = (Control)widget;
-
-          Shell shell = control.getShell();
-          Point location = shell.getLocation();
-          location.x += x - start.x;
-          location.y += y - start.y;
-          shell.setLocation(location);
-        }
-      }
-    }
+    SHELL_MOVE.hookControl(control);
   }
 }
