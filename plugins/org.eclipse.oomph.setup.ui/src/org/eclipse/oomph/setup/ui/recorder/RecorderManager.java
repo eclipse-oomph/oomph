@@ -56,7 +56,7 @@ public final class RecorderManager
 
   private static ToolItem toolItem;
 
-  private final Listener displayListener = new DisplayListener();
+  private final DisplayListener displayListener = new DisplayListener();
 
   private Display display;
 
@@ -273,9 +273,11 @@ public final class RecorderManager
 
     public static void stop()
     {
+      INSTANCE.displayListener.stop();
+
       if (INSTANCE.display != null)
       {
-        UIUtil.syncExec(INSTANCE.display, new Runnable()
+        UIUtil.asyncExec(INSTANCE.display, new Runnable()
         {
           public void run()
           {
@@ -293,8 +295,20 @@ public final class RecorderManager
    */
   private final class DisplayListener implements Listener
   {
+    private boolean stopped;
+
+    public void stop()
+    {
+      stopped = true;
+    }
+
     public void handleEvent(Event event)
     {
+      if (stopped)
+      {
+        return;
+      }
+
       if (event.widget instanceof Shell)
       {
         final Shell shell = (Shell)event.widget;
