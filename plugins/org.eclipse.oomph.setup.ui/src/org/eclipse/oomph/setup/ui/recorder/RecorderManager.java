@@ -281,11 +281,12 @@ public final class RecorderManager
         {
           public void run()
           {
-            INSTANCE.display.removeListener(SWT.Skin, INSTANCE.displayListener);
+            if (!INSTANCE.display.isDisposed())
+            {
+              INSTANCE.display.removeListener(SWT.Skin, INSTANCE.displayListener);
+            }
           }
         });
-
-        INSTANCE.display = null;
       }
     }
   }
