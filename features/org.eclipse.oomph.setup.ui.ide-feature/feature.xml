@@ -10,7 +10,7 @@
     Eike Stepper - initial API and implementation
 -->
 <feature
-      id="org.eclipse.oomph.setup.sdk"
+      id="org.eclipse.oomph.setup.ui.ide"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName"
@@ -81,10 +81,6 @@
 
    <includes
          id="org.eclipse.oomph.setup.workingsets"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.ui.ide"
          version="0.0.0"/>
 
 </feature>

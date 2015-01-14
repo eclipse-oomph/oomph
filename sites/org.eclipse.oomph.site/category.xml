@@ -70,6 +70,9 @@
    <feature url="features/org.eclipse.oomph.setup.jdt_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.jdt" version="1.0.0.qualifier">
       <category name="org.eclipse.oomph.setup.category"/>
    </feature>
+   <feature url="features/org.eclipse.oomph.setup.ui.ide_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.ui.ide" version="1.0.0.qualifier">
+      <category name="org.eclipse.oomph.setup.category"/>
+   </feature>
    <feature url="features/org.eclipse.oomph.setup.workbench_1.0.0.qualifier.jar" id="org.eclipse.oomph.setup.workbench" version="1.0.0.qualifier">
       <category name="org.eclipse.oomph.setup.category"/>
    </feature>
