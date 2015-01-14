@@ -24,6 +24,7 @@ import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -161,7 +162,8 @@ public class CatalogManager
     EList<ProductCatalog> productCatalogs = selection.getProductCatalogs();
     for (ProductCatalog productCatalog : index.getProductCatalogs())
     {
-      if (!"catalog".equals(EcoreUtil.getURI(productCatalog).scheme()))
+      URI uri = EcoreUtil.getURI(productCatalog);
+      if (!"catalog".equals(uri.scheme()) && !ProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(productCatalog.getName()))
       {
         productCatalogs.add(productCatalog);
       }

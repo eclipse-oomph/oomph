@@ -57,9 +57,11 @@ import java.util.Set;
  */
 public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
 {
-  private static final Date NOW = new Date();
+  public static final String SELF_PRODUCT_CATALOG_NAME = "self";
 
   private static final URI SELF_PRODUCT_CATALOG_URI = URI.createURI("catalog:/self-product-catalog.setup");
+
+  private static final Date NOW = new Date();
 
   @Override
   public boolean canHandle(URI uri)
@@ -108,7 +110,7 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
   private ProductCatalog create()
   {
     ProductCatalog productCatalog = SetupFactory.eINSTANCE.createProductCatalog();
-    productCatalog.setName("self");
+    productCatalog.setName(SELF_PRODUCT_CATALOG_NAME);
     productCatalog.setLabel("Self Products");
     productCatalog.setDescription("The product catalog for the self product and the empty product");
 
