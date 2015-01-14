@@ -49,8 +49,6 @@ public abstract class JREController implements ISelectionChangedListener
 
   private final Request.Handler downloadHandler;
 
-  private boolean settingInput;
-
   private String javaVersion;
 
   private int bitness = JREManager.BITNESS;
@@ -58,6 +56,8 @@ public abstract class JREController implements ISelectionChangedListener
   private JREFilter jreFilter;
 
   private JRE jre;
+
+  private boolean refreshing;
 
   public JREController(Label label, StructuredViewer viewer, Request.Handler downloadHandler)
   {
@@ -95,9 +95,9 @@ public abstract class JREController implements ISelectionChangedListener
         text += " VM";
         setLabel(text);
       }
-
-      refresh();
     }
+
+    refresh();
   }
 
   public final int getBitness()
@@ -110,8 +110,9 @@ public abstract class JREController implements ISelectionChangedListener
     if (this.bitness != bitness)
     {
       this.bitness = bitness;
-      refresh();
     }
+
+    refresh();
   }
 
   public final JRE getJRE()
@@ -187,11 +188,6 @@ public abstract class JREController implements ISelectionChangedListener
 
   public void selectionChanged(SelectionChangedEvent event)
   {
-    if (settingInput)
-    {
-      return;
-    }
-
     Object element = ((IStructuredSelection)viewer.getSelection()).getFirstElement();
     if (element instanceof JRE)
     {
@@ -202,7 +198,7 @@ public abstract class JREController implements ISelectionChangedListener
     {
       doSetJRE(null);
 
-      if (element == NO_JRE_FOUND)
+      if (element == NO_JRE_FOUND && !refreshing)
       {
         configureJREs();
       }
@@ -215,15 +211,15 @@ public abstract class JREController implements ISelectionChangedListener
     {
       public void run()
       {
-        Object oldElement = ((IStructuredSelection)viewer.getSelection()).getFirstElement();
-        JRE oldJRE = oldElement instanceof JRE ? (JRE)oldElement : jre;
-
-        jreFilter = new JREFilter(javaVersion, bitness, null);
-        Collection<JRE> jres = JREManager.INSTANCE.getJREs(jreFilter).values();
-
+        refreshing = true;
         try
         {
-          settingInput = true;
+          Object oldElement = ((IStructuredSelection)viewer.getSelection()).getFirstElement();
+          JRE oldJRE = oldElement instanceof JRE ? (JRE)oldElement : jre;
+
+          jreFilter = new JREFilter(javaVersion, bitness, null);
+          Collection<JRE> jres = JREManager.INSTANCE.getJREs(jreFilter).values();
+
           viewer.setInput(jres);
 
           if (jres.isEmpty())
@@ -254,7 +250,7 @@ public abstract class JREController implements ISelectionChangedListener
         }
         finally
         {
-          settingInput = false;
+          refreshing = false;
         }
       }
     });

@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
+import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.p2.core.AgentManager;
@@ -489,7 +490,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
     if (selectedProductVersion != productVersion)
     {
       selectedProductVersion = productVersion;
-      javaController.setJavaVersion(productVersion.getRequiredJavaVersion());
+
+      String requiredJavaVersion = productVersion.getRequiredJavaVersion();
+      javaController.setJavaVersion(requiredJavaVersion);
 
       ProductPage.saveProductVersionSelection(installer.getCatalogManager(), selectedProductVersion);
     }
@@ -807,7 +810,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
       System.clearProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION);
     }
 
-    String vmPath = new File(javaController.getJRE().getJavaHome(), "bin").getAbsolutePath();
+    JRE jre = javaController.getJRE();
+    String vmPath = new File(jre.getJavaHome(), "bin").getAbsolutePath();
 
     ResourceSet resourceSet = installer.getResourceSet();
     URIConverter uriConverter = resourceSet.getURIConverter();

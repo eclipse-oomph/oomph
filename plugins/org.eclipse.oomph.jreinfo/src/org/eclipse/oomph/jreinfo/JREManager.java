@@ -165,7 +165,7 @@ public final class JREManager
     String javaHome = properties.get(getDefaultsKey(bitness, javaVersion));
     if (javaHome == null)
     {
-      javaHome = properties.get(getDefaultsKey(bitness, javaVersion));
+      javaHome = properties.get(getDefaultsKey(bitness, null));
     }
 
     return javaHome;
@@ -176,7 +176,7 @@ public final class JREManager
     File defaultsFile = getDefaultsFile();
     Map<String, String> properties = PropertiesUtil.getProperties(defaultsFile);
     properties.put(getDefaultsKey(bitness, javaVersion), javaHome);
-    properties.put(getDefaultsKey(bitness, "*"), javaHome);
+    properties.put(getDefaultsKey(bitness, null), javaHome);
     PropertiesUtil.saveProperties(defaultsFile, properties, true);
   }
 
@@ -270,9 +270,14 @@ public final class JREManager
     return Integer.toString(bitness) + "/" + sanitizeKey(javaVersion);
   }
 
-  private static String sanitizeKey(String key)
+  private static String sanitizeKey(String javaVersion)
   {
-    return key.replace(' ', '_').replace('/', '_').replace('\\', '_').replace('=', '_');
+    if (javaVersion == null)
+    {
+      return "*";
+    }
+
+    return javaVersion.replace(' ', '_').replace('/', '_').replace('\\', '_').replace('=', '_');
   }
 
   private static List<JRE> getJREs(JREFilter filter, Collection<File> javaHomes)

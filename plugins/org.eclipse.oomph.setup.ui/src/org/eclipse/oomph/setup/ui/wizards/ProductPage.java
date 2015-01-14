@@ -378,7 +378,9 @@ public class ProductPage extends SetupWizardPage
         ProductVersion version = getSelectedProductVersion();
         if (version != null)
         {
-          javaController.setJavaVersion(version.getRequiredJavaVersion());
+          String requiredJavaVersion = version.getRequiredJavaVersion();
+          javaController.setJavaVersion(requiredJavaVersion);
+
           saveProductVersionSelection(catalogSelector.getCatalogManager(), version);
         }
       }
