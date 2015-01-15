@@ -53,6 +53,26 @@ for f in *.zip; do
     rename .zip .tar.gz $PRODUCTS/$f
   else
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
+    
+    if [[ $f == *win32* ]]; then
+      if [[ $f == *x86_64* ]]; then
+        bitness=64
+      else
+        bitness=32              
+      fi
+      
+      marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
+      
+      cat /opt/public/tools/oomph/extractor-$bitness.exe \
+        $marker \
+        $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar \
+        $marker \
+        $GIT/plugins/org.eclipse.oomph.extractor/Concat/descriptor-$bitness.txt \
+        $marker \
+        $PRODUCTS/$f \
+        $marker \
+        > oomph-extractor-$bitness.exe
+    fi
   fi
 done
 
