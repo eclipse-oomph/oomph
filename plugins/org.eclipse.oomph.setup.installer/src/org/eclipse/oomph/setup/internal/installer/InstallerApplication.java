@@ -55,6 +55,8 @@ public class InstallerApplication implements IApplication
 
   private static final Preference PREF_MODE = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("mode");
 
+  private static final boolean SKIP_COCOA_MENU = PropertiesUtil.isProperty("oomph.cocoa.menu.skip");
+
   private Mode mode = Mode.SIMPLE;
 
   private boolean jresInitialized;
@@ -114,7 +116,7 @@ public class InstallerApplication implements IApplication
     final Display display = Display.getDefault();
     Display.setAppName(AbstractSetupDialog.SHELL_TEXT);
 
-    if (Platform.WS_COCOA.equals(Platform.getWS()))
+    if (!SKIP_COCOA_MENU && Platform.WS_COCOA.equals(Platform.getWS()))
     {
       Runnable about = new Runnable()
       {
