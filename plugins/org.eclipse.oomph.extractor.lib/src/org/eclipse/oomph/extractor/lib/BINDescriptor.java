@@ -41,8 +41,15 @@ public final class BINDescriptor
     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
     format = readInt(reader);
-    jre = new JRE(readInt(reader), readInt(reader), readInt(reader), readInt(reader));
+
+    int major = readInt(reader);
+    int minor = readInt(reader);
+    int micro = readInt(reader);
+    int bitness = readInt(reader);
+
+    jre = new JRE(major, minor, micro, bitness);
     jdk = readInt(reader);
+
     launcherPath = reader.readLine();
     iniPath = reader.readLine();
     productName = reader.readLine();
