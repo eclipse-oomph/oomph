@@ -14,6 +14,7 @@ import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
@@ -330,11 +331,13 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    file = new File(context.getProductLocation(), context.getOS().getEclipseIni());
+    OS os = context.getOS();
+    file = new File(context.getProductLocation(), os.getEclipseIni());
     boolean result = !file.exists() || createNewContent(context);
-    // Ensure that the perform recomputes the contents because they could be modified by other tasks between now and
-    // when doPeform is called.
+
+    // Ensure that the perform recomputes the contents because they could be modified by other tasks between now and when doPeform is called.
     contents = null;
+
     return result;
   }
 

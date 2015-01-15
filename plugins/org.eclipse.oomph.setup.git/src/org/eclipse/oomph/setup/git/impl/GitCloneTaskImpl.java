@@ -20,6 +20,7 @@ import org.eclipse.oomph.setup.git.GitPackage;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.util.FileUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -749,7 +750,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   private static boolean configureLineEndingConversion(SetupTaskContext context, StoredConfig config) throws Exception
   {
-    if (context.getOS().isLineEndingConversionNeeded())
+    OS os = context.getOS();
+    if (os.isLineEndingConversionNeeded())
     {
       if (context.isPerforming())
       {
