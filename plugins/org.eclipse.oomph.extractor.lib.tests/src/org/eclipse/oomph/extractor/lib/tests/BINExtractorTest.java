@@ -17,8 +17,7 @@ import org.eclipse.oomph.extractor.lib.BINExtractor;
  */
 public class BINExtractorTest
 {
-  private static final String[] ARGS = { "../org.eclipse.oomph.extractor/Debug/extractor.exe", "unzipped", System.getProperty("java.home"),
-      "unzipped/launcher.txt" };
+  private static final String[] ARGS = { "../org.eclipse.oomph.extractor/Win64-Debug/oomph-extractor-64.exe", "extracted", System.getProperty("java.home") };
 
   public static void main(String[] args) throws Exception
   {

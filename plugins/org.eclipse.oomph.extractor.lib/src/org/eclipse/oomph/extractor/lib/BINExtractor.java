@@ -50,7 +50,7 @@ public final class BINExtractor extends IO
     int[] failure = extractorStream.getFailure();
 
     drain(extractorStream); // Find the marker that's embedded via extractor.h
-    drain(extractorStream); // Find the marker in front of libdata.jar
+    drain(new KMPInputStream(stream, pattern, failure)); // Find the marker in front of libdata.jar
     drain(new KMPInputStream(stream, pattern, failure)); // Find the marker in front of the descriptor
 
     KMPInputStream descriptorStream = new KMPInputStream(stream, pattern, failure);
