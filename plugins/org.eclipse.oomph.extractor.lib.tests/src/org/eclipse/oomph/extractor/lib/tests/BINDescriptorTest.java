@@ -11,7 +11,7 @@
 package org.eclipse.oomph.extractor.lib.tests;
 
 import org.eclipse.oomph.extractor.lib.BINDescriptor;
-import org.eclipse.oomph.extractor.lib.JRE;
+import org.eclipse.oomph.extractor.lib.JREData;
 
 import org.junit.Assert;
 
@@ -38,7 +38,7 @@ public class BINDescriptorTest
     InputStream stream = new ByteArrayInputStream(content.getBytes());
     BINDescriptor descriptor = new BINDescriptor(stream);
 
-    JRE jre = descriptor.getJRE();
+    JREData jre = descriptor.getJRE();
     Assert.assertEquals("major", major, jre.getMajor());
     Assert.assertEquals("minor", minor, jre.getMinor());
     Assert.assertEquals("micro", micro, jre.getMicro());

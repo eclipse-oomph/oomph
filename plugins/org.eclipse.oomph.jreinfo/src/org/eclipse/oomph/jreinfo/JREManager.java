@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.jreinfo;
 
+import org.eclipse.oomph.extractor.lib.JREData;
 import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
@@ -352,7 +353,7 @@ public final class JREManager
   {
     try
     {
-      return org.eclipse.oomph.extractor.lib.JRE.determineBitness();
+      return JREData.determineBitness();
     }
     catch (Throwable ex)
     {

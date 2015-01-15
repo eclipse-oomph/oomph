@@ -14,7 +14,7 @@ package org.eclipse.oomph.extractor.lib;
 /**
  * @author Eike Stepper
  */
-public final class JRE
+public final class JREData
 {
   private final int major;
 
@@ -24,7 +24,7 @@ public final class JRE
 
   private final int bitness;
 
-  public JRE(int major, int minor, int micro, int bitness)
+  public JREData(int major, int minor, int micro, int bitness)
   {
     this.major = major;
     this.minor = minor;
@@ -32,12 +32,12 @@ public final class JRE
     this.bitness = bitness;
   }
 
-  public JRE(String args)
+  public JREData(String args)
   {
     this(args.split(" "));
   }
 
-  public JRE(String[] args)
+  public JREData(String[] args)
   {
     major = parseInt(args[0]);
     minor = parseInt(args[1]);
@@ -45,7 +45,7 @@ public final class JRE
     bitness = parseInt(args[3]);
   }
 
-  public JRE()
+  public JREData()
   {
     String version = System.getProperty("java.version");
     String[] segments = version.split("\\.");
@@ -103,7 +103,7 @@ public final class JRE
     return bitness;
   }
 
-  public boolean satisfies(JRE requirement)
+  public boolean satisfies(JREData requirement)
   {
     if (major < requirement.major)
     {

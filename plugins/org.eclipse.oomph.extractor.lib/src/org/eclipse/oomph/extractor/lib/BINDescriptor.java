@@ -22,7 +22,7 @@ public final class BINDescriptor
 {
   private final int format;
 
-  private final JRE jre;
+  private final JREData jre;
 
   private final int jdk;
 
@@ -47,7 +47,7 @@ public final class BINDescriptor
     int micro = readInt(reader);
     int bitness = readInt(reader);
 
-    jre = new JRE(major, minor, micro, bitness);
+    jre = new JREData(major, minor, micro, bitness);
     jdk = readInt(reader);
 
     launcherPath = reader.readLine();
@@ -62,7 +62,7 @@ public final class BINDescriptor
     return format;
   }
 
-  public JRE getJRE()
+  public JREData getJRE()
   {
     return jre;
   }

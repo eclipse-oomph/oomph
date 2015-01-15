@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.jreinfo;
 
+import org.eclipse.oomph.extractor.lib.JREData;
 import org.eclipse.oomph.extractor.lib.JREValidator;
 import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
 import org.eclipse.oomph.util.IOUtil;
@@ -57,7 +58,7 @@ final class InfoManager
       {
         if (canonicalJavaHome.isDirectory())
         {
-          org.eclipse.oomph.extractor.lib.JRE result = testJRE(canonicalJavaHome);
+          JREData result = testJRE(canonicalJavaHome);
           if (result != null)
           {
             int major = result.getMajor();
@@ -128,7 +129,7 @@ final class InfoManager
     return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("infos.txt").toOSString());
   }
 
-  private static org.eclipse.oomph.extractor.lib.JRE testJRE(File javaHome) throws Exception
+  private static JREData testJRE(File javaHome) throws Exception
   {
     Process process = null;
 
@@ -145,7 +146,7 @@ final class InfoManager
       String line = bufferedReader.readLine();
       if (line != null)
       {
-        return new org.eclipse.oomph.extractor.lib.JRE(line);
+        return new JREData(line);
       }
     }
     catch (Throwable ex)

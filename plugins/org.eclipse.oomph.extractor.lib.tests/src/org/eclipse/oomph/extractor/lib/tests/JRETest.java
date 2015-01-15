@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.extractor.lib.tests;
 
-import org.eclipse.oomph.extractor.lib.JRE;
+import org.eclipse.oomph.extractor.lib.JREData;
 
 /**
  * @author Eike Stepper
@@ -19,7 +19,7 @@ public class JRETest
 {
   public static void main(String[] args) throws Exception
   {
-    JRE jre = new JRE();
+    JREData jre = new JREData();
     System.out.println("major:   " + jre.getMajor());
     System.out.println("minor:   " + jre.getMinor());
     System.out.println("micro:   " + jre.getMicro());
