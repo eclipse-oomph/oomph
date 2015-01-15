@@ -40,12 +40,11 @@ public final class BINExtractor extends IO
     String executable = args[0];
     String targetFolder = args[1];
     String javaHome = args[2];
-    String marker = args[3];
 
     FileInputStream in = new FileInputStream(executable);
     BufferedInputStream stream = new BufferedInputStream(in);
 
-    byte[] pattern = marker.getBytes("UTF-8");
+    byte[] pattern = BINMarker.getBytes();
 
     KMPInputStream extractorStream = new KMPInputStream(stream, pattern);
     int[] failure = extractorStream.getFailure();
