@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+
+  Contributors:
+    Eike Stepper - initial API and implementation
+-->
+<project name="get-libdata" default="install">
+
+	<target name="install">
+		<fail message="Specifiy -Dextractor.project=..." unless="extractor.project" />
+
+		<delete includeemptydirs="true" failonerror="false" verbose="false">
+			<fileset dir="${extractor.project}">
+				<include name="Libdata/**" />
+			</fileset>
+		</delete>
+
+		<p2.director metadatarepository="http://download.eclipse.org/oomph/updates/latest" artifactrepository="http://download.eclipse.org/oomph/updates/latest" destination="${extractor.project}/Libdata/tmp" profile="tmp" roaming="true">
+			<iu id="org.eclipse.oomph.extractor.lib" />
+		</p2.director>
+
+		<move tofile="${extractor.project}/Libdata/libdata.jar">
+			<fileset dir="${extractor.project}">
+				<include name="Libdata/tmp/plugins/*.jar" />
+			</fileset>
+		</move>
+
+		<delete includeemptydirs="true" failonerror="false" verbose="false">
+			<fileset dir="${extractor.project}">
+				<include name="Libdata/tmp/**" />
+			</fileset>
+		</delete>
+
+	</target>
+
+</project>

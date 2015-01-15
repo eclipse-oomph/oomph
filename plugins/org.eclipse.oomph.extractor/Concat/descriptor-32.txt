@@ -1,0 +1,11 @@
+1
+1
+7
+0
+32
+0
+oomph.exe
+oomph.ini
+Oomph Installer
+http://wiki.eclipse.org/Eclipse_Oomph_Installer
+http://download.eclipse.org/oomph/jre/128x128.png
