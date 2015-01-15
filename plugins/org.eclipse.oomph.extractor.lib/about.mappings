@@ -1,4 +1,3 @@
-#UpdateTrigger=201501140744
-0=${build.id}
-1=${git.branch}
-2=${git.commit}
+#########################################################
+## This file must not be modified by the build system! ##
+#########################################################
