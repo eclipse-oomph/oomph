@@ -14,6 +14,7 @@ import org.eclipse.oomph.p2.Configuration;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
+import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -281,7 +282,26 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_TargletTask_type");
+    TargletTask targletTask = (TargletTask)object;
+
+    StringBuilder builder = new StringBuilder();
+    Set<String> added = new HashSet<String>();
+
+    for (Targlet targlet : targletTask.getTarglets())
+    {
+      String name = targlet.getName();
+      if (added.add(name))
+      {
+        if (builder.length() != 0)
+        {
+          builder.append(" + ");
+        }
+
+        builder.append(name);
+      }
+    }
+
+    return getString("_UI_TargletTask_type") + " (" + builder + ")";
   }
 
   /**

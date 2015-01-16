@@ -55,7 +55,6 @@ import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
-import org.eclipse.equinox.p2.internal.repository.tools.MirrorApplication;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
@@ -111,9 +110,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   private static final boolean FORCE = "true".equals(PropertiesUtil.getProperty("oomph.setup.p2.force"));
 
   private static final Object FIRST_CALL_DETECTION_KEY = new Object();
-
-  @SuppressWarnings("unused")
-  private static final Class<MirrorApplication> MIRROR_CLASS = MirrorApplication.class;
 
   /**
    * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
@@ -501,7 +497,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     if (!StringUtil.isEmpty(overriddenLabel))
     {
       String label = getLabel();
-      if (!StringUtil.isEmpty(label))
+      if (!StringUtil.isEmpty(label) && !overriddenLabel.contains(label))
       {
         overriddenLabel += " + " + label;
       }
