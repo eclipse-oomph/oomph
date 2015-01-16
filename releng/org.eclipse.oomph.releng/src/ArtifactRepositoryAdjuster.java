@@ -30,7 +30,7 @@ public final class ArtifactRepositoryAdjuster
   private static final Pattern REPOSITORY_PATTERN = Pattern.compile("\\s*<repository.*?>\\s*");
 
   private static final Pattern FEATURE_PATTERN = Pattern
-      .compile("\\s*<artifact\\s+classifier\\s*=\\s*['\"]org.eclipse.update.feature['\"]\\s+id\\s*=\\s*['\"](.*?)['\"].*?>\\s*");
+      .compile("\\s*<artifact\\s+classifier\\s*=\\s*['\"]org.eclipse.update.feature['\"]\\s+id\\s*=\\s*['\"](org\\.eclipse\\.oomph.*?)['\"].*?>\\s*");
 
   private ArtifactRepositoryAdjuster()
   {
