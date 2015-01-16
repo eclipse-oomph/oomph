@@ -43,36 +43,65 @@ for f in *.zip; do
   sed -e 's/^Oomph.*Installer$/Oomph Installer/' $inifile > $inifile.tmp
   mv $inifile.tmp $inifile
 
-  echo "-Doomph.installer.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/products/repository" >> $inifile
-  echo "-Doomph.update.url=http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" >> $inifile
+  echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/repository" >> $inifile
+  echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> $inifile
 
   if [[ $f == *macosx* ]]; then
+    if [["$PACK_AND_SIGN" == true ]]; then
+      # MacOS executable signing is currently broken!
+      # See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
+      #
+      #echo "  Signing oomph.app"
+      #zip -r -q unsigned.zip oomph.app
+      #rm -rf oomph.app
+      #curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
+      #unzip -qq signed.zip
+      #rm -f signed.zip
+    fi
+    
     rm oomph
     ln -s oomph.app/Contents/MacOS/oomph oomph
     tar -czf $PRODUCTS/$f *
     rename .zip .tar.gz $PRODUCTS/$f
-  else
+
+  elif [[ $f == *win32* ]]; then
+    rm -f eclipsec.exe
+
+    if [["$PACK_AND_SIGN" == true ]]; then
+      echo "  Signing oomph.exe"
+      curl -o signed.exe -F filedata=@oomph.exe http://build.eclipse.org:31338/winsign.php
+      mv signed.exe oomph.exe
+    fi
+    
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
     
-    if [[ $f == *win32* ]]; then
-      if [[ $f == *x86_64* ]]; then
-        bitness=64
-      else
-        bitness=32              
-      fi
-      
-      marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
-      
-      cat /opt/public/tools/oomph/extractor-$bitness.exe \
-        $marker \
-        $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar \
-        $marker \
-        $GIT/plugins/org.eclipse.oomph.extractor/Concat/descriptor-$bitness.txt \
-        $marker \
-        $PRODUCTS/$f \
-        $marker \
-        > $PRODUCTS/oomph-extractor-win$bitness.exe
+    if [[ $f == *x86_64* ]]; then
+      bitness=64
+    else
+      bitness=32              
     fi
+    
+    extractor=$PRODUCTS/oomph-extractor-win$bitness.exe
+    marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
+    
+    cat /opt/public/tools/oomph/extractor-$bitness.exe \
+      $marker \
+      $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar \
+      $marker \
+      $GIT/plugins/org.eclipse.oomph.extractor/Concat/descriptor-$bitness.txt \
+      $marker \
+      $PRODUCTS/$f \
+      $marker \
+      > $extractor
+      
+    if [["$PACK_AND_SIGN" == true ]]; then
+      echo "  Signing $extractor"
+      curl -o $extractor-signed -F filedata=@extractor http://build.eclipse.org:31338/winsign.php
+      mv extractor-signed $extractor
+    fi
+
+  else
+    zip -r -9 -qq --symlinks $PRODUCTS/$f *
   fi
 done
 

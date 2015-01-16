@@ -115,56 +115,12 @@ rm -rf $PRODUCTS.tmp
 mkdir $PRODUCTS.tmp
 
 cd $WORKSPACE/products
-for f in *.zip *.tar.gz; do
+for f in *.exe *.zip *.tar.gz; do
   echo "Promoting $f"
-
-  cd $WORKSPACE
-  rm -rf $WORKSPACE/tmp
-  mkdir $WORKSPACE/tmp
-  cd $WORKSPACE/tmp
-
-  if [[ $f == *.zip ]]; then
-    unzip -qq $WORKSPACE/products/$f
-  else
-    tar -xzf $WORKSPACE/products/$f
-  fi
-
-  inifile=oomph.ini
-  if [[ $f == *macosx* ]]; then
-    inifile=oomph.app/Contents/MacOS/$inifile
-
-    # MacOS executable signing is currently broken!
-    # See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
-    #
-    #echo "  Signing oomph.app"
-    #zip -r -q unsigned.zip oomph.app
-    #rm -rf oomph.app
-    #curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
-    #unzip -qq signed.zip
-    #rm -f signed.zip
-  elif [[ $f == *win32* ]]; then
-    rm -f eclipsec.exe
-
-    echo "  Signing oomph.exe"
-    curl -o signed.exe -F filedata=@oomph.exe http://build.eclipse.org:31338/winsign.php
-    mv signed.exe oomph.exe
-  fi
-
-  head -n -2 $inifile > $inifile.tmp
-  mv $inifile.tmp $inifile
-  echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/repository" >> $inifile
-  echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> $inifile
-
-  if [[ $f == *.zip ]]; then
-    zip -r -9 -q $PRODUCTS.tmp/$f *
-  else
-    tar -czf $PRODUCTS.tmp/$f *
-  fi
+  cp -a $f $PRODUCTS.tmp
 done
 
 cd $WORKSPACE
-rm -rf $WORKSPACE/tmp
-
 cp -a $WORKSPACE/products/repository $PRODUCTS.tmp
 $BASH $SCRIPTS/adjustArtifactRepository.sh \
   $PRODUCTS.tmp/repository \
