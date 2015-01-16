@@ -94,6 +94,7 @@ import java.io.File;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -104,9 +105,11 @@ import java.util.Map;
  */
 public class SimpleVariablePage extends SimpleInstallerPage
 {
-  private static final Preference PREF_INSTALL_CONTAINER = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installContainer");
-
   private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled");
+
+  private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot");
+
+  private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt");
 
   private static final String TEXT_LOG = "Show installation log";
 
@@ -150,7 +153,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private ToolButton poolButton;
 
-  private String installContainer;
+  private String installRoot;
 
   private String installFolder;
 
@@ -351,9 +354,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
         dialog.setText(AbstractSetupDialog.SHELL_TEXT);
         dialog.setMessage("Select installation folder...");
 
-        if (!StringUtil.isEmpty(installContainer))
+        if (!StringUtil.isEmpty(installRoot))
         {
-          dialog.setFilterPath(installContainer);
+          dialog.setFilterPath(installRoot);
         }
 
         String dir = dialog.open();
@@ -610,9 +613,25 @@ public class SimpleVariablePage extends SimpleInstallerPage
       name = name.substring(lastDot + 1);
     }
 
-    if (installContainer == null)
+    if (installRoot == null)
     {
-      installContainer = PREF_INSTALL_CONTAINER.get(PropertiesUtil.USER_HOME);
+      if (FILE_INSTALL_ROOT.isFile())
+      {
+        List<String> lines = IOUtil.readLines(FILE_INSTALL_ROOT, "UTF-8");
+        if (lines != null && !lines.isEmpty())
+        {
+          installRoot = lines.get(0);
+          if (installRoot.length() == 0)
+          {
+            installRoot = null;
+          }
+        }
+      }
+
+      if (installRoot == null)
+      {
+        installRoot = PREF_INSTALL_ROOT.get(PropertiesUtil.USER_HOME);
+      }
     }
 
     for (int i = 1; i < 1000; i++)
@@ -623,7 +642,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         filename += i;
       }
 
-      File folder = new File(installContainer, filename);
+      File folder = new File(installRoot, filename);
       if (!folder.exists())
       {
         return folder.getAbsolutePath();
@@ -822,7 +841,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     UserAdjuster userAdjuster = new UserAdjuster();
     userAdjuster.adjust(user, installFolder);
-    PREF_INSTALL_CONTAINER.set(installContainer);
+    IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
 
     SimplePrompter prompter = new SimplePrompter();
 
@@ -944,7 +963,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       File parentFolder = folder.getParentFile();
       if (parentFolder != null)
       {
-        installContainer = parentFolder.getAbsolutePath();
+        installRoot = parentFolder.getAbsolutePath();
       }
     }
     catch (Exception ex)
