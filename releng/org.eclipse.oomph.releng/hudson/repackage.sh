@@ -71,7 +71,7 @@ for f in *.zip; do
         $marker \
         $PRODUCTS/$f \
         $marker \
-        > oomph-extractor-$bitness.exe
+        > $PRODUCTS/oomph-extractor-win$bitness.exe
     fi
   fi
 done
