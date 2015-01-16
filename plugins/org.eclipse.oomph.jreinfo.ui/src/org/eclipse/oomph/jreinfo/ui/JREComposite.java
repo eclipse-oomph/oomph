@@ -91,9 +91,9 @@ public class JREComposite extends Composite
 
   private TreeViewer treeViewer;
 
-  private Button downloadButton;
-
   private Button searchButton;
+
+  private Button downloadButton;
 
   private Button removeButton;
 
@@ -198,6 +198,18 @@ public class JREComposite extends Composite
     buttonComposite.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     buttonComposite.setLayout(UIUtil.createGridLayout(1));
 
+    searchButton = new Button(buttonComposite, SWT.NONE);
+    searchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    searchButton.setText("&Search...");
+    searchButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        searchPressed();
+      }
+    });
+
     if (downloadHandler != null)
     {
       downloadButton = new Button(buttonComposite, SWT.NONE);
@@ -212,18 +224,6 @@ public class JREComposite extends Composite
         }
       });
     }
-
-    searchButton = new Button(buttonComposite, SWT.NONE);
-    searchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    searchButton.setText("&Search...");
-    searchButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        searchPressed();
-      }
-    });
 
     removeButton = new Button(buttonComposite, SWT.NONE);
     removeButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
@@ -321,19 +321,6 @@ public class JREComposite extends Composite
   {
   }
 
-  protected void downloadPressed()
-  {
-    Request request = new Request("http://download.eclipse.org/oomph/jre/");
-
-    JREFilter filter = getJREFilter();
-    if (filter != null)
-    {
-      request.put("vm", filter.getQuery());
-    }
-
-    downloadHandler.handleRequest(request);
-  }
-
   protected void searchPressed()
   {
     File rootFolder = null;
@@ -405,6 +392,19 @@ public class JREComposite extends Composite
         //$FALL-THROUGH$
       }
     }
+  }
+
+  protected void downloadPressed()
+  {
+    Request request = new Request("http://download.eclipse.org/oomph/jre/");
+
+    JREFilter filter = getJREFilter();
+    if (filter != null)
+    {
+      request.put("vm", filter.getQuery());
+    }
+
+    downloadHandler.handleRequest(request);
   }
 
   protected void removePressed()
