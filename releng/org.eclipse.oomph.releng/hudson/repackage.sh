@@ -47,7 +47,7 @@ for f in *.zip; do
   echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> $inifile
 
   if [[ $f == *macosx* ]]; then
-    if [["$PACK_AND_SIGN" == true ]]; then
+    if [[ "$PACK_AND_SIGN" == true ]]; then
       # MacOS executable signing is currently broken!
       # See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
       #
@@ -67,7 +67,7 @@ for f in *.zip; do
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
 
-    if [["$PACK_AND_SIGN" == true ]]; then
+    if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing oomph.exe"
       curl -o signed.exe -F filedata=@oomph.exe http://build.eclipse.org:31338/winsign.php
       mv signed.exe oomph.exe
@@ -81,7 +81,7 @@ for f in *.zip; do
       bitness=32              
     fi
     
-    extractor=$PRODUCTS/oomph-extractor-win$bitness.exe
+    extractor=oomph-extractor-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
     
     cat /opt/public/tools/oomph/extractor-$bitness.exe \
@@ -92,12 +92,12 @@ for f in *.zip; do
       $marker \
       $PRODUCTS/$f \
       $marker \
-      > $extractor
+      > $PRODUCTS/$extractor
       
-    if [["$PACK_AND_SIGN" == true ]]; then
+    if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing $extractor"
-      curl -o $extractor-signed -F filedata=@extractor http://build.eclipse.org:31338/winsign.php
-      mv extractor-signed $extractor
+      curl -o $PRODUCTS/$extractor-signed -F filedata=@$PRODUCTS/$extractor http://build.eclipse.org:31338/winsign.php
+      mv $PRODUCTS/$extractor-signed $PRODUCTS/$extractor
     fi
 
   else
