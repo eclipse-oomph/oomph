@@ -47,7 +47,7 @@ for f in *.zip; do
   echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> $inifile
 
   if [[ $f == *macosx* ]]; then
-    if [[ "$PACK_AND_SIGN" == true ]]; then
+    #if [[ "$PACK_AND_SIGN" == true ]]; then
       # MacOS executable signing is currently broken!
       # See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
       #
@@ -57,7 +57,7 @@ for f in *.zip; do
       #curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
       #unzip -qq signed.zip
       #rm -f signed.zip
-    fi
+    #fi
     
     rm oomph
     ln -s oomph.app/Contents/MacOS/oomph oomph
