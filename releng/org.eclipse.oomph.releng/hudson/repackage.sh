@@ -32,6 +32,12 @@ for f in *.zip; do
   mkdir $PRODUCTS.tmp
   cd $PRODUCTS.tmp
 
+  if [[ $f == *x86_64* ]]; then
+    bitness=64
+  else
+    bitness=32              
+  fi
+  
   unzip -qq $SOURCE/$f
   zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
 
@@ -48,21 +54,20 @@ for f in *.zip; do
 
   if [[ $f == *macosx* ]]; then
     #if [[ "$PACK_AND_SIGN" == true ]]; then
-      # MacOS executable signing is currently broken!
-      # See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
-      #
-      #echo "  Signing oomph.app"
-      #zip -r -q unsigned.zip oomph.app
-      #rm -rf oomph.app
-      #curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
-      #unzip -qq signed.zip
-      #rm -f signed.zip
+    #   MacOS executable signing is currently broken!
+    #   See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
+    #  
+    #  echo "  Signing oomph.app"
+    #  zip -r -q unsigned.zip oomph.app
+    #  rm -rf oomph.app
+    #  curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
+    #  unzip -qq signed.zip
+    #  rm -f signed.zip
     #fi
     
     rm oomph
     ln -s oomph.app/Contents/MacOS/oomph oomph
-    tar -czf $PRODUCTS/$f *
-    rename .zip .tar.gz $PRODUCTS/$f
+    tar -czf $PRODUCTS/oomph-installer-mac$bitness.tar.gz *
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
@@ -75,15 +80,10 @@ for f in *.zip; do
     
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
     
-    if [[ $f == *x86_64* ]]; then
-      bitness=64
-    else
-      bitness=32              
-    fi
-    
     extractor=oomph-extractor-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
     
+    echo "  Creating $extractor"
     cat /opt/public/tools/oomph/extractor-$bitness.exe \
       $marker \
       $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar \
@@ -91,8 +91,9 @@ for f in *.zip; do
       $GIT/plugins/org.eclipse.oomph.extractor/Concat/descriptor-$bitness.txt \
       $marker \
       $PRODUCTS/$f \
-      $marker \
-      > $PRODUCTS/$extractor
+      $marker > $PRODUCTS/$extractor
+      
+    rm -f $PRODUCTS/$f
       
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing $extractor"
@@ -100,8 +101,8 @@ for f in *.zip; do
       mv $PRODUCTS/$extractor-signed $PRODUCTS/$extractor
     fi
 
-  else
-    zip -r -9 -qq --symlinks $PRODUCTS/$f *
+  elif [[ $f == *linux* ]]; then
+    zip -r -9 -qq --symlinks $PRODUCTS/oomph-installer-linux$bitness.zip *
   fi
 done
 
