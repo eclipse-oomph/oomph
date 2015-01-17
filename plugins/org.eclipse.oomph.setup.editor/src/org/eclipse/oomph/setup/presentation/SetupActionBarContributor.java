@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.presentation;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
+import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
@@ -71,12 +72,15 @@ import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
@@ -706,11 +710,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
     if (!additionalElements.isEmpty())
     {
-      Collections.sort(additionalElements, ACTION_COMPARATOR);
-
-      MenuManager submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalElements_menu_item"));
-      populateManagerGen(submenuManager, additionalElements, null);
-      manager.insertBefore("elements-end", submenuManager);
+      populateManagerEnablements(manager, SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalElements_menu_item"), "elements-end", additionalElements);
     }
 
     populateManagerGen(manager, scopes, "scopes-end");
@@ -720,15 +720,53 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
     if (!additionalTasks.isEmpty())
     {
-      Collections.sort(additionalTasks, ACTION_COMPARATOR);
-
-      MenuManager submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalTasks_menu_item"));
-      populateManagerGen(submenuManager, additionalTasks, null);
-      manager.insertBefore("tasks-end", submenuManager);
+      populateManagerEnablements(manager, SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalTasks_menu_item"), "tasks-end", additionalTasks);
     }
 
     populateManagerGen(manager, annotations, "annotations-end");
     populateManagerGen(manager, additions, "additions-end");
+  }
+
+  private void populateManagerEnablements(IContributionManager manager, String subMenuText, String insertBeforeID, final List<EnablementAction> additionalTasks)
+  {
+    final MenuManager submenuManager = new MenuManager(subMenuText);
+    submenuManager.addMenuListener(new IMenuListener()
+    {
+      public void menuAboutToShow(IMenuManager manager)
+      {
+        // Execute later in event loop to make sure the menu is visible when the first image is loaded.
+        UIUtil.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            Thread iconLoader = new Thread("IconLoader")
+            {
+              @Override
+              public void run()
+              {
+                for (EnablementAction action : additionalTasks)
+                {
+                  if (!submenuManager.isVisible())
+                  {
+                    break;
+                  }
+
+                  action.loadImage();
+                }
+              }
+            };
+
+            iconLoader.setDaemon(true);
+            iconLoader.start();
+          }
+        });
+      }
+    });
+
+    Collections.sort(additionalTasks, ACTION_COMPARATOR);
+    populateManagerGen(submenuManager, additionalTasks, null);
+
+    manager.insertBefore(insertBeforeID, submenuManager);
   }
 
   /**
@@ -964,20 +1002,40 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
     public EnablementAction(EObject eObject, EList<SetupTask> enablementTasks)
     {
+      eClass = eObject.eClass();
+
       IconReflectiveItemProvider itemProvider = ((SetupEditor)activeEditor).getReflectiveItemProvider();
       String typeText = itemProvider.getTypeText(eObject);
 
+      String defaultImageKey = SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eClass) ? "full/obj16/SetupTask" : "full/obj16/EObject";
+
       setText(typeText + "...");
       setToolTipText("Install the " + typeText + " extension model");
-      setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(itemProvider.getImage(eObject)));
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor(defaultImageKey));
 
-      eClass = eObject.eClass();
       this.enablementTasks = enablementTasks;
     }
 
     public EClass getEClass()
     {
       return eClass;
+    }
+
+    public void loadImage()
+    {
+      URI imageURI = EAnnotations.getImageURI(eClass);
+      if (imageURI != null)
+      {
+        final Image image = ExtendedImageRegistry.INSTANCE.getImage(imageURI);
+        setImageDescriptor(new ImageDescriptor()
+        {
+          @Override
+          public ImageData getImageData()
+          {
+            return image.getImageData();
+          }
+        });
+      }
     }
 
     @Override

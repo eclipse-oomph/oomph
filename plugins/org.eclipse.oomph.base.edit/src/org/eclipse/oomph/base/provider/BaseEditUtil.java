@@ -10,8 +10,7 @@
  */
 package org.eclipse.oomph.base.provider;
 
-import org.eclipse.oomph.base.util.EAnnotationConstants;
-import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.base.util.EAnnotations;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.URI;
@@ -29,6 +28,8 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
  */
 public final class BaseEditUtil
 {
+  private static final String TASK_SUFFIX = " Task"; // TODO Can this be made translatable?
+
   private BaseEditUtil()
   {
   }
@@ -69,13 +70,21 @@ public final class BaseEditUtil
     return adapterFactory;
   }
 
+  public static String sanitizeTaskText(String typeText)
+  {
+    if (typeText.endsWith(TASK_SUFFIX))
+    {
+      typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
+    }
+
+    return typeText;
+  }
+
   /**
    * @author Eike Stepper
    */
   public static final class IconReflectiveItemProvider extends ReflectiveItemProvider
   {
-    private static final String TASK_SUFFIX = " Task"; // TODO Can this be made translatable?
-
     public IconReflectiveItemProvider(AdapterFactory adapterFactory)
     {
       super(adapterFactory);
@@ -85,12 +94,7 @@ public final class BaseEditUtil
     public String getTypeText(Object object)
     {
       String typeText = super.getTypeText(object);
-      if (typeText.endsWith(TASK_SUFFIX))
-      {
-        typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
-      }
-
-      return typeText;
+      return sanitizeTaskText(typeText);
     }
 
     @Override
@@ -99,41 +103,13 @@ public final class BaseEditUtil
       EObject eObject = (EObject)object;
       EClass eClass = eObject.eClass();
 
-      String uri = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_LABEL_PROVIDER, EAnnotationConstants.KEY_IMAGE_URI);
-      if (!StringUtil.isEmpty(uri))
+      URI imageURI = EAnnotations.getImageURI(eClass);
+      if (imageURI != null)
       {
-        URI imageURI = URI.createURI(uri);
-        if (imageURI.isRelative())
-        {
-          URI imageBaseURI = getImageBaseURI(eClass);
-          if (imageBaseURI != null)
-          {
-            return imageURI.resolve(imageBaseURI);
-          }
-        }
-
         return imageURI;
       }
 
-      URI imageBaseURI = getImageBaseURI(eClass);
-      if (imageBaseURI != null)
-      {
-        return imageBaseURI.appendSegment(eClass.getName() + ".gif");
-      }
-
       return super.getImage(object);
-    }
-
-    private URI getImageBaseURI(EClass eClass)
-    {
-      EPackage ePackage = eClass.getEPackage();
-      String uri = EcoreUtil.getAnnotation(ePackage, EAnnotationConstants.ANNOTATION_LABEL_PROVIDER, EAnnotationConstants.KEY_IMAGE_BASE_URI);
-      if (!StringUtil.isEmpty(uri))
-      {
-        return URI.createURI(uri);
-      }
-
-      return null;
     }
   }
 }
