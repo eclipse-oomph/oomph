@@ -111,6 +111,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
@@ -2602,6 +2603,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     finally
     {
       monitor.done();
+      log("", false);
     }
 
     hasSuccessfullyPerformed = true;
@@ -2704,6 +2706,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           progressMonitor = null;
         }
       }
+    }
+    catch (OperationCanceledException ex)
+    {
+      throw ex;
+    }
+    catch (InterruptedException ex)
+    {
+      throw ex;
     }
     catch (Exception ex)
     {

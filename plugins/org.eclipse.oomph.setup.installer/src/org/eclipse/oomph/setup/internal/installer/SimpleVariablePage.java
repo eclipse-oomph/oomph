@@ -851,6 +851,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
     performer.setVMPath(vmPath);
     performer.setProgress(progress);
+    performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");
     performer.perform(progress);
     performer.recordVariables(installation, null, user);
     performer.savePasswords();

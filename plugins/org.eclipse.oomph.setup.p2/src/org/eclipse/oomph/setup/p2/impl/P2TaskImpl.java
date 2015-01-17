@@ -633,17 +633,17 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     File eclipseIni = new File(eclipseDir, "eclipse.ini");
     boolean eclipseIniExisted = eclipseIni.exists();
 
-    EList<Requirement> requirements = getRequirements();
-    EList<Repository> repositories = getRepositories();
-
-    context.log("Resolving " + requirements.size() + (requirements.size() == 1 ? " requirement" : " requirements") + " from " + repositories.size()
-        + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
-
     boolean offline = context.isOffline();
     context.log("Offline = " + offline);
 
     boolean mirrors = context.isMirrors();
     context.log("Mirrors = " + mirrors);
+
+    EList<Requirement> requirements = getRequirements();
+    EList<Repository> repositories = getRepositories();
+
+    context.log("Resolving " + requirements.size() + (requirements.size() == 1 ? " requirement" : " requirements") + " from " + repositories.size()
+        + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
 
     for (Requirement requirement : requirements)
     {
