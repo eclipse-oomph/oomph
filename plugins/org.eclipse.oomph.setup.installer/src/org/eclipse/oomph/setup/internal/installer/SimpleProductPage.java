@@ -61,9 +61,13 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   private static final boolean FANCY = false; // OS.INSTANCE.isWin();
 
-  private CatalogSelector catalogSelector;
-
   private SearchField searchField;
+
+  private ToolItem refreshButton;
+
+  private ToolItem catalogsButton;
+
+  private CatalogSelector catalogSelector;
 
   private StackComposite stackComposite;
 
@@ -104,7 +108,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     CatalogManager catalogManager = installer.getCatalogManager();
     catalogSelector = new CatalogSelector(catalogManager, true);
 
-    final ToolItem refreshButton = new ToolItem(toolBar, SWT.NONE);
+    refreshButton = new ToolItem(toolBar, SWT.NONE);
     refreshButton.setToolTipText("Refresh");
     refreshButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/refresh.png"));
     refreshButton.addSelectionListener(new SelectionAdapter()
@@ -117,7 +121,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     });
     AccessUtil.setKey(refreshButton, "refresh");
 
-    final ToolItem catalogsButton = new ToolItem(toolBar, SWT.DROP_DOWN);
+    catalogsButton = new ToolItem(toolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"));
     catalogManager.getSelection().eAdapters().add(new AdapterImpl()
@@ -394,7 +398,11 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     @Override
     public void loadIndex(final ResourceSet resourceSet, final org.eclipse.emf.common.util.URI... uris)
     {
+      searchField.setEnabled(false);
+      refreshButton.setEnabled(false);
+      catalogsButton.setEnabled(false);
       stackComposite.setTopControl(animator);
+
       animator.start(1, animator.getImages().length - 1);
 
       final IProgressMonitor monitor = new NullProgressMonitor();
@@ -425,6 +433,9 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
             {
               public void run()
               {
+                searchField.setEnabled(true);
+                refreshButton.setEnabled(true);
+                catalogsButton.setEnabled(true);
                 stackComposite.setTopControl(browser);
                 browser.setFocus();
               }
