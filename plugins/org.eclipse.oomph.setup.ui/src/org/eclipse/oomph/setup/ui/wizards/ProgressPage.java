@@ -648,7 +648,14 @@ public class ProgressPage extends SetupWizardPage
                     public void run()
                     {
                       progressLog.done();
-                      SetupUIPlugin.restart(trigger, getPerformer().getNeededTasks());
+
+                      UIUtil.asyncExec(new Runnable()
+                      {
+                        public void run()
+                        {
+                          SetupUIPlugin.restart(trigger, getPerformer().getNeededTasks());
+                        }
+                      });
                     }
                   });
 
