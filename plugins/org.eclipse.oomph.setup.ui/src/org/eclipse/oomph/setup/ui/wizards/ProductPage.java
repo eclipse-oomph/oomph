@@ -44,6 +44,7 @@ import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -91,7 +92,6 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -482,17 +482,7 @@ public class ProductPage extends SetupWizardPage
       {
         if (!"about:blank".equals(event.location))
         {
-          try
-          {
-            // java.awt.Desktop was introduced with Java 1.6!
-            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-            desktop.browse(new URI(event.location));
-          }
-          catch (Throwable ex)
-          {
-            //$FALL-THROUGH$
-          }
-
+          OS.INSTANCE.openSystemBrowser(event.location);
           event.doit = false;
         }
       }

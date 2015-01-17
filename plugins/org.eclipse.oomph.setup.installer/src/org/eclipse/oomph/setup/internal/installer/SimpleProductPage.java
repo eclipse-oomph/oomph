@@ -23,6 +23,7 @@ import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.SpriteAnimator;
 import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -44,7 +45,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 
 /**
  * @author Eike Stepper
@@ -177,7 +177,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           }
           else
           {
-            openSytemBrowser(url);
+            OS.INSTANCE.openSystemBrowser(url);
           }
 
           event.doit = false;
@@ -269,20 +269,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   public void reset()
   {
     browser.setText(browser.getText());
-  }
-
-  public static void openSytemBrowser(String url)
-  {
-    try
-    {
-      // java.awt.Desktop was introduced with Java 1.6!
-      java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-      desktop.browse(new URI(url));
-    }
-    catch (Throwable ex)
-    {
-      //$FALL-THROUGH$
-    }
   }
 
   public static String getHtml(StringBuilder builder)
