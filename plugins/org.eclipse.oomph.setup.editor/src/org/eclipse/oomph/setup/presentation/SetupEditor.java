@@ -979,7 +979,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       Object input = selectionViewer.getInput();
       if (input instanceof Resource || input == loadingResourceInput)
       {
-        ToggleViewerInputAction toggleViewerInputAction = getActionBarContributor().toggleViewerInputAction;
+        ToggleViewerInputAction toggleViewerInputAction = getActionBarContributor().getToggleViewerInputAction();
         toggleViewerInputAction.setActiveWorkbenchPart(this);
         toggleViewerInputAction.run();
         toggleViewerInputAction.setActiveWorkbenchPart(this);

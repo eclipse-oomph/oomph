@@ -222,22 +222,22 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
    */
   protected IMenuManager createSiblingMenuManager;
 
-  public ToggleViewerInputAction toggleViewerInputAction = new ToggleViewerInputAction();
+  private final ToggleViewerInputAction toggleViewerInputAction = new ToggleViewerInputAction();
 
-  private PreferenceRecorderToolbarAction recordPreferencesAction = new PreferenceRecorderToolbarAction(true);
+  private final PreferenceRecorderToolbarAction recordPreferencesAction = new PreferenceRecorderToolbarAction(true);
 
-  private CommandTableAction commandTableAction = new CommandTableAction();
+  private final CommandTableAction commandTableAction = new CommandTableAction();
 
-  private EditorTableAction editorTableAction = new EditorTableAction();
+  private final EditorTableAction editorTableAction = new EditorTableAction();
 
   @SuppressWarnings("unused")
-  private TestInstallAction testInstallAction = new TestInstallAction();
+  private final TestInstallAction testInstallAction = new TestInstallAction();
+
+  private final OpenInSetupEditorAction openInSetupEditorAction = new OpenInSetupEditorAction();
+
+  private final OpenInTextEditorAction openInTextEditorAction = new OpenInTextEditorAction();
 
   private RevertAction revertAction;
-
-  private OpenInSetupEditorAction openInSetupEditorAction = new OpenInSetupEditorAction();
-
-  private OpenInTextEditorAction openInTextEditorAction = new OpenInTextEditorAction();
 
   private int lastSubMenuID;
 
@@ -254,6 +254,11 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     validateAction = new ValidateAction();
     liveValidationAction = new DiagnosticDecorator.LiveValidator.LiveValidationAction(SetupEditorPlugin.getPlugin().getDialogSettings());
     controlAction = new ControlAction();
+  }
+
+  public final ToggleViewerInputAction getToggleViewerInputAction()
+  {
+    return toggleViewerInputAction;
   }
 
   @Override
