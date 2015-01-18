@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
+import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.ui.UIUtil;
@@ -96,10 +97,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -560,7 +563,6 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
             gatherMetaData((EPackage)root);
           }
         }
-
       }
     };
 
@@ -577,23 +579,24 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         if (value instanceof EObject)
         {
           EObject eObject = (EObject)value;
-          EClass eClass = eObject.eClass();
-          Resource eResource = eClass.eResource();
-          if (eResource != null && eResource.getResourceSet() == resourceSet)
+          if (eObject instanceof DynamicSetupTaskImpl)
           {
-            EList<SetupTask> enablementTasks = SetupTaskPerformer.createEnablementTasks(eClass, true);
-            if (enablementTasks != null)
+            EClass eClass = eObject.eClass();
+            Resource eResource = eClass.eResource();
+            if (eResource != null && eResource.getResourceSet() == resourceSet)
             {
-              eClass = eObject.eClass();
-
-              String typeText = EAnnotations.getText(eClass);
-              if (typeText == null)
+              EList<SetupTask> enablementTasks = SetupTaskPerformer.createEnablementTasks(eClass, true);
+              if (enablementTasks != null)
               {
-                typeText = iconItemProvider.getTypeText(eObject);
-              }
+                String typeText = EAnnotations.getText(eClass);
+                if (typeText == null)
+                {
+                  typeText = iconItemProvider.getTypeText(eObject);
+                }
 
-              EnablementAction action = new EnablementAction(shell, eClass, typeText, enablementTasks);
-              actions.add(action);
+                EnablementAction action = new EnablementAction(shell, eClass, typeText, enablementTasks);
+                actions.add(action);
+              }
             }
           }
         }
@@ -655,9 +658,10 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     List<EnablementAction> additionalTasks = new ArrayList<EnablementAction>();
     List<EnablementAction> additionalElements = new ArrayList<EnablementAction>();
 
+    Set<String> installedClasses = new HashSet<String>();
+
     for (IAction action : actions)
     {
-      Object descriptor;
       if (action instanceof EnablementAction)
       {
         EnablementAction additionalTaskAction = (EnablementAction)action;
@@ -674,6 +678,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         continue;
       }
 
+      Object descriptor;
       if (action instanceof CreateChildAction)
       {
         descriptor = ((CreateChildAction)action).getDescriptor();
@@ -716,6 +721,13 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         {
           elements.add(action);
         }
+
+        if (value instanceof EObject)
+        {
+          EClass eClass = ((EObject)value).eClass();
+          String installedClass = getInstalledClass(eClass);
+          installedClasses.add(installedClass);
+        }
       }
       else
       {
@@ -723,7 +735,10 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       }
     }
 
+    removeInstalledClasses(installedClasses, additionalElements);
     Collections.sort(elements, ACTION_COMPARATOR);
+
+    removeInstalledClasses(installedClasses, additionalTasks);
     Collections.sort(tasks, ACTION_COMPARATOR);
 
     populateManagerGen(manager, elements, "elements-end");
@@ -745,6 +760,25 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
     populateManagerGen(manager, annotations, "annotations-end");
     populateManagerGen(manager, additions, "additions-end");
+  }
+
+  private String getInstalledClass(EClass eClass)
+  {
+    return eClass.getEPackage().getNsURI() + "#" + eClass.getName();
+  }
+
+  private void removeInstalledClasses(Set<String> installedClasses, List<EnablementAction> actions)
+  {
+    for (Iterator<EnablementAction> it = actions.iterator(); it.hasNext();)
+    {
+      EnablementAction action = it.next();
+      EClass eClass = action.getEClass();
+      String installedClass = getInstalledClass(eClass);
+      if (installedClasses.contains(installedClass))
+      {
+        it.remove();
+      }
+    }
   }
 
   private void populateManagerEnablements(IContributionManager manager, String subMenuText, String insertBeforeID, final List<EnablementAction> additionalTasks)

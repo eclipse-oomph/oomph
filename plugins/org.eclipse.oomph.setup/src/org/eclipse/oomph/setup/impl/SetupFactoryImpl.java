@@ -32,7 +32,6 @@ import org.eclipse.oomph.setup.ResourceCreationTask;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
-import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.StringSubstitutionTask;
 import org.eclipse.oomph.setup.TextModification;
@@ -181,17 +180,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
   {
     if (eClass == SetupPackage.Literals.SETUP_TASK)
     {
-      return new SetupTaskImpl()
-      {
-        public boolean isNeeded(SetupTaskContext context) throws Exception
-        {
-          return false;
-        }
-
-        public void perform(SetupTaskContext context) throws Exception
-        {
-        }
-      };
+      return new DynamicSetupTaskImpl();
     }
 
     return createGen(eClass);
