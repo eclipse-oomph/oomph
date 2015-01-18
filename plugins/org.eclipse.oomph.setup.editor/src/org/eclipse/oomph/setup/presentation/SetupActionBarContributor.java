@@ -111,6 +111,8 @@ import java.util.Map;
  */
 public class SetupActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener
 {
+  private static final String ENABLEMENT_ITEM_PREFIX = EnablementAction.class.getName() + "-";
+
   private static final Comparator<? super IAction> ACTION_COMPARATOR = new Comparator<IAction>()
   {
     public int compare(IAction a1, IAction a2)
@@ -236,6 +238,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   private OpenInSetupEditorAction openInSetupEditorAction = new OpenInSetupEditorAction();
 
   private OpenInTextEditorAction openInTextEditorAction = new OpenInTextEditorAction();
+
+  private int lastSubMenuID;
 
   /**
    * This creates an instance of the contributor.
@@ -729,7 +733,10 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
   private void populateManagerEnablements(IContributionManager manager, String subMenuText, String insertBeforeID, final List<EnablementAction> additionalTasks)
   {
-    final MenuManager submenuManager = new MenuManager(subMenuText);
+    int id = ++lastSubMenuID;
+    String subMenuID = ENABLEMENT_ITEM_PREFIX + id;
+
+    final MenuManager submenuManager = new MenuManager(subMenuText, subMenuID);
     submenuManager.addMenuListener(new IMenuListener()
     {
       public void menuAboutToShow(IMenuManager manager)
@@ -774,9 +781,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
    * based on the {@link org.eclipse.jface.action.IAction}s contained in the <code>actions</code> collection.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
    */
-  protected void depopulateManager(IContributionManager manager, Collection<? extends IAction> actions)
+  protected void depopulateManagerGen(IContributionManager manager, Collection<? extends IAction> actions)
   {
     if (actions != null)
     {
@@ -803,6 +809,25 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         }
       }
     }
+  }
+
+  protected void depopulateManager(IContributionManager manager, Collection<? extends IAction> actions)
+  {
+    IContributionItem[] items = manager.getItems();
+    if (items != null)
+    {
+      for (int i = 0; i < items.length; i++)
+      {
+        IContributionItem item = items[i];
+        String id = item.getId();
+        if (id != null && id.startsWith(ENABLEMENT_ITEM_PREFIX))
+        {
+          manager.remove(item);
+        }
+      }
+    }
+
+    depopulateManagerGen(manager, actions);
   }
 
   /**
