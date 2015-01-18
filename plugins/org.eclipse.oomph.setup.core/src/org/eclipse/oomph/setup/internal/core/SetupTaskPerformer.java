@@ -54,7 +54,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
@@ -3072,7 +3072,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     EList<Map.Entry<String, Set<String>>> list = new BasicEList<Map.Entry<String, Set<String>>>(variables.entrySet());
 
-    SetupUtil.reorder(list, new SetupUtil.DependencyProvider<Map.Entry<String, Set<String>>>()
+    SetupCoreUtil.reorder(list, new SetupCoreUtil.DependencyProvider<Map.Entry<String, Set<String>>>()
     {
       public Collection<Map.Entry<String, Set<String>>> getDependencies(Map.Entry<String, Set<String>> variable)
       {
@@ -3116,7 +3116,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    SetupUtil.reorder(setupTasks, new SetupUtil.DependencyProvider<SetupTask>()
+    SetupCoreUtil.reorder(setupTasks, new SetupCoreUtil.DependencyProvider<SetupTask>()
     {
       public Collection<SetupTask> getDependencies(SetupTask setupTask)
       {

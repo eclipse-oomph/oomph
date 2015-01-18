@@ -14,7 +14,7 @@ import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.util.PreferencesRecorder;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 
@@ -71,7 +71,7 @@ public final class RecorderManager
     String value = SETUP_UI_PREFERENCES.get(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, null);
     if (value == null)
     {
-      ResourceSet resourceSet = SetupUtil.createResourceSet();
+      ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
       SetupContext setupContext = SetupContext.createUserOnly(resourceSet);
       User user = setupContext.getUser();
 

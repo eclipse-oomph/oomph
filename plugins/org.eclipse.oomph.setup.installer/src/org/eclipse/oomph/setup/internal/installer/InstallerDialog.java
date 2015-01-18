@@ -16,7 +16,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
@@ -439,7 +439,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
       for (Bundle bundle : bundleContext.getBundles())
       {
         String symbolicName = bundle.getSymbolicName();
-        if (symbolicName.startsWith(SetupUtil.OOMPH_NAMESPACE))
+        if (symbolicName.startsWith(SetupCoreUtil.OOMPH_NAMESPACE))
         {
           String buildID = OomphPlugin.getBuildID(bundle);
           if (buildID != null)

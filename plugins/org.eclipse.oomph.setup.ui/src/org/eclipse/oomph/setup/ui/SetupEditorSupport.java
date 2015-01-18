@@ -11,7 +11,7 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.setup.internal.core.SetupContext;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
@@ -73,7 +73,7 @@ public final class SetupEditorSupport
   {
     try
     {
-      URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
+      URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
       final String fragment = uri.fragment();
       final URI normalizedURI = uriConverter.normalize(uri.trimFragment());
 
@@ -168,7 +168,7 @@ public final class SetupEditorSupport
   {
     try
     {
-      URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
+      URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
       final URI normalizedURI = uriConverter.normalize(uri.trimFragment());
 
       final IEditorInput editorInput = getTextEditorInput(normalizedURI);
@@ -296,7 +296,7 @@ public final class SetupEditorSupport
 
             public InputStream getContents() throws CoreException
             {
-              URIConverter uriConverter = SetupUtil.createResourceSet().getURIConverter();
+              URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
               try
               {
                 return uriConverter.createInputStream(uri);

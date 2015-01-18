@@ -769,7 +769,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
     static
     {
-      ResourceSet resourceSet = SetupUtil.createResourceSet();
+      ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
       OPTIONS = resourceSet.getLoadOptions();
       OPTIONS.put(OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITH_ETAG_CHECKING);
       URI_CONVERTER = resourceSet.getURIConverter();

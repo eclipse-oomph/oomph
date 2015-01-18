@@ -142,7 +142,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
       descriptionMatcher.find();
       project.setDescription(descriptionMatcher.group(1));
 
-      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
+      Resource resource = SetupCoreUtil.createResourceSet().createResource(normalizedURI);
       resource.getContents().add(project);
       return saveResource(resource);
     }
@@ -150,7 +150,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     if (SetupContext.USER_SETUP_URI.equals(uri))
     {
       User user = SetupContext.createUser();
-      Resource resource = SetupUtil.createResourceSet().createResource(normalizedURI);
+      Resource resource = SetupCoreUtil.createResourceSet().createResource(normalizedURI);
       resource.getContents().add(user);
       return saveResource(resource);
     }

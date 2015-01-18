@@ -24,7 +24,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
@@ -72,6 +72,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   private Trigger trigger;
 
+  private String triggerName;
+
   private Object lastPage;
 
   private ResourceSet resourceSet;
@@ -104,7 +106,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     initUI();
     if (performer == null)
     {
-      resourceSet = SetupUtil.createResourceSet();
+      resourceSet = SetupCoreUtil.createResourceSet();
       setTrigger(Trigger.STARTUP);
       if (SetupContext.WORKSPACE_LOCATION_URI != null)
       {
@@ -156,11 +158,33 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return trigger;
   }
 
+  public String getTriggerName()
+  {
+    if (triggerName != null)
+    {
+      return triggerName;
+    }
+
+    if (trigger != null)
+    {
+      return trigger.toString();
+    }
+
+    return "ALL";
+  }
+
+  public void setTriggerName(String triggerName)
+  {
+    this.triggerName = triggerName == null ? null : triggerName.toUpperCase();
+  }
+
   public void setIndexLoader(IndexLoader indexLoader)
   {
     this.indexLoader = indexLoader;
-    if (indexLoader!=null)
-    indexLoader.setWizard(this);
+    if (indexLoader != null)
+    {
+      indexLoader.setWizard(this);
+    }
   }
 
   public void setIndexLoadedAction(Runnable indexLoadedAction)

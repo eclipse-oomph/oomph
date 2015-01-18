@@ -13,7 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.util.OomphPlugin;
 
@@ -140,7 +140,7 @@ public final class AboutDialog extends AbstractSetupDialog
 
       String version = plugin.getVersion().toString();
 
-      if (id.startsWith(SetupUtil.OOMPH_NAMESPACE))
+      if (id.startsWith(SetupCoreUtil.OOMPH_NAMESPACE))
       {
         try
         {
@@ -188,7 +188,7 @@ public final class AboutDialog extends AbstractSetupDialog
     List<IInstallableUnit> plugins = new ArrayList<IInstallableUnit>();
     for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), null))
     {
-      if (showAllPlugins || iu.getId().startsWith(SetupUtil.OOMPH_NAMESPACE))
+      if (showAllPlugins || iu.getId().startsWith(SetupCoreUtil.OOMPH_NAMESPACE))
       {
         for (IProvidedCapability capability : iu.getProvidedCapabilities())
         {

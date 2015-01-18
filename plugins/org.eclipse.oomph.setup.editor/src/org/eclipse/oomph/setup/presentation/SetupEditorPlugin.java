@@ -10,7 +10,8 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
-import org.eclipse.oomph.setup.provider.SetupEditPlugin;
+import org.eclipse.oomph.p2.provider.P2EditPlugin;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -54,7 +55,7 @@ public final class SetupEditorPlugin extends OomphUIPlugin
    */
   public SetupEditorPlugin()
   {
-    super(new ResourceLocator[] { SetupEditPlugin.INSTANCE, });
+    super(new ResourceLocator[] { SetupUIPlugin.INSTANCE, P2EditPlugin.INSTANCE, });
   }
 
   /**

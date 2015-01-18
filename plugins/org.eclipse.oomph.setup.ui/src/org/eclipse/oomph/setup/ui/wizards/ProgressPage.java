@@ -20,7 +20,7 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.log.ProgressLogProvider;
@@ -478,7 +478,7 @@ public class ProgressPage extends SetupWizardPage
 
       treeViewer.setInput(new ItemProvider(performer.getNeededTasks()));
 
-      String jobName = "Executing " + getTrigger().toString().toLowerCase() + " tasks";
+      String jobName = "Executing " + getTriggerName().toLowerCase() + " tasks";
       performer.log(jobName);
 
       if (renamed != null)
@@ -860,7 +860,7 @@ public class ProgressPage extends SetupWizardPage
   private void saveLocalFiles(SetupTaskPerformer performer)
   {
     User performerUser = performer.getUser();
-    ResourceSet resourceSet = SetupUtil.createResourceSet();
+    ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     User user = SetupContext.createUserOnly(resourceSet).getUser();
 
     boolean shouldSave = user.getAcceptedLicenses().addAll(performerUser.getAcceptedLicenses());

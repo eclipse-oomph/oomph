@@ -23,7 +23,7 @@ import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -289,7 +289,7 @@ public class SetupContext
 
   public static SetupContext createCopy(Installation installation, Workspace workspace, User user)
   {
-    Resource.Factory.Registry resourceFactoryRegistry = SetupUtil.createResourceSet().getResourceFactoryRegistry();
+    Resource.Factory.Registry resourceFactoryRegistry = SetupCoreUtil.createResourceSet().getResourceFactoryRegistry();
 
     Installation copiedInstallation = EcoreUtil.copy(installation);
     Resource installationResource = resourceFactoryRegistry.getFactory(INSTALLATION_SETUP_FILE_NAME_URI).createResource(INSTALLATION_SETUP_FILE_NAME_URI);
@@ -332,7 +332,7 @@ public class SetupContext
 
   public static void associate(final Installation installation, final Workspace workspace)
   {
-    final ResourceSet resourceSet = SetupUtil.createResourceSet();
+    final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     URIConverter uriConverter = resourceSet.getURIConverter();
     BaseUtil.execute(5000, new Runnable()
     {

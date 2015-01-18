@@ -28,8 +28,22 @@ public final class EAnnotations
 
   private static final String KEY_IMAGE_URI = "imageURI";
 
+  private static final String KEY_TEXT = "text";
+
   private EAnnotations()
   {
+  }
+
+  private static URI getImageBaseURI(EClass eClass)
+  {
+    EPackage ePackage = eClass.getEPackage();
+    String uri = EcoreUtil.getAnnotation(ePackage, ANNOTATION_LABEL_PROVIDER, KEY_IMAGE_BASE_URI);
+    if (!StringUtil.isEmpty(uri))
+    {
+      return URI.createURI(uri);
+    }
+
+    return null;
   }
 
   public static URI getImageURI(EClass eClass)
@@ -59,15 +73,8 @@ public final class EAnnotations
     return null;
   }
 
-  private static URI getImageBaseURI(EClass eClass)
+  public static String getText(EClass eClass)
   {
-    EPackage ePackage = eClass.getEPackage();
-    String uri = EcoreUtil.getAnnotation(ePackage, ANNOTATION_LABEL_PROVIDER, KEY_IMAGE_BASE_URI);
-    if (!StringUtil.isEmpty(uri))
-    {
-      return URI.createURI(uri);
-    }
-
-    return null;
+    return EcoreUtil.getAnnotation(eClass, ANNOTATION_LABEL_PROVIDER, KEY_TEXT);
   }
 }

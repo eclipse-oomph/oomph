@@ -20,6 +20,9 @@
           containment="true"/>
       <contents xsi:type="ecore:EAttribute" name="targletURIs" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
+      <details key="text" value="Targlets"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targlets" upperBound="-1"
         eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#//Targlet"
         containment="true">

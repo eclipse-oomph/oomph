@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.SetupTask;
  *
  * @see org.eclipse.oomph.setup.launching.LaunchingPackage#getLaunchTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
+ *        annotation="http://www.eclipse.org/oomph/base/LabelProvider text='Launcher'"
  * @generated
  */
 public interface LaunchTask extends SetupTask

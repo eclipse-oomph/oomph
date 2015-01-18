@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.setup.editor;
 
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.LabelDecorator;
 import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.util.StringUtil;
@@ -55,7 +55,7 @@ public abstract class ProjectTemplate
 
   protected void init()
   {
-    ResourceSet resourceSet = SetupUtil.createResourceSet();
+    ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     resource = resourceSet.createResource(URI.createURI("*.setup"));
   }
 

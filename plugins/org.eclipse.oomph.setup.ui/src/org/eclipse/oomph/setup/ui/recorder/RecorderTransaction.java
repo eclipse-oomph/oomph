@@ -610,7 +610,7 @@ public abstract class RecorderTransaction
       }
       else
       {
-        ResourceSet resourceSet = org.eclipse.oomph.setup.internal.core.util.SetupUtil.createResourceSet();
+        ResourceSet resourceSet = org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil.createResourceSet();
         Resource resource = resourceSet.getResource(SetupContext.USER_SETUP_URI, true);
         instance = new ResourceTransaction(resource);
       }

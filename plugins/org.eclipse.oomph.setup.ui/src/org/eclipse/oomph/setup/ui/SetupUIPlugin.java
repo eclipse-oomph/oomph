@@ -22,7 +22,7 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
@@ -135,7 +135,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
   {
     try
     {
-      Resource resource = SetupUtil.createResourceSet().createResource(URI.createFileURI(file.toString()));
+      Resource resource = SetupCoreUtil.createResourceSet().createResource(URI.createFileURI(file.toString()));
       resource.getContents().add(annotation);
       resource.save(null);
     }
@@ -249,7 +249,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
-        Resource resource = SetupUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
+        Resource resource = SetupCoreUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
         Annotation annotation = (Annotation)EcoreUtil.getObjectByType(resource.getContents(), BasePackage.Literals.ANNOTATION);
         resource.getContents().remove(annotation);
@@ -292,7 +292,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
     // This performer is only used to detect a need to update or to open the setup wizard.
     SetupTaskPerformer performer = null;
-    final ResourceSet resourceSet = SetupUtil.createResourceSet();
+    final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
 
     try
     {

@@ -271,6 +271,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
     String source = "http://www.eclipse.org/oomph/base/LabelProvider";
     addAnnotation(this, source, new String[] { "imageBaseURI",
         "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.workingsets.edit/icons/full/obj16" });
+    addAnnotation(workingSetTaskEClass, source, new String[] { "text", "Working Sets" });
   }
 
   /**

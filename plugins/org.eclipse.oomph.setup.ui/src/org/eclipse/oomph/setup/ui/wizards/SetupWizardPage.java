@@ -96,6 +96,11 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     return getWizard().getTrigger();
   }
 
+  public String getTriggerName()
+  {
+    return getWizard().getTriggerName();
+  }
+
   public Installation getInstallation()
   {
     return getWizard().getInstallation();

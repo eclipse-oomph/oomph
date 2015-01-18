@@ -26,7 +26,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.ui.PropertyField.AuthenticatedField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
@@ -495,7 +495,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         unresolvedVariables.addAll(fieldHolder.getVariables());
       }
 
-      final ResourceSet resourceSet = SetupUtil.createResourceSet();
+      final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
 
       User user = getUser();
       final User copiedUser = EcoreUtil.copy(user);

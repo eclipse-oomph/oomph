@@ -34,6 +34,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
+ *        annotation="http://www.eclipse.org/oomph/base/LabelProvider text='Targlets'"
  * @generated
  */
 public interface TargletTask extends SetupTask

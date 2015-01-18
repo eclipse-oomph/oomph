@@ -17,6 +17,9 @@
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
     </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
+      <details key="text" value="Launcher"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="launcher" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>

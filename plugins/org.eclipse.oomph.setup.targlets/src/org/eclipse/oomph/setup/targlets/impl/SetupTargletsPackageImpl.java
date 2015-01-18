@@ -325,6 +325,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     String source = "http://www.eclipse.org/oomph/base/LabelProvider";
     addAnnotation(this, source, new String[] { "imageBaseURI",
         "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.targlets.edit/icons/full/obj16" });
+    addAnnotation(targletTaskEClass, source, new String[] { "text", "Targlets" });
   }
 
   /**

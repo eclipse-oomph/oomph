@@ -70,16 +70,6 @@ public final class BaseEditUtil
     return adapterFactory;
   }
 
-  public static String sanitizeTaskText(String typeText)
-  {
-    if (typeText.endsWith(TASK_SUFFIX))
-    {
-      typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
-    }
-
-    return typeText;
-  }
-
   /**
    * @author Eike Stepper
    */
@@ -94,7 +84,12 @@ public final class BaseEditUtil
     public String getTypeText(Object object)
     {
       String typeText = super.getTypeText(object);
-      return sanitizeTaskText(typeText);
+      if (typeText.endsWith(TASK_SUFFIX))
+      {
+        typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
+      }
+
+      return typeText;
     }
 
     @Override

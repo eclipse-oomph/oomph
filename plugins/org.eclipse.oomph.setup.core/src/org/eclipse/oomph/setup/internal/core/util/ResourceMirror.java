@@ -44,7 +44,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
 
   public ResourceMirror()
   {
-    this(SetupUtil.createResourceSet());
+    this(SetupCoreUtil.createResourceSet());
   }
 
   public ResourceMirror(ResourceSet resourceSet)

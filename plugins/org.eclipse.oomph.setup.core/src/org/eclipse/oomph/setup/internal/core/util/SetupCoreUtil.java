@@ -67,7 +67,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public final class SetupUtil
+public final class SetupCoreUtil
 {
   public static final String OOMPH_NAMESPACE = "org.eclipse.oomph";
 
@@ -85,7 +85,7 @@ public final class SetupUtil
     AUTHORIZATION_HANDLER = new ECFURIHandlerImpl.AuthorizationHandlerImpl(uiServices, securePreferences);
   }
 
-  private SetupUtil()
+  private SetupCoreUtil()
   {
   }
 

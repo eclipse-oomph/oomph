@@ -14,7 +14,6 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.setup.CompoundTask;
-import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.RedirectionTask;
@@ -23,11 +22,8 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
-import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetsPackage;
@@ -53,11 +49,14 @@ import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.emf.edit.ui.action.LoadResourceAction;
 import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
-import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -72,15 +71,13 @@ import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
@@ -102,6 +99,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * This is the action bar contributor for the Setup model editor.
@@ -565,6 +564,9 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       }
     };
 
+    IconReflectiveItemProvider iconItemProvider = ((SetupEditor)activeEditor).getReflectiveItemProvider();
+    Shell shell = activeEditorPart.getSite().getShell();
+
     Collection<?> newChildDescriptors = itemProvider.getNewChildDescriptors(object, domain, siblingObject);
     for (Iterator<?> it = newChildDescriptors.iterator(); it.hasNext();)
     {
@@ -582,7 +584,16 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
             EList<SetupTask> enablementTasks = SetupTaskPerformer.createEnablementTasks(eClass, true);
             if (enablementTasks != null)
             {
-              actions.add(new EnablementAction(eObject, enablementTasks));
+              eClass = eObject.eClass();
+
+              String typeText = EAnnotations.getText(eClass);
+              if (typeText == null)
+              {
+                typeText = iconItemProvider.getTypeText(eObject);
+              }
+
+              EnablementAction action = new EnablementAction(shell, eClass, typeText, enablementTasks);
+              actions.add(action);
             }
           }
         }
@@ -751,25 +762,28 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
         {
           public void run()
           {
-            Thread iconLoader = new Thread("IconLoader")
+            final Queue<EnablementAction> queue = new ConcurrentLinkedQueue<EnablementAction>(additionalTasks);
+
+            for (int i = 0; i < 10; i++)
             {
-              @Override
-              public void run()
+              Job iconLoader = new Job("IconLoader-" + i)
               {
-                for (EnablementAction action : additionalTasks)
+                @Override
+                protected IStatus run(IProgressMonitor monitor)
                 {
-                  if (!submenuManager.isVisible())
+                  EnablementAction action;
+                  while ((action = queue.poll()) != null && submenuManager.isVisible() && !monitor.isCanceled())
                   {
-                    break;
+                    action.loadImage();
                   }
 
-                  action.loadImage();
+                  return Status.OK_STATUS;
                 }
-              }
-            };
+              };
 
-            iconLoader.setDaemon(true);
-            iconLoader.start();
+              iconLoader.setSystem(true);
+              iconLoader.schedule();
+            }
           }
         });
       }
@@ -1018,67 +1032,6 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     public Object getDescriptor()
     {
       return descriptor;
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private final class EnablementAction extends Action
-  {
-    private final EClass eClass;
-
-    private final EList<SetupTask> enablementTasks;
-
-    public EnablementAction(EObject eObject, EList<SetupTask> enablementTasks)
-    {
-      eClass = eObject.eClass();
-
-      IconReflectiveItemProvider itemProvider = ((SetupEditor)activeEditor).getReflectiveItemProvider();
-      String typeText = itemProvider.getTypeText(eObject);
-
-      String defaultImageKey = SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eClass) ? "full/obj16/SetupTask" : "full/obj16/EObject";
-
-      setText(typeText + "...");
-      setToolTipText("Install the " + typeText + " extension model");
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor(defaultImageKey));
-
-      this.enablementTasks = enablementTasks;
-    }
-
-    public EClass getEClass()
-    {
-      return eClass;
-    }
-
-    public void loadImage()
-    {
-      URI imageURI = EAnnotations.getImageURI(eClass);
-      if (imageURI != null)
-      {
-        final Image image = ExtendedImageRegistry.INSTANCE.getImage(imageURI);
-        setImageDescriptor(new ImageDescriptor()
-        {
-          @Override
-          public ImageData getImageData()
-          {
-            return image.getImageData();
-          }
-        });
-      }
-    }
-
-    @Override
-    public void run()
-    {
-      ResourceSet resourceSet = SetupUtil.createResourceSet();
-
-      SetupContext self = SetupContext.createInstallationAndUser(resourceSet);
-      Installation installation = self.getInstallation();
-      installation.getSetupTasks().addAll(enablementTasks);
-
-      SetupWizard updater = new SetupWizard.Updater(self);
-      updater.openDialog(UIUtil.getShell());
     }
   }
 

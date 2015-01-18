@@ -35,7 +35,7 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
-import org.eclipse.oomph.setup.internal.core.util.SetupUtil;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleViewerInputAction;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
@@ -1211,7 +1211,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, delegates);
 
     ResourceSet resourceSet = editingDomain.getResourceSet();
-    SetupUtil.configureResourceSet(resourceSet);
+    SetupCoreUtil.configureResourceSet(resourceSet);
 
     // If the index's folder is redirected to the local file system...
     URIConverter uriConverter = resourceSet.getURIConverter();
@@ -1543,7 +1543,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
             try
             {
-              SetupUtil.migrate(mainResource, migratedContents);
+              SetupCoreUtil.migrate(mainResource, migratedContents);
               CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
               command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
               command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));

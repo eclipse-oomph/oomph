@@ -253,6 +253,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     String source = "http://www.eclipse.org/oomph/base/LabelProvider";
     addAnnotation(this, source, new String[] { "imageBaseURI",
         "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.launching.edit/icons/full/obj16" });
+    addAnnotation(launchTaskEClass, source, new String[] { "text", "Launcher" });
   }
 
   /**
