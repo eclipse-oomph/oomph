@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
@@ -275,6 +276,13 @@ public class ProductPage extends SetupWizardPage
       {
         super.modelEmpty(empty);
         setPageComplete(!empty);
+      }
+
+      @Override
+      protected void jreChanged(JRE jre)
+      {
+        String vmPath = new File(jre.getJavaHome(), "bin").getAbsolutePath();
+        getWizard().setVMPath(vmPath);
       }
 
       @Override

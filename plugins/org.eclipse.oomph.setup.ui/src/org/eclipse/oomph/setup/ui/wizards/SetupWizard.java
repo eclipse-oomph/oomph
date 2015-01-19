@@ -84,6 +84,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   private SetupTaskPerformer performer;
 
+  private String vmPath;
+
   private IndexLoader indexLoader;
 
   private Runnable indexLoadedAction;
@@ -245,6 +247,16 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public void setPerformer(SetupTaskPerformer performer)
   {
     this.performer = performer;
+  }
+
+  public String getVMPath()
+  {
+    return vmPath;
+  }
+
+  public void setVMPath(String vmPath)
+  {
+    this.vmPath = vmPath;
   }
 
   @Override

@@ -277,6 +277,10 @@ public abstract class JREController implements ISelectionChangedListener
     }
   }
 
+  protected void jreChanged(JRE jre)
+  {
+  }
+
   private JRE getDefaultJRE(String javaVersion)
   {
     if (javaVersion != null)
@@ -301,5 +305,7 @@ public abstract class JREController implements ISelectionChangedListener
       String javaHome = jre.getJavaHome().getAbsolutePath();
       JREManager.INSTANCE.setDefaultJRE(bitness, javaVersion, javaHome);
     }
+
+    jreChanged(jre);
   }
 }
