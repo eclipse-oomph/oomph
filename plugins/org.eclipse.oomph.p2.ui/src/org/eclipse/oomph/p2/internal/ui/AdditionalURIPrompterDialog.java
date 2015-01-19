@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
-import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.Artifact;
+import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.AnalyzedArtifact;
 import org.eclipse.oomph.ui.OomphDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -51,13 +51,13 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
 
   private boolean firstTime;
 
-  private List<Artifact> artifacts;
+  private List<AnalyzedArtifact> artifacts;
 
   private Set<URI> repositories;
 
   private CheckboxTableViewer repositoryViewer;
 
-  public AdditionalURIPrompterDialog(Shell parentShell, boolean firstTime, List<Artifact> artifacts, Set<URI> repositories)
+  public AdditionalURIPrompterDialog(Shell parentShell, boolean firstTime, List<AnalyzedArtifact> artifacts, Set<URI> repositories)
   {
     super(parentShell, AgentAnalyzerDialog.TITLE, 600, 500, P2UIPlugin.INSTANCE, false);
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);

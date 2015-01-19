@@ -15,6 +15,8 @@ import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.internal.p2.engine.EngineActivator;
 import org.eclipse.equinox.internal.p2.engine.ProfileLock;
 import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
@@ -142,6 +144,11 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
   @Override
   protected synchronized final Map<String, org.eclipse.equinox.internal.p2.engine.Profile> getProfileMap()
   {
+    return getProfileMap(new NullProgressMonitor());
+  }
+
+  public synchronized final Map<String, org.eclipse.equinox.internal.p2.engine.Profile> getProfileMap(IProgressMonitor monitor)
+  {
     if (profileMap == null)
     {
       if (store == null || !store.isDirectory())
@@ -159,21 +166,42 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
         }
       });
 
-      for (File profileDirectory : profileDirectories)
+      if (profileDirectories == null)
       {
-        File profileFile = findLatestProfileFile(profileDirectory);
-        if (profileFile == null)
-        {
-          IOUtil.deleteBestEffort(profileFile);
-        }
-        else
-        {
-          String directoryName = profileDirectory.getName();
-          String profileId = unescape(directoryName.substring(0, directoryName.lastIndexOf(PROFILE_EXT)));
+        profileDirectories = new File[0];
+      }
 
-          LazyProfile profile = new LazyProfile(this, profileId, profileDirectory);
-          profileMap.put(profileId, profile);
+      monitor.beginTask("", profileDirectories.length);
+
+      try
+      {
+        for (File profileDirectory : profileDirectories)
+        {
+          P2CorePlugin.checkCancelation(monitor);
+
+          File profileFile = findLatestProfileFile(profileDirectory);
+          if (profileFile == null)
+          {
+            monitor.subTask("Deleting " + profileDirectory);
+            IOUtil.deleteBestEffort(profileFile);
+          }
+          else
+          {
+            String directoryName = profileDirectory.getName();
+            String profileId = unescape(directoryName.substring(0, directoryName.lastIndexOf(PROFILE_EXT)));
+
+            monitor.subTask("Registering profile " + profileId);
+
+            LazyProfile profile = new LazyProfile(this, profileId, profileDirectory);
+            profileMap.put(profileId, profile);
+          }
+
+          monitor.worked(1);
         }
+      }
+      finally
+      {
+        monitor.done();
       }
     }
 

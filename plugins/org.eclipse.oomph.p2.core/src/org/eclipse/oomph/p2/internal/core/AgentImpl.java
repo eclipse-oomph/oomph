@@ -19,6 +19,7 @@ import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -254,9 +255,11 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // TODO Delete artifacts from disk
   }
 
-  public boolean refreshBundlePools()
+  public void refreshBundlePools(IProgressMonitor monitor)
   {
-    return bundlePoolMap.refresh();
+    monitor.subTask("Refreshing " + getLocation() + " bundle pools");
+    bundlePoolMap.refresh();
+    monitor.done();
   }
 
   public synchronized LazyProfileRegistry getProfileRegistry()
@@ -406,10 +409,17 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     getProfileRegistry().removeProfile(profileID);
   }
 
-  public boolean refreshProfiles()
+  public void refreshProfiles(IProgressMonitor monitor)
   {
+    // monitor.subTask("Refreshing " + getLocation() + " profiles");
+    getProvisioningAgent();
+    profileRegistry.resetProfiles();
+    profileRegistry.getProfileMap(monitor);
+
     fillProfileMap(profileMap);
-    return profileMap.refresh();
+    profileMap.refresh();
+
+    // monitor.done();
   }
 
   private void fillProfileMap(PersistentMap<Profile> profileMap)

@@ -18,6 +18,8 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 
 import org.osgi.framework.BundleContext;
@@ -210,9 +212,43 @@ public class AgentManagerImpl implements AgentManager
     // TODO Delete artifacts from disk
   }
 
-  public boolean refreshAgents()
+  public void refreshAgents(IProgressMonitor monitor)
   {
-    return agentMap.refresh();
+    monitor.beginTask("Refreshing agents...", 1 + 20);
+
+    try
+    {
+      agentMap.refresh();
+      monitor.worked(1);
+
+      Collection<Agent> agents = getAgents();
+      refreshAgents(agents, new SubProgressMonitor(monitor, 20));
+    }
+    finally
+    {
+      monitor.done();
+    }
+  }
+
+  private void refreshAgents(Collection<Agent> agents, IProgressMonitor monitor)
+  {
+    monitor.beginTask("", 21 * agents.size());
+
+    try
+    {
+      for (Agent agent : agents)
+      {
+        P2CorePlugin.checkCancelation(monitor);
+        monitor.subTask("Refreshing " + agent.getLocation());
+
+        agent.refreshBundlePools(new SubProgressMonitor(monitor, 1));
+        agent.refreshProfiles(new SubProgressMonitor(monitor, 20));
+      }
+    }
+    finally
+    {
+      monitor.done();
+    }
   }
 
   public Collection<BundlePool> getBundlePools()

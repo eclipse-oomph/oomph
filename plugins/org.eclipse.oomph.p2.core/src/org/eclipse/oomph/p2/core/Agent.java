@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.core;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
@@ -34,7 +35,7 @@ public interface Agent extends AgentManagerElement, ProfileContainer
 
   public BundlePool addBundlePool(File location);
 
-  public boolean refreshBundlePools();
+  public void refreshBundlePools(IProgressMonitor monitor);
 
   public Set<String> getAllProfileIDs();
 
@@ -42,7 +43,7 @@ public interface Agent extends AgentManagerElement, ProfileContainer
 
   public Profile getCurrentProfile();
 
-  public boolean refreshProfiles();
+  public void refreshProfiles(IProgressMonitor monitor);
 
   public IProvisioningAgent getProvisioningAgent();
 

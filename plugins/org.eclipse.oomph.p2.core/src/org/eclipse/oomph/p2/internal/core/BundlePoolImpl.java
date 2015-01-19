@@ -91,11 +91,6 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
 
   public boolean isUsed()
   {
-    if (!getClients().isEmpty())
-    {
-      return true;
-    }
-
     if (!getProfiles().isEmpty())
     {
       return true;

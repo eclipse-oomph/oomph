@@ -393,7 +393,7 @@ public class AgentTests extends AbstractP2Test
     Agent agent = getAgent();
     IProfileRegistry profileRegistry = agent.getProfileRegistry();
     profileRegistry.addProfile("profile1");
-    agent.refreshProfiles();
+    agent.refreshProfiles(LOGGER);
 
     Profile profile = agent.getProfile("profile1");
     ProfileTransaction transaction = profile.change();

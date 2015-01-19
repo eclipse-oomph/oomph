@@ -10,8 +10,12 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.p2.ProfileDefinition;
+import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.SubMonitor;
@@ -23,8 +27,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.core.ProvisionException;
-import org.eclipse.equinox.p2.engine.IProfile;
-import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -43,6 +45,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -52,7 +55,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -63,7 +65,7 @@ public final class AgentAnalyzer
 {
   private final Agent agent;
 
-  private final Map<File, BundlePool> bundlePools = new HashMap<File, BundlePool>();
+  private final Map<File, AnalyzedBundlePool> bundlePools = new HashMap<File, AnalyzedBundlePool>();
 
   private final List<Job> analyzeProfileJobs = new ArrayList<Job>();
 
@@ -71,34 +73,49 @@ public final class AgentAnalyzer
 
   private Handler handler;
 
-  public AgentAnalyzer(Agent agent, Handler handler)
+  public AgentAnalyzer(Agent agent, Handler handler, IProgressMonitor monitor)
   {
     this.agent = agent;
     this.handler = handler;
 
-    IProfileRegistry profileRegistry = agent.getProfileRegistry();
-    for (IProfile p2Profile : profileRegistry.getProfiles())
-    {
-      String installFolder = p2Profile.getProperty(IProfile.PROP_INSTALL_FOLDER);
-      String cache = p2Profile.getProperty(IProfile.PROP_CACHE);
-      if (cache != null && !cache.equals(installFolder))
-      {
-        File location = new File(cache);
+    Collection<Profile> allProfiles = agent.getAllProfiles();
+    monitor.beginTask("Loading profiles...", allProfiles.size());
 
-        BundlePool bundlePool = bundlePools.get(location);
-        if (bundlePool == null)
+    try
+    {
+      for (Profile p2Profile : allProfiles)
+      {
+        P2CorePlugin.checkCancelation(monitor);
+        monitor.subTask(p2Profile.getProfileId());
+
+        BundlePool p2BundlePool = p2Profile.getBundlePool();
+        if (p2BundlePool != null)
         {
-          bundlePool = new BundlePool(this, location);
-          bundlePools.put(location, bundlePool);
+          File installFolder = p2Profile.getInstallFolder();
+          File location = p2BundlePool.getLocation();
+          if (!location.equals(installFolder))
+          {
+            AnalyzedBundlePool bundlePool = bundlePools.get(location);
+            if (bundlePool == null)
+            {
+              bundlePool = new AnalyzedBundlePool(this, location);
+              bundlePools.put(location, bundlePool);
+            }
+
+            bundlePool.addProfile(p2Profile, installFolder);
+          }
         }
 
-        bundlePool.addProfile(p2Profile, installFolder);
+        monitor.worked(1);
       }
     }
-
+    finally
+    {
+      monitor.done();
+    }
     handler.analyzerChanged(this);
 
-    for (BundlePool bundlePool : bundlePools.values())
+    for (AnalyzedBundlePool bundlePool : bundlePools.values())
     {
       Job job = bundlePool.analyze();
       analyzeProfileJobs.add(job);
@@ -118,7 +135,7 @@ public final class AgentAnalyzer
     bundlePools.clear();
   }
 
-  public Map<File, BundlePool> getBundlePools()
+  public Map<File, AnalyzedBundlePool> getBundlePools()
   {
     return bundlePools;
   }
@@ -137,7 +154,7 @@ public final class AgentAnalyzer
       // addURIs(repositoryURIs, repositoryManager, IRepositoryManager.REPOSITORIES_SYSTEM);
       addURIs(repositoryURIs, repositoryManager, IRepositoryManager.REPOSITORIES_NON_SYSTEM);
 
-      for (BundlePool bundlePool : bundlePools.values())
+      for (AnalyzedBundlePool bundlePool : bundlePools.values())
       {
         // Don't use possibly damaged local bundle pools for damage repair
         repositoryURIs.remove(bundlePool.getLocation().toURI());
@@ -155,7 +172,7 @@ public final class AgentAnalyzer
     }
   }
 
-  private void bundlePoolChanged(BundlePool bundlePool, boolean artifacts, boolean profiles)
+  private void bundlePoolChanged(AnalyzedBundlePool bundlePool, boolean artifacts, boolean profiles)
   {
     if (handler != null)
     {
@@ -163,7 +180,7 @@ public final class AgentAnalyzer
     }
   }
 
-  private void profileChanged(Profile profile)
+  private void profileChanged(AnalyzedProfile profile)
   {
     if (handler != null)
     {
@@ -171,7 +188,7 @@ public final class AgentAnalyzer
     }
   }
 
-  private void artifactChanged(Artifact artifact)
+  private void artifactChanged(AnalyzedArtifact artifact)
   {
     if (handler != null)
     {
@@ -194,17 +211,17 @@ public final class AgentAnalyzer
   {
     public void analyzerChanged(AgentAnalyzer analyzer);
 
-    public void bundlePoolChanged(BundlePool bundlePool, boolean artifacts, boolean profiles);
+    public void bundlePoolChanged(AnalyzedBundlePool bundlePool, boolean artifacts, boolean profiles);
 
-    public void profileChanged(Profile profile);
+    public void profileChanged(AnalyzedProfile profile);
 
-    public void artifactChanged(Artifact artifact);
+    public void artifactChanged(AnalyzedArtifact artifact);
   }
 
   /**
    * @author Eike Stepper
    */
-  public static final class BundlePool implements Comparable<BundlePool>
+  public static final class AnalyzedBundlePool implements Comparable<AnalyzedBundlePool>
   {
     private final AgentAnalyzer analyzer;
 
@@ -212,25 +229,25 @@ public final class AgentAnalyzer
 
     private final Set<URI> repositoryURIs = new LinkedHashSet<URI>();
 
-    private final List<Profile> profiles = new ArrayList<Profile>();
+    private final List<AnalyzedProfile> profiles = new ArrayList<AnalyzedProfile>();
 
-    private final Map<IArtifactKey, Artifact> artifacts = new HashMap<IArtifactKey, Artifact>();
+    private final Map<IArtifactKey, AnalyzedArtifact> artifacts = new HashMap<IArtifactKey, AnalyzedArtifact>();
 
-    private final Set<Artifact> unusedArtifacts = new HashSet<Artifact>();
+    private final Set<AnalyzedArtifact> unusedArtifacts = new HashSet<AnalyzedArtifact>();
 
-    private final Set<Artifact> damagedArtifacts = new HashSet<Artifact>();
+    private final Set<AnalyzedArtifact> damagedArtifacts = new HashSet<AnalyzedArtifact>();
 
     private int damagedArtifactsPercent;
 
-    private Artifact[] artifactsArray;
+    private AnalyzedArtifact[] artifactsArray;
 
-    private Artifact[] unusedArtifactsArray;
+    private AnalyzedArtifact[] unusedArtifactsArray;
 
-    private Artifact[] damagedArtifactsArray;
+    private AnalyzedArtifact[] damagedArtifactsArray;
 
     private IFileArtifactRepository p2BundlePool;
 
-    public BundlePool(AgentAnalyzer analyzer, File location)
+    public AnalyzedBundlePool(AgentAnalyzer analyzer, File location)
     {
       this.analyzer = analyzer;
       this.location = location;
@@ -259,12 +276,48 @@ public final class AgentAnalyzer
       }
     }
 
-    public Profile[] getProfiles()
+    public AnalyzedProfile[] getProfiles()
     {
-      synchronized (profiles)
+      synchronized (this)
       {
-        return profiles.toArray(new Profile[profiles.size()]);
+        return profiles.toArray(new AnalyzedProfile[profiles.size()]);
       }
+    }
+
+    public AnalyzedProfile[] getUnusedProfiles()
+    {
+      List<AnalyzedProfile> unusedProfiles = new ArrayList<AnalyzedProfile>();
+
+      synchronized (this)
+      {
+        for (AnalyzedProfile profile : profiles)
+        {
+          if (profile.isUnused())
+          {
+            unusedProfiles.add(profile);
+          }
+        }
+      }
+
+      return unusedProfiles.toArray(new AnalyzedProfile[unusedProfiles.size()]);
+    }
+
+    public int getUnusedProfilesCount()
+    {
+      int count = 0;
+
+      synchronized (this)
+      {
+        for (AnalyzedProfile profile : profiles)
+        {
+          if (profile.isUnused())
+          {
+            ++count;
+          }
+        }
+      }
+
+      return count;
     }
 
     public int getArtifactCount()
@@ -275,13 +328,13 @@ public final class AgentAnalyzer
       }
     }
 
-    public Artifact[] getArtifacts()
+    public AnalyzedArtifact[] getArtifacts()
     {
       synchronized (this)
       {
         if (artifactsArray == null)
         {
-          artifactsArray = artifacts.values().toArray(new Artifact[artifacts.size()]);
+          artifactsArray = artifacts.values().toArray(new AnalyzedArtifact[artifacts.size()]);
           Arrays.sort(artifactsArray);
         }
 
@@ -289,7 +342,7 @@ public final class AgentAnalyzer
       }
     }
 
-    public Artifact getArtifact(IArtifactKey key)
+    public AnalyzedArtifact getArtifact(IArtifactKey key)
     {
       synchronized (this)
       {
@@ -305,13 +358,13 @@ public final class AgentAnalyzer
       }
     }
 
-    public Artifact[] getUnusedArtifacts()
+    public AnalyzedArtifact[] getUnusedArtifacts()
     {
       synchronized (this)
       {
         if (unusedArtifactsArray == null)
         {
-          unusedArtifactsArray = unusedArtifacts.toArray(new Artifact[unusedArtifacts.size()]);
+          unusedArtifactsArray = unusedArtifacts.toArray(new AnalyzedArtifact[unusedArtifacts.size()]);
           Arrays.sort(unusedArtifactsArray);
         }
 
@@ -332,13 +385,13 @@ public final class AgentAnalyzer
       }
     }
 
-    public Artifact[] getDamagedArtifacts()
+    public AnalyzedArtifact[] getDamagedArtifacts()
     {
       synchronized (this)
       {
         if (damagedArtifactsArray == null)
         {
-          damagedArtifactsArray = damagedArtifacts.toArray(new Artifact[damagedArtifacts.size()]);
+          damagedArtifactsArray = damagedArtifacts.toArray(new AnalyzedArtifact[damagedArtifacts.size()]);
           Arrays.sort(damagedArtifactsArray);
         }
 
@@ -346,7 +399,7 @@ public final class AgentAnalyzer
       }
     }
 
-    public int compareTo(BundlePool o)
+    public int compareTo(AnalyzedBundlePool o)
     {
       return location.getAbsolutePath().compareTo(o.getLocation().getAbsolutePath());
     }
@@ -375,9 +428,9 @@ public final class AgentAnalyzer
       return p2BundlePool;
     }
 
-    Profile addProfile(IProfile p2Profile, String installFolder)
+    AnalyzedProfile addProfile(Profile p2Profile, File installFolder)
     {
-      Profile profile = new Profile(this, p2Profile, installFolder == null ? null : new File(installFolder));
+      AnalyzedProfile profile = new AnalyzedProfile(this, p2Profile, installFolder);
       repositoryURIs.addAll(profile.getRepositoryURIs());
 
       synchronized (this)
@@ -415,7 +468,7 @@ public final class AgentAnalyzer
         P2CorePlugin.checkCancelation(monitor);
 
         File file = p2BundlePool.getArtifactFile(key);
-        Artifact artifact = new Artifact(this, key, file);
+        AnalyzedArtifact artifact = new AnalyzedArtifact(this, key, file);
 
         synchronized (this)
         {
@@ -431,7 +484,7 @@ public final class AgentAnalyzer
 
       analyzer.bundlePoolChanged(this, true, false);
 
-      for (Profile profile : getProfiles())
+      for (AnalyzedProfile profile : getProfiles())
       {
         P2CorePlugin.checkCancelation(monitor);
         profile.analyze(monitor);
@@ -445,7 +498,7 @@ public final class AgentAnalyzer
 
     private void analyzeUnusedArtifacts(IProgressMonitor monitor)
     {
-      for (Artifact artifact : getArtifacts())
+      for (AnalyzedArtifact artifact : getArtifacts())
       {
         P2CorePlugin.checkCancelation(monitor);
         if (analyzeUnusedArtifact(artifact, monitor))
@@ -463,9 +516,9 @@ public final class AgentAnalyzer
       analyzer.bundlePoolChanged(this, true, false);
     }
 
-    private boolean analyzeUnusedArtifact(Artifact artifact, IProgressMonitor monitor)
+    private boolean analyzeUnusedArtifact(AnalyzedArtifact artifact, IProgressMonitor monitor)
     {
-      for (Profile profile : getProfiles())
+      for (AnalyzedProfile profile : getProfiles())
       {
         P2CorePlugin.checkCancelation(monitor);
         if (profile.getArtifacts().contains(artifact))
@@ -479,11 +532,11 @@ public final class AgentAnalyzer
 
     private void analyzeDamagedArtifacts(IProgressMonitor monitor)
     {
-      Artifact[] artifacts = getArtifacts();
+      AnalyzedArtifact[] artifacts = getArtifacts();
       int total = artifacts.length;
       int i = 0;
 
-      for (Artifact artifact : artifacts)
+      for (AnalyzedArtifact artifact : artifacts)
       {
         P2CorePlugin.checkCancelation(monitor);
 
@@ -523,7 +576,7 @@ public final class AgentAnalyzer
       analyzer.bundlePoolChanged(this, false, false);
     }
 
-    private static boolean isDamaged(Artifact artifact)
+    private static boolean isDamaged(AnalyzedArtifact artifact)
     {
       File file = artifact.getFile();
       if (file == null || !file.exists())
@@ -596,7 +649,7 @@ public final class AgentAnalyzer
   /**
    * @author Eike Stepper
    */
-  public static final class Profile implements Comparable<Profile>
+  public static final class AnalyzedProfile implements Comparable<AnalyzedProfile>
   {
     public static final String ECLIPSE = "Eclipse";
 
@@ -607,26 +660,25 @@ public final class AgentAnalyzer
     @Deprecated
     private static final String PROP_TARGLET_CONTAINER_ID = "targlet.container.id";
 
-    @Deprecated
-    private static final String PROP_REPO_LIST = "setup.repo.list";
+    private final AnalyzedBundlePool bundlePool;
 
-    private final BundlePool bundlePool;
-
-    private final IProfile p2Profile;
+    private final Profile p2Profile;
 
     private final File installFolder;
 
     private final String type;
 
+    private final int roots;
+
     private final Set<URI> repositoryURIs = new LinkedHashSet<URI>();
 
-    private final Set<Artifact> artifacts = new HashSet<Artifact>();
+    private final Set<AnalyzedArtifact> artifacts = new HashSet<AnalyzedArtifact>();
 
-    private final Set<Artifact> damagedArtifacts = new HashSet<Artifact>();
+    private final Set<AnalyzedArtifact> damagedArtifacts = new HashSet<AnalyzedArtifact>();
 
-    private Artifact[] damagedArtifactsArray;
+    private AnalyzedArtifact[] damagedArtifactsArray;
 
-    public Profile(BundlePool bundlePool, IProfile p2Profile, File installFolder)
+    public AnalyzedProfile(AnalyzedBundlePool bundlePool, Profile p2Profile, File installFolder)
     {
       this.bundlePool = bundlePool;
       this.p2Profile = p2Profile;
@@ -645,29 +697,30 @@ public final class AgentAnalyzer
         type = UNKNOWN;
       }
 
-      String repoList = p2Profile.getProperty(PROP_REPO_LIST);
-      if (repoList != null)
-      {
-        StringTokenizer tokenizer = new StringTokenizer(repoList, ",");
-        while (tokenizer.hasMoreTokens())
-        {
-          String uri = tokenizer.nextToken();
+      ProfileDefinition profileDefinition = p2Profile.getDefinition();
+      roots = profileDefinition.getRequirements().size();
 
-          try
-          {
-            repositoryURIs.add(new URI(uri));
-          }
-          catch (URISyntaxException ex)
-          {
-            P2CorePlugin.INSTANCE.log(ex);
-          }
+      for (Repository repository : profileDefinition.getRepositories())
+      {
+        try
+        {
+          repositoryURIs.add(new URI(repository.getURL()));
+        }
+        catch (URISyntaxException ex)
+        {
+          P2CorePlugin.INSTANCE.log(ex);
         }
       }
     }
 
-    public BundlePool getBundlePool()
+    public AnalyzedBundlePool getBundlePool()
     {
       return bundlePool;
+    }
+
+    public boolean isUnused()
+    {
+      return !p2Profile.isUsed();
     }
 
     public String getID()
@@ -685,12 +738,17 @@ public final class AgentAnalyzer
       return type;
     }
 
+    public final int getRoots()
+    {
+      return roots;
+    }
+
     public Set<URI> getRepositoryURIs()
     {
       return repositoryURIs;
     }
 
-    public Set<Artifact> getArtifacts()
+    public Set<AnalyzedArtifact> getArtifacts()
     {
       return artifacts;
     }
@@ -711,13 +769,13 @@ public final class AgentAnalyzer
       }
     }
 
-    public Artifact[] getDamagedArtifacts()
+    public AnalyzedArtifact[] getDamagedArtifacts()
     {
       synchronized (bundlePool)
       {
         if (damagedArtifactsArray == null)
         {
-          damagedArtifactsArray = damagedArtifacts.toArray(new Artifact[damagedArtifacts.size()]);
+          damagedArtifactsArray = damagedArtifacts.toArray(new AnalyzedArtifact[damagedArtifacts.size()]);
           Arrays.sort(damagedArtifactsArray);
         }
 
@@ -725,7 +783,7 @@ public final class AgentAnalyzer
       }
     }
 
-    public int compareTo(Profile o)
+    public int compareTo(AnalyzedProfile o)
     {
       return getID().compareTo(o.getID());
     }
@@ -742,7 +800,7 @@ public final class AgentAnalyzer
       {
         for (IArtifactKey key : iu.getArtifacts())
         {
-          Artifact artifact = bundlePool.getArtifact(key);
+          AnalyzedArtifact artifact = bundlePool.getArtifact(key);
           if (artifact != null)
           {
             synchronized (bundlePool)
@@ -756,12 +814,49 @@ public final class AgentAnalyzer
         }
       }
     }
+
+    public synchronized void delete(IProgressMonitor monitor)
+    {
+      if (isUnused())
+      {
+        monitor.subTask("Deleting " + this);
+        p2Profile.delete();
+
+        boolean artifactsChanged = false;
+        synchronized (bundlePool)
+        {
+          for (AnalyzedArtifact artifact : artifacts)
+          {
+            if (artifact.profiles.remove(this))
+            {
+              artifactsChanged = true;
+
+              if (artifact.profiles.isEmpty())
+              {
+                bundlePool.unusedArtifacts.add(artifact);
+                bundlePool.unusedArtifactsArray = null;
+              }
+            }
+          }
+
+          bundlePool.profiles.remove(this);
+        }
+
+        bundlePool.analyzer.bundlePoolChanged(bundlePool, true, true);
+        bundlePool.analyzer.profileChanged(this);
+
+        if (artifactsChanged)
+        {
+          bundlePool.analyzer.artifactChanged(null);
+        }
+      }
+    }
   }
 
   /**
    * @author Eike Stepper
    */
-  public static final class Artifact implements Comparable<Artifact>
+  public static final class AnalyzedArtifact implements Comparable<AnalyzedArtifact>
   {
     public static final String REPAIR_TASK_NAME = "Repairing artifacts";
 
@@ -771,7 +866,7 @@ public final class AgentAnalyzer
 
     public static final String TYPE_BINARY = "Binary";
 
-    private final BundlePool bundlePool;
+    private final AnalyzedBundlePool bundlePool;
 
     private final IArtifactKey key;
 
@@ -779,11 +874,11 @@ public final class AgentAnalyzer
 
     private final File file;
 
-    private final List<Profile> profiles = new ArrayList<Profile>();
+    private final List<AnalyzedProfile> profiles = new ArrayList<AnalyzedProfile>();
 
     private boolean damaged;
 
-    public Artifact(BundlePool bundlePool, IArtifactKey key, File file)
+    public AnalyzedArtifact(AnalyzedBundlePool bundlePool, IArtifactKey key, File file)
     {
       this.bundlePool = bundlePool;
       this.key = key;
@@ -814,7 +909,7 @@ public final class AgentAnalyzer
       return damaged;
     }
 
-    public BundlePool getBundlePool()
+    public AnalyzedBundlePool getBundlePool()
     {
       return bundlePool;
     }
@@ -844,12 +939,12 @@ public final class AgentAnalyzer
       return file;
     }
 
-    public List<Profile> getProfiles()
+    public List<AnalyzedProfile> getProfiles()
     {
       return profiles;
     }
 
-    public int compareTo(Artifact o)
+    public int compareTo(AnalyzedArtifact o)
     {
       int result = key.getId().compareTo(o.key.getId());
       if (result == 0)
@@ -891,7 +986,7 @@ public final class AgentAnalyzer
         return false;
       }
 
-      Artifact other = (Artifact)obj;
+      AnalyzedArtifact other = (AnalyzedArtifact)obj;
       if (key == null)
       {
         if (other.key != null)
@@ -913,7 +1008,7 @@ public final class AgentAnalyzer
       return key.getId() + " " + key.getVersion();
     }
 
-    void addProfile(Profile profile)
+    void addProfile(AnalyzedProfile profile)
     {
       profiles.add(profile);
     }
@@ -921,7 +1016,7 @@ public final class AgentAnalyzer
     void setDamaged()
     {
       damaged = true;
-      for (Profile profile : profiles)
+      for (AnalyzedProfile profile : profiles)
       {
         synchronized (bundlePool)
         {
@@ -954,7 +1049,7 @@ public final class AgentAnalyzer
         bundlePool.analyzer.bundlePoolChanged(bundlePool, false, false);
         bundlePool.analyzer.artifactChanged(this);
 
-        for (Profile profile : profiles)
+        for (AnalyzedProfile profile : profiles)
         {
           synchronized (bundlePool)
           {
@@ -1014,7 +1109,7 @@ public final class AgentAnalyzer
           bundlePool.damagedArtifactsArray = null;
         }
 
-        for (Profile profile : profiles)
+        for (AnalyzedProfile profile : profiles)
         {
           synchronized (bundlePool)
           {
@@ -1038,11 +1133,11 @@ public final class AgentAnalyzer
       SubMonitor progress = SubMonitor.convert(monitor, 1 + repositoryURIs.size()).detectCancelation();
 
       Set<URI> poolURIs = new HashSet<URI>();
-      for (BundlePool pool : bundlePool.analyzer.getBundlePools().values())
+      for (AnalyzedBundlePool pool : bundlePool.analyzer.getBundlePools().values())
       {
         if (pool != bundlePool)
         {
-          Artifact otherArtifact = pool.getArtifact(key);
+          AnalyzedArtifact otherArtifact = pool.getArtifact(key);
           if (otherArtifact != null && !otherArtifact.isDamaged())
           {
             URI uri = pool.getLocation().toURI();

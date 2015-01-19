@@ -11,14 +11,19 @@
 package org.eclipse.oomph.p2.internal.ui;
 
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.AgentManagerElement;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.AgentManagerElementImpl;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -36,12 +41,16 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Tree;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 /**
  * @author Eike Stepper
  */
 public class AgentManagerComposite extends Composite
 {
+  private static final Preference PREF_SHOW_PROFILES = P2UIPlugin.INSTANCE.getInstancePreference("showProfiles");
+
   private TreeViewer treeViewer;
 
   private Object selectedElement;
@@ -87,6 +96,38 @@ public class AgentManagerComposite extends Composite
     buttonComposite.setLayout(buttonLayout);
     buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
     buttonComposite.setBounds(0, 0, 64, 64);
+
+    Button refreshButton = new Button(buttonComposite, SWT.NONE);
+    refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    refreshButton.setText("Refresh");
+    refreshButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        try
+        {
+          ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+          dialog.run(true, true, new IRunnableWithProgress()
+          {
+            public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+            {
+              P2Util.getAgentManager().refreshAgents(monitor);
+            }
+          });
+        }
+        catch (InvocationTargetException ex)
+        {
+          P2UIPlugin.INSTANCE.log(ex);
+        }
+        catch (InterruptedException ex)
+        {
+          //$FALL-THROUGH$
+        }
+
+        treeViewer.refresh();
+      }
+    });
 
     newAgentButton = new Button(buttonComposite, SWT.NONE);
     newAgentButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
@@ -178,30 +219,54 @@ public class AgentManagerComposite extends Composite
       public void widgetSelected(SelectionEvent e)
       {
         boolean showProfiles = showProfilesButton.getSelection();
+        PREF_SHOW_PROFILES.set(showProfiles);
+
         contentProvider.setShowProfiles(showProfiles);
         treeViewer.refresh();
       }
     });
 
+    if (PREF_SHOW_PROFILES.get(false))
+    {
+      showProfilesButton.setSelection(true);
+      contentProvider.setShowProfiles(true);
+    }
+
     UIUtil.asyncExec(new Runnable()
     {
       public void run()
       {
+        final AgentManager agentManager = P2Util.getAgentManager();
+
         BusyIndicator.showWhile(getShell().getDisplay(), new Runnable()
         {
           public void run()
           {
-            treeViewer.setInput(P2Util.getAgentManager());
+            treeViewer.setInput(agentManager);
             treeViewer.expandAll();
           }
         });
 
-        if (selection != null)
+        if (selection == null)
+        {
+          Collection<Agent> agents = agentManager.getAgents();
+          if (!agents.isEmpty())
+          {
+            treeViewer.setSelection(new StructuredSelection(agents.iterator().next()));
+          }
+        }
+        else
         {
           treeViewer.setSelection(new StructuredSelection(selection));
         }
       }
     });
+  }
+
+  @Override
+  public boolean setFocus()
+  {
+    return treeViewer.getTree().setFocus();
   }
 
   public Object getSelectedElement()

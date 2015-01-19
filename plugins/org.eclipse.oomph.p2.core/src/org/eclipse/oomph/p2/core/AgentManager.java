@@ -12,6 +12,8 @@ package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.P2Exception;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.Set;
@@ -35,7 +37,7 @@ public interface AgentManager
 
   public Agent addAgent(File location);
 
-  public boolean refreshAgents();
+  public void refreshAgents(IProgressMonitor monitor);
 
   public Collection<BundlePool> getBundlePools();
 
