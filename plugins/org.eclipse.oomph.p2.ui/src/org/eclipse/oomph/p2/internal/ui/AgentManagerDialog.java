@@ -30,7 +30,7 @@ public class AgentManagerDialog extends OomphDialog
 
   public AgentManagerDialog(Shell parentShell)
   {
-    super(parentShell, TITLE, 500, 350, P2UIPlugin.INSTANCE, false);
+    super(parentShell, TITLE, 500, 400, P2UIPlugin.INSTANCE, false);
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
   }
 
