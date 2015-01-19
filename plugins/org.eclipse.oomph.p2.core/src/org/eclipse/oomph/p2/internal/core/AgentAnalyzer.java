@@ -718,6 +718,11 @@ public final class AgentAnalyzer
       return bundlePool;
     }
 
+    public Profile getP2Profile()
+    {
+      return p2Profile;
+    }
+
     public boolean isUnused()
     {
       return !p2Profile.isUsed();

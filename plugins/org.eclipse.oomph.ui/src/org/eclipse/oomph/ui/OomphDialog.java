@@ -46,6 +46,10 @@ import java.lang.reflect.Field;
  */
 public abstract class OomphDialog extends TitleAreaDialog implements HelpProvider
 {
+  private static final String SETTING_DIALOG_WIDTH = "dialogWidth";
+
+  private static final String SETTING_DIALOG_HEIGHT = "dialogHeight";
+
   private String title;
 
   private int width;
@@ -56,15 +60,34 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
   private HelpSupport helpSupport;
 
-  protected OomphDialog(Shell parentShell, String title, int width, int height, OomphUIPlugin plugin, boolean helpAvailable)
+  protected OomphDialog(Shell parentShell, String title, int defaultWidth, int defaultHeight, OomphUIPlugin plugin, boolean helpAvailable)
   {
     super(parentShell);
     setShellStyle(SWT.SHELL_TRIM | SWT.BORDER | SWT.APPLICATION_MODAL);
 
     this.title = title;
-    this.width = width;
-    this.height = height;
     this.plugin = plugin;
+
+    IDialogSettings settings = getDialogSettings();
+
+    try
+    {
+      int dialogWidth = settings.getInt(SETTING_DIALOG_WIDTH);
+      width = dialogWidth;
+    }
+    catch (NumberFormatException ex)
+    {
+      width = defaultWidth;
+    }
+    try
+    {
+      int dialogHeight = settings.getInt(SETTING_DIALOG_HEIGHT);
+      height = dialogHeight;
+    }
+    catch (NumberFormatException ex)
+    {
+      height = defaultHeight;
+    }
 
     if (helpAvailable)
     {
@@ -98,22 +121,17 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
       helpSupport = null;
     }
 
+    Point size = getShell().getSize();
+    IDialogSettings settings = getDialogSettings();
+    settings.put(SETTING_DIALOG_WIDTH, size.x);
+    settings.put(SETTING_DIALOG_HEIGHT, size.y);
+
     return super.close();
   }
 
   public String getTitle()
   {
     return title;
-  }
-
-  public int getWidth()
-  {
-    return width;
-  }
-
-  public int getHeight()
-  {
-    return height;
   }
 
   @Override

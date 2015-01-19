@@ -15,13 +15,13 @@ import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.AgentManagerElement;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.core.AgentManagerElementImpl;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -32,6 +32,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -50,11 +52,14 @@ import java.util.Collection;
  */
 public class AgentManagerComposite extends Composite
 {
-  private static final Preference PREF_SHOW_PROFILES = P2UIPlugin.INSTANCE.getInstancePreference("showProfiles");
+  // The standalone installer doesn't remember instance preferences in debug mode.
+  private static final Preference PREF_SHOW_PROFILES = P2UIPlugin.INSTANCE.getConfigurationPreference("showProfiles");
 
   private TreeViewer treeViewer;
 
   private Object selectedElement;
+
+  private Button refreshButton;
 
   private Button newAgentButton;
 
@@ -88,6 +93,22 @@ public class AgentManagerComposite extends Composite
 
     Tree tree = treeViewer.getTree();
     tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    tree.addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseDoubleClick(MouseEvent e)
+      {
+        if (selectedElement instanceof Profile)
+        {
+          ProfileDetailsDialog dialog = new ProfileDetailsDialog(getShell(), (Profile)selectedElement);
+          dialog.open();
+        }
+        else
+        {
+          treeViewer.setExpandedState(selectedElement, !treeViewer.getExpandedState(selectedElement));
+        }
+      }
+    });
 
     GridLayout buttonLayout = new GridLayout(1, false);
     buttonLayout.marginWidth = 0;
@@ -98,7 +119,7 @@ public class AgentManagerComposite extends Composite
     buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
     buttonComposite.setBounds(0, 0, 64, 64);
 
-    Button refreshButton = new Button(buttonComposite, SWT.NONE);
+    refreshButton = new Button(buttonComposite, SWT.NONE);
     refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     refreshButton.setText("Refresh");
     refreshButton.addSelectionListener(new SelectionAdapter()
@@ -180,7 +201,7 @@ public class AgentManagerComposite extends Composite
         String type = agentManagerElement.getElementType();
 
         String message = "Are you sure to delete " + type + " " + agentManagerElement + "?";
-        if (!(agentManagerElement instanceof IProfile))
+        if (!(agentManagerElement instanceof Profile))
         {
           message += "\n\nThe physical " + type + " files will remain on disk even if you answer Yes.";
         }
@@ -229,6 +250,13 @@ public class AgentManagerComposite extends Composite
 
         contentProvider.setShowProfiles(showProfiles);
         treeViewer.refresh();
+
+        if (selectedElement instanceof BundlePool)
+        {
+          treeViewer.setExpandedState(selectedElement, true);
+        }
+
+        profilesShown(showProfiles);
       }
     });
 
@@ -236,6 +264,7 @@ public class AgentManagerComposite extends Composite
     {
       showProfilesButton.setSelection(true);
       contentProvider.setShowProfiles(true);
+      profilesShown(true);
     }
 
     UIUtil.asyncExec(new Runnable()
@@ -284,10 +313,13 @@ public class AgentManagerComposite extends Composite
   public void setEnabled(boolean enabled)
   {
     treeViewer.getTree().setEnabled(enabled);
+
+    refreshButton.setEnabled(enabled);
     newAgentButton.setEnabled(enabled);
-    newPoolButton.setEnabled(enabled);
-    deleteButton.setEnabled(enabled);
-    analyzeButton.setEnabled(enabled);
+    showProfilesButton.setEnabled(enabled);
+
+    elementChanged(selectedElement);
+
     super.setEnabled(enabled);
   }
 
@@ -302,6 +334,10 @@ public class AgentManagerComposite extends Composite
     newPoolButton.setEnabled(element instanceof Agent);
     deleteButton.setEnabled(element instanceof AgentManagerElement && !((AgentManagerElement)element).isUsed());
     analyzeButton.setEnabled(element instanceof Agent);
+  }
+
+  protected void profilesShown(boolean profilesShown)
+  {
   }
 
   private String openDirectoryDialog(String message, String path)

@@ -24,13 +24,15 @@ public class AgentManagerDialog extends OomphDialog
 {
   public static final String TITLE = "Bundle Pool Management";
 
+  private static final String MESSAGE = "Manage your p2 agents and bundle pools.";
+
   private Object selectedElement;
 
   private AgentManagerComposite composite;
 
   public AgentManagerDialog(Shell parentShell)
   {
-    super(parentShell, TITLE, 500, 400, P2UIPlugin.INSTANCE, false);
+    super(parentShell, TITLE, 700, 500, P2UIPlugin.INSTANCE, false);
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
   }
 
@@ -63,7 +65,7 @@ public class AgentManagerDialog extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Manage your p2 agents and bundle pools.";
+    return MESSAGE;
   }
 
   @Override
@@ -90,6 +92,19 @@ public class AgentManagerDialog extends OomphDialog
       {
         super.elementChanged(element);
         AgentManagerDialog.this.elementChanged(element);
+      }
+
+      @Override
+      protected void profilesShown(boolean profilesShown)
+      {
+        super.profilesShown(profilesShown);
+        String message = MESSAGE;
+        if (profilesShown)
+        {
+          message += " Double-click profiles to see their details.";
+        }
+
+        setMessage(message);
       }
     };
 

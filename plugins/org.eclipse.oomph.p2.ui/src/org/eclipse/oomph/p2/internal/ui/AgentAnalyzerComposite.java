@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.internal.ui;
 
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.core.AgentAnalyzer;
 import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.AnalyzedArtifact;
 import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.AnalyzedBundlePool;
@@ -48,6 +49,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -437,6 +440,22 @@ public class AgentAnalyzerComposite extends Composite
           }
 
           artifactViewer.setSelection(new StructuredSelection(new ArrayList<AnalyzedArtifact>(artifacts)));
+        }
+      }
+    });
+
+    profileTable.addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseDoubleClick(MouseEvent e)
+      {
+        AnalyzedProfile[] selectedProfiles = getSelectedProfiles();
+        if (selectedProfiles.length == 1)
+        {
+          Profile profile = selectedProfiles[0].getP2Profile();
+
+          ProfileDetailsDialog dialog = new ProfileDetailsDialog(getShell(), profile);
+          dialog.open();
         }
       }
     });
