@@ -21,6 +21,7 @@ import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -178,8 +179,13 @@ public class AgentManagerComposite extends Composite
         AgentManagerElementImpl agentManagerElement = (AgentManagerElementImpl)selectedElement;
         String type = agentManagerElement.getElementType();
 
-        if (MessageDialog.openQuestion(getShell(), AgentManagerDialog.TITLE, "Are you sure to delete " + type + " " + agentManagerElement
-            + "?\n\nThe physical " + type + " files will remain on disk even if you answer Yes."))
+        String message = "Are you sure to delete " + type + " " + agentManagerElement + "?";
+        if (!(agentManagerElement instanceof IProfile))
+        {
+          message += "\n\nThe physical " + type + " files will remain on disk even if you answer Yes.";
+        }
+
+        if (MessageDialog.openQuestion(getShell(), AgentManagerDialog.TITLE, message))
         {
           try
           {
