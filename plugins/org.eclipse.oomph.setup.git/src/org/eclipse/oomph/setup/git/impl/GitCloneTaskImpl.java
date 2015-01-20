@@ -18,7 +18,6 @@ import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.git.GitCloneTask;
 import org.eclipse.oomph.setup.git.GitPackage;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
-import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -31,6 +30,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.egit.core.EclipseGitProgressTransformer;
@@ -502,7 +502,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     return 100;
   }
 
-  public boolean isNeeded(SetupTaskContext context) throws Exception
+  public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
     String location = getLocation();
 
@@ -552,7 +552,14 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       if (!workDirExisted)
       {
-        FileUtil.delete(workDir, new ProgressLogMonitor(context));
+        FileUtil.delete(workDir, new NullProgressMonitor()
+        {
+          @Override
+          public boolean isCanceled()
+          {
+            return context.isCanceled();
+          }
+        });
       }
 
       throw new Exception(ex);
@@ -628,7 +635,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
           context.log("Deleting the result of the failed clone operation");
         }
 
-        FileUtil.delete(workDir, new ProgressLogMonitor(context)
+        FileUtil.delete(workDir, new NullProgressMonitor()
         {
           @Override
           public boolean isCanceled()
