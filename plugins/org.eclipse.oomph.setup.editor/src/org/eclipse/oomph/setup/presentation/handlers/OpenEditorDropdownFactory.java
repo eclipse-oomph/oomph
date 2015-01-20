@@ -15,17 +15,13 @@ import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
-import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
-import org.eclipse.oomph.util.PropertiesUtil;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -87,15 +83,6 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
         User user = setupContext.getUser();
         createMenuItem(menu, adapterFactory, user);
         eObjects.add(user);
-
-        // TODO Remove at some point
-        if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.legacy")))
-        {
-          Index legacyIndex = SetupFactory.eINSTANCE.createIndex();
-          ((InternalEObject)legacyIndex).eSetProxyURI(URI
-              .createURI("http://git.eclipse.org/c/cdo/cdo.git/plain/plugins/org.eclipse.emf.cdo.releng.setup/Configuration.setup"));
-          createMenuItem(menu, adapterFactory, legacyIndex).setText("Legacy Catalog");
-        }
 
         Installation installation = setupContext.getInstallation();
         if (installation != null)
