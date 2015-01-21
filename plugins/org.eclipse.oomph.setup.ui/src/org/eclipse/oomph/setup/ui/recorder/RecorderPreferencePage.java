@@ -200,7 +200,11 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
   @Override
   public boolean performOk()
   {
-    transaction.commit();
+    if (transaction != null)
+    {
+      transaction.commit();
+    }
+
     return super.performOk();
   }
 
