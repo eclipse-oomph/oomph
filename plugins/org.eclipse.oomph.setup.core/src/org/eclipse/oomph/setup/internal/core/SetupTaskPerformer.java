@@ -71,6 +71,7 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.BasicEList;
@@ -105,10 +106,12 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -1241,6 +1244,23 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       if (setupTask instanceof WorkspaceTask)
       {
         return new File(((WorkspaceTask)setupTask).getLocation());
+      }
+    }
+
+    if (EMFPlugin.IS_RESOURCES_BUNDLE_AVAILABLE)
+    {
+      IWorkspace workspace = ResourcesPlugin.getWorkspace();
+      if (workspace != null)
+      {
+        IWorkspaceRoot root = workspace.getRoot();
+        if (root != null)
+        {
+          IPath location = root.getLocation();
+          if (location != null)
+          {
+            return location.toFile();
+          }
+        }
       }
     }
 

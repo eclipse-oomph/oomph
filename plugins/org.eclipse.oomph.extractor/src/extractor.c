@@ -43,17 +43,135 @@ getTempFile ()
  * User Interface
  ***************************************************************************************/
 
+static BOOL CALLBACK
+enumChildWindowsCallback (HWND hWnd, LPARAM lParam)
+{
+  _TCHAR className[MAX_PATH];
+  className[0] = 0;
+
+  GetClassName (hWnd, className, sizeof(className));
+  className[MAX_PATH - 1] = 0;
+
+  if (lstrcmpi (className, _T("SysTreeView32")) == 0)
+  {
+    HWND* phWnd = (HWND*) lParam;
+    if (phWnd)
+    {
+      *phWnd = hWnd;
+    }
+
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
 static int CALLBACK
 browseCallback (HWND hWnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
-  if (uMsg == BFFM_INITIALIZED)
+  static BOOL ensureVisible = FALSE;
+
+  switch (uMsg)
   {
-    HINSTANCE hInstance = GetModuleHandle (NULL);
-    HICON hIcon = LoadIcon (hInstance, MAKEINTRESOURCE(ID_ICON));
-    SendMessage (hWnd, WM_SETICON, ICON_SMALL, (LPARAM) hIcon);
+    case BFFM_INITIALIZED:
+      {
+        HINSTANCE hInstance = GetModuleHandle (NULL);
+        HICON hIcon = LoadIcon (hInstance, MAKEINTRESOURCE(ID_ICON));
+        SendMessage (hWnd, WM_SETICON, ICON_SMALL, (LPARAM) hIcon);
+
+        ensureVisible = FALSE;
+
+        _TCHAR buffer[MAX_PATH];
+        buffer[0] = 0;
+
+        GetCurrentDirectory (MAX_PATH, buffer);
+        buffer[MAX_PATH - 1] = 0;
+//        strcat (buffer, _T("\\EclipseInstaller"));
+
+        OSVERSIONINFO versionInfo;
+        versionInfo.dwOSVersionInfoSize = sizeof(versionInfo);
+
+        if (GetVersionEx (&versionInfo) && versionInfo.dwMajorVersion >= 6 && versionInfo.dwMinorVersion >= 1)
+        {
+          ensureVisible = TRUE;
+        }
+
+        SendMessage (hWnd, BFFM_SETSELECTION, TRUE, (LPARAM) buffer);
+        break;
+      }
+
+    case BFFM_SELCHANGED:
+      {
+        if (ensureVisible)
+        {
+          ensureVisible = FALSE;
+
+          HWND hWndTree = NULL;
+          EnumChildWindows (hWnd, enumChildWindowsCallback, (LPARAM) &hWndTree);
+
+          if (hWndTree)
+          {
+            HTREEITEM hTreeItem = TreeView_GetSelection(hWndTree);
+            if (hTreeItem)
+            {
+              TreeView_EnsureVisible(hWndTree, hTreeItem);
+            }
+          }
+        }
+
+        break;
+      }
   }
 
   return 0;
+}
+
+static BOOL CALLBACK
+dialogProc (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+  switch (msg)
+  {
+    case WM_INITDIALOG:
+      {
+        HINSTANCE hInstance = GetModuleHandle (NULL);
+        HICON hIcon = LoadIcon (hInstance, MAKEINTRESOURCE(ID_ICON));
+        SendMessage (hDlg, WM_SETICON, ICON_SMALL, (LPARAM) hIcon);
+        return TRUE;
+      }
+
+    case WM_CLOSE:
+      EndDialog (hDlg, 0);
+      return TRUE;
+
+    case WM_COMMAND:
+      switch (LOWORD(wParam))
+      {
+        case IDOK:
+          EndDialog (hDlg, 0);
+          return TRUE;
+
+        case IDC_EDIT1:
+          switch (HIWORD(wParam))
+          {
+            case EN_CHANGE:
+              {
+                HWND hText = (HWND) lParam;
+                _TCHAR buffer[MAX_PATH];
+                GetWindowText (hText, buffer, sizeof(buffer));
+
+                printf (_T("%s\n"), buffer);
+                fflush (stdout);
+                return TRUE;
+              }
+          }
+
+          return TRUE;
+      }
+
+      break;
+  }
+
+  return FALSE;
 }
 
 static _TCHAR*
@@ -61,8 +179,10 @@ browseForFolder (HWND hwndOwner, LPCTSTR lpszTitle)
 {
   CoInitialize (NULL);
 
+  DialogBox(NULL, MAKEINTRESOURCE(ID_DLGBOX2), hwndOwner, (DLGPROC)dialogProc);
+
   _TCHAR* result = NULL;
-  TCHAR buffer[MAX_PATH];
+  _TCHAR buffer[MAX_PATH];
 
   BROWSEINFO browseInfo = { 0 };
   browseInfo.hwndOwner = hwndOwner;
@@ -83,7 +203,7 @@ browseForFolder (HWND hwndOwner, LPCTSTR lpszTitle)
     CoTaskMemFree (itemIDList);
   }
 
-  // CoUninitialize ();
+// CoUninitialize ();
   return result;
 }
 
@@ -310,7 +430,7 @@ main (int argc, char *argv[])
       if (validateJRE (jre, &req))
       {
         _TCHAR label[MAX_PATH];
-        sprintf (label, _T("Extract %s to:"), req.productName);
+        sprintf (label, _T("Select or create an empty folder to extract %s into:"), req.productName);
 
         _TCHAR* targetFolder = browseForFolder (NULL, label);
         if (targetFolder == NULL)

@@ -11,10 +11,7 @@
 //
 
 #define ID_ICON                         101
-
 #define ID_DLGBOX                       201
 #define IDC_OK                          202
 #define IDC_CB1                         203
 #define IDC_EDIT1                       204
-
-#define ID_DLGBOX2                       301
