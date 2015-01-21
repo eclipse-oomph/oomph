@@ -189,26 +189,11 @@ public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
       emptyProduct.setDescription("The empty product");
       productCatalog.getProducts().add(emptyProduct);
 
-      VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-      variable.setName("installation.location");
-      variable.setValue("somewhere");
-      emptyProduct.getSetupTasks().add(variable);
-
       ProductVersion emptyProductVersion = SetupFactory.eINSTANCE.createProductVersion();
       emptyProductVersion.setName("version");
-      emptyProductVersion.setLabel("Self Empty Product Version");
-      emptyProductVersion.setDescription("The self empty product version");
+      emptyProductVersion.setLabel("Empty Product Version");
+      emptyProductVersion.setDescription("The empty product version");
       emptyProduct.getVersions().add(emptyProductVersion);
-
-      P2Task emptyP2Task = SetupP2Factory.eINSTANCE.createP2Task();
-      emptyProductVersion.getSetupTasks().add(emptyP2Task);
-
-      Requirement requirement = P2Factory.eINSTANCE.createRequirement("something");
-      emptyP2Task.getRequirements().add(requirement);
-
-      EList<Repository> repositories = emptyP2Task.getRepositories();
-      Repository repository = P2Factory.eINSTANCE.createRepository("http://somewhere");
-      repositories.add(repository);
     }
 
     return productCatalog;
