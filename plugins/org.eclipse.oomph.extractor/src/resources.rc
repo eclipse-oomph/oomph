@@ -12,32 +12,3 @@
 #include "resources.h"
 
 ID_ICON ICON "..\\..\\..\\products\\org.eclipse.oomph.setup.installer.product\\icons\\oomph.ico"
-
-/*
-ID_DLGBOX DIALOG 100, 100, 380, 90
-CAPTION "Title Bar Text"
-FONT 8, "MS Sans Serif"
-BEGIN
-  PUSHBUTTON "OK",  IDC_OK,      10, 10, 50,  15
-  CHECKBOX "Box 1", IDC_CB1,   10, 30, 50,  15
-  EDITTEXT          IDC_EDIT1, 10, 50, 100, 12
-  CONTROL "OK", 202, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_VISIBLE | WS_CHILD, 96, 56, 50, 15
-  CONTROL "", 204, "edit", ES_LEFT | WS_TABSTOP | WS_BORDER | WS_VISIBLE | WS_CHILD, 48, 25, 252, 12
-  CONTROL "The Oomph Installer needs to be extracted into a new folder on your disk.", 0, "static", SS_LEFT | WS_VISIBLE | WS_CHILD, 8, 9, 308, 15
-  CONTROL "Extract to:", 0, "static", SS_LEFT | WS_VISIBLE | WS_CHILD, 8, 26, 40, 13
-  CONTROL IDCANCEL, 202, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_VISIBLE | WS_CHILD, 168, 56, 50, 15
-  CONTROL "OK", 202, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_VISIBLE | WS_CHILD, 308, 25, 50, 15
-END
-*/
-
-ID_DLGBOX2 DIALOGEX 100, 100, 381, 87
-  CAPTION "Title Bar Text"
-  FONT 8, "MS Sans Serif"
-BEGIN
-  CONTROL "The Oomph Installer needs to be extracted into a new folder on your disk.", 0, "static", SS_LEFT | WS_VISIBLE | WS_CHILD, 8, 9, 308, 15
-  CONTROL "Extract to:", 0, "static", SS_LEFT | WS_VISIBLE | WS_CHILD, 8, 26, 40, 13
-  CONTROL "", 204, "edit", ES_LEFT | WS_TABSTOP | WS_BORDER | WS_VISIBLE | WS_CHILD, 48, 25, 252, 12
-  CONTROL "Browse", 0, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_VISIBLE | WS_CHILD, 308, 25, 50, 15
-  CONTROL "OK", 202, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_VISIBLE | WS_CHILD, 47, 47, 50, 15
-  CONTROL "Cancel", 0, "button", BS_PUSHBUTTON | WS_TABSTOP | WS_VISIBLE | WS_CHILD, 119, 47, 50, 15
-END
