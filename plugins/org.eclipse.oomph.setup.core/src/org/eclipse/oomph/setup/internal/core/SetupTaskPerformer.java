@@ -64,6 +64,7 @@ import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -186,7 +187,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private Set<Bundle> bundles = new HashSet<Bundle>();
 
-  private List<String> logMessageBuffer;
+  /**
+   * A list that contains instances of String and/or Pair<String, ProgressLog.Severity>.
+   */
+  private List<Object> logMessageBuffer;
 
   private PrintStream logStream;
 
@@ -1536,52 +1540,86 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void task(SetupTask setupTask)
   {
     progress.task(setupTask);
-    log("Performing setup task " + getLabel(setupTask));
+    log("Performing " + getLabel(setupTask), false, Severity.INFO);
   }
 
   public void log(Throwable t)
   {
-    log(SetupCorePlugin.toString(t), false);
+    log(SetupCorePlugin.toString(t), false, Severity.ERROR);
   }
 
   public void log(IStatus status)
   {
-    log(SetupCorePlugin.toString(status), false);
+    log(SetupCorePlugin.toString(status), false, Severity.fromStatus(status));
   }
 
   public void log(String line)
   {
-    log(line, true);
+    log(line, true, Severity.OK);
+  }
+
+  public void log(String line, Severity severity)
+  {
+    log(line, true, severity);
   }
 
   public void log(String line, boolean filter)
+  {
+    log(line, filter, Severity.OK);
+  }
+
+  public void log(String line, boolean filter, Severity severity)
   {
     if (progress != null)
     {
       if (logMessageBuffer != null)
       {
-        for (String value : logMessageBuffer)
+        for (Object value : logMessageBuffer)
         {
-          doLog(value, filter);
+          String bufferedLine;
+          Severity bufferedSeverity;
+          if (value instanceof String)
+          {
+            bufferedLine = (String)value;
+            bufferedSeverity = Severity.OK;
+          }
+          else
+          {
+            @SuppressWarnings("unchecked")
+            Pair<String, Severity> pair = (Pair<String, Severity>)value;
+
+            bufferedLine = pair.getElement1();
+            bufferedSeverity = pair.getElement2();
+          }
+
+          int xxx; // TODO Should we remember filter value, too; or is the line already filtered?
+          doLog(bufferedLine, filter, bufferedSeverity);
         }
 
         logMessageBuffer = null;
       }
 
-      doLog(line, filter);
+      doLog(line, filter, severity);
     }
     else
     {
       if (logMessageBuffer == null)
       {
-        logMessageBuffer = new ArrayList<String>();
+        logMessageBuffer = new ArrayList<Object>();
       }
 
-      logMessageBuffer.add(line);
+      if (severity == Severity.OK)
+      {
+        logMessageBuffer.add(line);
+      }
+      else
+      {
+        logMessageBuffer.add(Pair.create(line, severity));
+      }
     }
   }
 
-  private void doLog(String line, boolean filter)
+  private void doLog(String line, boolean filter, Severity severity)
   {
     if (filter)
     {
@@ -1604,7 +1642,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       SetupCorePlugin.INSTANCE.log(ex);
     }
 
-    progress.log(line, filter);
+    progress.log(line, filter, severity);
   }
 
   public PrintStream getLogStream()
@@ -3161,6 +3199,17 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     String label = labelProvider.getText(setupTask);
+    if (!label.startsWith(type))
+    {
+      label = type + " " + label;
+    }
+
+    int eol = label.indexOf('\n');
+    if (eol != -1)
+    {
+      label = label.substring(0, eol) + "...";
+    }
+
     return label.startsWith(type) ? label : type + " " + label;
   }
 

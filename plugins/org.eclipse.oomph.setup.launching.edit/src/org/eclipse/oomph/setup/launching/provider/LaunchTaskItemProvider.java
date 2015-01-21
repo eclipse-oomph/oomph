@@ -13,7 +13,6 @@ package org.eclipse.oomph.setup.launching.provider;
 import org.eclipse.oomph.setup.launching.LaunchTask;
 import org.eclipse.oomph.setup.launching.LaunchingPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -103,13 +102,13 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   @Override
   public String getText(Object object)
   {
-    String label = ((LaunchTask)object).getID();
-    return StringUtil.isEmpty(label) ? "Launcher" : label;
+    String label = ((LaunchTask)object).getLauncher();
+    return label == null || label.length() == 0 ? getString("_UI_LaunchTask_type") : getString("_UI_LaunchTask_type") + " " + label;
   }
 
   /**

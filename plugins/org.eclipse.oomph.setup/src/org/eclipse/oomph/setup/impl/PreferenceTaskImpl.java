@@ -301,7 +301,10 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     }
 
     final String value = getValue();
-    context.log("Setting preference " + key + " = " + value);
+    if (value != null && value.indexOf('\n') != -1)
+    {
+      context.log(value);
+    }
 
     performUI(context, new RunnableWithContext()
     {

@@ -1096,7 +1096,22 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     public void log(String line)
     {
-      log(line, true);
+      log(line, true, Severity.OK);
+    }
+
+    public void log(String line, Severity severity)
+    {
+      log(line, true, severity);
+    }
+
+    public void log(String line, boolean filter)
+    {
+      log(line, filter, Severity.OK);
+    }
+
+    public synchronized void log(String line, boolean filter, Severity severity)
+    {
+      name = line;
     }
 
     public void log(IStatus status)
@@ -1109,11 +1124,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       String string = SetupInstallerPlugin.toString(t);
       log(string, false);
-    }
-
-    public synchronized void log(String line, boolean filter)
-    {
-      name = line;
     }
 
     public synchronized void task(SetupTask setupTask)

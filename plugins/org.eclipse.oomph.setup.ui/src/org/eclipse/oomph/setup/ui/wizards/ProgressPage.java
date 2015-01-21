@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
+import org.eclipse.oomph.setup.log.ProgressLog.Severity;
 import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.log.ProgressLogProvider;
 import org.eclipse.oomph.setup.log.ProgressLogRunnable;
@@ -40,6 +41,7 @@ import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.ecore.EObject;
@@ -77,9 +79,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -98,9 +102,7 @@ import org.eclipse.ui.internal.progress.ProgressManager;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.security.cert.Certificate;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,8 +119,6 @@ public class ProgressPage extends SetupWizardPage
   public static final String PROGRESS_STATUS = "org.eclipse.oomph.setup.status";
 
   public static final String PAGE_NAME = "ProgressPage";
-
-  private static final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm:ss");
 
   private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
 
@@ -479,7 +479,7 @@ public class ProgressPage extends SetupWizardPage
       treeViewer.setInput(new ItemProvider(performer.getNeededTasks()));
 
       String jobName = "Executing " + getTriggerName().toLowerCase() + " tasks";
-      performer.log(jobName);
+      performer.log(jobName, false, Severity.INFO);
 
       if (renamed != null)
       {
@@ -637,7 +637,7 @@ public class ProgressPage extends SetupWizardPage
                 final boolean restart = restartReasons != null && !restartReasons.isEmpty() && trigger != Trigger.BOOTSTRAP;
                 if (restart)
                 {
-                  progressLog.message("A restart is needed for the following reasons:");
+                  progressLog.message("A restart is needed for the following reasons:", false, Severity.INFO);
                   for (String reason : restartReasons)
                   {
                     progressLog.message("  - " + reason);
@@ -665,7 +665,7 @@ public class ProgressPage extends SetupWizardPage
                     return Status.OK_STATUS;
                   }
 
-                  progressLog.message("Press Finish to restart now or Cancel to restart later.");
+                  progressLog.message("Press Finish to restart now or Cancel to restart later.", Severity.INFO);
                   disableCancelButton.set(false);
                 }
                 else
@@ -692,7 +692,7 @@ public class ProgressPage extends SetupWizardPage
 
                   if (success)
                   {
-                    progressLog.message("Press Finish to close the dialog.");
+                    progressLog.message("Press Finish to close the dialog.", Severity.INFO);
 
                     if (launchButton != null && !hasLaunched && trigger == Trigger.BOOTSTRAP)
                     {
@@ -719,14 +719,14 @@ public class ProgressPage extends SetupWizardPage
                   {
                     if (progressLog.isCanceled())
                     {
-                      progressLog.message("Task execution was canceled.");
+                      progressLog.message("Task execution was canceled.", Severity.WARNING);
                     }
                     else
                     {
-                      progressLog.message("There are failed tasks.");
+                      progressLog.message("There are failed tasks.", Severity.ERROR);
                     }
 
-                    progressLog.message("Press Back to choose different settings or Cancel to abort.");
+                    progressLog.message("Press Back to choose different settings or Cancel to abort.", Severity.INFO);
                   }
                 }
 
@@ -913,7 +913,10 @@ public class ProgressPage extends SetupWizardPage
    */
   private class ProgressPageLog implements ProgressLog, IProgressMonitor
   {
-    private final StringBuilder queue = new StringBuilder();
+    /**
+     * A list that contains instances of String and/or Pair<String, ProgressLog.Severity>.
+     */
+    private List<Object> queue;
 
     private final ProgressMonitorPart progressMonitorPart;
 
@@ -924,8 +927,6 @@ public class ProgressPage extends SetupWizardPage
     private boolean terminating;
 
     private boolean done;
-
-    private int time;
 
     public ProgressPageLog(ProgressMonitorPart progressMonitorPart)
     {
@@ -1094,32 +1095,52 @@ public class ProgressPage extends SetupWizardPage
     public void log(IStatus status)
     {
       String string = SetupUIPlugin.toString(status);
-      log(string, false);
+      log(string, false, Severity.fromStatus(status));
     }
 
     public void log(Throwable t)
     {
       String string = SetupUIPlugin.toString(t);
-      log(string, false);
+      log(string, false, Severity.ERROR);
+    }
+
+    public void log(String line, Severity severity)
+    {
+      log(line, true, severity);
     }
 
     public void log(String line, boolean filter)
+    {
+      log(line, filter, Severity.OK);
+    }
+
+    public void log(String line, boolean filter, Severity severity)
     {
       if (done)
       {
         return;
       }
 
-      message(line, filter);
+      message(line, filter, severity);
     }
 
     public void message(String line)
     {
-      message(line, true);
+      message(line, true, Severity.OK);
     }
 
-    private void message(String line, boolean filter)
+    public void message(String line, Severity severity)
     {
+      message(line, true, severity);
+    }
+
+    private void message(String line, boolean filter, Severity severity)
+    {
+      if (line.startsWith("ERROR"))
+      {
+        System.out.println();
+      }
+
       if (!terminating && isCanceled())
       {
         throw new OperationCanceledException();
@@ -1135,69 +1156,117 @@ public class ProgressPage extends SetupWizardPage
         return;
       }
 
-      boolean wasEmpty = enqueue(new Date(), line);
+      boolean wasEmpty = enqueue(line, severity);
       if (wasEmpty)
       {
         UIUtil.asyncExec(new Runnable()
         {
           public void run()
           {
-            String text = dequeue();
-            appendText(text);
+            List<Object> lines = dequeue();
+            appendText(lines);
           }
         });
       }
     }
 
-    private synchronized boolean enqueue(Date date, String line)
+    private synchronized boolean enqueue(String line, Severity severity)
     {
-      boolean wasEmpty = queue.length() == 0;
-
-      queue.append('[');
-      if (progressLogWrapper == null)
+      boolean wasEmpty = queue == null;
+      if (wasEmpty)
       {
-        queue.append(TIME.format(date));
+        queue = new ArrayList<Object>();
+      }
+
+      if (severity == Severity.OK)
+      {
+        queue.add(line);
       }
       else
       {
-        queue.append("12:00:");
-        if (time < 10)
-        {
-          queue.append('0');
-        }
-        queue.append(time++);
+        queue.add(Pair.create(line, severity));
       }
-
-      queue.append("] ");
-      queue.append(line);
-      queue.append('\n');
 
       return wasEmpty;
     }
 
-    private synchronized String dequeue()
+    private synchronized List<Object> dequeue()
     {
-      String result = queue.toString();
-      queue.setLength(0);
+      List<Object> result = queue;
+      queue = null;
       return result;
     }
 
-    private void appendText(String string)
+    private void appendText(List<Object> lines)
     {
-      try
+      for (Object value : lines)
       {
-        int length = logDocument.getLength();
-        logDocument.replace(length, 0, string);
-
-        if (!scrollLock && !logText.isDisposed())
+        String line;
+        Severity severity;
+        if (value instanceof String)
         {
-          int lineCount = logText.getLineCount();
-          logText.setTopIndex(lineCount - 1);
+          line = (String)value;
+          severity = Severity.OK;
         }
-      }
-      catch (Exception ex)
-      {
-        SetupUIPlugin.INSTANCE.log(ex);
+        else
+        {
+          @SuppressWarnings("unchecked")
+          Pair<String, Severity> pair = (Pair<String, Severity>)value;
+
+          line = pair.getElement1();
+          severity = pair.getElement2();
+        }
+
+        line += "\n";
+
+        try
+        {
+          int length = logDocument.getLength();
+          logDocument.replace(length, 0, line);
+
+          int colorID;
+          switch (severity)
+          {
+            case INFO:
+              colorID = SWT.COLOR_BLUE;
+              break;
+
+            case WARNING:
+              colorID = SWT.COLOR_DARK_YELLOW;
+              break;
+
+            case ERROR:
+              colorID = SWT.COLOR_RED;
+              break;
+
+            default:
+              colorID = SWT.COLOR_BLACK;
+              break;
+
+          }
+
+          if (colorID != SWT.COLOR_BLACK)
+          {
+            Color color = logText.getDisplay().getSystemColor(colorID);
+            StyleRange styleRange = new StyleRange(length, line.length(), color, null);
+            if (severity == Severity.INFO)
+            {
+              styleRange.fontStyle = SWT.BOLD;
+            }
+
+            logText.setStyleRange(styleRange);
+          }
+
+          if (!scrollLock && !logText.isDisposed())
+          {
+            int lineCount = logText.getLineCount();
+            logText.setTopIndex(lineCount - 1);
+          }
+        }
+        catch (Exception ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex);
+        }
       }
     }
   }

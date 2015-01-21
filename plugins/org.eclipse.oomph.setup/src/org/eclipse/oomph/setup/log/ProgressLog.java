@@ -23,7 +23,11 @@ public interface ProgressLog
 
   public void log(String line);
 
+  public void log(String line, Severity severity);
+
   public void log(String line, boolean filter);
+
+  public void log(String line, boolean filter, Severity severity);
 
   public void log(IStatus status);
 
@@ -32,4 +36,32 @@ public interface ProgressLog
   public void task(SetupTask setupTask);
 
   public void setTerminating();
+
+  /**
+   * @author Eike Stepper
+   */
+  public enum Severity
+  {
+    OK, INFO, WARNING, ERROR;
+
+    public static Severity fromStatus(IStatus status)
+    {
+      if (status != null)
+      {
+        switch (status.getSeverity())
+        {
+          case IStatus.INFO:
+            return INFO;
+
+          case IStatus.WARNING:
+            return WARNING;
+
+          case IStatus.ERROR:
+            return ERROR;
+        }
+      }
+
+      return OK;
+    }
+  }
 }

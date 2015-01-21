@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.launching.LaunchTask;
 import org.eclipse.oomph.setup.launching.LaunchingPackage;
 import org.eclipse.oomph.setup.launching.LaunchingPlugin;
+import org.eclipse.oomph.setup.log.ProgressLog.Severity;
 import org.eclipse.oomph.util.PropertyFile;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -38,7 +39,6 @@ import org.eclipse.debug.core.model.IStreamsProxy;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Launch Task</b></em>'.
  * <!-- end-user-doc -->
- * <p>
  * <p>
  * The following features are implemented:
  * </p>
@@ -261,17 +261,30 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
       for (IProcess process : processes)
       {
         IStreamsProxy streamsProxy = process.getStreamsProxy();
+
         IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
-        IStreamListener listener = new IStreamListener()
+        if (outputStreamMonitor != null)
         {
-          public void streamAppended(String text, IStreamMonitor monitor)
+          outputStreamMonitor.addListener(new IStreamListener()
           {
-            context.log(text);
-          }
-        };
-        outputStreamMonitor.addListener(listener);
+            public void streamAppended(String text, IStreamMonitor monitor)
+            {
+              context.log(text.replace('\r', ' '));
+            }
+          });
+        }
+
         IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
-        errorStreamMonitor.addListener(listener);
+        if (errorStreamMonitor != null)
+        {
+          errorStreamMonitor.addListener(new IStreamListener()
+          {
+            public void streamAppended(String text, IStreamMonitor monitor)
+            {
+              context.log(text.replace('\r', ' '), Severity.ERROR);
+            }
+          });
+        }
       }
 
       for (;;)
@@ -291,5 +304,4 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
       }
     }
   }
-
 } // LaunchTaskImpl

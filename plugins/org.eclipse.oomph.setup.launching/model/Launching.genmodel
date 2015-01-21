@@ -9,7 +9,7 @@
   <foreignModel>Launching.ecore</foreignModel>
   <genPackages prefix="Launching" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="Launching.ecore#/" publicationLocation="/setups/models/Launching.ecore">
-    <genClasses ecoreClass="Launching.ecore#//LaunchTask">
+    <genClasses ecoreClass="Launching.ecore#//LaunchTask" labelFeature="#//launching/LaunchTask/launcher">
       <genFeatures createChild="false" propertyDescription="The name of a launch configuration or the workspace absolute path of a launch configuration file"
           ecoreFeature="ecore:EAttribute Launching.ecore#//LaunchTask/launcher"/>
     </genClasses>

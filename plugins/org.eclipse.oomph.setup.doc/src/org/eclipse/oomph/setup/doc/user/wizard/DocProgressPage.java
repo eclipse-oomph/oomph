@@ -269,6 +269,16 @@ public class DocProgressPage
         log.log(status);
       }
 
+      public void log(String line, Severity severity)
+      {
+        log.log(line, severity);
+      }
+
+      public void log(String line, boolean filter, Severity severity)
+      {
+        log.log(line, filter, severity);
+      }
+
       public void log(String line, boolean filter)
       {
         log.log(line, filter);
