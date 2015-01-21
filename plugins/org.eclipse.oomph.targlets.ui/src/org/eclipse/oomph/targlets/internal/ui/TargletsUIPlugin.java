@@ -11,6 +11,7 @@
 package org.eclipse.oomph.targlets.internal.ui;
 
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
+import org.eclipse.oomph.targlets.presentation.TargletEditorPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
@@ -27,7 +28,7 @@ public final class TargletsUIPlugin extends OomphUIPlugin
 
   public TargletsUIPlugin()
   {
-    super(new ResourceLocator[] { P2UIPlugin.INSTANCE });
+    super(new ResourceLocator[] { P2UIPlugin.INSTANCE, TargletEditorPlugin.INSTANCE, });
   }
 
   @Override

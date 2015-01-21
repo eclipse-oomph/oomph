@@ -1592,7 +1592,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             bufferedSeverity = pair.getElement2();
           }
 
-          int xxx; // TODO Should we remember filter value, too; or is the line already filtered?
           doLog(bufferedLine, filter, bufferedSeverity);
         }
 

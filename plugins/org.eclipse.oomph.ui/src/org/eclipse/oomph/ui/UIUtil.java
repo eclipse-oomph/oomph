@@ -29,6 +29,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
@@ -467,6 +468,35 @@ public final class UIUtil
       {
         resource.dispose();
       }
+    }
+  }
+
+  public static void simulateKey(char character)
+  {
+    Display display = getDisplay();
+
+    Event event = new Event();
+    event.type = SWT.KeyDown;
+    event.character = character;
+    display.post(event);
+
+    try
+    {
+      Thread.sleep(10);
+    }
+    catch (InterruptedException ex)
+    {
+    }
+
+    event.type = SWT.KeyUp;
+    display.post(event);
+
+    try
+    {
+      Thread.sleep(10);
+    }
+    catch (InterruptedException ex)
+    {
     }
   }
 }

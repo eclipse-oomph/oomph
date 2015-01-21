@@ -17,6 +17,7 @@ import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor.UpdateProblem
 import org.eclipse.oomph.targlets.presentation.TargletEditor;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -27,21 +28,23 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.internal.ui.shared.target.StyledBundleLabelProvider;
 import org.eclipse.pde.ui.target.ITargetLocationEditor;
 import org.eclipse.pde.ui.target.ITargetLocationUpdater;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import java.util.ArrayList;
@@ -115,11 +118,59 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
   public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
   {
-    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-    TargletEditor.open(page, ((ITargletContainer)targetLocation).getID());
+    final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+    final Display display = window.getShell().getDisplay();
 
-    simulateEscapeKey();
-    simulateEscapeKey();
+    UIUtil.asyncExec(display, new Runnable()
+    {
+      public void run()
+      {
+        try
+        {
+          Shell activeShell = display.getActiveShell();
+          Object data = activeShell.getData();
+          if (data instanceof WizardDialog)
+          {
+            WizardDialog wizardDialog = (WizardDialog)data;
+
+            IWizard wizard = ReflectUtil.getValue("wizard", wizardDialog);
+            if (wizard != null)
+            {
+              wizard.performFinish();
+              wizardDialog.close();
+            }
+          }
+        }
+        catch (Throwable ex)
+        {
+          TargletsUIPlugin.INSTANCE.log(ex);
+        }
+      }
+    });
+
+    UIUtil.asyncExec(display, new Runnable()
+    {
+      public void run()
+      {
+        try
+        {
+          Shell activeShell = display.getActiveShell();
+          Object data = activeShell.getData();
+          if (data instanceof PreferenceDialog)
+          {
+            PreferenceDialog preferenceDialog = (PreferenceDialog)data;
+            ReflectUtil.invokeMethod("okPressed", preferenceDialog);
+          }
+        }
+        catch (Throwable ex)
+        {
+          TargletsUIPlugin.INSTANCE.log(ex);
+        }
+      }
+    });
+
+    IWorkbenchPage page = window.getActivePage();
+    TargletEditor.open(page, ((ITargletContainer)targetLocation).getID());
 
     return null;
   }
@@ -132,36 +183,6 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
   public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
   {
     return ((ITargletContainer)targetLocation).updateProfile(monitor);
-  }
-
-  private static void simulateEscapeKey()
-  {
-    Display display = UIUtil.getDisplay();
-
-    Event event = new Event();
-    event.type = SWT.KeyDown;
-    event.character = SWT.ESC;
-    display.post(event);
-
-    try
-    {
-      Thread.sleep(10);
-    }
-    catch (InterruptedException ex)
-    {
-    }
-
-    event.type = SWT.KeyUp;
-    display.post(event);
-    display.post(event);
-
-    try
-    {
-      Thread.sleep(10);
-    }
-    catch (InterruptedException ex)
-    {
-    }
   }
 
   /**

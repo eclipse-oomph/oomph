@@ -46,6 +46,10 @@ public final class TargletContainerEditorInput extends URIEditorInput
   {
     String id = getContainerID();
     ITargletContainer targletContainer = TargletContainerDescriptorManager.getContainer(id);
+    if (targletContainer == null)
+    {
+      return id;
+    }
 
     ITargetDefinition targetDefinition = targletContainer.getTargetDefinition();
     boolean active = TargetPlatformUtil.isActiveTargetDefinition(targetDefinition);

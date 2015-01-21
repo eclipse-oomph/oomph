@@ -16,10 +16,10 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.editor.ProjectTemplate;
 import org.eclipse.oomph.setup.presentation.templates.GenericProjectTemplate;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
-import org.eclipse.oomph.setup.ui.DelegatingLabelDecorator;
-import org.eclipse.oomph.setup.ui.LabelDecorator;
-import org.eclipse.oomph.setup.ui.PropertiesViewer;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
+import org.eclipse.oomph.ui.DelegatingLabelDecorator;
+import org.eclipse.oomph.ui.LabelDecorator;
+import org.eclipse.oomph.ui.PropertiesViewer;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.CommonPlugin;

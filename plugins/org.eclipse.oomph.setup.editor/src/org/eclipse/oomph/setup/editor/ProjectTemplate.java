@@ -11,8 +11,8 @@
 package org.eclipse.oomph.setup.editor;
 
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
-import org.eclipse.oomph.setup.ui.LabelDecorator;
-import org.eclipse.oomph.setup.ui.PropertiesViewer;
+import org.eclipse.oomph.ui.LabelDecorator;
+import org.eclipse.oomph.ui.PropertiesViewer;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
