@@ -3224,7 +3224,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       label = type + " " + label;
     }
 
-    int eol = label.indexOf('\n');
+    int eol = Math.min(label.indexOf('\r'), label.indexOf('\n'));
     if (eol != -1)
     {
       label = label.substring(0, eol) + "...";
