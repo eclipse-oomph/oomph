@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Marc-Andre Laperle (Ericsson) - Fix for bug 457505
  */
 package org.eclipse.oomph.resources;
 
@@ -14,6 +15,7 @@ import org.eclipse.oomph.resources.backend.BackendContainer;
 
 import org.eclipse.core.resources.IProject;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +31,7 @@ public interface ProjectHandler
    */
   public static class Collector implements ProjectHandler
   {
-    private final Map<IProject, BackendContainer> projectMap = new HashMap<IProject, BackendContainer>();
+    private final Map<IProject, BackendContainer> projectMap = Collections.synchronizedMap(new HashMap<IProject, BackendContainer>());
 
     public Collector()
     {

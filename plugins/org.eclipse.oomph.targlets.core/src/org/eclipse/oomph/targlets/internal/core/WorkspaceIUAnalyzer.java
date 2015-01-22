@@ -33,6 +33,7 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,9 +46,9 @@ public class WorkspaceIUAnalyzer
 
   private final MultiStatus status = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0, "Workspace IU Analysis", null);
 
-  private final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
+  private final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = Collections.synchronizedMap(new HashMap<IInstallableUnit, WorkspaceIUInfo>());
 
-  private final Map<String, Version> iuVersions = new HashMap<String, Version>();
+  private final Map<String, Version> iuVersions = Collections.synchronizedMap(new HashMap<String, Version>());
 
   private final String qualifierReplacement;
 
