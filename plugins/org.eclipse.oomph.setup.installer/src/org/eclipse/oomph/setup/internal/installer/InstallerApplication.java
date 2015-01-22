@@ -63,6 +63,14 @@ public class InstallerApplication implements IApplication
 
   private Integer run(final IApplicationContext context) throws Exception
   {
+    // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
+    P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
+
+    @SuppressWarnings("restriction")
+    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper.getService(
+        org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
+    agent.registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
+
     final InstallerUI[] installerDialog = { null };
 
     Thread jreInitializer = new Thread("JRE Initializer")
@@ -168,13 +176,6 @@ public class InstallerApplication implements IApplication
     {
       Questionnaire.perform(null, false);
     }
-
-    P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
-
-    @SuppressWarnings("restriction")
-    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper.getService(
-        org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
-    agent.registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
 
     String modeName = PREF_MODE.get(Mode.SIMPLE.name());
     mode = Mode.valueOf(modeName);
