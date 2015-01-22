@@ -630,10 +630,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         {
           context.log("Deleting the result of the canceled clone operation");
         }
-        else
-        {
-          context.log("Deleting the result of the failed clone operation");
-        }
 
         FileUtil.delete(workDir, new NullProgressMonitor()
         {
