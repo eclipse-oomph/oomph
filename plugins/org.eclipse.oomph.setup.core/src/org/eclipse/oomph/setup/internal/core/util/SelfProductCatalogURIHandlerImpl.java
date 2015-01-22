@@ -55,7 +55,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class ProductCatalogURIHandlerImpl extends URIHandlerImpl
+public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
 {
   public static final String SELF_PRODUCT_CATALOG_NAME = "self";
 

@@ -268,6 +268,7 @@ public class ProjectPage extends SetupWizardPage
                   uris.append(URI.createFileURI(filterPath + File.separator + fileNames[i]).toString());
                   uris.append("  ");
                 }
+
                 uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
               }
             });

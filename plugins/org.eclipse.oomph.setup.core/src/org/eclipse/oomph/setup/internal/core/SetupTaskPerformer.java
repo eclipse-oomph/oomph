@@ -1247,7 +1247,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    if (EMFPlugin.IS_RESOURCES_BUNDLE_AVAILABLE)
+    if (getTrigger() != Trigger.BOOTSTRAP && EMFPlugin.IS_RESOURCES_BUNDLE_AVAILABLE)
     {
       IWorkspace workspace = ResourcesPlugin.getWorkspace();
       if (workspace != null)

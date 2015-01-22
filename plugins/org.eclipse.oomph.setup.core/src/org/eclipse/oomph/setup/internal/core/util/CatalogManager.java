@@ -163,7 +163,7 @@ public class CatalogManager
     for (ProductCatalog productCatalog : index.getProductCatalogs())
     {
       URI uri = EcoreUtil.getURI(productCatalog);
-      if (!"catalog".equals(uri.scheme()) && !ProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(productCatalog.getName()))
+      if (!"catalog".equals(uri.scheme()) && !SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(productCatalog.getName()))
       {
         productCatalogs.add(productCatalog);
       }

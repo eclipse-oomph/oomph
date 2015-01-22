@@ -14,7 +14,7 @@ import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
-import org.eclipse.oomph.setup.internal.core.util.ProductCatalogURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.SelfProductCatalogURIHandlerImpl;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 
@@ -89,7 +89,7 @@ public class CatalogSelector
         List<? extends Scope> selectedCatalogs = catalogManager.getSelectedCatalogs(product);
         for (final Scope catalog : catalogManager.getCatalogs(product))
         {
-          if (!ProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(catalog.getName()))
+          if (!SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(catalog.getName()))
           {
             final MenuItem item = new MenuItem(menu, SWT.CHECK);
             item.setText(labelProvider.getText(catalog));
