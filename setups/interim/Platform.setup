@@ -18,24 +18,6 @@
       xsi:type="setup.p2:P2Task">
     <requirement
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.core.tools.feature.source.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.core.tools.feature.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.tools.orion.css.editor.feature.source.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.tools.orion.css.editor.feature.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.tools.event.spy.feature.source.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.tools.event.spy.feature.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.tools.css.spy.feature.source.feature.group"/>
-    <requirement
-        name="org.eclipse.e4.tools.css.spy.feature.feature.group"/>
-    <repository
-        url="http://download.eclipse.org/e4/updates/0.16"/>
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
