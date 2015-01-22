@@ -2620,6 +2620,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (bootstrap)
       {
+        log("Performing post bootstrap tasks", false, Severity.INFO);
         performEclipseIniTask(false, "--launcher.appendVmargs", null, new SubProgressMonitor(monitor, 1));
 
         if (vmPath != null)
