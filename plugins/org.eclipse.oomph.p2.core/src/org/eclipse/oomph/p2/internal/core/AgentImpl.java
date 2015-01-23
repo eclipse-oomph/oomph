@@ -73,8 +73,6 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   private IPlanner planner;
 
-  private CachingTransport cachingTransport;
-
   private Transport originalTransport;
 
   private IMetadataRepositoryManager originalMetadataRepositoryManager;
@@ -438,18 +436,21 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     if (this.provisioningAgent == null)
     {
       profileRegistry = (LazyProfileRegistry)provisioningAgent.getService(IProfileRegistry.SERVICE_NAME);
+      metadataRepositoryManager = (IMetadataRepositoryManager)provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
+      artifactRepositoryManager = (IArtifactRepositoryManager)provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME);
 
-      if (!PropertiesUtil.isProperty("oomph.p2.disable.offline"))
+      Transport transport = (Transport)provisioningAgent.getService(Transport.SERVICE_NAME);
+      if (cacheTransport(transport))
       {
-        originalTransport = (Transport)provisioningAgent.getService(Transport.SERVICE_NAME);
-        cachingTransport = new CachingTransport(originalTransport);
+        originalTransport = transport;
+        CachingTransport cachingTransport = new CachingTransport(transport);
         provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
 
-        originalMetadataRepositoryManager = (IMetadataRepositoryManager)provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
+        originalMetadataRepositoryManager = metadataRepositoryManager;
         metadataRepositoryManager = new CachingRepositoryManager.Metadata(provisioningAgent, cachingTransport);
         provisioningAgent.registerService(IMetadataRepositoryManager.SERVICE_NAME, metadataRepositoryManager);
 
-        originalArtifactRepositoryManager = (IArtifactRepositoryManager)provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME);
+        originalArtifactRepositoryManager = artifactRepositoryManager;
         artifactRepositoryManager = new CachingRepositoryManager.Artifact(provisioningAgent, cachingTransport);
         provisioningAgent.registerService(IArtifactRepositoryManager.SERVICE_NAME, artifactRepositoryManager);
       }
@@ -513,6 +514,22 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   public String toString()
   {
     return getLocation().getAbsolutePath();
+  }
+
+  private static boolean cacheTransport(Transport transport)
+  {
+    if (PropertiesUtil.isProperty("oomph.p2.disable.offline"))
+    {
+      return false;
+    }
+  
+    // If a location is listed twice or the location to be installed in is also listed in the agents.info we may already have a CachingTransport.
+    if (transport instanceof CachingTransport)
+    {
+      return false;
+    }
+  
+    return true;
   }
 
   private static File getFile(String path)

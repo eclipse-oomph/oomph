@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -23,10 +24,11 @@ import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.provisional.p2.repository.IStateful;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -55,6 +57,11 @@ public class CachingTransport extends Transport
 
   public CachingTransport(Transport delegate)
   {
+    if (delegate instanceof CachingTransport)
+    {
+      throw new IllegalArgumentException("CachingTransport should not be chained.");
+    }
+
     this.delegate = delegate;
 
     File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.USER_HOME));
@@ -75,72 +82,73 @@ public class CachingTransport extends Transport
       log("  ! " + uri);
     }
 
-    boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && OfflineMode.isEnabled())
+    if (!isLoadingRepository(uri))
+    {
+      return delegate.download(uri, target, startPos, monitor);
+    }
+
+    if (OfflineMode.isEnabled())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
       {
+        FileInputStream cacheInputStream = null;
+
         try
         {
-          byte[] content = IOUtil.readFile(cacheFile);
-          IOUtil.copy(new ByteArrayInputStream(content), target);
+          cacheInputStream = new FileInputStream(cacheFile);
+          IOUtil.copy(cacheInputStream, target);
           return Status.OK_STATUS;
         }
         catch (Exception ex)
         {
           //$FALL-THROUGH$
         }
+        finally
+        {
+          IOUtil.closeSilent(cacheInputStream);
+        }
       }
     }
 
-    OutputStream oldTarget = target;
-
-    class StatfulByteArrayOutputStream extends ByteArrayOutputStream implements IStateful
-    {
-      private IStatus status;
-
-      public IStatus getStatus()
-      {
-        return status;
-      }
-
-      public void setStatus(IStatus status)
-      {
-        this.status = status;
-      }
-    }
-
-    StatfulByteArrayOutputStream statefulTarget = new StatfulByteArrayOutputStream();
-    target = statefulTarget;
+    // If the offline mode is not enabled we must make p2 and (for later) ourselves happy.
+    File cacheFile = getCacheFile(uri);
+    StatefulFileOutputStream statefulTarget = null;
+    FileInputStream cacheInputStream = null;
 
     try
     {
-      IStatus status = delegate.download(uri, target, startPos, monitor);
+      statefulTarget = new StatefulFileOutputStream(cacheFile);
+
+      IStatus status = delegate.download(uri, statefulTarget, startPos, monitor);
       if (status.isOK())
       {
-        byte[] content = ((ByteArrayOutputStream)target).toByteArray();
-        IOUtil.copy(new ByteArrayInputStream(content), oldTarget);
+        IOUtil.closeSilent(statefulTarget);
 
-        if (loadingRepository)
-        {
-          File cacheFile = getCacheFile(uri);
-          IOUtil.writeFile(cacheFile, content);
+        // Files can be many megabytes large, so download them directly to a file.
+        cacheInputStream = new FileInputStream(cacheFile);
+        IOUtil.copy(cacheInputStream, target);
 
-          DownloadStatus downloadStatus = (DownloadStatus)status;
-          long lastModified = downloadStatus.getLastModified();
-          cacheFile.setLastModified(lastModified);
-        }
+        DownloadStatus downloadStatus = (DownloadStatus)status;
+        long lastModified = downloadStatus.getLastModified();
+        cacheFile.setLastModified(lastModified);
       }
 
       return status;
     }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
     finally
     {
-      if (oldTarget instanceof IStateful)
+      if (target instanceof IStateful && statefulTarget != null)
       {
-        ((IStateful)oldTarget).setStatus(statefulTarget.getStatus());
+        ((IStateful)target).setStatus(statefulTarget.getStatus());
       }
+
+      IOUtil.closeSilent(cacheInputStream);
+      IOUtil.closeSilent(statefulTarget);
     }
   }
 
@@ -164,8 +172,7 @@ public class CachingTransport extends Transport
       log("  ? " + uri);
     }
 
-    boolean loadingRepository = isLoadingRepository(uri);
-    if (loadingRepository && OfflineMode.isEnabled())
+    if (isLoadingRepository(uri) && OfflineMode.isEnabled())
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
@@ -215,6 +222,17 @@ public class CachingTransport extends Transport
     return !stack.isEmpty() && stack.peek().equals(location);
   }
 
+  private static void log(String message)
+  {
+    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    for (int i = 1; i < stack.size(); i++)
+    {
+      message = "   " + message;
+    }
+  
+    System.out.println(message);
+  }
+
   static void startLoadingRepository(URI location)
   {
     String uri = location.toString();
@@ -247,41 +265,26 @@ public class CachingTransport extends Transport
     stack.pop();
   }
 
-  private static void log(String message)
+  /**
+   * @author Eike Stepper
+   */
+  private static final class StatefulFileOutputStream extends FileOutputStream implements IStateful
   {
-    Stack<String> stack = REPOSITORY_LOCATIONS.get();
-    for (int i = 1; i < stack.size(); i++)
+    private IStatus status;
+
+    public StatefulFileOutputStream(File file) throws FileNotFoundException
     {
-      message = "   " + message;
+      super(file);
     }
 
-    System.out.println(message);
-  }
+    public IStatus getStatus()
+    {
+      return status;
+    }
 
-  // public static void main(String[] args)
-  // {
-  // List<Long> times = new ArrayList<Long>();
-  // for (File file : new File("C:/develop/oomph/ws-IDE/.metadata/.plugins/org.eclipse.oomph.resources/cache/eee6128dae530a6b0d43f5ce71aa47a03e818074")
-  // .listFiles())
-  // {
-  // times.add(file.lastModified());
-  // }
-  //
-  // Collections.sort(times);
-  //
-  // Long last = null;
-  // for (Long time : times)
-  // {
-  // if (last != null)
-  // {
-  // long millis = time - last;
-  // if (millis < 10000)
-  // {
-  // System.out.println(millis);
-  // }
-  // }
-  //
-  // last = time;
-  // }
-  // }
+    public void setStatus(IStatus status)
+    {
+      this.status = status;
+    }
+  }
 }

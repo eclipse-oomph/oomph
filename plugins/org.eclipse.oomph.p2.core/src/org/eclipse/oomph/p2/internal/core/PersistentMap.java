@@ -141,8 +141,11 @@ public abstract class PersistentMap<E>
     if (element == null)
     {
       element = createElement(key, extraInfo);
-      elements.put(key, element);
-      save(key, null);
+      if (element != null)
+      {
+        elements.put(key, element);
+        save(key, null);
+      }
     }
 
     return element;
@@ -162,6 +165,9 @@ public abstract class PersistentMap<E>
     return reconcile(null, null);
   }
 
+  /**
+   * @return the new element or <code>null</code> if no element should be created.
+   */
   protected abstract E createElement(String key, String extraInfo);
 
   protected void initializeFirstTime()
@@ -291,8 +297,11 @@ public abstract class PersistentMap<E>
         if (!key.equals(removedKey) && !elements.containsKey(key))
         {
           E element = createElement(key, extraInfo);
-          elements.put(key, element);
-          changed[0] = true;
+          if (element != null)
+          {
+            elements.put(key, element);
+            changed[0] = true;
+          }
         }
       }
     });

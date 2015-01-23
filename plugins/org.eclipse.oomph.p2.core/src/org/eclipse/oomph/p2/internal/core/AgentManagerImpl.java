@@ -74,7 +74,13 @@ public class AgentManagerImpl implements AgentManager
       @Override
       protected Agent createElement(String key, String extraInfo)
       {
-        return new AgentImpl(AgentManagerImpl.this, new File(key));
+        File location = new File(key);
+        if (location.isDirectory())
+        {
+          return new AgentImpl(AgentManagerImpl.this, location);
+        }
+        
+        return null;
       }
 
       @Override
