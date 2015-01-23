@@ -17,6 +17,13 @@
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/windowingSystem"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/architecture"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/locale"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/programArguments"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/vMArguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupTarglets.ecore#//TargletTask/implicitDependencies"/>
+    </genClasses>
+    <genClasses ecoreClass="SetupTarglets.ecore#//ImplicitDependency">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//ImplicitDependency/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//ImplicitDependency/version"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

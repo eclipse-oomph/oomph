@@ -119,6 +119,31 @@ public class SetupTargletsItemProviderAdapterFactory extends SetupTargletsAdapte
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.targlets.ImplicitDependency} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ImplicitDependencyItemProvider implicitDependencyItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.targlets.ImplicitDependency}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createImplicitDependencyAdapter()
+  {
+    if (implicitDependencyItemProvider == null)
+    {
+      implicitDependencyItemProvider = new ImplicitDependencyItemProvider(this);
+    }
+
+    return implicitDependencyItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -233,6 +258,10 @@ public class SetupTargletsItemProviderAdapterFactory extends SetupTargletsAdapte
     {
       targletTaskItemProvider.dispose();
     }
+    if (implicitDependencyItemProvider != null)
+    {
+      implicitDependencyItemProvider.dispose();
+    }
   }
 
   /**
@@ -288,6 +317,8 @@ public class SetupTargletsItemProviderAdapterFactory extends SetupTargletsAdapte
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupTargletsFactory.eINSTANCE.createTargletTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupTargletsFactory.eINSTANCE.createImplicitDependency()));
 
         return null;
       }

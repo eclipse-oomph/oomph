@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.targlets.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.targlets.ImplicitDependency;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 
@@ -100,6 +101,16 @@ public class SetupTargletsSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case SetupTargletsPackage.IMPLICIT_DEPENDENCY:
+      {
+        ImplicitDependency implicitDependency = (ImplicitDependency)theEObject;
+        T result = caseImplicitDependency(implicitDependency);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -117,6 +128,22 @@ public class SetupTargletsSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTargletTask(TargletTask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Implicit Dependency</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Implicit Dependency</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseImplicitDependency(ImplicitDependency object)
   {
     return null;
   }

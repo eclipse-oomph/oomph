@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.targlets.provider;
 
 import org.eclipse.oomph.p2.Configuration;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
+import org.eclipse.oomph.setup.targlets.SetupTargletsFactory;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 import org.eclipse.oomph.targlets.Targlet;
@@ -79,6 +80,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       addWindowingSystemPropertyDescriptor(object);
       addArchitecturePropertyDescriptor(object);
       addLocalePropertyDescriptor(object);
+      addProgramArgumentsPropertyDescriptor(object);
+      addVMArgumentsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -197,6 +200,34 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     });
   }
 
+  /**
+   * This adds a property descriptor for the Program Arguments feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addProgramArgumentsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_programArguments_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_programArguments_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__PROGRAM_ARGUMENTS, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the VM Arguments feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addVMArgumentsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_vMArguments_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_vMArguments_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__VM_ARGUMENTS, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
   private static Set<String> getChoices(String[] values, String extraValuesPreference)
   {
     Set<String> result = new HashSet<String>();
@@ -232,6 +263,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     {
       super.getChildrenFeatures(object);
       childrenFeatures.add(SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS);
+      childrenFeatures.add(SetupTargletsPackage.Literals.TARGLET_TASK__IMPLICIT_DEPENDENCIES);
     }
     return childrenFeatures;
   }
@@ -301,7 +333,13 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       }
     }
 
-    return getString("_UI_TargletTask_type") + " (" + builder + ")";
+    String label = getString("_UI_TargletTask_type");
+    if (builder.length() != 0)
+    {
+      label += " (" + builder + ")";
+    }
+
+    return label;
   }
 
   /**
@@ -323,9 +361,12 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       case SetupTargletsPackage.TARGLET_TASK__WINDOWING_SYSTEM:
       case SetupTargletsPackage.TARGLET_TASK__ARCHITECTURE:
       case SetupTargletsPackage.TARGLET_TASK__LOCALE:
+      case SetupTargletsPackage.TARGLET_TASK__PROGRAM_ARGUMENTS:
+      case SetupTargletsPackage.TARGLET_TASK__VM_ARGUMENTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
+      case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
@@ -345,6 +386,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
     newChildDescriptors.add(createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, TargletFactory.eINSTANCE.createTarglet()));
+
+    newChildDescriptors.add(createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__IMPLICIT_DEPENDENCIES,
+        SetupTargletsFactory.eINSTANCE.createImplicitDependency()));
   }
 
   /**

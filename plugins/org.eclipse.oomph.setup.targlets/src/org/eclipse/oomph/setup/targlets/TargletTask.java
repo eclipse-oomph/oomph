@@ -30,6 +30,9 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getWindowingSystem <em>Windowing System</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getArchitecture <em>Architecture</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getLocale <em>Locale</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getProgramArguments <em>Program Arguments</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getVMArguments <em>VM Arguments</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getImplicitDependencies <em>Implicit Dependencies</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask()
@@ -176,4 +179,73 @@ public interface TargletTask extends SetupTask
    * @generated
    */
   void setLocale(String value);
+
+  /**
+   * Returns the value of the '<em><b>Program Arguments</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Program Arguments</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Program Arguments</em>' attribute.
+   * @see #setProgramArguments(String)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_ProgramArguments()
+   * @model
+   * @generated
+   */
+  String getProgramArguments();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#getProgramArguments <em>Program Arguments</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Program Arguments</em>' attribute.
+   * @see #getProgramArguments()
+   * @generated
+   */
+  void setProgramArguments(String value);
+
+  /**
+   * Returns the value of the '<em><b>VM Arguments</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>VM Arguments</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>VM Arguments</em>' attribute.
+   * @see #setVMArguments(String)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_VMArguments()
+   * @model extendedMetaData="kind='attribute' name='vmArguments'"
+   * @generated
+   */
+  String getVMArguments();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#getVMArguments <em>VM Arguments</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>VM Arguments</em>' attribute.
+   * @see #getVMArguments()
+   * @generated
+   */
+  void setVMArguments(String value);
+
+  /**
+   * Returns the value of the '<em><b>Implicit Dependencies</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.oomph.setup.targlets.ImplicitDependency}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Implicit Dependencies</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Implicit Dependencies</em>' containment reference list.
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_ImplicitDependencies()
+   * @model containment="true"
+   *        extendedMetaData="name='implicitDependency'"
+   * @generated
+   */
+  EList<ImplicitDependency> getImplicitDependencies();
 } // TargletTask

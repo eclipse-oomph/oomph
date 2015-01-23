@@ -12,6 +12,8 @@ package org.eclipse.oomph.setup.targlets;
 
 import org.eclipse.emf.ecore.EFactory;
 
+import org.eclipse.equinox.p2.metadata.Version;
+
 /**
  * <!-- begin-user-doc -->
  * The <b>Factory</b> for the model.
@@ -38,6 +40,19 @@ public interface SetupTargletsFactory extends EFactory
    * @generated
    */
   TargletTask createTargletTask();
+
+  /**
+   * Returns a new object of class '<em>Implicit Dependency</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Implicit Dependency</em>'.
+   * @generated
+   */
+  ImplicitDependency createImplicitDependency();
+
+  ImplicitDependency createImplicitDependency(String id, Version version);
+
+  ImplicitDependency createImplicitDependency(String id, String version);
 
   /**
    * Returns the package supported by this factory.

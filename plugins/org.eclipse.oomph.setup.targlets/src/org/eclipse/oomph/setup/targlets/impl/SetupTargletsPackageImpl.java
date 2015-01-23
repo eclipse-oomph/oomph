@@ -10,7 +10,9 @@
  */
 package org.eclipse.oomph.setup.targlets.impl;
 
+import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.targlets.ImplicitDependency;
 import org.eclipse.oomph.setup.targlets.SetupTargletsFactory;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
@@ -36,6 +38,13 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * @generated
    */
   private EClass targletTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass implicitDependencyEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -182,6 +191,66 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTargletTask_ProgramArguments()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargletTask_VMArguments()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTargletTask_ImplicitDependencies()
+  {
+    return (EReference)targletTaskEClass.getEStructuralFeatures().get(8);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getImplicitDependency()
+  {
+    return implicitDependencyEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getImplicitDependency_ID()
+  {
+    return (EAttribute)implicitDependencyEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getImplicitDependency_Version()
+  {
+    return (EAttribute)implicitDependencyEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public SetupTargletsFactory getSetupTargletsFactory()
   {
     return (SetupTargletsFactory)getEFactoryInstance();
@@ -217,6 +286,13 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     createEAttribute(targletTaskEClass, TARGLET_TASK__WINDOWING_SYSTEM);
     createEAttribute(targletTaskEClass, TARGLET_TASK__ARCHITECTURE);
     createEAttribute(targletTaskEClass, TARGLET_TASK__LOCALE);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__PROGRAM_ARGUMENTS);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__VM_ARGUMENTS);
+    createEReference(targletTaskEClass, TARGLET_TASK__IMPLICIT_DEPENDENCIES);
+
+    implicitDependencyEClass = createEClass(IMPLICIT_DEPENDENCY);
+    createEAttribute(implicitDependencyEClass, IMPLICIT_DEPENDENCY__ID);
+    createEAttribute(implicitDependencyEClass, IMPLICIT_DEPENDENCY__VERSION);
   }
 
   /**
@@ -249,6 +325,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     // Obtain other dependent packages
     SetupPackage theSetupPackage = (SetupPackage)EPackage.Registry.INSTANCE.getEPackage(SetupPackage.eNS_URI);
     TargletPackage theTargletPackage = (TargletPackage)EPackage.Registry.INSTANCE.getEPackage(TargletPackage.eNS_URI);
+    P2Package theP2Package = (P2Package)EPackage.Registry.INSTANCE.getEPackage(P2Package.eNS_URI);
 
     // Create type parameters
 
@@ -271,6 +348,18 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTargletTask_Locale(), ecorePackage.getEString(), "locale", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_ProgramArguments(), ecorePackage.getEString(), "programArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTargletTask_ImplicitDependencies(), getImplicitDependency(), null, "implicitDependencies", null, 0, -1, TargletTask.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(implicitDependencyEClass, ImplicitDependency.class, "ImplicitDependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getImplicitDependency_ID(), ecorePackage.getEString(), "iD", null, 1, 1, ImplicitDependency.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getImplicitDependency_Version(), theP2Package.getVersion(), "version", "0.0.0", 0, 1, ImplicitDependency.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore");
@@ -351,6 +440,9 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getTargletTask_Targlets(), source, new String[] { "name", "targlet" });
     addAnnotation(getTargletTask_TargletURIs(), source, new String[] { "name", "targletURI" });
+    addAnnotation(getTargletTask_VMArguments(), source, new String[] { "kind", "attribute", "name", "vmArguments" });
+    addAnnotation(getTargletTask_ImplicitDependencies(), source, new String[] { "name", "implicitDependency" });
+    addAnnotation(getImplicitDependency_ID(), source, new String[] { "kind", "attribute", "name", "id" });
   }
 
 } // SetupTargletsPackageImpl

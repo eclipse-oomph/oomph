@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.targlets.impl;
 
+import org.eclipse.oomph.setup.targlets.ImplicitDependency;
 import org.eclipse.oomph.setup.targlets.SetupTargletsFactory;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
@@ -19,6 +20,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import org.eclipse.equinox.p2.metadata.Version;
 
 /**
  * <!-- begin-user-doc -->
@@ -74,6 +77,8 @@ public class SetupTargletsFactoryImpl extends EFactoryImpl implements SetupTargl
     {
       case SetupTargletsPackage.TARGLET_TASK:
         return createTargletTask();
+      case SetupTargletsPackage.IMPLICIT_DEPENDENCY:
+        return createImplicitDependency();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -88,6 +93,36 @@ public class SetupTargletsFactoryImpl extends EFactoryImpl implements SetupTargl
   {
     TargletTaskImpl targletTask = new TargletTaskImpl();
     return targletTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ImplicitDependency createImplicitDependency()
+  {
+    ImplicitDependencyImpl implicitDependency = new ImplicitDependencyImpl();
+    return implicitDependency;
+  }
+
+  public ImplicitDependency createImplicitDependency(String id, Version version)
+  {
+    ImplicitDependency implicitDependency = createImplicitDependency();
+    implicitDependency.setID(id);
+
+    if (version != null)
+    {
+      implicitDependency.setVersion(version);
+    }
+
+    return implicitDependency;
+  }
+
+  public ImplicitDependency createImplicitDependency(String id, String versionString)
+  {
+    Version version = versionString == null ? null : Version.parseVersion(versionString);
+    return createImplicitDependency(id, version);
   }
 
   /**

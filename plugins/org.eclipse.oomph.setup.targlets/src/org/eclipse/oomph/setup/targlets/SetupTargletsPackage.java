@@ -215,13 +215,77 @@ public interface SetupTargletsPackage extends EPackage
   int TARGLET_TASK__LOCALE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
+   * The feature id for the '<em><b>Program Arguments</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__PROGRAM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+
+  /**
+   * The feature id for the '<em><b>VM Arguments</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__VM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__IMPLICIT_DEPENDENCIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
+
+  /**
    * The number of structural features of the '<em>Targlet Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.targlets.impl.ImplicitDependencyImpl <em>Implicit Dependency</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.targlets.impl.ImplicitDependencyImpl
+   * @see org.eclipse.oomph.setup.targlets.impl.SetupTargletsPackageImpl#getImplicitDependency()
+   * @generated
+   */
+  int IMPLICIT_DEPENDENCY = 1;
+
+  /**
+   * The feature id for the '<em><b>ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPLICIT_DEPENDENCY__ID = 0;
+
+  /**
+   * The feature id for the '<em><b>Version</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPLICIT_DEPENDENCY__VERSION = 1;
+
+  /**
+   * The number of structural features of the '<em>Implicit Dependency</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPLICIT_DEPENDENCY_FEATURE_COUNT = 2;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.targlets.TargletTask <em>Targlet Task</em>}'.
@@ -298,6 +362,71 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    */
   EAttribute getTargletTask_Locale();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getProgramArguments <em>Program Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Program Arguments</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getProgramArguments()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_ProgramArguments();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getVMArguments <em>VM Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>VM Arguments</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getVMArguments()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_VMArguments();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.targlets.TargletTask#getImplicitDependencies <em>Implicit Dependencies</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Implicit Dependencies</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getImplicitDependencies()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EReference getTargletTask_ImplicitDependencies();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.targlets.ImplicitDependency <em>Implicit Dependency</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Implicit Dependency</em>'.
+   * @see org.eclipse.oomph.setup.targlets.ImplicitDependency
+   * @generated
+   */
+  EClass getImplicitDependency();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.ImplicitDependency#getID <em>ID</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>ID</em>'.
+   * @see org.eclipse.oomph.setup.targlets.ImplicitDependency#getID()
+   * @see #getImplicitDependency()
+   * @generated
+   */
+  EAttribute getImplicitDependency_ID();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.ImplicitDependency#getVersion <em>Version</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Version</em>'.
+   * @see org.eclipse.oomph.setup.targlets.ImplicitDependency#getVersion()
+   * @see #getImplicitDependency()
+   * @generated
+   */
+  EAttribute getImplicitDependency_Version();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -379,6 +508,56 @@ public interface SetupTargletsPackage extends EPackage
      * @generated
      */
     EAttribute TARGLET_TASK__LOCALE = eINSTANCE.getTargletTask_Locale();
+
+    /**
+     * The meta object literal for the '<em><b>Program Arguments</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__PROGRAM_ARGUMENTS = eINSTANCE.getTargletTask_ProgramArguments();
+
+    /**
+     * The meta object literal for the '<em><b>VM Arguments</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__VM_ARGUMENTS = eINSTANCE.getTargletTask_VMArguments();
+
+    /**
+     * The meta object literal for the '<em><b>Implicit Dependencies</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TARGLET_TASK__IMPLICIT_DEPENDENCIES = eINSTANCE.getTargletTask_ImplicitDependencies();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.targlets.impl.ImplicitDependencyImpl <em>Implicit Dependency</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.targlets.impl.ImplicitDependencyImpl
+     * @see org.eclipse.oomph.setup.targlets.impl.SetupTargletsPackageImpl#getImplicitDependency()
+     * @generated
+     */
+    EClass IMPLICIT_DEPENDENCY = eINSTANCE.getImplicitDependency();
+
+    /**
+     * The meta object literal for the '<em><b>ID</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPLICIT_DEPENDENCY__ID = eINSTANCE.getImplicitDependency_ID();
+
+    /**
+     * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPLICIT_DEPENDENCY__VERSION = eINSTANCE.getImplicitDependency_Version();
 
   }
 

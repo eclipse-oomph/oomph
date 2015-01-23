@@ -17,6 +17,8 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
+import org.eclipse.oomph.setup.targlets.ImplicitDependency;
+import org.eclipse.oomph.setup.targlets.SetupTargletsFactory;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 import org.eclipse.oomph.targlets.Targlet;
@@ -32,6 +34,7 @@ import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -46,21 +49,24 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetPlatformService;
+import org.eclipse.pde.core.target.NameVersionDescriptor;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Targlet Task</b></em>'.
  * <!-- end-user-doc -->
- * <p>
  * <p>
  * The following features are implemented:
  * </p>
@@ -71,6 +77,9 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getWindowingSystem <em>Windowing System</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getArchitecture <em>Architecture</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getLocale <em>Locale</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getProgramArguments <em>Program Arguments</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getVMArguments <em>VM Arguments</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getImplicitDependencies <em>Implicit Dependencies</em>}</li>
  * </ul>
  *
  * @generated
@@ -180,6 +189,56 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * @ordered
    */
   protected String locale = LOCALE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getProgramArguments() <em>Program Arguments</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProgramArguments()
+   * @generated
+   * @ordered
+   */
+  protected static final String PROGRAM_ARGUMENTS_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getProgramArguments() <em>Program Arguments</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProgramArguments()
+   * @generated
+   * @ordered
+   */
+  protected String programArguments = PROGRAM_ARGUMENTS_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getVMArguments() <em>VM Arguments</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVMArguments()
+   * @generated
+   * @ordered
+   */
+  protected static final String VM_ARGUMENTS_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getVMArguments() <em>VM Arguments</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVMArguments()
+   * @generated
+   * @ordered
+   */
+  protected String vMArguments = VM_ARGUMENTS_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getImplicitDependencies() <em>Implicit Dependencies</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getImplicitDependencies()
+   * @generated
+   * @ordered
+   */
+  protected EList<ImplicitDependency> implicitDependencies;
 
   private ITargletContainer targletContainer;
 
@@ -341,6 +400,71 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getProgramArguments()
+  {
+    return programArguments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setProgramArguments(String newProgramArguments)
+  {
+    String oldProgramArguments = programArguments;
+    programArguments = newProgramArguments;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__PROGRAM_ARGUMENTS, oldProgramArguments, programArguments));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getVMArguments()
+  {
+    return vMArguments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setVMArguments(String newVMArguments)
+  {
+    String oldVMArguments = vMArguments;
+    vMArguments = newVMArguments;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__VM_ARGUMENTS, oldVMArguments, vMArguments));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<ImplicitDependency> getImplicitDependencies()
+  {
+    if (implicitDependencies == null)
+    {
+      implicitDependencies = new EObjectContainmentEList<ImplicitDependency>(ImplicitDependency.class, this,
+          SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES);
+    }
+    return implicitDependencies;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -348,6 +472,8 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     {
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
         return ((InternalEList<?>)getTarglets()).basicRemove(otherEnd, msgs);
+      case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
+        return ((InternalEList<?>)getImplicitDependencies()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -374,6 +500,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return getArchitecture();
       case SetupTargletsPackage.TARGLET_TASK__LOCALE:
         return getLocale();
+      case SetupTargletsPackage.TARGLET_TASK__PROGRAM_ARGUMENTS:
+        return getProgramArguments();
+      case SetupTargletsPackage.TARGLET_TASK__VM_ARGUMENTS:
+        return getVMArguments();
+      case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
+        return getImplicitDependencies();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -409,6 +541,16 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       case SetupTargletsPackage.TARGLET_TASK__LOCALE:
         setLocale((String)newValue);
         return;
+      case SetupTargletsPackage.TARGLET_TASK__PROGRAM_ARGUMENTS:
+        setProgramArguments((String)newValue);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__VM_ARGUMENTS:
+        setVMArguments((String)newValue);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
+        getImplicitDependencies().clear();
+        getImplicitDependencies().addAll((Collection<? extends ImplicitDependency>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -441,6 +583,15 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       case SetupTargletsPackage.TARGLET_TASK__LOCALE:
         setLocale(LOCALE_EDEFAULT);
         return;
+      case SetupTargletsPackage.TARGLET_TASK__PROGRAM_ARGUMENTS:
+        setProgramArguments(PROGRAM_ARGUMENTS_EDEFAULT);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__VM_ARGUMENTS:
+        setVMArguments(VM_ARGUMENTS_EDEFAULT);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
+        getImplicitDependencies().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -467,6 +618,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return ARCHITECTURE_EDEFAULT == null ? architecture != null : !ARCHITECTURE_EDEFAULT.equals(architecture);
       case SetupTargletsPackage.TARGLET_TASK__LOCALE:
         return LOCALE_EDEFAULT == null ? locale != null : !LOCALE_EDEFAULT.equals(locale);
+      case SetupTargletsPackage.TARGLET_TASK__PROGRAM_ARGUMENTS:
+        return PROGRAM_ARGUMENTS_EDEFAULT == null ? programArguments != null : !PROGRAM_ARGUMENTS_EDEFAULT.equals(programArguments);
+      case SetupTargletsPackage.TARGLET_TASK__VM_ARGUMENTS:
+        return VM_ARGUMENTS_EDEFAULT == null ? vMArguments != null : !VM_ARGUMENTS_EDEFAULT.equals(vMArguments);
+      case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
+        return implicitDependencies != null && !implicitDependencies.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -495,6 +652,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     result.append(architecture);
     result.append(", locale: ");
     result.append(locale);
+    result.append(", programArguments: ");
+    result.append(programArguments);
+    result.append(", vMArguments: ");
+    result.append(vMArguments);
     result.append(')');
     return result.toString();
   }
@@ -517,6 +678,11 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, "windowing systems");
     mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, "architectures");
     mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, "locales");
+
+    mergeArguments(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__PROGRAM_ARGUMENTS);
+    mergeArguments(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__VM_ARGUMENTS);
+
+    getImplicitDependencies().addAll(targletTask.getImplicitDependencies());
   }
 
   private void mergeSetting(TargletTask overriddenTargletTask, EAttribute attribute, String errorLabel)
@@ -541,13 +707,50 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     }
   }
 
+  private void mergeArguments(TargletTask overriddenTargletTask, EAttribute attribute)
+  {
+    String overridingValue = sanitizeArguments((String)eGet(attribute));
+    String overriddenValue = sanitizeArguments((String)overriddenTargletTask.eGet(attribute));
+
+    if (overridingValue != null)
+    {
+      if (overriddenValue != null)
+      {
+        eSet(attribute, overriddenValue + "\n" + overridingValue);
+      }
+      else
+      {
+        eSet(attribute, overridingValue);
+      }
+    }
+  }
+
+  private String sanitizeArguments(String arguments)
+  {
+    if (StringUtil.isEmpty(arguments))
+    {
+      return null;
+    }
+
+    arguments = arguments.trim();
+
+    while (arguments.endsWith("\n") || arguments.endsWith("\r"))
+    {
+      arguments = arguments.substring(0, arguments.length() - 1).trim();
+    }
+
+    return arguments;
+  }
+
   @Override
   public void consolidate()
   {
     super.consolidate();
 
     Set<String> targletNames = new HashSet<String>();
-    LOOP: for (Iterator<Targlet> it = getTarglets().iterator(); it.hasNext();)
+    EList<Targlet> targlets = getTarglets();
+
+    LOOP: for (Iterator<Targlet> it = targlets.iterator(); it.hasNext();)
     {
       Targlet targlet = it.next();
       String name = targlet.getName();
@@ -572,6 +775,54 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         }
       }
     }
+
+    ECollections.sort(targlets, new Comparator<Targlet>()
+    {
+      public int compare(Targlet o1, Targlet o2)
+      {
+        return o1.getName().compareTo(o2.getName());
+      }
+    });
+
+    // Use a set to eliminate duplicates from the implicit dependencies.
+    EList<ImplicitDependency> implicitDependencies = getImplicitDependencies();
+    Set<NameVersionDescriptor> descriptors = createNameVersionDescriptors(implicitDependencies);
+    implicitDependencies.clear();
+
+    for (NameVersionDescriptor descriptor : descriptors)
+    {
+      String id = descriptor.getId();
+      String version = descriptor.getVersion();
+
+      ImplicitDependency implicitDependency = SetupTargletsFactory.eINSTANCE.createImplicitDependency(id, version);
+      implicitDependencies.add(implicitDependency);
+    }
+
+    ECollections.sort(implicitDependencies, new Comparator<ImplicitDependency>()
+    {
+      public int compare(ImplicitDependency o1, ImplicitDependency o2)
+      {
+        int result = o1.getID().compareTo(o2.getID());
+        if (result == 0)
+        {
+          Version v1 = o1.getVersion();
+          if (v1 == null)
+          {
+            v1 = Version.emptyVersion;
+          }
+
+          Version v2 = o2.getVersion();
+          if (v2 == null)
+          {
+            v2 = Version.emptyVersion;
+          }
+
+          result = v1.compareTo(v2);
+        }
+
+        return result;
+      }
+    });
   }
 
   @Override
@@ -620,30 +871,20 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           return true;
         }
 
-        boolean targetNeedsActivation = true;
-        if (targetDefinition.getHandle().equals(activeTargetHandle))
+        if (!targetDefinition.getHandle().equals(activeTargetHandle))
         {
-          targetNeedsActivation = false;
+          return true;
         }
 
-        boolean environmentNeedsUpdate = true;
-        if (ObjectUtil.equals(targetDefinition.getOS(), getOperatingSystem()) && ObjectUtil.equals(targetDefinition.getWS(), getWindowingSystem())
-            && ObjectUtil.equals(targetDefinition.getArch(), getArchitecture()) && ObjectUtil.equals(targetDefinition.getNL(), getLocale()))
+        if (!ObjectUtil.equals(targetDefinition.getOS(), getOperatingSystem()) //
+            || !ObjectUtil.equals(targetDefinition.getWS(), getWindowingSystem()) //
+            || !ObjectUtil.equals(targetDefinition.getArch(), getArchitecture()) //
+            || !ObjectUtil.equals(targetDefinition.getNL(), getLocale()) //
+            || !ObjectUtil.equals(targetDefinition.getProgramArguments(), getProgramArguments()) //
+            || !ObjectUtil.equals(targetDefinition.getVMArguments(), getVMArguments()) //
+            || !equalNameVersionDescriptors(targetDefinition.getImplicitDependencies(), getImplicitDependencies()))
         {
-          environmentNeedsUpdate = false;
-        }
-
-        return targetNeedsActivation || environmentNeedsUpdate;
-      }
-
-      private boolean hasRequirements(EList<Targlet> targlets)
-      {
-        for (Targlet targlet : targlets)
-        {
-          if (!targlet.getRequirements().isEmpty())
-          {
-            return true;
-          }
+          return true;
         }
 
         return false;
@@ -685,6 +926,9 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           targetDefinition.setWS(getWindowingSystem());
           targetDefinition.setArch(getArchitecture());
           targetDefinition.setNL(getLocale());
+          targetDefinition.setProgramArguments(getProgramArguments());
+          targetDefinition.setVMArguments(getVMArguments());
+          targetDefinition.setImplicitDependencies(getNameVersionDescriptors());
 
           if (targletContainer == null)
           {
@@ -788,6 +1032,55 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     }
 
     return null;
+  }
+
+  private NameVersionDescriptor[] getNameVersionDescriptors()
+  {
+    EList<ImplicitDependency> implicitDependencies = getImplicitDependencies();
+    if (implicitDependencies.isEmpty())
+    {
+      return null;
+    }
+
+    Set<NameVersionDescriptor> descriptors = createNameVersionDescriptors(implicitDependencies);
+    return descriptors.toArray(new NameVersionDescriptor[descriptors.size()]);
+  }
+
+  private static Set<NameVersionDescriptor> createNameVersionDescriptors(Collection<ImplicitDependency> implicitDependencies)
+  {
+    Set<NameVersionDescriptor> result = new LinkedHashSet<NameVersionDescriptor>();
+    for (ImplicitDependency implicitDependency : implicitDependencies)
+    {
+      Version version = implicitDependency.getVersion();
+      result.add(new NameVersionDescriptor(implicitDependency.getID(), version == null ? null : version.toString()));
+    }
+
+    return result;
+  }
+
+  private static boolean equalNameVersionDescriptors(NameVersionDescriptor[] targetImplicitDependencies, EList<ImplicitDependency> targletImplicitDependencies)
+  {
+    Set<NameVersionDescriptor> targetSet = new HashSet<NameVersionDescriptor>();
+    for (int i = 0; i < targetImplicitDependencies.length; i++)
+    {
+      targetSet.add(targetImplicitDependencies[i]);
+    }
+
+    Set<NameVersionDescriptor> targletSet = createNameVersionDescriptors(targletImplicitDependencies);
+    return targetSet.equals(targletSet);
+  }
+
+  private static boolean hasRequirements(EList<Targlet> targlets)
+  {
+    for (Targlet targlet : targlets)
+    {
+      if (!targlet.getRequirements().isEmpty())
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 } // TargletTaskImpl

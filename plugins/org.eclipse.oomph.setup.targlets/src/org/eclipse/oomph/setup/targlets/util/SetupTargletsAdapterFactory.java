@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.targlets.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.targlets.ImplicitDependency;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
 
@@ -89,6 +90,12 @@ public class SetupTargletsAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseImplicitDependency(ImplicitDependency object)
+    {
+      return createImplicitDependencyAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -132,6 +139,21 @@ public class SetupTargletsAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTargletTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.targlets.ImplicitDependency <em>Implicit Dependency</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.targlets.ImplicitDependency
+   * @generated
+   */
+  public Adapter createImplicitDependencyAdapter()
   {
     return null;
   }
