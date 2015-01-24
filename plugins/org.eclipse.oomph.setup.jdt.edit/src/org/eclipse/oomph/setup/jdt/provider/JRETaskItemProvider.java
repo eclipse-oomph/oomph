@@ -42,6 +42,7 @@ import java.util.Map;
 public class JRETaskItemProvider extends SetupTaskItemProvider
 {
   private static Map<String, String> VERSION_VARIABLES = new LinkedHashMap<String, String>();
+
   static
   {
     VERSION_VARIABLES.put("JRE-1.1", "${jre.location-1.1}");
@@ -173,7 +174,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
       return getString("_UI_JRETask_type");
     }
 
-    String label = "" + version;
+    String label = version;
     if (location != null)
     {
       if (location.length() == 0)

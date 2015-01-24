@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.setup.workbench.FileMapping;
 import org.eclipse.oomph.setup.workbench.WorkbenchFactory;
 import org.eclipse.oomph.setup.workbench.WorkbenchPackage;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -158,8 +159,21 @@ public class FileMappingItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = ((FileMapping)object).getFilePattern();
-    return label == null || label.length() == 0 ? getString("_UI_FileMapping_type") : label;
+    FileMapping fileMapping = (FileMapping)object;
+    String label = fileMapping.getFilePattern();
+
+    if (StringUtil.isEmpty(label))
+    {
+      label = getString("_UI_FileMapping_type");
+    }
+
+    String defaultEditorID = fileMapping.getDefaultEditorID();
+    if (!StringUtil.isEmpty(defaultEditorID))
+    {
+      label += " --> " + defaultEditorID;
+    }
+
+    return label;
   }
 
   /**
