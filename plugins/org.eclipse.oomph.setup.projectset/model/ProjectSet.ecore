@@ -17,6 +17,8 @@
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uRL" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uRL" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/Redirect"/>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

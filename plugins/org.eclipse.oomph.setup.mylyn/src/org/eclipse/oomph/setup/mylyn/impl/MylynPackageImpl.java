@@ -520,6 +520,8 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     createValidTriggersAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
+    // http://www.eclipse.org/oomph/setup/Redirect
+    createRedirectAnnotations();
   }
 
   /**
@@ -589,6 +591,20 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     addAnnotation(getMylynBuildsTask_BuildPlans(), source, new String[] { "name", "buildPlan" });
     addAnnotation(getQuery_URL(), source, new String[] { "kind", "attribute", "name", "url" });
     addAnnotation(getQuery_Attributes(), source, new String[] { "name", "attribute" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Redirect</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRedirectAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    addAnnotation(getMylynQueriesTask_RepositoryURL(), source, new String[] {});
+    addAnnotation(getMylynBuildsTask_ServerURL(), source, new String[] {});
+    addAnnotation(getQuery_URL(), source, new String[] {});
   }
 
 } // MylynPackageImpl

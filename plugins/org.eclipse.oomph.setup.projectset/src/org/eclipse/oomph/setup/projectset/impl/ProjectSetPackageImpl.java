@@ -215,6 +215,8 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
     createLabelProviderAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http://www.eclipse.org/oomph/setup/Redirect
+    createRedirectAnnotations();
   }
 
   /**
@@ -265,6 +267,18 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(projectSetImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Redirect</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRedirectAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    addAnnotation(getProjectSetImportTask_URL(), source, new String[] {});
   }
 
 } // ProjectSetPackageImpl

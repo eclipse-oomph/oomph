@@ -35,6 +35,7 @@
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="targletURI"/>
       </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/Redirect"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatingSystem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowingSystem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

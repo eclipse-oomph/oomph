@@ -375,6 +375,8 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     createValidTriggersAnnotations();
     // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
     createExtendedMetaDataAnnotations();
+    // http://www.eclipse.org/oomph/setup/Redirect
+    createRedirectAnnotations();
   }
 
   /**
@@ -443,6 +445,18 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     addAnnotation(getTargletTask_VMArguments(), source, new String[] { "kind", "attribute", "name", "vmArguments" });
     addAnnotation(getTargletTask_ImplicitDependencies(), source, new String[] { "name", "implicitDependency" });
     addAnnotation(getImplicitDependency_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/Redirect</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createRedirectAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    addAnnotation(getTargletTask_TargletURIs(), source, new String[] {});
   }
 
 } // SetupTargletsPackageImpl
