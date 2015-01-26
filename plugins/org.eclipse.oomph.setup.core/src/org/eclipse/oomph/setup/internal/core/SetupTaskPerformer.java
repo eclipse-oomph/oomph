@@ -1764,6 +1764,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     for (SetupTask setupTask : triggeredSetupTasks)
     {
+      redirectStrings(setupTask);
       for (Iterator<EObject> it = EcoreUtil.getAllContents(setupTask, false); it.hasNext();)
       {
         redirectStrings(it.next());
