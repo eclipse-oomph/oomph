@@ -1061,9 +1061,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   private static boolean equalNameVersionDescriptors(NameVersionDescriptor[] targetImplicitDependencies, EList<ImplicitDependency> targletImplicitDependencies)
   {
     Set<NameVersionDescriptor> targetSet = new HashSet<NameVersionDescriptor>();
-    for (int i = 0; i < targetImplicitDependencies.length; i++)
+    if (targetImplicitDependencies != null)
     {
-      targetSet.add(targetImplicitDependencies[i]);
+      for (int i = 0; i < targetImplicitDependencies.length; i++)
+      {
+        targetSet.add(targetImplicitDependencies[i]);
+      }
     }
 
     Set<NameVersionDescriptor> targletSet = createNameVersionDescriptors(targletImplicitDependencies);
