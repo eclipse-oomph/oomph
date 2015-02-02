@@ -11,8 +11,8 @@
 -->
 <project name="Oomph" default="change-version">
 
-	<property name="version.from" value="1.0.0" />
-	<property name="version.to" value="1.1.0" />
+	<property name="version.from" value="1.1.0" />
+	<property name="version.to" value="1.2.0" />
 
 	<target name="change-version">
 

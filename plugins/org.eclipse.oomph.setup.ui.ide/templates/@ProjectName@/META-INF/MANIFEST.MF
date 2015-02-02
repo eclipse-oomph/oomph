@@ -10,13 +10,13 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.emf.ecore;bundle-version="[2.10.0,3.0.0)",
- org.eclipse.oomph.setup;bundle-version="[1.0.0,2.0.0)",
- org.eclipse.oomph.base;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.p2;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.predicates;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.resources;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.targlets;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.workingsets;bundle-version="[1.0.0,2.0.0)";visibility:=reexport
+ org.eclipse.oomph.setup;bundle-version="[1.1.0,2.0.0)",
+ org.eclipse.oomph.base;bundle-version="[1.1.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.p2;bundle-version="[1.1.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.predicates;bundle-version="[1.1.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.resources;bundle-version="[1.1.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.targlets;bundle-version="[1.1.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.workingsets;bundle-version="[1.1.0,2.0.0)";visibility:=reexport
 Export-Package: @QualifiedPackageName@;version="1.0.0",
  @QualifiedPackageName@.impl;version="1.0.0",
  @QualifiedPackageName@.util;version="1.0.0"
