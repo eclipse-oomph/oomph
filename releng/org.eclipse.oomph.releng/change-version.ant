@@ -12,7 +12,9 @@
 <project name="Oomph" default="change-version">
 
 	<property name="version.from" value="1.1.0" />
+	<property name="version.from.range" value="[${version.from},2.0.0)" />
 	<property name="version.to" value="1.2.0" />
+	<property name="version.to.range" value="[${version.to},2.0.0)" />
 
 	<target name="change-version">
 
@@ -32,6 +34,22 @@
 		<replaceregexp match="Bundle-Version: ${version.from}.qualifier" replace="Bundle-Version: ${version.to}.qualifier" byline="true">
 			<fileset dir="${git.clone.location}">
 				<include name="plugins/*/META-INF/MANIFEST.MF" />
+				<include name="releng/*/META-INF/MANIFEST.MF" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="org.eclipse.oomph(.*);bundle-version=&quot;${version.from}&quot;" replace="org.eclipse.oomph\1;bundle-version=&quot;${version.to}&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="plugins/*/META-INF/MANIFEST.MF" />
+				<include name="plugins/org.eclipse.oomph.setup.ui.ide/templates/*/META-INF/MANIFEST.MF" />
+				<include name="releng/*/META-INF/MANIFEST.MF" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp match="org.eclipse.oomph(.*);bundle-version=&quot;\Q${version.from.range}\E&quot;" replace="org.eclipse.oomph\1;bundle-version=&quot;${version.to.range}&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="plugins/*/META-INF/MANIFEST.MF" />
+				<include name="plugins/org.eclipse.oomph.setup.ui.ide/templates/*/META-INF/MANIFEST.MF" />
 				<include name="releng/*/META-INF/MANIFEST.MF" />
 			</fileset>
 		</replaceregexp>
