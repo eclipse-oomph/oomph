@@ -15,8 +15,6 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
-import org.eclipse.oomph.setup.ui.Questionnaire;
-import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.ErrorDialog;
@@ -171,11 +169,6 @@ public class InstallerApplication implements IApplication
         context.applicationRunning();
       }
     });
-
-    if (!SetupUIPlugin.QUESTIONNAIRE_SKIP)
-    {
-      Questionnaire.perform(null, false);
-    }
 
     String modeName = PREF_MODE.get(Mode.SIMPLE.name());
     mode = Mode.valueOf(modeName);
