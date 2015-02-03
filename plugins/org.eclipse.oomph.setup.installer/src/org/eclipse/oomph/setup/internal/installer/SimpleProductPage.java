@@ -235,6 +235,12 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     builder.append(" --></style><body style=\"margin:0px; overflow:auto; font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif\"><table>\n");
 
+    boolean noFilter = StringUtil.isEmpty(filter);
+    if (!noFilter)
+    {
+      filter = filter.toLowerCase();
+    }
+
     boolean zebra = true;
     for (Scope scope : catalogSelector.getSelectedCatalogs())
     {
@@ -243,7 +249,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         ProductCatalog productCatalog = (ProductCatalog)scope;
         for (Product product : productCatalog.getProducts())
         {
-          if (StringUtil.isEmpty(filter) || product.getLabel().toLowerCase().contains(filter))
+          if (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter))
           {
             renderProduct(builder, product, zebra, downloadImageURI);
             zebra = !zebra;
@@ -362,6 +368,16 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     }
 
     return -1;
+  }
+
+  private static boolean isFiltered(String string, String filter)
+  {
+    if (string == null)
+    {
+      return false;
+    }
+
+    return string.toLowerCase().contains(filter);
   }
 
   /**
