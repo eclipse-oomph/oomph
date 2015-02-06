@@ -24,7 +24,7 @@
     <repository
         url="${oomph.update.url}"/>
     <repository
-        url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201410130308"/>
+        url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
   </setupTask>
   <product name="epp.package.dsl"
       label="Eclipse DSL Tools">
@@ -88,7 +88,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -144,7 +144,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -267,7 +267,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -323,7 +323,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -434,7 +434,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -478,7 +478,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -648,7 +648,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -698,7 +698,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -815,7 +815,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -871,7 +871,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -994,7 +994,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1050,7 +1050,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1161,7 +1161,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1205,7 +1205,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <description>The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</description>
@@ -1272,7 +1272,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1328,7 +1328,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1443,7 +1443,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1487,7 +1487,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1598,7 +1598,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1654,7 +1654,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1777,7 +1777,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1833,7 +1833,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1944,7 +1944,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -1988,7 +1988,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -2064,7 +2064,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -2092,7 +2092,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
@@ -2120,7 +2120,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201409261001"/>
+            url="http://download.eclipse.org/releases/luna/201501121000"/>
       </setupTask>
     </version>
     <version
