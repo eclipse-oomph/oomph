@@ -1136,11 +1136,6 @@ public class ProgressPage extends SetupWizardPage
 
     private void message(String line, boolean filter, Severity severity)
     {
-      if (line.startsWith("ERROR"))
-      {
-        System.out.println();
-      }
-
       if (!terminating && isCanceled())
       {
         throw new OperationCanceledException();
