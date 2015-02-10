@@ -78,6 +78,9 @@ echo "number = $BUILD_NUMBER" >> $PROPERTIES
 echo "key = $BUILD_KEY" >> $PROPERTIES
 echo "label = $BUILD_LABEL" >> $PROPERTIES
 
+mkdir -p
+
+BUILDS=$DOWNLOADS/builds
 HELP=$DOWNLOADS/help
 UPDATES=$DOWNLOADS/updates
 PRODUCTS=$DOWNLOADS/products
@@ -86,11 +89,14 @@ DROP_TYPE=$DROPS/$BUILD_TYPE
 DROP=$DROP_TYPE/$FOLDER
 
 mkdir -p $DOWNLOADS
+mkdir -p $BUILDS
 mkdir -p $HELP
 mkdir -p $UPDATES
 mkdir -p $PRODUCTS
 mkdir -p $DROPS
 mkdir -p $DROP_TYPE
+
+cp -a $PROPERTIES $BUILDS/$BUILD_NUMBER.properties
 
 ###################
 # DOWNLOADS/DROPS #
