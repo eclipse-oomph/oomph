@@ -39,7 +39,7 @@ for f in *.zip; do
   fi
   
   unzip -qq $SOURCE/$f
-  zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
+  #zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
 
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
