@@ -78,8 +78,6 @@ echo "number = $BUILD_NUMBER" >> $PROPERTIES
 echo "key = $BUILD_KEY" >> $PROPERTIES
 echo "label = $BUILD_LABEL" >> $PROPERTIES
 
-mkdir -p
-
 BUILDS=$DOWNLOADS/builds
 HELP=$DOWNLOADS/help
 UPDATES=$DOWNLOADS/updates
