@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.internal.ui;
 
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -35,9 +36,9 @@ public class ExploreRepositoryHandler extends AbstractHandler
       for (Iterator<?> it = ((IStructuredSelection)selection).iterator(); it.hasNext();)
       {
         Object element = it.next();
-        if (element instanceof Repository)
+        Repository repository = ObjectUtil.adapt(element, Repository.class);
+        if (repository != null)
         {
-          Repository repository = (Repository)element;
           String url = repository.getURL();
           if (!StringUtil.isEmpty(url))
           {

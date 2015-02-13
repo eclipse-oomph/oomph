@@ -69,9 +69,9 @@
          </class>
          <activeWhen>
              <iterate>
-                <instanceof
-                      value="org.eclipse.oomph.p2.Repository">
-                </instanceof>
+                <adapt
+                      type="org.eclipse.oomph.p2.Repository">
+                </adapt>
              </iterate>
          </activeWhen>
       </handler>
