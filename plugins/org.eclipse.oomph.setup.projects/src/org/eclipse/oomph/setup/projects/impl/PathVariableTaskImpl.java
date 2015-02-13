@@ -257,6 +257,12 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
     return createToken(getName());
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 0;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     IPathVariableManager pathVariableManager = ResourcesPlugin.getWorkspace().getPathVariableManager();

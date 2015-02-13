@@ -250,6 +250,12 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     return result.toString();
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 2;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI sourceURI = createResolvedURI(getSourceURL());

@@ -272,6 +272,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     return createToken(new Path(key).makeAbsolute().toString());
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 0;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     preferenceProperty = new PreferencesUtil.PreferenceProperty(key);

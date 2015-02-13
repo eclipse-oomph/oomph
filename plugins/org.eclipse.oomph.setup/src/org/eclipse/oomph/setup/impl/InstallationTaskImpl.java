@@ -204,6 +204,12 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     return PRIORITY_INSTALLATION - 1;
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 0;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     OS os = context.getOS();

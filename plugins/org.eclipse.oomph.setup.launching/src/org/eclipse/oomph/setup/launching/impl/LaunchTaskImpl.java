@@ -204,6 +204,12 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     return result.toString();
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 10;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     String launcher = getLauncher();

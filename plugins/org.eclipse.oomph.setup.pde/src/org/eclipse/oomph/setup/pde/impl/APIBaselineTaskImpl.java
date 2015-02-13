@@ -384,6 +384,12 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
     return result.toString();
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 50;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     ApiPlugin apiPlugin = ApiPlugin.getDefault();

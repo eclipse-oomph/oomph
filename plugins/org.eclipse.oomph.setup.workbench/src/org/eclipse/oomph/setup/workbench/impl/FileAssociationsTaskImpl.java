@@ -239,6 +239,12 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
     }
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 0;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     Map<String, FileEditorMapping> fileEditorMappings = getFileEditorMappings();

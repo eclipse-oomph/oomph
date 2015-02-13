@@ -257,6 +257,12 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
     return createToken(getName());
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 0;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     IValueVariable variable = getValueVariable(false);

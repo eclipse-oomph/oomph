@@ -250,6 +250,12 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
     return PRIORITY_REDIRECTION;
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 0;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return false;

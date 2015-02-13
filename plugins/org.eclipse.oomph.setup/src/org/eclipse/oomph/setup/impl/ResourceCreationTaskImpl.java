@@ -326,6 +326,12 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
     return result.toString();
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 2;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI targetURI = createResolvedURI(getTargetURL());

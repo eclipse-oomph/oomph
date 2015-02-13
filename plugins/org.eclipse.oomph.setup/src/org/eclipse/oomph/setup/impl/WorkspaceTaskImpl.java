@@ -194,6 +194,12 @@ public class WorkspaceTaskImpl extends SetupTaskImpl implements WorkspaceTask
     return PRIORITY_INSTALLATION - 1;
   }
 
+  @Override
+  public int getProgressMonitorWork()
+  {
+    return 0;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return !new File(getLocation()).isDirectory();

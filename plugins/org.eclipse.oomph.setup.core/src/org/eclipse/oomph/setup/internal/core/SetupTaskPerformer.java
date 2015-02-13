@@ -2729,7 +2729,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       int totalWork = 0;
       for (SetupTask neededTask : neededSetupTasks)
       {
-        int work = Math.max(1, neededTask.getProgressMonitorWork());
+        int work = Math.max(0, neededTask.getProgressMonitorWork());
         totalWork += work;
       }
 
@@ -2747,7 +2747,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         task(neededTask);
 
-        int work = Math.max(1, neededTask.getProgressMonitorWork());
+        int work = Math.max(0, neededTask.getProgressMonitorWork());
         progressMonitor = new SubProgressMonitor(monitor, work);
 
         try
