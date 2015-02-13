@@ -4,6 +4,10 @@ if [[ "$GIT" == "" ]]; then
   GIT=$WORKSPACE/git
 fi
 
+if [[ "$PACK_AND_SIGN" == "" ]]; then
+  PACK_AND_SIGN=false
+fi
+
 set -o nounset
 set -o errexit
 
