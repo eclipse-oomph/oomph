@@ -60,7 +60,7 @@ public class GearAnimator extends Animator
 
   private static final int CHOICES = NEXT - 1;
 
-  private static final String[] TITLES = { "Welcome to Eclipse Oomph", "Refresh Resources Automatically?", "Show Line Numbers in Editors?",
+  private static final String[] TITLES = { "Welcome to Eclipse", "Refresh Resources Automatically?", "Show Line Numbers in Editors?",
       "Check Spelling in Text Editors?", "Execute Jobs in Background?", "Encode Text Files with UTF-8?", "Enable Preference Recorder?" };
 
   static final int BIG_FONT_PX = 48;
