@@ -849,6 +849,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     performer.getUnresolvedVariables().clear();
     performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
     performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
+    performer.setOffline(false);
+    performer.setMirrors(true);
     performer.setVMPath(vmPath);
     performer.setProgress(progress);
     performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");

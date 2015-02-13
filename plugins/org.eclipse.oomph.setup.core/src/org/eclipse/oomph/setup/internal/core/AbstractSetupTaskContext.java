@@ -52,7 +52,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   private boolean performing;
 
-  private boolean mirrors;
+  private boolean mirrors = true;
 
   private Set<String> restartReasons = new LinkedHashSet<String>();
 
