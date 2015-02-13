@@ -92,7 +92,7 @@ public abstract class JREController implements ISelectionChangedListener
           text += " " + javaVersion;
         }
 
-        text += " VM";
+        text += "+ VM";
         setLabel(text);
       }
     }
