@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -208,7 +209,8 @@ public abstract class ExternalResource extends PlatformObject implements IResour
     {
       if (backendResource.isLocal())
       {
-        return URIUtil.fromString(backendResource.getLocation().toString());
+        return new File(backendResource.getLocation().toString()).toURI();
+        // return URIUtil.fromString(backendResource.getLocation().toString());
       }
 
       return URIUtil.fromString(backendResource.getAbsoluteURI().toString());
