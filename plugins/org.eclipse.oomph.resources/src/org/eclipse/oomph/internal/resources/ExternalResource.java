@@ -210,7 +210,6 @@ public abstract class ExternalResource extends PlatformObject implements IResour
       if (backendResource.isLocal())
       {
         return new File(backendResource.getLocation().toString()).toURI();
-        // return URIUtil.fromString(backendResource.getLocation().toString());
       }
 
       return URIUtil.fromString(backendResource.getAbsoluteURI().toString());

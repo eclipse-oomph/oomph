@@ -160,21 +160,7 @@ import java.util.regex.Pattern;
  */
 public class SetupTaskPerformer extends AbstractSetupTaskContext
 {
-  public static final boolean REMOTE_DEBUG = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_REMOTE_DEBUG) || tempTest();
-
-  private static boolean tempTest()
-  {
-    int xxx;
-
-    try
-    {
-      return new File("C:\\develop\\cpp22").exists();
-    }
-    catch (Throwable ex)
-    {
-      return false;
-    }
-  }
+  public static final boolean REMOTE_DEBUG = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_REMOTE_DEBUG);
 
   public static final Adapter RULE_VARIABLE_ADAPTER = new AdapterImpl();
 

@@ -144,8 +144,8 @@ public final class ResourcesUtil
         }
         else
         {
-          projectFolder = new File(project.getLocationURI().getPath());
-          file = new File(iFile.getLocationURI().getPath());
+          projectFolder = new File(project.getLocation().toOSString());
+          file = new File(iFile.getLocation().toOSString());
         }
 
         runnable.run(projectFolder, file);
