@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
 <setAttribute key="additional_plugins">
-<setEntry value="org.eclipse.equinox.p2.artifact.repository.source:1.1.300.v20131211-1531:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.artifact.repository:1.1.300.v20131211-1531:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.artifact.repository.source:1.1.300.v20150123-1500:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.artifact.repository:1.1.300.v20150123-1500:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.console.source:1.0.300.v20131113-1212:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.console:1.0.300.v20131113-1212:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.core.source:2.4.0.v20141112-1524:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.core:2.4.0.v20141112-1524:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.director.app.source:1.0.300.v20140228-1829:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.director.app:1.0.300.v20140228-1829:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.director.app.source:1.0.300.v20150123-0816:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.director.app:1.0.300.v20150123-0816:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.director.source:2.3.100.v20140224-1921:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.director:2.3.100.v20140224-1921:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.directorywatcher.source:1.1.0.v20131211-1531:default:true"/>
@@ -57,12 +57,12 @@
 <setEntry value="org.eclipse.equinox.p2.ui.sdk.scheduler:1.2.0.v20140422-1847:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.ui.sdk.source:1.0.300.v20140407-1803:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.ui.sdk:1.0.300.v20140407-1803:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.ui.source:2.4.0.v20141208-2105:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.ui:2.4.0.v20141208-2105:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.ui.source:2.4.0.v20150108-0934:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.ui:2.4.0.v20150108-0934:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.updatechecker.source:1.1.200.v20131119-0908:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.updatechecker:1.1.200.v20131119-0908:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.updatesite.source:1.0.400.v20140629-1744:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.updatesite:1.0.400.v20140629-1744:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.updatesite.source:1.0.400.v20150127-0451:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.updatesite:1.0.400.v20150127-0451:default:true"/>
 </setAttribute>
 <booleanAttribute key="append.args" value="true"/>
 <booleanAttribute key="askclear" value="true"/>

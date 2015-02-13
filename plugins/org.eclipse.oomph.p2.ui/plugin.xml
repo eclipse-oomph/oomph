@@ -68,7 +68,8 @@
                class="org.eclipse.oomph.p2.internal.ui.ExploreRepositoryHandler">
          </class>
          <activeWhen>
-             <iterate>
+             <iterate
+                   ifEmpty="false">
                 <adapt
                       type="org.eclipse.oomph.p2.Repository">
                 </adapt>
