@@ -1683,8 +1683,6 @@
       <requirement
           name="org.eclipse.recommenders.rcp.feature.feature.group"/>
       <requirement
-          name="org.eclipse.recommenders.codesearch.feature.feature.group"/>
-      <requirement
           name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
       <requirement
           name="org.eclipse.recommenders.stacktraces.rcp.feature.feature.group"/>
@@ -1741,27 +1739,6 @@
   </project>
   <project name="incubators"
       label="Incubators">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        remoteURI="recommenders.incubator/org.eclipse.recommenders.codesearch"
-        pushURI="">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Recommenders Code Search Git or Gerrit Repository</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>Recommenders Code Search</description>
-    </setupTask>
     <setupTask
         xsi:type="git:GitCloneTask"
         remoteURI="recommenders.incubator/org.eclipse.recommenders.livedoc"
@@ -1865,125 +1842,6 @@
           url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
       <repository
           url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
-    </setupTask>
-    <stream
-        name="master"/>
-  </project>
-  <project name="codesearch"
-      label="Codesearch">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.recommenders.codesearch"
-        remoteURI="recommenders.incubator/org.eclipse.recommenders.codesearch"
-        pushURI="">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Recommenders Codesearch Git or Gerrit Repository</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>Recommenders Codesearch</description>
-    </setupTask>
-    <setupTask
-        xsi:type="setup.p2:P2Task">
-      <requirement
-          name="org.eclipse.m2e.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.m2e.logback.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.xtend.sdk.feature.group"/>
-      <requirement
-          name="org.eclipse.epp.mpc.feature.group"/>
-      <requirement
-          name="org.eclipse.recommenders.rcp.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.recommenders.stacktraces.rcp.feature.feature.group"/>
-      <requirement
-          name="org.sonatype.tycho.m2e.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.hudson.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.git.feature.group"/>
-      <repository
-          url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.7.0/N/0.7.0.201309291400/"/>
-      <repository
-          url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
-      <repository
-          url="http://download.eclipse.org/recommenders/updates/milestones"/>
-    </setupTask>
-    <setupTask
-        xsi:type="maven:MavenImportTask">
-      <sourceLocator
-          rootFolder="${git.clone.recommenders.codesearch.location}">
-        <predicate
-            xsi:type="predicates:LocationPredicate"
-            pattern=".*/plugins/.*"/>
-        <predicate
-            xsi:type="predicates:LocationPredicate"
-            pattern=".*/features/.*"/>
-        <predicate
-            xsi:type="predicates:LocationPredicate"
-            pattern=".*/tests/.*"/>
-        <predicate
-            xsi:type="predicates:LocationPredicate"
-            pattern=".*/targets/.*"/>
-      </sourceLocator>
-    </setupTask>
-    <setupTask
-        xsi:type="pde:TargetPlatformTask"
-        name="Target Definition for Eclipse Luna (4.4)"/>
-    <setupTask
-        xsi:type="mylyn:MylynQueriesTask"
-        repositoryURL="https://bugs.eclipse.org/bugs"
-        userID="${bugzilla.id}"
-        password="${eclipse.user.password}">
-      <query
-          summary="Bugs"
-          url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;component=Codesearch&amp;list_id=8721722&amp;order=bug_id%20DESC&amp;product=Recommenders.Incubator&amp;query_based_on=&amp;query_format=advanced"/>
-    </setupTask>
-    <setupTask
-        xsi:type="mylyn:MylynBuildsTask"
-        serverURL="https://hudson.eclipse.org/recommenders"
-        userID="${bugzilla.id}"
-        password="${eclipse.user.password}">
-      <buildPlan
-          name="codesearch.gerrit.master"/>
-      <buildPlan
-          name="codesearch.origin.master"/>
-    </setupTask>
-    <setupTask
-        xsi:type="mylyn:MylynQueriesTask"
-        connectorKind="org.eclipse.mylyn.gerrit"
-        repositoryURL="https://git.eclipse.org/r"
-        userID="${bugzilla.id}"
-        password="${eclipse.user.password}">
-      <query
-          summary="Reviews">
-        <attribute
-            key="gerrit query type"
-            value="custom"/>
-        <attribute
-            key="gerrit query project"
-            value="recommenders.incubator/org.eclipse.recommenders.codesearch"/>
-        <attribute
-            key="gerrit query string"
-            value="project:recommenders.incubator/org.eclipse.recommenders.codesearch status:open branch:master"/>
-      </query>
     </setupTask>
     <stream
         name="master"/>
