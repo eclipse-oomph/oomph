@@ -34,8 +34,11 @@ public class StackComposite extends Composite
 
   public void setTopControl(Control topControl)
   {
-    layout.topControl = topControl;
-    layout();
+    if (layout.topControl != topControl)
+    {
+      layout.topControl = topControl;
+      layout();
+    }
   }
 
   @Override

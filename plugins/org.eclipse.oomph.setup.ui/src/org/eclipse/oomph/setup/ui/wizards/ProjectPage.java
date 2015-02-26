@@ -17,13 +17,13 @@ import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
-import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.provider.CatalogSelectionItemProvider;
 import org.eclipse.oomph.setup.provider.IndexItemProvider;
 import org.eclipse.oomph.setup.provider.ProjectCatalogItemProvider;
@@ -1386,24 +1386,8 @@ public class ProjectPage extends SetupWizardPage
       builder.append(" - ");
     }
 
-    String label = getLabel(project);
+    String label = SetupCoreUtil.getLabel(project);
     builder.append(label);
-  }
-
-  private static String getLabel(Scope scope)
-  {
-    if (scope == null)
-    {
-      return "";
-    }
-
-    String label = scope.getLabel();
-    if (StringUtil.isEmpty(label))
-    {
-      label = StringUtil.safe(scope.getName());
-    }
-
-    return label;
   }
 
   /**
@@ -1780,7 +1764,7 @@ public class ProjectPage extends SetupWizardPage
     {
       Stream stream = (Stream)element;
       ProjectCatalog catalog = stream.getProject().getProjectCatalog();
-      return getLabel(catalog);
+      return SetupCoreUtil.getLabel(catalog);
     }
 
     @Override
@@ -1824,7 +1808,7 @@ public class ProjectPage extends SetupWizardPage
     public String getText(Object element)
     {
       Stream stream = (Stream)element;
-      return getLabel(stream);
+      return SetupCoreUtil.getLabel(stream);
     }
 
     @Override

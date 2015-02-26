@@ -2724,6 +2724,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         autoBuilding = disableAutoBuilding();
       }
 
+      logSetupInfos();
       logBundleInfos();
 
       int totalWork = 0;
@@ -2831,6 +2832,27 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         buildJob.setRule(EcorePlugin.getWorkspaceRoot());
         buildJob.schedule();
+      }
+    }
+  }
+
+  private void logSetupInfos()
+  {
+    SetupContext setupContext = getSetupContext();
+
+    Installation installation = setupContext.getInstallation();
+    if (installation != null)
+    {
+      ProductVersion productVersion = installation.getProductVersion();
+      log("Product " + productVersion.getQualifiedName());
+    }
+
+    Workspace workspace = setupContext.getWorkspace();
+    if (workspace != null)
+    {
+      for (Stream stream : workspace.getStreams())
+      {
+        log("Project " + stream.getQualifiedName());
       }
     }
   }

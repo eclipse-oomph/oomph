@@ -902,6 +902,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       }
     }
 
+    boolean offline = context.isOffline();
+    context.log("Offline = " + offline);
+
+    boolean mirrors = context.isMirrors();
+    context.log("Mirrors = " + mirrors);
+
     TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
       public Object run(ITargetPlatformService service) throws CoreException

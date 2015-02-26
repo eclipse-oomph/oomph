@@ -20,10 +20,12 @@ import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -87,6 +89,22 @@ public final class SetupCoreUtil
 
   private SetupCoreUtil()
   {
+  }
+
+  public static String getLabel(Scope scope)
+  {
+    if (scope == null)
+    {
+      return "";
+    }
+  
+    String label = scope.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = StringUtil.safe(scope.getName());
+    }
+  
+    return label;
   }
 
   public static ResourceSet createResourceSet()
