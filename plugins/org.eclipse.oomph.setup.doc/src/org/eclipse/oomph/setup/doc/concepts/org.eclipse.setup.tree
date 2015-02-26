@@ -19324,7 +19324,7 @@
           value=""/>
     </children>
     <children
-        xmi:id="/setups/interim/CodeRecommenders.setup#/"
+        xmi:id="https://git.eclipse.org/c/recommenders/org.eclipse.recommenders.git/plain/tools/oomph/recommenders.setup#/"
         image="../../../../../../../images/trees/DNfmoRNYZ2CVb3Rgd1UpE87kpDo=.png"
         label="Code Recommenders">
       <children
