@@ -103,6 +103,12 @@ for f in *.zip; do
       echo "  Signing $extractor"
       curl -o $PRODUCTS/$extractor-signed -F filedata=@$PRODUCTS/$extractor http://build.eclipse.org:31338/winsign.php
       mv $PRODUCTS/$extractor-signed $PRODUCTS/$extractor
+      
+      actualSize=$(wc -c "$PRODUCTS/$extractor" | cut -f 1 -d ' ')
+      if [ $actualSize -lt 60000000 ]; then
+        echo "$PRODUCTS/$extractor is just $actualSize bytes large!"
+        exit 1
+      fi
     fi
 
   elif [[ $f == *linux* ]]; then
