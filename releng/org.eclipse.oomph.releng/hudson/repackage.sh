@@ -105,7 +105,7 @@ for f in *.zip; do
       mv $PRODUCTS/$extractor-signed $PRODUCTS/$extractor
       
       actualSize=$(wc -c "$PRODUCTS/$extractor" | cut -f 1 -d ' ')
-      if [ $actualSize -lt 60000000 ]; then
+      if [ $actualSize -lt 40000000 ]; then
         echo "$PRODUCTS/$extractor is just $actualSize bytes large!"
         exit 1
       fi
