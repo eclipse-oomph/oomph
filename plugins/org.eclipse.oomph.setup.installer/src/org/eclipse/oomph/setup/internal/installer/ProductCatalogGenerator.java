@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.tests.data;
+package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
@@ -81,6 +81,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("restriction")
 public class ProductCatalogGenerator implements IApplication
 {
   private static final String JAVA_VERSION_PREFIX = "addJvmArg(jvmArg:-Dosgi.requiredJavaVersion=";
