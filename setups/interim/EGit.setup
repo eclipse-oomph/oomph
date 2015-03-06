@@ -162,7 +162,7 @@
         <sourceLocator
             rootFolder="${git.clone.egit.location}"/>
         <repositoryList
-            name="Luna">
+            name="Mars">
           <repository
               url="http://download.eclipse.org/releases/mars"/>
           <repository
