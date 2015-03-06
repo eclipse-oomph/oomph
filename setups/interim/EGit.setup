@@ -119,8 +119,6 @@
         <requirement
             name="org.eclipse.jgit.ant.test"/>
         <requirement
-            name="org.eclipse.jgit.console"/>
-        <requirement
             name="org.eclipse.jgit.http.test"/>
         <requirement
             name="org.eclipse.jgit.http.apache.feature.group"/>
