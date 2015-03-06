@@ -57,7 +57,7 @@
       name="EGit"
       version="3.4"
       location="${workspace.location/../api.baseline}"
-      remoteURI="http://download.eclipse.org/egit/updates-3.4.1/org.eclipse.egit.repository-3.4.1.201406201815-r.zip"/>
+      remoteURI="http://download.eclipse.org/egit/updates/org.eclipse.egit.repository-3.7.0.201502260915-r.zip"/>
   <stream name="master">
     <setupTask
         xsi:type="git:GitCloneTask"
@@ -161,6 +161,17 @@
             locateNestedProjects="true"/>
         <sourceLocator
             rootFolder="${git.clone.egit.location}"/>
+        <repositoryList
+            name="Luna">
+          <repository
+              url="http://download.eclipse.org/releases/mars"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
+          <repository
+              url="http://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
+        </repositoryList>
         <repositoryList
             name="Luna">
           <repository
