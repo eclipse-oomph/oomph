@@ -14,8 +14,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/remoteName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/remoteURI"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/pushURI"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/userID"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/checkoutBranch"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/recursive"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

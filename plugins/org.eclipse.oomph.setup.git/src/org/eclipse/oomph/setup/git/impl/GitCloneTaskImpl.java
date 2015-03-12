@@ -8,6 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  *    Ericsson AB (Julian Enoch) - Bug 429520 - Support additional push URL
+ *    Ericsson AB (Julian Enoch) - Bug 462008 - Support submodules while cloning a Git repo
  */
 package org.eclipse.oomph.setup.git.impl;
 
@@ -66,7 +67,6 @@ import java.util.Set;
  * An implementation of the model object '<em><b>Git Clone Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>
@@ -75,6 +75,7 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getRemoteURI <em>Remote URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getPushURI <em>Push URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getCheckoutBranch <em>Checkout Branch</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#isRecursive <em>Recursive</em>}</li>
  * </ul>
  *
  * @generated
@@ -180,6 +181,26 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @ordered
    */
   protected String checkoutBranch = CHECKOUT_BRANCH_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isRecursive() <em>Recursive</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isRecursive()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean RECURSIVE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isRecursive() <em>Recursive</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isRecursive()
+   * @generated
+   * @ordered
+   */
+  protected boolean recursive = RECURSIVE_EDEFAULT;
 
   private boolean workDirExisted;
 
@@ -317,6 +338,31 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isRecursive()
+  {
+    return recursive;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRecursive(boolean newRecursive)
+  {
+    boolean oldRecursive = recursive;
+    recursive = newRecursive;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, GitPackage.GIT_CLONE_TASK__RECURSIVE, oldRecursive, recursive));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getPushURI()
   {
     return pushURI;
@@ -357,6 +403,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         return getPushURI();
       case GitPackage.GIT_CLONE_TASK__CHECKOUT_BRANCH:
         return getCheckoutBranch();
+      case GitPackage.GIT_CLONE_TASK__RECURSIVE:
+        return isRecursive();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -385,6 +433,9 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         return;
       case GitPackage.GIT_CLONE_TASK__CHECKOUT_BRANCH:
         setCheckoutBranch((String)newValue);
+        return;
+      case GitPackage.GIT_CLONE_TASK__RECURSIVE:
+        setRecursive((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -415,6 +466,9 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       case GitPackage.GIT_CLONE_TASK__CHECKOUT_BRANCH:
         setCheckoutBranch(CHECKOUT_BRANCH_EDEFAULT);
         return;
+      case GitPackage.GIT_CLONE_TASK__RECURSIVE:
+        setRecursive(RECURSIVE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -439,6 +493,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         return PUSH_URI_EDEFAULT == null ? pushURI != null : !PUSH_URI_EDEFAULT.equals(pushURI);
       case GitPackage.GIT_CLONE_TASK__CHECKOUT_BRANCH:
         return CHECKOUT_BRANCH_EDEFAULT == null ? checkoutBranch != null : !CHECKOUT_BRANCH_EDEFAULT.equals(checkoutBranch);
+      case GitPackage.GIT_CLONE_TASK__RECURSIVE:
+        return recursive != RECURSIVE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -467,6 +523,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     result.append(pushURI);
     result.append(", checkoutBranch: ");
     result.append(checkoutBranch);
+    result.append(", recursive: ");
+    result.append(recursive);
     result.append(')');
     return result.toString();
   }
@@ -591,7 +649,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       {
         if (cachedGit == null)
         {
-          cachedGit = cloneRepository(context, workDir, checkoutBranch, remoteName, remoteURI, new SubProgressMonitor(monitor, 50));
+          cachedGit = cloneRepository(context, workDir, checkoutBranch, remoteName, remoteURI, isRecursive(), new SubProgressMonitor(monitor, 50));
           cachedRepository = cachedGit.getRepository();
 
           if (!URI.createURI(remoteURI).isFile())
@@ -689,7 +747,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
   }
 
-  private static Git cloneRepository(SetupTaskContext context, File workDir, String checkoutBranch, String remoteName, String remoteURI,
+  private static Git cloneRepository(SetupTaskContext context, File workDir, String checkoutBranch, String remoteName, String remoteURI, boolean recursive,
       IProgressMonitor monitor) throws Exception
   {
     context.log("Cloning Git repo " + remoteURI + " to " + workDir);
@@ -702,6 +760,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     command.setDirectory(workDir);
     command.setTimeout(60);
     command.setProgressMonitor(new EclipseGitProgressTransformer(monitor));
+    command.setCloneSubmodules(recursive);
     return command.call();
   }
 

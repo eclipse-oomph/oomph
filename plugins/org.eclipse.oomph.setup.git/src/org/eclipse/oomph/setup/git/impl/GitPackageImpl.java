@@ -169,6 +169,16 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getGitCloneTask_Recursive()
+  {
+    return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public GitFactory getGitFactory()
   {
     return (GitFactory)getEFactoryInstance();
@@ -203,6 +213,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__REMOTE_URI);
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__PUSH_URI);
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__CHECKOUT_BRANCH);
+    createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__RECURSIVE);
   }
 
   /**
@@ -254,6 +265,8 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getGitCloneTask_CheckoutBranch(), ecorePackage.getEString(), "checkoutBranch", "${scope.project.stream.name}", 1, 1, GitCloneTask.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getGitCloneTask_Recursive(), ecorePackage.getEBoolean(), "recursive", "false", 0, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore");

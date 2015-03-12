@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.SetupTask;
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getRemoteURI <em>Remote URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getPushURI <em>Push URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getCheckoutBranch <em>Checkout Branch</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#isRecursive <em>Recursive</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask()
@@ -169,5 +170,32 @@ public interface GitCloneTask extends SetupTask
    * @generated
    */
   void setCheckoutBranch(String value);
+
+  /**
+   * Returns the value of the '<em><b>Recursive</b></em>' attribute.
+   * The default value is <code>"false"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Recursive</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Recursive</em>' attribute.
+   * @see #setRecursive(boolean)
+   * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_Recursive()
+   * @model default="false"
+   * @generated
+   */
+  boolean isRecursive();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.git.GitCloneTask#isRecursive <em>Recursive</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Recursive</em>' attribute.
+   * @see #isRecursive()
+   * @generated
+   */
+  void setRecursive(boolean value);
 
 } // GitCloneTask

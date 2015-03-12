@@ -207,13 +207,22 @@ public interface GitPackage extends EPackage
   int GIT_CLONE_TASK__CHECKOUT_BRANCH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
+   * The feature id for the '<em><b>Recursive</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CLONE_TASK__RECURSIVE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+
+  /**
    * The number of structural features of the '<em>Clone Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.GitCloneTask <em>Clone Task</em>}'.
@@ -279,6 +288,17 @@ public interface GitPackage extends EPackage
    * @generated
    */
   EAttribute getGitCloneTask_CheckoutBranch();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.GitCloneTask#isRecursive <em>Recursive</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Recursive</em>'.
+   * @see org.eclipse.oomph.setup.git.GitCloneTask#isRecursive()
+   * @see #getGitCloneTask()
+   * @generated
+   */
+  EAttribute getGitCloneTask_Recursive();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -353,6 +373,14 @@ public interface GitPackage extends EPackage
      * @generated
      */
     EAttribute GIT_CLONE_TASK__CHECKOUT_BRANCH = eINSTANCE.getGitCloneTask_CheckoutBranch();
+
+    /**
+     * The meta object literal for the '<em><b>Recursive</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute GIT_CLONE_TASK__RECURSIVE = eINSTANCE.getGitCloneTask_Recursive();
 
   }
 
