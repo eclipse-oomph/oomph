@@ -91,5 +91,6 @@
   </setupTask>
   <project href="user:/com.github.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Github.com project catalog'#/"/>
   <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
+  <project href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup#/"/>
   <project href="https://github.com/meysholdt/Xpect/raw/master/org.xpect.releng/Xpect.setup#/"/>
 </setup:ProjectCatalog>
