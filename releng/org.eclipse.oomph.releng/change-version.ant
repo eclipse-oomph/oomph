@@ -90,6 +90,12 @@
 			</fileset>
 		</replaceregexp>
 
+		<replaceregexp match="version=&quot;${version.from}&quot;" replace="version=&quot;${version.to}&quot;" byline="true">
+			<fileset dir="${git.clone.location}">
+				<include name="**/component.def" />
+			</fileset>
+		</replaceregexp>
+
 	</target>
 
 </project>
