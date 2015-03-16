@@ -247,10 +247,53 @@ findDescriptor (_TCHAR* executable, REQ* req)
 static BOOL
 execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
 {
+  BOOL result = FALSE;
+
   _TCHAR cmdline[2 * MAX_PATH];
   sprintf (cmdline, _T("\"%s\\bin\\javaw\" -cp \"%s\" %s %s"), javaHome, lib, className, args);
 
-  return WinExec (cmdline, SW_HIDE) > 31;
+  STARTUPINFO si;
+  PROCESS_INFORMATION pi;
+
+  ZeroMemory( &si, sizeof(si) );
+  si.cb = sizeof(si);
+  ZeroMemory( &pi, sizeof(pi) );
+
+  // Start the child process.
+  if (!CreateProcess ( NULL,   // No module name (use command line)
+      cmdline,        // Command line
+      NULL,           // Process handle not inheritable
+      NULL,           // Thread handle not inheritable
+      FALSE,          // Set handle inheritance to FALSE
+      0,              // No creation flags
+      NULL,           // Use parent's environment block
+      NULL,           // Use parent's starting directory
+      &si,            // Pointer to STARTUPINFO structure
+      &pi))            // Pointer to PROCESS_INFORMATION structure
+  {
+    return FALSE;
+  }
+
+  // Wait until child process exits.
+  WaitForSingleObject (pi.hProcess, INFINITE);
+
+  DWORD exitCode;
+  if (FALSE != GetExitCodeProcess (pi.hProcess, &exitCode))
+  {
+    result = exitCode == 0;
+  }
+
+  // Close process and thread handles.
+  CloseHandle (pi.hProcess);
+  CloseHandle (pi.hThread);
+
+  //  exitCode = system (cmdline);
+  //  result = exitCode == 0;
+
+  //  exitCode = WinExec (cmdline, SW_HIDE);
+  //  result= exitCode > 31;
+
+  return result;
 }
 
 static BOOL
