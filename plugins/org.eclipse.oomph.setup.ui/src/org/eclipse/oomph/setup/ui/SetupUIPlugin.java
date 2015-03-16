@@ -285,10 +285,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Ignore
     }
 
-    if (!QUESTIONNAIRE_SKIP)
-    {
-      Questionnaire.perform(UIUtil.getShell(), false);
-    }
+    // Disabled for bug 459486:
+    // if (!QUESTIONNAIRE_SKIP)
+    // {
+    // Questionnaire.perform(UIUtil.getShell(), false);
+    // }
 
     // This performer is only used to detect a need to update or to open the setup wizard.
     SetupTaskPerformer performer = null;
