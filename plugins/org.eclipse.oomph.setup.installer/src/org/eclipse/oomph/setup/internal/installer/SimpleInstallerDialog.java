@@ -365,7 +365,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
     public UpdateSearcher(Display display)
     {
-      super("Update Searcher");
+      super("Simple Update Searcher");
       this.display = display;
     }
 
