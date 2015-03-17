@@ -43,6 +43,8 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
 
   public static final String ANNOTATION_LOCATION = "location";
 
+  public static final String ANNOTATION_MODULE_ROOTS = "moduleRoots";
+
   private static final Pattern MODULES_PATTERN = Pattern.compile("([ \\t]*)<modules>.*?</modules>", Pattern.DOTALL);
 
   public PomModulesUpdater()
@@ -54,6 +56,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
       WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
   {
     ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
+
     for (Targlet targlet : targletContainer.getTarglets())
     {
       Annotation annotation = targlet.getAnnotation(ANNOTATION);
@@ -65,8 +68,20 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
           File mainPom = new File(location);
           if (mainPom.isFile())
           {
+            String[] moduleRoots = null;
+
+            String roots = annotation.getDetails().get(ANNOTATION_MODULE_ROOTS);
+            if (!StringUtil.isEmpty(roots))
+            {
+              moduleRoots = roots.split(",");
+              for (int i = 0; i < moduleRoots.length; i++)
+              {
+                moduleRoots[i] = moduleRoots[i].replace('\\', '/');
+              }
+            }
+
             Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = profileUpdateSucceededEvent.getWorkspaceIUInfos();
-            updatePomModules(mainPom, workspaceIUInfos, monitor);
+            updatePomModules(mainPom, moduleRoots, workspaceIUInfos, monitor);
           }
           else
           {
@@ -77,10 +92,11 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
     }
   }
 
-  private static void updatePomModules(final File mainPom, final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, final IProgressMonitor monitor)
-      throws Exception
+  private static void updatePomModules(final File mainPom, final String[] moduleRoots, final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos,
+      final IProgressMonitor monitor) throws Exception
   {
     monitor.subTask("Checking for POM modules updates");
+
     new FileUpdater()
     {
       @Override
@@ -99,7 +115,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
           builder.append("<modules>");
           builder.append(nl);
 
-          List<String> modules = analyzeProjects(mainPom, workspaceIUInfos, monitor);
+          List<String> modules = analyzeProjects(mainPom, moduleRoots, workspaceIUInfos, monitor);
           for (String module : modules)
           {
             builder.append(indent);
@@ -129,7 +145,8 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
     }.update(mainPom);
   }
 
-  private static List<String> analyzeProjects(File mainPom, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, IProgressMonitor monitor)
+  private static List<String> analyzeProjects(File mainPom, String[] moduleRoots, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos,
+      IProgressMonitor monitor)
   {
     URI mainURI = URI.createFileURI(mainPom.getAbsolutePath());
     List<String> modules = new ArrayList<String>();
@@ -139,11 +156,30 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
       TargletsCorePlugin.checkCancelation(monitor);
 
       File folder = info.getLocation();
-      File pom = new File(folder, "pom.xml");
-      if (pom.isFile())
+      String modulePath = folder.getAbsolutePath().replace('\\', '/');
+
+      boolean inRoot = true;
+      if (moduleRoots != null)
       {
-        URI uri = URI.createFileURI(folder.getAbsolutePath()).deresolve(mainURI);
-        modules.add(uri.toString());
+        inRoot = false;
+        for (String moduleRoot : moduleRoots)
+        {
+          if (modulePath.startsWith(moduleRoot))
+          {
+            inRoot = true;
+            break;
+          }
+        }
+      }
+
+      if (inRoot)
+      {
+        File pom = new File(folder, "pom.xml");
+        if (pom.isFile())
+        {
+          URI uri = URI.createFileURI(modulePath).deresolve(mainURI);
+          modules.add(uri.toString());
+        }
       }
     }
 

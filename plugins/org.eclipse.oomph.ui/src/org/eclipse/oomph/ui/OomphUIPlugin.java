@@ -74,12 +74,26 @@ public abstract class OomphUIPlugin extends OomphPlugin
 
   public final Image getSWTImage(String key)
   {
-    return ExtendedImageRegistry.INSTANCE.getImage(getImage(key));
+    try
+    {
+      return ExtendedImageRegistry.INSTANCE.getImage(getImage(key));
+    }
+    catch (RuntimeException ex)
+    {
+      throw new RuntimeException("Problem while getting image for " + key, ex);
+    }
   }
 
   public final ImageDescriptor getImageDescriptor(String key)
   {
-    return ExtendedImageRegistry.INSTANCE.getImageDescriptor(getImage(key));
+    try
+    {
+      return ExtendedImageRegistry.INSTANCE.getImageDescriptor(getImage(key));
+    }
+    catch (RuntimeException ex)
+    {
+      throw new RuntimeException("Problem while getting image descriptor for " + key, ex);
+    }
   }
 
   public static Font getFont(Font baseFont, Object object)
@@ -106,7 +120,7 @@ public abstract class OomphUIPlugin extends OomphPlugin
   {
     return getFont(baseFont, IItemFontProvider.BOLD_ITALIC_FONT);
   }
-  
+
   public static Color getColor(ColorDescriptor colorDescriptor)
   {
     return ExtendedColorRegistry.INSTANCE.getColor(null, null, colorDescriptor);
