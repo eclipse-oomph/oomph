@@ -11,15 +11,20 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
+import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.ShellMove;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.OS;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -88,6 +93,10 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
   private SimpleVariablePage variablePage;
 
+  private ToolButton updateButton;
+
+  private Resolution updateResolution;
+
   private int returnCode = RETURN_OK;
 
   public SimpleInstallerDialog(Display display, final Installer installer)
@@ -124,7 +133,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
       }
     });
 
-    GridLayout titleLayout = UIUtil.createGridLayout(3);
+    GridLayout titleLayout = UIUtil.createGridLayout(4);
     titleLayout.marginTop = 15;
     titleLayout.marginWidth = MARGIN_WIDTH;
     titleLayout.horizontalSpacing = 0;
@@ -136,6 +145,36 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     Label titleImage = new Label(titleComposite, SWT.NONE);
     titleImage.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, true, false));
     titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png"));
+
+    updateButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/update.png"), true);
+    updateButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
+    updateButton.setToolTipText("Update installer");
+    updateButton.setVisible(false);
+    updateButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        final Runnable successRunnable = new Runnable()
+        {
+          public void run()
+          {
+            returnCode = RETURN_ADVANCED;
+            exitSelected();
+          }
+        };
+
+        final ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
+        {
+          public void handleException(CoreException ex)
+          {
+            ErrorDialog.open(ex);
+          }
+        };
+
+        SelfUpdate.update(getShell(), updateResolution, successRunnable, exceptionHandler, null);
+      }
+    });
 
     ToolButton advancedButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/advanced.png"), true);
     advancedButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
@@ -175,6 +214,9 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     productPage.setFocus();
 
     hook(this);
+
+    Thread updateSearcher = new UpdateSearcher(getDisplay());
+    updateSearcher.start();
 
     display.timerExec(500, new Runnable()
     {
@@ -312,5 +354,46 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
   public static void hook(Control control)
   {
     SHELL_MOVE.hookControl(control);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class UpdateSearcher extends Thread
+  {
+    private Display display;
+
+    public UpdateSearcher(Display display)
+    {
+      super("Update Searcher");
+      this.display = display;
+    }
+
+    @Override
+    public void run()
+    {
+      try
+      {
+        User user = getInstaller().getUser();
+        updateResolution = SelfUpdate.resolve(user, null);
+        if (updateResolution != null && !display.isDisposed())
+        {
+          display.asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              if (!updateButton.isDisposed())
+              {
+                updateButton.setVisible(true);
+              }
+            }
+          });
+        }
+      }
+      catch (CoreException ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
+    }
   }
 }
