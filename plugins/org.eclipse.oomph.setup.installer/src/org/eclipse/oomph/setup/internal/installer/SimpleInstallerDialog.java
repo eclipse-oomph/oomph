@@ -155,7 +155,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        final Runnable successRunnable = new Runnable()
+        Runnable successRunnable = new Runnable()
         {
           public void run()
           {
@@ -164,7 +164,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
           }
         };
 
-        final ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
+        ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
         {
           public void handleException(CoreException ex)
           {

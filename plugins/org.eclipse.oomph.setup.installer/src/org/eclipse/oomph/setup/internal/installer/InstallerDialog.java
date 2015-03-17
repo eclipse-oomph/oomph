@@ -209,7 +209,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     }
     else
     {
-      final Runnable successRunnable = new Runnable()
+      Runnable successRunnable = new Runnable()
       {
         public void run()
         {
@@ -218,7 +218,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         }
       };
 
-      final ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
+      ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
       {
         public void handleException(CoreException ex)
         {
@@ -226,7 +226,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         }
       };
 
-      final Runnable finalRunnable = new Runnable()
+      Runnable finalRunnable = new Runnable()
       {
         public void run()
         {
