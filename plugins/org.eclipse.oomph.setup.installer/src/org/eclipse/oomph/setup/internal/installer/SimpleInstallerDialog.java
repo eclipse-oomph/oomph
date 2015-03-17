@@ -215,7 +215,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
     hook(this);
 
-    Thread updateSearcher = new UpdateSearcher(getDisplay());
+    Thread updateSearcher = new UpdateSearcher(display);
     updateSearcher.start();
 
     display.timerExec(500, new Runnable()
