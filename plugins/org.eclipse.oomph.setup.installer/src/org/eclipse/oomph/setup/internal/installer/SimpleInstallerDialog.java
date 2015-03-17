@@ -159,7 +159,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
         {
           public void run()
           {
-            returnCode = RETURN_ADVANCED;
+            returnCode = RETURN_RESTART;
             exitSelected();
           }
         };
