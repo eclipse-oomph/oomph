@@ -207,7 +207,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
             }
             else
             {
-              new Job("Refresh Setup Cache")
+              Job mirrorJob = new Job("Refresh Setup Cache")
               {
                 @Override
                 protected IStatus run(IProgressMonitor monitor)
@@ -230,7 +230,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
                     SetupPropertyTester.setStarting(false);
                   }
                 }
-              }.schedule();
+              };
+
+              mirrorJob.setSystem(true);
+              mirrorJob.schedule();
             }
           }
         }
