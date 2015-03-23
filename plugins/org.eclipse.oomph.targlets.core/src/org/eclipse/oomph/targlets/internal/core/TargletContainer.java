@@ -977,9 +977,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
             IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
             Set<IRequirement> licenseRequirements = new HashSet<IRequirement>();
+            Set<IRequirement> workspaceRequirements = new HashSet<IRequirement>();
+            Set<IRequirement> binaryRequirements = new HashSet<IRequirement>();
             for (IInstallableUnit iu : P2Util.asIterable(metadataResult))
             {
               TargletsCorePlugin.checkCancelation(monitor);
+
+              binaryRequirements.addAll(iu.getRequirements());
 
               ius.add(createGeneralizedIU(iu));
 
@@ -1004,6 +1008,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                 {
                   // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
                   ius.remove(workspaceIU);
+                  workspaceRequirements.addAll(workspaceIU.getRequirements());
                 }
 
                 // If there this workspace IU has a license...
@@ -1036,6 +1041,26 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               ius.add(requiredLicensesIU);
 
               profileChangeRequest.add(requiredLicensesIU);
+            }
+
+            // If we need source requirements.
+            workspaceRequirements.removeAll(binaryRequirements);
+            if (!workspaceRequirements.isEmpty())
+            {
+              // Build an artificial unit that requires all the license features.
+              InstallableUnitDescription workspaceRequirementsDescription = new InstallableUnitDescription();
+              workspaceRequirementsDescription.setId("workspace_requirements");
+              workspaceRequirementsDescription.setVersion(Version.createOSGi(1, 0, 0));
+              workspaceRequirementsDescription.setArtifacts(new IArtifactKey[0]);
+              workspaceRequirementsDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
+              workspaceRequirementsDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
+                  IInstallableUnit.NAMESPACE_IU_ID, workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
+              workspaceRequirementsDescription.addRequirements(workspaceRequirements);
+
+              IInstallableUnit workspaceRequirementsIU = MetadataFactory.createInstallableUnit(workspaceRequirementsDescription);
+              ius.add(workspaceRequirementsIU);
+
+              profileChangeRequest.add(workspaceRequirementsIU);
             }
 
             metadata = new CollectionResult<IInstallableUnit>(ius);
