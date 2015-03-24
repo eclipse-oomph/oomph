@@ -1095,8 +1095,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             if (requirementFilter != filter)
             {
               needsGeneralization = true;
-              IRequirement generalizedRequirement = MetadataFactory.createRequirement(requirement.getMatches(), generalizedRequirementFilter,
-                  requirement.getMin(), requirement.getMax(), requirement.isGreedy(), requirement.getDescription());
+              // IRequirement generalizedRequirement = MetadataFactory.createRequirement(requirement.getMatches(), generalizedRequirementFilter,
+              // requirement.getMin(), requirement.getMax(), requirement.isGreedy(), requirement.getDescription());
+              IRequirement generalizedRequirement = MetadataFactory.createRequirement(requirement.getMatches(), generalizedRequirementFilter, 0,
+                  requirement.getMax(), true, requirement.getDescription());
               generalizedRequirements[i] = generalizedRequirement;
             }
           }
