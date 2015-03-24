@@ -112,7 +112,7 @@ public abstract class OS
     return false;
   }
 
-  public final String getEclipseDir()
+  public String getEclipseDir()
   {
     return "eclipse";
   }
@@ -250,15 +250,21 @@ public abstract class OS
     }
 
     @Override
+    public String getEclipseDir()
+    {
+      return "Eclipse.app/Contents/Eclipse";
+    }
+
+    @Override
     public String getEclipseExecutable()
     {
-      return "Eclipse.app/Contents/MacOS/eclipse";
+      return "../MacOS/eclipse";
     }
 
     @Override
     public String getEclipseIni()
     {
-      return "Eclipse.app/Contents/MacOS/eclipse.ini";
+      return "eclipse.ini";
     }
 
     @Override
