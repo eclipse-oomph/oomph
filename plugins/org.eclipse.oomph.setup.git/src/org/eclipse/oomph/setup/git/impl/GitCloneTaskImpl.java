@@ -44,6 +44,7 @@ import org.eclipse.jgit.api.ReflogCommand;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.StatusCommand;
+import org.eclipse.jgit.api.SubmoduleUpdateCommand;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.ConfigConstants;
@@ -648,7 +649,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String remoteURI = getRemoteURI();
 
       IProgressMonitor monitor = context.getProgressMonitor(true);
-      monitor.beginTask("", (cachedGit == null ? 51 : 0) + (!hasCheckout ? 3 : 0));
+      monitor.beginTask("", (cachedGit == null ? 51 : 0) + (!hasCheckout ? 3 : 0) + (isRecursive() ? 20 : 0));
 
       try
       {
@@ -676,6 +677,11 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
           resetHard(context, cachedGit);
           monitor.worked(1);
+        }
+
+        if (isRecursive())
+        {
+          addSubmodules(context, cachedGit, new SubProgressMonitor(monitor, 20));
         }
       }
       finally
@@ -765,7 +771,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     command.setDirectory(workDir);
     command.setTimeout(60);
     command.setProgressMonitor(new EclipseGitProgressTransformer(monitor));
-    command.setCloneSubmodules(recursive);
     return command.call();
   }
 
@@ -921,6 +926,17 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     CheckoutCommand command = git.checkout();
     command.setName(checkoutBranch);
     command.call();
+  }
+
+  private static void addSubmodules(SetupTaskContext context, Git git, SubProgressMonitor monitor) throws Exception
+  {
+    context.log("Adding submodules");
+
+    git.submoduleInit().call();
+
+    SubmoduleUpdateCommand updateCommand = git.submoduleUpdate();
+    updateCommand.setProgressMonitor(new EclipseGitProgressTransformer(monitor));
+    updateCommand.call();
   }
 
   private static void resetHard(SetupTaskContext context, Git git) throws Exception
