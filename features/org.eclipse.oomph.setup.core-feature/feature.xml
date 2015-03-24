@@ -83,7 +83,7 @@
          version="0.0.0"
          unpack="false"/>
 
-   <plugin
+   <!--plugin
          id="org.eclipse.oomph.jreinfo.win32.x86"
          os="win32"
          arch="x86"
@@ -99,7 +99,7 @@
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"/-->
 
    <plugin
          id="org.eclipse.oomph.extractor.lib"
