@@ -16,8 +16,6 @@ import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.osgi.framework.BundleContext;
-
 /**
  * @author Eike Stepper
  */
@@ -50,12 +48,6 @@ public final class SetupCorePlugin extends OomphPlugin
     public Implementation()
     {
       plugin = this;
-    }
-
-    @Override
-    public void start(BundleContext context) throws Exception
-    {
-      super.start(context);
     }
   }
 }
