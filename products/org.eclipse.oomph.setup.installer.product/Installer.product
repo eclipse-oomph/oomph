@@ -11,7 +11,7 @@
 --launcher.XXMaxPermSize
 256M
 -name
-Oomph&#xa0;Installer
+Oomph Installer
 -data
 @none
       </programArgs>
@@ -60,6 +60,7 @@ Oomph&#xa0;Installer
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <property name="org.eclipse.update.reconcile" value="false" />
    </configurations>
 
 </product>
