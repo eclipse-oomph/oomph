@@ -92,13 +92,15 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     return (Installer)getWizard();
   }
 
-  public void refreshJREs()
+  public boolean refreshJREs()
   {
     ProductPage page = (ProductPage)getWizard().getPage(ProductPage.PAGE_NAME);
     if (page != null)
     {
-      page.refreshJREs();
+      return page.refreshJREs();
     }
+
+    return false;
   }
 
   @Override

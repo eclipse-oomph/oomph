@@ -32,5 +32,5 @@ public interface InstallerUI
 
   public Shell getShell();
 
-  public void refreshJREs();
+  public boolean refreshJREs();
 }

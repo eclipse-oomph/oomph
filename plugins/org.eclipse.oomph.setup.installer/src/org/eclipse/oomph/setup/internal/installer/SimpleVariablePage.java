@@ -599,9 +599,15 @@ public class SimpleVariablePage extends SimpleInstallerPage
     backButton.setEnabled(enabled);
   }
 
-  public void refreshJREs()
+  public boolean refreshJREs()
   {
-    javaController.refresh();
+    if (javaController != null)
+    {
+      javaController.refresh();
+      return true;
+    }
+
+    return false;
   }
 
   private String getDefaultInstallationFolder()

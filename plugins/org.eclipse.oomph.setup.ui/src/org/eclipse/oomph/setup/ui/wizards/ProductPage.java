@@ -281,7 +281,7 @@ public class ProductPage extends SetupWizardPage
       @Override
       protected void jreChanged(JRE jre)
       {
-        String vmPath = new File(jre.getJavaHome(), "bin").getAbsolutePath();
+        String vmPath = jre == null ? null : new File(jre.getJavaHome(), "bin").getAbsolutePath();
         getWizard().setVMPath(vmPath);
       }
 
@@ -586,9 +586,15 @@ public class ProductPage extends SetupWizardPage
     }
   }
 
-  public void refreshJREs()
+  public boolean refreshJREs()
   {
-    javaController.refresh();
+    if (javaController != null)
+    {
+      javaController.refresh();
+      return true;
+    }
+
+    return false;
   }
 
   private void updateDetails(boolean initial)

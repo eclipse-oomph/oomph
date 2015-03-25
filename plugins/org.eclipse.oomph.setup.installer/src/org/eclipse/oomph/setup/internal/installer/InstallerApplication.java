@@ -57,8 +57,6 @@ public class InstallerApplication implements IApplication
 
   private Mode mode = Mode.SIMPLE;
 
-  private boolean jresInitialized;
-
   private Integer run(final IApplicationContext context) throws Exception
   {
     // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
@@ -77,12 +75,24 @@ public class InstallerApplication implements IApplication
       public void run()
       {
         JREManager.INSTANCE.getJREs();
-        jresInitialized = true;
 
-        InstallerUI installerUI = installerDialog[0];
-        if (installerUI != null)
+        for (;;)
         {
-          installerUI.refreshJREs();
+          InstallerUI installerUI = installerDialog[0];
+          if (installerUI != null)
+          {
+            installerUI.refreshJREs();
+            break;
+          }
+
+          try
+          {
+            sleep(100);
+          }
+          catch (InterruptedException ex)
+          {
+            return;
+          }
         }
       }
     };
@@ -186,12 +196,6 @@ public class InstallerApplication implements IApplication
         SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer);
         installer.setSimpleShell(dialog);
         installerDialog[0] = dialog;
-      }
-
-      if (jresInitialized)
-      {
-        // TODO Do we need to make sure that this takes effect AFTER the UI is visible?
-        installerDialog[0].refreshJREs();
       }
 
       final int retcode = installerDialog[0].show();

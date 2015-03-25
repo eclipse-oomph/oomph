@@ -233,12 +233,14 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     return installer;
   }
 
-  public void refreshJREs()
+  public boolean refreshJREs()
   {
     if (variablePage != null)
     {
-      variablePage.refreshJREs();
+      return variablePage.refreshJREs();
     }
+
+    return false;
   }
 
   public int show()
