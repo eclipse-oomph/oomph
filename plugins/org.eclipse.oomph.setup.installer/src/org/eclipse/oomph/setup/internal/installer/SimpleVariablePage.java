@@ -532,15 +532,22 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     for (ProductVersion productVersion : product.getVersions())
     {
-      if (defaultProductVersion == null)
-      {
-        defaultProductVersion = productVersion;
-      }
-
       String label = productVersion.getLabel();
       if (label == null)
       {
         label = productVersion.getName();
+      }
+
+      if (OS.INSTANCE.isMac() && !label.contains("Mars"))
+      {
+        int xxx;
+        // TODO This is a work-around for the new Mac app layout problem!
+        continue;
+      }
+
+      if (defaultProductVersion == null)
+      {
+        defaultProductVersion = productVersion;
       }
 
       productVersions.put(label, productVersion);
