@@ -40,6 +40,7 @@ Oomph Installer
    <vm>
    </vm>
 
+
    <plugins>
    </plugins>
 
@@ -60,7 +61,6 @@ Oomph Installer
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
-      <property name="org.eclipse.update.reconcile" value="false" />
    </configurations>
 
 </product>
