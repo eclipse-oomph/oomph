@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +65,11 @@ public class CatalogManager
 
   public List<? extends Scope> getCatalogs(boolean product)
   {
+    if (index == null)
+    {
+      return Collections.emptyList();
+    }
+
     @SuppressWarnings("unchecked")
     List<? extends Scope> result = (List<? extends Scope>)index.eGet(product ? SetupPackage.Literals.INDEX__PRODUCT_CATALOGS
         : SetupPackage.Literals.INDEX__PROJECT_CATALOGS);
@@ -93,6 +99,11 @@ public class CatalogManager
 
   public void indexLoaded(Index index)
   {
+    if (index == null)
+    {
+      return;
+    }
+
     this.index = index;
 
     // Load the local selection into the same resource set as the index, but only if the local selection exists.

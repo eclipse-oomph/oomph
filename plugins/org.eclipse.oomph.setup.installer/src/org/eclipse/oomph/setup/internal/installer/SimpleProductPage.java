@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.Scope;
@@ -32,6 +33,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -45,6 +47,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -62,6 +65,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   private static final boolean FANCY = false; // OS.INSTANCE.isWin();
 
   private SearchField searchField;
+
+  private ToolBar buttonBar;
 
   private ToolItem refreshButton;
 
@@ -102,13 +107,13 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     searchField.setLayoutData(searchFieldData);
     searchField.getFilterControl().setFont(font);
 
-    ToolBar toolBar = new ToolBar(searchComposite, SWT.FLAT | SWT.RIGHT);
-    toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    buttonBar = new ToolBar(searchComposite, SWT.FLAT | SWT.RIGHT);
+    buttonBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 
     CatalogManager catalogManager = installer.getCatalogManager();
     catalogSelector = new CatalogSelector(catalogManager, true);
 
-    refreshButton = new ToolItem(toolBar, SWT.NONE);
+    refreshButton = new ToolItem(buttonBar, SWT.NONE);
     refreshButton.setToolTipText("Refresh");
     refreshButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/refresh.png"));
     refreshButton.addSelectionListener(new SelectionAdapter()
@@ -120,20 +125,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
     });
     AccessUtil.setKey(refreshButton, "refresh");
-
-    catalogsButton = new ToolItem(toolBar, SWT.DROP_DOWN);
-    catalogsButton.setToolTipText("Select Catalogs");
-    catalogsButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"));
-    catalogManager.getSelection().eAdapters().add(new AdapterImpl()
-    {
-      @Override
-      public void notifyChanged(Notification msg)
-      {
-        handleFilter("");
-      }
-    });
-    catalogSelector.configure(catalogsButton);
-    AccessUtil.setKey(catalogsButton, "catalogs");
 
     stackComposite = new StackComposite(this, SWT.NONE);
     stackComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -277,6 +268,38 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     browser.setText(browser.getText());
   }
 
+  private void createCatalogsButton()
+  {
+    if (catalogsButton == null)
+    {
+      catalogsButton = new ToolItem(buttonBar, SWT.DROP_DOWN);
+      catalogsButton.setToolTipText("Select Catalogs");
+      catalogsButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"));
+
+      CatalogManager catalogManager = catalogSelector.getCatalogManager();
+      catalogManager.getSelection().eAdapters().add(new AdapterImpl()
+      {
+        @Override
+        public void notifyChanged(Notification msg)
+        {
+          handleFilter("");
+        }
+      });
+
+      catalogSelector.configure(catalogsButton);
+      AccessUtil.setKey(catalogsButton, "catalogs");
+    }
+  }
+
+  private void disposeCatalogsButton()
+  {
+    if (catalogsButton != null)
+    {
+      catalogsButton.dispose();
+      catalogsButton = null;
+    }
+  }
+
   public static String getHtml(StringBuilder builder)
   {
     builder.append("</table></body></html>\n");
@@ -402,9 +425,14 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     {
       searchField.setEnabled(false);
       refreshButton.setEnabled(false);
-      catalogsButton.setEnabled(false);
-      stackComposite.setTopControl(animator);
 
+      if (catalogsButton != null)
+      {
+        catalogsButton.setEnabled(false);
+      }
+
+      browser.setText("", true);
+      stackComposite.setTopControl(animator);
       animator.start(1, animator.getImages().length - 1);
 
       final IProgressMonitor monitor = new NullProgressMonitor();
@@ -435,11 +463,49 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
             {
               public void run()
               {
-                searchField.setEnabled(true);
                 refreshButton.setEnabled(true);
-                catalogsButton.setEnabled(true);
                 stackComposite.setTopControl(browser);
                 browser.setFocus();
+
+                CatalogManager catalogManager = catalogSelector.getCatalogManager();
+                Index index = catalogManager.getIndex();
+                if (index == null)
+                {
+                  disposeCatalogsButton();
+                  int answer = new MessageDialog(getShell(), "Network Problem", null,
+                      "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
+                      MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
+                  switch (answer)
+                  {
+                    case 0:
+                      installer.reloadIndex();
+                      return;
+
+                    case 1:
+                      new ProxyPreferenceDialog(getShell()).open();
+                      installer.reloadIndex();
+                      return;
+
+                    default:
+                      dialog.exitSelected();
+                      return;
+                  }
+                }
+
+                searchField.setEnabled(true);
+
+                List<? extends Scope> productCatalogs = catalogManager.getCatalogs(true);
+                if (productCatalogs != null && productCatalogs.size() >= 3) // Self products + 2 more catalogs
+                {
+                  createCatalogsButton();
+                  catalogsButton.setEnabled(true);
+                }
+                else
+                {
+                  disposeCatalogsButton();
+                }
+
+                buttonBar.getParent().layout();
               }
             });
 

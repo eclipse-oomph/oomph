@@ -562,29 +562,27 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       {
         Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
         final Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
-        if (index != null)
-        {
-          Display display = wizard.getShell().getDisplay();
-          display.asyncExec(new Runnable()
-          {
-            public void run()
-            {
-              indexLoaded(index);
 
-              if (wizard.indexLoadedAction != null)
+        Display display = wizard.getShell().getDisplay();
+        display.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            indexLoaded(index);
+
+            if (wizard.indexLoadedAction != null)
+            {
+              try
               {
-                try
-                {
-                  wizard.indexLoadedAction.run();
-                }
-                catch (Exception ex)
-                {
-                  SetupUIPlugin.INSTANCE.log(ex);
-                }
+                wizard.indexLoadedAction.run();
+              }
+              catch (Exception ex)
+              {
+                SetupUIPlugin.INSTANCE.log(ex);
               }
             }
-          });
-        }
+          }
+        });
       }
     }
 

@@ -485,9 +485,13 @@ public final class IOUtil
     {
       if (file.isDirectory())
       {
-        for (File child : file.listFiles())
+        File[] children = file.listFiles();
+        if (children != null)
         {
-          deleted &= deleteBestEffort(child, deleteOnExit);
+          for (File child : children)
+          {
+            deleted &= deleteBestEffort(child, deleteOnExit);
+          }
         }
       }
 

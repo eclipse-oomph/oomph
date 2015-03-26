@@ -51,6 +51,7 @@ import org.eclipse.equinox.security.storage.StorageException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -72,309 +73,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 {
   public static final String OPTION_CACHE_HANDLING = "OPTION_CACHE_HANDLING";
 
-  public enum CacheHandling
-  {
-    CACHE_ONLY, CACHE_WITHOUT_ETAG_CHECKING, CACHE_WITH_ETAG_CHECKING, CACHE_IGNORE
-  }
-
   public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER";
 
   public static final String OPTION_AUTHORIZATION = "OPTION_AUTHORIZATION";
-
-  public interface AuthorizationHandler
-  {
-    public final class Authorization
-    {
-      public static final Authorization UNAUTHORIZED = new Authorization("", "");
-
-      public static final Authorization UNAUTHORIZEABLE = new Authorization("", "");
-
-      private final String user;
-
-      private final String password;
-
-      public Authorization(String user, String password)
-      {
-        this.user = user == null ? "" : user;
-        this.password = obscure(password == null ? "" : password);
-      }
-
-      public String getUser()
-      {
-        return user;
-      }
-
-      public String getPassword()
-      {
-        return unobscure(password);
-      }
-
-      public String getAuthorization()
-      {
-        return "Basic " + obscure(user.length() == 0 ? getPassword() : user + ":" + getPassword());
-      }
-
-      public boolean isAuthorized()
-      {
-        return !"".equals(password);
-      }
-
-      public boolean isUnauthorizeable()
-      {
-        return this == UNAUTHORIZEABLE;
-      }
-
-      private String obscure(String string)
-      {
-        return XMLTypeFactory.eINSTANCE.convertBase64Binary(string.getBytes());
-      }
-
-      private String unobscure(String string)
-      {
-        return new String(XMLTypeFactory.eINSTANCE.createBase64Binary(string));
-      }
-
-      @Override
-      public int hashCode()
-      {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (user == null ? 0 : user.hashCode());
-        result = prime * result + (password == null ? 0 : password.hashCode());
-        return result;
-      }
-
-      @Override
-      public boolean equals(Object obj)
-      {
-        if (this == obj)
-        {
-          return true;
-        }
-
-        if (obj == null)
-        {
-          return false;
-        }
-
-        if (getClass() != obj.getClass())
-        {
-          return false;
-        }
-
-        if (this == UNAUTHORIZEABLE)
-        {
-          return obj == UNAUTHORIZEABLE;
-        }
-
-        Authorization other = (Authorization)obj;
-        if (!user.equals(other.user))
-        {
-          return false;
-        }
-
-        if (!password.equals(other.password))
-        {
-          return false;
-        }
-
-        return true;
-      }
-
-      @Override
-      public String toString()
-      {
-        return this == UNAUTHORIZEABLE ? "Authorization [unauthorizeable]" : "Authorization [user=" + user + ", password=" + password + "]";
-      }
-    }
-
-    public Authorization authorize(URI uri);
-
-    public Authorization reauthorize(URI uri, Authorization authorization);
-  }
-
-  public static class AuthorizationHandlerImpl implements AuthorizationHandler
-  {
-    private final Map<String, Authorization> authorizations = new HashMap<String, Authorization>();
-
-    private final UIServices uiServices;
-
-    private ISecurePreferences securePreferences;
-
-    public AuthorizationHandlerImpl(UIServices uiServices, ISecurePreferences securePreferences)
-    {
-      this.uiServices = uiServices;
-      this.securePreferences = securePreferences;
-    }
-
-    public synchronized void clearCache()
-    {
-      authorizations.clear();
-    }
-
-    public synchronized Authorization authorize(URI uri)
-    {
-      String host = getHost(uri);
-      if (host != null)
-      {
-        Authorization cachedAuthorization = authorizations.get(host);
-        if (cachedAuthorization == Authorization.UNAUTHORIZEABLE)
-        {
-          return cachedAuthorization;
-        }
-
-        if (securePreferences != null)
-        {
-          try
-          {
-            ISecurePreferences node = securePreferences.node(host);
-            String user = node.get("user", "");
-            String password = node.get("password", "");
-
-            Authorization authorization = new Authorization(user, password);
-            if (authorization.isAuthorized())
-            {
-              authorizations.put(host, authorization);
-              return authorization;
-            }
-          }
-          catch (StorageException ex)
-          {
-            SetupCorePlugin.INSTANCE.log(ex);
-          }
-        }
-
-        if (cachedAuthorization != null)
-        {
-          return cachedAuthorization;
-        }
-      }
-
-      return Authorization.UNAUTHORIZED;
-    }
-
-    public synchronized Authorization reauthorize(URI uri, Authorization authorization)
-    {
-      // Double check that another thread hasn't already prompted and updated the secure store or has not already permanently failed to authorize.
-      Authorization currentAuthorization = authorize(uri);
-      if (!currentAuthorization.equals(authorization) || currentAuthorization == Authorization.UNAUTHORIZEABLE)
-      {
-        return currentAuthorization;
-      }
-
-      if (uiServices != null)
-      {
-        String host = getHost(uri);
-        if (host != null)
-        {
-          AuthenticationInfo authenticationInfo = uiServices.getUsernamePassword(uri.toString());
-          String user = authenticationInfo.getUserName();
-          String password = authenticationInfo.getPassword();
-          Authorization reauthorization = new Authorization(user, password);
-          if (reauthorization.isAuthorized())
-          {
-            if (authenticationInfo.saveResult() && securePreferences != null)
-            {
-              try
-              {
-                ISecurePreferences node = securePreferences.node(host);
-                node.put("user", user, false);
-                node.put("password", password, true);
-                node.flush();
-              }
-              catch (IOException ex)
-              {
-                SetupCorePlugin.INSTANCE.log(ex);
-              }
-              catch (StorageException ex)
-              {
-                SetupCorePlugin.INSTANCE.log(ex);
-              }
-            }
-
-            authorizations.put(host, reauthorization);
-            return reauthorization;
-          }
-          else
-          {
-            authorizations.put(host, Authorization.UNAUTHORIZEABLE);
-            return Authorization.UNAUTHORIZEABLE;
-          }
-        }
-      }
-
-      return currentAuthorization;
-    }
-  }
 
   private static final URI CACHE_FOLDER = SetupContext.GLOBAL_STATE_LOCATION_URI.appendSegment("cache");
 
   private static final Map<URI, String> EXPECTED_ETAGS = new HashMap<URI, String>();
 
-  public static Set<? extends URI> clearExpectedETags()
-  {
-    Set<URI> result;
-    synchronized (EXPECTED_ETAGS)
-    {
-      result = new HashSet<URI>(EXPECTED_ETAGS.keySet());
-      EXPECTED_ETAGS.clear();
-    }
-
-    return result;
-  }
-
-  public static Job mirror(final Set<? extends URI> uris)
-  {
-    Job job = new Job("ETag Mirror")
-    {
-      @Override
-      protected IStatus run(IProgressMonitor monitor)
-      {
-        new ETagMirror().begin(uris, monitor);
-        return Status.OK_STATUS;
-      }
-    };
-
-    job.schedule();
-    return job;
-  }
-
-  private static String getExpectedETag(URI uri)
-  {
-    synchronized (EXPECTED_ETAGS)
-    {
-      return EXPECTED_ETAGS.get(uri);
-    }
-  }
-
-  private static void setExpectedETag(URI uri, String eTag)
-  {
-    synchronized (EXPECTED_ETAGS)
-    {
-      EXPECTED_ETAGS.put(uri, eTag);
-    }
-  }
-
-  private static CacheHandling getCacheHandling(Map<?, ?> options)
-  {
-    CacheHandling cacheHandling = (CacheHandling)options.get(OPTION_CACHE_HANDLING);
-    if (cacheHandling == null)
-    {
-      cacheHandling = CacheHandling.CACHE_WITH_ETAG_CHECKING;
-    }
-
-    return cacheHandling;
-  }
-
-  private static AuthorizationHandler getAuthorizatonHandler(Map<?, ?> options)
-  {
-    return (AuthorizationHandler)options.get(OPTION_AUTHORIZATION_HANDLER);
-  }
-
-  private static Authorization getAuthorizaton(Map<?, ?> options)
-  {
-    return (Authorization)options.get(OPTION_AUTHORIZATION);
-  }
+  private static final boolean TEST_IO_EXCEPTION = false;
 
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
@@ -402,6 +109,18 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   @Override
   public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
   {
+    if (TEST_IO_EXCEPTION)
+    {
+      File folder = new File(CACHE_FOLDER.toFileString());
+      if (folder.isDirectory())
+      {
+        System.out.println("Deleting cache folder: " + folder);
+        IOUtil.deleteBestEffort(folder);
+      }
+
+      throw new IOException("Simulated network problem");
+    }
+
     CacheHandling cacheHandling = getCacheHandling(options);
     URIConverter uriConverter = getURIConverter(options);
     URI cacheURI = getCacheFile(uri);
@@ -446,8 +165,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     int triedReauthorization = 0;
     for (int i = 0;; ++i)
     {
-      IRetrieveFileTransferContainerAdapter fileTransfer = (IRetrieveFileTransferContainerAdapter)container
-          .getAdapter(IRetrieveFileTransferContainerAdapter.class);
+      IRetrieveFileTransferContainerAdapter fileTransfer = container.getAdapter(IRetrieveFileTransferContainerAdapter.class);
 
       if (proxy != null)
       {
@@ -585,6 +303,34 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
   }
 
+  public static Set<? extends URI> clearExpectedETags()
+  {
+    Set<URI> result;
+    synchronized (EXPECTED_ETAGS)
+    {
+      result = new HashSet<URI>(EXPECTED_ETAGS.keySet());
+      EXPECTED_ETAGS.clear();
+    }
+
+    return result;
+  }
+
+  public static Job mirror(final Set<? extends URI> uris)
+  {
+    Job job = new Job("ETag Mirror")
+    {
+      @Override
+      protected IStatus run(IProgressMonitor monitor)
+      {
+        new ETagMirror().begin(uris, monitor);
+        return Status.OK_STATUS;
+      }
+    };
+
+    job.schedule();
+    return job;
+  }
+
   public static URI getCacheFile(URI uri)
   {
     return CACHE_FOLDER.appendSegment(IOUtil.encodeFileName(uri.toString()));
@@ -646,6 +392,301 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
 
     return null;
+  }
+
+  @SuppressWarnings({ "deprecation", "restriction" })
+  private static Date parseHTTPDate(String string)
+  {
+    try
+    {
+      return org.apache.http.impl.cookie.DateUtils.parseDate(string);
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
+  }
+
+  private static String getExpectedETag(URI uri)
+  {
+    synchronized (EXPECTED_ETAGS)
+    {
+      return EXPECTED_ETAGS.get(uri);
+    }
+  }
+
+  private static void setExpectedETag(URI uri, String eTag)
+  {
+    synchronized (EXPECTED_ETAGS)
+    {
+      EXPECTED_ETAGS.put(uri, eTag);
+    }
+  }
+
+  private static CacheHandling getCacheHandling(Map<?, ?> options)
+  {
+    CacheHandling cacheHandling = (CacheHandling)options.get(OPTION_CACHE_HANDLING);
+    if (cacheHandling == null)
+    {
+      cacheHandling = CacheHandling.CACHE_WITH_ETAG_CHECKING;
+    }
+
+    return cacheHandling;
+  }
+
+  private static AuthorizationHandler getAuthorizatonHandler(Map<?, ?> options)
+  {
+    return (AuthorizationHandler)options.get(OPTION_AUTHORIZATION_HANDLER);
+  }
+
+  private static Authorization getAuthorizaton(Map<?, ?> options)
+  {
+    return (Authorization)options.get(OPTION_AUTHORIZATION);
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public enum CacheHandling
+  {
+    CACHE_ONLY, CACHE_WITHOUT_ETAG_CHECKING, CACHE_WITH_ETAG_CHECKING, CACHE_IGNORE
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public interface AuthorizationHandler
+  {
+    public Authorization authorize(URI uri);
+
+    public Authorization reauthorize(URI uri, Authorization authorization);
+
+    /**
+     * @author Ed Merks
+     */
+    public static final class Authorization
+    {
+      public static final Authorization UNAUTHORIZED = new Authorization("", "");
+
+      public static final Authorization UNAUTHORIZEABLE = new Authorization("", "");
+
+      private final String user;
+
+      private final String password;
+
+      public Authorization(String user, String password)
+      {
+        this.user = user == null ? "" : user;
+        this.password = obscure(password == null ? "" : password);
+      }
+
+      public String getUser()
+      {
+        return user;
+      }
+
+      public String getPassword()
+      {
+        return unobscure(password);
+      }
+
+      public String getAuthorization()
+      {
+        return "Basic " + obscure(user.length() == 0 ? getPassword() : user + ":" + getPassword());
+      }
+
+      public boolean isAuthorized()
+      {
+        return !"".equals(password);
+      }
+
+      public boolean isUnauthorizeable()
+      {
+        return this == UNAUTHORIZEABLE;
+      }
+
+      private String obscure(String string)
+      {
+        return XMLTypeFactory.eINSTANCE.convertBase64Binary(string.getBytes());
+      }
+
+      private String unobscure(String string)
+      {
+        return new String(XMLTypeFactory.eINSTANCE.createBase64Binary(string));
+      }
+
+      @Override
+      public int hashCode()
+      {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (user == null ? 0 : user.hashCode());
+        result = prime * result + (password == null ? 0 : password.hashCode());
+        return result;
+      }
+
+      @Override
+      public boolean equals(Object obj)
+      {
+        if (this == obj)
+        {
+          return true;
+        }
+
+        if (obj == null)
+        {
+          return false;
+        }
+
+        if (getClass() != obj.getClass())
+        {
+          return false;
+        }
+
+        if (this == UNAUTHORIZEABLE)
+        {
+          return obj == UNAUTHORIZEABLE;
+        }
+
+        Authorization other = (Authorization)obj;
+        if (!user.equals(other.user))
+        {
+          return false;
+        }
+
+        if (!password.equals(other.password))
+        {
+          return false;
+        }
+
+        return true;
+      }
+
+      @Override
+      public String toString()
+      {
+        return this == UNAUTHORIZEABLE ? "Authorization [unauthorizeable]" : "Authorization [user=" + user + ", password=" + password + "]";
+      }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class AuthorizationHandlerImpl implements AuthorizationHandler
+  {
+    private final Map<String, Authorization> authorizations = new HashMap<String, Authorization>();
+
+    private final UIServices uiServices;
+
+    private ISecurePreferences securePreferences;
+
+    public AuthorizationHandlerImpl(UIServices uiServices, ISecurePreferences securePreferences)
+    {
+      this.uiServices = uiServices;
+      this.securePreferences = securePreferences;
+    }
+
+    public synchronized void clearCache()
+    {
+      authorizations.clear();
+    }
+
+    public synchronized Authorization authorize(URI uri)
+    {
+      String host = getHost(uri);
+      if (host != null)
+      {
+        Authorization cachedAuthorization = authorizations.get(host);
+        if (cachedAuthorization == Authorization.UNAUTHORIZEABLE)
+        {
+          return cachedAuthorization;
+        }
+
+        if (securePreferences != null)
+        {
+          try
+          {
+            ISecurePreferences node = securePreferences.node(host);
+            String user = node.get("user", "");
+            String password = node.get("password", "");
+
+            Authorization authorization = new Authorization(user, password);
+            if (authorization.isAuthorized())
+            {
+              authorizations.put(host, authorization);
+              return authorization;
+            }
+          }
+          catch (StorageException ex)
+          {
+            SetupCorePlugin.INSTANCE.log(ex);
+          }
+        }
+
+        if (cachedAuthorization != null)
+        {
+          return cachedAuthorization;
+        }
+      }
+
+      return Authorization.UNAUTHORIZED;
+    }
+
+    public synchronized Authorization reauthorize(URI uri, Authorization authorization)
+    {
+      // Double check that another thread hasn't already prompted and updated the secure store or has not already permanently failed to authorize.
+      Authorization currentAuthorization = authorize(uri);
+      if (!currentAuthorization.equals(authorization) || currentAuthorization == Authorization.UNAUTHORIZEABLE)
+      {
+        return currentAuthorization;
+      }
+
+      if (uiServices != null)
+      {
+        String host = getHost(uri);
+        if (host != null)
+        {
+          AuthenticationInfo authenticationInfo = uiServices.getUsernamePassword(uri.toString());
+          String user = authenticationInfo.getUserName();
+          String password = authenticationInfo.getPassword();
+          Authorization reauthorization = new Authorization(user, password);
+          if (reauthorization.isAuthorized())
+          {
+            if (authenticationInfo.saveResult() && securePreferences != null)
+            {
+              try
+              {
+                ISecurePreferences node = securePreferences.node(host);
+                node.put("user", user, false);
+                node.put("password", password, true);
+                node.flush();
+              }
+              catch (IOException ex)
+              {
+                SetupCorePlugin.INSTANCE.log(ex);
+              }
+              catch (StorageException ex)
+              {
+                SetupCorePlugin.INSTANCE.log(ex);
+              }
+            }
+
+            authorizations.put(host, reauthorization);
+            return reauthorization;
+          }
+          else
+          {
+            authorizations.put(host, Authorization.UNAUTHORIZEABLE);
+            return Authorization.UNAUTHORIZEABLE;
+          }
+        }
+      }
+
+      return currentAuthorization;
+    }
   }
 
   /**
@@ -746,21 +787,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
   }
 
-  @SuppressWarnings({ "deprecation", "restriction" })
-  private static Date parseHTTPDate(String string)
-  {
-    try
-    {
-      return org.apache.http.impl.cookie.DateUtils.parseDate(string);
-    }
-    catch (Exception ex)
-    {
-      //$FALL-THROUGH$
-    }
-
-    return null;
-  }
-
+  /**
+   * @author Ed Merks
+   */
   private static class ETagMirror extends WorkerPool<ETagMirror, URI, ETagMirror.Worker>
   {
     private static final Map<Object, Object> OPTIONS;
@@ -797,6 +826,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       perform(uris);
     }
 
+    /**
+     * @author Ed Merks
+     */
     private static class Worker extends WorkerPool.Worker<URI, ETagMirror>
     {
       protected Worker(String name, ETagMirror workPool, URI key, int id, boolean secondary)

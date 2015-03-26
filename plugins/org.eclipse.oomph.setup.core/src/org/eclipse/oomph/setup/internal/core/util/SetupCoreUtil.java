@@ -97,13 +97,13 @@ public final class SetupCoreUtil
     {
       return "";
     }
-  
+
     String label = scope.getLabel();
     if (StringUtil.isEmpty(label))
     {
       label = StringUtil.safe(scope.getName());
     }
-  
+
     return label;
   }
 

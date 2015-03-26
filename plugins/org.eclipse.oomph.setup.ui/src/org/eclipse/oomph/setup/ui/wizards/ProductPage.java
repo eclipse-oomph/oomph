@@ -621,6 +621,11 @@ public class ProductPage extends SetupWizardPage
 
     versionLabel.setEnabled(productSelected);
     versionComboViewer.getControl().setEnabled(productSelected);
+    bitness32Button.setEnabled(productSelected);
+    bitness64Button.setEnabled(productSelected);
+    javaLabel.setEnabled(productSelected);
+    javaViewer.getControl().setEnabled(productSelected);
+    javaButton.setEnabled(productSelected);
 
     if (poolButton != null)
     {
