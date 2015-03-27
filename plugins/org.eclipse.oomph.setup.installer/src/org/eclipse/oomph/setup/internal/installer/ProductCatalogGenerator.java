@@ -33,8 +33,10 @@ import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.XMLUtil;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import org.eclipse.equinox.app.IApplication;
@@ -68,6 +70,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -95,6 +98,10 @@ public class ProductCatalogGenerator implements IApplication
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "classic2.jpg";
 
   private static final Map<String, String> ICONS = new HashMap<String, String>();
+
+  private static final List<String> PRODUCT_IDS = Arrays.asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.php",
+      "epp.package.committers", "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.rcp", "epp.package.testing",
+      "epp.package.parallel", "epp.package.automotive", "epp.package.scout" });
 
   public Object start(IApplicationContext context) throws Exception
   {
@@ -355,6 +362,7 @@ public class ProductCatalogGenerator implements IApplication
         }
       });
 
+      final EList<Product> products = productCatalog.getProducts();
       for (String id : ids)
       {
         String label = labels.get(id);
@@ -386,7 +394,7 @@ public class ProductCatalogGenerator implements IApplication
         product.setName(id);
         product.setLabel(label);
         attachBrandingInfos(product);
-        productCatalog.getProducts().add(product);
+        products.add(product);
 
         addProductVersion(product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrain, eppMetaDataRepositories, "latest",
             "Latest (" + latestTrainLabel + ")", p2TaskLabel, latestTrainsIUs);
@@ -421,6 +429,22 @@ public class ProductCatalogGenerator implements IApplication
 
         System.out.println();
       }
+
+      final List<String> productIDs = new UniqueEList<String>(PRODUCT_IDS);
+      for (Product product : products)
+      {
+        productIDs.add(product.getName());
+      }
+
+      ECollections.sort(products, new Comparator<Product>()
+      {
+        public int compare(Product product1, Product product2)
+        {
+          int index1 = productIDs.indexOf(product1.getName());
+          int index2 = productIDs.indexOf(product2.getName());
+          return index1 - index2;
+        }
+      });
 
       System.out.println("#################################################################################################################");
       System.out.println();
