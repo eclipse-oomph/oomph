@@ -98,11 +98,29 @@ public class ProductCatalogGenerator implements IApplication
 
   public Object start(IApplicationContext context) throws Exception
   {
+    // luna
+    // -staging mars staging-epp staging-train
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
-    org.eclipse.emf.common.util.URI uri = null;
-    if (arguments != null && arguments.length == 2 && "-generatorOutput".equals(arguments[0]))
+    org.eclipse.emf.common.util.URI outputLocation = null;
+    String stagingTrain = null;
+    URI stagingEPPLocation = null;
+    URI stagingTrainLocation = null;
+    if (arguments != null)
     {
-      uri = org.eclipse.emf.common.util.URI.createURI(arguments[1]);
+      for (int i = 0; i < arguments.length; ++i)
+      {
+        String option = arguments[i];
+        if ("-outputLocation".equals(option))
+        {
+          outputLocation = org.eclipse.emf.common.util.URI.createURI(arguments[++i]);
+        }
+        else if ("-staging".equals(option))
+        {
+          stagingTrain = arguments[++i];
+          stagingEPPLocation = new URI(arguments[++i]);
+          stagingTrainLocation = new URI(arguments[++i]);
+        }
+      }
     }
 
     ICONS.put("reporting", ICON_URL_PREFIX + "birt-icon_48x48.png");
@@ -121,7 +139,7 @@ public class ProductCatalogGenerator implements IApplication
     ICONS.put("testing", ICON_URL_PREFIX + "testing.png");
     ICONS.put("mobile", ICON_URL_PREFIX + "mobile.jpg");
 
-    generate(uri);
+    generate(outputLocation, stagingTrain, stagingEPPLocation, stagingTrainLocation);
     return null;
   }
 
@@ -150,7 +168,7 @@ public class ProductCatalogGenerator implements IApplication
     return false;
   }
 
-  public void generate(org.eclipse.emf.common.util.URI uri)
+  public void generate(org.eclipse.emf.common.util.URI outputLocation, String stagingTrain, URI stagingEPPLocation, URI stagingTrainLocation)
   {
     final String[] TRAINS = getTrains();
     final String LATEST_TRAIN = TRAINS[TRAINS.length - 1];
@@ -196,9 +214,15 @@ public class ProductCatalogGenerator implements IApplication
       for (final String train : TRAINS)
       {
         URI eppURI = new URI(PACKAGES + "/" + train);
-        System.out.println(eppURI);
+        System.out.print(eppURI);
+        if (train.equals(stagingTrain))
+        {
+          System.out.print(" -> " + stagingEPPLocation);
+        }
 
-        IMetadataRepository eppMetaDataRepository = manager.loadRepository(eppURI, null);
+        System.out.println();
+
+        IMetadataRepository eppMetaDataRepository = manager.loadRepository(train.equals(stagingTrain) ? stagingEPPLocation : eppURI, null);
         eppMetaDataRepositories.put(train, eppMetaDataRepository);
 
         Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
@@ -206,7 +230,7 @@ public class ProductCatalogGenerator implements IApplication
         URI releaseURI = new URI(RELEASES + "/" + train);
         System.out.print(releaseURI);
 
-        IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, eppURI, releaseURI);
+        IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, eppURI, train.equals(stagingTrain) ? stagingTrainLocation : releaseURI);
         releaseURI = trimEmptyTrailingSegment(releaseMetaDataRepository.getLocation());
         System.out.println(" -> " + releaseURI);
 
@@ -404,12 +428,12 @@ public class ProductCatalogGenerator implements IApplication
       checkVersionRanges(productCatalog);
       postProcess(productCatalog);
 
-      Resource resource = new BaseResourceFactoryImpl().createResource(uri == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup")
-          : uri);
+      Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? org.eclipse.emf.common.util.URI
+          .createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
       // resource.save(System.out, null);
 
-      if (uri != null)
+      if (outputLocation != null)
       {
         resource.save(null);
       }
