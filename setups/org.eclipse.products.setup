@@ -26,572 +26,6 @@
     <repository
         url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
   </setupTask>
-  <product name="epp.package.dsl"
-      label="Eclipse DSL Tools">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/dsl-package.jpg</value>
-      </detail>
-    </annotation>
-    <version
-        name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Mars)">
-        <requirement
-            name="epp.package.dsl"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="latest.released"
-        label="Latest Release (Luna)"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Luna)">
-        <requirement
-            name="epp.package.dsl"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Mars)">
-        <requirement
-            name="epp.package.dsl"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="luna"
-        label="Luna"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Luna)">
-        <requirement
-            name="epp.package.dsl"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="kepler"
-        label="Kepler"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Kepler)">
-        <requirement
-            name="epp.package.dsl"
-            versionRange="[2.0.0,2.1.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
-      </setupTask>
-    </version>
-    <version
-        name="juno"
-        label="Juno"
-        requiredJavaVersion="1.5">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Juno)">
-        <requirement
-            name="epp.package.dsl"
-            versionRange="[1.5.0,1.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
-      </setupTask>
-    </version>
-    <description>The essential tools for Java and DSL developers, including a Java &amp; Xtend IDE, a DSL Framework (Xtext), a Git client, XML Editor, and Maven integration.</description>
-  </product>
-  <product name="epp.package.automotive"
-      label="Eclipse IDE for Automotive Software Developers">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/classic.jpg</value>
-      </detail>
-    </annotation>
-    <version
-        name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Automotive Software Developers (Mars)">
-        <requirement
-            name="epp.package.automotive"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="latest.released"
-        label="Latest Release (Luna)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Automotive Software Developers (Luna)">
-        <requirement
-            name="epp.package.automotive"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Automotive Software Developers (Mars)">
-        <requirement
-            name="epp.package.automotive"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="luna"
-        label="Luna"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Automotive Software Developers (Luna)">
-        <requirement
-            name="epp.package.automotive"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="kepler"
-        label="Kepler"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Automotive Software Developers (Kepler)">
-        <requirement
-            name="epp.package.automotive"
-            versionRange="[2.0.0,2.1.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
-      </setupTask>
-    </version>
-    <version
-        name="juno"
-        label="Juno"
-        requiredJavaVersion="1.5">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Automotive Software Developers (Juno)">
-        <requirement
-            name="epp.package.automotive"
-            versionRange="[1.5.0,1.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
-      </setupTask>
-    </version>
-    <description>This package contains frameworks and tools used for the development of embedded automotive software: In addition to Eclipse Platform, Java Development Tools, and Plug-in Development Environment, it includes EMF, Sphinx, GMF, Xtext, Xtend, Xpand, UML2, selected other modeling components, C/C++ development tools, and XML/XSD editors and tools. To keep the package at a reasonable size, it includes only the runtime binaries but no source code and no developer documentation.</description>
-  </product>
-  <product name="epp.package.cpp"
-      label="Eclipse IDE for C/C++ Developers">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/cdt.png</value>
-      </detail>
-    </annotation>
-    <version
-        name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Mars)">
-        <requirement
-            name="epp.package.cpp"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="latest.released"
-        label="Latest Release (Luna)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Luna)">
-        <requirement
-            name="epp.package.cpp"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Mars)">
-        <requirement
-            name="epp.package.cpp"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="luna"
-        label="Luna"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Luna)">
-        <requirement
-            name="epp.package.cpp"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="kepler"
-        label="Kepler"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Kepler)">
-        <requirement
-            name="epp.package.cpp"
-            versionRange="[2.0.0,2.1.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
-      </setupTask>
-    </version>
-    <version
-        name="juno"
-        label="Juno"
-        requiredJavaVersion="1.5">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Juno)">
-        <requirement
-            name="epp.package.cpp"
-            versionRange="[1.5.0,1.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
-      </setupTask>
-    </version>
-    <description>An IDE for C/C++ developers with Mylyn integration.</description>
-  </product>
-  <product name="epp.package.committers"
-      label="Eclipse IDE for Eclipse Committers (unreleased before Mars)">
-    <version
-        name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Eclipse Committers (Mars)">
-        <requirement
-            name="epp.package.committers"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Eclipse Committers (Mars)">
-        <requirement
-            name="epp.package.committers"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <description>
-      Package suited for development of Eclipse itself at Eclipse.org; based on the Eclipse Platform adding PDE, Git, Marketplace Client, source code and developer documentation.&lt;br/>
-      &lt;br/>
-      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
-      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EGit&quot;>here&lt;/a> to file a bug against Eclipse Git team provider.
-    </description>
-  </product>
   <product name="epp.package.java"
       label="Eclipse IDE for Java Developers">
     <annotation
@@ -623,7 +57,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -673,7 +107,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -787,7 +221,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -843,7 +277,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -932,6 +366,492 @@
     </version>
     <description>Tools for Java developers creating Java EE and Web applications, including a Java IDE, tools for Java EE, JPA, JSF, Mylyn, EGit and others.</description>
   </product>
+  <product name="epp.package.cpp"
+      label="Eclipse IDE for C/C++ Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="imageURI">
+        <value>http://www.eclipse.org/downloads/images/cdt.png</value>
+      </detail>
+    </annotation>
+    <version
+        name="latest"
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Mars)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Luna)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="mars"
+        label="Mars"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Mars)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Luna)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="kepler"
+        label="Kepler"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Kepler)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[2.0.0,2.1.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
+        <repository
+            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+      </setupTask>
+    </version>
+    <version
+        name="juno"
+        label="Juno"
+        requiredJavaVersion="1.5">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Juno)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[1.5.0,1.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/juno"/>
+        <repository
+            url="http://download.eclipse.org/releases/juno/201303010900"/>
+      </setupTask>
+    </version>
+    <description>An IDE for C/C++ developers with Mylyn integration.</description>
+  </product>
+  <product name="epp.package.php"
+      label="Eclipse IDE for PHP Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="imageURI">
+        <value>http://www.eclipse.org/downloads/images/php.png</value>
+      </detail>
+    </annotation>
+    <version
+        name="latest"
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Mars)">
+        <requirement
+            name="epp.package.php"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Luna)">
+        <requirement
+            name="epp.package.php"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="mars"
+        label="Mars"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Mars)">
+        <requirement
+            name="epp.package.php"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Luna)">
+        <requirement
+            name="epp.package.php"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <description>The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</description>
+  </product>
+  <product name="epp.package.committers"
+      label="Eclipse IDE for Eclipse Committers (unreleased before Mars)">
+    <version
+        name="latest"
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Eclipse Committers (Mars)">
+        <requirement
+            name="epp.package.committers"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="mars"
+        label="Mars"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Eclipse Committers (Mars)">
+        <requirement
+            name="epp.package.committers"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <description>
+      Package suited for development of Eclipse itself at Eclipse.org; based on the Eclipse Platform adding PDE, Git, Marketplace Client, source code and developer documentation.&lt;br/>
+      &lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EGit&quot;>here&lt;/a> to file a bug against Eclipse Git team provider.
+    </description>
+  </product>
+  <product name="epp.package.dsl"
+      label="Eclipse DSL Tools">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="imageURI">
+        <value>http://www.eclipse.org/downloads/images/dsl-package.jpg</value>
+      </detail>
+    </annotation>
+    <version
+        name="latest"
+        label="Latest (Mars)"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Mars)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Luna)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="mars"
+        label="Mars"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Mars)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Luna)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="kepler"
+        label="Kepler"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Kepler)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[2.0.0,2.1.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
+        <repository
+            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+      </setupTask>
+    </version>
+    <version
+        name="juno"
+        label="Juno"
+        requiredJavaVersion="1.5">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Juno)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[1.5.0,1.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.8.0,3.9.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.8.0,3.9.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/juno"/>
+        <repository
+            url="http://download.eclipse.org/releases/juno/201303010900"/>
+      </setupTask>
+    </version>
+    <description>The essential tools for Java and DSL developers, including a Java &amp; Xtend IDE, a DSL Framework (Xtext), a Git client, XML Editor, and Maven integration.</description>
+  </product>
   <product name="epp.package.reporting"
       label="Eclipse IDE for Java and Report Developers">
     <annotation
@@ -966,7 +886,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -1022,7 +942,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -1111,105 +1031,6 @@
     </version>
     <description>Java EE tools and BIRT reporting tool for Java developers to create Java EE and Web applications that also have reporting needs.</description>
   </product>
-  <product name="epp.package.php"
-      label="Eclipse IDE for PHP Developers">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/php.png</value>
-      </detail>
-    </annotation>
-    <version
-        name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (Mars)">
-        <requirement
-            name="epp.package.php"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="latest.released"
-        label="Latest Release (Luna)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (Luna)">
-        <requirement
-            name="epp.package.php"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (Mars)">
-        <requirement
-            name="epp.package.php"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="luna"
-        label="Luna"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (Luna)">
-        <requirement
-            name="epp.package.php"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <description>The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</description>
-  </product>
   <product name="epp.package.modeling"
       label="Eclipse Modeling Tools">
     <annotation
@@ -1244,7 +1065,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -1300,7 +1121,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -1393,149 +1214,6 @@
               In addition, via the package's discover catalog, you can easily install a wide range of additional powerful, model-based tools and runtimes to suit your specific needs.
     </description>
   </product>
-  <product name="epp.package.parallel"
-      label="Eclipse for Parallel Application Developers">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/parallel.png</value>
-      </detail>
-    </annotation>
-    <version
-        name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Mars)">
-        <requirement
-            name="epp.package.parallel"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="latest.released"
-        label="Latest Release (Luna)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Luna)">
-        <requirement
-            name="epp.package.parallel"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Mars)">
-        <requirement
-            name="epp.package.parallel"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="luna"
-        label="Luna"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Luna)">
-        <requirement
-            name="epp.package.parallel"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="kepler"
-        label="Kepler"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Kepler)">
-        <requirement
-            name="epp.package.parallel"
-            versionRange="[2.0.0,2.1.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
-      </setupTask>
-    </version>
-    <version
-        name="juno"
-        label="Juno"
-        requiredJavaVersion="1.5">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Juno)">
-        <requirement
-            name="epp.package.parallel"
-            versionRange="[1.5.0,1.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
-      </setupTask>
-    </version>
-    <description>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</description>
-  </product>
   <product name="epp.package.rcp"
       label="Eclipse for RCP and RAP Developers">
     <annotation
@@ -1570,7 +1248,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -1626,7 +1304,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -1714,185 +1392,6 @@
       </setupTask>
     </version>
     <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Mylyn, the m2e Maven integration, and an XML editor. In addition to the CVS Eclipse Team provider, it also contains the EGit tooling for accessing Git version control systems.</description>
-  </product>
-  <product name="epp.package.scout"
-      label="Eclipse for Scout Developers">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="imageURI">
-        <value>http://www.eclipse.org/downloads/images/scout.jpg</value>
-      </detail>
-    </annotation>
-    <version
-        name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Mars)">
-        <requirement
-            name="epp.package.scout"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="latest.released"
-        label="Latest Release (Luna)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Luna)">
-        <requirement
-            name="epp.package.scout"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="mars"
-        label="Mars"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Mars)">
-        <requirement
-            name="epp.package.scout"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
-        <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
-      </setupTask>
-    </version>
-    <version
-        name="luna"
-        label="Luna"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Luna)">
-        <requirement
-            name="epp.package.scout"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/luna"/>
-        <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
-      </setupTask>
-    </version>
-    <version
-        name="kepler"
-        label="Kepler"
-        requiredJavaVersion="1.6">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Kepler)">
-        <requirement
-            name="epp.package.scout"
-            versionRange="[2.0.0,2.1.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
-        <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
-      </setupTask>
-    </version>
-    <version
-        name="juno"
-        label="Juno"
-        requiredJavaVersion="1.5">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Juno)">
-        <requirement
-            name="epp.package.scout"
-            versionRange="[1.5.0,1.6.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/juno"/>
-        <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
-      </setupTask>
-    </version>
-    <description>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a framework to develop Java/Eclipse based business applications that run on the desktop, in browsers, and on mobile devices. This package includes a complete SDK, useful developer tools and source code.</description>
   </product>
   <product name="epp.package.testing"
       label="Eclipse for Testers">
@@ -2036,6 +1535,507 @@
       </setupTask>
     </version>
     <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula and Mylyn.</description>
+  </product>
+  <product name="epp.package.parallel"
+      label="Eclipse for Parallel Application Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="imageURI">
+        <value>http://www.eclipse.org/downloads/images/parallel.png</value>
+      </detail>
+    </annotation>
+    <version
+        name="latest"
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Mars)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Luna)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="mars"
+        label="Mars"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Mars)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Luna)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="kepler"
+        label="Kepler"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Kepler)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[2.0.0,2.1.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
+        <repository
+            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+      </setupTask>
+    </version>
+    <version
+        name="juno"
+        label="Juno"
+        requiredJavaVersion="1.5">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Juno)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[1.5.0,1.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/juno"/>
+        <repository
+            url="http://download.eclipse.org/releases/juno/201303010900"/>
+      </setupTask>
+    </version>
+    <description>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</description>
+  </product>
+  <product name="epp.package.automotive"
+      label="Eclipse IDE for Automotive Software Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="imageURI">
+        <value>http://www.eclipse.org/downloads/images/classic.jpg</value>
+      </detail>
+    </annotation>
+    <version
+        name="latest"
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Mars)">
+        <requirement
+            name="epp.package.automotive"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Luna)">
+        <requirement
+            name="epp.package.automotive"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="mars"
+        label="Mars"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Mars)">
+        <requirement
+            name="epp.package.automotive"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Luna)">
+        <requirement
+            name="epp.package.automotive"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="kepler"
+        label="Kepler"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Kepler)">
+        <requirement
+            name="epp.package.automotive"
+            versionRange="[2.0.0,2.1.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
+        <repository
+            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+      </setupTask>
+    </version>
+    <version
+        name="juno"
+        label="Juno"
+        requiredJavaVersion="1.5">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Juno)">
+        <requirement
+            name="epp.package.automotive"
+            versionRange="[1.5.0,1.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.8.0,3.9.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.8.0,3.9.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/juno"/>
+        <repository
+            url="http://download.eclipse.org/releases/juno/201303010900"/>
+      </setupTask>
+    </version>
+    <description>This package contains frameworks and tools used for the development of embedded automotive software: In addition to Eclipse Platform, Java Development Tools, and Plug-in Development Environment, it includes EMF, Sphinx, GMF, Xtext, Xtend, Xpand, UML2, selected other modeling components, C/C++ development tools, and XML/XSD editors and tools. To keep the package at a reasonable size, it includes only the runtime binaries but no source code and no developer documentation.</description>
+  </product>
+  <product name="epp.package.scout"
+      label="Eclipse for Scout Developers">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="imageURI">
+        <value>http://www.eclipse.org/downloads/images/scout.jpg</value>
+      </detail>
+    </annotation>
+    <version
+        name="latest"
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Mars)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,4.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Luna)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="mars"
+        label="Mars"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Mars)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.12.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+        <repository
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Luna)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="kepler"
+        label="Kepler"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Kepler)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[2.0.0,2.1.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
+        <repository
+            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+      </setupTask>
+    </version>
+    <version
+        name="juno"
+        label="Juno"
+        requiredJavaVersion="1.5">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Juno)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[1.5.0,1.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.2.0,4.3.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.8.0,3.9.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.8.0,3.9.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/juno"/>
+        <repository
+            url="http://download.eclipse.org/releases/juno/201303010900"/>
+      </setupTask>
+    </version>
+    <description>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a framework to develop Java/Eclipse based business applications that run on the desktop, in browsers, and on mobile devices. This package includes a complete SDK, useful developer tools and source code.</description>
   </product>
   <product name="epp.package.standard"
       label="Eclipse Standard (discontinued after Luna)">
