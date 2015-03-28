@@ -111,11 +111,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt");
 
-  private static final String TEXT_LOG = "Show installation log";
+  private static final String TEXT_LAUNCH = "Launch";
 
   private static final String TEXT_README = "Show readme file";
 
-  private static final String TEXT_LAUNCH = "Launch product";
+  private static final String TEXT_LOG = "Show installation log";
+
+  private static final String TEXT_KEEP = "Keep installer";
 
   private final Map<String, ProductVersion> productVersions = new HashMap<String, ProductVersion>();
 
@@ -458,23 +460,28 @@ public class SimpleVariablePage extends SimpleInstallerPage
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        if (TEXT_LOG.equals(e.text))
-        {
-          String url = new File(installFolder, "eclipse/configuration/org.eclipse.oomph.setup/setup.log").toURI().toString();
-          OS.INSTANCE.openSystemBrowser(url);
-        }
-        else if (TEXT_README.equals(e.text))
-        {
-          if (readmePath != null)
-          {
-            String url = new File(installFolder, "eclipse/" + readmePath).toURI().toString();
-            OS.INSTANCE.openSystemBrowser(url);
-          }
-        }
-        else if (TEXT_LAUNCH.equals(e.text))
+        if (TEXT_LAUNCH.equals(e.text))
         {
           launchProduct();
           return;
+        }
+
+        if (TEXT_README.equals(e.text))
+        {
+          if (readmePath != null)
+          {
+            String url = new File(installFolder, OS.INSTANCE.getEclipseDir() + "/" + readmePath).toURI().toString();
+            OS.INSTANCE.openSystemBrowser(url);
+          }
+        }
+        else if (TEXT_LOG.equals(e.text))
+        {
+          String url = new File(installFolder, OS.INSTANCE.getEclipseDir() + "/configuration/org.eclipse.oomph.setup/setup.log").toURI().toString();
+          OS.INSTANCE.openSystemBrowser(url);
+        }
+        else if (TEXT_KEEP.equals(e.text))
+        {
+          new KeepInstallerDialog(getShell(), false).open();
         }
 
         installButton.setFocus();
@@ -911,7 +918,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       installButton.setToolTipText("Launch");
       progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GREEN));
 
-      message = "Installation finished successfully\n\n<a>" + TEXT_LOG + "</a>\n";
+      message = "Installation finished successfully: <a>" + TEXT_LAUNCH + "</a>\n\n";
 
       Scope scope = selectedProductVersion;
       while (scope != null)
@@ -930,7 +937,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
         scope = scope.getParentScope();
       }
 
-      message += "<a>" + TEXT_LAUNCH + "</a>";
+      message += "<a>" + TEXT_LOG + "</a>";
+
+      if (KeepInstallerDialog.canKeepInstaller())
+      {
+        message += "\n<a>" + TEXT_KEEP + "</a>";
+      }
     }
     else
     {

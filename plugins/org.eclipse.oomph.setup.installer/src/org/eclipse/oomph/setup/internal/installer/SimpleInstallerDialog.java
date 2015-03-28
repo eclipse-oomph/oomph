@@ -15,37 +15,27 @@ import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.ErrorDialog;
-import org.eclipse.oomph.ui.ShellMove;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.OS;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
@@ -53,35 +43,13 @@ import java.io.File;
 /**
  * @author Eike Stepper
  */
-public final class SimpleInstallerDialog extends Shell implements InstallerUI
+public final class SimpleInstallerDialog extends AbstractSimpleDialog implements InstallerUI
 {
   public static final int MARGIN_WIDTH = 42;
 
   public static final int MARGIN_HEIGHT = 15;
 
-  private static final ShellMove SHELL_MOVE = new ShellMove()
-  {
-    @Override
-    public void hookControl(Control control)
-    {
-      control.setBackground(WHITE);
-      super.hookControl(control);
-    }
-
-    @Override
-    protected boolean shouldHookControl(Control control)
-    {
-      return super.shouldHookControl(control) || control instanceof SimpleInstallerPage;
-    }
-  };
-
   private static final boolean CAPTURE = false;
-
-  private static final int WIDTH = 800;
-
-  private static final int HEIGHT = 600;
-
-  private static final Color WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
 
   private final Installer installer;
 
@@ -97,54 +65,19 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
   private Resolution updateResolution;
 
-  private int returnCode = RETURN_OK;
-
   public SimpleInstallerDialog(Display display, final Installer installer)
   {
-    super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.BORDER);
+    super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.BORDER, 800, 600, MARGIN_WIDTH, MARGIN_HEIGHT);
     this.installer = installer;
+  }
 
+  @Override
+  protected void createUI(Composite titleComposite)
+  {
     if (CAPTURE)
     {
       captureDownloadButton();
     }
-
-    GridLayout verticalLayout = UIUtil.createGridLayout(1);
-    verticalLayout.verticalSpacing = 20;
-
-    setLayout(verticalLayout);
-    setSize(WIDTH, HEIGHT);
-    setImages(Window.getDefaultImages());
-    setText(AbstractSetupDialog.SHELL_TEXT);
-
-    Rectangle bounds = display.getPrimaryMonitor().getBounds();
-    setLocation(bounds.x + (bounds.width - WIDTH) / 2, bounds.y + (bounds.height - HEIGHT) / 2);
-
-    addTraverseListener(new TraverseListener()
-    {
-      public void keyTraversed(TraverseEvent e)
-      {
-        if (e.detail == SWT.TRAVERSE_ESCAPE)
-        {
-          exitSelected();
-          e.detail = SWT.TRAVERSE_NONE;
-          e.doit = false;
-        }
-      }
-    });
-
-    GridLayout titleLayout = UIUtil.createGridLayout(4);
-    titleLayout.marginTop = 15;
-    titleLayout.marginWidth = MARGIN_WIDTH;
-    titleLayout.horizontalSpacing = 0;
-
-    Composite titleComposite = new Composite(this, SWT.NONE);
-    titleComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
-    titleComposite.setLayout(titleLayout);
-
-    Label titleImage = new Label(titleComposite, SWT.NONE);
-    titleImage.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, true, false));
-    titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png"));
 
     updateButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/update.png"), true);
     updateButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
@@ -159,7 +92,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
         {
           public void run()
           {
-            returnCode = RETURN_RESTART;
+            setReturnCode(RETURN_RESTART);
             exitSelected();
           }
         };
@@ -184,7 +117,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        returnCode = RETURN_ADVANCED;
+        setReturnCode(RETURN_ADVANCED);
         exitSelected();
       }
     });
@@ -213,7 +146,7 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     stackLayout.topControl = productPage;
     productPage.setFocus();
 
-    hook(this);
+    Display display = getDisplay();
 
     Thread updateSearcher = new UpdateSearcher(display);
     updateSearcher.start();
@@ -243,24 +176,11 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     return false;
   }
 
-  public int show()
-  {
-    open();
-
-    Display display = getDisplay();
-    while (!isDisposed())
-    {
-      if (!display.readAndDispatch())
-      {
-        display.sleep();
-      }
-    }
-
-    return returnCode;
-  }
-
   public void showAbout()
   {
+    int xxx;
+    // TODO Fix version in about dialog
+
     String version = "he.ll.o";
     new AboutDialog(getShell(), version).open();
   }
@@ -293,18 +213,6 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
 
     stackLayout.topControl = productPage;
     stack.layout();
-  }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Do nothing.
-  }
-
-  protected void exitSelected()
-  {
-    stack.setFocus(); // Browsers with focus make problems on dispose()!
-    dispose();
   }
 
   private void captureDownloadButton()
@@ -351,11 +259,6 @@ public final class SimpleInstallerDialog extends Shell implements InstallerUI
     event.x = pt.x;
     event.y = pt.y;
     getDisplay().post(event);
-  }
-
-  public static void hook(Control control)
-  {
-    SHELL_MOVE.hookControl(control);
   }
 
   /**

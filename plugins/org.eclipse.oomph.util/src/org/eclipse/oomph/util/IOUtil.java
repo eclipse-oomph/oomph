@@ -548,7 +548,7 @@ public final class IOUtil
     }
   }
 
-  public static void copyTree(File source, File target) throws IORuntimeException
+  public static void copyTree(File source, File target, boolean bestEffort) throws IORuntimeException
   {
     if (source.isDirectory())
     {
@@ -557,13 +557,28 @@ public final class IOUtil
       for (File file : files)
       {
         String name = file.getName();
-        copyTree(new File(source, name), new File(target, name));
+        copyTree(new File(source, name), new File(target, name), bestEffort);
       }
     }
     else
     {
-      copyFile(source, target);
+      try
+      {
+        copyFile(source, target);
+      }
+      catch (RuntimeException ex)
+      {
+        if (!bestEffort)
+        {
+          throw ex;
+        }
+      }
     }
+  }
+
+  public static void copyTree(File source, File target) throws IORuntimeException
+  {
+    copyTree(source, target, false);
   }
 
   public static void copyFile(File source, File target) throws IORuntimeException

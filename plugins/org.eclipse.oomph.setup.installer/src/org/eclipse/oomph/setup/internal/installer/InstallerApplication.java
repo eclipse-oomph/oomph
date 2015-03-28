@@ -189,6 +189,19 @@ public class InstallerApplication implements IApplication
 
       if (mode == Mode.ADVANCED)
       {
+        if (KeepInstallerDialog.canKeepInstaller())
+        {
+          Shell shell = new Shell(display);
+          if (MessageDialog.openQuestion(shell, AbstractSetupDialog.SHELL_TEXT,
+              "As an advanced user, do you want to keep the installer in a permanent location?"))
+          {
+            if (new KeepInstallerDialog(shell, true).open() == KeepInstallerDialog.OK)
+            {
+              return EXIT_OK;
+            }
+          }
+        }
+
         installerDialog[0] = new InstallerDialog(null, installer, restarted);
       }
       else
@@ -382,6 +395,7 @@ public class InstallerApplication implements IApplication
     }
     catch (Throwable ex)
     {
+      ex.printStackTrace();
       //$FALL-THROUGH$
     }
 

@@ -21,7 +21,7 @@
 static _TCHAR* lib = NULL;
 
 static _TCHAR*
-getTempFile ()
+getTempFile (_TCHAR* prefix)
 {
   _TCHAR tempFolder[MAX_PATH];
   DWORD dwRetVal = GetTempPath (MAX_PATH, tempFolder);
@@ -31,7 +31,7 @@ getTempFile ()
   }
 
   _TCHAR tempFile[MAX_PATH];
-  if ( GetTempFileName (tempFolder, _T("ext"), 0, tempFile) == 0)
+  if ( GetTempFileName (tempFolder, prefix, 0, tempFile) == 0)
   {
     return NULL;
   }
@@ -178,7 +178,7 @@ findDescriptor (_TCHAR* executable, REQ* req)
         else if (o == 2)
         {
           // Save the captured libdata.jar bytes to a temporary file.
-          lib = getTempFile ();
+          lib = getTempFile (_T("ext"));
 
           FILE *fp = fopen (lib, "wb");
           fwrite (libdata, libdataSize - size, 1, fp);
@@ -352,10 +352,19 @@ main (int argc, char *argv[])
     {
       if (validateJRE (jre, &req))
       {
-        _TCHAR label[MAX_PATH];
-        sprintf (label, _T("Extract %s to:"), req.productName);
+        _TCHAR* targetFolder = getTempFile (_T("eoi"));
+        if (targetFolder == NULL)
+        {
+          _TCHAR label[MAX_PATH];
+          sprintf (label, _T("Extract %s to:"), req.productName);
 
-        _TCHAR* targetFolder = browseForFolder (NULL, label);
+          targetFolder = browseForFolder (NULL, label);
+        }
+        else
+        {
+          DeleteFile (targetFolder);
+        }
+
         if (targetFolder == NULL)
         {
           return EXIT_CANCEL;

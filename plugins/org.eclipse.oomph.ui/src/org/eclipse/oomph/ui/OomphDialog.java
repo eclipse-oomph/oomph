@@ -168,7 +168,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
     Composite area = (Composite)super.createDialogArea(parent);
 
-    GridLayout layout = new GridLayout();
+    GridLayout layout = new GridLayout(getContainerColumns(), false);
     layout.marginWidth = getContainerMargin();
     layout.marginHeight = getContainerMargin();
     layout.verticalSpacing = 0;
@@ -243,8 +243,13 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
   protected Label createSeparator(Composite parent)
   {
     Label separator = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
-    separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    separator.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, getContainerColumns(), 1));
     return separator;
+  }
+
+  protected int getContainerColumns()
+  {
+    return 1;
   }
 
   protected int getContainerMargin()
