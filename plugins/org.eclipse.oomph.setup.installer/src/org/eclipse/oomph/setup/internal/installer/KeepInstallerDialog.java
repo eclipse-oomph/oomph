@@ -169,26 +169,26 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       }
     });
 
-    Label shortcutsLabel = new Label(parent, SWT.NONE);
-    shortcutsLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-    shortcutsLabel.setText("Create shortcuts:");
-
-    startMenuButton = new Button(parent, SWT.CHECK);
-    startMenuButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-    startMenuButton.setText("In the start menu");
-    startMenuButton.setSelection(true);
-
-    new Label(parent, SWT.NONE);
-
-    desktopButton = new Button(parent, SWT.CHECK);
-    desktopButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-    desktopButton.setText("On the desktop");
-
-    new Label(parent, SWT.NONE);
-
-    quickLaunchButton = new Button(parent, SWT.CHECK);
-    quickLaunchButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-    quickLaunchButton.setText("As a quick launch");
+    // Label shortcutsLabel = new Label(parent, SWT.NONE);
+    // shortcutsLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+    // shortcutsLabel.setText("Create shortcuts:");
+    //
+    // startMenuButton = new Button(parent, SWT.CHECK);
+    // startMenuButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+    // startMenuButton.setText("In the start menu");
+    // startMenuButton.setSelection(true);
+    //
+    // new Label(parent, SWT.NONE);
+    //
+    // desktopButton = new Button(parent, SWT.CHECK);
+    // desktopButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+    // desktopButton.setText("On the desktop");
+    //
+    // new Label(parent, SWT.NONE);
+    //
+    // quickLaunchButton = new Button(parent, SWT.CHECK);
+    // quickLaunchButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+    // quickLaunchButton.setText("As a quick launch");
 
     getShell().getDisplay().asyncExec(new Runnable()
     {
@@ -216,9 +216,9 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     final String launcher = InstallerApplication.getLauncher();
     if (launcher != null)
     {
-      final boolean startMenu = startMenuButton.getSelection();
-      final boolean desktop = desktopButton.getSelection();
-      final boolean quickLaunch = quickLaunchButton.getSelection();
+      final boolean startMenu = startMenuButton == null ? false : startMenuButton.getSelection();
+      final boolean desktop = desktopButton == null ? false : desktopButton.getSelection();
+      final boolean quickLaunch = quickLaunchButton == null ? false : quickLaunchButton.getSelection();
 
       ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog((Shell)getShell().getParent());
 
