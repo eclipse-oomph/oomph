@@ -28,15 +28,21 @@ import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.CollectionUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
@@ -49,6 +55,7 @@ import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -58,7 +65,9 @@ import org.eclipse.ui.IWorkbench;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -178,6 +187,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public void setTriggerName(String triggerName)
   {
     this.triggerName = triggerName == null ? null : triggerName.toUpperCase();
+  }
+
+  public IndexLoader getIndexLoader()
+  {
+    return indexLoader;
   }
 
   public void setIndexLoader(IndexLoader indexLoader)
@@ -424,7 +438,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public void reloadIndex()
   {
-    Set<Resource> excludedResources = new HashSet<Resource>();
+    reloadIndex(null);
+  }
+
+  public void reloadIndex(Set<Resource> updatedResources)
+  {
+    Set<Resource> excludedResources = new LinkedHashSet<Resource>();
 
     Resource selectionResource = getCatalogManager().getSelection().eResource();
     excludedResources.add(selectionResource);
@@ -444,11 +463,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     User user = setupContext.getUser();
     excludedResources.add(user.eResource());
 
+    Set<Resource> retainedResources = new HashSet<Resource>();
     EList<Resource> resources = resourceSet.getResources();
     for (Iterator<Resource> it = resources.iterator(); it.hasNext();)
     {
       Resource resource = it.next();
-      if (!excludedResources.contains(resource))
+      if (!excludedResources.contains(resource) && (updatedResources == null || updatedResources.contains(resource)))
       {
         if ("ecore".equals(resource.getURI().fileExtension()))
         {
@@ -459,19 +479,42 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           resource.unload();
         }
       }
+      else
+      {
+        retainedResources.add(resource);
+      }
     }
 
     resources.remove(selectionResource);
 
-    ECFURIHandlerImpl.clearExpectedETags();
-    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
-    resourceSet.getPackageRegistry().clear();
-    loadIndex();
+    if (updatedResources == null)
+    {
+      ECFURIHandlerImpl.clearExpectedETags();
+      resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
+      resourceSet.getPackageRegistry().clear();
+      loadIndex();
+    }
+    else
+    {
+      Set<URI> uris = new LinkedHashSet<URI>();
+      for (Resource resource : resources)
+      {
+        uris.add(resource.getURI());
+      }
+
+      loadIndex(uris.toArray(new URI[uris.size()]));
+    }
 
     for (Resource resource : excludedResources)
     {
       EcoreUtil.resolveAll(resource);
     }
+
+    for (Resource resource : retainedResources)
+    {
+      EcoreUtil.resolveAll(resource);
+    }
+
   }
 
   public void loadIndex()
@@ -481,7 +524,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   protected void loadIndex(URI... uris)
   {
-    IndexLoader indexLoader = this.indexLoader;
     if (indexLoader == null)
     {
       indexLoader = new ProgressMonitorDialogIndexLoader();
@@ -509,6 +551,10 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public static abstract class IndexLoader
   {
     private SetupWizard wizard;
+
+    private boolean reloading;
+
+    private boolean reloaded;
 
     final void setWizard(SetupWizard wizard)
     {
@@ -581,6 +627,115 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                 SetupUIPlugin.INSTANCE.log(ex);
               }
             }
+
+            // If we're currently reloading...
+            if (reloading)
+            {
+              // Then we're done now.
+              reloading = false;
+              reloaded = true;
+            }
+            else
+            {
+              final Shell shell = wizard.getShell();
+              new Thread()
+              {
+                @Override
+                public void run()
+                {
+                  // Collect a map of the remote URIs.
+                  Map<EClass, Set<URI>> uriMap = new LinkedHashMap<EClass, Set<URI>>();
+                  final Map<URI, Resource> resourceMap = new LinkedHashMap<URI, Resource>();
+                  URIConverter uriConverter = resourceSet.getURIConverter();
+                  for (Resource resource : resourceSet.getResources())
+                  {
+                    EList<EObject> contents = resource.getContents();
+                    if (!contents.isEmpty())
+                    {
+                      // Allow subclasses to override which types of objects are of interest for reloading.
+                      // The simple installer is only interested in the index, products, and product catalogs.
+                      EClass eClass = contents.get(0).eClass();
+                      if (shouldReload(eClass))
+                      {
+                        // If the scheme is remote...
+                        URI uri = uriConverter.normalize(resource.getURI());
+                        String scheme = uri.scheme();
+                        if ("http".equals(scheme) || "https".equals(scheme))
+                        {
+                          // Group the URIs by object type so we can reload "the most import" types of objects first.
+                          CollectionUtil.add(uriMap, eClass, uri);
+                          resourceMap.put(uri, resource);
+                        }
+                      }
+                    }
+                  }
+
+                  // Collect the URIs is order of importance.
+                  Set<URI> resourceURIs = new LinkedHashSet<URI>();
+                  for (EClass eClass : new EClass[] { SetupPackage.Literals.INDEX, SetupPackage.Literals.PRODUCT_CATALOG, SetupPackage.Literals.PRODUCT,
+                      SetupPackage.Literals.PROJECT_CATALOG, SetupPackage.Literals.PROJECT })
+                  {
+                    Set<URI> uris = uriMap.remove(eClass);
+                    if (uris != null)
+                    {
+                      resourceURIs.addAll(uris);
+                    }
+                  }
+
+                  for (Set<URI> uris : uriMap.values())
+                  {
+                    resourceURIs.addAll(uris);
+                  }
+
+                  // If there are resources to consider...
+                  if (!resourceURIs.isEmpty())
+                  {
+                    // We are testing if any remote resources have changed.
+                    reloading = true;
+
+                    // Remember which resource actually need updating based on detected remote changes by the ETag mirror.
+                    final Set<Resource> updatedResources = new HashSet<Resource>();
+                    new ECFURIHandlerImpl.ETagMirror()
+                    {
+                      @Override
+                      protected synchronized void cacheUpdated(URI uri)
+                      {
+                        updatedResources.add(resourceMap.get(uri));
+                      }
+                    }.begin(resourceURIs, new NullProgressMonitor());
+
+                    // If our shell is still available and we have updated resources...
+                    if (!shell.isDisposed() && !updatedResources.isEmpty())
+                    {
+                      shell.getDisplay().asyncExec(new Runnable()
+                      {
+                        public void run()
+                        {
+                          // If any of hte updated resources change a model, then reload the entire index.
+                          for (Resource resource : updatedResources)
+                          {
+                            if (resource.getContents().get(0) instanceof EPackage)
+                            {
+                              wizard.reloadIndex();
+                              return;
+                            }
+                          }
+
+                          // Otherwise reload only the affected resources.
+                          wizard.reloadIndex(updatedResources);
+                        }
+                      });
+                    }
+                    else
+                    {
+                      // Otherwise we're done reloading.
+                      reloading = false;
+                      reloaded = true;
+                    }
+                  }
+                }
+              }.start();
+            }
           }
         });
       }
@@ -589,6 +744,50 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     protected void indexLoaded(final Index index)
     {
       wizard.indexLoaded(index);
+    }
+
+    protected boolean shouldReload(EClass eClass)
+    {
+      return true;
+    }
+
+    public void awaitIndexLoad()
+    {
+      if (reloading && !reloaded)
+      {
+        try
+        {
+          waiting();
+
+          Shell shell = wizard.getShell();
+          Display display = shell.getDisplay();
+          while (!reloaded)
+          {
+            if (!display.isDisposed() && !display.readAndDispatch())
+            {
+              display.sleep();
+            }
+          }
+        }
+        finally
+        {
+          finishedWaiting();
+        }
+      }
+    }
+
+    protected void waiting()
+    {
+      Shell shell = wizard.getShell();
+      Display display = shell.getDisplay();
+      shell.setCursor(display.getSystemCursor(SWT.CURSOR_WAIT));
+    }
+
+    protected void finishedWaiting()
+    {
+      Shell shell = wizard.getShell();
+      Display display = shell.getDisplay();
+      shell.setCursor(display.getSystemCursor(SWT.CURSOR_ARROW));
     }
   }
 
@@ -634,6 +833,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     public Installer()
     {
       setTrigger(Trigger.BOOTSTRAP);
+      getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
       setSetupContext(SetupContext.createUserOnly(getResourceSet()));
       setWindowTitle("Eclipse Installer");
     }
@@ -655,7 +855,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       {
         public void run()
         {
-          getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
           loadIndex();
         }
       });

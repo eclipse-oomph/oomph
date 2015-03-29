@@ -424,11 +424,6 @@ public class ProductPage extends SetupWizardPage
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
     AccessUtil.setKey(collapseAllButton, "collapse");
 
-    final ToolItem refreshButton = new ToolItem(filterToolBar, SWT.NONE);
-    refreshButton.setToolTipText("Refresh");
-    refreshButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("refresh"));
-    AccessUtil.setKey(refreshButton, "refresh");
-
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
@@ -518,15 +513,6 @@ public class ProductPage extends SetupWizardPage
       public void widgetSelected(SelectionEvent e)
       {
         productViewer.collapseAll();
-      }
-    });
-
-    refreshButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        getWizard().reloadIndex();
       }
     });
 

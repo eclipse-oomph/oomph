@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -221,6 +222,21 @@ public class CatalogManager
 
   public void saveSelection()
   {
+    // Check if any containers are proxies.
+    // In this case save will fail.
+    // This case should only happen if we're trying to save while reloading the index and in that case we don't need to save.
+    for (EObject eObject : selection.eCrossReferences())
+    {
+      InternalEObject internalEObject = (InternalEObject)eObject;
+      for (InternalEObject eContainer = internalEObject.eInternalContainer(); eContainer != null; eContainer = eContainer.eInternalContainer())
+      {
+        if (eContainer.eIsProxy())
+        {
+          return;
+        }
+      }
+    }
+
     try
     {
       selection.eResource().save(null);

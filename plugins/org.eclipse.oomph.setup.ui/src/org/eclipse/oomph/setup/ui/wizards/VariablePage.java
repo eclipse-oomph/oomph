@@ -31,6 +31,7 @@ import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.ui.PropertyField.AuthenticatedField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
@@ -462,6 +463,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       {
         getWizard().setSetupContext(originalContext);
         originalContext = null;
+      }
+
+      IndexLoader indexLoader = getWizard().getIndexLoader();
+      if (indexLoader != null)
+      {
+        indexLoader.awaitIndexLoad();
       }
 
       setPageComplete(false);

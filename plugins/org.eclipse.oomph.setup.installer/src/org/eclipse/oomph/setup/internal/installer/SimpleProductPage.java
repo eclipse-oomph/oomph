@@ -15,6 +15,7 @@ import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
@@ -29,6 +30,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,8 +40,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -67,8 +67,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   private SearchField searchField;
 
   private ToolBar buttonBar;
-
-  private ToolItem refreshButton;
 
   private ToolItem catalogsButton;
 
@@ -113,23 +111,10 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     CatalogManager catalogManager = installer.getCatalogManager();
     catalogSelector = new CatalogSelector(catalogManager, true);
 
-    refreshButton = new ToolItem(buttonBar, SWT.NONE);
-    refreshButton.setToolTipText("Refresh");
-    refreshButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/refresh.png"));
-    refreshButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        installer.reloadIndex();
-      }
-    });
-    AccessUtil.setKey(refreshButton, "refresh");
-
     stackComposite = new StackComposite(this, SWT.NONE);
     stackComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-    SpriteIndexLoader indexLoader = new SpriteIndexLoader(stackComposite);
+    final SpriteIndexLoader indexLoader = new SpriteIndexLoader(stackComposite);
 
     browser = new Browser(stackComposite, SWT.NONE);
     browser.addLocationListener(new LocationAdapter()
@@ -142,6 +127,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         {
           if (url.startsWith(PRODUCT_PREFIX))
           {
+            indexLoader.awaitIndexLoad();
+
             url = url.substring(PRODUCT_PREFIX.length());
             int lastSlash = url.lastIndexOf('/');
 
@@ -424,7 +411,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     public void loadIndex(final ResourceSet resourceSet, final org.eclipse.emf.common.util.URI... uris)
     {
       searchField.setEnabled(false);
-      refreshButton.setEnabled(false);
 
       if (catalogsButton != null)
       {
@@ -463,7 +449,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
             {
               public void run()
               {
-                refreshButton.setEnabled(true);
                 stackComposite.setTopControl(browser);
                 browser.setFocus();
 
@@ -516,6 +501,25 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
       thread.setDaemon(true);
       thread.start();
+    }
+
+    @Override
+    protected void waiting()
+    {
+      stackComposite.setTopControl(animator);
+      animator.start(1, animator.getImages().length - 1);
+    }
+
+    @Override
+    protected void finishedWaiting()
+    {
+      stackComposite.setTopControl(browser);
+    }
+
+    @Override
+    protected boolean shouldReload(EClass eClass)
+    {
+      return eClass == SetupPackage.Literals.INDEX || eClass == SetupPackage.Literals.PRODUCT_CATALOG || eClass == SetupPackage.Literals.PRODUCT;
     }
   }
 }

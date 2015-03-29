@@ -83,6 +83,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   private static final boolean TEST_IO_EXCEPTION = false;
 
+  private static final boolean TEST_SLOW_NETWORK = false;
+
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
@@ -285,6 +287,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       if (response != null)
       {
         response.put(URIConverter.RESPONSE_TIME_STAMP_PROPERTY, transferListener.lastModified);
+      }
+
+      ETagMirror etagMirror = (ETagMirror)options.get(ETagMirror.OPTION_ETAG_MIRROR);
+      if (etagMirror != null)
+      {
+        etagMirror.cacheUpdated(uri);
       }
 
       return new ByteArrayInputStream(bytes);
@@ -790,11 +798,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   /**
    * @author Ed Merks
    */
-  private static class ETagMirror extends WorkerPool<ETagMirror, URI, ETagMirror.Worker>
+  public static class ETagMirror extends WorkerPool<ETagMirror, URI, ETagMirror.Worker>
   {
     private static final Map<Object, Object> OPTIONS;
 
     private static final URIConverter URI_CONVERTER;
+
+    private static final String OPTION_ETAG_MIRROR = "OPTION_ETAG_MIRROR";
 
     static
     {
@@ -805,6 +815,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
 
     private Set<? extends URI> uris;
+
+    private Map<Object, Object> options = new HashMap<Object, Object>(OPTIONS);
+
+    public ETagMirror()
+    {
+      options.put(OPTION_ETAG_MIRROR, this);
+    }
 
     @Override
     protected Worker createWorker(URI key, int workerID, boolean secondary)
@@ -826,6 +843,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       perform(uris);
     }
 
+    protected void cacheUpdated(URI uri)
+    {
+    }
+
     /**
      * @author Ed Merks
      */
@@ -839,13 +860,26 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       @Override
       protected IStatus perform(IProgressMonitor monitor)
       {
+        URI key = getKey();
         ETagMirror workPool = getWorkPool();
         IProgressMonitor workPoolMonitor = workPool.getMonitor();
-        workPoolMonitor.subTask("Mirroring " + getKey().toString());
+        workPoolMonitor.subTask("Mirroring " + key);
 
         try
         {
-          URI_CONVERTER.createInputStream(getKey(), OPTIONS).close();
+          if (TEST_SLOW_NETWORK)
+          {
+            try
+            {
+              Thread.sleep(5000);
+            }
+            catch (InterruptedException ex)
+            {
+              ex.printStackTrace();
+            }
+          }
+
+          URI_CONVERTER.createInputStream(key, workPool.options).close();
         }
         catch (IOException ex)
         {

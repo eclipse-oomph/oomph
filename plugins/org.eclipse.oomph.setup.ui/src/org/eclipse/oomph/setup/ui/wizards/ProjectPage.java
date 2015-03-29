@@ -104,6 +104,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
@@ -524,11 +525,6 @@ public class ProjectPage extends SetupWizardPage
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
     AccessUtil.setKey(collapseAllButton, "collapse");
 
-    final ToolItem refreshButton = new ToolItem(filterToolBar, SWT.NONE);
-    refreshButton.setToolTipText("Refresh");
-    refreshButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("refresh"));
-    AccessUtil.setKey(refreshButton, "refresh");
-
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
@@ -887,15 +883,6 @@ public class ProjectPage extends SetupWizardPage
       public void widgetSelected(SelectionEvent e)
       {
         projectViewer.collapseAll();
-      }
-    });
-
-    refreshButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        getWizard().reloadIndex();
       }
     });
 
@@ -1831,7 +1818,8 @@ public class ProjectPage extends SetupWizardPage
     @Override
     public Shell getShell()
     {
-      return getContainer().getShell();
+      IWizardContainer container = getContainer();
+      return container == null ? null : container.getShell();
     }
 
     @Override
