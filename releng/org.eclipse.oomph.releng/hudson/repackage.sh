@@ -85,7 +85,7 @@ for f in *.zip; do
     
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
     
-    extractor=eclipse-extractor-win$bitness.exe
+    extractor=eclipse-installer-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
     
     echo "  Creating $extractor"
@@ -111,7 +111,7 @@ for f in *.zip; do
         exit 1
       fi
       
-      cp -a $PRODUCTS/$extractor $PRODUCTS/oomph-extractor-win$bitness.exe
+      cp -a $PRODUCTS/$extractor $PRODUCTS/oomph-installer-win$bitness.exe
     fi
 
   elif [[ $f == *linux* ]]; then
