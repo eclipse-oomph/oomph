@@ -56,7 +56,7 @@ public class ShowInExplorerAction extends ActionDelegate
     try
     {
       IViewPart packageExplorerView = page.showView("org.eclipse.jdt.ui.PackageExplorer");
-      IShowInTarget showInTarget = (IShowInTarget)packageExplorerView.getAdapter(IShowInTarget.class);
+      IShowInTarget showInTarget = packageExplorerView.getAdapter(IShowInTarget.class);
       showInTarget.show(new ShowInContext(null, targetSelection));
     }
     catch (PartInitException ex)

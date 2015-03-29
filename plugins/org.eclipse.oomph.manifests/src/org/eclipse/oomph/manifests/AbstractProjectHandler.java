@@ -70,12 +70,12 @@ public abstract class AbstractProjectHandler extends AbstractHandler
 
         if (resource == null && element instanceof IAdaptable)
         {
-          resource = (IResource)((IAdaptable)element).getAdapter(IResource.class);
+          resource = ((IAdaptable)element).getAdapter(IResource.class);
         }
 
         if (resource == null)
         {
-          resource = (IResource)Platform.getAdapterManager().getAdapter(element, IResource.class);
+          resource = Platform.getAdapterManager().getAdapter(element, IResource.class);
         }
       }
     }

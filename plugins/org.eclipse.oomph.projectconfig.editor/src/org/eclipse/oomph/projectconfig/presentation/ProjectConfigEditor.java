@@ -1478,7 +1478,7 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public Object getAdapter(Class key)
   {

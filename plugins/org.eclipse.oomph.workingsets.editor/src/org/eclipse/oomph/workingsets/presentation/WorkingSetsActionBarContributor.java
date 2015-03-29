@@ -137,8 +137,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
 
       public ProjectPresentation(IProject project)
       {
-        super(project.getName(), ExtendedImageRegistry.INSTANCE.getImage(((IWorkbenchAdapter)project.getAdapter(IWorkbenchAdapter.class))
-            .getImageDescriptor(project)));
+        super(project.getName(), ExtendedImageRegistry.INSTANCE.getImage(project.getAdapter(IWorkbenchAdapter.class).getImageDescriptor(project)));
 
         this.project = project;
       }
@@ -208,7 +207,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
           }
           if (value instanceof IAdaptable)
           {
-            IProject project = (IProject)((IAdaptable)value).getAdapter(IProject.class);
+            IProject project = ((IAdaptable)value).getAdapter(IProject.class);
             if (project != null)
             {
               for (WorkingSetPresentation workingSet : input.getWorkingSets())

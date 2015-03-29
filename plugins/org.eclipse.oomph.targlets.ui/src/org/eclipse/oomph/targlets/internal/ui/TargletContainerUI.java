@@ -77,34 +77,34 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     labelProvider = new AdapterFactoryLabelProvider(adapterFactory);
   }
 
-  @SuppressWarnings("rawtypes")
-  public Class[] getAdapterList()
+  public Class<?>[] getAdapterList()
   {
     return ADAPTERS;
   }
 
-  public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType)
+  @SuppressWarnings("unchecked")
+  public <T> T getAdapter(Object object, Class<T> adapterType)
   {
-    if (adaptableObject instanceof ITargletContainer)
+    if (object instanceof ITargletContainer)
     {
       if (adapterType == ITreeContentProvider.class)
       {
-        return new ContainerContentProvider();
+        return (T)new ContainerContentProvider();
       }
 
       if (adapterType == ILabelProvider.class)
       {
-        return new ContainerLabelProvider();
+        return (T)new ContainerLabelProvider();
       }
 
       if (adapterType == ITargetLocationEditor.class)
       {
-        return this;
+        return (T)this;
       }
 
       if (adapterType == ITargetLocationUpdater.class)
       {
-        return this;
+        return (T)this;
       }
     }
 

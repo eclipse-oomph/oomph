@@ -768,7 +768,7 @@ public class TargletContainerComposite extends Composite
       this.selectionProvider = selectionProvider;
     }
 
-    public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter)
+    public <T> T getAdapter(Class<T> adapter)
     {
       return Platform.getAdapterManager().getAdapter(this, adapter);
     }

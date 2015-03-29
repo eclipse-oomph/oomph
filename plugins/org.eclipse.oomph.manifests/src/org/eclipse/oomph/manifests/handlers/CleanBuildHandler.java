@@ -115,7 +115,7 @@ public class CleanBuildHandler extends AbstractHandler
 
           if (element == null)
           {
-            IMarker marker = (IMarker)adaptable.getAdapter(IMarker.class);
+            IMarker marker = adaptable.getAdapter(IMarker.class);
             if (marker != null)
             {
               element = marker.getResource();

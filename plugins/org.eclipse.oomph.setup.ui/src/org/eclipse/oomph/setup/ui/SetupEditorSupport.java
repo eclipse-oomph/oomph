@@ -238,8 +238,7 @@ public final class SetupEditorSupport
 
       return new IStorageEditorInput()
       {
-        @SuppressWarnings("rawtypes")
-        public Object getAdapter(Class adapter)
+        public <T> T getAdapter(Class<T> adapter)
         {
           return null;
         }
@@ -273,8 +272,7 @@ public final class SetupEditorSupport
         {
           return new IStorage()
           {
-            @SuppressWarnings("rawtypes")
-            public Object getAdapter(Class adapter)
+            public <T> T getAdapter(Class<T> adapter)
             {
               return null;
             }

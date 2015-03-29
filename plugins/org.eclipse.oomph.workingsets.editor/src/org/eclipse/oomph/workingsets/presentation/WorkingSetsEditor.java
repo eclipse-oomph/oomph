@@ -993,7 +993,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
           }
           else if (value instanceof IAdaptable)
           {
-            IResource resource = (IResource)((IAdaptable)value).getAdapter(IResource.class);
+            IResource resource = ((IAdaptable)value).getAdapter(IResource.class);
             if (resource != null)
             {
               result.add(resource);
@@ -1239,7 +1239,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public Object getAdapter(Class key)
   {

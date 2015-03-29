@@ -76,7 +76,7 @@ public abstract class AbstractRevisionAction extends AbstractAction<RevObject>
 
     if (input instanceof IAdaptable)
     {
-      IResource resource = (IResource)((IAdaptable)input).getAdapter(IResource.class);
+      IResource resource = ((IAdaptable)input).getAdapter(IResource.class);
       if (resource != null)
       {
         org.eclipse.egit.core.project.RepositoryMapping mapping = org.eclipse.egit.core.project.RepositoryMapping.getMapping(resource);
