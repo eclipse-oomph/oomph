@@ -11,7 +11,7 @@
 --launcher.XXMaxPermSize
 256M
 -name
-Oomph Installer
+Eclipse Installer
 -data
 @none
       </programArgs>
