@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public abstract class AbstractSetupDialog extends OomphDialog
 {
-  public static final String SHELL_TEXT = "Oomph Installer";
+  public static final String SHELL_TEXT = "Eclipse Installer";
 
   public AbstractSetupDialog(Shell parentShell, String title, int width, int height, OomphUIPlugin plugin, boolean helpAvailable)
   {

@@ -50,7 +50,7 @@ for f in *.zip; do
     inifile=oomph.app/Contents/MacOS/$inifile
   fi
 
-  sed -e 's/^Oomph.*Installer$/Oomph Installer/' $inifile > $inifile.tmp
+  sed -e 's/^Eclipse.*Installer$/Eclipse Installer/' $inifile > $inifile.tmp
   mv $inifile.tmp $inifile
 
   echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/repository" >> $inifile
@@ -71,7 +71,8 @@ for f in *.zip; do
     
     rm oomph
     ln -s oomph.app/Contents/MacOS/oomph oomph
-    tar -czf $PRODUCTS/oomph-installer-mac$bitness.tar.gz *
+    tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz *
+    cp -a $PRODUCTS/eclipse-installer-mac$bitness.tar.gz $PRODUCTS/oomph-installer-mac$bitness.tar.gz
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
@@ -84,7 +85,7 @@ for f in *.zip; do
     
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
     
-    extractor=oomph-extractor-win$bitness.exe
+    extractor=eclipse-extractor-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
     
     echo "  Creating $extractor"
@@ -109,10 +110,13 @@ for f in *.zip; do
         echo "$PRODUCTS/$extractor is just $actualSize bytes large!"
         exit 1
       fi
+      
+      cp -a $PRODUCTS/$extractor $PRODUCTS/oomph-extractor-win$bitness.exe
     fi
 
   elif [[ $f == *linux* ]]; then
-    zip -r -9 -qq --symlinks $PRODUCTS/oomph-installer-linux$bitness.zip *
+    zip -r -9 -qq --symlinks $PRODUCTS/eclipse-installer-linux$bitness.zip *
+    cp -a $PRODUCTS/eclipse-installer-linux$bitness.zip $PRODUCTS/oomph-installer-linux$bitness.zip 
   fi
 done
 

@@ -302,7 +302,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
             new String[] {
                 powerShell,
                 "-command",
-                "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) 'Oomph Installer.lnk'; $targetPath = '" + target
+                "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) 'Eclipse Installer.lnk'; $targetPath = '" + target
                     + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
       }
     }

@@ -6,6 +6,6 @@
 0
 oomph.exe
 oomph.ini
-Oomph Installer
+Eclipse Installer
 http://wiki.eclipse.org/Eclipse_Oomph_Installer
 http://download.eclipse.org/oomph/jre/128x128.png

@@ -635,7 +635,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       setTrigger(Trigger.BOOTSTRAP);
       setSetupContext(SetupContext.createUserOnly(getResourceSet()));
-      setWindowTitle("Oomph Installer");
+      setWindowTitle("Eclipse Installer");
     }
 
     @Override
@@ -688,7 +688,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       setTrigger(Trigger.MANUAL);
       setSetupContext(SetupContext.create(getResourceSet()));
-      setWindowTitle("Oomph Importer");
+      setWindowTitle("Eclipse Importer");
     }
 
     @Override
@@ -733,7 +733,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       setTrigger(manual ? Trigger.MANUAL : Trigger.STARTUP);
       setSetupContext(SetupContext.create(getResourceSet()));
-      setWindowTitle("Oomph Updater");
+      setWindowTitle("Eclipse Updater");
     }
 
     public Updater(SetupTaskPerformer performer)
