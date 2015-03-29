@@ -690,7 +690,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     transaction.setMirrors(mirrors);
 
     boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor(true));
-    if (context.getTrigger() != Trigger.BOOTSTRAP)
+    if (context.getTrigger() == Trigger.BOOTSTRAP)
+    {
+      int xxx;
+    }
+    else
     {
       if (profileChanged)
       {
@@ -840,6 +844,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       Collection<ILicense> licenses = iu.getLicenses(null);
       for (ILicense license : licenses)
       {
+        if ("license".equals(license.getBody()))
+        {
+          // Work around bug 463387.
+          continue;
+        }
+
         String uuid = license.getUUID();
         if (acceptedLicenses.contains(new LicenseInfo(uuid, null)))
         {
