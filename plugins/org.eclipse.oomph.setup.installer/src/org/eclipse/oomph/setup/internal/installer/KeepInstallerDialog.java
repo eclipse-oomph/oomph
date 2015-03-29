@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,6 +36,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -42,7 +44,11 @@ import java.lang.reflect.InvocationTargetException;
  */
 public final class KeepInstallerDialog extends AbstractSetupDialog
 {
-  private static boolean isKept;
+  private static final Preference PREF_KEPT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("kept");
+
+  private static boolean kept = PREF_KEPT.get(false);
+
+  private static String powerShell;
 
   private final boolean startPermanentInstaller;
 
@@ -58,11 +64,6 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
   {
     super(parentShell, SHELL_TEXT, 500, 300, SetupInstallerPlugin.INSTANCE, false);
     this.startPermanentInstaller = startPermanentInstaller;
-  }
-
-  public final String getLocation()
-  {
-    return location;
   }
 
   @Override
@@ -169,26 +170,24 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       }
     });
 
-    // Label shortcutsLabel = new Label(parent, SWT.NONE);
-    // shortcutsLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-    // shortcutsLabel.setText("Create shortcuts:");
-    //
-    // startMenuButton = new Button(parent, SWT.CHECK);
-    // startMenuButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-    // startMenuButton.setText("In the start menu");
-    // startMenuButton.setSelection(true);
-    //
-    // new Label(parent, SWT.NONE);
-    //
-    // desktopButton = new Button(parent, SWT.CHECK);
-    // desktopButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-    // desktopButton.setText("On the desktop");
-    //
-    // new Label(parent, SWT.NONE);
-    //
-    // quickLaunchButton = new Button(parent, SWT.CHECK);
-    // quickLaunchButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-    // quickLaunchButton.setText("As a quick launch");
+    if (getPowerShell() != null)
+    {
+      new Label(parent, SWT.NONE);
+      startMenuButton = new Button(parent, SWT.CHECK);
+      startMenuButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+      startMenuButton.setText("Create start menu entry");
+      startMenuButton.setSelection(true);
+
+      new Label(parent, SWT.NONE);
+      desktopButton = new Button(parent, SWT.CHECK);
+      desktopButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+      desktopButton.setText("Create desktop shortcut");
+
+      new Label(parent, SWT.NONE);
+      quickLaunchButton = new Button(parent, SWT.CHECK);
+      quickLaunchButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+      quickLaunchButton.setText("Pin to task bar");
+    }
 
     getShell().getDisplay().asyncExec(new Runnable()
     {
@@ -253,11 +252,14 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     File target = new File(location);
     IOUtil.copyTree(source, target, true);
 
+    String launcherName = new File(launcher).getName();
+    String permanentLauncher = new File(target, launcherName).getAbsolutePath();
+
     if (startPermanentInstaller)
     {
       try
       {
-        Runtime.getRuntime().exec(new File(target, new File(launcher).getName()).getAbsolutePath());
+        Runtime.getRuntime().exec(permanentLauncher);
       }
       catch (Exception ex)
       {
@@ -270,12 +272,115 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       OS.INSTANCE.openSystemBrowser(url);
     }
 
-    isKept = true;
+    if (startMenu)
+    {
+      createShortCut("Programs", permanentLauncher);
+    }
+
+    if (desktop)
+    {
+      createShortCut("Desktop", permanentLauncher);
+    }
+
+    if (quickLaunch)
+    {
+      pinToTaskBar(location, launcherName);
+    }
+
+    kept = true;
+    PREF_KEPT.set(true);
+  }
+
+  private static void createShortCut(String specialFolder, String target)
+  {
+    try
+    {
+      String powerShell = getPowerShell();
+      if (powerShell != null)
+      {
+        Runtime.getRuntime().exec(
+            new String[] {
+                powerShell,
+                "-command",
+                "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) 'Oomph Installer.lnk'; $targetPath = '" + target
+                    + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
+      }
+    }
+    catch (IOException ex)
+    {
+      SetupInstallerPlugin.INSTANCE.log(ex);
+    }
+  }
+
+  private static void pinToTaskBar(String location, String launcherName)
+  {
+    try
+    {
+      String powerShell = getPowerShell();
+      if (powerShell != null)
+      {
+        Runtime.getRuntime().exec(
+            new String[] { powerShell, "-command",
+                "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
+      }
+    }
+    catch (IOException ex)
+    {
+      SetupInstallerPlugin.INSTANCE.log(ex);
+    }
+  }
+
+  private static String getPowerShell()
+  {
+    if (powerShell == null)
+    {
+      try
+      {
+        String systemRoot = System.getenv("SystemRoot");
+        if (systemRoot != null)
+        {
+          File system32 = new File(systemRoot, "system32");
+          if (system32.isDirectory())
+          {
+            File powerShellFolder = new File(system32, "WindowsPowerShell");
+            if (powerShellFolder.isDirectory())
+            {
+              File[] versions = powerShellFolder.listFiles();
+              if (versions != null)
+              {
+                for (File version : versions)
+                {
+                  try
+                  {
+                    File executable = new File(version, "powershell.exe");
+                    if (executable.isFile())
+                    {
+                      powerShell = executable.getAbsolutePath();
+                      break;
+                    }
+                  }
+                  catch (Exception ex)
+                  {
+                    //$FALL-THROUGH$
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    return powerShell;
   }
 
   public static boolean canKeepInstaller()
   {
-    if (!isKept && OS.INSTANCE.isWin())
+    if (!kept && OS.INSTANCE.isWin())
     {
       String launcher = InstallerApplication.getLauncher();
       return launcher != null && launcher.startsWith(PropertiesUtil.TEMP_DIR);
