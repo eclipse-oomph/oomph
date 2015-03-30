@@ -547,8 +547,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       if (OS.INSTANCE.isMac() && !label.contains("Mars"))
       {
-        int xxx;
-        // TODO This is a work-around for the new Mac app layout problem!
         continue;
       }
 
