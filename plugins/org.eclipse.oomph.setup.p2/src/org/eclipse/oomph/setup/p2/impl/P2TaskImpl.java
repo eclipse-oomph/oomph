@@ -690,11 +690,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     transaction.setMirrors(mirrors);
 
     boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor(true));
-    if (context.getTrigger() == Trigger.BOOTSTRAP)
-    {
-      int xxx;
-    }
-    else
+    if (context.getTrigger() != Trigger.BOOTSTRAP)
     {
       if (profileChanged)
       {
