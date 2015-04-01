@@ -175,15 +175,6 @@ $BASH $SCRIPTS/composeRepositories.sh \
 mkdir -p $UPDATES.tmp/latest
 cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/latest
 
-########################################################################
-### TODO: Remove when the unfortunate m6 folder is no longer needed! ###
-########################################################################
-if [[ -d $PRODUCTS/m6 ]]; then
-  cp -a $PRODUCTS/m6 $PRODUCTS.tmp
-fi
-########################################################################
-########################################################################
-
 mv $UPDATES $UPDATES.bak; mv $UPDATES.tmp $UPDATES
 mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS.tmp $PRODUCTS
 mv $HELP $HELP.bak; mv $HELP.tmp $HELP

@@ -72,7 +72,6 @@ for f in *.zip; do
     rm oomph
     ln -s oomph.app/Contents/MacOS/oomph oomph
     tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz *
-    cp -a $PRODUCTS/eclipse-installer-mac$bitness.tar.gz $PRODUCTS/oomph-installer-mac$bitness.tar.gz
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
@@ -110,13 +109,10 @@ for f in *.zip; do
         echo "$PRODUCTS/$extractor is just $actualSize bytes large!"
         exit 1
       fi
-      
-      cp -a $PRODUCTS/$extractor $PRODUCTS/oomph-installer-win$bitness.exe
     fi
 
   elif [[ $f == *linux* ]]; then
     zip -r -9 -qq --symlinks $PRODUCTS/eclipse-installer-linux$bitness.zip *
-    cp -a $PRODUCTS/eclipse-installer-linux$bitness.zip $PRODUCTS/oomph-installer-linux$bitness.zip 
   fi
 done
 
