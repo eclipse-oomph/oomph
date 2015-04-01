@@ -52,7 +52,6 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
-import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
@@ -63,6 +62,7 @@ import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -1675,10 +1675,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       try
       {
-        File productLocation = getProductLocation();
-        String path = InstallationTaskImpl.CONFIGURATION_FOLDER_NAME + "/" + SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME;
+        File location = getProductConfigurationLocation();
+        String path = SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME;
 
-        File logFile = new File(productLocation, path);
+        File logFile = new File(location, path);
         logFile.getParentFile().mkdirs();
 
         FileOutputStream out = new FileOutputStream(logFile, true);
@@ -2298,8 +2298,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (VariableTask.DEFAULT_STORAGE_URI.equals(storageURI))
       {
-        storageURI = PreferencesUtil.ROOT_PREFERENCE_NODE_URI.appendSegments(new String[] { PreferencesUtil.SECURE_NODE, SetupContext.OOMPH_NODE,
-            variable.getName(), "" });
+        storageURI = PreferencesUtil.ROOT_PREFERENCE_NODE_URI
+            .appendSegments(new String[] { PreferencesUtil.SECURE_NODE, SetupContext.OOMPH_NODE, variable.getName(), "" });
       }
       else if (storageURI != null && PreferencesUtil.PREFERENCE_SCHEME.equals(storageURI.scheme()) && !storageURI.hasTrailingPathSeparator())
       {
@@ -2572,13 +2572,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           URI redirectedBaseBaseURI = redirect(baseBaseURI);
           if (!redirectedBaseBaseURI.equals(baseBaseURI))
           {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseBaseURI + "->"
-                + redirectedBaseBaseURI, monitor);
+            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
+                "=" + baseBaseURI + "->" + redirectedBaseBaseURI, monitor);
           }
           else
           {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseURI + "->"
-                + redirectedBaseURI, monitor);
+            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
+                "=" + baseURI + "->" + redirectedBaseURI, monitor);
           }
         }
         else
@@ -2642,6 +2642,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         performIndexRediction(SetupContext.INDEX_SETUP_URI, "", new SubProgressMonitor(monitor, 1));
         performIndexRediction(SetupContext.INDEX_SETUP_LOCATION_URI, ".location", new SubProgressMonitor(monitor, 1));
+
+        if (OS.INSTANCE.isMac())
+        {
+          File file = new File(getProductConfigurationLocation(), "config.ini");
+          Map<String, String> configIni = PropertiesUtil.loadProperties(file);
+          configIni.put("osgi.configuration.cascaded", "false");
+          PropertiesUtil.saveProperties(file, configIni, false);
+        }
 
         if (REMOTE_DEBUG)
         {
@@ -3153,8 +3161,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    setSetupContext(SetupContext.create((Installation)copier.get(originalInstallation), (Workspace)copier.get(originalWorkspace),
-        (User)copier.get(originalPreferences)));
+    setSetupContext(
+        SetupContext.create((Installation)copier.get(originalInstallation), (Workspace)copier.get(originalWorkspace), (User)copier.get(originalPreferences)));
   }
 
   private EList<Map.Entry<String, Set<String>>> reorderVariables(final Map<String, Set<String>> variables)
@@ -3718,6 +3726,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private static class PDEAPIUtil
   {
     private static final Field BUILD_DISABLED_FIELD;
+
     static
     {
       Field buildDisabledField = null;
