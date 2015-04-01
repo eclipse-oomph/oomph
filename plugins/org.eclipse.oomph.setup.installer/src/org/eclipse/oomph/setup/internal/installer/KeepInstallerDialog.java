@@ -15,6 +15,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -30,7 +31,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -157,10 +158,15 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        DirectoryDialog dialog = new DirectoryDialog(shell);
+        FileDialog dialog = new FileDialog(shell, SWT.APPLICATION_MODAL | SWT.SAVE);
         dialog.setText("Keep Installer");
-        dialog.setMessage("Select an empty permanent location");
-        dialog.setFilterPath(locationText.getText());
+
+        if (!StringUtil.isEmpty(location))
+        {
+          final File file = new File(location).getAbsoluteFile();
+          dialog.setFilterPath(file.getParent());
+          dialog.setFileName(file.getName());
+        }
 
         String dir = dialog.open();
         if (dir != null)
@@ -298,10 +304,8 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       String powerShell = getPowerShell();
       if (powerShell != null)
       {
-        Runtime.getRuntime().exec(
-            new String[] {
-                powerShell,
-                "-command",
+        Runtime.getRuntime()
+            .exec(new String[] { powerShell, "-command",
                 "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) 'Eclipse Installer.lnk'; $targetPath = '" + target
                     + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
       }
@@ -319,9 +323,8 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       String powerShell = getPowerShell();
       if (powerShell != null)
       {
-        Runtime.getRuntime().exec(
-            new String[] { powerShell, "-command",
-                "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
+        Runtime.getRuntime().exec(new String[] { powerShell, "-command",
+            "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
       }
     }
     catch (IOException ex)
