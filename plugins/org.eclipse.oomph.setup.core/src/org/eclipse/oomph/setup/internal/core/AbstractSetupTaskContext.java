@@ -336,6 +336,14 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     });
 
+    registerFilter("username", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return URI.encodeSegment(value, false).replace("@", "%40");
+      }
+    });
+
     registerFilter("preferenceNode", new StringFilter()
     {
       public String filter(String value)

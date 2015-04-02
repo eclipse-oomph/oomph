@@ -59,7 +59,7 @@
         </detail>
         <detail
             key="form.cookie">
-          <value>ECLIPSESESSION</value>
+          <value>PHPSESSID</value>
         </detail>
         <detail
             key="form.parameters">
@@ -138,7 +138,7 @@
         </detail>
         <detail
             key="form.verification.url">
-          <value>https://git.eclipse.org/r/accounts/$${git.user.id}</value>
+          <value>https://git.eclipse.org/r/accounts/$${git.user.id|username}</value>
         </detail>
         <detail
             key="form.verification.matches">
@@ -171,10 +171,10 @@
         name="eclipse.gerrit.remoteURIs"
         label="Eclipse Gerrit Repository">
       <choice
-          value="ssh://${git.user.id}@git.eclipse.org:29418/@{remoteURI}"
+          value="ssh://${git.user.id|username}@git.eclipse.org:29418/@{remoteURI}"
           label="SSH (read-write, Gerrit)"/>
       <choice
-          value="https://${git.user.id}@git.eclipse.org/r/@{remoteURI}"
+          value="https://${git.user.id|username}@git.eclipse.org/r/@{remoteURI}"
           label="HTTPS (read-write, Gerrit)"/>
       <choice
           value="https://git.eclipse.org/r/@{remoteURI}"
@@ -186,7 +186,7 @@
         name="eclipse.git.remoteURIs"
         label="Eclipse Git Repository">
       <choice
-          value="ssh://${git.user.id}@git.eclipse.org/gitroot/@{remoteURI}.git"
+          value="ssh://${git.user.id|username}@git.eclipse.org/gitroot/@{remoteURI}.git"
           label="SSH (read-write, direct)"/>
       <choice
           value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
@@ -268,7 +268,7 @@
             value="git@github.com:@{remoteURI}.git"
             label="Git (read-write)"/>
         <choice
-            value="https://${github.user.id}@github.com/@{remoteURI}.git"
+            value="https://${github.user.id|username}@github.com/@{remoteURI}.git"
             label="HTTPS (read-write)"/>
         <choice
             value="http://github.com/@{remoteURI}.git"

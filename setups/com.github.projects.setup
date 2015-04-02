@@ -32,7 +32,7 @@
           value="git@github.com:@{remoteURI}.git"
           label="Git (read-write)"/>
       <choice
-          value="https://${github.user.id}@github.com/@{remoteURI}.git"
+          value="https://${github.user.id|username}@github.com/@{remoteURI}.git"
           label="HTTPS (read-write)"/>
       <choice
           value="https://github.com/@{remoteURI}.git"
