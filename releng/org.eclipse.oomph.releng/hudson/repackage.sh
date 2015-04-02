@@ -47,14 +47,14 @@ for f in *.zip; do
 
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
-    inifile="Eclipse Installer.app/Contents/Eclipse/$inifile"
+    inifile=Eclipse Installer.app/Contents/Eclipse/$inifile
   fi
 
-  sed -e 's/^Eclipse.*Installer$/Eclipse Installer/' $inifile > $inifile.tmp
-  mv $inifile.tmp $inifile
+  sed -e 's/^Eclipse.*Installer$/Eclipse Installer/' "$inifile" > "$inifile.tmp"
+  mv "$inifile.tmp" "$inifile"
 
-  echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/repository" >> $inifile
-  echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> $inifile
+  echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/repository" >> "$inifile"
+  echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> "$inifile"
 
   if [[ $f == *macosx* ]]; then
     #if [[ "$PACK_AND_SIGN" == true ]]; then
@@ -69,8 +69,6 @@ for f in *.zip; do
     #  rm -f signed.zip
     #fi
     
-    #rm oomph
-    #ln -s oomph.app/Contents/MacOS/oomph oomph
     tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz *
 
   elif [[ $f == *win32* ]]; then
