@@ -562,6 +562,11 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
+    if (StringUtil.isEmpty(getRemoteURI()))
+    {
+      return false;
+    }
+
     String location = getLocation();
 
     workDir = new File(location);
