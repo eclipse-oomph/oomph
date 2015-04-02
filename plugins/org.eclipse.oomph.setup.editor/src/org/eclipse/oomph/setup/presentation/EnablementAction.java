@@ -90,7 +90,7 @@ public final class EnablementAction extends Action
     {
       ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
 
-      SetupContext self = SetupContext.createInstallationAndUser(resourceSet);
+      SetupContext self = SetupContext.create(resourceSet);
       Installation installation = self.getInstallation();
       installation.getSetupTasks().addAll(enablementTasks);
 
