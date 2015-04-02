@@ -310,7 +310,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             if (!SetupContext.INSTALLATION_SETUP_FILE_NAME_URI.equals(uri))
             {
               InstallationTask installationTask = (InstallationTask)setupTask;
-              installationTask.setLocation(uri.trimSegments(4).toFileString());
+              installationTask.setLocation(uri.trimSegments(OS.INSTANCE.isMac() ? 6 : 4).toFileString());
             }
           }
         }
