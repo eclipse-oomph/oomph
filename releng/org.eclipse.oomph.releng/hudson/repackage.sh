@@ -47,7 +47,7 @@ for f in *.zip; do
 
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
-    inifile=Oomph.app/Contents/Eclipse/$inifile
+    inifile=Eclipse\ Installer.app/Contents/Eclipse/$inifile
   fi
 
   sed -e 's/^Eclipse.*Installer$/Eclipse Installer/' $inifile > $inifile.tmp
