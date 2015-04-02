@@ -606,6 +606,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
       else
       {
+        EcoreUtil.resolveAll(resourceSet);
+
         Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
         final Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
 
