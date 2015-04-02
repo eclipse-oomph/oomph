@@ -43,7 +43,7 @@
                 <product>
                   <id>org.eclipse.oomph.setup.installer.product</id>
                   <rootFolders>
-                    <macosx>Oomph.app</macosx>
+                    <macosx>Eclipse Installer.app</macosx>
                   </rootFolders>
                 </product>
               </products>
