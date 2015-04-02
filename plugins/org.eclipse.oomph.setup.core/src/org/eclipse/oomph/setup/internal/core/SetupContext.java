@@ -88,7 +88,7 @@ public class SetupContext
 
   public static final URI PRODUCT_LOCATION = getStaticInstallLocation();
 
-  public static final URI PRODUCT_ROOT_LOCATION = PRODUCT_LOCATION.trimSegments(1);
+  public static final URI PRODUCT_ROOT_LOCATION = PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 3 : 1);
 
   // State locations
 
