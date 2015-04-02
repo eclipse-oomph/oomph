@@ -47,7 +47,7 @@ for f in *.zip; do
 
   inifile=oomph.ini
   if [[ $f == *macosx* ]]; then
-    inifile=oomph.app/Contents/MacOS/$inifile
+    inifile=Oomph.app/Contents/Eclipse/$inifile
   fi
 
   sed -e 's/^Eclipse.*Installer$/Eclipse Installer/' $inifile > $inifile.tmp
@@ -69,8 +69,8 @@ for f in *.zip; do
     #  rm -f signed.zip
     #fi
     
-    rm oomph
-    ln -s oomph.app/Contents/MacOS/oomph oomph
+    #rm oomph
+    #ln -s oomph.app/Contents/MacOS/oomph oomph
     tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz *
 
   elif [[ $f == *win32* ]]; then

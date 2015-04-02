@@ -21,16 +21,16 @@ Eike Stepper - initial API and implementation
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tycho.scmUrl>scm:git:https://git.eclipse.org/r/p/oomph/org.eclipse.oomph.git</tycho.scmUrl>
-    <tycho-version>0.21.0</tycho-version>
+    <tycho-version>0.23.0-SNAPSHOT</tycho-version>
     <os-jvm-flags/>
   </properties>
 
   <pluginRepositories>
     <pluginRepository>
       <id>eclipse-maven-releases</id>
-      <url>https://repo.eclipse.org/content/repositories/releases</url>
+      <url>https://repo.eclipse.org/content/repositories/snapshots</url>
       <snapshots>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
