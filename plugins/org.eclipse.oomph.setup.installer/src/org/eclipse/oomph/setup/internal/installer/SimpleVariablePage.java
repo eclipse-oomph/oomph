@@ -524,8 +524,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     builder.append(".label{font-size:1.1em; font-weight:700}");
     builder.append(".description{font-size:14px; color:#333}");
     builder.append(".col1{padding:10px; width:64px; text-align:center; vertical-align:top}");
-    builder
-        .append(" --></style><body style=\"background-color:#fafafa; overflow:auto; margin:10px; font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif\"><table>\n");
+    builder.append(
+        " --></style><body style=\"background-color:#fafafa; overflow:auto; margin:10px; font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif\"><table>\n");
 
     SimpleProductPage.renderProduct(builder, product, true, null);
     browser.setText(SimpleProductPage.getHtml(builder), true);
@@ -855,7 +855,15 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     SetupContext setupContext = SetupContext.create(resourceSet, selectedProductVersion);
     Installation installation = setupContext.getInstallation();
-    User user = setupContext.getUser();
+    final User user = setupContext.getUser();
+
+//    UIUtil.syncExec(new Runnable()
+//    {
+//      public void run()
+//      {
+//        LicensePrePrompter.execute(getShell(), user);
+//      }
+//    });
 
     UserAdjuster userAdjuster = new UserAdjuster();
     userAdjuster.adjust(user, installFolder);
@@ -1053,7 +1061,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

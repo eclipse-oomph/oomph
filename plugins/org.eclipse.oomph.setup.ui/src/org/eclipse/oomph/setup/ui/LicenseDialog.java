@@ -37,6 +37,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Eike Stepper
+ */
 public class LicenseDialog extends AbstractConfirmDialog
 {
   private static final String LIST_WEIGHT = "ListSashWeight"; //$NON-NLS-1$
