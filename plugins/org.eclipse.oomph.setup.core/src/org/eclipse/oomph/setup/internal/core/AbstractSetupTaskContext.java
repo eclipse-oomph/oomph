@@ -194,8 +194,8 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       return null;
     }
 
-    String lastSegment = getTrigger() == Trigger.BOOTSTRAP ? getOS().getEclipseDir() : SetupContext.PRODUCT_LOCATION.lastSegment();
-    return new File(installationLocation, lastSegment);
+    // String lastSegment = getTrigger() == Trigger.BOOTSTRAP ? getOS().getEclipseDir() : SetupContext.PRODUCT_LOCATION.lastSegment();
+    return new File(installationLocation, getOS().getEclipseDir());
   }
 
   public File getProductConfigurationLocation()
