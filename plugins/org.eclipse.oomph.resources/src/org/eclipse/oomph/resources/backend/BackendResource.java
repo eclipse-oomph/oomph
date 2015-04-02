@@ -59,7 +59,7 @@ public abstract class BackendResource
 
   public final String getName()
   {
-    return StringUtil.safe(systemRelativeURI.lastSegment());
+    return URI.decode(StringUtil.safe(systemRelativeURI.lastSegment()));
   }
 
   public final BackendContainer getParent() throws BackendException
@@ -125,7 +125,7 @@ public abstract class BackendResource
 
   public final String getSystemRelativePath()
   {
-    return systemRelativeURI.toString();
+    return systemRelativeURI.toFileString();
   }
 
   public final URI getRelativeURI(BackendContainer base)
@@ -145,7 +145,7 @@ public abstract class BackendResource
     URI relativeURI = getRelativeURI(base);
     if (relativeURI != null)
     {
-      return relativeURI.toString();
+      return relativeURI.toFileString();
     }
 
     return null;

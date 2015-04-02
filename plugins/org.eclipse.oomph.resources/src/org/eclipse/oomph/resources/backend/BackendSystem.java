@@ -149,7 +149,7 @@ public abstract class BackendSystem extends BackendContainer
 
       Object delegateMember = delegateMembers[i];
       String name = getDelegateName(delegateMember);
-      URI systemRelativeURI = backendContainer.getSystemRelativeURI().appendSegment(name);
+      URI systemRelativeURI = backendContainer.getSystemRelativeURI().appendSegment(URI.encodeSegment(name, false));
 
       result[i] = createMember(delegateMember, systemRelativeURI, false);
     }
