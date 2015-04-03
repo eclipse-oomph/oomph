@@ -13,6 +13,9 @@ package org.eclipse.oomph.setup.presentation.handlers;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.UIUtil;
 
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
+
 /**
  * @author Eike Stepper
  */
@@ -28,8 +31,18 @@ public class PerformHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    SetupWizard updater = new SetupWizard.Updater(manual);
-    updater.openDialog(UIUtil.getShell());
+    final SetupWizard updater = new SetupWizard.Updater(manual)
+    {
+      @Override
+      public void createPageControls(Composite pageContainer)
+      {
+        loadIndex();
+        super.createPageControls(pageContainer);
+      }
+    };
+
+    Shell shell = UIUtil.getShell();
+    updater.openDialog(shell);
   }
 
   /**

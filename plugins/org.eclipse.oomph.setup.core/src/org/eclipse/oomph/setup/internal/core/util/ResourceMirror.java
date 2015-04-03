@@ -42,6 +42,8 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
 
   private DelegatingResourceLocator resourceLocator;
 
+  private HashSet<URI> visited = new HashSet<URI>();
+
   public ResourceMirror()
   {
     this(SetupCoreUtil.createResourceSet());
@@ -128,7 +130,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
     synchronized (resourceSet)
     {
       Resource resource = resourceSet.getResource(uri, false);
-      if (resource != null && resource.isLoaded())
+      if (resource != null && resource.isLoaded() && !visited.add(uri))
       {
         return true;
       }
@@ -194,27 +196,30 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
     {
       Resource resource = getWorkPool().createResource(getKey());
 
-      try
+      if (!resource.isLoaded())
       {
-        resource.load(getWorkPool().resourceSet.getLoadOptions());
-      }
-      catch (IOException ex)
-      {
-        new ResourceSetImpl()
+        try
         {
-          @Override
-          public void handleDemandLoadException(Resource resource, IOException exception) throws RuntimeException
+          resource.load(getWorkPool().resourceSet.getLoadOptions());
+        }
+        catch (IOException ex)
+        {
+          new ResourceSetImpl()
           {
-            try
+            @Override
+            public void handleDemandLoadException(Resource resource, IOException exception) throws RuntimeException
             {
-              super.handleDemandLoadException(resource, exception);
+              try
+              {
+                super.handleDemandLoadException(resource, exception);
+              }
+              catch (RuntimeException ex)
+              {
+                // Ignore
+              }
             }
-            catch (RuntimeException ex)
-            {
-              // Ignore
-            }
-          }
-        }.handleDemandLoadException(resource, ex);
+          }.handleDemandLoadException(resource, ex);
+        }
       }
 
       visit(resource);

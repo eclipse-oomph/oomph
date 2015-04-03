@@ -227,15 +227,16 @@ public class ConfirmationPage extends SetupWizardPage
     {
       initNeededSetupTasks();
 
+      SetupTaskPerformer performer = getPerformer();
       viewer.setInput(INPUT);
       viewer.setSubtreeChecked(ROOT_ELEMENT, true);
-      someTaskChecked = getPerformer().getTriggeredSetupTasks().size() > 0;
+      someTaskChecked = performer.getTriggeredSetupTasks().size() > 0;
 
       checkOverwrite();
 
       if (switchWorkspaceButton != null)
       {
-        newWorkspaceLocation = getPerformer().getWorkspaceLocation();
+        newWorkspaceLocation = performer.getWorkspaceLocation();
         URI currentWorkspaceLocationURI = CommonPlugin.resolve(URI.createURI(Platform.getInstanceLocation().getURL().toString()));
         if (currentWorkspaceLocationURI.isFile())
         {
@@ -248,7 +249,7 @@ public class ConfirmationPage extends SetupWizardPage
 
       validate();
 
-      if (getTrigger() == Trigger.STARTUP)
+      if (getTrigger() == Trigger.STARTUP || performer.isSkipConfirmation())
       {
         advanceToNextPage();
       }

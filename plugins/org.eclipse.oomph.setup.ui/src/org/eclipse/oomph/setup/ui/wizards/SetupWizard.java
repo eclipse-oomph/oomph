@@ -640,6 +640,10 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
             else
             {
               final Shell shell = wizard.getShell();
+
+              // We will be testing if any remote resources have changed.
+              reloading = true;
+
               new Thread()
               {
                 @Override
@@ -692,9 +696,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                   // If there are resources to consider...
                   if (!resourceURIs.isEmpty())
                   {
-                    // We are testing if any remote resources have changed.
-                    reloading = true;
-
                     // Remember which resource actually need updating based on detected remote changes by the ETag mirror.
                     final Set<Resource> updatedResources = new HashSet<Resource>();
                     new ECFURIHandlerImpl.ETagMirror()
