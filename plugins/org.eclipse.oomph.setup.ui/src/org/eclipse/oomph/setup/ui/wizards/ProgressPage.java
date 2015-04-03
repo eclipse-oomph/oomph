@@ -623,7 +623,73 @@ public class ProgressPage extends SetupWizardPage
               }
               catch (Throwable ex)
               {
-                SetupUIPlugin.INSTANCE.log(ex);
+                final IStatus status = SetupUIPlugin.INSTANCE.getStatus(ex);
+                SetupUIPlugin.INSTANCE.log(new IStatus()
+                {
+                  public IStatus[] getChildren()
+                  {
+                    return status.getChildren();
+                  }
+
+                  public int getCode()
+                  {
+                    return status.getCode();
+                  }
+
+                  public Throwable getException()
+                  {
+                    return status.getException();
+                  }
+
+                  public String getMessage()
+                  {
+                    return status.getMessage();
+                  }
+
+                  public String getPlugin()
+                  {
+                    return status.getPlugin();
+                  }
+
+                  public int getSeverity()
+                  {
+                    return IStatus.WARNING;
+                  }
+
+                  public boolean isMultiStatus()
+                  {
+                    return status.isMultiStatus();
+                  }
+
+                  public boolean isOK()
+                  {
+                    return false;
+                  }
+
+                  public boolean matches(int severityMask)
+                  {
+                    return (severityMask & IStatus.WARNING) != 0;
+                  }
+
+                  @Override
+                  public String toString()
+                  {
+                    StringBuilder result = new StringBuilder();
+                    result.append("Status WARNING");
+                    result.append(": ");
+                    result.append(getPlugin());
+                    result.append(" code=");
+                    result.append(getCode());
+                    result.append(' ');
+                    result.append(getMessage());
+                    result.append(' ');
+                    result.append(getException());
+                    result.append(" children=[");
+                    result.append(status);
+                    result.append("]");
+                    return result.toString();
+                  }
+                });
                 progressLog.log(ex);
               }
               finally
