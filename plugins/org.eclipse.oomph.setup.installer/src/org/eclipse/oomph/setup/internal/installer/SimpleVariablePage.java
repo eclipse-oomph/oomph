@@ -23,6 +23,7 @@ import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
@@ -38,6 +39,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
+import org.eclipse.oomph.setup.ui.LicensePrePrompter;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
@@ -857,13 +859,18 @@ public class SimpleVariablePage extends SimpleInstallerPage
     Installation installation = setupContext.getInstallation();
     final User user = setupContext.getUser();
 
-//    UIUtil.syncExec(new Runnable()
-//    {
-//      public void run()
-//      {
-//        LicensePrePrompter.execute(getShell(), user);
-//      }
-//    });
+    UIUtil.syncExec(new Runnable()
+    {
+      public void run()
+      {
+        EList<LicenseInfo> licenses = LicensePrePrompter.execute(getShell(), user);
+        if (licenses != null)
+        {
+          user.getAcceptedLicenses().addAll(licenses);
+          BaseUtil.saveEObject(user);
+        }
+      }
+    });
 
     UserAdjuster userAdjuster = new UserAdjuster();
     userAdjuster.adjust(user, installFolder);

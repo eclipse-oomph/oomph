@@ -8,13 +8,16 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal.installer;
+package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.User;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.StringUtil;
+
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -28,16 +31,27 @@ import org.eclipse.swt.widgets.Shell;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LicensePrePrompter extends AbstractSetupDialog
 {
+  private static final String DEFAULT_LICENSE_UUID = "DEFAULT_LICENSE";
+
+  private static final String DEFAULT_LICENSE_NAME = "Eclipse Foundation Software User Agreement";
+
+  private static final Set<String> IMPLIED_LICENSE_UUIDS = Collections
+      .unmodifiableSet(new HashSet<String>(Arrays.asList("6a3d083ad2bd7d3a80ee293235f8c5b1", "abc76a6cc9d06e4684ff61ed74a972c")));
+
   private final String license;
 
   private Browser licenseBrowser;
 
   public LicensePrePrompter(Shell parentShell, String license)
   {
-    super(parentShell, "Eclipse Foundation Software User Agreement", 700, 700, SetupInstallerPlugin.INSTANCE, false);
+    super(parentShell, DEFAULT_LICENSE_NAME, 700, 700, SetupUIPlugin.INSTANCE, false);
     this.license = license;
   }
 
@@ -77,15 +91,45 @@ public class LicensePrePrompter extends AbstractSetupDialog
     createButton(parent, IDialogConstants.CANCEL_ID, "Decide Later", false);
   }
 
-  public static void execute(Shell shell, User user)
+  public static EList<LicenseInfo> execute(Shell shell, User user)
   {
+    Set<String> unacceptedLicenses = new HashSet<String>(IMPLIED_LICENSE_UUIDS);
+
+    for (LicenseInfo licenseInfo : user.getAcceptedLicenses())
+    {
+      String uuid = licenseInfo.getUUID();
+      if (DEFAULT_LICENSE_UUID.equals(uuid))
+      {
+        return null;
+      }
+
+      unacceptedLicenses.remove(uuid);
+    }
+
+    if (unacceptedLicenses.isEmpty())
+    {
+      return null;
+    }
+
     String license = readLicense();
     if (StringUtil.isEmpty(license))
     {
-      return;
+      return null;
     }
 
-    new LicensePrePrompter(shell, license).open();
+    EList<LicenseInfo> acceptedLicenses = new BasicEList<LicenseInfo>();
+    acceptedLicenses.add(new LicenseInfo(DEFAULT_LICENSE_UUID, "Marker to remember license pre-prompting"));
+
+    LicensePrePrompter prompter = new LicensePrePrompter(shell, license);
+    if (prompter.open() == LicensePrePrompter.OK)
+    {
+      for (String uuid : unacceptedLicenses)
+      {
+        acceptedLicenses.add(new LicenseInfo(uuid, DEFAULT_LICENSE_NAME));
+      }
+    }
+
+    return acceptedLicenses;
   }
 
   private static String readLicense()
@@ -112,7 +156,7 @@ public class LicensePrePrompter extends AbstractSetupDialog
     }
     catch (Exception ex)
     {
-      SetupInstallerPlugin.INSTANCE.log(ex);
+      SetupUIPlugin.INSTANCE.log(ex);
     }
     finally
     {

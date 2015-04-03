@@ -50,6 +50,11 @@ public final class LicenseInfo
       throw new IllegalArgumentException("uuid is null"); //$NON-NLS-1$
     }
 
+    if (uuid.indexOf(' ') != -1)
+    {
+      throw new IllegalArgumentException("uuid contains a space"); //$NON-NLS-1$
+    }
+
     this.uuid = uuid;
     this.name = name;
   }

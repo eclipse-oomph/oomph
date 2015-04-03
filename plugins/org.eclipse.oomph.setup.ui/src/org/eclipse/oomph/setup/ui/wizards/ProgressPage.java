@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.UnsignedPolicy;
@@ -30,6 +31,7 @@ import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.AbstractConfirmDialog;
 import org.eclipse.oomph.setup.ui.AbstractDialogConfirmer;
 import org.eclipse.oomph.setup.ui.LicenseDialog;
+import org.eclipse.oomph.setup.ui.LicensePrePrompter;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
@@ -44,6 +46,7 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
@@ -345,8 +348,8 @@ public class ProgressPage extends SetupWizardPage
     }
     else
     {
-      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks",
-          false, "restartIfNeeded");
+      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks", false,
+          "restartIfNeeded");
     }
 
     launchAutomatically = launchButton.getSelection();
@@ -446,9 +449,11 @@ public class ProgressPage extends SetupWizardPage
       }
 
       final SetupTaskPerformer performer = getPerformer();
+      User performerUser = performer.getUser();
+
       performer.setProgress(progressLog);
       performer.put(ILicense.class, LICENSE_CONFIRMER);
-      performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performer.getUser(), false));
+      performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performerUser, false));
 
       File renamed = null;
       if (getTrigger() == Trigger.BOOTSTRAP)
@@ -473,6 +478,15 @@ public class ProgressPage extends SetupWizardPage
 
             throw new IORuntimeException(ex);
           }
+        }
+
+        EList<LicenseInfo> licenses = LicensePrePrompter.execute(getShell(), performerUser);
+        if (licenses != null)
+        {
+          ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+          User user = SetupContext.createUserOnly(resourceSet).getUser();
+          user.getAcceptedLicenses().addAll(licenses);
+          BaseUtil.saveEObject(user);
         }
       }
 
@@ -811,8 +825,7 @@ public class ProgressPage extends SetupWizardPage
                     {
                       if (restart)
                       {
-                        setMessage(
-                            "Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
+                        setMessage("Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
                             IMessageProvider.WARNING);
                         setButtonState(IDialogConstants.CANCEL_ID, true);
 
@@ -827,8 +840,8 @@ public class ProgressPage extends SetupWizardPage
                           setButtonState(IDialogConstants.CANCEL_ID, false);
                         }
 
-                        shell.setData(PROGRESS_STATUS, new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(),
-                            "Task execution has successfully completed"));
+                        shell.setData(PROGRESS_STATUS,
+                            new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(), "Task execution has successfully completed"));
                       }
                     }
                     else
