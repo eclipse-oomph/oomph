@@ -190,15 +190,11 @@ public class ProductPage extends SetupWizardPage
       @Override
       public Object[] getElements(Object object)
       {
-        if (object != NO_PRODUCT)
-        {
-          return ((Product)object).getVersions().toArray();
-        }
-
-        return super.getElements(object);
+        return ((Product)object).getVersions().toArray();
       }
     });
 
+    versionComboViewer.setInput(NO_PRODUCT);
     Combo versionCombo = versionComboViewer.getCombo();
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     AccessUtil.setKey(versionCombo, "versionChoice");
@@ -593,14 +589,17 @@ public class ProductPage extends SetupWizardPage
 
     versionComboViewer.setInput(product);
 
-    ProductVersion version = getDefaultProductVersion(catalogSelector.getCatalogManager(), product);
-    if (version != null)
-    {
-      versionComboViewer.setSelection(new StructuredSelection(version));
-    }
-
     boolean productSelected = product != NO_PRODUCT;
     String error = productSelected ? null : "Select a product from the catalogs and choose the product version.";
+
+    if (productSelected)
+    {
+      ProductVersion version = getDefaultProductVersion(catalogSelector.getCatalogManager(), product);
+      if (version != null)
+      {
+        versionComboViewer.setSelection(new StructuredSelection(version));
+      }
+    }
 
     descriptionBrowser.setEnabled(productSelected);
     descriptionBrowser.setText(safe(productSelected ? getDescriptionHTML(product) : null));
@@ -824,6 +823,12 @@ public class ProductPage extends SetupWizardPage
     Product product = SetupFactory.eINSTANCE.createProduct();
     product.setName("<no product selected>");
     product.setLabel(product.getName());
+
+    ProductVersion version = SetupFactory.eINSTANCE.createProductVersion();
+    version.setName("<no product version selected");
+    version.setName(version.getName());
+
+    product.getVersions().add(version);
     return product;
   }
 
