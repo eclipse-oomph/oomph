@@ -340,6 +340,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
           // No tasks are needed, either. Nothing to do.
           return;
         }
+
+        performer.setSkipConfirmation(true);
       }
       catch (Throwable ex)
       {
