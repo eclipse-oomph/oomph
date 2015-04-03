@@ -50,6 +50,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import org.osgi.framework.BundleContext;
@@ -241,7 +242,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     });
   }
 
-  private static void performStartup(IWorkbench workbench, IProgressMonitor monitor)
+  private static void performStartup(final IWorkbench workbench, IProgressMonitor monitor)
   {
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
@@ -348,7 +349,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     }
 
     final SetupTaskPerformer finalPerfomer = performer;
-    UIUtil.syncExec(new Runnable()
+    UIUtil.asyncExec(new Runnable()
     {
       public void run()
       {
@@ -357,8 +358,14 @@ public final class SetupUIPlugin extends OomphUIPlugin
           resourceSet.getResources().add(finalPerfomer.getUser().eResource());
         }
 
+        IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
+        if (workbenchWindow == null)
+        {
+          workbenchWindow = workbench.getWorkbenchWindows()[0];
+        }
+
         SetupWizard updater = new SetupWizard.Updater(finalPerfomer);
-        updater.openDialog(UIUtil.getShell());
+        updater.openDialog(workbenchWindow.getShell());
       }
     });
   }
