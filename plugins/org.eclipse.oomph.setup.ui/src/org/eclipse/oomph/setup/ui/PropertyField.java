@@ -33,6 +33,8 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -597,6 +599,8 @@ public abstract class PropertyField
 
     private List<? extends VariableChoice> choices;
 
+    private FocusHandler focusHandler;
+
     public TextField()
     {
       this(null, false);
@@ -703,7 +707,25 @@ public abstract class PropertyField
     {
       if (text != null)
       {
-        text.setText(secret ? PreferencesUtil.decrypt(value) : value);
+        String actualValue = secret ? PreferencesUtil.decrypt(value) : value;
+        if (text.isFocusControl())
+        {
+          // If the controls has focus, the user is still actively changing it
+          // so we don't want to replace the empty string with the default value until the control loses focus.
+          if (focusHandler == null)
+          {
+            focusHandler = new FocusHandler();
+            text.addFocusListener(focusHandler);
+          }
+
+          // Remember which value we want to set when the control loses focus.
+          // This value will be set only if the control's text is still empty.
+          focusHandler.setValue(actualValue);
+        }
+        else
+        {
+          text.setText(actualValue);
+        }
       }
       else
       {
@@ -911,6 +933,30 @@ public abstract class PropertyField
       Combo control = comboViewer.getCombo();
       control.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
       return control;
+    }
+
+    private class FocusHandler extends FocusAdapter
+    {
+      private String value;
+
+      @Override
+      public void focusLost(FocusEvent e)
+      {
+        // Forget about and remove this handler.
+        focusHandler = null;
+        text.removeFocusListener(this);
+
+        // If the text is still empty, transfer the value to it.
+        if (text.getText().length() == 0)
+        {
+          text.setText(value);
+        }
+      }
+
+      public void setValue(String value)
+      {
+        this.value = value;
+      }
     }
   }
 
