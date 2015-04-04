@@ -15,6 +15,7 @@ import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
@@ -24,6 +25,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -54,7 +57,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
   }
 
   @Override
-  protected Control createControl(Composite parent)
+  protected Control createControl(final Composite parent)
   {
     final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
 
@@ -83,6 +86,19 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
         }
       }
     });
+
+    if (OS.INSTANCE.isLinux())
+    {
+      toolBar.addControlListener(new ControlAdapter()
+      {
+        @Override
+        public void controlResized(ControlEvent e)
+        {
+          parent.pack();
+          toolBar.removeControlListener(this);
+        }
+      });
+    }
 
     // Create an animator to indicate the a setup is being performed, and to provide feedback once it's done.
     final ButtonAnimator buttonAnimator = new ButtonAnimator(SetupEditorPlugin.INSTANCE, toolItem, "progress", 7, true)
