@@ -2447,16 +2447,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   protected void createVariableAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(getInstallationTask_Location(), source, new String[] { "type", "STRING", "label", "Installation location rule", "description",
-        "The rule for the absolute folder location where the product is installed", "storageURI", null, "explicitType", "FOLDER", "explicitLabel",
-        "Installation location", "explicitDescription", "The absolute folder location where the product is installed" });
+    addAnnotation(getInstallationTask_Location(), source, new String[] { "filter", "canonical", "type", "STRING", "label", "Installation location rule",
+        "description", "The rule for the absolute folder location where the product is installed", "storageURI", null, "explicitType", "FOLDER",
+        "explicitLabel", "Installation location", "explicitDescription", "The absolute folder location where the product is installed" });
     addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${install.root/}${installation.id}", "label",
         "Installed in a uniquely-named folder within the root install folder" });
     addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${@id.location}", "label",
         "Installed in the specified absolute folder location" });
-    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "type", "STRING", "label", "Workspace location rule", "description",
-        "The rule for the absolute folder location where the workspace is located", "storageURI", null, "explicitType", "FOLDER", "explicitLabel",
-        "Workspace location", "explicitDescription", "The absolute folder location where the workspace is located" });
+    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "filter", "canonical", "type", "STRING", "label", "Workspace location rule",
+        "description", "The rule for the absolute folder location where the workspace is located", "storageURI", null, "explicitType", "FOLDER",
+        "explicitLabel", "Workspace location", "explicitDescription", "The absolute folder location where the workspace is located" });
     addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${workspace.container.root/}${workspace.id}",
         "label", "Located in a uniquely-named folder within the root workspace-container folder" });
     addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${installation.location/ws}", "label",

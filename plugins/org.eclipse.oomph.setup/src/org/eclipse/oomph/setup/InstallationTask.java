@@ -41,7 +41,7 @@ public interface InstallationTask extends SetupTask
    * @see #setLocation(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getInstallationTask_Location()
    * @model default="" required="true"
-   *        annotation="http://www.eclipse.org/oomph/setup/Variable type='STRING' label='Installation location rule' description='The rule for the absolute folder location where the product is installed' storageURI='null' explicitType='FOLDER' explicitLabel='Installation location' explicitDescription='The absolute folder location where the product is installed'"
+   *        annotation="http://www.eclipse.org/oomph/setup/Variable filter='canonical' type='STRING' label='Installation location rule' description='The rule for the absolute folder location where the product is installed' storageURI='null' explicitType='FOLDER' explicitLabel='Installation location' explicitDescription='The absolute folder location where the product is installed'"
    *        annotation="http://www.eclipse.org/oomph/setup/RuleVariable name='install.root' type='FOLDER' label='Root install folder' description='The root install folder where all the products are installed' storageURI='scope://'"
    *        annotation="http://www.eclipse.org/oomph/setup/RuleVariable name='installation.id' type='STRING' label='Installation folder name' description='The name of the folder within the root install folder where the product is installed'"
    * @generated

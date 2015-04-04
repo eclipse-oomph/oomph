@@ -568,12 +568,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               {
                 String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute);
                 String value = (String)setupTask.eGet(eAttribute);
-                String variableReference = getVariableReference(variableName);
+                EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
+                String variableReference = getVariableReference(variableName, variableAnnotation);
                 if (explicitKeys.containsKey(variableName))
                 {
                   if (StringUtil.isEmpty(value) || setupTask instanceof WorkspaceTask)
                   {
-                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                     if (variableAnnotation != null)
                     {
                       setupTask.eSet(eAttribute, variableReference);
@@ -595,7 +595,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
                   if (StringUtil.isEmpty(value))
                   {
-                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                     if (variableAnnotation != null)
                     {
                       ruleBasedAttributes.put(variable, eAttribute);
@@ -605,7 +604,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   }
                   else
                   {
-                    EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                     if (variableAnnotation != null)
                     {
                       populateImpliedVariable(setupTask, null, variableAnnotation, variable);
@@ -637,22 +635,25 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   }
 
                   // If the variable is a self reference.
-                  EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
-                  if (variableAnnotation != null && variableReference.equals(variable.getValue()))
+                  if (variableAnnotation != null)
                   {
-                    EMap<String, String> details = variableAnnotation.getDetails();
-                    VariableTask explicitVariable = SetupFactory.eINSTANCE.createVariableTask();
-                    String explicitVariableName = variableName + ".explicit";
-                    explicitVariable.setName(explicitVariableName);
-                    explicitVariable.setStorageURI(null);
-                    explicitVariable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_EXPLICIT_TYPE)));
-                    explicitVariable.setLabel(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_LABEL)));
-                    explicitVariable.setDescription(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_DESCRIPTION)));
-                    it.add(explicitVariable);
-                    explicitKeys.put(explicitVariableName, explicitVariable);
-                    annotateRuleVariable(explicitVariable, variable);
+                    String variableValue = variable.getValue();
+                    if (variableReference.equals(variableValue) || getVariableReference(variableName, null).equals(variableValue))
+                    {
+                      EMap<String, String> details = variableAnnotation.getDetails();
+                      VariableTask explicitVariable = SetupFactory.eINSTANCE.createVariableTask();
+                      String explicitVariableName = variableName + ".explicit";
+                      explicitVariable.setName(explicitVariableName);
+                      explicitVariable.setStorageURI(null);
+                      explicitVariable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_EXPLICIT_TYPE)));
+                      explicitVariable.setLabel(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_LABEL)));
+                      explicitVariable.setDescription(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_EXPLICIT_DESCRIPTION)));
+                      it.add(explicitVariable);
+                      explicitKeys.put(explicitVariableName, explicitVariable);
+                      annotateRuleVariable(explicitVariable, variable);
 
-                    variable.setValue(getVariableReference(explicitVariableName));
+                      variable.setValue(getVariableReference(explicitVariableName, variableAnnotation));
+                    }
                   }
                 }
               }
@@ -837,7 +838,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 {
                   if (!StringUtil.isEmpty(variableTask.getValue()))
                   {
-                    setupTask.eSet(eStructuralFeature, getVariableReference(variableTask.getName()));
+                    setupTask.eSet(eStructuralFeature, getVariableReference(variableTask.getName(), null));
                   }
                 }
                 else
@@ -945,7 +946,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     variableTask.setLabel(explicitLabel);
                     variableTask.setDescription(explicitDescription);
                   }
-                  setupTask.eSet(eStructuralFeature, getVariableReference(variableTask.getName()));
+                  setupTask.eSet(eStructuralFeature, getVariableReference(variableTask.getName(), null));
                 }
               }
             }
@@ -3649,7 +3650,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               variable.setValue(repositoryLocation);
               enablementTasks.add(0, variable);
 
-              repositoryLocation = getVariableReference(variableName);
+              repositoryLocation = getVariableReference(variableName, null);
             }
           }
         }
@@ -3708,8 +3709,17 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return enablementTasks;
   }
 
-  private static String getVariableReference(String variableName)
+  private static String getVariableReference(String variableName, EAnnotation variableAnnotation)
   {
+    if (variableAnnotation != null)
+    {
+      String filter = variableAnnotation.getDetails().get(EAnnotationConstants.KEY_FILTER);
+      if (filter != null)
+      {
+        return "${" + variableName + "|" + filter + "}";
+      }
+    }
+
     return "${" + variableName + "}";
   }
 

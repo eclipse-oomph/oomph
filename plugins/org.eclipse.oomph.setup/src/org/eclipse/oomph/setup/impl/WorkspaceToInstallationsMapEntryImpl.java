@@ -32,7 +32,6 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Workspace To Installations Map Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

@@ -237,6 +237,7 @@
           <details key="value" value="${@id.location}"/>
           <details key="label" value="Installed in the specified absolute folder location"/>
         </eAnnotations>
+        <details key="filter" value="canonical"/>
         <details key="type" value="STRING"/>
         <details key="label" value="Installation location rule"/>
         <details key="description" value="The rule for the absolute folder location where the product is installed"/>
@@ -284,6 +285,7 @@
           <details key="value" value="${@id.location}"/>
           <details key="label" value="Located in the specified absolute folder location"/>
         </eAnnotations>
+        <details key="filter" value="canonical"/>
         <details key="type" value="STRING"/>
         <details key="label" value="Workspace location rule"/>
         <details key="description" value="The rule for the absolute folder location where the workspace is located"/>

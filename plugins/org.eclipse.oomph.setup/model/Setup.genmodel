@@ -10,6 +10,10 @@
   <genPackages prefix="Setup" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       multipleEditorPages="false" extensibleProviderFactory="true" childCreationExtenders="true"
       ecorePackage="Setup.ecore#/">
+    <genAnnotations source="http://www.eclipse.org/oomph/Doc">
+      <details key="project" value="/org.eclipse.oomph.setup.doc/src"/>
+      <details key="package" value="org.eclipse.oomph.setup.doc.reference.model"/>
+    </genAnnotations>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//ScopeType">
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/None"/>
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/ProductCatalog"/>
@@ -132,6 +136,9 @@
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//Stream/project"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//User">
+      <genAnnotations source="http://www.eclipse.org/oomph/Doc">
+        <details key="article" value="a"/>
+      </genAnnotations>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//User/attributeRules"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/acceptedLicenses">
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
@@ -190,6 +197,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//RedirectionTask/targetURL"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//EclipseIniTask" labelFeature="#//setup/EclipseIniTask/option">
+      <genAnnotations source="http://www.eclipse.org/oomph/Doc">
+        <details key="name" value="Eclipse ini task"/>
+      </genAnnotations>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/option"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/vm"/>

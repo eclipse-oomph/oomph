@@ -35,7 +35,6 @@ import java.util.Date;
  * An implementation of the model object '<em><b>Preferences</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

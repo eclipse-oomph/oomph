@@ -28,7 +28,6 @@ import org.eclipse.core.variables.VariablesPlugin;
  * An implementation of the model object '<em><b>String Substitution Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

@@ -25,7 +25,6 @@ import java.io.File;
  * An implementation of the model object '<em><b>Workspace Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

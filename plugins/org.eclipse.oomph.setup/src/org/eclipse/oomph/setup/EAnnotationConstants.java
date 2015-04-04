@@ -41,6 +41,8 @@ public final class EAnnotationConstants
 
   public static final String ANNOTATION_RULE_VARIABLE = "http://www.eclipse.org/oomph/setup/RuleVariable";
 
+  public static final String KEY_FILTER = "filter";
+
   public static final String KEY_TYPE = "type";
 
   public static final String KEY_NAME = "name";

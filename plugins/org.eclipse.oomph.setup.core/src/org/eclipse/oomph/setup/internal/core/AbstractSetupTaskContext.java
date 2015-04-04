@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.core.runtime.OperationCanceledException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -341,6 +342,28 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       public String filter(String value)
       {
         return URI.encodeSegment(value, false).replace("@", "%40");
+      }
+    });
+
+    registerFilter("canonical", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        // Don't canonicalize the value if it contains a unexpanded variable reference.
+        if (STRING_EXPANSION_PATTERN.matcher(value).find())
+        {
+          return value;
+        }
+
+        File file = new File(value).getAbsoluteFile();
+        try
+        {
+          return file.getCanonicalPath();
+        }
+        catch (IOException ex)
+        {
+          return file.toString();
+        }
       }
     });
 

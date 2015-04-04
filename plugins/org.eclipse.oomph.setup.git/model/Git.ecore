@@ -47,6 +47,7 @@
           <details key="value" value="${@id.location}"/>
           <details key="label" value="Located in the specified absolute folder location"/>
         </eAnnotations>
+        <details key="filter" value="canonical"/>
         <details key="type" value="STRING"/>
         <details key="label" value="Git clone location rule"/>
         <details key="description" value="The rule for the absolute folder location where the Git clone is located"/>
