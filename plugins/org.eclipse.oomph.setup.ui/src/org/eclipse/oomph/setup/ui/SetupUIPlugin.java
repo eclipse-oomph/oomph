@@ -244,6 +244,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void performStartup(final IWorkbench workbench, IProgressMonitor monitor)
   {
+    monitor.beginTask("", 5);
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
     Set<URI> neededRestartTasks = new HashSet<URI>();
@@ -253,6 +254,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
+        monitor.setTaskName("Loading restart tasks " + restartingFile);
         Resource resource = SetupCoreUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
         Annotation annotation = (Annotation)EcoreUtil.getObjectByType(resource.getContents(), BasePackage.Literals.ANNOTATION);
@@ -289,6 +291,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Ignore
     }
 
+    monitor.worked(1);
+
     // Disabled for bug 459486:
     // if (!QUESTIONNAIRE_SKIP)
     // {
@@ -299,6 +303,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     SetupTaskPerformer performer = null;
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
 
+    monitor.setTaskName("Creating a setup task performer");
     try
     {
       performer = SetupTaskPerformer.createForIDE(resourceSet, SetupPrompter.CANCEL, trigger);
@@ -317,8 +322,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
       SetupContext.setSelf(SetupContext.createSelf(resourceSet));
     }
 
+    monitor.worked(1);
+
     if (performer != null)
     {
+      monitor.setTaskName("Initializing the setup task performer");
       try
       {
         // At this point we know that no prompt was needed.
@@ -350,6 +358,9 @@ public final class SetupUIPlugin extends OomphUIPlugin
       }
     }
 
+    monitor.worked(1);
+    monitor.setTaskName("Launching the setup wizard");
+
     final SetupTaskPerformer finalPerfomer = performer;
     UIUtil.asyncExec(new Runnable()
     {
@@ -370,6 +381,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
         updater.openDialog(workbenchWindow.getShell());
       }
     });
+
+    monitor.worked(1);
   }
 
   /**

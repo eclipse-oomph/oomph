@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.UnsignedPolicy;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
@@ -46,6 +47,7 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -733,7 +735,19 @@ public class ProgressPage extends SetupWizardPage
                       {
                         public void run()
                         {
-                          SetupUIPlugin.restart(trigger, getPerformer().getNeededTasks());
+                          // Also include any triggered task whose implementation is currently unavailable.
+                          // Such tasks will not be needed by are likely needed after the restart when their implementations have been installed.
+                          SetupTaskPerformer performer = getPerformer();
+                          EList<SetupTask> remainingTasks = new BasicEList<SetupTask>(performer.getNeededTasks());
+                          for (SetupTask setupTask : performer.getTriggeredSetupTasks())
+                          {
+                            if (setupTask instanceof DynamicSetupTaskImpl)
+                            {
+                              remainingTasks.add(setupTask);
+                            }
+                          }
+
+                          SetupUIPlugin.restart(trigger, remainingTasks);
                         }
                       });
                     }
