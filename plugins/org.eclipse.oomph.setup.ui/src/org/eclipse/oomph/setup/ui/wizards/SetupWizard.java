@@ -714,7 +714,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                       {
                         public void run()
                         {
-                          // If any of hte updated resources change a model, then reload the entire index.
+                          // If any of the updated resources change a model, then reload the entire index.
                           for (Resource resource : updatedResources)
                           {
                             if (resource.getContents().get(0) instanceof EPackage)
@@ -735,6 +735,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                       reloading = false;
                       reloaded = true;
                     }
+                  }
+                  else
+                  {
+                    // Otherwise we're done reloading.
+                    reloading = false;
+                    reloaded = true;
                   }
                 }
               }.start();
