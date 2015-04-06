@@ -540,17 +540,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
     int i = 0;
     int selection = 0;
 
-    for (ProductVersion productVersion : product.getVersions())
+    for (ProductVersion productVersion : ProductPage.getValidProductVersions(product))
     {
       String label = productVersion.getLabel();
       if (label == null)
       {
         label = productVersion.getName();
-      }
-
-      if (OS.INSTANCE.isMac() && !label.contains("Mars"))
-      {
-        continue;
       }
 
       if (defaultProductVersion == null)
@@ -1073,7 +1068,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

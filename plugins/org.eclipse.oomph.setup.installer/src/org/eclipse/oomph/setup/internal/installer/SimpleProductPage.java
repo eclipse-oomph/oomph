@@ -227,7 +227,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         ProductCatalog productCatalog = (ProductCatalog)scope;
         for (Product product : productCatalog.getProducts())
         {
-          if (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter))
+          if (!ProductPage.getValidProductVersions(product).isEmpty()
+              && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter)))
           {
             renderProduct(builder, product, zebra, downloadImageURI);
             zebra = !zebra;

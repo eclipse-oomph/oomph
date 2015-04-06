@@ -53,6 +53,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -95,6 +96,7 @@ import org.eclipse.ui.dialogs.PatternFilter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -190,7 +192,7 @@ public class ProductPage extends SetupWizardPage
       @Override
       public Object[] getElements(Object object)
       {
-        return ((Product)object).getVersions().toArray();
+        return getValidProductVersions((Product)object).toArray();
       }
     });
 
@@ -599,6 +601,10 @@ public class ProductPage extends SetupWizardPage
       {
         versionComboViewer.setSelection(new StructuredSelection(version));
       }
+      else
+      {
+        error = "The selected product has no versions that can be installed on this platform.";
+      }
     }
 
     descriptionBrowser.setEnabled(productSelected);
@@ -766,12 +772,13 @@ public class ProductPage extends SetupWizardPage
   public static ProductVersion getDefaultProductVersion(CatalogManager catalogManager, Product product)
   {
     ProductVersion version = catalogManager.getSelection().getDefaultProductVersions().get(product);
-    if (version == null)
+    List<ProductVersion> validProductVersions = getValidProductVersions(product);
+    if (!validProductVersions.contains(version))
     {
       ProductVersion firstReleasedProductVersion = null;
       ProductVersion latestProductVersion = null;
       ProductVersion latestReleasedProductVersion = null;
-      for (ProductVersion productVersion : product.getVersions())
+      for (ProductVersion productVersion : validProductVersions)
       {
         String versionName = productVersion.getName();
         if ("latest.released".equals(versionName))
@@ -840,6 +847,28 @@ public class ProductPage extends SetupWizardPage
     }
 
     return string;
+  }
+
+  public static List<ProductVersion> getValidProductVersions(Product product)
+  {
+    EList<ProductVersion> versions = product.getVersions();
+    if (OS.INSTANCE.isMac())
+    {
+      // Filter out the older releases because the latest p2, with it's layout changes for the Mac, can't install a correct image from older repositories.
+      List<ProductVersion> filteredProductVersions = new ArrayList<ProductVersion>();
+      for (ProductVersion version : versions)
+      {
+        String label = version.getLabel();
+        if (label == null || !label.contains("Luna") && !label.contains("Kepler") && !label.contains("Juno"))
+        {
+          filteredProductVersions.add(version);
+        }
+      }
+
+      return filteredProductVersions;
+    }
+
+    return versions;
   }
 
   public static String getProductImageURI(Product product)
