@@ -923,7 +923,8 @@ public class ProgressPage extends SetupWizardPage
 
       String eclipseDir = os.getEclipseDir();
       String eclipseExecutable = os.getEclipseExecutable();
-      String eclipsePath = new File(performer.getInstallationLocation(), eclipseDir + "/" + eclipseExecutable).getAbsolutePath();
+      File eclipseLocation = new File(performer.getInstallationLocation(), eclipseDir);
+      String eclipsePath = new File(eclipseLocation, eclipseExecutable).getAbsolutePath();
 
       List<String> command = new ArrayList<String>();
       command.add(eclipsePath);
@@ -936,6 +937,9 @@ public class ProgressPage extends SetupWizardPage
         command.add("-data");
         command.add(ws.toString());
       }
+
+      command.add("-vmargs");
+      command.add("-Duser.dir=" + eclipseLocation);
 
       ProcessBuilder builder = new ProcessBuilder(command);
       Process process = builder.start();
