@@ -65,6 +65,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private Resolution updateResolution;
 
+  private ToolButton advancedButton;
+
   public SimpleInstallerDialog(Display display, final Installer installer)
   {
     super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.BORDER, 800, 600, MARGIN_WIDTH, MARGIN_HEIGHT);
@@ -109,7 +111,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
-    ToolButton advancedButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/advanced.png"), true);
+    advancedButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/advanced.png"), true);
     advancedButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
     advancedButton.setToolTipText("Switch to advanced mode");
     advancedButton.addSelectionListener(new SelectionAdapter()
@@ -164,6 +166,19 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   public Installer getInstaller()
   {
     return installer;
+  }
+
+  public void setButtonsEnabled(boolean enabled)
+  {
+    if (updateButton != null)
+    {
+      updateButton.setEnabled(enabled);
+    }
+
+    if (advancedButton != null)
+    {
+      advancedButton.setEnabled(enabled);
+    }
   }
 
   public boolean refreshJREs()

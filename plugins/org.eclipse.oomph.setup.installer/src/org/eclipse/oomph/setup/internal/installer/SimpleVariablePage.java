@@ -437,6 +437,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
         else
         {
+          dialog.setButtonsEnabled(false);
           setEnabled(false);
 
           installButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/download_small.png"));
@@ -911,7 +912,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
       installThread.interrupt();
     }
 
+    dialog.setButtonsEnabled(true);
     setEnabled(true);
+
     progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
     progressLabel.setText("Installation canceled");
 
@@ -970,6 +973,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     cancelButton.setVisible(false);
     installStack.setTopControl(installButton);
+
+    dialog.setButtonsEnabled(true);
   }
 
   private void launchProduct()
