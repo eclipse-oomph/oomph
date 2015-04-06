@@ -78,8 +78,7 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
   protected void addIncludedWorkingSetsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InclusionPredicate_includedWorkingSets_feature"), getString("_UI_PropertyDescriptor_description",
-            "_UI_InclusionPredicate_includedWorkingSets_feature", "_UI_InclusionPredicate_type"),
+        getString("_UI_InclusionPredicate_includedWorkingSets_feature"), getString("_UI_InclusionPredicate_includedWorkingSets_description"),
         WorkingSetsPackage.Literals.INCLUSION_PREDICATE__INCLUDED_WORKING_SETS, true, false, true, null, null, null)
     {
       @Override

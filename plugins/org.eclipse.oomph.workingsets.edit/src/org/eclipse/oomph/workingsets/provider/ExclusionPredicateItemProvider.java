@@ -135,8 +135,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
   protected void addExcludedWorkingSetsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ExclusionPredicate_excludedWorkingSets_feature"), getString("_UI_PropertyDescriptor_description",
-            "_UI_ExclusionPredicate_excludedWorkingSets_feature", "_UI_ExclusionPredicate_type"),
+        getString("_UI_ExclusionPredicate_excludedWorkingSets_feature"), getString("_UI_ExclusionPredicate_excludedWorkingSets_description"),
         WorkingSetsPackage.Literals.EXCLUSION_PREDICATE__EXCLUDED_WORKING_SETS, true, false, true, null, null, null)
     {
       @Override

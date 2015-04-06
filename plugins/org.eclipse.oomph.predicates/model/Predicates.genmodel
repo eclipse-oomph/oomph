@@ -17,16 +17,20 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//NamePredicate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//NamePredicate/pattern"/>
+      <genFeatures createChild="false" propertyDescription="A regular expression used to match the name of the resource"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//NamePredicate/pattern"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//CommentPredicate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//CommentPredicate/pattern"/>
+      <genFeatures createChild="false" propertyDescription="A reguar expression used to match the comment of the resource's project"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//CommentPredicate/pattern"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//LocationPredicate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//LocationPredicate/pattern"/>
+      <genFeatures createChild="false" propertyDescription="A regular expression used to match the location of the resource"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//LocationPredicate/pattern"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//RepositoryPredicate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//RepositoryPredicate/project"/>
+      <genFeatures createChild="false" propertyDescription="A project used to determine whether a resource is in the same repository as that project"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//RepositoryPredicate/project"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//AndPredicate">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Predicates.ecore#//AndPredicate/operands"/>
@@ -38,14 +42,18 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Predicates.ecore#//NotPredicate/operand"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//NaturePredicate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//NaturePredicate/nature"/>
+      <genFeatures createChild="false" propertyDescription="A nature ID used to determine if a resource's project has that nature"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//NaturePredicate/nature"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//BuilderPredicate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//BuilderPredicate/builder"/>
+      <genFeatures createChild="false" propertyDescription="A builder ID used to determine if a resource's project has that builder"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//BuilderPredicate/builder"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//FilePredicate">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//FilePredicate/filePattern"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//FilePredicate/contentPattern"/>
+      <genFeatures createChild="false" propertyDescription="An Ant-style file pattern (*, **, ?) used to match paths of the resource's children"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//FilePredicate/filePattern"/>
+      <genFeatures createChild="false" propertyDescription="A regular expression used to match the contents of at least one of files filtered by the file pattern"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//FilePredicate/contentPattern"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

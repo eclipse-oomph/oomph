@@ -70,8 +70,7 @@ public class FilePredicateItemProvider extends PredicateItemProvider
   protected void addFilePatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_FilePredicate_filePattern_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_FilePredicate_filePattern_feature", "_UI_FilePredicate_type"),
+        getString("_UI_FilePredicate_filePattern_feature"), getString("_UI_FilePredicate_filePattern_description"),
         PredicatesPackage.Literals.FILE_PREDICATE__FILE_PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -84,8 +83,7 @@ public class FilePredicateItemProvider extends PredicateItemProvider
   protected void addContentPatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_FilePredicate_contentPattern_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_FilePredicate_contentPattern_feature", "_UI_FilePredicate_type"),
+        getString("_UI_FilePredicate_contentPattern_feature"), getString("_UI_FilePredicate_contentPattern_description"),
         PredicatesPackage.Literals.FILE_PREDICATE__CONTENT_PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 

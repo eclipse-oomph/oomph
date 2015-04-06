@@ -12,9 +12,11 @@
       multipleEditorPages="false" childCreationExtenders="true" ecorePackage="WorkingSets.ecore#/"
       publicationLocation="/setups/models/WorkingSets.ecore">
     <genClasses ecoreClass="WorkingSets.ecore#//WorkingSet">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/name"/>
+      <genFeatures createChild="false" propertyDescription="The name of the working set"
+          ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//WorkingSet/predicates"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/iD"/>
+      <genFeatures createChild="false" propertyDescription="The ID of the working set"
+          ecoreFeature="ecore:EAttribute WorkingSets.ecore#//WorkingSet/iD"/>
       <genOperations ecoreOperation="WorkingSets.ecore#//WorkingSet/matches">
         <genParameters ecoreParameter="WorkingSets.ecore#//WorkingSet/matches/resource"/>
       </genOperations>
@@ -26,10 +28,12 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="WorkingSets.ecore#//InclusionPredicate">
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//InclusionPredicate/includedWorkingSets"/>
+      <genFeatures createChild="false" propertyDescription="Other working sets used to match any resource matched by at least one of those working set's predicate"
+          propertySortChoices="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//InclusionPredicate/includedWorkingSets"/>
     </genClasses>
     <genClasses ecoreClass="WorkingSets.ecore#//ExclusionPredicate">
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//ExclusionPredicate/excludedWorkingSets"/>
+      <genFeatures createChild="false" propertyDescription="Other working sets used to any match any resource not matched by any of those working sets' predicate"
+          propertySortChoices="true" ecoreFeature="ecore:EReference WorkingSets.ecore#//ExclusionPredicate/excludedWorkingSets"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

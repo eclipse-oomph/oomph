@@ -81,9 +81,8 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
   protected void addProjectPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_RepositoryPredicate_project_feature"), getString("_UI_PropertyDescriptor_description", "_UI_RepositoryPredicate_project_feature",
-            "_UI_RepositoryPredicate_type"), PredicatesPackage.Literals.REPOSITORY_PREDICATE__PROJECT, true, false, false,
-        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+        getString("_UI_RepositoryPredicate_project_feature"), getString("_UI_RepositoryPredicate_project_description"),
+        PredicatesPackage.Literals.REPOSITORY_PREDICATE__PROJECT, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
       public Collection<?> getChoiceOfValues(Object object)

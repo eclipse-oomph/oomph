@@ -79,9 +79,8 @@ public class BuilderPredicateItemProvider extends PredicateItemProvider
   protected void addBuilderPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_BuilderPredicate_builder_feature"), getString("_UI_PropertyDescriptor_description", "_UI_BuilderPredicate_builder_feature",
-            "_UI_BuilderPredicate_type"), PredicatesPackage.Literals.BUILDER_PREDICATE__BUILDER, true, false, false,
-        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+        getString("_UI_BuilderPredicate_builder_feature"), getString("_UI_BuilderPredicate_builder_description"),
+        PredicatesPackage.Literals.BUILDER_PREDICATE__BUILDER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
       public Collection<?> getChoiceOfValues(Object object)

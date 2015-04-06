@@ -76,9 +76,8 @@ public class NaturePredicateItemProvider extends PredicateItemProvider
   protected void addNaturePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_NaturePredicate_nature_feature"), getString("_UI_PropertyDescriptor_description", "_UI_NaturePredicate_nature_feature",
-            "_UI_NaturePredicate_type"), PredicatesPackage.Literals.NATURE_PREDICATE__NATURE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-        null, null)
+        getString("_UI_NaturePredicate_nature_feature"), getString("_UI_NaturePredicate_nature_description"),
+        PredicatesPackage.Literals.NATURE_PREDICATE__NATURE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
       public Collection<?> getChoiceOfValues(Object object)

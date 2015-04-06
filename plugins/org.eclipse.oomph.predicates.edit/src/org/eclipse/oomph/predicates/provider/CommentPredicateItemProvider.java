@@ -69,8 +69,7 @@ public class CommentPredicateItemProvider extends PredicateItemProvider
   protected void addPatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_CommentPredicate_pattern_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_CommentPredicate_pattern_feature", "_UI_CommentPredicate_type"),
+        getString("_UI_CommentPredicate_pattern_feature"), getString("_UI_CommentPredicate_pattern_description"),
         PredicatesPackage.Literals.COMMENT_PREDICATE__PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 

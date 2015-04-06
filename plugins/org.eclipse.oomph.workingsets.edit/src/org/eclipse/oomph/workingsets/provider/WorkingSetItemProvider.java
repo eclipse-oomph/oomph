@@ -78,8 +78,8 @@ public class WorkingSetItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_WorkingSet_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_WorkingSet_name_feature", "_UI_WorkingSet_type"),
-        WorkingSetsPackage.Literals.WORKING_SET__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_WorkingSet_name_feature"), getString("_UI_WorkingSet_name_description"), WorkingSetsPackage.Literals.WORKING_SET__NAME, true, false,
+        false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -91,8 +91,8 @@ public class WorkingSetItemProvider extends ModelElementItemProvider
   protected void addIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_WorkingSet_iD_feature"), getString("_UI_PropertyDescriptor_description", "_UI_WorkingSet_iD_feature", "_UI_WorkingSet_type"),
-        WorkingSetsPackage.Literals.WORKING_SET__ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_WorkingSet_iD_feature"), getString("_UI_WorkingSet_iD_description"), WorkingSetsPackage.Literals.WORKING_SET__ID, true, false, false,
+        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**

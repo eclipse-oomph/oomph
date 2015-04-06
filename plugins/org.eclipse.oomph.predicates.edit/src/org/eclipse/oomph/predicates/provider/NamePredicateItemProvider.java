@@ -76,9 +76,8 @@ public class NamePredicateItemProvider extends PredicateItemProvider
   protected void addPatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_NamePredicate_pattern_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_NamePredicate_pattern_feature", "_UI_NamePredicate_type"),
-        PredicatesPackage.Literals.NAME_PREDICATE__PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_NamePredicate_pattern_feature"), getString("_UI_NamePredicate_pattern_description"), PredicatesPackage.Literals.NAME_PREDICATE__PATTERN,
+        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
