@@ -62,6 +62,9 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -90,8 +93,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.dialogs.FilteredTree;
-import org.eclipse.ui.dialogs.PatternFilter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -428,7 +429,7 @@ public class ProductPage extends SetupWizardPage
     catalogSelector.configure(catalogsButton);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
-    FilteredTree filteredTree = new FilteredTree(treeComposite, SWT.BORDER, new PatternFilter(), true);
+    final ProjectPage.FilteredTreeWithoutWorkbench filteredTree = new ProjectPage.FilteredTreeWithoutWorkbench(treeComposite, SWT.BORDER);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
@@ -447,6 +448,19 @@ public class ProductPage extends SetupWizardPage
         {
           public void run()
           {
+            try
+            {
+              Job.getJobManager().join(filteredTree.getRefreshJobFamily(), new NullProgressMonitor());
+            }
+            catch (OperationCanceledException ex)
+            {
+              // Ignore.
+            }
+            catch (InterruptedException ex)
+            {
+              // Ignore.
+            }
+
             if (productViewer.getExpandedElements().length == 0)
             {
               final Object[] elements = getElements(productViewer.getInput());

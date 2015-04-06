@@ -531,149 +531,7 @@ public class ProjectPage extends SetupWizardPage
     catalogSelector.configure(catalogsButton);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
-    final Object projectFilterJobFamily = new Object();
-
-    FilteredTree filteredTree = new FilteredTree(upperComposite, SWT.BORDER | SWT.MULTI, new PatternFilter(), true)
-    {
-      @Override
-      protected WorkbenchJob doCreateRefreshJob()
-      {
-        return new WorkbenchJob("Refresh Filter")
-        {
-          @Override
-          public IStatus runInUIThread(IProgressMonitor monitor)
-          {
-            if (treeViewer.getControl().isDisposed())
-            {
-              return Status.CANCEL_STATUS;
-            }
-
-            String text = getFilterString();
-            if (StringUtil.isEmpty(text))
-            {
-              return Status.OK_STATUS;
-            }
-
-            boolean initial = initialText != null && initialText.equals(text);
-            if (initial)
-            {
-              getPatternFilter().setPattern(null);
-            }
-            else
-            {
-              getPatternFilter().setPattern(text);
-            }
-
-            Control redrawFalseControl = treeComposite != null ? treeComposite : treeViewer.getControl();
-            try
-            {
-              redrawFalseControl.setRedraw(false);
-              TreeItem[] is = treeViewer.getTree().getItems();
-              for (int i = 0; i < is.length; i++)
-              {
-                TreeItem item = is[i];
-                if (item.getExpanded())
-                {
-                  treeViewer.setExpandedState(item.getData(), false);
-                }
-              }
-
-              treeViewer.refresh(true);
-
-              if (text.length() > 0 && !initial)
-              {
-                TreeItem[] items = getViewer().getTree().getItems();
-                int treeHeight = getViewer().getTree().getBounds().height;
-                int numVisibleItems = treeHeight / getViewer().getTree().getItemHeight();
-                long stopTime = 200 + System.currentTimeMillis();
-                boolean cancel = false;
-                if (items.length > 0 && recursiveExpand(items, monitor, stopTime, new int[] { numVisibleItems }))
-                {
-                  cancel = true;
-                }
-
-                updateToolbar(true);
-
-                if (cancel)
-                {
-                  return Status.CANCEL_STATUS;
-                }
-              }
-              else
-              {
-                updateToolbar(false);
-              }
-            }
-            finally
-            {
-              TreeItem[] items = getViewer().getTree().getItems();
-              if (items.length > 0 && getViewer().getTree().getSelectionCount() == 0)
-              {
-                treeViewer.getTree().setTopItem(items[0]);
-              }
-              redrawFalseControl.setRedraw(true);
-            }
-            return Status.OK_STATUS;
-          }
-
-          private boolean recursiveExpand(TreeItem[] items, IProgressMonitor monitor, long cancelTime, int[] numItemsLeft)
-          {
-            boolean canceled = false;
-            for (int i = 0; !canceled && i < items.length; i++)
-            {
-              TreeItem item = items[i];
-              boolean visible = numItemsLeft[0]-- >= 0;
-              if (monitor.isCanceled() || !visible && System.currentTimeMillis() > cancelTime)
-              {
-                canceled = true;
-              }
-              else
-              {
-                Object itemData = item.getData();
-                if (itemData != null)
-                {
-                  if (!item.getExpanded())
-                  {
-                    treeViewer.setExpandedState(itemData, true);
-                  }
-
-                  TreeItem[] children = item.getItems();
-                  if (items.length > 0)
-                  {
-                    canceled = recursiveExpand(children, monitor, cancelTime, numItemsLeft);
-                  }
-                }
-              }
-            }
-            return canceled;
-          }
-
-          @Override
-          public Display getDisplay()
-          {
-            return UIUtil.getDisplay();
-          }
-
-          @Override
-          public boolean shouldSchedule()
-          {
-            return true;
-          }
-
-          @Override
-          public boolean shouldRun()
-          {
-            return true;
-          }
-
-          @Override
-          public boolean belongsTo(Object family)
-          {
-            return family == projectFilterJobFamily;
-          }
-        };
-      }
-    };
+    final FilteredTreeWithoutWorkbench filteredTree = new FilteredTreeWithoutWorkbench(upperComposite, SWT.BORDER | SWT.MULTI);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
@@ -715,7 +573,7 @@ public class ProjectPage extends SetupWizardPage
             {
               try
               {
-                Job.getJobManager().join(projectFilterJobFamily, new NullProgressMonitor());
+                Job.getJobManager().join(filteredTree.getRefreshJobFamily(), new NullProgressMonitor());
               }
               catch (OperationCanceledException ex)
               {
@@ -1826,6 +1684,167 @@ public class ProjectPage extends SetupWizardPage
     protected boolean doAnimate()
     {
       return inactive && !projectsChanged;
+    }
+  }
+
+  /**
+   * This subclass is needed because the refresh job won't schedule if there is no workbench, which is the case in the installer wizard.
+   *
+   * @author Ed Merks
+   */
+  static class FilteredTreeWithoutWorkbench extends FilteredTree
+  {
+    private final Object refreshJobFamily = new Object();
+
+    public FilteredTreeWithoutWorkbench(Composite parent, int style)
+    {
+      super(parent, style, new PatternFilter(), true);
+    }
+
+    public Object getRefreshJobFamily()
+    {
+      return refreshJobFamily;
+    }
+
+    @Override
+    protected WorkbenchJob doCreateRefreshJob()
+    {
+      return new WorkbenchJob("Refresh Filter")
+      {
+        @Override
+        public IStatus runInUIThread(IProgressMonitor monitor)
+        {
+          if (treeViewer.getControl().isDisposed())
+          {
+            return Status.CANCEL_STATUS;
+          }
+
+          String text = getFilterString();
+          if (StringUtil.isEmpty(text))
+          {
+            getPatternFilter().setPattern(null);
+            treeViewer.refresh(true);
+            return Status.OK_STATUS;
+          }
+
+          boolean initial = initialText != null && initialText.equals(text);
+          if (initial)
+          {
+            getPatternFilter().setPattern(null);
+          }
+          else
+          {
+            getPatternFilter().setPattern(text);
+          }
+
+          Control redrawFalseControl = treeComposite != null ? treeComposite : treeViewer.getControl();
+          try
+          {
+            redrawFalseControl.setRedraw(false);
+            TreeItem[] is = treeViewer.getTree().getItems();
+            for (int i = 0; i < is.length; i++)
+            {
+              TreeItem item = is[i];
+              if (item.getExpanded())
+              {
+                treeViewer.setExpandedState(item.getData(), false);
+              }
+            }
+
+            treeViewer.refresh(true);
+
+            if (text.length() > 0 && !initial)
+            {
+              TreeItem[] items = getViewer().getTree().getItems();
+              int treeHeight = getViewer().getTree().getBounds().height;
+              int numVisibleItems = treeHeight / getViewer().getTree().getItemHeight();
+              long stopTime = 200 + System.currentTimeMillis();
+              boolean cancel = false;
+              if (items.length > 0 && recursiveExpand(items, monitor, stopTime, new int[] { numVisibleItems }))
+              {
+                cancel = true;
+              }
+
+              updateToolbar(true);
+
+              if (cancel)
+              {
+                return Status.CANCEL_STATUS;
+              }
+            }
+            else
+            {
+              updateToolbar(false);
+            }
+          }
+          finally
+          {
+            TreeItem[] items = getViewer().getTree().getItems();
+            if (items.length > 0 && getViewer().getTree().getSelectionCount() == 0)
+            {
+              treeViewer.getTree().setTopItem(items[0]);
+            }
+            redrawFalseControl.setRedraw(true);
+          }
+          return Status.OK_STATUS;
+        }
+
+        private boolean recursiveExpand(TreeItem[] items, IProgressMonitor monitor, long cancelTime, int[] numItemsLeft)
+        {
+          boolean canceled = false;
+          for (int i = 0; !canceled && i < items.length; i++)
+          {
+            TreeItem item = items[i];
+            boolean visible = numItemsLeft[0]-- >= 0;
+            if (monitor.isCanceled() || !visible && System.currentTimeMillis() > cancelTime)
+            {
+              canceled = true;
+            }
+            else
+            {
+              Object itemData = item.getData();
+              if (itemData != null)
+              {
+                if (!item.getExpanded())
+                {
+                  treeViewer.setExpandedState(itemData, true);
+                }
+
+                TreeItem[] children = item.getItems();
+                if (items.length > 0)
+                {
+                  canceled = recursiveExpand(children, monitor, cancelTime, numItemsLeft);
+                }
+              }
+            }
+          }
+          return canceled;
+        }
+
+        @Override
+        public Display getDisplay()
+        {
+          return UIUtil.getDisplay();
+        }
+
+        @Override
+        public boolean shouldSchedule()
+        {
+          return true;
+        }
+
+        @Override
+        public boolean shouldRun()
+        {
+          return true;
+        }
+
+        @Override
+        public boolean belongsTo(Object family)
+        {
+          return family == refreshJobFamily;
+        }
+      };
     }
   }
 }
