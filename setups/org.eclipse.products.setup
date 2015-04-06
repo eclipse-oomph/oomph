@@ -23,8 +23,6 @@
         name="org.eclipse.oomph.setup.feature.group"/>
     <repository
         url="${oomph.update.url}"/>
-    <repository
-        url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
   </setupTask>
   <product name="epp.package.java"
       label="Eclipse IDE for Java Developers">
@@ -158,6 +156,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -183,6 +183,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>The essential tools for any Java developer, including a Java IDE, a CVS client, Git client, XML Editor, Mylyn, Maven integration and WindowBuilder</description>
@@ -334,6 +336,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -362,6 +366,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>Tools for Java developers creating Java EE and Web applications, including a Java IDE, tools for Java EE, JPA, JSF, Mylyn, EGit and others.</description>
@@ -483,6 +489,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -505,6 +513,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>An IDE for C/C++ developers with Mylyn integration.</description>
@@ -820,6 +830,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -848,6 +860,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>The essential tools for Java and DSL developers, including a Java &amp; Xtend IDE, a DSL Framework (Xtext), a Git client, XML Editor, and Maven integration.</description>
@@ -999,6 +1013,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -1027,6 +1043,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>Java EE tools and BIRT reporting tool for Java developers to create Java EE and Web applications that also have reporting needs.</description>
@@ -1178,6 +1196,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -1206,6 +1226,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>
@@ -1361,6 +1383,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -1389,6 +1413,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Mylyn, the m2e Maven integration, and an XML editor. In addition to the CVS Eclipse Team provider, it also contains the EGit tooling for accessing Git version control systems.</description>
@@ -1510,6 +1536,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -1532,6 +1560,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula and Mylyn.</description>
@@ -1653,6 +1683,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -1675,6 +1707,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</description>
@@ -1826,6 +1860,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -1854,6 +1890,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>This package contains frameworks and tools used for the development of embedded automotive software: In addition to Eclipse Platform, Java Development Tools, and Plug-in Development Environment, it includes EMF, Sphinx, GMF, Xtext, Xtend, Xpand, UML2, selected other modeling components, C/C++ development tools, and XML/XSD editors and tools. To keep the package at a reasonable size, it includes only the runtime binaries but no source code and no developer documentation.</description>
@@ -2005,6 +2043,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -2033,6 +2073,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a framework to develop Java/Eclipse based business applications that run on the desktop, in browsers, and on mobile devices. This package includes a complete SDK, useful developer tools and source code.</description>
@@ -2142,6 +2184,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -2163,9 +2207,11 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
-    <description>This package contains the absolute minimal IDE. It is suitable only as a base for intalling other tools.</description>
+    <description>This package contains the absolute minimal IDE, suitable only as a base for installing other tools.</description>
   </product>
   <product name="epp.package.standard"
       label="Eclipse Standard (discontinued after Luna)">
@@ -2279,6 +2325,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <description>
@@ -2320,6 +2368,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -2345,6 +2395,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -2370,6 +2422,8 @@
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
     <version
@@ -2395,6 +2449,8 @@
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
   </product>

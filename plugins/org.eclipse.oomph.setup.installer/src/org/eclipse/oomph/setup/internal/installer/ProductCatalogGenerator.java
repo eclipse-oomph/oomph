@@ -205,13 +205,12 @@ public class ProductCatalogGenerator implements IApplication
       Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
 
       Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
-      Repository emfRepository = P2Factory.eINSTANCE.createRepository(trimEmptyTrailingSegment(
-          loadLatestRepository(manager, null, new URI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core")).getLocation()).toString());
+      String emfRepositoryLocation = trimEmptyTrailingSegment(
+          loadLatestRepository(manager, null, new URI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core")).getLocation()).toString();
 
       P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
       p2Task.getRequirements().add(oomphRequirement);
       p2Task.getRepositories().add(oomphRepository);
-      p2Task.getRepositories().add(emfRepository);
       productCatalog.getSetupTasks().add(p2Task);
 
       final Map<String, IMetadataRepository> eppMetaDataRepositories = new HashMap<String, IMetadataRepository>();
@@ -406,7 +405,7 @@ public class ProductCatalogGenerator implements IApplication
         products.add(product);
 
         addProductVersion(product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrain, eppMetaDataRepositories, "latest",
-            "Latest (" + latestTrainLabel + ")", p2TaskLabel, latestTrainsIUs);
+            "Latest (" + latestTrainLabel + ")", p2TaskLabel, latestTrainsIUs, emfRepositoryLocation);
 
         if (!latestUnreleased || size != 1)
         {
@@ -422,7 +421,7 @@ public class ProductCatalogGenerator implements IApplication
           Version releasedVersion = releasedTrainAndVersion.getVersion();
 
           addProductVersion(product, releasedVersion, VersionSegment.MINOR, releasedTrainAndVersion.getTrainURI(), releasedTrain, eppMetaDataRepositories,
-              "latest.released", "Latest Release (" + releasedTrainLabel + ")", p2TaskLabel, releasedTrainAndVersion.getIUs());
+              "latest.released", "Latest Release (" + releasedTrainLabel + ")", p2TaskLabel, releasedTrainAndVersion.getIUs(), emfRepositoryLocation);
         }
 
         for (int i = 0; i < size; i++)
@@ -433,7 +432,7 @@ public class ProductCatalogGenerator implements IApplication
           Version version = entry.getVersion();
 
           addProductVersion(product, version, VersionSegment.MINOR, entry.getTrainURI(), train, eppMetaDataRepositories, train, trainLabel, p2TaskLabel,
-              entry.getIUs());
+              entry.getIUs(), emfRepositoryLocation);
         }
 
         System.out.println();
@@ -623,7 +622,8 @@ public class ProductCatalogGenerator implements IApplication
   }
 
   private void addProductVersion(Product product, Version version, VersionSegment versionSegment, URI trainURI, String train,
-      Map<String, IMetadataRepository> eppMetaDataRepositories, String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius)
+      Map<String, IMetadataRepository> eppMetaDataRepositories, String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius,
+      String emfRepositoryLocation)
   {
     System.out.println("  " + label);
 
@@ -649,8 +649,20 @@ public class ProductCatalogGenerator implements IApplication
     p2Task.setLabel(p2TaskLabel + " (" + getTrainLabel(train) + ")");
     p2Task.getRequirements().add(requirement);
     addRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
-    p2Task.getRepositories().add(packageRepository);
+
+    if (!"org.eclipse.platform.ide".equals(name))
+    {
+      p2Task.getRepositories().add(packageRepository);
+    }
+
     p2Task.getRepositories().add(releaseRepository);
+
+    if (train.compareTo("luna") < 0)
+    {
+      Repository emfRepository = P2Factory.eINSTANCE.createRepository(emfRepositoryLocation);
+      p2Task.getRepositories().add(emfRepository);
+    }
+
     productVersion.getSetupTasks().add(p2Task);
 
     String idPrefix = "tooling" + productName + ".ini.";
@@ -771,7 +783,7 @@ public class ProductCatalogGenerator implements IApplication
     String name = product.getName();
     if (name.equals("org.eclipse.platform.ide"))
     {
-      product.setDescription("This package contains the absolute minimal IDE. It is suitable only as a base for intalling other tools.");
+      product.setDescription("This package contains the absolute minimal IDE, suitable only as a base for installing other tools.");
       return;
     }
 
