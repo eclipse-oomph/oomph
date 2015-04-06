@@ -101,7 +101,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final List<String> PRODUCT_IDS = Arrays.asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.php",
       "epp.package.committers", "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.rcp", "epp.package.testing",
-      "epp.package.parallel", "epp.package.automotive", "epp.package.scout" });
+      "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
 
   public Object start(IApplicationContext context) throws Exception
   {
@@ -241,7 +241,7 @@ public class ProductCatalogGenerator implements IApplication
         releaseURI = trimEmptyTrailingSegment(releaseMetaDataRepository.getLocation());
         System.out.println(" -> " + releaseURI);
 
-        for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createIUAnyQuery(), null)))
+        for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createLatestIUQuery(), null)))
         {
           String fragment = iu.getProperty("org.eclipse.equinox.p2.type.fragment");
           if ("true".equals(fragment))
@@ -262,7 +262,7 @@ public class ProductCatalogGenerator implements IApplication
           }
 
           IInstallableUnit existingIU = ius.get(id);
-          if (existingIU == null || existingIU.getVersion().compareTo(iu.getVersion()) < 0)
+          if (existingIU == null)
           {
             ius.put(id, iu);
             labels.put(id, label);
@@ -288,6 +288,15 @@ public class ProductCatalogGenerator implements IApplication
         for (String requirement : requirements)
         {
           ius.remove(requirement);
+        }
+
+        for (IInstallableUnit iu : P2Util.asIterable(releaseMetaDataRepository.query(
+            QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
+        {
+          String id = iu.getId();
+          String label = iu.getProperty("org.eclipse.equinox.p2.name");
+          ius.put(id, iu);
+          labels.put(id, label);
         }
 
         for (Map.Entry<String, IInstallableUnit> entry : ius.entrySet())
@@ -760,6 +769,12 @@ public class ProductCatalogGenerator implements IApplication
   private void attachBrandingInfos(final Product product)
   {
     String name = product.getName();
+    if (name.equals("org.eclipse.platform.ide"))
+    {
+      product.setDescription("This package contains the absolute minimal IDE. It is suitable only as a base for intalling other tools.");
+      return;
+    }
+
     if (name.startsWith("epp.package."))
     {
       name = name.substring("epp.package.".length());
@@ -816,7 +831,6 @@ public class ProductCatalogGenerator implements IApplication
                   {
                     product.setDescription(description.trim());
                   }
-
                 }
               }
             });
