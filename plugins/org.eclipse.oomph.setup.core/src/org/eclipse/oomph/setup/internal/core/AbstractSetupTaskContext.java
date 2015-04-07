@@ -86,6 +86,11 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
     // Do this late because \ is replaced by / when looking at this property.
     put(PROP_UPDATE_URL, SetupCorePlugin.UPDATE_URL);
+
+    for (Map.Entry<String, String> entry : CONTROL_CHARACTER_VALUES.entrySet())
+    {
+      put(entry.getKey(), entry.getValue());
+    }
   }
 
   public Map<Object, Object> getMap()

@@ -11,14 +11,12 @@
 package org.eclipse.oomph.setup.util;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
  */
 public final class SetupUtil
 {
-  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
 
   private SetupUtil()
   {
@@ -32,13 +30,23 @@ public final class SetupUtil
     }
 
     StringBuffer result = new StringBuffer();
-    Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string);
+    Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string);
     while (matcher.find())
     {
       matcher.appendReplacement(result, "\\$$0");
     }
 
     matcher.appendTail(result);
+
+    for (int i = 0, length = result.length(); i < length; ++i)
+    {
+      char c = result.charAt(i);
+      if (c < StringExpander.CONTROL_CHARACTER_REPLACEMENTS.length)
+      {
+        result.replace(i, i + 1, StringExpander.CONTROL_CHARACTER_REPLACEMENTS[c]);
+      }
+    }
+
     return result.toString();
   }
 }
