@@ -354,6 +354,7 @@
   <project href="interim/Platform.setup#/"/>
   <project href="http://git.eclipse.org/c/mmt/org.eclipse.qvtd.git/plain/releng/org.eclipse.qvtd.oomph/setups/qvtd.setup#/"/>
   <project href="http://git.eclipse.org/c/sirius/org.eclipse.sirius.git/plain/releng/org.eclipse.sirius.settings/Sirius.setup#/"/>
+  <project href="http://git.eclipse.org/c/tracecompass/org.eclipse.tracecompass.git/plain/TraceCompass.setup#/"/>
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/xtext/master/devtools/org.eclipse.xtext.contributor/interim/Xtext.setup#/"/>
   <project href="interim/XSD.setup#/"/>
