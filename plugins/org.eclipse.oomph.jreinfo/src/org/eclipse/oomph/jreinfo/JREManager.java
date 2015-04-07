@@ -181,12 +181,12 @@ public final class JREManager
     PropertiesUtil.saveProperties(defaultsFile, properties, true);
   }
 
-  public LinkedHashMap<File, JRE> getJREs()
+  public Map<File, JRE> getJREs()
   {
     return getJREs(null);
   }
 
-  public LinkedHashMap<File, JRE> getJREs(JREFilter filter)
+  public Map<File, JRE> getJREs(JREFilter filter)
   {
     Set<File> folders = getJavaHomes();
     List<JRE> jres = getJREs(filter, folders);

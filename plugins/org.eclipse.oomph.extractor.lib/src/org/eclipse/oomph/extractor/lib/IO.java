@@ -12,7 +12,6 @@ package org.eclipse.oomph.extractor.lib;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -118,7 +117,15 @@ public abstract class IO
     return count;
   }
 
-  public static void close(Closeable closeable) throws IOException
+  public static void close(InputStream closeable) throws IOException
+  {
+    if (closeable != null)
+    {
+      closeable.close();
+    }
+  }
+
+  public static void close(OutputStream closeable) throws IOException
   {
     if (closeable != null)
     {
@@ -170,7 +177,6 @@ public abstract class IO
       return failure;
     }
 
-    @Override
     public int read() throws IOException
     {
       while (!eof && unfilled != 0)

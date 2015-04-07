@@ -45,6 +45,7 @@
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/BOOLEAN"/>
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/INTEGER"/>
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/FLOAT"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//VariableType/JRE"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//UnsignedPolicy">
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//UnsignedPolicy/PROMPT"/>
@@ -116,6 +117,7 @@
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//ProductVersion">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//ProductVersion/product"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ProductVersion/requiredJavaVersion"/>
     </genClasses>
     <genClasses image="false" ecoreClass="Setup.ecore#//ProjectContainer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//ProjectContainer/projects"/>

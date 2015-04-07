@@ -479,6 +479,7 @@
     <eLiterals name="BOOLEAN" value="10"/>
     <eLiterals name="INTEGER" value="11"/>
     <eLiterals name="FLOAT" value="12"/>
+    <eLiterals name="JRE" value="13"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="LicenseInfo" instanceClassName="org.eclipse.oomph.setup.LicenseInfo"/>
   <eClassifiers xsi:type="ecore:EEnum" name="UnsignedPolicy">

@@ -155,7 +155,15 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  FLOAT(12, "FLOAT", "FLOAT");
+  FLOAT(12, "FLOAT", "FLOAT"), /**
+                               * The '<em><b>JRE</b></em>' literal object.
+                               * <!-- begin-user-doc -->
+                               * <!-- end-user-doc -->
+                               * @see #JRE_VALUE
+                               * @generated
+                               * @ordered
+                               */
+  JRE(13, "JRE", "JRE");
 
   /**
    * The '<em><b>STRING</b></em>' literal value.
@@ -353,13 +361,28 @@ public enum VariableType implements Enumerator
   public static final int FLOAT_VALUE = 12;
 
   /**
+   * The '<em><b>JRE</b></em>' literal value.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of '<em><b>JRE</b></em>' literal object isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @see #JRE
+   * @model
+   * @generated
+   * @ordered
+   */
+  public static final int JRE_VALUE = 13;
+
+  /**
    * An array of all the '<em><b>Variable Type</b></em>' enumerators.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
   private static final VariableType[] VALUES_ARRAY = new VariableType[] { STRING, TEXT, PASSWORD, PATTERN, URI, FILE, FOLDER, RESOURCE, CONTAINER, PROJECT,
-      BOOLEAN, INTEGER, FLOAT, };
+      BOOLEAN, INTEGER, FLOAT, JRE, };
 
   /**
    * A public read-only list of all the '<em><b>Variable Type</b></em>' enumerators.
@@ -449,6 +472,8 @@ public enum VariableType implements Enumerator
         return INTEGER;
       case FLOAT_VALUE:
         return FLOAT;
+      case JRE_VALUE:
+        return JRE;
     }
     return null;
   }

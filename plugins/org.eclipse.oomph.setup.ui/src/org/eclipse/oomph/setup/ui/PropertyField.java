@@ -11,7 +11,12 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.jreinfo.JRE;
+import org.eclipse.oomph.jreinfo.JREFilter;
+import org.eclipse.oomph.jreinfo.JREManager;
+import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
@@ -56,9 +61,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -92,6 +102,27 @@ public abstract class PropertyField
   {
     switch (type)
     {
+      case JRE:
+        for (VariableChoice choice : choices)
+        {
+          String value = choice.getValue();
+          Pattern JRE_LOCATION_VARIABLE_PATTERN = Pattern.compile("\\$\\{jre\\.location-([0-9]*)\\.([0-9]*)\\}");
+          if (value != null)
+          {
+            Matcher matcher = JRE_LOCATION_VARIABLE_PATTERN.matcher(value);
+            if (matcher.matches())
+            {
+              int major = Integer.valueOf(matcher.group(1));
+              int minor = Integer.valueOf(matcher.group(2)) - 1;
+              JREField jreField = new JREField(new JREFilter(major, minor, null), choices);
+              return jreField;
+            }
+          }
+          System.err.println("###" + choice);
+        }
+
+        return createField(VariableType.FOLDER, choices);
+
       case FOLDER:
         FileField fileField = new FileField(choices);
         fileField.setDialogText("Folder Selection");
@@ -196,7 +227,6 @@ public abstract class PropertyField
   public final void setValue(String value)
   {
     setValue(value, true);
-
   }
 
   public final void setValue(String value, boolean notify)
@@ -696,6 +726,11 @@ public abstract class PropertyField
       return text != null ? text : comboViewer.getCombo();
     }
 
+    protected ComboViewer getComboViewer()
+    {
+      return comboViewer;
+    }
+
     @Override
     protected String getControlValue()
     {
@@ -1103,6 +1138,78 @@ public abstract class PropertyField
       {
         transferValueToControl(dir);
       }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class JREField extends TextButtonField
+  {
+    private JREFilter jreFilter;
+
+    public JREField(JREFilter jreFilter, List<? extends VariableChoice> choices)
+    {
+      super(null, getJREChoices(jreFilter));
+      this.jreFilter = jreFilter;
+
+      setButtonText("Browse...");
+    }
+
+    private static List<? extends VariableChoice> getJREChoices(JREFilter jreFilter)
+    {
+      List<VariableChoice> choices = new ArrayList<VariableChoice>();
+      Map<File, JRE> jres = JREManager.INSTANCE.getJREs(jreFilter);
+      for (Map.Entry<File, JRE> entry : jres.entrySet())
+      {
+        VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+        String folder = entry.getKey().toString();
+        choice.setValue(folder);
+        JRE jre = entry.getValue();
+        choice.setLabel((jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " + jre.getBitness() + "bit -- "
+            + folder);
+        choices.add(choice);
+      }
+
+      return choices;
+    }
+
+    @Override
+    protected void helperButtonSelected(SelectionEvent e)
+    {
+      JREController jreController = new JREController(null, null, null)
+      {
+        @Override
+        protected Shell getShell()
+        {
+          return getHelper().getShell();
+        }
+
+        @Override
+        protected JRE getDefaultSelection()
+        {
+          String controlValue = getControlValue();
+          return JREManager.INSTANCE.getJREs().get(new File(controlValue));
+        }
+
+        @Override
+        protected void jreChanged(JRE jre)
+        {
+          if (jre != null && (jreFilter == null || jre.isMatch(jreFilter)))
+          {
+            transferValueToControl(jre.toString());
+          }
+        }
+
+        @Override
+        protected JREFilter createJREFilter()
+        {
+          return jreFilter;
+        }
+      };
+
+      jreController.refresh();
+      jreController.configureJREs();
     }
   }
 

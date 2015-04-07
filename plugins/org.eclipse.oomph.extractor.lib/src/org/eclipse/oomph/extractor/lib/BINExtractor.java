@@ -23,8 +23,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * @author Eike Stepper
@@ -69,7 +69,7 @@ public final class BINExtractor extends IO
   private static void adjustIni(String iniPath, String javaHome) throws IOException
   {
     File file = new File(iniPath);
-    List<String> lines = new ArrayList<String>();
+    Vector lines = new Vector();
 
     if (file.exists())
     {
@@ -116,9 +116,9 @@ public final class BINExtractor extends IO
     Writer writer = new OutputStreamWriter(out, UTF_8);
     BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-    for (String line : lines)
+    for (Enumeration it = lines.elements(); it.hasMoreElements();)
     {
-      bufferedWriter.write(line);
+      bufferedWriter.write((String)it.nextElement());
       bufferedWriter.write(NL);
     }
 

@@ -2308,6 +2308,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEEnumLiteral(variableTypeEEnum, VariableType.BOOLEAN);
     addEEnumLiteral(variableTypeEEnum, VariableType.INTEGER);
     addEEnumLiteral(variableTypeEEnum, VariableType.FLOAT);
+    addEEnumLiteral(variableTypeEEnum, VariableType.JRE);
 
     initEEnum(unsignedPolicyEEnum, UnsignedPolicy.class, "UnsignedPolicy");
     addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.PROMPT);

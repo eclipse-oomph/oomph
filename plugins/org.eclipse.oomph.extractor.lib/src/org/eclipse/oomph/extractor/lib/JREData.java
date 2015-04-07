@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.extractor.lib;
 
-
 /**
  * @author Eike Stepper
  */
@@ -128,7 +127,6 @@ public final class JREData
     return true;
   }
 
-  @Override
   public String toString()
   {
     return major + " " + minor + " " + micro + " " + bitness;

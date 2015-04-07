@@ -46,7 +46,7 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.1"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.1 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.1."/>
     </eAnnotations>
@@ -76,7 +76,7 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.2"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.2 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.2."/>
     </eAnnotations>
@@ -102,7 +102,7 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.3"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.3 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.3."/>
     </eAnnotations>
@@ -124,7 +124,7 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.4"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.4 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.4."/>
     </eAnnotations>
@@ -142,7 +142,7 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.5"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.5 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.5."/>
     </eAnnotations>
@@ -156,7 +156,7 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.6"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.6 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.6."/>
     </eAnnotations>
@@ -166,13 +166,13 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.7"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.7 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.7."/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
       <details key="name" value="jre.location-1.8"/>
-      <details key="type" value="FOLDER"/>
+      <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.8 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.8."/>
     </eAnnotations>

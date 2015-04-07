@@ -616,6 +616,11 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 
     getChoices().addAll(variableTask.getChoices());
 
+    if (variableTask.getType() == VariableType.JRE)
+    {
+      setType(VariableType.JRE);
+    }
+
     Annotation annotation = variableTask.getAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE);
     if (annotation != null)
     {
