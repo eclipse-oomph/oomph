@@ -88,7 +88,7 @@ public final class BINExtractor extends IO
       in.close();
     }
 
-    String value = javaHome + File.separator + "bin";
+    String value = getVMPath(javaHome);
     String option = "-vm";
     int optionIndex = lines.indexOf(option);
 
@@ -125,5 +125,15 @@ public final class BINExtractor extends IO
     bufferedWriter.close();
     writer.close();
     out.close();
+  }
+
+  private static String getVMPath(String javaHome)
+  {
+    if (javaHome.endsWith(".exe"))
+    {
+      return new File(javaHome).getParent();
+    }
+
+    return javaHome + File.separator + "bin";
   }
 }
