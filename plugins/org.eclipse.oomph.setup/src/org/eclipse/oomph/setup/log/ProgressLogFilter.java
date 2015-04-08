@@ -10,6 +10,10 @@
  */
 package org.eclipse.oomph.setup.log;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class ProgressLogFilter
 {
   private static final String[] IGNORED_PREFIXES = { "Scanning Git", "Re-indexing", "Calculating Decorations", "Decorating", "http://",
@@ -22,6 +26,8 @@ public class ProgressLogFilter
       "Synchronizing query: ", "Receiving related tasks", "Receiving task ", "Updating repository state", "Processing Local", "Resources to refresh:" };
 
   private String lastLine;
+
+  private Set<String> downloadProgressLines = Collections.synchronizedSet(new HashSet<String>());
 
   public String filter(String line)
   {
@@ -37,6 +43,10 @@ public class ProgressLogFilter
       if (index != -1)
       {
         line = line.substring(0, index);
+        if (!downloadProgressLines.add(line))
+        {
+          return null;
+        }
       }
     }
 
