@@ -86,6 +86,25 @@ findJREs (JRE* jres, TCHAR* keyName, int jdk)
 }
 
 JRE*
+findJavaHome (JRE* jres)
+{
+  _TCHAR javaHome[MAX_PATH] = "";
+  if (GetEnvironmentVariable ("JAVA_HOME", javaHome, sizeof(javaHome)) != 0)
+  {
+    if (findJRE (jres, javaHome) == NULL)
+    {
+      JRE* jre = malloc (sizeof(JRE));
+      jre->javaHome = javaHome;
+      jre->jdk = 0;
+      jre->next = jres;
+      jres = jre;
+    }
+  }
+
+  return jres;
+}
+
+JRE*
 findAllJREs ()
 {
   JRE* jres = NULL;
@@ -93,5 +112,6 @@ findAllJREs ()
   jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\Java Runtime Environment"), 0);
   jres = findJREs (jres, _T("Software\\JavaSoft\\Java Development Kit"), 1);
   jres = findJREs (jres, _T("Software\\JavaSoft\\Java Runtime Environment"), 0);
+  jres = findJavaHome (jres);
   return jres;
 }

@@ -9,6 +9,7 @@
  *    Eike Stepper - initial API and implementation
  */
 
+#include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -85,6 +86,34 @@ browseForFolder (HWND hwndOwner, LPCTSTR lpszTitle)
 
   // CoUninitialize ();
   return result;
+}
+
+static _TCHAR*
+browseForFile (HWND hwndOwner, LPCTSTR lpszTitle, LPCTSTR lpszFilter)
+{
+  _TCHAR szFile[MAX_PATH];
+  szFile[0] = 0;
+
+  OPENFILENAME ofn;
+  ZeroMemory(&ofn, sizeof(ofn));
+  ofn.lStructSize = sizeof(ofn);
+  ofn.hwndOwner = hwndOwner;
+  ofn.lpstrTitle = lpszTitle;
+  ofn.lpstrFile = szFile;
+  ofn.nMaxFile = sizeof(szFile);
+  ofn.lpstrFilter = lpszFilter;
+  ofn.nFilterIndex = 1;
+  ofn.lpstrFileTitle = NULL;
+  ofn.nMaxFileTitle = 0;
+  ofn.lpstrInitialDir = NULL;
+  ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+  if (GetOpenFileName (&ofn) == TRUE)
+  {
+    return ofn.lpstrFile;
+  }
+
+  return NULL;
 }
 
 /****************************************************************************************
@@ -250,7 +279,16 @@ execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
   BOOL result = FALSE;
 
   _TCHAR cmdline[2 * MAX_PATH];
-  sprintf (cmdline, _T("\"%s\\bin\\javaw\" -cp \"%s\" %s %s"), javaHome, lib, className, args);
+
+  _TCHAR* lastDot = strrchr (javaHome, '.');
+  if (lastDot != NULL && strcmp (lastDot, _T(".exe")) == 0)
+  {
+    sprintf (cmdline, _T("\"%s\" -cp \"%s\" %s %s"), javaHome, lib, className, args);
+  }
+  else
+  {
+    sprintf (cmdline, _T("\"%s\\bin\\javaw\" -cp \"%s\" %s %s"), javaHome, lib, className, args);
+  }
 
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
@@ -319,6 +357,49 @@ extractProduct (JRE* jre, _TCHAR* executable, _TCHAR* targetFolder)
   return execLib (jre->javaHome, _T("org.eclipse.oomph.extractor.lib.BINExtractor"), args);
 }
 
+static _TCHAR*
+getVM (_TCHAR* path)
+{
+  _TCHAR vm[MAX_PATH];
+  sprintf (vm, _T("%s\\javaw.exe"), path);
+
+  if ((_access (vm, 0)) != -1)
+  {
+    return strdup (vm);
+  }
+
+  return NULL;
+
+}
+
+static JRE*
+findAllJREsAndVMs ()
+{
+  JRE* jres = findAllJREs ();
+
+  _TCHAR path[32000] = _T("");
+  if (GetEnvironmentVariable (_T("PATH"), path, sizeof(path)) != 0)
+  {
+    _TCHAR* token = strtok (path, _T(";"));
+    while (token != NULL)
+    {
+      _TCHAR* vm = getVM (token);
+      if (vm != NULL)
+      {
+        JRE* jre = malloc (sizeof(JRE));
+        jre->javaHome = vm;
+        jre->jdk = 0;
+        jre->next = jres;
+        jres = jre;
+      }
+
+      token = strtok (NULL, _T(";"));
+    }
+  }
+
+  return jres;
+}
+
 /****************************************************************************************
  * Main Entry Point
  ***************************************************************************************/
@@ -347,7 +428,30 @@ main (int argc, char *argv[])
 
   if (validateJREs)
   {
-    JRE* jre = findAllJREs ();
+    JRE* jre = findAllJREsAndVMs ();
+
+    if (jre == NULL)
+    {
+      _TCHAR message[400];
+      sprintf (message, _T("The required %d-bit Java %d.%d.%d virtual machine could not be found.\nDo you want to browse your system for it?"), req.bitness,
+               req.major, req.minor, req.micro);
+
+      if ( MessageBox ( NULL, message, _T("Eclipse Installer"), MB_YESNO | MB_ICONQUESTION) == IDYES)
+      {
+        _TCHAR label[100];
+        sprintf (label, _T("Select a %d-Bit Java %d.%d.%d Virtual Machine"), req.bitness, req.major, req.minor, req.micro);
+
+        _TCHAR* vm = browseForFile (NULL, label, _T("javaw.exe\0javaw.exe\0\0"));
+        if (vm != NULL)
+        {
+          jre = malloc (sizeof(JRE));
+          jre->javaHome = vm;
+          jre->jdk = 0;
+          jre->next = NULL;
+        }
+      }
+    }
+
     while (jre)
     {
       if (validateJRE (jre, &req))
