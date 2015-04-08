@@ -25,6 +25,19 @@
          </run>
       </application>
    </extension>
+   
+   <extension
+         id="SetupMirror"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipse.oomph.setup.internal.installer.SetupMirror">
+         </run>
+      </application>
+   </extension>
 
    <extension
          id="application"
