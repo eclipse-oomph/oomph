@@ -14,7 +14,7 @@
 #include "org_eclipse_oomph_jreinfo_JREInfo.h"
 
 JNIEXPORT jobject JNICALL
-_Java_org_eclipse_oomph_jreinfo_JREInfo_getAllWin (JNIEnv* env, jclass jreinfoClass)
+Java_org_eclipse_oomph_jreinfo_JREInfo_getAllWin (JNIEnv* env, jclass jreinfoClass)
 {
   jobject jreinfo = NULL;
 

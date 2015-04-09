@@ -11,7 +11,7 @@ extern "C" {
  * Method:    getAllWin
  * Signature: ()Lorg/eclipse/oomph/jreinfo/JREInfo;
  */
-JNIEXPORT jobject JNICALL _Java_org_eclipse_oomph_jreinfo_JREInfo_getAllWin
+JNIEXPORT jobject JNICALL Java_org_eclipse_oomph_jreinfo_JREInfo_getAllWin
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus
