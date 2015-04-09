@@ -204,6 +204,9 @@
 									<listOptionValue builtIn="false" value="&quot;${JAVA_HOME}\include\win32&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.822849452" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -m32" valueType="string"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1447506359" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="BIT32"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1380511851" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.c.linker.mingw.so.release.1506927333" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.so.release">
