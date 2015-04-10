@@ -59,6 +59,7 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -136,7 +137,7 @@ public final class SetupCoreUtil
 
     class ModelResourceSet extends ResourceSetImpl
     {
-      private EPackage redirectedEPackage;
+      private Map<Resource, Resource> redirectedResources = new HashMap<Resource, Resource>();
 
       public ModelResourceSet()
       {
@@ -164,9 +165,10 @@ public final class SetupCoreUtil
         try
         {
           Resource resource = super.getResource(uri, true);
-          if (redirectedEPackage != null)
+          Resource redirectedResource = redirectedResources.get(resource);
+          if (redirectedResource != null)
           {
-            return null;
+            return redirectedResource;
           }
 
           if (resource.getResourceSet() == this)
@@ -190,10 +192,6 @@ public final class SetupCoreUtil
             return null;
           }
         }
-        finally
-        {
-          redirectedEPackage = null;
-        }
       }
 
       @Override
@@ -205,7 +203,7 @@ public final class SetupCoreUtil
         if (ePackage != null)
         {
           String nsURI = ePackage.getNsURI();
-          redirectedEPackage = packageRegistry.getEPackage(nsURI);
+          EPackage redirectedEPackage = packageRegistry.getEPackage(nsURI);
 
           for (EClassifier eClassifier : ePackage.getEClassifiers())
           {
@@ -226,6 +224,8 @@ public final class SetupCoreUtil
 
           if (redirectedEPackage != null)
           {
+            redirectedResources.put(resource, redirectedEPackage.eResource());
+
             packageRegistry.put(resource.getURI().toString(), redirectedEPackage);
             packageRegistry.put(uriConverter.normalize(resource.getURI()).toString(), redirectedEPackage);
           }
@@ -233,9 +233,9 @@ public final class SetupCoreUtil
           {
             packageRegistry.put(resource.getURI().toString(), ePackage);
             packageRegistry.put(uriConverter.normalize(resource.getURI()).toString(), ePackage);
-          }
 
-          ((EPackageImpl)ePackage).freeze();
+            ((EPackageImpl)ePackage).freeze();
+          }
         }
       }
     }
