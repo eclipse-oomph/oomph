@@ -83,6 +83,10 @@ import java.util.Set;
  */
 public class VariablePage extends SetupWizardPage implements SetupPrompter
 {
+  private static final URI INSTALLATION_ID_URI = URI.createURI("#~installation.id");
+
+  private static final URI WORKSPACE_ID_URI = URI.createURI("#~workspace.id");
+
   private Composite composite;
 
   private ScrolledComposite scrolledComposite;
@@ -92,8 +96,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   private boolean prompted;
 
   private boolean fullPrompt;
-
-  private boolean recursiveValidate;
 
   private boolean updating;
 
@@ -214,6 +216,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
     }
 
+    boolean setDefault = false;
     for (FieldHolder fieldHolder : manager)
     {
       if (StringUtil.isEmpty(fieldHolder.getValue()))
@@ -247,7 +250,17 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         }
         else if (!StringUtil.isEmpty(initialDefaultValue))
         {
+          setDefault = true;
           fieldHolder.setValue(initialDefaultValue);
+        }
+        else
+        {
+          String defaultValue = fieldHolder.getDefaultValue();
+          if (!StringUtil.isEmpty(defaultValue))
+          {
+            setDefault = true;
+            fieldHolder.setValue(defaultValue);
+          }
         }
       }
     }
@@ -364,19 +377,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
     }
 
-    if (!isPageComplete() && firstEmptyField == null)
+    if (!isPageComplete() && (firstEmptyField == null || setDefault))
     {
       // If the page isn't complete but there are no empty fields, then the last change introduced a new field.
       // So we should validate again to be sure there really needs to be more information prompted from the user.
-      if (!recursiveValidate)
-      {
-        recursiveValidate = true;
-        validate();
-      }
-    }
-    else
-    {
-      recursiveValidate = false;
+      validate();
     }
   }
 
@@ -447,9 +452,33 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
   }
 
+  private void clearSpecialFieldHolders()
+  {
+    clearSpecialFieldHolders(INSTALLATION_ID_URI);
+    clearSpecialFieldHolders(WORKSPACE_ID_URI);
+  }
+
+  private void clearSpecialFieldHolders(URI uri)
+  {
+    FieldHolderRecord fieldHolderRecord = manager.getFieldHolderRecord(uri);
+    if (fieldHolderRecord != null)
+    {
+      FieldHolder fieldHolder = fieldHolderRecord.getFieldHolder();
+      if (fieldHolder != null && !fieldHolder.isDirty())
+      {
+        fieldHolder.clearValue();
+      }
+    }
+  }
+
   @Override
   public void enterPage(boolean forward)
   {
+    if (forward)
+    {
+      clearSpecialFieldHolders();
+    }
+
     performer = getWizard().getPerformer();
     if (performer != null && forward)
     {
@@ -703,12 +732,29 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       return field == null ? initialValue : field.getValue();
     }
 
+    public String getDefaultValue()
+    {
+      return field == null ? null : field.getDefaultValue();
+    }
+
+    public void clearValue()
+    {
+      initialValue = "";
+
+      if (field != null)
+      {
+        field.setValue("", false, false);
+      }
+    }
+
     public void setValue(String value)
     {
       if (field == null)
       {
         throw new IllegalStateException("Can't set the value of a disposed field");
       }
+
+      initialValue = null;
 
       field.setValue(value, false);
     }
@@ -790,6 +836,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         variable.setValue(newValue);
       }
 
+      clearSpecialFieldHolders();
       validate();
     }
 

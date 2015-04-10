@@ -103,6 +103,12 @@ public abstract class PropertyField
     switch (type)
     {
       case JRE:
+        if (choices.isEmpty())
+        {
+          JREField jreField = new JREField(new JREFilter(1, 8, null), choices);
+          return jreField;
+        }
+
         for (VariableChoice choice : choices)
         {
           String value = choice.getValue();
@@ -118,7 +124,6 @@ public abstract class PropertyField
               return jreField;
             }
           }
-          System.err.println("###" + choice);
         }
 
         return createField(VariableType.FOLDER, choices);
@@ -224,12 +229,19 @@ public abstract class PropertyField
     return value;
   }
 
+  public abstract String getDefaultValue();
+
   public final void setValue(String value)
   {
     setValue(value, true);
   }
 
   public final void setValue(String value, boolean notify)
+  {
+    setValue(value, notify, true);
+  }
+
+  public final void setValue(String value, boolean notify, boolean transfer)
   {
     if (value == null)
     {
@@ -241,10 +253,13 @@ public abstract class PropertyField
     {
       this.value = value;
 
-      String controlValue = getControlValue();
-      if (!controlValue.equals(value))
+      if (transfer)
       {
-        transferValueToControl(value);
+        String controlValue = getControlValue();
+        if (!controlValue.equals(value))
+        {
+          transferValueToControl(value);
+        }
       }
 
       if (notify)
@@ -480,6 +495,12 @@ public abstract class PropertyField
     }
 
     @Override
+    public String getDefaultValue()
+    {
+      return "false";
+    }
+
+    @Override
     protected String getControlValue()
     {
       if (button == null)
@@ -666,6 +687,12 @@ public abstract class PropertyField
       super(labelText);
       this.secret = secret;
       this.choices = choices;
+    }
+
+    @Override
+    public String getDefaultValue()
+    {
+      return choices == null || choices.isEmpty() ? "" : choices.get(0).getValue();
     }
 
     public final PropertyField getLinkField()
@@ -1153,7 +1180,7 @@ public abstract class PropertyField
       super(null, getJREChoices(jreFilter));
       this.jreFilter = jreFilter;
 
-      setButtonText("Browse...");
+      setButtonText("Select...");
     }
 
     private static List<? extends VariableChoice> getJREChoices(JREFilter jreFilter)

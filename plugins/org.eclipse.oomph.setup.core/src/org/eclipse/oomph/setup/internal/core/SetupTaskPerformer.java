@@ -78,6 +78,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -1079,6 +1080,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     variable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_TYPE)));
     variable.setLabel(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_LABEL)));
     variable.setDescription(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_DESCRIPTION)));
+    variable.setDefaultValue(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_DEFAULT_VALUE)));
 
     // The storageURI remains the default unless there is an explicit key to specify it be null or whatever else is specified.
     if (details.containsKey(EAnnotationConstants.KEY_STORAGE_URI))
@@ -1892,6 +1894,86 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   protected String resolve(String key)
   {
     return lookup(key);
+  }
+
+  @Override
+  protected String filter(String value, String filterName)
+  {
+    if (filterName.equalsIgnoreCase("installationID"))
+    {
+      String installRoot = resolve("install.root");
+      if (StringUtil.isEmpty(installRoot))
+      {
+        VariableTask variable = allVariables.get("install.root");
+        if (variable != null)
+        {
+          installRoot = variable.getValue();
+        }
+      }
+
+      if (StringUtil.isEmpty(installRoot) || STRING_EXPANSION_PATTERN.matcher(installRoot).find())
+      {
+        return null;
+      }
+
+      String installationID;
+      String projectName = lookup("scope.project.name.qualified");
+      if (StringUtil.isEmpty(projectName))
+      {
+        installationID = SegmentSequence.create(".", lookup("scope.product.name")).lastSegment() + "-" + lookup("scope.product.version.name").replace('.', '-');
+      }
+      else
+      {
+        String projectCatalogName = lookup("scope.project.catalog.name");
+        String streamName = lookup("scope.project.stream.name");
+        installationID = SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1)).firstSegment() + "-"
+            + streamName.replace('.', '-');
+      }
+
+      String uniqueInstallationID = installationID;
+
+      for (int i = 2; new File(installRoot + "/" + uniqueInstallationID).exists(); ++i)
+      {
+        uniqueInstallationID = installationID + i;
+      }
+
+      return uniqueInstallationID;
+    }
+
+    if (filterName.equalsIgnoreCase("workspaceID"))
+    {
+      String workspaceContainerRoot = resolve("workspace.container.root");
+      if (StringUtil.isEmpty(workspaceContainerRoot))
+      {
+        VariableTask variable = allVariables.get("workspace.container.root");
+        if (variable != null)
+        {
+          workspaceContainerRoot = variable.getValue();
+        }
+      }
+
+      if (StringUtil.isEmpty(workspaceContainerRoot) || STRING_EXPANSION_PATTERN.matcher(workspaceContainerRoot).find())
+      {
+        return null;
+      }
+
+      String projectName = lookup("scope.project.name.qualified");
+      String projectCatalogName = lookup("scope.project.catalog.name");
+      String streamName = lookup("scope.project.stream.name");
+      String workspaceID = SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1)).firstSegment() + "-"
+          + streamName.replace('.', '-') + "-ws";
+
+      String uniqueWorkspaceID = workspaceID;
+
+      for (int i = 2; new File(workspaceContainerRoot + "/" + uniqueWorkspaceID).exists(); ++i)
+      {
+        uniqueWorkspaceID = workspaceID + i;
+      }
+
+      return uniqueWorkspaceID;
+    }
+
+    return super.filter(value, filterName);
   }
 
   @Override

@@ -110,8 +110,7 @@ public abstract class StringExpander
             result.append(matcher.group());
           }
         }
-
-        if (value != null)
+        else
         {
           String filters = matcher.group(4);
           if (filters != null)
@@ -119,6 +118,24 @@ public abstract class StringExpander
             for (String filterName : filters.split("\\|"))
             {
               value = filter(value, filterName);
+              if (value == null)
+              {
+                if (keys != null)
+                {
+                  unresolved = true;
+
+                  if (!isUnexpanded)
+                  {
+                    keys.add(key);
+                  }
+                }
+                else if (!unresolved)
+                {
+                  result.append(matcher.group());
+                }
+
+                continue;
+              }
             }
           }
 

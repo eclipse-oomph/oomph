@@ -51,6 +51,8 @@ public final class EAnnotationConstants
 
   public static final String KEY_DESCRIPTION = "description";
 
+  public static final String KEY_DEFAULT_VALUE = "defaultValue";
+
   public static final String KEY_VALUE = "value";
 
   public static final String KEY_STORAGE_URI = "storageURI";

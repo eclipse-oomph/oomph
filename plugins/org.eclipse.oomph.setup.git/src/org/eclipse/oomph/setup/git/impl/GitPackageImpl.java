@@ -392,7 +392,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
     addAnnotation(getGitCloneTask_Location(), source, new String[] { "name", "git.container.root", "type", "FOLDER", "label", "Root Git-container folder",
-        "description", "The root Git-container folder where all the Git clones are located", "storageURI", "scope://" });
+        "defaultValue", "${user.home}", "description", "The root Git-container folder where all the Git clones are located", "storageURI", "scope://" });
   }
 
   /**

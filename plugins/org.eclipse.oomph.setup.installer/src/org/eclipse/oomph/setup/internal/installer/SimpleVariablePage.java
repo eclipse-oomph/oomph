@@ -629,6 +629,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
       name = name.substring(lastDot + 1);
     }
 
+    name += "-" + selectedProductVersion.getName().replace('.', '-');
+
     if (installRoot == null)
     {
       if (FILE_INSTALL_ROOT.isFile())

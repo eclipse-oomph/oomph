@@ -72,6 +72,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
+  public static final String PREF_HEADLESS = "headless.startup";
+
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
 
   public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder";
@@ -158,88 +160,91 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void performStartup()
   {
-    final Display display = Display.getDefault();
-    display.asyncExec(new Runnable()
+    if (!"true".equals(PropertiesUtil.getProperty("headless.startup")))
     {
-      public void run()
+      final Display display = Display.getDefault();
+      display.asyncExec(new Runnable()
       {
-        if (!isInstallerProduct())
+        public void run()
         {
-          SetupPropertyTester.setStarting(true);
-
-          final IWorkbench workbench = PlatformUI.getWorkbench();
-          IExtensionTracker extensionTracker = workbench.getExtensionTracker();
-          if (extensionTracker == null || workbench.getWorkbenchWindowCount() == 0)
+          if (!isInstallerProduct())
           {
-            display.timerExec(1000, this);
-          }
-          else
-          {
-            if (SetupTaskPerformer.REMOTE_DEBUG)
-            {
-              MessageDialog.openInformation(UIUtil.getShell(), "Remote Debug Pause", "The setup tasks are paused to allow you to attach a remote debugger");
-            }
+            SetupPropertyTester.setStarting(true);
 
-            if (Platform.OS_MACOSX.equals(Platform.getOS()))
+            final IWorkbench workbench = PlatformUI.getWorkbench();
+            IExtensionTracker extensionTracker = workbench.getExtensionTracker();
+            if (extensionTracker == null || workbench.getWorkbenchWindowCount() == 0)
             {
-              new TaskItemDecorator();
-            }
-
-            RecorderManager.Lifecycle.start(display);
-
-            if (!SETUP_SKIP && !isSkipStartupTasks())
-            {
-              new Job("Setup check...")
-              {
-                @Override
-                protected IStatus run(IProgressMonitor monitor)
-                {
-                  try
-                  {
-                    performStartup(workbench, monitor);
-                    return Status.OK_STATUS;
-                  }
-                  finally
-                  {
-                    SetupPropertyTester.setStarting(false);
-                  }
-                }
-              }.schedule();
+              display.timerExec(1000, this);
             }
             else
             {
-              Job mirrorJob = new Job("Refresh Setup Cache")
+              if (SetupTaskPerformer.REMOTE_DEBUG)
               {
-                @Override
-                protected IStatus run(IProgressMonitor monitor)
+                MessageDialog.openInformation(UIUtil.getShell(), "Remote Debug Pause", "The setup tasks are paused to allow you to attach a remote debugger");
+              }
+
+              if (Platform.OS_MACOSX.equals(Platform.getOS()))
+              {
+                new TaskItemDecorator();
+              }
+
+              RecorderManager.Lifecycle.start(display);
+
+              if (!SETUP_SKIP && !isSkipStartupTasks())
+              {
+                new Job("Setup check...")
                 {
-                  try
+                  @Override
+                  protected IStatus run(IProgressMonitor monitor)
                   {
-                    ResourceMirror resourceMirror = new ResourceMirror();
-                    resourceMirror.perform(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
-                        SetupContext.USER_SETUP_URI }));
-
-                    ResourceSet resourceSet = resourceMirror.getResourceSet();
-                    resourceMirror.dispose();
-
-                    SetupContext.setSelf(SetupContext.createSelf(resourceSet));
-
-                    return Status.OK_STATUS;
+                    try
+                    {
+                      performStartup(workbench, monitor);
+                      return Status.OK_STATUS;
+                    }
+                    finally
+                    {
+                      SetupPropertyTester.setStarting(false);
+                    }
                   }
-                  finally
+                }.schedule();
+              }
+              else
+              {
+                Job mirrorJob = new Job("Refresh Setup Cache")
+                {
+                  @Override
+                  protected IStatus run(IProgressMonitor monitor)
                   {
-                    SetupPropertyTester.setStarting(false);
-                  }
-                }
-              };
+                    try
+                    {
+                      ResourceMirror resourceMirror = new ResourceMirror();
+                      resourceMirror.perform(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
+                          SetupContext.USER_SETUP_URI }));
 
-              mirrorJob.setSystem(true);
-              mirrorJob.schedule();
+                      ResourceSet resourceSet = resourceMirror.getResourceSet();
+                      resourceMirror.dispose();
+
+                      SetupContext.setSelf(SetupContext.createSelf(resourceSet));
+
+                      return Status.OK_STATUS;
+                    }
+                    finally
+                    {
+                      SetupPropertyTester.setStarting(false);
+                    }
+                  }
+                };
+
+                mirrorJob.setSystem(true);
+                mirrorJob.schedule();
+              }
             }
           }
         }
-      }
-    });
+      });
+    }
   }
 
   private static void performStartup(final IWorkbench workbench, IProgressMonitor monitor)

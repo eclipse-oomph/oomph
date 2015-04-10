@@ -171,14 +171,14 @@
         name="eclipse.gerrit.remoteURIs"
         label="Eclipse Gerrit Repository">
       <choice
+          value="https://git.eclipse.org/r/@{remoteURI}"
+          label="HTTPS (read-only, anonymous, Gerrit)"/>
+      <choice
           value="ssh://${git.user.id|username}@git.eclipse.org:29418/@{remoteURI}"
           label="SSH (read-write, Gerrit)"/>
       <choice
           value="https://${git.user.id|username}@git.eclipse.org/r/@{remoteURI}"
           label="HTTPS (read-write, Gerrit)"/>
-      <choice
-          value="https://git.eclipse.org/r/@{remoteURI}"
-          label="HTTPS (read-only, anonymous, Gerrit)"/>
       <description>Choose from the available remote Gerrit URIs</description>
     </setupTask>
     <setupTask
@@ -186,11 +186,11 @@
         name="eclipse.git.remoteURIs"
         label="Eclipse Git Repository">
       <choice
-          value="ssh://${git.user.id|username}@git.eclipse.org/gitroot/@{remoteURI}.git"
-          label="SSH (read-write, direct)"/>
-      <choice
           value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
           label="HTTP (read-only, anonymous, direct)"/>
+      <choice
+          value="ssh://${git.user.id|username}@git.eclipse.org/gitroot/@{remoteURI}.git"
+          label="SSH (read-write, direct)"/>
       <choice
           value="git://git.eclipse.org/gitroot/@{remoteURI}"
           label="Git (read-only, anonymous, direct)"/>

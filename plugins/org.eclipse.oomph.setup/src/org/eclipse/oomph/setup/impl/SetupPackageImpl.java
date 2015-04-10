@@ -2416,14 +2416,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
     addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "install.root", "type", "FOLDER", "label", "Root install folder",
-        "description", "The root install folder where all the products are installed", "storageURI", "scope://" });
+        "defaultValue", "${user.home}", "description", "The root install folder where all the products are installed", "storageURI", "scope://" });
     addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "installation.id", "type", "STRING", "label", "Installation folder name",
-        "description", "The name of the folder within the root install folder where the product is installed" });
+        "defaultValue", "${scope.product.name|installationID}", "description",
+        "The name of the folder within the root install folder where the product is installed" });
+    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.container.root", "type", "FOLDER", "label",
+        "Root workspace-container folder", "defaultValue", "${user.home}", "description",
+        "The root workspace-container folder where all the workspaces are located", "storageURI", "scope://" });
     addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.id", "type", "STRING", "label", "Workspace folder name",
-        "description", "The name of the workspace folder within the root workspace-container folder where the workspaces are located" });
-    addAnnotation(getWorkspaceTask_Location(), source,
-        new String[] { "name", "workspace.container.root", "type", "FOLDER", "label", "Root workspace-container folder", "description",
-            "The root workspace-container folder where all the workspaces are located", "storageURI", "scope://" });
+        "defaultValue", "${scope.project.name|workspaceID}", "description",
+        "The name of the workspace folder within the root workspace-container folder where the workspaces are located" });
   }
 
   /**
@@ -2458,10 +2460,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getWorkspaceTask_Location(), source, new String[] { "filter", "canonical", "type", "STRING", "label", "Workspace location rule",
         "description", "The rule for the absolute folder location where the workspace is located", "storageURI", null, "explicitType", "FOLDER",
         "explicitLabel", "Workspace location", "explicitDescription", "The absolute folder location where the workspace is located" });
-    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${workspace.container.root/}${workspace.id}",
-        "label", "Located in a uniquely-named folder within the root workspace-container folder" });
     addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${installation.location/ws}", "label",
         "Located in a folder named \'ws\' within the installation folder" });
+    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${workspace.container.root/}${workspace.id}",
+        "label", "Located in a uniquely-named folder within the root workspace-container folder" });
     addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${@id.location}", "label",
         "Located in the specified absolute folder location" });
   }

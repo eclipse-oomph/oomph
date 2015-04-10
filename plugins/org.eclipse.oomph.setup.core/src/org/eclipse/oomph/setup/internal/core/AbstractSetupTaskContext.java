@@ -456,6 +456,20 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
         return value.substring(pos + 1);
       }
     });
+
+    registerFilter("fileExtension", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        int pos = value.lastIndexOf('.');
+        if (pos == -1)
+        {
+          return "";
+        }
+
+        return value.substring(pos + 1);
+      }
+    });
   }
 
   /**
