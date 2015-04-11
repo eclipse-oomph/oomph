@@ -463,6 +463,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     User user = setupContext.getUser();
     excludedResources.add(user.eResource());
 
+    boolean ecoreChanged = false;
     Set<Resource> retainedResources = new HashSet<Resource>();
     EList<Resource> resources = resourceSet.getResources();
     for (Iterator<Resource> it = resources.iterator(); it.hasNext();)
@@ -473,6 +474,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         if ("ecore".equals(resource.getURI().fileExtension()))
         {
           it.remove();
+          ecoreChanged = true;
         }
         else
         {
@@ -487,9 +489,28 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     resources.remove(selectionResource);
 
-    if (updatedResources == null)
+    if (ecoreChanged)
     {
-      ECFURIHandlerImpl.clearExpectedETags();
+      for (Resource resource : retainedResources)
+      {
+        if ("ecore".equals(resource.getURI().fileExtension()))
+        {
+          resources.remove(resource);
+        }
+        else if (resource != selectionResource)
+        {
+          resource.unload();
+        }
+      }
+    }
+
+    if (updatedResources == null || ecoreChanged)
+    {
+      if (updatedResources == null)
+      {
+        ECFURIHandlerImpl.clearExpectedETags();
+      }
+
       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
       resourceSet.getPackageRegistry().clear();
       loadIndex();
@@ -535,6 +556,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   protected void indexLoaded(Index index)
   {
+    setSetupContext(SetupContext.createInstallationWorkspaceAndUser(resourceSet));
   }
 
   @Override
@@ -552,9 +574,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     private SetupWizard wizard;
 
-    private boolean reloading;
+    private volatile boolean loading = true;
 
-    private boolean reloaded;
+    private volatile boolean reloading;
+
+    private volatile boolean reloaded;
 
     final void setWizard(SetupWizard wizard)
     {
@@ -571,6 +595,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor) throws InvocationTargetException,
         InterruptedException
     {
+      loading = true;
       ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
       {
         @Override
@@ -634,6 +659,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
             if (reloading)
             {
               // Then we're done now.
+              loading = false;
               reloading = false;
               reloaded = true;
             }
@@ -643,6 +669,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
               // We will be testing if any remote resources have changed.
               reloading = true;
+              loading = false;
 
               new Thread()
               {
@@ -762,7 +789,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     public void awaitIndexLoad()
     {
-      if (reloading && !reloaded)
+      if (loading || reloading && !reloaded)
       {
         try
         {
@@ -872,6 +899,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     @Override
     protected void indexLoaded(Index index)
     {
+      super.indexLoaded(index);
       getCatalogManager().indexLoaded(index);
     }
 
@@ -928,6 +956,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     @Override
     protected void indexLoaded(Index index)
     {
+      super.indexLoaded(index);
       getCatalogManager().indexLoaded(index);
     }
   }

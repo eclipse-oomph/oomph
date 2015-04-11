@@ -234,6 +234,11 @@ public class SetupContext
     return new SetupContext(getInstallation(resourceSet, true, Mode.CREATE), getWorkspace(resourceSet, true, Mode.CREATE), getUser(resourceSet, true));
   }
 
+  public static SetupContext createInstallationWorkspaceAndUser(ResourceSet resourceSet)
+  {
+    return new SetupContext(getInstallation(resourceSet, false, Mode.NONE), getWorkspace(resourceSet, false, Mode.NONE), getUser(resourceSet, false));
+  }
+
   public static SetupContext createUserOnly(ResourceSet resourceSet)
   {
     return new SetupContext(null, null, getUser(resourceSet, true));

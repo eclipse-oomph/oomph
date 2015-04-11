@@ -35,6 +35,7 @@ import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -119,6 +120,45 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
           e.detail = SWT.TRAVERSE_NONE;
           e.doit = false;
         }
+      }
+    });
+
+    shell.getDisplay().asyncExec(new Runnable()
+    {
+      public void run()
+      {
+        final Runnable checkIndex = this;
+        final Installer installer = getInstaller();
+        installer.getIndexLoader().awaitIndexLoad();
+        shell.getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            if (installer.getCatalogManager().getIndex() == null)
+            {
+              int answer = new MessageDialog(shell, "Network Problem", null,
+                  "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
+                  MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
+              switch (answer)
+              {
+                case 0:
+                  installer.reloadIndex();
+                  shell.getDisplay().asyncExec(checkIndex);
+                  return;
+
+                case 1:
+                  new ProxyPreferenceDialog(getShell()).open();
+                  installer.reloadIndex();
+                  shell.getDisplay().asyncExec(checkIndex);
+                  return;
+
+                default:
+                  close();
+                  return;
+              }
+            }
+          }
+        });
       }
     });
   }

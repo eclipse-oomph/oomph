@@ -183,6 +183,15 @@ public final class SetupCoreUtil
         }
         catch (RuntimeException throwable)
         {
+          Resource resource = super.getResource(uri, false);
+          if (resource.getResourceSet() == this)
+          {
+            synchronized (resourceSet)
+            {
+              resourceSet.getResources().add(resource);
+            }
+          }
+
           if (loadOnDemand)
           {
             throw throwable;
