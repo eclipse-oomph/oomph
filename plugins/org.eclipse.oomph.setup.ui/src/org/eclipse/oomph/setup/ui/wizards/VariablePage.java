@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.ui.AccessUtil;
@@ -21,6 +22,7 @@ import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
@@ -32,6 +34,7 @@ import org.eclipse.oomph.setup.ui.PropertyField.AuthenticatedField;
 import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
+import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
@@ -77,6 +80,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -231,6 +236,44 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
             if (!StringUtil.isEmpty(value))
             {
               initialValue = value;
+
+              // Check the choices for ones that specify "match choice" annotations.
+              for (VariableChoice choice : variable.getChoices())
+              {
+                Annotation annotation = choice.getAnnotation(AnnotationConstants.ANNOTATION_MATCH_CHOICE);
+                if (annotation != null)
+                {
+                  String choiceValue = choice.getValue();
+                  if (choiceValue != null)
+                  {
+                    // Expand the choice into a pattern where the variables expand to ".*" and the rest of the value is quoted as literal.
+                    StringBuffer result = new StringBuffer("\\Q");
+                    Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(choiceValue);
+                    while (matcher.find())
+                    {
+                      matcher.appendReplacement(result, "\\\\E.*\\\\Q");
+                    }
+
+                    matcher.appendTail(result);
+
+                    try
+                    {
+                      // If the pattern matches, use the value of the choice as the initial value.
+                      Pattern pattern = Pattern.compile(result.toString());
+                      if (pattern.matcher(value).matches())
+                      {
+                        initialValue = choiceValue;
+                        setDefault = true;
+                        break;
+                      }
+                    }
+                    catch (Throwable throwable)
+                    {
+                      // Ignore.
+                    }
+                  }
+                }
+              }
             }
           }
 

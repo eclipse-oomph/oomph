@@ -33,7 +33,10 @@
           label="Git (read-write)"/>
       <choice
           value="https://${github.user.id|username}@github.com/@{remoteURI}.git"
-          label="HTTPS (read-write)"/>
+          label="HTTPS (read-write)">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
+      </choice>
       <choice
           value="https://github.com/@{remoteURI}.git"
           label="HTTP (read-only, anonymous)"/>
@@ -90,7 +93,7 @@
     </modification>
   </setupTask>
   <project href="user:/com.github.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Github.com project catalog'#/"/>
-  <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
   <project href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup#/"/>
   <project href="https://github.com/meysholdt/Xpect/raw/master/org.xpect.releng/Xpect.setup#/"/>
+  <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>

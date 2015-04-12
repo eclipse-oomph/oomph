@@ -175,10 +175,16 @@
           label="HTTPS (read-only, anonymous, Gerrit)"/>
       <choice
           value="ssh://${git.user.id|username}@git.eclipse.org:29418/@{remoteURI}"
-          label="SSH (read-write, Gerrit)"/>
+          label="SSH (read-write, Gerrit)">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
+      </choice>
       <choice
           value="https://${git.user.id|username}@git.eclipse.org/r/@{remoteURI}"
-          label="HTTPS (read-write, Gerrit)"/>
+          label="HTTPS (read-write, Gerrit)">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
+      </choice>
       <description>Choose from the available remote Gerrit URIs</description>
     </setupTask>
     <setupTask
@@ -190,7 +196,10 @@
           label="HTTP (read-only, anonymous, direct)"/>
       <choice
           value="ssh://${git.user.id|username}@git.eclipse.org/gitroot/@{remoteURI}.git"
-          label="SSH (read-write, direct)"/>
+          label="SSH (read-write, direct)">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
+      </choice>
       <choice
           value="git://git.eclipse.org/gitroot/@{remoteURI}"
           label="Git (read-only, anonymous, direct)"/>

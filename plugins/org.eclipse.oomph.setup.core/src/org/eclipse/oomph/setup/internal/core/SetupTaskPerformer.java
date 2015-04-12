@@ -812,6 +812,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
                 choice.setValue(value);
                 choice.setLabel(label);
+                choice.getAnnotations().addAll(EcoreUtil.copyAll(variableChoice.getAnnotations()));
                 choices.add(choice);
               }
             }
@@ -924,6 +925,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                         VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
                         choice.setValue(value);
                         choice.setLabel(label);
+                        choice.getAnnotations().addAll(EcoreUtil.copyAll(variableChoice.getAnnotations()));
                         choices.add(choice);
                       }
                     }
@@ -1896,21 +1898,44 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return lookup(key);
   }
 
+  private String specialResolve(String key)
+  {
+    String result = null;
+    VariableTask variable = allVariables.get(key);
+    if (variable != null)
+    {
+      result = getPrompter().getValue(variable);
+    }
+
+    if (StringUtil.isEmpty(result))
+    {
+      variable = SetupFactory.eINSTANCE.createVariableTask();
+      variable.setName(key);
+      result = getPrompter().getValue(variable);
+    }
+
+    if (StringUtil.isEmpty(result))
+    {
+      result = resolve(key);
+      if (StringUtil.isEmpty(result))
+      {
+        result = variable.getValue();
+        if (StringUtil.isEmpty(result))
+        {
+          result = variable.getDefaultValue();
+        }
+      }
+    }
+
+    return result;
+  }
+
   @Override
   protected String filter(String value, String filterName)
   {
     if (filterName.equalsIgnoreCase("installationID"))
     {
-      String installRoot = resolve("install.root");
-      if (StringUtil.isEmpty(installRoot))
-      {
-        VariableTask variable = allVariables.get("install.root");
-        if (variable != null)
-        {
-          installRoot = variable.getValue();
-        }
-      }
-
+      String installRoot = specialResolve("install.root");
       if (StringUtil.isEmpty(installRoot) || STRING_EXPANSION_PATTERN.matcher(installRoot).find())
       {
         return null;
@@ -1942,16 +1967,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     if (filterName.equalsIgnoreCase("workspaceID"))
     {
-      String workspaceContainerRoot = resolve("workspace.container.root");
-      if (StringUtil.isEmpty(workspaceContainerRoot))
-      {
-        VariableTask variable = allVariables.get("workspace.container.root");
-        if (variable != null)
-        {
-          workspaceContainerRoot = variable.getValue();
-        }
-      }
-
+      String workspaceContainerRoot = specialResolve("workspace.container.root");
       if (StringUtil.isEmpty(workspaceContainerRoot) || STRING_EXPANSION_PATTERN.matcher(workspaceContainerRoot).find())
       {
         return null;
