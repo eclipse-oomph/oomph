@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
+import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -25,6 +26,8 @@ public final class TargletsCorePlugin extends OomphPlugin
 
   private static Implementation plugin;
 
+  private CacheUsageConfirmer cacheUsageConfirmer;
+
   public TargletsCorePlugin()
   {
     super(new ResourceLocator[] {});
@@ -34,6 +37,16 @@ public final class TargletsCorePlugin extends OomphPlugin
   public ResourceLocator getPluginResourceLocator()
   {
     return plugin;
+  }
+
+  public CacheUsageConfirmer getCacheUsageConfirmer()
+  {
+    return cacheUsageConfirmer;
+  }
+
+  public void setCacheUsageConfirmer(CacheUsageConfirmer cacheUsageConfirmer)
+  {
+    this.cacheUsageConfirmer = cacheUsageConfirmer;
   }
 
   /**

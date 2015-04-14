@@ -19,6 +19,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
@@ -689,16 +690,38 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     transaction.setMirrors(mirrors);
 
-    boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor(true));
-    if (context.getTrigger() != Trigger.BOOTSTRAP)
+    IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
+    CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
+    CacheUsageConfirmer oldCacheUsageConfirmer = (CacheUsageConfirmer)provisioningAgent.getService(CacheUsageConfirmer.SERVICE_NAME);
+    try
     {
-      if (profileChanged)
+      if (cacheUsageConfirmer != null)
       {
-        context.setRestartNeeded("New software has been installed.");
+        provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, cacheUsageConfirmer);
       }
-      else
+
+      boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor(true));
+      if (context.getTrigger() != Trigger.BOOTSTRAP)
       {
-        context.log("No software updates are available");
+        if (profileChanged)
+        {
+          context.setRestartNeeded("New software has been installed.");
+        }
+        else
+        {
+          context.log("No software updates are available");
+        }
+      }
+    }
+    finally
+    {
+      if (cacheUsageConfirmer != null)
+      {
+        provisioningAgent.unregisterService(CacheUsageConfirmer.SERVICE_NAME, cacheUsageConfirmer);
+        if (oldCacheUsageConfirmer != null)
+        {
+          provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, oldCacheUsageConfirmer);
+        }
       }
     }
 

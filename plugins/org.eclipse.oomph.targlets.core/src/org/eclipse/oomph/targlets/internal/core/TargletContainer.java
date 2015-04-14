@@ -20,6 +20,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
+import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
@@ -692,8 +693,17 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     ProfileTransaction transaction = profile.change().setRemoveExistingInstallableUnits(true);
     transaction.setMirrors(MIRRORS.get() == Boolean.TRUE);
 
+    IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
+    CacheUsageConfirmer cacheUsageConfirmer = TargletsCorePlugin.INSTANCE.getCacheUsageConfirmer();
+    CacheUsageConfirmer oldCacheUsageConfirmer = (CacheUsageConfirmer)provisioningAgent.getService(CacheUsageConfirmer.SERVICE_NAME);
+
     try
     {
+      if (cacheUsageConfirmer != null)
+      {
+        provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, cacheUsageConfirmer);
+      }
+
       ProfileDefinition profileDefinition = transaction.getProfileDefinition();
       profileDefinition.setIncludeSourceBundles(isIncludeSources());
 
@@ -745,6 +755,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
 
       TargletsCorePlugin.INSTANCE.coreException(t);
+    }
+    finally
+    {
+      if (cacheUsageConfirmer != null && oldCacheUsageConfirmer != null)
+      {
+        provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, oldCacheUsageConfirmer);
+      }
     }
 
     progress.done();

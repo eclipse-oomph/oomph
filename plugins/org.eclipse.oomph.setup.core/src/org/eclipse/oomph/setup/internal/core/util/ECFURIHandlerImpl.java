@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.Authorizatio
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.WorkerPool;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;

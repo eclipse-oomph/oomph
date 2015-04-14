@@ -25,6 +25,7 @@ import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.WorkerPool;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -39,6 +40,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.director.SimplePlanner;
@@ -53,6 +55,7 @@ import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
@@ -88,6 +91,7 @@ import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -712,54 +716,45 @@ public class ProfileTransactionImpl implements ProfileTransaction
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
 
-    monitor.beginTask("", metadataURIs.length);
-
-    try
+    for (int i = 0; i < metadataURIs.length; i++)
     {
-      for (int i = 0; i < metadataURIs.length; i++)
+      try
       {
-        P2CorePlugin.checkCancelation(monitor);
+        Repository repository = repositories.get(i);
+        String url = repository.getURL();
+        final URI uri = new URI(url);
 
-        try
+        if (!knownRepositories.contains(url))
         {
-          Repository repository = repositories.get(i);
-          String url = repository.getURL();
-          final URI uri = new URI(url);
-
-          if (!knownRepositories.contains(url))
+          cleanup.add(new Runnable()
           {
-            cleanup.add(new Runnable()
+            public void run()
             {
-              public void run()
-              {
-                manager.removeRepository(uri);
-              }
-            });
-          }
+              manager.removeRepository(uri);
+            }
+          });
+        }
 
-          IMetadataRepository metadataRepository = manager.loadRepository(uri, new SubProgressMonitor(monitor, 1));
-          metadataRepositories.add(metadataRepository);
-
-          metadataURIs[i] = uri;
-          artifactURIs.add(uri);
-        }
-        catch (OperationCanceledException ex)
-        {
-          throw ex;
-        }
-        catch (CoreException ex)
-        {
-          throw ex;
-        }
-        catch (Exception ex)
-        {
-          throw new P2Exception(ex);
-        }
+        metadataURIs[i] = uri;
+        artifactURIs.add(uri);
+      }
+      catch (Exception ex)
+      {
+        throw new P2Exception(ex);
       }
     }
-    finally
+
+    RepositoryLoader repositoryLoader = new RepositoryLoader(manager, metadataURIs);
+    repositoryLoader.begin(monitor);
+    ProvisionException exception = repositoryLoader.getException();
+    if (exception != null)
     {
-      monitor.done();
+      throw exception;
+    }
+
+    if (repositoryLoader.isCanceled())
+    {
+      throw new OperationCanceledException();
     }
 
     for (BundlePool bundlePool : agent.getAgentManager().getBundlePools())
@@ -1228,6 +1223,95 @@ public class ProfileTransactionImpl implements ProfileTransaction
     public String toString()
     {
       return iu.toString() + " / " + propertyKey;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static final class RepositoryLoader extends WorkerPool<RepositoryLoader, URI, RepositoryLoader.Worker>
+  {
+    final private URI[] uris;
+
+    final protected IMetadataRepositoryManager manager;
+
+    final protected List<IMetadataRepository> metadataRepositories = Collections.synchronizedList(new ArrayList<IMetadataRepository>());
+
+    protected ProvisionException exception;
+
+    public RepositoryLoader(IMetadataRepositoryManager manager, URI... uris)
+    {
+      this.manager = manager;
+      this.uris = uris;
+    }
+
+    public void begin(IProgressMonitor monitor)
+    {
+      try
+      {
+        monitor.beginTask("", uris.length + 1);
+        monitor.worked(1);
+        begin("Load Repositories", monitor);
+      }
+      finally
+      {
+        monitor.done();
+      }
+    }
+
+    public ProvisionException getException()
+    {
+      return exception;
+    }
+
+    @Override
+    protected void run(String taskName, IProgressMonitor monitor)
+    {
+      perform(uris);
+    }
+
+    @Override
+    protected Worker createWorker(URI key, int workerID, boolean secondary)
+    {
+      return new Worker("Repository loader for " + key, this, key, workerID, secondary);
+    }
+
+    /**
+     * @author Ed Merks
+     */
+    private static class Worker extends WorkerPool.Worker<URI, RepositoryLoader>
+    {
+      protected Worker(String name, RepositoryLoader workPool, URI key, int id, boolean secondary)
+      {
+        super(name, workPool, key, id, secondary);
+      }
+
+      @Override
+      protected IStatus perform(IProgressMonitor monitor)
+      {
+        RepositoryLoader workPool = getWorkPool();
+        if (workPool.isCanceled())
+        {
+          return Status.CANCEL_STATUS;
+        }
+
+        try
+        {
+          IMetadataRepository metadataRepository = workPool.manager.loadRepository(getKey(), new SubProgressMonitor(monitor, 1));
+          workPool.metadataRepositories.add(metadataRepository);
+          return Status.OK_STATUS;
+        }
+        catch (ProvisionException ex)
+        {
+          workPool.cancel();
+          workPool.exception = ex;
+          return P2CorePlugin.INSTANCE.getStatus(ex);
+        }
+        catch (OperationCanceledException ex)
+        {
+          return Status.CANCEL_STATUS;
+        }
+      }
     }
   }
 }

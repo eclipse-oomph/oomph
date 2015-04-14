@@ -23,6 +23,7 @@ import org.eclipse.equinox.internal.p2.repository.AuthenticationFailedException;
 import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.provisional.p2.repository.IStateful;
+import org.eclipse.equinox.p2.core.IProvisioningAgent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -49,13 +52,17 @@ public class CachingTransport extends Transport
     }
   };
 
+  private static final Map<URI, Object> URI_LOCKS = new HashMap<URI, Object>();
+
   private static boolean DEBUG = false;
 
   private final Transport delegate;
 
   private final File cacheFolder;
 
-  public CachingTransport(Transport delegate)
+  private final IProvisioningAgent agent;
+
+  public CachingTransport(Transport delegate, IProvisioningAgent agent)
   {
     if (delegate instanceof CachingTransport)
     {
@@ -63,6 +70,7 @@ public class CachingTransport extends Transport
     }
 
     this.delegate = delegate;
+    this.agent = agent;
 
     File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.USER_HOME));
     cacheFolder = new File(folder, "cache");
@@ -72,6 +80,23 @@ public class CachingTransport extends Transport
   public File getCacheFile(URI uri)
   {
     return new File(cacheFolder, IOUtil.encodeFileName(uri.toString()));
+  }
+
+  private synchronized Object getLock(URI uri)
+  {
+    Object result = URI_LOCKS.get(uri);
+    if (result == null)
+    {
+      result = new Object();
+      URI_LOCKS.put(uri, result);
+    }
+
+    return result;
+  }
+
+  private synchronized void removeLock(URI uri)
+  {
+    URI_LOCKS.remove(uri);
   }
 
   @Override
@@ -87,17 +112,17 @@ public class CachingTransport extends Transport
       return delegate.download(uri, target, startPos, monitor);
     }
 
-    if (OfflineMode.isEnabled())
+    synchronized (getLock(uri))
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.exists())
       {
         FileInputStream cacheInputStream = null;
-
         try
         {
           cacheInputStream = new FileInputStream(cacheFile);
           IOUtil.copy(cacheInputStream, target);
+          removeLock(uri);
           return Status.OK_STATUS;
         }
         catch (Exception ex)
@@ -109,46 +134,47 @@ public class CachingTransport extends Transport
           IOUtil.closeSilent(cacheInputStream);
         }
       }
-    }
 
-    // If the offline mode is not enabled we must make p2 and (for later) ourselves happy.
-    File cacheFile = getCacheFile(uri);
-    StatefulFileOutputStream statefulTarget = null;
-    FileInputStream cacheInputStream = null;
+      // If the offline mode is not enabled we must make p2 and (for later) ourselves happy.
+      StatefulFileOutputStream statefulTarget = null;
+      FileInputStream cacheInputStream = null;
 
-    try
-    {
-      statefulTarget = new StatefulFileOutputStream(cacheFile);
-
-      IStatus status = delegate.download(uri, statefulTarget, startPos, monitor);
-      if (status.isOK())
+      try
       {
+        statefulTarget = new StatefulFileOutputStream(cacheFile);
+
+        IStatus status = delegate.download(uri, statefulTarget, startPos, monitor);
+        if (status.isOK())
+        {
+          IOUtil.closeSilent(statefulTarget);
+
+          // Files can be many megabytes large, so download them directly to a file.
+          cacheInputStream = new FileInputStream(cacheFile);
+          IOUtil.copy(cacheInputStream, target);
+
+          DownloadStatus downloadStatus = (DownloadStatus)status;
+          long lastModified = downloadStatus.getLastModified();
+          cacheFile.setLastModified(lastModified);
+        }
+
+        return status;
+      }
+      catch (IOException ex)
+      {
+        throw new IORuntimeException(ex);
+      }
+      finally
+      {
+        if (target instanceof IStateful && statefulTarget != null)
+        {
+          ((IStateful)target).setStatus(statefulTarget.getStatus());
+        }
+
+        IOUtil.closeSilent(cacheInputStream);
         IOUtil.closeSilent(statefulTarget);
 
-        // Files can be many megabytes large, so download them directly to a file.
-        cacheInputStream = new FileInputStream(cacheFile);
-        IOUtil.copy(cacheInputStream, target);
-
-        DownloadStatus downloadStatus = (DownloadStatus)status;
-        long lastModified = downloadStatus.getLastModified();
-        cacheFile.setLastModified(lastModified);
+        removeLock(uri);
       }
-
-      return status;
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
-    finally
-    {
-      if (target instanceof IStateful && statefulTarget != null)
-      {
-        ((IStateful)target).setStatus(statefulTarget.getStatus());
-      }
-
-      IOUtil.closeSilent(cacheInputStream);
-      IOUtil.closeSilent(statefulTarget);
     }
   }
 
@@ -198,7 +224,40 @@ public class CachingTransport extends Transport
       }
     }
 
-    return delegateGetLastModified(uri, monitor);
+    try
+    {
+      return delegateGetLastModified(uri, monitor);
+    }
+    catch (CoreException exception)
+    {
+      File cacheFile = getCacheFile(uri);
+      if (cacheFile.exists() && confirmCacheUsage(uri, cacheFile))
+      {
+        return cacheFile.lastModified();
+      }
+
+      throw exception;
+    }
+    catch (FileNotFoundException exception)
+    {
+      File cacheFile = getCacheFile(uri);
+      if (cacheFile.exists() && confirmCacheUsage(uri, cacheFile))
+      {
+        return cacheFile.lastModified();
+      }
+
+      throw exception;
+    }
+    catch (AuthenticationFailedException exception)
+    {
+      File cacheFile = getCacheFile(uri);
+      if (cacheFile.exists() && confirmCacheUsage(uri, cacheFile))
+      {
+        return cacheFile.lastModified();
+      }
+
+      throw exception;
+    }
   }
 
   private long delegateGetLastModified(URI uri, IProgressMonitor monitor) throws CoreException, FileNotFoundException, AuthenticationFailedException
@@ -206,17 +265,41 @@ public class CachingTransport extends Transport
     long lastModified = delegate.getLastModified(uri, monitor);
 
     File cacheFile = getCacheFile(uri);
-    if (!cacheFile.exists() || cacheFile.lastModified() != lastModified)
+    if (!cacheFile.exists())
     {
+      return lastModified - 1;
+    }
+
+    if (cacheFile.lastModified() != lastModified)
+    {
+      synchronized (getLock(uri))
+      {
+        cacheFile.delete();
+      }
       return lastModified - 1;
     }
 
     return lastModified;
   }
 
+  private synchronized boolean confirmCacheUsage(URI uri, File file)
+  {
+    CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)agent.getService(CacheUsageConfirmer.SERVICE_NAME);
+    if (cacheUsageConfirmer != null)
+    {
+      return cacheUsageConfirmer.confirmCacheUsage(uri, file);
+    }
+
+    return false;
+  }
+
   private static boolean isLoadingRepository(URI uri)
   {
     String location = org.eclipse.emf.common.util.URI.createURI(uri.toString()).trimSegments(1).toString();
+    if (location.endsWith("/"))
+    {
+      location = location.substring(0, location.length() - 1);
+    }
 
     Stack<String> stack = REPOSITORY_LOCATIONS.get();
     return !stack.isEmpty() && stack.peek().equals(location);
@@ -229,7 +312,7 @@ public class CachingTransport extends Transport
     {
       message = "   " + message;
     }
-  
+
     System.out.println(message);
   }
 

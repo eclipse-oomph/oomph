@@ -12,6 +12,8 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
+import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
 import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -261,6 +263,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public void setPerformer(SetupTaskPerformer performer)
   {
     this.performer = performer;
+
+    if (performer != null)
+    {
+      performer.put(CacheUsageConfirmer.class, new CacheUsageConfirmerUI());
+    }
   }
 
   public String getVMPath()

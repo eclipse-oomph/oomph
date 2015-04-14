@@ -443,7 +443,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       if (cacheTransport(transport))
       {
         originalTransport = transport;
-        CachingTransport cachingTransport = new CachingTransport(transport);
+        CachingTransport cachingTransport = new CachingTransport(transport, provisioningAgent);
         provisioningAgent.registerService(Transport.SERVICE_NAME, cachingTransport);
 
         originalMetadataRepositoryManager = metadataRepositoryManager;
@@ -522,13 +522,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     {
       return false;
     }
-  
+
     // If a location is listed twice or the location to be installed in is also listed in the agents.info we may already have a CachingTransport.
     if (transport instanceof CachingTransport)
     {
       return false;
     }
-  
+
     return true;
   }
 

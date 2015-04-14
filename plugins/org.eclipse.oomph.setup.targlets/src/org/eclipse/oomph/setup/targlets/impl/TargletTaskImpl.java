@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.targlets.impl;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
+import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -982,16 +983,27 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
           boolean mirrors = context.isMirrors();
 
-          targletContainer.setTarglets(targlets);
-          targletContainer.forceUpdate(true, mirrors, new SubProgressMonitor(monitor, 90));
-
+          CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
+          CacheUsageConfirmer oldCacheUsageConfirmer = TargletsCorePlugin.INSTANCE.getCacheUsageConfirmer();
           try
           {
-            Job.getJobManager().join(WorkspaceIUImporter.WORKSPACE_IU_IMPORT_FAMILY, new SubProgressMonitor(monitor, 10));
+            TargletsCorePlugin.INSTANCE.setCacheUsageConfirmer(cacheUsageConfirmer);
+
+            targletContainer.setTarglets(targlets);
+            targletContainer.forceUpdate(true, mirrors, new SubProgressMonitor(monitor, 90));
+
+            try
+            {
+              Job.getJobManager().join(WorkspaceIUImporter.WORKSPACE_IU_IMPORT_FAMILY, new SubProgressMonitor(monitor, 10));
+            }
+            catch (InterruptedException ex)
+            {
+              TargletsCorePlugin.INSTANCE.coreException(ex);
+            }
           }
-          catch (InterruptedException ex)
+          finally
           {
-            TargletsCorePlugin.INSTANCE.coreException(ex);
+            TargletsCorePlugin.INSTANCE.setCacheUsageConfirmer(oldCacheUsageConfirmer);
           }
 
           return null;

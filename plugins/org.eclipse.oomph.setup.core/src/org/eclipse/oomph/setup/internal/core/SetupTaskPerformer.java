@@ -22,6 +22,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.AttributeRule;
@@ -2736,6 +2737,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     try
     {
+      CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)get(CacheUsageConfirmer.class);
+      if (cacheUsageConfirmer != null)
+      {
+        cacheUsageConfirmer.reset();
+      }
+
       performTriggeredSetupTasks(new SubProgressMonitor(monitor, 100));
 
       if (bootstrap)
