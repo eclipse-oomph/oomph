@@ -32,6 +32,20 @@ public class UIPropertyTester extends PropertyTester
 
   private static final Preferences PREFERENCES = UIPlugin.INSTANCE.getInstancePreferences();
 
+  static
+  {
+    ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
+    {
+      public void preferenceChange(final IEclipsePreferences.PreferenceChangeEvent event)
+      {
+        if (SHOW_OFFLINE.equals(event.getKey()))
+        {
+          requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, "true".equals(event.getNewValue()));
+        }
+      }
+    });
+  }
+
   public static void requestEvaluation(final String id, final boolean layout)
   {
     UIUtil.syncExec(new Runnable()
@@ -50,35 +64,30 @@ public class UIPropertyTester extends PropertyTester
 
               if (layout)
               {
-                for (IWorkbenchWindow workbenchWindow : workbench.getWorkbenchWindows())
+                UIUtil.asyncExec(new Runnable()
                 {
-                  Shell shell = workbenchWindow.getShell();
-                  if (shell != null)
+                  public void run()
                   {
-                    shell.layout(true, true);
+                    for (IWorkbenchWindow workbenchWindow : workbench.getWorkbenchWindows())
+                    {
+                      Shell shell = workbenchWindow.getShell();
+                      if (shell != null)
+                      {
+                        shell.layout(true, true);
+                      }
+                    }
                   }
-                }
+                });
               }
             }
           }
         }
       }
     });
-
   }
 
   public UIPropertyTester()
   {
-    ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
-    {
-      public void preferenceChange(final IEclipsePreferences.PreferenceChangeEvent event)
-      {
-        if (SHOW_OFFLINE.equals(event.getKey()))
-        {
-          requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, "true".equals(event.getNewValue()));
-        }
-      }
-    });
   }
 
   public boolean test(Object receiver, String property, Object[] args, Object expectedValue)

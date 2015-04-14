@@ -35,7 +35,7 @@ public class SetupPropertyTester extends PropertyTester
 
   private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
 
-  public SetupPropertyTester()
+  static
   {
     ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
     {
@@ -47,6 +47,10 @@ public class SetupPropertyTester extends PropertyTester
         }
       }
     });
+  }
+
+  public SetupPropertyTester()
+  {
   }
 
   public static void setStarting(boolean starting)
