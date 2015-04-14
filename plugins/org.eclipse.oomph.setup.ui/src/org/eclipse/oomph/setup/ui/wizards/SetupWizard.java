@@ -592,8 +592,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     public abstract void loadIndex(ResourceSet resourceSet, URI... uris);
 
-    protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor) throws InvocationTargetException,
-        InterruptedException
+    protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor)
+        throws InvocationTargetException, InterruptedException
     {
       loading = true;
       ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
@@ -887,7 +887,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       addPage(new ProjectPage());
       super.addPages();
 
-      getShell().getDisplay().timerExec(500, new Runnable()
+      getShell().getDisplay().asyncExec(new Runnable()
       {
         public void run()
         {

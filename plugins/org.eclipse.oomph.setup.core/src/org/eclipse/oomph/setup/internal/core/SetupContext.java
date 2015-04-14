@@ -529,6 +529,11 @@ public class SetupContext
     else
     {
       installationResource = resourceSet.getResource(INSTALLATION_SETUP_FILE_NAME_URI, false);
+      if (installationResource == null)
+      {
+        installationResource = resourceSet.getResource(INSTALLATION_SETUP_URI, false);
+      }
+
       if (installationResource != null)
       {
         installation = (Installation)installationResource.getContents().get(0);
@@ -608,6 +613,11 @@ public class SetupContext
     else
     {
       workspaceResource = resourceSet.getResource(WORKSPACE_SETUP_FILE_NAME_URI, false);
+      if (workspaceResource == null && WORKSPACE_SETUP_URI != null)
+      {
+        workspaceResource = resourceSet.getResource(WORKSPACE_SETUP_URI, false);
+      }
+
       if (workspaceResource != null)
       {
         workspace = (Workspace)workspaceResource.getContents().get(0);
