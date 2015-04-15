@@ -701,8 +701,8 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       {
         if (overriddenValue != null)
         {
-          getAnnotations().add(
-              BaseFactory.eINSTANCE.createErrorAnnotation("The " + errorLabel + " '" + overriddenValue + "' and '" + overridingValue + "' collide."));
+          getAnnotations()
+              .add(BaseFactory.eINSTANCE.createErrorAnnotation("The " + errorLabel + " '" + overriddenValue + "' and '" + overridingValue + "' collide."));
         }
       }
     }
@@ -985,6 +985,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
           CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
           CacheUsageConfirmer oldCacheUsageConfirmer = TargletsCorePlugin.INSTANCE.getCacheUsageConfirmer();
+
           try
           {
             TargletsCorePlugin.INSTANCE.setCacheUsageConfirmer(cacheUsageConfirmer);
@@ -1014,7 +1015,6 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         }
       }
     });
-
   }
 
   private ITargetDefinition getTargetDefinition(ITargetPlatformService service, IProgressMonitor monitor) throws CoreException

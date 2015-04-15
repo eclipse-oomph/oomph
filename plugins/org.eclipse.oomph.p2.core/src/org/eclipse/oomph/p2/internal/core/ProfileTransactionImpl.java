@@ -109,8 +109,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   private static final String SOURCE_IU_ID = "org.eclipse.oomph.p2.source.container"; //$NON-NLS-1$
 
-  private static final IRequirement BUNDLE_REQUIREMENT = MetadataFactory.createRequirement(
-      "org.eclipse.equinox.p2.eclipse.type", "bundle", null, null, false, false, false); //$NON-NLS-1$ //$NON-NLS-2$
+  private static final IRequirement BUNDLE_REQUIREMENT = MetadataFactory.createRequirement("org.eclipse.equinox.p2.eclipse.type", "bundle", null, null, false, //$NON-NLS-1$ //$NON-NLS-2$
+      false, false);
 
   private static final Set<String> IMMUTABLE_PROPERTIES = new HashSet<String>(Arrays.asList(Profile.PROP_INSTALL_FEATURES, Profile.PROP_INSTALL_FOLDER,
       Profile.PROP_CACHE, Profile.PROP_PROFILE_TYPE, Profile.PROP_PROFILE_DEFINITION));
@@ -380,8 +380,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
         if (requirement instanceof IRequiredCapability)
         {
           IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
-          for (IInstallableUnit installableUnit : P2Util.asIterable(futureState.query(
-              QueryUtil.createIUQuery(requiredCapability.getName(), requiredCapability.getRange()), null)))
+          for (IInstallableUnit installableUnit : P2Util
+              .asIterable(futureState.query(QueryUtil.createIUQuery(requiredCapability.getName(), requiredCapability.getRange()), null)))
           {
             provisioningPlan.setInstallableUnitProfileProperty(installableUnit, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
             provisioningPlan.setInstallableUnitProfileProperty(installableUnit, SimplePlanner.INCLUSION_RULES,
@@ -807,8 +807,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
     rootDescription.setSingleton(true);
     rootDescription.setArtifacts(new IArtifactKey[0]);
     rootDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-    rootDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-        rootDescription.getId(), rootDescription.getVersion()) });
+    rootDescription.setCapabilities(new IProvidedCapability[] {
+        MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, rootDescription.getId(), rootDescription.getVersion()) });
     List<IRequirement> rootRequirements = new ArrayList<IRequirement>();
 
     Map<String, IInstallableUnit> rootIUs = new HashMap<String, IInstallableUnit>();
@@ -1231,13 +1231,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
    */
   private static final class RepositoryLoader extends WorkerPool<RepositoryLoader, URI, RepositoryLoader.Worker>
   {
-    final private URI[] uris;
+    private final IMetadataRepositoryManager manager;
 
-    final protected IMetadataRepositoryManager manager;
+    private final URI[] uris;
 
-    final protected List<IMetadataRepository> metadataRepositories = Collections.synchronizedList(new ArrayList<IMetadataRepository>());
+    private final List<IMetadataRepository> metadataRepositories = Collections.synchronizedList(new ArrayList<IMetadataRepository>());
 
-    protected ProvisionException exception;
+    private ProvisionException exception;
 
     public RepositoryLoader(IMetadataRepositoryManager manager, URI... uris)
     {
@@ -1281,7 +1281,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
      */
     private static class Worker extends WorkerPool.Worker<URI, RepositoryLoader>
     {
-      protected Worker(String name, RepositoryLoader workPool, URI key, int id, boolean secondary)
+      public Worker(String name, RepositoryLoader workPool, URI key, int id, boolean secondary)
       {
         super(name, workPool, key, id, secondary);
       }

@@ -24,7 +24,7 @@ import java.net.URI;
  */
 public class CacheUsageConfirmerUI extends CacheUsageConfirmer
 {
-  protected Boolean cacheUsageConfirmed;
+  private Boolean cacheUsageConfirmed;
 
   @Override
   public boolean confirmCacheUsage(final URI uri, File file)
@@ -71,9 +71,9 @@ public class CacheUsageConfirmerUI extends CacheUsageConfirmer
                 }
               }
 
-              cacheUsageConfirmed = MessageDialog.openQuestion(shell, "Download failure", "The following URI could not be downloaded:\n\n  " + uri
-                  + "\n\nA locally cached version that is " + message
-                  + " old is available.  Would you like to use locally cached versions, when available, to continue provisioning?");
+              cacheUsageConfirmed = MessageDialog.openQuestion(shell, "Download failure",
+                  "The following URI could not be downloaded:\n\n  " + uri + "\n\nA locally cached version that is " + message
+                      + " old is available.  Would you like to use locally cached versions, when available, to continue provisioning?");
             }
           });
         }

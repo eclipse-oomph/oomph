@@ -693,6 +693,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
     CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
     CacheUsageConfirmer oldCacheUsageConfirmer = (CacheUsageConfirmer)provisioningAgent.getService(CacheUsageConfirmer.SERVICE_NAME);
+
     try
     {
       if (cacheUsageConfirmer != null)

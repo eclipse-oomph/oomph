@@ -58,9 +58,9 @@ public class CachingTransport extends Transport
 
   private final Transport delegate;
 
-  private final File cacheFolder;
-
   private final IProvisioningAgent agent;
+
+  private final File cacheFolder;
 
   public CachingTransport(Transport delegate, IProvisioningAgent agent)
   {
@@ -80,23 +80,6 @@ public class CachingTransport extends Transport
   public File getCacheFile(URI uri)
   {
     return new File(cacheFolder, IOUtil.encodeFileName(uri.toString()));
-  }
-
-  private synchronized Object getLock(URI uri)
-  {
-    Object result = URI_LOCKS.get(uri);
-    if (result == null)
-    {
-      result = new Object();
-      URI_LOCKS.put(uri, result);
-    }
-
-    return result;
-  }
-
-  private synchronized void removeLock(URI uri)
-  {
-    URI_LOCKS.remove(uri);
   }
 
   @Override
@@ -291,6 +274,23 @@ public class CachingTransport extends Transport
     }
 
     return false;
+  }
+
+  private synchronized Object getLock(URI uri)
+  {
+    Object result = URI_LOCKS.get(uri);
+    if (result == null)
+    {
+      result = new Object();
+      URI_LOCKS.put(uri, result);
+    }
+  
+    return result;
+  }
+
+  private synchronized void removeLock(URI uri)
+  {
+    URI_LOCKS.remove(uri);
   }
 
   private static boolean isLoadingRepository(URI uri)
