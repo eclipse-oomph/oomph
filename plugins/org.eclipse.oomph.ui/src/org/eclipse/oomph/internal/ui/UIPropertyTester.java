@@ -32,6 +32,9 @@ public class UIPropertyTester extends PropertyTester
 
   private static final Preferences PREFERENCES = UIPlugin.INSTANCE.getInstancePreferences();
 
+  // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
+  private static boolean initialized;
+
   static
   {
     ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
@@ -44,6 +47,48 @@ public class UIPropertyTester extends PropertyTester
         }
       }
     });
+
+    // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
+    if (!initialized)
+    {
+      new Thread()
+      {
+        @Override
+        public void run()
+        {
+          try
+          {
+            sleep(2000);
+            initialized = true;
+            UIPropertyTester.requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, true);
+          }
+          catch (Throwable ex)
+          {
+            ex.printStackTrace();
+          }
+        }
+      }.start();
+    }
+  }
+
+  public UIPropertyTester()
+  {
+  }
+
+  public boolean test(Object receiver, String property, Object[] args, Object expectedValue)
+  {
+    if (expectedValue == null)
+    {
+      expectedValue = Boolean.TRUE;
+    }
+
+    if (SHOW_OFFLINE.equals(property))
+    {
+      boolean value = initialized ? PREFERENCES.getBoolean(SHOW_OFFLINE, false) : false;
+      return expectedValue.equals(value);
+    }
+
+    return false;
   }
 
   public static void requestEvaluation(final String id, final boolean layout)
@@ -84,24 +129,5 @@ public class UIPropertyTester extends PropertyTester
         }
       }
     });
-  }
-
-  public UIPropertyTester()
-  {
-  }
-
-  public boolean test(Object receiver, String property, Object[] args, Object expectedValue)
-  {
-    if (expectedValue == null)
-    {
-      expectedValue = Boolean.TRUE;
-    }
-
-    if (SHOW_OFFLINE.equals(property))
-    {
-      return expectedValue.equals(PREFERENCES.getBoolean(SHOW_OFFLINE, false));
-    }
-
-    return false;
   }
 }

@@ -73,30 +73,9 @@
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
             class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
-            id="org.eclipse.oomph.setup.ui.starting.propertyTester"
+            id="org.eclipse.oomph.setup.ui.propertyTester"
             namespace="org.eclipse.oomph.setup.ui"
-            properties="starting"
-            type="java.lang.Object">
-      </propertyTester>
-      <propertyTester
-            class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
-            id="org.eclipse.oomph.setup.ui.performing.propertyTester"
-            namespace="org.eclipse.oomph.setup.ui"
-            properties="performing"
-            type="java.lang.Object">
-      </propertyTester>
-      <propertyTester
-            class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
-            id="org.eclipse.oomph.setup.ui.handling.propertyTester"
-            namespace="org.eclipse.oomph.setup.ui"
-            properties="handling"
-            type="java.lang.Object">
-      </propertyTester>
-      <propertyTester
-            class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
-            id="org.eclipse.oomph.setup.ui.toolbar.propertyTester"
-            namespace="org.eclipse.oomph.setup.ui"
-            properties="showToolBarContributions"
+            properties="starting,performing,handling,showToolBarContributions"
             type="java.lang.Object">
       </propertyTester>
    </extension>
