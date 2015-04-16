@@ -265,6 +265,7 @@ public class ConfirmationPage extends SetupWizardPage
           checkedElements.add(EcoreUtil.getURI(setupTask));
         }
       }
+
       boolean hasSuccessfullyPerformed = performer.hasSuccessfullyPerformed();
 
       SetupWizardPage promptPage = (SetupWizardPage)getPreviousPage();
@@ -435,8 +436,8 @@ public class ConfirmationPage extends SetupWizardPage
     }
 
     // Put the workspace copy in a resource at the right location and save it.
-    URI workspaceResourceURI = URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
-        .toString());
+    URI workspaceResourceURI = URI
+        .createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup").toString());
     Resource workspaceResource = getResourceSet().getResourceFactoryRegistry().getFactory(workspaceResourceURI).createResource(workspaceResourceURI);
     workspaceResource.getContents().add(copiedWorkspace);
     BaseUtil.saveEObject(copiedWorkspace);
@@ -704,11 +705,16 @@ public class ConfirmationPage extends SetupWizardPage
   private void updateCheckStates()
   {
     Set<SetupTask> checkedTasks = getCheckedTasks();
-    int size = checkedTasks.size();
+    int checked = checkedTasks.size();
 
-    viewer.setChecked(ROOT_ELEMENT, size == getPerformer().getTriggeredSetupTasks().size());
+    EList<SetupTask> allTasks = isShowAll() ? getPerformer().getTriggeredSetupTasks() : getPerformer().getNeededTasks();
+    int all = allTasks.size();
 
-    someTaskChecked = size != 0;
+    viewer.setChecked(ROOT_ELEMENT, checked == all);
+
+    checkedTasks.retainAll(getPerformer().getNeededTasks());
+    someTaskChecked = !checkedTasks.isEmpty();
+
     validate();
   }
 
@@ -742,8 +748,8 @@ public class ConfirmationPage extends SetupWizardPage
 
     if (configurationLocationExists && !overwriteButton.getSelection())
     {
-      setErrorMessage("The folder " + lastConfigurationLocation
-          + " exists.\n Please check the Overwrite button to rename it and continue with the installation process.");
+      setErrorMessage(
+          "The folder " + lastConfigurationLocation + " exists.\n Please check the Overwrite button to rename it and continue with the installation process.");
       return;
     }
     else if (newWorkspaceLocation != null && !ObjectUtil.equals(newWorkspaceLocation, currentWorkspaceLocation) && !switchWorkspaceButton.getSelection())
