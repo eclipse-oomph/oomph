@@ -27,6 +27,8 @@ import java.util.Map;
  */
 public class PreferencesRecorder extends EContentAdapter
 {
+  private static final String INSTANCE_SCOPE = "instance";
+
   private final Map<Property, URI> paths = new HashMap<Property, URI>();
 
   private final Map<URI, String> values = new HashMap<URI, String>();
@@ -50,7 +52,8 @@ public class PreferencesRecorder extends EContentAdapter
 
   protected PreferenceNode getRootPreferenceNode()
   {
-    return PreferencesUtil.getRootPreferenceNode(true);
+    PreferenceNode root = PreferencesUtil.getRootPreferenceNode(true);
+    return root.getNode(INSTANCE_SCOPE);
   }
 
   @Override
@@ -62,7 +65,7 @@ public class PreferencesRecorder extends EContentAdapter
       Property property = (Property)target;
       URI absolutePath = property.getAbsolutePath();
       String scope = absolutePath.authority();
-      if ("instance".equals(scope) || "configuration".equals(scope))
+      if (INSTANCE_SCOPE.equals(scope))
       {
         paths.put(property, absolutePath);
       }
