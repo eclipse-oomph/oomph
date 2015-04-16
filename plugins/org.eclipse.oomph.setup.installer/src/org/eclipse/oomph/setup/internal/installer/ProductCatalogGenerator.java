@@ -289,8 +289,8 @@ public class ProductCatalogGenerator implements IApplication
           ius.remove(requirement);
         }
 
-        for (IInstallableUnit iu : P2Util.asIterable(releaseMetaDataRepository.query(
-            QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
+        for (IInstallableUnit iu : P2Util
+            .asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
         {
           String id = iu.getId();
           String label = iu.getProperty("org.eclipse.equinox.p2.name");
@@ -460,8 +460,8 @@ public class ProductCatalogGenerator implements IApplication
       checkVersionRanges(productCatalog);
       postProcess(productCatalog);
 
-      Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? org.eclipse.emf.common.util.URI
-          .createURI("org.eclipse.products.setup") : outputLocation);
+      Resource resource = new BaseResourceFactoryImpl()
+          .createResource(outputLocation == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
       // resource.save(System.out, null);
 
@@ -487,8 +487,7 @@ public class ProductCatalogGenerator implements IApplication
     return uri;
   }
 
-  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException,
-      ProvisionException
+  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException, ProvisionException
   {
     IMetadataRepository releaseMetaDataRepository = manager.loadRepository(releaseURI, null);
     IMetadataRepository result = releaseMetaDataRepository;
@@ -625,7 +624,7 @@ public class ProductCatalogGenerator implements IApplication
       Map<String, IMetadataRepository> eppMetaDataRepositories, String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius,
       String emfRepositoryLocation)
   {
-    System.out.println("  " + label);
+    System.out.print("  " + label);
 
     ProductVersion productVersion = SetupFactory.eINSTANCE.createProductVersion();
     productVersion.setName(name);
@@ -666,7 +665,12 @@ public class ProductCatalogGenerator implements IApplication
     productVersion.getSetupTasks().add(p2Task);
 
     String idPrefix = "tooling" + productName + ".ini.";
+
     Version maxJavaVersion = null;
+    if (train.compareTo("mars") >= 0)
+    {
+      maxJavaVersion = Version.create("1.7.0");
+    }
 
     IMetadataRepository eppMetaDataRepository = eppMetaDataRepositories.get(train);
     if (eppMetaDataRepository != null)
@@ -706,7 +710,7 @@ public class ProductCatalogGenerator implements IApplication
                     // if (parameter instanceof IFilterExpression)
                     // {
                     // IFilterExpression filterExpression = (IFilterExpression)parameter;
-                    // System.out.println("    " + filterExpression.toString() + " --> " + javaVersion);
+                    // System.out.println(" " + filterExpression.toString() + " --> " + javaVersion);
                     // }
                     // }
                     // }
@@ -728,7 +732,10 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       productVersion.setRequiredJavaVersion(javaVersion);
+      System.out.print(" --> Java " + javaVersion);
     }
+
+    System.out.println();
   }
 
   private VersionRange createVersionRange(Version version, VersionSegment versionSegment)

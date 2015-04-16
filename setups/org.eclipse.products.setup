@@ -36,7 +36,7 @@
     <version
         name="latest"
         label="Latest (Mars)"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Mars)">
@@ -86,7 +86,7 @@
     <version
         name="mars"
         label="Mars"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Mars)">
@@ -201,7 +201,7 @@
     <version
         name="latest"
         label="Latest (Mars)"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Mars)">
@@ -257,7 +257,7 @@
     <version
         name="mars"
         label="Mars"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Mars)">
@@ -695,7 +695,7 @@
     <version
         name="latest"
         label="Latest (Mars)"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Mars)">
@@ -751,7 +751,7 @@
     <version
         name="mars"
         label="Mars"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Mars)">
@@ -878,7 +878,7 @@
     <version
         name="latest"
         label="Latest (Mars)"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Mars)">
@@ -934,7 +934,7 @@
     <version
         name="mars"
         label="Mars"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Mars)">
@@ -1061,7 +1061,7 @@
     <version
         name="latest"
         label="Latest (Mars)"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Mars)">
@@ -1117,7 +1117,7 @@
     <version
         name="mars"
         label="Mars"
-        requiredJavaVersion="1.6">
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Mars)">
@@ -1447,7 +1447,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -1491,7 +1491,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201502061000"/>
+            url="http://download.eclipse.org/releases/mars/201503271000"/>
       </setupTask>
     </version>
     <version
@@ -2083,7 +2083,8 @@
       label="Eclipse Platform">
     <version
         name="latest"
-        label="Latest (Mars)">
+        label="Latest (Mars)"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Mars)">
@@ -2125,7 +2126,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Mars)">
