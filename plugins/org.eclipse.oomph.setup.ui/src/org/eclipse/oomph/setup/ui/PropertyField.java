@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
@@ -78,6 +79,8 @@ public abstract class PropertyField
   public static final int NUM_COLUMNS = 3;
 
   private static final String EMPTY = "";
+
+  private static final Pattern JRE_LOCATION_VARIABLE_PATTERN = Pattern.compile("\\$\\{jre\\.location-([0-9]*)\\.([0-9]*)\\}");
 
   public static PropertyField createField(final VariableTask variable)
   {
@@ -112,7 +115,6 @@ public abstract class PropertyField
         for (VariableChoice choice : choices)
         {
           String value = choice.getValue();
-          Pattern JRE_LOCATION_VARIABLE_PATTERN = Pattern.compile("\\$\\{jre\\.location-([0-9]*)\\.([0-9]*)\\}");
           if (value != null)
           {
             Matcher matcher = JRE_LOCATION_VARIABLE_PATTERN.matcher(value);
@@ -120,8 +122,7 @@ public abstract class PropertyField
             {
               int major = Integer.valueOf(matcher.group(1));
               int minor = Integer.valueOf(matcher.group(2)) - 1;
-              JREField jreField = new JREField(new JREFilter(major, minor, null), choices);
-              return jreField;
+              return new JREField(new JREFilter(major, minor, null), choices);
             }
           }
         }
@@ -129,15 +130,20 @@ public abstract class PropertyField
         return createField(VariableType.FOLDER, choices);
 
       case FOLDER:
+        FolderField folderField = new FolderField(choices);
+        folderField.setDialogText("Folder Selection");
+        folderField.setDialogMessage("Select a folder.");
+        return folderField;
+
+      case FILE:
         FileField fileField = new FileField(choices);
-        fileField.setDialogText("Folder Selection");
-        fileField.setDialogMessage("Select a folder.");
+        fileField.setDialogText("File Selection");
         return fileField;
 
       case CONTAINER:
         ContainerField containerField = new ContainerField(choices);
-        containerField.setDialogText("Folder Selection");
-        containerField.setDialogMessage("Select a folder.");
+        containerField.setDialogText("Container Selection");
+        containerField.setDialogMessage("Select a container.");
         return containerField;
 
       case TEXT:
@@ -149,6 +155,7 @@ public abstract class PropertyField
             return super.createText(parent, style | SWT.MULTI | SWT.V_SCROLL);
           }
         };
+
         textField.getControlGridData().heightHint = 50;
         return textField;
 
@@ -1092,28 +1099,28 @@ public abstract class PropertyField
   /**
    * @author Eike Stepper
    */
-  public static class FileField extends TextButtonField
+  public static class FolderField extends TextButtonField
   {
     private String dialogText;
 
     private String dialogMessage;
 
-    public FileField()
+    public FolderField()
     {
       this(null, null);
     }
 
-    public FileField(String labelText)
+    public FolderField(String labelText)
     {
       this(labelText, null);
     }
 
-    public FileField(List<? extends VariableChoice> choices)
+    public FolderField(List<? extends VariableChoice> choices)
     {
       this(null, choices);
     }
 
-    public FileField(String labelText, List<? extends VariableChoice> choices)
+    public FolderField(String labelText, List<? extends VariableChoice> choices)
     {
       super(labelText, choices);
       setButtonText("Browse...");
@@ -1169,6 +1176,68 @@ public abstract class PropertyField
   }
 
   /**
+   * @author Eike Stepper
+   */
+  public static class FileField extends TextButtonField
+  {
+    private String dialogText;
+
+    public FileField()
+    {
+      this(null, null);
+    }
+
+    public FileField(String labelText)
+    {
+      this(labelText, null);
+    }
+
+    public FileField(List<? extends VariableChoice> choices)
+    {
+      this(null, choices);
+    }
+
+    public FileField(String labelText, List<? extends VariableChoice> choices)
+    {
+      super(labelText, choices);
+      setButtonText("Browse...");
+    }
+
+    public final String getDialogText()
+    {
+      return dialogText;
+    }
+
+    public final void setDialogText(String dialogText)
+    {
+      this.dialogText = dialogText;
+    }
+
+    @Override
+    protected void helperButtonSelected(SelectionEvent e)
+    {
+      Shell shell = getHelper().getShell();
+      FileDialog dialog = new FileDialog(shell);
+      if (dialogText != null)
+      {
+        dialog.setText(dialogText);
+      }
+
+      String value = getValue();
+      if (value.length() != 0)
+      {
+        dialog.setFilterPath(value);
+      }
+
+      String dir = dialog.open();
+      if (dir != null)
+      {
+        transferValueToControl(dir);
+      }
+    }
+  }
+
+  /**
    * @author Ed Merks
    */
   public static class JREField extends TextButtonField
@@ -1193,8 +1262,8 @@ public abstract class PropertyField
         String folder = entry.getKey().toString();
         choice.setValue(folder);
         JRE jre = entry.getValue();
-        choice.setLabel((jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " + jre.getBitness() + "bit -- "
-            + folder);
+        choice.setLabel(
+            (jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " + jre.getBitness() + "bit -- " + folder);
         choices.add(choice);
       }
 
