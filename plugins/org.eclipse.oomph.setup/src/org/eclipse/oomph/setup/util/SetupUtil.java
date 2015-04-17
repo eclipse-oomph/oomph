@@ -43,7 +43,9 @@ public final class SetupUtil
       char c = result.charAt(i);
       if (c < StringExpander.CONTROL_CHARACTER_REPLACEMENTS.length)
       {
-        result.replace(i, i + 1, StringExpander.CONTROL_CHARACTER_REPLACEMENTS[c]);
+        String replacement = StringExpander.CONTROL_CHARACTER_REPLACEMENTS[c];
+        result.replace(i, i + 1, replacement);
+        length += replacement.length() - 1;
       }
     }
 
