@@ -52,8 +52,7 @@ public class PreferencesRecorder extends EContentAdapter
 
   protected PreferenceNode getRootPreferenceNode()
   {
-    PreferenceNode root = PreferencesUtil.getRootPreferenceNode(true);
-    return root.getNode(INSTANCE_SCOPE);
+    return PreferencesUtil.getRootPreferenceNode(true);
   }
 
   @Override
