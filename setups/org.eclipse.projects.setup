@@ -353,8 +353,8 @@
   <project href="http://git.eclipse.org/c/egit/egit.git/plain/tools/oomph/EGit.setup#/"/>
   <project href="http://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/releng/org.eclipse.emf.releng/EMF.setup#/"/>
   <project href="interim/EMFCompare.setup#/"/>
-  <project href="interim/ESON.setup#/"/>
   <project href="interim/Equinox.setup#/"/>
+  <project href="interim/ESON.setup#/"/>
   <project href="interim/JDT.setup#/"/>
   <project href="http://git.eclipse.org/c/ocl/org.eclipse.ocl.git/plain/releng/org.eclipse.ocl.oomph/setups/ocl.setup#/"/>
   <project href="Oomph.setup#/"/>
@@ -366,6 +366,7 @@
   <project href="http://git.eclipse.org/c/tracecompass/org.eclipse.tracecompass.git/plain/TraceCompass.setup#/"/>
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/xtext/master/devtools/org.eclipse.xtext.contributor/interim/Xtext.setup#/"/>
+  <project href="http://git.eclipse.org/c/m2t/org.eclipse.xpand.git/plain/releng/org.eclipse.xpand.releng/Xpand.setup#/"/>
   <project href="interim/XSD.setup#/"/>
   <description>All the projects at Eclipse.org that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>
