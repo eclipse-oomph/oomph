@@ -10,13 +10,11 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
-import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.SelfProductCatalogURIHandlerImpl;
-
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -85,14 +83,14 @@ public class CatalogSelector
           menuItem.dispose();
         }
 
-        AdapterFactoryLabelProvider labelProvider = new AdapterFactoryLabelProvider(BaseEditUtil.createAdapterFactory());
         List<? extends Scope> selectedCatalogs = catalogManager.getSelectedCatalogs(product);
+
         for (final Scope catalog : catalogManager.getCatalogs(product))
         {
           if (!SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(catalog.getName()))
           {
             final MenuItem item = new MenuItem(menu, SWT.CHECK);
-            item.setText(labelProvider.getText(catalog));
+            item.setText(SetupCoreUtil.getLabel(catalog));
             item.setSelection(selectedCatalogs.contains(catalog));
             item.addSelectionListener(new SelectionAdapter()
             {

@@ -429,7 +429,7 @@ public class ProductPage extends SetupWizardPage
     catalogSelector.configure(catalogsButton);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
-    final ProjectPage.FilteredTreeWithoutWorkbench filteredTree = new ProjectPage.FilteredTreeWithoutWorkbench(treeComposite, SWT.BORDER);
+    final FilteredTreeWithoutWorkbench filteredTree = new FilteredTreeWithoutWorkbench(treeComposite, SWT.BORDER);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");

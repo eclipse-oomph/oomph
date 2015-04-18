@@ -17,6 +17,7 @@ import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
@@ -34,7 +35,6 @@ import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -75,15 +75,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -96,6 +97,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -103,7 +105,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -119,21 +120,19 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.dialogs.FilteredTree;
-import org.eclipse.ui.dialogs.PatternFilter;
-import org.eclipse.ui.progress.WorkbenchJob;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -234,241 +233,24 @@ public class ProjectPage extends SetupWizardPage
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
-    final ToolItem addProjectButton = new ToolItem(filterToolBar, SWT.NONE);
-    addProjectButton.setToolTipText("Add a project to the user project of the selected catalog");
+    ToolItem addProjectButton = new ToolItem(filterToolBar, SWT.NONE);
+    addProjectButton.setToolTipText("Add user projects");
     addProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project"));
-    addProjectButton.setEnabled(false);
     AccessUtil.setKey(addProjectButton, "addProject");
 
-    final List<ProjectCatalog> projectCatalogs = new ArrayList<ProjectCatalog>();
+    final Set<ProjectCatalog> projectCatalogs = new HashSet<ProjectCatalog>();
     addProjectButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        ResourceDialog resourceDialog = new ResourceDialog(getShell(), "Locate Project", SWT.OPEN | SWT.MULTI)
-        {
-          @Override
-          protected void prepareBrowseFileSystemButton(Button browseFileSystemButton)
-          {
-            browseFileSystemButton.addSelectionListener(new SelectionAdapter()
-            {
-              @Override
-              public void widgetSelected(SelectionEvent event)
-              {
-                FileDialog fileDialog = new FileDialog(getShell(), style);
-                fileDialog.setFilterExtensions(new String[] { "*.setup" });
-                fileDialog.open();
-
-                String filterPath = fileDialog.getFilterPath();
-                String[] fileNames = fileDialog.getFileNames();
-                StringBuffer uris = new StringBuffer();
-
-                for (int i = 0, len = fileNames.length; i < len; i++)
-                {
-                  uris.append(URI.createFileURI(filterPath + File.separator + fileNames[i]).toString());
-                  uris.append("  ");
-                }
-
-                uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
-              }
-            });
-          }
-
-          @Override
-          protected void prepareBrowseWorkspaceButton(Button browseWorkspaceButton)
-          {
-            browseWorkspaceButton.addSelectionListener(new SelectionAdapter()
-            {
-              @Override
-              public void widgetSelected(SelectionEvent event)
-              {
-                StringBuffer uris = new StringBuffer();
-
-                IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
-                    Collections.<ViewerFilter> singletonList(new ViewerFilter()
-                    {
-                      @Override
-                      public boolean select(Viewer viewer, Object parentElement, Object element)
-                      {
-                        if (element instanceof IFile)
-                        {
-                          IFile file = (IFile)element;
-                          return "setup".equals(file.getFileExtension());
-                        }
-
-                        return true;
-                      }
-                    }));
-
-                for (int i = 0, len = files.length; i < len; i++)
-                {
-                  uris.append(URI.createURI(files[i].getLocationURI().toString(), true));
-                  uris.append("  ");
-                }
-
-                uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
-              }
-
-              private String getContextPath()
-              {
-                return context != null && context.isPlatformResource() ? URI.createURI(".").resolve(context).path().substring(9) : null;
-              }
-
-              private Object[] getContextSelection()
-              {
-                String path = getContextPath();
-                if (path != null)
-                {
-                  IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-                  IResource resource = root.findMember(path);
-                  if (resource != null && resource.isAccessible())
-                  {
-                    return new Object[] { resource };
-                  }
-                }
-                return null;
-              }
-            });
-          }
-
-          @Override
-          protected boolean processResources()
-          {
-            List<Project> validProjects = new ArrayList<Project>();
-            List<Project> invalidProjects = new ArrayList<Project>();
-            List<URI> invalidURIs = new ArrayList<URI>();
-            ResourceSet resourceSet = editingDomain.getResourceSet();
-            for (URI uri : getURIs())
-            {
-              BaseResource resource = BaseUtil.loadResourceSafely(resourceSet, uri);
-              Project project = (Project)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.PROJECT);
-              if (project == null)
-              {
-                invalidURIs.add(uri);
-              }
-              else if (project.eContainer() != null)
-              {
-                invalidProjects.add(project);
-              }
-              else
-              {
-                validProjects.add(project);
-              }
-            }
-
-            if (!validProjects.isEmpty())
-            {
-              Command command = DragAndDropCommand.create(editingDomain, projectCatalogs.get(0), 0.5F, DragAndDropFeedback.DROP_LINK,
-                  DragAndDropFeedback.DROP_LINK, validProjects);
-              editingDomain.getCommandStack().execute(command);
-              return true;
-            }
-
-            StringBuilder message = new StringBuilder();
-
-            int invalidURIsSize = invalidURIs.size();
-            if (invalidURIsSize != 0)
-            {
-              if (invalidURIsSize == 1)
-              {
-                message.append("The URI ");
-              }
-              else
-              {
-                message.append("The URIs ");
-              }
-
-              for (int i = 0; i < invalidURIsSize; ++i)
-              {
-                if (i != 0)
-                {
-                  message.append(", ");
-
-                  if (i + 1 == invalidURIsSize)
-                  {
-                    message.append(" and ");
-                  }
-                }
-
-                message.append('\'');
-                message.append(invalidURIs.get(i));
-                message.append('\'');
-              }
-
-              if (invalidURIsSize == 1)
-              {
-                message.append(" does not contain a valid project.");
-              }
-              else
-              {
-                message.append(" do not contain valid projects.");
-              }
-            }
-
-            int invalidProjectsSize = invalidProjects.size();
-            if (invalidProjectsSize != 0)
-            {
-              if (message.length() != 0)
-              {
-                message.append("\n\n");
-              }
-
-              if (invalidProjectsSize == 1)
-              {
-                message.append("The project ");
-              }
-              else
-              {
-                message.append("The projects ");
-              }
-
-              for (int i = 0; i < invalidProjectsSize; ++i)
-              {
-                if (i != 0)
-                {
-                  message.append(", ");
-
-                  if (i + 1 == invalidProjectsSize)
-                  {
-                    message.append(" and ");
-                  }
-                }
-
-                message.append('\'');
-                message.append(invalidProjects.get(i).getLabel());
-                message.append('\'');
-              }
-
-              if (invalidProjectsSize == 1)
-              {
-                message.append(" is already contained in the index.");
-              }
-              else
-              {
-                message.append(" are already contained in the index.");
-              }
-            }
-
-            if (message.length() == 0)
-            {
-              message.append("No URIs were specified. Hit Cancel to terminate the dialog.");
-            }
-
-            ErrorDialog.openError(getShell(), "Error Adding Projects", null,
-                new Status(IStatus.ERROR, SetupUIPlugin.INSTANCE.getSymbolicName(), message.toString()));
-            return false;
-          }
-        };
-
-        if (resourceDialog.open() == Window.OK)
-        {
-        }
+        ResourceDialog dialog = new AddUserProjectDialog(getShell(), projectCatalogs, catalogSelector, editingDomain);
+        dialog.open();
       }
     });
 
     final ToolItem removeProjectButton = new ToolItem(filterToolBar, SWT.NONE);
-    removeProjectButton.setToolTipText("Remove the select project from the user project");
+    removeProjectButton.setToolTipText("Remove the selected user projects");
     removeProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove_project"));
     removeProjectButton.setEnabled(false);
     AccessUtil.setKey(removeProjectButton, "removeProject");
@@ -769,7 +551,6 @@ public class ProjectPage extends SetupWizardPage
           }
         }
 
-        addProjectButton.setEnabled(!projectCatalogs.isEmpty());
         removeProjectButton.setEnabled(!userProjects.isEmpty());
 
         Workspace workspace = getWorkspace();
@@ -1355,8 +1136,8 @@ public class ProjectPage extends SetupWizardPage
           ProjectCatalog projectCatalog = (ProjectCatalog)owner;
           for (Project project : projectCatalog.getProjects())
           {
-            Command command = itemDelegator.createCommand(project, domain, DragAndDropCommand.class, new CommandParameter(project,
-                new DragAndDropCommand.Detail(location, operations, operation), collection));
+            Command command = itemDelegator.createCommand(project, domain, DragAndDropCommand.class,
+                new CommandParameter(project, new DragAndDropCommand.Detail(location, operations, operation), collection));
 
             if (command.canExecute())
             {
@@ -1688,163 +1469,327 @@ public class ProjectPage extends SetupWizardPage
   }
 
   /**
-   * This subclass is needed because the refresh job won't schedule if there is no workbench, which is the case in the installer wizard.
-   *
-   * @author Ed Merks
+   * @author Eike Stepper
    */
-  static class FilteredTreeWithoutWorkbench extends FilteredTree
+  private static final class AddUserProjectDialog extends ResourceDialog
   {
-    private final Object refreshJobFamily = new Object();
+    private final Set<ProjectCatalog> projectCatalogs;
 
-    public FilteredTreeWithoutWorkbench(Composite parent, int style)
-    {
-      super(parent, style, new PatternFilter(), true);
-    }
+    private final CatalogSelector catalogSelector;
 
-    public Object getRefreshJobFamily()
+    private final AdapterFactoryEditingDomain editingDomain;
+
+    private ComboViewer catalogViewer;
+
+    public AddUserProjectDialog(Shell parent, Set<ProjectCatalog> projectCatalogs, CatalogSelector catalogSelector, AdapterFactoryEditingDomain editingDomain)
     {
-      return refreshJobFamily;
+      super(parent, "Add User Projects", SWT.OPEN | SWT.MULTI);
+      this.projectCatalogs = projectCatalogs;
+      this.catalogSelector = catalogSelector;
+      this.editingDomain = editingDomain;
     }
 
     @Override
-    protected WorkbenchJob doCreateRefreshJob()
+    protected Control createDialogArea(Composite parent)
     {
-      return new WorkbenchJob("Refresh Filter")
+      Composite main = new Composite(parent, SWT.NONE);
+      main.setLayout(UIUtil.createGridLayout(1));
+      main.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+      Composite upperComposite = new Composite(main, 0);
+      GridLayout upperLayout = new GridLayout(2, false);
+      upperLayout.marginTop = 10;
+      upperLayout.marginWidth = 10;
+      upperComposite.setLayout(upperLayout);
+      upperComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+      applyDialogFont(upperComposite);
+
+      Label label = new Label(upperComposite, SWT.NONE);
+      label.setText("Catalog:");
+      label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+
+      catalogViewer = new ComboViewer(upperComposite, SWT.READ_ONLY);
+      catalogViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      catalogViewer.setContentProvider(ArrayContentProvider.getInstance());
+      catalogViewer.setLabelProvider(new LabelProvider()
       {
         @Override
-        public IStatus runInUIThread(IProgressMonitor monitor)
+        public String getText(Object element)
         {
-          if (treeViewer.getControl().isDisposed())
-          {
-            return Status.CANCEL_STATUS;
-          }
-
-          String text = getFilterString();
-          if (StringUtil.isEmpty(text))
-          {
-            getPatternFilter().setPattern(null);
-            treeViewer.refresh(true);
-            return Status.OK_STATUS;
-          }
-
-          boolean initial = initialText != null && initialText.equals(text);
-          if (initial)
-          {
-            getPatternFilter().setPattern(null);
-          }
-          else
-          {
-            getPatternFilter().setPattern(text);
-          }
-
-          Control redrawFalseControl = treeComposite != null ? treeComposite : treeViewer.getControl();
-          try
-          {
-            redrawFalseControl.setRedraw(false);
-            TreeItem[] is = treeViewer.getTree().getItems();
-            for (int i = 0; i < is.length; i++)
-            {
-              TreeItem item = is[i];
-              if (item.getExpanded())
-              {
-                treeViewer.setExpandedState(item.getData(), false);
-              }
-            }
-
-            treeViewer.refresh(true);
-
-            if (text.length() > 0 && !initial)
-            {
-              TreeItem[] items = getViewer().getTree().getItems();
-              int treeHeight = getViewer().getTree().getBounds().height;
-              int numVisibleItems = treeHeight / getViewer().getTree().getItemHeight();
-              long stopTime = 200 + System.currentTimeMillis();
-              boolean cancel = false;
-              if (items.length > 0 && recursiveExpand(items, monitor, stopTime, new int[] { numVisibleItems }))
-              {
-                cancel = true;
-              }
-
-              updateToolbar(true);
-
-              if (cancel)
-              {
-                return Status.CANCEL_STATUS;
-              }
-            }
-            else
-            {
-              updateToolbar(false);
-            }
-          }
-          finally
-          {
-            TreeItem[] items = getViewer().getTree().getItems();
-            if (items.length > 0 && getViewer().getTree().getSelectionCount() == 0)
-            {
-              treeViewer.getTree().setTopItem(items[0]);
-            }
-            redrawFalseControl.setRedraw(true);
-          }
-          return Status.OK_STATUS;
+          return SetupCoreUtil.getLabel((Scope)element);
         }
+      });
 
-        private boolean recursiveExpand(TreeItem[] items, IProgressMonitor monitor, long cancelTime, int[] numItemsLeft)
+      List<? extends Scope> selectedCatalogs = catalogSelector.getSelectedCatalogs();
+      catalogViewer.setInput(selectedCatalogs);
+
+      if (projectCatalogs.size() == 1)
+      {
+        for (Scope scope : selectedCatalogs)
         {
-          boolean canceled = false;
-          for (int i = 0; !canceled && i < items.length; i++)
+          if (projectCatalogs.contains(scope))
           {
-            TreeItem item = items[i];
-            boolean visible = numItemsLeft[0]-- >= 0;
-            if (monitor.isCanceled() || !visible && System.currentTimeMillis() > cancelTime)
-            {
-              canceled = true;
-            }
-            else
-            {
-              Object itemData = item.getData();
-              if (itemData != null)
-              {
-                if (!item.getExpanded())
-                {
-                  treeViewer.setExpandedState(itemData, true);
-                }
-
-                TreeItem[] children = item.getItems();
-                if (items.length > 0)
-                {
-                  canceled = recursiveExpand(children, monitor, cancelTime, numItemsLeft);
-                }
-              }
-            }
+            catalogViewer.setSelection(new StructuredSelection(scope));
+            break;
           }
-          return canceled;
         }
+      }
 
+      catalogViewer.addSelectionChangedListener(new ISelectionChangedListener()
+      {
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+          validate();
+        }
+      });
+
+      Composite lowerComposite = new Composite(main, 0);
+      GridLayout lowerLayout = new GridLayout();
+      lowerLayout.marginHeight = 0;
+      lowerLayout.marginWidth = 0;
+      lowerLayout.verticalSpacing = 0;
+      lowerComposite.setLayout(lowerLayout);
+      lowerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+      applyDialogFont(lowerComposite);
+
+      parent.getDisplay().asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          validate();
+        }
+      });
+
+      return super.createDialogArea(lowerComposite);
+    }
+
+    @Override
+    protected void prepareBrowseFileSystemButton(Button browseFileSystemButton)
+    {
+      browseFileSystemButton.addSelectionListener(new SelectionAdapter()
+      {
         @Override
-        public Display getDisplay()
+        public void widgetSelected(SelectionEvent event)
         {
-          return UIUtil.getDisplay();
+          FileDialog fileDialog = new FileDialog(getShell(), style);
+          fileDialog.setFilterExtensions(new String[] { "*.setup" });
+          fileDialog.open();
+
+          String filterPath = fileDialog.getFilterPath();
+          String[] fileNames = fileDialog.getFileNames();
+          StringBuffer uris = new StringBuffer();
+
+          for (int i = 0, len = fileNames.length; i < len; i++)
+          {
+            uris.append(URI.createFileURI(filterPath + File.separator + fileNames[i]).toString());
+            uris.append("  ");
+          }
+
+          uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
+        }
+      });
+    }
+
+    @Override
+    protected void prepareBrowseWorkspaceButton(Button browseWorkspaceButton)
+    {
+      browseWorkspaceButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent event)
+        {
+          StringBuffer uris = new StringBuffer();
+
+          IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
+              Collections.<ViewerFilter> singletonList(new ViewerFilter()
+          {
+            @Override
+            public boolean select(Viewer viewer, Object parentElement, Object element)
+            {
+              if (element instanceof IFile)
+              {
+                IFile file = (IFile)element;
+                return "setup".equals(file.getFileExtension());
+              }
+
+              return true;
+            }
+          }));
+
+          for (int i = 0, len = files.length; i < len; i++)
+          {
+            uris.append(URI.createURI(files[i].getLocationURI().toString(), true));
+            uris.append("  ");
+          }
+
+          uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
         }
 
-        @Override
-        public boolean shouldSchedule()
+        private String getContextPath()
         {
-          return true;
+          return context != null && context.isPlatformResource() ? URI.createURI(".").resolve(context).path().substring(9) : null;
         }
 
-        @Override
-        public boolean shouldRun()
+        private Object[] getContextSelection()
         {
-          return true;
+          String path = getContextPath();
+          if (path != null)
+          {
+            IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+            IResource resource = root.findMember(path);
+            if (resource != null && resource.isAccessible())
+            {
+              return new Object[] { resource };
+            }
+          }
+          return null;
+        }
+      });
+    }
+
+    protected void validate()
+    {
+      Button button = getButton(IDialogConstants.OK_ID);
+      if (button != null)
+      {
+        button.setEnabled(getSelectedCatalog() != null);
+      }
+    }
+
+    @Override
+    protected boolean processResources()
+    {
+      List<Project> validProjects = new ArrayList<Project>();
+      List<Project> invalidProjects = new ArrayList<Project>();
+      List<URI> invalidURIs = new ArrayList<URI>();
+      ResourceSet resourceSet = editingDomain.getResourceSet();
+      for (URI uri : getURIs())
+      {
+        BaseResource resource = BaseUtil.loadResourceSafely(resourceSet, uri);
+        Project project = (Project)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.PROJECT);
+        if (project == null)
+        {
+          invalidURIs.add(uri);
+        }
+        else if (project.eContainer() != null)
+        {
+          invalidProjects.add(project);
+        }
+        else
+        {
+          validProjects.add(project);
+        }
+      }
+
+      if (!validProjects.isEmpty())
+      {
+        ProjectCatalog selectedCatalog = getSelectedCatalog();
+
+        Command command = DragAndDropCommand.create(editingDomain, selectedCatalog, 0.5F, DragAndDropFeedback.DROP_LINK, DragAndDropFeedback.DROP_LINK,
+            validProjects);
+        editingDomain.getCommandStack().execute(command);
+        return true;
+      }
+
+      StringBuilder message = new StringBuilder();
+
+      int invalidURIsSize = invalidURIs.size();
+      if (invalidURIsSize != 0)
+      {
+        if (invalidURIsSize == 1)
+        {
+          message.append("The URI ");
+        }
+        else
+        {
+          message.append("The URIs ");
         }
 
-        @Override
-        public boolean belongsTo(Object family)
+        for (int i = 0; i < invalidURIsSize; ++i)
         {
-          return family == refreshJobFamily;
+          if (i != 0)
+          {
+            message.append(", ");
+
+            if (i + 1 == invalidURIsSize)
+            {
+              message.append(" and ");
+            }
+          }
+
+          message.append('\'');
+          message.append(invalidURIs.get(i));
+          message.append('\'');
         }
-      };
+
+        if (invalidURIsSize == 1)
+        {
+          message.append(" does not contain a valid project.");
+        }
+        else
+        {
+          message.append(" do not contain valid projects.");
+        }
+      }
+
+      int invalidProjectsSize = invalidProjects.size();
+      if (invalidProjectsSize != 0)
+      {
+        if (message.length() != 0)
+        {
+          message.append("\n\n");
+        }
+
+        if (invalidProjectsSize == 1)
+        {
+          message.append("The project ");
+        }
+        else
+        {
+          message.append("The projects ");
+        }
+
+        for (int i = 0; i < invalidProjectsSize; ++i)
+        {
+          if (i != 0)
+          {
+            message.append(", ");
+
+            if (i + 1 == invalidProjectsSize)
+            {
+              message.append(" and ");
+            }
+          }
+
+          message.append('\'');
+          message.append(invalidProjects.get(i).getLabel());
+          message.append('\'');
+        }
+
+        if (invalidProjectsSize == 1)
+        {
+          message.append(" is already contained in the index.");
+        }
+        else
+        {
+          message.append(" are already contained in the index.");
+        }
+      }
+
+      if (message.length() == 0)
+      {
+        message.append("No URIs were specified. Hit Cancel to terminate the dialog.");
+      }
+
+      ErrorDialog.openError(getShell(), "Error Adding Projects", null, new Status(IStatus.ERROR, SetupUIPlugin.INSTANCE.getSymbolicName(), message.toString()));
+      return false;
+    }
+
+    private ProjectCatalog getSelectedCatalog()
+    {
+      IStructuredSelection selection = (IStructuredSelection)catalogViewer.getSelection();
+      ProjectCatalog selectedCatalog = (ProjectCatalog)selection.getFirstElement();
+      return selectedCatalog;
     }
   }
 }
