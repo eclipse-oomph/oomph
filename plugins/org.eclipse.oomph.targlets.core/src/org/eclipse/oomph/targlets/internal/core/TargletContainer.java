@@ -33,7 +33,6 @@ import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
-import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -737,8 +736,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
       descriptor.commitUpdateTransaction(digest, requiredProjects.values(), progress.newChild());
 
-      TargletContainerEvent event = new TargletContainerEvent.ProfileUpdateSucceededEvent(this, descriptor, profile, commitContext.getMetadataRepositories(),
-          commitContext.getProvisioningPlan(), requiredProjects);
+      TargletContainerEvent event = new TargletContainerEvent.ProfileUpdateSucceededEvent(this, descriptor, profile, commitContext.getArtificialRoot(),
+          commitContext.getMetadataRepositories(), commitContext.getProvisioningPlan(), requiredProjects);
       TargletContainerListenerRegistry.INSTANCE.notifyListeners(event, progress.newChild());
 
       monitor.subTask("Targlet container profile update completed");
@@ -949,6 +948,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private IProvisioningPlan provisioningPlan;
 
+    private IInstallableUnit artificialRoot;
+
     private List<IMetadataRepository> metadataRepositories;
 
     private boolean isIncludeAllPlatforms;
@@ -963,6 +964,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     public IProvisioningPlan getProvisioningPlan()
     {
       return provisioningPlan;
+    }
+
+    public final IInstallableUnit getArtificialRoot()
+    {
+      return artificialRoot;
     }
 
     public List<IMetadataRepository> getMetadataRepositories()
@@ -1050,8 +1056,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               requiredLicensesDescription.setVersion(Version.createOSGi(1, 0, 0));
               requiredLicensesDescription.setArtifacts(new IArtifactKey[0]);
               requiredLicensesDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
-                  IInstallableUnit.NAMESPACE_IU_ID, requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
+              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
+                  requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
               requiredLicensesDescription.addRequirements(licenseRequirements);
 
               IInstallableUnit requiredLicensesIU = MetadataFactory.createInstallableUnit(requiredLicensesDescription);
@@ -1070,8 +1076,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               workspaceRequirementsDescription.setVersion(Version.createOSGi(1, 0, 0));
               workspaceRequirementsDescription.setArtifacts(new IArtifactKey[0]);
               workspaceRequirementsDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              workspaceRequirementsDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
-                  IInstallableUnit.NAMESPACE_IU_ID, workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
+              workspaceRequirementsDescription
+                  .setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
+                      workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
               workspaceRequirementsDescription.addRequirements(workspaceRequirements);
 
               IInstallableUnit workspaceRequirementsIU = MetadataFactory.createInstallableUnit(workspaceRequirementsDescription);
@@ -1285,8 +1292,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             }
 
             description.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
-            description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-                description.getId(), description.getVersion())));
+            description.addProvidedCapabilities(Collections
+                .singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, description.getId(), description.getVersion())));
 
             IInstallableUnit workspaceSourceIU = MetadataFactory.createInstallableUnit(description);
             ius.add(workspaceSourceIU);
@@ -1311,11 +1318,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
 
     @Override
-    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
-        Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
+    public boolean handleProvisioningPlan(ResolutionInfo info) throws CoreException
     {
-      this.provisioningPlan = provisioningPlan;
-      this.metadataRepositories = metadataRepositories;
+      provisioningPlan = info.getProvisioningPlan();
+      artificialRoot = info.getArtificialRoot();
+      metadataRepositories = info.getMetadataRepositories();
       return true;
     }
 
@@ -1338,8 +1345,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       description.setId(A_PDE_TARGET_PLATFORM_LOWER_CASE);
       Version version = Version.createOSGi(1, 0, 0);
       description.setVersion(version);
-      description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM,
-          "Cannot be installed into the IDE", version)));
+      description.addProvidedCapabilities(
+          Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM, "Cannot be installed into the IDE", version)));
       description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
       description.setArtifacts(new IArtifactKey[0]);
       return MetadataFactory.createInstallableUnit(description);

@@ -89,8 +89,7 @@ public interface ProfileTransaction
     /**
      * Called late during {@link ProfileTransaction#resolve(CommitContext, IProgressMonitor) resolve}.
      */
-    public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
-        Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
+    public boolean handleProvisioningPlan(ResolutionInfo info) throws CoreException
     {
       return true;
     }
@@ -117,6 +116,22 @@ public interface ProfileTransaction
     public void handleExecutionResult(IStatus status)
     {
       // Subclasses may override.
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    public interface ResolutionInfo
+    {
+      public IProvisioningPlan getProvisioningPlan();
+
+      public IInstallableUnit getArtificialRoot();
+
+      public Map<IInstallableUnit, DeltaType> getIUDeltas();
+
+      public Map<IInstallableUnit, Map<String, Pair<Object, Object>>> getPropertyDeltas();
+
+      public List<IMetadataRepository> getMetadataRepositories();
     }
 
     /**

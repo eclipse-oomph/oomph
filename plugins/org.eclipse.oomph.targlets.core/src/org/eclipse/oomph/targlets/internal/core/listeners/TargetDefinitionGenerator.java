@@ -11,36 +11,43 @@
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
-import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
+import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
+import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.IVersionedId;
 import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionedId;
+import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -59,6 +66,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   public static final String ANNOTATION_NAME = "name";
 
   public static final String ANNOTATION_LOCATION = "location";
+
+  public static final String ANNOTATION_PREFERRED_REPOSITORIES = "preferredRepositories";
 
   public static final String ANNOTATION_GENERATE_IMPLICIT_UNITS = "generateImplicitUnits";
 
@@ -83,8 +92,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   @Override
-  protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
-      WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
+  protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent, WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent,
+      IProgressMonitor monitor) throws Exception
   {
     ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
     for (Targlet targlet : targletContainer.getTarglets())
@@ -92,36 +101,45 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       Annotation annotation = targlet.getAnnotation(ANNOTATION);
       if (annotation != null)
       {
-        EMap<String, String> details = annotation.getDetails();
-
-        String name = details.get(ANNOTATION_NAME);
-        if (StringUtil.isEmpty(name))
-        {
-          name = "Generated from " + targlet.getName();
-        }
-
-        String location = details.get(ANNOTATION_LOCATION);
-        if (StringUtil.isEmpty(location))
-        {
-          location = File.createTempFile("tmp-", ".target").getAbsolutePath();
-          TargletsCorePlugin.INSTANCE.log("Generating target definition for targlet " + targlet.getName() + " to " + location);
-        }
-
         Profile profile = profileUpdateSucceededEvent.getProfile();
+        IInstallableUnit artificialRoot = profileUpdateSucceededEvent.getArtificialRoot();
         List<IMetadataRepository> metadataRepositories = profileUpdateSucceededEvent.getMetadataRepositories();
 
-        generateTargetDefinition(targlet, name, location, profile, metadataRepositories, monitor);
+        generateTargetDefinition(targlet, annotation, profile, artificialRoot, metadataRepositories, monitor);
       }
     }
   }
 
-  private static void generateTargetDefinition(final Targlet targlet, final String name, String location, Profile profile,
+  private static void generateTargetDefinition(final Targlet targlet, Annotation annotation, Profile profile, IInstallableUnit artificialRoot,
       List<IMetadataRepository> metadataRepositories, final IProgressMonitor monitor) throws Exception
   {
     monitor.setTaskName("Checking for generated target definition updates");
-    final Map<Repository, Set<IU>> repositoryIUs = analyzeRepositories(targlet, profile, metadataRepositories, monitor);
+    EMap<String, String> details = annotation.getDetails();
+
+    String targletName = details.get(ANNOTATION_NAME);
+    final String name = StringUtil.isEmpty(targletName) ? "Generated from " + targlet.getName() : targletName;
+
+    String location = details.get(ANNOTATION_LOCATION);
+    if (StringUtil.isEmpty(location))
+    {
+      location = File.createTempFile("tmp-", ".target").getAbsolutePath();
+      TargletsCorePlugin.INSTANCE.log("Generating target definition for targlet " + targlet.getName() + " to " + location);
+    }
 
     File targetDefinition = new File(location);
+
+    Set<IVersionedId> extraUnits = getExtraUnits(annotation);
+    List<String> preferredURLs = Arrays.asList(getAnnotationDetail(annotation, ANNOTATION_PREFERRED_REPOSITORIES, "").split(","));
+    boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
+    final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
+    final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
+    final boolean includeConfigurePhase = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
+    final String includeMode = getAnnotationDetail(annotation, ANNOTATION_INCLUDE_MODE, "planner");
+    final boolean includeSource = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
+
+    final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
+        extraUnits, preferredURLs, generateImplicitUnits, monitor);
+
     new FileUpdater()
     {
       private int sequenceNumber;
@@ -148,32 +166,24 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         builder.append("  <locations>");
         builder.append(nl);
 
-        for (Map.Entry<Repository, Set<IU>> entry : repositoryIUs.entrySet())
+        for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : repositoryIUs.entrySet())
         {
-          Repository repository = entry.getKey();
-          Set<IU> set = entry.getValue();
+          IMetadataRepository repository = entry.getKey();
+          Set<IInstallableUnit> set = entry.getValue();
 
-          Set<IU> extraUnits = getExtraUnits(repository);
-          set.addAll(extraUnits);
-
-          List<IU> list = new ArrayList<IU>(set);
+          List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
           if (!list.isEmpty())
           {
-            boolean versions = isAnnotationDetail(repository, ANNOTATION_GENERATE_VERSIONS, false);
-            boolean includeAllPlatforms = isAnnotationDetail(repository, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
-            boolean includeConfigurePhase = isAnnotationDetail(repository, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
-            String includeMode = getAnnotationDetail(repository, ANNOTATION_INCLUDE_MODE, "planner");
-            boolean includeSource = isAnnotationDetail(repository, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
-
             builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase
                 + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">");
             builder.append(nl);
 
             Collection<String> elements = new LinkedHashSet<String>();
             Collections.sort(list);
-            for (IU iu : list)
+
+            for (IInstallableUnit iu : list)
             {
-              elements.add(iu.formatElement(versions));
+              elements.add(formatElement(iu, versions));
             }
 
             for (String element : elements)
@@ -183,7 +193,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
               builder.append(nl);
             }
 
-            builder.append("      <repository location=\"" + repository.getURL() + "\"/>");
+            builder.append("      <repository location=\"" + repository.getLocation() + "\"/>");
             builder.append(nl);
             builder.append("    </location>");
             builder.append(nl);
@@ -209,60 +219,38 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     }.update(targetDefinition);
   }
 
-  private static String getAnnotationDetail(ModelElement element, String annotationDetailKey, String defaultValue)
+  private static boolean isAnnotationDetail(Annotation annotation, String key, boolean defaultValue)
   {
-    for (Annotation annotation : element.getAnnotations())
-    {
-      if (ANNOTATION.equals(annotation.getSource()))
-      {
-        String value = annotation.getDetails().get(annotationDetailKey);
-        if (value != null)
-        {
-          return value;
-        }
-      }
-    }
+    String detail = getAnnotationDetail(annotation, key, Boolean.toString(defaultValue));
+    return TRUE.equalsIgnoreCase(detail);
+  }
 
-    if (element instanceof Targlet)
+  private static String getAnnotationDetail(Annotation annotation, String key, String defaultValue)
+  {
+    String value = annotation.getDetails().get(key);
+    if (value == null)
     {
       return defaultValue;
     }
 
-    EObject container = element.eContainer();
-    if (container instanceof ModelElement)
-    {
-      return getAnnotationDetail((ModelElement)container, annotationDetailKey, defaultValue);
-    }
-
-    return defaultValue;
+    return value;
   }
 
-  private static boolean isAnnotationDetail(ModelElement element, String annotationDetailKey, boolean defaultValue)
+  private static Set<IVersionedId> getExtraUnits(Annotation annotation)
   {
-    String detail = getAnnotationDetail(element, annotationDetailKey, Boolean.toString(defaultValue));
-    return TRUE.equalsIgnoreCase(detail);
-  }
+    Set<IVersionedId> extraUnits = new HashSet<IVersionedId>();
 
-  private static Set<IU> getExtraUnits(Repository repository)
-  {
-    Set<IU> extraUnits = new HashSet<IU>();
-    for (Annotation annotation : repository.getAnnotations())
+    String values = annotation.getDetails().get(ANNOTATION_EXTRA_UNITS);
+    if (!StringUtil.isEmpty(values))
     {
-      if (ANNOTATION.equals(annotation.getSource()))
+      for (String value : values.split(" "))
       {
-        String values = annotation.getDetails().get(ANNOTATION_EXTRA_UNITS);
-        if (!StringUtil.isEmpty(values))
+        if (!StringUtil.isEmpty(value))
         {
-          for (String value : values.split(" "))
-          {
-            if (!StringUtil.isEmpty(value))
-            {
-              int pos = value.lastIndexOf('_');
-              String id = pos == -1 ? value : value.substring(0, pos);
-              Version version = pos == -1 ? Version.emptyVersion : Version.create(value.substring(pos + 1));
-              extraUnits.add(new ExtraIU(id, version));
-            }
-          }
+          int pos = value.lastIndexOf('_');
+          String id = pos == -1 ? value : value.substring(0, pos);
+          Version version = pos == -1 ? Version.emptyVersion : Version.create(value.substring(pos + 1));
+          extraUnits.add(new VersionedId(id, version));
         }
       }
     }
@@ -270,113 +258,143 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     return extraUnits;
   }
 
-  private static Map<Repository, Set<IU>> analyzeRepositories(Targlet targlet, Profile profile, List<IMetadataRepository> metadataRepositories,
+  private static String formatElement(IInstallableUnit iu, boolean withVersion)
+  {
+    Version version = iu.getVersion();
+    if (!withVersion || version == null)
+    {
+      version = Version.emptyVersion;
+    }
+
+    return "<unit id=\"" + iu.getId() + "\" version=\"" + version + "\"/>";
+  }
+
+  private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
+      List<IMetadataRepository> metadataRepositories, Set<IVersionedId> extraUnits, List<String> preferredURLs, boolean generateImplicitUnits,
       IProgressMonitor monitor)
   {
-    Map<Repository, Set<IU>> result = new LinkedHashMap<Repository, Set<IU>>();
-    Map<IInstallableUnit, IU> ius = new HashMap<IInstallableUnit, IU>();
-    boolean generateImplicitUnits = isAnnotationDetail(targlet, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
+    Set<IRequiredCapability> rootRequirements = getRootRequirements(targlet, artificialRoot);
 
-    for (Repository repository : targlet.getActiveRepositories())
+    Set<IInstallableUnit> resolvedIUs = new HashSet<IInstallableUnit>();
+    for (IRequiredCapability requirement : rootRequirements)
     {
-      TargletsCorePlugin.checkCancelation(monitor);
-      Set<IU> resultIUs = new HashSet<IU>();
-
-      IMetadataRepository metadataRepository = getMetadataRepository(repository.getURL(), metadataRepositories);
-      for (IInstallableUnit repositoryIU : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUAnyQuery(), null)))
-      {
-        TargletsCorePlugin.checkCancelation(monitor);
-
-        IInstallableUnit installableUnit = getInstallableUnitFromProfile(repositoryIU, profile);
-        if (installableUnit != null && !installableUnit.getId().endsWith(".source"))
-        {
-          IU iu = getOrCreateIU(ius, installableUnit);
-          resultIUs.add(iu);
-        }
-      }
-
-      if (!generateImplicitUnits)
-      {
-        Set<IU> rootIUs = new HashSet<IU>(resultIUs);
-        for (IU resultIU : resultIUs)
-        {
-          TargletsCorePlugin.checkCancelation(monitor);
-
-          IInstallableUnit delegate = resultIU.getDelegate();
-          if (delegate != null)
-          {
-            Set<IU> requiredIUs = resultIU.getRequiredIUs();
-            if (requiredIUs == null)
-            {
-              requiredIUs = new HashSet<IU>();
-              resultIU.setRequiredIUs(requiredIUs);
-
-              for (IRequirement requirement : delegate.getRequirements())
-              {
-                TargletsCorePlugin.checkCancelation(monitor);
-
-                for (IInstallableUnit installableUnit : P2Util.asIterable(profile.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
-                {
-                  TargletsCorePlugin.checkCancelation(monitor);
-
-                  IU requiredIU = getOrCreateIU(ius, installableUnit);
-                  requiredIU.setRequired(true);
-                  requiredIUs.add(requiredIU);
-                }
-              }
-            }
-
-            rootIUs.removeAll(requiredIUs);
-          }
-        }
-
-        result.put(repository, rootIUs);
-      }
-      else
-      {
-        result.put(repository, resultIUs);
-      }
+      resolveRequirement(requirement, profile, resolvedIUs);
     }
+
+    Map<String, IMetadataRepository> queriables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
+
+    Map<IMetadataRepository, Set<IInstallableUnit>> result = assignUnits(queriables, extraUnits, resolvedIUs);
 
     if (!generateImplicitUnits)
     {
-      for (Set<IU> resultIUs : result.values())
-      {
-        TargletsCorePlugin.checkCancelation(monitor);
-
-        List<IU> list = new ArrayList<IU>(resultIUs);
-        Collections.sort(list);
-
-        for (IU iu : list)
-        {
-          TargletsCorePlugin.checkCancelation(monitor);
-
-          if (resultIUs.size() <= 1)
-          {
-            break;
-          }
-
-          if (iu.isRequired())
-          {
-            resultIUs.remove(iu);
-          }
-        }
-      }
+      removeImplicitUnits(result, monitor);
     }
 
     return result;
   }
 
-  private static IU getOrCreateIU(Map<IInstallableUnit, IU> ius, IInstallableUnit installableUnit)
+  private static Set<IRequiredCapability> getRootRequirements(Targlet targlet, IInstallableUnit artificialRoot)
   {
-    IU iu = ius.get(installableUnit);
-    if (iu == null)
+    Map<String, Set<IRequiredCapability>> profileRequirements = new HashMap<String, Set<IRequiredCapability>>();
+    for (IRequirement profileRequirement : artificialRoot.getRequirements())
     {
-      iu = new ProfileIU(installableUnit);
-      ius.put(installableUnit, iu);
+      if (profileRequirement instanceof IRequiredCapability)
+      {
+        IRequiredCapability requiredCapability = (IRequiredCapability)profileRequirement;
+        String id = requiredCapability.getNamespace() + "/" + requiredCapability.getName();
+        CollectionUtil.add(profileRequirements, id, requiredCapability);
+      }
     }
 
-    return iu;
+    Set<IRequiredCapability> queue = new HashSet<IRequiredCapability>();
+    for (Requirement targletRequirement : targlet.getRequirements())
+    {
+      String id = targletRequirement.getNamespace() + "/" + targletRequirement.getName();
+      Set<IRequiredCapability> set = profileRequirements.get(id);
+      if (set != null)
+      {
+        queue.addAll(set);
+      }
+    }
+    return queue;
+  }
+
+  private static void resolveRequirement(IRequiredCapability requirement, IQueryable<IInstallableUnit> queryable, Set<IInstallableUnit> result)
+  {
+    for (IInstallableUnit iu : queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null))
+    {
+      String id = iu.getId();
+      if (id.endsWith(".source") || id.endsWith(".source.feature.group"))
+      {
+        continue;
+      }
+
+      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
+      {
+        continue;
+      }
+
+      if (!"true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
+      {
+        if (!result.add(iu))
+        {
+          continue;
+        }
+      }
+
+      for (IRequirement iuRequirement : iu.getRequirements())
+      {
+        if (iuRequirement instanceof IRequiredCapability)
+        {
+          resolveRequirement((IRequiredCapability)iuRequirement, queryable, result);
+        }
+      }
+    }
+  }
+
+  private static Map<String, IMetadataRepository> sortMetadataRepositories(Targlet targlet, List<IMetadataRepository> metadataRepositories,
+      List<String> preferredURLs, IProgressMonitor monitor)
+  {
+    Map<String, IMetadataRepository> queriables = new LinkedHashMap<String, IMetadataRepository>();
+    for (String urlPrefix : preferredURLs)
+    {
+      for (IMetadataRepository metadataRepository : metadataRepositories)
+      {
+        String url = metadataRepository.getLocation().toString();
+        if (!queriables.containsKey(url))
+        {
+          if (url.startsWith(urlPrefix))
+          {
+            queriables.put(url, metadataRepository);
+          }
+        }
+      }
+    }
+
+    for (Repository repository : targlet.getActiveRepositories())
+    {
+      TargletsCorePlugin.checkCancelation(monitor);
+      String url = repository.getURL();
+
+      if (!queriables.containsKey(url))
+      {
+        IMetadataRepository metadataRepository = getMetadataRepository(url, metadataRepositories);
+        if (metadataRepository != null)
+        {
+          queriables.put(url, metadataRepository);
+        }
+      }
+    }
+
+    for (IMetadataRepository metadataRepository : metadataRepositories)
+    {
+      String url = metadataRepository.getLocation().toString();
+      if (!queriables.containsKey(url))
+      {
+        queriables.put(url, metadataRepository);
+      }
+    }
+    return queriables;
   }
 
   private static IMetadataRepository getMetadataRepository(String url, List<IMetadataRepository> metadataRepositories)
@@ -392,193 +410,80 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     return null;
   }
 
-  private static IInstallableUnit getInstallableUnitFromProfile(IInstallableUnit repositoryIU, Profile profile)
+  private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queriables, Set<IVersionedId> extraUnits,
+      Set<IInstallableUnit> resolvedIUs)
   {
-    for (IInstallableUnit profileIU : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(repositoryIU), null)))
+    Map<IMetadataRepository, Set<IInstallableUnit>> result = new LinkedHashMap<IMetadataRepository, Set<IInstallableUnit>>();
+
+    // Use keySet() to preserve iteration order!
+    for (String url : queriables.keySet())
     {
-      if (!TRUE.equalsIgnoreCase(profileIU.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
+      IMetadataRepository metadataRepository = queriables.get(url);
+      Set<IInstallableUnit> ius = CollectionUtil.getSet(result, metadataRepository);
+
+      for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
       {
-        return profileIU;
+        IVersionedId extraUnit = it.next();
+        for (IInstallableUnit extraIU : metadataRepository.query(QueryUtil.createIUQuery(extraUnit), null))
+        {
+          ius.add(extraIU);
+          it.remove();
+          break;
+        }
       }
     }
 
-    return null;
+    for (IInstallableUnit iu : resolvedIUs)
+    {
+      for (IMetadataRepository metadataRepository : queriables.values())
+      {
+        if (!metadataRepository.query(QueryUtil.createIUQuery(iu), null).isEmpty())
+        {
+          CollectionUtil.add(result, metadataRepository, iu);
+          break;
+        }
+      }
+    }
+    return result;
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  private static abstract class IU implements Comparable<IU>
+  private static void removeImplicitUnits(Map<IMetadataRepository, Set<IInstallableUnit>> result, IProgressMonitor monitor)
   {
-    private Set<IU> requiredIUs;
-
-    private boolean required;
-
-    public IU()
+    for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : result.entrySet())
     {
-    }
+      IMetadataRepository metadataRepository = entry.getKey();
+      Set<IInstallableUnit> ius = entry.getValue();
 
-    public abstract String getID();
+      Set<IInstallableUnit> rootIUs = new HashSet<IInstallableUnit>(ius);
+      Set<IInstallableUnit> visitedIUs = new HashSet<IInstallableUnit>();
 
-    public abstract Version getVersion();
-
-    public abstract IInstallableUnit getDelegate();
-
-    public final Set<IU> getRequiredIUs()
-    {
-      return requiredIUs;
-    }
-
-    public final void setRequiredIUs(Set<IU> requiredIUs)
-    {
-      this.requiredIUs = requiredIUs;
-    }
-
-    public final boolean isRequired()
-    {
-      return required;
-    }
-
-    public final void setRequired(boolean required)
-    {
-      this.required = required;
-    }
-
-    @Override
-    public final int hashCode()
-    {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + getID().hashCode();
-
-      Version version = getVersion();
-      result = prime * result + version.hashCode();
-      return result;
-    }
-
-    @Override
-    public final boolean equals(Object obj)
-    {
-      if (this == obj)
+      for (IInstallableUnit iu : ius)
       {
-        return true;
+        removeImplicitUnits(iu, rootIUs, visitedIUs, metadataRepository, monitor);
       }
 
-      if (obj == null)
+      if (rootIUs.size() < ius.size())
       {
-        return false;
+        ius.retainAll(rootIUs);
       }
-
-      if (!(obj instanceof IU))
-      {
-        return false;
-      }
-
-      IU other = (IU)obj;
-      if (!getID().equals(other.getID()))
-      {
-        return false;
-      }
-
-      if (!getVersion().equals(other.getVersion()))
-      {
-        return false;
-      }
-
-      return true;
-    }
-
-    public final int compareTo(IU o)
-    {
-      int result = getID().compareTo(o.getID());
-      if (result == 0)
-      {
-        result = getVersion().compareTo(o.getVersion());
-      }
-
-      return result;
-    }
-
-    @Override
-    public final String toString()
-    {
-      return getID() + "_" + getVersion();
-    }
-
-    public final String formatElement(boolean withVersion)
-    {
-      Version version = getVersion();
-      if (!withVersion || version == null)
-      {
-        version = Version.emptyVersion;
-      }
-
-      return "<unit id=\"" + getID() + "\" version=\"" + version + "\"/>";
     }
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  private static final class ProfileIU extends IU
+  private static void removeImplicitUnits(IInstallableUnit iu, Set<IInstallableUnit> rootIUs, Set<IInstallableUnit> visitedIUs,
+      IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
   {
-    private final IInstallableUnit delegate;
-
-    public ProfileIU(IInstallableUnit delegate)
+    if (visitedIUs.add(iu))
     {
-      this.delegate = delegate;
-    }
+      for (IRequirement requirement : iu.getRequirements())
+      {
+        for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
+        {
+          TargletsCorePlugin.checkCancelation(monitor);
 
-    @Override
-    public String getID()
-    {
-      return delegate.getId();
-    }
-
-    @Override
-    public Version getVersion()
-    {
-      return delegate.getVersion();
-    }
-
-    @Override
-    public IInstallableUnit getDelegate()
-    {
-      return delegate;
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static final class ExtraIU extends IU
-  {
-    private final String id;
-
-    private final Version version;
-
-    public ExtraIU(String id, Version version)
-    {
-      this.id = id;
-      this.version = version;
-    }
-
-    @Override
-    public String getID()
-    {
-      return id;
-    }
-
-    @Override
-    public Version getVersion()
-    {
-      return version;
-    }
-
-    @Override
-    public IInstallableUnit getDelegate()
-    {
-      return null;
+          rootIUs.remove(requiredIU);
+          removeImplicitUnits(requiredIU, rootIUs, visitedIUs, queryable, monitor);
+        }
+      }
     }
   }
 }

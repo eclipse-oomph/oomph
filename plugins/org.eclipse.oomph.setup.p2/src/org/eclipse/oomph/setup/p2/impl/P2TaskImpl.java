@@ -65,7 +65,6 @@ import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
-import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
@@ -666,12 +665,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     ProfileTransaction.CommitContext commitContext = new ProfileTransaction.CommitContext()
     {
       @Override
-      public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
-          Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
+      public boolean handleProvisioningPlan(ResolutionInfo info) throws CoreException
       {
         try
         {
-          processLicenses(context, provisioningPlan, context.getProgressMonitor(false));
+          processLicenses(context, info.getProvisioningPlan(), context.getProgressMonitor(false));
         }
         catch (Exception ex)
         {

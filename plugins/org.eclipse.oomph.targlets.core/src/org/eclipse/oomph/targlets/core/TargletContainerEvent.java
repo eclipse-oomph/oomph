@@ -104,19 +104,22 @@ public class TargletContainerEvent extends EventObject
 
     private final transient Profile profile;
 
-    private final transient List<IMetadataRepository> metadataRepositories;
-
     private final transient IProvisioningPlan provisioningPlan;
+
+    private final transient IInstallableUnit artificialRoot;
+
+    private final transient List<IMetadataRepository> metadataRepositories;
 
     private final transient Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos;
 
-    public ProfileUpdateSucceededEvent(ITargletContainer source, ITargletContainerDescriptor descriptor, Profile profile,
+    public ProfileUpdateSucceededEvent(ITargletContainer source, ITargletContainerDescriptor descriptor, Profile profile, IInstallableUnit artificialRoot,
         List<IMetadataRepository> metadataRepositories, IProvisioningPlan provisioningPlan, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos)
     {
       super(source, descriptor);
       this.profile = profile;
-      this.metadataRepositories = metadataRepositories;
       this.provisioningPlan = provisioningPlan;
+      this.artificialRoot = artificialRoot;
+      this.metadataRepositories = metadataRepositories;
       this.workspaceIUInfos = workspaceIUInfos;
     }
 
@@ -125,14 +128,19 @@ public class TargletContainerEvent extends EventObject
       return profile;
     }
 
-    public final List<IMetadataRepository> getMetadataRepositories()
-    {
-      return metadataRepositories;
-    }
-
     public final IProvisioningPlan getProvisioningPlan()
     {
       return provisioningPlan;
+    }
+
+    public final IInstallableUnit getArtificialRoot()
+    {
+      return artificialRoot;
+    }
+
+    public final List<IMetadataRepository> getMetadataRepositories()
+    {
+      return metadataRepositories;
     }
 
     public final Map<IInstallableUnit, WorkspaceIUInfo> getWorkspaceIUInfos()

@@ -30,7 +30,6 @@ import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.IRunnable;
-import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -43,12 +42,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.VersionRange;
-import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.swt.widgets.Shell;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -89,16 +85,15 @@ public class SelfUpdate
       private IProvisioningPlan provisioningPlan;
 
       @Override
-      public boolean handleProvisioningPlan(IProvisioningPlan provisioningPlan, Map<IInstallableUnit, DeltaType> iuDeltas,
-          Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas, List<IMetadataRepository> metadataRepositories) throws CoreException
+      public boolean handleProvisioningPlan(ResolutionInfo info) throws CoreException
       {
-        if (repositoryChanged && iuDeltas.isEmpty() && propertyDeltas.size() <= 1)
+        if (repositoryChanged && info.getIUDeltas().isEmpty() && info.getPropertyDeltas().size() <= 1)
         {
           // Cancel if only the repository addition would be committed.
           return false;
         }
 
-        this.provisioningPlan = provisioningPlan;
+        provisioningPlan = info.getProvisioningPlan();
         return true;
       }
 

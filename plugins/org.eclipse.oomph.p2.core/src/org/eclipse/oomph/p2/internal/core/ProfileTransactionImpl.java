@@ -19,6 +19,8 @@ import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.DeltaType;
+import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.ResolutionInfo;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -105,6 +107,8 @@ import java.util.Set;
 @SuppressWarnings("restriction")
 public class ProfileTransactionImpl implements ProfileTransaction
 {
+  public static final String ARTIFICIAL_ROOT_ID = "artificial_root";
+
   private static final String OSGI_RESOLVER_USES_MODE = "osgi.resolver.usesMode";
 
   private static final String SOURCE_IU_ID = "org.eclipse.oomph.p2.source.container"; //$NON-NLS-1$
@@ -353,7 +357,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       initMirrors(cleanup);
 
-      List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
+      final List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
       Set<URI> artifactURIs = new HashSet<URI>();
       URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, new SubProgressMonitor(monitor, 50));
 
@@ -363,7 +367,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       IPlanner planner = agent.getPlanner();
       IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
-      IInstallableUnit rootIU = adjustProfileChangeRequest(profileChangeRequest, new SubProgressMonitor(monitor, 5));
+      final IInstallableUnit rootIU = adjustProfileChangeRequest(profileChangeRequest, new SubProgressMonitor(monitor, 5));
 
       final ProvisioningContext provisioningContext = context.createProvisioningContext(this, profileChangeRequest);
       provisioningContext.setMetadataRepositories(metadataURIs);
@@ -397,11 +401,39 @@ public class ProfileTransactionImpl implements ProfileTransaction
         provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
       }
 
-      Map<IInstallableUnit, CommitContext.DeltaType> iuDeltas = new HashMap<IInstallableUnit, CommitContext.DeltaType>();
-      Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas = new HashMap<IInstallableUnit, Map<String, Pair<Object, Object>>>();
+      final Map<IInstallableUnit, CommitContext.DeltaType> iuDeltas = new HashMap<IInstallableUnit, CommitContext.DeltaType>();
+      final Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas = new HashMap<IInstallableUnit, Map<String, Pair<Object, Object>>>();
       computeOperandDeltas(provisioningPlan, iuDeltas, propertyDeltas);
 
-      if (!context.handleProvisioningPlan(provisioningPlan, iuDeltas, propertyDeltas, metadataRepositories))
+      ResolutionInfo resolutionInfo = new ResolutionInfo()
+      {
+        public IProvisioningPlan getProvisioningPlan()
+        {
+          return provisioningPlan;
+        }
+
+        public IInstallableUnit getArtificialRoot()
+        {
+          return rootIU;
+        }
+
+        public Map<IInstallableUnit, DeltaType> getIUDeltas()
+        {
+          return iuDeltas;
+        }
+
+        public Map<IInstallableUnit, Map<String, Pair<Object, Object>>> getPropertyDeltas()
+        {
+          return propertyDeltas;
+        }
+
+        public List<IMetadataRepository> getMetadataRepositories()
+        {
+          return metadataRepositories;
+        }
+      };
+
+      if (!context.handleProvisioningPlan(resolutionInfo))
       {
         return null;
       }
@@ -499,7 +531,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         IInstallableUnit second = iuOperand.second();
         if (first == null)
         {
-          if (second.getId().equals("artificial_root"))
+          if (second.getId().equals(ARTIFICIAL_ROOT_ID))
           {
             it.remove();
           }
@@ -521,7 +553,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       {
         InstallableUnitPropertyOperand iuPropertyOperand = (InstallableUnitPropertyOperand)operand;
         IInstallableUnit operandIU = iuPropertyOperand.getInstallableUnit();
-        if (operandIU.getId().equals("artificial_root"))
+        if (operandIU.getId().equals(ARTIFICIAL_ROOT_ID))
         {
           it.remove();
         }
@@ -757,6 +789,12 @@ public class ProfileTransactionImpl implements ProfileTransaction
       throw new OperationCanceledException();
     }
 
+    for (int i = 0; i < metadataURIs.length; i++)
+    {
+      IMetadataRepository metadataRepository = manager.loadRepository(metadataURIs[i], null);
+      metadataRepositories.add(metadataRepository);
+    }
+
     for (BundlePool bundlePool : agent.getAgentManager().getBundlePools())
     {
       P2CorePlugin.checkCancelation(monitor);
@@ -802,7 +840,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
   private IInstallableUnit adjustProfileChangeRequest(final IProfileChangeRequest request, IProgressMonitor monitor) throws CoreException
   {
     InstallableUnitDescription rootDescription = new InstallableUnitDescription();
-    rootDescription.setId("artificial_root");
+    rootDescription.setId(ARTIFICIAL_ROOT_ID);
     rootDescription.setVersion(Version.createOSGi(1, 0, 0, "v" + System.currentTimeMillis()));
     rootDescription.setSingleton(true);
     rootDescription.setArtifacts(new IArtifactKey[0]);
