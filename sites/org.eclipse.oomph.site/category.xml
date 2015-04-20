@@ -76,6 +76,7 @@
    <feature url="features/org.eclipse.oomph.setup.workbench_1.1.0.qualifier.jar" id="org.eclipse.oomph.setup.workbench" version="1.1.0.qualifier">
       <category name="org.eclipse.oomph.setup.category"/>
    </feature>
+   <plugin url="releng/org.eclipse.oomph.releng.helpcenter_1.1.0.qualifier.jar" id="org.eclipse.oomph.releng.helpcenter" version="1.1.0.qualifier"/>
    <category-def name="org.eclipse.oomph.setup.category" label="Oomph Setup"/>
    <category-def name="org.eclipse.oomph.tools.category" label="Oomph Tools"/>
 </site>
