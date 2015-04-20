@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.base.provider.BaseEditPlugin;
+import org.eclipse.oomph.internal.setup.SetupPlugin;
 
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -43,11 +44,11 @@ public final class SetupEditPlugin extends EMFPlugin
    * Create the instance.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public SetupEditPlugin()
   {
-    super(new ResourceLocator[] { BaseEditPlugin.INSTANCE, });
+    super(new ResourceLocator[] { BaseEditPlugin.INSTANCE, SetupPlugin.INSTANCE });
   }
 
   /**

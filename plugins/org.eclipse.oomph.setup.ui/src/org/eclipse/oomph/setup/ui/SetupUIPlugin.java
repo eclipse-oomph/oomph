@@ -17,9 +17,11 @@ import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.TaskItemDecorator;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
+import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
@@ -94,7 +96,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public SetupUIPlugin()
   {
-    super(new ResourceLocator[] { JREInfoUIPlugin.INSTANCE, SetupEditPlugin.INSTANCE });
+    super(new ResourceLocator[] { JREInfoUIPlugin.INSTANCE, SetupEditPlugin.INSTANCE, SetupCorePlugin.INSTANCE, P2UIPlugin.INSTANCE });
   }
 
   @Override
@@ -220,8 +222,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
                     try
                     {
                       ResourceMirror resourceMirror = new ResourceMirror();
-                      resourceMirror.perform(Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI,
-                          SetupContext.USER_SETUP_URI }));
+                      resourceMirror.perform(
+                          Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI, SetupContext.USER_SETUP_URI }));
 
                       ResourceSet resourceSet = resourceMirror.getResourceSet();
                       resourceMirror.dispose();

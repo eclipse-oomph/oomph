@@ -1182,6 +1182,21 @@ public class ProjectPage extends SetupWizardPage
         }
 
         @Override
+        public Object getImage(Object object)
+        {
+          if (object instanceof Project)
+          {
+            Project project = (Project)object;
+            if (project.getStreams().isEmpty())
+            {
+              return SetupUIPlugin.INSTANCE.getSWTImage("folder");
+            }
+          }
+
+          return super.getImage(object);
+        }
+
+        @Override
         public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
         {
           if (childrenFeatures == null)
