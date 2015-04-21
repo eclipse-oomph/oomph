@@ -124,8 +124,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     }
 
     // Obtain or create and register package
-    BasePackageImpl theBasePackage = (BasePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof BasePackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new BasePackageImpl());
+    BasePackageImpl theBasePackage = (BasePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof BasePackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new BasePackageImpl());
 
     isInited = true;
 
@@ -442,8 +442,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
   protected void createLabelProviderAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.base.edit/icons/full/obj16" });
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.base.edit/icons/full/obj16" });
   }
 
   /**

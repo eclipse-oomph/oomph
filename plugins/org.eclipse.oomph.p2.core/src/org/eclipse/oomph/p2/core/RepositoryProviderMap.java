@@ -112,8 +112,8 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
   /**
    * @author Eike Stepper
    */
-  public static final class Metadata extends
-      RepositoryProviderMap<IMetadataRepositoryManager, IMetadataRepository, IInstallableUnit, RepositoryProvider.Metadata>
+  public static final class Metadata
+      extends RepositoryProviderMap<IMetadataRepositoryManager, IMetadataRepository, IInstallableUnit, RepositoryProvider.Metadata>
   {
     public Metadata(IMetadataRepositoryManager repositoryManager)
     {

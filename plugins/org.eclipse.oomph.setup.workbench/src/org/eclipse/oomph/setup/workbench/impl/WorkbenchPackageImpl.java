@@ -124,8 +124,8 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
     }
 
     // Obtain or create and register package
-    WorkbenchPackageImpl theWorkbenchPackage = (WorkbenchPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof WorkbenchPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new WorkbenchPackageImpl());
+    WorkbenchPackageImpl theWorkbenchPackage = (WorkbenchPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof WorkbenchPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new WorkbenchPackageImpl());
 
     isInited = true;
 
@@ -462,8 +462,8 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
 
     // Initialize classes and features; add operations and parameters
     initEClass(fileAssociationsTaskEClass, FileAssociationsTask.class, "FileAssociationsTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getFileAssociationsTask_Mappings(), getFileMapping(), null, "mappings", null, 1, -1, FileAssociationsTask.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFileAssociationsTask_Mappings(), getFileMapping(), null, "mappings", null, 1, -1, FileAssociationsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fileMappingEClass, FileMapping.class, "FileMapping", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFileMapping_FilePattern(), ecorePackage.getEString(), "filePattern", null, 1, 1, FileMapping.class, !IS_TRANSIENT, !IS_VOLATILE,

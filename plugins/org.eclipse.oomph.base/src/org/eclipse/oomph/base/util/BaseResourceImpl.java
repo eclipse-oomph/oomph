@@ -210,6 +210,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
   }
 
   private static final Method GET_ELEMENT_INDENT_METHOD;
+
   static
   {
     GET_ELEMENT_INDENT_METHOD = ReflectUtil.getMethod(XMLString.class, "getElementIndent", int.class);

@@ -96,8 +96,8 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
         Object image = propertyLabelProvider.getImage(propertyValue);
         if (image != null)
         {
-          result.append(DiagnosticDecorator.enquote("<img src='" + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(image))
-              + "'/> "));
+          result.append(
+              DiagnosticDecorator.enquote("<img src='" + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(image)) + "'/> "));
         }
 
         String valueText = propertyLabelProvider.getText(propertyValue);

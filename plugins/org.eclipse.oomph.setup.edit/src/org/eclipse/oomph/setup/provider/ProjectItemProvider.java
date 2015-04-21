@@ -73,9 +73,9 @@ public class ProjectItemProvider extends ScopeItemProvider
   protected void addLogicalProjectContainerPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new HierarchicalPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Project_logicalProjectContainer_feature"), getString("_UI_PropertyDescriptor_description",
-            "_UI_Project_logicalProjectContainer_feature", "_UI_Project_type"), SetupPackage.Literals.PROJECT__LOGICAL_PROJECT_CONTAINER, true, false, true,
-        null, null, null)
+        getString("_UI_Project_logicalProjectContainer_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_Project_logicalProjectContainer_feature", "_UI_Project_type"),
+        SetupPackage.Literals.PROJECT__LOGICAL_PROJECT_CONTAINER, true, false, true, null, null, null)
     {
       @Override
       public Collection<?> getChoiceOfValues(Object object)

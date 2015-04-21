@@ -11,10 +11,10 @@
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.targlets.core.ITargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainerListener;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
-import org.eclipse.oomph.targlets.core.ITargletContainerListener;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 

@@ -78,8 +78,8 @@ public final class SetupCoreUtil
 
   static
   {
-    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper.getService(
-        org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
+    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper
+        .getService(org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
     UIServices uiServices = (UIServices)agent.getService(UIServices.SERVICE_NAME);
 
     ISecurePreferences root = PreferencesUtil.getSecurePreferences();

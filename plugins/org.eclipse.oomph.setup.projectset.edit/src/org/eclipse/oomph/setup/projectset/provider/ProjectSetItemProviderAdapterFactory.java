@@ -379,8 +379,8 @@ public class ProjectSetItemProviderAdapterFactory extends ProjectSetAdapterFacto
       @Override
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
-        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
-            ProjectSetFactory.eINSTANCE.createProjectSetImportTask()));
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, ProjectSetFactory.eINSTANCE.createProjectSetImportTask()));
 
         return null;
       }

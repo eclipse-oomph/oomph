@@ -110,7 +110,7 @@ public final class P2Util
     {
       return queryResult;
     }
-  
+
     return new Iterable<T>()
     {
       public Iterator<T> iterator()

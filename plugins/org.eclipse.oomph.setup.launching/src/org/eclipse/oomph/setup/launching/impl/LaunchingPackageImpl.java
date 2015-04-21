@@ -82,8 +82,8 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     }
 
     // Obtain or create and register package
-    LaunchingPackageImpl theLaunchingPackage = (LaunchingPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LaunchingPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new LaunchingPackageImpl());
+    LaunchingPackageImpl theLaunchingPackage = (LaunchingPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LaunchingPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new LaunchingPackageImpl());
 
     isInited = true;
 

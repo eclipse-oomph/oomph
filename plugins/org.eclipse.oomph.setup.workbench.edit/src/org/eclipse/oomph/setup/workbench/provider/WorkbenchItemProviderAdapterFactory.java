@@ -534,8 +534,8 @@ public class WorkbenchItemProviderAdapterFactory extends WorkbenchAdapterFactory
       @Override
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
-        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
-            WorkbenchFactory.eINSTANCE.createFileAssociationsTask()));
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, WorkbenchFactory.eINSTANCE.createFileAssociationsTask()));
 
         newChildDescriptors
             .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, WorkbenchFactory.eINSTANCE.createKeyBindingTask()));

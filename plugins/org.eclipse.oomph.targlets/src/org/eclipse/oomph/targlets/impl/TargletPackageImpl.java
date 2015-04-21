@@ -170,8 +170,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     }
 
     // Obtain or create and register package
-    TargletPackageImpl theTargletPackage = (TargletPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TargletPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new TargletPackageImpl());
+    TargletPackageImpl theTargletPackage = (TargletPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TargletPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new TargletPackageImpl());
 
     isInited = true;
 
@@ -709,8 +709,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   protected void createLabelProviderAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.targlets.edit/icons/full/obj16" });
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.targlets.edit/icons/full/obj16" });
   }
 
   /**

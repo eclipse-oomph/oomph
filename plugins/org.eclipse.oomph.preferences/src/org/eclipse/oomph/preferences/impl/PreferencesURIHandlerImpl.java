@@ -182,8 +182,8 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
     {
       class PreferencesInput extends InputStream implements URIConverter.Loadable
       {
-        private PreferenceNode preferencesNode = PreferencesUtil.getRootPreferenceNode(Boolean.TRUE.equals(options
-            .get(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES)));
+        private PreferenceNode preferencesNode = PreferencesUtil
+            .getRootPreferenceNode(Boolean.TRUE.equals(options.get(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES)));
 
         private InputStream in;
 

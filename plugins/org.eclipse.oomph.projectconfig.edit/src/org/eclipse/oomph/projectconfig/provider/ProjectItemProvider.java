@@ -171,9 +171,9 @@ public class ProjectItemProvider extends ModelElementItemProvider
   protected void addPreferenceProfileReferencesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Project_preferenceProfileReferences_feature"), getString("_UI_PropertyDescriptor_description",
-            "_UI_Project_preferenceProfileReferences_feature", "_UI_Project_type"), ProjectConfigPackage.Literals.PROJECT__PREFERENCE_PROFILE_REFERENCES, true,
-        false, true, null, null, null)
+        getString("_UI_Project_preferenceProfileReferences_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_Project_preferenceProfileReferences_feature", "_UI_Project_type"),
+        ProjectConfigPackage.Literals.PROJECT__PREFERENCE_PROFILE_REFERENCES, true, false, true, null, null, null)
     {
       IItemLabelProvider labelProvider = new IItemLabelProvider()
       {
@@ -598,8 +598,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
   {
     if (operation == DragAndDropFeedback.DROP_LINK)
     {
-      return references.createCommand(references, domain, DragAndDropCommand.class, new CommandParameter(references,
-          new Detail(location, operations, operation), collection));
+      return references.createCommand(references, domain, DragAndDropCommand.class,
+          new CommandParameter(references, new Detail(location, operations, operation), collection));
     }
     return super.createPrimaryDragAndDropCommand(domain, owner, location, operations, operation, collection);
   }
@@ -607,6 +607,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
   private static final Set<String> IGNORE_NAME_COMPONENTS = new HashSet<String>(Arrays.asList(new String[] { "org", "eclipse", "com" }));
 
   private static final Map<String, String> ACRYONYMS = new HashMap<String, String>();
+
   static
   {
     ACRYONYMS.put("jdt", "JDT");
@@ -839,8 +840,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PROJECT__PREFERENCE_PROFILES,
-        ProjectConfigFactory.eINSTANCE.createPreferenceProfile()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PROJECT__PREFERENCE_PROFILES, ProjectConfigFactory.eINSTANCE.createPreferenceProfile()));
   }
 
   @Override
@@ -995,8 +996,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
               {
                 exclusions = Pattern.compile(exclusions.toString() + "|" + pattern.toString());
               }
-              command.appendAndExecute(SetCommand.create(domain, collidingPreferenceFilter, ProjectConfigPackage.Literals.PREFERENCE_FILTER__EXCLUSIONS,
-                  exclusions));
+              command.appendAndExecute(
+                  SetCommand.create(domain, collidingPreferenceFilter, ProjectConfigPackage.Literals.PREFERENCE_FILTER__EXCLUSIONS, exclusions));
             }
 
             Set<String> union = new LinkedHashSet<String>();

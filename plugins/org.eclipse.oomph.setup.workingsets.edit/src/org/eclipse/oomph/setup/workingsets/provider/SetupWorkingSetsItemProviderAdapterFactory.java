@@ -52,8 +52,8 @@ import java.util.List;
  * <!-- end-user-doc -->
  * @generated
  */
-public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSetsAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier,
-    IDisposable
+public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSetsAdapterFactory
+    implements ComposeableAdapterFactory, IChangeNotifier, IDisposable
 {
   /**
    * This keeps track of the root adapter factory that delegates to this adapter factory.
@@ -380,8 +380,8 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
       @Override
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
-        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
-            SetupWorkingSetsFactory.eINSTANCE.createWorkingSetTask()));
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupWorkingSetsFactory.eINSTANCE.createWorkingSetTask()));
 
         return null;
       }

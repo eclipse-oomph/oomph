@@ -49,8 +49,8 @@ public class CatalogManager
   public CatalogManager()
   {
     selection = SetupFactory.eINSTANCE.createCatalogSelection();
-    Resource selectionResource = Resource.Factory.Registry.INSTANCE.getFactory(SetupContext.CATALOG_SELECTION_SETUP_URI).createResource(
-        SetupContext.CATALOG_SELECTION_SETUP_URI);
+    Resource selectionResource = Resource.Factory.Registry.INSTANCE.getFactory(SetupContext.CATALOG_SELECTION_SETUP_URI)
+        .createResource(SetupContext.CATALOG_SELECTION_SETUP_URI);
     selectionResource.getContents().add(selection);
   }
 
@@ -72,24 +72,24 @@ public class CatalogManager
     }
 
     @SuppressWarnings("unchecked")
-    List<? extends Scope> result = (List<? extends Scope>)index.eGet(product ? SetupPackage.Literals.INDEX__PRODUCT_CATALOGS
-        : SetupPackage.Literals.INDEX__PROJECT_CATALOGS);
+    List<? extends Scope> result = (List<? extends Scope>)index
+        .eGet(product ? SetupPackage.Literals.INDEX__PRODUCT_CATALOGS : SetupPackage.Literals.INDEX__PROJECT_CATALOGS);
     return result;
   }
 
   public List<? extends Scope> getSelectedCatalogs(boolean product)
   {
     @SuppressWarnings("unchecked")
-    List<? extends Scope> result = (List<? extends Scope>)selection.eGet(product ? SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS
-        : SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS);
+    List<? extends Scope> result = (List<? extends Scope>)selection
+        .eGet(product ? SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS : SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS);
     return result;
   }
 
   public void selectCatalog(boolean product, Scope scope, boolean on)
   {
     @SuppressWarnings("unchecked")
-    InternalEList<Scope> list = (InternalEList<Scope>)selection.eGet(product ? SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS
-        : SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS);
+    InternalEList<Scope> list = (InternalEList<Scope>)selection
+        .eGet(product ? SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS : SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS);
 
     boolean changed = on ? list.add(scope) : list.remove(scope);
     if (changed)

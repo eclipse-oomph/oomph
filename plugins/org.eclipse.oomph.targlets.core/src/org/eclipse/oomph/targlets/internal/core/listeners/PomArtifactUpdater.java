@@ -54,8 +54,8 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
   }
 
   @Override
-  protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
-      WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception
+  protected void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent, WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent,
+      IProgressMonitor monitor) throws Exception
   {
     ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
     for (Targlet targlet : targletContainer.getTarglets())

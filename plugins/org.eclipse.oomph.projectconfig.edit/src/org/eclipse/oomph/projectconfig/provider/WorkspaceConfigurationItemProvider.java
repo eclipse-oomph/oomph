@@ -204,8 +204,8 @@ public class WorkspaceConfigurationItemProvider extends ModelElementItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.WORKSPACE_CONFIGURATION__PROJECTS,
-        ProjectConfigFactory.eINSTANCE.createProject()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.WORKSPACE_CONFIGURATION__PROJECTS, ProjectConfigFactory.eINSTANCE.createProject()));
   }
 
   /**

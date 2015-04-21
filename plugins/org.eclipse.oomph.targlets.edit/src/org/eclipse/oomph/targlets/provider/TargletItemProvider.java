@@ -249,17 +249,17 @@ public class TargletItemProvider extends ModelElementItemProvider
 
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__SOURCE_LOCATORS, ResourcesFactory.eINSTANCE.createSourceLocator()));
 
-    newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS,
-        TargletFactory.eINSTANCE.createFeatureGenerator()));
+    newChildDescriptors
+        .add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS, TargletFactory.eINSTANCE.createFeatureGenerator()));
 
     newChildDescriptors
         .add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS, TargletFactory.eINSTANCE.createPluginGenerator()));
 
-    newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS,
-        TargletFactory.eINSTANCE.createComponentGenerator()));
+    newChildDescriptors
+        .add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS, TargletFactory.eINSTANCE.createComponentGenerator()));
 
-    newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS,
-        TargletFactory.eINSTANCE.createBuckminsterGenerator()));
+    newChildDescriptors
+        .add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS, TargletFactory.eINSTANCE.createBuckminsterGenerator()));
 
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__REPOSITORY_LISTS, P2Factory.eINSTANCE.createRepositoryList()));
   }

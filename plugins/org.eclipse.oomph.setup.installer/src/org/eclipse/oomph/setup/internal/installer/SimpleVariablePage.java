@@ -1070,7 +1070,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

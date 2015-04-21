@@ -51,8 +51,8 @@ import java.util.List;
  * <!-- end-user-doc -->
  * @generated
  */
-public class SetupItemProviderAdapterFactory extends SetupAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable,
-    IChildCreationExtender
+public class SetupItemProviderAdapterFactory extends SetupAdapterFactory
+    implements ComposeableAdapterFactory, IChangeNotifier, IDisposable, IChildCreationExtender
 {
   /**
    * This keeps track of the root adapter factory that delegates to this adapter factory.
@@ -1252,8 +1252,8 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory impleme
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
             SetupFactory.eINSTANCE.create(SetupPackage.Literals.PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY)));
 
-        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
-            SetupFactory.eINSTANCE.create(SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY)));
+        newChildDescriptors.add(
+            createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.create(SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY)));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
             SetupFactory.eINSTANCE.create(SetupPackage.Literals.INSTALLATION_TO_WORKSPACES_MAP_ENTRY)));

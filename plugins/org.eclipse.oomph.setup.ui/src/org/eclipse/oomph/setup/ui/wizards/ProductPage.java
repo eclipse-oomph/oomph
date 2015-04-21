@@ -688,8 +688,7 @@ public class ProductPage extends SetupWizardPage
       label = product.getName();
     }
 
-    return "<html><body style=\"margin:5px;\"><img src=\""
-        + imageURI
+    return "<html><body style=\"margin:5px;\"><img src=\"" + imageURI
         + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
         + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
         + "</span></body></html>";

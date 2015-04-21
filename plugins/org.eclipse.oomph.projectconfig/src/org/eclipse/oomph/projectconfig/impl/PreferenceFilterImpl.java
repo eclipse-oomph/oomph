@@ -91,8 +91,8 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * @generated
    * @ordered
    */
-  protected static final Pattern EXCLUSIONS_EDEFAULT = (Pattern)ProjectConfigFactory.eINSTANCE
-      .createFromString(ProjectConfigPackage.eINSTANCE.getPattern(), "");
+  protected static final Pattern EXCLUSIONS_EDEFAULT = (Pattern)ProjectConfigFactory.eINSTANCE.createFromString(ProjectConfigPackage.eINSTANCE.getPattern(),
+      "");
 
   /**
    * The cached value of the '{@link #getExclusions() <em>Exclusions</em>}' attribute.
@@ -140,7 +140,8 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
       {
         if (eNotificationRequired())
         {
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, ProjectConfigPackage.PREFERENCE_FILTER__PREFERENCE_NODE, oldPreferenceNode, preferenceNode));
+          eNotify(
+              new ENotificationImpl(this, Notification.RESOLVE, ProjectConfigPackage.PREFERENCE_FILTER__PREFERENCE_NODE, oldPreferenceNode, preferenceNode));
         }
       }
     }
@@ -204,8 +205,8 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    */
   public void setPreferenceProfile(PreferenceProfile newPreferenceProfile)
   {
-    if (newPreferenceProfile != eInternalContainer() || eContainerFeatureID() != ProjectConfigPackage.PREFERENCE_FILTER__PREFERENCE_PROFILE
-        && newPreferenceProfile != null)
+    if (newPreferenceProfile != eInternalContainer()
+        || eContainerFeatureID() != ProjectConfigPackage.PREFERENCE_FILTER__PREFERENCE_PROFILE && newPreferenceProfile != null)
     {
       if (EcoreUtil.isAncestor(this, newPreferenceProfile))
       {

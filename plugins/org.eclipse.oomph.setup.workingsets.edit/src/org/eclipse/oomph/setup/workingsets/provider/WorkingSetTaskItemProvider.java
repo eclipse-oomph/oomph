@@ -162,8 +162,8 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(SetupWorkingSetsPackage.Literals.WORKING_SET_TASK__WORKING_SETS,
-        WorkingSetsFactory.eINSTANCE.createWorkingSet()));
+    newChildDescriptors
+        .add(createChildParameter(SetupWorkingSetsPackage.Literals.WORKING_SET_TASK__WORKING_SETS, WorkingSetsFactory.eINSTANCE.createWorkingSet()));
   }
 
   /**

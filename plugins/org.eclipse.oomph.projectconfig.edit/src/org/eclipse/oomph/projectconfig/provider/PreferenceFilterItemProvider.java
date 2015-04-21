@@ -94,9 +94,9 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
    */
   protected void addPreferenceNodePropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(new PreferenceItemItemProvider.PreferenceItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory)
-        .getRootAdapterFactory(), getResourceLocator(), getString("_UI_PreferenceFilter_preferenceNode_feature"), getString(
-        "_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_preferenceNode_feature", "_UI_PreferenceFilter_type"),
+    itemPropertyDescriptors.add(new PreferenceItemItemProvider.PreferenceItemPropertyDescriptor(
+        ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_PreferenceFilter_preferenceNode_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_preferenceNode_feature", "_UI_PreferenceFilter_type"),
         ProjectConfigPackage.Literals.PREFERENCE_FILTER__PREFERENCE_NODE, true, false, true, null, null, null)
     {
       @Override

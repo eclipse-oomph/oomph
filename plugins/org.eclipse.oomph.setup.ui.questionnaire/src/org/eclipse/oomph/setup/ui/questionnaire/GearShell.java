@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class GearShell extends AnimatedShell<Map<URI, String>> implements Listener
+public class GearShell extends AnimatedShell<Map<URI, String>>implements Listener
 {
   private static final boolean TEST_OVERLAYS = false;
 

@@ -157,7 +157,8 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
     includeSourceBundles = newIncludeSourceBundles;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES, oldIncludeSourceBundles, includeSourceBundles));
+      eNotify(
+          new ENotificationImpl(this, Notification.SET, P2Package.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES, oldIncludeSourceBundles, includeSourceBundles));
     }
   }
 

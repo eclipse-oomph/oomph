@@ -11,7 +11,6 @@
  */
 package org.eclipse.oomph.util;
 
-
 /**
  * Various static helper methods.
  *

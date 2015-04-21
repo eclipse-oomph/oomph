@@ -51,8 +51,8 @@ import java.util.List;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable,
-    IChildCreationExtender
+public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
+    implements ComposeableAdapterFactory, IChangeNotifier, IDisposable, IChildCreationExtender
 {
   /**
    * This keeps track of the root adapter factory that delegates to this adapter factory.
@@ -76,7 +76,8 @@ public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ChildCreationExtenderManager childCreationExtenderManager = new ChildCreationExtenderManager(ResourcesEditPlugin.INSTANCE, ResourcesPackage.eNS_URI);
+  protected ChildCreationExtenderManager childCreationExtenderManager = new ChildCreationExtenderManager(ResourcesEditPlugin.INSTANCE,
+      ResourcesPackage.eNS_URI);
 
   /**
    * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.

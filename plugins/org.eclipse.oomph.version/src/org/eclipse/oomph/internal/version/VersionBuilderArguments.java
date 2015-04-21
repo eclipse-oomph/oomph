@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class VersionBuilderArguments extends HashMap<String, String> implements IVersionBuilderArguments
+public class VersionBuilderArguments extends HashMap<String, String>implements IVersionBuilderArguments
 {
   private static final long serialVersionUID = 1L;
 

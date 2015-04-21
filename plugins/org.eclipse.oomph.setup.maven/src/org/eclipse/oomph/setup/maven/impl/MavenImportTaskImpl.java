@@ -155,7 +155,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     projectNameTemplate = newProjectNameTemplate;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE, oldProjectNameTemplate, projectNameTemplate));
+      eNotify(
+          new ENotificationImpl(this, Notification.SET, MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE, oldProjectNameTemplate, projectNameTemplate));
     }
   }
 
@@ -350,8 +351,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     }
   }
 
-  private void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, LocalProjectScanner projectScanner, IProgressMonitor monitor)
-      throws InterruptedException
+  private void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, LocalProjectScanner projectScanner,
+      IProgressMonitor monitor) throws InterruptedException
   {
     monitor.beginTask("", 2);
 

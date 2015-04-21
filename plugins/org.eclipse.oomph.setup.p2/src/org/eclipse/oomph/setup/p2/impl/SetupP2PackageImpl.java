@@ -84,8 +84,8 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
     }
 
     // Obtain or create and register package
-    SetupP2PackageImpl theSetupP2Package = (SetupP2PackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupP2PackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new SetupP2PackageImpl());
+    SetupP2PackageImpl theSetupP2Package = (SetupP2PackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupP2PackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SetupP2PackageImpl());
 
     isInited = true;
 
@@ -256,8 +256,8 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getP2Task_LicenseConfirmationDisabled(), ecorePackage.getEBoolean(), "licenseConfirmationDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getP2Task_MergeDisabled(), ecorePackage.getEBoolean(), "mergeDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getP2Task_MergeDisabled(), ecorePackage.getEBoolean(), "mergeDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);
@@ -278,8 +278,8 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
   protected void createLabelProviderAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.p2.edit/icons/full/obj16" });
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.p2.edit/icons/full/obj16" });
   }
 
   /**

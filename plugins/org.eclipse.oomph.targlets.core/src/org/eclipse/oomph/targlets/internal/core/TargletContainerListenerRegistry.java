@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.targlets.internal.core;
 
-import org.eclipse.oomph.targlets.core.TargletContainerEvent;
 import org.eclipse.oomph.targlets.core.ITargletContainerListener;
+import org.eclipse.oomph.targlets.core.TargletContainerEvent;
 import org.eclipse.oomph.util.ConcurrentArray;
 
 import org.eclipse.core.runtime.IConfigurationElement;

@@ -284,7 +284,7 @@ public class CachingTransport extends Transport
       result = new Object();
       URI_LOCKS.put(uri, result);
     }
-  
+
     return result;
   }
 

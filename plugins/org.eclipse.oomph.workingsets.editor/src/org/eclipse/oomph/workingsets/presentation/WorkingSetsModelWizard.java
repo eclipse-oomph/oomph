@@ -82,8 +82,8 @@ public class WorkingSetsModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final List<String> FILE_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(WorkingSetsEditorPlugin.INSTANCE.getString(
-      "_UI_WorkingSetsEditorFilenameExtensions").split("\\s*,\\s*")));
+  public static final List<String> FILE_EXTENSIONS = Collections
+      .unmodifiableList(Arrays.asList(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_WorkingSetsEditorFilenameExtensions").split("\\s*,\\s*")));
 
   /**
    * A formatted list of supported file extensions, suitable for display.
@@ -91,8 +91,8 @@ public class WorkingSetsModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String FORMATTED_FILE_EXTENSIONS = WorkingSetsEditorPlugin.INSTANCE.getString("_UI_WorkingSetsEditorFilenameExtensions").replaceAll(
-      "\\s*,\\s*", ", ");
+  public static final String FORMATTED_FILE_EXTENSIONS = WorkingSetsEditorPlugin.INSTANCE.getString("_UI_WorkingSetsEditorFilenameExtensions")
+      .replaceAll("\\s*,\\s*", ", ");
 
   /**
    * This caches an instance of the model package.

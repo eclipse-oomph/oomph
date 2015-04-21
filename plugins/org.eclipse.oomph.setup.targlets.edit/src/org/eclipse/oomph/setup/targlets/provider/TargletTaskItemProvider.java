@@ -109,9 +109,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addOperatingSystemPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_operatingSystem_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_operatingSystem_feature",
-            "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, true, false, true,
-        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+        getString("_UI_TargletTask_operatingSystem_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_operatingSystem_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
       public Collection<?> getChoiceOfValues(Object object)
@@ -130,9 +130,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addWindowingSystemPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_windowingSystem_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_windowingSystem_feature",
-            "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, true, false, true,
-        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+        getString("_UI_TargletTask_windowingSystem_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_windowingSystem_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
       public Collection<?> getChoiceOfValues(Object object)
@@ -151,9 +151,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addArchitecturePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_architecture_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_architecture_feature",
-            "_UI_TargletTask_type"), SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-        null, null)
+        getString("_UI_TargletTask_architecture_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_architecture_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
       public Collection<?> getChoiceOfValues(Object object)
@@ -387,8 +387,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
     newChildDescriptors.add(createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, TargletFactory.eINSTANCE.createTarglet()));
 
-    newChildDescriptors.add(createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__IMPLICIT_DEPENDENCIES,
-        SetupTargletsFactory.eINSTANCE.createImplicitDependency()));
+    newChildDescriptors.add(
+        createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__IMPLICIT_DEPENDENCIES, SetupTargletsFactory.eINSTANCE.createImplicitDependency()));
   }
 
   /**

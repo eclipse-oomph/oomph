@@ -558,8 +558,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         return repositoryLists != null && !repositoryLists.isEmpty();
       case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME:
-        return ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT == null ? activeRepositoryListName != null : !ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT
-            .equals(activeRepositoryListName);
+        return ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT == null ? activeRepositoryListName != null
+            : !ACTIVE_REPOSITORY_LIST_NAME_EDEFAULT.equals(activeRepositoryListName);
       case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST:
         return getActiveRepositoryList() != null;
       case TargletPackage.TARGLET__ACTIVE_REPOSITORIES:

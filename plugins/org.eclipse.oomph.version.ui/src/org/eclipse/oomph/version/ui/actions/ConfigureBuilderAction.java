@@ -59,9 +59,8 @@ public class ConfigureBuilderAction extends AbstractAction<IVersionBuilderArgume
               {
                 if (!arguments.equals(commandArguments))
                 {
-                  if (!MessageDialog
-                      .openQuestion(shell, TITLE,
-                          "The selected projects have different configurations. The configuration you specify will be applied to all selected projects.\n\nWould you like to proceed?"))
+                  if (!MessageDialog.openQuestion(shell, TITLE,
+                      "The selected projects have different configurations. The configuration you specify will be applied to all selected projects.\n\nWould you like to proceed?"))
                   {
                     return null;
                   }

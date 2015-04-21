@@ -52,8 +52,8 @@ public class ReplaceResolution extends AbstractDocumentResolution
       return "Change the debug option";
     }
 
-    return replacement == null ? "Remove the reference" : Markers.getQuickFixAlternativeReplacement(marker) == null ? "Change the version"
-        : "Change to the extact version";
+    return replacement == null ? "Remove the reference"
+        : Markers.getQuickFixAlternativeReplacement(marker) == null ? "Change the version" : "Change to the extact version";
   }
 
   @Override

@@ -101,9 +101,9 @@ public class UserItemProvider extends ScopeItemProvider
   protected void addQuestionnaireDatePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_User_questionnaireDate_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_User_questionnaireDate_feature", "_UI_User_type"), SetupPackage.Literals.USER__QUESTIONNAIRE_DATE,
-        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+        getString("_UI_User_questionnaireDate_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_questionnaireDate_feature", "_UI_User_type"),
+        SetupPackage.Literals.USER__QUESTIONNAIRE_DATE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**

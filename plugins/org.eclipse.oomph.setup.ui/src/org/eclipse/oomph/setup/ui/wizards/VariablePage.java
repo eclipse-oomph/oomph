@@ -201,8 +201,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       fieldHolder.clear();
     }
 
-    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers.isEmpty() ? performer == null ? Collections.<SetupTaskPerformer> emptySet() : Collections
-        .singleton(performer) : incompletePerformers)
+    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers.isEmpty()
+        ? performer == null ? Collections.<SetupTaskPerformer> emptySet() : Collections.singleton(performer) : incompletePerformers)
     {
       List<VariableTask> variables = setupTaskPerformer.getUnresolvedVariables();
       for (VariableTask variable : variables)
@@ -585,8 +585,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       Installation installation = performer.getInstallation();
       Resource installationResource = installation.eResource();
       URI installationResourceURI = installationResource.getURI();
-      installationResource.setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup")
-          .toString()));
+      installationResource
+          .setURI(URI.createFileURI(new File(performer.getProductConfigurationLocation(), "org.eclipse.oomph.setup/installation.setup").toString()));
 
       Workspace workspace = performer.getWorkspace();
       Resource workspaceResource = null;
@@ -595,8 +595,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       {
         workspaceResource = workspace.eResource();
         workspaceResourceURI = workspaceResource.getURI();
-        workspaceResource.setURI(URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup")
-            .toString()));
+        workspaceResource
+            .setURI(URI.createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup").toString()));
       }
 
       Installation copiedInstallation = EcoreUtil.copy(installation);

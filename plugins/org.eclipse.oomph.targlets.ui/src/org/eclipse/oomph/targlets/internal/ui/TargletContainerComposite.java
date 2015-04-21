@@ -686,14 +686,14 @@ public class TargletContainerComposite extends Composite
         return null;
       }
 
-      public Object executeCommand(ParameterizedCommand command, Event event) throws ExecutionException, NotDefinedException, NotEnabledException,
-          NotHandledException
+      public Object executeCommand(ParameterizedCommand command, Event event)
+          throws ExecutionException, NotDefinedException, NotEnabledException, NotHandledException
       {
         return null;
       }
 
-      public Object executeCommandInContext(ParameterizedCommand command, Event event, IEvaluationContext context) throws ExecutionException,
-          NotDefinedException, NotEnabledException, NotHandledException
+      public Object executeCommandInContext(ParameterizedCommand command, Event event, IEvaluationContext context)
+          throws ExecutionException, NotDefinedException, NotEnabledException, NotHandledException
       {
         return null;
       }

@@ -70,8 +70,9 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
 
   public void begin(final IProgressMonitor monitor)
   {
-    final String taskName = resourceSet.getLoadOptions().get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
-        : "Loading from internet ";
+    final String taskName = resourceSet.getLoadOptions()
+        .get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
+            : "Loading from internet ";
     ResourceSet resourceSet = getResourceSet();
     XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
     {

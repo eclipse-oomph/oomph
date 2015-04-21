@@ -73,8 +73,8 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
   protected void addIncludedPreferenceProfilesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InclusionPredicate_includedPreferenceProfiles_feature"), getString("_UI_PropertyDescriptor_description",
-            "_UI_InclusionPredicate_includedPreferenceProfiles_feature", "_UI_InclusionPredicate_type"),
+        getString("_UI_InclusionPredicate_includedPreferenceProfiles_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_InclusionPredicate_includedPreferenceProfiles_feature", "_UI_InclusionPredicate_type"),
         ProjectConfigPackage.Literals.INCLUSION_PREDICATE__INCLUDED_PREFERENCE_PROFILES, true, false, true, null, null, null)
     {
       @Override

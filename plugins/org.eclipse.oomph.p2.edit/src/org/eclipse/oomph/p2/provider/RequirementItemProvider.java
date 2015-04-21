@@ -102,8 +102,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Requirement_namespace_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_namespace_feature", "_UI_Requirement_type"),
-        P2Package.Literals.REQUIREMENT__NAMESPACE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_namespace_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__NAMESPACE,
+        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**

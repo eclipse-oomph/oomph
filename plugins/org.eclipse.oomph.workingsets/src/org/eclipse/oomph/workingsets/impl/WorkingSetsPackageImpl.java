@@ -109,8 +109,8 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
     }
 
     // Obtain or create and register package
-    WorkingSetsPackageImpl theWorkingSetsPackage = (WorkingSetsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof WorkingSetsPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new WorkingSetsPackageImpl());
+    WorkingSetsPackageImpl theWorkingSetsPackage = (WorkingSetsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof WorkingSetsPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new WorkingSetsPackageImpl());
 
     isInited = true;
 
@@ -391,7 +391,8 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore" });
+    addAnnotation(this, source,
+        new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore" });
   }
 
   /**

@@ -138,8 +138,8 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
     }
 
     // Obtain or create and register package
-    ProjectConfigPackageImpl theProjectConfigPackage = (ProjectConfigPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectConfigPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new ProjectConfigPackageImpl());
+    ProjectConfigPackageImpl theProjectConfigPackage = (ProjectConfigPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectConfigPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ProjectConfigPackageImpl());
 
     isInited = true;
 
@@ -671,8 +671,8 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
         IS_ORDERED);
     initEAttribute(getPreferenceProfile_Name(), ecorePackage.getEString(), "name", null, 1, 1, PreferenceProfile.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceProfile_Project(), getProject(), getProject_PreferenceProfiles(), "project", null, 0, 1, PreferenceProfile.class,
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPreferenceProfile_Project(), getProject(), getProject_PreferenceProfiles(), "project", null, 0, 1, PreferenceProfile.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPreferenceProfile_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, PreferenceProfile.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -688,12 +688,12 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
     initEReference(getPreferenceFilter_PreferenceProfile(), getPreferenceProfile(), getPreferenceProfile_PreferenceFilters(), "preferenceProfile", null, 1, 1,
         PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEAttribute(getPreferenceFilter_Inclusions(), getPattern(), "inclusions", ".*", 1, 1, PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPreferenceFilter_Inclusions(), getPattern(), "inclusions", ".*", 1, 1, PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getPreferenceFilter_Exclusions(), getPattern(), "exclusions", "", 1, 1, PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceFilter_Properties(), thePreferencesPackage.getProperty(), null, "properties", null, 0, -1, PreferenceFilter.class,
-        IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getPreferenceFilter_Properties(), thePreferencesPackage.getProperty(), null, "properties", null, 0, -1, PreferenceFilter.class, IS_TRANSIENT,
+        IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     op = initEOperation(getPreferenceFilter__Matches__String(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -763,8 +763,8 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(projectEClass, source, new String[] { "constraints",
-        "AllPreferencesManaged PreferenceProfileReferencesSpecifyUniqueProperties AllPropertiesHaveManagedValue" });
+    addAnnotation(projectEClass, source,
+        new String[] { "constraints", "AllPreferencesManaged PreferenceProfileReferencesSpecifyUniqueProperties AllPropertiesHaveManagedValue" });
   }
 
 } // ProjectConfigPackageImpl

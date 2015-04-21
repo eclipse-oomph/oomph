@@ -321,8 +321,8 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.pde.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.pde.feature.group" });
+    addAnnotation(this, source,
+        new String[] { "variableName", "setup.pde.p2", "repository", "${oomph.update.url}", "installableUnits", "org.eclipse.oomph.setup.pde.feature.group" });
   }
 
   /**
@@ -360,21 +360,22 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
   protected void createVariableAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(getAPIBaselineTask_Location(), source, new String[] { "type", "STRING", "label", "API baseline location rule", "description",
-        "The rule for the absolute folder location where the API baseline is located", "explicitType", "FOLDER", "explicitLabel",
-        "${@id.name}-${@id.version} API baseline location", "explicitDescription",
-        "The absolute folder location where the ${@id.name}-${@id.version} API baseline is located" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${api.baselines.root/}${@id.name|lower}-${@id.version}", "label",
-        "Located in a folder named \'<name>-<version>\' within the root API baselines folder" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${installation.location/baselines/}${@id.name|lower}-${@id.version}", "label",
-        "Located in a folder named \'baselines/<name>-<version>\' within the installation folder" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
-        "${workspace.location/.baselines/}${@id.name|lower}-${@id.version}", "label",
-        "Located in a folder named \'.baselines/<name>-<version>\' within the workspace folder" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${@id.location}", "label",
-        "Located in the specified absolute folder location" });
+    addAnnotation(getAPIBaselineTask_Location(), source,
+        new String[] { "type", "STRING", "label", "API baseline location rule", "description",
+            "The rule for the absolute folder location where the API baseline is located", "explicitType", "FOLDER", "explicitLabel",
+            "${@id.name}-${@id.version} API baseline location", "explicitDescription",
+            "The absolute folder location where the ${@id.name}-${@id.version} API baseline is located" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${api.baselines.root/}${@id.name|lower}-${@id.version}", "label",
+            "Located in a folder named \'<name>-<version>\' within the root API baselines folder" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${installation.location/baselines/}${@id.name|lower}-${@id.version}", "label",
+            "Located in a folder named \'baselines/<name>-<version>\' within the installation folder" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${workspace.location/.baselines/}${@id.name|lower}-${@id.version}", "label",
+            "Located in a folder named \'.baselines/<name>-<version>\' within the workspace folder" });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${@id.location}", "label", "Located in the specified absolute folder location" });
   }
 
   /**

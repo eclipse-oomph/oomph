@@ -38,8 +38,8 @@ import java.util.Map;
  */
 public abstract class FileUpdater
 {
-  private static final URIConverter URI_CONVERTER = new ExtensibleURIConverterImpl(URIHandler.DEFAULT_HANDLERS, Arrays.asList(new ContentHandler[] {
-      new PlatformContentHandlerImpl(), new XMLContentHandlerImpl() }));
+  private static final URIConverter URI_CONVERTER = new ExtensibleURIConverterImpl(URIHandler.DEFAULT_HANDLERS,
+      Arrays.asList(new ContentHandler[] { new PlatformContentHandlerImpl(), new XMLContentHandlerImpl() }));
 
   public FileUpdater()
   {

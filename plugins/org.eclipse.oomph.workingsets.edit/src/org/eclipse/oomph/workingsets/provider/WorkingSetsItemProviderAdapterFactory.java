@@ -376,11 +376,11 @@ public class WorkingSetsItemProviderAdapterFactory extends WorkingSetsAdapterFac
       @Override
       public Object caseAndPredicate(AndPredicate object)
       {
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS,
-            WorkingSetsFactory.eINSTANCE.createInclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS, WorkingSetsFactory.eINSTANCE.createInclusionPredicate()));
 
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS,
-            WorkingSetsFactory.eINSTANCE.createExclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS, WorkingSetsFactory.eINSTANCE.createExclusionPredicate()));
 
         return null;
       }

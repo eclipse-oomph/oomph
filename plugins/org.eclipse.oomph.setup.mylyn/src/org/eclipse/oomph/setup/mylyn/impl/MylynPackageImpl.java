@@ -117,8 +117,8 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     }
 
     // Obtain or create and register package
-    MylynPackageImpl theMylynPackage = (MylynPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MylynPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new MylynPackageImpl());
+    MylynPackageImpl theMylynPackage = (MylynPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MylynPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MylynPackageImpl());
 
     isInited = true;
 

@@ -636,8 +636,8 @@ public class ProjectConfigActionBarContributor extends EditingDomainActionBarCon
     populateManager(submenuManager, createSiblingActions, null);
     menuManager.insertBefore("edit", submenuManager);
 
-    ISelectionProvider selectionProvider = activeEditor instanceof ISelectionProvider ? (ISelectionProvider)activeEditor : activeEditor.getEditorSite()
-        .getSelectionProvider();
+    ISelectionProvider selectionProvider = activeEditor instanceof ISelectionProvider ? (ISelectionProvider)activeEditor
+        : activeEditor.getEditorSite().getSelectionProvider();
 
     if (selectionProvider != null)
     {

@@ -308,8 +308,8 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
   protected void createEnablementAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.jdt.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.jdt.feature.group" });
+    addAnnotation(this, source,
+        new String[] { "variableName", "setup.jdt.p2", "repository", "${oomph.update.url}", "installableUnits", "org.eclipse.oomph.setup.jdt.feature.group" });
   }
 
   /**

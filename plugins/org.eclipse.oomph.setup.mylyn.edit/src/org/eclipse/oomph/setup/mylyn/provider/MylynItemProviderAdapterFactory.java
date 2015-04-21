@@ -412,8 +412,8 @@ public class MylynItemProviderAdapterFactory extends MylynAdapterFactory impleme
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, MylynFactory.eINSTANCE.createQuery()));
 
-        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
-            MylynFactory.eINSTANCE.create(MylynPackage.Literals.QUERY_ATTRIBUTE)));
+        newChildDescriptors
+            .add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, MylynFactory.eINSTANCE.create(MylynPackage.Literals.QUERY_ATTRIBUTE)));
 
         return null;
       }

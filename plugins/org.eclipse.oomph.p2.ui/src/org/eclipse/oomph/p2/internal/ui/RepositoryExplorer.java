@@ -122,8 +122,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 
-  private static final Transfer[] DND_TRANSFERS = OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES).toArray(
-      new Transfer[OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES).size()]);
+  private static final Transfer[] DND_TRANSFERS = OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES)
+      .toArray(new Transfer[OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES).size()]);
 
   private static final String DEFAULT_CAPABILITY_NAMESPACE = IInstallableUnit.NAMESPACE_IU_ID;
 

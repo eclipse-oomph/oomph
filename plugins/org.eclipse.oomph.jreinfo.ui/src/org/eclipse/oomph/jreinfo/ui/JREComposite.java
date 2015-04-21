@@ -373,8 +373,8 @@ public class JREComposite extends Composite
           treeViewer.setSelection(new StructuredSelection(new ArrayList<JRE>(jres)));
         }
 
-        MessageDialog
-            .openInformation(getShell(), JREDialog.TITLE, (size == 0 ? "No" : Integer.toString(size)) + " new VM" + (size == 1 ? "" : "s") + " found.");
+        MessageDialog.openInformation(getShell(), JREDialog.TITLE,
+            (size == 0 ? "No" : Integer.toString(size)) + " new VM" + (size == 1 ? "" : "s") + " found.");
       }
       catch (InvocationTargetException ex)
       {

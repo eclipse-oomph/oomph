@@ -106,10 +106,9 @@ public abstract class CaptureSetupWizard extends Capture.Window<WizardDialog>
     getViewerControl(wizardDialog, "productViewer").setFocus();
 
     ResourceSet resourceSet = getResourceSet(wizardDialog);
-    ProductVersion luna = (ProductVersion)resourceSet
-        .getEObject(
-            URI.createURI("index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.standard']/@versions[name='luna']"),
-            false);
+    ProductVersion luna = (ProductVersion)resourceSet.getEObject(
+        URI.createURI("index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.standard']/@versions[name='luna']"),
+        false);
 
     TreeViewer productViewer = getViewer(wizardDialog, "productViewer");
     productViewer.setSelection(new StructuredSelection(luna.getProduct()));

@@ -106,8 +106,8 @@ public class SetupModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final List<String> FILE_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(SetupEditorPlugin.INSTANCE.getString(
-      "_UI_SetupEditorFilenameExtensions").split("\\s*,\\s*")));
+  public static final List<String> FILE_EXTENSIONS = Collections
+      .unmodifiableList(Arrays.asList(SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").split("\\s*,\\s*")));
 
   /**
    * A formatted list of supported file extensions, suitable for display.
@@ -115,8 +115,8 @@ public class SetupModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String FORMATTED_FILE_EXTENSIONS = SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions")
-      .replaceAll("\\s*,\\s*", ", ");
+  public static final String FORMATTED_FILE_EXTENSIONS = SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").replaceAll("\\s*,\\s*",
+      ", ");
 
   /**
    * This caches an instance of the model package.
@@ -618,22 +618,22 @@ public class SetupModelWizard extends Wizard implements INewWizard
       URI templateFolder = URI.createPlatformPluginURI(SetupEditorPlugin.PLUGIN_ID, false).appendSegment("templates");
 
       {
-        ProjectTemplate projectTemplate = new GenericProjectTemplate("Simple Project", templateFolder.appendSegment("@SimpleProjectTemplate@.setup")
-            .appendFragment("/"));
+        ProjectTemplate projectTemplate = new GenericProjectTemplate("Simple Project",
+            templateFolder.appendSegment("@SimpleProjectTemplate@.setup").appendFragment("/"));
         projectTemplate.init(this);
         templates.add(projectTemplate);
       }
 
       {
-        ProjectTemplate projectTemplate = new GenericProjectTemplate("Eclipse Project", templateFolder.appendSegment("@EclipseProjectTemplate@.setup")
-            .appendFragment("/"));
+        ProjectTemplate projectTemplate = new GenericProjectTemplate("Eclipse Project",
+            templateFolder.appendSegment("@EclipseProjectTemplate@.setup").appendFragment("/"));
         projectTemplate.init(this);
         templates.add(projectTemplate);
       }
 
       {
-        ProjectTemplate projectTemplate = new GenericProjectTemplate("Github Project", templateFolder.appendSegment("@GithubProjectTemplate@.setup")
-            .appendFragment("/"));
+        ProjectTemplate projectTemplate = new GenericProjectTemplate("Github Project",
+            templateFolder.appendSegment("@GithubProjectTemplate@.setup").appendFragment("/"));
         projectTemplate.init(this);
         templates.add(projectTemplate);
       }

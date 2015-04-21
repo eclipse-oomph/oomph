@@ -410,8 +410,8 @@ public class SetupTargletsItemProviderAdapterFactory extends SetupTargletsAdapte
       @Override
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
-        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
-            SetupTargletsFactory.eINSTANCE.createTargletTask()));
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupTargletsFactory.eINSTANCE.createTargletTask()));
 
         return null;
       }

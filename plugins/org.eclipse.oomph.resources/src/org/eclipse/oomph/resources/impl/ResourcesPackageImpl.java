@@ -151,8 +151,8 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     }
 
     // Obtain or create and register package
-    ResourcesPackageImpl theResourcesPackage = (ResourcesPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ResourcesPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new ResourcesPackageImpl());
+    ResourcesPackageImpl theResourcesPackage = (ResourcesPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ResourcesPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ResourcesPackageImpl());
 
     isInited = true;
 

@@ -30,8 +30,8 @@ public final class WorkingSetsUtil
 
   public static final String WORKING_SET_GROUP_PREFERENCE_KEY = "working.set.group";
 
-  public static final URI WORKING_SET_GROUP_PREFERENCE_URI = URI.createURI("preference:/instance/org.eclipse.oomph.workingsets/"
-      + WORKING_SET_GROUP_PREFERENCE_KEY + "/");
+  public static final URI WORKING_SET_GROUP_PREFERENCE_URI = URI
+      .createURI("preference:/instance/org.eclipse.oomph.workingsets/" + WORKING_SET_GROUP_PREFERENCE_KEY + "/");
 
   public static final URI WORKING_SET_GROUP_PREFERENCE_RESOURCE_URI = WORKING_SET_GROUP_PREFERENCE_URI.trimSegments(1).appendSegment("Preferences.workingsets");
 

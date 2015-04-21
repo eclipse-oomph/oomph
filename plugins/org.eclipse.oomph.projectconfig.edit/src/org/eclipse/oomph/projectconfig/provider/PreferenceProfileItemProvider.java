@@ -104,8 +104,8 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
   protected void addReferentProjectsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceProfile_referentProjects_feature"), getString("_UI_PropertyDescriptor_description",
-            "_UI_PreferenceProfile_referentProjects_feature", "_UI_PreferenceProfile_type"),
+        getString("_UI_PreferenceProfile_referentProjects_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceProfile_referentProjects_feature", "_UI_PreferenceProfile_type"),
         ProjectConfigPackage.Literals.PREFERENCE_PROFILE__REFERENT_PROJECTS, true, false, true, null, null, null)
     {
       @Override
@@ -485,26 +485,26 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREFERENCE_FILTERS,
-        ProjectConfigFactory.eINSTANCE.createPreferenceFilter()));
+    newChildDescriptors.add(
+        createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREFERENCE_FILTERS, ProjectConfigFactory.eINSTANCE.createPreferenceFilter()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        PredicatesFactory.eINSTANCE.createNamePredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createNamePredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        PredicatesFactory.eINSTANCE.createCommentPredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createCommentPredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        PredicatesFactory.eINSTANCE.createLocationPredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createLocationPredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        PredicatesFactory.eINSTANCE.createRepositoryPredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createRepositoryPredicate()));
 
     newChildDescriptors
         .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createAndPredicate()));
@@ -515,14 +515,14 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
     newChildDescriptors
         .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createNotPredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        PredicatesFactory.eINSTANCE.createNaturePredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createNaturePredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        PredicatesFactory.eINSTANCE.createBuilderPredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createBuilderPredicate()));
 
-    newChildDescriptors.add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES,
-        PredicatesFactory.eINSTANCE.createFilePredicate()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createFilePredicate()));
   }
 
   /**

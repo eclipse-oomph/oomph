@@ -1307,8 +1307,8 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
   {
     if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty())
     {
-      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.projectconfig.editor", 0, getString(
-          "_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
+      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.projectconfig.editor", 0,
+          getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
       basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
       return basicDiagnostic;
     }
@@ -1364,8 +1364,8 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
       setCurrentViewer(selectionViewer);
 
       selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-      selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain,
-          selectionViewer, ProjectConfigEditorPlugin.getPlugin().getDialogSettings())));
+      selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory),
+          new DiagnosticDecorator(editingDomain, selectionViewer, ProjectConfigEditorPlugin.getPlugin().getDialogSettings())));
       selectionViewer.setInput(editingDomain.getResourceSet());
       selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 
@@ -1575,8 +1575,8 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
    */
   public IPropertySheetPage getPropertySheetPage()
   {
-    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, ProjectConfigEditorPlugin
-        .getPlugin().getDialogSettings())
+    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE,
+        ProjectConfigEditorPlugin.getPlugin().getDialogSettings())
     {
       @Override
       public void setSelectionToViewer(List<?> selection)
@@ -1903,8 +1903,8 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
    */
   public void setStatusLineManager(ISelection selection)
   {
-    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager : getActionBars()
-        .getStatusLineManager();
+    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager
+        : getActionBars().getStatusLineManager();
 
     if (statusLineManager != null)
     {

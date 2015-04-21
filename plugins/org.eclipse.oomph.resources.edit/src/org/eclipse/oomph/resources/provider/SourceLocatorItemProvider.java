@@ -217,11 +217,11 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PROJECT_FACTORIES,
-        ResourcesFactory.eINSTANCE.createEclipseProjectFactory()));
+    newChildDescriptors
+        .add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PROJECT_FACTORIES, ResourcesFactory.eINSTANCE.createEclipseProjectFactory()));
 
-    newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PROJECT_FACTORIES,
-        ResourcesFactory.eINSTANCE.createMavenProjectFactory()));
+    newChildDescriptors
+        .add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PROJECT_FACTORIES, ResourcesFactory.eINSTANCE.createMavenProjectFactory()));
 
     newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PREDICATES, PredicatesFactory.eINSTANCE.createNamePredicate()));
 

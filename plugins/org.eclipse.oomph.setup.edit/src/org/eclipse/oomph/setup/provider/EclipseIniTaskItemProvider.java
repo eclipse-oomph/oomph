@@ -100,8 +100,7 @@ public class EclipseIniTaskItemProvider extends SetupTaskItemProvider
   protected void addVmPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_EclipseIniTask_vm_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_EclipseIniTask_vm_feature", "_UI_EclipseIniTask_type"),
+        getString("_UI_EclipseIniTask_vm_feature"), getString("_UI_PropertyDescriptor_description", "_UI_EclipseIniTask_vm_feature", "_UI_EclipseIniTask_type"),
         SetupPackage.Literals.ECLIPSE_INI_TASK__VM, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 

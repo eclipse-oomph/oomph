@@ -131,8 +131,8 @@ public class SetupTaskWizardPage extends WizardPage
 
     containerLocationText = new Text(containerLocationComposite, SWT.BORDER);
     containerLocationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    containerLocationText.setToolTipText("The physical disk location under which the new projects will be created.\n"
-        + "The default is the workspace location.");
+    containerLocationText
+        .setToolTipText("The physical disk location under which the new projects will be created.\n" + "The default is the workspace location.");
 
     containerLocationBrowseButton = new Button(containerLocationComposite, SWT.NONE);
     containerLocationBrowseButton.setText("Browse...");
@@ -236,9 +236,9 @@ public class SetupTaskWizardPage extends WizardPage
 
     schemaLocationText = new Text(container, SWT.BORDER);
     schemaLocationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    schemaLocationText.setToolTipText("The public URL of the model schema to be created.\n"
-        + "At runtime this URL must be accessible to the Oomph setup engine.\n"
-        + "The EMF generator will create this public schema at the local 'Publication Location'.");
+    schemaLocationText
+        .setToolTipText("The public URL of the model schema to be created.\n" + "At runtime this URL must be accessible to the Oomph setup engine.\n"
+            + "The EMF generator will create this public schema at the local 'Publication Location'.");
 
     Label publicationLocationLabel = new Label(container, SWT.NONE);
     publicationLocationLabel.setText("Publication Location:");

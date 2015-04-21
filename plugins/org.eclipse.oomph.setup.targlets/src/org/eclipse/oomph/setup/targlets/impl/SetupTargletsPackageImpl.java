@@ -93,8 +93,8 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     }
 
     // Obtain or create and register package
-    SetupTargletsPackageImpl theSetupTargletsPackage = (SetupTargletsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupTargletsPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new SetupTargletsPackageImpl());
+    SetupTargletsPackageImpl theSetupTargletsPackage = (SetupTargletsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupTargletsPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SetupTargletsPackageImpl());
 
     isInited = true;
 
@@ -348,8 +348,8 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTargletTask_Locale(), ecorePackage.getEString(), "locale", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_ProgramArguments(), ecorePackage.getEString(), "programArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_ProgramArguments(), ecorePackage.getEString(), "programArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTargletTask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTargletTask_ImplicitDependencies(), getImplicitDependency(), null, "implicitDependencies", null, 0, -1, TargletTask.class, !IS_TRANSIENT,

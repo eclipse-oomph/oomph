@@ -210,13 +210,13 @@ public class AnnotationItemProvider extends ModelElementItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__DETAILS,
-        BaseFactory.eINSTANCE.create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY)));
+    newChildDescriptors
+        .add(createChildParameter(BasePackage.Literals.ANNOTATION__DETAILS, BaseFactory.eINSTANCE.create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY)));
 
     newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, BaseFactory.eINSTANCE.createAnnotation()));
 
-    newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
-        BaseFactory.eINSTANCE.create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY)));
+    newChildDescriptors
+        .add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, BaseFactory.eINSTANCE.create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY)));
 
     newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, XMLTypeFactory.eINSTANCE.createAnyType()));
   }

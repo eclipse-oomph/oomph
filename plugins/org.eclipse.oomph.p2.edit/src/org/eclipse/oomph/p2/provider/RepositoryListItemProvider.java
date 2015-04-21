@@ -84,8 +84,8 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_RepositoryList_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_RepositoryList_name_feature", "_UI_RepositoryList_type"),
-        P2Package.Literals.REPOSITORY_LIST__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_PropertyDescriptor_description", "_UI_RepositoryList_name_feature", "_UI_RepositoryList_type"), P2Package.Literals.REPOSITORY_LIST__NAME,
+        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**

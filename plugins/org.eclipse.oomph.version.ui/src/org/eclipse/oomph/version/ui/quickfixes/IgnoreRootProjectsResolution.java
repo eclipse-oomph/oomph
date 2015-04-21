@@ -42,8 +42,7 @@ public class IgnoreRootProjectsResolution extends AbstractResolution
     IProject project = marker.getResource().getProject();
     VersionBuilderArguments arguments = new VersionBuilderArguments(project);
 
-    return "Configure '"
-        + arguments.getReleasePath()
+    return "Configure '" + arguments.getReleasePath()
         + "' to stop checking that non-root elements are referenced by a root element. To re-enable this checking, use the Preferences dialog to manage the release check mode.";
   }
 

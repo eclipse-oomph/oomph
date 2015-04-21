@@ -538,8 +538,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
             Version nextFeatureVersion = getNextFeatureVersion(releaseVersion, nextMicroVersion, change);
             if (elementVersion.compareTo(nextFeatureVersion) < 0)
             {
-              IMarker marker = addVersionMarker(componentModelFile, "Version must be increased to " + nextFeatureVersion
-                  + " because the feature's references have changed", nextFeatureVersion);
+              IMarker marker = addVersionMarker(componentModelFile,
+                  "Version must be increased to " + nextFeatureVersion + " because the feature's references have changed", nextFeatureVersion);
               if (marker != null)
               {
                 marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT);
@@ -1002,8 +1002,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
               if (matcher.groupCount() < 4 || !".qualifier".equals(matcher.group(4)))
               {
                 Version expectedVersion = new Version(version);
-                addMalformedVersionMarker(file, regex, new Version(expectedVersion.getMajor(), expectedVersion.getMinor(), expectedVersion.getMicro(),
-                    "qualifier"));
+                addMalformedVersionMarker(file, regex,
+                    new Version(expectedVersion.getMajor(), expectedVersion.getMinor(), expectedVersion.getMicro(), "qualifier"));
                 return true;
               }
             }
@@ -1176,9 +1176,9 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         marker.setAttribute(Markers.PROBLEM_TYPE, Markers.SCHEMA_BUILDER_PROBLEM);
         marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
         String lineDelimiter = VersionUtil.getLineDelimiter(file);
-        marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, lineDelimiter + "\t\t<buildCommand>" + lineDelimiter
-            + "\t\t\t<name>org.eclipse.pde.SchemaBuilder</name>" + lineDelimiter + "\t\t\t<arguments>" + lineDelimiter + "\t\t\t</arguments>" + lineDelimiter
-            + "\t\t</buildCommand>" + lineDelimiter + "\t\t");
+        marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT,
+            lineDelimiter + "\t\t<buildCommand>" + lineDelimiter + "\t\t\t<name>org.eclipse.pde.SchemaBuilder</name>" + lineDelimiter + "\t\t\t<arguments>"
+                + lineDelimiter + "\t\t\t</arguments>" + lineDelimiter + "\t\t</buildCommand>" + lineDelimiter + "\t\t");
         marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_SCHEMA_BUILDER_ARGUMENT);
         return;
       }
@@ -1558,9 +1558,11 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   private IMarker addFeatureChildMarker(IFile file, String problemType, String tag, String name, String msg, boolean isLicense, boolean hasQuickFix,
       Version version, int severity) throws CoreException, IOException
   {
-    String regex = isLicense ? "\\s+.*?license-feature-version\\s*=\\s*[\"']([^\"']*)[\"']" : version != null ? "[ \\t\\x0B\\f]*<" + tag
-        + "\\s+[^<]*id\\s*=\\s*[\"']" + name.replace(".", "\\.") + "[\"'].*?version\\s*=\\s*[\"']([^\"']*)[\"'].*?/>([ \\t\\x0B\\f]*[\\n\\r])*"
-        : "[ \\t\\x0B\\f]*<" + tag + "\\s+[^<]*id\\s*=\\s*[\"'](" + name.replace(".", "\\.") + ")[\"'].*?/>([ \\t\\x0B\\f]*[\\n\\r])*";
+    String regex = isLicense ? "\\s+.*?license-feature-version\\s*=\\s*[\"']([^\"']*)[\"']"
+        : version != null
+            ? "[ \\t\\x0B\\f]*<" + tag + "\\s+[^<]*id\\s*=\\s*[\"']" + name.replace(".", "\\.")
+                + "[\"'].*?version\\s*=\\s*[\"']([^\"']*)[\"'].*?/>([ \\t\\x0B\\f]*[\\n\\r])*"
+            : "[ \\t\\x0B\\f]*<" + tag + "\\s+[^<]*id\\s*=\\s*[\"'](" + name.replace(".", "\\.") + ")[\"'].*?/>([ \\t\\x0B\\f]*[\\n\\r])*";
     IMarker marker = Markers.addMarker(file, msg, severity, regex);
     marker.setAttribute(Markers.PROBLEM_TYPE, problemType);
     if (version != null)

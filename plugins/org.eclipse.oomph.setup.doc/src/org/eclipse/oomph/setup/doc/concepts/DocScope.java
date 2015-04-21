@@ -18,10 +18,10 @@ import org.eclipse.oomph.setup.doc.concepts.DocSetupResource.DocIndexResource.Pr
 import org.eclipse.oomph.setup.doc.concepts.DocSetupResource.DocIndexResource.ProjectCatalogResource.ProjectResource;
 import org.eclipse.oomph.setup.doc.concepts.DocTask.DocP2Task;
 import org.eclipse.oomph.setup.doc.concepts.DocTaskComposition.ScopeList;
+import org.eclipse.oomph.setup.doc.user.wizard.DocImportWizard;
 import org.eclipse.oomph.setup.doc.user.wizard.DocInstallWizard;
 import org.eclipse.oomph.setup.doc.user.wizard.DocProductPage;
 import org.eclipse.oomph.setup.doc.user.wizard.DocProjectPage;
-import org.eclipse.oomph.setup.doc.user.wizard.DocImportWizard;
 
 /**
  * Scopes

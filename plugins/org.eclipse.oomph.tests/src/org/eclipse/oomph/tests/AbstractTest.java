@@ -10,10 +10,10 @@
  */
 package org.eclipse.oomph.tests;
 
-import org.eclipse.oomph.util.OomphPlugin;
-import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OomphPlugin;
+import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -97,8 +97,7 @@ public abstract class AbstractTest
   @Before
   public void setUp() throws Exception
   {
-    log("=========================================================================================================================\n"
-        + testName.getMethodName()
+    log("=========================================================================================================================\n" + testName.getMethodName()
         + "\n=========================================================================================================================\n");
   }
 

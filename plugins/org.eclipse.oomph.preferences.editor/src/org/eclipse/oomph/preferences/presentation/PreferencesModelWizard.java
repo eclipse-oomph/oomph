@@ -82,8 +82,8 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final List<String> FILE_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(PreferencesEditorPlugin.INSTANCE.getString(
-      "_UI_PreferencesEditorFilenameExtensions").split("\\s*,\\s*")));
+  public static final List<String> FILE_EXTENSIONS = Collections
+      .unmodifiableList(Arrays.asList(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions").split("\\s*,\\s*")));
 
   /**
    * A formatted list of supported file extensions, suitable for display.
@@ -91,8 +91,8 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String FORMATTED_FILE_EXTENSIONS = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions").replaceAll(
-      "\\s*,\\s*", ", ");
+  public static final String FORMATTED_FILE_EXTENSIONS = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions")
+      .replaceAll("\\s*,\\s*", ", ");
 
   /**
    * This caches an instance of the model package.

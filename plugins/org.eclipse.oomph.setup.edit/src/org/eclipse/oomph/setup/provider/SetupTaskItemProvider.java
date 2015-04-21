@@ -141,8 +141,8 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_SetupTask_successors_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_successors_feature", "_UI_SetupTask_type"),
-        SetupPackage.Literals.SETUP_TASK__SUCCESSORS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+        getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_successors_feature", "_UI_SetupTask_type"), SetupPackage.Literals.SETUP_TASK__SUCCESSORS,
+        true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**
@@ -330,9 +330,9 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
   protected void addExcludedTriggersPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_SetupTask_excludedTriggers_feature"), getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_excludedTriggers_feature",
-            "_UI_SetupTask_type"), SetupPackage.Literals.SETUP_TASK__EXCLUDED_TRIGGERS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-        PropertiesUtil.EXPERT_FILTER)
+        getString("_UI_SetupTask_excludedTriggers_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_excludedTriggers_feature", "_UI_SetupTask_type"),
+        SetupPackage.Literals.SETUP_TASK__EXCLUDED_TRIGGERS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, PropertiesUtil.EXPERT_FILTER)
     {
       @Override
       public IItemLabelProvider getLabelProvider(Object object)

@@ -509,8 +509,8 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     return null;
   }
 
-  public static void handleProjects(final SourceLocator sourceLocator, final EList<ProjectFactory> defaultProjectFactories,
-      final ProjectHandler projectHandler, final MultiStatus status, final IProgressMonitor monitor)
+  public static void handleProjects(final SourceLocator sourceLocator, final EList<ProjectFactory> defaultProjectFactories, final ProjectHandler projectHandler,
+      final MultiStatus status, final IProgressMonitor monitor)
   {
     final BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(sourceLocator);
     if (rootContainer == null)

@@ -111,6 +111,7 @@ public class P2ServiceUI extends UIServices
     boolean trustUnsigned = true;
     boolean persistTrust = false;
     Certificate[] trusted = new Certificate[0];
+
     // Some day we may summarize all of this in one UI, or perhaps we'll have a preference to honor regarding
     // unsigned content. For now we prompt separately first as to whether unsigned detail should be trusted
     final Shell shell = getShell();
@@ -135,6 +136,7 @@ public class P2ServiceUI extends UIServices
           return parent;
         }
       });
+
       trustUnsigned = result[0];
     }
 
@@ -190,12 +192,14 @@ public class P2ServiceUI extends UIServices
               shell.setText(ProvUIMessages.TrustCertificateDialog_Title);
             }
           };
+
           trustCertificateDialog.open();
           Certificate[] values = new Certificate[trustCertificateDialog.getResult() == null ? 0 : trustCertificateDialog.getResult().length];
           for (int i = 0; i < values.length; i++)
           {
             values[i] = (Certificate)((TreeNode)trustCertificateDialog.getResult()[i]).getValue();
           }
+
           result[0] = values;
         }
       });

@@ -397,11 +397,11 @@ public class ProjectConfigItemProviderAdapterFactory extends ProjectConfigAdapte
       @Override
       public Object caseAndPredicate(AndPredicate object)
       {
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS,
-            ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS, ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
 
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS,
-            ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS, ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
 
         return null;
       }
@@ -414,11 +414,11 @@ public class ProjectConfigItemProviderAdapterFactory extends ProjectConfigAdapte
       @Override
       public Object caseOrPredicate(OrPredicate object)
       {
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.OR_PREDICATE__OPERANDS,
-            ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.OR_PREDICATE__OPERANDS, ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
 
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.OR_PREDICATE__OPERANDS,
-            ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.OR_PREDICATE__OPERANDS, ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
 
         return null;
       }
@@ -431,11 +431,11 @@ public class ProjectConfigItemProviderAdapterFactory extends ProjectConfigAdapte
       @Override
       public Object caseNotPredicate(NotPredicate object)
       {
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.NOT_PREDICATE__OPERAND,
-            ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.NOT_PREDICATE__OPERAND, ProjectConfigFactory.eINSTANCE.createInclusionPredicate()));
 
-        newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.NOT_PREDICATE__OPERAND,
-            ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
+        newChildDescriptors
+            .add(createChildParameter(PredicatesPackage.Literals.NOT_PREDICATE__OPERAND, ProjectConfigFactory.eINSTANCE.createExclusionPredicate()));
 
         return null;
       }

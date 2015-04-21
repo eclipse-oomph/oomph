@@ -162,8 +162,8 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(ProjectsPackage.Literals.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS,
-        ResourcesFactory.eINSTANCE.createSourceLocator()));
+    newChildDescriptors
+        .add(createChildParameter(ProjectsPackage.Literals.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS, ResourcesFactory.eINSTANCE.createSourceLocator()));
   }
 
   /**

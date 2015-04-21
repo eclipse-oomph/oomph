@@ -128,8 +128,8 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
   protected void addExcludedPreferenceProfilesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ExclusionPredicate_excludedPreferenceProfiles_feature"), getString("_UI_PropertyDescriptor_description",
-            "_UI_ExclusionPredicate_excludedPreferenceProfiles_feature", "_UI_ExclusionPredicate_type"),
+        getString("_UI_ExclusionPredicate_excludedPreferenceProfiles_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_ExclusionPredicate_excludedPreferenceProfiles_feature", "_UI_ExclusionPredicate_type"),
         ProjectConfigPackage.Literals.EXCLUSION_PREDICATE__EXCLUDED_PREFERENCE_PROFILES, true, false, true, null, null, null)
     {
       @Override

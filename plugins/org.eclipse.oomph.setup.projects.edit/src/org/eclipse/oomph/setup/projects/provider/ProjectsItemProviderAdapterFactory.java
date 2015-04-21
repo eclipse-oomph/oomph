@@ -410,11 +410,11 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
       @Override
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
-        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
-            ProjectsFactory.eINSTANCE.createProjectsImportTask()));
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, ProjectsFactory.eINSTANCE.createProjectsImportTask()));
 
-        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS,
-            ProjectsFactory.eINSTANCE.createPathVariableTask()));
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, ProjectsFactory.eINSTANCE.createPathVariableTask()));
 
         return null;
       }

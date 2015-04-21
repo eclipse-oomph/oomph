@@ -256,9 +256,8 @@ public class ProjectConfigValidator extends EObjectValidator
 
             LOOP: for (Map.Entry<PreferenceNode, Set<Property>> entry : result.entrySet())
             {
-              for (PreferenceNode targetPreferenceNode = entry.getKey(), otherPreferenceNode = referencedPreferenceNode; targetPreferenceNode.getName().equals(
-                  otherPreferenceNode.getName())
-                  && targetPreferenceNode != projectPreferenceNode && otherPreferenceNode != otherProjectPreferenceNode;)
+              for (PreferenceNode targetPreferenceNode = entry.getKey(), otherPreferenceNode = referencedPreferenceNode; targetPreferenceNode.getName()
+                  .equals(otherPreferenceNode.getName()) && targetPreferenceNode != projectPreferenceNode && otherPreferenceNode != otherProjectPreferenceNode;)
               {
                 targetPreferenceNode = targetPreferenceNode.getParent();
                 otherPreferenceNode = otherPreferenceNode.getParent();
@@ -521,9 +520,10 @@ public class ProjectConfigValidator extends EObjectValidator
             data.add(1, project);
             data.addAll(2, preferencesProfiles);
 
-            diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_NonUniquePropertyApplication_diagnostic",
-                new Object[] { getObjectLabel(property, context), getObjectLabel(preferencesProfiles, context), getObjectLabel(project, context),
-                    getObjectLabel(otherProperties, context) }, data.toArray(), context));
+            diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE,
+                0, "_UI_NonUniquePropertyApplication_diagnostic", new Object[] { getObjectLabel(property, context),
+                    getObjectLabel(preferencesProfiles, context), getObjectLabel(project, context), getObjectLabel(otherProperties, context) },
+                data.toArray(), context));
           }
         }
       }
@@ -545,8 +545,8 @@ public class ProjectConfigValidator extends EObjectValidator
             Set<Object> data = new LinkedHashSet<Object>();
             data.add(key);
             data.addAll(value.keySet());
-            BasicDiagnostic diagnostic = createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_OverlappingPreferenceProfile_diagnostic", new Object[] {
-                getObjectLabel(key, context), getObjectLabel(value.keySet(), context) }, data.toArray(), context);
+            BasicDiagnostic diagnostic = createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_OverlappingPreferenceProfile_diagnostic",
+                new Object[] { getObjectLabel(key, context), getObjectLabel(value.keySet(), context) }, data.toArray(), context);
 
             List<Project> referentProjects = new ArrayList<Project>(key.getReferentProjects());
             referentProjects.add(key.getProject());
@@ -630,13 +630,13 @@ public class ProjectConfigValidator extends EObjectValidator
 
           diagnostics.add(createDiagnostic(Diagnostic.WARNING, DIAGNOSTIC_SOURCE, 0, "_UI_InconsistentPropertyValue_diagnostic",
               new Object[] { getObjectLabel(managedProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managedProperty.getValue()),
-                  getObjectLabel(managingProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managingProperty.getValue()) }, new Object[] {
-                  managedProperty, managingProperty }, context));
+                  getObjectLabel(managingProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managingProperty.getValue()) },
+              new Object[] { managedProperty, managingProperty }, context));
 
           diagnostics.add(createDiagnostic(Diagnostic.WARNING, DIAGNOSTIC_SOURCE, 0, "_UI_InconsistentPropertyValue_diagnostic",
               new Object[] { getObjectLabel(managedProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managedProperty.getValue()),
-                  getObjectLabel(managingProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managingProperty.getValue()) }, new Object[] {
-                  project, managedProperty, managingProperty }, context));
+                  getObjectLabel(managingProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managingProperty.getValue()) },
+              new Object[] { project, managedProperty, managingProperty }, context));
         }
       }
 

@@ -201,8 +201,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     builder.append(".zebra{background-color:#fafafa}");
     if (FANCY)
     {
-      builder.append("a.dl{background-image:url('" + downloadImageURI
-          + "'); background-repeat:no-repeat; background-position:top left; width:57px; height:56px}");
+      builder
+          .append("a.dl{background-image:url('" + downloadImageURI + "'); background-repeat:no-repeat; background-position:top left; width:57px; height:56px}");
       builder.append("a.dl:hover{background-image:url('" + downloadHoverImageURI + "')}");
       builder.append("a.dl:active{background-image:url('" + downloadActiveImageURI + "')}");
     }

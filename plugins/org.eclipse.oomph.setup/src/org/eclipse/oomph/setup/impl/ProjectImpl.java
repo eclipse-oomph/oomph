@@ -232,8 +232,8 @@ public class ProjectImpl extends ScopeImpl implements Project
     logicalProjectContainer = newLogicalProjectContainer;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.PROJECT__LOGICAL_PROJECT_CONTAINER, oldLogicalProjectContainer,
-          logicalProjectContainer));
+      eNotify(
+          new ENotificationImpl(this, Notification.SET, SetupPackage.PROJECT__LOGICAL_PROJECT_CONTAINER, oldLogicalProjectContainer, logicalProjectContainer));
     }
   }
 

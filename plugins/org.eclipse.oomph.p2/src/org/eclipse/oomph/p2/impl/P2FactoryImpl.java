@@ -340,12 +340,12 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
         return new VersionRange(Version.createOSGi(major, 0, 0), true, Version.createOSGi(major + 1, 0, 0), false);
 
       case MINOR:
-        return new VersionRange(Version.createOSGi(major, minor, 0), true, compatible ? Version.createOSGi(major + 1, 0, 0) : Version.createOSGi(major,
-            minor + 1, 0), false);
+        return new VersionRange(Version.createOSGi(major, minor, 0), true,
+            compatible ? Version.createOSGi(major + 1, 0, 0) : Version.createOSGi(major, minor + 1, 0), false);
 
       case MICRO:
-        return new VersionRange(Version.createOSGi(major, minor, micro), true, compatible ? Version.createOSGi(major + 1, 0, 0) : Version.createOSGi(major,
-            minor, micro + 1), false);
+        return new VersionRange(Version.createOSGi(major, minor, micro), true,
+            compatible ? Version.createOSGi(major + 1, 0, 0) : Version.createOSGi(major, minor, micro + 1), false);
 
       default:
         throw new P2Exception("Invalid segment: " + segment);

@@ -293,7 +293,8 @@ public class ReleaseManager implements IReleaseManager
   }
 
   @SuppressWarnings("restriction")
-  private org.eclipse.pde.internal.core.ifeature.IFeatureModel getFeatureModel(String name, org.eclipse.pde.internal.core.ifeature.IFeatureModel[] featureModels)
+  private org.eclipse.pde.internal.core.ifeature.IFeatureModel getFeatureModel(String name,
+      org.eclipse.pde.internal.core.ifeature.IFeatureModel[] featureModels)
   {
     Version highestVersion = null;
     org.eclipse.pde.internal.core.ifeature.IFeatureModel highestModel = null;

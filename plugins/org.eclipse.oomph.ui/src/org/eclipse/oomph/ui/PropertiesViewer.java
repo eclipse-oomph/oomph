@@ -68,8 +68,8 @@ public class PropertiesViewer extends TableViewer
     final Table table = getTable();
     UIUtil.applyGridData(table).heightHint = 64;
 
-    setLabelProvider(new DecoratingPropertiesLabelProvider(new PropertiesLabelProvider(), labelDecorator, table.getFont(), table.getBackground(),
-        table.getForeground()));
+    setLabelProvider(
+        new DecoratingPropertiesLabelProvider(new PropertiesLabelProvider(), labelDecorator, table.getFont(), table.getBackground(), table.getForeground()));
     setContentProvider(new PropertiesContentProvider());
 
     propertyColumn = new TableColumn(table, SWT.NONE);
@@ -236,8 +236,8 @@ public class PropertiesViewer extends TableViewer
     }
   }
 
-  private final class DecoratingPropertiesLabelProvider extends DecoratingColumLabelProvider implements ITableLabelProvider, ITableColorProvider,
-      ITableFontProvider
+  private final class DecoratingPropertiesLabelProvider extends DecoratingColumLabelProvider
+      implements ITableLabelProvider, ITableColorProvider, ITableFontProvider
   {
     private PropertiesLabelProvider propertiesLabelProvider;
 
@@ -249,7 +249,8 @@ public class PropertiesViewer extends TableViewer
 
     private Color foreground;
 
-    public DecoratingPropertiesLabelProvider(PropertiesLabelProvider labelProvider, LabelDecorator labelDecorator, Font font, Color background, Color foreground)
+    public DecoratingPropertiesLabelProvider(PropertiesLabelProvider labelProvider, LabelDecorator labelDecorator, Font font, Color background,
+        Color foreground)
     {
       super(labelProvider, labelDecorator);
       propertiesLabelProvider = labelProvider;

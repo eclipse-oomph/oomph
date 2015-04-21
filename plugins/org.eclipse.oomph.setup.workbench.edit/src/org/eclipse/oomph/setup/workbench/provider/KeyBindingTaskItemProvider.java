@@ -251,8 +251,8 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
 
     newChildDescriptors.add(createChildParameter(WorkbenchPackage.Literals.KEY_BINDING_TASK__CONTEXTS, WorkbenchFactory.eINSTANCE.createKeyBindingContext()));
 
-    newChildDescriptors.add(createChildParameter(WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND_PARAMETERS,
-        WorkbenchFactory.eINSTANCE.createCommandParameter()));
+    newChildDescriptors
+        .add(createChildParameter(WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND_PARAMETERS, WorkbenchFactory.eINSTANCE.createCommandParameter()));
   }
 
   /**

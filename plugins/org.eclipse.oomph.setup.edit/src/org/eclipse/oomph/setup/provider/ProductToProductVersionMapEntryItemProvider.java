@@ -50,8 +50,8 @@ import java.util.Map;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-    ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAdapter
+    implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
   private final ModelElementItemProvider.HierarchicalPropertyDescriptor keyPropertyDescriptor = new ModelElementItemProvider.HierarchicalPropertyDescriptor(
       ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ProductToProductVersionMapEntry_key_feature"),
@@ -101,10 +101,9 @@ public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAda
     }
   };
 
-  private final ItemPropertyDescriptor valuePropertyDescriptor = new ItemPropertyDescriptor(
-      ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-      getString("_UI_ProductToProductVersionMapEntry_value_feature"), getString("_UI_PropertyDescriptor_description",
-          "_UI_ProductToProductVersionMapEntry_value_feature", "_UI_ProductToProductVersionMapEntry_type"),
+  private final ItemPropertyDescriptor valuePropertyDescriptor = new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+      getResourceLocator(), getString("_UI_ProductToProductVersionMapEntry_value_feature"),
+      getString("_UI_PropertyDescriptor_description", "_UI_ProductToProductVersionMapEntry_value_feature", "_UI_ProductToProductVersionMapEntry_type"),
       SetupPackage.Literals.PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY__VALUE, true, false, true, null, null, null)
   {
     @Override

@@ -45,8 +45,8 @@ import java.util.List;
  * <!-- end-user-doc -->
  * @generated
  */
-public class PredicatesItemProviderAdapterFactory extends PredicatesAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable,
-    IChildCreationExtender
+public class PredicatesItemProviderAdapterFactory extends PredicatesAdapterFactory
+    implements ComposeableAdapterFactory, IChangeNotifier, IDisposable, IChildCreationExtender
 {
   /**
    * This keeps track of the root adapter factory that delegates to this adapter factory.

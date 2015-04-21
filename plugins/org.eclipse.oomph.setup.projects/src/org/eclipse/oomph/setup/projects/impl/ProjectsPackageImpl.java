@@ -92,8 +92,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     }
 
     // Obtain or create and register package
-    ProjectsPackageImpl theProjectsPackage = (ProjectsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectsPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new ProjectsPackageImpl());
+    ProjectsPackageImpl theProjectsPackage = (ProjectsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectsPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ProjectsPackageImpl());
 
     isInited = true;
 

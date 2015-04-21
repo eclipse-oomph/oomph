@@ -1040,8 +1040,8 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
   {
     if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty())
     {
-      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.targlets.editor", 0, getString("_UI_CreateModelError_message",
-          resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
+      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.targlets.editor", 0,
+          getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
       basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
       return basicDiagnostic;
     }
@@ -1080,8 +1080,8 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
       setCurrentViewer(selectionViewer);
 
       selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-      selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain,
-          selectionViewer, TargletEditorPlugin.getPlugin().getDialogSettings())));
+      selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory),
+          new DiagnosticDecorator(editingDomain, selectionViewer, TargletEditorPlugin.getPlugin().getDialogSettings())));
       selectionViewer.setInput(editingDomain.getResourceSet().getResources().get(0));
       selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 
@@ -1241,12 +1241,12 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
           // Set up the tree viewer.
           //
           contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-          contentOutlineViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(
-              editingDomain, contentOutlineViewer, TargletEditorPlugin.getPlugin().getDialogSettings())));
+          contentOutlineViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory),
+              new DiagnosticDecorator(editingDomain, contentOutlineViewer, TargletEditorPlugin.getPlugin().getDialogSettings())));
           contentOutlineViewer.setInput(editingDomain.getResourceSet());
 
-          new ColumnViewerInformationControlToolTipSupport(contentOutlineViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain,
-              contentOutlineViewer));
+          new ColumnViewerInformationControlToolTipSupport(contentOutlineViewer,
+              new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, contentOutlineViewer));
 
           // Make sure our popups work.
           //
@@ -1301,8 +1301,8 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    */
   public IPropertySheetPage getPropertySheetPage()
   {
-    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, TargletEditorPlugin
-        .getPlugin().getDialogSettings())
+    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE,
+        TargletEditorPlugin.getPlugin().getDialogSettings())
     {
       @Override
       public void setSelectionToViewer(List<?> selection)
@@ -1621,8 +1621,8 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    */
   public void setStatusLineManager(ISelection selection)
   {
-    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager : getActionBars()
-        .getStatusLineManager();
+    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager
+        : getActionBars().getStatusLineManager();
 
     if (statusLineManager != null)
     {

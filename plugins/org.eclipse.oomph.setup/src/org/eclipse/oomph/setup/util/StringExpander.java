@@ -31,6 +31,7 @@ public abstract class StringExpander
   private static boolean NEEDS_PATH_SEPARATOR_CONVERSION = File.separatorChar == '\\';
 
   protected static final Map<String, String> CONTROL_CHARACTER_VALUES = new HashMap<String, String>();
+
   static
   {
     for (int i = 0, length = CONTROL_CHARACTER_REPLACEMENTS.length; i < length; ++i)

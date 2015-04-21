@@ -87,15 +87,14 @@ public class ProjectCatalogGenerator
     EList<ProductCatalog> productCatalogs = index.getProductCatalogs();
     for (ProjectCatalog projectCatalog : projectCatalogs)
     {
-      Resource catalogResource = resourceSet.createResource(URI.createFileURI(new File(PROJECT_CATALOGS, ids.get(projectCatalog).substring(
-          CLASSIFICATION.length())
-          + ".setup").toString()));
+      Resource catalogResource = resourceSet
+          .createResource(URI.createFileURI(new File(PROJECT_CATALOGS, ids.get(projectCatalog).substring(CLASSIFICATION.length()) + ".setup").toString()));
       catalogResource.getContents().add(projectCatalog);
 
       for (Project project : projectCatalog.getProjects())
       {
-        Resource projectResource = resourceSet.createResource(URI.createFileURI(new File(PROJECTS, ids.get(project).substring(PRODUCT.length()) + ".setup")
-            .toString()));
+        Resource projectResource = resourceSet
+            .createResource(URI.createFileURI(new File(PROJECTS, ids.get(project).substring(PRODUCT.length()) + ".setup").toString()));
         projectResource.getContents().add(project);
       }
 
@@ -115,8 +114,8 @@ public class ProjectCatalogGenerator
     EList<ProjectCatalog> catalogs = new BasicEList<ProjectCatalog>();
     for (File file : PROJECT_CATALOGS.listFiles())
     {
-      URI uri = local ? URI.createFileURI(file.toString()) : URI.createURI("http://download.eclipse.org/modeling/emf/cdo/data/project_catalogs/"
-          + file.getName());
+      URI uri = local ? URI.createFileURI(file.toString())
+          : URI.createURI("http://download.eclipse.org/modeling/emf/cdo/data/project_catalogs/" + file.getName());
       Resource resource = resourceSet.getResource(uri, true);
       catalogs.add((ProjectCatalog)resource.getContents().get(0));
     }
@@ -146,9 +145,8 @@ public class ProjectCatalogGenerator
     installationTask.setID("installation");
     productCatalog.getSetupTasks().add(installationTask);
 
-    Resource catalogResource = resourceSet.createResource(URI.createFileURI(new File(PRODUCT_CATALOGS, ids.get(projectCatalog).substring(
-        CLASSIFICATION.length())
-        + ".setup").toString()));
+    Resource catalogResource = resourceSet
+        .createResource(URI.createFileURI(new File(PRODUCT_CATALOGS, ids.get(projectCatalog).substring(CLASSIFICATION.length()) + ".setup").toString()));
     catalogResource.getContents().add(productCatalog);
 
     for (Project project : projectCatalog.getProjects())
@@ -160,8 +158,8 @@ public class ProjectCatalogGenerator
         product.setName(project.getName() + " - " + subProject.getName() + " Product");
         productCatalog.getProducts().add(product);
 
-        Resource productResource = resourceSet.createResource(URI.createFileURI(new File(PRODUCTS, ids.get(project).substring(PRODUCT.length()) + "-" + ++i
-            + ".setup").toString()));
+        Resource productResource = resourceSet
+            .createResource(URI.createFileURI(new File(PRODUCTS, ids.get(project).substring(PRODUCT.length()) + "-" + ++i + ".setup").toString()));
         productResource.getContents().add(product);
 
         VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
@@ -4820,8 +4818,8 @@ public class ProjectCatalogGenerator
     linkChildren(PRODUCT, 47, COMPONENT, 1485, 365, 367, 366, 1395, 1548, 368);
     linkChildren(PRODUCT, 251, COMPONENT, 1720, 1717, 1722, 1721, 1719, 1718);
     linkChildren(PRODUCT, 50, COMPONENT, 489, 1011, 756, 1520, 987);
-    linkChildren(PRODUCT, 36, COMPONENT, 411, 410, 301, 423, 880, 408, 690, 573, 409, 692, 472, 694, 881, 693, 877, 412, 300, 413, 474, 415, 696, 414, 417,
-        406, 697, 407, 416, 695, 302, 691);
+    linkChildren(PRODUCT, 36, COMPONENT, 411, 410, 301, 423, 880, 408, 690, 573, 409, 692, 472, 694, 881, 693, 877, 412, 300, 413, 474, 415, 696, 414, 417, 406,
+        697, 407, 416, 695, 302, 691);
     linkChildren(PRODUCT, 70, COMPONENT, 614, 820, 846, 616, 617, 819, 615, 771);
     linkChildren(PRODUCT, 255, COMPONENT, 1760, 1759, 1761);
     linkChildren(PRODUCT, 130, COMPONENT, 1161, 1023, 1309, 1883, 1439, 1819, 1024);
@@ -4874,13 +4872,14 @@ public class ProjectCatalogGenerator
     linkChildren(PRODUCT, 279, COMPONENT, 1947);
     linkChildren(PRODUCT, 225, COMPONENT, 1600, 1602, 1601, 1603, 1611, 1714, 1828, 1814, 1608, 1610);
     linkChildren(PRODUCT, 177, COMPONENT, 1364, 1328, 1329);
-    linkChildren(PRODUCT, 12, COMPONENT, 378, 288, 848, 787, 432, 580, 589, 593, 592, 583, 579, 581, 585, 586, 588, 590, 584, 591, 582, 587, 723, 818, 992, 722);
+    linkChildren(PRODUCT, 12, COMPONENT, 378, 288, 848, 787, 432, 580, 589, 593, 592, 583, 579, 581, 585, 586, 588, 590, 584, 591, 582, 587, 723, 818, 992,
+        722);
     linkChildren(PRODUCT, 283, COMPONENT, 1955);
     linkChildren(PRODUCT, 128, COMPONENT, 1016, 1044, 1014, 1015, 1017);
     linkChildren(PRODUCT, 277, COMPONENT, 1940, 1945, 1967, 1941);
-    linkChildren(PRODUCT, 30, COMPONENT, 1051, 932, 1337, 277, 671, 1171, 1174, 760, 511, 276, 275, 875, 279, 512, 788, 1584, 1582, 1581, 1583, 1585, 1586,
-        491, 789, 575, 1052, 914, 513, 514, 578, 515, 1176, 516, 577, 753, 792, 576, 795, 1172, 518, 519, 520, 793, 640, 870, 872, 873, 1216, 871, 521, 278,
-        522, 1173, 825, 902, 824);
+    linkChildren(PRODUCT, 30, COMPONENT, 1051, 932, 1337, 277, 671, 1171, 1174, 760, 511, 276, 275, 875, 279, 512, 788, 1584, 1582, 1581, 1583, 1585, 1586, 491,
+        789, 575, 1052, 914, 513, 514, 578, 515, 1176, 516, 577, 753, 792, 576, 795, 1172, 518, 519, 520, 793, 640, 870, 872, 873, 1216, 871, 521, 278, 522,
+        1173, 825, 902, 824);
     linkChildren(PRODUCT, 220, COMPONENT, 1570, 1577, 1573, 1576, 1572, 1723, 1571, 1574, 1575);
     linkChildren(PRODUCT, 253, COMPONENT, 1779, 1731, 1729, 1730);
     linkChildren(PRODUCT, 109, COMPONENT, 912);
@@ -4997,8 +4996,8 @@ public class ProjectCatalogGenerator
     linkChildren(PRODUCT, 84, COMPONENT, 256, 184, 185, 183);
     linkChildren(PRODUCT, 75, COMPONENT, 724, 225, 227);
     linkChildren(PRODUCT, 77, COMPONENT, 727, 188);
-    linkChildren(PRODUCT, 73, COMPONENT, 426, 199, 232, 233, 200, 198, 342, 235, 234, 878, 237, 236, 238, 716, 196, 341, 248, 241, 247, 240, 879, 333, 244,
-        245, 239, 242);
+    linkChildren(PRODUCT, 73, COMPONENT, 426, 199, 232, 233, 200, 198, 342, 235, 234, 878, 237, 236, 238, 716, 196, 341, 248, 241, 247, 240, 879, 333, 244, 245,
+        239, 242);
     linkChildren(PRODUCT, 186, COMPONENT, 1375, 1784, 1926);
     linkChildren(PRODUCT, 278, COMPONENT, 1943, 1944, 1942);
     linkChildren(PRODUCT, 195, COMPONENT, 1507, 1417, 1419, 1418, 1506);
@@ -5035,13 +5034,13 @@ public class ProjectCatalogGenerator
     linkVersions(276, 2827, 2828, 2829, 2830, 2831, 2832, 2833, 2834, 2835, 2836, 2837, 2842, 2843, 2844);
     linkVersions(98, 677, 1119, 1189, 1418, 1419, 1420, 1421, 1782, 1783, 1784, 2699, 2700, 2701, 2702);
     linkVersions(224, 1995, 2075);
-    linkVersions(6, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 531, 758, 759, 760, 761, 762, 849, 1173, 1174,
-        1175, 1205, 1206, 1262, 1292, 1293, 1332, 1390, 1391, 1534, 1580, 1581, 1751, 1830, 2212, 2213, 2386, 2514, 2515);
+    linkVersions(6, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 531, 758, 759, 760, 761, 762, 849, 1173, 1174, 1175,
+        1205, 1206, 1262, 1292, 1293, 1332, 1390, 1391, 1534, 1580, 1581, 1751, 1830, 2212, 2213, 2386, 2514, 2515);
     linkVersions(105, 722);
     linkVersions(141, 1284, 1294, 1295, 1393, 1394, 1395, 1558, 1559);
     linkVersions(215, 1892);
-    linkVersions(10, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 357, 706, 717, 718, 720, 754, 756,
-        773, 799, 1123, 1124, 1202, 1325, 1326, 1389, 1431, 1432, 1523, 1544, 1588, 1605, 1726, 1832, 2044, 2273, 2382, 2520, 2631, 2632, 2633, 2774);
+    linkVersions(10, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 357, 706, 717, 718, 720, 754, 756, 773,
+        799, 1123, 1124, 1202, 1325, 1326, 1389, 1431, 1432, 1523, 1544, 1588, 1605, 1726, 1832, 2044, 2273, 2382, 2520, 2631, 2632, 2633, 2774);
     linkVersions(56, 333, 1360, 1361, 1362);
     linkVersions(97, 663);
     linkVersions(24, 206, 207, 208, 209, 210, 211, 212, 213, 214, 671, 672, 673, 674, 1074, 1210, 1211, 1343, 1525, 1526, 1543, 1759, 1760, 1887, 1888, 1889,
@@ -5128,8 +5127,8 @@ public class ProjectCatalogGenerator
     linkVersions(221, 1981, 2011);
     linkVersions(46, 291, 292, 293, 294, 295, 664, 665, 777, 778, 779, 795, 1129, 1130, 1131, 1263, 1311, 1312, 1359, 1556, 1603, 1704, 1705, 1931, 1947, 1948,
         1980, 1990, 2264, 2347, 2464, 2599, 2673, 2674);
-    linkVersions(3, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 547, 631, 632, 737, 803, 804, 805, 1349, 1367, 1466, 1578, 1579, 1794,
-        1950, 1951, 2141, 2304, 2364, 2405, 2406, 2491, 2492, 2627, 2688, 2853);
+    linkVersions(3, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 547, 631, 632, 737, 803, 804, 805, 1349, 1367, 1466, 1578, 1579, 1794, 1950,
+        1951, 2141, 2304, 2364, 2405, 2406, 2491, 2492, 2627, 2688, 2853);
     linkVersions(138, 1250, 1253, 1254, 1516, 1550, 1551, 1552, 1553, 1554, 1555, 1582, 1583, 1584, 1735, 1776, 1807, 1808, 1843, 1844, 1845, 1924, 1934, 1935,
         1936, 1944, 1987, 2009, 2010, 2015, 2016, 2017, 2018, 2019, 2020, 2076, 2077, 2078, 2079, 2080, 2081, 2087, 2088, 2089, 2090, 2102, 2103, 2104, 2105,
         2106, 2107, 2179, 2180, 2233, 2234, 2261, 2262, 2295, 2296, 2297, 2333, 2334, 2389, 2390, 2442, 2443, 2488, 2489, 2490, 2516, 2517, 2518, 2519, 2528,
@@ -5197,11 +5196,11 @@ public class ProjectCatalogGenerator
     linkVersions(231, 2091, 2560, 2561);
     linkVersions(2, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 548, 633, 634, 738, 806, 807, 808, 809, 1243, 1366, 1467, 1575, 1576, 1577,
         1954, 1955, 1975, 1976, 2142, 2365, 2403, 2404, 2495, 2496, 2628, 2687);
-    linkVersions(55, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 585, 694, 695, 696, 697, 728, 729, 832, 833,
-        834, 1176, 1177, 1320, 1321, 1322, 1323, 2266, 2267, 2328, 2375, 2452, 2622, 2623, 2816, 2817, 2818);
+    linkVersions(55, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 585, 694, 695, 696, 697, 728, 729, 832, 833, 834,
+        1176, 1177, 1320, 1321, 1322, 1323, 2266, 2267, 2328, 2375, 2452, 2622, 2623, 2816, 2817, 2818);
     linkVersions(150, 1422);
-    linkVersions(1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 549, 635, 636, 739, 810, 811, 812, 813, 1244, 1365, 1468, 1572, 1573, 1574,
-        1694, 1952, 1953, 1956, 2143, 2363, 2401, 2402, 2493, 2494, 2629, 2686, 2813);
+    linkVersions(1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 549, 635, 636, 739, 810, 811, 812, 813, 1244, 1365, 1468, 1572, 1573, 1574, 1694,
+        1952, 1953, 1956, 2143, 2363, 2401, 2402, 2493, 2494, 2629, 2686, 2813);
     linkVersions(273, 2770);
     linkVersions(27, 229, 230, 231, 232, 603, 748, 749, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1101, 1156, 1164, 1207, 1245, 1258, 1259, 1260, 1350, 1351,
         1352, 1426, 1455, 1569, 1570, 1571, 1625, 1626, 1660, 1688, 1689, 1732, 1737, 1863, 1878, 1879, 1957, 1958, 2045, 2046, 2131, 2132, 2133, 2134, 2135,

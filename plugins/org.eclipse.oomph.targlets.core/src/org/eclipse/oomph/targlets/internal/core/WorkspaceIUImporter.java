@@ -154,7 +154,8 @@ public final class WorkspaceIUImporter
         // which completely screws up PDEs own notification handling
         // causing it to handle the same deltas more the once, making a mess of the PDE's model.
         // JDT doesn't create the links until the AutoBuildJob runs, which happens very late in the overall processing cycle.
-        org.eclipse.jdt.internal.core.ExternalFoldersManager externalFoldersManager = org.eclipse.jdt.internal.core.ExternalFoldersManager.getExternalFoldersManager();
+        org.eclipse.jdt.internal.core.ExternalFoldersManager externalFoldersManager = org.eclipse.jdt.internal.core.ExternalFoldersManager
+            .getExternalFoldersManager();
         for (IPluginModelBase pluginModelBase : PluginRegistry.getExternalModels())
         {
           String installLocation = pluginModelBase.getInstallLocation();

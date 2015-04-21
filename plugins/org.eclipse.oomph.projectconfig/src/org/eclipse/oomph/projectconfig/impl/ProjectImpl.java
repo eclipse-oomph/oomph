@@ -150,8 +150,8 @@ public class ProjectImpl extends ModelElementImpl implements Project
       }
       if (newConfiguration != null)
       {
-        msgs = ((InternalEObject)newConfiguration)
-            .eInverseAdd(this, ProjectConfigPackage.WORKSPACE_CONFIGURATION__PROJECTS, WorkspaceConfiguration.class, msgs);
+        msgs = ((InternalEObject)newConfiguration).eInverseAdd(this, ProjectConfigPackage.WORKSPACE_CONFIGURATION__PROJECTS, WorkspaceConfiguration.class,
+            msgs);
       }
       msgs = basicSetConfiguration(newConfiguration, msgs);
       if (msgs != null)

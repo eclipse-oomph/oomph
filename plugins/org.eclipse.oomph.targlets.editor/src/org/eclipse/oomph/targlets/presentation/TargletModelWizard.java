@@ -77,8 +77,8 @@ public class TargletModelWizard extends Wizard implements INewWizard
   /**
    * The supported extensions for created files.
    */
-  public static final List<String> FILE_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(TargletEditorPlugin.INSTANCE.getString(
-      "_UI_TargletEditorFilenameExtensions").split("\\s*,\\s*")));
+  public static final List<String> FILE_EXTENSIONS = Collections
+      .unmodifiableList(Arrays.asList(TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameExtensions").split("\\s*,\\s*")));
 
   /**
    * A formatted list of supported file extensions, suitable for display.

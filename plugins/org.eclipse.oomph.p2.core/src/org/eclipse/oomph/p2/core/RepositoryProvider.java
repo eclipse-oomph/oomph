@@ -157,8 +157,8 @@ public abstract class RepositoryProvider<M extends IRepositoryManager<T>, R exte
 
   protected abstract R loadRepository(M repositoryManager, URI location, IProgressMonitor monitor) throws ProvisionException, OperationCanceledException;
 
-  protected abstract R createRepository(M repositoryManager, URI location, String name, String type, Map<String, String> properties) throws ProvisionException,
-      OperationCanceledException;
+  protected abstract R createRepository(M repositoryManager, URI location, String name, String type, Map<String, String> properties)
+      throws ProvisionException, OperationCanceledException;
 
   protected abstract void removeAllContent(R repository, IProgressMonitor monitor);
 

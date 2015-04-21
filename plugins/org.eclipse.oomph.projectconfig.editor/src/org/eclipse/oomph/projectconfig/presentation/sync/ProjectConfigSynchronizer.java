@@ -224,9 +224,8 @@ public final class ProjectConfigSynchronizer implements IStartup
                       }
                     }
 
-                    if (!managedProperties.isEmpty()
-                        && (propertyModificationHandling == PropertyModificationHandling.PROPAGATE || propertyModificationHandling == PropertyModificationHandling.PROMPT
-                            && ProjectConfigSynchronizerPreferences.isPropagate()))
+                    if (!managedProperties.isEmpty() && (propertyModificationHandling == PropertyModificationHandling.PROPAGATE
+                        || propertyModificationHandling == PropertyModificationHandling.PROMPT && ProjectConfigSynchronizerPreferences.isPropagate()))
                     {
                       for (Map.Entry<Property, Property> entry : managedProperties.entrySet())
                       {

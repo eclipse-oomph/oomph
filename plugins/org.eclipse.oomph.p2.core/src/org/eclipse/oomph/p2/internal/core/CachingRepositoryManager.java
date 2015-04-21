@@ -77,8 +77,8 @@ public class CachingRepositoryManager<T>
 
   private static final Method METHOD_exitLoad = ReflectUtil.getMethod(AbstractRepositoryManager.class, "exitLoad", URI.class);
 
-  private static final Method METHOD_broadcastChangeEvent = ReflectUtil.getMethod(AbstractRepositoryManager.class, "broadcastChangeEvent", URI.class,
-      int.class, int.class, boolean.class);
+  private static final Method METHOD_broadcastChangeEvent = ReflectUtil.getMethod(AbstractRepositoryManager.class, "broadcastChangeEvent", URI.class, int.class,
+      int.class, boolean.class);
 
   private final AbstractRepositoryManager<T> delegate;
 

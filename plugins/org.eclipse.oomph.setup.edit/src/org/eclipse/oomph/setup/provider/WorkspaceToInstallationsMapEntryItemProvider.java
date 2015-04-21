@@ -42,8 +42,8 @@ import java.util.Map.Entry;
  * <!-- end-user-doc -->
  * @generated
  */
-public class WorkspaceToInstallationsMapEntryItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-    ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+public class WorkspaceToInstallationsMapEntryItemProvider extends ItemProviderAdapter
+    implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
   private AdapterFactoryItemDelegator itemDelegator;
 

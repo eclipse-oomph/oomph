@@ -164,8 +164,8 @@ public class ProfileDetailsComposite extends Composite
         ProfileDefinition definition = profile.getDefinition();
         ItemProvider requirements = new ItemProvider(adapterFactory, "Requirements", P2UIPlugin.INSTANCE.getSWTImage("full/obj16/ProfileDefinition"),
             definition.getRequirements());
-        ItemProvider repositories = new ItemProvider(adapterFactory, "Repositories", P2UIPlugin.INSTANCE.getSWTImage("full/obj16/RepositoryList"), definition
-            .getRepositories());
+        ItemProvider repositories = new ItemProvider(adapterFactory, "Repositories", P2UIPlugin.INSTANCE.getSWTImage("full/obj16/RepositoryList"),
+            definition.getRepositories());
 
         ItemProvider input = new ItemProvider(adapterFactory);
         input.getChildren().add(requirements);

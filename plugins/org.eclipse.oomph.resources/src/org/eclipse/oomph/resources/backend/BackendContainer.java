@@ -175,6 +175,6 @@ public abstract class BackendContainer extends BackendResource
     progress.done();
   }
 
-  protected abstract boolean doVisit(BackendContainer backendContainer, Visitor visitor, IProgressMonitor monitor) throws BackendException,
-      OperationCanceledException;
+  protected abstract boolean doVisit(BackendContainer backendContainer, Visitor visitor, IProgressMonitor monitor)
+      throws BackendException, OperationCanceledException;
 }

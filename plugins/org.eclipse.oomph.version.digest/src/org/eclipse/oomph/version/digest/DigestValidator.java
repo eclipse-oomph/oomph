@@ -68,8 +68,8 @@ public class DigestValidator extends VersionValidator
   }
 
   @Override
-  public void updateBuildState(IBuildState buildState, IRelease release, IProject project, IResourceDelta delta, IModel componentModel, IProgressMonitor monitor)
-      throws Exception
+  public void updateBuildState(IBuildState buildState, IRelease release, IProject project, IResourceDelta delta, IModel componentModel,
+      IProgressMonitor monitor) throws Exception
   {
     DigestValidatorState validatorState = (DigestValidatorState)buildState.getValidatorState();
     IPath releasePath = release.getFile().getFullPath();
@@ -234,7 +234,7 @@ public class DigestValidator extends VersionValidator
           byte[] digest = getFolderDigest(memberStates);
           result.setDigest(digest);
           result.setChildren(memberStates.toArray(new DigestValidatorState[memberStates.size()]));
-          // VersionBuilder.trace("   " + delta.getFullPath() + "  -->  " + TestResourceChangeListener.getKind(delta) +
+          // VersionBuilder.trace(" " + delta.getFullPath() + " --> " + TestResourceChangeListener.getKind(delta) +
           // " " + TestResourceChangeListener.getFlags(delta));
         }
         else
@@ -248,7 +248,7 @@ public class DigestValidator extends VersionValidator
           IFile file = (IFile)resource;
           byte[] digest = getFileDigest(file);
           result.setDigest(digest);
-          // VersionBuilder.trace("   " + delta.getFullPath() + "  -->  " + TestResourceChangeListener.getKind(delta) +
+          // VersionBuilder.trace(" " + delta.getFullPath() + " --> " + TestResourceChangeListener.getKind(delta) +
           // " " + TestResourceChangeListener.getFlags(delta));
         }
 
@@ -274,8 +274,8 @@ public class DigestValidator extends VersionValidator
   {
   }
 
-  private ReleaseDigest getReleaseDigest(IPath releasePath, IRelease release, IProgressMonitor monitor) throws IOException, CoreException,
-      ClassNotFoundException
+  private ReleaseDigest getReleaseDigest(IPath releasePath, IRelease release, IProgressMonitor monitor)
+      throws IOException, CoreException, ClassNotFoundException
   {
     IFile file = getDigestFile(releasePath);
     long localTimeStamp = file.getLocalTimeStamp();

@@ -50,8 +50,8 @@ import java.util.Map;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-    ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter
+    implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
   private ModelElementItemProvider.HierarchicalPropertyDescriptor keyPropertyDescriptor = new ModelElementItemProvider.HierarchicalPropertyDescriptor(
       ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_key_feature"),
@@ -102,9 +102,9 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter imp
   };
 
   protected ItemPropertyDescriptor valuePropertyDescriptor = new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-      getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_value_feature"), getString("_UI_PropertyDescriptor_description",
-          "_UI_ProjectToStreamMapEntry_value_feature", "_UI_ProjectToStreamMapEntry_type"), SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__VALUE, true,
-      false, true, null, null, null)
+      getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_value_feature"),
+      getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_value_feature", "_UI_ProjectToStreamMapEntry_type"),
+      SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__VALUE, true, false, true, null, null, null)
   {
     @Override
     public Collection<?> getChoiceOfValues(Object object)
