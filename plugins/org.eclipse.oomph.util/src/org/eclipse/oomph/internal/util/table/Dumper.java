@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Cornel Izbasa <cizbasa@info.uvt.ro> - Bug 465236
  */
 package org.eclipse.oomph.internal.util.table;
 
@@ -71,7 +72,7 @@ public class Dumper
     this.padding = padding == null ? "" : padding;
 
     StringBuilder builder = new StringBuilder();
-    for (int i = 0; i < padding.length(); i++)
+    for (int i = 0; i < this.padding.length(); i++)
     {
       builder.append(borderLeftRight);
     }
