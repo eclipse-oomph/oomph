@@ -42,7 +42,6 @@ import java.util.List;
  * An implementation of the model object '<em><b>Project Set Import Task</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

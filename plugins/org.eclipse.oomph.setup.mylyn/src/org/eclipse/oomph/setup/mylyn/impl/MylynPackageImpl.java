@@ -518,10 +518,10 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     createLabelProviderAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
-    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
-    createExtendedMetaDataAnnotations();
     // http://www.eclipse.org/oomph/setup/Redirect
     createRedirectAnnotations();
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
   }
 
   /**

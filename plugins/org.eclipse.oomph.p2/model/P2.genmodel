@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.p2/src" creationIcons="false"
     editorDirectory="" modelPluginID="org.eclipse.oomph.p2" modelName="P2" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
-    copyrightFields="false" optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
+    copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
     operationReflection="true" cleanup="true">
   <foreignModel>P2.ecore</foreignModel>
   <genPackages prefix="P2" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
@@ -31,6 +31,11 @@
       <genOperations ecoreOperation="P2.ecore#//ProfileDefinition/setRepositories">
         <genParameters ecoreParameter="P2.ecore#//ProfileDefinition/setRepositories/repositories"/>
       </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="P2.ecore#//Configuration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Configuration/wS"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Configuration/oS"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Configuration/arch"/>
     </genClasses>
     <genClasses ecoreClass="P2.ecore#//Requirement">
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/iD"/>

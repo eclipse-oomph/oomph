@@ -34,7 +34,6 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>Profile Definition</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

@@ -4,7 +4,7 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.setup.projectset" modelName="ProjectSet"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
     importOrganizing="true" decoration="Live" cleanup="true">
   <foreignModel>ProjectSet.ecore</foreignModel>
   <genPackages prefix="ProjectSet" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"

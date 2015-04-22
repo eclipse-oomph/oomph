@@ -34,7 +34,6 @@ import java.util.regex.PatternSyntaxException;
  * An implementation of the model object '<em><b>File Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

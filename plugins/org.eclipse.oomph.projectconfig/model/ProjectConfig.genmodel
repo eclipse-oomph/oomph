@@ -4,7 +4,7 @@
     modelPluginID="org.eclipse.oomph.projectconfig" modelName="Project Config" modelPluginClass="org.eclipse.oomph.projectconfig.impl.ProjectConfigPlugin"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    usedGenPackages="../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.preferences/model/Preferences.genmodel#//preferences ../../org.eclipse.oomph.base/model/Base.genmodel#//base"
+    runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.preferences/model/Preferences.genmodel#//preferences ../../org.eclipse.oomph.base/model/Base.genmodel#//base"
     operationReflection="true" decoration="Live" cleanup="true">
   <foreignModel>ProjectConfig.ecore</foreignModel>
   <genPackages prefix="ProjectConfig" basePackage="org.eclipse.oomph" disposableProviderFactory="true"

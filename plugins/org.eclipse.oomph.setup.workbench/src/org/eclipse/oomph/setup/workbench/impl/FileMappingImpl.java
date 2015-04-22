@@ -31,7 +31,6 @@ import java.util.Collection;
  * An implementation of the model object '<em><b>File Mapping</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

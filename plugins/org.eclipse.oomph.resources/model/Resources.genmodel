@@ -4,19 +4,51 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.resources" modelName="Resources"
     modelPluginClass="org.eclipse.oomph.internal.resources.ResourcesPlugin" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
-    copyrightFields="false" optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates"
+    copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates"
     operationReflection="true" cleanup="true">
   <foreignModel>Resources.ecore</foreignModel>
   <genPackages prefix="Resources" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       extensibleProviderFactory="true" childCreationExtenders="true" ecorePackage="Resources.ecore#/"
       publicationLocation="/setups/models/Resources.ecore">
+    <genDataTypes ecoreDataType="Resources.ecore#//ProjectHandler"/>
+    <genDataTypes ecoreDataType="Resources.ecore#//BackendContainer"/>
+    <genDataTypes ecoreDataType="Resources.ecore#//MultiStatus"/>
+    <genDataTypes ecoreDataType="Resources.ecore#//ProgressMonitor"/>
     <genClasses ecoreClass="Resources.ecore#//SourceLocator">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Resources.ecore#//SourceLocator/rootFolder"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Resources.ecore#//SourceLocator/locateNestedProjects"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Resources.ecore#//SourceLocator/excludedPaths"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Resources.ecore#//SourceLocator/projectFactories"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Resources.ecore#//SourceLocator/predicates"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Resources.ecore#//SourceLocator/locateNestedProjects"/>
       <genOperations ecoreOperation="Resources.ecore#//SourceLocator/matches">
         <genParameters ecoreParameter="Resources.ecore#//SourceLocator/matches/project"/>
       </genOperations>
+      <genOperations ecoreOperation="Resources.ecore#//SourceLocator/loadProject">
+        <genParameters ecoreParameter="Resources.ecore#//SourceLocator/loadProject/defaultProjectFactories"/>
+        <genParameters ecoreParameter="Resources.ecore#//SourceLocator/loadProject/backendContainer"/>
+        <genParameters ecoreParameter="Resources.ecore#//SourceLocator/loadProject/monitor"/>
+      </genOperations>
+      <genOperations ecoreOperation="Resources.ecore#//SourceLocator/handleProjects">
+        <genParameters ecoreParameter="Resources.ecore#//SourceLocator/handleProjects/defaultProjectFactories"/>
+        <genParameters ecoreParameter="Resources.ecore#//SourceLocator/handleProjects/projectHandler"/>
+        <genParameters ecoreParameter="Resources.ecore#//SourceLocator/handleProjects/status"/>
+        <genParameters ecoreParameter="Resources.ecore#//SourceLocator/handleProjects/monitor"/>
+      </genOperations>
     </genClasses>
+    <genClasses image="false" ecoreClass="Resources.ecore#//ProjectFactory">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Resources.ecore#//ProjectFactory/excludedPaths"/>
+      <genOperations ecoreOperation="Resources.ecore#//ProjectFactory/createProject">
+        <genParameters ecoreParameter="Resources.ecore#//ProjectFactory/createProject/rootContainer"/>
+        <genParameters ecoreParameter="Resources.ecore#//ProjectFactory/createProject/backendContainer"/>
+        <genParameters ecoreParameter="Resources.ecore#//ProjectFactory/createProject/monitor"/>
+      </genOperations>
+      <genOperations ecoreOperation="Resources.ecore#//ProjectFactory/isExcludedPath">
+        <genParameters ecoreParameter="Resources.ecore#//ProjectFactory/isExcludedPath/rootContainer"/>
+        <genParameters ecoreParameter="Resources.ecore#//ProjectFactory/isExcludedPath/backendContainer"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Resources.ecore#//XMLProjectFactory"/>
+    <genClasses ecoreClass="Resources.ecore#//EclipseProjectFactory"/>
+    <genClasses ecoreClass="Resources.ecore#//MavenProjectFactory"/>
   </genPackages>
 </genmodel:GenModel>

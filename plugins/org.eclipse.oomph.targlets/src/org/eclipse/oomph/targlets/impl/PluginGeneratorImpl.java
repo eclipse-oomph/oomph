@@ -43,7 +43,6 @@ import java.util.jar.JarFile;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Plugin Generator</b></em>'.
  * <!-- end-user-doc -->
- * <p>
  *
  * @generated
  */

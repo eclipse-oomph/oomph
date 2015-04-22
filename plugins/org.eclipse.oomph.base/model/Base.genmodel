@@ -4,7 +4,7 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.base" modelName="Base" modelPluginClass="org.eclipse.oomph.internal.base.BasePlugin"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    optimizedHasChildren="true" operationReflection="true" cleanup="true">
+    optimizedHasChildren="true" runtimeVersion="2.10" operationReflection="true" cleanup="true">
   <foreignModel>Base.ecore</foreignModel>
   <genPackages prefix="Base" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       dataTypeConverters="true" extensibleProviderFactory="true" childCreationExtenders="true"

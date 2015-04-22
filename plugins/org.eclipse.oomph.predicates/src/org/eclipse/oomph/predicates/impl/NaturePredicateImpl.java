@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.CoreException;
  * An implementation of the model object '<em><b>Nature Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

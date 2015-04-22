@@ -4,13 +4,17 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.setup.projects" modelName="Projects"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
     importOrganizing="true" decoration="Live" cleanup="true">
   <foreignModel>Projects.ecore</foreignModel>
   <genPackages prefix="Projects" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="Projects.ecore#/" publicationLocation="/setups/models/Projects.ecore">
     <genClasses ecoreClass="Projects.ecore#//ProjectsImportTask">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Projects.ecore#//ProjectsImportTask/sourceLocators"/>
+    </genClasses>
+    <genClasses ecoreClass="Projects.ecore#//PathVariableTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//PathVariableTask/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//PathVariableTask/uRI"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

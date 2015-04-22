@@ -4,13 +4,14 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.setup.maven" modelName="Maven"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
     importOrganizing="true" decoration="Live" cleanup="true">
   <foreignModel>Maven.ecore</foreignModel>
   <genPackages prefix="Maven" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="Maven.ecore#/" publicationLocation="/setups/models/Maven.ecore">
     <genClasses ecoreClass="Maven.ecore#//MavenImportTask">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Maven.ecore#//MavenImportTask/sourceLocators"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenImportTask/projectNameTemplate"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

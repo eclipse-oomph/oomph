@@ -4,7 +4,7 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.setup.workingsets" modelName="SetupWorkingSets"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    optimizedHasChildren="true" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup ../../org.eclipse.oomph.workingsets/model/WorkingSets.genmodel#//workingsets"
+    optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup ../../org.eclipse.oomph.workingsets/model/WorkingSets.genmodel#//workingsets"
     importOrganizing="true" decoration="Live" cleanup="true">
   <foreignModel>SetupWorkingSets.ecore</foreignModel>
   <genPackages prefix="SetupWorkingSets" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"

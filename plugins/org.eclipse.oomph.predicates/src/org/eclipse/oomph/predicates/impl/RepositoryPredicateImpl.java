@@ -34,7 +34,6 @@ import java.net.URI;
  * An implementation of the model object '<em><b>Repository Predicate</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>

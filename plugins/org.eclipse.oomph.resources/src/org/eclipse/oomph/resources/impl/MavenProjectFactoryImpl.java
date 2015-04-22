@@ -23,7 +23,6 @@ import org.w3c.dom.Element;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Maven Project Factory</b></em>'.
  * <!-- end-user-doc -->
- * <p>
  *
  * @generated
  */

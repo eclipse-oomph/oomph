@@ -52,7 +52,6 @@ import java.util.Map;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Feature Generator</b></em>'.
  * <!-- end-user-doc -->
- * <p>
  *
  * @generated
  */

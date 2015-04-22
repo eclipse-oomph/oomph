@@ -37,7 +37,6 @@ import java.io.FileNotFoundException;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>XML Project Factory</b></em>'.
  * <!-- end-user-doc -->
- * <p>
  *
  * @generated
  */

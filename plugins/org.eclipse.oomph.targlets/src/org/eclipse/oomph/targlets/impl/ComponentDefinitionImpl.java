@@ -26,7 +26,6 @@ import org.eclipse.equinox.p2.metadata.Version;
  * An implementation of the model object '<em><b>Component Definition</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * <p>
  * The following features are implemented:
  * </p>
  * <ul>
