@@ -13,7 +13,7 @@ Export-Package: org.eclipse.oomph.setup.ui;version="1.1.0";x-internal:=true,
  org.eclipse.oomph.setup.ui.recorder;version="1.1.0";x-internal:=true,
  org.eclipse.oomph.setup.ui.wizards;version="1.1.0";x-internal:=true
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
- org.eclipse.core.expressions;bundle-version="[3.4.0,3.5.0)",
+ org.eclipse.core.expressions;bundle-version="[3.4.0,4.0.0)",
  org.eclipse.core.filesystem;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)";resolution:=optional,
  org.eclipse.equinox.p2.core;bundle-version="[2.0.0,3.0.0)",
