@@ -126,7 +126,7 @@ public class AgentAnalyzerComposite extends Composite
 
   private Button deleteProfilesButton;
 
-  public AgentAnalyzerComposite(final Composite parent, int margin, int style, Agent agent)
+  public AgentAnalyzerComposite(final Composite parent, int margin, int style, Agent agent) throws InvocationTargetException, InterruptedException
   {
     super(parent, style);
     this.agent = agent;
@@ -157,17 +157,9 @@ public class AgentAnalyzerComposite extends Composite
       }
     });
 
-    setEnabled(false);
-    getDisplay().asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        initAnalyzer();
-        setEnabled(true);
+    initAnalyzer();
 
-        bundlePoolContentProvider.setInput(bundlePoolViewer, analyzer);
-      }
-    });
+    bundlePoolContentProvider.setInput(bundlePoolViewer, analyzer);
   }
 
   private void createBundlePoolViewer()
@@ -522,129 +514,118 @@ public class AgentAnalyzerComposite extends Composite
     // Disable the check that prevents subclassing of SWT components
   }
 
-  private void initAnalyzer()
+  private void initAnalyzer() throws InvocationTargetException, InterruptedException
   {
-    try
+    ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+    dialog.run(true, true, new IRunnableWithProgress()
     {
-      ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-      dialog.run(true, true, new IRunnableWithProgress()
+      public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
       {
-        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        analyzer = new AgentAnalyzer(agent, new Handler()
         {
-          analyzer = new AgentAnalyzer(agent, new Handler()
+          public void analyzerChanged(final AgentAnalyzer analyzer)
           {
-            public void analyzerChanged(final AgentAnalyzer analyzer)
-            {
-              if (analyzer == AgentAnalyzerComposite.this.analyzer)
-              {
-                asyncExec(new Runnable()
-                {
-                  public void run()
-                  {
-                    bundlePoolContentProvider.refresh();
-
-                    if (!deletingArtifacts)
-                    {
-                      artifactContentProvider.refresh();
-                      profileContentProvider.refresh();
-                    }
-
-                    getDisplay().asyncExec(new Runnable()
-                    {
-                      public void run()
-                      {
-                        Object[] elements = bundlePoolContentProvider.getElements(analyzer);
-                        if (elements.length != 0)
-                        {
-                          bundlePoolViewer.setSelection(new StructuredSelection(elements[0]));
-                        }
-                      }
-                    });
-                  }
-                });
-              }
-            }
-
-            public void bundlePoolChanged(final AnalyzedBundlePool bundlePool, final boolean artifacts, final boolean profiles)
+            if (analyzer == AgentAnalyzerComposite.this.analyzer)
             {
               asyncExec(new Runnable()
               {
                 public void run()
                 {
-                  bundlePoolViewer.update(bundlePool, null);
+                  bundlePoolContentProvider.refresh();
 
-                  if (bundlePool == currentBundlePool)
+                  if (!deletingArtifacts)
                   {
-                    if (artifacts)
-                    {
-                      artifactContentProvider.refresh();
-                    }
+                    artifactContentProvider.refresh();
+                    profileContentProvider.refresh();
+                  }
 
-                    if (profiles)
+                  getDisplay().asyncExec(new Runnable()
+                  {
+                    public void run()
                     {
-                      profileContentProvider.refresh();
+                      Object[] elements = bundlePoolContentProvider.getElements(analyzer);
+                      if (elements.length != 0)
+                      {
+                        bundlePoolViewer.setSelection(new StructuredSelection(elements[0]));
+                      }
                     }
+                  });
+                }
+              });
+            }
+          }
+
+          public void bundlePoolChanged(final AnalyzedBundlePool bundlePool, final boolean artifacts, final boolean profiles)
+          {
+            asyncExec(new Runnable()
+            {
+              public void run()
+              {
+                bundlePoolViewer.update(bundlePool, null);
+
+                if (bundlePool == currentBundlePool)
+                {
+                  if (artifacts)
+                  {
+                    artifactContentProvider.refresh();
+                  }
+
+                  if (profiles)
+                  {
+                    profileContentProvider.refresh();
+                  }
+                }
+              }
+            });
+          }
+
+          public void profileChanged(final AnalyzedProfile profile)
+          {
+            if (deletingArtifacts)
+            {
+              return;
+            }
+
+            if (profile.getBundlePool() == currentBundlePool)
+            {
+              asyncExec(new Runnable()
+              {
+                public void run()
+                {
+                  profileViewer.update(profile, null);
+                }
+              });
+            }
+          }
+
+          public void artifactChanged(final AnalyzedArtifact artifact)
+          {
+            if (deletingArtifacts)
+            {
+              return;
+            }
+
+            if (artifact == null || artifact.getBundlePool() == currentBundlePool)
+            {
+              asyncExec(new Runnable()
+              {
+                public void run()
+                {
+                  if (artifact != null && ObjectUtil.equals(artifactContentProvider.getFilter(), SHOW_ALL))
+                  {
+                    artifactViewer.update(artifact, null);
+                  }
+                  else
+                  {
+                    artifactContentProvider.refresh();
                   }
                 }
               });
             }
-
-            public void profileChanged(final AnalyzedProfile profile)
-            {
-              if (deletingArtifacts)
-              {
-                return;
-              }
-
-              if (profile.getBundlePool() == currentBundlePool)
-              {
-                asyncExec(new Runnable()
-                {
-                  public void run()
-                  {
-                    profileViewer.update(profile, null);
-                  }
-                });
-              }
-            }
-
-            public void artifactChanged(final AnalyzedArtifact artifact)
-            {
-              if (deletingArtifacts)
-              {
-                return;
-              }
-
-              if (artifact == null || artifact.getBundlePool() == currentBundlePool)
-              {
-                asyncExec(new Runnable()
-                {
-                  public void run()
-                  {
-                    if (artifact != null && ObjectUtil.equals(artifactContentProvider.getFilter(), SHOW_ALL))
-                    {
-                      artifactViewer.update(artifact, null);
-                    }
-                    else
-                    {
-                      artifactContentProvider.refresh();
-                    }
-                  }
-                });
-              }
-            }
-          }, monitor);
-        }
-      });
-    }
-    catch (InvocationTargetException ex)
-    {
-      P2UIPlugin.INSTANCE.log(ex);
-    }
-    catch (InterruptedException ex)
-    {
-      //$FALL-THROUGH$
-    }
+          }
+        }, monitor);
+      }
+    });
   }
 
   private void asyncExec(Runnable runnable)

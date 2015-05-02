@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.internal.ui;
 
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.OomphDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -18,6 +19,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Eike Stepper
@@ -59,8 +62,20 @@ public class AgentAnalyzerDialog extends OomphDialog
   {
     getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/agent"));
 
-    AgentAnalyzerComposite composite = new AgentAnalyzerComposite(parent, 10, SWT.NONE, agent);
-    composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+    try
+    {
+      AgentAnalyzerComposite composite = new AgentAnalyzerComposite(parent, 10, SWT.NONE, agent);
+      composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+    }
+    catch (InvocationTargetException ex)
+    {
+      ErrorDialog.open(ex);
+      close();
+    }
+    catch (InterruptedException ex)
+    {
+      close();
+    }
   }
 
   @Override

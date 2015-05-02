@@ -86,23 +86,26 @@ public final class AgentAnalyzer
       for (Profile p2Profile : allProfiles)
       {
         P2CorePlugin.checkCancelation(monitor);
-        monitor.subTask(p2Profile.getProfileId());
-
-        BundlePool p2BundlePool = p2Profile.getBundlePool();
-        if (p2BundlePool != null)
+        if (p2Profile.isValid())
         {
-          File installFolder = p2Profile.getInstallFolder();
-          File location = p2BundlePool.getLocation();
-          if (!location.equals(installFolder))
-          {
-            AnalyzedBundlePool bundlePool = bundlePools.get(location);
-            if (bundlePool == null)
-            {
-              bundlePool = new AnalyzedBundlePool(this, location);
-              bundlePools.put(location, bundlePool);
-            }
+          monitor.subTask(p2Profile.getProfileId());
 
-            bundlePool.addProfile(p2Profile, installFolder);
+          BundlePool p2BundlePool = p2Profile.getBundlePool();
+          if (p2BundlePool != null)
+          {
+            File installFolder = p2Profile.getInstallFolder();
+            File location = p2BundlePool.getLocation();
+            if (!location.equals(installFolder))
+            {
+              AnalyzedBundlePool bundlePool = bundlePools.get(location);
+              if (bundlePool == null)
+              {
+                bundlePool = new AnalyzedBundlePool(this, location);
+                bundlePools.put(location, bundlePool);
+              }
+
+              bundlePool.addProfile(p2Profile, installFolder);
+            }
           }
         }
 
@@ -113,6 +116,7 @@ public final class AgentAnalyzer
     {
       monitor.done();
     }
+
     handler.analyzerChanged(this);
 
     for (AnalyzedBundlePool bundlePool : bundlePools.values())
