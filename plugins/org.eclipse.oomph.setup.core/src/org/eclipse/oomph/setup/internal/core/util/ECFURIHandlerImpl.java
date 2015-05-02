@@ -862,8 +862,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       {
         URI key = getKey();
         ETagMirror workPool = getWorkPool();
-        IProgressMonitor workPoolMonitor = workPool.getMonitor();
-        workPoolMonitor.subTask("Mirroring " + key);
+
+        try
+        {
+          workPool.getMonitor().subTask("Mirroring " + key);
+        }
+        catch (Exception ex)
+        {
+          SetupCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
 
         try
         {
@@ -887,7 +894,14 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         }
         finally
         {
-          workPoolMonitor.worked(1);
+          try
+          {
+            workPool.getMonitor().worked(1);
+          }
+          catch (Exception ex)
+          {
+            SetupCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+          }
         }
 
         return Status.OK_STATUS;

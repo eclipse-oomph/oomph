@@ -192,6 +192,11 @@ public abstract class OomphPlugin extends EMFPlugin
     getLog().log(status);
   }
 
+  public final void log(Throwable t, int severity)
+  {
+    log(getStatus(t, severity));
+  }
+
   public final String log(Throwable t)
   {
     t.printStackTrace();
@@ -212,16 +217,21 @@ public abstract class OomphPlugin extends EMFPlugin
     if (obj instanceof Throwable)
     {
       Throwable t = (Throwable)obj;
-      String msg = t.getLocalizedMessage();
-      if (msg == null || msg.length() == 0)
-      {
-        msg = t.getClass().getName();
-      }
-
-      return new Status(IStatus.ERROR, getSymbolicName(), msg, t);
+      return getStatus(t, IStatus.ERROR);
     }
 
     return new Status(IStatus.INFO, getSymbolicName(), obj.toString(), null);
+  }
+
+  public final IStatus getStatus(Throwable t, int severity)
+  {
+    String msg = t.getLocalizedMessage();
+    if (msg == null || msg.length() == 0)
+    {
+      msg = t.getClass().getName();
+    }
+
+    return new Status(severity, getSymbolicName(), msg, t);
   }
 
   public final void coreException(IStatus status) throws CoreException
