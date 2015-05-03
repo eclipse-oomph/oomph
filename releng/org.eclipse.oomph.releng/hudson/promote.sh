@@ -55,11 +55,11 @@ set -o errexit
 #   $WORKSPACE/updates/org.eclipse.oomph.site.zip
 #
 #   $WORKSPACE/products/
-#   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86.zip
-#   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-linux.gtk.x86_64.zip
-#   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-macosx.cocoa.x86_64.tar.gz
-#   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-win32.win32.x86.zip
-#   $WORKSPACE/products/org.eclipse.oomph.setup.installer.product-win32.win32.x86_64.zip
+#   $WORKSPACE/products/eclipse-installer-linux32.tar.gz
+#   $WORKSPACE/products/eclipse-installer-linux64.tar.gz
+#   $WORKSPACE/products/eclipse-installer-mac64.tar.gz
+#   $WORKSPACE/products/eclipse-installer-win32.exe
+#   $WORKSPACE/products/eclipse-installer-win64.exe
 #   $WORKSPACE/products/repository/
 #   $WORKSPACE/products/repository/binary/
 #   $WORKSPACE/products/repository/features/
@@ -119,7 +119,7 @@ rm -rf $PRODUCTS.tmp
 mkdir $PRODUCTS.tmp
 
 cd $WORKSPACE/products
-for f in *.exe *.zip *.tar.gz; do
+for f in *.exe *.tar.gz; do
   echo "Promoting $f"
   cp -a $f $PRODUCTS.tmp
 done
