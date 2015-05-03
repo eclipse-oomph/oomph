@@ -38,12 +38,14 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -642,6 +644,21 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
         Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
         final Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
+        if (index == null)
+        {
+          for (Diagnostic diagnostic : resource.getErrors())
+          {
+            if (diagnostic instanceof Throwable)
+            {
+              Throwable throwable = (Throwable)diagnostic;
+              SetupUIPlugin.INSTANCE.log(throwable);
+            }
+            else
+            {
+              SetupUIPlugin.INSTANCE.log(diagnostic.getMessage(), IStatus.ERROR);
+            }
+          }
+        }
 
         Display display = wizard.getShell().getDisplay();
         display.asyncExec(new Runnable()
