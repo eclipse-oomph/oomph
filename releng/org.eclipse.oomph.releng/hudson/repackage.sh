@@ -29,19 +29,21 @@ mkdir $PRODUCTS
 SOURCE=$GIT/products/org.eclipse.oomph.setup.installer.product/target/products
 cd $SOURCE
 
+TMP=$WORKSPACE/eclipse-installer
+
 for f in *.zip; do
   echo "Repackaging $f"
 
-  rm -rf $PRODUCTS.tmp
-  mkdir $PRODUCTS.tmp
-  cd $PRODUCTS.tmp
+  rm -rf $TMP
+  mkdir $TMP
+  cd $TMP
 
   if [[ $f == *x86_64* ]]; then
     bitness=64
   else
-    bitness=32              
+    bitness=32
   fi
-  
+
   unzip -qq $SOURCE/$f
   #zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
 
@@ -60,7 +62,7 @@ for f in *.zip; do
     #if [[ "$PACK_AND_SIGN" == true ]]; then
     #   MacOS executable signing is currently broken!
     #   See https://bugs.eclipse.org/bugs/show_bug.cgi?id=446390
-    #  
+    #
     #  echo "  Signing oomph.app"
     #  zip -r -q unsigned.zip oomph.app
     #  rm -rf oomph.app
@@ -68,7 +70,7 @@ for f in *.zip; do
     #  unzip -qq signed.zip
     #  rm -f signed.zip
     #fi
-    
+
     tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz *
 
   elif [[ $f == *win32* ]]; then
@@ -79,12 +81,12 @@ for f in *.zip; do
       curl -o signed.exe -F filedata=@oomph.exe http://build.eclipse.org:31338/winsign.php
       mv signed.exe oomph.exe
     fi
-    
+
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
-    
+
     extractor=eclipse-installer-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
-    
+
     echo "  Creating $extractor"
     cat /opt/public/tools/oomph/extractor-$bitness.exe \
       $marker \
@@ -94,14 +96,14 @@ for f in *.zip; do
       $marker \
       $PRODUCTS/$f \
       $marker > $PRODUCTS/$extractor
-      
+
     rm -f $PRODUCTS/$f
-      
+
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing $extractor"
       curl -o $PRODUCTS/$extractor-signed -F filedata=@$PRODUCTS/$extractor http://build.eclipse.org:31338/winsign.php
       mv $PRODUCTS/$extractor-signed $PRODUCTS/$extractor
-      
+
       actualSize=$(wc -c "$PRODUCTS/$extractor" | cut -f 1 -d ' ')
       if [ $actualSize -lt 40000000 ]; then
         echo "$PRODUCTS/$extractor is just $actualSize bytes large!"
@@ -110,11 +112,11 @@ for f in *.zip; do
     fi
 
   elif [[ $f == *linux* ]]; then
-    zip -r -9 -qq --symlinks $PRODUCTS/eclipse-installer-linux$bitness.zip *
+    tar -czf $PRODUCTS/eclipse-installer-linux$bitness.tar.gz ../eclipse_installer
   fi
 done
 
-rm -rf $PRODUCTS.tmp
+rm -rf $TMP
 cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repository $PRODUCTS
 
 rm -rf $WORKSPACE/help
