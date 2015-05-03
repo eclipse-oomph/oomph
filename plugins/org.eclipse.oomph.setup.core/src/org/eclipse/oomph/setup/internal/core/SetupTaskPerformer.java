@@ -1952,8 +1952,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         String projectCatalogName = lookup("scope.project.catalog.name");
         String streamName = lookup("scope.project.stream.name");
-        installationID = SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1)).firstSegment() + "-"
-            + streamName.replace('.', '-');
+        installationID = escape(projectCatalogName, projectName, streamName);
       }
 
       String uniqueInstallationID = installationID;
@@ -1977,8 +1976,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       String projectName = lookup("scope.project.name.qualified");
       String projectCatalogName = lookup("scope.project.catalog.name");
       String streamName = lookup("scope.project.stream.name");
-      String workspaceID = SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1)).firstSegment() + "-"
-          + streamName.replace('.', '-') + "-ws";
+      String workspaceID = escape(projectCatalogName, projectName, streamName) + "-ws";
 
       String uniqueWorkspaceID = workspaceID;
 
@@ -1991,6 +1989,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     return super.filter(value, filterName);
+  }
+
+  private String escape(String projectCatalogName, String projectName, String streamName)
+  {
+    return SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1)).firstSegment() + "-"
+        + streamName.replace('.', '-').replace('/', '-').replace('\\', '-');
   }
 
   @Override
