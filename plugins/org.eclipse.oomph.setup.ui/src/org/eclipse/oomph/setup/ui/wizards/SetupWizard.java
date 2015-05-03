@@ -646,18 +646,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         final Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
         if (index == null)
         {
-          for (Diagnostic diagnostic : resource.getErrors())
-          {
-            if (diagnostic instanceof Throwable)
-            {
-              Throwable throwable = (Throwable)diagnostic;
-              SetupUIPlugin.INSTANCE.log(throwable);
-            }
-            else
-            {
-              SetupUIPlugin.INSTANCE.log(diagnostic.getMessage(), IStatus.ERROR);
-            }
-          }
+          logErrors(resource);
         }
 
         Display display = wizard.getShell().getDisplay();
@@ -848,6 +837,36 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       Shell shell = wizard.getShell();
       Display display = shell.getDisplay();
       shell.setCursor(display.getSystemCursor(SWT.CURSOR_ARROW));
+    }
+
+    private void logErrors(Resource resource)
+    {
+      try
+      {
+        for (Diagnostic diagnostic : resource.getErrors())
+        {
+          try
+          {
+            if (diagnostic instanceof Throwable)
+            {
+              Throwable throwable = (Throwable)diagnostic;
+              SetupUIPlugin.INSTANCE.log(throwable);
+            }
+            else
+            {
+              SetupUIPlugin.INSTANCE.log(diagnostic.getMessage(), IStatus.ERROR);
+            }
+          }
+          catch (Exception ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
     }
   }
 
