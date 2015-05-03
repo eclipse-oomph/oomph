@@ -113,7 +113,7 @@ for f in *.zip; do
 
   elif [[ $f == *linux* ]]; then
     cd ..
-    tar -czf $PRODUCTS/eclipse-installer-linux$bitness.tar.gz eclipse_installer/*
+    tar -czf $PRODUCTS/eclipse-installer-linux$bitness.tar.gz eclipse_installer
     cd eclipse_installer
   fi
 done
