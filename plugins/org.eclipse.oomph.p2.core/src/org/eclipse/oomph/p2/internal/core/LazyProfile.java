@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.p2.P2Exception;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.internal.p2.engine.ISurrogateProfileHandler;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -55,6 +57,8 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
       {
         return referent;
       }
+
+      delegate = null;
     }
 
     if (!loadOnDemand)
@@ -64,12 +68,12 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
 
     String profileId = getProfileId();
     org.eclipse.equinox.internal.p2.engine.Profile referent = registry.loadProfile(profileId, profileDirectory);
-
-    if (referent != null)
+    if (referent == null)
     {
-      referent.setParent(parent);
+      throw new P2Exception("Profile '" + profileId + "' could not be loaded from " + profileDirectory);
     }
 
+    referent.setParent(parent);
     delegate = new SoftReference<org.eclipse.equinox.internal.p2.engine.Profile>(referent);
     return referent;
   }
