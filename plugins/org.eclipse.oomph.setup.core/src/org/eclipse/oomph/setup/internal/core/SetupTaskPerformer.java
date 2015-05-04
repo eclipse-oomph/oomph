@@ -60,6 +60,7 @@ import org.eclipse.oomph.setup.log.ProgressLogFilter;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
+import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
@@ -2770,7 +2771,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           File file = new File(getProductConfigurationLocation(), "config.ini");
           Map<String, String> configIni = PropertiesUtil.loadProperties(file);
           configIni.put("osgi.configuration.cascaded", "false");
-          PropertiesUtil.saveProperties(file, configIni, false);
+          P2TaskImpl.saveConfigIni(file, configIni, SetupTaskPerformer.class);
         }
 
         if (REMOTE_DEBUG)

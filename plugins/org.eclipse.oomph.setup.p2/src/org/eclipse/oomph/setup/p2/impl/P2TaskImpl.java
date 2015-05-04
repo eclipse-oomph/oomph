@@ -755,7 +755,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
                 if (new File(artifactFile, "splash.bmp").exists())
                 {
                   properties.put("osgi.splashPath", org.eclipse.emf.common.util.URI.createFileURI(artifactFile.toString()).toString());
-                  PropertiesUtil.saveProperties(configIniFile, properties, false);
+                  saveConfigIni(configIniFile, properties, P2TaskImpl.class);
 
                   return;
                 }
@@ -1001,5 +1001,10 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     return result;
+  }
+
+  public static void saveConfigIni(File file, Map<String, String> properties, Class<?> caller)
+  {
+    PropertiesUtil.saveProperties(file, properties, false, true, "This configuration file was written by: " + caller.getName());
   }
 } // InstallTaskImpl

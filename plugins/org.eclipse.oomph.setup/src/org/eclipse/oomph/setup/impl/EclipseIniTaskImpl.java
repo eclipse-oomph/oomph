@@ -351,6 +351,8 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     if (contents != null || createNewContent(context))
     {
       context.log("Changing " + file + " (" + getLabel(getValue()) + ")");
+
+      // Write the ini file with the system's default encoding; the native launcher reads it so.
       IOUtil.writeLines(file, null, contents);
       context.setRestartNeeded("The eclipse.ini file has changed.");
     }
@@ -358,6 +360,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
   private boolean createNewContent(SetupTaskContext context)
   {
+    // Read the existing ini file with the system's default encoding, like the native launcher does.
     List<String> oldContents = IOUtil.readLines(file, null);
     contents = new ArrayList<String>(oldContents);
     int vmargsIndex = contents.indexOf("-vmargs");

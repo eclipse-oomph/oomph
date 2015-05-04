@@ -10,18 +10,23 @@
  */
 package org.eclipse.oomph.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
 
 /**
  * @author Eike Stepper
@@ -88,30 +93,97 @@ public final class PropertiesUtil
     return value;
   }
 
-  public static void saveProperties(File file, Map<String, String> properties, boolean sort)
+  // public static void main(String[] args)
+  // {
+  // Map<String, String> properties = loadProperties(new File("config.ini"));
+  // dump(properties);
+  //
+  // properties.put("test.property", "René Hentschke" + StringUtil.NL + "Eike Stepper");
+  // saveProperties(new File("config.properties"), properties, false, true,
+  // "This configuration file was written by: org.eclipse.equinox.internal.frameworkadmin.equinox.EquinoxFwConfigFileParser");
+  // }
+  //
+  // private static void dump(Map<String, String> properties)
+  // {
+  // for (Map.Entry<String, String> entry : properties.entrySet())
+  // {
+  // System.out.println(entry.getKey() + "=" + entry.getValue());
+  // }
+  // }
+
+  public static void saveProperties(File file, final Map<String, String> properties, final boolean sort)
   {
-    FileWriter fileWriter = null;
+    saveProperties(file, properties, sort, false, null);
+  }
+
+  public static void saveProperties(File file, final Map<String, String> properties, final boolean sort, boolean withDate, String comment)
+  {
+    OutputStream stream = null;
 
     try
     {
-      fileWriter = new FileWriter(file);
-      BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+      // Buffering is done inside java.lang.Properties.
+      stream = new FileOutputStream(file);
 
-      List<String> keys = new ArrayList<String>(properties.keySet());
-      if (sort)
+      Properties converter = new Properties()
       {
-        Collections.sort(keys);
-      }
+        private static final long serialVersionUID = 1L;
 
-      for (String key : keys)
+        @Override
+        public synchronized Enumeration<Object> keys()
+        {
+          Collection<String> keys = properties.keySet();
+          if (sort)
+          {
+            List<String> keyList = new ArrayList<String>(keys);
+            Collections.sort(keyList);
+            keys = keyList;
+          }
+
+          Vector<Object> keyVector = new Vector<Object>();
+          for (String key : keys)
+          {
+            keyVector.add(key);
+          }
+
+          return keyVector.elements();
+        }
+
+        @Override
+        public synchronized Object get(Object key)
+        {
+          return properties.get(key);
+        }
+      };
+
+      if (withDate)
       {
-        String value = properties.get(key);
-        String line = StringUtil.implode(Arrays.asList(key, value), '=');
-        bufferedWriter.write(line);
-        bufferedWriter.write(StringUtil.NL);
+        converter.store(stream, comment);
       }
+      else
+      {
+        ByteArrayOutputStream temp = new ByteArrayOutputStream();
+        converter.store(temp, comment);
 
-      bufferedWriter.close();
+        String string = temp.toString("8859_1");
+        int firstNL = string.indexOf(StringUtil.NL);
+        if (firstNL != -1)
+        {
+          if (comment == null)
+          {
+            string = string.substring(firstNL + StringUtil.NL.length());
+          }
+          else
+          {
+            // Skip the comment line.
+            int secondNL = string.indexOf(StringUtil.NL, firstNL + StringUtil.NL.length());
+            String commentLine = string.substring(0, firstNL + StringUtil.NL.length());
+            string = commentLine + string.substring(secondNL + StringUtil.NL.length());
+          }
+        }
+
+        IOUtil.copy(new ByteArrayInputStream(string.getBytes("8859_1")), stream);
+      }
     }
     catch (IOException ex)
     {
@@ -119,55 +191,32 @@ public final class PropertiesUtil
     }
     finally
     {
-      IOUtil.closeSilent(fileWriter);
+      IOUtil.closeSilent(stream);
     }
   }
 
   public static Map<String, String> loadProperties(File file)
   {
-    FileReader fileReader = null;
+    InputStream stream = null;
 
     try
     {
-      fileReader = new FileReader(file);
-      BufferedReader bufferedReader = new BufferedReader(fileReader);
+      // Buffering is done inside java.lang.Properties.
+      stream = new FileInputStream(file);
 
-      Map<String, String> properties = new LinkedHashMap<String, String>();
-
-      String line;
-      while ((line = bufferedReader.readLine()) != null)
+      final Map<String, String> properties = new LinkedHashMap<String, String>();
+      Properties converter = new Properties()
       {
-        List<String> tokens = StringUtil.explode(line, "=");
-        int size = tokens.size();
-        if (size > 0)
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public synchronized Object put(Object key, Object value)
         {
-          String key = tokens.get(0);
-          String value = null;
-
-          if (size == 2)
-          {
-            value = tokens.get(1);
-          }
-          else if (size > 2)
-          {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 1; i < size; i++)
-            {
-              if (builder.length() != 0)
-              {
-                builder.append("=");
-              }
-
-              builder.append(tokens.get(i));
-            }
-
-            value = builder.toString();
-          }
-
-          properties.put(key, value);
+          return properties.put((String)key, (String)value);
         }
-      }
+      };
 
+      converter.load(stream);
       return properties;
     }
     catch (IOException ex)
@@ -176,7 +225,7 @@ public final class PropertiesUtil
     }
     finally
     {
-      IOUtil.closeSilent(fileReader);
+      IOUtil.closeSilent(stream);
     }
   }
 
