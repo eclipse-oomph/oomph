@@ -346,20 +346,23 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   public static String getETag(URIConverter uriConverter, URI file)
   {
-    URI eTagFile = file.appendFileExtension("etag");
-    if (uriConverter.exists(eTagFile, null))
+    if (uriConverter.exists(file, null))
     {
-      try
+      URI eTagFile = file.appendFileExtension("etag");
+      if (uriConverter.exists(eTagFile, null))
       {
-        return new String(BaseUtil.readFile(uriConverter, null, eTagFile), "UTF-8");
-      }
-      catch (IORuntimeException ex)
-      {
-        // If we can't read the ETag, we'll just return null.
-      }
-      catch (UnsupportedEncodingException ex)
-      {
-        // All systems support UTF-8.
+        try
+        {
+          return new String(BaseUtil.readFile(uriConverter, null, eTagFile), "UTF-8");
+        }
+        catch (IORuntimeException ex)
+        {
+          // If we can't read the ETag, we'll just return null.
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+          // All systems support UTF-8.
+        }
       }
     }
 
