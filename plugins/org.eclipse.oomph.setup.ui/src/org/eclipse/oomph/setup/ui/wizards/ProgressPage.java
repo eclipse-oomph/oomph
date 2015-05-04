@@ -1291,6 +1291,11 @@ public class ProgressPage extends SetupWizardPage
 
     private void appendText(List<Object> lines)
     {
+      if (logText.isDisposed())
+      {
+        return;
+      }
+
       for (Object value : lines)
       {
         String line;
@@ -1349,7 +1354,7 @@ public class ProgressPage extends SetupWizardPage
             logText.setStyleRange(styleRange);
           }
 
-          if (!scrollLock && !logText.isDisposed())
+          if (!scrollLock)
           {
             int lineCount = logText.getLineCount();
             logText.setTopIndex(lineCount - 1);
