@@ -97,6 +97,7 @@ import org.eclipse.swt.widgets.Tree;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -246,6 +247,8 @@ public class ProductPage extends SetupWizardPage
     javaViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     javaViewer.setContentProvider(new ArrayContentProvider());
     javaViewer.setLabelProvider(new LabelProvider());
+
+    javaViewer.setInput(Collections.singletonList(new JRE(new File(""), 0, 0, 0, 0, false, 0)));
 
     javaButton = new ToolButton(lowerComposite, SWT.PUSH, JREInfoUIPlugin.INSTANCE.getSWTImage("jre"), true);
     javaButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
