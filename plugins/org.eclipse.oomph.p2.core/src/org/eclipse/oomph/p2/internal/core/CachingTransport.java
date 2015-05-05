@@ -127,10 +127,9 @@ public class CachingTransport extends Transport
         statefulTarget = new StatefulFileOutputStream(cacheFile);
 
         IStatus status = delegate.download(uri, statefulTarget, startPos, monitor);
+        IOUtil.closeSilent(statefulTarget);
         if (status.isOK())
         {
-          IOUtil.closeSilent(statefulTarget);
-
           // Files can be many megabytes large, so download them directly to a file.
           cacheInputStream = new FileInputStream(cacheFile);
           IOUtil.copy(cacheInputStream, target);
@@ -138,6 +137,10 @@ public class CachingTransport extends Transport
           DownloadStatus downloadStatus = (DownloadStatus)status;
           long lastModified = downloadStatus.getLastModified();
           cacheFile.setLastModified(lastModified);
+        }
+        else
+        {
+          IOUtil.deleteBestEffort(cacheFile);
         }
 
         return status;
