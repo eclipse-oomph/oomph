@@ -202,6 +202,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private PrintStream logStream;
 
+  private boolean logStreamError;
+
   private ProgressLogFilter logFilter = new ProgressLogFilter();
 
   private IProgressMonitor progressMonitor;
@@ -1669,15 +1671,19 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       return;
     }
 
-    try
+    if (!logStreamError)
     {
-      PrintStream logStream = getLogStream(true);
-      logStream.println("[" + DATE_TIME.format(new Date()) + "] " + line);
-      logStream.flush();
-    }
-    catch (Exception ex)
-    {
-      SetupCorePlugin.INSTANCE.log(ex);
+      try
+      {
+        PrintStream logStream = getLogStream(true);
+        logStream.println("[" + DATE_TIME.format(new Date()) + "] " + line);
+        logStream.flush();
+      }
+      catch (Exception ex)
+      {
+        SetupCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+        logStreamError = true;
+      }
     }
 
     progress.log(line, filter, severity);
