@@ -217,6 +217,11 @@ public class Activator extends Plugin
     plugin.getLog().log(status);
   }
 
+  public static void log(Throwable t, int severity)
+  {
+    log(getStatus(t, severity));
+  }
+
   public static String log(Throwable t)
   {
     IStatus status = getStatus(t);
@@ -239,6 +244,17 @@ public class Activator extends Plugin
     }
 
     return new Status(IStatus.ERROR, PLUGIN_ID, msg, t);
+  }
+
+  public static IStatus getStatus(Throwable t, int severity)
+  {
+    String msg = t.getLocalizedMessage();
+    if (msg == null || msg.length() == 0)
+    {
+      msg = t.getClass().getName();
+    }
+
+    return new Status(severity, PLUGIN_ID, msg, t);
   }
 
   private static File getStateFile(String name)

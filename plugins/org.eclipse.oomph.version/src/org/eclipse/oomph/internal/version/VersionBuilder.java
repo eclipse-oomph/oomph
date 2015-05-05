@@ -35,6 +35,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.osgi.service.resolver.BundleDescription;
@@ -284,7 +285,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       }
       catch (Exception ex)
       {
-        Activator.log(ex);
+        Activator.log(ex, IStatus.WARNING);
         String msg = "Problem with release spec: " + releasePath + " (" + ex.getMessage() + ")";
         IMarker marker = Markers.addMarker(projectDescription, msg, IMarker.SEVERITY_ERROR, "(" + releasePath.toString().replace(".", "\\.") + ")");
         if (marker != null)
