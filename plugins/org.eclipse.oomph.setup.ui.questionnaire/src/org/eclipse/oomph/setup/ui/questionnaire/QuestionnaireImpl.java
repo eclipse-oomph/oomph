@@ -80,15 +80,21 @@ public class QuestionnaireImpl extends Questionnaire
           if (!preferences.isEmpty())
           {
             boolean inIDE = !SetupUIPlugin.isInstallerProduct();
-            for (Entry<URI, String> entry : preferences.entrySet())
+            for (final Entry<URI, String> entry : preferences.entrySet())
             {
-              String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
+              final String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
               transaction.setPolicy(path, true);
 
               if (inIDE)
               {
-                PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);
-                property.set(entry.getValue());
+                UIUtil.syncExec(new Runnable()
+                {
+                  public void run()
+                  {
+                    PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);
+                    property.set(entry.getValue());
+                  }
+                });
               }
             }
 
