@@ -341,7 +341,18 @@ public final class PreferencesUtil
           }
         }
 
-        String value = node.get(name, null);
+        String value = null;
+        try
+        {
+          // This can throw runtime exceptions.
+          // We should ignore any exception that might result when fetching the value.
+          value = node.get(name, null);
+        }
+        catch (RuntimeException ex)
+        {
+          // Ignore.
+        }
+
         property.setValue(value == null ? "" : value);
 
         properties.add(property);
