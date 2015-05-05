@@ -27,6 +27,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
+import org.eclipse.core.runtime.IStatus;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,7 +55,7 @@ public final class BaseUtil
     }
     catch (Throwable ex)
     {
-      BasePlugin.INSTANCE.log(ex);
+      BasePlugin.INSTANCE.log(ex, IStatus.WARNING);
       return (BaseResource)resourceSet.getResource(uri, false);
     }
   }

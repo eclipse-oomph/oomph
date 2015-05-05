@@ -100,8 +100,8 @@ public class SetupContext
 
   public static final URI CONFIGURATION_STATE_LOCATION_URI = CONFIGURATION_LOCATION_URI.appendSegment(OOMPH_NODE);
 
-  public static final URI WORKSPACE_STATE_LOCATION_URI = WORKSPACE_LOCATION_URI == null ? null
-      : WORKSPACE_LOCATION_URI.appendSegments(new String[] { ".metadata", ".plugins", OOMPH_NODE });
+  public static final URI WORKSPACE_STATE_LOCATION_URI = WORKSPACE_LOCATION_URI == null ? null : WORKSPACE_LOCATION_URI.appendSegments(new String[] {
+      ".metadata", ".plugins", OOMPH_NODE });
 
   // Resource locations
 
@@ -117,11 +117,11 @@ public class SetupContext
 
   public static final URI WORKSPACE_SETUP_FILE_NAME_URI = URI.createURI("workspace.setup");
 
-  public static final URI WORKSPACE_SETUP_URI = WORKSPACE_STATE_LOCATION_URI == null ? null
-      : WORKSPACE_STATE_LOCATION_URI.appendSegment(WORKSPACE_SETUP_FILE_NAME_URI.lastSegment());
+  public static final URI WORKSPACE_SETUP_URI = WORKSPACE_STATE_LOCATION_URI == null ? null : WORKSPACE_STATE_LOCATION_URI
+      .appendSegment(WORKSPACE_SETUP_FILE_NAME_URI.lastSegment());
 
-  public static final URI WORKSPACE_SETUP_RELATIVE_URI = URI
-      .createHierarchicalURI(new String[] { ".metadata", ".plugins", OOMPH_NODE, WORKSPACE_SETUP_FILE_NAME_URI.lastSegment() }, null, null);
+  public static final URI WORKSPACE_SETUP_RELATIVE_URI = URI.createHierarchicalURI(new String[] { ".metadata", ".plugins", OOMPH_NODE,
+      WORKSPACE_SETUP_FILE_NAME_URI.lastSegment() }, null, null);
 
   public static final URI USER_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("user.setup");
 
@@ -345,8 +345,8 @@ public class SetupContext
       {
         associate(resourceSet, installation, workspace);
       }
-    }, uriConverter, LOCATION_CATALOG_SETUP_URI, installation == null ? null : installation.eResource().getURI(),
-        workspace == null ? null : workspace.eResource().getURI());
+    }, uriConverter, LOCATION_CATALOG_SETUP_URI, installation == null ? null : installation.eResource().getURI(), workspace == null ? null : workspace
+        .eResource().getURI());
   }
 
   private static void associate(ResourceSet resourceSet, Installation installation, Workspace workspace)
@@ -474,9 +474,7 @@ public class SetupContext
       }
 
       Location location = Platform.getInstallLocation();
-      URI result = URI.createURI(FileLocator.resolve(location.getURL()).toString());
-      result = result.hasTrailingPathSeparator() ? result.trimSegments(1) : result;
-
+      URI result = getURI(location);
       if (OS.INSTANCE.isMac())
       {
         result = result.trimSegments(1).appendSegment("Eclipse");
@@ -490,6 +488,17 @@ public class SetupContext
     }
   }
 
+  private static URI getURI(Location location) throws IOException
+  {
+    URI result = URI.createURI(FileLocator.resolve(location.getURL()).toString());
+    if (result.isFile())
+    {
+      result = URI.createFileURI(result.toFileString());
+    }
+
+    return result.hasTrailingPathSeparator() ? result.trimSegments(1) : result;
+  }
+
   private static URI getStaticConfigurationLocation()
   {
     try
@@ -500,8 +509,8 @@ public class SetupContext
       }
 
       Location location = Platform.getConfigurationLocation();
-      URI result = URI.createURI(FileLocator.resolve(location.getURL()).toString());
-      return result.hasTrailingPathSeparator() ? result.trimSegments(1) : result;
+      URI result = getURI(location);
+      return result;
     }
     catch (IOException ex)
     {
@@ -560,33 +569,27 @@ public class SetupContext
 
     if (realInstallation && installation != null && installation.getProductVersion() == null)
     {
+      ProductCatalog productCatalog = null;
+
       Resource indexResource = BaseUtil.loadResourceSafely(resourceSet, INDEX_SETUP_URI);
       Index index = (Index)EcoreUtil.getObjectByType(indexResource.getContents(), SetupPackage.Literals.INDEX);
-      if (index == null)
+      if (index != null)
       {
-        return null;
+        EList<ProductCatalog> productCatalogs = index.getProductCatalogs();
+        if (!productCatalogs.isEmpty())
+        {
+          productCatalog = productCatalogs.get(0);
+        }
       }
 
-      EList<ProductCatalog> productCatalogs = index.getProductCatalogs();
-      if (productCatalogs.isEmpty())
+      if (productCatalog == null)
       {
-        return null;
+        Resource selfProductCatalogResource = BaseUtil.loadResourceSafely(resourceSet, URI.createURI("catalog:/self-product-catalog.setup"));
+        productCatalog = (ProductCatalog)EcoreUtil.getObjectByType(selfProductCatalogResource.getContents(), SetupPackage.Literals.PRODUCT_CATALOG);
       }
 
-      ProductCatalog productCatalog = productCatalogs.get(0);
       EList<Product> products = productCatalog.getProducts();
-      if (products.isEmpty())
-      {
-        return null;
-      }
-
-      Product product = products.get(0);
-      EList<ProductVersion> versions = product.getVersions();
-      if (versions.isEmpty())
-      {
-        return null;
-      }
-
+      EList<ProductVersion> versions = products.get(0).getVersions();
       installation.setProductVersion(versions.get(0));
 
       if (save)
