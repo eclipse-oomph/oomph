@@ -120,12 +120,18 @@ public class DigestValidator extends VersionValidator
     }
 
     byte[] releasedProjectDigest = releaseDigest.get(project.getName());
-    if (VersionUtil.DEBUG)
+
+    boolean changedSinceRelease = false;
+    if (releasedProjectDigest != null)
     {
-      System.out.println("RELEASE = " + formatDigest(releasedProjectDigest));
+      if (VersionUtil.DEBUG)
+      {
+        System.out.println("RELEASE = " + formatDigest(releasedProjectDigest));
+      }
+
+      changedSinceRelease = !MessageDigest.isEqual(validatorDigest, releasedProjectDigest);
     }
 
-    boolean changedSinceRelease = !MessageDigest.isEqual(validatorDigest, releasedProjectDigest);
     buildState.setChangedSinceRelease(changedSinceRelease);
     buildState.setValidatorState(validatorState);
   }
