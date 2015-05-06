@@ -51,6 +51,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -102,13 +103,14 @@ public final class ProjectConfigUtil
         }
       }
 
-      if (getProjectNames(workspaceConfiguration.getInstancePreferenceNode().getParent().getNode("project")).containsAll(projectNames))
+      if (getProjectNames(workspaceConfiguration.getInstancePreferenceNode().getParent().getNode(PreferencesUtil.PROJECT_NODE)).containsAll(projectNames))
       {
         complete(workspaceConfiguration);
       }
       else
       {
-        final PreferenceNode projectPreferenceNode = PreferencesUtil.getRootPreferenceNode(true).getNode("project");
+        final PreferenceNode projectPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.singleton(PreferencesUtil.PROJECT_NODE), true).getNode(
+            PreferencesUtil.PROJECT_NODE);
         Adapter projectNodeListener = new AdapterImpl()
         {
           @Override
@@ -202,11 +204,11 @@ public final class ProjectConfigUtil
     PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode();
 
     WorkspaceConfiguration workspaceConfiguration = ProjectConfigFactory.eINSTANCE.createWorkspaceConfiguration();
-    PreferenceNode instancePreferenceNode = rootPreferenceNode.getNode("instance");
+    PreferenceNode instancePreferenceNode = rootPreferenceNode.getNode(PreferencesUtil.INSTANCE_NODE);
     workspaceConfiguration.setInstancePreferenceNode(instancePreferenceNode);
-    workspaceConfiguration.setDefaultPreferenceNode(rootPreferenceNode.getNode("default"));
+    workspaceConfiguration.setDefaultPreferenceNode(rootPreferenceNode.getNode(PreferencesUtil.DEFAULT_NODE));
 
-    PreferenceNode projectsPreferenceNode = rootPreferenceNode.getNode("project");
+    PreferenceNode projectsPreferenceNode = rootPreferenceNode.getNode(PreferencesUtil.PROJECT_NODE);
     EList<Project> projects = workspaceConfiguration.getProjects();
 
     for (IProject iProject : WORKSPACE_ROOT.getProjects())

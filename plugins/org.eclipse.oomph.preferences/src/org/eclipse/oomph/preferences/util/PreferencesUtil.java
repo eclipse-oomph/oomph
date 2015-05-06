@@ -87,6 +87,9 @@ public final class PreferencesUtil
 
   public static final String SECURE_NODE = "secure";
 
+  public static final Set<String> ALL_CHILD_NODES = Collections.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList(new String[] { SECURE_NODE,
+      BUNDLE_DEFAULTS_NODE, DEFAULT_NODE, CONFIRGURATION_NODE, INSTANCE_NODE, PROJECT_NODE })));
+
   private static final IEclipsePreferences ROOT = Platform.getPreferencesService().getRootNode();
 
   public static ISecurePreferences getSecurePreferences()
@@ -113,6 +116,11 @@ public final class PreferencesUtil
 
   public static PreferenceNode getRootPreferenceNode(boolean isSynchronized)
   {
+    return getRootPreferenceNode(ALL_CHILD_NODES, isSynchronized);
+  }
+
+  public static PreferenceNode getRootPreferenceNode(Set<String> childNodes, boolean isSynchronized)
+  {
     ResourceSet resourceSet = new ResourceSetImpl();
     Resource resource = resourceSet.createResource(ROOT_PREFERENCE_NODE_URI.appendSegment("*.preferences"));
     PreferenceNode root = PreferencesFactory.eINSTANCE.createPreferenceNode();
@@ -121,7 +129,7 @@ public final class PreferencesUtil
     traverse(root, ROOT, isSynchronized);
 
     int index = 0;
-    for (String name : new String[] { BUNDLE_DEFAULTS_NODE, DEFAULT_NODE, CONFIRGURATION_NODE, INSTANCE_NODE, PROJECT_NODE })
+    for (String name : childNodes)
     {
       PreferenceNode node = root.getNode(name);
       if (node != null)
@@ -130,22 +138,25 @@ public final class PreferencesUtil
       }
     }
 
-    PreferenceNode secureRoot = PreferencesFactory.eINSTANCE.createPreferenceNode();
-    ISecurePreferences securePreferences = getSecurePreferences();
-    if (securePreferences != null)
+    if (childNodes.contains(SECURE_NODE))
     {
-      try
+      PreferenceNode secureRoot = PreferencesFactory.eINSTANCE.createPreferenceNode();
+      ISecurePreferences securePreferences = getSecurePreferences();
+      if (securePreferences != null)
       {
-        traverse(secureRoot, SecurePreferenceWapper.create(securePreferences), false);
+        try
+        {
+          traverse(secureRoot, SecurePreferenceWapper.create(securePreferences), false);
+        }
+        catch (Throwable ex)
+        {
+          // Ignore
+        }
       }
-      catch (Throwable ex)
-      {
-        // Ignore
-      }
-    }
 
-    secureRoot.setName(SECURE_NODE);
-    root.getChildren().add(0, secureRoot);
+      secureRoot.setName(SECURE_NODE);
+      root.getChildren().add(0, secureRoot);
+    }
 
     return root;
   }

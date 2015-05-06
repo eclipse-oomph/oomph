@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 
 import org.eclipse.jface.preference.PreferenceDialog;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class PreferenceRecorderAction extends AbstractContainerAction
   protected boolean runInit(SetupTaskContainer container)
   {
     preferenceAdapter = createPreferenceAdapter();
-    rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(true);
+    rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.singleton(PreferencesUtil.INSTANCE_NODE), true);
     rootPreferenceNode.eAdapters().add(preferenceAdapter);
     return true;
   }

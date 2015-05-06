@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class PreferencesRecorder extends EContentAdapter
 
   protected PreferenceNode getRootPreferenceNode()
   {
-    return PreferencesUtil.getRootPreferenceNode(true);
+    return PreferencesUtil.getRootPreferenceNode(Collections.singleton(PreferencesUtil.INSTANCE_NODE), true);
   }
 
   @Override
