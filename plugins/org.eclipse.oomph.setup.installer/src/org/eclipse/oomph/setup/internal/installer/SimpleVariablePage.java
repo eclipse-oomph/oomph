@@ -7,19 +7,21 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Yatta Solutions - [466264] Enhance UX in simple installer
  */
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
+import org.eclipse.oomph.internal.ui.FlatButton;
+import org.eclipse.oomph.internal.ui.ImageCheckbox;
+import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.p2.core.AgentManager;
-import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
-import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.Installation;
@@ -36,6 +38,8 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.installer.InstallLaunchButton.State;
+import org.eclipse.oomph.setup.internal.installer.MessageOverlay.Type;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
@@ -45,7 +49,6 @@ import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.ui.StackComposite;
-import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
@@ -64,7 +67,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.metadata.ILicense;
-import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -83,19 +86,13 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
 import java.security.cert.Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -107,19 +104,21 @@ import java.util.Map;
  */
 public class SimpleVariablePage extends SimpleInstallerPage
 {
-  private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled");
+  private static final String SETUP_LOG_FILE = OS.INSTANCE.getEclipseDir() + "/configuration/org.eclipse.oomph.setup/setup.log";
 
   private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot");
 
   private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt");
 
-  private static final String TEXT_LAUNCH = "Launch";
+  private static final String TEXT_README = "show readme file";
 
-  private static final String TEXT_README = "Show readme file";
+  private static final String TEXT_LOG = "show installation log";
 
-  private static final String TEXT_LOG = "Show installation log";
+  private static final String TEXT_KEEP = "keep installer";
 
-  private static final String TEXT_KEEP = "Keep installer";
+  private static final String MESSAGE_SUCCESS = "Installation completed successfully.";
+
+  private static final String MESSAGE_FAILURE = "Installation failed with an error.";
 
   private final Map<String, ProductVersion> productVersions = new HashMap<String, ProductVersion>();
 
@@ -129,19 +128,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private String readmePath;
 
-  private BundlePool pool;
-
-  private boolean poolEnabled;
-
   private Browser browser;
-
-  private Composite versionComposite;
 
   private CCombo versionCombo;
 
-  private ToolButton bitness32Button;
+  private ImageCheckbox bitness32Button;
 
-  private ToolButton bitness64Button;
+  private ImageCheckbox bitness64Button;
 
   private JREController javaController;
 
@@ -149,13 +142,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private ComboViewer javaViewer;
 
-  private ToolButton javaButton;
+  private FlatButton javaButton;
 
   private Text folderText;
 
-  private ToolButton folderButton;
-
-  private ToolButton poolButton;
+  private FlatButton folderButton;
 
   private String installRoot;
 
@@ -165,7 +156,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private StackComposite installStack;
 
-  private ToolButton installButton;
+  private InstallLaunchButton installButton;
 
   private String installError;
 
@@ -175,34 +166,34 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private SimpleProgress progress;
 
-  private ProgressBar progressBar;
+  private FlatButton cancelButton;
 
-  private Link progressLabel;
+  private FlatButton showReadmeButton;
 
-  private ToolButton cancelButton;
+  private FlatButton keepInstallerButton;
 
-  private ToolButton backButton;
+  private Composite afterInstallComposite;
 
-  public SimpleVariablePage(final Composite parent, int style, final SimpleInstallerDialog dialog)
+  private FlatButton showInstallLogButton;
+
+  private Composite errorComposite;
+
+  public SimpleVariablePage(final Composite parent, final SimpleInstallerDialog dialog)
   {
-    super(parent, style, dialog);
+    super(parent, dialog, true);
+  }
 
-    poolEnabled = PREF_POOL_ENABLED.get(true);
-    enablePool(poolEnabled);
-
-    GridLayout layout = UIUtil.createGridLayout(4);
-    layout.marginWidth = SimpleInstallerDialog.MARGIN_WIDTH;
-    layout.marginTop = 5;
-    layout.marginBottom = SimpleInstallerDialog.MARGIN_HEIGHT;
-    layout.horizontalSpacing = 5;
-    layout.verticalSpacing = 5;
-    setLayout(layout);
+  @Override
+  protected void createContent(Composite container)
+  {
+    container.setBackgroundMode(SWT.INHERIT_FORCE);
+    container.setBackground(SetupInstallerPlugin.COLOR_WHITE);
 
     // Row 1
-    GridData browserLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false, layout.numColumns, 1);
-    browserLayoutData.heightHint = OS.INSTANCE.isLinux() ? 120 : 142;
+    GridData browserLayoutData = GridDataFactory.fillDefaults().grab(true, false).create();
+    browserLayoutData.heightHint = OS.INSTANCE.isLinux() ? 120 : 216;
 
-    Composite browserComposite = new Composite(this, SWT.BORDER);
+    Composite browserComposite = new Composite(container, SWT.NONE);
     browserComposite.setLayoutData(browserLayoutData);
     browserComposite.setLayout(new FillLayout());
 
@@ -221,19 +212,23 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    // Row 2
-    new Label(this, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, layout.numColumns, 1));
+    Composite variablesComposite = new Composite(container, SWT.NONE);
+    GridLayout variablesLayout = new GridLayout(4, false);
+    variablesLayout.horizontalSpacing = 8;
+    variablesLayout.verticalSpacing = 3;
+    variablesLayout.marginLeft = 14;
+    variablesLayout.marginRight = 30;
+    variablesLayout.marginTop = 40;
+    variablesLayout.marginBottom = 0;
+    variablesLayout.marginHeight = 0;
+    variablesComposite.setLayout(variablesLayout);
+    variablesComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
     // Row 3
-    createLabel("Product Version ");
+    Label productVersionLabel = createLabel(variablesComposite, "Product Version");
+    productVersionLabel.setLayoutData(GridDataFactory.swtDefaults().hint(135, SWT.DEFAULT).create());
 
-    versionComposite = new Composite(this, SWT.NONE);
-    versionComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    versionComposite.setLayout(UIUtil.createGridLayout(4));
-
-    versionCombo = new CCombo(versionComposite, SWT.BORDER | SWT.READ_ONLY);
-    versionCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-    versionCombo.setFont(font);
+    versionCombo = createComboBox(variablesComposite, SWT.READ_ONLY);
     versionCombo.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -245,55 +240,51 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    if (JREManager.BITNESS_CHANGEABLE)
+    bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit.png"),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_hover.png"));
+    bitness32Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(4, 0).hint(SWT.DEFAULT, 30).create());
+    bitness32Button.setChecked(false);
+    bitness32Button.setVisible(JREManager.BITNESS_CHANGEABLE);
+    bitness32Button.addSelectionListener(new SelectionAdapter()
     {
-      new Label(versionComposite, SWT.NONE);
-
-      bitness32Button = new ToolButton(versionComposite, SWT.RADIO, SetupInstallerPlugin.INSTANCE.getSWTImage("32bit.png"), true);
-      bitness32Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-      bitness32Button.setSelection(false);
-      bitness32Button.addSelectionListener(new SelectionAdapter()
+      @Override
+      public void widgetSelected(SelectionEvent e)
       {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          bitness32Button.setSelection(true);
-          bitness64Button.setSelection(false);
-          javaController.setBitness(32);
-        }
-      });
+        bitness32Button.setChecked(true);
+        bitness64Button.setChecked(false);
+        javaController.setBitness(32);
+      }
+    });
 
-      bitness64Button = new ToolButton(versionComposite, SWT.RADIO, SetupInstallerPlugin.INSTANCE.getSWTImage("64bit.png"), true);
-      bitness64Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-      bitness64Button.setSelection(true);
-      bitness64Button.addSelectionListener(new SelectionAdapter()
+    bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit.png"),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_hover.png"));
+    bitness64Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).hint(SWT.DEFAULT, 30).create());
+    bitness64Button.setChecked(true);
+    bitness64Button.setVisible(JREManager.BITNESS_CHANGEABLE);
+    bitness64Button.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
       {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          bitness32Button.setSelection(false);
-          bitness64Button.setSelection(true);
-          javaController.setBitness(64);
-        }
-      });
-    }
-
-    new Label(this, SWT.NONE);
-    new Label(this, SWT.NONE);
+        bitness32Button.setChecked(false);
+        bitness64Button.setChecked(true);
+        javaController.setBitness(64);
+      }
+    });
 
     // Row 4
-    javaLabel = createLabel("Java VM ");
+    javaLabel = createLabel(variablesComposite, "Java VM");
 
-    CCombo javaCombo = new CCombo(this, SWT.BORDER | SWT.READ_ONLY);
-    javaCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    javaCombo.setFont(font);
+    CCombo javaCombo = createComboBox(variablesComposite, SWT.READ_ONLY);
+    applyComboOrTextStyle(javaCombo);
 
     javaViewer = new ComboViewer(javaCombo);
     javaViewer.setContentProvider(new ArrayContentProvider());
     javaViewer.setLabelProvider(new LabelProvider());
 
-    javaButton = new ToolButton(this, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"), false);
-    javaButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+    javaButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png"));
+    javaButton.setLayoutData(GridDataFactory.swtDefaults().indent(4, 0).create());
     javaButton.setToolTipText("Select Java VM...");
     javaButton.addSelectionListener(new SelectionAdapter()
     {
@@ -329,14 +320,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     };
 
-    new Label(this, SWT.NONE);
+    new Label(variablesComposite, SWT.NONE);
 
     // Row 5
-    createLabel("Installation Folder ");
+    createLabel(variablesComposite, "Installation Folder");
 
-    folderText = new Text(this, SWT.BORDER);
-    folderText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    folderText.setFont(font);
+    folderText = createTextField(variablesComposite);
     folderText.addModifyListener(new ModifyListener()
     {
       public void modifyText(ModifyEvent e)
@@ -346,8 +335,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    folderButton = new ToolButton(this, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"), false);
-    folderButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+    folderButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png"));
+    folderButton.setLayoutData(GridDataFactory.swtDefaults().indent(4, 0).create());
     folderButton.setToolTipText("Select installation folder...");
     folderButton.addSelectionListener(new SelectionAdapter()
     {
@@ -372,38 +362,24 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    poolButton = new ToolButton(this, SWT.PUSH, getBundlePoolImage(), false);
-    poolButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-    poolButton.setToolTipText("Configure bundle pool...");
-    poolButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        manageBundlePools();
-      }
-    });
+    new Label(variablesComposite, SWT.NONE);
+    new Label(variablesComposite, SWT.NONE);
 
-    // Row 6
-    backButton = new ToolButton(this, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/back.png"), true);
-    backButton.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, true, 1, 2));
-    backButton.setToolTipText("Back");
-    backButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        dialog.backSelected();
-      }
-    });
+    installButton = new InstallLaunchButton(variablesComposite);
+    installButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, 36).indent(0, 32).create());
+    installButton.setCurrentState(InstallLaunchButton.State.INSTALL);
 
-    installStack = new StackComposite(this, SWT.NONE);
-    installStack.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    new Label(variablesComposite, SWT.NONE);
+    new Label(variablesComposite, SWT.NONE);
 
-    cancelButton = new ToolButton(this, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/cancel.png"), false);
-    cancelButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-    cancelButton.setToolTipText("Cancel");
-    cancelButton.setVisible(false);
+    installStack = new StackComposite(variablesComposite, SWT.NONE);
+    installStack.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BEGINNING).span(4, 1).indent(60, 0).hint(SWT.DEFAULT, 72).create());
+
+    final Composite duringInstallContainer = new Composite(installStack, SWT.NONE);
+    duringInstallContainer.setLayout(UIUtil.createGridLayout(1));
+
+    // During installation.
+    cancelButton = createButton(duringInstallContainer, "Cancel Installation", "Cancel", SetupInstallerPlugin.INSTANCE.getSWTImage("simple/delete.png"));
     cancelButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -413,18 +389,45 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    new Label(this, SWT.NONE);
+    GridLayout afterInstallLayout = UIUtil.createGridLayout(1);
+    afterInstallLayout.verticalSpacing = 3;
 
-    installButton = new ToolButton(installStack, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/download_small.png"), false);
+    afterInstallComposite = new Composite(installStack, SWT.NONE);
+    afterInstallComposite.setLayout(afterInstallLayout);
 
-    final Composite progressComposite = new Composite(installStack, SWT.NONE);
-    progressComposite.setLayout(UIUtil.createGridLayout(1));
+    showReadmeButton = createButton(afterInstallComposite, TEXT_README, null, null);
+    showReadmeButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        if (readmePath != null)
+        {
+          java.net.URI readmeURI = new File(installFolder, OS.INSTANCE.getEclipseDir() + "/" + readmePath).toURI();
+          dialog.showReadme(readmeURI);
+        }
+      }
+    });
 
-    GridData layoutData2 = new GridData(SWT.FILL, SWT.CENTER, true, true);
-    layoutData2.heightHint = 28;
+    showInstallLogButton = createButton(afterInstallComposite, TEXT_LOG, null, null);
+    showInstallLogButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        openInstallLog();
+      }
+    });
 
-    progressBar = new ProgressBar(progressComposite, SWT.NONE);
-    progressBar.setLayoutData(layoutData2);
+    keepInstallerButton = createButton(afterInstallComposite, TEXT_KEEP, null, null);
+    keepInstallerButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        dialog.showKeepInstaller();
+      }
+    });
 
     installButton.addSelectionListener(new SelectionAdapter()
     {
@@ -437,65 +440,59 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
         else
         {
+          dialog.clearMessage();
           dialog.setButtonsEnabled(false);
+
           setEnabled(false);
 
-          installButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/download_small.png"));
-          progressBar.setSelection(0);
-          progressLabel.setForeground(null);
-          cancelButton.setVisible(true);
+          installButton.setCurrentState(State.INSTALLING);
+          installButton.setProgress(0);
 
-          installStack.setTopControl(progressComposite);
+          installStack.setTopControl(duringInstallContainer);
+          installStack.setVisible(true);
+          layout(true, true);
 
           install();
         }
       }
     });
 
-    installStack.setTopControl(installButton);
+    GridLayout errorLayout = UIUtil.createGridLayout(1);
+    errorLayout.verticalSpacing = 0;
 
-    // Row 7
-    progressLabel = new Link(this, SWT.WRAP);
-    progressLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-    progressLabel.setFont(SetupInstallerPlugin.getFont(font, URI.createURI("font:///9/bold")));
-    progressLabel.addSelectionListener(new SelectionAdapter()
+    errorComposite = new Composite(installStack, SWT.NONE);
+    errorComposite.setLayout(errorLayout);
+
+    // Just for debugging
+    // installStack.setVisible(true);
+    // installStack.setTopControl(errorComposite);
+    // installButton.setProgress(0.98f);
+    // installButton.setCurrentState(InstallLaunchButton.State.INSTALLING);
+    // installButton.setEnabled(false);
+  }
+
+  private FlatButton createButton(Composite parent, String text, String toolTip, Image icon)
+  {
+    FlatButton button = new FlatButton(parent, SWT.PUSH);
+    button.setBackground(SetupInstallerPlugin.COLOR_LIGHTEST_GRAY);
+    button.setText(text);
+    button.setCornerWidth(10);
+    button.setAlignment(SWT.CENTER);
+    button.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///10/normal")));
+    button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BEGINNING).grab(false, false).hint(232, 22).create());
+    button.setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+
+    if (icon != null)
     {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        if (TEXT_LAUNCH.equals(e.text))
-        {
-          launchProduct();
-          return;
-        }
+      button.setImage(icon);
+    }
 
-        if (TEXT_README.equals(e.text))
-        {
-          if (readmePath != null)
-          {
-            String url = new File(installFolder, OS.INSTANCE.getEclipseDir() + "/" + readmePath).toURI().toString();
-            OS.INSTANCE.openSystemBrowser(url);
-          }
-        }
-        else if (TEXT_LOG.equals(e.text))
-        {
-          String url = new File(installFolder, OS.INSTANCE.getEclipseDir() + "/configuration/org.eclipse.oomph.setup/setup.log").toURI().toString();
-          OS.INSTANCE.openSystemBrowser(url);
-        }
-        else if (TEXT_KEEP.equals(e.text))
-        {
-          new KeepInstallerDialog(getShell(), false).open();
-        }
+    if (toolTip != null)
+    {
+      button.setToolTipText(toolTip);
+    }
 
-        installButton.setFocus();
-      }
-    });
-
-    List<Control> tabList = new ArrayList<Control>(Arrays.asList(getTabList()));
-    tabList.remove(browserComposite);
-    tabList.remove(backButton);
-    tabList.add(backButton);
-    setTabList(tabList.toArray(new Control[tabList.size()]));
+    return button;
   }
 
   protected void productVersionSelected(ProductVersion productVersion)
@@ -521,17 +518,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     this.product = product;
 
-    StringBuilder builder = new StringBuilder();
-    builder.append("<html><style TYPE=\"text/css\"><!-- ");
-    builder.append("table{border:none; border-collapse:collapse}");
-    builder.append(".label{font-size:1.1em; font-weight:700}");
-    builder.append(".description{font-size:14px; color:#333}");
-    builder.append(".col1{padding:10px; width:64px; text-align:center; vertical-align:top}");
-    builder.append(
-        " --></style><body style=\"background-color:#fafafa; overflow:auto; margin:10px; font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif\"><table>\n");
+    String html = SimpleInstallerDialog.getPageTemplate();
+    html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, true, false));
 
-    SimpleProductPage.renderProduct(builder, product, true, null);
-    browser.setText(SimpleProductPage.getHtml(builder), true);
+    browser.setText(html, true);
 
     productVersions.clear();
     versionCombo.removeAll();
@@ -564,12 +554,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
       ++i;
     }
 
-    versionCombo.pack();
-    Point size = versionCombo.getSize();
-    size.x += 10;
-    versionCombo.setSize(size);
-    versionComposite.layout();
-
     versionCombo.select(selection);
     versionCombo.setSelection(new Point(0, 0));
     productVersionSelected(defaultProductVersion);
@@ -577,18 +561,18 @@ public class SimpleVariablePage extends SimpleInstallerPage
     installFolder = getDefaultInstallationFolder();
     setFolderText(installFolder);
 
-    installStack.setTopControl(installButton);
-    installButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/download_small.png"));
-    installButton.setToolTipText("Install");
+    installButton.setCurrentState(State.INSTALL);
+
+    installStack.setVisible(false);
     installed = false;
 
-    progressLabel.setText("");
     setEnabled(true);
   }
 
   @Override
   public void setEnabled(boolean enabled)
   {
+    super.setEnabled(enabled);
     versionCombo.setEnabled(enabled);
 
     if (JREManager.BITNESS_CHANGEABLE)
@@ -605,8 +589,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     folderText.setEnabled(enabled);
     folderButton.setEnabled(enabled);
-    poolButton.setEnabled(enabled);
-    backButton.setEnabled(enabled);
   }
 
   public boolean refreshJREs()
@@ -670,104 +652,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
     throw new IllegalStateException("User home is full");
   }
 
-  private Image getBundlePoolImage()
-  {
-    return SetupInstallerPlugin.INSTANCE.getSWTImage("simple/bundle_pool_" + (poolEnabled ? "enabled" : "disabled") + ".png");
-  }
-
-  private void enablePool(boolean poolEnabled)
-  {
-    if (this.poolEnabled != poolEnabled)
-    {
-      this.poolEnabled = poolEnabled;
-      PREF_POOL_ENABLED.set(poolEnabled);
-    }
-
-    if (poolEnabled)
-    {
-      pool = P2Util.getAgentManager().getDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName());
-    }
-    else
-    {
-      pool = null;
-    }
-
-    if (poolButton != null)
-    {
-      poolButton.setImage(getBundlePoolImage());
-    }
-  }
-
-  private Label createLabel(String text)
-  {
-    Label label = new Label(this, SWT.RIGHT);
-    label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    label.setText(text);
-    label.setFont(font);
-    return label;
-  }
-
-  private void manageBundlePools()
-  {
-    final boolean[] enabled = { poolEnabled };
-
-    AgentManagerDialog dialog = new AgentManagerDialog(getShell())
-    {
-      @Override
-      protected void createUI(Composite parent)
-      {
-        final Button enabledButton = new Button(parent, SWT.CHECK);
-        enabledButton.setText("Enable shared bundle pool");
-        enabledButton.setSelection(poolEnabled);
-        enabledButton.addSelectionListener(new SelectionAdapter()
-        {
-          @Override
-          public void widgetSelected(SelectionEvent e)
-          {
-            enabled[0] = enabledButton.getSelection();
-            getComposite().setEnabled(enabled[0]);
-          }
-        });
-
-        new Label(parent, SWT.NONE);
-        super.createUI(parent);
-        getComposite().setEnabled(poolEnabled);
-      }
-
-      @Override
-      protected void createButtonsForButtonBar(Composite parent)
-      {
-        super.createButtonsForButtonBar(parent);
-        Button button = getButton(IDialogConstants.OK_ID);
-        if (button != null)
-        {
-          button.setEnabled(false);
-        }
-      }
-
-      @Override
-      protected void elementChanged(Object element)
-      {
-        Button button = getButton(IDialogConstants.OK_ID);
-        if (button != null)
-        {
-          button.setEnabled(element instanceof BundlePool);
-        }
-      }
-    };
-
-    if (pool != null)
-    {
-      dialog.setSelectedElement(pool);
-    }
-
-    if (dialog.open() == AgentManagerDialog.OK)
-    {
-      enablePool(enabled[0]);
-      pool = (BundlePool)dialog.getSelectedElement();
-    }
-  }
-
   private void install()
   {
     installThread = new Thread()
@@ -796,11 +680,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           if (!progress.isCanceled())
           {
             SetupInstallerPlugin.INSTANCE.log(ex);
-            installError = ex.getMessage();
-            if (StringUtil.isEmpty(installError))
-            {
-              installError = ex.getClass().getName();
-            }
+            installError = MESSAGE_FAILURE;
           }
         }
         finally
@@ -837,10 +717,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private void installPerform() throws Exception
   {
-    if (pool != null)
+    if (dialog.getPool() != null)
     {
-      P2Util.getAgentManager().setDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName(), pool);
-      System.setProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION, pool.getLocation().getAbsolutePath());
+      P2Util.getAgentManager().setDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName(), dialog.getPool());
+      System.setProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION, dialog.getPool().getLocation().getAbsolutePath());
     }
     else
     {
@@ -912,26 +792,23 @@ public class SimpleVariablePage extends SimpleInstallerPage
     dialog.setButtonsEnabled(true);
     setEnabled(true);
 
-    progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-    progressLabel.setText("Installation canceled");
-
-    cancelButton.setVisible(false);
-    installStack.setTopControl(installButton);
+    installButton.setCurrentState(State.INSTALL);
+    installStack.setVisible(false);
   }
 
   private void installFinished()
   {
     readmePath = null;
-    String message;
 
     if (installError == null)
     {
       installed = true;
-      installButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/launch.png"));
-      installButton.setToolTipText("Launch");
-      progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GREEN));
 
-      message = "Installation finished successfully: <a>" + TEXT_LAUNCH + "</a>\n\n";
+      installButton.setCurrentState(State.INSTALLED);
+      installButton.setToolTipText("Launch");
+
+      showInstallLogButton.setParent(afterInstallComposite);
+      keepInstallerButton.setVisible(InstallerUtil.canKeepInstaller());
 
       Scope scope = selectedProductVersion;
       while (scope != null)
@@ -942,7 +819,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           readmePath = annotation.getDetails().get(AnnotationConstants.KEY_README_PATH);
           if (readmePath != null)
           {
-            message += "<a>" + TEXT_README + "</a>\n";
+            showReadmeButton.setEnabled(true);
             break;
           }
         }
@@ -950,28 +827,51 @@ public class SimpleVariablePage extends SimpleInstallerPage
         scope = scope.getParentScope();
       }
 
-      message += "<a>" + TEXT_LOG + "</a>";
-
-      if (KeepInstallerDialog.canKeepInstaller())
-      {
-        message += "\n<a>" + TEXT_KEEP + "</a>";
-      }
+      showSuccessMessage();
     }
     else
     {
       setEnabled(true);
-
-      progressLabel.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
-      message = installError + "\n\n<a>" + TEXT_LOG + "</a>\n";
+      installButton.setCurrentState(State.INSTALL);
+      showErrorMessage();
     }
 
-    progressLabel.setText(message);
-    backButton.setEnabled(true);
-
-    cancelButton.setVisible(false);
-    installStack.setTopControl(installButton);
-
+    setEnabled(true);
     dialog.setButtonsEnabled(true);
+  }
+
+  private void showSuccessMessage()
+  {
+    dialog.showMessage(MESSAGE_SUCCESS, Type.SUCCESS, true);
+
+    installStack.setTopControl(afterInstallComposite);
+    installStack.setVisible(true);
+    layout(true, true);
+  }
+
+  private void showErrorMessage()
+  {
+    Runnable action = null;
+    String errorMessage = installError;
+
+    if (isInstallLogAvailable())
+    {
+      action = new Runnable()
+      {
+        public void run()
+        {
+          openInstallLog();
+        }
+      };
+
+      errorMessage += " <a>Show log</a>.";
+    }
+
+    dialog.showMessage(errorMessage, Type.ERROR, false, action);
+
+    installStack.setTopControl(errorComposite);
+    installStack.setVisible(true);
+    layout(true, true);
   }
 
   private void launchProduct()
@@ -991,7 +891,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private void setFolderText(String dir)
   {
     folderText.setText(dir);
-    folderText.setSelection(dir.length());
   }
 
   private void validateFolderText(String dir)
@@ -1013,6 +912,17 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       //$FALL-THROUGH$
     }
+  }
+
+  private void openInstallLog()
+  {
+    File installationLogFile = new File(installFolder, SETUP_LOG_FILE);
+    dialog.showInstallationLog(installationLogFile);
+  }
+
+  private boolean isInstallLogAvailable()
+  {
+    return new File(installFolder, SETUP_LOG_FILE).exists();
   }
 
   /**
@@ -1070,7 +980,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 
@@ -1127,8 +1037,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
     private volatile boolean canceled;
 
     private volatile boolean done;
-
-    private int lastSelection = -1;
 
     private String lastName;
 
@@ -1245,24 +1153,18 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       if (!canceled)
       {
-        int smin = progressBar.getMinimum();
-        int smax = progressBar.getMaximum();
-        int selection = (int)(work * (smax - smin) / totalWork + smin);
+        double progress = work / totalWork;
 
         try
         {
-          if (selection != lastSelection)
-          {
-            lastSelection = selection;
-            progressBar.setSelection(selection);
-          }
+          installButton.setProgress((float)progress);
 
           if (!ObjectUtil.equals(name, lastName))
           {
             lastName = name;
             if (!done)
             {
-              progressLabel.setText(StringUtil.safe(name));
+              installButton.setToolTipText(StringUtil.safe(name));
             }
           }
         }

@@ -32,23 +32,27 @@ import java.lang.reflect.Method;
  * @author Eike Stepper
  */
 @SuppressWarnings("restriction")
-public class ProxyPreferenceDialog extends AbstractPreferenceDialog
+public class NetworkConnectionsDialog extends AbstractPreferenceDialog
 {
-  public ProxyPreferenceDialog(Shell parentShell)
+  public static final String TITLE = "Network Connections";
+
+  public static final String DESCRIPTION = "Adjust your network connection settings";
+
+  public NetworkConnectionsDialog(Shell parentShell)
   {
-    super(parentShell, "Network Proxy Settings");
+    super(parentShell, TITLE);
   }
 
   @Override
   protected String getShellText()
   {
-    return "Oomph Network Proxy Preferences";
+    return TITLE;
   }
 
   @Override
   protected String getDefaultMessage()
   {
-    return "Adjust your network proxy settings.";
+    return DESCRIPTION + ".";
   }
 
   @Override

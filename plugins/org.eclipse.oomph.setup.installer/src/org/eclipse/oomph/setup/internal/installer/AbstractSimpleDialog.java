@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Yatta Solutions - [466264] Enhance UX in simple installer
  */
 package org.eclipse.oomph.setup.internal.installer;
 
@@ -14,13 +15,12 @@ import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.ui.ShellMove;
 import org.eclipse.oomph.ui.UIUtil;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -33,17 +33,8 @@ import org.eclipse.swt.widgets.Shell;
  */
 public abstract class AbstractSimpleDialog extends Shell
 {
-  public static final Color WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
-
   private static final ShellMove SHELL_MOVE = new ShellMove()
   {
-    @Override
-    public void hookControl(Control control)
-    {
-      control.setBackground(WHITE);
-      super.hookControl(control);
-    }
-
     @Override
     protected boolean shouldHookControl(Control control)
     {
@@ -55,17 +46,21 @@ public abstract class AbstractSimpleDialog extends Shell
 
   private int returnCode = Window.OK;
 
-  public AbstractSimpleDialog(Display display, int style, int width, int height, int marginWidth, int marginHeight)
+  public AbstractSimpleDialog(Display display, int style, int width, int height)
   {
     super(display, style);
 
     GridLayout verticalLayout = UIUtil.createGridLayout(1);
-    verticalLayout.verticalSpacing = 20;
+    verticalLayout.marginWidth = 1;
+    verticalLayout.marginHeight = 1;
+    verticalLayout.verticalSpacing = 0;
 
     setLayout(verticalLayout);
     setSize(width, height);
     setImages(Window.getDefaultImages());
     setText(AbstractSetupDialog.SHELL_TEXT);
+
+    setBackground(SetupInstallerPlugin.getColor(207, 207, 207));
 
     Rectangle bounds = display.getPrimaryMonitor().getBounds();
     setLocation(bounds.x + (bounds.width - width) / 2, bounds.y + (bounds.height - height) / 2);
@@ -83,17 +78,20 @@ public abstract class AbstractSimpleDialog extends Shell
       }
     });
 
-    GridLayout titleLayout = UIUtil.createGridLayout(4);
-    titleLayout.marginTop = marginHeight;
-    titleLayout.marginWidth = marginWidth;
+    GridLayout titleLayout = UIUtil.createGridLayout(2);
     titleLayout.horizontalSpacing = 0;
+    titleLayout.verticalSpacing = 0;
+    titleLayout.marginLeft = 20;
+    titleLayout.marginRight = 14;
 
     titleComposite = new Composite(this, SWT.NONE);
-    titleComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
+    titleComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 72).create());
     titleComposite.setLayout(titleLayout);
+    titleComposite.setBackgroundMode(SWT.INHERIT_FORCE);
+    titleComposite.setBackground(SetupInstallerPlugin.COLOR_LIGHTEST_GRAY);
 
     Label titleImage = new Label(titleComposite, SWT.NONE);
-    titleImage.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, true, false));
+    titleImage.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).indent(SWT.DEFAULT, 26).align(SWT.BEGINNING, SWT.BEGINNING).create());
     titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png"));
   }
 

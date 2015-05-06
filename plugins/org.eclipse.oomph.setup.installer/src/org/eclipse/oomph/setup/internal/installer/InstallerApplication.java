@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Yatta Solutions - [466264] Enhance UX in simple installer
  */
 package org.eclipse.oomph.setup.internal.installer;
 
@@ -151,7 +152,7 @@ public class InstallerApplication implements IApplication
         {
           if (installerDialog[0] != null)
           {
-            ProxyPreferenceDialog proxyPreferenceDialog = new ProxyPreferenceDialog(installerDialog[0].getShell());
+            NetworkConnectionsDialog proxyPreferenceDialog = new NetworkConnectionsDialog(installerDialog[0].getShell());
             proxyPreferenceDialog.open();
           }
         }
@@ -189,7 +190,7 @@ public class InstallerApplication implements IApplication
 
       if (mode == Mode.ADVANCED)
       {
-        if (KeepInstallerDialog.canKeepInstaller())
+        if (InstallerUtil.canKeepInstaller())
         {
           Shell shell = new Shell(display);
           if (MessageDialog.openQuestion(shell, AbstractSetupDialog.SHELL_TEXT,

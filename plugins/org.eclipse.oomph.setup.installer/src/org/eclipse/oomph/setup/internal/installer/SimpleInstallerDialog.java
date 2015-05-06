@@ -7,51 +7,75 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Yatta Solutions - [466264] Enhance UX in simple installer
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.internal.ui.FlatButton;
+import org.eclipse.oomph.internal.ui.ImageHoverButton;
+import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
+import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.installer.MessageOverlay.ControlRelocator;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.ErrorDialog;
-import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ExceptionHandler;
+import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.OomphPlugin.BundleFile;
+import org.eclipse.oomph.util.OomphPlugin.Preference;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Label;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Stack;
 
 /**
  * @author Eike Stepper
  */
 public final class SimpleInstallerDialog extends AbstractSimpleDialog implements InstallerUI
 {
-  public static final int MARGIN_WIDTH = 42;
+  private static final int INSTALLER_WIDTH = 523;
 
-  public static final int MARGIN_HEIGHT = 15;
+  private static final int INSTALLER_HEIGHT = 632;
 
-  private static final boolean CAPTURE = false;
+  private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled");
+
+  private static Font defaultFont;
+
+  private static String css;
+
+  private static String pageTemplate;
+
+  private static String productTemplate;
 
   private final Installer installer;
+
+  private final Stack<SimpleInstallerPage> pageStack = new Stack<SimpleInstallerPage>();
 
   private Composite stack;
 
@@ -61,31 +85,207 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private SimpleVariablePage variablePage;
 
-  private ToolButton updateButton;
+  private SimpleReadmePage readmePage;
+
+  private SimpleInstallationLogPage installationLogPage;
+
+  private SimpleKeepInstallerPage keepInstallerPage;
+
+  private SimpleInstallerMenu installerMenu;
+
+  private SimpleInstallerMenu.InstallerMenuItem updateInstallerItem;
+
+  private SimpleInstallerMenuButton menuButton;
+
+  private boolean poolEnabled;
+
+  private BundlePool pool;
 
   private Resolution updateResolution;
 
-  private ToolButton advancedButton;
+  private MessageOverlay currentMessage;
 
   public SimpleInstallerDialog(Display display, final Installer installer)
   {
-    super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.BORDER, 800, 600, MARGIN_WIDTH, MARGIN_HEIGHT);
+    super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.NO_TRIM, INSTALLER_WIDTH, INSTALLER_HEIGHT);
     this.installer = installer;
   }
 
   @Override
   protected void createUI(Composite titleComposite)
   {
-    if (CAPTURE)
+    poolEnabled = PREF_POOL_ENABLED.get(true);
+    enablePool(poolEnabled);
+
+    Composite exitMenuButtonContainer = new Composite(titleComposite, SWT.NONE);
+    exitMenuButtonContainer.setLayout(UIUtil.createGridLayout(1));
+    exitMenuButtonContainer.setLayoutData(GridDataFactory.swtDefaults().grab(false, true).align(SWT.CENTER, SWT.FILL).create());
+
+    FlatButton exitButton = new ImageHoverButton(exitMenuButtonContainer, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit.png"),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit_hover.png"));
+    exitButton.setShowButtonDownState(false);
+    exitButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BEGINNING).create());
+    exitButton.setToolTipText("Exit");
+    exitButton.addSelectionListener(new SelectionAdapter()
     {
-      captureDownloadButton();
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        exitSelected();
+      }
+    });
+
+    menuButton = new SimpleInstallerMenuButton(exitMenuButtonContainer);
+    menuButton.setLayoutData(GridDataFactory.swtDefaults().grab(false, true).align(SWT.CENTER, SWT.BEGINNING).indent(11, 0).create());
+    menuButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        toggleMenu();
+      }
+    });
+
+    stackLayout = new StackLayout();
+
+    stack = new Composite(this, SWT.NONE);
+    stack.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+    stack.setLayout(stackLayout);
+
+    productPage = new SimpleProductPage(stack, this);
+    variablePage = new SimpleVariablePage(stack, this);
+    readmePage = new SimpleReadmePage(stack, this);
+    installationLogPage = new SimpleInstallationLogPage(stack, this);
+    keepInstallerPage = new SimpleKeepInstallerPage(stack, this);
+
+    switchToPage(productPage);
+
+    Display display = getDisplay();
+
+    Thread updateSearcher = new UpdateSearcher(display);
+    updateSearcher.start();
+
+    display.timerExec(500, new Runnable()
+    {
+      public void run()
+      {
+        installer.getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
+        installer.loadIndex();
+      }
+    });
+
+    // Initialize menu
+    getInstallerMenu();
+
+    updateAvailable(false);
+  }
+
+  private void toggleMenu()
+  {
+    getInstallerMenu().setVisible(!getInstallerMenu().isVisible());
+  }
+
+  public Installer getInstaller()
+  {
+    return installer;
+  }
+
+  public void setButtonsEnabled(boolean enabled)
+  {
+    menuButton.setEnabled(enabled);
+  }
+
+  private void enablePool(boolean poolEnabled)
+  {
+    if (this.poolEnabled != poolEnabled)
+    {
+      this.poolEnabled = poolEnabled;
+      PREF_POOL_ENABLED.set(poolEnabled);
     }
 
-    updateButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/update.png"), true);
-    updateButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
-    updateButton.setToolTipText("Update installer");
-    updateButton.setVisible(false);
-    updateButton.addSelectionListener(new SelectionAdapter()
+    if (poolEnabled)
+    {
+      pool = P2Util.getAgentManager().getDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName());
+    }
+    else
+    {
+      pool = null;
+    }
+
+    // FIXME: Enabled/Disabled state for bundle pooling?
+    // if (poolButton != null)
+    // {
+    // poolButton.setImage(getBundlePoolImage());
+    // }
+  }
+
+  public BundlePool getPool()
+  {
+    return pool;
+  }
+
+  private SimpleInstallerMenu getInstallerMenu()
+  {
+    if (installerMenu == null)
+    {
+      installerMenu = createInstallerMenu();
+    }
+
+    return installerMenu;
+  }
+
+  private SimpleInstallerMenu createInstallerMenu()
+  {
+    SimpleInstallerMenu menu = new SimpleInstallerMenu(this);
+
+    SimpleInstallerMenu.InstallerMenuItem networkConnectionsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    networkConnectionsItem.setText(NetworkConnectionsDialog.TITLE.toUpperCase() + "...");
+    networkConnectionsItem.setToolTipText(NetworkConnectionsDialog.DESCRIPTION);
+    networkConnectionsItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        Dialog dialog = new NetworkConnectionsDialog(SimpleInstallerDialog.this);
+        dialog.open();
+      }
+    });
+
+    SimpleInstallerMenu.InstallerMenuItem bundlePoolsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    bundlePoolsItem.setText("BUNDLE POOLS...");
+    bundlePoolsItem.setToolTipText(AgentManagerDialog.MESSAGE);
+    bundlePoolsItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        manageBundlePools();
+      }
+    });
+
+    SimpleInstallerMenu.InstallerMenuItem ssh2KeysItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    ssh2KeysItem.setText(NetworkSSH2Dialog.TITLE.toUpperCase() + "...");
+    ssh2KeysItem.setToolTipText(NetworkSSH2Dialog.DESCRIPTION);
+    ssh2KeysItem.setDividerVisible(false);
+    ssh2KeysItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        Dialog dialog = new NetworkSSH2Dialog(SimpleInstallerDialog.this);
+        dialog.open();
+      }
+    });
+
+    Label spacer1 = new Label(menu, SWT.NONE);
+    spacer1.setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 46).create());
+
+    updateInstallerItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    updateInstallerItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle.png"));
+    updateInstallerItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle_hover.png"));
+    updateInstallerItem.setText("UPDATE");
+    updateInstallerItem.setToolTipText("Install available updates");
+    updateInstallerItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
@@ -111,10 +311,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
-    advancedButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/advanced.png"), true);
-    advancedButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
-    advancedButton.setToolTipText("Switch to advanced mode");
-    advancedButton.addSelectionListener(new SelectionAdapter()
+    SimpleInstallerMenu.InstallerMenuItem advancedModeItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    advancedModeItem.setText("ADVANCED");
+    advancedModeItem.setToolTipText("Switch to advanced mode");
+    advancedModeItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
@@ -124,10 +324,22 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
-    ToolButton exitButton = new ToolButton(titleComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit.png"), true);
-    exitButton.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
-    exitButton.setToolTipText("Exit");
-    exitButton.addSelectionListener(new SelectionAdapter()
+    SimpleInstallerMenu.InstallerMenuItem aboutItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    aboutItem.setText("ABOUT");
+    aboutItem.setToolTipText("Show information about this installer");
+    aboutItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        showAbout();
+      }
+    });
+
+    SimpleInstallerMenu.InstallerMenuItem exitItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    exitItem.setText("EXIT");
+    exitItem.setDividerVisible(false);
+    exitItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
@@ -136,48 +348,74 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
-    stackLayout = new StackLayout();
+    return menu;
+  }
 
-    stack = new Composite(this, SWT.NONE);
-    stack.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-    stack.setLayout(stackLayout);
+  private void updateAvailable(boolean available)
+  {
+    menuButton.setNotificationVisible(available);
+    updateInstallerItem.setVisible(available);
+    installerMenu.layout();
+  }
 
-    productPage = new SimpleProductPage(stack, SWT.NONE, this);
-    variablePage = new SimpleVariablePage(stack, SWT.NONE, this);
+  private void manageBundlePools()
+  {
+    final boolean[] enabled = { poolEnabled };
 
-    stackLayout.topControl = productPage;
-    productPage.setFocus();
-
-    Display display = getDisplay();
-
-    Thread updateSearcher = new UpdateSearcher(display);
-    updateSearcher.start();
-
-    display.timerExec(500, new Runnable()
+    AgentManagerDialog dialog = new AgentManagerDialog(getShell())
     {
-      public void run()
+      @Override
+      protected void createUI(Composite parent)
       {
-        installer.getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
-        installer.loadIndex();
+        final Button enabledButton = new Button(parent, SWT.CHECK);
+        enabledButton.setText("Enable shared bundle pool");
+        enabledButton.setSelection(poolEnabled);
+        enabledButton.addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            enabled[0] = enabledButton.getSelection();
+            getComposite().setEnabled(enabled[0]);
+          }
+        });
+
+        new Label(parent, SWT.NONE);
+        super.createUI(parent);
+        getComposite().setEnabled(poolEnabled);
       }
-    });
-  }
 
-  public Installer getInstaller()
-  {
-    return installer;
-  }
+      @Override
+      protected void createButtonsForButtonBar(Composite parent)
+      {
+        super.createButtonsForButtonBar(parent);
+        Button button = getButton(IDialogConstants.OK_ID);
+        if (button != null)
+        {
+          button.setEnabled(false);
+        }
+      }
 
-  public void setButtonsEnabled(boolean enabled)
-  {
-    if (updateButton != null)
+      @Override
+      protected void elementChanged(Object element)
+      {
+        Button button = getButton(IDialogConstants.OK_ID);
+        if (button != null)
+        {
+          button.setEnabled(element instanceof BundlePool);
+        }
+      }
+    };
+
+    if (pool != null)
     {
-      updateButton.setEnabled(enabled);
+      dialog.setSelectedElement(pool);
     }
 
-    if (advancedButton != null)
+    if (dialog.open() == AgentManagerDialog.OK)
     {
-      advancedButton.setEnabled(enabled);
+      enablePool(enabled[0]);
+      pool = (BundlePool)dialog.getSelectedElement();
     }
   }
 
@@ -203,77 +441,210 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   public void productSelected(Product product)
   {
     variablePage.setProduct(product);
-    UIUtil.asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        variablePage.setFocus();
-      }
-    });
-
-    stackLayout.topControl = variablePage;
-    stack.layout();
+    switchToPage(variablePage);
   }
 
   public void backSelected()
   {
+    if (pageStack.size() <= 1)
+    {
+      return;
+    }
+
     UIUtil.asyncExec(new Runnable()
     {
       public void run()
       {
-        productPage.reset(); // TODO Use JavaScript, so that the browser doesn't scroll to top!
-        productPage.setFocus();
-      }
-    });
+        SimpleInstallerPage currentPage = pageStack.pop();
 
-    stackLayout.topControl = productPage;
-    stack.layout();
-  }
-
-  private void captureDownloadButton()
-  {
-    final Shell captureShell = new Shell(this, SWT.NO_TRIM | SWT.MODELESS);
-    captureShell.setLayout(new FillLayout());
-
-    Image image = SetupInstallerPlugin.INSTANCE.getSWTImage("/download.png");
-
-    final ToolButton downloadActiveButton = new ToolButton(captureShell, SWT.RADIO, image, false);
-    downloadActiveButton.setBackground(WHITE);
-    downloadActiveButton.setSelection(true);
-
-    final ToolButton downloadHoverButton = new ToolButton(captureShell, SWT.PUSH, image, false);
-    downloadHoverButton.setBackground(WHITE);
-    downloadHoverButton.addMouseMoveListener(new MouseMoveListener()
-    {
-      public void mouseMove(MouseEvent e)
-      {
         try
         {
-          AccessUtil.save(new File("/develop/download_hover.png"), downloadHoverButton);
-          AccessUtil.save(new File("/develop/download_active.png"), downloadActiveButton);
+          currentPage.aboutToHide();
         }
         catch (Exception ex)
         {
-          ex.printStackTrace();
+          SetupInstallerPlugin.INSTANCE.log(ex);
         }
-        finally
-        {
-          // captureShell.dispose();
-        }
+
+        SimpleInstallerPage previousPage = pageStack.peek();
+
+        stackLayout.topControl = previousPage;
+        stack.layout();
+
+        previousPage.aboutToShow();
+        previousPage.setFocus();
       }
     });
+  }
 
-    captureShell.pack();
-    captureShell.open();
+  public void showMessage(String message, MessageOverlay.Type type, boolean dismissAutomatically)
+  {
+    showMessage(message, type, dismissAutomatically, null);
+  }
 
-    Point pt = getDisplay().map(downloadHoverButton, null, 10, 10);
-    downloadHoverButton.setFocus();
+  public void showMessage(String message, MessageOverlay.Type type, boolean dismissAutomatically, Runnable action)
+  {
+    clearMessage();
 
-    Event event = new Event();
-    event.type = SWT.MouseMove;
-    event.x = pt.x;
-    event.y = pt.y;
-    getDisplay().post(event);
+    currentMessage = new MessageOverlay(this, type, new ControlRelocator()
+    {
+      public void relocate(Control control)
+      {
+        Rectangle bounds = SimpleInstallerDialog.this.getBounds();
+        int x = bounds.x + 5;
+        int y = bounds.y + 24;
+
+        int width = bounds.width - 9;
+
+        // Depending on the current page, the height varies
+        int height = pageStack.peek() instanceof SimpleProductPage ? 87 : 70;
+        control.setBounds(x, y, width, height);
+      }
+    }, dismissAutomatically, action);
+
+    currentMessage.setMessage(message);
+    currentMessage.setVisible(true);
+  }
+
+  public void clearMessage()
+  {
+    if (currentMessage != null && !currentMessage.isDisposed())
+    {
+      if (!currentMessage.isDisposed())
+      {
+        currentMessage.close();
+      }
+
+      currentMessage = null;
+    }
+  }
+
+  public void showReadme(URI readmeURI)
+  {
+    readmePage.setReadmeURI(readmeURI);
+    switchToPage(readmePage);
+  }
+
+  public void showInstallationLog(File installationLogFile)
+  {
+    installationLogPage.setInstallationLogFile(installationLogFile);
+    switchToPage(installationLogPage);
+  }
+
+  public void showKeepInstaller()
+  {
+    switchToPage(keepInstallerPage);
+  }
+
+  private void switchToPage(final SimpleInstallerPage page)
+  {
+    if (page != null)
+    {
+      final SimpleInstallerPage currentPage = !pageStack.isEmpty() ? pageStack.peek() : null;
+      if (currentPage == null || currentPage != page)
+      {
+        pageStack.push(page);
+
+        UIUtil.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            if (currentPage != null)
+            {
+              currentPage.aboutToHide();
+            }
+
+            stackLayout.topControl = page;
+            stack.layout();
+
+            page.aboutToShow();
+            page.setFocus();
+          }
+        });
+      }
+    }
+  }
+
+  static Font getDefaultFont()
+  {
+    if (defaultFont == null)
+    {
+      defaultFont = JFaceResources.getFont(SetupInstallerPlugin.FONT_LABEL_DEFAULT);
+      if (defaultFont == null)
+      {
+        defaultFont = UIUtil.getDisplay().getSystemFont();
+      }
+    }
+
+    return defaultFont;
+  }
+
+  static String getCSS()
+  {
+    if (css == null)
+    {
+      try
+      {
+        css = readBundleResource("html/css/simpleInstaller.css");
+      }
+      catch (IOException ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
+    }
+
+    return css;
+  }
+
+  static String getPageTemplate()
+  {
+    if (pageTemplate == null)
+    {
+      try
+      {
+        pageTemplate = readBundleResource("html/PageTemplate.html");
+
+        // Embed CSS
+        pageTemplate = pageTemplate.replace("%INSTALLER_CSS%", SimpleInstallerDialog.getCSS());
+      }
+      catch (IOException ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
+    }
+
+    return pageTemplate;
+  }
+
+  static String getProductTemplate()
+  {
+    if (productTemplate == null)
+    {
+      try
+      {
+        productTemplate = readBundleResource("html/ProductTemplate.html");
+      }
+      catch (IOException ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
+    }
+
+    return productTemplate;
+  }
+
+  private static String readBundleResource(final String name) throws IOException
+  {
+    try
+    {
+      BundleFile root = SetupInstallerPlugin.INSTANCE.getRootFile();
+      BundleFile child = root.getChild(name);
+      return child.getContentsString();
+    }
+    catch (Exception ex)
+    {
+      throw new IOExceptionWithCause(ex);
+    }
   }
 
   /**
@@ -302,10 +673,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
           {
             public void run()
             {
-              if (!updateButton.isDisposed())
-              {
-                updateButton.setVisible(true);
-              }
+              updateAvailable(true);
             }
           });
         }

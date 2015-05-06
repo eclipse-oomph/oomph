@@ -7,27 +7,31 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Yatta Solutions - [466264] Enhance UX in simple installer
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.ui.FlatButton;
+import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.util.URI;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * @author Eike Stepper
@@ -38,26 +42,146 @@ public abstract class SimpleInstallerPage extends Composite
 
   public static final RGB ACTIVE_RGB = new RGB(196, 211, 254);
 
-  private static final URI FONT_URI = URI.createURI("font://Helvetica/14///");
+  public static final Color COLOR_PAGE_BORDER = SetupInstallerPlugin.getColor(238, 238, 238);
 
-  protected final Font font;
+  protected static final Font FONT_LABEL = SimpleInstallerDialog.getDefaultFont();
 
   protected final Installer installer;
 
   protected final SimpleInstallerDialog dialog;
 
-  public SimpleInstallerPage(final Composite parent, int style, final SimpleInstallerDialog dialog)
+  private final FlatButton backButton;
+
+  public SimpleInstallerPage(final Composite parent, final SimpleInstallerDialog dialog, boolean withBackButton)
   {
-    super(parent, style);
-    font = SetupInstallerPlugin.getFont(parent.getFont(), FONT_URI);
+    super(parent, SWT.NONE);
     installer = dialog.getInstaller();
     this.dialog = dialog;
+
+    GridLayout layout = new GridLayout(1, false);
+    layout.marginWidth = 3;
+    layout.marginHeight = 4;
+    layout.verticalSpacing = 0;
+    setLayout(layout);
+
+    Composite container = new Composite(this, SWT.NONE);
+    GridLayout containerLayout = UIUtil.createGridLayout(1);
+    containerLayout.verticalSpacing = 0;
+    container.setLayout(containerLayout);
+    container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+    container.setBackground(COLOR_PAGE_BORDER);
+
+    createContent(container);
+
+    if (withBackButton)
+    {
+      Composite buttonContainer = new Composite(this, SWT.NONE);
+      buttonContainer.setLayout(UIUtil.createGridLayout(1));
+      buttonContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 33).create());
+      buttonContainer.setBackgroundMode(SWT.INHERIT_FORCE);
+      buttonContainer.setBackground(SetupInstallerPlugin.COLOR_WHITE);
+
+      backButton = new BackButton(buttonContainer);
+      backButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(15, 0).create());
+      backButton.setToolTipText("Back");
+      backButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          dialog.backSelected();
+        }
+      });
+    }
+    else
+    {
+      backButton = null;
+    }
+  }
+
+  @Override
+  public void setEnabled(boolean enabled)
+  {
+    if (backButton != null)
+    {
+      backButton.setEnabled(enabled);
+    }
+  }
+
+  protected Text createTextField(Composite parent)
+  {
+    Composite textContainer = createInputFieldWrapper(parent, 0, 7, 0, 7);
+    applyComboOrTextStyle(textContainer);
+
+    Text textField = new Text(textContainer, SWT.NONE | SWT.SINGLE);
+    textField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
+    applyComboOrTextStyle(textField);
+
+    return textField;
+  }
+
+  protected CCombo createComboBox(Composite parent, int style)
+  {
+    Composite comboContainer = createInputFieldWrapper(parent, 0, 0, 0, 7);
+    applyComboOrTextStyle(comboContainer);
+
+    CCombo combo = new CCombo(comboContainer, style);
+    combo.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
+    applyComboOrTextStyle(combo);
+
+    return combo;
+  }
+
+  private Composite createInputFieldWrapper(Composite parent, int marginTop, int marginRight, int marginBottom, int marginLeft)
+  {
+    GridLayout textContainerLayout = new GridLayout();
+    textContainerLayout.marginHeight = 0;
+    textContainerLayout.marginWidth = 0;
+    textContainerLayout.marginTop = marginTop;
+    textContainerLayout.marginRight = marginRight;
+    textContainerLayout.marginBottom = marginBottom;
+    textContainerLayout.marginLeft = marginLeft;
+
+    Composite textContainer = new Composite(parent, SWT.NONE);
+    textContainer.setLayout(textContainerLayout);
+    textContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 30).create());
+    textContainer.setBackgroundMode(SWT.INHERIT_FORCE);
+    return textContainer;
+  }
+
+  protected abstract void createContent(Composite container);
+
+  public void aboutToShow()
+  {
+    // Subclasses may implement.
+  }
+
+  public void aboutToHide()
+  {
+    // Subclasses may implement.
+  }
+
+  protected void applyComboOrTextStyle(Control control)
+  {
+    control.setFont(SetupInstallerPlugin.getFont(FONT_LABEL, URI.createURI("font:///10/normal")));
+    control.setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+    control.setBackground(SetupInstallerPlugin.COLOR_LIGHTEST_GRAY);
+  }
+
+  protected Label createLabel(Composite parent, String text)
+  {
+    Label label = new Label(parent, SWT.NONE);
+    label.setLayoutData(GridDataFactory.swtDefaults().create());
+    label.setText(text);
+    label.setFont(FONT_LABEL);
+    label.setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+    return label;
   }
 
   @Override
   protected void checkSubclass()
   {
-    // Disable the check that prevents subclassing of SWT components.
+    // Allow subclassing.
   }
 
   public static String hex(RGB color)
@@ -77,123 +201,25 @@ public abstract class SimpleInstallerPage extends Composite
   }
 
   /**
-   * @author Eike Stepper
+   * @author Andreas Scharf
    */
-  public static abstract class ImageButton extends Label implements MouseTrackListener, MouseMoveListener, MouseListener, SelectionListener
+  private static class BackButton extends ImageHoverButton
   {
-    private static final Color HOVER_COLOR = SetupInstallerPlugin.getColor(HOVER_RGB);
+    private static final Image ARROW_LEFT = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left.png");
 
-    private static final Color ACTIVE_COLOR = SetupInstallerPlugin.getColor(ACTIVE_RGB);
+    private static final Image ARROW_LEFT_HOVER = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left_hover.png");
 
-    private Color oldBackground;
+    private static final Image ARROW_LEFT_DISABLED = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left_disabled.png");
 
-    private boolean mouseDown;
+    private static final Font FONT = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///10/bold"));
 
-    public ImageButton(Composite parent, Image image)
+    public BackButton(Composite parent)
     {
-      super(parent, SWT.NONE);
-      setImage(image);
-
-      addMouseTrackListener(this);
-      addMouseMoveListener(this);
-      addMouseListener(this);
+      super(parent, SWT.PUSH, ARROW_LEFT, ARROW_LEFT_HOVER, ARROW_LEFT_DISABLED);
+      setIconTextGap(16);
+      setText("BACK");
+      setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+      setFont(FONT);
     }
-
-    public void mouseEnter(MouseEvent e)
-    {
-      if (oldBackground == null)
-      {
-        oldBackground = getBackground();
-      }
-
-      if (mouseDown)
-      {
-        setBackground(ACTIVE_COLOR);
-      }
-      else
-      {
-        setBackground(HOVER_COLOR);
-      }
-    }
-
-    public void mouseExit(MouseEvent e)
-    {
-      if (oldBackground != null)
-      {
-        setBackground(oldBackground);
-        oldBackground = null;
-      }
-    }
-
-    public void mouseHover(MouseEvent e)
-    {
-      // Do nothing.
-    }
-
-    public void mouseMove(MouseEvent e)
-    {
-      Rectangle bounds = getBounds();
-      bounds.x = 0;
-      bounds.y = 0;
-
-      if (bounds.contains(e.x, e.y))
-      {
-        if (oldBackground == null)
-        {
-          mouseEnter(null);
-        }
-      }
-      else
-      {
-        if (oldBackground != null)
-        {
-          mouseExit(null);
-        }
-      }
-    }
-
-    public void mouseDoubleClick(MouseEvent e)
-    {
-      // Do nothing.
-    }
-
-    public void mouseDown(MouseEvent e)
-    {
-      mouseDown = true;
-      setBackground(ACTIVE_COLOR);
-    }
-
-    public void mouseUp(MouseEvent e)
-    {
-      if (oldBackground != null)
-      {
-        setBackground(HOVER_COLOR);
-        widgetSelected();
-      }
-      else
-      {
-        mouseExit(null);
-      }
-
-      mouseDown = false;
-    }
-
-    public void widgetDefaultSelected(SelectionEvent e)
-    {
-      // Do nothing.
-    }
-
-    public void widgetSelected(SelectionEvent e)
-    {
-      widgetSelected();
-    }
-
-    @Override
-    protected void checkSubclass()
-    {
-      // Disable the check that prevents subclassing of SWT components.
-    }
-
-    protected abstract void widgetSelected();
   }
 }

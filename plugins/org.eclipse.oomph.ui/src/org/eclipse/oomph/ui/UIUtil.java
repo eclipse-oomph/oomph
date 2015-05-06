@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Resource;
@@ -44,6 +45,8 @@ import java.lang.reflect.InvocationTargetException;
 public final class UIUtil
 {
   public static final IWorkbench WORKBENCH;
+
+  public static final Color COLOR_PURPLE = UIPlugin.getColor(44, 34, 85);
 
   private static Image ERROR_IMAGE;
 

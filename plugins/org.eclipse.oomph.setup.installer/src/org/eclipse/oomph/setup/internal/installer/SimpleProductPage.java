@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Yatta Solutions - [466264] Enhance UX in simple installer
  */
 package org.eclipse.oomph.setup.internal.installer;
 
@@ -20,7 +21,6 @@ import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
-import org.eclipse.oomph.ui.SearchField;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.SpriteAnimator;
 import org.eclipse.oomph.ui.StackComposite;
@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -54,17 +55,11 @@ import java.util.List;
  */
 public class SimpleProductPage extends SimpleInstallerPage implements FilterHandler
 {
+  private static final int MAX_DESCRIPTION_LENGTH = 120;
+
   private static final String PRODUCT_PREFIX = "product://";
 
-  private static final String downloadImageURI = ProductPage.getImageURI(SetupInstallerPlugin.INSTANCE, "simple/download.png");
-
-  private static final String downloadHoverImageURI = ProductPage.getImageURI(SetupInstallerPlugin.INSTANCE, "simple/download_hover.png");
-
-  private static final String downloadActiveImageURI = ProductPage.getImageURI(SetupInstallerPlugin.INSTANCE, "simple/download_active.png");
-
-  private static final boolean FANCY = false; // OS.INSTANCE.isWin();
-
-  private SearchField searchField;
+  private SimpleSearchField searchField;
 
   private ToolBar buttonBar;
 
@@ -76,25 +71,22 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   private Browser browser;
 
-  public SimpleProductPage(final Composite parent, int style, final SimpleInstallerDialog dialog)
+  public SimpleProductPage(final Composite parent, final SimpleInstallerDialog dialog)
   {
-    super(parent, style, dialog);
+    super(parent, dialog, false);
+  }
 
-    GridLayout layout = UIUtil.createGridLayout(1);
-    layout.verticalSpacing = 20;
-    setLayout(layout);
-
+  @Override
+  protected void createContent(Composite container)
+  {
     GridLayout searchLayout = UIUtil.createGridLayout(2);
-    searchLayout.marginWidth = SimpleInstallerDialog.MARGIN_WIDTH;
+    searchLayout.horizontalSpacing = 0;
 
-    Composite searchComposite = new Composite(this, SWT.NONE);
+    Composite searchComposite = new Composite(container, SWT.NONE);
     searchComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     searchComposite.setLayout(searchLayout);
 
-    GridData searchFieldData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-    searchFieldData.widthHint = 350;
-
-    searchField = new SearchField(searchComposite, SimpleProductPage.this)
+    searchField = new SimpleSearchField(searchComposite, SimpleProductPage.this)
     {
       @Override
       protected void finishFilter()
@@ -102,17 +94,19 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         browser.setFocus();
       }
     };
-    searchField.setLayoutData(searchFieldData);
-    searchField.getFilterControl().setFont(font);
+
+    searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).hint(SWT.DEFAULT, 34).create());
 
     buttonBar = new ToolBar(searchComposite, SWT.FLAT | SWT.RIGHT);
-    buttonBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    buttonBar.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).exclude(true).create());
 
     CatalogManager catalogManager = installer.getCatalogManager();
     catalogSelector = new CatalogSelector(catalogManager, true);
 
-    stackComposite = new StackComposite(this, SWT.NONE);
-    stackComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    stackComposite = new StackComposite(container, SWT.NONE);
+    stackComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).indent(0, 4).create());
+    stackComposite.setBackgroundMode(SWT.INHERIT_FORCE);
+    stackComposite.setBackground(SetupInstallerPlugin.COLOR_WHITE);
 
     final SpriteIndexLoader indexLoader = new SpriteIndexLoader(stackComposite);
 
@@ -176,6 +170,14 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   }
 
   @Override
+  public void aboutToHide()
+  {
+    super.aboutToHide();
+    reset(); // TODO Use JavaScript, so that the browser doesn't scroll to top!
+    setFocus();
+  }
+
+  @Override
   public boolean setFocus()
   {
     return browser.setFocus();
@@ -183,35 +185,13 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   public void handleFilter(String filter)
   {
-    String filterText = searchField.getFilterControl().getText();
+    String filterText = searchField.getFilterText();
     if (filterText.length() != 0)
     {
       filter = filterText;
     }
 
-    StringBuilder builder = new StringBuilder();
-    builder.append("<html><style TYPE=\"text/css\"><!-- ");
-    builder.append("table{width:100%; border:none; border-collapse:collapse}");
-    builder.append(".label{font-size:1.1em; font-weight:700}");
-    builder.append(".description{font-size:14px; color:#333}");
-    builder.append(".col{padding:10px; border-top:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb}");
-    builder.append(".col1{text-align:center}");
-    builder.append(".col2{width:100%}");
-    builder.append(".col3{text-align:center}");
-    builder.append(".zebra{background-color:#fafafa}");
-    if (FANCY)
-    {
-      builder
-          .append("a.dl{background-image:url('" + downloadImageURI + "'); background-repeat:no-repeat; background-position:top left; width:57px; height:56px}");
-      builder.append("a.dl:hover{background-image:url('" + downloadHoverImageURI + "')}");
-      builder.append("a.dl:active{background-image:url('" + downloadActiveImageURI + "')}");
-    }
-    else
-    {
-      builder.append("img.dl{border-style:none}");
-    }
-
-    builder.append(" --></style><body style=\"margin:0px; overflow:auto; font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif\"><table>\n");
+    StringBuilder productsBuilder = new StringBuilder();
 
     boolean noFilter = StringUtil.isEmpty(filter);
     if (!noFilter)
@@ -219,7 +199,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       filter = filter.toLowerCase();
     }
 
-    boolean zebra = true;
     for (Scope scope : catalogSelector.getSelectedCatalogs())
     {
       if (scope instanceof ProductCatalog)
@@ -230,25 +209,16 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           if (!ProductPage.getValidProductVersions(product).isEmpty()
               && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter)))
           {
-            renderProduct(builder, product, zebra, downloadImageURI);
-            zebra = !zebra;
+            productsBuilder.append(renderProduct(product, false, true));
           }
         }
       }
     }
 
-    String html = getHtml(builder);
-
-    // try
-    // {
-    // IOUtil.writeUTF8(new File("/develop/products.html"), html);
-    // }
-    // catch (Exception ex)
-    // {
-    // ex.printStackTrace();
-    // }
-
-    browser.setText(html, true);
+    String productPageHTML = SimpleInstallerDialog.getProductTemplate();
+    String simpleInstallerHTML = SimpleInstallerDialog.getPageTemplate();
+    productPageHTML = simpleInstallerHTML.replace("%CONTENT%", productsBuilder.toString());
+    browser.setText(productPageHTML, true);
   }
 
   public void reset()
@@ -288,68 +258,9 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     }
   }
 
-  public static String getHtml(StringBuilder builder)
+  private static String removeLinks(String description)
   {
-    builder.append("</table></body></html>\n");
-    return builder.toString();
-  }
-
-  public static void renderProduct(StringBuilder builder, Product product, boolean zebra, String downloadImageURI)
-  {
-    String imageURI = ProductPage.getProductImageURI(product);
-
-    String description = product.getDescription();
-    if (description != null && downloadImageURI != null)
-    {
-      int dot = findFirstDot(description);
-      if (dot == -1)
-      {
-        description += ".";
-      }
-      else
-      {
-        description = description.substring(0, dot + 1);
-      }
-    }
-
-    String label = product.getLabel();
-    if (StringUtil.isEmpty(label))
-    {
-      label = product.getName();
-    }
-
-    builder.append("<tr class=\"row" + (zebra ? " zebra" : "") + "\">");
-
-    builder.append("<td class=\"col col1\"><img src=\"");
-    builder.append(imageURI);
-    builder.append("\" width=\"42\" height=\"42\"></img></td>");
-
-    builder.append("<td class=\"col col2\"><p class=\"label\">");
-    builder.append(label);
-    builder.append("</p>");
-
-    if (description != null)
-    {
-      builder.append("<p class=\"description\">");
-      builder.append(description);
-      builder.append("</p></td>");
-    }
-
-    if (downloadImageURI != null)
-    {
-      if (FANCY)
-      {
-        builder.append("<td class=\"col col3\"><a class=\"dl\" href=\"product://" + product.getProductCatalog().getName() + "/" + product.getName()
-            + "\" title=\"Select\"/></td>");
-      }
-      else
-      {
-        builder.append("<td class=\"col col3\"><a class=\"dl\" href=\"product://" + product.getProductCatalog().getName() + "/" + product.getName()
-            + "\" title=\"Select\"><img class=\"dl\" src=\"" + downloadImageURI + "\"/></a></td>");
-      }
-    }
-
-    builder.append("</tr>\n");
+    return description.replaceAll("</?a[^>]*>", "");
   }
 
   private static int findFirstDot(String description)
@@ -389,6 +300,66 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     }
 
     return string.toLowerCase().contains(filter);
+  }
+
+  public static String renderProduct(Product product, boolean large, boolean link)
+  {
+    String imageURI = ProductPage.getProductImageURI(product);
+
+    String label = product.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = product.getName();
+    }
+
+    String description = product.getDescription();
+    if (description != null)
+    {
+      int dot = findFirstDot(description);
+      if (dot == -1)
+      {
+        description += ".";
+      }
+      else
+      {
+        description = description.substring(0, dot + 1);
+      }
+    }
+    else
+    {
+      // TODO: Empty string? Or something like "No description available"?
+      description = "";
+    }
+
+    String containerStyle = "productContainer";
+
+    if (!large)
+    {
+      description = StringUtil.shorten(description, MAX_DESCRIPTION_LENGTH, true);
+      description = removeLinks(description);
+      containerStyle += " noSelect";
+    }
+
+    String productHtml = SimpleInstallerDialog.getProductTemplate();
+
+    if (link)
+    {
+      String productLink = "product://" + product.getProductCatalog().getName() + "/" + product.getName();
+      productHtml = productHtml.replace("%PRODUCT_LINK%", productLink);
+
+      containerStyle += " productLink";
+    }
+
+    if (large)
+    {
+      containerStyle += " largeProduct";
+    }
+
+    productHtml = productHtml.replace("%PRODUCT_CONTAINER_STYLE%", containerStyle);
+    productHtml = productHtml.replace("%PRODUCT_ICON_SRC%", imageURI);
+    productHtml = productHtml.replace("%PRODUCT_TITLE%", label);
+    productHtml = productHtml.replace("%PRODUCT_DESCRIPTION%", description);
+    return productHtml;
   }
 
   /**
@@ -468,7 +439,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
                       return;
 
                     case 1:
-                      new ProxyPreferenceDialog(getShell()).open();
+                      new NetworkConnectionsDialog(getShell()).open();
                       installer.reloadIndex();
                       return;
 

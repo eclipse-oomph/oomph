@@ -147,7 +147,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
                   return;
 
                 case 1:
-                  new ProxyPreferenceDialog(getShell()).open();
+                  new NetworkConnectionsDialog(getShell()).open();
                   installer.reloadIndex();
                   shell.getDisplay().asyncExec(checkIndex);
                   return;
@@ -180,7 +180,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        Dialog dialog = new ProxyPreferenceDialog(getShell());
+        Dialog dialog = new NetworkConnectionsDialog(getShell());
         dialog.open();
       }
     });
@@ -192,7 +192,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        Dialog dialog = new SSH2PreferenceDialog(getShell());
+        Dialog dialog = new NetworkSSH2Dialog(getShell());
         dialog.open();
       }
     });

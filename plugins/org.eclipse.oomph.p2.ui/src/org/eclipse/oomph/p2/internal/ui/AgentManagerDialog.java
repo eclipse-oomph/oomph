@@ -24,7 +24,7 @@ public class AgentManagerDialog extends OomphDialog
 {
   public static final String TITLE = "Bundle Pool Management";
 
-  private static final String MESSAGE = "Manage your p2 agents and bundle pools.";
+  public static final String MESSAGE = "Manage your p2 agents and bundle pools";
 
   private Object selectedElement;
 
@@ -65,7 +65,7 @@ public class AgentManagerDialog extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    return MESSAGE;
+    return MESSAGE + ".";
   }
 
   @Override
@@ -98,7 +98,7 @@ public class AgentManagerDialog extends OomphDialog
       protected void profilesShown(boolean profilesShown)
       {
         super.profilesShown(profilesShown);
-        String message = MESSAGE;
+        String message = MESSAGE + ".";
         if (profilesShown)
         {
           message += " Double-click profiles to see their details.";

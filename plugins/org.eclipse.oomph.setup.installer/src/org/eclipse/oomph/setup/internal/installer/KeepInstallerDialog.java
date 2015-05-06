@@ -7,13 +7,11 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Yatta Solutions - [466264] Enhance UX in simple installer
  */
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
-import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.OS;
-import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -37,7 +35,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -45,12 +42,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 public final class KeepInstallerDialog extends AbstractSetupDialog
 {
-  private static final Preference PREF_KEPT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("kept");
-
-  private static boolean kept = PREF_KEPT.get(false);
-
-  private static String powerShell;
-
   private final boolean startPermanentInstaller;
 
   private String location;
@@ -176,7 +167,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       }
     });
 
-    if (getPowerShell() != null)
+    if (InstallerUtil.getPowerShell() != null)
     {
       new Label(parent, SWT.NONE);
       startMenuButton = new Button(parent, SWT.CHECK);
@@ -234,7 +225,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             monitor.beginTask("Copying installer to " + location, IProgressMonitor.UNKNOWN);
-            keepInstaller(launcher, startMenu, desktop, quickLaunch);
+            InstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, quickLaunch);
             monitor.done();
           }
         });
@@ -250,145 +241,5 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     }
 
     super.okPressed();
-  }
-
-  protected void keepInstaller(String launcher, boolean startMenu, boolean desktop, boolean quickLaunch)
-  {
-    File source = new File(launcher).getParentFile();
-    File target = new File(location);
-    IOUtil.copyTree(source, target, true);
-
-    String launcherName = new File(launcher).getName();
-    String permanentLauncher = new File(target, launcherName).getAbsolutePath();
-
-    if (startPermanentInstaller)
-    {
-      try
-      {
-        Runtime.getRuntime().exec(permanentLauncher);
-      }
-      catch (Exception ex)
-      {
-        SetupInstallerPlugin.INSTANCE.log(ex);
-      }
-    }
-    else
-    {
-      String url = target.toURI().toString();
-      OS.INSTANCE.openSystemBrowser(url);
-    }
-
-    if (startMenu)
-    {
-      createShortCut("Programs", permanentLauncher);
-    }
-
-    if (desktop)
-    {
-      createShortCut("Desktop", permanentLauncher);
-    }
-
-    if (quickLaunch)
-    {
-      pinToTaskBar(location, launcherName);
-    }
-
-    kept = true;
-    PREF_KEPT.set(true);
-  }
-
-  private static void createShortCut(String specialFolder, String target)
-  {
-    try
-    {
-      String powerShell = getPowerShell();
-      if (powerShell != null)
-      {
-        Runtime.getRuntime()
-            .exec(new String[] { powerShell, "-command",
-                "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) 'Eclipse Installer.lnk'; $targetPath = '" + target
-                    + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
-      }
-    }
-    catch (IOException ex)
-    {
-      SetupInstallerPlugin.INSTANCE.log(ex);
-    }
-  }
-
-  private static void pinToTaskBar(String location, String launcherName)
-  {
-    try
-    {
-      String powerShell = getPowerShell();
-      if (powerShell != null)
-      {
-        Runtime.getRuntime().exec(new String[] { powerShell, "-command",
-            "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
-      }
-    }
-    catch (IOException ex)
-    {
-      SetupInstallerPlugin.INSTANCE.log(ex);
-    }
-  }
-
-  private static String getPowerShell()
-  {
-    if (powerShell == null)
-    {
-      try
-      {
-        String systemRoot = System.getenv("SystemRoot");
-        if (systemRoot != null)
-        {
-          File system32 = new File(systemRoot, "system32");
-          if (system32.isDirectory())
-          {
-            File powerShellFolder = new File(system32, "WindowsPowerShell");
-            if (powerShellFolder.isDirectory())
-            {
-              File[] versions = powerShellFolder.listFiles();
-              if (versions != null)
-              {
-                for (File version : versions)
-                {
-                  try
-                  {
-                    File executable = new File(version, "powershell.exe");
-                    if (executable.isFile())
-                    {
-                      powerShell = executable.getAbsolutePath();
-                      break;
-                    }
-                  }
-                  catch (Exception ex)
-                  {
-                    //$FALL-THROUGH$
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        //$FALL-THROUGH$
-      }
-    }
-
-    return powerShell;
-  }
-
-  public static boolean canKeepInstaller()
-  {
-    if (!kept && OS.INSTANCE.isWin())
-    {
-      String launcher = InstallerApplication.getLauncher();
-      return launcher != null && launcher.startsWith(PropertiesUtil.TEMP_DIR);
-    }
-
-    return false;
   }
 }

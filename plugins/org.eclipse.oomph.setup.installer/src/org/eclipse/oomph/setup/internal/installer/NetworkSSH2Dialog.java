@@ -20,23 +20,27 @@ import org.eclipse.swt.widgets.Shell;
  * @author Eike Stepper
  */
 @SuppressWarnings("restriction")
-public class SSH2PreferenceDialog extends AbstractPreferenceDialog
+public class NetworkSSH2Dialog extends AbstractPreferenceDialog
 {
-  public SSH2PreferenceDialog(Shell parentShell)
+  public static final String TITLE = "SSH2 Keys";
+
+  public static final String DESCRIPTION = "Adjust your SSH2 key settings";
+
+  public NetworkSSH2Dialog(Shell parentShell)
   {
-    super(parentShell, "SSH2 Settings");
+    super(parentShell, TITLE);
   }
 
   @Override
   protected String getShellText()
   {
-    return "Oomph SSH Preferences";
+    return TITLE;
   }
 
   @Override
   protected String getDefaultMessage()
   {
-    return "Adjust your SSH2 settings.";
+    return DESCRIPTION + ".";
   }
 
   @Override
