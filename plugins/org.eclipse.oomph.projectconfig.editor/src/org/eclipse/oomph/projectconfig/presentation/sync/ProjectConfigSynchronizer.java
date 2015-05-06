@@ -293,36 +293,39 @@ public final class ProjectConfigSynchronizer implements IStartup
               private void collectModifiedProperties(Map<Property, Property> result, WorkspaceConfiguration workspaceConfiguration,
                   PreferenceNode oldPreferenceNode, PreferenceNode newPreferenceNode)
               {
-                for (PreferenceNode newChild : newPreferenceNode.getChildren())
+                if (newPreferenceNode != null)
                 {
-                  PreferenceNode oldChild = oldPreferenceNode == null ? null : oldPreferenceNode.getNode(newChild.getName());
-                  if (oldChild == null)
+                  for (PreferenceNode newChild : newPreferenceNode.getChildren())
                   {
-                    for (Property newProperty : newChild.getProperties())
+                    PreferenceNode oldChild = oldPreferenceNode == null ? null : oldPreferenceNode.getNode(newChild.getName());
+                    if (oldChild == null)
+                    {
+                      for (Property newProperty : newChild.getProperties())
+                      {
+                        result.put(newProperty, null);
+                      }
+                    }
+                    else
+                    {
+                      collectModifiedProperties(result, workspaceConfiguration, oldChild, newChild);
+                    }
+                  }
+
+                  for (Property newProperty : newPreferenceNode.getProperties())
+                  {
+                    Property oldProperty = oldPreferenceNode == null ? null : oldPreferenceNode.getProperty(newProperty.getName());
+                    if (oldProperty == null)
                     {
                       result.put(newProperty, null);
                     }
-                  }
-                  else
-                  {
-                    collectModifiedProperties(result, workspaceConfiguration, oldChild, newChild);
-                  }
-                }
-
-                for (Property newProperty : newPreferenceNode.getProperties())
-                {
-                  Property oldProperty = oldPreferenceNode == null ? null : oldPreferenceNode.getProperty(newProperty.getName());
-                  if (oldProperty == null)
-                  {
-                    result.put(newProperty, null);
-                  }
-                  else
-                  {
-                    String newValue = newProperty.getValue();
-                    String oldValue = oldProperty.getValue();
-                    if (newValue == null ? oldValue != null : !newValue.equals(oldValue))
+                    else
                     {
-                      result.put(newProperty, oldProperty);
+                      String newValue = newProperty.getValue();
+                      String oldValue = oldProperty.getValue();
+                      if (newValue == null ? oldValue != null : !newValue.equals(oldValue))
+                      {
+                        result.put(newProperty, oldProperty);
+                      }
                     }
                   }
                 }
