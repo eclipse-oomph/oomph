@@ -98,7 +98,7 @@ public class CachingTransport extends Transport
     synchronized (getLock(uri))
     {
       File cacheFile = getCacheFile(uri);
-      if (cacheFile.exists())
+      if (cacheFile.length() > 0)
       {
         FileInputStream cacheInputStream = null;
         try
@@ -187,7 +187,7 @@ public class CachingTransport extends Transport
     if (isLoadingRepository(uri) && OfflineMode.isEnabled())
     {
       File cacheFile = getCacheFile(uri);
-      if (cacheFile.exists())
+      if (cacheFile.length() > 0)
       {
         return cacheFile.lastModified();
       }
@@ -217,7 +217,7 @@ public class CachingTransport extends Transport
     catch (CoreException exception)
     {
       File cacheFile = getCacheFile(uri);
-      if (cacheFile.exists() && confirmCacheUsage(uri, cacheFile))
+      if (cacheFile.length() > 0 && confirmCacheUsage(uri, cacheFile))
       {
         return cacheFile.lastModified();
       }
@@ -227,7 +227,7 @@ public class CachingTransport extends Transport
     catch (FileNotFoundException exception)
     {
       File cacheFile = getCacheFile(uri);
-      if (cacheFile.exists() && confirmCacheUsage(uri, cacheFile))
+      if (cacheFile.length() > 0 && confirmCacheUsage(uri, cacheFile))
       {
         return cacheFile.lastModified();
       }
@@ -237,7 +237,7 @@ public class CachingTransport extends Transport
     catch (AuthenticationFailedException exception)
     {
       File cacheFile = getCacheFile(uri);
-      if (cacheFile.exists() && confirmCacheUsage(uri, cacheFile))
+      if (cacheFile.length() > 0 && confirmCacheUsage(uri, cacheFile))
       {
         return cacheFile.lastModified();
       }
@@ -251,7 +251,7 @@ public class CachingTransport extends Transport
     long lastModified = delegate.getLastModified(uri, monitor);
 
     File cacheFile = getCacheFile(uri);
-    if (!cacheFile.exists())
+    if (cacheFile.length() == 0)
     {
       return lastModified - 1;
     }
