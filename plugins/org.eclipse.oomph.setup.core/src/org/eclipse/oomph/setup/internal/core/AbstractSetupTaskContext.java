@@ -174,12 +174,19 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   public String redirect(String uri)
   {
-    if (StringUtil.isEmpty(uri))
+    if (!StringUtil.isEmpty(uri))
     {
-      return null;
+      try
+      {
+        return redirect(URI.createURI(uri)).toString();
+      }
+      catch (RuntimeException ex)
+      {
+        // Ignore.
+      }
     }
 
-    return redirect(URI.createURI(uri)).toString();
+    return uri;
   }
 
   public URIConverter getURIConverter()
