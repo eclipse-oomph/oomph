@@ -38,6 +38,7 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.installer.InstallLaunchButton.State;
 import org.eclipse.oomph.setup.internal.installer.MessageOverlay.Type;
 import org.eclipse.oomph.setup.log.ProgressLog;
@@ -275,7 +276,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     // Row 4
     javaLabel = createLabel(variablesComposite, "Java VM");
 
-    CCombo javaCombo = createComboBox(variablesComposite, SWT.READ_ONLY);
+    final CCombo javaCombo = createComboBox(variablesComposite, SWT.READ_ONLY);
     applyComboOrTextStyle(javaCombo);
 
     javaViewer = new ComboViewer(javaCombo);
@@ -314,6 +315,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
 
       @Override
+      protected void jreChanged(JRE jre)
+      {
+        super.jreChanged(jre);
+        javaCombo.setToolTipText(jre.getJavaHome().toString());
+      }
+
+      @Override
       protected void setLabel(String text)
       {
         super.setLabel(text + " ");
@@ -332,6 +340,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         String dir = folderText.getText();
         validateFolderText(dir);
+        folderText.setToolTipText(installFolder);
       }
     });
 
@@ -505,6 +514,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
       javaController.setJavaVersion(requiredJavaVersion);
 
       ProductPage.saveProductVersionSelection(installer.getCatalogManager(), selectedProductVersion);
+
+      versionCombo.setToolTipText(SetupCoreUtil.getLabel(selectedProductVersion));
     }
   }
 
@@ -532,17 +543,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     for (ProductVersion productVersion : ProductPage.getValidProductVersions(product))
     {
-      String label = productVersion.getLabel();
-      if (label == null)
-      {
-        label = productVersion.getName();
-      }
-
       if (defaultProductVersion == null)
       {
         defaultProductVersion = productVersion;
       }
 
+      String label = SetupCoreUtil.getLabel(productVersion);
       productVersions.put(label, productVersion);
       versionCombo.add(label);
 
@@ -891,6 +897,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private void setFolderText(String dir)
   {
     folderText.setText(dir);
+    folderText.setToolTipText(dir);
   }
 
   private void validateFolderText(String dir)
@@ -980,7 +987,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 
