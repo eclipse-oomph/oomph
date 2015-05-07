@@ -1,0 +1,17 @@
+Splash Screen
+=============
+
+The splash screen used for both the Eclipse SDK and Eclipse Platform Runtime is located in the bundle org.eclipse.platform (see in Git repository [1]).
+It is a single file called splash.bmp (a 452x302 bitmap). The same directory in the source tree contains some PhotoShop source files that can be used to update the splash.
+Typically each year the splash needs updating with the current year in the copyright statement, and the name of the Simultaneous Release.
+
+In the same org.eclipse.platform bundle, the plugin.xml file contains properties specifying the font color and position of progress messages
+that are overlayed on the splash screen during startup. These properties might need changing if there are significant changes to the splash screen layout.
+See properties startupForegroundColor, startupMessageRect, and startupProgressRect
+
+Note: If your image program offers a choice, such as GIMP 2.8.10 does, it is important to save the the bmp WITHOUT color space information saved or,
+else, the splash screen will not be displayed on Windows .... apparently a silent failure to read a "modern" BMP file (watch bug 439573).
+Also, The bitmap should be saved in 24 bit format (8R, 8G, 8B) for else "funny colors" (such as red instead of blue, or green instead of blue)
+will sometimes appear if the 32 bit format is used, with 8 bits of "transparency".
+
+[1] http://git.eclipse.org/c/platform/eclipse.platform.git/tree/platform/org.eclipse.platform
