@@ -34,6 +34,13 @@ Eike Stepper - initial API and implementation
         <enabled>true</enabled>
       </snapshots>
     </pluginRepository>
+    <pluginRepository>
+      <id>eclipse-cbi-releases</id>
+      <url>https://repo.eclipse.org/content/repositories/cbi-snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
   </pluginRepositories>
 
   <build>
