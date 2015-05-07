@@ -583,7 +583,7 @@ public class GearAnimator extends Animator
     ExitShell exitShell = new ExitShell(this);
     Boolean result = exitShell.openModal();
 
-    if (result == true)
+    if (Boolean.TRUE.equals(result))
     {
       for (Listener listener : getListeners())
       {
