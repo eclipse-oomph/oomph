@@ -619,33 +619,36 @@ public class ConfirmationPage extends SetupWizardPage
       @Override
       public void controlResized(ControlEvent e)
       {
-        try
+        if (!tree.isDisposed())
         {
-          tree.setRedraw(false);
-
-          Rectangle clientArea = tree.getClientArea();
-          int clientWidth = clientArea.width - clientArea.x;
-
-          // We get events during setInput where the tree items are disposed because the view is empty and then the column can't be packed.
-          TreeItem[] items = tree.getItems();
-          if (items.length > 0 && !items[0].isDisposed())
+          try
           {
-            column.pack();
-            int width = column.getWidth();
-            if (width < clientWidth)
+            tree.setRedraw(false);
+
+            Rectangle clientArea = tree.getClientArea();
+            int clientWidth = clientArea.width - clientArea.x;
+
+            // We get events during setInput where the tree items are disposed because the view is empty and then the column can't be packed.
+            TreeItem[] items = tree.getItems();
+            if (items.length > 0 && !items[0].isDisposed())
+            {
+              column.pack();
+              int width = column.getWidth();
+              if (width < clientWidth)
+              {
+                column.setWidth(clientWidth);
+              }
+            }
+            else
             {
               column.setWidth(clientWidth);
             }
-          }
-          else
-          {
-            column.setWidth(clientWidth);
-          }
 
-        }
-        finally
-        {
-          tree.setRedraw(true);
+          }
+          finally
+          {
+            tree.setRedraw(true);
+          }
         }
       }
     };
