@@ -246,6 +246,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     bitness32Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(4, 0).hint(SWT.DEFAULT, 30).create());
     bitness32Button.setChecked(false);
     bitness32Button.setVisible(JREManager.BITNESS_CHANGEABLE);
+    bitness32Button.setToolTipText("Create a 32 bit installation");
     bitness32Button.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -262,6 +263,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     bitness64Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).hint(SWT.DEFAULT, 30).create());
     bitness64Button.setChecked(true);
     bitness64Button.setVisible(JREManager.BITNESS_CHANGEABLE);
+    bitness64Button.setToolTipText("Create a 64 bit installation");
     bitness64Button.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -286,7 +288,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     javaButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
         SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png"));
     javaButton.setLayoutData(GridDataFactory.swtDefaults().indent(4, 0).create());
-    javaButton.setToolTipText("Select Java VM...");
+    javaButton.setToolTipText("Select a Java VM");
     javaButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -347,7 +349,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     folderButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
         SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png"));
     folderButton.setLayoutData(GridDataFactory.swtDefaults().indent(4, 0).create());
-    folderButton.setToolTipText("Select installation folder...");
+    folderButton.setToolTipText("Select an installation folder");
     folderButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -355,7 +357,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         DirectoryDialog dialog = new DirectoryDialog(getShell());
         dialog.setText(AbstractSetupDialog.SHELL_TEXT);
-        dialog.setMessage("Select installation folder...");
+        dialog.setMessage("Select an installation folder:");
 
         if (!StringUtil.isEmpty(installRoot))
         {
@@ -517,6 +519,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       versionCombo.setToolTipText(SetupCoreUtil.getLabel(selectedProductVersion));
     }
+
+    installFolder = getDefaultInstallationFolder();
+    setFolderText(installFolder);
   }
 
   @Override
@@ -564,11 +569,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     versionCombo.setSelection(new Point(0, 0));
     productVersionSelected(defaultProductVersion);
 
-    installFolder = getDefaultInstallationFolder();
-    setFolderText(installFolder);
-
     installButton.setCurrentState(State.INSTALL);
-
     installStack.setVisible(false);
     installed = false;
 

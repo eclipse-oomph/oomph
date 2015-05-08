@@ -83,6 +83,11 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     hookListeners();
   }
 
+  public String getText()
+  {
+    return text;
+  }
+
   public void setText(String text)
   {
     if (this.text != text)
@@ -90,6 +95,11 @@ public class FlatButton extends Canvas implements Listener, PaintListener
       this.text = text;
       redraw();
     }
+  }
+
+  public Image getImage()
+  {
+    return image;
   }
 
   public void setImage(Image image)
@@ -101,9 +111,9 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     }
   }
 
-  public Image getImage()
+  public int getAlignment()
   {
-    return image;
+    return alignment;
   }
 
   public void setAlignment(int alignment)
@@ -127,9 +137,110 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     }
   }
 
-  public int getAlignment()
+  public int getCornerWidth()
   {
-    return alignment;
+    return cornerWidth;
+  }
+
+  public void setCornerWidth(int cornerWidth)
+  {
+    if (this.cornerWidth != cornerWidth)
+    {
+      this.cornerWidth = cornerWidth;
+      redraw();
+    }
+  }
+
+  @Override
+  public Color getBackground()
+  {
+    return internalBackgroundColor;
+  }
+
+  @Override
+  public void setBackground(Color color)
+  {
+    if (internalBackgroundColor != color)
+    {
+      internalBackgroundColor = color;
+      redraw();
+    }
+  }
+
+  public Color getHoverColor()
+  {
+    return hoverColor;
+  }
+
+  public void setHoverColor(Color hoverColor)
+  {
+    if (this.hoverColor != hoverColor)
+    {
+      this.hoverColor = hoverColor;
+      redraw();
+    }
+  }
+
+  public Color getDisabledColor()
+  {
+    return disabledColor;
+  }
+
+  public void setDisabledColor(Color disabledColor)
+  {
+    if (this.disabledColor != disabledColor)
+    {
+      this.disabledColor = disabledColor;
+      redraw();
+    }
+  }
+
+  public boolean isShowButtonDownState()
+  {
+    return showButtonDownState;
+  }
+
+  public void setShowButtonDownState(boolean showButtonDownState)
+  {
+    if (this.showButtonDownState != showButtonDownState)
+    {
+      this.showButtonDownState = showButtonDownState;
+      redraw();
+    }
+  }
+
+  public int getIconTextGap()
+  {
+    return iconTextGap;
+  }
+
+  public void setIconTextGap(int iconTextGap)
+  {
+    if (this.iconTextGap != iconTextGap)
+    {
+      this.iconTextGap = iconTextGap;
+
+      Composite parent = getParent();
+      if (parent != null)
+      {
+        parent.layout();
+      }
+    }
+  }
+
+  public void addSelectionListener(SelectionListener listener)
+  {
+    selectionListeners.add(listener);
+  }
+
+  public void removeSelectionListener(SelectionListener listener)
+  {
+    selectionListeners.remove(selectionListeners);
+  }
+
+  public boolean isHover()
+  {
+    return hover;
   }
 
   @Override
@@ -223,20 +334,6 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   {
     unhookListeners();
     super.dispose();
-  }
-
-  public void setIconTextGap(int iconTextGap)
-  {
-    if (this.iconTextGap != iconTextGap)
-    {
-      this.iconTextGap = iconTextGap;
-
-      Composite parent = getParent();
-      if (parent != null)
-      {
-        parent.layout();
-      }
-    }
   }
 
   /**
@@ -337,20 +434,6 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     // Allow subclassing.
   }
 
-  public boolean isHover()
-  {
-    return hover;
-  }
-
-  public void setShowButtonDownState(boolean showButtonDownState)
-  {
-    if (this.showButtonDownState != showButtonDownState)
-    {
-      this.showButtonDownState = showButtonDownState;
-      redraw();
-    }
-  }
-
   public void handleEvent(Event event)
   {
     switch (event.type)
@@ -421,6 +504,14 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     notifySelectionListeners(new SelectionEvent(event));
   }
 
+  /**
+   * Called when the hover status of this button changes.
+   */
+  protected void onHover()
+  {
+    // Do nothing.
+  }
+
   protected void onMouseEnter(Event event)
   {
     setHover(true);
@@ -433,14 +524,6 @@ public class FlatButton extends Canvas implements Listener, PaintListener
       this.hover = hover;
       onHover();
     }
-  }
-
-  /**
-   * Called when the hover status of this button changes.
-   */
-  protected void onHover()
-  {
-    // Subclasses may implement.
   }
 
   private void notifySelectionListeners(SelectionEvent event)
@@ -475,30 +558,6 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   protected void setListenersPaused(boolean pause)
   {
     listenersPaused = pause;
-  }
-
-  public void setCornerWidth(int cornerWidth)
-  {
-    if (this.cornerWidth != cornerWidth)
-    {
-      this.cornerWidth = cornerWidth;
-      redraw();
-    }
-  }
-
-  public int getCornerWidth()
-  {
-    return cornerWidth;
-  }
-
-  public void addSelectionListener(SelectionListener listener)
-  {
-    selectionListeners.add(listener);
-  }
-
-  public void removeSelectionListener(SelectionListener listener)
-  {
-    selectionListeners.remove(selectionListeners);
   }
 
   public final void paintControl(PaintEvent e)
@@ -559,50 +618,6 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     {
       gc.setBackground(internalBackgroundColor);
       gc.fillRoundRectangle(x, y, width, height, cornerWidth, cornerWidth);
-    }
-  }
-
-  public Color getHoverColor()
-  {
-    return hoverColor;
-  }
-
-  public void setHoverColor(Color hoverColor)
-  {
-    if (this.hoverColor != hoverColor)
-    {
-      this.hoverColor = hoverColor;
-      redraw();
-    }
-  }
-
-  @Override
-  public void setBackground(Color color)
-  {
-    if (internalBackgroundColor != color)
-    {
-      internalBackgroundColor = color;
-      redraw();
-    }
-  }
-
-  @Override
-  public Color getBackground()
-  {
-    return internalBackgroundColor;
-  }
-
-  public Color getDisabledColor()
-  {
-    return disabledColor;
-  }
-
-  public void setDisabledColor(Color disabledColor)
-  {
-    if (this.disabledColor != disabledColor)
-    {
-      this.disabledColor = disabledColor;
-      redraw();
     }
   }
 }
