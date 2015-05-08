@@ -46,8 +46,6 @@ public final class UIUtil
 {
   public static final IWorkbench WORKBENCH;
 
-  public static final Color COLOR_PURPLE = UIPlugin.getColor(44, 34, 85);
-
   private static Image ERROR_IMAGE;
 
   private static Image WARNING_IMAGE;
@@ -241,6 +239,11 @@ public final class UIUtil
   {
     UIPlugin.INSTANCE.log(ex);
     ErrorDialog.open(ex);
+  }
+
+  public static Color getEclipseThemeColor()
+  {
+    return UIPlugin.getColor(44, 34, 85);
   }
 
   public static Image getStatusImage(int severity)

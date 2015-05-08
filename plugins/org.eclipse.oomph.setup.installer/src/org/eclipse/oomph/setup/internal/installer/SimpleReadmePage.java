@@ -55,7 +55,7 @@ public class SimpleReadmePage extends SimpleInstallerPage
 
     Label title = new Label(container, SWT.NONE);
     title.setText("README");
-    title.setForeground(UIUtil.COLOR_PURPLE);
+    title.setForeground(UIUtil.getEclipseThemeColor());
     title.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///12/bold")));
     title.setLayoutData(GridDataFactory.swtDefaults().create());
 

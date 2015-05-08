@@ -48,7 +48,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
   private boolean hover;
 
-  private Color hoverColor = UIUtil.COLOR_PURPLE;
+  private Color hoverColor = UIUtil.getEclipseThemeColor();
 
   private Color disabledColor = COLOR_DEFAULT_DISABLED;
 
