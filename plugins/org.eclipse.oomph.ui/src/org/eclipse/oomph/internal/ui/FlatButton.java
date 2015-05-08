@@ -281,7 +281,17 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     if (text != null)
     {
       GC gc = new GC(this);
-      Point textSize = gc.textExtent(text);
+      Point textSize;
+
+      try
+      {
+        textSize = gc.textExtent(text);
+      }
+      finally
+      {
+        gc.dispose();
+      }
+
       width += textSize.x;
 
       if (image != null)
@@ -591,6 +601,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   {
     Composite parent = getParent();
     Color parentBackground = null;
+
     do
     {
       parentBackground = parent.getBackground();
