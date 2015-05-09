@@ -536,6 +536,15 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     switchToPage(keepInstallerPage);
   }
 
+  @Override
+  public void dispose()
+  {
+    // Ensure that no Browser widget has the focus. See bug 466902.
+    menuButton.setFocus();
+
+    super.dispose();
+  }
+
   private void switchToPage(final SimpleInstallerPage page)
   {
     if (page != null)
