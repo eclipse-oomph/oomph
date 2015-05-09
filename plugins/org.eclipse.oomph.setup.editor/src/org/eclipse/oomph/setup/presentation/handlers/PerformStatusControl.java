@@ -105,15 +105,17 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     {
       private boolean done;
 
+      private boolean fixed;
+
       @Override
       public void run()
       {
         if (!toolItem.isDisposed())
         {
-          // If the tool bar isn't visible, fix its position.
-          if (!toolBar.isVisible())
+          // Fix the position once or when the tool bar isn't visible.
+          if (!fixed || !toolBar.isVisible())
           {
-            fixPosition();
+            fixed = fixPosition();
           }
 
           super.run();
@@ -243,7 +245,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     return toolBar;
   }
 
-  private void fixPosition()
+  private boolean fixPosition()
   {
     IWorkbenchWindow workbenchWindow = getWorkbenchWindow();
 
@@ -258,6 +260,12 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
       EObject progressBar = (EObject)ReflectUtil.invokeMethod(findMethod, modelService, "org.eclipse.ui.ProgressBar", model);
       EObject performStatusBar = (EObject)ReflectUtil.invokeMethod(findMethod, modelService, "org.eclipse.oomph.setup.status", model);
 
+      if (progressBar == null)
+      {
+        // Try again later.
+        return false;
+      }
+
       // Just moving it in the model doesn't update the IDE, so make sure it's definitely added.
       @SuppressWarnings("unchecked")
       EList<EObject> children = (EList<EObject>)progressBar.eContainer().eGet(progressBar.eContainmentFeature());
@@ -271,5 +279,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     {
       // Ignore.
     }
+
+    return true;
   }
 }

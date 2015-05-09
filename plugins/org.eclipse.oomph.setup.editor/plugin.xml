@@ -220,6 +220,19 @@
          <toolbar
                id="org.eclipse.oomph.setup.status"
                label="Status">
+            <command
+                  commandId="org.eclipse.oomph.setup.editor.performDropdown"
+                  icon="icons/spacer.gif"
+                  id="org.eclipse.oomph.setup.perform.menu"
+                  style="push">
+               <visibleWhen>
+                  <test
+                        forcePluginActivation="true"
+                        property="org.eclipse.oomph.setup.ui.performing"
+                        value="true">
+                  </test>
+               </visibleWhen>
+            </command>
             <control
                   class="org.eclipse.oomph.setup.presentation.handlers.PerformStatusControl"
                   id="org.eclipse.oomph.setup.status.control">
@@ -231,6 +244,19 @@
                   </test>
                </visibleWhen>
             </control>
+            <command
+                  commandId="org.eclipse.oomph.setup.editor.performDropdown"
+                  icon="icons/spacer.gif"
+                  id="org.eclipse.oomph.setup.perform.menu"
+                  style="push">
+               <visibleWhen>
+                  <test
+                        forcePluginActivation="true"
+                        property="org.eclipse.oomph.setup.ui.performing"
+                        value="true">
+                  </test>
+               </visibleWhen>
+            </command>
          </toolbar>
       </menuContribution>
       <menuContribution
