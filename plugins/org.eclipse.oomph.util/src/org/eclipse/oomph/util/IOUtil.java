@@ -99,6 +99,22 @@ public final class IOUtil
     }
   }
 
+  public static File getExistingFolder(File file)
+  {
+    if (file.isDirectory())
+    {
+      return file.getAbsoluteFile();
+    }
+  
+    File parent = file.getParentFile();
+    if (parent != null)
+    {
+      return getExistingFolder(parent);
+    }
+  
+    return null;
+  }
+
   public static boolean isSerializeable(Object object)
   {
     try

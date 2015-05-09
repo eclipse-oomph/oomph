@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.util.ConcurrentArray;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
@@ -1164,7 +1165,18 @@ public abstract class PropertyField
       String value = getValue();
       if (value.length() != 0)
       {
-        dialog.setFilterPath(value);
+        try
+        {
+          File existingFolder = IOUtil.getExistingFolder(new File(value));
+          if (existingFolder != null)
+          {
+            dialog.setFilterPath(existingFolder.getAbsolutePath());
+          }
+        }
+        catch (Exception ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
       }
 
       String dir = dialog.open();
@@ -1234,78 +1246,6 @@ public abstract class PropertyField
       {
         transferValueToControl(dir);
       }
-    }
-  }
-
-  /**
-   * @author Ed Merks
-   */
-  public static class JREField extends TextButtonField
-  {
-    private JREFilter jreFilter;
-
-    public JREField(JREFilter jreFilter, List<? extends VariableChoice> choices)
-    {
-      super(null, getJREChoices(jreFilter));
-      this.jreFilter = jreFilter;
-
-      setButtonText("Select...");
-    }
-
-    private static List<? extends VariableChoice> getJREChoices(JREFilter jreFilter)
-    {
-      List<VariableChoice> choices = new ArrayList<VariableChoice>();
-      Map<File, JRE> jres = JREManager.INSTANCE.getJREs(jreFilter);
-      for (Map.Entry<File, JRE> entry : jres.entrySet())
-      {
-        VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-        String folder = entry.getKey().toString();
-        choice.setValue(folder);
-        JRE jre = entry.getValue();
-        choice.setLabel(
-            (jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " + jre.getBitness() + "bit -- " + folder);
-        choices.add(choice);
-      }
-
-      return choices;
-    }
-
-    @Override
-    protected void helperButtonSelected(SelectionEvent e)
-    {
-      JREController jreController = new JREController(null, null, null)
-      {
-        @Override
-        protected Shell getShell()
-        {
-          return getHelper().getShell();
-        }
-
-        @Override
-        protected JRE getDefaultSelection()
-        {
-          String controlValue = getControlValue();
-          return JREManager.INSTANCE.getJREs().get(new File(controlValue));
-        }
-
-        @Override
-        protected void jreChanged(JRE jre)
-        {
-          if (jre != null && (jreFilter == null || jre.isMatch(jreFilter)))
-          {
-            transferValueToControl(jre.toString());
-          }
-        }
-
-        @Override
-        protected JREFilter createJREFilter()
-        {
-          return jreFilter;
-        }
-      };
-
-      jreController.refresh();
-      jreController.configureJREs();
     }
   }
 
@@ -1396,6 +1336,78 @@ public abstract class PropertyField
       }
 
       return null;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class JREField extends TextButtonField
+  {
+    private JREFilter jreFilter;
+
+    public JREField(JREFilter jreFilter, List<? extends VariableChoice> choices)
+    {
+      super(null, getJREChoices(jreFilter));
+      this.jreFilter = jreFilter;
+
+      setButtonText("Select...");
+    }
+
+    private static List<? extends VariableChoice> getJREChoices(JREFilter jreFilter)
+    {
+      List<VariableChoice> choices = new ArrayList<VariableChoice>();
+      Map<File, JRE> jres = JREManager.INSTANCE.getJREs(jreFilter);
+      for (Map.Entry<File, JRE> entry : jres.entrySet())
+      {
+        VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+        String folder = entry.getKey().toString();
+        choice.setValue(folder);
+        JRE jre = entry.getValue();
+        choice.setLabel(
+            (jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " + jre.getBitness() + "bit -- " + folder);
+        choices.add(choice);
+      }
+
+      return choices;
+    }
+
+    @Override
+    protected void helperButtonSelected(SelectionEvent e)
+    {
+      JREController jreController = new JREController(null, null, null)
+      {
+        @Override
+        protected Shell getShell()
+        {
+          return getHelper().getShell();
+        }
+
+        @Override
+        protected JRE getDefaultSelection()
+        {
+          String controlValue = getControlValue();
+          return JREManager.INSTANCE.getJREs().get(new File(controlValue));
+        }
+
+        @Override
+        protected void jreChanged(JRE jre)
+        {
+          if (jre != null && (jreFilter == null || jre.isMatch(jreFilter)))
+          {
+            transferValueToControl(jre.toString());
+          }
+        }
+
+        @Override
+        protected JREFilter createJREFilter()
+        {
+          return jreFilter;
+        }
+      };
+
+      jreController.refresh();
+      jreController.configureJREs();
     }
   }
 

@@ -359,9 +359,20 @@ public class SimpleVariablePage extends SimpleInstallerPage
         dialog.setText(AbstractSetupDialog.SHELL_TEXT);
         dialog.setMessage("Select an installation folder:");
 
-        if (!StringUtil.isEmpty(installRoot))
+        if (!StringUtil.isEmpty(installFolder))
         {
-          dialog.setFilterPath(installRoot);
+          try
+          {
+            File existingFolder = IOUtil.getExistingFolder(new File(installFolder));
+            if (existingFolder != null)
+            {
+              dialog.setFilterPath(existingFolder.getAbsolutePath());
+            }
+          }
+          catch (Exception ex)
+          {
+            SetupInstallerPlugin.INSTANCE.log(ex, IStatus.WARNING);
+          }
         }
 
         String dir = dialog.open();
