@@ -28,7 +28,7 @@
             </separator>
          </menu>
          <action
-               class="org.eclipse.oomph.projectcopy.CopyProjectAction"
+               class="org.eclipse.oomph.projectcopy.ProjectCopyAction"
                enablesFor="1"
                id="org.eclipse.oomph.CopyProjectAction"
                label="Copy Project..."

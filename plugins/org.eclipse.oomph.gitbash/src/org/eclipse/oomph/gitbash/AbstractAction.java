@@ -61,6 +61,7 @@ public abstract class AbstractAction<TARGET> implements IObjectActionDelegate
     {
       try
       {
+        // TODO Schedule a background job to prevent UI freeze.
         run(targetPart.getSite().getShell(), target);
       }
       catch (Exception ex)

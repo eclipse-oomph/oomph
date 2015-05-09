@@ -22,9 +22,12 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -49,13 +52,13 @@ import java.io.IOException;
 /**
  * @author Eike Stepper
  */
-public class CopyProjectAction implements IObjectActionDelegate
+public class ProjectCopyAction implements IObjectActionDelegate
 {
   private Shell shell;
 
   private ISelection selection;
 
-  public CopyProjectAction()
+  public ProjectCopyAction()
   {
   }
 
@@ -71,8 +74,8 @@ public class CopyProjectAction implements IObjectActionDelegate
 
   public void run(IAction action)
   {
-    IProject source = (IProject)((IStructuredSelection)selection).getFirstElement();
-    File folder = source.getLocation().toFile();
+    final IProject source = (IProject)((IStructuredSelection)selection).getFirstElement();
+    final File folder = source.getLocation().toFile();
 
     try
     {
@@ -101,15 +104,45 @@ public class CopyProjectAction implements IObjectActionDelegate
 
       if (dialog.open() == Dialog.OK)
       {
-        String newName = dialog.getValue();
-        File newFolder = new File(parentFolder, newName);
-        copyTree(folder, source.getName(), newName, folder, newFolder);
-        importProject(newFolder, newName);
+        final String newName = dialog.getValue();
+
+        new Job("Copy project")
+        {
+          @Override
+          protected IStatus run(IProgressMonitor monitor)
+          {
+            try
+            {
+              ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
+              {
+                public void run(IProgressMonitor monitor) throws CoreException
+                {
+                  try
+                  {
+                    File newFolder = new File(parentFolder, newName);
+                    copyTree(folder, source.getName(), newName, folder, newFolder);
+                    importProject(newFolder, newName);
+                  }
+                  catch (Exception ex)
+                  {
+                    ProjectCopyPlugin.INSTANCE.coreException(ex);
+                  }
+                }
+              }, monitor);
+
+              return Status.OK_STATUS;
+            }
+            catch (CoreException ex)
+            {
+              return ex.getStatus();
+            }
+          }
+        }.schedule();
       }
     }
     catch (Exception ex)
     {
-      Activator.log("Could not fully copy project " + source.getName(), ex);
+      ProjectCopyPlugin.INSTANCE.log(ex);
     }
   }
 
