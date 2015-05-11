@@ -33,6 +33,7 @@ import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
 
@@ -44,6 +45,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
+import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
@@ -68,7 +70,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.resources.IFile;
@@ -107,6 +108,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -156,7 +159,7 @@ public class ProjectPage extends SetupWizardPage
 
   private ComposedAdapterFactory adapterFactory;
 
-  private AdapterFactoryLabelProvider labelProvider;
+  private ToolTipLabelProvider labelProvider;
 
   private CatalogSelector catalogSelector;
 
@@ -319,7 +322,7 @@ public class ProjectPage extends SetupWizardPage
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
 
     projectViewer = filteredTree.getViewer();
-    labelProvider = new AdapterFactoryLabelProvider.FontProvider(adapterFactory, projectViewer)
+    labelProvider = new ToolTipLabelProvider(adapterFactory)
     {
       private final Font baseFont = projectViewer.getControl().getFont();
 
@@ -336,6 +339,18 @@ public class ProjectPage extends SetupWizardPage
         }
 
         return super.getFont(object);
+      }
+
+      @Override
+      public String getToolTipText(Object element)
+      {
+        if (element instanceof Project)
+        {
+          Project project = (Project)element;
+          return project.getDescription();
+        }
+
+        return "";
       }
     };
 
@@ -418,6 +433,17 @@ public class ProjectPage extends SetupWizardPage
         }
 
         return super.extractDragSource(object);
+      }
+    });
+
+    new ColumnViewerInformationControlToolTipSupport(projectViewer, new LocationListener()
+    {
+      public void changing(LocationEvent event)
+      {
+      }
+
+      public void changed(LocationEvent event)
+      {
       }
     });
 
