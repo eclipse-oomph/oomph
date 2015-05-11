@@ -10,8 +10,10 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 
 import org.eclipse.emf.common.CommonPlugin;
 
@@ -29,6 +31,7 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -248,7 +251,21 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
           File profileFile = findLatestProfileFile(profileDirectory);
           if (profileFile != null)
           {
-            ReflectUtil.invokeMethod(parseMethod, parser, profileFile);
+            try
+            {
+              ReflectUtil.invokeMethod(parseMethod, parser, profileFile);
+            }
+            catch (ReflectionException ex)
+            {
+              Throwable cause = ex.getCause();
+              if (cause instanceof IOException)
+              {
+                long length = profileFile.length();
+                throw new IORuntimeException("The file " + profileFile + " of length " + length + " failed to load properly", cause);
+              }
+
+              throw ex;
+            }
           }
         }
         finally
