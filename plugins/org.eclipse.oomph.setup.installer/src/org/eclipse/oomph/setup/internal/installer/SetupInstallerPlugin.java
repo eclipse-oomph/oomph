@@ -15,8 +15,10 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
+import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.core.runtime.Path;
@@ -74,6 +76,11 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
     {
       super.start(context);
       initializeFonts();
+
+      File temporaryIconsFolder = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".oomph.icons");
+      temporaryIconsFolder.mkdir();
+      temporaryIconsFolder.deleteOnExit();
+      ReflectUtil.setValue("imageDirectory", ImageURIRegistry.INSTANCE, temporaryIconsFolder);
     }
 
     private void initializeFonts()
