@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
+import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
@@ -18,6 +20,8 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -42,7 +46,33 @@ public class SetupMirror implements IApplication
     // String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 
     ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
-    new ResourceMirror(resourceSet).perform(SetupContext.INDEX_SETUP_URI);
+
+    BytesResourceFactoryImpl bytesResourceFactory = new BytesResourceFactoryImpl();
+    Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
+    extensionToFactoryMap.put("gif", bytesResourceFactory);
+    extensionToFactoryMap.put("png", bytesResourceFactory);
+    extensionToFactoryMap.put("jpeg", bytesResourceFactory);
+    extensionToFactoryMap.put("jpg", bytesResourceFactory);
+
+    new ResourceMirror(resourceSet)
+    {
+      @Override
+      protected void visit(EObject eObject)
+      {
+        if (eObject instanceof EClass)
+        {
+          EClass eClass = (EClass)eObject;
+          if (!eClass.isAbstract())
+          {
+            final URI imageURI = EAnnotations.getImageURI(eClass);
+            if (imageURI != null)
+            {
+              schedule(imageURI, true);
+            }
+          }
+        }
+      }
+    }.perform(SetupContext.INDEX_SETUP_URI);
     EcoreUtil.resolveAll(resourceSet);
 
     File file = new File(System.getProperty("java.io.tmpdir"), "setups.zip");
@@ -74,7 +104,7 @@ public class SetupMirror implements IApplication
 
     ECFURIHandlerImpl.clearExpectedETags();
 
-    URIConverter uriConverter = resourceSet.getURIConverter();
+    final URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();
     Map<Object, Object> options = new HashMap<Object, Object>();
     if (lastModified != 0)
@@ -86,6 +116,19 @@ public class SetupMirror implements IApplication
     for (Resource resource : resourceSet.getResources())
     {
       URI uri = resource.getURI();
+
+      /*
+       * if ("ecore".equals(uri.fileExtension())) { EPackage ePackage = (EPackage)EcoreUtil.getObjectByType(resource.getContents(),
+       * EcorePackage.Literals.EPACKAGE); for (EClassifier eClassifier : ePackage.getEClassifiers()) { if (eClassifier instanceof EClass) { EClass eClass =
+       * (EClass)eClassifier; if (!eClass.isAbstract()) { final URI imageURI = EAnnotations.getImageURI(eClass); if (imageURI != null) { System.err.println("##"
+       * + imageURI); URI normalizedURI = uriConverter.normalize(imageURI); URI deresolvedURI = normalizedURI.deresolve(GIT_C_PREFIX, true, true, false); if
+       * (deresolvedURI.hasRelativePath()) { URI output = deresolvedURI.resolve(outputLocation); Resource imageResource = new ResourceImpl(output) {
+       * @Override protected URIConverter getURIConverter() { return uriConverter; }
+       * @Override protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException { InputStream inputStream = null; try { inputStream =
+       * uriConverter.createInputStream(imageURI); IOUtil.copy(inputStream, outputStream); } finally { IOUtil.closeSilent(inputStream); } } };
+       * imageResource.save(options); } } } } } }
+       */
+
       URI normalizedURI = uriConverter.normalize(uri);
       URI deresolvedURI = normalizedURI.deresolve(GIT_C_PREFIX, true, true, false);
       if (deresolvedURI.hasRelativePath())

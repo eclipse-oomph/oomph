@@ -144,7 +144,7 @@ public class EnablementDialog extends AbstractSetupDialog
             URI imageURI = EAnnotations.getImageURI(eClass);
             if (imageURI != null)
             {
-              final Image image = ExtendedImageRegistry.INSTANCE.getImage(imageURI);
+              final Image image = ExtendedImageRegistry.INSTANCE.getImage(BaseEditUtil.getImage(imageURI));
 
               UIUtil.asyncExec(new Runnable()
               {

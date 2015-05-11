@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
+import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -28,7 +29,6 @@ import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -70,15 +70,8 @@ public final class EnablementAction extends Action
     URI imageURI = EAnnotations.getImageURI(eClass);
     if (imageURI != null)
     {
-      final Image image = ExtendedImageRegistry.INSTANCE.getImage(imageURI);
-      setImageDescriptor(new ImageDescriptor()
-      {
-        @Override
-        public ImageData getImageData()
-        {
-          return image.getImageData();
-        }
-      });
+      final Image image = ExtendedImageRegistry.INSTANCE.getImage(BaseEditUtil.getImage(imageURI));
+      setImageDescriptor(ImageDescriptor.createFromImage(image));
     }
   }
 
