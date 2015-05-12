@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.util.WorkerPool;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -60,7 +59,9 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
   @Override
   protected LoadJob createWorker(URI key, int workerID, boolean secondary)
   {
-    return new LoadJob(this, key, workerID, secondary);
+    LoadJob loadJob = new LoadJob(this, key, workerID, secondary);
+    loadJob.setSystem(true);
+    return loadJob;
   }
 
   public ResourceSet getResourceSet()
@@ -91,9 +92,6 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
           total += rs.getResources().size();
         }
 
-        monitor.subTask("Loading " + resource.getURI());
-        monitor.worked(1);
-
         ++counter;
         if (total < counter)
         {
@@ -101,13 +99,14 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
         }
 
         monitor.setTaskName(taskName + counter + " of " + total);
+        monitor.subTask("Loading " + resource.getURI());
+        monitor.worked(1);
       }
     };
 
     Object oldResourceHandler = resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, resourceHandler);
 
-    EList<Resource> resources = resourceSet.getResources();
-    monitor.beginTask(taskName, resources.size() < 3 ? IProgressMonitor.UNKNOWN : resources.size());
+    monitor.beginTask(taskName, 50);
 
     super.begin(taskName, monitor);
 

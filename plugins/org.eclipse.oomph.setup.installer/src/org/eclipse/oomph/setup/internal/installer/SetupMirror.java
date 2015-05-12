@@ -54,7 +54,7 @@ public class SetupMirror implements IApplication
     extensionToFactoryMap.put("jpeg", bytesResourceFactory);
     extensionToFactoryMap.put("jpg", bytesResourceFactory);
 
-    new ResourceMirror(resourceSet)
+    ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
     {
       @Override
       protected void visit(EObject eObject)
@@ -72,7 +72,9 @@ public class SetupMirror implements IApplication
           }
         }
       }
-    }.perform(SetupContext.INDEX_SETUP_URI);
+    };
+    resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
+    resourceMirror.dispose();
     EcoreUtil.resolveAll(resourceSet);
 
     File file = new File(System.getProperty("java.io.tmpdir"), "setups.zip");

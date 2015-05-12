@@ -135,6 +135,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       {
         try
         {
+          setExpectedETag(uri, expectedETag);
           return uriConverter.createInputStream(cacheURI, options);
         }
         catch (IOException ex)
@@ -432,7 +433,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   {
     synchronized (EXPECTED_ETAGS)
     {
-      EXPECTED_ETAGS.put(uri, eTag);
+      String originalExpectedETag = EXPECTED_ETAGS.put(uri, eTag);
+      if (eTag == null && originalExpectedETag != null)
+      {
+        EXPECTED_ETAGS.put(uri, originalExpectedETag);
+      }
     }
   }
 

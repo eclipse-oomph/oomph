@@ -110,7 +110,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
           }
         }
 
-        if (workspace != null)
+        if (workspace != null && !workspace.getStreams().isEmpty())
         {
           new MenuItem(menu, SWT.SEPARATOR);
           for (Stream stream : workspace.getStreams())

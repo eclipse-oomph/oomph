@@ -23,6 +23,8 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.CacheHandling;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
@@ -40,6 +42,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,6 +50,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -58,9 +62,10 @@ import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -195,7 +200,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
               if (!SETUP_SKIP && !isSkipStartupTasks())
               {
-                new Job("Setup check...")
+                new Job("Setup check")
                 {
                   @Override
                   protected IStatus run(IProgressMonitor monitor)
@@ -214,20 +219,18 @@ public final class SetupUIPlugin extends OomphUIPlugin
               }
               else
               {
-                Job mirrorJob = new Job("Refresh Setup Cache")
+                Job mirrorJob = new Job("Initialize Setup Models")
                 {
                   @Override
                   protected IStatus run(IProgressMonitor monitor)
                   {
                     try
                     {
-                      ResourceMirror resourceMirror = new ResourceMirror();
-                      resourceMirror.perform(
-                          Arrays.asList(new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI, SetupContext.USER_SETUP_URI }));
+                      monitor.beginTask("Loading resources", 10);
 
-                      ResourceSet resourceSet = resourceMirror.getResourceSet();
-                      resourceMirror.dispose();
-
+                      ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+                      resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
+                      mirror(resourceSet, monitor, 10);
                       SetupContext.setSelf(SetupContext.createSelf(resourceSet));
 
                       return Status.OK_STATUS;
@@ -239,7 +242,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
                   }
                 };
 
-                mirrorJob.setSystem(true);
                 mirrorJob.schedule();
               }
             }
@@ -249,9 +251,65 @@ public final class SetupUIPlugin extends OomphUIPlugin
     }
   }
 
+  private static void mirror(final ResourceSet resourceSet, IProgressMonitor monitor, int work)
+  {
+    ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
+    {
+      @Override
+      protected void run(String taskName, IProgressMonitor monitor)
+      {
+        List<URI> uris = new ArrayList<URI>();
+        URIConverter uriConverter = resourceSet.getURIConverter();
+        for (URI uri : new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI, SetupContext.USER_SETUP_URI })
+        {
+          if (uriConverter.exists(uri, null))
+          {
+            uris.add(uri);
+          }
+        }
+
+        perform(uris);
+      }
+    };
+    resourceMirror.begin(new SubProgressMonitor(monitor, work));
+  }
+
+  private static Set<? extends EObject> checkCrossReferences(ResourceSet resourceSet, URI uri)
+  {
+    Set<EObject> result = new HashSet<EObject>();
+    Resource resource = resourceSet.getResource(uri, false);
+    if (resource != null)
+    {
+      EList<EObject> contents = resource.getContents();
+      if (!contents.isEmpty())
+      {
+        EObject eObject = contents.get(0);
+        for (EObject eCrossReference : eObject.eCrossReferences())
+        {
+          Resource eResource = eCrossReference.eResource();
+          if (eResource != null)
+          {
+            for (EObject content : eResource.getContents())
+            {
+              EObject eContainer = content.eContainer();
+              if (eContainer != null)
+              {
+                result.add(eContainer);
+              }
+            }
+
+            eResource.unload();
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
   private static void performStartup(final IWorkbench workbench, IProgressMonitor monitor)
   {
-    monitor.beginTask("", 5);
+    monitor.beginTask("", 105);
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
     Set<URI> neededRestartTasks = new HashSet<URI>();
@@ -313,6 +371,35 @@ public final class SetupUIPlugin extends OomphUIPlugin
     monitor.setTaskName("Creating a setup task performer");
     try
     {
+      // Ensure that the demand created resources for the installation, workspace, and user are loaded and created.
+      // Load the resource set quickly without doing ETag checking.
+      resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
+      mirror(resourceSet, monitor, 25);
+
+      // Check the installation and workspace resources for cross references.
+      // This unloads the cross referenced resources and returns the container objects of the root object(s) of those resources.
+      Set<EObject> eContainers = new HashSet<EObject>();
+      eContainers.addAll(checkCrossReferences(resourceSet, SetupContext.INSTALLATION_SETUP_URI));
+      eContainers.addAll(checkCrossReferences(resourceSet, SetupContext.WORKSPACE_SETUP_URI));
+
+      if (!eContainers.isEmpty())
+      {
+        // Reload any resources that have been unloaded, this time with ETag checking.
+        resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITH_ETAG_CHECKING);
+        mirror(resourceSet, monitor, 75);
+
+        // Resolve the containment proxies of the containers.
+        for (EObject eContainer : eContainers)
+        {
+          for (@SuppressWarnings("unused")
+          EObject eObject : eContainer.eContents())
+          {
+            // Resolve all containment proxies.
+          }
+        }
+      }
+
+      // Create the performer with a fully populated resource set.
       performer = SetupTaskPerformer.createForIDE(resourceSet, SetupPrompter.CANCEL, trigger);
     }
     catch (OperationCanceledException ex)
