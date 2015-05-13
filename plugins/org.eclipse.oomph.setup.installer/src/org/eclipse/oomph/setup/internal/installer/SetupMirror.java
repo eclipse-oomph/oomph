@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 201t Ed Merks and others.
+ * Copyright (c) 2015 Ed Merks and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,19 +31,82 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import java.io.File;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * @author Ed Merks
  */
 public class SetupMirror implements IApplication
 {
-  private static final URI GIT_C_PREFIX = URI.createURI("http://git.eclipse.org/c/");
+  // private static final URI GIT_C_PREFIX = URI.createURI("http://git.eclipse.org/c/");
 
   public Object start(IApplicationContext context) throws Exception
   {
     // String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
+
+    Set<String> entryNames = new HashSet<String>();
+
+    File file = new File(System.getProperty("java.io.tmpdir"), "setups.zip");
+    long lastModified = file.lastModified();
+    File temp = new File(file.toString() + ".tmp");
+    URI outputLocation;
+
+    if (lastModified == 0)
+    {
+      outputLocation = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/");
+    }
+    else
+    {
+      try
+      {
+        IOUtil.copyFile(file, temp);
+      }
+      catch (Throwable throwable)
+      {
+        throwable.printStackTrace();
+      }
+
+      if (!temp.setLastModified(lastModified))
+      {
+        System.err.println("Count not set timestamp of " + temp);
+      }
+
+      outputLocation = URI.createURI("archive:" + URI.createFileURI(temp.toString()) + "!/");
+
+      ZipFile zipFile = null;
+      try
+      {
+        zipFile = new ZipFile(temp);
+        for (Enumeration<? extends ZipEntry> entries = zipFile.entries(); entries.hasMoreElements();)
+        {
+          ZipEntry zipEntry = entries.nextElement();
+
+          String name = zipEntry.getName();
+          entryNames.add(name);
+
+          URI path = URI.createURI(name);
+          URI uri = URI.createURI(path.segment(0) + ":" + "//" + path.segment(1));
+          for (int i = 2, length = path.segmentCount(); i < length; ++i)
+          {
+            uri = uri.appendSegment(path.segment(i));
+          }
+
+          URI archiveEntry = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/" + path);
+
+          System.err.println("! " + uri + " -> " + archiveEntry);
+        }
+      }
+      finally
+      {
+        IOUtil.closeSilent(zipFile);
+      }
+    }
 
     ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
 
@@ -77,33 +140,6 @@ public class SetupMirror implements IApplication
     resourceMirror.dispose();
     EcoreUtil.resolveAll(resourceSet);
 
-    File file = new File(System.getProperty("java.io.tmpdir"), "setups.zip");
-    long lastModified = file.lastModified();
-    File temp = new File(file.toString() + ".tmp");
-    URI outputLocation;
-    if (lastModified == 0)
-    {
-      outputLocation = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/");
-    }
-    else
-    {
-      try
-      {
-        IOUtil.copyFile(file, temp);
-      }
-      catch (Throwable throwable)
-      {
-        throwable.printStackTrace();
-      }
-
-      if (!temp.setLastModified(lastModified))
-      {
-        System.err.println("Count not set timestamp of " + temp);
-      }
-
-      outputLocation = URI.createURI("archive:" + URI.createFileURI(temp.toString()) + "!/");
-    }
-
     ECFURIHandlerImpl.clearExpectedETags();
 
     final URIConverter uriConverter = resourceSet.getURIConverter();
@@ -119,26 +155,25 @@ public class SetupMirror implements IApplication
     {
       URI uri = resource.getURI();
 
-      /*
-       * if ("ecore".equals(uri.fileExtension())) { EPackage ePackage = (EPackage)EcoreUtil.getObjectByType(resource.getContents(),
-       * EcorePackage.Literals.EPACKAGE); for (EClassifier eClassifier : ePackage.getEClassifiers()) { if (eClassifier instanceof EClass) { EClass eClass =
-       * (EClass)eClassifier; if (!eClass.isAbstract()) { final URI imageURI = EAnnotations.getImageURI(eClass); if (imageURI != null) { System.err.println("##"
-       * + imageURI); URI normalizedURI = uriConverter.normalize(imageURI); URI deresolvedURI = normalizedURI.deresolve(GIT_C_PREFIX, true, true, false); if
-       * (deresolvedURI.hasRelativePath()) { URI output = deresolvedURI.resolve(outputLocation); Resource imageResource = new ResourceImpl(output) {
-       * @Override protected URIConverter getURIConverter() { return uriConverter; }
-       * @Override protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException { InputStream inputStream = null; try { inputStream =
-       * uriConverter.createInputStream(imageURI); IOUtil.copy(inputStream, outputStream); } finally { IOUtil.closeSilent(inputStream); } } };
-       * imageResource.save(options); } } } } } }
-       */
-
       URI normalizedURI = uriConverter.normalize(uri);
-      URI deresolvedURI = normalizedURI.deresolve(GIT_C_PREFIX, true, true, false);
-      if (deresolvedURI.hasRelativePath())
+      String scheme = normalizedURI.scheme();
+      if (normalizedURI.query() == null && ("http".equals(scheme) || "https".equals(scheme)))
       {
+        URI path = URI.createURI(scheme);
+        path = path.appendSegment(normalizedURI.authority());
+        path = path.appendSegments(normalizedURI.segments());
+        System.err.println("###" + normalizedURI);
+        // URI deresolvedURI = normalizedURI.deresolve(GIT_C_PREFIX, true, true, false);
+        // if (deresolvedURI.hasRelativePath())
+        //
         System.out.println("Mirroring " + normalizedURI);
 
-        URI output = deresolvedURI.resolve(outputLocation);
-        uriMap.put(normalizedURI, output);
+        // URI output = deresolvedURI.resolve(outputLocation);
+        URI output = path.resolve(outputLocation);
+
+        entryNames.remove(path.toString());
+
+        uriMap.put(uri, output);
         resource.save(options);
       }
       else
@@ -147,8 +182,13 @@ public class SetupMirror implements IApplication
       }
     }
 
-    long finalLastModified = lastModified == 0 ? file.lastModified() : temp.lastModified();
+    for (String entryName : entryNames)
+    {
+      URI archiveEntry = URI.createURI(outputLocation + entryName);
+      uriConverter.delete(archiveEntry, null);
+    }
 
+    long finalLastModified = lastModified == 0 ? file.lastModified() : temp.lastModified();
     if (lastModified != finalLastModified)
     {
       if (OS.INSTANCE.isWin())

@@ -23,6 +23,8 @@ import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 import org.eclipse.oomph.util.StringUtil;
@@ -58,6 +60,7 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +69,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author Eike Stepper
@@ -317,6 +322,56 @@ public final class SetupCoreUtil
         }
       }
     }
+
+    if (SetupContext.INDEX_SETUP_MIRROR_LOCATION_URI != null
+        && !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_REDIRECTION_BASE + "mirror.nothing"))
+        && SetupContext.INDEX_SETUP_LOCATION_URI.equals(uriConverter.normalize(SetupContext.INDEX_SETUP_LOCATION_URI)))
+    {
+      handleMirrorRedirection(uriConverter);
+    }
+  }
+
+  private static void handleMirrorRedirection(URIConverter uriConverter)
+  {
+    Map<Object, Object> options = new HashMap<Object, Object>();
+    options.put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
+    long start = System.currentTimeMillis();
+    InputStream inputStream = null;
+    ZipInputStream zipInputStream = null;
+    try
+    {
+      inputStream = uriConverter.createInputStream(SetupContext.INDEX_SETUP_MIRROR_LOCATION_URI, options);
+      zipInputStream = new ZipInputStream(inputStream);
+      for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry())
+      {
+        String name = zipEntry.getName();
+        URI path = URI.createURI(name);
+        URI uri = URI.createURI(path.segment(0) + ":" + "//" + path.segment(1));
+        for (int i = 2, length = path.segmentCount(); i < length; ++i)
+        {
+          uri = uri.appendSegment(path.segment(i));
+        }
+
+        URI archiveEntry = URI.createURI("archive:" + SetupContext.INDEX_SETUP_MIRROR_LOCATION_URI + "!/" + path);
+
+        if (uri.equals(uriConverter.normalize(uri)))
+        {
+          uriConverter.getURIMap().put(uri, archiveEntry);
+        }
+      }
+    }
+    catch (IOException ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
+    finally
+    {
+      IOUtil.closeSilent(inputStream);
+      IOUtil.closeSilent(zipInputStream);
+    }
+
+    long finish = System.currentTimeMillis();
+    System.err.println("processing mirror archive " + (finish - start) / 1000.0);
   }
 
   public static <T> void reorder(EList<T> values, DependencyProvider<T> dependencyProvider)
