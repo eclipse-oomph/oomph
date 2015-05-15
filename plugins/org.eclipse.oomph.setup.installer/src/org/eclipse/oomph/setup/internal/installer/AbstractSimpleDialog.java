@@ -12,7 +12,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
-import org.eclipse.oomph.ui.ShellMove;
+import org.eclipse.oomph.ui.MouseHandler;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -33,15 +33,6 @@ import org.eclipse.swt.widgets.Shell;
  */
 public abstract class AbstractSimpleDialog extends Shell
 {
-  private static final ShellMove SHELL_MOVE = new ShellMove()
-  {
-    @Override
-    protected boolean shouldHookControl(Control control)
-    {
-      return super.shouldHookControl(control) || control instanceof SimpleInstallerPage;
-    }
-  };
-
   private Composite titleComposite;
 
   private int returnCode = Window.OK;
@@ -98,7 +89,15 @@ public abstract class AbstractSimpleDialog extends Shell
   public int show()
   {
     createUI(titleComposite);
-    hook(this);
+
+    new MouseHandler.MoveAndResize(this)
+    {
+      @Override
+      protected boolean shouldHookControl(Control control)
+      {
+        return super.shouldHookControl(control) || control instanceof SimpleInstallerPage;
+      }
+    };
 
     open();
 
@@ -135,10 +134,5 @@ public abstract class AbstractSimpleDialog extends Shell
   protected void checkSubclass()
   {
     // Do nothing.
-  }
-
-  public static void hook(Control control)
-  {
-    SHELL_MOVE.hookControl(control);
   }
 }
