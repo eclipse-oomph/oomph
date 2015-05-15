@@ -28,10 +28,10 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.setup.SetupPreferencePage"
             class="org.eclipse.oomph.setup.ui.SetupPreferencePage"
-            name="Setup">
+            name="Setup Tasks">
       </page>
       <page
-            category="org.eclipse.oomph.setup.SetupPreferencePage"
+            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.setup.PreferenceRecorderPreferencePage"
             class="org.eclipse.oomph.setup.ui.recorder.RecorderPreferencePage"
             name="Preference Recorder">
