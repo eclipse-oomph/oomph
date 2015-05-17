@@ -75,7 +75,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
     container.setLayout(layout);
     container.setBackgroundMode(SWT.INHERIT_FORCE);
-    container.setBackground(SetupInstallerPlugin.COLOR_WHITE);
+    container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     Label title = new Label(container, SWT.NONE);
     title.setText("Keep Installer");
@@ -85,7 +85,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
     Label description = new Label(container, SWT.NONE);
     description.setText("Copy the installer to a permanent location on your disk.");
-    description.setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+    description.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     description.setLayoutData(GridDataFactory.swtDefaults().indent(0, 10).create());
 
     Composite varContainer = new Composite(container, SWT.NONE);
@@ -191,7 +191,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     applyButton.setLayoutData(GridDataFactory.fillDefaults().indent(0, 43).hint(SWT.DEFAULT, 36).create());
     applyButton.setText("APPLY");
     applyButton.setBackground(SetupInstallerPlugin.getColor(50, 196, 0));
-    applyButton.setForeground(SetupInstallerPlugin.COLOR_WHITE);
+    applyButton.setForeground(AbstractSimpleDialog.COLOR_WHITE);
     applyButton.setFont(SetupInstallerPlugin.getFont(getFont(), URI.createURI("font:///14/bold")));
     applyButton.setCornerWidth(10);
     applyButton.setAlignment(SWT.CENTER);

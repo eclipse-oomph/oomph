@@ -60,7 +60,7 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
 
     container.setLayout(layout);
     container.setBackgroundMode(SWT.INHERIT_FORCE);
-    container.setBackground(SetupInstallerPlugin.COLOR_WHITE);
+    container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     Label title = new Label(container, SWT.NONE);
     title.setText("INSTALLATION LOG");

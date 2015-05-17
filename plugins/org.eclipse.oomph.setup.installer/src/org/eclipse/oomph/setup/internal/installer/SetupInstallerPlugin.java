@@ -24,7 +24,6 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 
 import org.osgi.framework.BundleContext;
@@ -37,12 +36,6 @@ import java.io.File;
 public final class SetupInstallerPlugin extends OomphUIPlugin
 {
   public static final SetupInstallerPlugin INSTANCE = new SetupInstallerPlugin();
-
-  public static final Color COLOR_WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
-
-  public static final Color COLOR_LIGHTEST_GRAY = getColor(245, 245, 245);
-
-  public static final Color COLOR_LABEL_FOREGROUND = getColor(85, 85, 85);
 
   public static final String FONT_OPEN_SANS = "font-open-sans";
 
@@ -75,12 +68,16 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
     public void start(BundleContext context) throws Exception
     {
       super.start(context);
-      initializeFonts();
 
-      File temporaryIconsFolder = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".oomph.icons");
-      temporaryIconsFolder.mkdir();
-      temporaryIconsFolder.deleteOnExit();
-      ReflectUtil.setValue("imageDirectory", ImageURIRegistry.INSTANCE, temporaryIconsFolder);
+      if (!"true".equals(PropertiesUtil.getProperty(SetupUIPlugin.PREF_HEADLESS)))
+      {
+        initializeFonts();
+
+        File temporaryIconsFolder = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".oomph.icons");
+        temporaryIconsFolder.mkdir();
+        temporaryIconsFolder.deleteOnExit();
+        ReflectUtil.setValue("imageDirectory", ImageURIRegistry.INSTANCE, temporaryIconsFolder);
+      }
     }
 
     private void initializeFonts()

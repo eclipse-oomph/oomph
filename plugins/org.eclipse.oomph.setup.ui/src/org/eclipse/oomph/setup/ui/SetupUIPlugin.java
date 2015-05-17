@@ -167,7 +167,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void performStartup()
   {
-    if (!"true".equals(PropertiesUtil.getProperty("headless.startup")))
+    if (!"true".equals(PropertiesUtil.getProperty(PREF_HEADLESS)))
     {
       final Display display = Display.getDefault();
       display.asyncExec(new Runnable()

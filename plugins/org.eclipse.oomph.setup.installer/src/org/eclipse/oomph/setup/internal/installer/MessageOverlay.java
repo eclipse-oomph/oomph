@@ -236,9 +236,9 @@ public class MessageOverlay extends Shell implements ControlListener
    */
   public static enum Type
   {
-    ERROR(SetupInstallerPlugin.getColor(249, 54, 50), SetupInstallerPlugin.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
+    ERROR(SetupInstallerPlugin.getColor(249, 54, 50), AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
         SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")), SUCCESS(SetupInstallerPlugin.getColor(58, 195, 4),
-            SetupInstallerPlugin.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
+            AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
             SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png"));
 
     public final Color backgroundColor;

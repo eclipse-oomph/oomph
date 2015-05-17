@@ -42,7 +42,7 @@ import java.util.zip.ZipFile;
 /**
  * @author Ed Merks
  */
-public class SetupMirror implements IApplication
+public class SetupArchiver implements IApplication
 {
   // private static final URI GIT_C_PREFIX = URI.createURI("http://git.eclipse.org/c/");
 
@@ -50,9 +50,9 @@ public class SetupMirror implements IApplication
   {
     // String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 
-    Set<String> entryNames = new HashSet<String>();
-
     File file = new File(System.getProperty("java.io.tmpdir"), "setups.zip");
+
+    Set<String> entryNames = new HashSet<String>();
     long lastModified = file.lastModified();
     File temp = new File(file.toString() + ".tmp");
     URI outputLocation;

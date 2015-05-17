@@ -26,13 +26,13 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class InstallLaunchButton extends ImageHoverButton
 {
-  private static final Color COLOR_FOREGROUND_DEFAULT = SetupInstallerPlugin.COLOR_WHITE;
+  private static final Color COLOR_FOREGROUND_DEFAULT = AbstractSimpleDialog.COLOR_WHITE;
 
   private static final Color COLOR_INSTALL = SetupInstallerPlugin.getColor(250, 148, 0);
 
   private static final Color COLOR_INSTALLING = SetupInstallerPlugin.getColor(50, 196, 0);
 
-  private static final Color COLOR_INSTALLING_FOREGROUND = SetupInstallerPlugin.COLOR_LABEL_FOREGROUND;
+  private static final Color COLOR_INSTALLING_FOREGROUND = AbstractSimpleDialog.COLOR_LABEL_FOREGROUND;
 
   private static final Color COLOR_LAUNCH = COLOR_INSTALLING;
 
@@ -115,7 +115,7 @@ public class InstallLaunchButton extends ImageHoverButton
   {
     if (currentState == State.INSTALLING)
     {
-      gc.setBackground(SetupInstallerPlugin.COLOR_LIGHTEST_GRAY);
+      gc.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
       gc.fillRoundRectangle(x, y, width, height, getCornerWidth(), getCornerWidth());
 
       int progressWidth = (int)(width * progress);

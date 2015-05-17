@@ -137,10 +137,10 @@ public class SimpleInstallerMenu extends Shell
       setAlignment(SWT.LEFT);
       setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 36).create());
       setFont(FONT);
-      setForeground(SetupInstallerPlugin.COLOR_WHITE);
+      setForeground(AbstractSimpleDialog.COLOR_WHITE);
 
       divider = new Divider(this, 1);
-      divider.setBackground(SetupInstallerPlugin.COLOR_WHITE);
+      divider.setBackground(AbstractSimpleDialog.COLOR_WHITE);
       divider.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).grab(true, true).create());
 
       addSelectionListener(new SelectionAdapter()

@@ -79,7 +79,7 @@ public abstract class SimpleInstallerPage extends Composite
       buttonContainer.setLayout(UIUtil.createGridLayout(1));
       buttonContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 33).create());
       buttonContainer.setBackgroundMode(SWT.INHERIT_FORCE);
-      buttonContainer.setBackground(SetupInstallerPlugin.COLOR_WHITE);
+      buttonContainer.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
       backButton = new BackButton(buttonContainer);
       backButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(15, 0).create());
@@ -164,8 +164,8 @@ public abstract class SimpleInstallerPage extends Composite
   protected void applyComboOrTextStyle(Control control)
   {
     control.setFont(SetupInstallerPlugin.getFont(FONT_LABEL, URI.createURI("font:///10/normal")));
-    control.setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
-    control.setBackground(SetupInstallerPlugin.COLOR_LIGHTEST_GRAY);
+    control.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
+    control.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
   }
 
   protected Label createLabel(Composite parent, String text)
@@ -174,7 +174,7 @@ public abstract class SimpleInstallerPage extends Composite
     label.setLayoutData(GridDataFactory.swtDefaults().create());
     label.setText(text);
     label.setFont(FONT_LABEL);
-    label.setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+    label.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     return label;
   }
 
@@ -218,7 +218,7 @@ public abstract class SimpleInstallerPage extends Composite
       super(parent, SWT.PUSH, ARROW_LEFT, ARROW_LEFT_HOVER, ARROW_LEFT_DISABLED);
       setIconTextGap(16);
       setText("BACK");
-      setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+      setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
       setFont(FONT);
     }
   }

@@ -106,7 +106,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     stackComposite = new StackComposite(container, SWT.NONE);
     stackComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).indent(0, 4).create());
     stackComposite.setBackgroundMode(SWT.INHERIT_FORCE);
-    stackComposite.setBackground(SetupInstallerPlugin.COLOR_WHITE);
+    stackComposite.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     final SpriteIndexLoader indexLoader = new SpriteIndexLoader(stackComposite);
 

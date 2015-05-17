@@ -20,6 +20,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -36,6 +37,12 @@ public abstract class AbstractSimpleDialog extends Shell
   private Composite titleComposite;
 
   private int returnCode = Window.OK;
+
+  public static final Color COLOR_WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
+
+  public static final Color COLOR_LIGHTEST_GRAY = SetupInstallerPlugin.getColor(245, 245, 245);
+
+  public static final Color COLOR_LABEL_FOREGROUND = SetupInstallerPlugin.getColor(85, 85, 85);
 
   public AbstractSimpleDialog(Display display, int style, int width, int height)
   {
@@ -79,7 +86,7 @@ public abstract class AbstractSimpleDialog extends Shell
     titleComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 72).create());
     titleComposite.setLayout(titleLayout);
     titleComposite.setBackgroundMode(SWT.INHERIT_FORCE);
-    titleComposite.setBackground(SetupInstallerPlugin.COLOR_LIGHTEST_GRAY);
+    titleComposite.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
 
     Label titleImage = new Label(titleComposite, SWT.NONE);
     titleImage.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).indent(SWT.DEFAULT, 26).align(SWT.BEGINNING, SWT.BEGINNING).create());

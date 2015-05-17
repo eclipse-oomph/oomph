@@ -188,7 +188,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   protected void createContent(Composite container)
   {
     container.setBackgroundMode(SWT.INHERIT_FORCE);
-    container.setBackground(SetupInstallerPlugin.COLOR_WHITE);
+    container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     // Row 1
     GridData browserLayoutData = GridDataFactory.fillDefaults().grab(true, false).create();
@@ -496,13 +496,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private FlatButton createButton(Composite parent, String text, String toolTip, Image icon)
   {
     FlatButton button = new FlatButton(parent, SWT.PUSH);
-    button.setBackground(SetupInstallerPlugin.COLOR_LIGHTEST_GRAY);
+    button.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
     button.setText(text);
     button.setCornerWidth(10);
     button.setAlignment(SWT.CENTER);
     button.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///10/normal")));
     button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BEGINNING).grab(false, false).hint(232, 22).create());
-    button.setForeground(SetupInstallerPlugin.COLOR_LABEL_FOREGROUND);
+    button.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
 
     if (icon != null)
     {
