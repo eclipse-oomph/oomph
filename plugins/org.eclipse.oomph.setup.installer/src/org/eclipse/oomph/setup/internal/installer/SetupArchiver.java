@@ -48,9 +48,17 @@ public class SetupArchiver implements IApplication
 
   public Object start(IApplicationContext context) throws Exception
   {
-    // String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
+    String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 
     File file = new File(System.getProperty("java.io.tmpdir"), "setups.zip");
+
+    for (int i = 0; i < arguments.length; ++i)
+    {
+      if ("-target".equals(arguments[i]))
+      {
+        file = new File(arguments[++i]);
+      }
+    }
 
     Set<String> entryNames = new HashSet<String>();
     long lastModified = file.lastModified();
@@ -227,5 +235,4 @@ public class SetupArchiver implements IApplication
   public void stop()
   {
   }
-
 }
