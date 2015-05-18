@@ -1964,7 +1964,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       String uniqueInstallationID = installationID;
 
-      for (int i = 2; new File(installRoot + "/" + uniqueInstallationID).exists(); ++i)
+      for (int i = 2; new File(installRoot + "/" + uniqueInstallationID + "/" + getOS().getEclipseDir()).exists(); ++i)
       {
         uniqueInstallationID = installationID + i;
       }
@@ -2000,8 +2000,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private String escape(String projectCatalogName, String projectName, String streamName)
   {
-    return SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1)).firstSegment() + "-"
-        + streamName.replace('.', '-').replace('/', '-').replace('\\', '-');
+    SegmentSequence qualifiedProjectName = SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1));
+    String baseName = qualifiedProjectName.segmentCount() > 2 && "user".equals(qualifiedProjectName.firstSegment())
+        && "project".equals(qualifiedProjectName.segment(1)) ? qualifiedProjectName.segment(2) : qualifiedProjectName.firstSegment();
+    return baseName + "-" + streamName.replace('.', '-').replace('/', '-').replace('\\', '-');
   }
 
   @Override
