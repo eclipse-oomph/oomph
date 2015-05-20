@@ -323,7 +323,7 @@ public final class SetupCoreUtil
       }
     }
 
-    if (SetupContext.INDEX_SETUP_MIRROR_LOCATION_URI != null
+    if (SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI != null
         && !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_REDIRECTION_BASE + "mirror.nothing"))
         && SetupContext.INDEX_SETUP_LOCATION_URI.equals(uriConverter.normalize(SetupContext.INDEX_SETUP_LOCATION_URI)))
     {
@@ -333,30 +333,34 @@ public final class SetupCoreUtil
 
   private static void handleMirrorRedirection(URIConverter uriConverter)
   {
+    // long start = System.currentTimeMillis();
+
     Map<Object, Object> options = new HashMap<Object, Object>();
     options.put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
-    long start = System.currentTimeMillis();
     InputStream inputStream = null;
     ZipInputStream zipInputStream = null;
     try
     {
-      inputStream = uriConverter.createInputStream(SetupContext.INDEX_SETUP_MIRROR_LOCATION_URI, options);
+      inputStream = uriConverter.createInputStream(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, options);
       zipInputStream = new ZipInputStream(inputStream);
       for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry())
       {
         String name = zipEntry.getName();
         URI path = URI.createURI(name);
-        URI uri = URI.createURI(path.segment(0) + ":" + "//" + path.segment(1));
-        for (int i = 2, length = path.segmentCount(); i < length; ++i)
+        int segmentCount = path.segmentCount();
+        if (segmentCount > 2)
         {
-          uri = uri.appendSegment(path.segment(i));
-        }
+          URI uri = URI.createURI(path.segment(0) + ":" + "//" + path.segment(1));
+          for (int i = 2, length = path.segmentCount(); i < length; ++i)
+          {
+            uri = uri.appendSegment(path.segment(i));
+          }
 
-        URI archiveEntry = URI.createURI("archive:" + SetupContext.INDEX_SETUP_MIRROR_LOCATION_URI + "!/" + path);
-
-        if (uri.equals(uriConverter.normalize(uri)))
-        {
-          uriConverter.getURIMap().put(uri, archiveEntry);
+          if (uri.equals(uriConverter.normalize(uri)))
+          {
+            URI archiveEntry = URI.createURI("archive:" + SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!/" + path);
+            uriConverter.getURIMap().put(uri, archiveEntry);
+          }
         }
       }
     }
@@ -370,8 +374,8 @@ public final class SetupCoreUtil
       IOUtil.closeSilent(zipInputStream);
     }
 
-    long finish = System.currentTimeMillis();
-    System.err.println("processing mirror archive " + (finish - start) / 1000.0);
+    // long finish = System.currentTimeMillis();
+    // System.err.println("processing mirror archive " + (finish - start) / 1000.0);
   }
 
   public static <T> void reorder(EList<T> values, DependencyProvider<T> dependencyProvider)

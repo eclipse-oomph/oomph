@@ -31,6 +31,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -107,7 +108,7 @@ public class SetupArchiver implements IApplication
 
           URI archiveEntry = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/" + path);
 
-          System.err.println("! " + uri + " -> " + archiveEntry);
+          System.out.println("Previously mirrored " + uri + " -> " + archiveEntry);
         }
       }
       finally
@@ -170,19 +171,35 @@ public class SetupArchiver implements IApplication
         URI path = URI.createURI(scheme);
         path = path.appendSegment(normalizedURI.authority());
         path = path.appendSegments(normalizedURI.segments());
-        System.err.println("###" + normalizedURI);
-        // URI deresolvedURI = normalizedURI.deresolve(GIT_C_PREFIX, true, true, false);
-        // if (deresolvedURI.hasRelativePath())
-        //
         System.out.println("Mirroring " + normalizedURI);
 
-        // URI output = deresolvedURI.resolve(outputLocation);
-        URI output = path.resolve(outputLocation);
+        if (resource.getContents().isEmpty())
+        {
+          System.err.println("Failed to load " + normalizedURI);
+        }
+        else
+        {
+          URI output = path.resolve(outputLocation);
+          entryNames.remove(path.toString());
+          uriMap.put(uri, output);
 
-        entryNames.remove(path.toString());
+          try
+          {
+            long before = resource.getTimeStamp();
+            resource.save(options);
+            long after = resource.getTimeStamp();
 
-        uriMap.put(uri, output);
-        resource.save(options);
+            if (after - before > 0)
+            {
+              System.err.println("changed! " + normalizedURI);
+            }
+          }
+          catch (IOException ex)
+          {
+            System.err.println("Failed to save " + normalizedURI);
+            ex.printStackTrace();
+          }
+        }
       }
       else
       {

@@ -111,10 +111,7 @@ public class SetupContext
 
   public static final URI INDEX_SETUP_LOCATION_URI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup");
 
-  public static final URI INDEX_SETUP_MIRROR_LOCATION_URI = null;
-
-  // public static final URI INDEX_SETUP_MIRROR_LOCATION_URI = URI.createURI("http://download.eclipse.org/oomph/setups/setups.zip");
-  // public static final URI INDEX_SETUP_MIRROR_LOCATION_URI = URI.createFileURI("C:\\Users\\merks\\AppData\\Local\\Temp\\setups.zip");
+  public static final URI INDEX_SETUP_ARCHIVE_LOCATION_URI = URI.createURI("http://www.eclipse.org/setups/setups.zip");
 
   public static final URI INSTALLATION_SETUP_FILE_NAME_URI = URI.createURI("installation.setup");
 
