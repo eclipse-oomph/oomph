@@ -150,7 +150,7 @@ public class CachingRepositoryManager<T>
           {
             addRepository(result, false, suffixes[i]);
 
-            if (!indexFile.exists())
+            if (!indexFile.exists() || preferredOrder.length == 0)
             {
               cacheIndexFile(location, suffixes[i]);
             }

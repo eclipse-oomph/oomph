@@ -14,12 +14,14 @@ import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.internal.p2.repository.AuthenticationFailedException;
+import org.eclipse.equinox.internal.p2.repository.CacheManager;
 import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.provisional.p2.repository.IStateful;
@@ -32,7 +34,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -190,6 +194,46 @@ public class CachingTransport extends Transport
       if (cacheFile.length() > 0)
       {
         return cacheFile.lastModified();
+      }
+
+      CacheManager cacheManager = (CacheManager)agent.getService(CacheManager.SERVICE_NAME);
+      if (cacheManager == null)
+      {
+        throw new IllegalArgumentException("Cache manager service not available");
+      }
+
+      // The file is not in Oomph's cache, so try to find if it's in p2's cache.
+      org.eclipse.emf.common.util.URI location = org.eclipse.emf.common.util.URI.createURI(uri.toString());
+      String fileExtension = location.fileExtension();
+      if ("xz".equals(fileExtension))
+      {
+        // The .xml.xz repository implementation caches using this approach.
+        Method method = ReflectUtil.getMethod(cacheManager, "getCacheFile", URI.class);
+        File file = (File)ReflectUtil.invokeMethod(method, cacheManager, uri);
+        if (file != null && file.exists())
+        {
+          return file.lastModified();
+        }
+      }
+      else
+      {
+        // For .xml and .jar, the repository implementations caching using this approach.
+        String prefix = location.trimFileExtension().lastSegment();
+        try
+        {
+          org.eclipse.emf.common.util.URI repositoryLocation = location.trimSegments(1);
+          URI repositoryURI = new URI(repositoryLocation.toString());
+          Method method = ReflectUtil.getMethod(cacheManager, "getCache", URI.class, String.class);
+          File file = (File)ReflectUtil.invokeMethod(method, cacheManager, repositoryURI, prefix);
+          if (file != null && file.exists() && file.toString().endsWith(fileExtension))
+          {
+            return file.lastModified();
+          }
+        }
+        catch (URISyntaxException ex1)
+        {
+          // Ignore.
+        }
       }
 
       try
