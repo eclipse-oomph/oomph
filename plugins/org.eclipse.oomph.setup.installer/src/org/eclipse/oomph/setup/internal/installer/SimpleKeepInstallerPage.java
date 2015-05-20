@@ -148,7 +148,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     FlatButton folderButton = new ImageHoverButton(varContainer, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
         SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"));
     folderButton.setLayoutData(GridDataFactory.swtDefaults().indent(12, 0).create());
-    folderButton.setToolTipText("Browse...");
+    folderButton.setToolTipText("Browse" + StringUtil.HORIZONTAL_ELLIPSIS);
     folderButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -268,11 +268,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
   private void setErrorMessage(String text)
   {
-    if (text == null)
-    {
-      dialog.clearMessage();
-    }
-    else
+    if (text != null)
     {
       dialog.showMessage(text, Type.ERROR, false);
     }

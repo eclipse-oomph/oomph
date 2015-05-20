@@ -10,8 +10,10 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 
 /**
  * @author Andreas Scharf
@@ -41,24 +43,15 @@ public class ImageHoverButton extends FlatButton
     this.hoverImage = hoverImage;
     this.disabledImage = disabledImage;
 
-    setImage(computeImage());
-  }
-
-  protected Image computeImage()
-  {
-    if (!isEnabled())
-    {
-      return getDisabledImage() != null ? getDisabledImage() : getDefaultImage();
-    }
-
-    return isHover() ? getHoverImage() : getDefaultImage();
+    setDisabledBackgroundColor(null);
+    updateImage();
   }
 
   @Override
   public void setEnabled(boolean enabled)
   {
     super.setEnabled(enabled);
-    setImage(computeImage());
+    updateImage();
   }
 
   public void setDefaultImage(Image defaultImage)
@@ -66,7 +59,7 @@ public class ImageHoverButton extends FlatButton
     if (this.defaultImage != defaultImage)
     {
       this.defaultImage = defaultImage;
-      setImage(computeImage());
+      updateImage();
     }
   }
 
@@ -80,19 +73,13 @@ public class ImageHoverButton extends FlatButton
     if (this.hoverImage != hoverImage)
     {
       this.hoverImage = hoverImage;
-      setImage(computeImage());
+      updateImage();
     }
   }
 
   public Image getHoverImage()
   {
     return hoverImage;
-  }
-
-  @Override
-  protected void onHover()
-  {
-    setImage(computeImage());
   }
 
   public Image getDisabledImage()
@@ -105,7 +92,47 @@ public class ImageHoverButton extends FlatButton
     if (this.disabledImage != disabledImage)
     {
       this.disabledImage = disabledImage;
-      setImage(computeImage());
+      updateImage();
     }
+  }
+
+  @Override
+  protected void onHover()
+  {
+    updateImage();
+  }
+
+  @Override
+  protected void onFocusIn(Event event)
+  {
+    updateImage();
+  }
+
+  @Override
+  protected void onFocusOut(Event event)
+  {
+    updateImage();
+  }
+
+  @Override
+  protected void drawFocusState(GC gc, int x, int y, int width, int height)
+  {
+    // Don't draw any borders
+  }
+
+  protected Image computeImage()
+  {
+    if (!isEnabled())
+    {
+      return getDisabledImage() != null ? getDisabledImage() : getDefaultImage();
+    }
+  
+    return isHover() || isFocusControl() ? getHoverImage() : getDefaultImage();
+  }
+
+  protected final void updateImage()
+  {
+    Image image = computeImage();
+    setImage(image);
   }
 }

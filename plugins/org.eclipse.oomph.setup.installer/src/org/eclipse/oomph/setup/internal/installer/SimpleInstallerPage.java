@@ -21,6 +21,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -115,6 +117,7 @@ public abstract class SimpleInstallerPage extends Composite
 
     Text textField = new Text(textContainer, SWT.NONE | SWT.SINGLE);
     textField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
+    textField.addFocusListener(new FocusSelectionAdapter());
     applyComboOrTextStyle(textField);
 
     return textField;
@@ -127,6 +130,7 @@ public abstract class SimpleInstallerPage extends Composite
 
     CCombo combo = new CCombo(comboContainer, style);
     combo.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
+    combo.addFocusListener(new FocusSelectionAdapter());
     applyComboOrTextStyle(combo);
 
     return combo;
@@ -153,12 +157,12 @@ public abstract class SimpleInstallerPage extends Composite
 
   public void aboutToShow()
   {
-    // Subclasses may implement.
+    // Subclasses may override.
   }
 
   public void aboutToHide()
   {
-    // Subclasses may implement.
+    // Subclasses may override.
   }
 
   protected void applyComboOrTextStyle(Control control)
@@ -173,7 +177,7 @@ public abstract class SimpleInstallerPage extends Composite
     Label label = new Label(parent, SWT.NONE);
     label.setLayoutData(GridDataFactory.swtDefaults().create());
     label.setText(text);
-    label.setFont(FONT_LABEL);
+    label.setFont(SetupInstallerPlugin.getFont(FONT_LABEL, URI.createURI("font:///10/bold")));
     label.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     return label;
   }
@@ -182,6 +186,11 @@ public abstract class SimpleInstallerPage extends Composite
   protected void checkSubclass()
   {
     // Allow subclassing.
+  }
+
+  protected static Control spacer(Composite parent)
+  {
+    return new Label(parent, SWT.NONE);
   }
 
   public static String hex(RGB color)
@@ -198,6 +207,24 @@ public abstract class SimpleInstallerPage extends Composite
     }
 
     return hexString;
+  }
+
+  /**
+   * @author Andreas Scharf
+   */
+  private final class FocusSelectionAdapter extends FocusAdapter
+  {
+    @Override
+    public void focusLost(FocusEvent e)
+    {
+      UIUtil.setSelectionToEnd(e.widget);
+    }
+
+    @Override
+    public void focusGained(FocusEvent e)
+    {
+      UIUtil.selectAllText(e.widget);
+    }
   }
 
   /**

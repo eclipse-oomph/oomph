@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -42,9 +44,13 @@ import java.util.Map;
  */
 public class CatalogManager
 {
+  public static final String PROPERTY_INDEX = "PROPERTY_INDEX";
+
   private Index index;
 
   private CatalogSelection selection;
+
+  private PropertyChangeSupport propertyChangeSupport;
 
   public CatalogManager()
   {
@@ -52,6 +58,26 @@ public class CatalogManager
     Resource selectionResource = Resource.Factory.Registry.INSTANCE.getFactory(SetupContext.CATALOG_SELECTION_SETUP_URI)
         .createResource(SetupContext.CATALOG_SELECTION_SETUP_URI);
     selectionResource.getContents().add(selection);
+  }
+
+  public void addPropertyChangeListener(PropertyChangeListener listener)
+  {
+    getPropertyChangeSupport().addPropertyChangeListener(listener);
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener)
+  {
+    getPropertyChangeSupport().removePropertyChangeListener(listener);
+  }
+
+  private synchronized PropertyChangeSupport getPropertyChangeSupport()
+  {
+    if (propertyChangeSupport == null)
+    {
+      propertyChangeSupport = new PropertyChangeSupport(this);
+    }
+
+    return propertyChangeSupport;
   }
 
   public Index getIndex()
@@ -105,6 +131,7 @@ public class CatalogManager
       return;
     }
 
+    Index oldIndex = this.index;
     this.index = index;
 
     // Load the local selection into the same resource set as the index, but only if the local selection exists.
@@ -167,6 +194,8 @@ public class CatalogManager
 
       saveSelection();
     }
+
+    getPropertyChangeSupport().firePropertyChange(PROPERTY_INDEX, oldIndex, this.index);
   }
 
   private void populateSelectedProductCatalogs(CatalogSelection selection, Index index)

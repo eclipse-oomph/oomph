@@ -11,6 +11,7 @@
 package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -18,6 +19,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -38,9 +40,18 @@ import java.util.List;
  */
 public class FlatButton extends Canvas implements Listener, PaintListener
 {
+  private static final int[] LISTENER_TYPES = { SWT.MouseEnter, SWT.MouseExit, SWT.MouseDown, SWT.MouseUp, SWT.MouseMove, SWT.KeyDown, SWT.Traverse,
+      SWT.FocusIn, SWT.FocusOut };
+
+  private static final Cursor CURSOR_HAND = UIUtil.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
+
   private static final int DEFAULT_ICON_TEXT_GAP = 5;
 
-  private static final Color COLOR_DEFAULT_DISABLED = UIPlugin.getColor(210, 210, 210);
+  protected static final Color COLOR_DEFAULT_FOCUS_FOREGROUND = UIPlugin.getColor(180, 180, 180);
+
+  protected static final Color COLOR_DEFAULT_DISABLED_BACKGROUND = UIPlugin.getColor(238, 238, 238);
+
+  protected static final Color COLOR_DEFAULT_DISABLED_FOREGROUND = UIPlugin.getColor(170, 170, 170);
 
   private final List<SelectionListener> selectionListeners = new ArrayList<SelectionListener>();
 
@@ -50,7 +61,9 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
   private Color hoverColor = UIUtil.getEclipseThemeColor();
 
-  private Color disabledColor = COLOR_DEFAULT_DISABLED;
+  private Color disabledBackgroundColor = COLOR_DEFAULT_DISABLED_BACKGROUND;
+
+  private Color disabledForegroundColor = COLOR_DEFAULT_DISABLED_FOREGROUND;
 
   private Color internalBackgroundColor;
 
@@ -78,9 +91,16 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     this.buttonStyle = buttonStyle;
 
     setLayout(new GridLayout(1, false));
-    setCursor(UIUtil.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
+    setCursor(CURSOR_HAND);
 
     hookListeners();
+  }
+
+  @Override
+  public void setEnabled(boolean enabled)
+  {
+    super.setEnabled(enabled);
+    setCursor(enabled ? CURSOR_HAND : null);
   }
 
   public String getText()
@@ -181,18 +201,32 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     }
   }
 
-  public Color getDisabledColor()
+  public Color getDisabledForegroundColor()
   {
-    return disabledColor;
+    return disabledForegroundColor;
   }
 
-  public void setDisabledColor(Color disabledColor)
+  public void setDisabledForegroundColor(Color color)
   {
-    if (this.disabledColor != disabledColor)
+    if (!ObjectUtil.equals(disabledForegroundColor, color))
     {
-      this.disabledColor = disabledColor;
+      disabledForegroundColor = color;
       redraw();
     }
+  }
+
+  protected void setDisabledBackgroundColor(Color color)
+  {
+    if (!ObjectUtil.equals(disabledBackgroundColor, color))
+    {
+      disabledBackgroundColor = color;
+      redraw();
+    }
+  }
+
+  protected Color getDisabledBackgroundColor()
+  {
+    return disabledBackgroundColor;
   }
 
   public boolean isShowButtonDownState()
@@ -319,11 +353,10 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
   protected void hookListeners()
   {
-    addListener(SWT.MouseEnter, this);
-    addListener(SWT.MouseExit, this);
-    addListener(SWT.MouseDown, this);
-    addListener(SWT.MouseUp, this);
-    addListener(SWT.MouseMove, this);
+    for (int type : LISTENER_TYPES)
+    {
+      addListener(type, this);
+    }
 
     addPaintListener(this);
   }
@@ -332,11 +365,10 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   {
     removePaintListener(this);
 
-    removeListener(SWT.MouseMove, (Listener)this);
-    removeListener(SWT.MouseUp, (Listener)this);
-    removeListener(SWT.MouseDown, (Listener)this);
-    removeListener(SWT.MouseExit, (Listener)this);
-    removeListener(SWT.MouseEnter, (Listener)this);
+    for (int type : LISTENER_TYPES)
+    {
+      removeListener(type, (Listener)this);
+    }
   }
 
   @Override
@@ -349,7 +381,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   /**
    * Called when this button should paint itself.
    *
-   * Subclasses may implement.
+   * Subclasses may override.
    */
   protected void drawContent(PaintEvent e)
   {
@@ -414,14 +446,14 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   {
     if (isEnabled())
     {
-      if (isHover() && !listenersPaused && hoverColor != null)
+      if (isHover() || isFocusControl() && !listenersPaused && hoverColor != null)
       {
         gc.setForeground(hoverColor);
       }
     }
-    else if (disabledColor != null)
+    else if (disabledForegroundColor != null)
     {
-      gc.setForeground(disabledColor);
+      gc.setForeground(disabledForegroundColor);
     }
 
     gc.drawText(text, x, y, true);
@@ -444,7 +476,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     // Allow subclassing.
   }
 
-  public void handleEvent(Event event)
+  public void handleEvent(final Event event)
   {
     switch (event.type)
     {
@@ -466,12 +498,59 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
       case SWT.MouseMove:
         mouseMoveInternal(event);
+        break;
+
+      case SWT.KeyDown:
+        if (event.character == SWT.CR || event.character == SWT.SPACE)
+        {
+          notifySelectionListeners(null);
+        }
+        break;
+
+      case SWT.Traverse:
+        event.doit = true;
+        break;
+
+      case SWT.FocusIn:
+        onFocusIn(event);
+        break;
+
+      case SWT.FocusOut:
+        // Async exec to ensure that focus transfer is completed
+        getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            onFocusOut(event);
+          }
+        });
+        break;
     }
 
     if (!isDisposed())
     {
       redraw();
     }
+  }
+
+  /**
+   * Called when the button loses focus.
+   *
+   * @param event The associated {@link Event}, may be null.
+   */
+  protected void onFocusOut(Event event)
+  {
+    // Subclasses may override.
+  }
+
+  /**
+   * Called when the button gains focus.
+   *
+   * @param event The associated {@link Event}, may be null.
+   */
+  protected void onFocusIn(Event event)
+  {
+    // Subclasses may override.
   }
 
   private void mouseMoveInternal(Event event)
@@ -544,7 +623,9 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     }
 
     Rectangle r = getBounds();
-    if (event.x >= 0 && event.x <= r.width && event.y >= 0 && event.y <= r.height && !selectionListeners.isEmpty())
+
+    // Event could be null if the keyboard was used
+    if (event == null || event.x >= 0 && event.x <= r.width && event.y >= 0 && event.y <= r.height && !selectionListeners.isEmpty())
     {
       for (SelectionListener listener : selectionListeners)
       {
@@ -591,10 +672,34 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
     drawBackground(gc, clientX, clientY, clientWidth, clientHeight, 0, 0);
     drawContent(e);
+
     if (isHover())
     {
       drawHoverState(gc, clientX, clientY, clientWidth, clientHeight);
     }
+
+    if (isFocusControl())
+    {
+      drawFocusState(gc, clientX, clientY, clientWidth, clientHeight);
+    }
+  }
+
+  /**
+   * Draws the focus state of this button. This method will be called last, meaning
+   * that everything is painted <b>on top</b> of anything else.
+   *
+   * @param gc The {@link GC} to draw with
+   * @param x The x coordinate
+   * @param x The y coordinate
+   * @param width The width to visualize
+   * @param height The height to visualize
+   */
+  protected void drawFocusState(GC gc, int x, int y, int width, int height)
+  {
+    Color oldForeground = gc.getForeground();
+    gc.setForeground(COLOR_DEFAULT_FOCUS_FOREGROUND);
+    gc.drawRoundRectangle(x, y, width, height, cornerWidth, cornerWidth);
+    gc.setForeground(oldForeground);
   }
 
   private void clearBackground(GC gc, Rectangle bounds)
@@ -619,15 +724,23 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
   protected void drawHoverState(GC gc, int x, int y, int width, int height)
   {
-    // Subclasses may implement to draw a hover state.
+    // Subclasses may override to draw a hover state.
   }
 
   @Override
   public void drawBackground(GC gc, int x, int y, int width, int height, int offsetX, int offsetY)
   {
-    if (internalBackgroundColor != null)
+    if (isEnabled())
     {
-      gc.setBackground(internalBackgroundColor);
+      if (internalBackgroundColor != null)
+      {
+        gc.setBackground(internalBackgroundColor);
+        gc.fillRoundRectangle(x, y, width, height, cornerWidth, cornerWidth);
+      }
+    }
+    else if (disabledBackgroundColor != null)
+    {
+      gc.setBackground(disabledBackgroundColor);
       gc.fillRoundRectangle(x, y, width, height, cornerWidth, cornerWidth);
     }
   }

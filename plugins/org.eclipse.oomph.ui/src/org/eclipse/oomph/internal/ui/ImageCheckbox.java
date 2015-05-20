@@ -59,7 +59,7 @@ public class ImageCheckbox extends ImageHoverButton
       return getHoverImage();
     }
 
-    return isChecked() ? getCheckedImage() : getDefaultImage();
+    return isChecked() || isFocusControl() ? getCheckedImage() : getDefaultImage();
   }
 
   protected Image getCheckedImage()

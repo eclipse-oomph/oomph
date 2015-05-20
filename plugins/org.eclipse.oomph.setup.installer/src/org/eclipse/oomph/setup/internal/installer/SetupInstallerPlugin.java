@@ -89,7 +89,11 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
     private boolean loadFont(String path)
     {
       File exportedFont = new File(PropertiesUtil.TEMP_DIR, new Path(path).lastSegment());
-      SetupInstallerPlugin.INSTANCE.exportResources(path, exportedFont);
+      if (!exportedFont.exists())
+      {
+        SetupInstallerPlugin.INSTANCE.exportResources(path, exportedFont);
+      }
+      
       return UIUtil.getDisplay().loadFont(exportedFont.toString());
     }
   }

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
 
@@ -26,6 +27,8 @@ import org.eclipse.swt.widgets.Label;
  */
 public class SimpleInstallerMenuButton extends Composite
 {
+  static final String ACCESS_KEY = "menuButton";
+
   private static final int NOTIFICATION_X_OFFSET = 15;
 
   // TODO We have some issues with transparency of the overlay
@@ -59,6 +62,7 @@ public class SimpleInstallerMenuButton extends Composite
     Image buttonHoverImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu_hover.png");
     Image buttonDisabledImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu_disabled.png");
     button = new ImageHoverButton(container, SWT.PUSH, buttonImage, buttonHoverImage, buttonDisabledImage);
+    AccessUtil.setKey(button, ACCESS_KEY);
 
     // TODO As soon as the transparancy issues with the overlay are solved,
     // we can re-enable the visualization of the button down state.

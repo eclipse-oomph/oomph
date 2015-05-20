@@ -16,8 +16,14 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -25,7 +31,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -35,7 +40,7 @@ public class MessageOverlay extends Shell implements ControlListener
 {
   private static final int DEFAULT_AUTO_DISMISS_MILLIS = 4 * 1000;
 
-  private static final int MAX_MESSAGE_LENGTH = 175;
+  private static final int MAX_MESSAGE_LENGTH = 210;
 
   private static final int MAX_TOOLTIP_LINE_LENGTH = 60;
 
@@ -45,9 +50,13 @@ public class MessageOverlay extends Shell implements ControlListener
 
   private final boolean dismissAutomatically;
 
-  private Link link;
+  private StyledText text;
 
   private boolean firstShown = true;
+
+  private Runnable action;
+
+  private Type type;
 
   public MessageOverlay(SimpleInstallerDialog dialog, Type type, ControlRelocator controlRelocator, boolean dismissAutomatically)
   {
@@ -69,8 +78,10 @@ public class MessageOverlay extends Shell implements ControlListener
     }
 
     this.dialog = dialog;
+    this.type = type;
     this.controlRelocator = controlRelocator;
     this.dismissAutomatically = dismissAutomatically;
+    this.action = action;
 
     setBackground(type.backgroundColor);
     setBackgroundMode(SWT.INHERIT_FORCE);
@@ -84,19 +95,37 @@ public class MessageOverlay extends Shell implements ControlListener
     layout.marginBottom = 3;
     setLayout(layout);
 
-    link = new Link(this, SWT.NONE);
-    link.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).create());
-    link.setFont(SimpleInstallerDialog.getDefaultFont());
-    link.setForeground(type.foregroundColor);
+    text = new StyledText(this, SWT.WRAP);
+    text.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).create());
+    text.setFont(SimpleInstallerDialog.getDefaultFont());
+    text.setForeground(type.foregroundColor);
+
     if (action != null)
     {
-      link.addSelectionListener(new SelectionAdapter()
+      final Display display = getDisplay();
+
+      text.setCursor(display.getSystemCursor(SWT.CURSOR_HAND));
+      text.addMouseListener(new MouseAdapter()
       {
         @Override
-        public void widgetSelected(SelectionEvent e)
+        public void mouseUp(MouseEvent e)
         {
-          action.run();
-          close();
+          try
+          {
+            action.run();
+          }
+          catch (Exception ex)
+          {
+            SetupInstallerPlugin.INSTANCE.log(ex);
+          }
+
+          display.asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              MessageOverlay.this.close();
+            }
+          });
         }
       });
     }
@@ -116,6 +145,14 @@ public class MessageOverlay extends Shell implements ControlListener
 
     // Initial bounds
     controlRelocator.relocate(this);
+
+    addDisposeListener(new DisposeListener()
+    {
+      public void widgetDisposed(DisposeEvent e)
+      {
+        MessageOverlay.this.getParent().removeControlListener(MessageOverlay.this);
+      }
+    });
   }
 
   @Override
@@ -157,13 +194,6 @@ public class MessageOverlay extends Shell implements ControlListener
   }
 
   @Override
-  public void dispose()
-  {
-    getParent().removeControlListener(this);
-    super.dispose();
-  }
-
-  @Override
   protected void checkSubclass()
   {
     // Nothing to do
@@ -172,22 +202,61 @@ public class MessageOverlay extends Shell implements ControlListener
   public void setMessage(String message)
   {
     String tmp = message;
-    int maxMessageLength = MAX_MESSAGE_LENGTH;
-    if (message.length() > maxMessageLength)
+    String actionLabel = action instanceof RunnableWithLabel ? ((RunnableWithLabel)action).getLabel() : null;
+
+    int actionLabelStartIndex = Integer.MIN_VALUE;
+    int actionLabelLength = Integer.MIN_VALUE;
+
+    if (actionLabel != null)
     {
-      tmp = StringUtil.shorten(message, maxMessageLength, false);
+      tmp += " " + actionLabel;
+      actionLabelStartIndex = message.length() + 1;
+      actionLabelLength = actionLabel.length();
+    }
+
+    if (tmp.length() > MAX_MESSAGE_LENGTH)
+    {
+      if (actionLabel != null)
+      {
+        try
+        {
+          tmp = StringUtil.shorten(message, MAX_MESSAGE_LENGTH - actionLabel.length() - 1, false);
+          actionLabelStartIndex = tmp.length() + 1;
+          tmp += " " + actionLabel;
+          actionLabelLength = actionLabel.length();
+        }
+        catch (IllegalArgumentException ex)
+        {
+          // Could happen if we have really long action labels: discard the action label text.
+          tmp = StringUtil.shorten(message, MAX_MESSAGE_LENGTH, false);
+          actionLabelStartIndex = Integer.MIN_VALUE;
+          actionLabelLength = Integer.MIN_VALUE;
+        }
+      }
+      else
+      {
+        tmp = StringUtil.shorten(message, MAX_MESSAGE_LENGTH, false);
+      }
 
       String wrapText = StringUtil.wrapText(message, MAX_TOOLTIP_LINE_LENGTH, true);
       wrapText = ensureMaxLineLength(message, wrapText, MAX_TOOLTIP_LINE_LENGTH);
 
-      link.setToolTipText(wrapText);
+      text.setToolTipText(wrapText);
     }
     else
     {
-      link.setToolTipText(null);
+      text.setToolTipText(null);
     }
 
-    link.setText(tmp);
+    text.setText(tmp);
+
+    if (actionLabelStartIndex >= 0)
+    {
+      StyleRange range = new StyleRange(actionLabelStartIndex, actionLabelLength, type.foregroundColor, type.backgroundColor);
+      range.underline = true;
+      text.setStyleRange(range);
+    }
+
     layout();
   }
 
@@ -256,5 +325,14 @@ public class MessageOverlay extends Shell implements ControlListener
       this.closeImg = closeImg;
       this.closeImgHover = closeImgHover;
     }
+  }
+
+  /**
+   *
+   * @author Andreas Scharf
+   */
+  public static interface RunnableWithLabel extends Runnable
+  {
+    String getLabel();
   }
 }

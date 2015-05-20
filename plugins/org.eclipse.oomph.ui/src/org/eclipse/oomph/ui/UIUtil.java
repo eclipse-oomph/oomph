@@ -28,11 +28,13 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -150,6 +152,38 @@ public final class UIUtil
     return shell[0];
   }
 
+  /**
+   * Checks if the given {@link Control} is a child of the given
+   * parent.
+   *
+   * @param parent The parent, not <code>null</code>.
+   * @param controlToCheck The control to check, not <code>null</code>.
+   *
+   * @return <code>true</code> if the given control is a child of the given
+   * parent, <code>false</code> otherwise.
+   */
+  public static boolean isParent(Composite parent, Control controlToCheck)
+  {
+    if (parent == null || controlToCheck == null)
+    {
+      throw new IllegalArgumentException("Neither parent nor controlToCheck must be null");
+    }
+  
+    if (controlToCheck == parent)
+    {
+      return true;
+    }
+  
+    Composite tmpParent = controlToCheck.getParent();
+  
+    while (tmpParent != parent && tmpParent != null)
+    {
+      tmpParent = tmpParent.getParent();
+    }
+  
+    return tmpParent == parent;
+  }
+
   public static GridLayout createGridLayout(int numColumns)
   {
     GridLayout layout = new GridLayout(numColumns, false);
@@ -176,29 +210,59 @@ public final class UIUtil
 
   public static void clearTextSelection(Object control)
   {
-    try
+    Text text = findTextControl(control);
+    if (text != null)
     {
-      if (control instanceof Viewer)
-      {
-        control = ((Viewer)control).getControl();
-      }
+      text.clearSelection();
+    }
+  }
 
-      if (control instanceof CCombo)
+  public static void setSelectionToEnd(Widget control)
+  {
+    Text text = findTextControl(control);
+    if (text != null)
+    {
+      String content = text.getText();
+      text.setSelection(content.length() + 1);
+    }
+  }
+
+  public static void selectAllText(Widget control)
+  {
+    Text text = findTextControl(control);
+    if (text != null)
+    {
+      text.setSelection(0);
+    }
+  }
+
+  private static Text findTextControl(Object control)
+  {
+    if (control instanceof Viewer)
+    {
+      control = ((Viewer)control).getControl();
+    }
+
+    if (control instanceof CCombo)
+    {
+      CCombo combo = (CCombo)control;
+
+      try
       {
-        CCombo combo = (CCombo)control;
         control = ReflectUtil.getValue("text", combo);
       }
-
-      if (control instanceof Text)
+      catch (Throwable ex)
       {
-        Text text = (Text)control;
-        text.clearSelection();
+        //$FALL-THROUGH$
       }
     }
-    catch (Throwable ex)
+
+    if (control instanceof Text)
     {
-      //$FALL-THROUGH$
+      return (Text)control;
     }
+
+    return null;
   }
 
   public static void runInProgressDialog(Shell shell, IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException

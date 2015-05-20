@@ -49,6 +49,7 @@ public class InstallLaunchButton extends ImageHoverButton
     setCornerWidth(10);
     setAlignment(SWT.CENTER);
     setCurrentState(State.INSTALL);
+    setDisabledBackgroundColor(COLOR_DEFAULT_DISABLED_BACKGROUND);
   }
 
   public float getProgress()
@@ -86,6 +87,7 @@ public class InstallLaunchButton extends ImageHoverButton
   {
     setDefaultImage(newState.icon);
     setHoverImage(newState.hoverIcon);
+    setDisabledImage(newState.disabledIcon);
     setText(newState.label);
     setBackground(newState.backgroundColor);
     setForeground(newState.foregroundColor);
@@ -140,16 +142,19 @@ public class InstallLaunchButton extends ImageHoverButton
   public static enum State
   {
     INSTALL("INSTALL", COLOR_INSTALL, COLOR_FOREGROUND_DEFAULT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_hover.png")),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_hover.png"), SetupInstallerPlugin.INSTANCE
+            .getSWTImage("simple/install_button_install_disabled.png")),
 
     INSTALLING("INSTALLING", COLOR_INSTALLING, COLOR_INSTALLING_FOREGROUND),
 
     INSTALLED("LAUNCH", COLOR_LAUNCH, COLOR_FOREGROUND_DEFAULT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch_hover.png"));
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch_hover.png"), null);
 
     public final Image icon;
 
     public final Image hoverIcon;
+
+    public final Image disabledIcon;
 
     public final String label;
 
@@ -159,16 +164,17 @@ public class InstallLaunchButton extends ImageHoverButton
 
     State(final String label, final Color backgroundColor, final Color foregroundColor)
     {
-      this(label, backgroundColor, foregroundColor, null, null);
+      this(label, backgroundColor, foregroundColor, null, null, null);
     }
 
-    State(final String label, final Color backgroundColor, final Color foregroundColor, final Image icon, final Image hoverIcon)
+    State(final String label, final Color backgroundColor, final Color foregroundColor, final Image icon, final Image hoverIcon, Image disabledIcon)
     {
       this.label = label;
       this.backgroundColor = backgroundColor;
       this.foregroundColor = foregroundColor;
       this.icon = icon;
       this.hoverIcon = hoverIcon;
+      this.disabledIcon = disabledIcon;
     }
   }
 }

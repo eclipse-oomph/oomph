@@ -143,7 +143,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     });
 
     Button browseButton = new Button(parent, SWT.NONE);
-    browseButton.setText("Browse...");
+    browseButton.setText("Browse" + StringUtil.HORIZONTAL_ELLIPSIS);
     browseButton.addSelectionListener(new SelectionAdapter()
     {
       @Override

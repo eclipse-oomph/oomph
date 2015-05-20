@@ -23,18 +23,14 @@ a {
 
 .productContainer {
 	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	width: 470px;
 	height: 62px;
 	padding: 18px 14px;
 	border-bottom: 3px solid #eee;
+	overflow: hidden;
 }
 
 .productContainer:last-child {
 	border-bottom: 0;
-}
-
-.largeProduct {
-	height: 180px !important;
 }
 
 .largeProduct:hover {
@@ -68,8 +64,11 @@ a {
 	background-color: #aebbdd;
 }
 
-.icon {
-	float: left;
+.iconContainer {
+	display: table-cell;
+}
+
+.icon {	
 	width: 64px;
 	height: 64px;
 	position: relative;
@@ -90,8 +89,8 @@ a {
 }
 
 .product {
-	float: left;
-	width: 390px;
+	display: table-cell;
+	vertical-align: top;
 	height: 56px;
 	padding: 6px 0 2px 16px;
 	overflow: visible;

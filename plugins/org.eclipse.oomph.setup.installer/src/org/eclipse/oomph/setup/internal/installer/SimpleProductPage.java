@@ -11,7 +11,6 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -28,8 +27,6 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.StringUtil;
 
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 
@@ -45,10 +42,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -62,8 +57,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   private SimpleSearchField searchField;
 
   private ToolBar buttonBar;
-
-  private ToolItem catalogsButton;
 
   private CatalogSelector catalogSelector;
 
@@ -226,38 +219,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     browser.setText(browser.getText());
   }
 
-  private void createCatalogsButton()
-  {
-    if (catalogsButton == null)
-    {
-      catalogsButton = new ToolItem(buttonBar, SWT.DROP_DOWN);
-      catalogsButton.setToolTipText("Select Catalogs");
-      catalogsButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"));
-
-      CatalogManager catalogManager = catalogSelector.getCatalogManager();
-      catalogManager.getSelection().eAdapters().add(new AdapterImpl()
-      {
-        @Override
-        public void notifyChanged(Notification msg)
-        {
-          handleFilter("");
-        }
-      });
-
-      catalogSelector.configure(catalogsButton);
-      AccessUtil.setKey(catalogsButton, "catalogs");
-    }
-  }
-
-  private void disposeCatalogsButton()
-  {
-    if (catalogsButton != null)
-    {
-      catalogsButton.dispose();
-      catalogsButton = null;
-    }
-  }
-
   private static String removeLinks(String description)
   {
     return description.replaceAll("</?a[^>]*>", "");
@@ -384,11 +345,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     {
       searchField.setEnabled(false);
 
-      if (catalogsButton != null)
-      {
-        catalogsButton.setEnabled(false);
-      }
-
       browser.setText("", true);
       stackComposite.setTopControl(animator);
       animator.start(1, animator.getImages().length - 1);
@@ -428,10 +384,9 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
                 Index index = catalogManager.getIndex();
                 if (index == null)
                 {
-                  disposeCatalogsButton();
                   int answer = new MessageDialog(getShell(), "Network Problem", null,
                       "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
-                      MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
+                      MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy" + StringUtil.HORIZONTAL_ELLIPSIS, "Exit" }, 0).open();
                   switch (answer)
                   {
                     case 0:
@@ -450,19 +405,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
                 }
 
                 searchField.setEnabled(true);
-
-                List<? extends Scope> productCatalogs = catalogManager.getCatalogs(true);
-                if (productCatalogs != null && productCatalogs.size() >= 3) // Self products + 2 more catalogs
-                {
-                  createCatalogsButton();
-                  catalogsButton.setEnabled(true);
-                }
-                else
-                {
-                  disposeCatalogsButton();
-                }
-
-                buttonBar.getParent().layout();
               }
             });
 

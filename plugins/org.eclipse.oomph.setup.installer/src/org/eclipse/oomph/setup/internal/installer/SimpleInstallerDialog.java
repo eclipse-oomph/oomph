@@ -11,14 +11,18 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.installer.MessageOverlay.ControlRelocator;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
@@ -30,6 +34,7 @@ import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.Dialog;
@@ -49,9 +54,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -59,7 +67,23 @@ import java.util.Stack;
  */
 public final class SimpleInstallerDialog extends AbstractSimpleDialog implements InstallerUI
 {
-  private static final int INSTALLER_WIDTH = 523;
+  private static final String CATALOGS_MENU_ITEM_TEXT = ProductCatalogsDialog.TITLE.toUpperCase() + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String SSH2_MENU_ITEM_TEXT = NetworkSSH2Dialog.TITLE.toUpperCase() + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String BUNDLE_POOLS_MENU_ITEM_TEXT = "BUNDLE POOLS" + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String NETWORK_CONNECTIONS_MENU_ITEM_TEXT = NetworkConnectionsDialog.TITLE.toUpperCase() + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String UPDATE_MENU_ITEM_TEXT = "UPDATE";
+
+  private static final String ADVANCED_MENU_ITEM_TEXT = "ADVANCED";
+
+  private static final String ABOUT_MENU_ITEM_TEXT = "ABOUT";
+
+  private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
+
+  private static final int INSTALLER_WIDTH = 600;
 
   private static final int INSTALLER_HEIGHT = 632;
 
@@ -92,8 +116,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private SimpleKeepInstallerPage keepInstallerPage;
 
   private SimpleInstallerMenu installerMenu;
-
-  private SimpleInstallerMenu.InstallerMenuItem updateInstallerItem;
 
   private SimpleInstallerMenuButton menuButton;
 
@@ -174,10 +196,33 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
-    // Initialize menu
+    // Initialize menu.
     getInstallerMenu();
 
+    // Listen for changes in the catalog index to update enabled/disabled state
+    // of product catalogs button.
+    installer.getCatalogManager().addPropertyChangeListener(new PropertyChangeListener()
+    {
+      public void propertyChange(PropertyChangeEvent evt)
+      {
+        if (CatalogManager.PROPERTY_INDEX.equals(evt.getPropertyName()))
+        {
+          indexLoaded((Index)evt.getNewValue());
+        }
+      }
+    });
+
     updateAvailable(false);
+  }
+
+  private void indexLoaded(Index index)
+  {
+    List<? extends Scope> productCatalogs = installer.getCatalogManager().getCatalogs(true);
+    boolean showProductCatalogsItem = productCatalogs != null && productCatalogs.size() >= 3; // Self products + 2 more catalogs
+
+    installerMenu.findMenuItemByName(SSH2_MENU_ITEM_TEXT).setDividerVisible(showProductCatalogsItem);
+    installerMenu.findMenuItemByName(CATALOGS_MENU_ITEM_TEXT).setVisible(showProductCatalogsItem);
+    installerMenu.layout();
   }
 
   private void toggleMenu()
@@ -236,10 +281,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private SimpleInstallerMenu createInstallerMenu()
   {
-    SimpleInstallerMenu menu = new SimpleInstallerMenu(this);
+    final SimpleInstallerMenu menu = new SimpleInstallerMenu(this);
 
     SimpleInstallerMenu.InstallerMenuItem networkConnectionsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    networkConnectionsItem.setText(NetworkConnectionsDialog.TITLE.toUpperCase() + "...");
+    networkConnectionsItem.setText(NETWORK_CONNECTIONS_MENU_ITEM_TEXT);
     networkConnectionsItem.setToolTipText(NetworkConnectionsDialog.DESCRIPTION);
     networkConnectionsItem.addSelectionListener(new SelectionAdapter()
     {
@@ -252,7 +297,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     });
 
     SimpleInstallerMenu.InstallerMenuItem bundlePoolsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    bundlePoolsItem.setText("BUNDLE POOLS...");
+    bundlePoolsItem.setText(BUNDLE_POOLS_MENU_ITEM_TEXT);
     bundlePoolsItem.setToolTipText(AgentManagerDialog.MESSAGE);
     bundlePoolsItem.addSelectionListener(new SelectionAdapter()
     {
@@ -264,7 +309,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     });
 
     SimpleInstallerMenu.InstallerMenuItem ssh2KeysItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    ssh2KeysItem.setText(NetworkSSH2Dialog.TITLE.toUpperCase() + "...");
+    ssh2KeysItem.setText(SSH2_MENU_ITEM_TEXT);
     ssh2KeysItem.setToolTipText(NetworkSSH2Dialog.DESCRIPTION);
     ssh2KeysItem.setDividerVisible(false);
     ssh2KeysItem.addSelectionListener(new SelectionAdapter()
@@ -277,13 +322,32 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
+    SimpleInstallerMenu.InstallerMenuItem catalogsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    catalogsItem.setText(CATALOGS_MENU_ITEM_TEXT);
+    catalogsItem.setDividerVisible(false);
+    catalogsItem.setToolTipText(ProductCatalogsDialog.DESCRIPTION);
+    catalogsItem.setVisible(false);
+    catalogsItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        ProductCatalogsDialog productCatalogsDialog = new ProductCatalogsDialog(SimpleInstallerDialog.this, installer.getCatalogManager(), true);
+        if (productCatalogsDialog.open() == SWT.OK)
+        {
+          productPage.handleFilter("");
+        }
+      }
+    });
+    AccessUtil.setKey(catalogsItem, "catalogs");
+
     Label spacer1 = new Label(menu, SWT.NONE);
     spacer1.setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 46).create());
 
-    updateInstallerItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    SimpleInstallerMenu.InstallerMenuItem updateInstallerItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     updateInstallerItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle.png"));
     updateInstallerItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle_hover.png"));
-    updateInstallerItem.setText("UPDATE");
+    updateInstallerItem.setText(UPDATE_MENU_ITEM_TEXT);
     updateInstallerItem.setToolTipText("Install available updates");
     updateInstallerItem.addSelectionListener(new SelectionAdapter()
     {
@@ -312,7 +376,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     });
 
     SimpleInstallerMenu.InstallerMenuItem advancedModeItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    advancedModeItem.setText("ADVANCED");
+    advancedModeItem.setText(ADVANCED_MENU_ITEM_TEXT);
     advancedModeItem.setToolTipText("Switch to advanced mode");
     advancedModeItem.addSelectionListener(new SelectionAdapter()
     {
@@ -325,7 +389,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     });
 
     SimpleInstallerMenu.InstallerMenuItem aboutItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    aboutItem.setText("ABOUT");
+    aboutItem.setText(ABOUT_MENU_ITEM_TEXT);
     aboutItem.setToolTipText("Show information about this installer");
     aboutItem.addSelectionListener(new SelectionAdapter()
     {
@@ -337,7 +401,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     });
 
     SimpleInstallerMenu.InstallerMenuItem exitItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    exitItem.setText("EXIT");
+    exitItem.setText(EXIT_MENU_ITEM_TEXT);
     exitItem.setDividerVisible(false);
     exitItem.addSelectionListener(new SelectionAdapter()
     {
@@ -354,7 +418,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private void updateAvailable(boolean available)
   {
     menuButton.setNotificationVisible(available);
-    updateInstallerItem.setVisible(available);
+    installerMenu.findMenuItemByName(UPDATE_MENU_ITEM_TEXT).setVisible(available);
     installerMenu.layout();
   }
 
@@ -508,7 +572,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public void clearMessage()
   {
-    if (currentMessage != null && !currentMessage.isDisposed())
+    if (currentMessage != null)
     {
       if (!currentMessage.isDisposed())
       {

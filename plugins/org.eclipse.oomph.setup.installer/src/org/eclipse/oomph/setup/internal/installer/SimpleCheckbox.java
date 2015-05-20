@@ -50,6 +50,7 @@ public class SimpleCheckbox extends FlatButton
     });
     setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///9/bold")));
     setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
+    setDisabledBackgroundColor(null);
   }
 
   @Override

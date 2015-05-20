@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.ui.UIUtil;
@@ -18,8 +19,8 @@ import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -30,21 +31,25 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Andreas Scharf
  */
-public class SimpleInstallerMenu extends Shell
+public class SimpleInstallerMenu extends Shell implements Listener
 {
-  private static final int MENU_WIDTH = 340;
+  private static final int MENU_MIN_WIDTH = 340;
 
-  private static final int MENU_HEIGHT = 553;
+  private static final int MENU_MIN_HEIGHT = 553;
 
   public SimpleInstallerMenu(Shell parent)
   {
     super(parent, SWT.NO_TRIM);
-    setSize(MENU_WIDTH, MENU_HEIGHT);
+    setSize(MENU_MIN_WIDTH, MENU_MIN_HEIGHT);
     setBackground(SetupInstallerPlugin.getColor(247, 148, 31));
     setBackgroundMode(SWT.INHERIT_FORCE);
 
@@ -69,6 +74,24 @@ public class SimpleInstallerMenu extends Shell
     hookListeners();
   }
 
+  public InstallerMenuItem findMenuItemByName(String name)
+  {
+    if (name == null)
+    {
+      throw new IllegalArgumentException("name must not be null");
+    }
+
+    for (Control child : getChildren())
+    {
+      if (child instanceof InstallerMenuItem && name.equals(((InstallerMenuItem)child).getText()))
+      {
+        return (InstallerMenuItem)child;
+      }
+    }
+
+    return null;
+  }
+
   @Override
   public void setVisible(boolean visible)
   {
@@ -78,6 +101,12 @@ public class SimpleInstallerMenu extends Shell
     }
 
     super.setVisible(visible);
+
+    if (visible)
+    {
+      setFocus();
+      forceFocus();
+    }
   }
 
   @Override
@@ -94,14 +123,35 @@ public class SimpleInstallerMenu extends Shell
 
   private void hookListeners()
   {
-    getParent().addControlListener(new ControlAdapter()
+    Composite parent = getParent();
+    parent.addListener(SWT.Move, this);
+    parent.addListener(SWT.Resize, this);
+
+    Display display = getDisplay();
+    display.addFilter(SWT.FocusOut, this);
+    display.addFilter(SWT.FocusIn, this);
+    display.addFilter(SWT.MouseDown, this);
+
+    addDisposeListener(new DisposeListener()
     {
-      @Override
-      public void controlMoved(ControlEvent e)
+      public void widgetDisposed(DisposeEvent e)
       {
-        adjustPosition();
+        removeDisposeListener(this);
+        unhookListeners();
       }
     });
+  }
+
+  private void unhookListeners()
+  {
+    Display display = getDisplay();
+    display.removeFilter(SWT.MouseDown, this);
+    display.removeFilter(SWT.FocusIn, this);
+    display.removeFilter(SWT.FocusOut, this);
+
+    Composite parent = getParent();
+    parent.removeListener(SWT.Resize, this);
+    parent.removeListener(SWT.Move, this);
   }
 
   private void adjustPosition()
@@ -109,11 +159,13 @@ public class SimpleInstallerMenu extends Shell
     Composite parent = getParent();
     Rectangle bounds = parent.getBounds();
 
-    Point bottomRight = new Point(bounds.x + bounds.width, bounds.y + bounds.height);
-    parent.toDisplay(bottomRight);
+    Point menuStartLocation = new Point(bounds.x + bounds.width, bounds.y + 75);
+    parent.toDisplay(menuStartLocation);
 
-    Point size = getSize();
-    setBounds(bottomRight.x, bottomRight.y - size.y - 5, size.x, size.y);
+    Point prefSize = computeSize(SWT.DEFAULT, SWT.DEFAULT);
+    Point size = new Point(Math.max(prefSize.x, MENU_MIN_WIDTH), Math.max(prefSize.y, bounds.height - 80) - 5);
+
+    setBounds(menuStartLocation.x, menuStartLocation.y, size.x, size.y);
   }
 
   /**
@@ -208,5 +260,59 @@ public class SimpleInstallerMenu extends Shell
         e.gc.fillRectangle(clientArea.x, clientArea.y, clientArea.width, clientArea.height);
       }
     }
+  }
+
+  public void handleEvent(Event event)
+  {
+    switch (event.type)
+    {
+      case SWT.Move:
+      case SWT.Resize:
+        adjustPosition();
+        break;
+      case SWT.FocusIn:
+      case SWT.FocusOut:
+      case SWT.MouseDown:
+        if (closeMenu(event))
+        {
+          close();
+        }
+        break;
+    }
+  }
+
+  private boolean closeMenu(Event event)
+  {
+    Display display = getDisplay();
+    Control focusControl = display.getFocusControl();
+    Control cursorControl = display.getCursorControl();
+
+    if (cursorControl == null)
+    {
+      return true;
+    }
+
+    if (focusControl == this)
+    {
+      return false;
+    }
+
+    boolean menuButtonPressed = SimpleInstallerMenuButton.ACCESS_KEY.equals(AccessUtil.getKey(cursorControl));
+    if (!menuButtonPressed && event.type == SWT.FocusOut && focusControl != null)
+    {
+      menuButtonPressed = SimpleInstallerMenuButton.ACCESS_KEY.equals(AccessUtil.getKey(focusControl));
+    }
+
+    if (menuButtonPressed)
+    {
+      return false;
+    }
+
+    if (UIUtil.isParent(this, focusControl))
+    {
+      return false;
+    }
+
+    return true;
   }
 }
