@@ -1722,7 +1722,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       public void run()
       {
-        setActivePage(0);
+        if (getPageCount() > 0)
+        {
+          setActivePage(0);
+        }
       }
     });
 
