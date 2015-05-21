@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,11 +87,11 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
       String bundlePoolPath = bundlePool.getLocation().getAbsolutePath();
 
       Agent agent = bundlePool.getAgent();
-      String agentPath = agent.getLocation().getAbsolutePath();
+      String agentPath = agent.getLocation().getAbsolutePath() + File.pathSeparator;
 
       if (bundlePoolPath.startsWith(agentPath))
       {
-        bundlePoolPath = bundlePoolPath.substring(agentPath.length() + 1);
+        bundlePoolPath = bundlePoolPath.substring(agentPath.length());
       }
 
       return bundlePoolPath;
