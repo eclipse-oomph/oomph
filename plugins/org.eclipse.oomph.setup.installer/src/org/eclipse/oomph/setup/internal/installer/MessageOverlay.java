@@ -110,6 +110,8 @@ public class MessageOverlay extends Shell implements ControlListener
         @Override
         public void mouseUp(MouseEvent e)
         {
+          MessageOverlay.this.close();
+
           try
           {
             action.run();
@@ -118,14 +120,6 @@ public class MessageOverlay extends Shell implements ControlListener
           {
             SetupInstallerPlugin.INSTANCE.log(ex);
           }
-
-          display.asyncExec(new Runnable()
-          {
-            public void run()
-            {
-              MessageOverlay.this.close();
-            }
-          });
         }
       });
     }

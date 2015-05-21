@@ -43,6 +43,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -99,6 +101,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private final Installer installer;
 
+  private final CatalogManager catalogManager;
+
   private final Stack<SimpleInstallerPage> pageStack = new Stack<SimpleInstallerPage>();
 
   private Composite stack;
@@ -131,6 +135,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.NO_TRIM, INSTALLER_WIDTH, INSTALLER_HEIGHT);
     this.installer = installer;
+    catalogManager = installer.getCatalogManager();
   }
 
   @Override
@@ -199,9 +204,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     // Initialize menu.
     getInstallerMenu();
 
-    // Listen for changes in the catalog index to update enabled/disabled state
-    // of product catalogs button.
-    installer.getCatalogManager().addPropertyChangeListener(new PropertyChangeListener()
+    final PropertyChangeListener catalogManagerListener = new PropertyChangeListener()
     {
       public void propertyChange(PropertyChangeEvent evt)
       {
@@ -210,6 +213,15 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
           indexLoaded((Index)evt.getNewValue());
         }
       }
+    };
+    catalogManager.addPropertyChangeListener(catalogManagerListener);
+
+    addDisposeListener(new DisposeListener()
+    {
+      public void widgetDisposed(DisposeEvent e)
+      {
+        catalogManager.removePropertyChangeListener(catalogManagerListener);
+      }
     });
 
     updateAvailable(false);
@@ -217,10 +229,9 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private void indexLoaded(Index index)
   {
-    List<? extends Scope> productCatalogs = installer.getCatalogManager().getCatalogs(true);
+    List<? extends Scope> productCatalogs = catalogManager.getCatalogs(true);
     boolean showProductCatalogsItem = productCatalogs != null && productCatalogs.size() >= 3; // Self products + 2 more catalogs
 
-    installerMenu.findMenuItemByName(SSH2_MENU_ITEM_TEXT).setDividerVisible(showProductCatalogsItem);
     installerMenu.findMenuItemByName(CATALOGS_MENU_ITEM_TEXT).setVisible(showProductCatalogsItem);
     installerMenu.layout();
   }
@@ -283,6 +294,24 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     final SimpleInstallerMenu menu = new SimpleInstallerMenu(this);
 
+    SimpleInstallerMenu.InstallerMenuItem catalogsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    catalogsItem.setText(CATALOGS_MENU_ITEM_TEXT);
+    catalogsItem.setToolTipText(ProductCatalogsDialog.DESCRIPTION);
+    catalogsItem.setVisible(false);
+    catalogsItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        ProductCatalogsDialog productCatalogsDialog = new ProductCatalogsDialog(SimpleInstallerDialog.this, catalogManager, true);
+        if (productCatalogsDialog.open() == ProductCatalogsDialog.OK)
+        {
+          productPage.handleFilter("");
+        }
+      }
+    });
+    AccessUtil.setKey(catalogsItem, "catalogs");
+
     SimpleInstallerMenu.InstallerMenuItem networkConnectionsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     networkConnectionsItem.setText(NETWORK_CONNECTIONS_MENU_ITEM_TEXT);
     networkConnectionsItem.setToolTipText(NetworkConnectionsDialog.DESCRIPTION);
@@ -321,25 +350,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         dialog.open();
       }
     });
-
-    SimpleInstallerMenu.InstallerMenuItem catalogsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    catalogsItem.setText(CATALOGS_MENU_ITEM_TEXT);
-    catalogsItem.setDividerVisible(false);
-    catalogsItem.setToolTipText(ProductCatalogsDialog.DESCRIPTION);
-    catalogsItem.setVisible(false);
-    catalogsItem.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        ProductCatalogsDialog productCatalogsDialog = new ProductCatalogsDialog(SimpleInstallerDialog.this, installer.getCatalogManager(), true);
-        if (productCatalogsDialog.open() == SWT.OK)
-        {
-          productPage.handleFilter("");
-        }
-      }
-    });
-    AccessUtil.setKey(catalogsItem, "catalogs");
 
     Label spacer1 = new Label(menu, SWT.NONE);
     spacer1.setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 46).create());
@@ -508,6 +518,35 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     switchToPage(variablePage);
   }
 
+  private void doSwitch(final SimpleInstallerPage oldPage, final SimpleInstallerPage newPage)
+  {
+    if (oldPage != null)
+    {
+      oldPage.aboutToHide();
+    }
+
+    stackLayout.topControl = newPage;
+    stack.layout();
+
+    clearMessage();
+
+    newPage.aboutToShow();
+    newPage.setFocus();
+  }
+
+  private void switchToPage(final SimpleInstallerPage newPage)
+  {
+    if (newPage != null)
+    {
+      SimpleInstallerPage oldPage = !pageStack.isEmpty() ? pageStack.peek() : null;
+      if (oldPage == null || oldPage != newPage)
+      {
+        pageStack.push(newPage);
+        doSwitch(oldPage, newPage);
+      }
+    }
+  }
+
   public void backSelected()
   {
     if (pageStack.size() <= 1)
@@ -515,30 +554,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       return;
     }
 
-    UIUtil.asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        SimpleInstallerPage currentPage = pageStack.pop();
+    SimpleInstallerPage oldPage = pageStack.pop();
+    SimpleInstallerPage newPage = pageStack.peek();
 
-        try
-        {
-          currentPage.aboutToHide();
-        }
-        catch (Exception ex)
-        {
-          SetupInstallerPlugin.INSTANCE.log(ex);
-        }
-
-        SimpleInstallerPage previousPage = pageStack.peek();
-
-        stackLayout.topControl = previousPage;
-        stack.layout();
-
-        previousPage.aboutToShow();
-        previousPage.setFocus();
-      }
-    });
+    doSwitch(oldPage, newPage);
   }
 
   public void showMessage(String message, MessageOverlay.Type type, boolean dismissAutomatically)
@@ -607,35 +626,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     menuButton.setFocus();
 
     super.dispose();
-  }
-
-  private void switchToPage(final SimpleInstallerPage page)
-  {
-    if (page != null)
-    {
-      final SimpleInstallerPage currentPage = !pageStack.isEmpty() ? pageStack.peek() : null;
-      if (currentPage == null || currentPage != page)
-      {
-        pageStack.push(page);
-
-        UIUtil.asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            if (currentPage != null)
-            {
-              currentPage.aboutToHide();
-            }
-
-            stackLayout.topControl = page;
-            stack.layout();
-
-            page.aboutToShow();
-            page.setFocus();
-          }
-        });
-      }
-    }
   }
 
   static Font getDefaultFont()

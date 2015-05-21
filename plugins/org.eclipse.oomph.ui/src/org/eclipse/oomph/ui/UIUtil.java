@@ -168,19 +168,19 @@ public final class UIUtil
     {
       throw new IllegalArgumentException("Neither parent nor controlToCheck must be null");
     }
-  
+
     if (controlToCheck == parent)
     {
       return true;
     }
-  
+
     Composite tmpParent = controlToCheck.getParent();
-  
+
     while (tmpParent != parent && tmpParent != null)
     {
       tmpParent = tmpParent.getParent();
     }
-  
+
     return tmpParent == parent;
   }
 
@@ -232,7 +232,7 @@ public final class UIUtil
     Text text = findTextControl(control);
     if (text != null)
     {
-      text.setSelection(0);
+      text.selectAll();
     }
   }
 

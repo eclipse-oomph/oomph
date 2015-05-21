@@ -46,7 +46,7 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
 
   public ProductCatalogsDialog(Shell parentShell, CatalogManager catalogManager, boolean product)
   {
-    super(parentShell, TITLE, 300, 300, SetupInstallerPlugin.INSTANCE, false);
+    super(parentShell, TITLE, 450, 300, SetupInstallerPlugin.INSTANCE, false);
     this.catalogManager = catalogManager;
     this.product = product;
   }
@@ -66,7 +66,7 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
   @Override
   protected void createUI(Composite parent)
   {
-    catalogViewer = CheckboxTableViewer.newCheckList(parent, SWT.BORDER);
+    catalogViewer = CheckboxTableViewer.newCheckList(parent, SWT.NONE);
     catalogViewer.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
     catalogViewer.setContentProvider(new IStructuredContentProvider()
     {
