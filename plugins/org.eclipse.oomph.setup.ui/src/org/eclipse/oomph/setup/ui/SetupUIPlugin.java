@@ -471,7 +471,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
           workbenchWindow = workbench.getWorkbenchWindows()[0];
         }
 
-        SetupWizard updater = new SetupWizard.Updater(finalPerfomer);
+        SetupWizard updater = finalPerfomer != null ? new SetupWizard.Updater(finalPerfomer) : new SetupWizard.Updater(SetupContext
+            .createInstallationWorkspaceAndUser(resourceSet));
         updater.openDialog(workbenchWindow.getShell());
       }
     });
