@@ -45,8 +45,11 @@ public class TaskItemDecorator
       {
         public void preferenceChange(PreferenceChangeEvent event)
         {
-          Object value = event.getNewValue();
-          update(value == null ? "" : value.toString());
+          if (WORKSPACE_NAME.equals(event.getKey()))
+          {
+            Object value = event.getNewValue();
+            update(value == null ? "" : value.toString());
+          }
         }
       });
 
