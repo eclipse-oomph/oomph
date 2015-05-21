@@ -2706,7 +2706,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 "=" + baseURI + "->" + redirectedBaseURI, monitor);
           }
         }
-        else
+        // Don't add -D if we're redirecting into the default archive.
+        else if (!redirectedURI.isArchive() || !(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!").equals(redirectedURI.authority()))
         {
           performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI,
               monitor);

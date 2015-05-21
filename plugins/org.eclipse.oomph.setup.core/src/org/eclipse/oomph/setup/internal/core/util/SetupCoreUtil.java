@@ -327,11 +327,11 @@ public final class SetupCoreUtil
         && !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_REDIRECTION_BASE + "mirror.nothing"))
         && SetupContext.INDEX_SETUP_LOCATION_URI.equals(uriConverter.normalize(SetupContext.INDEX_SETUP_LOCATION_URI)))
     {
-      handleMirrorRedirection(uriConverter);
+      handleArchiveRedirection(uriConverter);
     }
   }
 
-  private static void handleMirrorRedirection(URIConverter uriConverter)
+  private static void handleArchiveRedirection(URIConverter uriConverter)
   {
     // long start = System.currentTimeMillis();
 
