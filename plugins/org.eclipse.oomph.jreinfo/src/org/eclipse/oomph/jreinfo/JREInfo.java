@@ -16,11 +16,16 @@ import org.eclipse.oomph.util.XMLUtil;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
 
 /**
  * @author Stepper
@@ -96,6 +101,14 @@ public final class JREInfo
       Process process = builder.start();
 
       DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+      documentBuilder.setEntityResolver(new EntityResolver()
+      {
+        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+        {
+          return new InputSource(new StringReader(""));
+        }
+      });
+
       Element rootElement = XMLUtil.loadRootElement(documentBuilder, process.getInputStream());
       XMLUtil.handleElementsByTagName(rootElement, "key", new XMLUtil.ElementHandler()
       {
