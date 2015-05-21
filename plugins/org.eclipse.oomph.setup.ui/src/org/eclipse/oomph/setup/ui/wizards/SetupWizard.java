@@ -691,7 +691,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                 {
                   // Collect a map of the remote URIs.
                   Map<EClass, Set<URI>> uriMap = new LinkedHashMap<EClass, Set<URI>>();
-                  final Map<URI, Resource> resourceMap = new LinkedHashMap<URI, Resource>();
+                  final Map<URI, Set<Resource>> resourceMap = new LinkedHashMap<URI, Set<Resource>>();
                   URIConverter uriConverter = resourceSet.getURIConverter();
                   for (Resource resource : resourceSet.getResources())
                   {
@@ -706,11 +706,21 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                         // If the scheme is remote...
                         URI uri = uriConverter.normalize(resource.getURI());
                         String scheme = uri.scheme();
-                        if ("http".equals(scheme) || "https".equals(scheme))
+                        if (uri.isArchive())
+                        {
+                          String authority = uri.authority();
+                          if (authority.startsWith("http:") || authority.startsWith("https:"))
+                          {
+                            URI archiveURI = URI.createURI(authority.substring(0, authority.length() - 1));
+                            CollectionUtil.add(uriMap, eClass, archiveURI);
+                            CollectionUtil.add(resourceMap, archiveURI, resource);
+                          }
+                        }
+                        else if ("http".equals(scheme) || "https".equals(scheme))
                         {
                           // Group the URIs by object type so we can reload "the most import" types of objects first.
                           CollectionUtil.add(uriMap, eClass, uri);
-                          resourceMap.put(uri, resource);
+                          CollectionUtil.add(resourceMap, uri, resource);
                         }
                       }
                     }
@@ -743,7 +753,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                       @Override
                       protected synchronized void cacheUpdated(URI uri)
                       {
-                        updatedResources.add(resourceMap.get(uri));
+                        updatedResources.addAll(resourceMap.get(uri));
                       }
                     }.begin(resourceURIs, new NullProgressMonitor());
 
