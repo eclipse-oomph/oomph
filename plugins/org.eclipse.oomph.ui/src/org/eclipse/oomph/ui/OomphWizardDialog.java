@@ -55,7 +55,10 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
       {
         public void pageChanged(PageChangedEvent event)
         {
-          helpSupport.updateHelp();
+          if (helpSupport != null)
+          {
+            helpSupport.updateHelp();
+          }
         }
       };
 
