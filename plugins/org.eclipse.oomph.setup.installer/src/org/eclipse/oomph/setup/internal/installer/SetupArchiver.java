@@ -113,7 +113,17 @@ public class SetupArchiver implements IApplication
       }
       finally
       {
-        IOUtil.closeSilent(zipFile);
+        try
+        {
+          if (zipFile != null)
+          {
+            zipFile.close();
+          }
+        }
+        catch (IOException ex)
+        {
+          ex.printStackTrace();
+        }
       }
     }
 
