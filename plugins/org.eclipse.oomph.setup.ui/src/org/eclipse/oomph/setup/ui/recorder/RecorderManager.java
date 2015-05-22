@@ -93,22 +93,19 @@ public final class RecorderManager
       }
       finally
       {
-        if (isPreferenceDialog(display.getActiveShell()))
+        if (enabled)
         {
-          if (enabled)
+          if (recorder == null)
           {
-            if (recorder == null)
-            {
-              recorder = new PreferencesRecorder();
-            }
+            recorder = new PreferencesRecorder();
           }
-          else
+        }
+        else
+        {
+          if (recorder != null)
           {
-            if (recorder != null)
-            {
-              recorder.done();
-              recorder = null;
-            }
+            recorder.done();
+            recorder = null;
           }
         }
       }
@@ -196,7 +193,7 @@ public final class RecorderManager
   }
 
   @SuppressWarnings("restriction")
-  private static void hookRecorderCheckbox(Shell shell)
+  private static void hookRecorderCheckbox(final Shell shell)
   {
     try
     {
