@@ -36,7 +36,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -764,17 +763,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                       {
                         public void run()
                         {
-                          // If any of the updated resources change a model, then reload the entire index.
-                          for (Resource resource : updatedResources)
-                          {
-                            if (resource.getContents().get(0) instanceof EPackage)
-                            {
-                              wizard.reloadIndex();
-                              return;
-                            }
-                          }
-
-                          // Otherwise reload only the affected resources.
+                          // Reload only the affected resources.
                           wizard.reloadIndex(updatedResources);
                         }
                       });
