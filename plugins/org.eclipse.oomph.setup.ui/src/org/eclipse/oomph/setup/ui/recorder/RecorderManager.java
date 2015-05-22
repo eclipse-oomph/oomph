@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -25,7 +26,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -40,8 +41,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import org.osgi.service.prefs.BackingStoreException;
-
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -52,7 +52,7 @@ public final class RecorderManager
 {
   public static final RecorderManager INSTANCE = new RecorderManager();
 
-  private static final IEclipsePreferences SETUP_UI_PREFERENCES = (IEclipsePreferences)SetupUIPlugin.INSTANCE.getInstancePreferences();
+  private static final IPersistentPreferenceStore SETUP_UI_PREFERENCES = (IPersistentPreferenceStore)SetupUIPlugin.INSTANCE.getPreferenceStore();
 
   private static ToolItem toolItem;
 
@@ -68,8 +68,8 @@ public final class RecorderManager
 
   public boolean isRecorderEnabled()
   {
-    String value = SETUP_UI_PREFERENCES.get(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, null);
-    if (value == null)
+    String value = SETUP_UI_PREFERENCES.getString(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER);
+    if (StringUtil.isEmpty(value))
     {
       ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
       SetupContext setupContext = SetupContext.createUserOnly(resourceSet);
@@ -114,13 +114,13 @@ public final class RecorderManager
 
   private void doSetRecorderEnabled(boolean enabled)
   {
-    SETUP_UI_PREFERENCES.putBoolean(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, enabled);
+    SETUP_UI_PREFERENCES.setValue(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, enabled);
 
     try
     {
-      SETUP_UI_PREFERENCES.flush();
+      SETUP_UI_PREFERENCES.save();
     }
-    catch (BackingStoreException ex)
+    catch (IOException ex)
     {
       SetupUIPlugin.INSTANCE.log(ex);
     }
