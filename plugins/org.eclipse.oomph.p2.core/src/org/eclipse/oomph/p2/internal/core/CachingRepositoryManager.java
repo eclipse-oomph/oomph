@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
@@ -79,6 +80,10 @@ public class CachingRepositoryManager<T>
 
   private static final Method METHOD_broadcastChangeEvent = ReflectUtil.getMethod(AbstractRepositoryManager.class, "broadcastChangeEvent", URI.class, int.class,
       int.class, boolean.class);
+
+  private static final String PROPERTY_VERSION = "version";
+
+  private static final String PROPERTY_GENERATED = "generated";
 
   private final AbstractRepositoryManager<T> delegate;
 
@@ -152,7 +157,7 @@ public class CachingRepositoryManager<T>
 
             if (!indexFile.exists() || preferredOrder.length == 0)
             {
-              cacheIndexFile(location, suffixes[i]);
+              cacheIndexFile(location, suffixes[i], allSuffixes);
             }
 
             break;
@@ -225,7 +230,7 @@ public class CachingRepositoryManager<T>
     }
   }
 
-  private void cacheIndexFile(URI location, String suffix)
+  private void cacheIndexFile(URI location, String suffix, String[] allSuffixes)
   {
     if ("file".equals(location.getScheme()))
     {
@@ -242,12 +247,23 @@ public class CachingRepositoryManager<T>
     else
     {
       properties = new LinkedHashMap<String, String>();
-      properties.put("version", "1");
+      properties.put(PROPERTY_VERSION, "1");
+      properties.put(PROPERTY_GENERATED, "true");
     }
 
     String prefix = repositoryType == IRepository.TYPE_METADATA ? "metadata" : "artifact";
 
-    properties.put(prefix + ".repository.factory.order", suffix + ",!");
+    StringBuilder builder = new StringBuilder(suffix);
+    for (String otherSuffix : allSuffixes)
+    {
+      if (!ObjectUtil.equals(otherSuffix, suffix))
+      {
+        builder.append(",");
+        builder.append(otherSuffix);
+      }
+    }
+
+    properties.put(prefix + ".repository.factory.order", builder.toString() + ",!");
     PropertiesUtil.saveProperties(cachedIndexFile, properties, false);
   }
 
