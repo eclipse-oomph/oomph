@@ -42,20 +42,32 @@ public class ProgressLogMonitor extends ProgressMonitorWrapper
   public void beginTask(String name, int totalWork)
   {
     super.beginTask(name, totalWork);
-    log.log(name);
+    log(name);
   }
 
   @Override
   public void setTaskName(String name)
   {
     super.setTaskName(name);
-    log.log(name);
+    log(name);
   }
 
   @Override
   public void subTask(String name)
   {
     super.subTask(name);
-    log.log(name);
+    log(name);
+  }
+
+  private void log(String name)
+  {
+    try
+    {
+      log.log(name);
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
   }
 }
