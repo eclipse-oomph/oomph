@@ -40,7 +40,9 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
@@ -167,6 +169,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private Color gray;
 
+  private Composite container;
+
   private ComboViewer repositoryViewer;
 
   private CCombo repositoryCombo;
@@ -290,16 +294,19 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private void setItems(Item... items)
   {
-    versionsViewer.setInput(null);
-
-    itemsViewerInput = new CategoryItem();
-    itemsViewerInput.setChildren(items);
-    itemsViewer.setInput(itemsViewerInput);
-
-    if (itemsViewer instanceof TreeViewer && filter != null)
+    if (!container.isDisposed())
     {
-      TreeViewer treeViewer = (TreeViewer)itemsViewer;
-      treeViewer.expandAll();
+      versionsViewer.setInput(null);
+
+      itemsViewerInput = new CategoryItem();
+      itemsViewerInput.setChildren(items);
+      itemsViewer.setInput(itemsViewerInput);
+
+      if (itemsViewer instanceof TreeViewer && filter != null)
+      {
+        TreeViewer treeViewer = (TreeViewer)itemsViewer;
+        treeViewer.expandAll();
+      }
     }
   }
 
@@ -328,7 +335,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     final Display display = parent.getDisplay();
     gray = new Color(display, 75, 75, 75);
 
-    Composite container = new Composite(parent, SWT.NONE);
+    container = new Composite(parent, SWT.NONE);
     container.setBackground(WHITE);
     container.setLayout(new GridLayout(1, false));
 
@@ -856,22 +863,66 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
 
     @Override
+    @SuppressWarnings("restriction")
     protected void doSafe(IProgressMonitor monitor) throws Throwable
     {
       analyzeJob.cancel();
       installableUnits = null;
 
+      IMetadataRepositoryManager repositoryManager = P2Util.getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
       if (repositoryProvider == null || !repositoryProvider.getLocation().equals(location))
       {
         disposeRepositoryProvider();
-
-        IMetadataRepositoryManager repositoryManager = P2Util.getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
         repositoryProvider = new RepositoryProvider.Metadata(repositoryManager, location);
       }
 
       SubMonitor progress = SubMonitor.convert(monitor, 101);
 
       IMetadataRepository repository = repositoryProvider.getRepository(progress.newChild(100));
+
+      if (repository instanceof org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)
+      {
+        org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository compositeRepository = (org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)repository;
+        org.eclipse.equinox.internal.p2.persistence.CompositeRepositoryState state = compositeRepository.toState();
+        URI[] children = state.getChildren();
+
+        final List<Item> errors = new ArrayList<Item>();
+        Set<String> messages = new HashSet<String>();
+
+        for (URI child : children)
+        {
+          try
+          {
+            URI absolute = URIUtil.makeAbsolute(child, location);
+            if (repositoryManager.loadRepository(absolute, null) == null)
+            {
+              throw new ProvisionException("No repository found at " + absolute + ".");
+            }
+          }
+          catch (Exception ex)
+          {
+            IStatus status = P2UIPlugin.INSTANCE.getStatus(ex);
+            if (messages.add(status.getMessage()))
+            {
+              errors.add(new ErrorItem(status));
+            }
+          }
+        }
+
+        if (!errors.isEmpty())
+        {
+          UIUtil.asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              setItems(errors.toArray(new Item[errors.size()]));
+            }
+          });
+
+          return;
+        }
+      }
+
       installableUnits = repository.query(QueryUtil.createIUAnyQuery(), progress.newChild(1));
       analyzeJob.reschedule();
     }
@@ -1373,19 +1424,25 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         public void run()
         {
-          setItems(capabilityItems);
-
-          namespaceViewer.setInput(namespaces);
-          namespaceViewer.getCCombo().pack();
-          selectorComposite.getParent().layout();
-
-          UIUtil.asyncExec(new Runnable()
+          if (!container.isDisposed())
           {
-            public void run()
+            setItems(capabilityItems);
+
+            namespaceViewer.setInput(namespaces);
+            namespaceViewer.getCCombo().pack();
+            selectorComposite.getParent().layout();
+
+            UIUtil.asyncExec(new Runnable()
             {
-              namespaceViewer.setSelection(new StructuredSelection(currentNamespace));
-            }
-          });
+              public void run()
+              {
+                if (!container.isDisposed() && currentNamespace != null)
+                {
+                  namespaceViewer.setSelection(new StructuredSelection(currentNamespace));
+                }
+              }
+            });
+          }
         }
       });
     }
@@ -1513,27 +1570,33 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         public void run()
         {
-          repositoryViewer.refresh();
-
-          UIUtil.asyncExec(new Runnable()
+          if (!container.isDisposed())
           {
-            public void run()
+            repositoryViewer.refresh();
+
+            UIUtil.asyncExec(new Runnable()
             {
-              String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
-              if (activeRepository == null)
+              public void run()
               {
-                repositoryViewer.setSelection(StructuredSelection.EMPTY);
-                repositoryCombo.setText("");
+                if (!container.isDisposed())
+                {
+                  String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
+                  if (activeRepository == null)
+                  {
+                    repositoryViewer.setSelection(StructuredSelection.EMPTY);
+                    repositoryCombo.setText("");
+                  }
+                  else
+                  {
+                    ISelection selection = new StructuredSelection(activeRepository);
+                    repositoryViewer.setSelection(selection);
+                    repositoryCombo.setText(activeRepository);
+                    repositoryCombo.setSelection(new Point(0, activeRepository.length()));
+                  }
+                }
               }
-              else
-              {
-                ISelection selection = new StructuredSelection(activeRepository);
-                repositoryViewer.setSelection(selection);
-                repositoryCombo.setText(activeRepository);
-                repositoryCombo.setSelection(new Point(0, activeRepository.length()));
-              }
-            }
-          });
+            });
+          }
         }
       });
     }
