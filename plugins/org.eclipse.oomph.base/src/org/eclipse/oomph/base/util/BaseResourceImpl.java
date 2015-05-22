@@ -293,7 +293,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         EObject basisObject = null;
         boolean checkedID = false;
         String id = null;
-        for (InternalEObject container = internalEObject.eInternalContainer(); container != null; container = container.eInternalContainer())
+        for (InternalEObject container = (InternalEObject)internalEObject.eContainer(); container != null; container = (InternalEObject)container.eContainer())
         {
           // If the object is contained by this helper's resource, we want a normal "downward" pointing href.
           Internal eDirectResource = container.eDirectResource();
@@ -320,7 +320,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         }
 
         Resource rootContainerResource = internalEObject.eResource();
-        if (rootContainerResource != otherResource)
+        if (rootContainerResource != otherResource && rootContainerResource != null)
         {
           String fragmentPath = EcoreUtil.getRelativeURIFragmentPath(internalEObject, basisObject == null ? obj : basisObject);
           URI proxyURI = super.getHREF(rootContainerResource, internalEObject);
