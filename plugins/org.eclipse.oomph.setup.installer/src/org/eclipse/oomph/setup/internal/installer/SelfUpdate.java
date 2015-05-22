@@ -21,6 +21,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
@@ -30,6 +31,7 @@ import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.IRunnable;
+import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -39,10 +41,17 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.swt.widgets.Shell;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -56,6 +65,78 @@ public class SelfUpdate
   private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
 
   public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL).replace('\\', '/');
+
+  public static final String SELF_HOSTING = "Self Hosting";
+
+  public static String getProductVersion()
+  {
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+
+    IProfile profile = agent.getProfileRegistry().getProfile(IProfileRegistry.SELF);
+    if (profile == null || "SelfHostingProfile".equals(profile.getProfileId()))
+    {
+      return SELF_HOSTING;
+    }
+
+    String firstBuildID = null;
+    int highestBuildID = 0;
+
+    BundleContext bundleContext = SetupInstallerPlugin.INSTANCE.getBundleContext();
+    for (Bundle bundle : bundleContext.getBundles())
+    {
+      String symbolicName = bundle.getSymbolicName();
+      if (symbolicName.startsWith(SetupCoreUtil.OOMPH_NAMESPACE))
+      {
+        String buildID = OomphPlugin.getBuildID(bundle);
+        if (buildID != null)
+        {
+          if (firstBuildID == null)
+          {
+            firstBuildID = buildID;
+          }
+
+          try
+          {
+            int id = Integer.parseInt(buildID);
+            if (id > highestBuildID)
+            {
+              highestBuildID = id;
+            }
+          }
+          catch (NumberFormatException ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+      }
+    }
+
+    String buildID = highestBuildID != 0 ? Integer.toString(highestBuildID) : firstBuildID;
+
+    for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.PRODUCT_ID), null)))
+    {
+      String label;
+
+      Version version = iu.getVersion();
+      if (buildID != null && version.getSegmentCount() > 3)
+      {
+        label = version.getSegment(0) + "." + version.getSegment(1) + "." + version.getSegment(2);
+      }
+      else
+      {
+        label = version.toString();
+      }
+
+      if (buildID != null)
+      {
+        label += " Build " + buildID;
+      }
+
+      return label;
+    }
+
+    return null;
+  }
 
   public static Resolution resolve(final User user, IProgressMonitor monitor) throws CoreException
   {

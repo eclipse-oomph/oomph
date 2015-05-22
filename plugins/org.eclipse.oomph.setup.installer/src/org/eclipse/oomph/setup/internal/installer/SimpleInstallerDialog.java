@@ -505,10 +505,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public void showAbout()
   {
-    int xxx;
-    // TODO Fix version in about dialog
-
-    String version = "he.ll.o";
+    String version = SelfUpdate.getProductVersion();
     new AboutDialog(getShell(), version).open();
   }
 

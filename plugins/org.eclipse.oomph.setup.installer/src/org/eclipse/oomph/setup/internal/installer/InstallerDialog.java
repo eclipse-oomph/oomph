@@ -11,28 +11,18 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
-import org.eclipse.oomph.p2.core.Agent;
-import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
-import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
-import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
 import org.eclipse.oomph.util.ExceptionHandler;
-import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.equinox.p2.engine.IProfile;
-import org.eclipse.equinox.p2.engine.IProfileRegistry;
-import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.metadata.Version;
-import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -51,9 +41,6 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 
 /**
  * @author Eike Stepper
@@ -406,8 +393,6 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
    */
   private final class ProductVersionInitializer extends Thread
   {
-    private boolean selfHosting;
-
     public ProductVersionInitializer()
     {
       super("Product Version Initializer");
@@ -418,10 +403,10 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     {
       try
       {
-        version = getProductVersion();
+        version = SelfUpdate.getProductVersion();
         if (version != null)
         {
-          if (selfHosting)
+          if (version == SelfUpdate.SELF_HOSTING)
           {
             updateSearching = false;
             setUpdateIcon(0);
@@ -461,77 +446,6 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
       {
         SetupInstallerPlugin.INSTANCE.log(ex);
       }
-    }
-
-    private String getProductVersion()
-    {
-      Agent agent = P2Util.getAgentManager().getCurrentAgent();
-
-      IProfile profile = agent.getProfileRegistry().getProfile(IProfileRegistry.SELF);
-      if (profile == null || "SelfHostingProfile".equals(profile.getProfileId()))
-      {
-        selfHosting = true;
-        return "Self Hosting";
-      }
-
-      String firstBuildID = null;
-      int highestBuildID = 0;
-
-      BundleContext bundleContext = SetupInstallerPlugin.INSTANCE.getBundleContext();
-      for (Bundle bundle : bundleContext.getBundles())
-      {
-        String symbolicName = bundle.getSymbolicName();
-        if (symbolicName.startsWith(SetupCoreUtil.OOMPH_NAMESPACE))
-        {
-          String buildID = OomphPlugin.getBuildID(bundle);
-          if (buildID != null)
-          {
-            if (firstBuildID == null)
-            {
-              firstBuildID = buildID;
-            }
-
-            try
-            {
-              int id = Integer.parseInt(buildID);
-              if (id > highestBuildID)
-              {
-                highestBuildID = id;
-              }
-            }
-            catch (NumberFormatException ex)
-            {
-              //$FALL-THROUGH$
-            }
-          }
-        }
-      }
-
-      String buildID = highestBuildID != 0 ? Integer.toString(highestBuildID) : firstBuildID;
-
-      for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(SetupUIPlugin.PRODUCT_ID), null)))
-      {
-        String label;
-
-        Version version = iu.getVersion();
-        if (buildID != null && version.getSegmentCount() > 3)
-        {
-          label = version.getSegment(0) + "." + version.getSegment(1) + "." + version.getSegment(2);
-        }
-        else
-        {
-          label = version.toString();
-        }
-
-        if (buildID != null)
-        {
-          label += " Build " + buildID;
-        }
-
-        return label;
-      }
-
-      return null;
     }
   }
 
