@@ -63,7 +63,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   private IProvisioningAgent provisioningAgent;
 
-  private LazyProfileRegistry profileRegistry;
+  private IProfileRegistry profileRegistry;
 
   private IMetadataRepositoryManager metadataRepositoryManager;
 
@@ -260,7 +260,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     monitor.done();
   }
 
-  public synchronized LazyProfileRegistry getProfileRegistry()
+  public synchronized IProfileRegistry getProfileRegistry()
   {
     getProvisioningAgent();
     return profileRegistry;
@@ -411,8 +411,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   {
     // monitor.subTask("Refreshing " + getLocation() + " profiles");
     getProvisioningAgent();
-    profileRegistry.resetProfiles();
-    profileRegistry.getProfileMap(monitor);
+
+    if (profileRegistry instanceof LazyProfileRegistry)
+    {
+      LazyProfileRegistry lazyProfileRegistry = (LazyProfileRegistry)profileRegistry;
+      lazyProfileRegistry.resetProfiles();
+      lazyProfileRegistry.getProfileMap(monitor);
+    }
 
     fillProfileMap(profileMap);
     profileMap.refresh();
