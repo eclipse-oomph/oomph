@@ -163,6 +163,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
 
   public final void paintControl(PaintEvent e)
   {
+    int index = this.index;
     if (index != NONE)
     {
       Rectangle clientArea = getClientArea();
