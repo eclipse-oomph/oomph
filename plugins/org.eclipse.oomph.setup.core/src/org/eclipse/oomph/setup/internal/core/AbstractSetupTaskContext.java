@@ -196,6 +196,12 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   public OS getOS()
   {
+    OS os = (OS)get(OS.class);
+    if (os != null)
+    {
+      return os;
+    }
+
     return OS.INSTANCE;
   }
 

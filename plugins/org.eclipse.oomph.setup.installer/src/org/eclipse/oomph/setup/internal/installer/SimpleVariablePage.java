@@ -811,6 +811,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     performer.getUnresolvedVariables().clear();
     performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
     performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
+    performer.put(OS.class, OS.INSTANCE.getForBitness(javaController.getBitness()));
     performer.setOffline(false);
     performer.setMirrors(true);
     performer.setVMPath(vmPath);
@@ -1085,7 +1086,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

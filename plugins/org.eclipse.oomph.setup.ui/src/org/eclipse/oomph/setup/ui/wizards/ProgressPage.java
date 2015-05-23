@@ -917,7 +917,7 @@ public class ProgressPage extends SetupWizardPage
   public static boolean launchProduct(SetupTaskPerformer performer) throws Exception
   {
     OS os = performer.getOS();
-    if (os.isCurrent())
+    if (os.isCurrentOS())
     {
       performer.log("Launching the installed product...");
 

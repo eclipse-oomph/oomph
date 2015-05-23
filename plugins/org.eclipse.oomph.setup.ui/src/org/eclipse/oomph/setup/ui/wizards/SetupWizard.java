@@ -31,6 +31,7 @@ import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -97,6 +98,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   private SetupTaskPerformer performer;
 
   private String vmPath;
+
+  private OS os;
 
   private IndexLoader indexLoader;
 
@@ -279,6 +282,16 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public void setVMPath(String vmPath)
   {
     this.vmPath = vmPath;
+  }
+
+  public OS getOS()
+  {
+    return os;
+  }
+
+  public void setOS(OS os)
+  {
+    this.os = os;
   }
 
   @Override

@@ -24,6 +24,7 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.PropertiesViewer;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -380,6 +381,7 @@ public class ConfirmationPage extends SetupWizardPage
         {
           SetupTaskPerformer performer = getPerformer();
           performer.setVMPath(getWizard().getVMPath());
+          performer.put(OS.class, getWizard().getOS());
           performer.setMirrors(isMirrors());
           performer.setOffline(isOffline());
 

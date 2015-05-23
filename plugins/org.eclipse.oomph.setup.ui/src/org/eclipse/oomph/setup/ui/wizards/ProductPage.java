@@ -285,6 +285,7 @@ public class ProductPage extends SetupWizardPage
       {
         String vmPath = jre == null ? null : new File(jre.getJavaHome(), "bin").getAbsolutePath();
         getWizard().setVMPath(vmPath);
+        getWizard().setOS(OS.INSTANCE.getForBitness(getBitness()));
       }
 
       @Override

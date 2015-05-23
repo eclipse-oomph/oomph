@@ -76,6 +76,11 @@ public abstract class OS
     return Platform.getOS().equals(osgiOS) && Platform.getWS().equals(osgiWS) && Platform.getOSArch().equals(osgiArch);
   }
 
+  public boolean isCurrentOS()
+  {
+    return Platform.getOS().equals(osgiOS);
+  }
+
   public boolean is32BitAvailable()
   {
     return true;
@@ -124,6 +129,8 @@ public abstract class OS
   public abstract String getGitPrefix();
 
   public abstract String getJREsRoot();
+
+  public abstract OS getForBitness(int bitness);
 
   public static void close(Closeable closeable)
   {
@@ -174,6 +181,8 @@ public abstract class OS
    */
   private static class Win32 extends OS
   {
+    private static final Win32 INSTANCE = new Win32(Platform.WS_WIN32, Platform.ARCH_X86);
+
     public Win32(String osgiWS, String osgiArch)
     {
       super(Platform.OS_WIN32, osgiWS, osgiArch);
@@ -214,6 +223,17 @@ public abstract class OS
     {
       return "C:\\Program Files (x86)\\Java";
     }
+
+    @Override
+    public OS getForBitness(int bitness)
+    {
+      if (bitness == 64)
+      {
+        return Win64.INSTANCE;
+      }
+
+      return this;
+    }
   }
 
   /**
@@ -221,6 +241,8 @@ public abstract class OS
    */
   private static class Win64 extends Win32
   {
+    private static final Win64 INSTANCE = new Win64(Platform.WS_WIN32);
+
     public Win64(String osgiWS)
     {
       super(osgiWS, Platform.ARCH_X86_64);
@@ -230,6 +252,17 @@ public abstract class OS
     public String getJREsRoot()
     {
       return "C:\\Program Files\\Java";
+    }
+
+    @Override
+    public OS getForBitness(int bitness)
+    {
+      if (bitness == 32)
+      {
+        return Win32.INSTANCE;
+      }
+
+      return this;
     }
   }
 
@@ -284,6 +317,12 @@ public abstract class OS
     {
       return false;
     }
+
+    @Override
+    public OS getForBitness(int bitness)
+    {
+      return this;
+    }
   }
 
   /**
@@ -324,6 +363,38 @@ public abstract class OS
     public String getJREsRoot()
     {
       return "";
+    }
+
+    @Override
+    public OS getForBitness(int bitness)
+    {
+      String osgiArch = getOsgiArch();
+      if (bitness == 32)
+      {
+        if (Platform.ARCH_X86_64.equals(osgiArch))
+        {
+          return new Linux(getOsgiWS(), Platform.ARCH_X86);
+        }
+
+        if (Platform.ARCH_IA64.equals(osgiArch))
+        {
+          return new Linux(getOsgiWS(), Platform.ARCH_IA64_32);
+        }
+      }
+      else
+      {
+        if (Platform.ARCH_X86.equals(osgiArch))
+        {
+          return new Linux(getOsgiWS(), Platform.ARCH_X86_64);
+        }
+
+        if (Platform.ARCH_IA64_32.equals(osgiArch))
+        {
+          return new Linux(getOsgiWS(), Platform.ARCH_IA64);
+        }
+      }
+
+      return this;
     }
   }
 }
