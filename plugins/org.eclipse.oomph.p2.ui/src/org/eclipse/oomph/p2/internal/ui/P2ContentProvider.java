@@ -13,6 +13,7 @@ package org.eclipse.oomph.p2.internal.ui;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.Profile;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -58,6 +59,24 @@ public class P2ContentProvider implements ITreeContentProvider
 
   public Object getParent(Object element)
   {
+    if (element instanceof Profile)
+    {
+      Profile profile = (Profile)element;
+      return profile.getBundlePool();
+    }
+
+    if (element instanceof BundlePool)
+    {
+      BundlePool bundlePool = (BundlePool)element;
+      return bundlePool.getAgent();
+    }
+
+    if (element instanceof Agent)
+    {
+      Agent agent = (Agent)element;
+      return agent.getAgentManager();
+    }
+
     return null;
   }
 

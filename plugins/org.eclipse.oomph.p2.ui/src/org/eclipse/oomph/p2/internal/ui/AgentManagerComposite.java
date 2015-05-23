@@ -27,11 +27,14 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -45,7 +48,9 @@ import org.eclipse.swt.widgets.Tree;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -106,6 +111,17 @@ public class AgentManagerComposite extends Composite
         else
         {
           treeViewer.setExpandedState(selectedElement, !treeViewer.getExpandedState(selectedElement));
+        }
+      }
+    });
+    tree.addKeyListener(new KeyAdapter()
+    {
+      @Override
+      public void keyPressed(KeyEvent e)
+      {
+        if (e.keyCode == SWT.DEL && deleteButton.isEnabled())
+        {
+          deletePressed();
         }
       }
     });
@@ -197,27 +213,7 @@ public class AgentManagerComposite extends Composite
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        AgentManagerElementImpl agentManagerElement = (AgentManagerElementImpl)selectedElement;
-        String type = agentManagerElement.getElementType();
-
-        String message = "Are you sure to delete " + type + " " + agentManagerElement + "?";
-        if (!(agentManagerElement instanceof Profile))
-        {
-          message += "\n\nThe physical " + type + " files will remain on disk even if you answer Yes.";
-        }
-
-        if (MessageDialog.openQuestion(getShell(), AgentManagerDialog.TITLE, message))
-        {
-          try
-          {
-            agentManagerElement.delete();
-            treeViewer.refresh();
-          }
-          catch (Exception ex)
-          {
-            P2UIPlugin.INSTANCE.log(ex);
-          }
-        }
+        deletePressed();
       }
     });
 
@@ -327,6 +323,65 @@ public class AgentManagerComposite extends Composite
   protected void checkSubclass()
   {
     // Disable the check that prevents subclassing of SWT components
+  }
+
+  private void deletePressed()
+  {
+    AgentManagerElementImpl agentManagerElement = (AgentManagerElementImpl)selectedElement;
+    String type = agentManagerElement.getElementType();
+
+    String message = "Are you sure to delete " + type + " " + agentManagerElement + "?";
+    if (!(agentManagerElement instanceof Profile))
+    {
+      message += "\n\nThe physical " + type + " files will remain on disk even if you answer Yes.";
+    }
+
+    if (MessageDialog.openQuestion(getShell(), AgentManagerDialog.TITLE, message))
+    {
+      try
+      {
+        Object newSelection = null;
+        IStructuredSelection selection = (IStructuredSelection)treeViewer.getSelection();
+        Object element = selection.getFirstElement();
+        if (element != null)
+        {
+          ITreeContentProvider contentProvider = (ITreeContentProvider)treeViewer.getContentProvider();
+          Object parent = contentProvider.getParent(element);
+          if (parent != null)
+          {
+            newSelection = parent;
+
+            Object[] elements = contentProvider.getChildren(parent);
+            treeViewer.getComparator().sort(treeViewer, elements);
+            List<Object> children = Arrays.asList(elements);
+            int index = children.indexOf(element);
+            if (index != -1)
+            {
+              if (index + 1 < children.size())
+              {
+                newSelection = children.get(index + 1);
+              }
+              else if (index > 0)
+              {
+                newSelection = children.get(index - 1);
+              }
+            }
+          }
+        }
+
+        agentManagerElement.delete();
+        treeViewer.refresh();
+
+        if (newSelection != null)
+        {
+          treeViewer.setSelection(new StructuredSelection(newSelection));
+        }
+      }
+      catch (Exception ex)
+      {
+        P2UIPlugin.INSTANCE.log(ex);
+      }
+    }
   }
 
   protected void elementChanged(Object element)
