@@ -110,6 +110,8 @@ import java.util.Map;
  */
 public class SimpleVariablePage extends SimpleInstallerPage
 {
+  private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch");
+
   private static final String SETUP_LOG_FILE = OS.INSTANCE.getEclipseDir() + "/configuration/org.eclipse.oomph.setup/setup.log";
 
   private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot");
@@ -937,7 +939,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
       SetupInstallerPlugin.INSTANCE.log(ex);
     }
 
-    dialog.exitSelected();
+    if (EXIT_AFTER_LAUNCH)
+    {
+      dialog.exitSelected();
+    }
   }
 
   private void setFolderText(String dir)
