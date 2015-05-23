@@ -783,10 +783,6 @@
         value="warning"/>
     <setupTask
         xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.team.cvs.ssh/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
         key="/project/org.eclipse.team.cvs.ssh2/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
         value="warning"/>
     <setupTask
@@ -822,7 +818,7 @@
         <requirement
             name="org.eclipse.cvs.feature.group"/>
         <requirement
-            name="org.eclipse.team.cvs.ssh"/>
+            name="org.eclipse.team.cvs.ssh2"/>
         <requirement
             name="org.eclipse.compare.examples"/>
         <requirement
@@ -855,7 +851,7 @@
               project="org.eclipse.team.core"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='team']/@setupTasks.16/@workingSets.1 //@projects[name='team']/@setupTasks.16/@workingSets.2"/>
+              excludedWorkingSet="//@projects[name='team']/@setupTasks.15/@workingSets.1 //@projects[name='team']/@setupTasks.15/@workingSets.2"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -1372,6 +1368,66 @@
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform UI support</description>
+  </project>
+  <project name="ui.tools"
+      label="UI Tools">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.platform.ui.tools"
+        remoteURI="platform/eclipse.platform.ui.tools"
+        pushURI="">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform UI Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <description>Platform UI Tools</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform UI Tools"
+          activeRepositoryList="${eclipse.target.platform}"
+          includeAllPlatforms="true">
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <sourceLocator
+            rootFolder="${git.clone.platform.ui.tools.location}"
+            locateNestedProjects="true"/>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform UI Tools">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.e4.core.tools.feature"/>
+        </predicate>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master">
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="eclipse.target.platform"
+          value="Mars"
+          storageURI="scope://Workspace"/>
+    </stream>
+    <description>The Platform UI Tools support</description>
   </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"

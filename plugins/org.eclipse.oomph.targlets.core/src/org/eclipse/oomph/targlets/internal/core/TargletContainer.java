@@ -439,6 +439,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     builder.append(PROP_ARCH);
     builder.append("="); //$NON-NLS-1$
     builder.append(arch);
+
+    builder.append(",org.eclipse.swt.buildtime=true");
+
     return builder.toString();
   }
 
@@ -1056,8 +1059,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               requiredLicensesDescription.setVersion(Version.createOSGi(1, 0, 0));
               requiredLicensesDescription.setArtifacts(new IArtifactKey[0]);
               requiredLicensesDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-                  requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
+              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
+                  IInstallableUnit.NAMESPACE_IU_ID, requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
               requiredLicensesDescription.addRequirements(licenseRequirements);
 
               IInstallableUnit requiredLicensesIU = MetadataFactory.createInstallableUnit(requiredLicensesDescription);
@@ -1076,9 +1079,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               workspaceRequirementsDescription.setVersion(Version.createOSGi(1, 0, 0));
               workspaceRequirementsDescription.setArtifacts(new IArtifactKey[0]);
               workspaceRequirementsDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              workspaceRequirementsDescription
-                  .setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-                      workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
+              workspaceRequirementsDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
+                  IInstallableUnit.NAMESPACE_IU_ID, workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
               workspaceRequirementsDescription.addRequirements(workspaceRequirements);
 
               IInstallableUnit workspaceRequirementsIU = MetadataFactory.createInstallableUnit(workspaceRequirementsDescription);
@@ -1292,8 +1294,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             }
 
             description.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
-            description.addProvidedCapabilities(Collections
-                .singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, description.getId(), description.getVersion())));
+            description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
+                description.getId(), description.getVersion())));
 
             IInstallableUnit workspaceSourceIU = MetadataFactory.createInstallableUnit(description);
             ius.add(workspaceSourceIU);
@@ -1345,8 +1347,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       description.setId(A_PDE_TARGET_PLATFORM_LOWER_CASE);
       Version version = Version.createOSGi(1, 0, 0);
       description.setVersion(version);
-      description.addProvidedCapabilities(
-          Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM, "Cannot be installed into the IDE", version)));
+      description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM,
+          "Cannot be installed into the IDE", version)));
       description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
       description.setArtifacts(new IArtifactKey[0]);
       return MetadataFactory.createInstallableUnit(description);
