@@ -10,10 +10,8 @@
  */
 package org.eclipse.oomph.setup.workingsets.impl;
 
-import org.eclipse.oomph.setup.Project;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.Stream;
-import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
@@ -180,31 +178,40 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     return super.eIsSet(featureID);
   }
 
-  public boolean isNeeded(SetupTaskContext context) throws Exception
+  private String getWorkingSetPrefix()
   {
-    WorkingSetGroup defaultWorkingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
-    Map<String, WorkingSet> existingWorkingSets = new HashMap<String, WorkingSet>();
-    for (WorkingSet workingSet : defaultWorkingSetGroup.getWorkingSets())
-    {
-      existingWorkingSets.put(workingSet.getID(), workingSet);
-    }
-
-    String prefix = "";
     for (EObject eContainer = eContainer(); eContainer != null; eContainer = eContainer.eContainer())
     {
-      if (eContainer instanceof Project)
+      if (eContainer instanceof Scope)
       {
-        prefix += ((Project)eContainer).getName() + " ";
-      }
-      else if (eContainer instanceof Stream)
-      {
-        prefix += ((Stream)eContainer).getName() + " ";
-      }
-      else if (eContainer instanceof User)
-      {
-        prefix += "<user> ";
+        Scope scope = (Scope)eContainer;
+        return scope.getQualifiedName().replace(' ', '.') + '-';
       }
     }
+
+    throw new IllegalStateException("The working set task must be indirectly contained by a scope");
+  }
+
+  private Map<String, WorkingSet> getExistingWorkingSets(String prefix, EList<WorkingSet> workingSets)
+  {
+    Map<String, WorkingSet> existingWorkingSets = new HashMap<String, WorkingSet>();
+    for (WorkingSet workingSet : workingSets)
+    {
+      String id = workingSet.getID();
+      if (id.startsWith(prefix))
+      {
+        existingWorkingSets.put(id, workingSet);
+      }
+    }
+
+    return existingWorkingSets;
+  }
+
+  public boolean isNeeded(SetupTaskContext context) throws Exception
+  {
+    String prefix = getWorkingSetPrefix();
+    WorkingSetGroup defaultWorkingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
+    Map<String, WorkingSet> existingWorkingSets = getExistingWorkingSets(prefix, defaultWorkingSetGroup.getWorkingSets());
 
     for (WorkingSet workingSet : getWorkingSets())
     {
@@ -216,25 +223,22 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     {
       context.checkCancelation();
 
-      WorkingSet existingWorkingSet = existingWorkingSets.put(workingSet.getID(), workingSet);
+      WorkingSet existingWorkingSet = existingWorkingSets.remove(workingSet.getID());
       if (existingWorkingSet == null || !EcoreUtil.equals(workingSet.getPredicates(), existingWorkingSet.getPredicates()))
       {
         return true;
       }
     }
 
-    return false;
+    return !existingWorkingSets.isEmpty();
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
+    String prefix = getWorkingSetPrefix();
     WorkingSetGroup defaultWorkingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
-    Map<String, WorkingSet> existingIds = new HashMap<String, WorkingSet>();
     EList<WorkingSet> workingSets = defaultWorkingSetGroup.getWorkingSets();
-    for (WorkingSet workingSet : workingSets)
-    {
-      existingIds.put(workingSet.getID(), workingSet);
-    }
+    Map<String, WorkingSet> existingWorkingSets = getExistingWorkingSets(prefix, workingSets);
 
     EList<WorkingSet> newWorkingSetGroups = getWorkingSets();
     int index = 0;
@@ -243,7 +247,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
       context.checkCancelation();
 
       String id = workingSet.getID();
-      WorkingSet existingWorkingSet = existingIds.put(id, workingSet);
+      WorkingSet existingWorkingSet = existingWorkingSets.remove(id);
       if (existingWorkingSet == null)
       {
         workingSets.add(index++, workingSet);
@@ -255,6 +259,8 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
         ++index;
       }
     }
+
+    workingSets.removeAll(existingWorkingSets.values());
 
     Resource resource = defaultWorkingSetGroup.eResource();
     resource.save(null);
