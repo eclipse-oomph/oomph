@@ -68,6 +68,7 @@ for f in *.zip; do
       rm -f unsigned.zip signed.zip
     fi
 
+    chmod a+x "Eclipse Installer.app/Contents/MacOS/oomph"
     tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz "Eclipse Installer.app"
 
   elif [[ $f == *win32* ]]; then
