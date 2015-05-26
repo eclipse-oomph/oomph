@@ -33,6 +33,7 @@ import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -117,6 +118,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -514,7 +516,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       Profile profile = descriptor.getWorkingProfile();
       if (profile == null || //
-          !descriptor.getWorkingDigest().equals(digest) && descriptor.getUpdateProblem() == null || //
+          !descriptor.getWorkingDigest().equals(digest) && !isDisplayThread() && descriptor.getUpdateProblem() == null || //
           FORCE_UPDATE.get() == Boolean.TRUE)
       {
         try
@@ -902,6 +904,22 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return providesNamespace(unit, "org.eclipse.update.feature");
   }
 
+  private static boolean isDisplayThread()
+  {
+    try
+    {
+      Class<?> displayClass = CommonPlugin.loadClass("org.eclipse.swt", "org.eclipse.swt.widgets.Display");
+      Method getCurrentMethod = ReflectUtil.getMethod(displayClass, "getCurrent");
+      return ReflectUtil.invokeMethod(getCurrentMethod, null) != null;
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return false;
+  }
+
   private static boolean providesNamespace(IInstallableUnit unit, String namespace)
   {
     for (IProvidedCapability providedCapability : unit.getProvidedCapabilities())
@@ -1059,8 +1077,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               requiredLicensesDescription.setVersion(Version.createOSGi(1, 0, 0));
               requiredLicensesDescription.setArtifacts(new IArtifactKey[0]);
               requiredLicensesDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
-                  IInstallableUnit.NAMESPACE_IU_ID, requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
+              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
+                  requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
               requiredLicensesDescription.addRequirements(licenseRequirements);
 
               IInstallableUnit requiredLicensesIU = MetadataFactory.createInstallableUnit(requiredLicensesDescription);
@@ -1079,8 +1097,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               workspaceRequirementsDescription.setVersion(Version.createOSGi(1, 0, 0));
               workspaceRequirementsDescription.setArtifacts(new IArtifactKey[0]);
               workspaceRequirementsDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              workspaceRequirementsDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(
-                  IInstallableUnit.NAMESPACE_IU_ID, workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
+              workspaceRequirementsDescription
+                  .setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
+                      workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
               workspaceRequirementsDescription.addRequirements(workspaceRequirements);
 
               IInstallableUnit workspaceRequirementsIU = MetadataFactory.createInstallableUnit(workspaceRequirementsDescription);
@@ -1294,8 +1313,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             }
 
             description.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
-            description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-                description.getId(), description.getVersion())));
+            description.addProvidedCapabilities(Collections
+                .singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, description.getId(), description.getVersion())));
 
             IInstallableUnit workspaceSourceIU = MetadataFactory.createInstallableUnit(description);
             ius.add(workspaceSourceIU);
@@ -1347,8 +1366,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       description.setId(A_PDE_TARGET_PLATFORM_LOWER_CASE);
       Version version = Version.createOSGi(1, 0, 0);
       description.setVersion(version);
-      description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM,
-          "Cannot be installed into the IDE", version)));
+      description.addProvidedCapabilities(
+          Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM, "Cannot be installed into the IDE", version)));
       description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
       description.setArtifacts(new IArtifactKey[0]);
       return MetadataFactory.createInstallableUnit(description);
