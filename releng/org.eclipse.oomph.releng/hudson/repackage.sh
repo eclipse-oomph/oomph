@@ -65,10 +65,10 @@ for f in *.zip; do
       rm -rf "Eclipse Installer.app"
       curl -o signed.zip -F file=@unsigned.zip http://build.eclipse.org:31338/macsign.php
       unzip -qq signed.zip
-      rm -f signed.zip
+      rm -f unsigned.zip signed.zip
     fi
 
-    tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz *
+    tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz "Eclipse Installer.app"
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
