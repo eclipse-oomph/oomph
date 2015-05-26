@@ -440,7 +440,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   {
     if (this.provisioningAgent == null)
     {
-      profileRegistry = (LazyProfileRegistry)provisioningAgent.getService(IProfileRegistry.SERVICE_NAME);
+      profileRegistry = (IProfileRegistry)provisioningAgent.getService(IProfileRegistry.SERVICE_NAME);
       metadataRepositoryManager = (IMetadataRepositoryManager)provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
       artifactRepositoryManager = (IArtifactRepositoryManager)provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME);
 
