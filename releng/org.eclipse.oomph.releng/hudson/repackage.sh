@@ -63,7 +63,7 @@ for f in *.zip; do
       echo "  Signing Eclipse Installer.app"
       zip -r -q unsigned.zip "Eclipse Installer.app"
       rm -rf "Eclipse Installer.app"
-      curl -o signed.zip -F filedata=@unsigned.zip http://build.eclipse.org:31338/macsign.php
+      curl -o signed.zip -F file=@unsigned.zip http://build.eclipse.org:31338/macsign.php
       unzip -qq signed.zip
       rm -f signed.zip
     fi
