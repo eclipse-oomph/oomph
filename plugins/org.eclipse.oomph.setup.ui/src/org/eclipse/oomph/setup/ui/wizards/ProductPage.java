@@ -508,7 +508,7 @@ public class ProductPage extends SetupWizardPage
     });
     AccessUtil.setKey(descriptionBrowser, "description");
 
-    sashForm.setWeights(new int[] { 7, 2 });
+    sashForm.setWeights(new int[] { 14, 5 });
 
     final CatalogSelection selection = catalogManager.getSelection();
     productViewer.setInput(selection);
