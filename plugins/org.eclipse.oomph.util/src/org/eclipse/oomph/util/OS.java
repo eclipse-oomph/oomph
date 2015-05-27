@@ -14,6 +14,7 @@ import org.eclipse.oomph.internal.util.UtilPlugin;
 
 import org.eclipse.emf.common.CommonPlugin;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 
 import java.io.Closeable;
@@ -111,7 +112,7 @@ public abstract class OS
     }
     catch (Throwable ex)
     {
-      //$FALL-THROUGH$
+      UtilPlugin.INSTANCE.log(ex, IStatus.WARNING);
     }
 
     return false;
