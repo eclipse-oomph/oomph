@@ -492,11 +492,17 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
 
     public boolean isNeeded(SetupTaskContext context, MylynQueriesTask task) throws Exception
     {
+      EList<Query> queries = task.getQueries();
+      if (queries.isEmpty())
+      {
+        return false;
+      }
+
       String connectorKind = task.getConnectorKind();
       String repositoryURL = task.getRepositoryURL();
       repository = TasksUi.getRepositoryManager().getRepository(connectorKind, repositoryURL);
 
-      for (Query query : task.getQueries())
+      for (Query query : queries)
       {
         context.checkCancelation();
 
