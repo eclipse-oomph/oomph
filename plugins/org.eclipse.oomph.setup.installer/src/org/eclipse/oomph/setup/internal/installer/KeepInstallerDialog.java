@@ -28,7 +28,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -54,28 +53,20 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
 
   public KeepInstallerDialog(Shell parentShell, boolean startPermanentInstaller)
   {
-    super(parentShell, SHELL_TEXT, 500, 300, SetupInstallerPlugin.INSTANCE, false);
+    super(parentShell, SHELL_TEXT, 560, 270, SetupInstallerPlugin.INSTANCE, false);
     this.startPermanentInstaller = startPermanentInstaller;
   }
 
   @Override
   protected String getDefaultMessage()
   {
-    return "Copy the installer to a permanent location on your disk.";
+    return KeepInstallerUtil.KEEP_INSTALLER_DESCRIPTION + ".";
   }
 
   @Override
   protected int getContainerMargin()
   {
     return 10;
-  }
-
-  @Override
-  protected Control createContents(Composite parent)
-  {
-    Control contents = super.createContents(parent);
-    parent.pack();
-    return contents;
   }
 
   @Override
@@ -167,7 +158,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       }
     });
 
-    if (InstallerUtil.getPowerShell() != null)
+    if (KeepInstallerUtil.getPowerShell() != null)
     {
       new Label(parent, SWT.NONE);
       startMenuButton = new Button(parent, SWT.CHECK);
@@ -225,7 +216,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             monitor.beginTask("Copying installer to " + location, IProgressMonitor.UNKNOWN);
-            InstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, quickLaunch);
+            KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, quickLaunch);
             monitor.done();
           }
         });

@@ -41,6 +41,8 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
 
   private File installationLogFile;
 
+  private Label logFilePathLabel;
+
   public SimpleInstallationLogPage(Composite parent, SimpleInstallerDialog dialog)
   {
     super(parent, dialog, true);
@@ -56,7 +58,7 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
     layout.marginBottom = 30;
     layout.marginHeight = 0;
     layout.marginWidth = 0;
-    layout.verticalSpacing = 0;
+    layout.verticalSpacing = 5;
 
     container.setLayout(layout);
     container.setBackgroundMode(SWT.INHERIT_FORCE);
@@ -66,14 +68,17 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
     title.setText("INSTALLATION LOG");
     title.setForeground(UIUtil.getEclipseThemeColor());
     title.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///12/bold")));
-    title.setLayoutData(GridDataFactory.swtDefaults().create());
+    title.setLayoutData(GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.END).create());
+
+    logFilePathLabel = new Label(container, SWT.NONE);
+    logFilePathLabel.setLayoutData(GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.END).grab(true, false).create());
 
     scrolledComposite = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
     scrolledComposite.setExpandHorizontal(true);
     scrolledComposite.setExpandVertical(true);
     text = new Text(scrolledComposite, SWT.MULTI | SWT.READ_ONLY);
     scrolledComposite.setContent(text);
-    scrolledComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).indent(0, 20).create());
+    scrolledComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
     // Workaround for bug 93472 (Content of ScrolledComposite doesn't get scrolled by mousewheel).
     // Setting the focus on the scroller doesn't work, that is why we forward the mouse wheel event.
@@ -108,9 +113,12 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
       if (this.installationLogFile != null && this.installationLogFile.exists())
       {
         text.setText(readLog());
+        logFilePathLabel.setVisible(true);
+        logFilePathLabel.setText("Location: " + this.installationLogFile.getAbsolutePath());
       }
       else
       {
+        logFilePathLabel.setVisible(false);
         text.setText("No installation log available.");
       }
 

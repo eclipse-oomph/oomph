@@ -52,7 +52,7 @@ public abstract class SimpleInstallerPage extends Composite
 
   protected final SimpleInstallerDialog dialog;
 
-  private final FlatButton backButton;
+  protected final FlatButton backButton;
 
   public SimpleInstallerPage(final Composite parent, final SimpleInstallerDialog dialog, boolean withBackButton)
   {

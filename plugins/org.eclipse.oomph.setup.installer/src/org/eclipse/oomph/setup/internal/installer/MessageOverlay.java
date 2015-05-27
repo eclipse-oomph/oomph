@@ -46,17 +46,17 @@ public class MessageOverlay extends Shell implements ControlListener
 
   private final SimpleInstallerDialog dialog;
 
+  private final Type type;
+
   private final ControlRelocator controlRelocator;
 
   private final boolean dismissAutomatically;
 
+  private final Runnable action;
+
   private StyledText text;
 
   private boolean firstShown = true;
-
-  private Runnable action;
-
-  private Type type;
 
   public MessageOverlay(SimpleInstallerDialog dialog, Type type, ControlRelocator controlRelocator, boolean dismissAutomatically)
   {
@@ -110,7 +110,7 @@ public class MessageOverlay extends Shell implements ControlListener
         @Override
         public void mouseUp(MouseEvent e)
         {
-          MessageOverlay.this.close();
+          MessageOverlay.this.dialog.clearMessage();
 
           try
           {
@@ -133,7 +133,7 @@ public class MessageOverlay extends Shell implements ControlListener
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        close();
+        MessageOverlay.this.dialog.clearMessage();
       }
     });
 
@@ -147,6 +147,21 @@ public class MessageOverlay extends Shell implements ControlListener
         MessageOverlay.this.getParent().removeControlListener(MessageOverlay.this);
       }
     });
+  }
+
+  public Runnable getAction()
+  {
+    return action;
+  }
+
+  public Type getType()
+  {
+    return type;
+  }
+
+  public boolean isDismissAutomatically()
+  {
+    return dismissAutomatically;
   }
 
   @Override
@@ -289,20 +304,14 @@ public class MessageOverlay extends Shell implements ControlListener
   /**
    * @author Andreas Scharf
    */
-  public static interface ControlRelocator
-  {
-    public void relocate(Control control);
-  }
-
-  /**
-   * @author Andreas Scharf
-   */
   public static enum Type
   {
     ERROR(SetupInstallerPlugin.getColor(249, 54, 50), AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
         SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")), SUCCESS(SetupInstallerPlugin.getColor(58, 195, 4),
             AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
-            SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png"));
+            SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")), WARNING(SetupInstallerPlugin.getColor(240, 173, 78),
+                AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
+                SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png"));
 
     public final Color backgroundColor;
 
@@ -322,11 +331,19 @@ public class MessageOverlay extends Shell implements ControlListener
   }
 
   /**
+   * @author Andreas Scharf
+   */
+  public static interface ControlRelocator
+  {
+    public void relocate(Control control);
+  }
+
+  /**
    *
    * @author Andreas Scharf
    */
   public static interface RunnableWithLabel extends Runnable
   {
-    String getLabel();
+    public String getLabel();
   }
 }

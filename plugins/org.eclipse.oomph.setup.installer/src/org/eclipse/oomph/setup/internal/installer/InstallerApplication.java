@@ -190,7 +190,7 @@ public class InstallerApplication implements IApplication
 
       if (mode == Mode.ADVANCED)
       {
-        if (InstallerUtil.canKeepInstaller())
+        if (KeepInstallerUtil.canKeepInstaller())
         {
           Shell shell = new Shell(display);
           if (MessageDialog.openQuestion(shell, AbstractSetupDialog.SHELL_TEXT,

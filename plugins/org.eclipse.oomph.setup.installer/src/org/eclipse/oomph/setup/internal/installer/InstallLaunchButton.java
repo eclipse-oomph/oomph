@@ -68,6 +68,13 @@ public class InstallLaunchButton extends ImageHoverButton
     redraw();
   }
 
+  @Override
+  public boolean isHover()
+  {
+    // No hover during install.
+    return currentState == State.INSTALLING ? false : super.isHover();
+  }
+
   public void setCurrentState(State newState)
   {
     if (newState == null)
@@ -147,7 +154,7 @@ public class InstallLaunchButton extends ImageHoverButton
 
     INSTALLING("INSTALLING", COLOR_INSTALLING, COLOR_INSTALLING_FOREGROUND),
 
-    INSTALLED("LAUNCH", COLOR_LAUNCH, COLOR_FOREGROUND_DEFAULT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch.png"),
+    LAUNCH("LAUNCH", COLOR_LAUNCH, COLOR_FOREGROUND_DEFAULT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch.png"),
         SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch_hover.png"), null);
 
     public final Image icon;

@@ -22,13 +22,15 @@ import java.io.IOException;
 /**
  * @author Eike Stepper
  */
-public final class InstallerUtil
+public final class KeepInstallerUtil
 {
+  public static final String KEEP_INSTALLER_DESCRIPTION = "Copy the installer to a permanent location on your disk in order to remember your settings and support self updates";
+
   private static final Preference PREF_KEPT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("kept");
 
   private static String powerShell;
 
-  private InstallerUtil()
+  private KeepInstallerUtil()
   {
   }
 
@@ -36,7 +38,7 @@ public final class InstallerUtil
   {
     try
     {
-      String powerShell = InstallerUtil.getPowerShell();
+      String powerShell = KeepInstallerUtil.getPowerShell();
       if (powerShell != null)
       {
         Runtime.getRuntime()
@@ -55,7 +57,7 @@ public final class InstallerUtil
   {
     try
     {
-      String powerShell = InstallerUtil.getPowerShell();
+      String powerShell = KeepInstallerUtil.getPowerShell();
       if (powerShell != null)
       {
         Runtime.getRuntime().exec(new String[] { powerShell, "-command",

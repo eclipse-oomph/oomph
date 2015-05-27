@@ -10,8 +10,12 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.ui.FlatButton;
+import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
+import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 
@@ -21,9 +25,10 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,6 +44,10 @@ public class SimpleSearchField extends Composite
 
   private Label searchLabel;
 
+  private FlatButton clearSearchButton;
+
+  private StackComposite buttonComposite;
+
   @SuppressWarnings("restriction")
   public SimpleSearchField(final Composite parent, final FilterHandler filterHandler)
   {
@@ -49,6 +58,8 @@ public class SimpleSearchField extends Composite
     layout.marginRight = 24;
     setLayout(layout);
 
+    setBackgroundMode(SWT.INHERIT_FORCE);
+
     searchField = new Text(this, SWT.NONE);
     searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
     searchField.setMessage(org.eclipse.ui.internal.WorkbenchMessages.FilteredTree_FilterMessage);
@@ -58,6 +69,7 @@ public class SimpleSearchField extends Composite
       public void modifyText(ModifyEvent e)
       {
         filterHandler.handleFilter(searchField.getText());
+        updateSearchAction();
       }
     });
 
@@ -89,11 +101,26 @@ public class SimpleSearchField extends Composite
       }
     });
 
-    searchLabel = new Label(this, SWT.NONE);
+    buttonComposite = new StackComposite(this, SWT.NONE);
+    buttonComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, true).create());
+
+    searchLabel = new Label(buttonComposite, SWT.NONE);
     searchLabel.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search.png"));
-    searchLabel.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, true).create());
-    searchLabel.setBackground(null);
+
+    clearSearchButton = new ImageHoverButton(buttonComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search_erase.png"),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search_erase_hover.png"));
+    clearSearchButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        searchField.setText("");
+      }
+    });
+
     setBackground(UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+    updateSearchAction();
   }
 
   public String getFilterText()
@@ -108,19 +135,17 @@ public class SimpleSearchField extends Composite
     searchField.setFont(font);
   }
 
-  @Override
-  public void setBackground(Color color)
-  {
-    super.setBackground(color);
-    searchField.setBackground(color);
-    searchLabel.setBackground(color);
-  }
-
   /**
    * Subclasses may override.
    */
   protected void finishFilter()
   {
     // Do nothing.
+  }
+
+  private void updateSearchAction()
+  {
+    boolean containsText = !StringUtil.isEmpty(searchField.getText());
+    buttonComposite.setTopControl(containsText ? clearSearchButton : searchLabel);
   }
 }

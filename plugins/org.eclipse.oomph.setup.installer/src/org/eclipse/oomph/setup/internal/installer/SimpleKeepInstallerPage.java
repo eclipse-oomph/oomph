@@ -83,10 +83,10 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     title.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///12/bold")));
     title.setLayoutData(GridDataFactory.swtDefaults().create());
 
-    Label description = new Label(container, SWT.NONE);
-    description.setText("Copy the installer to a permanent location on your disk.");
+    Label description = new Label(container, SWT.WRAP);
+    description.setText(KeepInstallerUtil.KEEP_INSTALLER_DESCRIPTION + ".");
     description.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
-    description.setLayoutData(GridDataFactory.swtDefaults().indent(0, 10).create());
+    description.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).indent(0, 10).create());
 
     Composite varContainer = new Composite(container, SWT.NONE);
     GridLayout varContainerLayout = new GridLayout(3, false);
@@ -172,7 +172,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
       }
     });
 
-    if (InstallerUtil.getPowerShell() != null)
+    if (KeepInstallerUtil.getPowerShell() != null)
     {
       new Label(varContainer, SWT.NONE);
       startMenuButton = createCheckbox(varContainer, "create start menu entry");
@@ -216,7 +216,16 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
               public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
               {
                 monitor.beginTask("Copying installer to " + location, IProgressMonitor.UNKNOWN);
-                InstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, quickLaunch);
+                KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, quickLaunch);
+
+                UIUtil.getDisplay().asyncExec(new Runnable()
+                {
+                  public void run()
+                  {
+                    dialog.backSelected();
+                  }
+                });
+
                 monitor.done();
               }
             });

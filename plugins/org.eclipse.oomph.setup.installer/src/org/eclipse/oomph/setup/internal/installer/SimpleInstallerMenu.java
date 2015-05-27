@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
+import org.eclipse.oomph.internal.ui.ToggleSwitchButton;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -25,7 +26,9 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -168,32 +171,92 @@ public class SimpleInstallerMenu extends Shell implements Listener
     setBounds(menuStartLocation.x, menuStartLocation.y, size.x, size.y);
   }
 
+  public void handleEvent(Event event)
+  {
+    switch (event.type)
+    {
+      case SWT.Move:
+      case SWT.Resize:
+        adjustPosition();
+        break;
+
+      case SWT.FocusIn:
+      case SWT.FocusOut:
+      case SWT.MouseDown:
+        if (closeMenu(event))
+        {
+          close();
+        }
+        break;
+    }
+  }
+
+  private boolean closeMenu(Event event)
+  {
+    Display display = getDisplay();
+    Control focusControl = display.getFocusControl();
+    Control cursorControl = display.getCursorControl();
+
+    if (cursorControl == null)
+    {
+      return true;
+    }
+
+    if (focusControl == this)
+    {
+      return false;
+    }
+
+    boolean menuButtonPressed = SimpleInstallerMenuButton.ACCESS_KEY.equals(AccessUtil.getKey(cursorControl));
+    if (!menuButtonPressed && event.type == SWT.FocusOut && focusControl != null)
+    {
+      menuButtonPressed = SimpleInstallerMenuButton.ACCESS_KEY.equals(AccessUtil.getKey(focusControl));
+    }
+
+    if (menuButtonPressed)
+    {
+      return false;
+    }
+
+    if (focusControl != null && UIUtil.isParent(this, focusControl))
+    {
+      return false;
+    }
+
+    return true;
+  }
+
   /**
    * @author Andreas Scharf
    */
-  public static class InstallerMenuItem extends ImageHoverButton
+  public static class InstallerMenuItem extends Composite
   {
     private static final Font FONT = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///13/bold"));
+
+    private ImageHoverButton button;
 
     private Divider divider;
 
     public InstallerMenuItem(final SimpleInstallerMenu menu)
     {
-      super(menu, SWT.PUSH);
+      super(menu, SWT.NONE);
 
       GridLayout layout = UIUtil.createGridLayout(1);
       layout.marginWidth = 0;
       layout.marginHeight = 0;
+      layout.verticalSpacing = 0;
 
       setLayout(layout);
-      setAlignment(SWT.LEFT);
       setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 36).create());
-      setFont(FONT);
-      setForeground(AbstractSimpleDialog.COLOR_WHITE);
+
+      Composite content = new Composite(this, SWT.NONE);
+      content.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
+      createContent(content);
 
       divider = new Divider(this, 1);
       divider.setBackground(AbstractSimpleDialog.COLOR_WHITE);
-      divider.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).grab(true, true).create());
+      divider.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.END).grab(true, false).create());
 
       addSelectionListener(new SelectionAdapter()
       {
@@ -203,6 +266,50 @@ public class SimpleInstallerMenu extends Shell implements Listener
           menu.close();
         }
       });
+    }
+
+    public void createContent(Composite content)
+    {
+      GridLayout layout = UIUtil.createGridLayout(1);
+      layout.marginWidth = 0;
+      layout.marginHeight = 0;
+      content.setLayout(layout);
+
+      button = new ImageHoverButton(content, SWT.PUSH);
+      button.setAlignment(SWT.LEFT);
+      button.setForeground(AbstractSimpleDialog.COLOR_WHITE);
+      button.setFont(FONT);
+      button.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).create());
+    }
+
+    public void setDefaultImage(Image defaultImage)
+    {
+      button.setDefaultImage(defaultImage);
+    }
+
+    public void setHoverImage(Image hoverImage)
+    {
+      button.setHoverImage(hoverImage);
+    }
+
+    public void addSelectionListener(SelectionListener listener)
+    {
+      button.addSelectionListener(listener);
+    }
+
+    public void removeSelectionListener(SelectionListener listener)
+    {
+      button.removeSelectionListener(listener);
+    }
+
+    public String getText()
+    {
+      return button.getText();
+    }
+
+    public void setText(String text)
+    {
+      button.setText(text);
     }
 
     @Override
@@ -262,57 +369,35 @@ public class SimpleInstallerMenu extends Shell implements Listener
     }
   }
 
-  public void handleEvent(Event event)
+  /**
+   * @author Andreas Scharf
+   */
+  public static class InstallerMenuItemWithToggle extends InstallerMenuItem
   {
-    switch (event.type)
-    {
-      case SWT.Move:
-      case SWT.Resize:
-        adjustPosition();
-        break;
-      case SWT.FocusIn:
-      case SWT.FocusOut:
-      case SWT.MouseDown:
-        if (closeMenu(event))
-        {
-          close();
-        }
-        break;
-    }
-  }
+    private ToggleSwitchButton toggleSwitch;
 
-  private boolean closeMenu(Event event)
-  {
-    Display display = getDisplay();
-    Control focusControl = display.getFocusControl();
-    Control cursorControl = display.getCursorControl();
-
-    if (cursorControl == null)
+    public InstallerMenuItemWithToggle(SimpleInstallerMenu menu)
     {
-      return true;
+      super(menu);
     }
 
-    if (focusControl == this)
+    @Override
+    public void createContent(Composite content)
     {
-      return false;
+      super.createContent(content);
+
+      GridLayout layout = UIUtil.createGridLayout(2);
+      layout.marginWidth = 0;
+      layout.marginHeight = 0;
+      content.setLayout(layout);
+
+      toggleSwitch = new ToggleSwitchButton(content);
+      toggleSwitch.setLayoutData(GridDataFactory.swtDefaults().create());
     }
 
-    boolean menuButtonPressed = SimpleInstallerMenuButton.ACCESS_KEY.equals(AccessUtil.getKey(cursorControl));
-    if (!menuButtonPressed && event.type == SWT.FocusOut && focusControl != null)
+    public ToggleSwitchButton getToggleSwitch()
     {
-      menuButtonPressed = SimpleInstallerMenuButton.ACCESS_KEY.equals(AccessUtil.getKey(focusControl));
+      return toggleSwitch;
     }
-
-    if (menuButtonPressed)
-    {
-      return false;
-    }
-
-    if (UIUtil.isParent(this, focusControl))
-    {
-      return false;
-    }
-
-    return true;
   }
 }
