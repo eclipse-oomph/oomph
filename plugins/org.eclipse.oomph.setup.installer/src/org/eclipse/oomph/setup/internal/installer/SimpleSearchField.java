@@ -64,6 +64,7 @@ public class SimpleSearchField extends Composite
     searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
     searchField.setMessage(org.eclipse.ui.internal.WorkbenchMessages.FilteredTree_FilterMessage);
     searchField.setFont(SetupInstallerPlugin.getFont(getFont(), URI.createURI("font:///11/normal")));
+    searchField.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
     searchField.addModifyListener(new ModifyListener()
     {
       public void modifyText(ModifyEvent e)

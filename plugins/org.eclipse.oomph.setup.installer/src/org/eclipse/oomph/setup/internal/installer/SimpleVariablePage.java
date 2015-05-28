@@ -54,10 +54,10 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
-import org.eclipse.oomph.util.OomphPlugin.Preference;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -80,6 +80,7 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -356,8 +357,25 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       public void modifyText(ModifyEvent e)
       {
-        validatePage();
-        folderText.setToolTipText(installFolder);
+        final FocusListener focusSelectionAdapter = (FocusListener)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
+
+        // At least under Ubuntu it is necessary to use async execs
+        // to ensure proper focus transfer to the folder text field
+        UIUtil.getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            folderText.removeFocusListener(focusSelectionAdapter);
+          }
+        });
+
+        UIUtil.getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            validatePage();
+          }
+        });
 
         UIUtil.getDisplay().asyncExec(new Runnable()
         {
@@ -366,6 +384,16 @@ public class SimpleVariablePage extends SimpleInstallerPage
             folderText.setFocus();
           }
         });
+
+        UIUtil.getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            folderText.addFocusListener(focusSelectionAdapter);
+          }
+        });
+
+        folderText.setToolTipText(installFolder);
       }
     });
 

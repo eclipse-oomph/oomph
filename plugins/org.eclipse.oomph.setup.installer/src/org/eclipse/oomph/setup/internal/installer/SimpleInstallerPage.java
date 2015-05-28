@@ -117,7 +117,9 @@ public abstract class SimpleInstallerPage extends Composite
 
     Text textField = new Text(textContainer, SWT.NONE | SWT.SINGLE);
     textField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
-    textField.addFocusListener(new FocusSelectionAdapter());
+    FocusSelectionAdapter focusSelectionAdapter = new FocusSelectionAdapter();
+    textField.addFocusListener(focusSelectionAdapter);
+    textField.setData(FocusSelectionAdapter.ADAPTER_KEY, focusSelectionAdapter);
     applyComboOrTextStyle(textField);
 
     return textField;
@@ -130,7 +132,9 @@ public abstract class SimpleInstallerPage extends Composite
 
     CCombo combo = new CCombo(comboContainer, style);
     combo.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
-    combo.addFocusListener(new FocusSelectionAdapter());
+    FocusSelectionAdapter focusSelectionAdapter = new FocusSelectionAdapter();
+    combo.addFocusListener(focusSelectionAdapter);
+    combo.setData(FocusSelectionAdapter.ADAPTER_KEY, focusSelectionAdapter);
     applyComboOrTextStyle(combo);
 
     return combo;
@@ -212,8 +216,10 @@ public abstract class SimpleInstallerPage extends Composite
   /**
    * @author Andreas Scharf
    */
-  private final class FocusSelectionAdapter extends FocusAdapter
+  public static final class FocusSelectionAdapter extends FocusAdapter
   {
+    public static final String ADAPTER_KEY = "focusSelectionAdapter";
+
     @Override
     public void focusLost(FocusEvent e)
     {
