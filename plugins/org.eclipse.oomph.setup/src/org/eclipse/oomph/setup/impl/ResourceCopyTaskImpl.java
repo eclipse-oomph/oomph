@@ -259,6 +259,12 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
   {
     URI sourceURI = createResolvedURI(getSourceURL());
     URI targetURI = createResolvedURI(getTargetURL());
+
+    if (sourceURI == null || targetURI == null)
+    {
+      return false;
+    }
+
     URIConverter uriConverter = context.getURIConverter();
     if (targetURI.hasTrailingPathSeparator())
     {
