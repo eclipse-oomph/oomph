@@ -257,7 +257,18 @@ public abstract class JREController implements ISelectionChangedListener
 
             if (selection == null || !jres.contains(selection))
             {
-              selection = jres.iterator().next();
+              for (JRE jre : jres)
+              {
+                if (selection == null)
+                {
+                  selection = jre;
+                }
+                else if (jre.isCurrent())
+                {
+                  selection = jre;
+                  break;
+                }
+              }
             }
 
             setSelection(new StructuredSelection(selection));

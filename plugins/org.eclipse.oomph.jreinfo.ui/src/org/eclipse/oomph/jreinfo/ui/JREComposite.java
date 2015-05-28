@@ -21,6 +21,9 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.Request;
 
+import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TreeColumnLayout;
@@ -31,6 +34,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -45,6 +49,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -115,7 +120,7 @@ public class JREComposite extends Composite
 
     treeViewer = new TreeViewer(composite, SWT.BORDER | SWT.MULTI);
     treeViewer.setContentProvider(contentProvider);
-    treeViewer.setLabelProvider(new JRELabelProvider());
+    treeViewer.setLabelProvider(new JRELabelProvider(treeViewer.getTree().getFont()));
     treeViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
       public void selectionChanged(SelectionChangedEvent event)
@@ -506,8 +511,15 @@ public class JREComposite extends Composite
   /**
    * @author Eike Stepper
    */
-  private final class JRELabelProvider extends LabelProvider implements ITableLabelProvider, IColorProvider
+  private final class JRELabelProvider extends LabelProvider implements ITableLabelProvider, IColorProvider, ITableFontProvider
   {
+    private Font font;
+
+    public JRELabelProvider(Font font)
+    {
+      this.font = font;
+    }
+
     public Image getColumnImage(Object element, int columnIndex)
     {
       if (columnIndex == 0)
@@ -545,7 +557,7 @@ public class JREComposite extends Composite
         switch (columnIndex)
         {
           case 0:
-            return jre.getJavaHome().getAbsolutePath();
+            return jre.toString();
           case 1:
             return jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro();
           case 2:
@@ -574,6 +586,20 @@ public class JREComposite extends Composite
 
     public Color getBackground(Object element)
     {
+      return null;
+    }
+
+    public Font getFont(Object element, int columnIndex)
+    {
+      if (element instanceof JRE)
+      {
+        JRE jre = (JRE)element;
+        if (jre.isCurrent())
+        {
+          return ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);
+        }
+      }
+
       return null;
     }
   }

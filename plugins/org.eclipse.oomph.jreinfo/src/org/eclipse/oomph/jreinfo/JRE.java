@@ -118,6 +118,12 @@ public final class JRE implements Comparable<JRE>
     return true;
   }
 
+  public boolean isCurrent()
+  {
+    String systemJavaHome = System.getProperty("java.home");
+    return javaHome.getPath().equals(systemJavaHome);
+  }
+
   public boolean isMatch(JREFilter filter)
   {
     Integer filterMajor = filter.getMajor();
@@ -222,9 +228,7 @@ public final class JRE implements Comparable<JRE>
   @Override
   public String toString()
   {
-    // return javaHome.getAbsolutePath() + " (" + major + "." + minor + "." + micro + "/" + bitness + "bit " + (jdk ? "JDK" : "JRE") + ")";
-    // return javaHome.getAbsolutePath() + " (" + bitness + " Bit " + (jdk ? "JDK" : "JRE") + ")";
-    return javaHome.getAbsolutePath();
+    return javaHome.getPath() + (isCurrent() ? " (Current)" : "");
   }
 
   String toLine()

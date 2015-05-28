@@ -66,6 +66,23 @@ public final class JREInfo
           //$FALL-THROUGH$
       }
 
+      String javaHome = System.getProperty("java.home");
+      if (javaHome != null)
+      {
+        File javaHomeFolder = new File(javaHome);
+        if (javaHomeFolder.isDirectory())
+        {
+          int jdk = isJDK(javaHomeFolder);
+
+          JREInfo info = new JREInfo();
+          info.javaHome = javaHomeFolder.getAbsolutePath();
+          info.jdk = jdk;
+          info.next = jreInfo;
+
+          jreInfo = info;
+        }
+      }
+
       if (!SKIP_USER_HOME)
       {
         jreInfo = searchFolder(jreInfo, PropertiesUtil.USER_HOME);
