@@ -13,21 +13,30 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Andreas Scharf
  */
 public class SimpleInstallerMenuButton extends Composite
 {
-  static final String ACCESS_KEY = "menuButton";
+  public static final String ACCESS_KEY = "menuButton";
+
+  private static final Cursor CURSOR_HAND = UIUtil.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
 
   private static final int NOTIFICATION_X_OFFSET = 15;
 
@@ -35,6 +44,8 @@ public class SimpleInstallerMenuButton extends Composite
   // if we move the overlay a bit down (e.g. by using a y-offset of -7)
   // for example.
   private static final int NOTIFICATION_Y_OFFSET = -9;
+
+  private final Set<SelectionListener> selectionListeners = new HashSet<SelectionListener>();
 
   private final Label notificationOverlay;
 
@@ -47,10 +58,40 @@ public class SimpleInstallerMenuButton extends Composite
 
     Composite container = new Composite(this, SWT.NONE);
 
-    notificationOverlay = new Label(container, SWT.NONE);
+    notificationOverlay = new Label(container, SWT.NONE)
+    {
+      @Override
+      protected void checkSubclass()
+      {
+        // Do nothing.
+      }
+    };
+
+    notificationOverlay.setCursor(CURSOR_HAND);
     Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/notification_overlay.png");
     Rectangle overlayImageBounds = overlayImage.getBounds();
     notificationOverlay.setImage(overlayImage);
+    notificationOverlay.addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseDown(MouseEvent e)
+      {
+        synchronized (selectionListeners)
+        {
+          for (SelectionListener listener : selectionListeners)
+          {
+            try
+            {
+              listener.widgetSelected(null);
+            }
+            catch (Exception ex)
+            {
+              // Ignore.
+            }
+          }
+        }
+      }
+    });
 
     int overlayX = notNegative(NOTIFICATION_X_OFFSET);
     int overlayY = notNegative(NOTIFICATION_Y_OFFSET);
@@ -94,12 +135,22 @@ public class SimpleInstallerMenuButton extends Composite
 
   public void addSelectionListener(SelectionListener listener)
   {
+    synchronized (selectionListeners)
+    {
+      selectionListeners.add(listener);
+    }
+
     button.addSelectionListener(listener);
   }
 
   public void removeSelectionListener(SelectionListener listener)
   {
     button.removeSelectionListener(listener);
+
+    synchronized (selectionListeners)
+    {
+      selectionListeners.remove(listener);
+    }
   }
 
   private static int notNegative(int value)

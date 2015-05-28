@@ -168,6 +168,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       @Override
       public void widgetSelected(SelectionEvent e)
       {
+        // Don't use the event, it can be null!
         toggleMenu();
       }
     });
