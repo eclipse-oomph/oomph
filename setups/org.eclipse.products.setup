@@ -53,9 +53,9 @@
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -103,9 +103,9 @@
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -221,9 +221,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -277,9 +277,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -398,9 +398,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -442,9 +442,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,4.6.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -545,9 +545,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -589,9 +589,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,4.6.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -643,9 +643,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -671,9 +671,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <description>
@@ -715,9 +715,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -771,9 +771,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1081,9 +1081,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1137,9 +1137,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1268,9 +1268,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1324,9 +1324,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1445,9 +1445,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1489,9 +1489,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,4.6.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1592,9 +1592,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1636,9 +1636,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,4.6.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1745,9 +1745,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1801,9 +1801,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1928,9 +1928,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -1984,9 +1984,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,3.12.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -2098,9 +2098,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
@@ -2141,9 +2141,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,4.6.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/RC1"/>
+            url="http://download.eclipse.org/technology/epp/packages/mars/RC2"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201505221000"/>
+            url="http://download.eclipse.org/releases/mars/201505291000"/>
       </setupTask>
     </version>
     <version
