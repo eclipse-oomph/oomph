@@ -103,10 +103,10 @@ import java.util.regex.Pattern;
  */
 public class P2TaskImpl extends SetupTaskImpl implements P2Task
 {
-  private static final boolean SKIP = "true".equals(PropertiesUtil.getProperty(PROP_SKIP));
+  private static final boolean SKIP = PropertiesUtil.isProperty(PROP_SKIP);
 
   // This is used only for documentation capture.
-  private static final boolean FORCE = "true".equals(PropertiesUtil.getProperty("oomph.setup.p2.force"));
+  private static final boolean FORCE = PropertiesUtil.isProperty("oomph.setup.p2.force");
 
   private static final Object FIRST_CALL_DETECTION_KEY = new Object();
 

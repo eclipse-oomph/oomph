@@ -323,8 +323,7 @@ public final class SetupCoreUtil
       }
     }
 
-    if (SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI != null
-        && !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_REDIRECTION_BASE + "mirror.nothing"))
+    if (SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI != null && !PropertiesUtil.isProperty(SetupProperties.PROP_REDIRECTION_BASE + "mirror.nothing")
         && SetupContext.INDEX_SETUP_LOCATION_URI.equals(uriConverter.normalize(SetupContext.INDEX_SETUP_LOCATION_URI)))
     {
       handleArchiveRedirection(uriConverter);

@@ -167,7 +167,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void performStartup()
   {
-    if (!"true".equals(PropertiesUtil.getProperty(PREF_HEADLESS)))
+    if (!PropertiesUtil.isProperty(PREF_HEADLESS))
     {
       final Display display = Display.getDefault();
       display.asyncExec(new Runnable()
@@ -471,8 +471,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
           workbenchWindow = workbench.getWorkbenchWindows()[0];
         }
 
-        SetupWizard updater = finalPerfomer != null ? new SetupWizard.Updater(finalPerfomer) : new SetupWizard.Updater(SetupContext
-            .createInstallationWorkspaceAndUser(resourceSet));
+        SetupWizard updater = finalPerfomer != null ? new SetupWizard.Updater(finalPerfomer)
+            : new SetupWizard.Updater(SetupContext.createInstallationWorkspaceAndUser(resourceSet));
         updater.openDialog(workbenchWindow.getShell());
       }
     });

@@ -69,7 +69,7 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
     {
       super.start(context);
 
-      if (!"true".equals(PropertiesUtil.getProperty(SetupUIPlugin.PREF_HEADLESS)))
+      if (!PropertiesUtil.isProperty(SetupUIPlugin.PREF_HEADLESS))
       {
         initializeFonts();
 
@@ -93,7 +93,7 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
       {
         SetupInstallerPlugin.INSTANCE.exportResources(path, exportedFont);
       }
-      
+
       return UIUtil.getDisplay().loadFont(exportedFont.toString());
     }
   }

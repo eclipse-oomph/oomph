@@ -93,6 +93,19 @@ public final class PropertiesUtil
     return value;
   }
 
+  public static int getProperty(String key, int defaultValue)
+  {
+    try
+    {
+      String property = getProperty(key);
+      return Integer.parseInt(property);
+    }
+    catch (Exception ex)
+    {
+      return defaultValue;
+    }
+  }
+
   // public static void main(String[] args)
   // {
   // Map<String, String> properties = loadProperties(new File("config.ini"));

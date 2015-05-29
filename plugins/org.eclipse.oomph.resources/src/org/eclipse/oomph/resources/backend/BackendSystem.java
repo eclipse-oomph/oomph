@@ -506,13 +506,13 @@ public abstract class BackendSystem extends BackendContainer
 
     private static final int DEFAULT_MAX_THREADS = 10;
 
-    private static final int MAX_THREADS = Integer.parseInt(PropertiesUtil.getProperty(PROP_MAX_THREADS, "" + DEFAULT_MAX_THREADS));
+    private static final int MAX_THREADS = PropertiesUtil.getProperty(PROP_MAX_THREADS, DEFAULT_MAX_THREADS);
 
     private static final String PROP_SKIP_THRESHOLD = "oomph.resources.VisitorThreadPool.SKIP_THRESHOLD";
 
     private static final int DEFAULT_SKIP_THRESHOLD = MAX_THREADS / 2;
 
-    private static final int SKIP_THRESHOLD = Integer.parseInt(PropertiesUtil.getProperty(PROP_SKIP_THRESHOLD, "" + DEFAULT_SKIP_THRESHOLD));
+    private static final int SKIP_THRESHOLD = PropertiesUtil.getProperty(PROP_SKIP_THRESHOLD, DEFAULT_SKIP_THRESHOLD);
 
     private final LinkedList<VisitorThread> threads = new LinkedList<VisitorThread>();
 
