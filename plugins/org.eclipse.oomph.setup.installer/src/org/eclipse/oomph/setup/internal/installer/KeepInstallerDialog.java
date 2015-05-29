@@ -184,7 +184,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
         File home = new File(PropertiesUtil.USER_HOME);
         for (int i = 1; i < Integer.MAX_VALUE; i++)
         {
-          File folder = new File(home, "oomph" + (i > 1 ? i : ""));
+          File folder = new File(home, "eclipse-installer" + (i > 1 ? i : ""));
           if (!folder.exists())
           {
             String path = folder.getAbsolutePath();
