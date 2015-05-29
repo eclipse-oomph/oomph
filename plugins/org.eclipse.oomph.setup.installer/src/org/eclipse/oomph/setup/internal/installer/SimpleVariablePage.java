@@ -111,7 +111,7 @@ import java.util.Map;
  */
 public class SimpleVariablePage extends SimpleInstallerPage
 {
-  private static final int PROGRESS_WATCHDOG_TIMEOUT = PropertiesUtil.getProperty("oomph.progress.watchdog.timeout", 0);
+  public static final int PROGRESS_WATCHDOG_TIMEOUT = PropertiesUtil.getProperty("oomph.progress.watchdog.timeout", 0);
 
   private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch");
 

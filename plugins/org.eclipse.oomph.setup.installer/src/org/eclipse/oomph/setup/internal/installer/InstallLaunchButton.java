@@ -63,7 +63,10 @@ public class InstallLaunchButton extends ImageHoverButton
     setBackgroundMode(SWT.INHERIT_FORCE);
     setLayout(null);
 
-    progressSpinner = new SpriteAnimator(this, SWT.TRANSPARENT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 32, 32, 20);
+    if (SimpleVariablePage.PROGRESS_WATCHDOG_TIMEOUT != 0)
+    {
+      progressSpinner = new SpriteAnimator(this, SWT.TRANSPARENT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 32, 32, 20);
+    }
 
     addControlListener(new ControlListener()
     {
@@ -140,8 +143,12 @@ public class InstallLaunchButton extends ImageHoverButton
         setListenersPaused(true);
         setCursor(null);
         setShowButtonDownState(false);
-        progressSpinner.setBackground(newState.backgroundColor);
-        progressSpinner.setVisible(true);
+        if (progressSpinner != null)
+        {
+          progressSpinner.setBackground(newState.backgroundColor);
+          progressSpinner.setVisible(true);
+        }
+
         break;
 
       default:
@@ -149,48 +156,63 @@ public class InstallLaunchButton extends ImageHoverButton
         setCursor(UIUtil.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
         setShowButtonDownState(true);
         stopProgressAnimation();
-        progressSpinner.setVisible(false);
+        if (progressSpinner != null)
+        {
+          progressSpinner.setVisible(false);
+        }
     }
   }
 
   public void setProgressAnimationSpeed(float speed)
   {
-    if (speed < 0 || speed > 1)
+    if (progressSpinner != null)
     {
-      throw new IllegalArgumentException("speed must be between [0..1]");
-    }
+      if (speed < 0 || speed > 1)
+      {
+        throw new IllegalArgumentException("speed must be between [0..1]");
+      }
 
-    int delay = Math.round((1f - speed) * MAXIMUM_PROGRESS_ANIMATION_DELAY);
-    progressSpinner.setDelay(Math.max(delay, MINIMUM_PROGRESS_ANIMATION_DELAY));
+      int delay = Math.round((1f - speed) * MAXIMUM_PROGRESS_ANIMATION_DELAY);
+      progressSpinner.setDelay(Math.max(delay, MINIMUM_PROGRESS_ANIMATION_DELAY));
+    }
   }
 
   public void stopProgressAnimation()
   {
-    progressSpinner.stop();
+    if (progressSpinner != null)
+    {
+      progressSpinner.stop();
+    }
   }
 
   public void startProgressAnimation()
   {
-    relocateProgressAnimation();
-    progressSpinner.start();
+    if (progressSpinner != null)
+    {
+      relocateProgressAnimation();
+      progressSpinner.start();
+    }
   }
 
   private void relocateProgressAnimation()
   {
-    GC gc = new GC(this);
+    if (progressSpinner != null)
+    {
+      GC gc = new GC(this);
 
-    try
-    {
-      Point textExtent = gc.textExtent(getText());
-      int spinnerTextGap = 10;
-      Rectangle clientArea = getClientArea();
-      int startX = (clientArea.width - textExtent.x) / 2 - spinnerTextGap - progressSpinner.getWidth();
-      int startY = (clientArea.height - progressSpinner.getHeight()) / 2;
-      progressSpinner.setBounds(startX, startY, 32, 32);
-    }
-    finally
-    {
-      gc.dispose();
+      try
+      {
+        Point textExtent = gc.textExtent(getText());
+        int spinnerTextGap = 10;
+        Rectangle clientArea = getClientArea();
+        int startX = (clientArea.width - textExtent.x) / 2 - spinnerTextGap - progressSpinner.getWidth();
+        int startY = (clientArea.height - progressSpinner.getHeight()) / 2;
+        progressSpinner.setBounds(startX, startY, 32, 32);
+      }
+      finally
+      {
+        gc.dispose();
+      }
     }
   }
 
