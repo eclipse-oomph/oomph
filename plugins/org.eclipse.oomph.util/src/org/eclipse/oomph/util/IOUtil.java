@@ -49,6 +49,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * @author Eike Stepper
@@ -105,13 +106,31 @@ public final class IOUtil
     {
       return file.getAbsoluteFile();
     }
-  
+
     File parent = file.getParentFile();
     if (parent != null)
     {
       return getExistingFolder(parent);
     }
-  
+
+    return null;
+  }
+
+  public static File getFromPath(String command)
+  {
+    String path = System.getenv().get("PATH");
+
+    StringTokenizer tokenizer = new StringTokenizer(path, File.pathSeparator);
+    while (tokenizer.hasMoreTokens())
+    {
+      String folder = tokenizer.nextToken();
+      File file = new File(folder, command);
+      if (file.isFile())
+      {
+        return file;
+      }
+    }
+
     return null;
   }
 

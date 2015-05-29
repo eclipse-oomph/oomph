@@ -137,27 +137,23 @@ public abstract class OS
 
   private boolean openSystemBrowser(String command, String url)
   {
-    String[] cmdarray = { "\"" + command + "\"", "\"" + url + "\"" };
-
-    try
+    if (IOUtil.getFromPath(command) != null)
     {
-      Process process = Runtime.getRuntime().exec(cmdarray);
-      if (process != null)
+      String[] cmdarray = { command, url };
+
+      try
       {
-        try
+        Process process = Runtime.getRuntime().exec(cmdarray);
+        if (process != null)
         {
-          // See if we get an IllegalThreadStateException that indicates that the process is still running.
-          process.exitValue();
-        }
-        catch (IllegalThreadStateException ex)
-        {
+          // Don't check whether the process is still running; some commands just delegate to others and terminate.
           return true;
         }
       }
-    }
-    catch (IOException ex)
-    {
-      //$FALL-THROUGH$
+      catch (IOException ex)
+      {
+        //$FALL-THROUGH$
+      }
     }
 
     return false;
