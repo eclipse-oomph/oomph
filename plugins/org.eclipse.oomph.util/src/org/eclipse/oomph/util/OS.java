@@ -393,7 +393,7 @@ public abstract class OS
    */
   private static final class Linux extends OS
   {
-    private static final String[] OPEN_COMMANDS = { "kde-open", "gnome-open", "xdg-open" };
+    private static final String[] OPEN_COMMANDS = { "kde-open", "gnome-open", "xdg-open", "sensible-browser" };
 
     public Linux(String osgiWS, String osgiArch)
     {
