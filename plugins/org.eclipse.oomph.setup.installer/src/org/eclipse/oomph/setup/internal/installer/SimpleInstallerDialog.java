@@ -98,6 +98,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static String productTemplate;
 
+  private static String productTemplateLarge;
+
   private final Installer installer;
 
   private final CatalogManager catalogManager;
@@ -697,6 +699,23 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     }
 
     return productTemplate;
+  }
+
+  static String getProductTemplateLarge()
+  {
+    if (productTemplateLarge == null)
+    {
+      try
+      {
+        productTemplateLarge = readBundleResource("html/ProductTemplateLarge.html");
+      }
+      catch (IOException ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
+    }
+
+    return productTemplateLarge;
   }
 
   private static String readBundleResource(final String name) throws IOException

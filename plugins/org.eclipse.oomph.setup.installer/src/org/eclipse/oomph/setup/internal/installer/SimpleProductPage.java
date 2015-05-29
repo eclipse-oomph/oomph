@@ -202,7 +202,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           if (!ProductPage.getValidProductVersions(product).isEmpty()
               && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter)))
           {
-            productsBuilder.append(renderProduct(product, false, true));
+            productsBuilder.append(renderProduct(product, false));
           }
         }
       }
@@ -263,7 +263,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     return string.toLowerCase().contains(filter);
   }
 
-  public static String renderProduct(Product product, boolean large, boolean link)
+  public static String renderProduct(Product product, boolean large)
   {
     String imageURI = ProductPage.getProductImageURI(product);
 
@@ -292,31 +292,17 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       description = "";
     }
 
-    String containerStyle = "productContainer";
+    String productHtml = large ? SimpleInstallerDialog.getProductTemplateLarge() : SimpleInstallerDialog.getProductTemplate();
 
     if (!large)
     {
       description = StringUtil.shorten(description, MAX_DESCRIPTION_LENGTH, true);
       description = removeLinks(description);
-      containerStyle += " noSelect";
-    }
 
-    String productHtml = SimpleInstallerDialog.getProductTemplate();
-
-    if (link)
-    {
       String productLink = "product://" + product.getProductCatalog().getName() + "/" + product.getName();
       productHtml = productHtml.replace("%PRODUCT_LINK%", productLink);
-
-      containerStyle += " productLink";
     }
 
-    if (large)
-    {
-      containerStyle += " largeProduct";
-    }
-
-    productHtml = productHtml.replace("%PRODUCT_CONTAINER_STYLE%", containerStyle);
     productHtml = productHtml.replace("%PRODUCT_ICON_SRC%", imageURI);
     productHtml = productHtml.replace("%PRODUCT_TITLE%", label);
     productHtml = productHtml.replace("%PRODUCT_DESCRIPTION%", description);

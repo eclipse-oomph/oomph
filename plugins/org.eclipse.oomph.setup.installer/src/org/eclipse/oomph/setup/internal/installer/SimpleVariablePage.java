@@ -605,7 +605,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     this.product = product;
 
     String html = SimpleInstallerDialog.getPageTemplate();
-    html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, true, false));
+    html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, true));
 
     browser.setText(html, true);
 
