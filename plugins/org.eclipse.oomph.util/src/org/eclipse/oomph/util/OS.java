@@ -97,8 +97,25 @@ public abstract class OS
     return "ISO-8859-1";
   }
 
+  protected abstract String[] getOpenCommands();
+
   public boolean openSystemBrowser(String url)
   {
+    try
+    {
+      for (String command : getOpenCommands())
+      {
+        if (openSystemBrowser(command, url))
+        {
+          return true;
+        }
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
     try
     {
       // java.awt.Desktop was introduced with Java 1.6!
@@ -113,6 +130,34 @@ public abstract class OS
     catch (Throwable ex)
     {
       UtilPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
+
+    return false;
+  }
+
+  private boolean openSystemBrowser(String command, String url)
+  {
+    String[] cmdarray = { "\"" + command + "\"", "\"" + url + "\"" };
+
+    try
+    {
+      Process process = Runtime.getRuntime().exec(cmdarray);
+      if (process != null)
+      {
+        try
+        {
+          // See if we get an IllegalThreadStateException that indicates that the process is still running.
+          process.exitValue();
+        }
+        catch (IllegalThreadStateException ex)
+        {
+          return true;
+        }
+      }
+    }
+    catch (IOException ex)
+    {
+      //$FALL-THROUGH$
     }
 
     return false;
@@ -184,6 +229,9 @@ public abstract class OS
   {
     private static final Win32 INSTANCE = new Win32(Platform.WS_WIN32, Platform.ARCH_X86);
 
+    // Don't use "explorer" as it forks another process and returns a confusing exit value.
+    private static final String[] OPEN_COMMANDS = {};
+
     public Win32(String osgiWS, String osgiArch)
     {
       super(Platform.OS_WIN32, osgiWS, osgiArch);
@@ -235,6 +283,12 @@ public abstract class OS
 
       return this;
     }
+
+    @Override
+    protected String[] getOpenCommands()
+    {
+      return OPEN_COMMANDS;
+    }
   }
 
   /**
@@ -272,6 +326,8 @@ public abstract class OS
    */
   private static final class Mac extends OS
   {
+    private static final String[] OPEN_COMMANDS = { "open" };
+
     public Mac(String osgiWS, String osgiArch)
     {
       super(Platform.OS_MACOSX, osgiWS, osgiArch);
@@ -324,6 +380,12 @@ public abstract class OS
     {
       return this;
     }
+
+    @Override
+    protected String[] getOpenCommands()
+    {
+      return OPEN_COMMANDS;
+    }
   }
 
   /**
@@ -331,6 +393,8 @@ public abstract class OS
    */
   private static final class Linux extends OS
   {
+    private static final String[] OPEN_COMMANDS = { "kde-open", "gnome-open", "xdg-open" };
+
     public Linux(String osgiWS, String osgiArch)
     {
       super(Platform.OS_LINUX, osgiWS, osgiArch);
@@ -374,28 +438,39 @@ public abstract class OS
       {
         if (Platform.ARCH_X86_64.equals(osgiArch))
         {
-          return new Linux(getOsgiWS(), Platform.ARCH_X86);
+          return createLinux(Platform.ARCH_X86);
         }
 
         if (Platform.ARCH_IA64.equals(osgiArch))
         {
-          return new Linux(getOsgiWS(), Platform.ARCH_IA64_32);
+          return createLinux(Platform.ARCH_IA64_32);
         }
       }
       else
       {
         if (Platform.ARCH_X86.equals(osgiArch))
         {
-          return new Linux(getOsgiWS(), Platform.ARCH_X86_64);
+          return createLinux(Platform.ARCH_X86_64);
         }
 
         if (Platform.ARCH_IA64_32.equals(osgiArch))
         {
-          return new Linux(getOsgiWS(), Platform.ARCH_IA64);
+          return createLinux(Platform.ARCH_IA64);
         }
       }
 
       return this;
+    }
+
+    private Linux createLinux(String arch)
+    {
+      return new Linux(getOsgiWS(), arch);
+    }
+
+    @Override
+    protected String[] getOpenCommands()
+    {
+      return OPEN_COMMANDS;
     }
   }
 }
