@@ -24,6 +24,8 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.GridData;
@@ -308,6 +310,44 @@ public final class UIUtil
   public static Color getEclipseThemeColor()
   {
     return UIPlugin.getColor(44, 34, 85);
+  }
+
+  /**
+   * Extracts a sprite from the given texture atlas.
+   * <br>
+   * <br>
+   * <b>Important:</b> the caller is responsible for disposing the created image.
+   *
+   * @param textureAtlas The input texture atlas.
+   * @param x The x coordinate of the target sprite.
+   * @param y The y coordinate of the target sprite.
+   * @param width The width of the target sprite.
+   * @param height The height of the target sprite.
+   *
+   * @return A new image with the extracted sprite.
+   */
+  public static Image extractSprite(Image textureAtlas, int x, int y, int width, int height)
+  {
+    ImageData textureAtlasData = textureAtlas.getImageData();
+    PaletteData textureAtlasPaletteData = textureAtlasData.palette;
+
+    ImageData spriteImageData = new ImageData(width, height, textureAtlasData.depth,
+        new PaletteData(textureAtlasPaletteData.redMask, textureAtlasPaletteData.greenMask, textureAtlasPaletteData.blueMask));
+
+    int[] pixels = new int[width * height];
+    byte[] alphas = new byte[width * height];
+
+    for (int scanline = 0; scanline < height; scanline++)
+    {
+      int yOffset = y + scanline;
+      textureAtlasData.getPixels(x, yOffset, width, pixels, scanline * width);
+      textureAtlasData.getAlphas(x, yOffset, width, alphas, scanline * width);
+    }
+
+    spriteImageData.setPixels(0, 0, pixels.length, pixels, 0);
+    spriteImageData.setAlphas(0, 0, alphas.length, alphas, 0);
+
+    return new Image(getDisplay(), spriteImageData);
   }
 
   public static Image getStatusImage(int severity)

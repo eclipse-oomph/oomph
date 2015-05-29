@@ -318,7 +318,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     public SpriteIndexLoader(Composite parent)
     {
-      animator = new SpriteAnimator(parent, SWT.NO_BACKGROUND, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 32, 32, 20);
+      animator = new SpriteAnimator(parent, SWT.NONE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 32, 32, 20);
     }
 
     public SpriteAnimator getAnimator()

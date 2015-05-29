@@ -11,14 +11,19 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
+import org.eclipse.oomph.ui.SpriteAnimator;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -36,9 +41,15 @@ public class InstallLaunchButton extends ImageHoverButton
 
   private static final Color COLOR_LAUNCH = COLOR_INSTALLING;
 
+  private static final long MINIMUM_PROGRESS_ANIMATION_DELAY = 20;
+
+  private static final long MAXIMUM_PROGRESS_ANIMATION_DELAY = 200;
+
   private State currentState;
 
   private float progress;
+
+  private SpriteAnimator progressSpinner;
 
   public InstallLaunchButton(Composite parent)
   {
@@ -48,8 +59,32 @@ public class InstallLaunchButton extends ImageHoverButton
     setFont(SetupInstallerPlugin.getFont(getFont(), URI.createURI("font:///14/bold")));
     setCornerWidth(10);
     setAlignment(SWT.CENTER);
-    setCurrentState(State.INSTALL);
     setDisabledBackgroundColor(COLOR_DEFAULT_DISABLED_BACKGROUND);
+    setBackgroundMode(SWT.INHERIT_FORCE);
+    setLayout(null);
+
+    progressSpinner = new SpriteAnimator(this, SWT.TRANSPARENT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 32, 32, 20);
+
+    addControlListener(new ControlListener()
+    {
+      public void controlResized(ControlEvent e)
+      {
+        if (currentState == State.INSTALL)
+        {
+          relocateProgressAnimation();
+        }
+      }
+
+      public void controlMoved(ControlEvent e)
+      {
+        if (currentState == State.INSTALL)
+        {
+          relocateProgressAnimation();
+        }
+      }
+    });
+
+    setCurrentState(State.INSTALL);
   }
 
   public float getProgress()
@@ -105,12 +140,57 @@ public class InstallLaunchButton extends ImageHoverButton
         setListenersPaused(true);
         setCursor(null);
         setShowButtonDownState(false);
+        progressSpinner.setBackground(newState.backgroundColor);
+        progressSpinner.setVisible(true);
         break;
 
       default:
         setListenersPaused(false);
         setCursor(UIUtil.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
         setShowButtonDownState(true);
+        stopProgressAnimation();
+        progressSpinner.setVisible(false);
+    }
+  }
+
+  public void setProgressAnimationSpeed(float speed)
+  {
+    if (speed < 0 || speed > 1)
+    {
+      throw new IllegalArgumentException("speed must be between [0..1]");
+    }
+
+    int delay = Math.round((1f - speed) * MAXIMUM_PROGRESS_ANIMATION_DELAY);
+    progressSpinner.setDelay(Math.max(delay, MINIMUM_PROGRESS_ANIMATION_DELAY));
+  }
+
+  public void stopProgressAnimation()
+  {
+    progressSpinner.stop();
+  }
+
+  public void startProgressAnimation()
+  {
+    relocateProgressAnimation();
+    progressSpinner.start();
+  }
+
+  private void relocateProgressAnimation()
+  {
+    GC gc = new GC(this);
+
+    try
+    {
+      Point textExtent = gc.textExtent(getText());
+      int spinnerTextGap = 10;
+      Rectangle clientArea = getClientArea();
+      int startX = (clientArea.width - textExtent.x) / 2 - spinnerTextGap - progressSpinner.getWidth();
+      int startY = (clientArea.height - progressSpinner.getHeight()) / 2;
+      progressSpinner.setBounds(startX, startY, 32, 32);
+    }
+    finally
+    {
+      gc.dispose();
     }
   }
 
@@ -149,10 +229,10 @@ public class InstallLaunchButton extends ImageHoverButton
   public static enum State
   {
     INSTALL("INSTALL", COLOR_INSTALL, COLOR_FOREGROUND_DEFAULT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_hover.png"), SetupInstallerPlugin.INSTANCE
-            .getSWTImage("simple/install_button_install_disabled.png")),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_hover.png"),
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_disabled.png")),
 
-    INSTALLING("INSTALLING", COLOR_INSTALLING, COLOR_INSTALLING_FOREGROUND),
+    INSTALLING("INSTALLING", COLOR_INSTALLING, COLOR_INSTALLING_FOREGROUND, null, null, null),
 
     LAUNCH("LAUNCH", COLOR_LAUNCH, COLOR_FOREGROUND_DEFAULT, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch.png"),
         SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch_hover.png"), null);
@@ -168,11 +248,6 @@ public class InstallLaunchButton extends ImageHoverButton
     public final Color backgroundColor;
 
     public final Color foregroundColor;
-
-    State(final String label, final Color backgroundColor, final Color foregroundColor)
-    {
-      this(label, backgroundColor, foregroundColor, null, null, null);
-    }
 
     State(final String label, final Color backgroundColor, final Color foregroundColor, final Image icon, final Image hoverIcon, Image disabledIcon)
     {

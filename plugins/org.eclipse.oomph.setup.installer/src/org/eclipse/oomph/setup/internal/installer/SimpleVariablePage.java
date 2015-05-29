@@ -111,6 +111,8 @@ import java.util.Map;
  */
 public class SimpleVariablePage extends SimpleInstallerPage
 {
+  private static final int PROGRESS_WATCHDOG_TIMEOUT = Integer.parseInt(PropertiesUtil.getProperty("oomph.progress.watchdog.timeout", "0"));
+
   private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch");
 
   private static final String SETUP_LOG_FILE = OS.INSTANCE.getEclipseDir() + "/configuration/org.eclipse.oomph.setup/setup.log";
@@ -1173,6 +1175,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     private volatile double work;
 
+    private volatile double lastWork;
+
+    private volatile long reportWarningTimeout;
+
     private volatile boolean canceled;
 
     private volatile boolean done;
@@ -1292,6 +1298,28 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       if (!canceled)
       {
+        if (PROGRESS_WATCHDOG_TIMEOUT != 0)
+        {
+          long now = System.currentTimeMillis();
+          if (lastWork == work)
+          {
+            if (now >= reportWarningTimeout)
+            {
+              dialog.showMessage("The installation process is taking longer than usually.", Type.WARNING, false);
+              installButton.setProgressAnimationSpeed(0.4f);
+              resetWatchdogTimer(now);
+            }
+          }
+          else
+          {
+            installButton.startProgressAnimation();
+            installButton.setProgressAnimationSpeed(1);
+            dialog.clearMessage();
+            resetWatchdogTimer(now);
+            lastWork = work;
+          }
+        }
+
         double progress = work / totalWork;
 
         try
@@ -1317,6 +1345,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
           schedule();
         }
       }
+    }
+
+    private void resetWatchdogTimer(long now)
+    {
+      reportWarningTimeout = now + PROGRESS_WATCHDOG_TIMEOUT * 1000;
     }
 
     private void schedule()

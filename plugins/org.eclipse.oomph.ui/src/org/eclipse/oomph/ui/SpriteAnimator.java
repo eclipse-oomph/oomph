@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.ui;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -34,7 +33,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
 
   private final int height;
 
-  private final long delay;
+  private long delay;
 
   private int firstIndex = NONE;
 
@@ -42,7 +41,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
 
   private int index = NONE;
 
-  private boolean clearBackground;
+  private boolean running;
 
   public SpriteAnimator(Composite parent, int style, Image sprite, int width, int height, long delay)
   {
@@ -61,12 +60,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
     {
       for (int y = 0; y < countY; y++)
       {
-        Image image = new Image(getDisplay(), width, height);
-        GC gc = new GC(image);
-        gc.drawImage(sprite, x * width, y * height, width, height, 0, 0, width, height);
-        gc.dispose();
-
-        images[x + countX * y] = image;
+        images[x + countX * y] = UIUtil.extractSprite(sprite, x * width, y * width, width, height);
       }
     }
 
@@ -81,6 +75,11 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
   public final int getHeight()
   {
     return height;
+  }
+
+  public final void setDelay(long delay)
+  {
+    this.delay = delay;
   }
 
   public final long getDelay()
@@ -100,19 +99,23 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
 
   public final synchronized void start(int firstIndex, int lastIndex)
   {
+    if (running && this.firstIndex == firstIndex && this.lastIndex == lastIndex)
+    {
+      return;
+    }
+
     this.firstIndex = firstIndex;
     this.lastIndex = lastIndex;
     index = firstIndex;
 
-    clearBackground = (getStyle() & SWT.NO_BACKGROUND) != 0;
+    running = true;
+
     getDisplay().asyncExec(this);
   }
 
   public final synchronized void stop()
   {
-    firstIndex = NONE;
-    lastIndex = NONE;
-    index = NONE;
+    running = false;
 
     getDisplay().asyncExec(new Runnable()
     {
@@ -140,7 +143,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
   {
     try
     {
-      if (index != NONE && !isDisposed())
+      if (running && !isDisposed())
       {
         redraw();
 
@@ -171,12 +174,6 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
       int y = (clientArea.height - height) / 2;
 
       GC gc = e.gc;
-      if (clearBackground)
-      {
-        gc.fillRectangle(clientArea);
-        clearBackground = false;
-      }
-
       gc.drawImage(images[index], x, y);
     }
   }
