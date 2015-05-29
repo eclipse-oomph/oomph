@@ -243,7 +243,7 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
    * The work will be performed at some later point in time on a different thread.
    * Returns whether any work is actually scheduled (needed) for any of the given keys.
    */
-  public boolean schedule(Collection<? extends K> keys)
+  public synchronized boolean schedule(Collection<? extends K> keys)
   {
     boolean result = false;
     for (K key : keys)
