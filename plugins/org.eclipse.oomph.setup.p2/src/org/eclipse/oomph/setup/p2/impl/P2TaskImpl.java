@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.p2.impl;
 
+import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
@@ -658,8 +659,10 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     Profile profile = getProfile(context, profileID);
     ProfileTransaction transaction = profile.change();
-    transaction.getProfileDefinition().setRequirements(requirements);
-    transaction.getProfileDefinition().setRepositories(repositories);
+
+    ProfileDefinition profileDefinition = transaction.getProfileDefinition();
+    profileDefinition.setRequirements(requirements);
+    profileDefinition.setRepositories(repositories);
 
     ProfileTransaction.CommitContext commitContext = new ProfileTransaction.CommitContext()
     {
