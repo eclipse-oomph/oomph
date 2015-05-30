@@ -518,6 +518,11 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     switchToPage(variablePage);
   }
 
+  public SimpleInstallerPage getTopPage()
+  {
+    return (SimpleInstallerPage)stackLayout.topControl;
+  }
+
   private void doSwitch(final SimpleInstallerPage oldPage, final SimpleInstallerPage newPage)
   {
     if (oldPage != null)

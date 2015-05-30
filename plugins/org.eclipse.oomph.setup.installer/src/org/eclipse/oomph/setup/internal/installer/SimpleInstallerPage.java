@@ -159,6 +159,11 @@ public abstract class SimpleInstallerPage extends Composite
 
   protected abstract void createContent(Composite container);
 
+  public boolean isTop()
+  {
+    return dialog.getTopPage() == this;
+  }
+
   public void aboutToShow()
   {
     // Subclasses may override.

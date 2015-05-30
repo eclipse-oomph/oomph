@@ -991,15 +991,16 @@ public class SimpleVariablePage extends SimpleInstallerPage
       errorMessage = validateFolderText(folderText.getText());
     }
 
-    if (errorMessage != null)
+    if (isTop())
     {
-      // TODO it would also be possible to add an action which
-      // will trigger the same action as the folderButton
-      dialog.showMessage(errorMessage, Type.ERROR, false, null);
-    }
-    else
-    {
-      dialog.clearMessage();
+      if (errorMessage != null)
+      {
+        dialog.showMessage(errorMessage, Type.ERROR, false, null);
+      }
+      else
+      {
+        dialog.clearMessage();
+      }
     }
 
     installButton.setEnabled(errorMessage == null);
@@ -1010,6 +1011,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     super.aboutToShow();
     keepInstallerButton.setVisible(KeepInstallerUtil.canKeepInstaller());
+    validatePage();
   }
 
   private String validateJREs()
@@ -1042,7 +1044,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
       File parentFolder = folder.getParentFile();
       if (parentFolder == null || !parentFolder.canWrite() || folder.isFile() || folder.isDirectory() && !folder.canWrite())
       {
-        return "Folder " + folder.getName() + " cannot be created.";
+        String name = folder.getName();
+        if (StringUtil.isEmpty(name))
+        {
+          name = dir;
+        }
+
+        return "Folder " + name + " cannot be created.";
       }
 
       installRoot = parentFolder.getAbsolutePath();
