@@ -164,9 +164,12 @@ public abstract class OS
     return "eclipse";
   }
 
-  public abstract String getEclipseExecutable();
+  public abstract String getRelativeExecutableFolder();
 
-  public abstract String getEclipseIni();
+  public String getExecutableName(String launcherName)
+  {
+    return launcherName;
+  }
 
   public abstract String getGitPrefix();
 
@@ -246,15 +249,15 @@ public abstract class OS
     }
 
     @Override
-    public String getEclipseExecutable()
+    public String getRelativeExecutableFolder()
     {
-      return "eclipse.exe";
+      return "";
     }
 
     @Override
-    public String getEclipseIni()
+    public String getExecutableName(String launcherName)
     {
-      return "eclipse.ini";
+      return super.getExecutableName(launcherName) + ".exe";
     }
 
     @Override
@@ -342,15 +345,9 @@ public abstract class OS
     }
 
     @Override
-    public String getEclipseExecutable()
+    public String getRelativeExecutableFolder()
     {
-      return "../MacOS/eclipse";
-    }
-
-    @Override
-    public String getEclipseIni()
-    {
-      return "eclipse.ini";
+      return "../MacOS";
     }
 
     @Override
@@ -403,15 +400,9 @@ public abstract class OS
     }
 
     @Override
-    public String getEclipseExecutable()
+    public String getRelativeExecutableFolder()
     {
-      return "eclipse";
-    }
-
-    @Override
-    public String getEclipseIni()
-    {
-      return "eclipse.ini";
+      return "";
     }
 
     @Override

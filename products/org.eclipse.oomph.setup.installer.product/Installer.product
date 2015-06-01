@@ -46,14 +46,6 @@ Eclipse Installer
 
    <features>
       <feature id="org.eclipse.oomph.setup.installer"/>
-      <feature id="org.eclipse.emf.common"/>
-      <feature id="org.eclipse.emf.common.ui"/>
-      <feature id="org.eclipse.emf.ecore"/>
-      <feature id="org.eclipse.emf.edit"/>
-      <feature id="org.eclipse.emf.edit.ui"/>
-      <feature id="org.eclipse.e4.rcp"/>
-      <feature id="org.eclipse.rcp"/>
-      <feature id="org.eclipse.equinox.p2.core.feature"/>
    </features>
 
    <configurations>

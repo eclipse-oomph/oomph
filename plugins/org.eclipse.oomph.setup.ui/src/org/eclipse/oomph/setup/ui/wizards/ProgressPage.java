@@ -922,12 +922,14 @@ public class ProgressPage extends SetupWizardPage
       performer.log("Launching the installed product...");
 
       String eclipseDir = os.getEclipseDir();
-      String eclipseExecutable = os.getEclipseExecutable();
+      String relativeExecutableFolder = os.getRelativeExecutableFolder();
+      String executableName = os.getExecutableName(performer.getLauncherName());
       File eclipseLocation = new File(performer.getInstallationLocation(), eclipseDir);
-      String eclipsePath = new File(eclipseLocation, eclipseExecutable).getAbsolutePath();
+      File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
+      String executable = new File(executableFolder, executableName).getAbsolutePath();
 
       List<String> command = new ArrayList<String>();
-      command.add(eclipsePath);
+      command.add(executable);
 
       File ws = performer.getWorkspaceLocation();
       if (ws != null)

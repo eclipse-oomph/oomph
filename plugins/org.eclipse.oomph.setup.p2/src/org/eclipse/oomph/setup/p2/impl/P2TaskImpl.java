@@ -713,6 +713,10 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
           context.log("No software updates are available");
         }
       }
+      else
+      {
+        context.put(IProfile.class, profile);
+      }
     }
     finally
     {

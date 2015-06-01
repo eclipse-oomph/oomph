@@ -213,8 +213,14 @@ public class SetupContext
     URI uri = installation.eResource().getURI();
     if (uri.segmentCount() > 3)
     {
-      URI executable = uri.trimSegments(3).appendSegments(URI.createURI(OS.INSTANCE.getEclipseExecutable()).segments());
-      if (resourceSet.getURIConverter().exists(executable, null))
+      String eclipseLauncher = PropertiesUtil.getProperty("eclipse.launcher");
+      if (eclipseLauncher == null)
+      {
+        throw new IllegalStateException("There is no eclipse.launcher property defined");
+      }
+
+      File eclipseLauncherExecutable = new File(eclipseLauncher);
+      if (eclipseLauncherExecutable.exists())
       {
         effectiveInstallation = installation;
       }
@@ -754,8 +760,15 @@ public class SetupContext
   {
     private static URI getStaticWorkspaceLocationURI()
     {
-      IWorkspaceRoot workspaceRoot = EcorePlugin.getWorkspaceRoot();
-      return URI.createFileURI(workspaceRoot.getLocation().toOSString());
+      try
+      {
+        IWorkspaceRoot workspaceRoot = EcorePlugin.getWorkspaceRoot();
+        return URI.createFileURI(workspaceRoot.getLocation().toOSString());
+      }
+      catch (Throwable throwable)
+      {
+        return null;
+      }
     }
   }
 }

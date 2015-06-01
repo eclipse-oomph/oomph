@@ -219,8 +219,6 @@ public class ProjectPage extends SetupWizardPage
       }
     }, resourceSet);
 
-    resourceSet.eAdapters().add(new AdapterFactoryEditingDomain.EditingDomainProvider(editingDomain));
-
     SashForm sashForm = new SashForm(parent, SWT.SMOOTH | SWT.VERTICAL);
 
     Composite upperComposite = new Composite(sashForm, SWT.NONE);
@@ -236,7 +234,7 @@ public class ProjectPage extends SetupWizardPage
 
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
-    ToolItem addProjectButton = new ToolItem(filterToolBar, SWT.NONE);
+    final ToolItem addProjectButton = new ToolItem(filterToolBar, SWT.NONE);
     addProjectButton.setToolTipText("Add user projects");
     addProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project"));
     AccessUtil.setKey(addProjectButton, "addProject");
@@ -1561,19 +1559,16 @@ public class ProjectPage extends SetupWizardPage
         }
       });
 
-      List<? extends Scope> selectedCatalogs = catalogSelector.getSelectedCatalogs();
-      catalogViewer.setInput(selectedCatalogs);
+      List<? extends Scope> catalogs = catalogSelector.getCatalogs();
+      catalogViewer.setInput(catalogs);
 
-      if (projectCatalogs.size() == 1)
+      if (catalogs.size() == 1)
       {
-        for (Scope scope : selectedCatalogs)
-        {
-          if (projectCatalogs.contains(scope))
-          {
-            catalogViewer.setSelection(new StructuredSelection(scope));
-            break;
-          }
-        }
+        catalogViewer.setSelection(new StructuredSelection(catalogs.get(0)));
+      }
+      else if (projectCatalogs.size() == 1 && catalogs.containsAll(projectCatalogs))
+      {
+        catalogViewer.setSelection(new StructuredSelection(projectCatalogs.iterator().next()));
       }
 
       catalogViewer.addSelectionChangedListener(new ISelectionChangedListener()
@@ -1643,19 +1638,19 @@ public class ProjectPage extends SetupWizardPage
 
           IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
               Collections.<ViewerFilter> singletonList(new ViewerFilter()
-          {
-            @Override
-            public boolean select(Viewer viewer, Object parentElement, Object element)
-            {
-              if (element instanceof IFile)
               {
-                IFile file = (IFile)element;
-                return "setup".equals(file.getFileExtension());
-              }
+                @Override
+                public boolean select(Viewer viewer, Object parentElement, Object element)
+                {
+                  if (element instanceof IFile)
+                  {
+                    IFile file = (IFile)element;
+                    return "setup".equals(file.getFileExtension());
+                  }
 
-              return true;
-            }
-          }));
+                  return true;
+                }
+              }));
 
           for (int i = 0, len = files.length; i < len; i++)
           {
@@ -1725,6 +1720,10 @@ public class ProjectPage extends SetupWizardPage
       if (!validProjects.isEmpty())
       {
         ProjectCatalog selectedCatalog = getSelectedCatalog();
+        if (!catalogSelector.getSelectedCatalogs().contains(selectedCatalog))
+        {
+          catalogSelector.select(selectedCatalog, true);
+        }
 
         Command command = DragAndDropCommand.create(editingDomain, selectedCatalog, 0.5F, DragAndDropFeedback.DROP_LINK, DragAndDropFeedback.DROP_LINK,
             validProjects);

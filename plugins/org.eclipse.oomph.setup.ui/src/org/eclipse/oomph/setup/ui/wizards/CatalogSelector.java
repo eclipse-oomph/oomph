@@ -60,6 +60,16 @@ public class CatalogSelector
     return catalogManager.getSelectedCatalogs(product);
   }
 
+  public List<? extends Scope> getCatalogs()
+  {
+    return catalogManager.getCatalogs(product);
+  }
+
+  public void select(Scope catalog, boolean on)
+  {
+    catalogManager.selectCatalog(product, catalog, on);
+  }
+
   public void configure(final ToolItem toolItem)
   {
     final ToolBar toolBar = toolItem.getParent();
@@ -98,7 +108,7 @@ public class CatalogSelector
               public void widgetSelected(SelectionEvent e)
               {
                 boolean on = item.getSelection();
-                catalogManager.selectCatalog(product, catalog, on);
+                select(catalog, on);
               }
             });
           }

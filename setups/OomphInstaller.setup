@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Product
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="oomph.installer"
+    label="Oomph's Eclipse Installer">
+  <version name="mars"
+      label="Mars">
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Installer">
+      <requirement
+          name="org.eclipse.oomph.setup.installer.product"/>
+      <repository
+          url="http://download.eclipse.org/oomph/products/repository"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:EclipseIniTask"
+        option="-Dxyz"
+        value="=true"
+        vm="true"/>
+  </version>
+  <description>Oomph's Eclipse Installer product</description>
+</setup:Product>

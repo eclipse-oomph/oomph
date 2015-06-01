@@ -14,6 +14,7 @@ package org.eclipse.oomph.setup.internal.core;
 
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -28,15 +29,24 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.ITouchpointData;
+import org.eclipse.equinox.p2.metadata.ITouchpointInstruction;
+import org.eclipse.equinox.p2.query.QueryUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -44,6 +54,8 @@ import java.util.Set;
 public abstract class AbstractSetupTaskContext extends StringExpander implements SetupTaskContext, SetupProperties
 {
   private static final Map<String, StringFilter> STRING_FILTER_REGISTRY = new HashMap<String, StringFilter>();
+
+  private static final Pattern setLauncherNamePattern = Pattern.compile("setLauncherName\\(name:([^)]*)\\)");
 
   private SetupPrompter prompter;
 
@@ -60,6 +72,8 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   private URIConverter uriConverter;
 
   private Map<Object, Object> map = new LinkedHashMap<Object, Object>();
+
+  private String launcherName;
 
   protected AbstractSetupTaskContext(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext)
   {
@@ -225,6 +239,53 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     }
 
     return new File(productLocation, InstallationTaskImpl.CONFIGURATION_FOLDER_NAME);
+  }
+
+  public String getLauncherName()
+  {
+    if (launcherName == null)
+    {
+      IProfile profile = (IProfile)get(IProfile.class);
+      if (profile == null)
+      {
+        profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+      }
+
+      launcherName = getLauncherName(profile);
+    }
+
+    return launcherName;
+  }
+
+  private static String getLauncherName(IProfile profile)
+  {
+    for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), null)))
+    {
+      Collection<ITouchpointData> touchpointDatas = iu.getTouchpointData();
+      if (touchpointDatas != null)
+      {
+        for (ITouchpointData touchpointData : touchpointDatas)
+        {
+          ITouchpointInstruction instruction = touchpointData.getInstruction("configure");
+          if (instruction != null)
+          {
+            String body = instruction.getBody();
+            if (body != null)
+            {
+              Matcher matcher = setLauncherNamePattern.matcher(body);
+              if (matcher.matches())
+              {
+                return matcher.group(1);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    SetupCorePlugin.INSTANCE.log("Could not determine the launcher name from " + profile.getProfileId(), IStatus.ERROR);
+
+    return "eclipse";
   }
 
   public Workspace getWorkspace()

@@ -13,8 +13,8 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
@@ -330,8 +330,13 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    OS os = context.getOS();
-    file = new File(context.getProductLocation(), os.getEclipseIni());
+    // Return early for bootstrap because the launcher name can't be determined until after the p2 task has performed.
+    if (context.getTrigger() == Trigger.BOOTSTRAP)
+    {
+      return true;
+    }
+
+    file = new File(context.getProductLocation(), context.getLauncherName() + ".ini");
     boolean result = !file.exists() || createNewContent(context);
 
     // Ensure that the perform recomputes the contents because they could be modified by other tasks between now and when doPeform is called.
@@ -342,6 +347,11 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
   public void perform(SetupTaskContext context) throws Exception
   {
+    if (file == null)
+    {
+      file = new File(context.getProductLocation(), context.getLauncherName() + ".ini");
+    }
+
     if (!file.exists())
     {
       context.log("Skipping because " + file + " does not exist");
@@ -354,7 +364,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
       // Write the ini file with the system's default encoding; the native launcher reads it so.
       IOUtil.writeLines(file, null, contents);
-      context.setRestartNeeded("The eclipse.ini file has changed.");
+      context.setRestartNeeded("The " + file.getName() + " file has changed.");
     }
   }
 

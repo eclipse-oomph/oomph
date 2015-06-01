@@ -10,16 +10,25 @@
  */
 package org.eclipse.oomph.setup.internal.core.util;
 
-import org.eclipse.oomph.setup.Project;
+import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.SetupFactory;
+import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,11 +42,9 @@ import java.util.regex.Pattern;
  */
 public class UserURIHandlerImpl extends URIHandlerImpl
 {
-  private static final Pattern NAME_PATTERN = Pattern.compile("name='([^']*)'");
+  private static final String FEATURE_PATTERN_SUFFIX = "='([^']*)'";
 
-  private static final Pattern LABEL_PATTERN = Pattern.compile("label='([^']*)'");
-
-  private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("description='([^']*)'");
+  private static final Pattern CLASS_PATTERN = Pattern.compile("class" + FEATURE_PATTERN_SUFFIX);
 
   public UserURIHandlerImpl()
   {
@@ -130,20 +137,55 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     String query = uri.query();
     if (query != null)
     {
-      Project project = SetupFactory.eINSTANCE.createProject();
-      String decodedQuery = URI.decode(query);
-      Matcher nameMatcher = NAME_PATTERN.matcher(decodedQuery);
-      nameMatcher.find();
-      project.setName(nameMatcher.group(1));
-      Matcher labelMatcher = LABEL_PATTERN.matcher(decodedQuery);
-      labelMatcher.find();
-      project.setLabel(labelMatcher.group(1));
-      Matcher descriptionMatcher = DESCRIPTION_PATTERN.matcher(decodedQuery);
-      descriptionMatcher.find();
-      project.setDescription(descriptionMatcher.group(1));
-
       Resource resource = SetupCoreUtil.createResourceSet().createResource(normalizedURI);
-      resource.getContents().add(project);
+
+      String decodedQuery = URI.decode(query);
+
+      Matcher classMatcher = CLASS_PATTERN.matcher(decodedQuery);
+      URI classURI = URI.createURI(classMatcher.find() ? classMatcher.group(1) : SetupPackage.eNS_URI + "#//Project");
+
+      EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage(classURI.trimFragment().toString());
+      if (ePackage == null)
+      {
+        throw new IllegalArgumentException("No package registered for " + classURI);
+      }
+
+      EObject eObject = ePackage.eResource().getEObject(classURI.fragment());
+      if (eObject instanceof EClass)
+      {
+        EClass eClass = (EClass)eObject;
+        EObject instance = EcoreUtil.create(eClass);
+
+        for (EAttribute eAttribute : eClass.getEAllAttributes())
+        {
+          if (!eAttribute.isMany())
+          {
+            Pattern pattern = Pattern.compile(eAttribute.getName() + FEATURE_PATTERN_SUFFIX);
+            Matcher matcher = pattern.matcher(decodedQuery);
+            if (matcher.find())
+            {
+              String value = matcher.group(1);
+              instance.eSet(eAttribute, EcoreUtil.createFromString(eAttribute.getEAttributeType(), value));
+            }
+          }
+        }
+
+        if (instance instanceof ProductCatalog)
+        {
+          ProductCatalog productCatalog = (ProductCatalog)instance;
+          EList<SetupTask> setupTasks = productCatalog.getSetupTasks();
+          InstallationTask installationTask = SetupFactory.eINSTANCE.createInstallationTask();
+          installationTask.setID("installation");
+          setupTasks.add(installationTask);
+        }
+
+        resource.getContents().add(instance);
+      }
+      else
+      {
+        throw new IllegalArgumentException("No class registered for " + classURI);
+      }
+
       return saveResource(resource);
     }
 

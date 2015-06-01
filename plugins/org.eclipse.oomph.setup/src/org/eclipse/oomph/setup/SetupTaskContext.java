@@ -72,4 +72,6 @@ public interface SetupTaskContext extends ProgressLog
   public Object put(Object key, Object value);
 
   public Set<Object> keySet();
+
+  public String getLauncherName();
 }

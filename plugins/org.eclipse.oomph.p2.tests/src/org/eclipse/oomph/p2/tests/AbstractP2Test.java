@@ -19,20 +19,37 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.P2Util.VersionedIdFilter;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
+import org.eclipse.oomph.p2.internal.core.P2CorePlugin;
 import org.eclipse.oomph.tests.AbstractTest;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.equinox.internal.p2.repository.Transport;
+import org.eclipse.equinox.p2.internal.repository.mirroring.Mirroring;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
+import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.IRepository;
+import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import org.junit.BeforeClass;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("restriction")
 public abstract class AbstractP2Test extends AbstractTest
 {
   private static final String TMP = PropertiesUtil.getProperty("java.io.tmpdir");
@@ -40,6 +57,112 @@ public abstract class AbstractP2Test extends AbstractTest
   private static final String CDO = "p2-test-mirror-001-cdo";
 
   private static final String PLATFORM = "p2-test-mirror-001-platform";
+
+  private static final String SIMPLE_METADATA_REPOSITORY = IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY;
+
+  private static final String SIMPLE_ARTIFACT_REPOSITORY = IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY;
+
+  public static void mirrorArtifactRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
+  {
+    List<URI> repositoriesToRemove = new ArrayList<URI>();
+    repositoriesToRemove.add(targetURI);
+
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    IArtifactRepositoryManager manager = agent.getArtifactRepositoryManager();
+    if (!manager.contains(sourceURI))
+    {
+      repositoriesToRemove.add(sourceURI);
+    }
+
+    try
+    {
+      IArtifactRepository sourceRepository = manager.loadRepository(sourceURI, 0, monitor);
+      String name = sourceRepository.getName();
+      if (name == null)
+      {
+        name = sourceURI.toString();
+      }
+
+      IArtifactRepository targetRepository = manager.createRepository(targetURI, name, SIMPLE_ARTIFACT_REPOSITORY, sourceRepository.getProperties());
+      targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
+
+      List<IArtifactKey> keys = new ArrayList<IArtifactKey>();
+      for (IArtifactKey key : P2Util.asIterable(sourceRepository.query(ArtifactKeyQuery.ALL_KEYS, null)))
+      {
+        if (filter == null || filter.matches(key))
+        {
+          keys.add(key);
+        }
+      }
+
+      Transport transport = (Transport)agent.getProvisioningAgent().getService(Transport.SERVICE_NAME);
+
+      Mirroring mirror = new Mirroring(sourceRepository, targetRepository, true);
+      mirror.setCompare(false);
+      mirror.setTransport(transport);
+      mirror.setArtifactKeys(keys.toArray(new IArtifactKey[keys.size()]));
+
+      IStatus result = mirror.run(true, false);
+      P2CorePlugin.INSTANCE.coreException(result);
+    }
+    finally
+    {
+      for (URI uri : repositoriesToRemove)
+      {
+        manager.removeRepository(uri);
+      }
+    }
+  }
+
+  public static void mirrorRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
+
+  {
+    mirrorMetadataRepository(sourceURI, targetURI, filter, monitor);
+    mirrorArtifactRepository(sourceURI, targetURI, filter, monitor);
+  }
+
+  public static void mirrorMetadataRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
+  {
+    List<URI> repositoriesToRemove = new ArrayList<URI>();
+    repositoriesToRemove.add(targetURI);
+
+    IMetadataRepositoryManager manager = P2Util.getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
+    if (!manager.contains(sourceURI))
+    {
+      repositoriesToRemove.add(sourceURI);
+    }
+
+    try
+    {
+      IMetadataRepository sourceRepository = manager.loadRepository(sourceURI, 0, monitor);
+      String name = sourceRepository.getName();
+      if (name == null)
+      {
+        name = sourceURI.toString();
+      }
+
+      IMetadataRepository targetRepository = manager.createRepository(targetURI, name, SIMPLE_METADATA_REPOSITORY, sourceRepository.getProperties());
+      targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
+
+      List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
+      for (IInstallableUnit iu : P2Util.asIterable(sourceRepository.query(QueryUtil.createIUAnyQuery(), null)))
+      {
+        if (filter == null || filter.matches(iu))
+        {
+          ius.add(iu);
+        }
+      }
+
+      targetRepository.addInstallableUnits(ius);
+    }
+    finally
+    {
+      for (URI uri : repositoriesToRemove)
+      {
+        manager.removeRepository(uri);
+      }
+    }
+  }
 
   private static final VersionedIdFilter CDO_FILTER = new VersionedIdFilter()
   {
@@ -81,7 +204,7 @@ public abstract class AbstractP2Test extends AbstractTest
     if (!local.isDirectory())
     {
       LOGGER.setTaskName("Creating test mirror of " + repo + " under " + local);
-      P2Util.mirrorRepository(new URI(repo), local.toURI(), filter, LOGGER);
+      mirrorRepository(new URI(repo), local.toURI(), filter, LOGGER);
       LOGGER.setTaskName(null);
     }
   }
