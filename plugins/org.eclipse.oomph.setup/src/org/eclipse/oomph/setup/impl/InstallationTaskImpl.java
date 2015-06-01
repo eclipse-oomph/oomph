@@ -14,7 +14,6 @@ import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
-import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
@@ -211,11 +210,10 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    OS os = context.getOS();
-
+    String relativeProductFolder = context.getRelativeProductFolder();
     Map<URI, URI> map = context.getURIConverter().getURIMap();
     map.put(URI.createURI("configuration:/"),
-        context.getTrigger() == Trigger.BOOTSTRAP ? URI.createFileURI(getLocation() + "/" + os.getEclipseDir() + "/" + CONFIGURATION_FOLDER_NAME + "/")
+        context.getTrigger() == Trigger.BOOTSTRAP ? URI.createFileURI(getLocation() + "/" + relativeProductFolder + "/" + CONFIGURATION_FOLDER_NAME + "/")
             : getStaticConfigurationLocation().appendSegment(""));
 
     return false;

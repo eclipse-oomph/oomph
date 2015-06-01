@@ -12,10 +12,14 @@
  */
 package org.eclipse.oomph.setup.internal.core;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
@@ -26,6 +30,7 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
@@ -227,7 +232,8 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       return null;
     }
 
-    return new File(installationLocation, getOS().getEclipseDir());
+    String relativeProductFolder = getRelativeProductFolder();
+    return new File(installationLocation, relativeProductFolder);
   }
 
   public File getProductConfigurationLocation()
@@ -239,6 +245,56 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     }
 
     return new File(productLocation, InstallationTaskImpl.CONFIGURATION_FOLDER_NAME);
+  }
+
+  public String getRelativeProductFolder()
+  {
+    String productFolderName = getProductFolderName();
+    return getOS().getRelativeProductFolder(productFolderName);
+  }
+
+  private String getProductFolderName()
+  {
+    Installation installation = getInstallation();
+    ProductVersion productVersion = installation.getProductVersion();
+
+    OS os = getOS();
+    String osgiOS = os.getOsgiOS();
+    String osgiWS = os.getOsgiWS();
+    String osgiArch = os.getOsgiArch();
+    String[] keys = new String[] { //
+    "folderName." + osgiOS + '.' + osgiWS + '.' + osgiArch, //
+        "folderName." + osgiOS + '.' + osgiWS, //
+        "folderName." + osgiOS, //
+        "folderName", //
+    };
+
+    return getProductFolderName(productVersion, keys);
+  }
+
+  private String getProductFolderName(Scope scope, String[] keys)
+  {
+    if (scope == null)
+    {
+      return "";
+    }
+
+    Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    if (annotation != null)
+    {
+      EMap<String, String> details = annotation.getDetails();
+
+      for (String key : keys)
+      {
+        String folderName = details.get(key);
+        if (folderName != null)
+        {
+          return folderName;
+        }
+      }
+    }
+
+    return getProductFolderName(scope.getParentScope(), keys);
   }
 
   public String getLauncherName()

@@ -350,8 +350,8 @@ public class ProgressPage extends SetupWizardPage
     }
     else
     {
-      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks", false,
-          "restartIfNeeded");
+      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks",
+          false, "restartIfNeeded");
     }
 
     launchAutomatically = launchButton.getSelection();
@@ -839,7 +839,8 @@ public class ProgressPage extends SetupWizardPage
                     {
                       if (restart)
                       {
-                        setMessage("Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
+                        setMessage(
+                            "Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
                             IMessageProvider.WARNING);
                         setButtonState(IDialogConstants.CANCEL_ID, true);
 
@@ -854,8 +855,8 @@ public class ProgressPage extends SetupWizardPage
                           setButtonState(IDialogConstants.CANCEL_ID, false);
                         }
 
-                        shell.setData(PROGRESS_STATUS,
-                            new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(), "Task execution has successfully completed"));
+                        shell.setData(PROGRESS_STATUS, new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(),
+                            "Task execution has successfully completed"));
                       }
                     }
                     else
@@ -921,10 +922,10 @@ public class ProgressPage extends SetupWizardPage
     {
       performer.log("Launching the installed product...");
 
-      String eclipseDir = os.getEclipseDir();
+      String relativeProductFolder = performer.getRelativeProductFolder();
       String relativeExecutableFolder = os.getRelativeExecutableFolder();
       String executableName = os.getExecutableName(performer.getLauncherName());
-      File eclipseLocation = new File(performer.getInstallationLocation(), eclipseDir);
+      File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
       File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
       String executable = new File(executableFolder, executableName).getAbsolutePath();
 

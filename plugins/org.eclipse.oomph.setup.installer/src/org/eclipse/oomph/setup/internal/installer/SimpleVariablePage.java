@@ -115,8 +115,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch");
 
-  private static final String SETUP_LOG_FILE = OS.INSTANCE.getEclipseDir() + "/configuration/org.eclipse.oomph.setup/setup.log";
-
   private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot");
 
   private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt");
@@ -481,7 +479,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         if (readmePath != null)
         {
-          java.net.URI readmeURI = new File(installFolder, OS.INSTANCE.getEclipseDir() + "/" + readmePath).toURI();
+          String relativeProductFolder = performer.getRelativeProductFolder();
+          java.net.URI readmeURI = new File(installFolder, relativeProductFolder + "/" + readmePath).toURI();
           dialog.showReadme(readmeURI);
         }
       }
@@ -1063,15 +1062,21 @@ public class SimpleVariablePage extends SimpleInstallerPage
     return errorMessage;
   }
 
+  private File getLogFile()
+  {
+    String relativeProductFolder = performer.getRelativeProductFolder();
+    return new File(installFolder, relativeProductFolder + "/configuration/org.eclipse.oomph.setup/setup.log");
+  }
+
   private void openInstallLog()
   {
-    File installationLogFile = new File(installFolder, SETUP_LOG_FILE);
+    File installationLogFile = getLogFile();
     dialog.showInstallationLog(installationLogFile);
   }
 
   private boolean isInstallLogAvailable()
   {
-    return new File(installFolder, SETUP_LOG_FILE).exists();
+    return getLogFile().exists();
   }
 
   /**
@@ -1129,7 +1134,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

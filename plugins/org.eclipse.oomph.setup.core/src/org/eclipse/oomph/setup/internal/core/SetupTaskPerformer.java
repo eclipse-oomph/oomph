@@ -1963,8 +1963,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
 
       String uniqueInstallationID = installationID;
+      String relativeProductFolder = getRelativeProductFolder();
 
-      for (int i = 2; new File(installRoot + "/" + uniqueInstallationID + "/" + getOS().getEclipseDir()).exists(); ++i)
+      for (int i = 2; new File(installRoot + "/" + uniqueInstallationID + "/" + relativeProductFolder).exists(); ++i)
       {
         uniqueInstallationID = installationID + i;
       }

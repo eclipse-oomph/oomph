@@ -10,10 +10,13 @@
  */
 package org.eclipse.oomph.setup.internal.core.util;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -135,6 +138,11 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
       selfProductVersion.setLabel("Self Product Version");
       selfProductVersion.setDescription("The self product version");
       selfProduct.getVersions().add(selfProductVersion);
+
+      Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
+      annotation.setSource(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      annotation.getDetails().put("folderName", SetupContext.PRODUCT_LOCATION.segment(SetupContext.PRODUCT_ROOT_LOCATION.segmentCount()));
+      selfProductVersion.getAnnotations().add(annotation);
 
       P2Task selfP2Task = SetupP2Factory.eINSTANCE.createP2Task();
       selfProductVersion.getSetupTasks().add(selfP2Task);

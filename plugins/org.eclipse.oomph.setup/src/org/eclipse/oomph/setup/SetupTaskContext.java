@@ -59,6 +59,8 @@ public interface SetupTaskContext extends ProgressLog
 
   public File getWorkspaceLocation();
 
+  public String getRelativeProductFolder();
+
   public OS getOS();
 
   public URIConverter getURIConverter();

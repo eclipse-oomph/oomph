@@ -159,9 +159,14 @@ public abstract class OS
     return false;
   }
 
-  public String getEclipseDir()
+  public String getRelativeProductFolder(String folderName)
   {
-    return "eclipse";
+    if (StringUtil.isEmpty(folderName))
+    {
+      return "eclipse";
+    }
+
+    return folderName;
   }
 
   public abstract String getRelativeExecutableFolder();
@@ -339,9 +344,18 @@ public abstract class OS
     }
 
     @Override
-    public String getEclipseDir()
+    public String getRelativeProductFolder(String folderName)
     {
-      return "Eclipse.app/Contents/Eclipse";
+      if (StringUtil.isEmpty(folderName))
+      {
+        folderName = "Eclipse.app";
+      }
+      else if (!folderName.endsWith(".app"))
+      {
+        folderName += ".app";
+      }
+
+      return folderName + "/Contents/Eclipse";
     }
 
     @Override
