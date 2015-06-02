@@ -167,8 +167,6 @@ public class ProjectPage extends SetupWizardPage
 
   private TableViewer streamViewer;
 
-  private Button skipButton;
-
   private AddButtonAnimator addButtonAnimator;
 
   private boolean projectsChanged;
@@ -728,43 +726,17 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
+    checkPageComplete();
+
     sashForm.setWeights(new int[] { 3, 1 });
     return sashForm;
   }
 
-  @Override
-  protected void createCheckButtons()
+  protected void checkPageComplete()
   {
-    if (existingStreams.isEmpty() && getPreviousPage() instanceof ProductPage)
-    {
-      skipButton = addCheckButton("Skip Project Selection", "Enable the Next button to proceed without provisioning projects", false, "skipButton");
-      skipButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          Workspace workspace = getWorkspace();
-          if (skipButton.getSelection())
-          {
-            if (workspace != null)
-            {
-              streamViewer.setSelection(new StructuredSelection(workspace.getStreams()));
-            }
-
-            removeSelectedStreams();
-            getWizard().setSetupContext(SetupContext.create(getInstallation(), (Workspace)null, getUser()));
-            setPageComplete(true);
-          }
-          else
-          {
-            setPageComplete(workspace != null && workspace.getStreams().size() != existingStreams.size());
-          }
-        }
-      });
-
-      AccessUtil.setKey(skipButton, "skip");
-      setPageComplete(skipButton.getSelection());
-    }
+    Workspace workspace = getWorkspace();
+    setPageComplete(existingStreams.isEmpty() ? getPreviousPage() instanceof ProductPage : workspace != null
+        && workspace.getStreams().size() > existingStreams.size());
   }
 
   @Override
@@ -964,11 +936,7 @@ public class ProjectPage extends SetupWizardPage
       streamViewer.setSelection(new StructuredSelection(addedStreams));
       projectViewer.update(addedProjects.toArray(), null);
 
-      setPageComplete(true);
-      if (skipButton != null)
-      {
-        skipButton.setSelection(false);
-      }
+      checkPageComplete();
     }
   }
 
@@ -1007,10 +975,7 @@ public class ProjectPage extends SetupWizardPage
 
         streamViewer.refresh();
 
-        if (workspaceStreams.size() == existingStreams.size())
-        {
-          setPageComplete(false);
-        }
+        checkPageComplete();
       }
     }
   }
