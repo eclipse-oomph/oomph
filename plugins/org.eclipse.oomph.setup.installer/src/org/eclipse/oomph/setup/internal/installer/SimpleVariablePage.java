@@ -897,13 +897,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
           readmePath = annotation.getDetails().get(AnnotationConstants.KEY_README_PATH);
           if (readmePath != null)
           {
-            showReadmeButton.setEnabled(true);
             break;
           }
         }
 
         scope = scope.getParentScope();
       }
+
+      showReadmeButton.setVisible(readmePath != null);
 
       showSuccessMessage();
 
