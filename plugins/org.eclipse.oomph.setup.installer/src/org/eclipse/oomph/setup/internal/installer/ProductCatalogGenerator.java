@@ -103,6 +103,8 @@ public class ProductCatalogGenerator implements IApplication
       "epp.package.committers", "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.rcp", "epp.package.testing",
       "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
 
+  private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.standard", "epp.package.mobile"));
+
   public Object start(IApplicationContext context) throws Exception
   {
     // luna
@@ -219,7 +221,8 @@ public class ProductCatalogGenerator implements IApplication
 
       for (final String train : TRAINS)
       {
-        URI eppURI = new URI(PACKAGES + "/" + train);
+        URI originalEPPURI = new URI(PACKAGES + "/" + train);
+        URI eppURI = originalEPPURI;
         System.out.print(eppURI);
         boolean isStaging = train.equals(stagingTrain);
         if (isStaging)
@@ -265,7 +268,7 @@ public class ProductCatalogGenerator implements IApplication
         URI releaseURI = new URI(RELEASES + "/" + train);
         System.out.print(releaseURI);
 
-        IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, eppURI, isStaging ? stagingTrainLocation : releaseURI);
+        IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI);
         releaseURI = trimEmptyTrailingSegment(releaseMetaDataRepository.getLocation());
         System.out.println(" -> " + releaseURI);
 
@@ -617,22 +620,28 @@ public class ProductCatalogGenerator implements IApplication
   @Deprecated
   private void postProcess(ProductCatalog productCatalog)
   {
-    for (Product product : productCatalog.getProducts())
+    for (Iterator<Product> it = productCatalog.getProducts().iterator(); it.hasNext();)
     {
-      if ("epp.package.standard".equals(product.getName()))
-      {
-        for (ProductVersion version : product.getVersions())
-        {
-          if (version.getLabel().contains("Mars"))
-          {
-            P2Task task = (P2Task)version.getSetupTasks().get(0);
-            Requirement requirement = task.getRequirements().get(0);
-            requirement.setName("epp.package.committers");
-          }
-        }
+      Product product = it.next();
+      String id = product.getName();
 
-        return;
+      if (EXCLUDED_IDS.contains(id))
+      {
+        it.remove();
       }
+
+      // if ("epp.package.standard".equals(id))
+      // {
+      // for (ProductVersion version : product.getVersions())
+      // {
+      // if (version.getLabel().contains("Mars"))
+      // {
+      // P2Task task = (P2Task)version.getSetupTasks().get(0);
+      // Requirement requirement = task.getRequirements().get(0);
+      // requirement.setName("epp.package.committers");
+      // }
+      // }
+      // }
     }
   }
 
@@ -943,7 +952,10 @@ public class ProductCatalogGenerator implements IApplication
     // imageURI = IOUtil.encodeImageData(imageURI);
 
     EMap<String, String> brandingInfos = getBrandingInfos(product);
-    brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, imageURI);
+    if (!brandingInfos.containsKey(AnnotationConstants.KEY_IMAGE_URI))
+    {
+      brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, imageURI);
+    }
   }
 
   private EMap<String, String> getBrandingInfos(Product product)
