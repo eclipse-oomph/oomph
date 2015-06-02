@@ -554,7 +554,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     if (installButton.getCurrentState() == State.LAUNCH)
     {
-      if (MessageDialog.openQuestion(dialog, "Launch product", "Do you want to launch the installed product now?"))
+      if (MessageDialog.openQuestion(dialog, "Launch product",
+          "If you go back, you lose the ability to launch this product from the installer.\nDo you want to launch it now?"))
       {
         launchProduct(false);
       }
