@@ -4,8 +4,8 @@
 0
 32
 0
-oomph.exe
-oomph.ini
+eclipse-installer.exe
+eclipse-installer.ini
 Eclipse Installer
 http://wiki.eclipse.org/Eclipse_Installer
 http://download.eclipse.org/oomph/jre/128x128.png

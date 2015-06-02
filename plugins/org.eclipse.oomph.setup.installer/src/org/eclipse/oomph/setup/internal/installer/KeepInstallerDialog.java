@@ -49,8 +49,6 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
 
   private Button desktopButton;
 
-  private Button quickLaunchButton;
-
   public KeepInstallerDialog(Shell parentShell, boolean startPermanentInstaller)
   {
     super(parentShell, SHELL_TEXT, 560, 270, SetupInstallerPlugin.INSTANCE, false);
@@ -170,11 +168,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       desktopButton = new Button(parent, SWT.CHECK);
       desktopButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
       desktopButton.setText("Create desktop shortcut");
-
-      new Label(parent, SWT.NONE);
-      quickLaunchButton = new Button(parent, SWT.CHECK);
-      quickLaunchButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-      quickLaunchButton.setText("Pin to task bar");
+      desktopButton.setSelection(true);
     }
 
     getShell().getDisplay().asyncExec(new Runnable()
@@ -205,7 +199,6 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     {
       final boolean startMenu = startMenuButton == null ? false : startMenuButton.getSelection();
       final boolean desktop = desktopButton == null ? false : desktopButton.getSelection();
-      final boolean quickLaunch = quickLaunchButton == null ? false : quickLaunchButton.getSelection();
 
       ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog((Shell)getShell().getParent());
 
@@ -216,7 +209,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             monitor.beginTask("Copying installer to " + location, IProgressMonitor.UNKNOWN);
-            KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, quickLaunch);
+            KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, false);
             monitor.done();
           }
         });

@@ -27,12 +27,12 @@ Eclipse Installer
 
    <splash
       location="org.eclipse.oomph.setup.installer" />
-   <launcher name="oomph">
-      <linux icon="icons/oomph.xpm"/>
-      <macosx icon="icons/oomph.icns"/>
+   <launcher name="eclipse-installer">
+      <linux icon="icons/eclipse-installer.xpm"/>
+      <macosx icon="icons/eclipse-installer.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="icons/oomph.ico"/>
+         <ico path="icons/eclipse-installer.ico"/>
          <bmp/>
       </win>
    </launcher>

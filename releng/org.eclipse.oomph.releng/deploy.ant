@@ -18,18 +18,18 @@
 	<property name="source" location="${git.clone.location}\products\org.eclipse.oomph.setup.installer.product\target\products\org.eclipse.oomph.setup.installer.product-${platform.suffix}.zip" />
 
 	<target name="init.win32" if="os.win32">
-		<property name="launcher.exe" location="${target}/oomph.exe" />
-		<property name="launcher.ini" location="${target}/oomph.ini" />
+		<property name="launcher.exe" location="${target}/eclipse-installer.exe" />
+		<property name="launcher.ini" location="${target}/eclipse-installer.ini" />
 	</target>
 
 	<target name="init.macosx" if="os.macosx">
-		<property name="launcher.exe" location="${target}/oomph.app/Contents/MacOS/oomph" />
-		<property name="launcher.ini" location="${target}/oomph.app/Contents/MacOS/oomph.ini" />
+		<property name="launcher.exe" location="${target}/Eclipse Installer.app/Contents/MacOS/eclipse-installer" />
+		<property name="launcher.ini" location="${target}/Eclipse Installer.app/Contents/Eclipse/eclipse-installer.ini" />
 	</target>
 
 	<target name="init.linux" if="os.linux">
-		<property name="launcher.exe" location="${target}/oomph" />
-		<property name="launcher.ini" location="${target}/oomph.ini" />
+		<property name="launcher.exe" location="${target}/eclipse-installer" />
+		<property name="launcher.ini" location="${target}/eclipse-installer.ini" />
 	</target>
 
 	<target name="init" depends="init.win32,init.macosx,init.linux">

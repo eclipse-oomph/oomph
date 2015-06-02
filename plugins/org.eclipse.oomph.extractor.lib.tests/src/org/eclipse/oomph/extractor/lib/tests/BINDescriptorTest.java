@@ -31,8 +31,8 @@ public class BINDescriptorTest
     int micro = 0;
     int bitness = 64;
     int jdk = 0;
-    String launcherPath = "oomph.exe";
-    String iniPath = "oomph.ini";
+    String launcherPath = "eclipse-installer.exe";
+    String iniPath = "eclipse-installer.ini";
 
     String content = major + " " + minor + " " + micro + " " + bitness + " " + jdk + " " + launcherPath + " " + iniPath;
     InputStream stream = new ByteArrayInputStream(content.getBytes());

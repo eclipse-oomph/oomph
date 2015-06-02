@@ -52,8 +52,6 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
   private SimpleCheckbox desktopButton;
 
-  private SimpleCheckbox quickLaunchButton;
-
   private boolean startPermanentInstaller;
 
   public SimpleKeepInstallerPage(Composite parent, SimpleInstallerDialog dialog)
@@ -180,9 +178,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
       new Label(varContainer, SWT.NONE);
       desktopButton = createCheckbox(varContainer, "create desktop shortcut");
-
-      new Label(varContainer, SWT.NONE);
-      quickLaunchButton = createCheckbox(varContainer, "pin to task bar");
+      desktopButton.setChecked(true);
     }
 
     new Label(varContainer, SWT.NONE);
@@ -205,7 +201,6 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
         {
           final boolean startMenu = startMenuButton == null ? false : startMenuButton.isChecked();
           final boolean desktop = desktopButton == null ? false : desktopButton.isChecked();
-          final boolean quickLaunch = quickLaunchButton == null ? false : quickLaunchButton.isChecked();
 
           ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog((Shell)getShell().getParent());
 
@@ -216,7 +211,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
               public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
               {
                 monitor.beginTask("Copying installer to " + location, IProgressMonitor.UNKNOWN);
-                KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, quickLaunch);
+                KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, false);
 
                 UIUtil.getDisplay().asyncExec(new Runnable()
                 {

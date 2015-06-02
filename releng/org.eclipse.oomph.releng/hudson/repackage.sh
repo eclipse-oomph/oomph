@@ -47,7 +47,7 @@ for f in *.zip; do
   unzip -qq $SOURCE/$f
   #zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
 
-  inifile=oomph.ini
+  inifile=eclipse-installer.ini
   if [[ $f == *macosx* ]]; then
     inifile="Eclipse Installer.app/Contents/Eclipse/$inifile"
   fi
@@ -68,16 +68,16 @@ for f in *.zip; do
       rm -f unsigned.zip signed.zip
     fi
 
-    chmod a+x "Eclipse Installer.app/Contents/MacOS/oomph"
+    chmod a+x "Eclipse Installer.app/Contents/MacOS/eclipse-installer"
     tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz "Eclipse Installer.app"
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
 
     if [[ "$PACK_AND_SIGN" == true ]]; then
-      echo "  Signing oomph.exe"
-      curl -o signed.exe -F filedata=@oomph.exe http://build.eclipse.org:31338/winsign.php
-      mv signed.exe oomph.exe
+      echo "  Signing eclipse-installer.exe"
+      curl -o signed.exe -F filedata=@eclipse-installer.exe http://build.eclipse.org:31338/winsign.php
+      mv signed.exe eclipse-installer.exe
     fi
 
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
