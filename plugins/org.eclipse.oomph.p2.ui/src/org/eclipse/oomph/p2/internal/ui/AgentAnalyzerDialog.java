@@ -54,7 +54,7 @@ public class AgentAnalyzerDialog extends OomphDialog
   @Override
   protected String getImagePath()
   {
-    return "wizban/AgentAnalyzer";
+    return "wizban/AgentAnalyzer.png";
   }
 
   @Override

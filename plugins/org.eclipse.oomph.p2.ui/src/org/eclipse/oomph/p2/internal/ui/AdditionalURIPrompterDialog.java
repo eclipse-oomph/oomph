@@ -87,7 +87,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
   @Override
   protected String getImagePath()
   {
-    return "wizban/AgentAnalyzer";
+    return "wizban/AgentAnalyzer.png";
   }
 
   @Override

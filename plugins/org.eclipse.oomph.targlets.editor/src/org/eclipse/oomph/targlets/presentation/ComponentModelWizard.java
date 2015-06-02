@@ -266,7 +266,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     @Override
     protected Object getImage()
     {
-      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cdef_wiz");
+      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cdef_wiz.png");
     }
 
     @Override
@@ -388,7 +388,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     @Override
     protected Object getImage()
     {
-      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cext_wiz");
+      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cext_wiz.png");
     }
 
     @Override

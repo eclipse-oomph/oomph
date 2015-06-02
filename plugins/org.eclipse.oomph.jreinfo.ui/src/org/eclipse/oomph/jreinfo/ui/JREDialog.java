@@ -107,7 +107,7 @@ public class JREDialog extends OomphDialog
   @Override
   protected String getImagePath()
   {
-    return "library_wiz";
+    return "library_wiz.png";
   }
 
   @Override

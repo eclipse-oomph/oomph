@@ -138,7 +138,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
     this.workbench = workbench;
     this.selection = selection;
     setWindowTitle(TargletEditorPlugin.INSTANCE.getString("_UI_TargletModelWizard_label"));
-    setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(TargletEditorPlugin.INSTANCE.getImage("full/wizban/NewTarglet")));
+    setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(TargletEditorPlugin.INSTANCE.getImage("full/wizban/NewTarglet.png")));
   }
 
   /**

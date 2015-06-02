@@ -154,14 +154,15 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
    * This just records the information.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public void init(IWorkbench workbench, IStructuredSelection selection)
   {
     this.workbench = workbench;
     this.selection = selection;
     setWindowTitle(PreferencesEditorPlugin.INSTANCE.getString("_UI_Wizard_label"));
-    setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(PreferencesEditorPlugin.INSTANCE.getImage("full/wizban/NewPreferences")));
+    setDefaultPageImageDescriptor(
+        ExtendedImageRegistry.INSTANCE.getImageDescriptor(PreferencesEditorPlugin.INSTANCE.getImage("full/wizban/NewPreferences.png")));
   }
 
   /**

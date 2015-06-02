@@ -85,7 +85,7 @@ public class SetupTaskWizardPage extends WizardPage
     super("wizardPage");
     setTitle("Setup Task");
     setDescription("This wizard creates a new setup model extension.");
-    setImageDescriptor(SetupUIIDEPlugin.INSTANCE.getImageDescriptor("extension_wiz"));
+    setImageDescriptor(SetupUIIDEPlugin.INSTANCE.getImageDescriptor("extension_wiz.png"));
   }
 
   public void createControl(Composite parent)

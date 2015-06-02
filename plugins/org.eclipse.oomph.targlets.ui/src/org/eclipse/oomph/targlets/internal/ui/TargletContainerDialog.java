@@ -55,7 +55,7 @@ public class TargletContainerDialog extends OomphDialog
   @Override
   protected String getImagePath()
   {
-    return "full/wizban/NewTarglet";
+    return "full/wizban/NewTarglet.png";
   }
 
   @Override

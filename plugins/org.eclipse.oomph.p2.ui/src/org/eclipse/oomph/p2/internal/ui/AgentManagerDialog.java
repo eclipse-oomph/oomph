@@ -71,7 +71,7 @@ public class AgentManagerDialog extends OomphDialog
   @Override
   protected String getImagePath()
   {
-    return "wizban/AgentManager";
+    return "wizban/AgentManager.png";
   }
 
   @Override
