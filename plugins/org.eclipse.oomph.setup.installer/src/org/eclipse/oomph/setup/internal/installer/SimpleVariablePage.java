@@ -68,6 +68,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.metadata.ILicense;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -111,7 +112,7 @@ import java.util.Map;
  */
 public class SimpleVariablePage extends SimpleInstallerPage
 {
-  public static final int PROGRESS_WATCHDOG_TIMEOUT = PropertiesUtil.getProperty("oomph.progress.watchdog.timeout", 0);
+  public static final int PROGRESS_WATCHDOG_TIMEOUT = PropertiesUtil.getProperty("oomph.progress.watchdog.timeout", 15);
 
   private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch");
 
@@ -548,6 +549,20 @@ public class SimpleVariablePage extends SimpleInstallerPage
     // installButton.setEnabled(false);
   }
 
+  @Override
+  protected void backSelected()
+  {
+    if (installButton.getCurrentState() == State.LAUNCH)
+    {
+      if (MessageDialog.openQuestion(dialog, "Launch product", "Do you want to launch the installed product now?"))
+      {
+        launchProduct(false);
+      }
+    }
+
+    super.backSelected();
+  }
+
   private FlatButton createButton(Composite parent, String text, String toolTip, Image icon)
   {
     FlatButton button = new FlatButton(parent, SWT.PUSH);
@@ -873,6 +888,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     installButton.setCurrentState(State.INSTALL);
     installStack.setVisible(false);
+
+    dialog.clearMessage();
   }
 
   private void installFinished()
@@ -959,6 +976,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private void launchProduct()
   {
+    launchProduct(EXIT_AFTER_LAUNCH);
+  }
+
+  private void launchProduct(boolean exitAfterLaunch)
+  {
     try
     {
       ProgressPage.launchProduct(performer);
@@ -968,7 +990,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       SetupInstallerPlugin.INSTANCE.log(ex);
     }
 
-    if (EXIT_AFTER_LAUNCH)
+    if (exitAfterLaunch)
     {
       dialog.exitSelected();
     }
@@ -1135,7 +1157,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

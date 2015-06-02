@@ -27,6 +27,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -313,7 +314,34 @@ public final class UIUtil
   }
 
   /**
-   * Extracts a sprite from the given texture atlas.
+   * Extracts all sprites from the given textureatlas.
+   *
+   * @param textureAtlas The input texture atlas.
+   * @param countX The number of sprites in horizontal axis.
+   * @param countY The number of sprites in vertical axis.
+   *
+   * @return An array containing the countX * countY sprites.
+   */
+  public static Image[] extractSprites(Image textureAtlas, int countX, int countY)
+  {
+    Rectangle atlasBounds = textureAtlas.getBounds();
+    int width = atlasBounds.width / countX;
+    int height = atlasBounds.height / countY;
+
+    Image[] sprites = new Image[countX * countY];
+    for (int y = 0; y < countY; y++)
+    {
+      for (int x = 0; x < countX; x++)
+      {
+        sprites[countX * y + x] = UIUtil.extractSprite(textureAtlas, x * width, y * width, width, height);
+      }
+    }
+
+    return sprites;
+  }
+
+  /**
+   * Extracts a single sprite from the given texture atlas.
    * <br>
    * <br>
    * <b>Important:</b> the caller is responsible for disposing the created image.

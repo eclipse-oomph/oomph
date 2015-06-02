@@ -91,7 +91,7 @@ public abstract class SimpleInstallerPage extends Composite
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          dialog.backSelected();
+          backSelected();
         }
       });
     }
@@ -195,6 +195,11 @@ public abstract class SimpleInstallerPage extends Composite
   protected void checkSubclass()
   {
     // Allow subclassing.
+  }
+
+  protected void backSelected()
+  {
+    dialog.backSelected();
   }
 
   protected static Control spacer(Composite parent)
