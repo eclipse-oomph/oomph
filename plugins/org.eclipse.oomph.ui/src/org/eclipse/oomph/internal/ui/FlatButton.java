@@ -517,7 +517,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
       case SWT.FocusOut:
         // Async exec to ensure that focus transfer is completed
-        getDisplay().asyncExec(new Runnable()
+        UIUtil.asyncExec(this, new Runnable()
         {
           public void run()
           {

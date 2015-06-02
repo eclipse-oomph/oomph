@@ -401,6 +401,37 @@ public final class UIUtil
     }
   }
 
+  public static void asyncExec(final Control control, final Runnable runnable)
+  {
+    try
+    {
+      if (control.isDisposed())
+      {
+        return;
+      }
+
+      control.getDisplay().asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          if (!control.isDisposed())
+          {
+            runnable.run();
+          }
+        }
+      });
+    }
+    catch (SWTException ex)
+    {
+      if (ex.code != SWT.ERROR_WIDGET_DISPOSED)
+      {
+        throw ex;
+      }
+
+      //$FALL-THROUGH$
+    }
+  }
+
   public static void asyncExec(final Display display, final Runnable runnable)
   {
     try
