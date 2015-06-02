@@ -211,57 +211,6 @@ public final class ArtifactRepositoryAdjuster
   /**
    * @author Eike Stepper
    */
-  private static class Version
-  {
-    private final int major;
-
-    private final int minor;
-
-    private final int micro;
-
-    public Version(String str)
-    {
-      String[] segments = str.split("\\.");
-      major = getSegment(segments, 0);
-      minor = getSegment(segments, 1);
-      micro = getSegment(segments, 2);
-    }
-
-    public boolean isGreaterThan(Version other)
-    {
-      if (major > other.major)
-      {
-        return true;
-      }
-
-      if (major == other.major)
-      {
-        if (minor > other.minor)
-        {
-          return true;
-        }
-
-        if (minor == other.minor)
-        {
-          if (micro > other.micro)
-          {
-            return true;
-          }
-        }
-      }
-
-      return false;
-    }
-
-    private static int getSegment(String[] segments, int i)
-    {
-      return Integer.parseInt(segments[i]);
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
   private static final class Properties extends LinkedHashMap<String, String>
   {
     private static final long serialVersionUID = 1L;

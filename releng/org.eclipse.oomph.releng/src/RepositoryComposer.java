@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
  * All rights reserved. This program and the accompanying materials
@@ -285,56 +286,5 @@ public final class RepositoryComposer
   {
     File marker = new File(folder, REMOVE_MARKER);
     marker.createNewFile();
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static final class Version implements Comparable<Version>
-  {
-    private final Integer major;
-
-    private final Integer minor;
-
-    private final Integer micro;
-
-    public Version(String name)
-    {
-      for (int i = 0; i < name.length(); i++)
-      {
-        char c = name.charAt(i);
-        if (!Character.isDigit(c) && c != '.')
-        {
-          name = name.substring(0, i);
-          break;
-        }
-      }
-
-      String[] segments = name.split("\\.");
-      major = Integer.parseInt(segments[0]);
-      minor = Integer.parseInt(segments[1]);
-      micro = Integer.parseInt(segments[2]);
-    }
-
-    public int compareTo(Version o)
-    {
-      int result = major.compareTo(o.major);
-      if (result == 0)
-      {
-        result = minor.compareTo(o.minor);
-        if (result == 0)
-        {
-          result = micro.compareTo(o.micro);
-        }
-      }
-
-      return result;
-    }
-
-    @Override
-    public String toString()
-    {
-      return major + "." + minor + "." + micro;
-    }
   }
 }
