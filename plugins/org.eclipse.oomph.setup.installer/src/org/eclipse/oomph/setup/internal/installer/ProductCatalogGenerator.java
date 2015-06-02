@@ -134,7 +134,7 @@ public class ProductCatalogGenerator implements IApplication
     ICONS.put("cpp", ICON_URL_PREFIX + "cdt.png");
     ICONS.put("automotive", ICON_URL_PREFIX + "classic.jpg");
     ICONS.put("committers", ICON_URL_PREFIX + "committers.png");
-    ICONS.put("dsl", ICON_URL_PREFIX + "dsl-package.jpg");
+    ICONS.put("dsl", ICON_URL_PREFIX + "dsl-package_42.png");
     ICONS.put("java", ICON_URL_PREFIX + "java.png");
     ICONS.put("jee", ICON_URL_PREFIX + "javaee.png");
     // ICONS.put("?", ICON_URL_PREFIX+"JRebel-42x42-dark.png");
