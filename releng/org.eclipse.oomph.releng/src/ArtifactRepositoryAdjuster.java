@@ -10,14 +10,18 @@
  *    Eike Stepper - initial API and implementation
  */
 
-import org.eclipse.oomph.util.IOUtil;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,10 +134,10 @@ public final class ArtifactRepositoryAdjuster
     reader.close();
   }
 
-  private static Version getGreatestFeatureVersion(File input)
+  private static Version getGreatestFeatureVersion(File input) throws IOException
   {
     Version greatestVersion = null;
-    List<String> lines = IOUtil.readLines(input, "UTF-8");
+    List<String> lines = readLines(input, "UTF-8");
     for (String line : lines)
     {
       Matcher matcher = FEATURE_PATTERN.matcher(line);
@@ -148,6 +152,54 @@ public final class ArtifactRepositoryAdjuster
     }
 
     return greatestVersion;
+  }
+
+  private static List<String> readLines(File file, String charsetName) throws IOException
+  {
+    List<String> lines = new ArrayList<String>();
+
+    if (file.exists())
+    {
+      InputStream in = null;
+      Reader reader = null;
+      BufferedReader bufferedReader = null;
+
+      try
+      {
+        in = new FileInputStream(file);
+        reader = charsetName == null ? new InputStreamReader(in) : new InputStreamReader(in, charsetName);
+        bufferedReader = new BufferedReader(reader);
+
+        String line;
+        while ((line = bufferedReader.readLine()) != null)
+        {
+          lines.add(line);
+        }
+      }
+      finally
+      {
+        closeSilent(bufferedReader);
+        closeSilent(reader);
+        closeSilent(in);
+      }
+    }
+
+    return lines;
+  }
+
+  private static void closeSilent(Closeable closeable)
+  {
+    try
+    {
+      if (closeable != null)
+      {
+        closeable.close();
+      }
+    }
+    catch (Exception ex)
+    {
+      // Ignore.
+    }
   }
 
   private static void writeLine(BufferedWriter writer, String line) throws IOException
