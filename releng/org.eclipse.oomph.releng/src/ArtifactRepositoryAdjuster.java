@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
  * All rights reserved. This program and the accompanying materials
@@ -9,6 +10,8 @@
  *    Eike Stepper - initial API and implementation
  */
 
+import org.eclipse.oomph.util.IOUtil;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,6 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,8 +33,8 @@ public final class ArtifactRepositoryAdjuster
 
   private static final Pattern REPOSITORY_PATTERN = Pattern.compile("\\s*<repository.*?>\\s*");
 
-  private static final Pattern FEATURE_PATTERN = Pattern
-      .compile("\\s*<artifact\\s+classifier\\s*=\\s*['\"]org.eclipse.update.feature['\"]\\s+id\\s*=\\s*['\"](org\\.eclipse\\.oomph.*?)['\"].*?>\\s*");
+  private static final Pattern FEATURE_PATTERN = Pattern.compile(
+      "\\s*<artifact\\s+classifier\\s*=\\s*['\"]org.eclipse.update.feature['\"]\\s+id\\s*=\\s*['\"](org\\.eclipse\\.oomph.*?)['\"]\\s+version\\s*=\\s*['\"]([^'\"]*)['\"].*?>\\s*");
 
   private ArtifactRepositoryAdjuster()
   {
@@ -45,6 +49,8 @@ public final class ArtifactRepositoryAdjuster
 
     File input = new File(repositoryFolder, "artifacts.xml");
     File output = new File(repositoryFolder, "artifacts.out");
+
+    Version greatestVersion = getGreatestFeatureVersion(input);
 
     System.out.println("Adjusting " + input);
     System.out.println("  repository.name = " + repositoryName);
@@ -90,7 +96,7 @@ public final class ArtifactRepositoryAdjuster
             properties.remove("p2.mirrorsURL");
           }
 
-          String statsURI = "http://download.eclipse.org/" + relativePath;
+          String statsURI = "http://download.eclipse.org/stats/oomph/" + greatestVersion;
           System.out.println("  p2.statsURI = " + statsURI);
           properties.put("p2.statsURI", statsURI);
 
@@ -124,10 +130,81 @@ public final class ArtifactRepositoryAdjuster
     reader.close();
   }
 
+  private static Version getGreatestFeatureVersion(File input)
+  {
+    Version greatestVersion = null;
+    List<String> lines = IOUtil.readLines(input, "UTF-8");
+    for (String line : lines)
+    {
+      Matcher matcher = FEATURE_PATTERN.matcher(line);
+      if (matcher.matches())
+      {
+        Version version = new Version(matcher.group(2));
+        if (greatestVersion == null || version.isGreaterThan(greatestVersion))
+        {
+          greatestVersion = version;
+        }
+      }
+    }
+
+    return greatestVersion;
+  }
+
   private static void writeLine(BufferedWriter writer, String line) throws IOException
   {
     writer.write(line);
     writer.write('\n');
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static class Version
+  {
+    private final int major;
+
+    private final int minor;
+
+    private final int micro;
+
+    public Version(String str)
+    {
+      String[] segments = str.split("\\.");
+      major = getSegment(segments, 0);
+      minor = getSegment(segments, 1);
+      micro = getSegment(segments, 2);
+    }
+
+    public boolean isGreaterThan(Version other)
+    {
+      if (major > other.major)
+      {
+        return true;
+      }
+
+      if (major == other.major)
+      {
+        if (minor > other.minor)
+        {
+          return true;
+        }
+
+        if (minor == other.minor)
+        {
+          if (micro > other.micro)
+          {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
+    private static int getSegment(String[] segments, int i)
+    {
+      return Integer.parseInt(segments[i]);
+    }
   }
 
   /**
