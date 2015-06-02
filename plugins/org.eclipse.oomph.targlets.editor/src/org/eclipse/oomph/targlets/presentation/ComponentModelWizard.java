@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.presentation;
 
+import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.TargletFactory;
 
@@ -157,6 +158,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
           try
           {
             ResourceSet resourceSet = new ResourceSetImpl();
+            resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new BaseResourceFactoryImpl());
 
             URI fileURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 

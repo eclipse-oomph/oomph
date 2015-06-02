@@ -21,10 +21,12 @@
             genModel="model/Setup.genmodel"/>
    </extension>
 
-   <extension point="org.eclipse.emf.ecore.extension_parser">
+   <extension
+         point="org.eclipse.emf.ecore.content_parser">
       <parser
-            type="setup"
-            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"/>
+            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"
+            contentTypeIdentifier="org.eclipse.oomph.setup">
+      </parser>
    </extension>
 
    <extension

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.presentation;
 
+import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -275,6 +276,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
             // Create a resource set
             //
             ResourceSet resourceSet = new ResourceSetImpl();
+            resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new BaseResourceFactoryImpl());
 
             // Get the URI of the model file.
             //

@@ -21,16 +21,20 @@
             genModel="model/Targlets.genmodel"/>
    </extension>
 
-   <extension point="org.eclipse.emf.ecore.extension_parser">
+   <extension
+         point="org.eclipse.emf.ecore.content_parser">
       <parser
-            type="targlet"
-            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"/>
+            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"
+            contentTypeIdentifier="org.eclipse.oomph.targlets.targlet">
+      </parser>
       <parser
-            type="def"
-            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"/>
+            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"
+            contentTypeIdentifier="org.eclipse.oomph.targlets.def">
+      </parser>
       <parser
-            type="ext"
-            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"/>
+            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"
+            contentTypeIdentifier="org.eclipse.oomph.targlets.ext">
+      </parser>
    </extension>
 
    <extension

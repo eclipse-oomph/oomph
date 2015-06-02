@@ -125,6 +125,7 @@ public final class SetupCoreUtil
     Resource.Factory factory = new BaseResourceFactoryImpl();
 
     Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
+    extensionToFactoryMap.put("setup", factory);
     extensionToFactoryMap.put("targlet", factory);
     extensionToFactoryMap.put("def", factory);
     extensionToFactoryMap.put("ext", factory);
