@@ -198,7 +198,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     for (WorkingSet workingSet : workingSets)
     {
       String id = workingSet.getID();
-      if (id.startsWith(prefix))
+      if (id != null && id.startsWith(prefix))
       {
         existingWorkingSets.put(id, workingSet);
       }
