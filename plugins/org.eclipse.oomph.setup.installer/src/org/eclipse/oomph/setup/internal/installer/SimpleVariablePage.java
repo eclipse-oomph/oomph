@@ -1100,7 +1100,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private boolean isInstallLogAvailable()
   {
-    return getLogFile().exists();
+    return performer != null && getLogFile().exists();
   }
 
   /**
