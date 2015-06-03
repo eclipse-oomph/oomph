@@ -49,7 +49,6 @@ import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
-import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
@@ -862,7 +861,7 @@ public class ProductPage extends SetupWizardPage
 
   private String getDescriptionHTML(Product product)
   {
-    String imageURI = getProductImageURI(product);
+    URI imageURI = getProductImageURI(product);
 
     String description = product.getDescription();
     String label = product.getLabel();
@@ -871,8 +870,7 @@ public class ProductPage extends SetupWizardPage
       label = product.getName();
     }
 
-    return "<html><body style=\"margin:5px;\"><img src=\""
-        + imageURI
+    return "<html><body style=\"margin:5px;\"><img src=\"" + BaseEditUtil.getImage(imageURI)
         + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
         + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
         + "</span></body></html>";
@@ -1116,23 +1114,23 @@ public class ProductPage extends SetupWizardPage
     return versions;
   }
 
-  public static String getProductImageURI(Product product)
+  public static URI getProductImageURI(Product product)
   {
-    String imageURI = null;
+    URI imageURI = null;
 
     Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
     if (annotation != null)
     {
-      imageURI = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+      if (detail != null)
+      {
+        imageURI = URI.createURI(detail);
+      }
     }
 
     if (imageURI == null)
     {
-      imageURI = getImageURI(SetupUIPlugin.INSTANCE, "committers.png");
-    }
-    else
-    {
-      imageURI = IOUtil.decodeImageData(imageURI);
+      imageURI = URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
     }
 
     return imageURI;
@@ -1560,19 +1558,19 @@ public class ProductPage extends SetupWizardPage
 
           IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
               Collections.<ViewerFilter> singletonList(new ViewerFilter()
+          {
+            @Override
+            public boolean select(Viewer viewer, Object parentElement, Object element)
+            {
+              if (element instanceof IFile)
               {
-                @Override
-                public boolean select(Viewer viewer, Object parentElement, Object element)
-                {
-                  if (element instanceof IFile)
-                  {
-                    IFile file = (IFile)element;
-                    return "setup".equals(file.getFileExtension());
-                  }
+                IFile file = (IFile)element;
+                return "setup".equals(file.getFileExtension());
+              }
 
-                  return true;
-                }
-              }));
+              return true;
+            }
+          }));
 
           for (int i = 0, len = files.length; i < len; i++)
           {

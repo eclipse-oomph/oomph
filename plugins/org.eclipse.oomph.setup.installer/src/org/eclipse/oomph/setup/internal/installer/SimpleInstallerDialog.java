@@ -84,7 +84,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
 
-  private static final int INSTALLER_WIDTH = 600;
+  private static final int INSTALLER_WIDTH = 620;
 
   private static final int INSTALLER_HEIGHT = 632;
 

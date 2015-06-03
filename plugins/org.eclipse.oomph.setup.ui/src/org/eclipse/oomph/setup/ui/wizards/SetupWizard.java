@@ -905,10 +905,9 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         if (eObject instanceof Product)
         {
           Product product = (Product)eObject;
-          String productImageURI = ProductPage.getProductImageURI(product);
-          if (productImageURI != null)
+          URI uri = ProductPage.getProductImageURI(product);
+          if (uri != null)
           {
-            URI uri = URI.createURI(productImageURI);
             if (getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().containsKey(uri.fileExtension()))
             {
               schedule(uri, true);

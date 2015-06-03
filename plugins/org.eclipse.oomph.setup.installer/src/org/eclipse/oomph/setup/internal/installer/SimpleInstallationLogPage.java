@@ -33,7 +33,7 @@ import java.io.File;
  */
 public class SimpleInstallationLogPage extends SimpleInstallerPage
 {
-  private static final int SCROLL_SPEED = 8;
+  public static final int SCROLL_SPEED = 8;
 
   private ScrolledComposite scrolledComposite;
 
