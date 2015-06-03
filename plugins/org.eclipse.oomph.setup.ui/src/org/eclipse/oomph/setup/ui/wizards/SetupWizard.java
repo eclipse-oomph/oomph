@@ -11,12 +11,14 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
 import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
@@ -617,7 +619,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         throws InvocationTargetException, InterruptedException
     {
       loading = true;
-      ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
+
+      ResourceMirror resourceMirror = new ResourceMirrorWithProductImages(resourceSet)
       {
         @Override
         protected void run(String taskName, IProgressMonitor monitor)
@@ -876,6 +879,44 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       catch (Exception ex)
       {
         //$FALL-THROUGH$
+      }
+    }
+
+    /**
+     * @author Ed Merks
+     */
+    public static class ResourceMirrorWithProductImages extends ResourceMirror
+    {
+      public ResourceMirrorWithProductImages(ResourceSet resourceSet)
+      {
+        super(resourceSet);
+
+        BytesResourceFactoryImpl bytesResourceFactory = new BytesResourceFactoryImpl();
+        Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
+        extensionToFactoryMap.put("gif", bytesResourceFactory);
+        extensionToFactoryMap.put("png", bytesResourceFactory);
+        extensionToFactoryMap.put("jpeg", bytesResourceFactory);
+        extensionToFactoryMap.put("jpg", bytesResourceFactory);
+      }
+
+      @Override
+      protected void visit(EObject eObject)
+      {
+        if (eObject instanceof Product)
+        {
+          Product product = (Product)eObject;
+          String productImageURI = ProductPage.getProductImageURI(product);
+          if (productImageURI != null)
+          {
+            URI uri = URI.createURI(productImageURI);
+            if (getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().containsKey(uri.fileExtension()))
+            {
+              schedule(uri, true);
+            }
+          }
+        }
+
+        super.visit(eObject);
       }
     }
   }

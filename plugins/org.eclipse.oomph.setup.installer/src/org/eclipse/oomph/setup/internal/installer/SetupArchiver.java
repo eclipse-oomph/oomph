@@ -10,12 +10,12 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
 import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 
@@ -127,16 +127,8 @@ public class SetupArchiver implements IApplication
       }
     }
 
-    ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
-
-    BytesResourceFactoryImpl bytesResourceFactory = new BytesResourceFactoryImpl();
-    Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
-    extensionToFactoryMap.put("gif", bytesResourceFactory);
-    extensionToFactoryMap.put("png", bytesResourceFactory);
-    extensionToFactoryMap.put("jpeg", bytesResourceFactory);
-    extensionToFactoryMap.put("jpg", bytesResourceFactory);
-
-    ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
+    final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+    ResourceMirror resourceMirror = new SetupWizard.IndexLoader.ResourceMirrorWithProductImages(resourceSet)
     {
       @Override
       protected void visit(EObject eObject)
@@ -147,14 +139,17 @@ public class SetupArchiver implements IApplication
           if (!eClass.isAbstract())
           {
             final URI imageURI = EAnnotations.getImageURI(eClass);
-            if (imageURI != null)
+            if (imageURI != null && resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().containsKey(imageURI.fileExtension()))
             {
               schedule(imageURI, true);
             }
           }
         }
+
+        super.visit(eObject);
       }
     };
+
     resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
     resourceMirror.dispose();
     EcoreUtil.resolveAll(resourceSet);
