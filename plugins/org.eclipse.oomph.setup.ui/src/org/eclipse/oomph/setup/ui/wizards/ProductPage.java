@@ -987,7 +987,14 @@ public class ProductPage extends SetupWizardPage
 
       if (latestReleasedProductVersion != null)
       {
-        version = latestReleasedProductVersion;
+        if (latestReleasedProductVersion.getLabel().contains("(Luna)") && latestProductVersion != null && latestProductVersion.getLabel().contains("(Mars"))
+        {
+          version = latestProductVersion;
+        }
+        else
+        {
+          version = latestReleasedProductVersion;
+        }
       }
       else if (firstReleasedProductVersion != null)
       {
