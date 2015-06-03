@@ -39,8 +39,8 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
-import org.eclipse.oomph.setup.internal.installer.InstallLaunchButton.State;
-import org.eclipse.oomph.setup.internal.installer.MessageOverlay.Type;
+import org.eclipse.oomph.setup.internal.installer.SimpleInstallLaunchButton.State;
+import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
@@ -164,7 +164,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private StackComposite installStack;
 
-  private InstallLaunchButton installButton;
+  private SimpleInstallLaunchButton installButton;
 
   private String installError;
 
@@ -440,9 +440,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
     spacer(variablesComposite);
     spacer(variablesComposite);
 
-    installButton = new InstallLaunchButton(variablesComposite);
+    installButton = new SimpleInstallLaunchButton(variablesComposite);
     installButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, 36).indent(0, 32).create());
-    installButton.setCurrentState(InstallLaunchButton.State.INSTALL);
+    installButton.setCurrentState(SimpleInstallLaunchButton.State.INSTALL);
 
     spacer(variablesComposite);
     spacer(variablesComposite);
@@ -954,7 +954,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     if (isInstallLogAvailable())
     {
-      action = new MessageOverlay.RunnableWithLabel()
+      action = new SimpleMessageOverlay.RunnableWithLabel()
       {
         public void run()
         {
@@ -1335,6 +1335,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       if (!canceled)
       {
+        String safeName = StringUtil.safe(name);
+
         if (PROGRESS_WATCHDOG_TIMEOUT != 0)
         {
           long now = System.currentTimeMillis();
@@ -1342,7 +1344,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           {
             if (now >= reportWarningTimeout)
             {
-              dialog.showMessage("The installation process is taking longer than usually.", Type.WARNING, false);
+              dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
               installButton.setProgressAnimationSpeed(0.4f);
               resetWatchdogTimer(now);
             }
@@ -1368,7 +1370,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
             lastName = name;
             if (!done)
             {
-              installButton.setToolTipText(StringUtil.safe(name));
+              installButton.setToolTipText(safeName);
             }
           }
         }

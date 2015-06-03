@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 /**
  * @author Andreas Scharf
  */
-public class InstallLaunchButton extends ImageHoverButton
+public class SimpleInstallLaunchButton extends ImageHoverButton
 {
   private static final Color COLOR_FOREGROUND_DEFAULT = AbstractSimpleDialog.COLOR_WHITE;
 
@@ -49,7 +49,7 @@ public class InstallLaunchButton extends ImageHoverButton
 
   private ProgressSpinner progressSpinner;
 
-  public InstallLaunchButton(Composite parent)
+  public SimpleInstallLaunchButton(Composite parent)
   {
     super(parent, SWT.PUSH);
 
@@ -373,7 +373,7 @@ public class InstallLaunchButton extends ImageHoverButton
     {
       if (visible && !isDisposed())
       {
-        InstallLaunchButton.this.redraw();
+        SimpleInstallLaunchButton.this.redraw();
         schedule();
       }
     }

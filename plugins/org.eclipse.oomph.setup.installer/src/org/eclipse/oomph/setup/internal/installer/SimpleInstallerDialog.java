@@ -25,7 +25,7 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
-import org.eclipse.oomph.setup.internal.installer.MessageOverlay.ControlRelocator;
+import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.ControlRelocator;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.ErrorDialog;
@@ -130,7 +130,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private Resolution updateResolution;
 
-  private MessageOverlay currentMessage;
+  private SimpleMessageOverlay currentMessage;
 
   private ToggleSwitchButton bundlePoolSwitch;
 
@@ -565,12 +565,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     doSwitch(oldPage, newPage);
   }
 
-  public void showMessage(String message, MessageOverlay.Type type, boolean dismissAutomatically)
+  public void showMessage(String message, SimpleMessageOverlay.Type type, boolean dismissAutomatically)
   {
     showMessage(message, type, dismissAutomatically, null);
   }
 
-  public void showMessage(String message, MessageOverlay.Type type, boolean dismissAutomatically, Runnable action)
+  public void showMessage(String message, SimpleMessageOverlay.Type type, boolean dismissAutomatically, Runnable action)
   {
     // Check if we can reuse the current message to reduce flickering.
     if (currentMessage == null || currentMessage.getType() != type || currentMessage.isDismissAutomatically() != dismissAutomatically
@@ -578,7 +578,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       clearMessage();
 
-      currentMessage = new MessageOverlay(this, type, new ControlRelocator()
+      currentMessage = new SimpleMessageOverlay(this, type, new ControlRelocator()
       {
         public void relocate(Control control)
         {

@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Andreas Scharf
  */
-public class MessageOverlay extends Shell implements ControlListener
+public class SimpleMessageOverlay extends Shell implements ControlListener
 {
   private static final int DEFAULT_AUTO_DISMISS_MILLIS = 4 * 1000;
 
@@ -58,12 +58,12 @@ public class MessageOverlay extends Shell implements ControlListener
 
   private boolean firstShown = true;
 
-  public MessageOverlay(SimpleInstallerDialog dialog, Type type, ControlRelocator controlRelocator, boolean dismissAutomatically)
+  public SimpleMessageOverlay(SimpleInstallerDialog dialog, Type type, ControlRelocator controlRelocator, boolean dismissAutomatically)
   {
     this(dialog, type, controlRelocator, dismissAutomatically, null);
   }
 
-  public MessageOverlay(SimpleInstallerDialog dialog, Type type, ControlRelocator controlRelocator, boolean dismissAutomatically, final Runnable action)
+  public SimpleMessageOverlay(SimpleInstallerDialog dialog, Type type, ControlRelocator controlRelocator, boolean dismissAutomatically, final Runnable action)
   {
     super(dialog, SWT.NO_TRIM);
 
@@ -110,7 +110,7 @@ public class MessageOverlay extends Shell implements ControlListener
         @Override
         public void mouseUp(MouseEvent e)
         {
-          MessageOverlay.this.dialog.clearMessage();
+          SimpleMessageOverlay.this.dialog.clearMessage();
 
           try
           {
@@ -133,7 +133,7 @@ public class MessageOverlay extends Shell implements ControlListener
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        MessageOverlay.this.dialog.clearMessage();
+        SimpleMessageOverlay.this.dialog.clearMessage();
       }
     });
 
@@ -144,7 +144,7 @@ public class MessageOverlay extends Shell implements ControlListener
     {
       public void widgetDisposed(DisposeEvent e)
       {
-        MessageOverlay.this.getParent().removeControlListener(MessageOverlay.this);
+        SimpleMessageOverlay.this.getParent().removeControlListener(SimpleMessageOverlay.this);
       }
     });
   }

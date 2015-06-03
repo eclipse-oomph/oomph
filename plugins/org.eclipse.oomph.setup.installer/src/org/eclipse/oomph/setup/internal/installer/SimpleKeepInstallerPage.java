@@ -13,7 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
-import org.eclipse.oomph.setup.internal.installer.MessageOverlay.Type;
+import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
