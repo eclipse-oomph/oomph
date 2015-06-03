@@ -141,6 +141,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -154,6 +156,8 @@ public class ProductPage extends SetupWizardPage
   private static final Product NO_PRODUCT = createNoProduct();
 
   private static boolean OVERWRITE_TMP_IMAGES = true;
+
+  private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*");
 
   private ComposedAdapterFactory adapterFactory;
 
@@ -256,7 +260,7 @@ public class ProductPage extends SetupWizardPage
     });
 
     versionComboViewer.setInput(NO_PRODUCT);
-    Combo versionCombo = versionComboViewer.getCombo();
+    final Combo versionCombo = versionComboViewer.getCombo();
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     AccessUtil.setKey(versionCombo, "versionChoice");
 
@@ -451,6 +455,8 @@ public class ProductPage extends SetupWizardPage
 
           saveProductVersionSelection(catalogSelector.getCatalogManager(), version);
         }
+
+        versionCombo.setToolTipText(getToolTipText(version));
       }
     });
 
@@ -865,7 +871,8 @@ public class ProductPage extends SetupWizardPage
       label = product.getName();
     }
 
-    return "<html><body style=\"margin:5px;\"><img src=\"" + imageURI
+    return "<html><body style=\"margin:5px;\"><img src=\""
+        + imageURI
         + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
         + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
         + "</span></body></html>";
@@ -1011,6 +1018,47 @@ public class ProductPage extends SetupWizardPage
       }
     }
     return version;
+  }
+
+  public static String getToolTipText(ProductVersion version)
+  {
+    if (version == null)
+    {
+      return null;
+    }
+
+    String label = SetupCoreUtil.getLabel(version);
+    Matcher matcher = RELEASE_LABEL_PATTERN.matcher(label);
+    if (matcher.matches())
+    {
+      String sublabel = matcher.group(1);
+      for (ProductVersion otherVersion : version.getProduct().getVersions())
+      {
+        String otherVersionLabel = SetupCoreUtil.getLabel(otherVersion);
+        if (sublabel.equals(otherVersionLabel))
+        {
+          label = sublabel;
+          break;
+        }
+      }
+    }
+
+    String result = "Install the " + label + " version ";
+    String name = version.getName();
+    if ("latest.released".equals(name))
+    {
+      result += "and update to the next service release or to the next full release";
+    }
+    else if ("latest".equals(name))
+    {
+      result += "and update to the next available version, including unreleased versions";
+    }
+    else
+    {
+      result += "and update to the next service release";
+    }
+
+    return result;
   }
 
   public static void saveProductVersionSelection(CatalogManager catalogManager, ProductVersion version)
@@ -1512,19 +1560,19 @@ public class ProductPage extends SetupWizardPage
 
           IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
               Collections.<ViewerFilter> singletonList(new ViewerFilter()
-          {
-            @Override
-            public boolean select(Viewer viewer, Object parentElement, Object element)
-            {
-              if (element instanceof IFile)
               {
-                IFile file = (IFile)element;
-                return "setup".equals(file.getFileExtension());
-              }
+                @Override
+                public boolean select(Viewer viewer, Object parentElement, Object element)
+                {
+                  if (element instanceof IFile)
+                  {
+                    IFile file = (IFile)element;
+                    return "setup".equals(file.getFileExtension());
+                  }
 
-              return true;
-            }
-          }));
+                  return true;
+                }
+              }));
 
           for (int i = 0, len = files.length; i < len; i++)
           {
