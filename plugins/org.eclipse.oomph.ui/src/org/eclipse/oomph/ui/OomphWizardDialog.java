@@ -143,4 +143,13 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
     super.setTitleImage(newTitleImage);
     OomphDialog.fixTitleImageLayout(this);
   }
+
+  public int openInBackground()
+  {
+    create();
+
+    constrainShellSize();
+
+    return getReturnCode();
+  }
 }

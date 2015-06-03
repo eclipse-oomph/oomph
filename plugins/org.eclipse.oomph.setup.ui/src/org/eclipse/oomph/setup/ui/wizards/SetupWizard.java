@@ -1019,6 +1019,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
    */
   public static class Updater extends SetupWizard
   {
+    protected boolean openInBackground;
+
     public Updater(boolean manual)
     {
       setTrigger(manual ? Trigger.MANUAL : Trigger.STARTUP);
@@ -1029,6 +1031,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     public Updater(SetupTaskPerformer performer)
     {
       super(performer);
+      openInBackground = true;
     }
 
     public Updater(SetupContext setupContext)
@@ -1040,6 +1043,18 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     public String getHelpPath()
     {
       return HELP_FOLDER + "DocUpdateWizard.html";
+    }
+
+    @Override
+    public int openDialog(Shell parentShell)
+    {
+      if (openInBackground)
+      {
+        SetupWizardDialog dialog = new SetupWizardDialog(parentShell, this);
+        return dialog.openInBackground();
+      }
+
+      return super.openDialog(parentShell);
     }
   }
 }
