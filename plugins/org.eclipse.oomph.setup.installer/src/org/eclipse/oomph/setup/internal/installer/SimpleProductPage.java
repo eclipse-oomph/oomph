@@ -591,7 +591,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         }
       });
 
-      contentHeight = getTextHeight(title) + VERTICAL_SPACE + 2 * getTextHeight(description);
+      contentHeight = getTextHeight(title, 1) + VERTICAL_SPACE + getTextHeight(description, 2);
     }
 
     public Product getProduct()
@@ -623,20 +623,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         {
           gc.dispose();
         }
-      }
-    }
-
-    private static int getTextHeight(Control control)
-    {
-      GC gc = new GC(control);
-
-      try
-      {
-        return gc.textExtent("Ag").y;
-      }
-      finally
-      {
-        gc.dispose();
       }
     }
 
@@ -688,6 +674,31 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     {
       control.addMouseTrackListener(this);
       control.addMouseListener(this);
+    }
+
+    private static int getTextHeight(Control control, int lines)
+    {
+      StringBuilder builder = new StringBuilder();
+      for (int i = 0; i < lines; i++)
+      {
+        if (builder.length() != 0)
+        {
+          builder.append("\n");
+        }
+
+        builder.append("Ag");
+      }
+
+      GC gc = new GC(control);
+
+      try
+      {
+        return gc.textExtent(builder.toString()).y;
+      }
+      finally
+      {
+        gc.dispose();
+      }
     }
 
     private static String shorten(GC gc, int width, int lines, String html)
