@@ -584,10 +584,23 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
       description.addControlListener(new ControlAdapter()
       {
+        private boolean settingProduct;
+
         @Override
         public void controlResized(ControlEvent e)
         {
-          setProduct(product);
+          if (!settingProduct)
+          {
+            try
+            {
+              settingProduct = true;
+              setProduct(product);
+            }
+            finally
+            {
+              settingProduct = false;
+            }
+          }
         }
       });
 
