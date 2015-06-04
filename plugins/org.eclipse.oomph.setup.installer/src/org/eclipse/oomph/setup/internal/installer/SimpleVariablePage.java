@@ -840,7 +840,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
 
     JRE jre = javaController.getJRE();
-    String vmPath = new File(jre.getJavaHome(), "bin").getAbsolutePath();
+    String vmPath = ProductPage.getVMOption(jre);
 
     ResourceSet resourceSet = installer.getResourceSet();
     URIConverter uriConverter = resourceSet.getURIConverter();

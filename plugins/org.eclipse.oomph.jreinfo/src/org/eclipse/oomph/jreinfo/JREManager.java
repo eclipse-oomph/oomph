@@ -15,6 +15,7 @@ import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -52,6 +53,8 @@ public final class JREManager
   public static final JREManager INSTANCE = new JREManager();
 
   private final List<String> javaHomes = new ArrayList<String>();
+
+  private String systemJavaHome;
 
   private JREManager()
   {
@@ -184,6 +187,69 @@ public final class JREManager
   public Map<File, JRE> getJREs()
   {
     return getJREs(null);
+  }
+
+  public synchronized JRE getSystemJRE()
+  {
+    if (OS.INSTANCE.isWin())
+    {
+      if (systemJavaHome == null)
+      {
+        // The native launcher augments the system PATH.
+        // It optionally prefixes the PATH with folder entries based on the JVM it has decided to use.
+        // These entries always use '/' instead of '\' so we can recognize the entries added by the native launcher.
+        List<String> folders = new ArrayList<String>();
+        String path = System.getenv("PATH");
+        for (String folder : path.split(File.pathSeparator))
+        {
+          systemJavaHome = "";
+
+          if (!StringUtil.isEmpty(folder))
+          {
+            if (folder.indexOf('/') == -1)
+            {
+              folders.add(folder);
+            }
+            else
+            {
+              // This tests if we are in debug mode.
+              // In that case, the JRE for the selected JRE of the launcher is at the front of the list, but it uses proper '\'
+              // So we ignore everything before the native launcher added entries.
+              boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("jdwp") >= 0;
+              if (isDebug)
+              {
+                folders.clear();
+              }
+            }
+          }
+        }
+
+        // The native launcher also adds the current working directory at the end of the path.
+        // We should ignore this one too.
+        int size = folders.size();
+        if (size > 0)
+        {
+          folders.remove(size - 1);
+        }
+
+        for (String folder : folders)
+        {
+          JREData jreData = InfoManager.testJRE(new File(folder, JAVA_EXECUTABLE).toString());
+          if (jreData != null)
+          {
+            systemJavaHome = jreData.getJavaHome();
+            break;
+          }
+        }
+      }
+
+      if (!StringUtil.isEmpty(systemJavaHome))
+      {
+        return getJREs().get(new File(systemJavaHome));
+      }
+    }
+
+    return null;
   }
 
   public Map<File, JRE> getJREs(JREFilter filter)

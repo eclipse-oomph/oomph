@@ -342,8 +342,7 @@ public class ProductPage extends SetupWizardPage
       @Override
       protected void jreChanged(JRE jre)
       {
-        String vmPath = jre == null ? null : new File(jre.getJavaHome(), "bin").getAbsolutePath();
-        getWizard().setVMPath(vmPath);
+        getWizard().setVMPath(getVMOption(jre));
         getWizard().setOS(OS.INSTANCE.getForBitness(getBitness()));
       }
 
@@ -1101,6 +1100,16 @@ public class ProductPage extends SetupWizardPage
     }
 
     return string;
+  }
+
+  public static String getVMOption(JRE jre)
+  {
+    if (jre == null || jre.equals(JREManager.INSTANCE.getSystemJRE()))
+    {
+      return null;
+    }
+
+    return new File(jre.getJavaHome(), "bin").toString();
   }
 
   public static URI getProductImageURI(Product product)

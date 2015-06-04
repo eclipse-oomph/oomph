@@ -23,12 +23,15 @@ public final class JREData
 
   private final int bitness;
 
+  private final String javaHome;
+
   public JREData(int major, int minor, int micro, int bitness)
   {
     this.major = major;
     this.minor = minor;
     this.micro = micro;
     this.bitness = bitness;
+    javaHome = "";
   }
 
   public JREData(String args)
@@ -42,6 +45,14 @@ public final class JREData
     minor = parseInt(args[1]);
     micro = parseInt(args[2]);
     bitness = parseInt(args[3]);
+    if (args.length > 4)
+    {
+      javaHome = args[4].replace("%25", "%").replace("%20", " ");
+    }
+    else
+    {
+      javaHome = "";
+    }
   }
 
   public JREData()
@@ -80,6 +91,7 @@ public final class JREData
     }
 
     bitness = determineBitness();
+    javaHome = System.getProperty("java.home");
   }
 
   public int getMajor()
@@ -100,6 +112,11 @@ public final class JREData
   public int getBitness()
   {
     return bitness;
+  }
+
+  public String getJavaHome()
+  {
+    return javaHome;
   }
 
   public boolean satisfies(JREData requirement)
@@ -129,7 +146,44 @@ public final class JREData
 
   public String toString()
   {
-    return major + " " + minor + " " + micro + " " + bitness;
+    StringBuffer result = new StringBuffer();
+    result.append(major);
+    result.append(' ');
+    result.append(minor);
+    result.append(' ');
+    result.append(micro);
+    result.append(' ');
+    result.append(bitness);
+
+    if (!"".equals(javaHome))
+    {
+      result.append(' ');
+
+      for (int i = 0, length = javaHome.length(); i < length; ++i)
+      {
+        char character = javaHome.charAt(i);
+        switch (character)
+        {
+          case ' ':
+          {
+            result.append("%20");
+            break;
+          }
+          case '%':
+          {
+            result.append("%25");
+            break;
+          }
+          default:
+          {
+            result.append(character);
+            break;
+          }
+        }
+      }
+    }
+
+    return result.toString();
   }
 
   public static int determineBitness()

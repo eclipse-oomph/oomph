@@ -129,14 +129,18 @@ final class InfoManager
     return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("infos.txt").toOSString());
   }
 
-  private static JREData testJRE(File javaHome) throws Exception
+  private static JREData testJRE(File javaHome)
+  {
+    String executable = JRE.getExecutable(javaHome).getAbsolutePath();
+    return testJRE(executable);
+  }
+
+  static JREData testJRE(String executable)
   {
     Process process = null;
 
     try
     {
-      String executable = JRE.getExecutable(javaHome).getAbsolutePath();
-
       ProcessBuilder builder = new ProcessBuilder();
       builder.command(executable, "-cp", LIB_CLASS_PATH, JREValidator.class.getName());
 
