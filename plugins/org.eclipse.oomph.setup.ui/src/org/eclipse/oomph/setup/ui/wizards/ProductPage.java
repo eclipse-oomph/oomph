@@ -34,6 +34,7 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
@@ -770,6 +771,25 @@ public class ProductPage extends SetupWizardPage
     }
 
     return false;
+  }
+
+  @Override
+  public void sendStats(boolean success)
+  {
+    super.sendStats(success);
+
+    SetupContext setupContext = getWizard().getSetupContext();
+    if (!success)
+    {
+      // If we've failed but there are streams involved, they can be the cause of the failure so don't blame the product.
+      Workspace workspace = setupContext.getWorkspace();
+      if (workspace != null && !workspace.getStreams().isEmpty())
+      {
+        return;
+      }
+    }
+
+    SetupCoreUtil.sendStats(setupContext.getInstallation().getProductVersion(), success);
   }
 
   private void updateDetails(boolean initial)

@@ -773,6 +773,24 @@ public class ProjectPage extends SetupWizardPage
     }
   }
 
+  @Override
+  public void sendStats(boolean success)
+  {
+    super.sendStats(success);
+
+    // If we've failed but there are streams involved, they can be the cause of the failure so don't blame the product.
+    Workspace workspace = getWizard().getSetupContext().getWorkspace();
+    if (workspace != null)
+    {
+      List<Stream> streams = new ArrayList<Stream>(workspace.getStreams());
+      streams.removeAll(existingStreams);
+      for (Stream stream : streams)
+      {
+        SetupCoreUtil.sendStats(stream, success);
+      }
+    }
+  }
+
   private void saveProjectStreamSelection(Stream stream)
   {
     CatalogManager catalogManager = catalogSelector.getCatalogManager();

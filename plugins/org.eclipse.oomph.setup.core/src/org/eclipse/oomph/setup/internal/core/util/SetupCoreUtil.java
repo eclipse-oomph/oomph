@@ -21,6 +21,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.util.IOUtil;
@@ -61,6 +62,7 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -78,6 +80,8 @@ import java.util.zip.ZipInputStream;
 public final class SetupCoreUtil
 {
   public static final String OOMPH_NAMESPACE = "org.eclipse.oomph";
+
+  private static final URI STATS_URI_PREFIX = URI.createURI("http://download.eclipse.org/stats/oomph");
 
   private static final ECFURIHandlerImpl.AuthorizationHandlerImpl AUTHORIZATION_HANDLER;
 
@@ -417,6 +421,54 @@ public final class SetupCoreUtil
   public static void migrate(Resource resource, Collection<EObject> result)
   {
     new Migrator(resource).migrate(result);
+  }
+
+  public static void sendStats(Scope scope, boolean success)
+  {
+    if (scope != null)
+    {
+      Resource resource = scope.eResource();
+      if (resource != null)
+      {
+        ResourceSet resourceSet = resource.getResourceSet();
+        if (resourceSet != null)
+        {
+          URI statusURI = STATS_URI_PREFIX;
+          ScopeType type = scope.getType();
+          switch (type)
+          {
+            case PRODUCT_VERSION:
+            {
+              statusURI = statusURI.appendSegment("product");
+              break;
+            }
+            case STREAM:
+            {
+              statusURI = statusURI.appendSegment("project");
+              break;
+            }
+            default:
+            {
+              return;
+            }
+          }
+
+          statusURI = statusURI.appendSegment(success ? "success" : "failure");
+          List<String> names = new ArrayList<String>();
+          for (Scope x = scope; x != null; x = x.getParentScope())
+          {
+            names.add(0, URI.encodeSegment(x.getName(), false));
+          }
+
+          for (String name : names)
+          {
+            statusURI = statusURI.appendSegment(name);
+          }
+
+          resourceSet.getURIConverter().exists(statusURI, null);
+        }
+      }
+    }
   }
 
   /**

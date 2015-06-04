@@ -918,6 +918,19 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     readmePath = null;
 
+    if (performer != null)
+    {
+      Installation installation = performer.getInstallation();
+      if (installation != null)
+      {
+        ProductVersion productVersion = installation.getProductVersion();
+        if (productVersion != null)
+        {
+          SetupCoreUtil.sendStats(productVersion, installError == null);
+        }
+      }
+    }
+
     if (installError == null)
     {
       installed = true;

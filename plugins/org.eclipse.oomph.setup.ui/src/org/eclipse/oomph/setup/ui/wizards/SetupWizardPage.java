@@ -131,6 +131,10 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     return true;
   }
 
+  public void sendStats(boolean success)
+  {
+  }
+
   protected void handleInactivity(Display display, boolean inactive)
   {
   }

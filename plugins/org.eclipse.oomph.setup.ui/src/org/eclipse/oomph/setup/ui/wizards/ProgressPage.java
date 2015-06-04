@@ -717,6 +717,8 @@ public class ProgressPage extends SetupWizardPage
                 progressLog.setTerminating();
                 progressLog.message("Took " + seconds + " seconds.");
 
+                getWizard().sendStats(success);
+
                 final AtomicBoolean disableCancelButton = new AtomicBoolean(true);
 
                 final boolean restart = restartReasons != null && !restartReasons.isEmpty() && trigger != Trigger.BOOTSTRAP;

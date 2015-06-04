@@ -447,6 +447,18 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return false;
   }
 
+  public void sendStats(boolean success)
+  {
+    for (IWizardPage page : getPages())
+    {
+      if (page instanceof SetupWizardPage)
+      {
+        SetupWizardPage setupWizardPage = (SetupWizardPage)page;
+        setupWizardPage.sendStats(success);
+      }
+    }
+  }
+
   private void clearStartupProperties()
   {
     System.clearProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP);
