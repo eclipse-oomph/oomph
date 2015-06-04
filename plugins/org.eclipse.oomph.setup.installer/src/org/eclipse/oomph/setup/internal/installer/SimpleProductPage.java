@@ -570,7 +570,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       logo.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 2));
       listenToMouse(logo);
 
-      title = new Label(this, SWT.WRAP);
+      title = new Label(this, SWT.NONE);
       title.setForeground(COLOR_TITLE);
       title.setFont(FONT_TITLE);
       title.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -591,7 +591,13 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         }
       });
 
-      contentHeight = getTextHeight(title, 1) + VERTICAL_SPACE + getTextHeight(description, 2);
+      title.setText("Ag");
+      int titleHeight = title.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+
+      description.setText("Ag\nAg");
+      int descriptionHeight = description.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+
+      contentHeight = titleHeight + VERTICAL_SPACE + descriptionHeight;
     }
 
     public Product getProduct()
@@ -612,8 +618,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
         try
         {
-          int width = description.getSize().x - 5;
-          int lines = list != null ? 2 : 9;
+          int width = description.getSize().x - 8;
+          int lines = list != null ? 2 : 8;
 
           String text = shorten(gc, width, lines, product.getDescription());
           description.setText(text);
