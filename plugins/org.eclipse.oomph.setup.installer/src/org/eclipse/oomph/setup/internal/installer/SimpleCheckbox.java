@@ -12,8 +12,6 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.FlatButton;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -48,7 +46,7 @@ public class SimpleCheckbox extends FlatButton
         setChecked(!SimpleCheckbox.this.isChecked());
       }
     });
-    setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///9/bold")));
+    setFont(SimpleInstallerDialog.getFont(0, "bold"));
     setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     setDisabledBackgroundColor(null);
   }

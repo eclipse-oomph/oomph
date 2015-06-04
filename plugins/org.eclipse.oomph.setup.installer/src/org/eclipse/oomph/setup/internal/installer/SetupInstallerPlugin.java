@@ -14,6 +14,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
@@ -21,7 +22,7 @@ import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
@@ -29,6 +30,8 @@ import org.eclipse.swt.graphics.FontData;
 import org.osgi.framework.BundleContext;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author Eike Stepper
@@ -82,19 +85,27 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
 
     private void initializeFonts()
     {
+      FontData[] fontData = JFaceResources.getDefaultFont().getFontData();
+      int height = fontData == null || fontData.length == 0 ? 9 : (int)fontData[0].height;
+
       loadFont("/fonts/OpenSans-Regular.ttf");
-      JFaceResources.getFontRegistry().put(SetupInstallerPlugin.FONT_LABEL_DEFAULT, new FontData[] { new FontData("Open Sans", 9, SWT.BOLD) });
+      JFaceResources.getFontRegistry().put(SetupInstallerPlugin.FONT_LABEL_DEFAULT, new FontData[] { new FontData("Open Sans", height, SWT.BOLD) });
     }
 
     private boolean loadFont(String path)
     {
-      File exportedFont = new File(PropertiesUtil.TEMP_DIR, new Path(path).lastSegment());
-      if (!exportedFont.exists())
+      try
       {
-        SetupInstallerPlugin.INSTANCE.exportResources(path, exportedFont);
+        URL url = new URL("platform:/plugin/" + SetupInstallerPlugin.INSTANCE.getSymbolicName() + path);
+        URL fileURL = FileLocator.toFileURL(url);
+        String filePath = fileURL.getPath();
+        File file = new File(filePath);
+        return UIUtil.getDisplay().loadFont(file.toString());
       }
-
-      return UIUtil.getDisplay().loadFont(exportedFont.toString());
+      catch (IOException ex)
+      {
+        throw new IORuntimeException(ex);
+      }
     }
   }
 }

@@ -41,6 +41,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.installer.SimpleInstallLaunchButton.State;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
+import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductComposite;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
@@ -136,7 +137,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private String readmePath;
 
-  private Browser browser;
+  private Browser detailBrowser;
+
+  private ProductComposite detailComposite;
 
   private CCombo versionCombo;
 
@@ -199,24 +202,32 @@ public class SimpleVariablePage extends SimpleInstallerPage
     GridData browserLayoutData = GridDataFactory.fillDefaults().indent(0, 13).grab(true, false).create();
     browserLayoutData.heightHint = 216;
 
-    Composite browserComposite = new Composite(container, SWT.NONE);
-    browserComposite.setLayoutData(browserLayoutData);
-    browserComposite.setLayout(new FillLayout());
+    Composite detailArea = new Composite(container, SWT.NONE);
+    detailArea.setLayoutData(browserLayoutData);
+    detailArea.setLayout(new FillLayout());
 
-    browser = new Browser(browserComposite, SWT.NO_SCROLL);
-    browser.addLocationListener(new LocationAdapter()
+    try
     {
-      @Override
-      public void changing(LocationEvent event)
+      detailBrowser = new Browser(detailArea, SWT.NO_SCROLL);
+      detailBrowser.addLocationListener(new LocationAdapter()
       {
-        String url = event.location;
-        if (!"about:blank".equals(url))
+        @Override
+        public void changing(LocationEvent event)
         {
-          OS.INSTANCE.openSystemBrowser(url);
-          event.doit = false;
+          String url = event.location;
+          if (!"about:blank".equals(url))
+          {
+            OS.INSTANCE.openSystemBrowser(url);
+            event.doit = false;
+          }
         }
-      }
-    });
+      });
+    }
+    catch (Exception ex)
+    {
+      detailBrowser = null;
+      detailComposite = new ProductComposite(detailArea, null, null);
+    }
 
     Composite variablesComposite = new Composite(container, SWT.NONE);
     GridLayout variablesLayout = new GridLayout(5, false);
@@ -538,7 +549,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     // Exclude browser from focus traversal because otherwise we get
     // a strange traversal behavior
     List<Control> tabList = new ArrayList<Control>(Arrays.asList(container.getTabList()));
-    tabList.remove(browserComposite);
+    tabList.remove(detailArea);
     container.setTabList(tabList.toArray(new Control[tabList.size()]));
 
     // Just for debugging
@@ -571,7 +582,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     button.setText(text);
     button.setCornerWidth(10);
     button.setAlignment(SWT.CENTER);
-    button.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///10/normal")));
+    button.setFont(SimpleInstallerDialog.getFont(1, "normal"));
     button.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 22).create());
     button.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
 
@@ -621,10 +632,17 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     this.product = product;
 
-    String html = SimpleInstallerDialog.getPageTemplate();
-    html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, true));
+    if (detailBrowser != null)
+    {
+      String html = SimpleInstallerDialog.getPageTemplate();
+      html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, true));
 
-    browser.setText(html, true);
+      detailBrowser.setText(html, true);
+    }
+    else
+    {
+      detailComposite.setProduct(product);
+    }
 
     productVersions.clear();
     versionCombo.removeAll();
@@ -1158,7 +1176,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

@@ -13,8 +13,6 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -67,7 +65,7 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
     Label title = new Label(container, SWT.NONE);
     title.setText("INSTALLATION LOG");
     title.setForeground(UIUtil.getEclipseThemeColor());
-    title.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///12/bold")));
+    title.setFont(SimpleInstallerDialog.getFont(3, "bold"));
     title.setLayoutData(GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.END).create());
 
     logFilePathLabel = new Label(container, SWT.NONE);

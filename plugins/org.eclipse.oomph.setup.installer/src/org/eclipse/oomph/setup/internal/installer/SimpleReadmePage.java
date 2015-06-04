@@ -12,8 +12,6 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.ui.UIUtil;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -56,7 +54,7 @@ public class SimpleReadmePage extends SimpleInstallerPage
     Label title = new Label(container, SWT.NONE);
     title.setText("README");
     title.setForeground(UIUtil.getEclipseThemeColor());
-    title.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///12/bold")));
+    title.setFont(SimpleInstallerDialog.getFont(3, "bold"));
     title.setLayoutData(GridDataFactory.swtDefaults().create());
 
     browser = new Browser(container, SWT.NONE);

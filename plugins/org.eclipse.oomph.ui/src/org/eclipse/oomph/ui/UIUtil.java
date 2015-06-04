@@ -21,6 +21,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -51,11 +52,13 @@ public final class UIUtil
 {
   public static final IWorkbench WORKBENCH;
 
-  private static Image ERROR_IMAGE;
+  private static Image errorImage;
 
-  private static Image WARNING_IMAGE;
+  private static Image warningImage;
 
-  private static Image INFO_IMAGE;
+  private static Image infoImage;
+
+  private static Boolean browserAvailable;
 
   static
   {
@@ -153,6 +156,44 @@ public final class UIUtil
     });
 
     return shell[0];
+  }
+
+  public static synchronized boolean isBrowserAvailable()
+  {
+    if (browserAvailable == null)
+    {
+      syncExec(new Runnable()
+      {
+        public void run()
+        {
+          Shell shell = null;
+
+          try
+          {
+            shell = new Shell();
+            new Browser(shell, SWT.NONE);
+            browserAvailable = true;
+          }
+          catch (Exception ex)
+          {
+            browserAvailable = false;
+          }
+          finally
+          {
+            try
+            {
+              shell.dispose();
+            }
+            catch (Exception ex)
+            {
+              // Ignore.
+            }
+          }
+        }
+      });
+    }
+
+    return browserAvailable;
   }
 
   /**
@@ -382,30 +423,30 @@ public final class UIUtil
   {
     if (severity == IStatus.ERROR)
     {
-      if (ERROR_IMAGE == null)
+      if (errorImage == null)
       {
-        ERROR_IMAGE = UIPlugin.INSTANCE.getSWTImage("error");
+        errorImage = UIPlugin.INSTANCE.getSWTImage("error");
       }
 
-      return ERROR_IMAGE;
+      return errorImage;
     }
 
     if (severity == IStatus.WARNING)
     {
-      if (WARNING_IMAGE == null)
+      if (warningImage == null)
       {
-        WARNING_IMAGE = UIPlugin.INSTANCE.getSWTImage("warning");
+        warningImage = UIPlugin.INSTANCE.getSWTImage("warning");
       }
 
-      return WARNING_IMAGE;
+      return warningImage;
     }
 
-    if (INFO_IMAGE == null)
+    if (infoImage == null)
     {
-      INFO_IMAGE = UIPlugin.INSTANCE.getSWTImage("info");
+      infoImage = UIPlugin.INSTANCE.getSWTImage("info");
     }
 
-    return INFO_IMAGE;
+    return infoImage;
   }
 
   public static void exec(Display display, boolean async, Runnable runnable)

@@ -16,8 +16,6 @@ import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.internal.ui.ToggleSwitchButton;
 import org.eclipse.oomph.ui.UIUtil;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -231,7 +229,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
    */
   public static class InstallerMenuItem extends Composite
   {
-    private static final Font FONT = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///13/bold"));
+    private static final Font FONT = SimpleInstallerDialog.getFont(4, "bold");
 
     private ImageHoverButton button;
 

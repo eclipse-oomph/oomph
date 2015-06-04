@@ -11,13 +11,14 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
+import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductList.BrowserProductList;
+import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductList.CompositeProductList;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
@@ -26,12 +27,12 @@ import org.eclipse.oomph.ui.SpriteAnimator;
 import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -50,6 +51,7 @@ import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -133,8 +135,15 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     stackComposite.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     indexLoader = new SpriteIndexLoader(stackComposite);
-    productList = new CompositeProductList(this, stackComposite);
-    // productList = new BrowserProductList(this, stackComposite, catalogSelector);
+
+    if ("browser".equals(PropertiesUtil.getProperty("oomph.product.list")))
+    {
+      productList = new BrowserProductList(this, stackComposite, catalogSelector);
+    }
+    else
+    {
+      productList = new CompositeProductList(this, stackComposite);
+    }
 
     stackComposite.setTopControl(indexLoader.getAnimator());
 
@@ -248,7 +257,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   public static String renderProduct(Product product, boolean large)
   {
-    URI imageURI = ProductPage.getProductImageURI(product);
+    String imageURI = ProductPage.getImageURI(product);
 
     String label = product.getLabel();
     if (StringUtil.isEmpty(label))
@@ -286,7 +295,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       productHtml = productHtml.replace("%PRODUCT_LINK%", productLink);
     }
 
-    productHtml = productHtml.replace("%PRODUCT_ICON_SRC%", imageURI.toString());
+    productHtml = productHtml.replace("%PRODUCT_ICON_SRC%", imageURI);
     productHtml = productHtml.replace("%PRODUCT_TITLE%", label);
     productHtml = productHtml.replace("%PRODUCT_DESCRIPTION%", description);
     return productHtml;
@@ -295,7 +304,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   /**
    * @author Eike Stepper
    */
-  protected static abstract class ProductList
+  public static abstract class ProductList
   {
     private final SimpleProductPage page;
 
@@ -314,424 +323,457 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     {
       page.productSelected(product);
     }
-  }
 
-  /**
-   * @author Eike Stepper
-   */
-  private static class BrowserProductList extends ProductList
-  {
-    private final Browser browser;
-
-    public BrowserProductList(SimpleProductPage page, StackComposite stackComposite, final CatalogSelector catalogSelector)
+    /**
+     * @author Eike Stepper
+     */
+    public static class BrowserProductList extends ProductList
     {
-      super(page);
-      browser = new Browser(stackComposite, SWT.NONE);
-      browser.addLocationListener(new LocationAdapter()
+      private final Browser browser;
+
+      public BrowserProductList(SimpleProductPage page, StackComposite stackComposite, final CatalogSelector catalogSelector)
       {
-        @Override
-        public void changing(LocationEvent event)
+        super(page);
+        browser = new Browser(stackComposite, SWT.NONE);
+        browser.addLocationListener(new LocationAdapter()
         {
-          String url = event.location;
-          if (!"about:blank".equals(url))
+          @Override
+          public void changing(LocationEvent event)
           {
-            if (url.startsWith(PRODUCT_PREFIX))
+            String url = event.location;
+            if (!"about:blank".equals(url))
             {
-              url = url.substring(PRODUCT_PREFIX.length());
-              productSelected(url, catalogSelector);
-            }
-            else
-            {
-              OS.INSTANCE.openSystemBrowser(url);
-            }
+              if (url.startsWith(PRODUCT_PREFIX))
+              {
+                url = url.substring(PRODUCT_PREFIX.length());
+                productSelected(url, catalogSelector);
+              }
+              else
+              {
+                OS.INSTANCE.openSystemBrowser(url);
+              }
 
-            event.doit = false;
+              event.doit = false;
+            }
           }
-        }
-      });
-    }
-
-    @Override
-    public Control getControl()
-    {
-      return browser;
-    }
-
-    @Override
-    public void setInput(List<Product> products)
-    {
-      StringBuilder productsBuilder = new StringBuilder();
-      for (Product product : products)
-      {
-        productsBuilder.append(renderProduct(product, false));
+        });
       }
 
-      String productPageHTML = SimpleInstallerDialog.getProductTemplate();
-      String simpleInstallerHTML = SimpleInstallerDialog.getPageTemplate();
-      productPageHTML = simpleInstallerHTML.replace("%CONTENT%", productsBuilder.toString());
-      browser.setText(productPageHTML, true);
-    }
-
-    @Override
-    public void reset()
-    {
-      browser.setText(browser.getText());
-    }
-
-    private void productSelected(String url, CatalogSelector catalogSelector)
-    {
-      int lastSlash = url.lastIndexOf('/');
-      String catalogName = url.substring(0, lastSlash);
-      String productName = url.substring(lastSlash + 1);
-
-      for (Scope scope : catalogSelector.getSelectedCatalogs())
+      @Override
+      public Control getControl()
       {
-        if (scope instanceof ProductCatalog)
+        return browser;
+      }
+
+      @Override
+      public void setInput(List<Product> products)
+      {
+        StringBuilder productsBuilder = new StringBuilder();
+        for (Product product : products)
         {
-          ProductCatalog productCatalog = (ProductCatalog)scope;
-          if (catalogName.equals(productCatalog.getName()))
+          productsBuilder.append(renderProduct(product, false));
+        }
+
+        String productPageHTML = SimpleInstallerDialog.getProductTemplate();
+        String simpleInstallerHTML = SimpleInstallerDialog.getPageTemplate();
+        productPageHTML = simpleInstallerHTML.replace("%CONTENT%", productsBuilder.toString());
+        browser.setText(productPageHTML, true);
+      }
+
+      @Override
+      public void reset()
+      {
+        browser.setText(browser.getText());
+      }
+
+      private void productSelected(String url, CatalogSelector catalogSelector)
+      {
+        int lastSlash = url.lastIndexOf('/');
+        String catalogName = url.substring(0, lastSlash);
+        String productName = url.substring(lastSlash + 1);
+
+        for (Scope scope : catalogSelector.getSelectedCatalogs())
+        {
+          if (scope instanceof ProductCatalog)
           {
-            for (Product product : productCatalog.getProducts())
+            ProductCatalog productCatalog = (ProductCatalog)scope;
+            if (catalogName.equals(productCatalog.getName()))
             {
-              if (productName.equals(product.getName()))
+              for (Product product : productCatalog.getProducts())
               {
-                productSelected(product);
+                if (productName.equals(product.getName()))
+                {
+                  productSelected(product);
+                }
               }
             }
           }
         }
       }
     }
+
+    /**
+     * @author Eike Stepper
+     */
+    public static final class CompositeProductList extends ProductList
+    {
+      public static final int SPACE = 3;
+
+      private final ScrolledComposite scrolledComposite;
+
+      private final Composite scrolledContent;
+
+      private List<Product> products;
+
+      public CompositeProductList(SimpleProductPage page, StackComposite stackComposite)
+      {
+        super(page);
+        scrolledComposite = new ScrolledComposite(stackComposite, SWT.V_SCROLL);
+        scrolledComposite.setExpandHorizontal(true);
+        scrolledComposite.setExpandVertical(true);
+
+        GridLayout gridLayout = new GridLayout(1, false);
+        gridLayout.marginWidth = 0;
+        gridLayout.marginHeight = 0;
+        gridLayout.verticalSpacing = SPACE;
+
+        scrolledContent = new Composite(scrolledComposite, SWT.NONE);
+        scrolledContent.setLayout(gridLayout);
+        scrolledContent.setBackground(SimpleProductPage.COLOR_PAGE_BORDER);
+
+        // Workaround for bug 93472 (Content of ScrolledComposite doesn't get scrolled by mousewheel).
+        // Setting the focus on the scroller doesn't work, that is why we forward the mouse wheel event.
+        scrolledContent.addListener(SWT.MouseVerticalWheel, new Listener()
+        {
+          public void handleEvent(Event event)
+          {
+            int value = event.count * SimpleInstallationLogPage.SCROLL_SPEED;
+            ScrollBar vbar = scrolledComposite.getVerticalBar();
+            vbar.setSelection(vbar.getSelection() - value);
+
+            Listener[] selectionListeners = vbar.getListeners(SWT.Selection);
+            for (Listener listener : selectionListeners)
+            {
+              listener.handleEvent(event);
+            }
+          }
+        });
+
+        scrolledComposite.setContent(scrolledContent);
+      }
+
+      @Override
+      public Control getControl()
+      {
+        return scrolledComposite;
+      }
+
+      @Override
+      public void setInput(final List<Product> products)
+      {
+        this.products = products;
+
+        Control[] children = scrolledContent.getChildren();
+        for (int i = children.length - 1; i >= 0; --i)
+        {
+          children[i].dispose();
+        }
+
+        if (products != null)
+        {
+          Cursor handCursor = scrolledContent.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
+
+          for (Product product : products)
+          {
+            ProductComposite productComposite = new ProductComposite(scrolledContent, this, product);
+
+            GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+            gridData.minimumHeight = ProductComposite.TOTAL_HEIGHT;
+            gridData.heightHint = gridData.minimumHeight;
+
+            productComposite.setLayoutData(gridData);
+            productComposite.setCursor(handCursor);
+          }
+
+          int size = products.size();
+          int height = size * ProductComposite.TOTAL_HEIGHT;
+          if (size > 0)
+          {
+            height += (size - 1) * SPACE;
+          }
+
+          scrolledComposite.setMinHeight(height);
+        }
+        else
+        {
+          scrolledComposite.setMinHeight(0);
+        }
+
+        scrolledContent.layout();
+      }
+
+      @Override
+      public void reset()
+      {
+        setInput(products);
+      }
+    }
   }
 
   /**
    * @author Eike Stepper
    */
-  private static final class CompositeProductList extends ProductList
+  public static final class ProductComposite extends Composite implements MouseTrackListener, MouseListener
   {
-    private static final int SPACE = 3;
+    public static final int BORDER = 17;
 
-    private final ScrolledComposite scrolledComposite;
+    public static final int HEIGHT = 64;
 
-    private final Composite scrolledContent;
+    public static final int TOTAL_HEIGHT = HEIGHT + 2 * BORDER;
 
-    private List<Product> products;
+    private static final Color COLOR_WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
 
-    public CompositeProductList(SimpleProductPage page, StackComposite stackComposite)
+    private static final Color COLOR_TITLE = UIUtil.getEclipseThemeColor();
+
+    private static final Color COLOR_DESCRIPTION = SetupInstallerPlugin.getColor(85, 85, 85);
+
+    private static final Color COLOR_SELECTION = SetupInstallerPlugin.getColor(174, 187, 221);
+
+    private static final Font FONT_TITLE = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///+4/bold"));
+
+    private static final Font FONT_DESCRIPTION = SimpleInstallerDialog.getFont(1, "normal");
+
+    private final CompositeProductList list;
+
+    private Product product;
+
+    private Logo logo;
+
+    private Label title;
+
+    private Label description;
+
+    public ProductComposite(Composite parent, CompositeProductList list, final Product product)
     {
-      super(page);
-      scrolledComposite = new ScrolledComposite(stackComposite, SWT.V_SCROLL);
-      scrolledComposite.setExpandHorizontal(true);
-      scrolledComposite.setExpandVertical(true);
+      super(parent, SWT.NONE);
+      this.list = list;
 
-      GridLayout gridLayout = new GridLayout(1, false);
-      gridLayout.marginWidth = 0;
-      gridLayout.marginHeight = 0;
-      gridLayout.verticalSpacing = SPACE;
+      GridLayout gridLayout = new GridLayout(2, false);
+      gridLayout.marginWidth = BORDER;
+      gridLayout.marginHeight = BORDER;
+      gridLayout.horizontalSpacing = BORDER;
+      gridLayout.verticalSpacing = 10;
+      setLayout(gridLayout);
 
-      scrolledContent = new Composite(scrolledComposite, SWT.NONE);
-      scrolledContent.setLayout(gridLayout);
-      scrolledContent.setBackground(SimpleProductPage.COLOR_PAGE_BORDER);
+      setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+      listenToMouse(this);
 
-      // Workaround for bug 93472 (Content of ScrolledComposite doesn't get scrolled by mousewheel).
-      // Setting the focus on the scroller doesn't work, that is why we forward the mouse wheel event.
-      scrolledContent.addListener(SWT.MouseVerticalWheel, new Listener()
+      logo = new Logo(this);
+      logo.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 2));
+      listenToMouse(logo);
+
+      title = new Label(this, SWT.WRAP);
+      title.setForeground(COLOR_TITLE);
+      title.setFont(FONT_TITLE);
+      title.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      listenToMouse(title);
+
+      description = new Label(this, SWT.WRAP);
+      description.setForeground(COLOR_DESCRIPTION);
+      description.setFont(FONT_DESCRIPTION);
+      description.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      listenToMouse(description);
+
+      description.addControlListener(new ControlAdapter()
       {
-        public void handleEvent(Event event)
+        @Override
+        public void controlResized(ControlEvent e)
         {
-          int value = event.count * SimpleInstallationLogPage.SCROLL_SPEED;
-          ScrollBar vbar = scrolledComposite.getVerticalBar();
-          vbar.setSelection(vbar.getSelection() - value);
-
-          Listener[] selectionListeners = vbar.getListeners(SWT.Selection);
-          for (Listener listener : selectionListeners)
-          {
-            listener.handleEvent(event);
-          }
+          setProduct(product);
         }
       });
-
-      scrolledComposite.setContent(scrolledContent);
     }
 
-    @Override
-    public Control getControl()
+    public Product getProduct()
     {
-      return scrolledComposite;
+      return product;
     }
 
-    @Override
-    public void setInput(final List<Product> products)
+    public void setProduct(Product product)
     {
-      this.products = products;
-
-      Control[] children = scrolledContent.getChildren();
-      for (int i = children.length - 1; i >= 0; --i)
+      this.product = product;
+      if (product != null)
       {
-        children[i].dispose();
-      }
-
-      if (products != null)
-      {
-        for (Product product : products)
-        {
-          new ProductComposite(scrolledContent, this, product);
-        }
-
-        int size = products.size();
-        int height = size * ProductComposite.TOTAL_HEIGHT;
-        if (size > 0)
-        {
-          height += (size - 1) * SPACE;
-        }
-
-        scrolledComposite.setMinHeight(height);
-      }
-      else
-      {
-        scrolledComposite.setMinHeight(0);
-      }
-
-      scrolledContent.layout();
-    }
-
-    @Override
-    public void reset()
-    {
-      setInput(products);
-    }
-
-    /**
-     * @author Eike Stepper
-     */
-    private static final class ProductComposite extends Composite implements MouseTrackListener, MouseListener
-    {
-      private static final int BORDER = 17;
-
-      private static final int HEIGHT = 64;
-
-      private static final int TOTAL_HEIGHT = HEIGHT + 2 * BORDER;
-
-      private static final Color COLOR_WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
-
-      private static final Color COLOR_TITLE = UIUtil.getEclipseThemeColor();
-
-      private static final Color COLOR_DESCRIPTION = SetupInstallerPlugin.getColor(85, 85, 85);
-
-      private static final Color COLOR_SELECTION = SetupInstallerPlugin.getColor(174, 187, 221);
-
-      private static final Font FONT_TITLE = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///12/bold"));
-
-      private static final Font FONT_DESCRIPTION = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///10/normal"));
-
-      private final Product product;
-
-      private final CompositeProductList list;
-
-      public ProductComposite(Composite parent, CompositeProductList list, final Product product)
-      {
-        super(parent, SWT.NONE);
-        this.list = list;
-        this.product = product;
-
-        GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
-        gridData.minimumHeight = TOTAL_HEIGHT;
-        gridData.heightHint = gridData.minimumHeight;
-
-        GridLayout gridLayout = new GridLayout(2, false);
-        gridLayout.marginWidth = BORDER;
-        gridLayout.marginHeight = BORDER;
-        gridLayout.horizontalSpacing = BORDER;
-        gridLayout.verticalSpacing = 10;
-
-        setLayoutData(gridData);
-        setLayout(gridLayout);
-
-        setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        setCursor(getDisplay().getSystemCursor(SWT.CURSOR_HAND));
-        listenToMouse(this);
-
-        URI imageURI = ProductPage.getProductImageURI(product);
-        Image image = ExtendedImageRegistry.INSTANCE.getImage(BaseEditUtil.getImage(imageURI));
-
-        Logo logo = new Logo(this, image);
-        logo.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 2));
-        listenToMouse(logo);
-
-        Label title = new Label(this, SWT.WRAP);
-        title.setForeground(COLOR_TITLE);
-        title.setFont(FONT_TITLE);
-        title.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+        Image image = ProductPage.getImage(product);
+        logo.setImage(image);
         title.setText(product.getLabel());
-        listenToMouse(title);
 
-        final Label description = new Label(this, SWT.WRAP);
-        description.setForeground(COLOR_DESCRIPTION);
-        description.setFont(FONT_DESCRIPTION);
-        description.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-        listenToMouse(description);
-
-        description.addControlListener(new ControlAdapter()
-        {
-          @Override
-          public void controlResized(ControlEvent e)
-          {
-            setDescription(description, product);
-          }
-        });
-      }
-
-      private void setDescription(Label label, Product product)
-      {
-        int width = label.getSize().x;
-        GC gc = new GC(label);
+        GC gc = new GC(description);
 
         try
         {
-          String text = shorten(gc, width, product.getDescription());
-          label.setText(text);
-          label.getParent().layout();
+          int width = description.getSize().x - 5;
+          int lines = list != null ? 2 : 9;
+
+          String text = shorten(gc, width, lines, product.getDescription());
+          description.setText(text);
+          description.getParent().layout();
         }
         finally
         {
           gc.dispose();
         }
       }
+    }
 
-      private static String shorten(GC gc, int width, String html)
-      {
-        String plain = StringUtil.isEmpty(html) ? "No description available." : stripHTML(html);
-
-        StringBuilder builder = new StringBuilder();
-        int lineWidth = 0;
-        int lines = 1;
-
-        String[] words = plain.split(" ");
-        for (String word : words)
-        {
-          int wordWidth = gc.textExtent(word + " ").x;
-          lineWidth += wordWidth;
-          if (lineWidth > width)
-          {
-            if (++lines > 2)
-            {
-              int length = builder.length();
-              builder.replace(length - 1, length, "...");
-              break;
-            }
-
-            lineWidth = wordWidth;
-          }
-
-          builder.append(word);
-          builder.append(" ");
-        }
-
-        return builder.toString();
-      }
-
-      private static String stripHTML(String html)
-      {
-        try
-        {
-          final StringBuilder builder = new StringBuilder();
-          new ParserDelegator().parse(new StringReader(html), new HTMLEditorKit.ParserCallback()
-          {
-            @Override
-            public void handleText(char[] text, int pos)
-            {
-              builder.append(text);
-            }
-          }, Boolean.TRUE);
-
-          return builder.toString();
-        }
-        catch (IOException ex)
-        {
-          return html;
-        }
-      }
-
-      private void listenToMouse(Control control)
-      {
-        control.addMouseTrackListener(this);
-        control.addMouseListener(this);
-      }
-
-      public void mouseEnter(MouseEvent e)
+    public void mouseEnter(MouseEvent e)
+    {
+      if (list != null)
       {
         setBackground(COLOR_SELECTION);
       }
+    }
 
-      public void mouseExit(MouseEvent e)
+    public void mouseExit(MouseEvent e)
+    {
+      if (list != null)
       {
         setBackground(COLOR_WHITE);
       }
+    }
 
-      public void mouseHover(MouseEvent e)
+    public void mouseHover(MouseEvent e)
+    {
+      // Do nothing.
+    }
+
+    public void mouseDoubleClick(MouseEvent e)
+    {
+      // Do nothing.
+    }
+
+    public void mouseDown(MouseEvent e)
+    {
+      // Do nothing.
+    }
+
+    public void mouseUp(MouseEvent e)
+    {
+      if (list != null && product != null && getClientArea().contains(e.x, e.y))
       {
-        // Do nothing.
+        list.productSelected(product);
       }
+    }
 
-      public void mouseDoubleClick(MouseEvent e)
-      {
-        // Do nothing.
-      }
+    private void listenToMouse(Control control)
+    {
+      control.addMouseTrackListener(this);
+      control.addMouseListener(this);
+    }
 
-      public void mouseDown(MouseEvent e)
-      {
-        // Do nothing.
-      }
+    private static String shorten(GC gc, int width, int lines, String html)
+    {
+      String plain = StringUtil.isEmpty(html) ? "No description available." : stripHTML(html);
 
-      public void mouseUp(MouseEvent e)
+      StringBuilder builder = new StringBuilder();
+      int lineWidth = 0;
+      int lineCount = 1;
+
+      String[] words = plain.split(" ");
+      for (String word : words)
       {
-        if (getClientArea().contains(e.x, e.y))
+        int wordWidth = gc.textExtent(word + " ").x;
+        lineWidth += wordWidth;
+        if (lineWidth > width)
         {
-          list.productSelected(product);
+          if (++lineCount > lines)
+          {
+            int length = builder.length();
+            builder.replace(length - 1, length, "...");
+            break;
+          }
+
+          lineWidth = wordWidth;
         }
+
+        builder.append(word);
+        builder.append(" ");
       }
 
-      /**
-       * @author Eike Stepper
-       */
-      private static final class Logo extends Composite implements PaintListener
+      return builder.toString();
+    }
+
+    private static String stripHTML(String html)
+    {
+      try
       {
-        private final Image image;
-
-        private int imageX;
-
-        private int imageY;
-
-        public Logo(Composite parent, Image image)
+        final StringBuilder builder = new StringBuilder();
+        new ParserDelegator().parse(new StringReader(html), new HTMLEditorKit.ParserCallback()
         {
-          super(parent, SWT.DOUBLE_BUFFERED);
-          this.image = image;
+          @Override
+          public void handleText(char[] text, int pos)
+          {
+            builder.append(text);
+          }
+        }, Boolean.TRUE);
 
-          ImageData imageData = image.getImageData();
-          imageX = (HEIGHT - imageData.width) / 2;
-          imageY = (HEIGHT - imageData.height) / 2;
+        return builder.toString();
+      }
+      catch (IOException ex)
+      {
+        return html;
+      }
+    }
 
-          addPaintListener(this);
-          setSize(HEIGHT, HEIGHT);
-        }
+    /**
+     * @author Eike Stepper
+     */
+    public static final class Logo extends Composite implements PaintListener
+    {
+      private Image image;
 
-        public void paintControl(PaintEvent e)
-        {
-          Rectangle rect = getClientArea();
-          GC gc = e.gc;
+      private int imageX;
 
-          int oldAntialias = gc.getAntialias();
-          gc.setAntialias(SWT.ON);
+      private int imageY;
 
-          Color oldBackground = gc.getBackground();
-          gc.setBackground(COLOR_PAGE_BORDER);
+      public Logo(Composite parent)
+      {
+        super(parent, SWT.DOUBLE_BUFFERED);
 
-          gc.fillOval(0, 0, rect.width, rect.height);
-          gc.drawImage(image, imageX, imageY);
+        addPaintListener(this);
+        setSize(HEIGHT, HEIGHT);
+      }
 
-          gc.setBackground(oldBackground);
-          gc.setAntialias(oldAntialias);
-        }
+      public Image getImage()
+      {
+        return image;
+      }
+
+      public void setImage(Image image)
+      {
+        this.image = image;
+
+        ImageData imageData = image.getImageData();
+        imageX = (HEIGHT - imageData.width) / 2;
+        imageY = (HEIGHT - imageData.height) / 2;
+      }
+
+      public void paintControl(PaintEvent e)
+      {
+        Rectangle rect = getClientArea();
+        GC gc = e.gc;
+
+        int oldAntialias = gc.getAntialias();
+        gc.setAntialias(SWT.ON);
+
+        Color oldBackground = gc.getBackground();
+        gc.setBackground(COLOR_PAGE_BORDER);
+
+        gc.fillOval(0, 0, rect.width, rect.height);
+        gc.drawImage(image, imageX, imageY);
+
+        gc.setBackground(oldBackground);
+        gc.setAntialias(oldAntialias);
       }
     }
   }

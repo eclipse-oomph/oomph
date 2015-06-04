@@ -17,8 +17,6 @@ import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -63,7 +61,7 @@ public class SimpleSearchField extends Composite
     searchField = new Text(this, SWT.NONE);
     searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
     searchField.setMessage(org.eclipse.ui.internal.WorkbenchMessages.FilteredTree_FilterMessage);
-    searchField.setFont(SetupInstallerPlugin.getFont(getFont(), URI.createURI("font:///11/normal")));
+    searchField.setFont(SimpleInstallerDialog.getFont(2, "normal"));
     searchField.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
     searchField.addModifyListener(new ModifyListener()
     {

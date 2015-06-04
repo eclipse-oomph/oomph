@@ -183,7 +183,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     productPage = new SimpleProductPage(stack, this);
     variablePage = new SimpleVariablePage(stack, this);
-    readmePage = new SimpleReadmePage(stack, this);
+
+    if (UIUtil.isBrowserAvailable())
+    {
+      readmePage = new SimpleReadmePage(stack, this);
+    }
+
     installationLogPage = new SimpleInstallationLogPage(stack, this);
     keepInstallerPage = new SimpleKeepInstallerPage(stack, this);
 
@@ -614,8 +619,15 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public void showReadme(URI readmeURI)
   {
-    readmePage.setReadmeURI(readmeURI);
-    switchToPage(readmePage);
+    if (readmePage != null)
+    {
+      readmePage.setReadmeURI(readmeURI);
+      switchToPage(readmePage);
+    }
+    else
+    {
+      OS.INSTANCE.openSystemBrowser(readmeURI.toString());
+    }
   }
 
   public void showInstallationLog(File installationLogFile)
@@ -636,6 +648,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     menuButton.setFocus();
 
     super.dispose();
+  }
+
+  public static Font getFont(int relativeHeight, String style)
+  {
+    String height = relativeHeight == 0 ? "" : relativeHeight > 0 ? "+" + relativeHeight : Integer.toString(relativeHeight);
+    return SetupInstallerPlugin.getFont(getDefaultFont(), org.eclipse.emf.common.util.URI.createURI("font:///" + height + "/" + style));
   }
 
   static Font getDefaultFont()

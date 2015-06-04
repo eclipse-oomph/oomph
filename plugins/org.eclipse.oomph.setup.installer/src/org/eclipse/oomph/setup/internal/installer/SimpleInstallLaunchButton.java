@@ -14,8 +14,6 @@ import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.ui.SpriteAnimator;
 import org.eclipse.oomph.ui.UIUtil;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -54,7 +52,7 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
     super(parent, SWT.PUSH);
 
     setForeground(UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-    setFont(SetupInstallerPlugin.getFont(getFont(), URI.createURI("font:///14/bold")));
+    setFont(SimpleInstallerDialog.getFont(5, "bold"));
     setCornerWidth(10);
     setAlignment(SWT.CENTER);
     setDisabledBackgroundColor(COLOR_DEFAULT_DISABLED_BACKGROUND);

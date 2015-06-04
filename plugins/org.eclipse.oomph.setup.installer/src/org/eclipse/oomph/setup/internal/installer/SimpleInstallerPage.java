@@ -16,8 +16,6 @@ import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.UIUtil;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -176,7 +174,7 @@ public abstract class SimpleInstallerPage extends Composite
 
   protected void applyComboOrTextStyle(Control control)
   {
-    control.setFont(SetupInstallerPlugin.getFont(FONT_LABEL, URI.createURI("font:///10/normal")));
+    control.setFont(SimpleInstallerDialog.getFont(1, "normal"));
     control.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     control.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
   }
@@ -186,7 +184,7 @@ public abstract class SimpleInstallerPage extends Composite
     Label label = new Label(parent, SWT.NONE);
     label.setLayoutData(GridDataFactory.swtDefaults().create());
     label.setText(text);
-    label.setFont(SetupInstallerPlugin.getFont(FONT_LABEL, URI.createURI("font:///10/bold")));
+    label.setFont(SimpleInstallerDialog.getFont(1, "bold"));
     label.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     return label;
   }
@@ -254,7 +252,7 @@ public abstract class SimpleInstallerPage extends Composite
 
     private static final Image ARROW_LEFT_DISABLED = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left_disabled.png");
 
-    private static final Font FONT = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///10/bold"));
+    private static final Font FONT = SimpleInstallerDialog.getFont(1, "bold");
 
     public BackButton(Composite parent)
     {

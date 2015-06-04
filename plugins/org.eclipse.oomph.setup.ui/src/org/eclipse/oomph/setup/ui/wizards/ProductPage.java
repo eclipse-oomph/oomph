@@ -50,8 +50,6 @@ import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
-import org.eclipse.oomph.util.OomphPlugin;
-import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -60,6 +58,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.emf.common.util.EList;
@@ -80,6 +79,7 @@ import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -117,6 +117,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.URLTransfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -153,8 +154,6 @@ public class ProductPage extends SetupWizardPage
   private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null;
 
   private static final Product NO_PRODUCT = createNoProduct();
-
-  private static boolean OVERWRITE_TMP_IMAGES = true;
 
   private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*");
 
@@ -643,22 +642,31 @@ public class ProductPage extends SetupWizardPage
     Composite descriptionComposite = new Composite(sashForm, SWT.BORDER);
     descriptionComposite.setLayout(new FillLayout());
 
-    descriptionBrowser = new Browser(descriptionComposite, SWT.NONE);
-    descriptionBrowser.addLocationListener(new LocationAdapter()
+    try
     {
-      @Override
-      public void changing(LocationEvent event)
+      descriptionBrowser = new Browser(descriptionComposite, SWT.NONE);
+      descriptionBrowser.addLocationListener(new LocationAdapter()
       {
-        if (!"about:blank".equals(event.location))
+        @Override
+        public void changing(LocationEvent event)
         {
-          OS.INSTANCE.openSystemBrowser(event.location);
-          event.doit = false;
+          if (!"about:blank".equals(event.location))
+          {
+            OS.INSTANCE.openSystemBrowser(event.location);
+            event.doit = false;
+          }
         }
-      }
-    });
-    AccessUtil.setKey(descriptionBrowser, "description");
+      });
 
-    sashForm.setWeights(new int[] { 14, 5 });
+      AccessUtil.setKey(descriptionBrowser, "description");
+      sashForm.setWeights(new int[] { 14, 5 });
+    }
+    catch (Exception ex)
+    {
+      descriptionComposite.dispose();
+      descriptionBrowser = null;
+      sashForm.setWeights(new int[] { 1 });
+    }
 
     final CatalogSelection selection = catalogManager.getSelection();
     productViewer.setInput(selection);
@@ -791,8 +799,11 @@ public class ProductPage extends SetupWizardPage
       }
     }
 
-    descriptionBrowser.setEnabled(productSelected);
-    descriptionBrowser.setText(safe(productSelected ? getDescriptionHTML(product) : null));
+    if (descriptionBrowser != null)
+    {
+      descriptionBrowser.setEnabled(productSelected);
+      descriptionBrowser.setText(safe(productSelected ? getDescriptionHTML(product) : null));
+    }
 
     versionLabel.setEnabled(productSelected);
     versionComboViewer.getControl().setEnabled(productSelected);
@@ -861,7 +872,7 @@ public class ProductPage extends SetupWizardPage
 
   private String getDescriptionHTML(Product product)
   {
-    URI imageURI = getProductImageURI(product);
+    String imageURI = getImageURI(product);
 
     String description = product.getDescription();
     String label = product.getLabel();
@@ -870,7 +881,7 @@ public class ProductPage extends SetupWizardPage
       label = product.getName();
     }
 
-    return "<html><body style=\"margin:5px;\"><img src=\"" + BaseEditUtil.getImage(imageURI)
+    return "<html><body style=\"margin:5px;\"><img src=\"" + imageURI
         + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
         + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
         + "</span></body></html>";
@@ -1092,6 +1103,72 @@ public class ProductPage extends SetupWizardPage
     return string;
   }
 
+  public static URI getProductImageURI(Product product)
+  {
+    URI imageURI = null;
+
+    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    if (annotation != null)
+    {
+      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+      if (detail != null)
+      {
+        imageURI = URI.createURI(detail);
+      }
+    }
+
+    if (imageURI == null)
+    {
+      imageURI = getDefaultProductImageURI();
+    }
+
+    return imageURI;
+  }
+
+  private static String getImageURI(URI imageURI)
+  {
+    Image remoteImage = getImage(imageURI);
+    return ImageURIRegistry.INSTANCE.getImageURI(remoteImage).toString();
+  }
+
+  public static String getImageURI(Product product)
+  {
+    try
+    {
+      URI imageURI = getProductImageURI(product);
+      return getImageURI(imageURI);
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
+
+    URI imageURI = getDefaultProductImageURI();
+    return getImageURI(imageURI);
+  }
+
+  private static Image getImage(URI imageURI)
+  {
+    Object image = BaseEditUtil.getImage(imageURI);
+    return ExtendedImageRegistry.INSTANCE.getImage(image);
+  }
+
+  public static Image getImage(Product product)
+  {
+    try
+    {
+      URI imageURI = getProductImageURI(product);
+      return getImage(imageURI);
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
+
+    URI imageURI = getDefaultProductImageURI();
+    return getImage(imageURI);
+  }
+
   public static List<ProductVersion> getValidProductVersions(Product product)
   {
     EList<ProductVersion> versions = product.getVersions();
@@ -1114,40 +1191,9 @@ public class ProductPage extends SetupWizardPage
     return versions;
   }
 
-  public static URI getProductImageURI(Product product)
+  public static URI getDefaultProductImageURI()
   {
-    URI imageURI = null;
-
-    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-    if (annotation != null)
-    {
-      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
-      if (detail != null)
-      {
-        imageURI = URI.createURI(detail);
-      }
-    }
-
-    if (imageURI == null)
-    {
-      imageURI = URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
-    }
-
-    return imageURI;
-  }
-
-  public static String getImageURI(OomphPlugin plugin, String iconName)
-  {
-    File iconFile = new File(PropertiesUtil.getProperty("java.io.tmpdir"), iconName);
-    if (OVERWRITE_TMP_IMAGES || !iconFile.exists())
-    {
-      iconFile.getParentFile().mkdirs();
-
-      BundleFile bundleFile = plugin.getRootFile().getChild("icons/" + iconName);
-      bundleFile.export(iconFile);
-    }
-
-    return iconFile.toURI().toString();
+    return URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
   }
 
   /**

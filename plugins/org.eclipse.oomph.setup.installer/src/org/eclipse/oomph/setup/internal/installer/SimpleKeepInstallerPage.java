@@ -18,8 +18,6 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
-import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -78,7 +76,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     Label title = new Label(container, SWT.NONE);
     title.setText("Keep Installer");
     title.setForeground(UIUtil.getEclipseThemeColor());
-    title.setFont(SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///12/bold")));
+    title.setFont(SimpleInstallerDialog.getFont(3, "bold"));
     title.setLayoutData(GridDataFactory.swtDefaults().create());
 
     Label description = new Label(container, SWT.WRAP);
@@ -188,7 +186,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     applyButton.setText("APPLY");
     applyButton.setBackground(SetupInstallerPlugin.getColor(50, 196, 0));
     applyButton.setForeground(AbstractSimpleDialog.COLOR_WHITE);
-    applyButton.setFont(SetupInstallerPlugin.getFont(getFont(), URI.createURI("font:///14/bold")));
+    applyButton.setFont(SimpleInstallerDialog.getFont(5, "bold"));
     applyButton.setCornerWidth(10);
     applyButton.setAlignment(SWT.CENTER);
     applyButton.addSelectionListener(new SelectionAdapter()
