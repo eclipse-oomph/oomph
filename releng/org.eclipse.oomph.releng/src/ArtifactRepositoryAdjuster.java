@@ -100,7 +100,7 @@ public final class ArtifactRepositoryAdjuster
             properties.remove("p2.mirrorsURL");
           }
 
-          String statsURI = "http://download.eclipse.org/stats/oomph/" + greatestVersion;
+          String statsURI = "http://download.eclipse.org/stats/oomph/feature/" + greatestVersion;
           System.out.println("  p2.statsURI = " + statsURI);
           properties.put("p2.statsURI", statsURI);
 
