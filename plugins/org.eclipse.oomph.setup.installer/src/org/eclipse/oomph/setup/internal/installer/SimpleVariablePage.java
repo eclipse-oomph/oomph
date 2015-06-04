@@ -742,7 +742,32 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       if (installRoot == null)
       {
-        installRoot = PREF_INSTALL_ROOT.get(PropertiesUtil.USER_HOME);
+        // Default to ${user.home}/eclipse, unless there is a file at that location, or what looks like an existing Eclipse installation.
+        // In that case default just to ${user.home}.
+        String defaultValue = PropertiesUtil.USER_HOME;
+        File defaultInstallRoot = new File(defaultValue, "eclipse");
+        if (!defaultInstallRoot.exists())
+        {
+          defaultValue = defaultInstallRoot.toString();
+        }
+        else if (defaultInstallRoot.isDirectory())
+        {
+          boolean isEclipseInstallation = false;
+          for (File file : defaultInstallRoot.listFiles())
+          {
+            if ("eclipse.ini".equals(file.getName()))
+            {
+              isEclipseInstallation = true;
+            }
+          }
+
+          if (!isEclipseInstallation)
+          {
+            defaultValue = defaultInstallRoot.toString();
+          }
+        }
+
+        installRoot = PREF_INSTALL_ROOT.get(defaultValue);
       }
     }
 
@@ -1099,7 +1124,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       File folder = new File(installFolder);
 
       File parentFolder = folder.getParentFile();
-      if (parentFolder == null || !parentFolder.canWrite() || folder.isFile() || folder.isDirectory() && !folder.canWrite())
+      if (!isValidParentFolder(parentFolder) || folder.isFile() || folder.isDirectory() && !folder.canWrite())
       {
         String name = folder.getName();
         if (StringUtil.isEmpty(name))
@@ -1118,6 +1143,21 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
 
     return errorMessage;
+  }
+
+  private boolean isValidParentFolder(File parentFolder)
+  {
+    if (parentFolder == null)
+    {
+      return false;
+    }
+
+    if (parentFolder.exists())
+    {
+      return parentFolder.isDirectory() && parentFolder.canWrite();
+    }
+
+    return isValidParentFolder(parentFolder.getParentFile());
   }
 
   private File getLogFile()
