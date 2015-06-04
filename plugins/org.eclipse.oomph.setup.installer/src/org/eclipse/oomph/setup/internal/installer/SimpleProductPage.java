@@ -479,6 +479,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           children[i].dispose();
         }
 
+        int listHeight = 0;
+
         if (products != null)
         {
           Cursor handCursor = scrolledContent.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
@@ -486,29 +488,25 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           for (Product product : products)
           {
             ProductComposite productComposite = new ProductComposite(scrolledContent, this, product);
+            int height = productComposite.getTotalHeight();
+
+            if (listHeight != 0)
+            {
+              listHeight += SPACE;
+            }
+
+            listHeight += height;
 
             GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
-            gridData.minimumHeight = ProductComposite.TOTAL_HEIGHT;
-            gridData.heightHint = gridData.minimumHeight;
+            gridData.minimumHeight = height;
+            gridData.heightHint = height;
 
             productComposite.setLayoutData(gridData);
             productComposite.setCursor(handCursor);
           }
-
-          int size = products.size();
-          int height = size * ProductComposite.TOTAL_HEIGHT;
-          if (size > 0)
-          {
-            height += (size - 1) * SPACE;
-          }
-
-          scrolledComposite.setMinHeight(height);
-        }
-        else
-        {
-          scrolledComposite.setMinHeight(0);
         }
 
+        scrolledComposite.setMinHeight(listHeight);
         scrolledContent.layout();
       }
 
@@ -527,9 +525,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   {
     public static final int BORDER = 17;
 
-    public static final int HEIGHT = 64;
-
-    public static final int TOTAL_HEIGHT = HEIGHT + 2 * BORDER;
+    private static final int VERTICAL_SPACE = 10;
 
     private static final Color COLOR_WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
 
@@ -553,6 +549,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     private Label description;
 
+    private int contentHeight;
+
     public ProductComposite(Composite parent, CompositeProductList list, final Product product)
     {
       super(parent, SWT.NONE);
@@ -562,7 +560,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       gridLayout.marginWidth = BORDER;
       gridLayout.marginHeight = BORDER;
       gridLayout.horizontalSpacing = BORDER;
-      gridLayout.verticalSpacing = 10;
+      gridLayout.verticalSpacing = VERTICAL_SPACE;
       setLayout(gridLayout);
 
       setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -592,6 +590,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           setProduct(product);
         }
       });
+
+      contentHeight = getTextHeight(title) + VERTICAL_SPACE + 2 * getTextHeight(description);
     }
 
     public Product getProduct()
@@ -624,6 +624,25 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           gc.dispose();
         }
       }
+    }
+
+    private static int getTextHeight(Control control)
+    {
+      GC gc = new GC(control);
+
+      try
+      {
+        return gc.textExtent("Ag").y;
+      }
+      finally
+      {
+        gc.dispose();
+      }
+    }
+
+    public int getTotalHeight()
+    {
+      return contentHeight + 2 * BORDER;
     }
 
     public void mouseEnter(MouseEvent e)
@@ -730,6 +749,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
      */
     public static final class Logo extends Composite implements PaintListener
     {
+      private static final int HEIGHT = 64;
+
       private Image image;
 
       private int imageX;
