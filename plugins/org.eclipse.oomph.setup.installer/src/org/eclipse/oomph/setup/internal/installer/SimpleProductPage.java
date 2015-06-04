@@ -682,31 +682,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       control.addMouseListener(this);
     }
 
-    private static int getTextHeight(Control control, int lines)
-    {
-      StringBuilder builder = new StringBuilder();
-      for (int i = 0; i < lines; i++)
-      {
-        if (builder.length() != 0)
-        {
-          builder.append("\n");
-        }
-
-        builder.append("Ag");
-      }
-
-      GC gc = new GC(control);
-
-      try
-      {
-        return gc.textExtent(builder.toString()).y;
-      }
-      finally
-      {
-        gc.dispose();
-      }
-    }
-
     private static String shorten(GC gc, int width, int lines, String html)
     {
       String plain = StringUtil.isEmpty(html) ? "No description available." : stripHTML(html);
