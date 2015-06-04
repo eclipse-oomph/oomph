@@ -349,10 +349,18 @@ validateJRE (JRE* jre, REQ* req)
 }
 
 static BOOL
-extractProduct (JRE* jre, _TCHAR* executable, _TCHAR* targetFolder)
+extractProduct (JRE* jre, JRE* argJRE, _TCHAR* executable, _TCHAR* targetFolder)
 {
   _TCHAR args[MAX_PATH];
-  sprintf (args, _T("\"%s\" \"%s\" \"%s\""), executable, targetFolder, jre->javaHome);
+
+  if (argJRE == NULL)
+  {
+    sprintf (args, _T("\"%s\" \"%s\""), executable, targetFolder);
+  }
+  else
+  {
+    sprintf (args, _T("\"%s\" \"%s\" \"%s\""), executable, targetFolder, argJRE->javaHome);
+  }
 
   return execLib (jre->javaHome, _T("org.eclipse.oomph.extractor.lib.BINExtractor"), args);
 }
@@ -373,7 +381,7 @@ getVM (_TCHAR* path)
 }
 
 static JRE*
-findAllJREsAndVMs ()
+findAllJREsAndVMs (JRE** defaultJRE)
 {
   JRE* jres = findAllJREs ();
 
@@ -389,11 +397,25 @@ findAllJREsAndVMs ()
         JRE* jre = malloc (sizeof(JRE));
         jre->javaHome = vm;
         jre->jdk = 0;
-        jre->next = jres;
-        jres = jre;
+
+        if (*defaultJRE == NULL)
+        {
+          *defaultJRE = jre;
+        }
+        else
+        {
+          jre->next = jres;
+          jres = jre;
+        }
       }
 
       token = strtok (NULL, _T(";"));
+    }
+
+    if (*defaultJRE != NULL)
+    {
+      (*defaultJRE)->next = jres;
+      jres = *defaultJRE;
     }
   }
 
@@ -428,7 +450,8 @@ main (int argc, char *argv[])
 
   if (validateJREs)
   {
-    JRE* jre = findAllJREsAndVMs ();
+    JRE* defaultJRE = NULL;
+    JRE* jre = findAllJREsAndVMs (&defaultJRE);
 
     if (jre == NULL)
     {
@@ -474,7 +497,8 @@ main (int argc, char *argv[])
           return EXIT_CANCEL;
         }
 
-        if (extractProduct (jre, executable, targetFolder))
+        JRE* argJRE = jre == defaultJRE ? NULL : jre;
+        if (extractProduct (jre, argJRE, executable, targetFolder))
         {
           return EXIT_SUCCESS;
         }

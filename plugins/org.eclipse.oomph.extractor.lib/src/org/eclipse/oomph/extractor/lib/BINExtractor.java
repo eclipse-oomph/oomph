@@ -39,7 +39,7 @@ public final class BINExtractor extends IO
   {
     String executable = args[0];
     String targetFolder = args[1];
-    String javaHome = args[2];
+    String javaHome = args.length > 2 ? args[2] : null;
 
     FileInputStream in = new FileInputStream(executable);
     BufferedInputStream stream = new BufferedInputStream(in);
@@ -61,7 +61,11 @@ public final class BINExtractor extends IO
 
     in.close();
 
-    adjustIni(targetFolder + File.separator + descriptor.getIniPath(), javaHome);
+    if (javaHome != null)
+    {
+      adjustIni(targetFolder + File.separator + descriptor.getIniPath(), javaHome);
+    }
+
     String launcher = targetFolder + File.separator + descriptor.getLauncherPath();
     Runtime.getRuntime().exec(launcher);
   }
