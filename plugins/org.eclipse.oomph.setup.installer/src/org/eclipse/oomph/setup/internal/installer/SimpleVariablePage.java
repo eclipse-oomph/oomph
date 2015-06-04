@@ -849,18 +849,21 @@ public class SimpleVariablePage extends SimpleInstallerPage
     Installation installation = setupContext.getInstallation();
     final User user = setupContext.getUser();
 
-    UIUtil.syncExec(new Runnable()
+    if (UIUtil.isBrowserAvailable())
     {
-      public void run()
+      UIUtil.syncExec(new Runnable()
       {
-        EList<LicenseInfo> licenses = LicensePrePrompter.execute(getShell(), user);
-        if (licenses != null)
+        public void run()
         {
-          user.getAcceptedLicenses().addAll(licenses);
-          BaseUtil.saveEObject(user);
+          EList<LicenseInfo> licenses = LicensePrePrompter.execute(getShell(), user);
+          if (licenses != null)
+          {
+            user.getAcceptedLicenses().addAll(licenses);
+            BaseUtil.saveEObject(user);
+          }
         }
-      }
-    });
+      });
+    }
 
     UserAdjuster userAdjuster = new UserAdjuster();
     userAdjuster.adjust(user, installFolder);
