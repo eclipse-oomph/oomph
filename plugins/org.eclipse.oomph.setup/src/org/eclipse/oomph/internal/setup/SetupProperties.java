@@ -34,4 +34,12 @@ public interface SetupProperties
   public static final String PROP_REDIRECTION_BASE = "oomph.redirection.";
 
   public static final String PROP_UPDATE_URL = "oomph.update.url";
+
+  public static final String PROP_SETUP_PRODUCT_CATALOG_FILTER = "oomph.setup.product.catalog.filter";
+
+  public static final String PROP_SETUP_PRODUCT_FILTER = "oomph.setup.product.filter";
+
+  public static final String PROP_SETUP_PRODUCT_VERSION_FILTER = "oomph.setup.product.version.filter";
+
+  public static final String PROP_SETUP_JRE_CHOICE = "oomph.setup.jre.choice";
 }

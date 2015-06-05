@@ -21,7 +21,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
-import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
@@ -38,7 +38,6 @@ import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
@@ -74,11 +73,9 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static final String BUNDLE_POOLS_MENU_ITEM_TEXT = "BUNDLE POOLS" + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String NETWORK_CONNECTIONS_MENU_ITEM_TEXT = NetworkConnectionsDialog.TITLE.toUpperCase() + StringUtil.HORIZONTAL_ELLIPSIS;
-
   private static final String UPDATE_MENU_ITEM_TEXT = "UPDATE";
 
-  private static final String ADVANCED_MENU_ITEM_TEXT = "ADVANCED MODE";
+  private static final String ADVANCED_MENU_ITEM_TEXT = "ADVANCED MODE...";
 
   private static final String ABOUT_MENU_ITEM_TEXT = "ABOUT";
 
@@ -238,8 +235,22 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private void indexLoaded(Index index)
   {
-    List<? extends Scope> productCatalogs = catalogManager.getCatalogs(true);
-    boolean showProductCatalogsItem = productCatalogs != null && productCatalogs.size() >= 3; // Self products + 2 more catalogs
+    @SuppressWarnings("unchecked")
+    List<ProductCatalog> productCatalogs = (List<ProductCatalog>)catalogManager.getCatalogs(true);
+
+    int count = 0;
+    if (productCatalogs != null)
+    {
+      for (ProductCatalog productCatalog : productCatalogs)
+      {
+        if (SimpleProductPage.isIncluded(productCatalog))
+        {
+          ++count;
+        }
+      }
+    }
+
+    boolean showProductCatalogsItem = count > 1;
 
     installerMenu.findMenuItemByName(CATALOGS_MENU_ITEM_TEXT).setVisible(showProductCatalogsItem);
     installerMenu.layout();
@@ -322,19 +333,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
     AccessUtil.setKey(catalogsItem, "catalogs");
-
-    SimpleInstallerMenu.InstallerMenuItem networkConnectionsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    networkConnectionsItem.setText(NETWORK_CONNECTIONS_MENU_ITEM_TEXT);
-    networkConnectionsItem.setToolTipText(NetworkConnectionsDialog.DESCRIPTION);
-    networkConnectionsItem.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        Dialog dialog = new NetworkConnectionsDialog(SimpleInstallerDialog.this);
-        dialog.open();
-      }
-    });
 
     SimpleInstallerMenu.InstallerMenuItemWithToggle bundlePoolsItem = new SimpleInstallerMenu.InstallerMenuItemWithToggle(menu);
     bundlePoolsItem.setText(BUNDLE_POOLS_MENU_ITEM_TEXT);

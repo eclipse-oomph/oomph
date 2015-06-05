@@ -14,6 +14,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageCheckbox;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
@@ -74,6 +75,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -129,6 +131,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private static final String MESSAGE_FAILURE = "Installation failed with an error.";
 
+  protected static final boolean JRE_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_JRE_CHOICE, "true"));
+
   private final Map<String, ProductVersion> productVersions = new HashMap<String, ProductVersion>();
 
   private Product product;
@@ -143,6 +147,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private CCombo versionCombo;
 
+  private Label versionLabel;
+
+  private Control versionSpacer;
+
   private ImageCheckbox bitness32Button;
 
   private ImageCheckbox bitness64Button;
@@ -151,9 +159,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private Label javaLabel;
 
+  private Control javaSpacer;
+
   private ComboViewer javaViewer;
 
   private FlatButton javaButton;
+
+  private Control javaTrailingSpacer;
 
   private Text folderText;
 
@@ -187,6 +199,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private Composite errorComposite;
 
+  private Composite container;
+
   public SimpleVariablePage(final Composite parent, final SimpleInstallerDialog dialog)
   {
     super(parent, dialog, true);
@@ -195,6 +209,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
   @Override
   protected void createContent(Composite container)
   {
+    this.container = container;
+
     container.setBackgroundMode(SWT.INHERIT_FORCE);
     container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
@@ -223,7 +239,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
       });
     }
-    catch (Exception ex)
+    catch (Throwable ex)
     {
       detailBrowser = null;
       detailComposite = new ProductComposite(detailArea, null, null);
@@ -242,10 +258,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
     variablesComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
     // Row 3
-    createLabel(variablesComposite, "Product Version");
+    versionLabel = createLabel(variablesComposite, "Product Version");
 
     // Spacer to get a little bit more distance between labels and input fields
-    spacer(variablesComposite).setLayoutData(GridDataFactory.swtDefaults().hint(17, SWT.DEFAULT).create());
+    versionSpacer = spacer(variablesComposite);
+    versionSpacer.setLayoutData(GridDataFactory.swtDefaults().hint(17, SWT.DEFAULT).create());
 
     versionCombo = createComboBox(variablesComposite, SWT.READ_ONLY);
     versionCombo.addSelectionListener(new SelectionAdapter()
@@ -296,7 +313,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     // Row 4
     javaLabel = createLabel(variablesComposite, "Java VM");
 
-    spacer(variablesComposite);
+    javaSpacer = spacer(variablesComposite);
 
     final CCombo javaCombo = createComboBox(variablesComposite, SWT.READ_ONLY);
 
@@ -347,7 +364,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         super.jreChanged(jre);
         validatePage();
-        javaCombo.setToolTipText(jre.getJavaHome().toString());
+        javaCombo.setToolTipText(jre == null ? null : jre.getJavaHome().toString());
       }
 
       @Override
@@ -357,7 +374,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     };
 
-    spacer(variablesComposite);
+    javaTrailingSpacer = spacer(variablesComposite);
 
     // Row 5
     createLabel(variablesComposite, "Installation Folder");
@@ -651,9 +668,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
     int i = 0;
     int selection = 0;
 
-    for (ProductVersion productVersion : ProductPage.getValidProductVersions(product))
+    List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER);
+    for (ProductVersion productVersion : validProductVersions)
     {
-      if (defaultProductVersion == null)
+      if (defaultProductVersion == null || !validProductVersions.contains(defaultProductVersion))
       {
         defaultProductVersion = productVersion;
       }
@@ -678,7 +696,31 @@ public class SimpleVariablePage extends SimpleInstallerPage
     installStack.setVisible(false);
     installed = false;
 
-    setEnabled(true);
+    UIUtil.asyncExec(container, new Runnable()
+    {
+      public void run()
+      {
+        setEnabled(true);
+      }
+    });
+  }
+
+  private void setVisible(Control control, boolean visible)
+  {
+    control.setVisible(visible);
+
+    Object layoutData = control.getLayoutData();
+    if (layoutData == null)
+    {
+      layoutData = new GridData();
+      control.setLayoutData(layoutData);
+    }
+
+    if (layoutData instanceof GridData)
+    {
+      GridData gridData = (GridData)layoutData;
+      gridData.exclude = !visible;
+    }
   }
 
   @Override
@@ -687,20 +729,37 @@ public class SimpleVariablePage extends SimpleInstallerPage
     super.setEnabled(enabled);
     versionCombo.setEnabled(enabled);
 
-    if (JREManager.BITNESS_CHANGEABLE)
-    {
-      int bitness = javaController.getBitness();
-      bitness32Button.setEnabled(enabled);
-      bitness32Button.setVisible(enabled || bitness == 32);
-      bitness64Button.setEnabled(enabled);
-      bitness64Button.setVisible(enabled || bitness == 64);
-    }
-
     javaViewer.getControl().setEnabled(enabled);
     javaButton.setEnabled(enabled);
 
     folderText.setEnabled(enabled);
     folderButton.setEnabled(enabled);
+
+    boolean versionVisible = versionCombo.getItemCount() != 1;
+    setVisible(versionLabel, versionVisible);
+    setVisible(versionSpacer, versionVisible);
+    setVisible(versionCombo.getParent(), versionVisible);
+    setVisible(bitness32Button, versionVisible);
+    setVisible(bitness64Button, versionVisible);
+
+    if (JREManager.BITNESS_CHANGEABLE)
+    {
+      int bitness = javaController.getBitness();
+      bitness32Button.setEnabled(enabled);
+      bitness32Button.setVisible(versionVisible && (enabled || bitness == 32));
+      bitness64Button.setEnabled(enabled);
+      bitness64Button.setVisible(versionVisible && (enabled || bitness == 64));
+    }
+
+    IStructuredSelection structuredSelection = javaViewer.getStructuredSelection();
+    boolean javaVisible = JRE_CHOICE || !(structuredSelection.getFirstElement() instanceof JRE);
+    setVisible(javaLabel, javaVisible);
+    setVisible(javaSpacer, javaVisible);
+    setVisible(javaViewer.getCCombo().getParent(), javaVisible);
+    setVisible(javaButton, javaVisible);
+    setVisible(javaTrailingSpacer, javaVisible);
+
+    container.layout(true, true);
   }
 
   public boolean refreshJREs()
@@ -1232,7 +1291,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

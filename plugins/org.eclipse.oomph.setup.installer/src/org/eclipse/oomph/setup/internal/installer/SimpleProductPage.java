@@ -191,12 +191,15 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       if (scope instanceof ProductCatalog)
       {
         ProductCatalog productCatalog = (ProductCatalog)scope;
-        for (Product product : productCatalog.getProducts())
+        if (isIncluded(productCatalog))
         {
-          if (!ProductPage.getValidProductVersions(product).isEmpty()
-              && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter)))
+          for (Product product : productCatalog.getProducts())
           {
-            products.add(product);
+            if (isIncluded(product)
+                && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter)))
+            {
+              products.add(product);
+            }
           }
         }
       }

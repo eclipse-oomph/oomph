@@ -11,10 +11,17 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
+import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.ProductCatalog;
+import org.eclipse.oomph.setup.internal.core.util.SelfProductCatalogURIHandlerImpl;
+import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -33,6 +40,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Eike Stepper
  */
@@ -45,6 +54,12 @@ public abstract class SimpleInstallerPage extends Composite
   public static final Color COLOR_PAGE_BORDER = SetupInstallerPlugin.getColor(238, 238, 238);
 
   protected static final Font FONT_LABEL = SimpleInstallerDialog.getDefaultFont();
+
+  private static final Pattern PRODUCT_CATALOG_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_CATALOG_FILTER, ""));
+
+  private static final Pattern PRODUCT_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_FILTER, ""));
+
+  protected static final Pattern PRODUCT_VERSION_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_VERSION_FILTER, ""));
 
   protected final Installer installer;
 
@@ -198,6 +213,39 @@ public abstract class SimpleInstallerPage extends Composite
   protected void backSelected()
   {
     dialog.backSelected();
+  }
+
+  public static boolean isIncluded(ProductCatalog productCatalog)
+  {
+    String name = productCatalog.getName();
+    if (SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) || productCatalog.getProducts().isEmpty())
+    {
+      return false;
+    }
+
+    if (name == null || StringUtil.isEmpty(PRODUCT_CATALOG_FILTER.pattern()) || PRODUCT_CATALOG_FILTER.matcher(name).matches())
+    {
+      for (Product product : productCatalog.getProducts())
+      {
+        if (isIncluded(product))
+        {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  public static boolean isIncluded(Product product)
+  {
+    String name = product.getQualifiedName();
+    if (name == null || StringUtil.isEmpty(PRODUCT_FILTER.pattern()) || PRODUCT_FILTER.matcher(name).matches())
+    {
+      return !ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER).isEmpty();
+    }
+
+    return false;
   }
 
   protected static Control spacer(Composite parent)

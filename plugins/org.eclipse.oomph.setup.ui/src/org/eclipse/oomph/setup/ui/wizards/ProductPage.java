@@ -254,7 +254,7 @@ public class ProductPage extends SetupWizardPage
       @Override
       public Object[] getElements(Object object)
       {
-        return getValidProductVersions((Product)object).toArray();
+        return getValidProductVersions((Product)object, null).toArray();
       }
     });
 
@@ -900,7 +900,8 @@ public class ProductPage extends SetupWizardPage
       label = product.getName();
     }
 
-    return "<html><body style=\"margin:5px;\"><img src=\"" + imageURI
+    return "<html><body style=\"margin:5px;\"><img src=\""
+        + imageURI
         + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
         + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
         + "</span></body></html>";
@@ -999,7 +1000,7 @@ public class ProductPage extends SetupWizardPage
   public static ProductVersion getDefaultProductVersion(CatalogManager catalogManager, Product product)
   {
     ProductVersion version = catalogManager.getSelection().getDefaultProductVersions().get(product);
-    List<ProductVersion> validProductVersions = getValidProductVersions(product);
+    List<ProductVersion> validProductVersions = getValidProductVersions(product, null);
     if (!validProductVersions.contains(version))
     {
       ProductVersion firstReleasedProductVersion = null;
@@ -1047,6 +1048,7 @@ public class ProductPage extends SetupWizardPage
         saveProductVersionSelection(catalogManager, version);
       }
     }
+
     return version;
   }
 
@@ -1200,23 +1202,34 @@ public class ProductPage extends SetupWizardPage
     return getImage(imageURI);
   }
 
-  public static List<ProductVersion> getValidProductVersions(Product product)
+  public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter)
   {
-    EList<ProductVersion> versions = product.getVersions();
+    List<ProductVersion> versions = new ArrayList<ProductVersion>(product.getVersions());
     if (OS.INSTANCE.isMac())
     {
       // Filter out the older releases because the latest p2, with it's layout changes for the Mac, can't install a correct image from older repositories.
-      List<ProductVersion> filteredProductVersions = new ArrayList<ProductVersion>();
-      for (ProductVersion version : versions)
+      for (Iterator<ProductVersion> it = versions.iterator(); it.hasNext();)
       {
+        ProductVersion version = it.next();
         String label = version.getLabel();
-        if (label == null || !label.contains("Luna") && !label.contains("Kepler") && !label.contains("Juno"))
+        if (label != null && (label.contains("Luna") || label.contains("Kepler") || label.contains("Juno")))
         {
-          filteredProductVersions.add(version);
+          it.remove();
         }
       }
+    }
 
-      return filteredProductVersions;
+    if (filter != null && !StringUtil.isEmpty(filter.pattern()))
+    {
+      for (Iterator<ProductVersion> it = versions.iterator(); it.hasNext();)
+      {
+        ProductVersion version = it.next();
+        String name = version.getQualifiedName();
+        if (name == null || !filter.matcher(name).matches())
+        {
+          it.remove();
+        }
+      }
     }
 
     return versions;
@@ -1635,19 +1648,19 @@ public class ProductPage extends SetupWizardPage
 
           IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
               Collections.<ViewerFilter> singletonList(new ViewerFilter()
-          {
-            @Override
-            public boolean select(Viewer viewer, Object parentElement, Object element)
-            {
-              if (element instanceof IFile)
               {
-                IFile file = (IFile)element;
-                return "setup".equals(file.getFileExtension());
-              }
+                @Override
+                public boolean select(Viewer viewer, Object parentElement, Object element)
+                {
+                  if (element instanceof IFile)
+                  {
+                    IFile file = (IFile)element;
+                    return "setup".equals(file.getFileExtension());
+                  }
 
-              return true;
-            }
-          }));
+                  return true;
+                }
+              }));
 
           for (int i = 0, len = files.length; i < len; i++)
           {
