@@ -74,6 +74,18 @@ public class AgentManagerImpl implements AgentManager
     agentMap = new PersistentMap<Agent>(infoFile)
     {
       @Override
+      protected Agent loadElement(String key, String extraInfo)
+      {
+        File location = new File(key);
+        if (AgentImpl.isValid(location))
+        {
+          return super.loadElement(key, extraInfo);
+        }
+
+        return null;
+      }
+
+      @Override
       protected Agent createElement(String key, String extraInfo)
       {
         return new AgentImpl(AgentManagerImpl.this, new File(key));

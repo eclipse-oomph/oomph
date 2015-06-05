@@ -78,7 +78,13 @@ public abstract class PersistentMap<E>
         {
           public void handleKey(String key, String extraInfo) throws Exception
           {
-            E element = createElement(key, extraInfo);
+            E element = loadElement(key, extraInfo);
+            if (element == null)
+            {
+              needsSave[0] = true;
+              return;
+            }
+
             if (element instanceof AgentManagerElement)
             {
               AgentManagerElement agentManagerElement = (AgentManagerElement)element;
@@ -163,6 +169,23 @@ public abstract class PersistentMap<E>
   public final synchronized boolean refresh()
   {
     return reconcile(null, null);
+  }
+
+  /**
+   * Restore an element from the persisted information. In contrast to {@link #createElement(String, String)},
+   * which is also used by {@link #addElement(String, String)} to explicitly add elements, loading might need
+   * additional checks to avoid restoring stale entries (which e.g. don't exist anymore).
+   * <p>
+   * The default implementation simply delegates to {@link #createElement(String, String)}.
+   *
+   * @return the new element or <code>null</code> if no element should be created.
+   * @see #createElement(String, String)
+   * @see #load()
+   * @see #refresh()
+   */
+  protected E loadElement(String key, String extraInfo)
+  {
+    return createElement(key, extraInfo);
   }
 
   /**

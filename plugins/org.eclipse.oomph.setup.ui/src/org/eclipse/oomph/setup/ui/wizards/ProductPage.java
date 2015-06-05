@@ -923,7 +923,9 @@ public class ProductPage extends SetupWizardPage
 
   private void initBundlePool()
   {
-    BundlePool pool = P2Util.getAgentManager().getDefaultBundlePool(SetupUIPlugin.INSTANCE.getSymbolicName());
+    String client = SetupUIPlugin.INSTANCE.getSymbolicName();
+    AgentManager agentManager = P2Util.getAgentManager();
+    BundlePool pool = agentManager.getDefaultBundlePool(client);
     setCurrentBundlePool(pool);
   }
 
