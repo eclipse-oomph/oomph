@@ -83,7 +83,7 @@ public class AgentManagerDialog extends OomphDialog
   @Override
   protected void createUI(Composite parent)
   {
-    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/agent"));
+    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"));
 
     composite = new AgentManagerComposite(parent, SWT.NONE, selectedElement)
     {

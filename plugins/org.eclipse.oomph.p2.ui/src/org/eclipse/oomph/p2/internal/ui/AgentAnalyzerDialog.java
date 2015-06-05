@@ -60,7 +60,7 @@ public class AgentAnalyzerDialog extends OomphDialog
   @Override
   protected void createUI(Composite parent)
   {
-    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/agent"));
+    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"));
 
     try
     {

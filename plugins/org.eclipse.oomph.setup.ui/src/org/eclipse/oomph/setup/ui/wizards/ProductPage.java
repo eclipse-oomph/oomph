@@ -427,7 +427,7 @@ public class ProductPage extends SetupWizardPage
       poolCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
       AccessUtil.setKey(poolCombo, "poolChoice");
 
-      managePoolsButton = new ToolButton(lowerComposite, SWT.PUSH, P2UIPlugin.INSTANCE.getSWTImage("obj16/agent"), true);
+      managePoolsButton = new ToolButton(lowerComposite, SWT.PUSH, P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"), true);
       managePoolsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
       managePoolsButton.setToolTipText("Manage Bundle Pools...");
       managePoolsButton.addSelectionListener(new SelectionAdapter()
