@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +42,7 @@ public abstract class PersistentMap<E>
 
   private final File lockFile;
 
-  private final Map<String, E> elements = new HashMap<String, E>();
+  private final Map<String, E> elements = new LinkedHashMap<String, E>();
 
   public PersistentMap(File file)
   {
