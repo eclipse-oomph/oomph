@@ -2215,4 +2215,127 @@
     </version>
     <description>This package contains the absolute minimal IDE, suitable only as a base for installing other tools.</description>
   </product>
+  <product name="epp.package.standard"
+      label="Eclipse Standard (discontinued after Luna)">
+    <version
+        name="latest"
+        label="Latest (Luna)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Luna)">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[4.4.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,4.0.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,4.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="latest.released"
+        label="Latest Release (Luna)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Luna)">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.5.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="luna"
+        label="Luna"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Luna)">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[4.4.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.4.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.4.0,4.6.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.10.0,3.12.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.10.0,3.12.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/luna"/>
+        <repository
+            url="http://download.eclipse.org/releases/luna/201502271000"/>
+      </setupTask>
+    </version>
+    <version
+        name="kepler"
+        label="Kepler"
+        requiredJavaVersion="1.6">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Standard (Kepler)">
+        <requirement
+            name="epp.package.standard"
+            versionRange="[2.0.0,2.1.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.3.0,4.4.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.9.0,3.10.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/kepler"/>
+        <repository
+            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+      </setupTask>
+    </version>
+    <description>
+      Package suited for development of Eclipse itself at Eclipse.org; based on the Eclipse Platform adding PDE, Git, Marketplace Client, source code and developer documentation.&lt;br/>
+      &lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EGit&quot;>here&lt;/a> to file a bug against Eclipse Git team provider.
+    </description>
+  </product>
 </setup:ProductCatalog>
