@@ -1090,7 +1090,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           public Collection<?> getChildren(Object object)
           {
             Resource resource = (Resource)object;
-            Object[] contents = getContents(resource);
+            List<EObject> contents = new ArrayList<EObject>(resource.getContents());
 
             ResourceSet resourceSet = resource.getResourceSet();
             if (resourceSet != null && resourceSet.getResources().get(0) != resource)
@@ -1108,7 +1108,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               return children;
             }
 
-            return Arrays.asList(contents);
+            return contents;
           }
 
           @Override
