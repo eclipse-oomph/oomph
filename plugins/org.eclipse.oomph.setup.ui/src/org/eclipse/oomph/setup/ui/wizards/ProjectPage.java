@@ -735,8 +735,7 @@ public class ProjectPage extends SetupWizardPage
   protected void checkPageComplete()
   {
     Workspace workspace = getWorkspace();
-    setPageComplete(existingStreams.isEmpty() ? getPreviousPage() instanceof ProductPage : workspace != null
-        && workspace.getStreams().size() > existingStreams.size());
+    setPageComplete(getPreviousPage() instanceof ProductPage || workspace != null && workspace.getStreams().size() > existingStreams.size());
   }
 
   @Override
@@ -1143,8 +1142,8 @@ public class ProjectPage extends SetupWizardPage
           ProjectCatalog projectCatalog = (ProjectCatalog)owner;
           for (Project project : projectCatalog.getProjects())
           {
-            Command command = itemDelegator.createCommand(project, domain, DragAndDropCommand.class,
-                new CommandParameter(project, new DragAndDropCommand.Detail(location, operations, operation), collection));
+            Command command = itemDelegator.createCommand(project, domain, DragAndDropCommand.class, new CommandParameter(project,
+                new DragAndDropCommand.Detail(location, operations, operation), collection));
 
             if (command.canExecute())
             {
