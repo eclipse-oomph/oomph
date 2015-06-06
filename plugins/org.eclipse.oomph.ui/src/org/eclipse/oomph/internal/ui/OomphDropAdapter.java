@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
@@ -137,8 +138,15 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
     {
       // Otherwise, the source should be available now as event.data, and we can create the command.
       source = getDragSource(event);
-      Object target = extractDropTarget(event.item);
-      command = DragAndDropCommand.create(domain, target, getLocation(event), event.operations, originalOperation, source);
+      if (source == null)
+      {
+        command = UnexecutableCommand.INSTANCE;
+      }
+      else
+      {
+        Object target = extractDropTarget(event.item);
+        command = DragAndDropCommand.create(domain, target, getLocation(event), event.operations, originalOperation, source);
+      }
     }
 
     // If the command can execute...
