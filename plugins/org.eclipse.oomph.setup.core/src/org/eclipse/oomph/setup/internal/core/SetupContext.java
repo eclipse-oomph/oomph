@@ -25,6 +25,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -518,6 +519,31 @@ public class SetupContext
 
       Location location = Platform.getConfigurationLocation();
       URI result = getURI(location);
+
+      Location parentLocation = location.getParentLocation();
+      if (parentLocation != null)
+      {
+        URI targetInstallation = result.appendSegment(OOMPH_NODE).appendSegment("installation.setup");
+        File target = new File(targetInstallation.toFileString());
+        if (!target.exists())
+        {
+          URI parentURI = getURI(parentLocation);
+          URI sourceInstallation = parentURI.appendSegment(OOMPH_NODE).appendSegment("installation.setup");
+          File source = new File(sourceInstallation.toFileString());
+          if (source.exists())
+          {
+            try
+            {
+              IOUtil.copyFile(source, target);
+            }
+            catch (IORuntimeException ex)
+            {
+              // Ignore.
+            }
+          }
+        }
+      }
+
       return result;
     }
     catch (IOException ex)

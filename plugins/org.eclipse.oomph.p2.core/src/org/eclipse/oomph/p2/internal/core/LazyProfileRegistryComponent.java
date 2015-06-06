@@ -10,11 +10,13 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.spi.IAgentServiceFactory;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
+import org.eclipse.osgi.storage.StorageUtil;
 
 import java.io.File;
 
@@ -28,7 +30,8 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
   {
     IAgentLocation location = (IAgentLocation)agent.getService(IAgentLocation.SERVICE_NAME);
     File directory = LazyProfileRegistry.getDefaultRegistryDirectory(location);
-    LazyProfileRegistry registry = new LazyProfileRegistry(agent, directory);
+    boolean canWrite = StorageUtil.canWrite(directory);
+    SimpleProfileRegistry registry = canWrite ? new LazyProfileRegistry(agent, directory) : new SimpleProfileRegistry(agent, directory);
     registry.setEventBus((IProvisioningEventBus)agent.getService(IProvisioningEventBus.SERVICE_NAME));
     return registry;
   }
