@@ -103,7 +103,7 @@ public class ProductCatalogGenerator implements IApplication
       "epp.package.committers", "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.rcp", "epp.package.testing",
       "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
 
-  private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.standard", "epp.package.mobile"));
+  private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.mobile"));
 
   public Object start(IApplicationContext context) throws Exception
   {
@@ -135,6 +135,7 @@ public class ProductCatalogGenerator implements IApplication
     ICONS.put("reporting", ICON_URL_PREFIX + "birt-icon_48x48.png");
     ICONS.put("cpp", ICON_URL_PREFIX + "cdt.png");
     ICONS.put("automotive", ICON_URL_PREFIX + "classic.jpg");
+    ICONS.put("standard", ICON_URL_PREFIX + "committers.png");
     ICONS.put("committers", ICON_URL_PREFIX + "committers.png");
     ICONS.put("dsl", ICON_URL_PREFIX + "dsl-package_42.png");
     ICONS.put("java", ICON_URL_PREFIX + "java.png");
@@ -630,18 +631,18 @@ public class ProductCatalogGenerator implements IApplication
         it.remove();
       }
 
-      // if ("epp.package.standard".equals(id))
-      // {
-      // for (ProductVersion version : product.getVersions())
-      // {
-      // if (version.getLabel().contains("Mars"))
-      // {
-      // P2Task task = (P2Task)version.getSetupTasks().get(0);
-      // Requirement requirement = task.getRequirements().get(0);
-      // requirement.setName("epp.package.committers");
-      // }
-      // }
-      // }
+      if ("epp.package.standard".equals(id))
+      {
+        for (ProductVersion version : product.getVersions())
+        {
+          if (version.getLabel().contains("Mars"))
+          {
+            P2Task task = (P2Task)version.getSetupTasks().get(0);
+            Requirement requirement = task.getRequirements().get(0);
+            requirement.setName("epp.package.committers");
+          }
+        }
+      }
     }
   }
 
