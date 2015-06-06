@@ -951,30 +951,35 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     UserAdjuster userAdjuster = new UserAdjuster();
     userAdjuster.adjust(user, installFolder);
-    IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
+    try
+    {
+      IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
 
-    SimplePrompter prompter = new SimplePrompter();
+      SimplePrompter prompter = new SimplePrompter();
 
-    performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
-    performer.getUnresolvedVariables().clear();
-    performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
-    performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
-    performer.put(OS.class, OS.INSTANCE.getForBitness(javaController.getBitness()));
-    performer.setOffline(false);
-    performer.setMirrors(true);
-    performer.setVMPath(vmPath);
-    performer.setProgress(progress);
-    performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");
-    performer.perform(progress);
-    performer.recordVariables(installation, null, user);
-    performer.savePasswords();
+      performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
+      performer.getUnresolvedVariables().clear();
+      performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
+      performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
+      performer.put(OS.class, OS.INSTANCE.getForBitness(javaController.getBitness()));
+      performer.setOffline(false);
+      performer.setMirrors(true);
+      performer.setVMPath(vmPath);
+      performer.setProgress(progress);
+      performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");
+      performer.perform(progress);
+      performer.recordVariables(installation, null, user);
+      performer.savePasswords();
 
-    File configurationLocation = performer.getProductConfigurationLocation();
-    installation.eResource().setURI(URI.createFileURI(new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup").toString()));
-    BaseUtil.saveEObject(installation);
-
-    userAdjuster.undo();
-    BaseUtil.saveEObject(user);
+      File configurationLocation = performer.getProductConfigurationLocation();
+      installation.eResource().setURI(URI.createFileURI(new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup").toString()));
+      BaseUtil.saveEObject(installation);
+    }
+    finally
+    {
+      userAdjuster.undo();
+      BaseUtil.saveEObject(user);
+    }
   }
 
   private void installCancel()
