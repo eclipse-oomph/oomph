@@ -42,6 +42,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.variables.IStringVariableManager;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
@@ -602,6 +604,16 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private void triggerLoad(String repository)
   {
+    try
+    {
+      IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
+      repository = manager.performStringSubstitution(repository);
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
     URI location = null;
 
     try
