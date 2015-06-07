@@ -871,6 +871,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
         {
           progress.setCanceled(true);
         }
+        catch (UnloggedException ex)
+        {
+          installError = ex.getMessage();
+        }
         catch (Exception ex)
         {
           if (!progress.isCanceled())
@@ -956,8 +960,50 @@ public class SimpleVariablePage extends SimpleInstallerPage
       IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
 
       SimplePrompter prompter = new SimplePrompter();
-
       performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
+
+      final List<VariableTask> unresolvedVariables = prompter.getUnresolvedVariables();
+      if (!unresolvedVariables.isEmpty())
+      {
+        StringBuilder builder = new StringBuilder();
+        for (VariableTask variable : unresolvedVariables)
+        {
+          if (builder.length() != 0)
+          {
+            builder.append(", ");
+          }
+
+          builder.append(variable.getName());
+        }
+
+        final String variables = builder.toString();
+        final boolean multi = unresolvedVariables.size() > 1;
+
+        UIUtil.syncExec(new Runnable()
+        {
+          public void run()
+          {
+            String message = "The variable" + (multi ? "s" : "") + " " + variables + " " + (multi ? "are" : "is") + " undefined. You likely declared "
+                + (multi ? "them" : "it")
+                + " in your 'user.setup' file without appropriate restrictions, so that you can't use the installer's simple mode anymore."
+                + "\n\nDo you want to switch to the advanced mode now?";
+
+            if (MessageDialog.openQuestion(getShell(), "Undefined Variables", message))
+            {
+              unresolvedVariables.clear();
+              dialog.switchToAdvancedMode();
+            }
+          }
+        });
+
+        if (unresolvedVariables.isEmpty())
+        {
+          return;
+        }
+
+        throw new UnloggedException("Undefined variable" + (multi ? "s" : "") + ": " + variables);
+      }
+
       performer.getUnresolvedVariables().clear();
       performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
       performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
@@ -1244,6 +1290,19 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
+  private static final class UnloggedException extends RuntimeException
+  {
+    private static final long serialVersionUID = 1L;
+
+    public UnloggedException(String message)
+    {
+      super(message);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
   private static class UserAdjuster
   {
     private static final URI INSTALLATION_LOCATION_ATTRIBUTE_URI = SetupTaskPerformer.getAttributeURI(SetupPackage.Literals.INSTALLATION_TASK__LOCATION);
@@ -1296,12 +1355,19 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 
+    private final List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
+
     public SimplePrompter()
     {
+    }
+
+    public List<VariableTask> getUnresolvedVariables()
+    {
+      return unresolvedVariables;
     }
 
     public boolean promptVariables(List<? extends SetupTaskContext> performers)
@@ -1311,25 +1377,20 @@ public class SimpleVariablePage extends SimpleInstallerPage
         List<VariableTask> unresolvedVariables = ((SetupTaskPerformer)performer).getUnresolvedVariables();
         for (VariableTask variable : unresolvedVariables)
         {
-          String name = variable.getName();
-          // System.out.println(name);
-
-          String value = get(name);
+          String value = getValue(variable);
           if (value == null)
           {
-            return false;
+            this.unresolvedVariables.add(variable);
           }
         }
       }
 
-      return true;
+      return unresolvedVariables.isEmpty();
     }
 
     public String getValue(VariableTask variable)
     {
       String name = variable.getName();
-      // System.out.println(name);
-
       return get(name);
     }
 

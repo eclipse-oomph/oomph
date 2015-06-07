@@ -399,8 +399,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        setReturnCode(RETURN_ADVANCED);
-        exitSelected();
+        switchToAdvancedMode();
       }
     });
 
@@ -553,6 +552,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         doSwitch(oldPage, newPage);
       }
     }
+  }
+
+  public void switchToAdvancedMode()
+  {
+    setReturnCode(RETURN_ADVANCED);
+    exitSelected();
   }
 
   public void backSelected()

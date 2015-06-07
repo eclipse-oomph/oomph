@@ -179,7 +179,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static final Pattern INSTALLABLE_UNIT_WITH_RANGE_PATTERN = Pattern.compile("([^\\[\\(]*)(.*)");
 
-  private static Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
+  private static final Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
 
   private ProgressLog progress;
 
@@ -193,7 +193,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private EList<SetupTask> neededSetupTasks;
 
-  private Set<Bundle> bundles = new HashSet<Bundle>();
+  private final Set<Bundle> bundles = new HashSet<Bundle>();
 
   /**
    * A list that contains instances of String and/or Pair<String, ProgressLog.Severity>.
@@ -204,33 +204,33 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private boolean logStreamError;
 
-  private ProgressLogFilter logFilter = new ProgressLogFilter();
+  private final ProgressLogFilter logFilter = new ProgressLogFilter();
 
   private IProgressMonitor progressMonitor;
 
-  private List<EStructuralFeature.Setting> unresolvedSettings = new ArrayList<EStructuralFeature.Setting>();
+  private final List<EStructuralFeature.Setting> unresolvedSettings = new ArrayList<EStructuralFeature.Setting>();
 
-  private List<VariableTask> passwordVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> passwordVariables = new ArrayList<VariableTask>();
 
-  private Map<URI, String> passwords = new LinkedHashMap<URI, String>();
+  private final Map<URI, String> passwords = new LinkedHashMap<URI, String>();
 
-  private List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
 
-  private List<VariableTask> resolvedVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> resolvedVariables = new ArrayList<VariableTask>();
 
-  private List<VariableTask> appliedRuleVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> appliedRuleVariables = new ArrayList<VariableTask>();
 
-  private Map<String, VariableTask> allVariables = new LinkedHashMap<String, VariableTask>();
+  private final Map<String, VariableTask> allVariables = new LinkedHashMap<String, VariableTask>();
 
-  private Set<String> undeclaredVariables = new LinkedHashSet<String>();
+  private final Set<String> undeclaredVariables = new LinkedHashSet<String>();
 
-  private Map<VariableTask, EAttribute> ruleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
+  private final Map<VariableTask, EAttribute> ruleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
-  private Map<VariableTask, EAttribute> ruleBasedAttributes = new LinkedHashMap<VariableTask, EAttribute>();
+  private final Map<VariableTask, EAttribute> ruleBasedAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
-  private List<AttributeRule> attributeRules = new ArrayList<AttributeRule>();
+  private final List<AttributeRule> attributeRules = new ArrayList<AttributeRule>();
 
-  private ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
+  private final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
   private String vmPath;
 
