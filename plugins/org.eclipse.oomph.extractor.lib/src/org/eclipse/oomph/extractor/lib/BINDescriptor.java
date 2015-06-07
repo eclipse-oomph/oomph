@@ -11,15 +11,23 @@
 package org.eclipse.oomph.extractor.lib;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 /**
  * @author Eike Stepper
  */
 public final class BINDescriptor
 {
+  private static final String CHARSET = "UTF-8";
+
+  private static final String NL = "\n";
+
   private final int format;
 
   private final JREData jre;
@@ -38,7 +46,7 @@ public final class BINDescriptor
 
   public BINDescriptor(InputStream in) throws IOException
   {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in, CHARSET));
 
     format = readInt(reader);
 
@@ -97,8 +105,49 @@ public final class BINDescriptor
     return imageURI;
   }
 
+  public void write(File file) throws IOException
+  {
+    FileOutputStream out = new FileOutputStream(file);
+
+    try
+    {
+      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, CHARSET));
+      writeInt(writer, format);
+
+      writeInt(writer, jre.getMajor());
+      writeInt(writer, jre.getMinor());
+      writeInt(writer, jre.getMicro());
+      writeInt(writer, jre.getBitness());
+      writeInt(writer, jdk);
+
+      writeString(writer, launcherPath);
+      writeString(writer, iniPath);
+      writeString(writer, productName);
+      writeString(writer, productURI);
+      writeString(writer, imageURI);
+
+      writer.flush();
+    }
+    finally
+    {
+      IO.close(out);
+    }
+  }
+
   private static int readInt(BufferedReader reader) throws IOException
   {
     return Integer.parseInt(reader.readLine());
+  }
+
+  private static void writeInt(BufferedWriter writer, int value) throws IOException
+  {
+    writer.write(Integer.toString(value));
+    writer.write(NL);
+  }
+
+  private void writeString(BufferedWriter writer, String value) throws IOException
+  {
+    writer.write(value);
+    writer.write(NL);
   }
 }

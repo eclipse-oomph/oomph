@@ -13,6 +13,7 @@ package org.eclipse.oomph.extractor.lib;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,35 +40,118 @@ public final class BINExtractor extends IO
   {
     String executable = args[0];
     String targetFolder = args[1];
-    String javaHome = args.length > 2 ? args[2] : null;
+    String javaHome = null;
 
-    FileInputStream in = new FileInputStream(executable);
-    BufferedInputStream stream = new BufferedInputStream(in);
+    boolean export = false;
+    File markerFile = null;
+    File extractorFile = null;
+    File libdataFile = null;
+    File descriptorFile = null;
 
-    byte[] pattern = BINMarker.getBytes();
-
-    KMPInputStream extractorStream = new KMPInputStream(stream, pattern);
-    int[] failure = extractorStream.getFailure();
-
-    drain(extractorStream); // Find the marker that's embedded via extractor.h
-    drain(new KMPInputStream(stream, pattern, failure)); // Find the marker in front of libdata.jar
-    drain(new KMPInputStream(stream, pattern, failure)); // Find the marker in front of the descriptor
-
-    KMPInputStream descriptorStream = new KMPInputStream(stream, pattern, failure);
-    BINDescriptor descriptor = new BINDescriptor(descriptorStream);
-
-    KMPInputStream binStream = new KMPInputStream(stream, pattern, failure);
-    unzip(binStream, targetFolder);
-
-    in.close();
-
-    if (javaHome != null)
+    if (args.length > 2)
     {
-      adjustIni(targetFolder + File.separator + descriptor.getIniPath(), javaHome);
+      if ("-export".equals(args[2]))
+      {
+        export = true;
+        markerFile = new File(args[3]);
+        extractorFile = new File(args[4]);
+        libdataFile = new File(args[5]);
+        descriptorFile = new File(args[6]);
+      }
+      else
+      {
+        javaHome = args[2];
+      }
     }
 
-    String launcher = targetFolder + File.separator + descriptor.getLauncherPath();
-    Runtime.getRuntime().exec(launcher);
+    InputStream in = new FileInputStream(executable);
+    BINDescriptor descriptor;
+
+    try
+    {
+      BufferedInputStream stream = new BufferedInputStream(in);
+
+      byte[] pattern = BINMarker.getBytes();
+      if (export)
+      {
+        copy(new ByteArrayInputStream(pattern), markerFile);
+      }
+
+      KMPInputStream kmpStream = new KMPInputStream(stream, pattern);
+      int[] failure = kmpStream.getFailure();
+
+      // Find the marker that's embedded via extractor.h
+      if (export)
+      {
+        copy(kmpStream, extractorFile);
+        copy(new ByteArrayInputStream(pattern), extractorFile);
+      }
+      else
+      {
+        drain(kmpStream);
+      }
+
+      // Find the marker after the extractor binary
+      kmpStream = new KMPInputStream(stream, pattern, failure);
+      if (export)
+      {
+        copy(kmpStream, extractorFile);
+      }
+      else
+      {
+        drain(kmpStream);
+      }
+
+      // Find the marker after the libdata.jar
+      kmpStream = new KMPInputStream(stream, pattern, failure);
+      if (export)
+      {
+        copy(kmpStream, libdataFile);
+      }
+      else
+      {
+        drain(kmpStream);
+      }
+
+      // Find the marker after the descriptor
+      kmpStream = new KMPInputStream(stream, pattern, failure);
+      descriptor = new BINDescriptor(kmpStream);
+      descriptor.write(descriptorFile);
+
+      // Find the marker after the product
+      kmpStream = new KMPInputStream(stream, pattern, failure);
+      unzip(kmpStream, targetFolder);
+    }
+    finally
+    {
+      close(in);
+    }
+
+    if (!export)
+    {
+      if (javaHome != null)
+      {
+        adjustIni(targetFolder + File.separator + descriptor.getIniPath(), javaHome);
+      }
+
+      String launcher = targetFolder + File.separator + descriptor.getLauncherPath();
+      Runtime.getRuntime().exec(launcher);
+    }
+  }
+
+  private static void copy(InputStream source, File targetFile) throws IOException
+  {
+    targetFile.getParentFile().mkdirs();
+    OutputStream target = new FileOutputStream(targetFile, true);
+
+    try
+    {
+      copy(source, target);
+    }
+    finally
+    {
+      close(target);
+    }
   }
 
   private static void adjustIni(String iniPath, String javaHome) throws IOException
