@@ -25,6 +25,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -43,14 +44,13 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class SimpleInstallerMenu extends Shell implements Listener
 {
-  private static final int MENU_MIN_WIDTH = 340;
-
-  private static final int MENU_MIN_HEIGHT = 553;
+  private static Point defaultSize;
 
   public SimpleInstallerMenu(Shell parent)
   {
     super(parent, SWT.NO_TRIM);
-    setSize(MENU_MIN_WIDTH, MENU_MIN_HEIGHT);
+    Point defaultSize = getDefaultSize(parent);
+    setSize(defaultSize.x, defaultSize.y);
     setBackground(SetupInstallerPlugin.getColor(247, 148, 31));
     setBackgroundMode(SWT.INHERIT_FORCE);
 
@@ -164,7 +164,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
     parent.toDisplay(menuStartLocation);
 
     Point prefSize = computeSize(SWT.DEFAULT, SWT.DEFAULT);
-    Point size = new Point(Math.max(prefSize.x, MENU_MIN_WIDTH), Math.max(prefSize.y, bounds.height - 80) - 5);
+    Point size = new Point(Math.max(prefSize.x, getDefaultSize(parent).x), Math.max(prefSize.y, bounds.height - 80) - 5);
 
     setBounds(menuStartLocation.x, menuStartLocation.y, size.x, size.y);
   }
@@ -224,6 +224,16 @@ public class SimpleInstallerMenu extends Shell implements Listener
     return true;
   }
 
+  private static Point getDefaultSize(Drawable drawable)
+  {
+    if (defaultSize == null)
+    {
+      defaultSize = SimpleInstallerDialog.computeSize(drawable, InstallerMenuItem.FONT, 11, 18);
+    }
+
+    return defaultSize;
+  }
+
   /**
    * @author Andreas Scharf
    */
@@ -235,6 +245,8 @@ public class SimpleInstallerMenu extends Shell implements Listener
 
     private Divider divider;
 
+    GridData gridData = GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 36).create();
+
     public InstallerMenuItem(final SimpleInstallerMenu menu)
     {
       super(menu, SWT.NONE);
@@ -245,7 +257,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
       layout.verticalSpacing = 0;
 
       setLayout(layout);
-      setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 36).create());
+      setLayoutData(gridData);
 
       Composite content = new Composite(this, SWT.NONE);
       content.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -278,6 +290,10 @@ public class SimpleInstallerMenu extends Shell implements Listener
       button.setForeground(AbstractSimpleDialog.COLOR_WHITE);
       button.setFont(FONT);
       button.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).create());
+
+      button.setText("");
+      Point defaultButtonSize = button.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+      gridData.heightHint = defaultButtonSize.y + 5;
     }
 
     public void setDefaultImage(Image defaultImage)

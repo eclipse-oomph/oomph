@@ -33,6 +33,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -92,7 +93,6 @@ public abstract class SimpleInstallerPage extends Composite
     {
       Composite buttonContainer = new Composite(this, SWT.NONE);
       buttonContainer.setLayout(UIUtil.createGridLayout(1));
-      buttonContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 33).create());
       buttonContainer.setBackgroundMode(SWT.INHERIT_FORCE);
       buttonContainer.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
@@ -107,6 +107,9 @@ public abstract class SimpleInstallerPage extends Composite
           backSelected();
         }
       });
+
+      Point defaultBackButtonSize = backButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+      buttonContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, defaultBackButtonSize.y + 11).create());
     }
     else
     {

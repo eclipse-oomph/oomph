@@ -47,7 +47,10 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -81,13 +84,11 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
 
-  private static final int INSTALLER_WIDTH = 620;
-
-  private static final int INSTALLER_HEIGHT = 632;
-
   private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled");
 
   private static Font defaultFont;
+
+  private static Point defaultSize;
 
   private static String css;
 
@@ -133,7 +134,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public SimpleInstallerDialog(Display display, final Installer installer)
   {
-    super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.NO_TRIM, INSTALLER_WIDTH, INSTALLER_HEIGHT);
+    super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.NO_TRIM, getDefaultSize(display).x, getDefaultSize(display).y);
     setMinimumSize(385, 75);
     this.installer = installer;
     catalogManager = installer.getCatalogManager();
@@ -668,9 +669,40 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       {
         defaultFont = UIUtil.getDisplay().getSystemFont();
       }
+
+      // int relativeHeight = 10;
+      // String height = relativeHeight == 0 ? "" : relativeHeight > 0 ? "+" + relativeHeight : Integer.toString(relativeHeight);
+      // defaultFont = SetupInstallerPlugin.getFont(getDefaultFont(), org.eclipse.emf.common.util.URI.createURI("font:///" + height + "/"));
     }
 
     return defaultFont;
+  }
+
+  static Point getDefaultSize(Drawable drawable)
+  {
+    if (defaultSize == null)
+    {
+      defaultSize = computeSize(drawable, getDefaultFont(), 31, 32);
+    }
+
+    return defaultSize;
+  }
+
+  static Point computeSize(Drawable drawable, Font font, int x, int y)
+  {
+    GC gc = new GC(drawable);
+    gc.setFont(font);
+    try
+    {
+      int height = gc.getFontMetrics().getHeight();
+      int totalWidth = height * x;
+      int totalHeight = height * y;
+      return new Point(totalWidth, totalHeight);
+    }
+    finally
+    {
+      gc.dispose();
+    }
   }
 
   static String getCSS()

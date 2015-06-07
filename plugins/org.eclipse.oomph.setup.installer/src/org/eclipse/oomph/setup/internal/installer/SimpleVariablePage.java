@@ -90,6 +90,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -216,7 +217,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     // Row 1
     GridData browserLayoutData = GridDataFactory.fillDefaults().indent(0, 13).grab(true, false).create();
-    browserLayoutData.heightHint = 216;
+    Point defaultSize = SimpleInstallerDialog.getDefaultSize(container);
+    browserLayoutData.heightHint = defaultSize.y * 34 / 100;
 
     Composite detailArea = new Composite(container, SWT.NONE);
     detailArea.setLayoutData(browserLayoutData);
@@ -469,7 +471,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
     spacer(variablesComposite);
 
     installButton = new SimpleInstallLaunchButton(variablesComposite);
-    installButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, 36).indent(0, 32).create());
+    Point defaultInstallButtonSize = installButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+    installButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, defaultInstallButtonSize.y + 3).indent(0, 32)
+        .create());
     installButton.setCurrentState(SimpleInstallLaunchButton.State.INSTALL);
 
     spacer(variablesComposite);

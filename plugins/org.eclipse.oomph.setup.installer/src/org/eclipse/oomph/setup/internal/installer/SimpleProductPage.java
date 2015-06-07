@@ -56,6 +56,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -116,7 +117,9 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
     };
 
-    searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).hint(SWT.DEFAULT, 34).create());
+    Point defaultSearchFieldSize = searchField.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+    searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).hint(SWT.DEFAULT, defaultSearchFieldSize.y + 10)
+        .create());
 
     buttonBar = new ToolBar(searchComposite, SWT.FLAT | SWT.RIGHT);
     buttonBar.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).exclude(true).create());
