@@ -116,7 +116,10 @@ public final class BINExtractor extends IO
       // Find the marker after the descriptor
       kmpStream = new KMPInputStream(stream, pattern, failure);
       descriptor = new BINDescriptor(kmpStream);
-      descriptor.write(descriptorFile);
+      if (export)
+      {
+        descriptor.write(descriptorFile);
+      }
 
       // Find the marker after the product
       kmpStream = new KMPInputStream(stream, pattern, failure);

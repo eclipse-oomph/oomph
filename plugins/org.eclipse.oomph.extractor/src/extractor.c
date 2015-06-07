@@ -290,6 +290,9 @@ execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
     sprintf (cmdline, _T("\"%s\\bin\\javaw\" -cp \"%s\" %s %s"), javaHome, lib, className, args);
   }
 
+  printf (cmdline);
+  printf (_T("\n"));
+
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
 
@@ -307,7 +310,7 @@ execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
       NULL,           // Use parent's environment block
       NULL,           // Use parent's starting directory
       &si,            // Pointer to STARTUPINFO structure
-      &pi))            // Pointer to PROCESS_INFORMATION structure
+      &pi))           // Pointer to PROCESS_INFORMATION structure
   {
     return FALSE;
   }
