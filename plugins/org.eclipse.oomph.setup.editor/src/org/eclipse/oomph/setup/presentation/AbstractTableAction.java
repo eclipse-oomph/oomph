@@ -10,6 +10,11 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
+import org.eclipse.oomph.ui.ErrorDialog;
+import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -19,6 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
+
+import java.io.File;
 
 /**
  * @author Eike Stepper
@@ -40,8 +47,25 @@ public abstract class AbstractTableAction extends Action
   @Override
   public void run()
   {
-    Dialog dialog = new CommandTableDialog(part.getSite().getShell());
-    dialog.open();
+    if (UIUtil.isBrowserAvailable())
+    {
+      Dialog dialog = new CommandTableDialog(part.getSite().getShell());
+      dialog.open();
+    }
+    else
+    {
+      try
+      {
+        String html = renderHTML();
+        File tempFile = File.createTempFile("table", ".html");
+        IOUtil.writeUTF8(tempFile, html);
+        OS.INSTANCE.openSystemBrowser(tempFile.toURI().toString());
+      }
+      catch (Exception ex)
+      {
+        ErrorDialog.open(ex);
+      }
+    }
   }
 
   protected abstract String renderHTML();

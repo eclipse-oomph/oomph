@@ -222,7 +222,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     detailArea.setLayoutData(browserLayoutData);
     detailArea.setLayout(new FillLayout());
 
-    try
+    if (UIUtil.isBrowserAvailable())
     {
       detailBrowser = new Browser(detailArea, SWT.NO_SCROLL);
       detailBrowser.addLocationListener(new LocationAdapter()
@@ -239,7 +239,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
       });
     }
-    catch (Throwable ex)
+    else
     {
       detailBrowser = null;
       detailComposite = new ProductComposite(detailArea, null, null);

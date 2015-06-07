@@ -20,6 +20,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CCombo;
@@ -43,6 +44,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.parser.ParserDelegator;
+
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -174,7 +180,7 @@ public final class UIUtil
             new Browser(shell, SWT.NONE);
             browserAvailable = true;
           }
-          catch (Exception ex)
+          catch (SWTError ex)
           {
             browserAvailable = false;
           }
@@ -707,6 +713,28 @@ public final class UIUtil
     }
     catch (InterruptedException ex)
     {
+    }
+  }
+
+  public static String stripHTML(String html)
+  {
+    try
+    {
+      final StringBuilder builder = new StringBuilder();
+      new ParserDelegator().parse(new StringReader(html), new HTMLEditorKit.ParserCallback()
+      {
+        @Override
+        public void handleText(char[] text, int pos)
+        {
+          builder.append(text);
+        }
+      }, Boolean.TRUE);
+
+      return builder.toString();
+    }
+    catch (IOException ex)
+    {
+      return html;
     }
   }
 }

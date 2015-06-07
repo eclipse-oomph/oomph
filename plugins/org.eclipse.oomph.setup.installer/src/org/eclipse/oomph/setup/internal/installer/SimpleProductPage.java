@@ -67,11 +67,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.ToolBar;
 
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.parser.ParserDelegator;
-
-import java.io.IOException;
-import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +131,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     indexLoader = new SpriteIndexLoader(stackComposite);
 
-    if ("browser".equals(PropertiesUtil.getProperty("oomph.product.list")))
+    if (UIUtil.isBrowserAvailable() && "browser".equals(PropertiesUtil.getProperty("oomph.product.list")))
     {
       productList = new BrowserProductList(this, stackComposite, catalogSelector);
     }
@@ -700,7 +695,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     private static String shorten(GC gc, int width, int lines, String html)
     {
-      String plain = StringUtil.isEmpty(html) ? "No description available." : stripHTML(html);
+      String plain = StringUtil.isEmpty(html) ? "No description available." : UIUtil.stripHTML(html);
 
       StringBuilder builder = new StringBuilder();
       int lineWidth = 0;
@@ -728,28 +723,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
 
       return builder.toString();
-    }
-
-    private static String stripHTML(String html)
-    {
-      try
-      {
-        final StringBuilder builder = new StringBuilder();
-        new ParserDelegator().parse(new StringReader(html), new HTMLEditorKit.ParserCallback()
-        {
-          @Override
-          public void handleText(char[] text, int pos)
-          {
-            builder.append(text);
-          }
-        }, Boolean.TRUE);
-
-        return builder.toString();
-      }
-      catch (IOException ex)
-      {
-        return html;
-      }
     }
 
     /**

@@ -12,6 +12,7 @@ package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.internal.util.HTTPServer;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.jface.dialogs.DialogTray;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -92,37 +93,49 @@ public class HelpSupport
     {
       public void helpRequested(HelpEvent e)
       {
-        if (dialog.getTray() != null)
+        if (UIUtil.isBrowserAvailable())
         {
-          dialog.closeTray();
-          helpButton.setSelection(false);
-          return;
-        }
-
-        DialogTray tray = new DialogTray()
-        {
-          @Override
-          protected Control createContents(Composite parent)
+          if (dialog.getTray() != null)
           {
-            helpBrowser = new Browser(parent, SWT.NONE);
-            helpBrowser.setSize(500, 800);
-            helpBrowser.addDisposeListener(new DisposeListener()
-            {
-              public void widgetDisposed(DisposeEvent e)
-              {
-                helpBrowser = null;
-                redrawCalloutControls();
-              }
-            });
-
-            updateHelp();
-            return helpBrowser;
+            dialog.closeTray();
+            helpButton.setSelection(false);
+            return;
           }
-        };
 
-        dialog.openTray(tray);
-        helpButton.setSelection(true);
-        redrawCalloutControls();
+          DialogTray tray = new DialogTray()
+          {
+            @Override
+            protected Control createContents(Composite parent)
+            {
+              helpBrowser = new Browser(parent, SWT.NONE);
+              helpBrowser.setSize(500, 800);
+              helpBrowser.addDisposeListener(new DisposeListener()
+              {
+                public void widgetDisposed(DisposeEvent e)
+                {
+                  helpBrowser = null;
+                  redrawCalloutControls();
+                }
+              });
+
+              updateHelp();
+              return helpBrowser;
+            }
+          };
+
+          dialog.openTray(tray);
+          helpButton.setSelection(true);
+        }
+        else
+        {
+          helpButton.setSelection(false);
+
+          String helpPath = getHelpPath();
+          if (helpPath != null)
+          {
+            OS.INSTANCE.openSystemBrowser(getHelpURL(helpPath));
+          }
+        }
       }
     });
 
@@ -136,15 +149,23 @@ public class HelpSupport
 
   public final void updateHelp()
   {
+    String helpPath = getHelpPath();
+    if (helpPath != null)
+    {
+      setHelpPath(helpPath);
+    }
+  }
+
+  private final String getHelpPath()
+  {
     if (dialog instanceof HelpProvider)
     {
       HelpProvider helpProvider = (HelpProvider)dialog;
       String helpPath = helpProvider.getHelpPath();
-      if (helpPath != null)
-      {
-        setHelpPath(helpPath);
-      }
+      return helpPath;
     }
+
+    return null;
   }
 
   public final void addHelpCallout(final Control control, final int number)

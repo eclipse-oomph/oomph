@@ -110,15 +110,22 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.URLTransfer;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -129,6 +136,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
@@ -165,6 +173,8 @@ public class ProductPage extends SetupWizardPage
   private TreeViewer productViewer;
 
   private Browser descriptionBrowser;
+
+  private DescriptionViewer descriptionViewer;
 
   private Label versionLabel;
 
@@ -641,8 +651,7 @@ public class ProductPage extends SetupWizardPage
 
     Composite descriptionComposite = new Composite(sashForm, SWT.BORDER);
     descriptionComposite.setLayout(new FillLayout());
-
-    try
+    if (UIUtil.isBrowserAvailable())
     {
       descriptionBrowser = new Browser(descriptionComposite, SWT.NONE);
       descriptionBrowser.addLocationListener(new LocationAdapter()
@@ -659,14 +668,15 @@ public class ProductPage extends SetupWizardPage
       });
 
       AccessUtil.setKey(descriptionBrowser, "description");
-      sashForm.setWeights(new int[] { 14, 5 });
     }
-    catch (Exception ex)
+    else
     {
-      descriptionComposite.dispose();
-      descriptionBrowser = null;
-      sashForm.setWeights(new int[] { 1 });
+      descriptionComposite.setForeground(productTree.getForeground());
+      descriptionComposite.setBackground(productTree.getBackground());
+      descriptionViewer = new DescriptionViewer(descriptionComposite, productTree.getFont());
     }
+
+    sashForm.setWeights(new int[] { 14, 5 });
 
     final CatalogSelection selection = catalogManager.getSelection();
     productViewer.setInput(selection);
@@ -820,8 +830,15 @@ public class ProductPage extends SetupWizardPage
 
     if (descriptionBrowser != null)
     {
+      String html = safe(productSelected ? getDescriptionHTML(product) : null);
       descriptionBrowser.setEnabled(productSelected);
-      descriptionBrowser.setText(safe(productSelected ? getDescriptionHTML(product) : null));
+      descriptionBrowser.setText(html);
+    }
+    else
+    {
+      String html = safe(productSelected ? product.getDescription() : null);
+      String plain = StringUtil.isEmpty(html) ? "No description available." : UIUtil.stripHTML(html);
+      descriptionViewer.update(getImage(product), SetupCoreUtil.getLabel(product), plain);
     }
 
     versionLabel.setEnabled(productSelected);
@@ -1238,6 +1255,71 @@ public class ProductPage extends SetupWizardPage
   public static URI getDefaultProductImageURI()
   {
     return URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class DescriptionViewer
+  {
+    private ScrolledComposite scrolledComposite;
+
+    private Composite descriptionComposite;
+
+    private CLabel descriptionLabel;
+
+    private Text descriptionText;
+
+    private ControlAdapter resizeListener;
+
+    public DescriptionViewer(Composite container, Font font)
+    {
+      Color foreground = container.getForeground();
+      Color background = container.getBackground();
+
+      scrolledComposite = new ScrolledComposite(container, SWT.VERTICAL);
+      scrolledComposite.setExpandHorizontal(true);
+      scrolledComposite.setExpandVertical(true);
+
+      resizeListener = new ControlAdapter()
+      {
+        @Override
+        public void controlResized(ControlEvent e)
+        {
+          Point size = descriptionComposite.computeSize(scrolledComposite.getClientArea().width, SWT.DEFAULT);
+          scrolledComposite.setMinSize(size);
+        }
+      };
+      scrolledComposite.addControlListener(resizeListener);
+
+      descriptionComposite = new Composite(scrolledComposite, SWT.NONE);
+      descriptionComposite.setLayout(new GridLayout());
+      descriptionComposite.setForeground(foreground);
+      descriptionComposite.setBackground(background);
+      scrolledComposite.setContent(descriptionComposite);
+
+      descriptionLabel = new CLabel(descriptionComposite, SWT.NONE);
+      descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      descriptionLabel.setForeground(foreground);
+      descriptionLabel.setBackground(background);
+      descriptionLabel.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold")));
+
+      Label separator = new Label(descriptionComposite, SWT.HORIZONTAL | SWT.SEPARATOR);
+      separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+      descriptionText = new Text(descriptionComposite, SWT.READ_ONLY | SWT.WRAP);
+      descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
+      descriptionText.setForeground(foreground);
+      descriptionText.setBackground(background);
+    }
+
+    public void update(Image image, String title, String body)
+    {
+      descriptionLabel.setImage(image);
+      descriptionLabel.setText(title);
+      descriptionText.setText(body);
+      resizeListener.controlResized(null);
+    }
   }
 
   /**
