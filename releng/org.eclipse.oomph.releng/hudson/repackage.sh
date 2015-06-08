@@ -84,6 +84,14 @@ for f in *.zip; do
     extractor=eclipse-installer-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
 
+    rm -rf $WORKSPACE/save-$bitness
+    mkdir $WORKSPACE/save-$bitness
+    cp -a /opt/public/tools/oomph/extractor-$bitness.exe $WORKSPACE/save-$bitness/extractor.exe
+    cp -a $marker $WORKSPACE/save-$bitness/marker.txt
+    cp -a $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar $WORKSPACE/save-$bitness/libdata.jar
+    cp -a $GIT/plugins/org.eclipse.oomph.extractor/Concat/descriptor-$bitness.txt $WORKSPACE/save-$bitness/descriptor.txt
+    cp -a $PRODUCTS/$f $WORKSPACE/save-$bitness/product.zip
+
     echo "  Creating $extractor"
     cat /opt/public/tools/oomph/extractor-$bitness.exe \
       $marker \
@@ -94,7 +102,7 @@ for f in *.zip; do
       $PRODUCTS/$f \
       $marker > $PRODUCTS/$extractor
 
-    #rm -f $PRODUCTS/$f
+    rm -f $PRODUCTS/$f
 
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing $extractor"
