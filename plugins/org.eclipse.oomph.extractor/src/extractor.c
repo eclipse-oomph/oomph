@@ -138,6 +138,7 @@ typedef struct req_s
 static BOOL
 findDescriptor (_TCHAR* executable, REQ* req)
 {
+  marker[0] = 32;
   int size = sizeof(marker);
   int failure[size];
   memset (failure, 0, sizeof(failure));
@@ -198,13 +199,9 @@ findDescriptor (_TCHAR* executable, REQ* req)
       {
         if (o == 0)
         {
-          // We've found the bytes that are embedded into the marker[] array. Skip...
-        }
-        else if (o == 1)
-        {
           // We've found the marker that precedes libdata.jar. Skip...
         }
-        else if (o == 2)
+        else if (o == 1)
         {
           // Save the captured libdata.jar bytes to a temporary file.
           lib = getTempFile (_T("ext"));

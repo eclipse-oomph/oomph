@@ -79,22 +79,9 @@ public final class BINExtractor extends IO
         copy(new ByteArrayInputStream(pattern), markerFile);
       }
 
+      // Find the marker after the extractor binary
       KMPInputStream kmpStream = new KMPInputStream(stream, pattern);
       int[] failure = kmpStream.getFailure();
-
-      // Find the marker that's embedded via extractor.h
-      if (export)
-      {
-        copy(kmpStream, extractorFile);
-        copy(new ByteArrayInputStream(pattern), extractorFile);
-      }
-      else
-      {
-        drain(kmpStream);
-      }
-
-      // Find the marker after the extractor binary
-      kmpStream = new KMPInputStream(stream, pattern, failure);
       if (export)
       {
         copy(kmpStream, extractorFile);
@@ -159,7 +146,7 @@ public final class BINExtractor extends IO
       parentFile.mkdirs();
     }
 
-    OutputStream target = new FileOutputStream(targetFile, true);
+    OutputStream target = new FileOutputStream(targetFile);
 
     try
     {
