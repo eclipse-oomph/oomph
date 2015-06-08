@@ -174,6 +174,11 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   @Override
   public Color getBackground()
   {
+    if (internalBackgroundColor == null)
+    {
+      return super.getBackground();
+    }
+
     return internalBackgroundColor;
   }
 

@@ -278,39 +278,47 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_hover.png"));
-    bitness32Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(4, 0).hint(SWT.DEFAULT, 30).create());
-    bitness32Button.setChecked(false);
-    bitness32Button.setVisible(JREManager.BITNESS_CHANGEABLE);
-    bitness32Button.setToolTipText("Create a 32 bit installation");
-    bitness32Button.addSelectionListener(new SelectionAdapter()
+    if (JREManager.BITNESS_CHANGEABLE)
     {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit.png"),
+          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_hover.png"));
+      bitness32Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(4, 0).hint(SWT.DEFAULT, 30).create());
+      bitness32Button.setChecked(false);
+      bitness32Button.setVisible(JREManager.BITNESS_CHANGEABLE);
+      bitness32Button.setToolTipText("Create a 32 bit installation");
+      bitness32Button.addSelectionListener(new SelectionAdapter()
       {
-        bitness32Button.setChecked(true);
-        bitness64Button.setChecked(false);
-        javaController.setBitness(32);
-      }
-    });
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          bitness32Button.setChecked(true);
+          bitness64Button.setChecked(false);
+          javaController.setBitness(32);
+        }
+      });
 
-    bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_hover.png"));
-    bitness64Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).hint(SWT.DEFAULT, 30).create());
-    bitness64Button.setChecked(true);
-    bitness64Button.setVisible(JREManager.BITNESS_CHANGEABLE);
-    bitness64Button.setToolTipText("Create a 64 bit installation");
-    bitness64Button.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit.png"),
+          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_hover.png"));
+      bitness64Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).hint(SWT.DEFAULT, 30).create());
+      bitness64Button.setChecked(true);
+      bitness64Button.setVisible(JREManager.BITNESS_CHANGEABLE);
+      bitness64Button.setToolTipText("Create a 64 bit installation");
+      bitness64Button.addSelectionListener(new SelectionAdapter()
       {
-        bitness32Button.setChecked(false);
-        bitness64Button.setChecked(true);
-        javaController.setBitness(64);
-      }
-    });
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          bitness32Button.setChecked(false);
+          bitness64Button.setChecked(true);
+          javaController.setBitness(64);
+        }
+      });
+    }
+    else
+    {
+      new Label(variablesComposite, SWT.NONE);
+      new Label(variablesComposite, SWT.NONE);
+    }
 
     // Row 4
     javaLabel = createLabel(variablesComposite, "Java VM");
@@ -472,8 +480,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     installButton = new SimpleInstallLaunchButton(variablesComposite);
     Point defaultInstallButtonSize = installButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-    installButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, defaultInstallButtonSize.y + 3).indent(0, 32)
-        .create());
+    installButton
+        .setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, defaultInstallButtonSize.y + 3).indent(0, 32).create());
     installButton.setCurrentState(SimpleInstallLaunchButton.State.INSTALL);
 
     spacer(variablesComposite);
@@ -743,8 +751,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
     setVisible(versionLabel, versionVisible);
     setVisible(versionSpacer, versionVisible);
     setVisible(versionCombo.getParent(), versionVisible);
-    setVisible(bitness32Button, versionVisible);
-    setVisible(bitness64Button, versionVisible);
 
     if (JREManager.BITNESS_CHANGEABLE)
     {
