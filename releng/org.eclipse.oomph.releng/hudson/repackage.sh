@@ -45,7 +45,6 @@ for f in *.zip; do
   fi
 
   unzip -qq $SOURCE/$f
-  #zip --delete -qq plugins/com.ibm.icu_*.jar 'com/*'
 
   inifile=eclipse-installer.ini
   if [[ $f == *macosx* ]]; then
@@ -100,6 +99,7 @@ for f in *.zip; do
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing $extractor"
       curl -o $PRODUCTS/$extractor-signed -F filedata=@$PRODUCTS/$extractor http://build.eclipse.org:31338/winsign.php
+      cp -a $PRODUCTS/$extractor $WORKSPACE
       mv $PRODUCTS/$extractor-signed $PRODUCTS/$extractor
 
       actualSize=$(wc -c "$PRODUCTS/$extractor" | cut -f 1 -d ' ')
