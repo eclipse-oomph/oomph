@@ -92,14 +92,13 @@ for f in *.zip; do
     cp -a $GIT/plugins/org.eclipse.oomph.extractor/Concat/descriptor-$bitness.txt $WORKSPACE/save-$bitness/descriptor.txt
     cp -a $PRODUCTS/$f $WORKSPACE/save-$bitness/product.zip
 
-    cp -a $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar tmp-libdata.jar
     cp -a /opt/public/tools/oomph/extractor-$bitness.exe extractor.exe
-    zip tmp-libdata.jar extractor.exe
+    zip -9 -qq $PRODUCTS/$f extractor.exe
 
     echo "  Creating $extractor"
     cat /opt/public/tools/oomph/extractor-$bitness.exe \
       $marker \
-      tmp-libdata.jar \
+      $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar \
       $marker \
       $GIT/plugins/org.eclipse.oomph.extractor/Concat/descriptor-$bitness.txt \
       $marker \
