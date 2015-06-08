@@ -180,7 +180,7 @@ findDescriptor (_TCHAR* executable, REQ* req)
         break;
       }
 
-      if (o == 2)
+      if (o == 1)
       {
         libdata[libdataSize++] = b;
       }
