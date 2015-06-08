@@ -68,7 +68,7 @@ public abstract class IO
     while (ze != null)
     {
       String name = ze.getName();
-      if (!name.endsWith("/"))
+      if (!"extractor.exe".equals(name) && !name.endsWith("/"))
       {
         File file = new File(targetFolder, name);
         file.getParentFile().mkdirs();
