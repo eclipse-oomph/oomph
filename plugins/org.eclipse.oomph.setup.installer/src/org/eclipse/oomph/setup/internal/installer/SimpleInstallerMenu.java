@@ -228,7 +228,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
   {
     if (defaultSize == null)
     {
-      defaultSize = SimpleInstallerDialog.computeSize(drawable, InstallerMenuItem.FONT, 11, 18);
+      defaultSize = SimpleInstallerDialog.computeSize(drawable, InstallerMenuItem.FONT, 15, 24);
     }
 
     return defaultSize;

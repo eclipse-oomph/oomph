@@ -317,50 +317,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     final SimpleInstallerMenu menu = new SimpleInstallerMenu(this);
 
-    SimpleInstallerMenu.InstallerMenuItem catalogsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    catalogsItem.setText(CATALOGS_MENU_ITEM_TEXT);
-    catalogsItem.setToolTipText(ProductCatalogsDialog.DESCRIPTION);
-    catalogsItem.setVisible(false);
-    catalogsItem.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        ProductCatalogsDialog productCatalogsDialog = new ProductCatalogsDialog(SimpleInstallerDialog.this, catalogManager, true);
-        if (productCatalogsDialog.open() == ProductCatalogsDialog.OK)
-        {
-          productPage.handleFilter("");
-        }
-      }
-    });
-    AccessUtil.setKey(catalogsItem, "catalogs");
-
-    SimpleInstallerMenu.InstallerMenuItemWithToggle bundlePoolsItem = new SimpleInstallerMenu.InstallerMenuItemWithToggle(menu);
-    bundlePoolsItem.setText(BUNDLE_POOLS_MENU_ITEM_TEXT);
-    bundlePoolsItem.setToolTipText(AgentManagerDialog.MESSAGE);
-    bundlePoolsItem.setDividerVisible(false);
-    bundlePoolsItem.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        manageBundlePools();
-      }
-    });
-
-    bundlePoolSwitch = bundlePoolsItem.getToggleSwitch();
-    bundlePoolSwitch.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        enablePool(bundlePoolSwitch.isSelected());
-      }
-    });
-
-    Label spacer1 = new Label(menu, SWT.NONE);
-    spacer1.setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 46).create());
-
     SimpleInstallerMenu.InstallerMenuItem updateInstallerItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     updateInstallerItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle.png"));
     updateInstallerItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle_hover.png"));
@@ -392,6 +348,27 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
+    SimpleInstallerMenu.InstallerMenuItem catalogsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    catalogsItem.setText(CATALOGS_MENU_ITEM_TEXT);
+    catalogsItem.setToolTipText(ProductCatalogsDialog.DESCRIPTION);
+    catalogsItem.setVisible(false);
+    catalogsItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        ProductCatalogsDialog productCatalogsDialog = new ProductCatalogsDialog(SimpleInstallerDialog.this, catalogManager, true);
+        if (productCatalogsDialog.open() == ProductCatalogsDialog.OK)
+        {
+          productPage.handleFilter("");
+        }
+      }
+    });
+    AccessUtil.setKey(catalogsItem, "catalogs");
+
+    // Label spacer1 = new Label(menu, SWT.NONE);
+    // spacer1.setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 46).create());
+
     SimpleInstallerMenu.InstallerMenuItem advancedModeItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     advancedModeItem.setText(ADVANCED_MENU_ITEM_TEXT);
     advancedModeItem.setToolTipText("Switch to advanced mode");
@@ -401,6 +378,29 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       public void widgetSelected(SelectionEvent e)
       {
         switchToAdvancedMode();
+      }
+    });
+
+    SimpleInstallerMenu.InstallerMenuItemWithToggle bundlePoolsItem = new SimpleInstallerMenu.InstallerMenuItemWithToggle(menu);
+    bundlePoolsItem.setText(BUNDLE_POOLS_MENU_ITEM_TEXT);
+    bundlePoolsItem.setToolTipText(AgentManagerDialog.MESSAGE);
+    // bundlePoolsItem.setDividerVisible(false);
+    bundlePoolsItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        manageBundlePools();
+      }
+    });
+
+    bundlePoolSwitch = bundlePoolsItem.getToggleSwitch();
+    bundlePoolSwitch.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        enablePool(bundlePoolSwitch.isSelected());
       }
     });
 
@@ -682,7 +682,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     if (defaultSize == null)
     {
-      defaultSize = computeSize(drawable, getDefaultFont(), 31, 32);
+      defaultSize = computeSize(drawable, getDefaultFont(), 37, 38);
     }
 
     return defaultSize;
@@ -692,6 +692,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     GC gc = new GC(drawable);
     gc.setFont(font);
+
     try
     {
       int height = gc.getFontMetrics().getHeight();
