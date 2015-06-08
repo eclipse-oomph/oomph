@@ -170,7 +170,7 @@ findDescriptor (_TCHAR* executable, REQ* req)
   int libdataSize = 0;
 
   int o;
-  for (o = 0; o < 3; ++o)
+  for (o = 0; o < 2; ++o)
   {
     int k = 0;
     for (;;)
