@@ -47,6 +47,7 @@ public final class BINExtractor extends IO
     File extractorFile = null;
     File libdataFile = null;
     File descriptorFile = null;
+    File zipFile = null;
 
     if (args.length > 2)
     {
@@ -57,6 +58,7 @@ public final class BINExtractor extends IO
         extractorFile = new File(args[4]);
         libdataFile = new File(args[5]);
         descriptorFile = new File(args[6]);
+        zipFile = new File(targetFolder);
       }
       else
       {
@@ -123,7 +125,14 @@ public final class BINExtractor extends IO
 
       // Find the marker after the product
       kmpStream = new KMPInputStream(stream, pattern, failure);
-      unzip(kmpStream, targetFolder);
+      if (export)
+      {
+        copy(kmpStream, zipFile);
+      }
+      else
+      {
+        unzip(kmpStream, targetFolder);
+      }
     }
     finally
     {
@@ -144,7 +153,12 @@ public final class BINExtractor extends IO
 
   private static void copy(InputStream source, File targetFile) throws IOException
   {
-    targetFile.getParentFile().mkdirs();
+    File parentFile = targetFile.getParentFile();
+    if (parentFile != null)
+    {
+      parentFile.mkdirs();
+    }
+
     OutputStream target = new FileOutputStream(targetFile, true);
 
     try

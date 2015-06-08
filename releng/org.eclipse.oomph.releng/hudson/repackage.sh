@@ -94,7 +94,7 @@ for f in *.zip; do
       $PRODUCTS/$f \
       $marker > $PRODUCTS/$extractor
 
-    rm -f $PRODUCTS/$f
+    #rm -f $PRODUCTS/$f
 
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing $extractor"
