@@ -145,7 +145,9 @@ if [[ "$BUILD_TYPE" != nightly ]]; then
     "Oomph Product Updates" \
     $BUILD_TYPE
 elif
-  cp -a $PRODUCTS/*.exe $PRODUCTS/*.tar.gz $PRODUCTS/repository $PRODUCTS.tmp
+  cp -a $PRODUCTS/*.exe $PRODUCTS.tmp
+  cp -a $PRODUCTS/*.tar.gz $PRODUCTS.tmp
+  cp -a $PRODUCTS/repository $PRODUCTS.tmp
 fi
 
 ##################
