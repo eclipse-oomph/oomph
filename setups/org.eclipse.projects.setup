@@ -365,6 +365,7 @@
   <project href="interim/PDE.setup#/"/>
   <project href="interim/Platform.setup#/"/>
   <project href="http://git.eclipse.org/c/mmt/org.eclipse.qvtd.git/plain/releng/org.eclipse.qvtd.oomph/setups/qvtd.setup#/"/>
+  <project href="http://git.eclipse.org/c/mmt/org.eclipse.qvto.git/plain/releng/org.eclipse.qvto.oomph/setups/qvto.setup#/"/>
   <project href="interim/SimultaneousReleaseTrain.setup#/"/>
   <project href="http://git.eclipse.org/c/sirius/org.eclipse.sirius.git/plain/releng/org.eclipse.sirius.settings/Sirius.setup#/"/>
   <project href="http://git.eclipse.org/c/tracecompass/org.eclipse.tracecompass.git/plain/TraceCompass.setup#/"/>
