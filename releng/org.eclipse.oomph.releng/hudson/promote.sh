@@ -131,6 +131,7 @@ for f in *.exe *.tar.gz; do
 done
 
 cd $WORKSPACE
+cp -a $PROPERTIES $PRODUCTS.tmp/latest/product.properties
 cp -a $WORKSPACE/products/repository $PRODUCTS.tmp/latest
 $BASH $SCRIPTS/adjustArtifactRepository.sh \
   $PRODUCTS.tmp/latest/repository \
@@ -139,6 +140,7 @@ $BASH $SCRIPTS/adjustArtifactRepository.sh \
   $BUILD_TYPE
 
 if [[ "$BUILD_TYPE" != nightly ]]; then
+  cp -a $PROPERTIES $PRODUCTS.tmp/product.properties
   cp -a $WORKSPACE/products/repository $PRODUCTS.tmp
   $BASH $SCRIPTS/adjustArtifactRepository.sh \
     $PRODUCTS.tmp/repository \
