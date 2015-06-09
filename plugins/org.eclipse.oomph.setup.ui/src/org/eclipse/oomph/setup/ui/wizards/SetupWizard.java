@@ -343,7 +343,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public void addPages()
   {
-    IDialogSettings wizardSection = SetupUIPlugin.INSTANCE.getDialogSettings(getClass().getSimpleName());
+    IDialogSettings wizardSection = SetupUIPlugin.INSTANCE.getDialogSettings(SetupWizard.class.getSimpleName());
     setDialogSettings(wizardSection);
 
     addPage(new VariablePage());
@@ -627,8 +627,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     public abstract void loadIndex(ResourceSet resourceSet, URI... uris);
 
-    protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor)
-        throws InvocationTargetException, InterruptedException
+    protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor) throws InvocationTargetException,
+        InterruptedException
     {
       loading = true;
 
