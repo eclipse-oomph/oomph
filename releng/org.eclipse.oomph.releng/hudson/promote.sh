@@ -121,10 +121,11 @@ mkdir $PRODUCTS.tmp/latest
 
 cd $WORKSPACE/products
 for f in *.exe *.tar.gz; do
-  echo "Promoting $f"
+  echo "Promoting $f to $PRODUCTS.tmp/latest"
   cp -a $f $PRODUCTS.tmp/latest
 
   if [[ "$BUILD_TYPE" != nightly ]]; then
+    echo "Promoting $f to $PRODUCTS.tmp"
     cp -a $f $PRODUCTS.tmp
   fi
 done
@@ -195,9 +196,14 @@ cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/$BUILD_TYPE/latest
 mkdir -p $UPDATES.tmp/latest
 cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/latest
 
-mv $UPDATES.tmp $UPDATES
-mv $PRODUCTS.tmp $PRODUCTS
-mv $HELP.tmp $HELP
+mv $UPDATES $UPDATES.bak; mv $UPDATES.tmp $UPDATES
+mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS.tmp $PRODUCTS
+mv $HELP $HELP.bak; mv $HELP.tmp $HELP
+
+cd $WORKSPACE
+rm -rf $UPDATES.bak
+rm -rf $PRODUCTS.bak
+rm -rf $HELP.bak
 
 cd $WORKSPACE
 for t in nightly milestone; do
