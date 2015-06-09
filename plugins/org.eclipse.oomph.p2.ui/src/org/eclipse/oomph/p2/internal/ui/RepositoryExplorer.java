@@ -1190,7 +1190,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
                     }
                   }
 
-                  CollectionUtil.add(versions, child, version);
+                  if (child != null)
+                  {
+                    CollectionUtil.add(versions, child, version);
+                  }
                 }
               }
             }
