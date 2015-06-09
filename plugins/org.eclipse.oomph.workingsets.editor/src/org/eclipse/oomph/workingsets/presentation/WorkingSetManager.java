@@ -46,6 +46,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -264,10 +265,18 @@ public class WorkingSetManager
                       List<IWorkingSet> newActiveWorkingSets = getActiveWorkingSets(allWorkingSets.toArray(new IWorkingSet[allWorkingSets.size()]),
                           activeWorkingSets);
                       StringBuilder id = new StringBuilder("Aggregate:");
-                      for (IWorkingSet iWorkingSet : newActiveWorkingSets)
+                      for (Iterator<IWorkingSet> it = newActiveWorkingSets.iterator(); it.hasNext();)
                       {
-                        id.append(iWorkingSet.getName());
-                        id.append(":");
+                        IWorkingSet iWorkingSet = it.next();
+                        if (iWorkingSet == null)
+                        {
+                          it.remove();
+                        }
+                        else
+                        {
+                          id.append(iWorkingSet.getName());
+                          id.append(":");
+                        }
                       }
 
                       IWorkingSet aggregateWorkingSet = MANAGER.getWorkingSet(id.toString());
