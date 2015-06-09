@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -44,7 +45,11 @@ public class PreferencesRecorder extends EContentAdapter
 
   public Map<URI, String> done()
   {
-    rootPreferenceNode.eResource().unload();
+    for (Iterator<EObject> it = rootPreferenceNode.eResource().getAllContents(); it.hasNext();)
+    {
+      it.next().eAdapters().clear();
+    }
+
     rootPreferenceNode = null;
 
     paths.clear();

@@ -126,15 +126,18 @@ public final class PreferencesUtil
     PreferenceNode root = PreferencesFactory.eINSTANCE.createPreferenceNode();
     resource.getContents().add(root);
 
-    traverse(root, ROOT, isSynchronized);
+    traverse(root, childNodes == ALL_CHILD_NODES ? null : childNodes, ROOT, isSynchronized);
 
-    int index = 0;
-    for (String name : childNodes)
+    if (childNodes.size() > 1)
     {
-      PreferenceNode node = root.getNode(name);
-      if (node != null)
+      int index = 0;
+      for (String name : childNodes)
       {
-        root.getChildren().move(index++, node);
+        PreferenceNode node = root.getNode(name);
+        if (node != null)
+        {
+          root.getChildren().move(index++, node);
+        }
       }
     }
 
@@ -146,7 +149,7 @@ public final class PreferencesUtil
       {
         try
         {
-          traverse(secureRoot, SecurePreferenceWapper.create(securePreferences), false);
+          traverse(secureRoot, null, SecurePreferenceWapper.create(securePreferences), false);
         }
         catch (Throwable ex)
         {
@@ -308,7 +311,7 @@ public final class PreferencesUtil
     return null;
   }
 
-  private static void traverse(PreferenceNode preferenceNode, Preferences node, boolean isSynchronized)
+  private static void traverse(PreferenceNode preferenceNode, Set<String> childNodes, Preferences node, boolean isSynchronized)
   {
     try
     {
@@ -324,10 +327,13 @@ public final class PreferencesUtil
       Arrays.sort(childrenNames);
       for (String name : childrenNames)
       {
-        Preferences childNode = node.node(name);
-        PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
-        children.add(childPreferenceNode);
-        traverse(childPreferenceNode, childNode, isSynchronized);
+        if (childNodes == null || childNodes.contains(name))
+        {
+          Preferences childNode = node.node(name);
+          PreferenceNode childPreferenceNode = PreferencesFactory.eINSTANCE.createPreferenceNode();
+          children.add(childPreferenceNode);
+          traverse(childPreferenceNode, null, childNode, isSynchronized);
+        }
       }
 
       EList<Property> properties = preferenceNode.getProperties();
@@ -1159,7 +1165,7 @@ public final class PreferencesUtil
         }
 
         children.add(index, childPreferenceNode);
-        traverse(childPreferenceNode, childNode, true);
+        traverse(childPreferenceNode, null, childNode, true);
       }
     }
 
