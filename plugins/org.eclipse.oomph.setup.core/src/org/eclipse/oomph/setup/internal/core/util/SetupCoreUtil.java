@@ -70,6 +70,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -296,7 +297,14 @@ public final class SetupCoreUtil
 
     uriMap.put(SetupContext.INDEX_SETUP_URI.trimSegments(1), SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
 
-    for (Map.Entry<Object, Object> entry : System.getProperties().entrySet())
+    Properties properties = System.getProperties();
+    Map<Object, Object> safeProperties;
+    synchronized (properties)
+    {
+      safeProperties = new HashMap<Object, Object>(properties);
+    }
+
+    for (Map.Entry<Object, Object> entry : safeProperties.entrySet())
     {
       Object key = entry.getKey();
       if (key instanceof String)

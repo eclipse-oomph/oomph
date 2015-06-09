@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -98,9 +99,13 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       put(entry.getKey(), entry.getValue());
     }
 
-    for (Map.Entry<Object, Object> entry : System.getProperties().entrySet())
+    Properties properties = System.getProperties();
+    synchronized (properties)
     {
-      put(entry.getKey(), entry.getValue());
+      for (Map.Entry<Object, Object> entry : properties.entrySet())
+      {
+        put(entry.getKey(), entry.getValue());
+      }
     }
 
     // Do this late because \ is replaced by / when looking at this property.
