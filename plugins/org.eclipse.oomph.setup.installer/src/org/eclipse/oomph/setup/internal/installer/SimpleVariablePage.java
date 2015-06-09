@@ -28,6 +28,7 @@ import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
@@ -202,6 +203,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private Composite container;
 
+  private SimpleCheckbox createStartMenuEntryButton;
+
+  private SimpleCheckbox createDesktopShortcutButton;
+
   public SimpleVariablePage(final Composite parent, final SimpleInstallerDialog dialog)
   {
     super(parent, dialog, true);
@@ -215,10 +220,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
     container.setBackgroundMode(SWT.INHERIT_FORCE);
     container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
+    String powerShell = KeepInstallerUtil.getPowerShell();
+
     // Row 1
     GridData browserLayoutData = GridDataFactory.fillDefaults().indent(0, 13).grab(true, false).create();
     Point defaultSize = SimpleInstallerDialog.getDefaultSize(container);
-    browserLayoutData.heightHint = defaultSize.y * 34 / 100;
+    browserLayoutData.heightHint = defaultSize.y * (powerShell != null ? 20 : 34) / 100;
 
     Composite detailArea = new Composite(container, SWT.NONE);
     detailArea.setLayoutData(browserLayoutData);
@@ -474,14 +481,40 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
+    // Pin rows
+    if (powerShell != null)
+    {
+      {
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+      }
+      {
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+        createStartMenuEntryButton = createCheckbox(variablesComposite, "create start menu entry");
+        spacer(variablesComposite);
+      }
+      {
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+        spacer(variablesComposite);
+        createDesktopShortcutButton = createCheckbox(variablesComposite, "create desktop shortcut");
+        spacer(variablesComposite);
+      }
+    }
+
     spacer(variablesComposite);
     spacer(variablesComposite);
     spacer(variablesComposite);
 
     installButton = new SimpleInstallLaunchButton(variablesComposite);
     Point defaultInstallButtonSize = installButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-    installButton
-        .setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, defaultInstallButtonSize.y + 3).indent(0, 32).create());
+    installButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, defaultInstallButtonSize.y + 3).indent(0, 32)
+        .create());
     installButton.setCurrentState(SimpleInstallLaunchButton.State.INSTALL);
 
     spacer(variablesComposite);
@@ -747,10 +780,15 @@ public class SimpleVariablePage extends SimpleInstallerPage
     folderText.setEnabled(enabled);
     folderButton.setEnabled(enabled);
 
+    createStartMenuEntryButton.setEnabled(enabled);
+    createDesktopShortcutButton.setEnabled(enabled);
+
     boolean versionVisible = versionCombo.getItemCount() != 1;
     setVisible(versionLabel, versionVisible);
     setVisible(versionSpacer, versionVisible);
     setVisible(versionCombo.getParent(), versionVisible);
+    setVisible(bitness32Button, versionVisible);
+    setVisible(bitness64Button, versionVisible);
 
     if (JREManager.BITNESS_CHANGEABLE)
     {
@@ -1103,6 +1141,40 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       showReadmeButton.setVisible(readmePath != null);
 
+      if (createStartMenuEntryButton != null || createDesktopShortcutButton != null)
+      {
+        File executable = ProgressPage.getExecutable(performer);
+
+        ProductCatalog productCatalog = product.getProductCatalog();
+        String catalogName = "user.products".equals(productCatalog.getName()) ? "" : productCatalog.getLabel();
+        int firstDot = catalogName.indexOf('.');
+        if (firstDot != -1)
+        {
+          catalogName = catalogName.substring(0, firstDot);
+        }
+
+        String productName = product.getName();
+        if (productName.startsWith("epp.package."))
+        {
+          productName = productName.substring("epp.package.".length());
+        }
+        productName = productName.replace('.', ' ');
+
+        String qualifiedProductName = productName + " " + selectedProductVersion.getName().replace('.', ' ');
+
+        String shortCutName = StringUtil.capAll(StringUtil.isEmpty(catalogName) ? qualifiedProductName : catalogName + " " + qualifiedProductName);
+
+        if (createStartMenuEntryButton != null && createStartMenuEntryButton.isChecked())
+        {
+          KeepInstallerUtil.createShortCut("Programs", executable.getAbsolutePath(), shortCutName);
+        }
+
+        if (createDesktopShortcutButton != null && createDesktopShortcutButton.isChecked())
+        {
+          KeepInstallerUtil.createShortCut("Desktop", executable.getAbsolutePath(), shortCutName);
+        }
+      }
+
       showSuccessMessage();
 
       backButton.setEnabled(true);
@@ -1297,6 +1369,15 @@ public class SimpleVariablePage extends SimpleInstallerPage
     return performer != null && getLogFile().exists();
   }
 
+  private SimpleCheckbox createCheckbox(Composite parent, String text)
+  {
+    final SimpleCheckbox checkbox = new SimpleCheckbox(parent);
+    checkbox.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+    checkbox.setText(text);
+    checkbox.setChecked(true);
+    return checkbox;
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -1365,7 +1446,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

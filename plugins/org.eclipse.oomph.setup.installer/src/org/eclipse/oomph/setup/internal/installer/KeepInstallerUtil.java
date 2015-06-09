@@ -36,14 +36,22 @@ public final class KeepInstallerUtil
 
   public static void createShortCut(String specialFolder, String target)
   {
+    createShortCut(specialFolder, target, "Eclipse Installer");
+
+  }
+
+  public static void createShortCut(String specialFolder, String target, String shortcutName)
+  {
     try
     {
       String powerShell = KeepInstallerUtil.getPowerShell();
       if (powerShell != null)
       {
-        Runtime.getRuntime()
-            .exec(new String[] { powerShell, "-command",
-                "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) 'Eclipse Installer.lnk'; $targetPath = '" + target
+        Runtime.getRuntime().exec(
+            new String[] {
+                powerShell,
+                "-command",
+                "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + shortcutName + ".lnk'; $targetPath = '" + target
                     + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
       }
     }
@@ -60,8 +68,9 @@ public final class KeepInstallerUtil
       String powerShell = KeepInstallerUtil.getPowerShell();
       if (powerShell != null)
       {
-        Runtime.getRuntime().exec(new String[] { powerShell, "-command",
-            "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
+        Runtime.getRuntime().exec(
+            new String[] { powerShell, "-command",
+                "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
       }
     }
     catch (IOException ex)

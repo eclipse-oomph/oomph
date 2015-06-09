@@ -350,8 +350,8 @@ public class ProgressPage extends SetupWizardPage
     }
     else
     {
-      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks", false,
-          "restartIfNeeded");
+      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks",
+          false, "restartIfNeeded");
     }
 
     launchAutomatically = launchButton.getSelection();
@@ -844,7 +844,8 @@ public class ProgressPage extends SetupWizardPage
                     {
                       if (restart)
                       {
-                        setMessage("Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
+                        setMessage(
+                            "Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
                             IMessageProvider.WARNING);
                         setButtonState(IDialogConstants.CANCEL_ID, true);
 
@@ -859,8 +860,8 @@ public class ProgressPage extends SetupWizardPage
                           setButtonState(IDialogConstants.CANCEL_ID, false);
                         }
 
-                        shell.setData(PROGRESS_STATUS,
-                            new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(), "Task execution has successfully completed"));
+                        shell.setData(PROGRESS_STATUS, new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(),
+                            "Task execution has successfully completed"));
                       }
                     }
                     else
@@ -917,6 +918,17 @@ public class ProgressPage extends SetupWizardPage
       SetupUIPlugin.INSTANCE.log(ex);
       ErrorDialog.open(ex);
     }
+  }
+
+  public static File getExecutable(SetupTaskPerformer performer)
+  {
+    OS os = performer.getOS();
+    String relativeProductFolder = performer.getRelativeProductFolder();
+    String relativeExecutableFolder = os.getRelativeExecutableFolder();
+    String executableName = os.getExecutableName(performer.getLauncherName());
+    File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
+    File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
+    return new File(executableFolder, executableName);
   }
 
   public static boolean launchProduct(SetupTaskPerformer performer) throws Exception
