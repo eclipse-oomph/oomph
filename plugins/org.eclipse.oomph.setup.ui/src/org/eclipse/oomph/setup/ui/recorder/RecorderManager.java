@@ -114,7 +114,7 @@ public final class RecorderManager
 
   private void doSetRecorderEnabled(boolean enabled)
   {
-    SETUP_UI_PREFERENCES.setValue(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, enabled);
+    SETUP_UI_PREFERENCES.setValue(SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER, Boolean.toString(enabled));
 
     try
     {
