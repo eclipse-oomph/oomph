@@ -1166,12 +1166,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
         if (createStartMenuEntryButton != null && createStartMenuEntryButton.isChecked())
         {
-          KeepInstallerUtil.createShortCut("Programs", executable.getAbsolutePath(), shortCutName);
+          KeepInstallerUtil.createShortCut("Programs", "Eclipse", executable.getAbsolutePath(), shortCutName);
         }
 
         if (createDesktopShortcutButton != null && createDesktopShortcutButton.isChecked())
         {
-          KeepInstallerUtil.createShortCut("Desktop", executable.getAbsolutePath(), shortCutName);
+          KeepInstallerUtil.createShortCut("Desktop", null, executable.getAbsolutePath(), shortCutName);
         }
       }
 

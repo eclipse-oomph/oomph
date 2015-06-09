@@ -36,24 +36,42 @@ public final class KeepInstallerUtil
 
   public static void createShortCut(String specialFolder, String target)
   {
-    createShortCut(specialFolder, target, "Eclipse Installer");
-
+    createShortCut(specialFolder, null, target, "Eclipse Installer");
   }
 
-  public static void createShortCut(String specialFolder, String target, String shortcutName)
+  public static void createShortCut(String specialFolder, String groupName, String target, String shortcutName)
   {
     try
     {
       String powerShell = KeepInstallerUtil.getPowerShell();
       if (powerShell != null)
       {
-        Runtime.getRuntime().exec(
-            new String[] {
-                powerShell,
-                "-command",
-                "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + shortcutName + ".lnk'; $targetPath = '" + target
-                    + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
+        if (groupName != null)
+        {
+          Runtime.getRuntime().exec(
+              new String[] {
+                  powerShell,
+                  "-command",
+                  "& { " + "$folderPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + groupName + "';"
+                      + //
+                      "[system.io.directory]::CreateDirectory($folderPath); "
+                      + //
+                      "$linkPath = Join-Path $folderPath '" + shortcutName + ".lnk'; $targetPath = '" + target
+                      + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
+
+        }
+        else
+        {
+          Runtime.getRuntime().exec(
+              new String[] {
+                  powerShell,
+                  "-command",
+                  "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + shortcutName + ".lnk'; $targetPath = '" + target
+                      + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
+
+        }
       }
+      // [system.io.directory]::CreateDirectory("C:\test")
     }
     catch (IOException ex)
     {
