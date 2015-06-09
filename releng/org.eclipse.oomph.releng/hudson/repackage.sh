@@ -54,8 +54,10 @@ for f in *.zip; do
   sed -e 's/^Eclipse.*Installer$/Eclipse Installer/' "$inifile" > "$inifile.tmp"
   mv "$inifile.tmp" "$inifile"
 
-  echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/repository" >> "$inifile"
-  echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> "$inifile"
+  if [[ "$BUILD_TYPE" == "" || "$BUILD_TYPE" == none || "$BUILD_TYPE" == nightly ]]; then
+    echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/latest/repository" >> "$inifile"
+    echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> "$inifile"
+  fi
 
   if [[ $f == *macosx* ]]; then
     if [[ "$PACK_AND_SIGN" == true ]]; then

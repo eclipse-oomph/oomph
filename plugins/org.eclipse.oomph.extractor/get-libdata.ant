@@ -20,7 +20,7 @@
 			</fileset>
 		</delete>
 
-		<p2.director metadatarepository="http://download.eclipse.org/oomph/updates/latest" artifactrepository="http://download.eclipse.org/oomph/updates/latest" destination="${extractor.project}/Libdata/tmp" profile="tmp" roaming="true">
+		<p2.director metadatarepository="http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" artifactrepository="http://hudson.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates" destination="${extractor.project}/Libdata/tmp" profile="tmp" roaming="true">
 			<iu id="org.eclipse.oomph.extractor.lib" />
 		</p2.director>
 

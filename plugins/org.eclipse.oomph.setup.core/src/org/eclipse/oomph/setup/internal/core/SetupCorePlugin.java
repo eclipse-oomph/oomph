@@ -21,7 +21,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
  */
 public final class SetupCorePlugin extends OomphPlugin
 {
-  private static final String DEFAULT_UPDATE_URL = "http://download.eclipse.org/oomph/updates/latest";
+  private static final String DEFAULT_UPDATE_URL = "http://download.eclipse.org/oomph/updates/milestone/latest";
 
   public static final String UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_UPDATE_URL, DEFAULT_UPDATE_URL).replace('\\', '/');
 

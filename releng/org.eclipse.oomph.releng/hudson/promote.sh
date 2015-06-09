@@ -117,21 +117,36 @@ $BASH $SCRIPTS/adjustArtifactRepository.sh \
 cd $WORKSPACE
 rm -rf $PRODUCTS.tmp
 mkdir $PRODUCTS.tmp
+mkdir $PRODUCTS.tmp/latest
 
 cd $WORKSPACE/products
 for f in *.exe *.tar.gz; do
   echo "Promoting $f"
-  cp -a $f $PRODUCTS.tmp
+  cp -a $f $PRODUCTS.tmp/latest
+
+  if [[ "$BUILD_TYPE" != nightly ]]; then
+    cp -a $f $PRODUCTS.tmp
+  fi
 done
 
 cd $WORKSPACE
-cp -a $WORKSPACE/products/repository $PRODUCTS.tmp
+cp -a $WORKSPACE/products/repository $PRODUCTS.tmp/latest
 $BASH $SCRIPTS/adjustArtifactRepository.sh \
-  $PRODUCTS.tmp/repository \
-  $PRODUCTS/repository \
-  "Oomph Product Updates" \
+  $PRODUCTS.tmp/latest/repository \
+  $PRODUCTS/latest/repository \
+  "Oomph Product Updates Latest" \
   $BUILD_TYPE
 
+if [[ "$BUILD_TYPE" != nightly ]]; then
+  cp -a $WORKSPACE/products/repository $PRODUCTS.tmp
+  $BASH $SCRIPTS/adjustArtifactRepository.sh \
+    $PRODUCTS.tmp/repository \
+    $PRODUCTS/repository \
+    "Oomph Product Updates" \
+    $BUILD_TYPE
+elif
+  cp -a $PRODUCTS/*.exe $PRODUCTS/*.tar.gz $PRODUCTS/repository $PRODUCTS.tmp
+fi
 
 ##################
 # DOWNLOADS/HELP #
@@ -172,18 +187,17 @@ $BASH $SCRIPTS/composeRepositories.sh \
   "$BUILD_KEY" \
   "$BUILD_LABEL"
 
+mkdir -p $UPDATES.tmp/$BUILD_TYPE/latest
+cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/$BUILD_TYPE/latest
+
 mkdir -p $UPDATES.tmp/latest
 cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/latest
 
-mv $UPDATES $UPDATES.bak; mv $UPDATES.tmp $UPDATES
-mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS.tmp $PRODUCTS
-mv $HELP $HELP.bak; mv $HELP.tmp $HELP
+mv $UPDATES.tmp $UPDATES
+mv $PRODUCTS.tmp $PRODUCTS
+mv $HELP.tmp $HELP
 
 cd $WORKSPACE
-rm -rf $UPDATES.bak
-rm -rf $PRODUCTS.bak
-rm -rf $HELP.bak
-
 for t in nightly milestone; do
   for f in $DROPS/$t/*; do
     if [[ -f $f/REMOVE ]]; then
