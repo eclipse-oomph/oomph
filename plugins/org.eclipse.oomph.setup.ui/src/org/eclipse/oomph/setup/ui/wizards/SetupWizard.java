@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+ * Copyright (c) 2014, 2015 Eike Stepper (Berlin, Germany) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -627,8 +627,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     public abstract void loadIndex(ResourceSet resourceSet, URI... uris);
 
-    protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor) throws InvocationTargetException,
-        InterruptedException
+    protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor)
+        throws InvocationTargetException, InterruptedException
     {
       loading = true;
 
