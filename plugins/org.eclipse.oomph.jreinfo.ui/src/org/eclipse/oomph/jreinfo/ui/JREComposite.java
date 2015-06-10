@@ -96,7 +96,7 @@ public class JREComposite extends Composite
 
   private TreeViewer treeViewer;
 
-  private Button searchButton;
+  private Button browseButton;
 
   private Button downloadButton;
 
@@ -203,15 +203,15 @@ public class JREComposite extends Composite
     buttonComposite.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     buttonComposite.setLayout(UIUtil.createGridLayout(1));
 
-    searchButton = new Button(buttonComposite, SWT.NONE);
-    searchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    searchButton.setText("&Search...");
-    searchButton.addSelectionListener(new SelectionAdapter()
+    browseButton = new Button(buttonComposite, SWT.NONE);
+    browseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    browseButton.setText("&Browse...");
+    browseButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        searchPressed();
+        browsePressed();
       }
     });
 
@@ -326,7 +326,7 @@ public class JREComposite extends Composite
   {
   }
 
-  protected void searchPressed()
+  protected void browsePressed()
   {
     File rootFolder = null;
 
@@ -346,7 +346,7 @@ public class JREComposite extends Composite
 
     DirectoryDialog dialog = new DirectoryDialog(getShell());
     dialog.setText(JREDialog.TITLE);
-    dialog.setMessage("Select root folder...");
+    dialog.setMessage("Pick a root folder that will be recursively searched for Java virtual machines...");
     dialog.setFilterPath(filterPath);
 
     final String dir = dialog.open();
