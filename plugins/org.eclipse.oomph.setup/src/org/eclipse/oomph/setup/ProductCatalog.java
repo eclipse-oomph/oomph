@@ -72,7 +72,7 @@ public interface ProductCatalog extends Scope
    * @return the value of the '<em>Products</em>' containment reference list.
    * @see org.eclipse.oomph.setup.SetupPackage#getProductCatalog_Products()
    * @see org.eclipse.oomph.setup.Product#getProductCatalog
-   * @model opposite="productCatalog" containment="true" resolveProxies="true" keys="name" required="true"
+   * @model opposite="productCatalog" containment="true" resolveProxies="true" keys="name"
    *        extendedMetaData="name='product'"
    * @generated
    */

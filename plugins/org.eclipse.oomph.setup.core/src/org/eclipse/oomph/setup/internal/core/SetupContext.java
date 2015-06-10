@@ -68,14 +68,19 @@ public class SetupContext
 
   public static final String USER_SCHEME = "user";
 
+  public static boolean isUserScheme(String scheme)
+  {
+    return USER_SCHEME.equals(scheme) || "user-ext".equals(scheme);
+  }
+
   /**
    * Resolves a '{@link #USER_SCHEME user}' scheme URI to a 'file' scheme URI.
    */
   public static URI resolveUser(URI uri)
   {
-    if (USER_SCHEME.equals(uri.scheme()))
+    if (isUserScheme(uri.scheme()))
     {
-      return SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments());
+      return SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments()).appendFragment(uri.fragment());
     }
 
     return uri;

@@ -53,7 +53,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public boolean canHandle(URI uri)
   {
-    return SetupContext.USER_SCHEME.equals(uri.scheme());
+    return SetupContext.isUserScheme(uri.scheme());
   }
 
   @Override

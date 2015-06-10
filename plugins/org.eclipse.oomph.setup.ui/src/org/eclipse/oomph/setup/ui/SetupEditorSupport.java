@@ -313,17 +313,9 @@ public final class SetupEditorSupport
     return editorInput;
   }
 
-  private static IEditorInput getEditorInput(final URI normalizedURI)
+  private static IEditorInput getEditorInput(URI normalizedURI)
   {
-    if ("user".equals(normalizedURI.scheme()))
-    {
-      URI uri = normalizedURI.replacePrefix(SetupContext.GLOBAL_SETUPS_URI, SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("")).trimQuery();
-      FileEditorInput editorInput = getFileEditorInput(uri);
-      if (editorInput != null)
-      {
-        return editorInput;
-      }
-    }
+    normalizedURI = SetupContext.resolveUser(normalizedURI);
 
     if (normalizedURI.isFile())
     {

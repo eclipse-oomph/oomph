@@ -1137,10 +1137,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                     uri = resourceSet.getURIConverter().normalize(uri);
                   }
 
-                  if ("user".equals(uri.scheme()))
-                  {
-                    uri = uri.replacePrefix(SetupContext.GLOBAL_SETUPS_URI, SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("")).trimQuery();
-                  }
+                  uri = SetupContext.resolveUser(uri);
 
                   return uri;
                 }
@@ -1188,24 +1185,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           @Override
           protected void gather(EditingDomain domain, URI uri)
           {
-            if (SetupContext.USER_SCHEME.equals(uri.scheme()))
-            {
-              uri = SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments());
-            }
-
-            super.gather(domain, uri);
+            super.gather(domain, SetupContext.resolveUser(uri));
           }
         }, new OomphTransferDelegate.URLTransferDelegate()
         {
           @Override
           protected void gather(EditingDomain domain, URI uri)
           {
-            if (SetupContext.USER_SCHEME.equals(uri.scheme()))
-            {
-              uri = SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments());
-            }
-
-            super.gather(domain, uri);
+            super.gather(domain, SetupContext.resolveUser(uri));
           }
         });
     editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, delegates);
@@ -1595,8 +1582,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     boolean hasErrors = !resource.getErrors().isEmpty();
     if (hasErrors || !resource.getWarnings().isEmpty())
     {
-      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.setup.editor", 0,
-          getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
+      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.setup.editor", 0, getString(
+          "_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
       basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
       return basicDiagnostic;
     }
@@ -1644,8 +1631,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
-    selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer),
-        new DiagnosticDecorator(editingDomain, selectionViewer, dialogSettings))
+    selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer), new DiagnosticDecorator(
+        editingDomain, selectionViewer, dialogSettings))
     {
       @Override
       public String getText(Object element)
@@ -2981,8 +2968,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   public void setStatusLineManager(ISelection selection)
   {
-    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager
-        : getActionBars().getStatusLineManager();
+    IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager : getActionBars()
+        .getStatusLineManager();
 
     if (statusLineManager != null)
     {

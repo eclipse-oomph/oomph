@@ -900,7 +900,7 @@ public class ProductPage extends SetupWizardPage
     {
       ProductCatalog productCatalog = (ProductCatalog)scope;
       Resource resource = productCatalog.eResource();
-      return resource != null && "user".equals(resource.getURI().scheme());
+      return resource != null && SetupContext.isUserScheme(resource.getURI().scheme());
     }
 
     return false;
@@ -1410,7 +1410,7 @@ public class ProductPage extends SetupWizardPage
         {
           final ProductCatalog targetProductCatalog = (ProductCatalog)owner;
           Resource directResource = ((InternalEObject)targetProductCatalog).eDirectResource();
-          if (directResource != null && "user".equals(directResource.getURI().scheme()))
+          if (directResource != null && SetupContext.isUserScheme(directResource.getURI().scheme()))
           {
             final ResourceSet resourceSet = domain.getResourceSet();
             return new DragAndDropCommand(domain, resourceSet, location, operations, operation, collection)

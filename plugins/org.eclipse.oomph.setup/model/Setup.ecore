@@ -124,8 +124,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="ProductCatalog" eSuperTypes="#//Scope">
     <eStructuralFeatures xsi:type="ecore:EReference" name="index" eType="#//Index"
         transient="true" eOpposite="#//Index/productCatalogs"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="products" lowerBound="1"
-        upperBound="-1" eType="#//Product" containment="true" eOpposite="#//Product/productCatalog"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="products" upperBound="-1"
+        eType="#//Product" containment="true" eOpposite="#//Product/productCatalog"
         eKeys="#//Scope/name">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="product"/>

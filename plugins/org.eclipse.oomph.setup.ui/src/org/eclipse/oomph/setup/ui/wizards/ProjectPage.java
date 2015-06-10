@@ -603,7 +603,7 @@ public class ProjectPage extends SetupWizardPage
         if (parentProject != null)
         {
           Resource resource = parentProject.eResource();
-          if (resource != null && SetupContext.USER_SCHEME.equals(resource.getURI().scheme()))
+          if (resource != null && SetupContext.isUserScheme(resource.getURI().scheme()))
           {
             userProjects.add(project);
           }
@@ -1220,7 +1220,7 @@ public class ProjectPage extends SetupWizardPage
         {
           final Project targetProject = (Project)getTarget();
           Resource directResource = ((InternalEObject)targetProject).eDirectResource();
-          if (directResource != null && "user".equals(directResource.getURI().scheme()))
+          if (directResource != null && SetupContext.isUserScheme(directResource.getURI().scheme()))
           {
             final ResourceSet resourceSet = domain.getResourceSet();
             return new DragAndDropCommand(domain, resourceSet, location, operations, operation, collection)
