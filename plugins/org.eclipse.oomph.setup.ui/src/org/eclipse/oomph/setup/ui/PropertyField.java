@@ -266,7 +266,7 @@ public abstract class PropertyField
         String controlValue = getControlValue();
         if (!controlValue.equals(value))
         {
-          transferValueToControl(value);
+          transferValueToControl(value, false);
         }
       }
 
@@ -331,7 +331,7 @@ public abstract class PropertyField
 
     helper.setLayoutData(helperGridData);
     setEnabled(enabled);
-    transferValueToControl(value);
+    transferValueToControl(value, true);
   }
 
   public final Label getLabel()
@@ -414,7 +414,7 @@ public abstract class PropertyField
 
   protected abstract String getControlValue();
 
-  protected abstract void transferValueToControl(String value);
+  protected abstract void transferValueToControl(String value, boolean force);
 
   protected abstract Control createControl(Composite parent);
 
@@ -526,7 +526,7 @@ public abstract class PropertyField
     }
 
     @Override
-    protected void transferValueToControl(String value)
+    protected void transferValueToControl(String value, boolean force)
     {
       if (button != null)
       {
@@ -773,12 +773,12 @@ public abstract class PropertyField
     }
 
     @Override
-    protected void transferValueToControl(String value)
+    protected void transferValueToControl(String value, boolean force)
     {
       if (text != null)
       {
         String actualValue = secret ? PreferencesUtil.decrypt(value) : value;
-        if (text.isFocusControl())
+        if (!force && text.isFocusControl())
         {
           // If the controls has focus, the user is still actively changing it
           // so we don't want to replace the empty string with the default value until the control loses focus.
@@ -1182,7 +1182,7 @@ public abstract class PropertyField
       String dir = dialog.open();
       if (dir != null)
       {
-        transferValueToControl(dir);
+        transferValueToControl(dir, true);
       }
     }
   }
@@ -1244,7 +1244,7 @@ public abstract class PropertyField
       String dir = dialog.open();
       if (dir != null)
       {
-        transferValueToControl(dir);
+        transferValueToControl(dir, true);
       }
     }
   }
@@ -1307,7 +1307,7 @@ public abstract class PropertyField
       IContainer[] folders = WorkspaceResourceDialog.openFolderSelection(shell, getDialogText(), getDialogMessage(), false, initialSelection, null);
       if (folders.length > 0)
       {
-        transferValueToControl(folders[0].getFullPath().toString());
+        transferValueToControl(folders[0].getFullPath().toString(), true);
       }
     }
 
@@ -1395,7 +1395,7 @@ public abstract class PropertyField
         {
           if (jre != null && (jreFilter == null || jre.isMatch(jreFilter)))
           {
-            transferValueToControl(jre.toString());
+            transferValueToControl(jre.toString(), true);
           }
         }
 
