@@ -283,7 +283,7 @@
           <repository
               url="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/I-latest/repository"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
         <repositoryList
             name="Luna">
