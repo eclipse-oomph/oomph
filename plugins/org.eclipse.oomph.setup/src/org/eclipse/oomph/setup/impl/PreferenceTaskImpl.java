@@ -316,8 +316,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       public void run(SetupTaskContext context) throws Exception
       {
         preferenceProperty.set(value);
-        preferenceProperty.getNode().flush();
       }
     });
+
+    preferenceProperty.getNode().flush();
   }
 } // PreferenceTaskImpl
