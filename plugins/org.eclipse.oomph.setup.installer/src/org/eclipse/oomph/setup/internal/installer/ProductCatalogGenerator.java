@@ -418,16 +418,16 @@ public class ProductCatalogGenerator implements IApplication
         Version latestVersion = latestTrainAndVersion.getVersion();
         Map<String, Set<IInstallableUnit>> latestTrainsIUs = latestTrainAndVersion.getIUs();
 
-        if (latestTrain != LATEST_TRAIN)
-        {
-          label += " (discontinued after " + latestTrainLabel + ")";
-        }
+        // if (latestTrain != LATEST_TRAIN)
+        // {
+        // label += " (discontinued after " + latestTrainLabel + ")";
+        // }
 
         boolean latestUnreleased = latestTrain == LATEST_TRAIN && !LATEST_RELEASED;
-        if (latestUnreleased && size == 1)
-        {
-          label += " (unreleased before " + latestTrainLabel + ")";
-        }
+        // if (latestUnreleased && size == 1)
+        // {
+        // label += " (unreleased before " + latestTrainLabel + ")";
+        // }
 
         System.out.println(label + " (" + id + ")");
 
