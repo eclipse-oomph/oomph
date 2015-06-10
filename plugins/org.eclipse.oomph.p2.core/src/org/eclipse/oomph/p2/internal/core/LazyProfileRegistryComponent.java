@@ -21,6 +21,7 @@ import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.osgi.storage.StorageUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Instantiates default instances of {@link IProfileRegistry}.
@@ -32,9 +33,46 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
   {
     IAgentLocation location = (IAgentLocation)agent.getService(IAgentLocation.SERVICE_NAME);
     File directory = LazyProfileRegistry.getDefaultRegistryDirectory(location);
-    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty("oomph.p2.lazy.profile.registry")) && StorageUtil.canWrite(directory);
+    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty("oomph.p2.lazy.profile.registry")) && OsgiHelper.canWrite(directory);
     SimpleProfileRegistry registry = isLazySupported ? new LazyProfileRegistry(agent, directory) : new SimpleProfileRegistry(agent, directory);
     registry.setEventBus((IProvisioningEventBus)agent.getService(IProvisioningEventBus.SERVICE_NAME));
     return registry;
+  }
+
+  private static class OsgiHelper
+  {
+    public static boolean canWrite(File installDir)
+    {
+      try
+      {
+        return StorageUtil.canWrite(installDir);
+      }
+      catch (NoClassDefFoundError ex)
+      {
+        if (!installDir.canWrite() || !installDir.isDirectory())
+        {
+          return false;
+        }
+
+        File fileTest = null;
+        try
+        {
+          fileTest = File.createTempFile("test", ".dll", installDir);
+        }
+        catch (IOException e)
+        {
+          return false;
+        }
+        finally
+        {
+          if (fileTest != null)
+          {
+            fileTest.delete();
+          }
+        }
+
+        return true;
+      }
+    }
   }
 }
