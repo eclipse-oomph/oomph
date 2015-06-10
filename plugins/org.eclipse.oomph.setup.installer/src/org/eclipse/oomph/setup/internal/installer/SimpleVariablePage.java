@@ -805,19 +805,22 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private void setVisible(Control control, boolean visible)
   {
-    control.setVisible(visible);
-
-    Object layoutData = control.getLayoutData();
-    if (layoutData == null)
+    if (control != null)
     {
-      layoutData = new GridData();
-      control.setLayoutData(layoutData);
-    }
+      control.setVisible(visible);
 
-    if (layoutData instanceof GridData)
-    {
-      GridData gridData = (GridData)layoutData;
-      gridData.exclude = !visible;
+      Object layoutData = control.getLayoutData();
+      if (layoutData == null)
+      {
+        layoutData = new GridData();
+        control.setLayoutData(layoutData);
+      }
+
+      if (layoutData instanceof GridData)
+      {
+        GridData gridData = (GridData)layoutData;
+        gridData.exclude = !visible;
+      }
     }
   }
 
