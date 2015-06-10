@@ -156,15 +156,15 @@ public final class RecorderManager
           public void run()
           {
             RecorderPoliciesDialog reviewDialog = new RecorderPoliciesDialog(shell, transaction, values);
-            if (reviewDialog.open() != RecorderPoliciesDialog.OK)
-            {
-              exitEarly[0] = true;
-              return;
-            }
+            int result = reviewDialog.open();
 
             if (!reviewDialog.isEnablePreferenceRecorder())
             {
               setRecorderEnabled(false);
+              exitEarly[0] = true;
+            }
+            else if (result != RecorderPoliciesDialog.OK)
+            {
               exitEarly[0] = true;
             }
           }

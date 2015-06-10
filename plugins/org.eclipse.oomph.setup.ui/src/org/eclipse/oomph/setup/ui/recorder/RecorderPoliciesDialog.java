@@ -78,7 +78,7 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Define whether to record preference tasks for the listed preferences from now on.";
+    return "Select which preferences to record for reuse across all workspaces.  Press 'F1' for details.";
   }
 
   @Override

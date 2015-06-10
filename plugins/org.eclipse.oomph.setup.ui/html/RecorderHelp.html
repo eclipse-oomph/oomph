@@ -1,1 +1,69 @@
-This is the awesome recorder help.
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Preference Recording</title>
+
+<link rel="stylesheet" href="book.css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Preference Recording)";
+    }
+}
+</script>
+</head>
+<body bgcolor="white" onload="windowTitle();">
+<h1>Preference Recorder Dialog</h1>
+<p>
+The preference recorder detects all preferences that were changed while the Preferences dialog was open.
+It provides the ability to selectively record each changed preference.
+A recorded preference has global impact, i.e., it applies to all workspaces, not just the current workspace.
+All recorded preferences are automatically applied on startup.
+They can be manually applied via <span class="selectstep">Help &rarr; Perform Setup Tasks&hellip;</span> to an already-running IDE.
+</p>
+<h2>Preference Selection and Policies</h2>
+<p>
+Preference selection determines not only what's recorded, but also how future changes to that preference are handled:
+</p>
+<ul>
+<li>
+Each checked preference will be recorded. In the future, any change to that preference will simply be recorded without prompting.
+</li>
+<li>
+Each unchecked preference will not be recorded. In the future, any change to that preference will simply be ignored without prompting.
+</li>
+</ul>
+<p>
+In other words, not only are preferences selectively recorded, but also preference handling policies are maintained.
+As such, this dialog will appear less often as you train it to either record or ignore each specific preference.
+Use <span class="selectstep">Window &rarr; Oomph &rarr; Setup &rarr; Preference Recorder</span> to view or modify these policies.
+</p>
+<p>
+Recorded preferences, as well as the associated policies, are maintained in in your <em>user setup</em>,
+which you can view or modify using <span class="selectstep">Navigate &rarr; Open Setup &rarr; Open User</span>.
+</p>
+<h2>How to Proceed</h2>
+<p>
+The preference recorder dialog prompts you to take the following actions:
+</p>
+<ul>
+<li>
+Press Cancel to record nothing and to leave the policies unchanged.  In this case, the preference selections have no impact.
+</li>
+<li>
+Select the preferences you always want recorded and deselect the preferences you don't ever want recorded.
+</li>
+<li>
+Press OK, to selectively record the preferences and to update the policies.
+</li>
+<li>
+Uncheck the "Recorder enabled" button to disable preference recording and to avoid seeing this dialog the next time.
+Note that you can also enable or disable the preference recorder via the tool bar button in the Preferences dialog itself.
+</li>
+<ul>
+</body>
+</html>
