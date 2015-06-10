@@ -1505,7 +1505,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     resourceMirror.perform(resourceURI);
 
-    final Resource mainResource = editingDomain.getResourceSet().getResource(resourceURI, false);
+    final Resource mainResource = resourceSet.getResource(resourceURI, false);
     EList<EObject> contents = mainResource.getContents();
     EObject rootObject = null;
     if (!contents.isEmpty())
@@ -1515,6 +1515,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
       }
+    }
+
+    try
+    {
+      EcoreUtil.resolveAll(resourceSet);
+    }
+    catch (RuntimeException ex)
+    {
+      // Ignore.
     }
 
     for (Resource resource : resourceSet.getResources())
