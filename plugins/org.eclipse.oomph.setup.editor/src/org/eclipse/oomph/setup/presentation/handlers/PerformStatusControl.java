@@ -45,8 +45,6 @@ import java.lang.reflect.Method;
  */
 public class PerformStatusControl extends WorkbenchWindowControlContribution
 {
-  private IStatus status;
-
   public PerformStatusControl()
   {
   }
@@ -74,7 +72,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
           boolean visible = !shell.isVisible();
           shell.setVisible(visible);
 
-          if (status != null)
+          if (SetupPropertyTester.getPerformingStatus() != null)
           {
             resetPerforming();
           }
@@ -134,10 +132,13 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
             toolItem.setSelection(visible);
           }
 
+          IStatus status = SetupPropertyTester.getPerformingStatus();
           if (status == null)
           {
             // If there is a status, reflect the feedback into the images.
             status = (IStatus)shell.getData(ProgressPage.PROGRESS_STATUS);
+            SetupPropertyTester.setPerformingStatus(status);
+
             if (status != null)
             {
               String statusImage;
@@ -219,7 +220,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
       protected boolean doAnimate()
       {
         // Keep animating once there is a status.
-        if (status != null)
+        if (SetupPropertyTester.getPerformingStatus() != null)
         {
           Shell shell = getShell();
           if (shell.isVisible())

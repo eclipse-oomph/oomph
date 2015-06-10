@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui;
 import org.eclipse.oomph.internal.ui.UIPropertyTester;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -34,9 +35,11 @@ public class SetupPropertyTester extends PropertyTester
 
   private static boolean starting;
 
-  private static Shell handlingShell;
+  private static IStatus performingStatus;
 
   private static Shell performingShell;
+
+  private static Shell handlingShell;
 
   static
   {
@@ -148,6 +151,16 @@ public class SetupPropertyTester extends PropertyTester
   public static Shell getPerformingShell()
   {
     return performingShell;
+  }
+
+  public static IStatus getPerformingStatus()
+  {
+    return performingStatus;
+  }
+
+  public static void setPerformingStatus(IStatus performingStatus)
+  {
+    SetupPropertyTester.performingStatus = performingStatus;
   }
 
   public static void setPerformingShell(Shell shell)

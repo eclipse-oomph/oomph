@@ -46,6 +46,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -53,20 +54,31 @@ import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.wizards.IWizardDescriptor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -398,9 +410,13 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     for (IWizardPage page : getPages())
     {
-      if (!((SetupWizardPage)page).performCancel())
+      if (page instanceof SetupWizardPage)
       {
-        return false;
+        SetupWizardPage setupWizardPage = (SetupWizardPage)page;
+        if (!setupWizardPage.performCancel())
+        {
+          return false;
+        }
       }
     }
 
@@ -599,7 +615,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     super.dispose();
 
-    adapterFactory.dispose();
+    if (adapterFactory != null)
+    {
+      adapterFactory.dispose();
+      adapterFactory = null;
+    }
   }
 
   /**
@@ -1025,6 +1045,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
    */
   public static class Importer extends SetupWizard implements IImportWizard
   {
+    public static final String WIZARD_ID = "org.eclipse.oomph.setup.ui.ImportWizard";
+
     public Importer()
     {
       setTrigger(Trigger.MANUAL);
@@ -1045,6 +1067,14 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     @Override
     public void addPages()
     {
+      Shell performingShell = SetupPropertyTester.getPerformingShell();
+      if (performingShell != null)
+      {
+        String title = getWindowTitle();
+        addPage(new ExistingProcessPage(title));
+        return;
+      }
+
       addPage(new ProjectPage());
       super.addPages();
 
@@ -1063,6 +1093,106 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       super.indexLoaded(index);
       getCatalogManager().indexLoaded(index);
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    private static final class ExistingProcessPage extends WizardPage
+    {
+      public ExistingProcessPage(String title)
+      {
+        super("ExistingProcess");
+        setTitle(title);
+        setErrorMessage("The " + title + " cannot be opened because another setup process is already active.");
+      }
+
+      public void createControl(Composite parent)
+      {
+        Composite container = new Composite(parent, SWT.NULL);
+        container.setLayout(new GridLayout());
+        setControl(container);
+
+        GridData explanationGridData = new GridData(SWT.CENTER, SWT.BOTTOM, true, true);
+        explanationGridData.widthHint = 320;
+
+        Label explanation = new Label(container, SWT.WRAP);
+        explanation.setLayoutData(explanationGridData);
+        explanation.setText("Another setup process is already active. If the dialog of that other process is minimized you can see it in the status bar:");
+
+        Label image = new Label(container, SWT.BORDER);
+        image.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+        image.setImage(SetupUIPlugin.INSTANCE.getSWTImage("existing_process.png"));
+
+        new Label(container, SWT.NONE);
+        new Label(container, SWT.NONE);
+
+        Label suggestion = new Label(container, SWT.WRAP);
+        suggestion.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false));
+        suggestion.setText("Complete that other process before importing projects.");
+
+        Button button = new Button(container, SWT.NONE);
+        button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+        button.setText("Open Existing Setup Process");
+        button.addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            String title = getTitle();
+            String message = "Meanwhile the other setup process has finished.";
+
+            Shell currentShell = getShell();
+            Shell parentShell = (Shell)currentShell.getParent();
+            currentShell.dispose();
+
+            Shell performingShell = SetupPropertyTester.getPerformingShell();
+            if (performingShell == null)
+            {
+              IWizardDescriptor descriptor = PlatformUI.getWorkbench().getImportWizardRegistry().findWizard(WIZARD_ID);
+              if (descriptor == null)
+              {
+                MessageDialog.openInformation(parentShell, title, message);
+              }
+              else
+              {
+                if (MessageDialog.openQuestion(parentShell, title, message + "\nDo you want to open the " + title + " again?"))
+                {
+                  try
+                  {
+                    IWizard wizard = descriptor.createWizard();
+                    WizardDialog wizardDialog = new WizardDialog(parentShell, wizard);
+                    wizardDialog.setTitle(title);
+                    wizardDialog.open();
+                  }
+                  catch (CoreException ex)
+                  {
+                    SetupUIPlugin.INSTANCE.log(ex);
+                  }
+                }
+              }
+            }
+            else
+            {
+              boolean visible = !performingShell.isVisible();
+              performingShell.setVisible(visible);
+
+              if (SetupPropertyTester.getPerformingStatus() != null)
+              {
+                SetupPropertyTester.setPerformingShell(null);
+              }
+
+              if (visible)
+              {
+                performingShell.setFocus();
+              }
+            }
+          }
+        });
+
+        new Label(container, SWT.NONE).setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, true));
+        setPageComplete(false);
+      }
     }
   }
 
