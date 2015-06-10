@@ -561,6 +561,26 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     exitSelected();
   }
 
+  @Override
+  protected void exitSelected()
+  {
+    for (SimpleInstallerPage page : pageStack)
+    {
+      if (page instanceof SimpleVariablePage)
+      {
+        SimpleVariablePage variablePage = (SimpleVariablePage)page;
+        if (!variablePage.promptLaunchProduct())
+        {
+          return;
+        }
+
+        break;
+      }
+    }
+
+    super.exitSelected();
+  }
+
   public void backSelected()
   {
     if (pageStack.size() <= 1)
@@ -650,7 +670,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     // Ensure that no Browser widget has the focus. See bug 466902.
     menuButton.setFocus();
-
     super.dispose();
   }
 
@@ -669,10 +688,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       {
         defaultFont = UIUtil.getDisplay().getSystemFont();
       }
-
-      // int relativeHeight = 10;
-      // String height = relativeHeight == 0 ? "" : relativeHeight > 0 ? "+" + relativeHeight : Integer.toString(relativeHeight);
-      // defaultFont = SetupInstallerPlugin.getFont(getDefaultFont(), org.eclipse.emf.common.util.URI.createURI("font:///" + height + "/"));
     }
 
     return defaultFont;

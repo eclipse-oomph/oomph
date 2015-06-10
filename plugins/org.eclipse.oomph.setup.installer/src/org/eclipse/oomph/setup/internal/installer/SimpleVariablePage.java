@@ -71,6 +71,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.metadata.ILicense;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -513,8 +514,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     installButton = new SimpleInstallLaunchButton(variablesComposite);
     Point defaultInstallButtonSize = installButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-    installButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, defaultInstallButtonSize.y + 3).indent(0, 32)
-        .create());
+    installButton
+        .setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).hint(SWT.DEFAULT, defaultInstallButtonSize.y + 3).indent(0, 32).create());
     installButton.setCurrentState(SimpleInstallLaunchButton.State.INSTALL);
 
     spacer(variablesComposite);
@@ -625,16 +626,40 @@ public class SimpleVariablePage extends SimpleInstallerPage
   @Override
   protected void backSelected()
   {
-    if (installButton.getCurrentState() == State.LAUNCH)
+    if (promptLaunchProduct())
     {
-      if (MessageDialog.openQuestion(dialog, "Launch product",
-          "If you go back, you lose the ability to launch this product from the installer.\nDo you want to launch it now?"))
+      super.backSelected();
+    }
+  }
+
+  public boolean promptLaunchProduct()
+  {
+    if (installButton != null && installButton.getCurrentState() == State.LAUNCH)
+    {
+      MessageDialog warningDialog = new MessageDialog(dialog, "Unlaunched Product Warning", null,
+          "You're about to lose the ability to launch the installed product from the installer.\n\nDo you want to launch it now?", MessageDialog.WARNING,
+          new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
+
+      int result = warningDialog.open();
+      if (result == 0)
       {
+        // Yes: Do launch; then continue.
         launchProduct(false);
+        return true;
       }
+
+      if (result == 1)
+      {
+        // No: Do not launch; but continue.
+        return true;
+      }
+
+      // Cancel: Do not launch; and do not continue.
+      return false;
     }
 
-    super.backSelected();
+    // Nothing to launch; just continue.
+    return true;
   }
 
   private FlatButton createButton(Composite parent, String text, String toolTip, Image icon)
@@ -1453,7 +1478,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 
