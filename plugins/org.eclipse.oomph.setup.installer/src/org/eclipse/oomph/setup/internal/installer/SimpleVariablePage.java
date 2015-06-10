@@ -780,8 +780,15 @@ public class SimpleVariablePage extends SimpleInstallerPage
     folderText.setEnabled(enabled);
     folderButton.setEnabled(enabled);
 
-    createStartMenuEntryButton.setEnabled(enabled);
-    createDesktopShortcutButton.setEnabled(enabled);
+    if (createStartMenuEntryButton != null)
+    {
+      createStartMenuEntryButton.setEnabled(enabled);
+    }
+
+    if (createDesktopShortcutButton != null)
+    {
+      createDesktopShortcutButton.setEnabled(enabled);
+    }
 
     boolean versionVisible = versionCombo.getItemCount() != 1;
     setVisible(versionLabel, versionVisible);
