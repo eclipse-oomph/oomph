@@ -54,7 +54,7 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
 
   public RecorderPoliciesDialog(Shell parentShell, RecorderTransaction transaction, Map<URI, String> preferences)
   {
-    super(parentShell, "Preference Recorder", 600, 400, SetupUIPlugin.INSTANCE, false);
+    super(parentShell, "Preference Recorder", 600, 400, SetupUIPlugin.INSTANCE, true);
     this.transaction = transaction;
     this.preferences = preferences;
   }
@@ -79,6 +79,12 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
   protected String getDefaultMessage()
   {
     return "Define whether to record preference tasks for the listed preferences from now on.";
+  }
+
+  @Override
+  public String getHelpPath()
+  {
+    return SetupUIPlugin.INSTANCE.getSymbolicName() + "/html/RecorderHelp.html";
   }
 
   @Override

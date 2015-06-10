@@ -892,6 +892,11 @@ public abstract class OomphPlugin extends EMFPlugin
       public Root(Bundle bundle)
       {
         super("", true, null);
+        if (bundle == null)
+        {
+          throw new IllegalArgumentException("Bundle is null");
+        }
+
         this.bundle = bundle;
       }
 
