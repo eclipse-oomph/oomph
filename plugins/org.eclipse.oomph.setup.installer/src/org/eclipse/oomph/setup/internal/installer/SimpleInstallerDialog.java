@@ -569,7 +569,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       if (page instanceof SimpleVariablePage)
       {
         SimpleVariablePage variablePage = (SimpleVariablePage)page;
-        if (!variablePage.promptLaunchProduct())
+        if (!variablePage.promptLaunchProduct("You're about to exit the installer"))
         {
           return;
         }

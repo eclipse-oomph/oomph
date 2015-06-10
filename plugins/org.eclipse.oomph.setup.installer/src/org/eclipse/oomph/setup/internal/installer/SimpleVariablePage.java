@@ -626,21 +626,21 @@ public class SimpleVariablePage extends SimpleInstallerPage
   @Override
   protected void backSelected()
   {
-    if (promptLaunchProduct())
+    if (promptLaunchProduct("You're about to install another product"))
     {
       super.backSelected();
     }
   }
 
-  public boolean promptLaunchProduct()
+  public boolean promptLaunchProduct(String currentAction)
   {
     if (installButton != null && installButton.getCurrentState() == State.LAUNCH)
     {
-      MessageDialog warningDialog = new MessageDialog(dialog, "Unlaunched Product Warning", null,
-          "You're about to lose the ability to launch the installed product from the installer.\n\nDo you want to launch it now?", MessageDialog.WARNING,
+      MessageDialog prompt = new MessageDialog(dialog, "Launch Product", null,
+          currentAction + " without having launched the installed product.\n\nDo you want to launch it now?", MessageDialog.QUESTION,
           new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
 
-      int result = warningDialog.open();
+      int result = prompt.open();
       if (result == 0)
       {
         // Yes: Do launch; then continue.
