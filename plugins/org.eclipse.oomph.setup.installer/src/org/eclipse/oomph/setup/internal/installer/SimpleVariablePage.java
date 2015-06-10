@@ -122,6 +122,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch");
 
+  private static final Preference PREF_STARTMENU_ENTRY = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("startMenuEntry");
+
+  private static final Preference PREF_DESKTOP_SHORTCUT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("desktopShortcut");
+
   private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot");
 
   private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt");
@@ -492,18 +496,42 @@ public class SimpleVariablePage extends SimpleInstallerPage
         spacer(variablesComposite);
         spacer(variablesComposite);
       }
+
       {
         spacer(variablesComposite);
         spacer(variablesComposite);
         spacer(variablesComposite);
+
         createStartMenuEntryButton = createCheckbox(variablesComposite, "create start menu entry");
+        createStartMenuEntryButton.setChecked(PREF_STARTMENU_ENTRY.get(true));
+        createStartMenuEntryButton.addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            PREF_STARTMENU_ENTRY.set(createStartMenuEntryButton.isChecked());
+          }
+        });
+
         spacer(variablesComposite);
       }
+
       {
         spacer(variablesComposite);
         spacer(variablesComposite);
         spacer(variablesComposite);
+
         createDesktopShortcutButton = createCheckbox(variablesComposite, "create desktop shortcut");
+        createDesktopShortcutButton.setChecked(PREF_DESKTOP_SHORTCUT.get(true));
+        createDesktopShortcutButton.addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            PREF_DESKTOP_SHORTCUT.set(createDesktopShortcutButton.isChecked());
+          }
+        });
+
         spacer(variablesComposite);
       }
     }
