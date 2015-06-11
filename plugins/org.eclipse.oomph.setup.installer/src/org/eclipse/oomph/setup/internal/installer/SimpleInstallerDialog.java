@@ -561,6 +561,11 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     exitSelected();
   }
 
+  protected void exitQuiet()
+  {
+    super.exitSelected();
+  }
+
   @Override
   protected void exitSelected()
   {
@@ -578,7 +583,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     }
 
-    super.exitSelected();
+    exitQuiet();
   }
 
   public void backSelected()

@@ -1307,7 +1307,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     if (exitAfterLaunch)
     {
-      dialog.exitSelected();
+      dialog.exitQuiet();
     }
   }
 
