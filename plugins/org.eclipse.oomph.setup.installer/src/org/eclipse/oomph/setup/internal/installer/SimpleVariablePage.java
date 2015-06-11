@@ -162,6 +162,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private ImageCheckbox bitness64Button;
 
+  private Label bitness32Spacer;
+
+  private Label bitness64Spacer;
+
   private JREController javaController;
 
   private Label javaLabel;
@@ -328,8 +332,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
     else
     {
-      new Label(variablesComposite, SWT.NONE);
-      new Label(variablesComposite, SWT.NONE);
+      bitness32Spacer = new Label(variablesComposite, SWT.NONE);
+      bitness64Spacer = new Label(variablesComposite, SWT.NONE);
     }
 
     // Row 4
@@ -852,6 +856,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     setVisible(versionCombo.getParent(), versionVisible);
     setVisible(bitness32Button, versionVisible);
     setVisible(bitness64Button, versionVisible);
+    setVisible(bitness32Spacer, versionVisible);
+    setVisible(bitness64Spacer, versionVisible);
 
     if (JREManager.BITNESS_CHANGEABLE)
     {
