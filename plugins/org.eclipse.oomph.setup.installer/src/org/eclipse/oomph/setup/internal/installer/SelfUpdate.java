@@ -187,7 +187,6 @@ public class SelfUpdate
         }
 
         P2TaskImpl.processLicenses(provisioningPlan, ProgressPage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
-        provisioningPlan = null;
 
         return UnsignedContentDialog.createUnsignedContentConfirmer(user, true);
       }
