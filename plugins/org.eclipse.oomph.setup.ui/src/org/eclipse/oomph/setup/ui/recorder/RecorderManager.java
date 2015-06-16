@@ -334,44 +334,48 @@ public final class RecorderManager
                 return;
               }
 
-              final Map<URI, String> values = recorder.done();
-              recorder = null;
-
-              for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
+              UIUtil.asyncExec(new Runnable()
               {
-                URI uri = it.next();
-                String pluginID = uri.segment(0);
-
-                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID) && SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(uri.lastSegment()))
+                public void run()
                 {
-                  it.remove();
-                }
-              }
-
-              if (values.isEmpty())
-              {
-                RecorderTransaction transaction = RecorderTransaction.getInstance();
-                if (transaction != null)
-                {
-                  // Close a transaction that has been opened by the RecorderPreferencePage.
-                  transaction.close();
-                }
-              }
-              else
-              {
-                Job job = new Job("Store preferences")
-                {
-                  @Override
-                  protected IStatus run(IProgressMonitor monitor)
+                  final Map<URI, String> values = recorder.done();
+                  recorder = null;
+                  for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
                   {
-                    handleRecording(shell, values);
-                    return Status.OK_STATUS;
-                  }
-                };
+                    URI uri = it.next();
+                    String pluginID = uri.segment(0);
 
-                job.setSystem(true);
-                job.schedule();
-              }
+                    if (SetupUIPlugin.PLUGIN_ID.equals(pluginID) && SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(uri.lastSegment()))
+                    {
+                      it.remove();
+                    }
+                  }
+                  if (values.isEmpty())
+                  {
+                    RecorderTransaction transaction = RecorderTransaction.getInstance();
+                    if (transaction != null)
+                    {
+                      // Close a transaction that has been opened by the RecorderPreferencePage.
+                      transaction.close();
+                    }
+                  }
+                  else
+                  {
+                    Job job = new Job("Store preferences")
+                    {
+                      @Override
+                      protected IStatus run(IProgressMonitor monitor)
+                      {
+                        handleRecording(shell, values);
+                        return Status.OK_STATUS;
+                      }
+                    };
+
+                    job.setSystem(true);
+                    job.schedule();
+                  }
+                }
+              });
             }
           });
         }
