@@ -86,7 +86,6 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -296,8 +295,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     if (JREManager.BITNESS_CHANGEABLE)
     {
-      bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit.png"),
-          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_hover.png"));
+      bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_enabled.png"),
+          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_selected.png"));
+      bitness32Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_disabled.png"));
       bitness32Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(4, 0).hint(SWT.DEFAULT, 30).create());
       bitness32Button.setChecked(false);
       bitness32Button.setVisible(JREManager.BITNESS_CHANGEABLE);
@@ -313,8 +313,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
       });
 
-      bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit.png"),
-          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_hover.png"));
+      bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_enabled.png"),
+          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_selected.png"));
+      bitness32Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_disabled.png"));
       bitness64Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).hint(SWT.DEFAULT, 30).create());
       bitness64Button.setChecked(true);
       bitness64Button.setVisible(JREManager.BITNESS_CHANGEABLE);
@@ -412,18 +413,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       public void modifyText(ModifyEvent e)
       {
-        final FocusListener focusSelectionAdapter = (FocusListener)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
+        final FocusSelectionAdapter focusSelectionAdapter = (FocusSelectionAdapter)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
+        focusSelectionAdapter.setNextSelectionRange(folderText.getSelection());
 
         // At least under Ubuntu it is necessary to use async execs
         // to ensure proper focus transfer to the folder text field
-        UIUtil.getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            folderText.removeFocusListener(focusSelectionAdapter);
-          }
-        });
-
         UIUtil.getDisplay().asyncExec(new Runnable()
         {
           public void run()
@@ -437,14 +431,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
           public void run()
           {
             folderText.setFocus();
-          }
-        });
-
-        UIUtil.getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            folderText.addFocusListener(focusSelectionAdapter);
           }
         });
 
@@ -698,6 +684,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     FlatButton button = new FlatButton(parent, SWT.PUSH);
     button.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
+    button.setFocusForegroundColor(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
     button.setText(text);
     button.setCornerWidth(10);
     button.setAlignment(SWT.CENTER);

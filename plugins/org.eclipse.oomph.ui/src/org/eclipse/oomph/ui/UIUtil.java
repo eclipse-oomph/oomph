@@ -277,6 +277,15 @@ public final class UIUtil
     }
   }
 
+  public static void setSelectionTo(Widget control, Point selection)
+  {
+    Text text = findTextControl(control);
+    if (text != null)
+    {
+      text.setSelection(selection);
+    }
+  }
+
   public static void selectAllText(Widget control)
   {
     Text text = findTextControl(control);

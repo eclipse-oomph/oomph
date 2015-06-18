@@ -15,6 +15,8 @@ import org.eclipse.oomph.ui.SpriteAnimator;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -62,6 +64,21 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
     if (SimpleVariablePage.PROGRESS_WATCHDOG_TIMEOUT != 0)
     {
       progressSpinner = new ProgressSpinner(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 8, 4, 20);
+
+      addControlListener(new ControlAdapter()
+      {
+        @Override
+        public void controlResized(ControlEvent e)
+        {
+          relocateProgressAnimation();
+        }
+
+        @Override
+        public void controlMoved(ControlEvent e)
+        {
+          relocateProgressAnimation();
+        }
+      });
 
       // Skip first white image.
       progressSpinner.setKeyframeRange(1, 31);

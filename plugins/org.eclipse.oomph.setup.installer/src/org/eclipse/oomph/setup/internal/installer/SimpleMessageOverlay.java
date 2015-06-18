@@ -24,10 +24,12 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -139,6 +141,10 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
 
     // Initial bounds
     controlRelocator.relocate(this);
+
+    ParentShellRelocator parentShellRelocator = new ParentShellRelocator(dialog);
+    addMouseMoveListener(parentShellRelocator);
+    addMouseListener(parentShellRelocator);
 
     addDisposeListener(new DisposeListener()
     {
@@ -345,5 +351,55 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
   public static interface RunnableWithLabel extends Runnable
   {
     public String getLabel();
+  }
+
+  /**
+   * @author Andreas Scharf
+   */
+  private class ParentShellRelocator extends MouseAdapter implements MouseMoveListener
+  {
+    private Shell shellToMove;
+
+    private boolean move;
+
+    private Point lastPosition;
+
+    public ParentShellRelocator(Shell shellToMove)
+    {
+      this.shellToMove = shellToMove;
+    }
+
+    @Override
+    public void mouseDown(MouseEvent e)
+    {
+      move = true;
+      lastPosition = toDisplay(e.x, e.y);
+    }
+
+    @Override
+    public void mouseUp(MouseEvent e)
+    {
+      move = false;
+    }
+
+    public void mouseMove(final MouseEvent e)
+    {
+      if (move)
+      {
+        Point currentPosition = toDisplay(e.x, e.y);
+
+        int deltaX = currentPosition.x - lastPosition.x;
+        int deltaY = currentPosition.y - lastPosition.y;
+
+        lastPosition = currentPosition;
+
+        Point currentShellLocation = shellToMove.getLocation();
+        int newX = currentShellLocation.x + deltaX;
+        int newY = currentShellLocation.y + deltaY;
+
+        shellToMove.setLocation(newX, newY);
+      }
+    }
+
   }
 }

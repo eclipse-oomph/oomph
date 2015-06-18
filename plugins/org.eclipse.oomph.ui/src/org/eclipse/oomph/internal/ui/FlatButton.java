@@ -67,6 +67,8 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
   private Color internalBackgroundColor;
 
+  private Color focusForegroundColor = COLOR_DEFAULT_FOCUS_FOREGROUND;
+
   private Image image;
 
   private String text;
@@ -232,6 +234,16 @@ public class FlatButton extends Canvas implements Listener, PaintListener
   protected Color getDisabledBackgroundColor()
   {
     return disabledBackgroundColor;
+  }
+
+  public Color getFocusForegroundColor()
+  {
+    return focusForegroundColor;
+  }
+
+  public void setFocusForegroundColor(Color focusForegroundColor)
+  {
+    this.focusForegroundColor = focusForegroundColor;
   }
 
   public boolean isShowButtonDownState()
@@ -701,10 +713,13 @@ public class FlatButton extends Canvas implements Listener, PaintListener
    */
   protected void drawFocusState(GC gc, int x, int y, int width, int height)
   {
-    Color oldForeground = gc.getForeground();
-    gc.setForeground(COLOR_DEFAULT_FOCUS_FOREGROUND);
-    gc.drawRoundRectangle(x, y, width, height, cornerWidth, cornerWidth);
-    gc.setForeground(oldForeground);
+    if (focusForegroundColor != null)
+    {
+      Color oldForeground = gc.getForeground();
+      gc.setForeground(focusForegroundColor);
+      gc.drawRoundRectangle(x, y, width, height, cornerWidth, cornerWidth);
+      gc.setForeground(oldForeground);
+    }
   }
 
   private void clearBackground(GC gc, Rectangle bounds)

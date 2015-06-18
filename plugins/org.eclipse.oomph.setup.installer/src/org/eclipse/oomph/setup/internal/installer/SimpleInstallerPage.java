@@ -279,6 +279,18 @@ public abstract class SimpleInstallerPage extends Composite
   {
     public static final String ADAPTER_KEY = "focusSelectionAdapter";
 
+    private Point nextSelectionRange;
+
+    public Point getNextSelectionRange()
+    {
+      return nextSelectionRange;
+    }
+
+    public void setNextSelectionRange(Point nextSelectionRange)
+    {
+      this.nextSelectionRange = nextSelectionRange;
+    }
+
     @Override
     public void focusLost(FocusEvent e)
     {
@@ -288,7 +300,21 @@ public abstract class SimpleInstallerPage extends Composite
     @Override
     public void focusGained(FocusEvent e)
     {
-      UIUtil.selectAllText(e.widget);
+      if (nextSelectionRange != null)
+      {
+        try
+        {
+          UIUtil.setSelectionTo(e.widget, nextSelectionRange);
+        }
+        finally
+        {
+          nextSelectionRange = null;
+        }
+      }
+      else
+      {
+        UIUtil.selectAllText(e.widget);
+      }
     }
   }
 

@@ -327,6 +327,13 @@ public class SimpleInstallerMenu extends Shell implements Listener
     }
 
     @Override
+    public void setToolTipText(String string)
+    {
+      super.setToolTipText(string);
+      button.setToolTipText(string);
+    }
+
+    @Override
     public void setVisible(boolean visible)
     {
       super.setVisible(visible);
