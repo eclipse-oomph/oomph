@@ -52,6 +52,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
   protected void resetPerforming()
   {
     SetupPropertyTester.setPerformingShell(null);
+    SetupPropertyTester.setPerformingStatus(null);
   }
 
   @Override
