@@ -73,14 +73,12 @@ for f in *.zip; do
     tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz "Eclipse Installer.app"
 
   elif [[ $f == *win32* ]]; then
+    rm -f eclipsec.exe
+
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing eclipse-installer.exe"
       curl -o signed.exe -F filedata=@eclipse-installer.exe http://build.eclipse.org:31338/winsign.php
       mv signed.exe eclipse-installer.exe
-
-      echo "  Signing eclipsec.exe"
-      curl -o signed.exe -F filedata=@eclipsec.exe http://build.eclipse.org:31338/winsign.php
-      mv signed.exe eclipsec.exe
     fi
 
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
