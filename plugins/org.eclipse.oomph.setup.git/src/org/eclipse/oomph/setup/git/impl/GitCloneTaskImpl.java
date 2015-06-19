@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
@@ -58,9 +59,11 @@ import org.eclipse.jgit.transport.URIish;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -212,6 +215,10 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   private Git cachedGit;
 
   private Repository cachedRepository;
+
+  private Object repositoryUtil;
+
+  private boolean bypassCloning;
 
   /**
    * <!-- begin-user-doc -->
@@ -568,6 +575,25 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       return false;
     }
 
+    // If the EGit UI is available, this will contain the list of repositories that have been added to the repositories view.
+    Set<String> repositories = null;
+
+    // Force start egit to make the clone appears in the repositories view and so projects are connected by the egit team provider.
+    try
+    {
+      Class<?> egitUIActivatorClass = CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator");
+      Object egitUIActivator = ReflectUtil.invokeMethod("getDefault", egitUIActivatorClass);
+      repositoryUtil = ReflectUtil.invokeMethod("getRepositoryUtil", egitUIActivator);
+
+      @SuppressWarnings("unchecked")
+      List<String> configuredRepositories = (List<String>)ReflectUtil.invokeMethod("getConfiguredRepositories", repositoryUtil);
+      repositories = new HashSet<String>(configuredRepositories);
+    }
+    catch (Throwable ex)
+    {
+      // Ignore.
+    }
+
     String location = getLocation();
 
     workDir = new File(location);
@@ -578,9 +604,12 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
     workDirExisted = true;
 
+    boolean needsToBeAdded = repositories != null && !repositories.contains(new File(workDir, ".git").toString());
     if (workDir.list().length > 1)
     {
-      return false;
+      // Even though cloning isn't needed, return true if the repository needs to be added to the repositories view.
+      bypassCloning = true;
+      return needsToBeAdded;
     }
 
     context.log("Opening Git clone " + workDir);
@@ -610,7 +639,9 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         return true;
       }
 
-      return false;
+      // Even though cloning isn't needed, return true if the repository needs to be added to the repositories view.
+      bypassCloning = true;
+      return needsToBeAdded;
     }
     catch (Throwable ex)
     {
@@ -634,16 +665,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   {
     try
     {
-      // Force start egit to make the clone appears in the repositories view and so projects are connected by the egit team provider.
-      try
-      {
-        CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator");
-      }
-      catch (ClassNotFoundException ex)
-      {
-        // Ignore.
-      }
-
       String checkoutBranch = getCheckoutBranch();
       String remoteName = getRemoteName();
       String remoteURI = getRemoteURI();
@@ -653,35 +674,52 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
       try
       {
-        if (cachedGit == null)
+        if (!bypassCloning)
         {
-          cachedGit = cloneRepository(context, workDir, checkoutBranch, remoteName, remoteURI, isRecursive(), new SubProgressMonitor(monitor, 50));
-          cachedRepository = cachedGit.getRepository();
-
-          if (!URI.createURI(remoteURI).isFile())
+          if (cachedGit == null)
           {
-            String pushURI = getPushURI();
-            configureRepository(context, cachedRepository, checkoutBranch, remoteName, remoteURI, pushURI);
+            cachedGit = cloneRepository(context, workDir, checkoutBranch, remoteName, remoteURI, isRecursive(), new SubProgressMonitor(monitor, 50));
+            cachedRepository = cachedGit.getRepository();
+
+            if (!URI.createURI(remoteURI).isFile())
+            {
+              String pushURI = getPushURI();
+              configureRepository(context, cachedRepository, checkoutBranch, remoteName, remoteURI, pushURI);
+            }
+
+            monitor.worked(1);
           }
 
-          monitor.worked(1);
+          if (!hasCheckout)
+          {
+            createBranch(context, cachedGit, checkoutBranch, remoteName);
+            monitor.worked(1);
+
+            checkout(context, cachedGit, checkoutBranch);
+            monitor.worked(1);
+
+            resetHard(context, cachedGit);
+            monitor.worked(1);
+          }
+
+          if (isRecursive())
+          {
+            addSubmodules(context, cachedGit, new SubProgressMonitor(monitor, 20));
+          }
         }
 
-        if (!hasCheckout)
+        if (repositoryUtil != null)
         {
-          createBranch(context, cachedGit, checkoutBranch, remoteName);
-          monitor.worked(1);
-
-          checkout(context, cachedGit, checkoutBranch);
-          monitor.worked(1);
-
-          resetHard(context, cachedGit);
-          monitor.worked(1);
-        }
-
-        if (isRecursive())
-        {
-          addSubmodules(context, cachedGit, new SubProgressMonitor(monitor, 20));
+          try
+          {
+            // Add the clone to the Git repositories view.
+            Method addConfiguredRepositoryMethod = ReflectUtil.getMethod(repositoryUtil.getClass(), "addConfiguredRepository", File.class);
+            ReflectUtil.invokeMethod(addConfiguredRepositoryMethod, repositoryUtil, new File(workDir, ".git"));
+          }
+          catch (Throwable ex)
+          {
+            // Ignore.
+          }
         }
       }
       finally
