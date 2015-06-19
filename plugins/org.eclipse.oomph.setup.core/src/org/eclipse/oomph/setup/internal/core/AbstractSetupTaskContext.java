@@ -104,7 +104,15 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     {
       for (Map.Entry<Object, Object> entry : properties.entrySet())
       {
-        put(entry.getKey(), entry.getValue());
+        Object key = entry.getKey();
+        Object value = entry.getValue();
+        put(key, value);
+
+        if ("eclipse.home.location".equals(key))
+        {
+          URI eclipseHomeRootLocation = URI.createURI(value.toString()).trimSegments(OS.INSTANCE.isMac() ? 3 : 1);
+          put("eclipse.home.root.location", eclipseHomeRootLocation.toString());
+        }
       }
     }
 
@@ -435,6 +443,14 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   static
   {
+    registerFilter("file", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return URI.createURI(value).toFileString();
+      }
+    });
+
     registerFilter("uri", new StringFilter()
     {
       public String filter(String value)

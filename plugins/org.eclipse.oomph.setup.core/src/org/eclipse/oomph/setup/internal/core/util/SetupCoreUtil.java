@@ -25,6 +25,7 @@ import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
@@ -88,8 +89,8 @@ public final class SetupCoreUtil
 
   static
   {
-    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper
-        .getService(org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
+    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper.getService(
+        org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
     UIServices uiServices = (UIServices)agent.getService(UIServices.SERVICE_NAME);
 
     ISecurePreferences root = PreferencesUtil.getSecurePreferences();
@@ -323,6 +324,12 @@ public final class SetupCoreUtil
             //
             if (targetURI.isFile())
             {
+              // If the file is a relative path, interpret it as relative to the root folder of the installation.
+              if (targetURI.isRelative())
+              {
+                targetURI = targetURI.resolve(SetupContext.PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 2 : 0).appendSegment(""));
+              }
+
               File file = new File(targetURI.toFileString());
               if (!file.exists())
               {

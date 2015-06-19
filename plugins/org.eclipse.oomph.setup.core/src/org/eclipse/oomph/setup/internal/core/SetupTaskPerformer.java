@@ -1789,9 +1789,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             URI targetURI = URI.createURI(targetURL);
 
             uriMap.put(sourceURI, targetURI);
-            it.remove();
           }
         }
+
+        it.remove();
       }
     }
 
