@@ -160,7 +160,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"
+      defaultValue="Mars"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
@@ -197,26 +197,35 @@
       <requirement
           name="org.eclipse.sdk.feature.group"/>
       <sourceLocator
-          rootFolder="${git.clone.location}"/>
+          rootFolder="${git.clone.location}"
+          locateNestedProjects="true"/>
       <repositoryList
           name="Mars">
         <repository
             url="http://download.eclipse.org/releases/mars"/>
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
             url="http://download.eclipse.org/releases/luna"/>
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
         <repository
             url="http://download.eclipse.org/releases/kepler"/>
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
       <repositoryList
           name="Juno">
         <repository
             url="http://download.eclipse.org/releases/juno"/>
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
     </targlet>
   </setupTask>

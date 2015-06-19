@@ -148,7 +148,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"
+      defaultValue="Mars"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
@@ -185,7 +185,8 @@
       <requirement
           name="org.eclipse.sdk.feature.group"/>
       <sourceLocator
-          rootFolder="${git.clone.location}"/>
+          rootFolder="${git.clone.location}"
+          locateNestedProjects="true"/>
       <repositoryList
           name="Mars">
         <repository
