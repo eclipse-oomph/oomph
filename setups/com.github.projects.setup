@@ -39,7 +39,7 @@
       </choice>
       <choice
           value="https://github.com/@{remoteURI}.git"
-          label="HTTP (read-only, anonymous)"/>
+          label="HTTPS (read-only, anonymous)"/>
       <description>Choose from the available Github URIs</description>
     </setupTask>
     <setupTask

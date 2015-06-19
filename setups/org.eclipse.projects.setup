@@ -280,8 +280,8 @@
             value="https://${github.user.id|username}@github.com/@{remoteURI}.git"
             label="HTTPS (read-write)"/>
         <choice
-            value="http://github.com/@{remoteURI}.git"
-            label="HTTP (read-only, anonymous)"/>
+            value="https://github.com/@{remoteURI}.git"
+            label="HTTPS (read-only, anonymous)"/>
         <description>Choose from the available Github URIs</description>
       </setupTask>
     </setupTask>
