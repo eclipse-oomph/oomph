@@ -37,6 +37,8 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -253,9 +255,11 @@ public class SelfUpdate
     ProfileDefinition profileDefinition = transaction.getProfileDefinition();
 
     EList<Repository> repositories = profileDefinition.getRepositories();
-    if (repositories.size() != 1 || !INSTALLER_UPDATE_URL.equals(repositories.get(0).getURL()))
+    URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
+    String installerUpdateURL = uriConverter.normalize(URI.createURI(INSTALLER_UPDATE_URL)).toString();
+    if (repositories.size() != 1 || !installerUpdateURL.equals(repositories.get(0).getURL()))
     {
-      Repository repository = P2Factory.eINSTANCE.createRepository(INSTALLER_UPDATE_URL);
+      Repository repository = P2Factory.eINSTANCE.createRepository(installerUpdateURL);
       profileDefinition.setRepositories(ECollections.singletonEList(repository));
       return true;
     }
