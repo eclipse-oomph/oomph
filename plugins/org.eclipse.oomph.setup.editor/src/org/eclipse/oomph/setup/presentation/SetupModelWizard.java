@@ -812,6 +812,11 @@ public class SetupModelWizard extends Wizard implements INewWizard
       {
         templatesViewer.getControl().setFocus();
       }
+
+      if (visible && templatesViewer.getSelection().isEmpty() && !templates.isEmpty())
+      {
+        templatesViewer.setSelection(new StructuredSelection(templates.get(0)));
+      }
     }
 
     public TreeViewer getPreviewer()
