@@ -315,7 +315,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_enabled.png"),
           SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_selected.png"));
-      bitness32Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_disabled.png"));
+      bitness64Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_disabled.png"));
       bitness64Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).hint(SWT.DEFAULT, 30).create());
       bitness64Button.setChecked(true);
       bitness64Button.setVisible(JREManager.BITNESS_CHANGEABLE);
@@ -842,8 +842,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     setVisible(versionSpacer, versionVisible);
     setVisible(versionCombo.getParent(), versionVisible);
     setVisible(bitness32Button, versionVisible);
-    setVisible(bitness64Button, versionVisible);
     setVisible(bitness32Spacer, versionVisible);
+    setVisible(bitness64Button, versionVisible);
     setVisible(bitness64Spacer, versionVisible);
 
     if (JREManager.BITNESS_CHANGEABLE)
@@ -1059,6 +1059,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     UserAdjuster userAdjuster = new UserAdjuster();
     userAdjuster.adjust(user, installFolder);
+
     try
     {
       IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
