@@ -45,8 +45,6 @@ import java.util.zip.ZipFile;
  */
 public class SetupArchiver implements IApplication
 {
-  // private static final URI GIT_C_PREFIX = URI.createURI("http://git.eclipse.org/c/");
-
   public Object start(IApplicationContext context) throws Exception
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
@@ -164,6 +162,9 @@ public class SetupArchiver implements IApplication
       options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
       // options.put(Resource.OPTION_LINE_DELIMITER, "\n");
     }
+
+    // Remove any folder redirection that might be in place for the location of the setups folder.
+    uriMap.remove(SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
 
     for (Resource resource : resourceSet.getResources())
     {
