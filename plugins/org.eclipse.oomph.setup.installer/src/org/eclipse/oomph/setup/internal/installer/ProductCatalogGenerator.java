@@ -170,7 +170,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean isLatestReleased()
   {
-    return false;
+    return true;
   }
 
   private boolean testNewUnreleasedProduct()
@@ -525,7 +525,7 @@ public class ProductCatalogGenerator implements IApplication
       throws URISyntaxException, ProvisionException
   {
     IMetadataRepository result = repository;
-    if (repository instanceof ICompositeRepository<?>)
+    if (!isLatestReleased() && repository instanceof ICompositeRepository<?>)
     {
       ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)repository;
       long latest = Integer.MIN_VALUE;
