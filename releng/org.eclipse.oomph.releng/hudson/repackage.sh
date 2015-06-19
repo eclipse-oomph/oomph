@@ -46,7 +46,7 @@ for f in *.zip; do
 
   unzip -qq $SOURCE/$f
 
-  inifile=eclipse-installer.ini
+  inifile=eclipse-inst.ini
   if [[ $f == *macosx* ]]; then
     inifile="Eclipse Installer.app/Contents/Eclipse/$inifile"
   fi
@@ -69,21 +69,21 @@ for f in *.zip; do
       rm -f unsigned.zip signed.zip
     fi
 
-    chmod a+x "Eclipse Installer.app/Contents/MacOS/eclipse-installer"
-    tar -czf $PRODUCTS/eclipse-installer-mac$bitness.tar.gz "Eclipse Installer.app"
+    chmod a+x "Eclipse Installer.app/Contents/MacOS/eclipse-inst"
+    tar -czf $PRODUCTS/eclipse-inst-mac$bitness.tar.gz "Eclipse Installer.app"
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
 
     if [[ "$PACK_AND_SIGN" == true ]]; then
-      echo "  Signing eclipse-installer.exe"
-      curl -o signed.exe -F filedata=@eclipse-installer.exe http://build.eclipse.org:31338/winsign.php
-      mv signed.exe eclipse-installer.exe
+      echo "  Signing eclipse-inst.exe"
+      curl -o signed.exe -F filedata=@eclipse-inst.exe http://build.eclipse.org:31338/winsign.php
+      mv signed.exe eclipse-inst.exe
     fi
 
     zip -r -9 -qq --symlinks $PRODUCTS/$f *
 
-    extractor=eclipse-installer-win$bitness.exe
+    extractor=eclipse-inst-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
 
     cp -a /opt/public/tools/oomph/extractor-$bitness.exe extractor.exe
@@ -116,7 +116,7 @@ for f in *.zip; do
 
   elif [[ $f == *linux* ]]; then
     cd ..
-    tar -czf $PRODUCTS/eclipse-installer-linux$bitness.tar.gz eclipse-installer
+    tar -czf $PRODUCTS/eclipse-inst-linux$bitness.tar.gz eclipse-installer
     cd $TMP
   fi
 done

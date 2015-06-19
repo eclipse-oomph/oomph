@@ -11,4 +11,4 @@ COPY /B extractor-%1.exe + ^
   ..\marker.txt +  ^
   ..\Concat\product\product-%1.zip + ^
   ..\marker.txt  ^
-  eclipse-installer-%1.exe
+  eclipse-inst-%1.exe

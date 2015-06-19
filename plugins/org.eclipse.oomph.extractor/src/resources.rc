@@ -11,4 +11,4 @@
 
 #include "resources.h"
 
-ID_ICON ICON "..\\..\\..\\products\\org.eclipse.oomph.setup.installer.product\\icons\\eclipse-installer.ico"
+ID_ICON ICON "..\\..\\..\\products\\org.eclipse.oomph.setup.installer.product\\icons\\eclipse-inst.ico"

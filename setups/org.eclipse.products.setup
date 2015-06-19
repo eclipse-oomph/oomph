@@ -24,6 +24,18 @@
     <repository
         url="${oomph.update.url}"/>
   </setupTask>
+  <setupTask
+      xsi:type="setup:ResourceCopyTask"
+      sourceURL="${installation.location|uri}/de.escnet.perspective_1.0.0.201408130949.jar"
+      targetURL="${installation.location|uri}/eclipse/dropins/"/>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      content="eclipse.preferences.version=1&#xD;&#xA;defaultPerspectiveId=de.escnet.perspective.development&#xD;&#xA;showIntro=false&#xD;&#xA;"
+      targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.prefs"/>
+  <setupTask
+      xsi:type="setup:PreferenceTask"
+      key="/instance/org.eclipse.ui.ide/WORKSPACE_NAME"
+      value="${installation.location|lastSegment|upper}"/>
   <product name="epp.package.java"
       label="Eclipse IDE for Java Developers">
     <annotation

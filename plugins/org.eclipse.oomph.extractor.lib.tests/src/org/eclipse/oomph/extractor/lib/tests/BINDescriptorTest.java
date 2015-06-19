@@ -31,8 +31,8 @@ public class BINDescriptorTest
     int micro = 0;
     int bitness = 64;
     int jdk = 0;
-    String launcherPath = "eclipse-installer.exe";
-    String iniPath = "eclipse-installer.ini";
+    String launcherPath = "eclipse-inst.exe";
+    String iniPath = "eclipse-inst.ini";
 
     String content = major + " " + minor + " " + micro + " " + bitness + " " + jdk + " " + launcherPath + " " + iniPath;
     InputStream stream = new ByteArrayInputStream(content.getBytes());

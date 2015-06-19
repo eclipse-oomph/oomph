@@ -55,11 +55,11 @@ set -o errexit
 #   $WORKSPACE/updates/org.eclipse.oomph.site.zip
 #
 #   $WORKSPACE/products/
-#   $WORKSPACE/products/eclipse-installer-linux32.tar.gz
-#   $WORKSPACE/products/eclipse-installer-linux64.tar.gz
-#   $WORKSPACE/products/eclipse-installer-mac64.tar.gz
-#   $WORKSPACE/products/eclipse-installer-win32.exe
-#   $WORKSPACE/products/eclipse-installer-win64.exe
+#   $WORKSPACE/products/eclipse-inst-linux32.tar.gz
+#   $WORKSPACE/products/eclipse-inst-linux64.tar.gz
+#   $WORKSPACE/products/eclipse-inst-mac64.tar.gz
+#   $WORKSPACE/products/eclipse-inst-win32.exe
+#   $WORKSPACE/products/eclipse-inst-win64.exe
 #   $WORKSPACE/products/repository/
 #   $WORKSPACE/products/repository/binary/
 #   $WORKSPACE/products/repository/features/

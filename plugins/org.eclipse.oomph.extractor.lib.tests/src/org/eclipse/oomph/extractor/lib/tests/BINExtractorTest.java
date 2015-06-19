@@ -17,7 +17,7 @@ import org.eclipse.oomph.extractor.lib.BINExtractor;
  */
 public class BINExtractorTest
 {
-  private static final String[] ARGS = { "../org.eclipse.oomph.extractor/Win64-Debug/eclipse-installer-64.exe", "extracted", System.getProperty("java.home") };
+  private static final String[] ARGS = { "../org.eclipse.oomph.extractor/Win64-Debug/eclipse-inst-64.exe", "extracted", System.getProperty("java.home") };
 
   public static void main(String[] args) throws Exception
   {
