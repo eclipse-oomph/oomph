@@ -240,12 +240,12 @@ public class ProductCatalogGenerator implements IApplication
         {
           URI latestLocation = latestEPPMetaDataRepository.getLocation();
           System.out.print(" -> " + latestLocation);
-          org.eclipse.emf.common.util.URI relativeLocation = org.eclipse.emf.common.util.URI.createURI(latestLocation.toString())
-              .deresolve(org.eclipse.emf.common.util.URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
+          org.eclipse.emf.common.util.URI relativeLocation = org.eclipse.emf.common.util.URI.createURI(latestLocation.toString()).deresolve(
+              org.eclipse.emf.common.util.URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
           if (relativeLocation.isRelative())
           {
-            URI actualLatestEPPURI = new URI(
-                org.eclipse.emf.common.util.URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments()).toString());
+            URI actualLatestEPPURI = new URI(org.eclipse.emf.common.util.URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments())
+                .toString());
             try
             {
               manager.loadRepository(actualLatestEPPURI, null);
@@ -322,8 +322,8 @@ public class ProductCatalogGenerator implements IApplication
           ius.remove(requirement);
         }
 
-        for (IInstallableUnit iu : P2Util
-            .asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
+        for (IInstallableUnit iu : P2Util.asIterable(releaseMetaDataRepository.query(
+            QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
         {
           String id = iu.getId();
           String label = iu.getProperty("org.eclipse.equinox.p2.name");
@@ -494,8 +494,8 @@ public class ProductCatalogGenerator implements IApplication
       checkVersionRanges(productCatalog);
       postProcess(productCatalog);
 
-      Resource resource = new BaseResourceFactoryImpl()
-          .createResource(outputLocation == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup") : outputLocation);
+      Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? org.eclipse.emf.common.util.URI
+          .createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
       // resource.save(System.out, null);
 
@@ -521,10 +521,17 @@ public class ProductCatalogGenerator implements IApplication
     return uri;
   }
 
-  private IMetadataRepository getLatestRepository(IMetadataRepositoryManager manager, IMetadataRepository repository)
-      throws URISyntaxException, ProvisionException
+  private IMetadataRepository getLatestRepository(IMetadataRepositoryManager manager, IMetadataRepository repository) throws URISyntaxException,
+      ProvisionException
   {
     IMetadataRepository result = repository;
+    URI location = repository.getLocation();
+    if (location.getPath().endsWith("mars"))
+    {
+      IMetadataRepository childRepository = manager.loadRepository(new URI(location + "/R"), null);
+      return childRepository;
+    }
+
     if (!isLatestReleased() && repository instanceof ICompositeRepository<?>)
     {
       ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)repository;
@@ -546,7 +553,8 @@ public class ProductCatalogGenerator implements IApplication
     return result;
   }
 
-  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException, ProvisionException
+  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException,
+      ProvisionException
   {
     IMetadataRepository releaseMetaDataRepository = manager.loadRepository(releaseURI, null);
     IMetadataRepository result = releaseMetaDataRepository;
