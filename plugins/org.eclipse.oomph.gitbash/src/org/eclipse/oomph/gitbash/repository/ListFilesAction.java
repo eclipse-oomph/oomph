@@ -32,6 +32,7 @@ import org.eclipse.ui.ide.IDE;
 import java.io.File;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -144,7 +145,23 @@ public class ListFilesAction extends AbstractAction<Repository>
         names.add(name);
       }
 
-      walk.release();
+      try
+      {
+        walk.close();
+      }
+      catch (Throwable ex)
+      {
+        try
+        {
+          Method method = walk.getClass().getMethod("release");
+          method.invoke(walk);
+        }
+        catch (Throwable ignore)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
       monitor.worked(1);
     }
 
