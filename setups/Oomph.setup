@@ -271,17 +271,24 @@
         <sourceLocator
             rootFolder="${git.clone.oomph.location}"/>
         <repositoryList
-            name="Mars">
+            name="Neon">
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11"/>
           <repository
               url="http://download.eclipse.org/egit/updates"/>
           <repository
               url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
           <repository
-              url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
+              url="http://download.eclipse.org/technology/m2e/releases/1.6"/>
           <repository
-              url="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/R-3.7.0-20150609111814/repository"/>
+              url="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/R-3.7.0-20150609111814"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+        </repositoryList>
+        <repositoryList
+            name="Mars">
+          <repository
+              url="http://download.eclipse.org/releases/mars"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
@@ -290,55 +297,19 @@
           <repository
               url="http://download.eclipse.org/releases/luna"/>
           <repository
-              url="http://download.eclipse.org/ecoretools/updates/releases/2.0.0/luna"/>
-          <repository
-              url="http://download.eclipse.org/sirius/updates/releases/1.0.1/luna"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
-          <repository
-              url="http://download.eclipse.org/egit/updates"/>
-          <repository
-              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-          <repository
-              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
-          <repository
-              url="http://download.eclipse.org/webtools/repository/luna"/>
-          <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
         <repositoryList
             name="Kepler">
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
-          <repository
-              url="http://download.eclipse.org/egit/updates"/>
-          <repository
-              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-          <repository
-              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
-          <repository
-              url="http://download.eclipse.org/webtools/repository/kepler"/>
+              url="http://download.eclipse.org/releases/kepler"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
         <repositoryList
             name="Juno">
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/R201409011055"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
-          <repository
-              url="http://download.eclipse.org/egit/updates"/>
-          <repository
-              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-          <repository
-              url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
-          <repository
-              url="http://download.eclipse.org/webtools/repository/juno"/>
+              url="http://download.eclipse.org/releases/juno"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>

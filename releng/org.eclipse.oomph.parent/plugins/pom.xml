@@ -29,6 +29,7 @@ Eike Stepper - initial API and implementation
     <module>../../../plugins/org.eclipse.oomph.base</module>
     <module>../../../plugins/org.eclipse.oomph.base.edit</module>
     <module>../../../plugins/org.eclipse.oomph.extractor.lib</module>
+    <module>../../../plugins/org.eclipse.oomph.extractor.lib.tests</module>
     <module>../../../plugins/org.eclipse.oomph.gitbash</module>
     <module>../../../plugins/org.eclipse.oomph.jreinfo</module>
     <module>../../../plugins/org.eclipse.oomph.jreinfo.ui</module>
