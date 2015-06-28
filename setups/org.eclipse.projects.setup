@@ -227,6 +227,9 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
+          value="Neon"
+          label="Eclipse Neon - 4.6"/>
+      <choice
           value="Mars"
           label="Eclipse Mars - 4.5"/>
       <choice
