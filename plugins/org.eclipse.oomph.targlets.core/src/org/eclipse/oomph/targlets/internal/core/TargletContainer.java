@@ -34,6 +34,7 @@ import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.SubMonitor;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -719,6 +720,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         rootRequirements.addAll(EcoreUtil.copyAll(targlet.getRequirements()));
       }
 
+      // Filter out any ill-formed requirements.
+      for (Iterator<Requirement> it = rootRequirements.iterator(); it.hasNext();)
+      {
+        Requirement requirement = it.next();
+        if (StringUtil.isEmpty(requirement.getName()) || StringUtil.isEmpty(requirement.getName()) || requirement.getVersionRange() == null)
+        {
+          it.remove();
+        }
+      }
+
       if (rootRequirements.isEmpty())
       {
         descriptor.rollbackUpdateTransaction(null, new NullProgressMonitor());
@@ -731,6 +742,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       for (Targlet targlet : targlets)
       {
         repositories.addAll(EcoreUtil.copyAll(targlet.getActiveRepositories()));
+      }
+
+      // Filter out any bogus repositories.
+      for (Iterator<Repository> it = repositories.iterator(); it.hasNext();)
+      {
+        Repository repository = it.next();
+        if (StringUtil.isEmpty(repository.getURL()))
+        {
+          it.remove();
+        }
       }
 
       WorkspaceIUAnalyzer workspaceIUAnalyzer = analyzeWorkspaceIUs(rootRequirements, progress);
