@@ -6,7 +6,7 @@
    <feature url="features/org.eclipse.oomph.manifests_1.1.0.qualifier.jar" id="org.eclipse.oomph.manifests" version="1.1.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
-   <feature url="features/org.eclipse.oomph.p2_1.1.0.qualifier.jar" id="org.eclipse.oomph.p2" version="1.1.0.qualifier">
+   <feature url="features/org.eclipse.oomph.p2_1.2.0.qualifier.jar" id="org.eclipse.oomph.p2" version="1.2.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
    <feature url="features/org.eclipse.oomph.preferences_1.1.0.qualifier.jar" id="org.eclipse.oomph.preferences" version="1.1.0.qualifier">
@@ -39,7 +39,7 @@
    <feature url="features/org.eclipse.oomph.winexplorer_1.1.0.qualifier.jar" id="org.eclipse.oomph.winexplorer" version="1.1.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
-   <feature url="features/org.eclipse.oomph.workingsets_1.1.0.qualifier.jar" id="org.eclipse.oomph.workingsets" version="1.1.0.qualifier">
+   <feature url="features/org.eclipse.oomph.workingsets_1.2.0.qualifier.jar" id="org.eclipse.oomph.workingsets" version="1.2.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
    <feature id="org.eclipse.oomph.all" version="0.0.0"/>
