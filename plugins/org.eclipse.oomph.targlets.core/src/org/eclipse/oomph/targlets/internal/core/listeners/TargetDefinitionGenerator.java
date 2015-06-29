@@ -13,8 +13,8 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
-import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.p2.internal.core.RootAnalyzer;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
@@ -287,7 +287,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     if (!generateImplicitUnits)
     {
-      removeImplicitUnits(result, monitor);
+      RootAnalyzer.removeImplicitUnits(result, monitor);
     }
 
     return result;
@@ -444,46 +444,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         }
       }
     }
+
     return result;
-  }
-
-  private static void removeImplicitUnits(Map<IMetadataRepository, Set<IInstallableUnit>> result, IProgressMonitor monitor)
-  {
-    for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : result.entrySet())
-    {
-      IMetadataRepository metadataRepository = entry.getKey();
-      Set<IInstallableUnit> ius = entry.getValue();
-
-      Set<IInstallableUnit> rootIUs = new HashSet<IInstallableUnit>(ius);
-      Set<IInstallableUnit> visitedIUs = new HashSet<IInstallableUnit>();
-
-      for (IInstallableUnit iu : ius)
-      {
-        removeImplicitUnits(iu, rootIUs, visitedIUs, metadataRepository, monitor);
-      }
-
-      if (rootIUs.size() < ius.size())
-      {
-        ius.retainAll(rootIUs);
-      }
-    }
-  }
-
-  private static void removeImplicitUnits(IInstallableUnit iu, Set<IInstallableUnit> rootIUs, Set<IInstallableUnit> visitedIUs,
-      IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
-  {
-    if (visitedIUs.add(iu))
-    {
-      for (IRequirement requirement : iu.getRequirements())
-      {
-        for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
-        {
-          TargletsCorePlugin.checkCancelation(monitor);
-
-          rootIUs.remove(requiredIU);
-          removeImplicitUnits(requiredIU, rootIUs, visitedIUs, queryable, monitor);
-        }
-      }
-    }
   }
 }
