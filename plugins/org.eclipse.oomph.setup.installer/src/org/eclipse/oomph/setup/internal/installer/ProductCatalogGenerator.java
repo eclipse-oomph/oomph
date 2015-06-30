@@ -65,6 +65,7 @@ import javax.xml.parsers.DocumentBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -107,6 +108,58 @@ public class ProductCatalogGenerator implements IApplication
 
   public Object start(IApplicationContext context) throws Exception
   {
+    // if (true)
+    // {
+    // String completeLocation = "http://download.eclipse.org/releases/mars/201506241002";
+    //
+    // Product product = SetupFactory.eINSTANCE.createProduct();
+    // product.setName("org.eclipse.complete");
+    // product.setLabel("Eclipse IDE Complete");
+    //
+    // ProductVersion productVersion = SetupFactory.eINSTANCE.createProductVersion();
+    // productVersion.setName("mars");
+    // productVersion.setLabel("Mars");
+    // product.getVersions().add(productVersion);
+    //
+    // P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+    // p2Task.setLabel("Complete");
+    // productVersion.getSetupTasks().add(p2Task);
+    //
+    // Repository completeRepository = P2Factory.eINSTANCE.createRepository();
+    // completeRepository.setURL(completeLocation);
+    // p2Task.getRepositories().add(completeRepository);
+    //
+    // IMetadataRepositoryManager manager = getMetadataRepositoryManager();
+    // IMetadataRepository repository = manager.loadRepository(new URI(completeLocation), null);
+    //
+    // Set<IInstallableUnit> ius = RootAnalyzer.getRootUnits(repository, null);
+    // List<IInstallableUnit> rootUnits = new ArrayList<IInstallableUnit>(ius);
+    // Collections.sort(rootUnits, new Comparator<IInstallableUnit>()
+    // {
+    // public int compare(IInstallableUnit iu1, IInstallableUnit iu2)
+    // {
+    // return iu1.getId().compareTo(iu2.getId());
+    // }
+    // });
+    //
+    // for (IInstallableUnit rootUnit : rootUnits)
+    // {
+    // Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+    // requirement.setName(rootUnit.getId());
+    // requirement.setMatchExpression(rootUnit.getFilter());
+    // p2Task.getRequirements().add(requirement);
+    // }
+    //
+    // System.out.println();
+    // System.out.println();
+    //
+    // Resource resource = new BaseResourceFactoryImpl().createResource(org.eclipse.emf.common.util.URI.createURI("org.eclipse.complete.setup"));
+    // resource.getContents().add(product);
+    // resource.save(System.out, null);
+    //
+    // return null;
+    // }
+
     // luna
     // -staging mars staging-epp staging-train
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
@@ -198,12 +251,7 @@ public class ProductCatalogGenerator implements IApplication
       installationTask.setID("installation");
       productCatalog.getSetupTasks().add(installationTask);
 
-      File agentLocation = File.createTempFile("test-", "-agent");
-      agentLocation.delete();
-      agentLocation.mkdirs();
-
-      Agent agent = new AgentImpl(null, agentLocation);
-      IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
+      IMetadataRepositoryManager manager = getMetadataRepositoryManager();
 
       Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
 
@@ -240,12 +288,12 @@ public class ProductCatalogGenerator implements IApplication
         {
           URI latestLocation = latestEPPMetaDataRepository.getLocation();
           System.out.print(" -> " + latestLocation);
-          org.eclipse.emf.common.util.URI relativeLocation = org.eclipse.emf.common.util.URI.createURI(latestLocation.toString()).deresolve(
-              org.eclipse.emf.common.util.URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
+          org.eclipse.emf.common.util.URI relativeLocation = org.eclipse.emf.common.util.URI.createURI(latestLocation.toString())
+              .deresolve(org.eclipse.emf.common.util.URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
           if (relativeLocation.isRelative())
           {
-            URI actualLatestEPPURI = new URI(org.eclipse.emf.common.util.URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments())
-                .toString());
+            URI actualLatestEPPURI = new URI(
+                org.eclipse.emf.common.util.URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments()).toString());
             try
             {
               manager.loadRepository(actualLatestEPPURI, null);
@@ -322,8 +370,8 @@ public class ProductCatalogGenerator implements IApplication
           ius.remove(requirement);
         }
 
-        for (IInstallableUnit iu : P2Util.asIterable(releaseMetaDataRepository.query(
-            QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
+        for (IInstallableUnit iu : P2Util
+            .asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
         {
           String id = iu.getId();
           String label = iu.getProperty("org.eclipse.equinox.p2.name");
@@ -494,8 +542,8 @@ public class ProductCatalogGenerator implements IApplication
       checkVersionRanges(productCatalog);
       postProcess(productCatalog);
 
-      Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? org.eclipse.emf.common.util.URI
-          .createURI("org.eclipse.products.setup") : outputLocation);
+      Resource resource = new BaseResourceFactoryImpl()
+          .createResource(outputLocation == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
       // resource.save(System.out, null);
 
@@ -521,8 +569,19 @@ public class ProductCatalogGenerator implements IApplication
     return uri;
   }
 
-  private IMetadataRepository getLatestRepository(IMetadataRepositoryManager manager, IMetadataRepository repository) throws URISyntaxException,
-      ProvisionException
+  private IMetadataRepositoryManager getMetadataRepositoryManager() throws IOException
+  {
+    File agentLocation = File.createTempFile("test-", "-agent");
+    agentLocation.delete();
+    agentLocation.mkdirs();
+  
+    Agent agent = new AgentImpl(null, agentLocation);
+    IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
+    return manager;
+  }
+
+  private IMetadataRepository getLatestRepository(IMetadataRepositoryManager manager, IMetadataRepository repository)
+      throws URISyntaxException, ProvisionException
   {
     IMetadataRepository result = repository;
     URI location = repository.getLocation();
@@ -553,8 +612,7 @@ public class ProductCatalogGenerator implements IApplication
     return result;
   }
 
-  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException,
-      ProvisionException
+  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException, ProvisionException
   {
     IMetadataRepository releaseMetaDataRepository = manager.loadRepository(releaseURI, null);
     IMetadataRepository result = releaseMetaDataRepository;
@@ -626,7 +684,6 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  @Deprecated
   private void postProcess(ProductCatalog productCatalog)
   {
     for (Iterator<Product> it = productCatalog.getProducts().iterator(); it.hasNext();)
