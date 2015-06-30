@@ -178,7 +178,8 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Oomph"
-          activeRepositoryList="${eclipse.target.platform}">
+          activeRepositoryList="${eclipse.target.platform}"
+          includeAllPlatforms="true">
         <annotation
             source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
           <detail
