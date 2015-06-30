@@ -22,6 +22,7 @@ import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.RepositoryProvider;
+import org.eclipse.oomph.p2.impl.RequirementImpl;
 import org.eclipse.oomph.p2.internal.ui.RepositoryManager.RepositoryManagerListener;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.ui.SearchField;
@@ -50,6 +51,7 @@ import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
@@ -649,6 +651,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           Object element = it.next();
 
           VersionRange versionRange = VersionRange.emptyRange;
+          String filter = null;
+
           if (element instanceof VersionProvider.ItemVersion)
           {
             VersionProvider.ItemVersion itemVersion = (VersionProvider.ItemVersion)element;
@@ -656,6 +660,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
             VersionSegment versionSegment = versionProvider.getVersionSegment();
             versionRange = P2Factory.eINSTANCE.createVersionRange(version, versionSegment, compatibleVersion);
+
+            filter = RequirementImpl.formatMatchExpression(itemVersion.getFilter());
 
             element = ((IStructuredSelection)itemsViewer.getSelection()).getFirstElement();
           }
@@ -667,11 +673,30 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             String namespace = item.getNamespace();
             if (namespace != null)
             {
+              if (filter == null && item instanceof VersionedItem)
+              {
+                VersionedItem versionedItem = (VersionedItem)item;
+
+                for (IMatchExpression<IInstallableUnit> matchExpression : versionedItem.getVersions().values())
+                {
+                  String string = RequirementImpl.formatMatchExpression(matchExpression);
+                  if (filter == null || filter.equals(string))
+                  {
+                    filter = string;
+                  }
+                  else
+                  {
+                    filter = null;
+                    break;
+                  }
+                }
+              }
+
               Requirement requirement = P2Factory.eINSTANCE.createRequirement();
               requirement.setNamespace(namespace);
               requirement.setName(item.getName());
               requirement.setVersionRange(versionRange);
-
+              requirement.setFilter(filter);
               result.add(requirement);
             }
           }
@@ -1116,7 +1141,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         String categoryID, IProgressMonitor monitor)
     {
       Map<String, Item> children = new HashMap<String, Item>();
-      Map<Item, Set<Version>> versions = new HashMap<Item, Set<Version>>();
+      Map<Item, Map<Version, IMatchExpression<IInstallableUnit>>> versions = new HashMap<Item, Map<Version, IMatchExpression<IInstallableUnit>>>();
 
       for (IRequirement requirement : categories.get(categoryID))
       {
@@ -1192,7 +1217,16 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
                   if (child != null)
                   {
-                    CollectionUtil.add(versions, child, version);
+                    IMatchExpression<IInstallableUnit> matchExpression = iu.getFilter();
+
+                    Map<Version, IMatchExpression<IInstallableUnit>> map = versions.get(child);
+                    if (map == null)
+                    {
+                      map = new HashMap<Version, IMatchExpression<IInstallableUnit>>();
+                      versions.put(child, map);
+                    }
+
+                    map.put(version, matchExpression);
                   }
                 }
               }
@@ -1201,7 +1235,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         }
       }
 
-      for (Map.Entry<Item, Set<Version>> entry : versions.entrySet())
+      for (Map.Entry<Item, Map<Version, IMatchExpression<IInstallableUnit>>> entry : versions.entrySet())
       {
         P2UIPlugin.checkCancelation(monitor);
 
@@ -1254,7 +1288,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     public void analyzeInstallableUnits(IProgressMonitor monitor)
     {
       Map<String, String> names = new HashMap<String, String>();
-      Map<String, Set<Version>> versions = new HashMap<String, Set<Version>>();
+      Map<String, Map<Version, IMatchExpression<IInstallableUnit>>> versions = new HashMap<String, Map<Version, IMatchExpression<IInstallableUnit>>>();
 
       for (IInstallableUnit iu : installableUnits)
       {
@@ -1267,7 +1301,18 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           if (isFiltered(name))
           {
             names.put(id, name);
-            CollectionUtil.add(versions, id, iu.getVersion());
+
+            Version version = iu.getVersion();
+            IMatchExpression<IInstallableUnit> filter = iu.getFilter();
+
+            Map<Version, IMatchExpression<IInstallableUnit>> map = versions.get(id);
+            if (map == null)
+            {
+              map = new HashMap<Version, IMatchExpression<IInstallableUnit>>();
+              versions.put(id, map);
+            }
+
+            map.put(version, filter);
           }
         }
       }
@@ -1279,9 +1324,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         P2UIPlugin.checkCancelation(monitor);
         String id = iterator.next();
+        Map<Version, IMatchExpression<IInstallableUnit>> map = versions.get(id);
 
         FeatureItem featureItem = new FeatureItem(id);
-        featureItem.setVersions(versions.get(id));
+        featureItem.setVersions(map);
         featureItem.setLabel(names.get(id));
         featureItems[i] = featureItem;
       }
@@ -1744,13 +1790,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       if (inputElement instanceof VersionedItem)
       {
         VersionedItem versionedItem = (VersionedItem)inputElement;
-        Set<Version> versions = versionedItem.getVersions();
+        Map<Version, IMatchExpression<IInstallableUnit>> versions = versionedItem.getVersions();
         if (versions != null)
         {
           Set<ItemVersion> itemVersions = new HashSet<ItemVersion>();
-          for (Version version : versions)
+          for (Map.Entry<Version, IMatchExpression<IInstallableUnit>> entry : versions.entrySet())
           {
-            ItemVersion itemVersion = getItemVersion(version);
+            ItemVersion itemVersion = getItemVersion(entry.getKey(), entry.getValue());
             itemVersions.add(itemVersion);
           }
 
@@ -1769,12 +1815,12 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       return IMAGE;
     }
 
-    private ItemVersion getItemVersion(Version version)
+    private ItemVersion getItemVersion(Version version, IMatchExpression<IInstallableUnit> filter)
     {
       int segments = version.getSegmentCount();
       if (segments == 0)
       {
-        return new ItemVersion(version, "0.0.0");
+        return new ItemVersion(version, "0.0.0", filter);
       }
 
       segments = Math.min(segments, versionSegment.ordinal() + 1);
@@ -1803,7 +1849,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         builder.append(".x");
       }
 
-      return new ItemVersion(version, builder.toString());
+      return new ItemVersion(version, builder.toString(), filter);
     }
 
     /**
@@ -1815,15 +1861,23 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       private final String label;
 
-      public ItemVersion(Version version, String label)
+      private final IMatchExpression<IInstallableUnit> filter;
+
+      public ItemVersion(Version version, String label, IMatchExpression<IInstallableUnit> filter)
       {
         this.version = version;
         this.label = label;
+        this.filter = filter;
       }
 
       public Version getVersion()
       {
         return version;
+      }
+
+      public IMatchExpression<IInstallableUnit> getFilter()
+      {
+        return filter;
       }
 
       public int compareTo(ItemVersion o)
@@ -1999,6 +2053,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     private Item[] children;
 
+    public CategoryItem()
+    {
+    }
+
     @Override
     public Image getImage()
     {
@@ -2024,12 +2082,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
 
     @Override
-    public String getNamespace()
-    {
-      return null;
-    }
-
-    @Override
     protected Integer getCategoryOrder()
     {
       return CATEGORY_ORDER;
@@ -2041,16 +2093,20 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static abstract class VersionedItem extends Item
   {
-    private Set<Version> versions;
+    private Map<Version, IMatchExpression<IInstallableUnit>> versions;
 
-    public Set<Version> getVersions()
+    public VersionedItem()
+    {
+    }
+
+    public Map<Version, IMatchExpression<IInstallableUnit>> getVersions()
     {
       return versions;
     }
 
-    public void setVersions(Set<Version> versions)
+    public void setVersions(Map<Version, IMatchExpression<IInstallableUnit>> map)
     {
-      this.versions = versions;
+      versions = map;
     }
   }
 
@@ -2123,6 +2179,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     private String namespace;
 
+    public CapabilityItem()
+    {
+    }
+
     @Override
     public String getNamespace()
     {
@@ -2132,6 +2192,17 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     public void setNamespace(String namespace)
     {
       this.namespace = namespace;
+    }
+
+    public void setVersions(Set<Version> versions)
+    {
+      Map<Version, IMatchExpression<IInstallableUnit>> map = new HashMap<Version, IMatchExpression<IInstallableUnit>>();
+      for (Version version : versions)
+      {
+        map.put(version, null);
+      }
+
+      setVersions(map);
     }
 
     @Override

@@ -206,7 +206,9 @@ public class ProfileDetailsComposite extends Composite
         {
           String id = iu.getId();
           VersionRange versionRange = new VersionRange(iu.getVersion().toString());
-          children.add(P2Factory.eINSTANCE.createRequirement(id, versionRange));
+          Requirement requirement = P2Factory.eINSTANCE.createRequirement(id, versionRange);
+          requirement.setMatchExpression(iu.getFilter());
+          children.add(requirement);
         }
 
         ECollections.sort(children, new Comparator<Requirement>()

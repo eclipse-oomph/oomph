@@ -24,8 +24,11 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -43,6 +46,7 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isFeature <em>Feature</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getFilter <em>Filter</em>}</li>
  * </ul>
  *
  * @generated
@@ -151,6 +155,26 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @ordered
    */
   protected static final boolean FEATURE_EDEFAULT = false;
+
+  /**
+   * The default value of the '{@link #getFilter() <em>Filter</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFilter()
+   * @generated
+   * @ordered
+   */
+  protected static final String FILTER_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getFilter() <em>Filter</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFilter()
+   * @generated
+   * @ordered
+   */
+  protected String filter = FILTER_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -319,6 +343,43 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getFilter()
+  {
+    return filter;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFilter(String newFilter)
+  {
+    String oldFilter = filter;
+    filter = newFilter;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__FILTER, oldFilter, filter));
+    }
+  }
+
+  public IMatchExpression<IInstallableUnit> getMatchExpression()
+  {
+    String filter = getFilter();
+    return parseMatchExpression(filter);
+  }
+
+  public void setMatchExpression(IMatchExpression<IInstallableUnit> matchExpression)
+  {
+    String filter = formatMatchExpression(matchExpression);
+    setFilter(filter);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
@@ -336,6 +397,8 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return isOptional();
       case P2Package.REQUIREMENT__FEATURE:
         return isFeature();
+      case P2Package.REQUIREMENT__FILTER:
+        return getFilter();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -364,6 +427,9 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return;
       case P2Package.REQUIREMENT__OPTIONAL:
         setOptional((Boolean)newValue);
+        return;
+      case P2Package.REQUIREMENT__FILTER:
+        setFilter((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -394,6 +460,9 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       case P2Package.REQUIREMENT__OPTIONAL:
         setOptional(OPTIONAL_EDEFAULT);
         return;
+      case P2Package.REQUIREMENT__FILTER:
+        setFilter(FILTER_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -420,6 +489,8 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return optional != OPTIONAL_EDEFAULT;
       case P2Package.REQUIREMENT__FEATURE:
         return isFeature() != FEATURE_EDEFAULT;
+      case P2Package.REQUIREMENT__FILTER:
+        return FILTER_EDEFAULT == null ? filter != null : !FILTER_EDEFAULT.equals(filter);
     }
     return super.eIsSet(featureID);
   }
@@ -502,6 +573,29 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     }
 
     return result.toString();
+  }
+
+  public static IMatchExpression<IInstallableUnit> parseMatchExpression(String filter)
+  {
+    if (filter == null)
+    {
+      return null;
+    }
+
+    return InstallableUnit.parseFilter(filter);
+  }
+
+  public static String formatMatchExpression(IMatchExpression<IInstallableUnit> matchExpression)
+  {
+    if (matchExpression == null)
+    {
+      return null;
+    }
+
+    return matchExpression.getParameters()[0].toString();
+    // StringBuffer buffer = new StringBuffer();
+    // matchExpression.toLDAPString(buffer);
+    // return buffer.toString();
   }
 
 } // RequirementImpl

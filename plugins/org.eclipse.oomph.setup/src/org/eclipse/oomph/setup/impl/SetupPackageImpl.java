@@ -404,8 +404,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     }
 
     // Obtain or create and register package
-    SetupPackageImpl theSetupPackage = (SetupPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new SetupPackageImpl());
+    SetupPackageImpl theSetupPackage = (SetupPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupPackageImpl
+        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SetupPackageImpl());
 
     isInited = true;
 
@@ -2000,8 +2000,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEClass(setupTaskEClass, SetupTask.class, "SetupTask", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSetupTask_ID(), ecorePackage.getEString(), "iD", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
         IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetupTask_Description(), theBasePackage.getText(), "description", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSetupTask_Description(), theBasePackage.getText(), "description", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetupTask_ScopeType(), getScopeType(), "scopeType", null, 0, 1, SetupTask.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getSetupTask_ExcludedTriggers(), getTriggerSet(), "excludedTriggers", "", 1, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
@@ -2078,8 +2078,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEReference(getProduct_ProductCatalog(), getProductCatalog(), getProductCatalog_Products(), "productCatalog", null, 0, 1, Product.class, IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getProduct_ProductCatalog().getEKeys().add(getScope_Name());
-    initEReference(getProduct_Versions(), getProductVersion(), getProductVersion_Product(), "versions", null, 1, -1, Product.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getProduct_Versions(), getProductVersion(), getProductVersion_Product(), "versions", null, 1, -1, Product.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getProduct_Versions().getEKeys().add(getScope_Name());
 
     initEClass(productVersionEClass, ProductVersion.class, "ProductVersion", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2178,8 +2178,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVariableTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVariableTask_Choices(), getVariableChoice(), null, "choices", null, 0, -1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVariableTask_Choices(), getVariableChoice(), null, "choices", null, 0, -1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(variableChoiceEClass, VariableChoice.class, "VariableChoice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getVariableChoice_Value(), ecorePackage.getEString(), "value", null, 1, 1, VariableChoice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
@@ -2190,8 +2190,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEClass(stringSubstitutionTaskEClass, StringSubstitutionTask.class, "StringSubstitutionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getStringSubstitutionTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getStringSubstitutionTask_Value(), ecorePackage.getEString(), "value", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getStringSubstitutionTask_Value(), ecorePackage.getEString(), "value", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(redirectionTaskEClass, RedirectionTask.class, "RedirectionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getRedirectionTask_SourceURL(), ecorePackage.getEString(), "sourceURL", null, 1, 1, RedirectionTask.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -2226,8 +2226,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(resourceCreationTaskEClass, ResourceCreationTask.class, "ResourceCreationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getResourceCreationTask_Content(), ecorePackage.getEString(), "content", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getResourceCreationTask_Content(), ecorePackage.getEString(), "content", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCreationTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCreationTask_Encoding(), ecorePackage.getEString(), "encoding", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT,
@@ -2249,8 +2249,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
 
     initEClass(productToProductVersionMapEntryEClass, Map.Entry.class, "ProductToProductVersionMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
         !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProductToProductVersionMapEntry_Key(), getProduct(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getProductToProductVersionMapEntry_Key(), getProduct(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getProductToProductVersionMapEntry_Value(), getProductVersion(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -2316,7 +2316,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.DECLINE);
 
     // Initialize data types
-    initEDataType(triggerSetEDataType, Set.class, "TriggerSet", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, "java.util.Set<org.eclipse.oomph.setup.Trigger>");
+    initEDataType(triggerSetEDataType, Set.class, "TriggerSet", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS,
+        "java.util.Set<org.eclipse.oomph.setup.Trigger>");
     initEDataType(licenseInfoEDataType, LicenseInfo.class, "LicenseInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
@@ -2346,8 +2347,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   protected void createLabelProviderAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.edit/icons/full/obj16" });
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.edit/icons/full/obj16" });
   }
 
   /**
@@ -2417,15 +2418,15 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
     addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "install.root", "type", "FOLDER", "label", "Root install folder",
         "defaultValue", "${user.home}", "description", "The root install folder where all the products are installed", "storageURI", "scope://" });
-    addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "installation.id", "type", "STRING", "label", "Installation folder name",
-        "defaultValue", "${scope.product.name|installationID}", "description",
-        "The name of the folder within the root install folder where the product is installed" });
-    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.container.root", "type", "FOLDER", "label",
-        "Root workspace-container folder", "defaultValue", "${user.home}", "description",
-        "The root workspace-container folder where all the workspaces are located", "storageURI", "scope://" });
-    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.id", "type", "STRING", "label", "Workspace folder name",
-        "defaultValue", "${scope.project.name|workspaceID}", "description",
-        "The name of the workspace folder within the root workspace-container folder where the workspaces are located" });
+    addAnnotation(getInstallationTask_Location(), source,
+        new String[] { "name", "installation.id", "type", "STRING", "label", "Installation folder name", "defaultValue", "${scope.product.name|installationID}",
+            "description", "The name of the folder within the root install folder where the product is installed" });
+    addAnnotation(getWorkspaceTask_Location(), source,
+        new String[] { "name", "workspace.container.root", "type", "FOLDER", "label", "Root workspace-container folder", "defaultValue", "${user.home}",
+            "description", "The root workspace-container folder where all the workspaces are located", "storageURI", "scope://" });
+    addAnnotation(getWorkspaceTask_Location(), source,
+        new String[] { "name", "workspace.id", "type", "STRING", "label", "Workspace folder name", "defaultValue", "${scope.project.name|workspaceID}",
+            "description", "The name of the workspace folder within the root workspace-container folder where the workspaces are located" });
   }
 
   /**
@@ -2450,22 +2451,24 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   protected void createVariableAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(getInstallationTask_Location(), source, new String[] { "filter", "canonical", "type", "STRING", "label", "Installation location rule",
-        "description", "The rule for the absolute folder location where the product is installed", "storageURI", null, "explicitType", "FOLDER",
-        "explicitLabel", "Installation location", "explicitDescription", "The absolute folder location where the product is installed" });
-    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${install.root/}${installation.id}", "label",
-        "Installed in a uniquely-named folder within the root install folder" });
-    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${@id.location}", "label",
-        "Installed in the specified absolute folder location" });
-    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "filter", "canonical", "type", "STRING", "label", "Workspace location rule",
-        "description", "The rule for the absolute folder location where the workspace is located", "storageURI", null, "explicitType", "FOLDER",
-        "explicitLabel", "Workspace location", "explicitDescription", "The absolute folder location where the workspace is located" });
-    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${installation.location/ws}", "label",
-        "Located in a folder named \'ws\' within the installation folder" });
-    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${workspace.container.root/}${workspace.id}",
-        "label", "Located in a uniquely-named folder within the root workspace-container folder" });
-    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${@id.location}", "label",
-        "Located in the specified absolute folder location" });
+    addAnnotation(getInstallationTask_Location(), source,
+        new String[] { "filter", "canonical", "type", "STRING", "label", "Installation location rule", "description",
+            "The rule for the absolute folder location where the product is installed", "storageURI", null, "explicitType", "FOLDER", "explicitLabel",
+            "Installation location", "explicitDescription", "The absolute folder location where the product is installed" });
+    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${install.root/}${installation.id}", "label", "Installed in a uniquely-named folder within the root install folder" });
+    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${@id.location}", "label", "Installed in the specified absolute folder location" });
+    addAnnotation(getWorkspaceTask_Location(), source,
+        new String[] { "filter", "canonical", "type", "STRING", "label", "Workspace location rule", "description",
+            "The rule for the absolute folder location where the workspace is located", "storageURI", null, "explicitType", "FOLDER", "explicitLabel",
+            "Workspace location", "explicitDescription", "The absolute folder location where the workspace is located" });
+    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${installation.location/ws}", "label", "Located in a folder named \'ws\' within the installation folder" });
+    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${workspace.container.root/}${workspace.id}", "label",
+        "Located in a uniquely-named folder within the root workspace-container folder" });
+    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice",
+        new String[] { "value", "${@id.location}", "label", "Located in the specified absolute folder location" });
   }
 
 } // SetupPackageImpl

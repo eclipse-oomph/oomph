@@ -12,8 +12,10 @@ package org.eclipse.oomph.p2;
 
 import org.eclipse.oomph.base.ModelElement;
 
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +31,7 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isOptional <em>Optional</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isFeature <em>Feature</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#getFilter <em>Filter</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.p2.P2Package#getRequirement()
@@ -159,6 +162,36 @@ public interface Requirement extends ModelElement
    * @generated
    */
   boolean isFeature();
+
+  /**
+   * Returns the value of the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Filter</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Filter</em>' attribute.
+   * @see #setFilter(String)
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Filter()
+   * @model
+   * @generated
+   */
+  String getFilter();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#getFilter <em>Filter</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Filter</em>' attribute.
+   * @see #getFilter()
+   * @generated
+   */
+  void setFilter(String value);
+
+  IMatchExpression<IInstallableUnit> getMatchExpression();
+
+  void setMatchExpression(IMatchExpression<IInstallableUnit> matchExpression);
 
   /**
    * <!-- begin-user-doc -->

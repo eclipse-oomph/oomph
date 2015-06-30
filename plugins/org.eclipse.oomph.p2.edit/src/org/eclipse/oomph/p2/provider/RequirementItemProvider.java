@@ -75,6 +75,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
       addVersionRangePropertyDescriptor(object);
       addOptionalPropertyDescriptor(object);
       addFeaturePropertyDescriptor(object);
+      addFilterPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -146,6 +147,19 @@ public class RequirementItemProvider extends ModelElementItemProvider
         getString("_UI_Requirement_feature_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Requirement_feature_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__FEATURE,
         false, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Filter feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addFilterPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Requirement_filter_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_filter_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__FILTER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   @Override
@@ -297,6 +311,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
       case P2Package.REQUIREMENT__VERSION_RANGE:
       case P2Package.REQUIREMENT__OPTIONAL:
       case P2Package.REQUIREMENT__FEATURE:
+      case P2Package.REQUIREMENT__FILTER:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

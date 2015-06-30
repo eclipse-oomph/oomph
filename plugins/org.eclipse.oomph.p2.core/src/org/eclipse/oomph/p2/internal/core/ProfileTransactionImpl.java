@@ -73,6 +73,7 @@ import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.planner.IPlanner;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.planner.ProfileInclusionRules;
@@ -858,7 +859,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
         rootIUs.put(id, rootIU);
 
         VersionRange versionRange = getCleanVersionRange(rootIU);
-        IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, null, false, false);
+        IMatchExpression<IInstallableUnit> filter = rootIU.getFilter();
+
+        IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, filter, false, false);
         rootRequirements.add(rootRequirement);
       }
 
@@ -874,9 +877,10 @@ public class ProfileTransactionImpl implements ProfileTransaction
       String namespace = requirement.getNamespace();
       String name = requirement.getName();
       VersionRange versionRange = requirement.getVersionRange();
+      IMatchExpression<IInstallableUnit> filter = requirement.getMatchExpression();
       boolean optional = requirement.isOptional();
 
-      IRequirement rootRequirement = MetadataFactory.createRequirement(namespace, name, versionRange, null, optional, false);
+      IRequirement rootRequirement = MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional, false);
       rootRequirements.add(rootRequirement);
     }
 

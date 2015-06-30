@@ -309,13 +309,22 @@ public interface P2Package extends EPackage
   int REQUIREMENT__FEATURE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__FILTER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
+
+  /**
    * The number of structural features of the '<em>Requirement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
+  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -695,6 +704,17 @@ public interface P2Package extends EPackage
   EAttribute getRequirement_Feature();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getFilter <em>Filter</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Filter</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#getFilter()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Filter();
+
+  /**
    * Returns the meta object for the '{@link org.eclipse.oomph.p2.Requirement#setVersionRange(org.eclipse.equinox.p2.metadata.Version, org.eclipse.oomph.p2.VersionSegment) <em>Set Version Range</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -975,6 +995,14 @@ public interface P2Package extends EPackage
      * @generated
      */
     EAttribute REQUIREMENT__FEATURE = eINSTANCE.getRequirement_Feature();
+
+    /**
+     * The meta object literal for the '<em><b>Filter</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__FILTER = eINSTANCE.getRequirement_Filter();
 
     /**
      * The meta object literal for the '<em><b>Set Version Range</b></em>' operation.

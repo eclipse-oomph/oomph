@@ -172,6 +172,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
             }
 
             requirement.setName(iu.getId());
+            requirement.setMatchExpression(iu.getFilter());
             requirements.add(requirement);
           }
         }
