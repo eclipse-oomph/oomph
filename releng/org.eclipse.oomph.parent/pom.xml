@@ -21,26 +21,35 @@ Eike Stepper - initial API and implementation
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tycho.scmUrl>scm:git:https://git.eclipse.org/r/p/oomph/org.eclipse.oomph.git</tycho.scmUrl>
-    <tycho-version>0.23.0-SNAPSHOT</tycho-version>
-    <cbi-signing-version>1.1.2-SNAPSHOT</cbi-signing-version>
+    <tycho-version>0.23.0</tycho-version>
     <os-jvm-flags/>
   </properties>
 
   <pluginRepositories>
     <pluginRepository>
       <id>eclipse-maven-releases</id>
+      <url>https://repo.eclipse.org/content/repositories/releases</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>eclipse-cbi-releases</id>
+      <url>https://repo.eclipse.org/content/repositories/cbi-releases</url>
+    </pluginRepository>
+    <!-- Snapshot Repos
+    <pluginRepository>
+      <id>eclipse-maven-snapshots</id>
       <url>https://repo.eclipse.org/content/repositories/snapshots</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
     </pluginRepository>
     <pluginRepository>
-      <id>eclipse-cbi-releases</id>
+      <id>eclipse-cbi-snapshots</id>
       <url>https://repo.eclipse.org/content/repositories/cbi-snapshots</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
     </pluginRepository>
+    -->
   </pluginRepositories>
 
   <build>
@@ -122,7 +131,6 @@ Eike Stepper - initial API and implementation
         <plugin>
           <groupId>org.eclipse.cbi.maven.plugins</groupId>
           <artifactId>eclipse-jarsigner-plugin</artifactId>
-          <version>${cbi-signing-version}</version>
         </plugin>
         <plugin>
           <groupId>org.eclipse.tycho.extras</groupId>

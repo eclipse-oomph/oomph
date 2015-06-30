@@ -3,7 +3,7 @@
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.ui.externaltools.launchGroup"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${maven.root}\bin\mvn.bat"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dbuild.id=Unknown&#13;&#10;-Dgit.commit=Unknown&#13;&#10;-Dgit.branch=Unknown&#13;&#10;-DskipTests=true&#13;&#10;-DDenv=win64&#13;&#10;-DDtycho.debug.resolver=true&#13;&#10;-DX&#13;&#10;clean&#13;&#10;verify"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${maven.root}\bin\mvnDebug.bat"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dbuild.id=Unknown&#13;&#10;-Dgit.commit=Unknown&#13;&#10;-Dgit.branch=Unknown&#13;&#10;-DskipTests=true&#13;&#10;-Denv=win64&#13;&#10;-DDtycho.debug.resolver=true&#13;&#10;-DX&#13;&#10;clean&#13;&#10;verify"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${git.clone.oomph}"/>
 </launchConfiguration>
