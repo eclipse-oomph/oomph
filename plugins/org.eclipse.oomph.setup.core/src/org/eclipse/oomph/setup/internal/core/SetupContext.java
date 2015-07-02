@@ -220,15 +220,13 @@ public class SetupContext
     if (uri.segmentCount() > 3)
     {
       String eclipseLauncher = PropertiesUtil.getProperty("eclipse.launcher");
-      if (eclipseLauncher == null)
+      if (eclipseLauncher != null)
       {
-        throw new IllegalStateException("There is no eclipse.launcher property defined");
-      }
-
-      File eclipseLauncherExecutable = new File(eclipseLauncher);
-      if (eclipseLauncherExecutable.exists())
-      {
-        effectiveInstallation = installation;
+        File eclipseLauncherExecutable = new File(eclipseLauncher);
+        if (eclipseLauncherExecutable.exists())
+        {
+          effectiveInstallation = installation;
+        }
       }
     }
 
