@@ -26,22 +26,39 @@ import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
+import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
 import org.eclipse.oomph.p2.internal.core.ProfileImpl;
 import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 
 /**
  * @author Eike Stepper
  */
+@FixMethodOrder(MethodSorters.JVM)
 public class AgentTests extends AbstractP2Test
 {
   @Test
@@ -259,7 +276,7 @@ public class AgentTests extends AbstractP2Test
 
     // No update (keep new version)
     ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
-    commitProfileTransaction(transaction3, true);
+    commitProfileTransaction(transaction3, false);
     assertThat(features.list().length, is(1));
     assertThat(new File(features, newVersion).isDirectory(), is(true));
   }
@@ -304,7 +321,7 @@ public class AgentTests extends AbstractP2Test
 
     // No update (keep new version)
     ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
-    commitProfileTransaction(transaction3, true);
+    commitProfileTransaction(transaction3, false);
     assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, newVersion).isFile(), is(true));
   }
@@ -324,7 +341,8 @@ public class AgentTests extends AbstractP2Test
     // Install
     ProfileTransaction transaction1 = profile.change();
     ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
-    profileDefinition.getRequirements().add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch"));
+    profileDefinition.getRequirements()
+        .add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch", new VersionRange("[0.1.46.v201205102330,0.1.46.v201205102330]")));
     profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository(PLATFORM_OLD.toURI().toString()));
 
     commitProfileTransaction(transaction1, true);
@@ -336,20 +354,25 @@ public class AgentTests extends AbstractP2Test
     File plugins = new File(installFolder, "plugins");
     assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, oldVersion).isFile(), is(true));
+    assertThat(new File(plugins, newVersion).isFile(), is(false));
 
-    // Update (add new version)
+    // Update (keep old version)
     ProfileTransaction transaction2 = profile.change();
     transaction2.getProfileDefinition().getRepositories().add(P2Factory.eINSTANCE.createRepository(PLATFORM_NEW.toURI().toString()));
 
-    commitProfileTransaction(transaction2, true);
+    commitProfileTransaction(transaction2, true); // Profile must change, but only the profileDefinition property.
+    assertThat(plugins.list().length, is(1));
+    assertThat(new File(plugins, oldVersion).isFile(), is(true));
+    assertThat(new File(plugins, newVersion).isFile(), is(false));
+
+    // Update (add new version)
+    ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
+    transaction3.getProfileDefinition().getRequirements()
+        .add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch", new VersionRange("[0.1.50.v201310081430,0.1.50.v201310081430]")));
+
+    commitProfileTransaction(transaction3, true);
     assertThat(plugins.list().length, is(2));
     assertThat(new File(plugins, oldVersion).isFile(), is(true));
-    assertThat(new File(plugins, newVersion).isFile(), is(true));
-
-    // Update (remove old version)
-    ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
-    commitProfileTransaction(transaction3, true);
-    assertThat(plugins.list().length, is(1));
     assertThat(new File(plugins, newVersion).isFile(), is(true));
   }
 
@@ -429,5 +452,118 @@ public class AgentTests extends AbstractP2Test
 
     File artifacts = new File(installFolder, "artifacts.xml");
     assertThat(artifacts.isFile(), is(true));
+  }
+
+  @Test
+  public void testP2IndexSorting() throws Exception
+  {
+    final Agent testAgent = getAgent();
+
+    @SuppressWarnings("restriction")
+    class RepoMan extends CachingRepositoryManager.Metadata
+    {
+      private final String INDEX_FILE = "p2.index"; //$NON-NLS-1$
+
+      public RepoMan()
+      {
+        super(testAgent.getProvisioningAgent(), null);
+      }
+
+      public void test(String uri) throws Exception
+      {
+        URI location = new URI(uri);
+        org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties indexFile = loadIndexFile(location, new NullProgressMonitor());
+
+        String[] allSuffixes = getAllSuffixes();
+        System.out.println("allSuffixes: " + Arrays.asList(allSuffixes));
+
+        String[] preferredOrder = getPreferredRepositorySearchOrder(indexFile);
+        System.out.println("preferredOrder: " + Arrays.asList(preferredOrder));
+
+        String[] suffixes = sortSuffixes(allSuffixes, location, preferredOrder);
+        System.out.println("suffixes: " + Arrays.asList(suffixes));
+      }
+
+      /**
+       * Fetches the p2.index file from the server. If the file could not be fetched
+       * a NullSafe version is returned.
+       */
+      private org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties loadIndexFile(URI location, IProgressMonitor monitor)
+      {
+        org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties locationProperties = org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties
+            .createEmptyIndexFile();
+        // Handle the case of in-memory repos
+        if (!isURL(location))
+        {
+          return locationProperties;
+        }
+
+        if ("file".equals(location.getScheme())) //$NON-NLS-1$
+        {
+          InputStream localStream = null;
+          try
+          {
+            try
+            {
+              File indexFile = URIUtil.toFile(getIndexFileURI(location));
+              if (indexFile != null && indexFile.exists() && indexFile.canRead())
+              {
+                localStream = new FileInputStream(indexFile);
+                locationProperties = org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties.create(localStream);
+              }
+            }
+            finally
+            {
+              if (localStream != null)
+              {
+                localStream.close();
+              }
+            }
+          }
+          catch (IOException e)
+          {
+            // do nothing.
+          }
+          return locationProperties;
+        }
+
+        // Handle non local repos (i.e. not file:)
+        ByteArrayOutputStream index = new ByteArrayOutputStream();
+        IStatus indexFileStatus = null;
+        indexFileStatus = getTransport().download(getIndexFileURI(location), index, monitor);
+        if (indexFileStatus != null && indexFileStatus.isOK())
+        {
+          locationProperties = org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties.create(new ByteArrayInputStream(index.toByteArray()));
+        }
+
+        return locationProperties;
+      }
+
+      private boolean isURL(URI location)
+      {
+        try
+        {
+          new URL(location.toASCIIString());
+        }
+        catch (MalformedURLException e)
+        {
+          return false;
+        }
+        return true;
+      }
+
+      private URI getIndexFileURI(URI base)
+      {
+        final String name = INDEX_FILE;
+        String spec = base.toString();
+        if (spec.endsWith(name))
+        {
+          return base;
+        }
+        return URIUtil.append(base, name);
+      }
+    }
+
+    new RepoMan().test("http://download.eclipse.org/releases/mars");
   }
 }

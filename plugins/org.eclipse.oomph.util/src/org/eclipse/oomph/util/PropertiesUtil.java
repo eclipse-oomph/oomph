@@ -33,10 +33,6 @@ import java.util.Vector;
  */
 public final class PropertiesUtil
 {
-  public static final String USER_HOME = getProperty("user.home", ".");
-
-  public static final String TEMP_DIR = getProperty("java.io.tmpdir", ".");
-
   public static final String[] EXPERT_FILTER = { "org.eclipse.ui.views.properties.expert" };
 
   private static final String TRUE = Boolean.TRUE.toString();
@@ -104,6 +100,16 @@ public final class PropertiesUtil
     {
       return defaultValue;
     }
+  }
+
+  public static String getUserHome()
+  {
+    return getProperty("user.home", ".");
+  }
+
+  public static String getTmpDir()
+  {
+    return getProperty("java.io.tmpdir", ".");
   }
 
   // public static void main(String[] args)

@@ -127,6 +127,7 @@ public abstract class AbstractTest
     if (userHome == null)
     {
       userHome = createTempFolder();
+      System.setProperty("user.home", userHome.getAbsolutePath());
     }
 
     return userHome;

@@ -28,7 +28,6 @@ import org.eclipse.equinox.internal.provisional.p2.repository.IStateful;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -48,6 +47,8 @@ import java.util.Stack;
 @SuppressWarnings("restriction")
 public class CachingTransport extends Transport
 {
+  public static final String SERVICE_NAME = Transport.SERVICE_NAME;
+
   private static final ThreadLocal<Stack<String>> REPOSITORY_LOCATIONS = new InheritableThreadLocal<Stack<String>>()
   {
     @Override
@@ -61,69 +62,35 @@ public class CachingTransport extends Transport
 
   private static boolean DEBUG = false;
 
-  private final Transport delegate;
-
   private final IProvisioningAgent agent;
 
   private final File cacheFolder;
 
+  private Transport delegate;
+
   public CachingTransport(Transport delegate, IProvisioningAgent agent)
+  {
+    setDelegate(delegate);
+    this.agent = agent;
+
+    File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.getUserHome()));
+    cacheFolder = new File(folder, "cache");
+    cacheFolder.mkdirs();
+  }
+
+  public final Transport getDelegate()
+  {
+    return delegate;
+  }
+
+  public final void setDelegate(Transport delegate)
   {
     if (delegate instanceof CachingTransport)
     {
-      throw new IllegalArgumentException("CachingTransport should not be chained.");
+      throw new IllegalArgumentException("CachingTransport should not be chained");
     }
 
     this.delegate = delegate;
-    this.agent = agent;
-
-    File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.USER_HOME));
-    cacheFolder = new File(folder, "cache");
-    if (cacheFolder.exists())
-    {
-      cleanupIndexFiles();
-    }
-    else
-    {
-      cacheFolder.mkdirs();
-    }
-  }
-
-  private void cleanupIndexFiles()
-  {
-    File markerFile = new File(cacheFolder, ".indexes_cleaned_up");
-    if (!markerFile.exists())
-    {
-      try
-      {
-        markerFile.createNewFile();
-      }
-      catch (IOException ex)
-      {
-        P2CorePlugin.INSTANCE.log(ex);
-        return;
-      }
-
-      File[] indexFiles = cacheFolder.listFiles(new FileFilter()
-      {
-        public boolean accept(File file)
-        {
-          return file.isFile() && file.getName().endsWith("_p2.index");
-        }
-      });
-
-      for (File indexFile : indexFiles)
-      {
-        try
-        {
-          IOUtil.deleteBestEffort(indexFile, false);
-        }
-        catch (Exception ex)
-        {
-          P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
-        }
-      }
-    }
   }
 
   public File getCacheFile(URI uri)
@@ -144,12 +111,14 @@ public class CachingTransport extends Transport
       return delegate.download(uri, target, startPos, monitor);
     }
 
+
     synchronized (getLock(uri))
     {
       File cacheFile = getCacheFile(uri);
       if (cacheFile.length() > 0)
       {
         FileInputStream cacheInputStream = null;
+
         try
         {
           cacheInputStream = new FileInputStream(cacheFile);

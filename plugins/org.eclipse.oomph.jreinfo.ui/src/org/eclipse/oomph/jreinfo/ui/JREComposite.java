@@ -342,7 +342,7 @@ public class JREComposite extends Composite
       rootFolder = rootFolder.getParentFile();
     }
 
-    String filterPath = rootFolder == null ? PropertiesUtil.USER_HOME : rootFolder.getAbsolutePath();
+    String filterPath = rootFolder == null ? PropertiesUtil.getUserHome() : rootFolder.getAbsolutePath();
 
     DirectoryDialog dialog = new DirectoryDialog(getShell());
     dialog.setText(JREDialog.TITLE);

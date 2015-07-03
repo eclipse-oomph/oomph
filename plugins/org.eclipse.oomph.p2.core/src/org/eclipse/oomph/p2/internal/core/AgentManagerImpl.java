@@ -60,7 +60,7 @@ public class AgentManagerImpl implements AgentManager
 
   public AgentManagerImpl()
   {
-    this(new File(PropertiesUtil.USER_HOME));
+    this(new File(PropertiesUtil.getUserHome()));
   }
 
   public AgentManagerImpl(final File userHome)

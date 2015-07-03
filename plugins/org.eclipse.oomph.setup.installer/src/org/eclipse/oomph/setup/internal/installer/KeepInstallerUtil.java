@@ -106,7 +106,7 @@ public final class KeepInstallerUtil
     if (!isInstallerKept() && OS.INSTANCE.isWin())
     {
       String launcher = InstallerApplication.getLauncher();
-      return launcher != null && launcher.startsWith(PropertiesUtil.TEMP_DIR);
+      return launcher != null && launcher.startsWith(PropertiesUtil.getTmpDir());
     }
 
     return false;

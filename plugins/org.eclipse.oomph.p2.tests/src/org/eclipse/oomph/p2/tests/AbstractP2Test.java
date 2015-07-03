@@ -10,9 +10,6 @@
  */
 package org.eclipse.oomph.p2.tests;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -52,7 +49,7 @@ import java.util.List;
 @SuppressWarnings("restriction")
 public abstract class AbstractP2Test extends AbstractTest
 {
-  private static final String TMP = PropertiesUtil.getProperty("java.io.tmpdir");
+  protected static final String TMP = PropertiesUtil.getProperty("java.io.tmpdir");
 
   private static final String CDO = "p2-test-mirror-001-cdo";
 
@@ -61,6 +58,96 @@ public abstract class AbstractP2Test extends AbstractTest
   private static final String SIMPLE_METADATA_REPOSITORY = IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY;
 
   private static final String SIMPLE_ARTIFACT_REPOSITORY = IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY;
+
+  private static final VersionedIdFilter CDO_FILTER = new VersionedIdFilter()
+  {
+    public boolean matches(IVersionedId versionedId)
+    {
+      String id = versionedId.getId();
+      return id.startsWith("org.eclipse.net4j.util") || id.startsWith("org.apache");
+    }
+  };
+
+  private static final VersionedIdFilter PLATFORM_FILTER = new VersionedIdFilter()
+  {
+    public boolean matches(IVersionedId versionedId)
+    {
+      String id = versionedId.getId();
+      return id.startsWith("com.jcraft.jsch") || id.startsWith("org.apache") || id.startsWith("a.jre");
+    }
+  };
+
+  public static final File CDO_OLD = new File(TMP, CDO + "-old");
+
+  public static final File CDO_NEW = new File(TMP, CDO + "-new");
+
+  public static final File PLATFORM_OLD = new File(TMP, PLATFORM + "-old");
+
+  public static final File PLATFORM_NEW = new File(TMP, PLATFORM + "-new");
+
+  @Override
+  public void setUp() throws Exception
+  {
+    super.setUp();
+    AgentManagerImpl.instance = new AgentManagerImpl(getUserHome());
+  }
+
+  @Override
+  public void tearDown() throws Exception
+  {
+    AgentManagerImpl.instance = null;
+    super.tearDown();
+  }
+
+  protected Agent getAgent()
+  {
+    AgentManager agentManager = P2Util.getAgentManager();
+    return agentManager.getAgents().iterator().next();
+  }
+
+  protected Agent getFreshAgent()
+  {
+    AgentManagerImpl.instance = new AgentManagerImpl(getUserHome());
+    return getAgent();
+  }
+
+  protected void commitProfileTransaction(ProfileTransaction transaction, boolean expectedChange) throws CoreException
+  {
+    commitProfileTransaction(transaction, expectedChange, LOGGER);
+  }
+
+  protected void commitProfileTransaction(ProfileTransaction transaction, boolean expectedChange, IProgressMonitor monitor) throws CoreException
+  {
+    boolean actualChange = transaction.commit(monitor);
+    if (actualChange != expectedChange)
+    {
+      if (expectedChange)
+      {
+        throw new AssertionError("Profile should have changed, but didn't");
+      }
+
+      throw new AssertionError("Profile should not have changed, but did");
+    }
+  }
+
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception
+  {
+    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
+    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
+    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000", PLATFORM_OLD, PLATFORM_FILTER);
+    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700", PLATFORM_NEW, PLATFORM_FILTER);
+  }
+
+  private static void mirror(String repo, File local, VersionedIdFilter filter) throws Exception
+  {
+    if (!local.isDirectory())
+    {
+      LOGGER.setTaskName("Creating test mirror of " + repo + " under " + local);
+      mirrorRepository(new URI(repo), local.toURI(), filter, LOGGER);
+      LOGGER.setTaskName(null);
+    }
+  }
 
   public static void mirrorArtifactRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
   {
@@ -162,82 +249,5 @@ public abstract class AbstractP2Test extends AbstractTest
         manager.removeRepository(uri);
       }
     }
-  }
-
-  private static final VersionedIdFilter CDO_FILTER = new VersionedIdFilter()
-  {
-    public boolean matches(IVersionedId versionedId)
-    {
-      String id = versionedId.getId();
-      return id.startsWith("org.eclipse.net4j.util") || id.startsWith("org.apache");
-    }
-  };
-
-  private static final VersionedIdFilter PLATFORM_FILTER = new VersionedIdFilter()
-  {
-    public boolean matches(IVersionedId versionedId)
-    {
-      String id = versionedId.getId();
-      return id.startsWith("com.jcraft.jsch") || id.startsWith("org.apache") || id.startsWith("a.jre");
-    }
-  };
-
-  public static final File CDO_OLD = new File(TMP, CDO + "-old");
-
-  public static final File CDO_NEW = new File(TMP, CDO + "-new");
-
-  public static final File PLATFORM_OLD = new File(TMP, PLATFORM + "-old");
-
-  public static final File PLATFORM_NEW = new File(TMP, PLATFORM + "-new");
-
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception
-  {
-    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
-    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
-    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000", PLATFORM_OLD, PLATFORM_FILTER);
-    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700", PLATFORM_NEW, PLATFORM_FILTER);
-  }
-
-  private static void mirror(String repo, File local, VersionedIdFilter filter) throws Exception
-  {
-    if (!local.isDirectory())
-    {
-      LOGGER.setTaskName("Creating test mirror of " + repo + " under " + local);
-      mirrorRepository(new URI(repo), local.toURI(), filter, LOGGER);
-      LOGGER.setTaskName(null);
-    }
-  }
-
-  @Override
-  public void setUp() throws Exception
-  {
-    super.setUp();
-    AgentManagerImpl.instance = new AgentManagerImpl(getUserHome());
-  }
-
-  @Override
-  public void tearDown() throws Exception
-  {
-    AgentManagerImpl.instance = null;
-    super.tearDown();
-  }
-
-  protected Agent getAgent()
-  {
-    AgentManager agentManager = P2Util.getAgentManager();
-    return agentManager.getAgents().iterator().next();
-  }
-
-  protected Agent getFreshAgent()
-  {
-    AgentManagerImpl.instance = new AgentManagerImpl(getUserHome());
-    return getAgent();
-  }
-
-  protected void commitProfileTransaction(ProfileTransaction transaction, boolean expectedChange) throws CoreException
-  {
-    boolean actualChange = transaction.commit(LOGGER);
-    assertThat(actualChange, is(expectedChange));
   }
 }

@@ -97,7 +97,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public final IPath getUserLocation() throws IllegalStateException
   {
-    return new Path(PropertiesUtil.USER_HOME).append(".eclipse").append(getSymbolicName());
+    return new Path(PropertiesUtil.getUserHome()).append(".eclipse").append(getSymbolicName());
   }
 
   public final Preferences getInstancePreferences()

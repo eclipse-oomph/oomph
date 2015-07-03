@@ -98,7 +98,7 @@ public class SetupContext
 
   // State locations
 
-  public static final URI GLOBAL_STATE_LOCATION_URI = URI.createFileURI(PropertiesUtil.USER_HOME).appendSegments(new String[] { ".eclipse", OOMPH_NODE });
+  public static final URI GLOBAL_STATE_LOCATION_URI = URI.createFileURI(PropertiesUtil.getUserHome()).appendSegments(new String[] { ".eclipse", OOMPH_NODE });
 
   public static final URI GLOBAL_SETUPS_URI = URI.createURI(USER_SCHEME + ":/");
 
@@ -106,8 +106,8 @@ public class SetupContext
 
   public static final URI CONFIGURATION_STATE_LOCATION_URI = CONFIGURATION_LOCATION_URI.appendSegment(OOMPH_NODE);
 
-  public static final URI WORKSPACE_STATE_LOCATION_URI = WORKSPACE_LOCATION_URI == null ? null : WORKSPACE_LOCATION_URI.appendSegments(new String[] {
-      ".metadata", ".plugins", OOMPH_NODE });
+  public static final URI WORKSPACE_STATE_LOCATION_URI = WORKSPACE_LOCATION_URI == null ? null
+      : WORKSPACE_LOCATION_URI.appendSegments(new String[] { ".metadata", ".plugins", OOMPH_NODE });
 
   // Resource locations
 
@@ -125,11 +125,11 @@ public class SetupContext
 
   public static final URI WORKSPACE_SETUP_FILE_NAME_URI = URI.createURI("workspace.setup");
 
-  public static final URI WORKSPACE_SETUP_URI = WORKSPACE_STATE_LOCATION_URI == null ? null : WORKSPACE_STATE_LOCATION_URI
-      .appendSegment(WORKSPACE_SETUP_FILE_NAME_URI.lastSegment());
+  public static final URI WORKSPACE_SETUP_URI = WORKSPACE_STATE_LOCATION_URI == null ? null
+      : WORKSPACE_STATE_LOCATION_URI.appendSegment(WORKSPACE_SETUP_FILE_NAME_URI.lastSegment());
 
-  public static final URI WORKSPACE_SETUP_RELATIVE_URI = URI.createHierarchicalURI(new String[] { ".metadata", ".plugins", OOMPH_NODE,
-      WORKSPACE_SETUP_FILE_NAME_URI.lastSegment() }, null, null);
+  public static final URI WORKSPACE_SETUP_RELATIVE_URI = URI
+      .createHierarchicalURI(new String[] { ".metadata", ".plugins", OOMPH_NODE, WORKSPACE_SETUP_FILE_NAME_URI.lastSegment() }, null, null);
 
   public static final URI USER_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("user.setup");
 
@@ -357,8 +357,8 @@ public class SetupContext
       {
         associate(resourceSet, installation, workspace);
       }
-    }, uriConverter, LOCATION_CATALOG_SETUP_URI, installation == null ? null : installation.eResource().getURI(), workspace == null ? null : workspace
-        .eResource().getURI());
+    }, uriConverter, LOCATION_CATALOG_SETUP_URI, installation == null ? null : installation.eResource().getURI(),
+        workspace == null ? null : workspace.eResource().getURI());
   }
 
   private static void associate(ResourceSet resourceSet, Installation installation, Workspace workspace)

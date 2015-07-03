@@ -42,7 +42,9 @@ import org.eclipse.pde.core.target.ITargetPlatformService;
 import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.File;
 import java.util.Arrays;
@@ -53,6 +55,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
+@FixMethodOrder(MethodSorters.JVM)
 public class TargletTests extends AbstractP2Test
 {
   private static final String TARGET_NAME = "Test Target";

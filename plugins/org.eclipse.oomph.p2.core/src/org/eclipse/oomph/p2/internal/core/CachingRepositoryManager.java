@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
-import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
@@ -20,6 +19,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.internal.p2.artifact.repository.ArtifactRepositoryManager;
 import org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager;
+import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager;
 import org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties;
 import org.eclipse.equinox.internal.provisional.p2.repository.RepositoryEvent;
@@ -34,7 +34,9 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,8 +51,6 @@ public class CachingRepositoryManager<T>
 
   private static final Method METHOD_basicGetRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "basicGetRepository", URI.class);
 
-  // private static final Method METHOD_checkNotFound = ReflectUtil.getMethod(AbstractRepositoryManager.class, "checkNotFound", URI.class);
-
   private static final Method METHOD_fail = ReflectUtil.getMethod(AbstractRepositoryManager.class, "fail", URI.class, int.class);
 
   private static final Method METHOD_addRepository1 = ReflectUtil.getMethod(AbstractRepositoryManager.class, "addRepository", URI.class, boolean.class,
@@ -63,9 +63,6 @@ public class CachingRepositoryManager<T>
 
   private static final Method METHOD_getAllSuffixes = ReflectUtil.getMethod(AbstractRepositoryManager.class, "getAllSuffixes");
 
-  private static final Method METHOD_sortSuffixes = ReflectUtil.getMethod(AbstractRepositoryManager.class, "sortSuffixes", String[].class, URI.class,
-      String[].class);
-
   private static final Method METHOD_loadRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "loadRepository", URI.class, String.class,
       String.class, int.class, SubMonitor.class);
 
@@ -74,7 +71,6 @@ public class CachingRepositoryManager<T>
 
   private static final Method METHOD_removeRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "removeRepository", URI.class, boolean.class);
 
-  // private static final Method METHOD_rememberNotFound = ReflectUtil.getMethod(AbstractRepositoryManager.class, "rememberNotFound", URI.class);
 
   private static final Method METHOD_exitLoad = ReflectUtil.getMethod(AbstractRepositoryManager.class, "exitLoad", URI.class);
 
@@ -82,8 +78,6 @@ public class CachingRepositoryManager<T>
       int.class, boolean.class);
 
   private static final String PROPERTY_VERSION = "version";
-
-  private static final String PROPERTY_GENERATED = "generated";
 
   private final AbstractRepositoryManager<T> delegate;
 
@@ -95,6 +89,16 @@ public class CachingRepositoryManager<T>
   {
     this.delegate = delegate;
     this.repositoryType = repositoryType;
+
+    if (transport == null)
+    {
+      Object t = delegate.getAgent().getService(Transport.SERVICE_NAME);
+      if (t instanceof CachingTransport)
+      {
+        transport = (CachingTransport)t;
+      }
+    }
+
     this.transport = transport;
   }
 
@@ -116,10 +120,6 @@ public class CachingRepositoryManager<T>
         return result;
       }
 
-      // if (checkNotFound(location))
-      // {
-      // fail(location, ProvisionException.REPOSITORY_NOT_FOUND);
-      // }
 
       // Add the repository first so that it will be enabled, but don't send add event until after the load.
       added = addRepository(location, true, false);
@@ -127,7 +127,7 @@ public class CachingRepositoryManager<T>
       LocationProperties indexFile = loadIndexFile(location, sub.newChild(15));
       String[] preferredOrder = getPreferredRepositorySearchOrder(indexFile);
       String[] allSuffixes = getAllSuffixes();
-      String[] suffixes = sortSuffixes(allSuffixes, location, preferredOrder);
+      String[] suffixes = sortSuffixes(allSuffixes, preferredOrder);
 
       sub = SubMonitor.convert(sub, NLS.bind("Adding repository {0}", location), suffixes.length * 100);
       ProvisionException failure = null;
@@ -154,12 +154,7 @@ public class CachingRepositoryManager<T>
           if (result != null)
           {
             addRepository(result, false, suffixes[i]);
-
-            if (!indexFile.exists() || preferredOrder.length == 0)
-            {
-              cacheIndexFile(location, suffixes[i], allSuffixes);
-            }
-
+            cacheIndexFile(location, suffixes[i]);
             break;
           }
         }
@@ -182,11 +177,6 @@ public class CachingRepositoryManager<T>
         {
           delegate.removeRepository(location);
         }
-        // else if (failure == null || failure.getStatus().getCode() != ProvisionException.REPOSITORY_FAILED_AUTHENTICATION
-        // && failure.getStatus().getCode() != ProvisionException.REPOSITORY_FAILED_READ)
-        // {
-        // rememberNotFound(location);
-        // }
 
         if (failure != null)
         {
@@ -230,40 +220,30 @@ public class CachingRepositoryManager<T>
     }
   }
 
-  private void cacheIndexFile(URI location, String suffix, String[] allSuffixes)
+  private void cacheIndexFile(URI location, String suffix)
   {
     if ("file".equals(location.getScheme()))
     {
       return;
     }
 
-    Map<String, String> properties;
-
     File cachedIndexFile = getCachedIndexFile(location);
-    if (cachedIndexFile.exists())
+
+    Map<String, String> properties = PropertiesUtil.getProperties(cachedIndexFile);
+    if (!properties.containsKey(PROPERTY_VERSION))
     {
-      properties = PropertiesUtil.loadProperties(cachedIndexFile);
+      properties.put(PROPERTY_VERSION, "1");
+    }
+
+    if (repositoryType == IRepository.TYPE_METADATA)
+    {
+      properties.put("metadata.repository.factory.order", suffix);
     }
     else
     {
-      properties = new LinkedHashMap<String, String>();
-      properties.put(PROPERTY_VERSION, "1");
-      properties.put(PROPERTY_GENERATED, "true");
+      properties.put("artifact.repository.factory.order", suffix);
     }
 
-    String prefix = repositoryType == IRepository.TYPE_METADATA ? "metadata" : "artifact";
-
-    StringBuilder builder = new StringBuilder(suffix);
-    for (String otherSuffix : allSuffixes)
-    {
-      if (!ObjectUtil.equals(otherSuffix, suffix))
-      {
-        builder.append(",");
-        builder.append(otherSuffix);
-      }
-    }
-
-    properties.put(prefix + ".repository.factory.order", builder.toString() + ",!");
     PropertiesUtil.saveProperties(cachedIndexFile, properties, false);
   }
 
@@ -331,9 +311,21 @@ public class CachingRepositoryManager<T>
     return (String[])ReflectUtil.invokeMethod(METHOD_getAllSuffixes, delegate);
   }
 
-  protected String[] sortSuffixes(String[] suffixes, URI location, String[] preferredOrder)
+  private String[] sortSuffixes(String[] allSuffixes, String[] preferredOrder)
   {
-    return (String[])ReflectUtil.invokeMethod(METHOD_sortSuffixes, delegate, suffixes, location, preferredOrder);
+    List<String> suffixes = new ArrayList<String>(Arrays.asList(allSuffixes));
+
+    for (int i = preferredOrder.length - 1; i >= 0; --i)
+    {
+      String suffix = preferredOrder[i].trim();
+      if (!LocationProperties.END.equals(suffix))
+      {
+        suffixes.remove(suffix);
+        suffixes.add(0, suffix);
+      }
+    }
+
+    return suffixes.toArray(new String[suffixes.size()]);
   }
 
   @SuppressWarnings("unchecked")
@@ -378,7 +370,7 @@ public class CachingRepositoryManager<T>
   /**
    * @author Eike Stepper
    */
-  public static final class Metadata extends MetadataRepositoryManager
+  public static class Metadata extends MetadataRepositoryManager
   {
     private final CachingRepositoryManager<IInstallableUnit> loader;
 
@@ -398,7 +390,7 @@ public class CachingRepositoryManager<T>
   /**
    * @author Eike Stepper
    */
-  public static final class Artifact extends ArtifactRepositoryManager
+  public static class Artifact extends ArtifactRepositoryManager
   {
     private final CachingRepositoryManager<IArtifactKey> loader;
 

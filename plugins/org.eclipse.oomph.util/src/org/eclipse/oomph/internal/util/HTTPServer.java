@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,6 +127,12 @@ public final class HTTPServer
     return 0;
   }
 
+  public String getURL()
+  {
+    int port = acceptor != null ? acceptor.getPort() : 0;
+    return "http://127.0.0.1:" + port;
+  }
+
   public synchronized void addContext(Context context)
   {
     contexts.add(context);
@@ -157,6 +164,12 @@ public final class HTTPServer
       acceptor.interrupt();
       threadPool.shutdown();
     }
+  }
+
+  @Override
+  public String toString()
+  {
+    return getURL();
   }
 
   private static void registerContentType(String contentType, String... extensions)
@@ -329,7 +342,7 @@ public final class HTTPServer
               UtilPlugin.INSTANCE.log(ex);
             }
 
-            Context.sendResponse(output, STATUS_INTERNAL_SERVER_ERROR, null, true);
+            Context.sendResponse(output, STATUS_INTERNAL_SERVER_ERROR, null, 0, true);
           }
 
           try
@@ -376,14 +389,16 @@ public final class HTTPServer
       String[] tokens = line.split(" ");
       if (tokens.length < 2)
       {
-        Context.sendResponse(output, STATUS_BAD_REQUEST, null, false);
+        Context.sendResponse(output, STATUS_BAD_REQUEST, null, 0, false);
         return;
       }
 
       String method = tokens[0];
-      if (!"GET".equalsIgnoreCase(method))
+      boolean head = "HEAD".equalsIgnoreCase(method);
+
+      if (!head && !"GET".equalsIgnoreCase(method))
       {
-        Context.sendResponse(output, STATUS_NOT_IMPLEMENTED, null, false);
+        Context.sendResponse(output, STATUS_NOT_IMPLEMENTED, null, 0, false);
         return;
       }
 
@@ -395,7 +410,7 @@ public final class HTTPServer
       {
         if (PATH_SEPARATOR.equals(path))
         {
-          Context.sendResponse(output, STATUS_OK, "index.html", false);
+          Context.sendResponse(output, STATUS_OK, "index.html", 0, false);
 
           for (Context c : contexts)
           {
@@ -410,7 +425,7 @@ public final class HTTPServer
           return;
         }
 
-        Context.sendResponse(output, STATUS_NOT_FOUND, null, false);
+        Context.sendResponse(output, STATUS_NOT_FOUND, null, 0, false);
         return;
       }
 
@@ -425,7 +440,7 @@ public final class HTTPServer
         System.out.println(context + " " + path);
       }
 
-      context.handleRequest(path, output);
+      context.handleRequest(path, output, !head);
     }
 
     private boolean isBadState()
@@ -447,6 +462,11 @@ public final class HTTPServer
 
     protected Context(String path, boolean allowDirectory)
     {
+      if (!path.startsWith(PATH_SEPARATOR))
+      {
+        throw new IllegalArgumentException("Path must start with a slash: " + path);
+      }
+
       this.path = path;
       this.allowDirectory = allowDirectory;
     }
@@ -471,6 +491,11 @@ public final class HTTPServer
       return null;
     }
 
+    public String getURL(HTTPServer server)
+    {
+      return server.getURL() + path;
+    }
+
     @Override
     public final String toString()
     {
@@ -484,24 +509,24 @@ public final class HTTPServer
       return string + "]";
     }
 
-    protected void handleRequest(String path, DataOutputStream output) throws IOException
+    protected void handleRequest(String path, DataOutputStream output, boolean responseBody) throws IOException
     {
       if (isDirectory(path))
       {
         if (!allowDirectory)
         {
-          Context.sendResponse(output, STATUS_FORBIDDEN, null, false);
+          Context.sendResponse(output, STATUS_FORBIDDEN, null, 0, false);
         }
         else
         {
           if (!path.endsWith(PATH_SEPARATOR))
           {
             path += PATH_SEPARATOR;
-            Context.sendResponse(output, STATUS_SEE_OTHER, path, false);
+            Context.sendResponse(output, STATUS_SEE_OTHER, path, 0, false);
           }
           else
           {
-            Context.sendResponse(output, STATUS_OK, "index.html", false);
+            Context.sendResponse(output, STATUS_OK, "index.html", 0, false);
           }
 
           if (path.length() > 1)
@@ -553,21 +578,26 @@ public final class HTTPServer
 
       if (!isFile(path))
       {
-        Context.sendResponse(output, STATUS_NOT_FOUND, null, false);
+        Context.sendResponse(output, STATUS_NOT_FOUND, null, 0, false);
         return;
       }
 
-      Context.sendResponse(output, STATUS_OK, path, false);
-      InputStream stream = null;
+      long lastModified = getLastModified(path);
+      Context.sendResponse(output, STATUS_OK, path, lastModified, false);
 
-      try
+      if (responseBody)
       {
-        stream = getContents(path);
-        IOUtil.copy(stream, output);
-      }
-      finally
-      {
-        IOUtil.close(stream);
+        InputStream stream = null;
+
+        try
+        {
+          stream = getContents(path);
+          IOUtil.copy(stream, output);
+        }
+        finally
+        {
+          IOUtil.close(stream);
+        }
       }
     }
 
@@ -578,6 +608,11 @@ public final class HTTPServer
     protected abstract String[] getChildren(String path) throws IOException;
 
     protected abstract InputStream getContents(String path) throws IOException;
+
+    protected long getLastModified(String path) throws IOException
+    {
+      return System.currentTimeMillis();
+    }
 
     protected static String encodePath(String path) throws UnsupportedEncodingException
     {
@@ -602,7 +637,13 @@ public final class HTTPServer
       return URLDecoder.decode(path, URL_ENCODING);
     }
 
-    protected static void sendResponse(DataOutputStream output, String status, String fileName, boolean ignoreExceptions)
+    @SuppressWarnings({ "deprecation", "restriction" })
+    protected static String formatDate(long lastModified)
+    {
+      return org.apache.http.impl.cookie.DateUtils.formatDate(new Date(lastModified));
+    }
+
+    protected static void sendResponse(DataOutputStream output, String status, String fileName, long lastModified, boolean ignoreExceptions)
     {
       try
       {
@@ -632,6 +673,13 @@ public final class HTTPServer
         output.writeBytes(contentType);
         output.writeBytes("\r\n");
 
+        if (lastModified != 0)
+        {
+          output.writeBytes("Last-Modified: ");
+          output.writeBytes(formatDate(lastModified));
+          output.writeBytes("\r\n");
+        }
+
         if (location != null)
         {
           output.writeBytes("Location: /file/c");
@@ -653,10 +701,17 @@ public final class HTTPServer
       }
       catch (IOException ex)
       {
-        if (!ignoreExceptions)
+        if (ignoreExceptions)
         {
-          UtilPlugin.INSTANCE.log(ex);
+          return;
         }
+
+        if (ex instanceof SocketException && ex.getMessage().equals("Software caused connection abort: socket write error"))
+        {
+          return;
+        }
+
+        UtilPlugin.INSTANCE.log(ex);
       }
     }
   }
@@ -822,6 +877,13 @@ public final class HTTPServer
       return new FileInputStream(file);
     }
 
+    @Override
+    protected long getLastModified(String path) throws IOException
+    {
+      File file = getFile(path);
+      return file.lastModified();
+    }
+
     private File getFile(String path)
     {
       if (root == null)
@@ -925,6 +987,13 @@ public final class HTTPServer
       }
 
       return file.getContents();
+    }
+
+    @Override
+    protected long getLastModified(String path) throws IOException
+    {
+      BundleFile file = getFile(path);
+      return file.getBundle().getLastModified();
     }
 
     private BundleFile getFile(String path) throws FileNotFoundException

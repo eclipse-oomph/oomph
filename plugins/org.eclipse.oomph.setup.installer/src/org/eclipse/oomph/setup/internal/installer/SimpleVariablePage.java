@@ -907,7 +907,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         // Default to ${user.home}/eclipse, unless there is a file at that location, or what looks like an existing Eclipse installation.
         // In that case default just to ${user.home}.
-        String defaultValue = PropertiesUtil.USER_HOME;
+        String defaultValue = PropertiesUtil.getUserHome();
         File defaultInstallRoot = new File(defaultValue, "eclipse");
         if (!defaultInstallRoot.exists())
         {
