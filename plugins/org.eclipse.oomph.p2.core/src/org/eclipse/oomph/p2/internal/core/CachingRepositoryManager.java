@@ -71,7 +71,6 @@ public class CachingRepositoryManager<T>
 
   private static final Method METHOD_removeRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "removeRepository", URI.class, boolean.class);
 
-
   private static final Method METHOD_exitLoad = ReflectUtil.getMethod(AbstractRepositoryManager.class, "exitLoad", URI.class);
 
   private static final Method METHOD_broadcastChangeEvent = ReflectUtil.getMethod(AbstractRepositoryManager.class, "broadcastChangeEvent", URI.class, int.class,
@@ -119,7 +118,6 @@ public class CachingRepositoryManager<T>
       {
         return result;
       }
-
 
       // Add the repository first so that it will be enabled, but don't send add event until after the load.
       added = addRepository(location, true, false);
@@ -243,6 +241,9 @@ public class CachingRepositoryManager<T>
     {
       properties.put("artifact.repository.factory.order", suffix);
     }
+
+    // Cleanup; can be removed at some point in the future...
+    properties.remove("generated");
 
     PropertiesUtil.saveProperties(cachedIndexFile, properties, false);
   }
