@@ -46,7 +46,12 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IContributor;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -74,6 +79,8 @@ import java.util.concurrent.CountDownLatch;
 public abstract class RecorderTransaction
 {
   private static final String POLICIES_FILE_NAME = "policies.properties";
+
+  private static final String POLICIES_EXT_POINT = "org.eclipse.oomph.setup.ui.preferencePolicies";
 
   private static final String POLICY_RECORD = "record";
 
@@ -210,6 +217,23 @@ public abstract class RecorderTransaction
     {
       policies.put(key, policy);
     }
+  }
+
+  public boolean setPolicy(String key, String value)
+  {
+    if (POLICY_RECORD.equals(value))
+    {
+      setPolicy(key, true);
+      return true;
+    }
+
+    if (POLICY_IGNORE.equals(value))
+    {
+      setPolicy(key, false);
+      return true;
+    }
+
+    return false;
   }
 
   public void setPreferences(Map<URI, String> preferences)
@@ -367,12 +391,47 @@ public abstract class RecorderTransaction
   {
     if (!policiesInitialized)
     {
-      BundleFile policiesFile = SetupUIPlugin.INSTANCE.getRootFile().getChild(POLICIES_FILE_NAME);
-      if (policiesFile != null)
+      boolean changed = false;
+
+      try
       {
-        String contents = policiesFile.getContentsString();
-        String[] lines = contents.split("[\n\r]");
-        for (int i = 0; i < lines.length; i++)
+        changed |= initializePoliciesFromProperties();
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+      }
+
+      try
+      {
+        changed |= initializePoliciesFromExtensions();
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+      }
+
+      if (changed)
+      {
+        commit();
+      }
+
+      policiesInitialized = true;
+    }
+  }
+
+  private boolean initializePoliciesFromProperties()
+  {
+    boolean changed = false;
+
+    BundleFile policiesFile = SetupUIPlugin.INSTANCE.getRootFile().getChild(POLICIES_FILE_NAME);
+    if (policiesFile != null)
+    {
+      String contents = policiesFile.getContentsString();
+      String[] lines = contents.split("[\n\r]");
+      for (int i = 0; i < lines.length; i++)
+      {
+        try
         {
           String line = lines[i].trim();
           if (line.length() != 0)
@@ -384,25 +443,56 @@ public abstract class RecorderTransaction
               if (!cleanPolicies.containsKey(key))
               {
                 String value = line.substring(pos + 1).trim();
-
-                if (POLICY_RECORD.equals(value))
-                {
-                  setPolicy(key, true);
-                }
-                else if (POLICY_IGNORE.equals(value))
-                {
-                  setPolicy(key, false);
-                }
+                changed |= setPolicy(key, value);
               }
             }
           }
         }
-
-        commit();
+        catch (Exception ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
       }
-
-      policiesInitialized = true;
     }
+
+    return changed;
+  }
+
+  private boolean initializePoliciesFromExtensions()
+  {
+    boolean changed = false;
+
+    IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+    for (IConfigurationElement configurationElement : extensionRegistry.getConfigurationElementsFor(POLICIES_EXT_POINT))
+    {
+      try
+      {
+        String pluginRelativePath = configurationElement.getAttribute("pluginRelativePath");
+        while (pluginRelativePath != null && pluginRelativePath.startsWith("/"))
+        {
+          pluginRelativePath = pluginRelativePath.substring(1);
+        }
+
+        if (StringUtil.isEmpty(pluginRelativePath))
+        {
+          continue;
+        }
+
+        String policy = configurationElement.getAttribute("policy");
+
+        IContributor contributor = configurationElement.getContributor();
+        String contributorName = contributor.getName();
+
+        String key = "/instance/" + contributorName + "/" + pluginRelativePath;
+        changed |= setPolicy(key, policy);
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+      }
+    }
+
+    return changed;
   }
 
   private void findRecorderAnnotation(SetupTaskContainer container)
