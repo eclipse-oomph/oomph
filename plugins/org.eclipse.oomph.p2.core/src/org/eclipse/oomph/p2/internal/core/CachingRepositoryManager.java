@@ -245,6 +245,7 @@ public class CachingRepositoryManager<T>
     // Cleanup; can be removed at some point in the future...
     properties.remove("generated");
 
+    cachedIndexFile.getParentFile().mkdirs();
     PropertiesUtil.saveProperties(cachedIndexFile, properties, false);
   }
 

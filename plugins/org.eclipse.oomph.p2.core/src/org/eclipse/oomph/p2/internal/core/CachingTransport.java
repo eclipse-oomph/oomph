@@ -111,7 +111,6 @@ public class CachingTransport extends Transport
       return delegate.download(uri, target, startPos, monitor);
     }
 
-
     synchronized (getLock(uri))
     {
       File cacheFile = getCacheFile(uri);
@@ -142,6 +141,7 @@ public class CachingTransport extends Transport
 
       try
       {
+        cacheFile.getParentFile().mkdirs();
         statefulTarget = new StatefulFileOutputStream(cacheFile);
 
         IStatus status = delegate.download(uri, statefulTarget, startPos, monitor);
