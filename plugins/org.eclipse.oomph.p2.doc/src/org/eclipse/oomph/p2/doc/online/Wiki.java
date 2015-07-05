@@ -13,7 +13,7 @@ package org.eclipse.oomph.p2.doc.online;
 /**
  * Wiki
  *
- * @external https://wiki.eclipse.org/Eclipse_Oomph_Installer
+ * @external http://wiki.eclipse.org/Eclipse_Installer
  * @number 2
  */
 public class Wiki

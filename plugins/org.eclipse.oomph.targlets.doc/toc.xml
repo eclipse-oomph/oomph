@@ -26,7 +26,7 @@
   </topic>
   <topic label="Online Docs" href="html/online/index.html">
     <topic label="Homepage" href="http://www.eclipse.org/oomph" icon="external" />
-    <topic label="Wiki" href="https://wiki.eclipse.org/Eclipse_Oomph_Installer" icon="external" />
+    <topic label="Wiki" href="http://wiki.eclipse.org/Eclipse_Installer" icon="external" />
   </topic>
   <topic label="Legal" href="about.html" />
 </toc>
