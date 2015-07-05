@@ -106,7 +106,7 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = ((InstallationTask)object).getID();
+    String label = ((InstallationTask)object).getLocation();
     return label == null || label.length() == 0 ? getString("_UI_InstallationTask_type") : getString("_UI_InstallationTask_type") + " " + label;
   }
 

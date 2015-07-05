@@ -164,13 +164,13 @@
     <genClasses ecoreClass="Setup.ecore#//Installation">
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Installation/productVersion"/>
     </genClasses>
-    <genClasses ecoreClass="Setup.ecore#//InstallationTask">
+    <genClasses ecoreClass="Setup.ecore#//InstallationTask" labelFeature="#//setup/InstallationTask/location">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//InstallationTask/location"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Workspace">
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Workspace/streams"/>
     </genClasses>
-    <genClasses ecoreClass="Setup.ecore#//WorkspaceTask">
+    <genClasses ecoreClass="Setup.ecore#//WorkspaceTask" labelFeature="#//setup/WorkspaceTask/location">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//WorkspaceTask/location"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//CompoundTask">

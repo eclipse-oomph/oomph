@@ -106,7 +106,7 @@ public class WorkspaceTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = ((WorkspaceTask)object).getID();
+    String label = ((WorkspaceTask)object).getLocation();
     return label == null || label.length() == 0 ? getString("_UI_WorkspaceTask_type") : getString("_UI_WorkspaceTask_type") + " " + label;
   }
 
