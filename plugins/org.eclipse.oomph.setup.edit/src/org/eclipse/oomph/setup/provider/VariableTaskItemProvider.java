@@ -267,6 +267,19 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
       }
     }
 
+    String defaultValue = variable.getDefaultValue();
+    if (defaultValue != null)
+    {
+      if (defaultValue.length() == 0)
+      {
+        label += " (default: \"\")";
+      }
+      else
+      {
+        label += " (default: " + defaultValue + ")";
+      }
+    }
+
     return label;
   }
 
