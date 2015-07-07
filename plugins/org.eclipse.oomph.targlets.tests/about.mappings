@@ -1,4 +1,4 @@
-#UpdateTrigger=201505270954
+#UpdateTrigger=201507071912
 0=${build.id}
 1=${git.branch}
 2=${git.commit}
