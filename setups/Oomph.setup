@@ -465,6 +465,9 @@
           summary="Oomph Features"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=enhancement"/>
       <query
+          summary="Oomph Resolved in 1.2.0"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.2.0"/>
+      <query
           summary="Oomph Resolved in 1.1.0"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.1.0"/>
       <query
