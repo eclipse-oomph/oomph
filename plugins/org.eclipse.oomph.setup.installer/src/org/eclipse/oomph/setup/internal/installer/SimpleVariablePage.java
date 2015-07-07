@@ -99,6 +99,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
@@ -1691,8 +1692,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
           {
             if (now >= reportWarningTimeout)
             {
-              dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
-              installButton.setProgressAnimationSpeed(0.4f);
+              if (!isModalShellInForeground())
+              {
+                dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
+                installButton.setProgressAnimationSpeed(0.4f);
+              }
+
               resetWatchdogTimer(now);
             }
           }
@@ -1731,6 +1736,26 @@ public class SimpleVariablePage extends SimpleInstallerPage
           schedule();
         }
       }
+    }
+
+    private boolean isModalShellInForeground()
+    {
+      Shell mainShell = getShell();
+      Shell[] shells = getDisplay().getShells();
+
+      for (Shell shell : shells)
+      {
+        if (shell != mainShell)
+        {
+          int style = shell.getStyle();
+          if ((style & SWT.APPLICATION_MODAL) != 0 || (style & SWT.PRIMARY_MODAL) != 0 || (style & SWT.SYSTEM_MODAL) != 0)
+          {
+            return true;
+          }
+        }
+      }
+
+      return false;
     }
 
     private void resetWatchdogTimer(long now)
