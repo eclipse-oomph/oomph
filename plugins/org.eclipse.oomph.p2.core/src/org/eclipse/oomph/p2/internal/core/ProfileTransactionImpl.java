@@ -86,7 +86,6 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.service.datalocation.Location;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -108,6 +107,8 @@ import java.util.Set;
 @SuppressWarnings("restriction")
 public class ProfileTransactionImpl implements ProfileTransaction
 {
+  public static final String PROP_ADDITIONAL_POOLS = "oomph.p2.additional.pools";
+
   public static final String ARTIFICIAL_ROOT_ID = "artificial_root";
 
   private static final String OSGI_RESOLVER_USES_MODE = "osgi.resolver.usesMode";
@@ -748,6 +749,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
+    Set<URI> addedArtifactURIs = new HashSet<URI>();
 
     for (int i = 0; i < metadataURIs.length; i++)
     {
@@ -769,7 +771,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
         }
 
         metadataURIs[i] = uri;
-        artifactURIs.add(uri);
+
+        if (addedArtifactURIs.add(uri))
+        {
+          artifactURIs.add(uri);
+        }
       }
       catch (Exception ex)
       {
@@ -796,46 +802,24 @@ public class ProfileTransactionImpl implements ProfileTransaction
       metadataRepositories.add(metadataRepository);
     }
 
-    for (BundlePool bundlePool : agent.getAgentManager().getBundlePools())
+    if (!"false".equalsIgnoreCase(PropertiesUtil.getProperty(PROP_ADDITIONAL_POOLS)))
     {
-      P2CorePlugin.checkCancelation(monitor);
-      File location = bundlePool.getLocation();
-
-      if (!isLocationWithCrippledICU(location))
+      for (BundlePool bundlePool : agent.getAgentManager().getBundlePools())
       {
-        artifactURIs.add(location.toURI());
-      }
-    }
+        P2CorePlugin.checkCancelation(monitor);
 
-    return metadataURIs;
-  }
-
-  private boolean isLocationWithCrippledICU(File location)
-  {
-    File plugins = new File(location, "plugins");
-    if (plugins.isDirectory())
-    {
-      File[] files = plugins.listFiles(new FilenameFilter()
-      {
-        public boolean accept(File dir, String name)
+        if (bundlePool != profile.getBundlePool())
         {
-          return name.startsWith("com.ibm.icu_") && name.endsWith(".jar");
-        }
-      });
-
-      if (files != null)
-      {
-        for (File file : files)
-        {
-          if (file.length() < 1000000)
+          URI uri = bundlePool.getLocation().toURI();
+          if (addedArtifactURIs.add(uri))
           {
-            return true;
+            artifactURIs.add(uri);
           }
         }
       }
     }
 
-    return false;
+    return metadataURIs;
   }
 
   private IInstallableUnit adjustProfileChangeRequest(final IProfileChangeRequest request, IProgressMonitor monitor) throws CoreException

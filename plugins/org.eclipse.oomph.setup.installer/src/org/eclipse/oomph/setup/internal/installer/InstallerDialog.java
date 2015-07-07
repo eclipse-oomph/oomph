@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
@@ -73,6 +74,11 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     super(parentShell, installer);
     this.restarted = restarted;
     addPageChangedListener(pageChangedListener);
+
+    if (UIPlugin.isRecorderEnabled())
+    {
+      setNonModal();
+    }
   }
 
   public Installer getInstaller()
@@ -114,13 +120,17 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     {
       public void run()
       {
-        final Runnable checkIndex = this;
         final Installer installer = getInstaller();
         installer.getIndexLoader().awaitIndexLoad();
+
+        final Runnable checkIndex = this;
         shell.getDisplay().asyncExec(new Runnable()
         {
           public void run()
           {
+            UIPlugin.openRecorderIfEnabled();
+            SetupInstallerPlugin.runTests();
+
             if (installer.getCatalogManager().getIndex() == null)
             {
               int answer = new MessageDialog(shell, "Network Problem", null,

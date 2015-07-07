@@ -555,6 +555,7 @@ public class ProductPage extends SetupWizardPage
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
+    AccessUtil.setKey(filteredTree.getViewer().getTree(), "productTree");
     addHelpCallout(filteredTree.getViewer().getTree(), 1);
 
     productViewer = filteredTree.getViewer();
@@ -917,8 +918,7 @@ public class ProductPage extends SetupWizardPage
       label = product.getName();
     }
 
-    return "<html><body style=\"margin:5px;\"><img src=\""
-        + imageURI
+    return "<html><body style=\"margin:5px;\"><img src=\"" + imageURI
         + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
         + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
         + "</span></body></html>";
@@ -1730,19 +1730,19 @@ public class ProductPage extends SetupWizardPage
 
           IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
               Collections.<ViewerFilter> singletonList(new ViewerFilter()
+          {
+            @Override
+            public boolean select(Viewer viewer, Object parentElement, Object element)
+            {
+              if (element instanceof IFile)
               {
-                @Override
-                public boolean select(Viewer viewer, Object parentElement, Object element)
-                {
-                  if (element instanceof IFile)
-                  {
-                    IFile file = (IFile)element;
-                    return "setup".equals(file.getFileExtension());
-                  }
+                IFile file = (IFile)element;
+                return "setup".equals(file.getFileExtension());
+              }
 
-                  return true;
-                }
-              }));
+              return true;
+            }
+          }));
 
           for (int i = 0, len = files.length; i < len; i++)
           {

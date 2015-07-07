@@ -2425,8 +2425,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (VariableTask.DEFAULT_STORAGE_URI.equals(storageURI))
       {
-        storageURI = PreferencesUtil.ROOT_PREFERENCE_NODE_URI.appendSegments(new String[] { PreferencesUtil.SECURE_NODE, SetupContext.OOMPH_NODE,
-            variable.getName(), "" });
+        storageURI = PreferencesUtil.ROOT_PREFERENCE_NODE_URI
+            .appendSegments(new String[] { PreferencesUtil.SECURE_NODE, SetupContext.OOMPH_NODE, variable.getName(), "" });
       }
       else if (storageURI != null && PreferencesUtil.PREFERENCE_SCHEME.equals(storageURI.scheme()) && !storageURI.hasTrailingPathSeparator())
       {
@@ -2699,13 +2699,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           URI redirectedBaseBaseURI = redirect(baseBaseURI);
           if (!redirectedBaseBaseURI.equals(baseBaseURI))
           {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseBaseURI + "->"
-                + redirectedBaseBaseURI, monitor);
+            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
+                "=" + baseBaseURI + "->" + redirectedBaseBaseURI, monitor);
           }
           else
           {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + baseURI + "->"
-                + redirectedBaseURI, monitor);
+            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
+                "=" + baseURI + "->" + redirectedBaseURI, monitor);
           }
         }
         // Don't add -D if we're redirecting into the default archive.
@@ -2851,7 +2851,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
     else
     {
-      if (CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE)
+      if (SetupContext.USE_RESOURCES_BUNDLE)
       {
         WorkspaceUtil.performNeededSetupTasks(this, monitor);
       }
@@ -3295,8 +3295,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    setSetupContext(SetupContext.create((Installation)copier.get(originalInstallation), (Workspace)copier.get(originalWorkspace),
-        (User)copier.get(originalPreferences)));
+    setSetupContext(
+        SetupContext.create((Installation)copier.get(originalInstallation), (Workspace)copier.get(originalWorkspace), (User)copier.get(originalPreferences)));
   }
 
   private EList<Map.Entry<String, Set<String>>> reorderVariables(final Map<String, Set<String>> variables)
@@ -3733,12 +3733,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static boolean disableAutoBuilding() throws CoreException
   {
-    return CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE && WorkspaceUtil.disableAutoBuilding();
+    return SetupContext.USE_RESOURCES_BUNDLE && WorkspaceUtil.disableAutoBuilding();
   }
 
   public static void restoreAutoBuilding(boolean autoBuilding) throws CoreException
   {
-    if (CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE)
+    if (SetupContext.USE_RESOURCES_BUNDLE)
     {
       WorkspaceUtil.restoreAutoBuilding(autoBuilding);
     }

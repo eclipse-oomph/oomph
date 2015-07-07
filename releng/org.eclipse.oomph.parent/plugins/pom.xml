@@ -62,6 +62,7 @@ Eike Stepper - initial API and implementation
     <module>../../../plugins/org.eclipse.oomph.setup.git</module>
     <module>../../../plugins/org.eclipse.oomph.setup.git.edit</module>
     <module>../../../plugins/org.eclipse.oomph.setup.installer</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.installer.tests</module>
     <module>../../../plugins/org.eclipse.oomph.setup.jdt</module>
     <module>../../../plugins/org.eclipse.oomph.setup.jdt.edit</module>
     <module>../../../plugins/org.eclipse.oomph.setup.launching</module>
@@ -97,6 +98,7 @@ Eike Stepper - initial API and implementation
     <module>../../../plugins/org.eclipse.oomph.targlets.ui</module>
     <module>../../../plugins/org.eclipse.oomph.tests</module>
     <module>../../../plugins/org.eclipse.oomph.ui</module>
+    <module>../../../plugins/org.eclipse.oomph.ui.tests</module>
     <module>../../../plugins/org.eclipse.oomph.util</module>
     <module>../../../plugins/org.eclipse.oomph.util.doc</module>
     <module>../../../plugins/org.eclipse.oomph.util.pde</module>

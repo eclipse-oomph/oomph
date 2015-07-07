@@ -15,6 +15,12 @@ package org.eclipse.oomph.internal.setup;
  */
 public interface SetupProperties
 {
+  public static final String PROP_DO_NOT_LOAD_RESOURCES_PLUGIN = "org.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin";
+
+  public static final String PROP_REDIRECTION_BASE = "oomph.redirection.";
+
+  public static final String PROP_UPDATE_URL = "oomph.update.url";
+
   public static final String PROP_SETUP_SKIP = "oomph.setup.skip";
 
   public static final String PROP_SETUP_QUESTIONNAIRE_SKIP = "oomph.setup.questionnaire.skip";
@@ -31,9 +37,7 @@ public interface SetupProperties
 
   public static final String PROP_SETUP_REMOTE_DEBUG = "oomph.setup.remote.debug";
 
-  public static final String PROP_REDIRECTION_BASE = "oomph.redirection.";
-
-  public static final String PROP_UPDATE_URL = "oomph.update.url";
+  public static final String PROP_SETUP_INSTALLER_MODE = "oomph.setup.installer.mode";
 
   public static final String PROP_SETUP_PRODUCT_CATALOG_FILTER = "oomph.setup.product.catalog.filter";
 

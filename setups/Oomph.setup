@@ -52,6 +52,10 @@
     <requirement
         name="org.eclipse.emf.ecoretools.sdk.feature.group"/>
     <requirement
+        name="org.eclipse.swtbot.ide.feature.group"/>
+    <requirement
+        name="org.eclipse.swtbot.eclipse.test.junit.feature.group"/>
+    <requirement
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"
         optional="true"/>
     <repository
@@ -60,6 +64,8 @@
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
         url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+    <repository
+        url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
     <repository
         url="${oomph.update.url}"/>
   </setupTask>
@@ -284,6 +290,8 @@
           <repository
               url="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/R-3.7.0-20150609111814/repository"/>
           <repository
+              url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
+          <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         </repositoryList>
         <repositoryList
@@ -322,7 +330,7 @@
           name="Oomph Setup">
         <predicate
             xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.setup(\.(util|core|doc|edit|editor|ui|ui\.ide|ui\.questionnaire|tests|installer|installer\.product|sdk))?(-feature)?"/>
+            pattern="org\.eclipse\.oomph\.setup(\.(util|core|doc|edit|editor|ui|ui\.ide|ui\.questionnaire|tests|installer|installer\.product|installer\.tests|sdk))?(-feature)?"/>
       </workingSet>
       <workingSet
           name="Oomph Setup Extensions">

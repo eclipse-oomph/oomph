@@ -141,6 +141,9 @@ public final class PropertiesUtil
 
     try
     {
+      File folder = file.getParentFile();
+      folder.mkdirs();
+
       // Buffering is done inside java.lang.Properties.
       stream = new FileOutputStream(file);
 

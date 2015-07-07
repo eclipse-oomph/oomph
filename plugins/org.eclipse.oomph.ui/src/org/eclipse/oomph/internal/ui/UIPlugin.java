@@ -13,11 +13,15 @@ package org.eclipse.oomph.internal.ui;
 import org.eclipse.oomph.internal.util.UtilPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.ToggleCommandHandler;
+import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.osgi.framework.BundleContext;
+
+import java.lang.reflect.Method;
 
 /**
  * @author Eike Stepper
@@ -25,6 +29,28 @@ import org.osgi.framework.BundleContext;
 public final class UIPlugin extends OomphUIPlugin
 {
   public static final UIPlugin INSTANCE = new UIPlugin();
+
+  private static final Method OPEN_RECORDER_METHOD;
+
+  static
+  {
+    Method openRecorderMethod = null;
+
+    if (PropertiesUtil.isProperty("org.eclipse.swtbot.generator.enable"))
+    {
+      try
+      {
+        Class<?> startupRecorderClass = INSTANCE.getClass().getClassLoader().loadClass("org.eclipse.swtbot.generator.ui.StartupRecorder");
+        openRecorderMethod = ReflectUtil.getMethod(startupRecorderClass, "openRecorder", String.class);
+      }
+      catch (Throwable t)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    OPEN_RECORDER_METHOD = openRecorderMethod;
+  }
 
   private static Implementation plugin;
 
@@ -37,6 +63,26 @@ public final class UIPlugin extends OomphUIPlugin
   public ResourceLocator getPluginResourceLocator()
   {
     return plugin;
+  }
+
+  public static boolean isRecorderEnabled()
+  {
+    return OPEN_RECORDER_METHOD != null;
+  }
+
+  public static void openRecorderIfEnabled()
+  {
+    if (isRecorderEnabled())
+    {
+      try
+      {
+        OPEN_RECORDER_METHOD.invoke(null, (String)null);
+      }
+      catch (Throwable t)
+      {
+        t.printStackTrace();
+      }
+    }
   }
 
   /**

@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.internal.core;
 
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LocationCatalog;
@@ -62,6 +63,9 @@ import java.util.Map.Entry;
  */
 public class SetupContext
 {
+  public static final boolean USE_RESOURCES_BUNDLE = PropertiesUtil.getProperty(SetupProperties.PROP_DO_NOT_LOAD_RESOURCES_PLUGIN) == null
+      && CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE;
+
   public static final String OOMPH_NODE = "org.eclipse.oomph.setup";
 
   public static final String LOG_FILE_NAME = "setup.log";
@@ -90,7 +94,7 @@ public class SetupContext
 
   public static final URI CONFIGURATION_LOCATION_URI = getStaticConfigurationLocation();
 
-  public static final URI WORKSPACE_LOCATION_URI = CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE ? WorkspaceUtil.getStaticWorkspaceLocationURI() : null;
+  public static final URI WORKSPACE_LOCATION_URI = USE_RESOURCES_BUNDLE ? WorkspaceUtil.getStaticWorkspaceLocationURI() : null;
 
   public static final URI PRODUCT_LOCATION = getStaticInstallLocation();
 

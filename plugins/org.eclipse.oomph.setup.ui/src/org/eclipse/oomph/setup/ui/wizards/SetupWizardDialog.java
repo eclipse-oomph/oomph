@@ -34,8 +34,13 @@ public class SetupWizardDialog extends OomphWizardDialog
 
     if (wizard.getTrigger() != Trigger.BOOTSTRAP)
     {
-      setShellStyle(SWT.CLOSE | SWT.MAX | SWT.TITLE | SWT.BORDER | SWT.RESIZE | getDefaultOrientation());
+      setNonModal();
     }
+  }
+
+  protected void setNonModal()
+  {
+    setShellStyle(SWT.CLOSE | SWT.MAX | SWT.TITLE | SWT.BORDER | SWT.RESIZE | getDefaultOrientation());
   }
 
   @Override

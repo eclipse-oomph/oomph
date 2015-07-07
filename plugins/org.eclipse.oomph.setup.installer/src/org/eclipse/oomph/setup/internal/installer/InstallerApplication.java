@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
@@ -58,7 +59,7 @@ public class InstallerApplication implements IApplication
 
   private Mode mode = Mode.SIMPLE;
 
-  private Integer run(final IApplicationContext context) throws Exception
+  protected Integer run(final IApplicationContext context) throws Exception
   {
     // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
     P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
@@ -172,17 +173,25 @@ public class InstallerApplication implements IApplication
       CocoaUtil.register(display, about, preferences, quit);
     }
 
-    display.asyncExec(new Runnable()
+    if (context != null)
     {
-      public void run()
+      display.asyncExec(new Runnable()
       {
-        // End the splash screen once the dialog is up.
-        context.applicationRunning();
-      }
-    });
+        public void run()
+        {
+          // End the splash screen once the dialog is up.
+          context.applicationRunning();
+        }
+      });
+    }
 
-    String modeName = PREF_MODE.get(Mode.SIMPLE.name());
-    mode = Mode.valueOf(modeName);
+    String modeName = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MODE);
+    if (modeName == null)
+    {
+      modeName = PREF_MODE.get(Mode.SIMPLE.name());
+    }
+
+    mode = Mode.valueOf(modeName.toUpperCase());
 
     for (;;)
     {

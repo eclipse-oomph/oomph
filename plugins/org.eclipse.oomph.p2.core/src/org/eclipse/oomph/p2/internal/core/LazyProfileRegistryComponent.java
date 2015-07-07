@@ -29,12 +29,25 @@ import java.io.IOException;
 @SuppressWarnings("restriction")
 public class LazyProfileRegistryComponent implements IAgentServiceFactory
 {
+  public static final String PROP_LAZY_PROFILE_REGISTRY = "oomph.p2.lazy.profile.registry";
+
   public Object createService(IProvisioningAgent agent)
   {
     IAgentLocation location = (IAgentLocation)agent.getService(IAgentLocation.SERVICE_NAME);
     File directory = LazyProfileRegistry.getDefaultRegistryDirectory(location);
-    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty("oomph.p2.lazy.profile.registry")) && OsgiHelper.canWrite(directory);
-    SimpleProfileRegistry registry = isLazySupported ? new LazyProfileRegistry(agent, directory) : new SimpleProfileRegistry(agent, directory);
+
+    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty(PROP_LAZY_PROFILE_REGISTRY)) && OsgiHelper.canWrite(directory);
+
+    SimpleProfileRegistry registry;
+    if (isLazySupported)
+    {
+      registry = new LazyProfileRegistry(agent, directory);
+    }
+    else
+    {
+      registry = new SimpleProfileRegistry(agent, directory);
+    }
+
     registry.setEventBus((IProvisioningEventBus)agent.getService(IProvisioningEventBus.SERVICE_NAME));
     return registry;
   }

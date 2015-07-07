@@ -49,6 +49,7 @@ public final class AccessUtil
   public static void setKey(Widget widget, Object key)
   {
     widget.setData(DATA_KEY, key);
+    widget.setData("org.eclipse.swtbot.widget.key", key);
   }
 
   public static Image capture(Control control)

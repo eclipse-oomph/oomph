@@ -23,9 +23,16 @@ import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.testing.ITestHarness;
+import org.eclipse.ui.testing.TestableObject;
 
 import org.osgi.framework.BundleContext;
 
@@ -55,6 +62,42 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
   public ResourceLocator getPluginResourceLocator()
   {
     return plugin;
+  }
+
+  public static void runTests()
+  {
+    try
+    {
+      TestableObject testableObject = PlatformUI.getTestableObject();
+      if (testableObject != null)
+      {
+        final ITestHarness testHarness = testableObject.getTestHarness();
+        if (testHarness != null)
+        {
+          new Job("Test Harness")
+          {
+            @Override
+            protected IStatus run(IProgressMonitor monitor)
+            {
+              try
+              {
+                testHarness.runTests();
+              }
+              catch (Exception ex)
+              {
+                INSTANCE.log(ex, IStatus.WARNING);
+              }
+
+              return Status.OK_STATUS;
+            }
+          }.schedule();
+        }
+      }
+    }
+    catch (Throwable ex)
+    {
+      INSTANCE.log(ex);
+    }
   }
 
   /**
