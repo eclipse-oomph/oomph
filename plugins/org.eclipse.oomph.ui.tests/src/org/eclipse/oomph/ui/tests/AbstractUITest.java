@@ -38,8 +38,8 @@ public abstract class AbstractUITest extends AbstractTest
   @BeforeClass
   public static void setUpBeforeClass() throws Exception
   {
-    bot = new ShellTrackingBot();
-
+    bot = new SWTBot().shell("Eclipse Installer").bot();
+    // bot = new ShellTrackingBot();
   }
 
   @AfterClass
