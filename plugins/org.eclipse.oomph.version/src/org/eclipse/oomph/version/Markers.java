@@ -52,6 +52,8 @@ public final class Markers
 
   public static final String UNREFERENCED_ELEMENT_PROBLEM = "unreferenced.element";
 
+  public static final String FEATURE_CLOSURE_PROBLEM = "feature.closure";
+
   public static final String COMPONENT_VERSION_PROBLEM = "component.version";
 
   public static final String VALIDATOR_CLASS_PROBLEM = "validator.class";
@@ -71,6 +73,8 @@ public final class Markers
   public static final String QUICK_FIX_REFERENCE = "quickFixReference";
 
   public static final String QUICK_FIX_CONFIGURE_OPTION = "quickFixConfigureOption";
+
+  public static final String QUICK_FIX_CONFIGURE_VALUE = "quickFixConfigureValue";
 
   private static final Pattern NL_PATTERN = Pattern.compile("([\\n][\\r]?|[\\r][\\n]?)", Pattern.MULTILINE);
 
@@ -116,6 +120,17 @@ public final class Markers
   public static String getQuickFixConfigureOption(IMarker marker)
   {
     return getAttribute(marker, QUICK_FIX_CONFIGURE_OPTION);
+  }
+
+  public static String getQuickFixConfigureValue(IMarker marker)
+  {
+    String attribute = getAttribute(marker, QUICK_FIX_CONFIGURE_VALUE);
+    if (attribute == null)
+    {
+      attribute = "true";
+    }
+
+    return attribute;
   }
 
   public static String getAttribute(IMarker marker, String attributeName)
@@ -239,20 +254,25 @@ public final class Markers
     return addMarker(file, message, severity);
   }
 
-  public static void deleteAllMarkers(IResource resource) throws CoreException
+  public static void deleteAllMarkers(IResource resource, String... problemTypes) throws CoreException
   {
-    resource.deleteMarkers(MARKER_TYPE, false, IResource.DEPTH_INFINITE);
-  }
+    if (problemTypes.length == 0)
+    {
+      resource.deleteMarkers(MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+    }
 
-  public static void deleteAllMarkers(IResource resource, String problemType) throws CoreException
-  {
     IMarker[] markers = resource.findMarkers(MARKER_TYPE, false, IResource.DEPTH_INFINITE);
     for (IMarker marker : markers)
     {
       Object value = marker.getAttribute(PROBLEM_TYPE);
-      if (problemType.equals(value))
+      for (int i = 0; i < problemTypes.length; i++)
       {
-        marker.delete();
+        String problemType = problemTypes[i];
+        if (problemType.equals(value))
+        {
+          marker.delete();
+          break;
+        }
       }
     }
   }

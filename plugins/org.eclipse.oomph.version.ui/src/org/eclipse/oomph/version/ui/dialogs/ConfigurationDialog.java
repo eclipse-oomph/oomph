@@ -19,6 +19,9 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -61,6 +64,8 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
 
   private Button ignoreFeatureContentRedundancyButton;
 
+  private Button checkFeatureClosureCompletenessButton;
+
   public ConfigurationDialog(Shell parentShell, VersionBuilderArguments defaults)
   {
     super(parentShell);
@@ -97,37 +102,59 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
       releasePathText.setText(releasePath);
     }
 
+    SelectionListener buttonListener = new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        validate();
+      }
+    };
+
     ignoreMalformedVersionsButton = new Button(composite, SWT.CHECK);
     ignoreMalformedVersionsButton.setText("Ignore malformed versions");
     ignoreMalformedVersionsButton.setSelection(values.isIgnoreMalformedVersions());
+    ignoreMalformedVersionsButton.addSelectionListener(buttonListener);
 
     ignoreFeatureNatureButton = new Button(composite, SWT.CHECK);
     ignoreFeatureNatureButton.setText("Ignore feature nature");
     ignoreFeatureNatureButton.setSelection(values.isIgnoreFeatureNature());
+    ignoreFeatureNatureButton.addSelectionListener(buttonListener);
 
     ignoreSchemaBuilderButton = new Button(composite, SWT.CHECK);
     ignoreSchemaBuilderButton.setText("Ignore schema builder");
     ignoreSchemaBuilderButton.setSelection(values.isIgnoreSchemaBuilder());
+    ignoreSchemaBuilderButton.addSelectionListener(buttonListener);
 
     ignoreDebugOptionsButton = new Button(composite, SWT.CHECK);
     ignoreDebugOptionsButton.setText("Ignore debug options");
     ignoreDebugOptionsButton.setSelection(values.isIgnoreDebugOptions());
+    ignoreDebugOptionsButton.addSelectionListener(buttonListener);
 
     ignoreMissingDependencyRangesButton = new Button(composite, SWT.CHECK);
     ignoreMissingDependencyRangesButton.setText("Ignore missing dependency version ranges");
     ignoreMissingDependencyRangesButton.setSelection(values.isIgnoreMissingDependencyRanges());
+    ignoreMissingDependencyRangesButton.addSelectionListener(buttonListener);
 
     ignoreMissingExportVersionsButton = new Button(composite, SWT.CHECK);
     ignoreMissingExportVersionsButton.setText("Ignore missing package export versions");
     ignoreMissingExportVersionsButton.setSelection(values.isIgnoreMissingExportVersions());
-
-    ignoreFeatureContentRedundancyButton = new Button(composite, SWT.CHECK);
-    ignoreFeatureContentRedundancyButton.setText("Ignore feature content redundancy");
-    ignoreFeatureContentRedundancyButton.setSelection(values.isIgnoreFeatureContentRedundancy());
+    ignoreMissingExportVersionsButton.addSelectionListener(buttonListener);
 
     ignoreFeatureContentChangesButton = new Button(composite, SWT.CHECK);
     ignoreFeatureContentChangesButton.setText("Ignore feature content changes");
     ignoreFeatureContentChangesButton.setSelection(values.isIgnoreFeatureContentChanges());
+    ignoreFeatureContentChangesButton.addSelectionListener(buttonListener);
+
+    ignoreFeatureContentRedundancyButton = new Button(composite, SWT.CHECK);
+    ignoreFeatureContentRedundancyButton.setText("Ignore feature content redundancy");
+    ignoreFeatureContentRedundancyButton.setSelection(values.isIgnoreFeatureContentRedundancy());
+    ignoreFeatureContentRedundancyButton.addSelectionListener(buttonListener);
+
+    checkFeatureClosureCompletenessButton = new Button(composite, SWT.CHECK);
+    checkFeatureClosureCompletenessButton.setText("Check feature closure completeness");
+    checkFeatureClosureCompletenessButton.setSelection(values.isCheckFeatureClosureCompleteness());
+    checkFeatureClosureCompletenessButton.addSelectionListener(buttonListener);
 
     releasePathText.addModifyListener(new ModifyListener()
     {
@@ -149,6 +176,14 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
       return;
     }
 
+    boolean redundancyCheck = !ignoreFeatureContentRedundancyButton.getSelection();
+    boolean completenessCheck = checkFeatureClosureCompletenessButton.getSelection();
+    if (redundancyCheck && completenessCheck)
+    {
+      setErrorMessage("Redundancy and completeness checks cannot be done at the same time.");
+      return;
+    }
+
     setErrorMessage(null);
   }
 
@@ -162,8 +197,9 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     values.setIgnoreDebugOptions(ignoreDebugOptionsButton.getSelection());
     values.setIgnoreMissingDependencyRanges(ignoreMissingDependencyRangesButton.getSelection());
     values.setIgnoreMissingExportVersions(ignoreMissingExportVersionsButton.getSelection());
-    values.setIgnoreFeatureContentRedundancy(ignoreFeatureContentRedundancyButton.getSelection());
     values.setIgnoreFeatureContentChanges(ignoreFeatureContentChangesButton.getSelection());
+    values.setIgnoreFeatureContentRedundancy(ignoreFeatureContentRedundancyButton.getSelection());
+    values.setCheckFeatureClosureCompleteness(checkFeatureClosureCompletenessButton.getSelection());
     super.okPressed();
   }
 
@@ -207,14 +243,19 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     return values.isIgnoreMissingExportVersions();
   }
 
+  public boolean isIgnoreFeatureContentChanges()
+  {
+    return values.isIgnoreFeatureContentChanges();
+  }
+
   public boolean isIgnoreFeatureContentRedundancy()
   {
     return values.isIgnoreFeatureContentRedundancy();
   }
 
-  public boolean isIgnoreFeatureContentChanges()
+  public boolean isCheckFeatureClosureCompleteness()
   {
-    return values.isIgnoreFeatureContentChanges();
+    return values.isCheckFeatureClosureCompleteness();
   }
 
   public void applyTo(IProject project) throws CoreException

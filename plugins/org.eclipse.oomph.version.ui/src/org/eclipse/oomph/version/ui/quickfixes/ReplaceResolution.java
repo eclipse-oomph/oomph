@@ -47,6 +47,11 @@ public class ReplaceResolution extends AbstractDocumentResolution
       return "Add the feature builder";
     }
 
+    if (Markers.FEATURE_CLOSURE_PROBLEM.equals(problemType))
+    {
+      return "Add the plug-in reference";
+    }
+
     if (Markers.DEBUG_OPTION_PROBLEM.equals(problemType))
     {
       return "Change the debug option";
@@ -108,6 +113,18 @@ public class ReplaceResolution extends AbstractDocumentResolution
       {
         start = matcher.start(1);
         end = matcher.end(1);
+
+        for (int i = 1; i < 9; i++)
+        {
+          String insertTag = "\\" + i;
+          if (replacement.contains(insertTag))
+          {
+            int offset = matcher.start(i);
+            int length = matcher.end(i) - offset;
+            String found = document.get(offset, length);
+            replacement = replacement.replace(insertTag, found);
+          }
+        }
       }
       else
       {

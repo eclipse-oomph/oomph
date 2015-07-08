@@ -80,10 +80,10 @@ public class VersionResolutionGenerator implements IMarkerResolutionGenerator2
       resolutions.add(new PropertiesResolution.IgnoredReferences(marker));
     }
 
-    String ignoreOption = Markers.getQuickFixConfigureOption(marker);
-    if (ignoreOption != null)
+    String option = Markers.getQuickFixConfigureOption(marker);
+    if (option != null)
     {
-      resolutions.add(new ConfigureResolution(marker, ignoreOption));
+      resolutions.add(new ConfigureResolution(marker, option));
     }
 
     String nature = Markers.getQuickFixNature(marker);

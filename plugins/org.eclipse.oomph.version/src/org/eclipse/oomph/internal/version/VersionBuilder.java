@@ -489,7 +489,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         addDeviationMarker(componentModelFile, element, releaseVersion);
       }
 
-      Markers.deleteAllMarkers(componentModelFile, Markers.COMPONENT_VERSION_PROBLEM);
+      Markers.deleteAllMarkers(componentModelFile, Markers.COMPONENT_VERSION_PROBLEM, Markers.FEATURE_CLOSURE_PROBLEM);
       boolean microVersionProperlyIncreased = false;
 
       if (comparison < 0)
@@ -521,6 +521,11 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         if (!arguments.isIgnoreFeatureContentRedundancy())
         {
           checkFeatureRedundancy(componentModelFile, element);
+        }
+
+        if (arguments.isCheckFeatureClosureCompleteness())
+        {
+          checkFeatureClosureCompleteness(componentModelFile, element);
         }
 
         if (!arguments.isIgnoreFeatureContentChanges())
@@ -817,6 +822,64 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       }
 
       ++i;
+    }
+  }
+
+  private void checkFeatureClosureCompleteness(IFile file, IElement element)
+  {
+    List<IElement> children = element.getChildren();
+    Set<IElement> plugins = new HashSet<IElement>();
+    Map<IElement, IElement> closure = new HashMap<IElement, IElement>();
+
+    for (IElement child : children)
+    {
+      if (child.getType() == IElement.Type.FEATURE)
+      {
+        collectFeatureClosure(child, child, closure);
+      }
+      else
+      {
+        plugins.add(child);
+      }
+    }
+
+    for (Map.Entry<IElement, IElement> entry : closure.entrySet())
+    {
+      IElement plugin = entry.getKey();
+      if (plugins.add(plugin))
+      {
+        try
+        {
+          IElement mainFeature = entry.getValue();
+          addFeatureClosureMarker(file, plugin, mainFeature);
+        }
+        catch (Exception ex)
+        {
+          Activator.log(ex);
+        }
+      }
+    }
+  }
+
+  private void collectFeatureClosure(IElement feature, IElement mainFeature, Map<IElement, IElement> closure)
+  {
+    feature = resolveElement(feature);
+    if (feature != null)
+    {
+      for (IElement child : feature.getChildren())
+      {
+        if (child.getType() == IElement.Type.PLUGIN)
+        {
+          if (!closure.containsKey(child))
+          {
+            closure.put(child, mainFeature);
+          }
+        }
+        else
+        {
+          collectFeatureClosure(child, mainFeature, closure);
+        }
+      }
     }
   }
 
@@ -1468,6 +1531,29 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
       IMarker marker = addFeatureChildMarker(file, Markers.COMPONENT_VERSION_PROBLEM, "plugin", name, msg, false, true, null, IMarker.SEVERITY_WARNING);
       marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT);
+    }
+    catch (Exception ex)
+    {
+      Activator.log(ex);
+    }
+  }
+
+  private void addFeatureClosureMarker(IFile file, IElement pluginChild, IElement featureChild)
+  {
+    try
+    {
+      String pluginName = pluginChild.getName();
+      String featureName = featureChild.getName();
+      String msg = "Plug-in '" + pluginName + "' should be referenced because feature '" + featureName + "' contains it";
+
+      String lineDelimiter = VersionUtil.getLineDelimiter(file);
+
+      IMarker marker = addFeatureChildMarker(file, Markers.FEATURE_CLOSURE_PROBLEM, "includes", featureName, msg, false, true, null, IMarker.SEVERITY_WARNING);
+      marker.setAttribute(Markers.QUICK_FIX_PATTERN, "(([ \t]*)<includes(\\s*)id\\s*=\\s*\"" + featureName + "\")");
+      marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, "\\2<plugin\\3id=\"" + pluginName
+          + "\"\\3download-size=\"0\"\\3install-size=\"0\"\\3version=\"0.0.0\"\\3unpack=\"false\"/>" + lineDelimiter + lineDelimiter + "\\1");
+      marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT);
+      marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_VALUE, "false");
     }
     catch (Exception ex)
     {

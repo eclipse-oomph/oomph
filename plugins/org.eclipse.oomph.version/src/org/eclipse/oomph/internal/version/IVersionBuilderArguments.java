@@ -38,9 +38,11 @@ public interface IVersionBuilderArguments extends Map<String, String>
 
   public static final String IGNORE_EXPORT_VERSIONS_ARGUMENT = "ignore.missing.export.versions";
 
+  public static final String IGNORE_CONTENT_CHANGES_ARGUMENT = "ignore.feature.content.changes";
+
   public static final String IGNORE_CONTENT_REDUNDANCY_ARGUMENT = "ignore.feature.content.redundancy";
 
-  public static final String IGNORE_CONTENT_CHANGES_ARGUMENT = "ignore.feature.content.changes";
+  public static final String CHECK_CLOSURE_COMPLETENESS_ARGUMENT = "check.feature.closure.completeness";
 
   public String getReleasePath();
 
@@ -58,9 +60,11 @@ public interface IVersionBuilderArguments extends Map<String, String>
 
   public boolean isIgnoreMissingExportVersions();
 
+  public boolean isIgnoreFeatureContentChanges();
+
   public boolean isIgnoreFeatureContentRedundancy();
 
-  public boolean isIgnoreFeatureContentChanges();
+  public boolean isCheckFeatureClosureCompleteness();
 
   public void applyTo(IProject project) throws CoreException;
 }

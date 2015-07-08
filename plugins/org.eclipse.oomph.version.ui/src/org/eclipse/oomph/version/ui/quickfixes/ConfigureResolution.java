@@ -48,10 +48,11 @@ public class ConfigureResolution extends AbstractResolution
   protected void apply(IMarker marker) throws Exception
   {
     String option = Markers.getQuickFixConfigureOption(marker);
+    String value = Markers.getQuickFixConfigureValue(marker);
 
     IProject project = marker.getResource().getProject();
     VersionBuilderArguments arguments = new VersionBuilderArguments(project);
-    arguments.put(option, "true");
+    arguments.put(option, value);
     arguments.applyTo(project);
   }
 }

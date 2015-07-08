@@ -30,10 +30,10 @@
    <feature url="features/org.eclipse.oomph.targlets_1.2.0.qualifier.jar" id="org.eclipse.oomph.targlets" version="1.2.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
-   <feature url="features/org.eclipse.oomph.version_1.1.0.qualifier.jar" id="org.eclipse.oomph.version" version="1.1.0.qualifier">
+   <feature url="features/org.eclipse.oomph.version_1.2.0.qualifier.jar" id="org.eclipse.oomph.version" version="1.2.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
-   <feature url="features/org.eclipse.oomph.version.headless_1.1.0.qualifier.jar" id="org.eclipse.oomph.version.headless" version="1.1.0.qualifier">
+   <feature url="features/org.eclipse.oomph.version.headless_1.2.0.qualifier.jar" id="org.eclipse.oomph.version.headless" version="1.2.0.qualifier">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
    <feature url="features/org.eclipse.oomph.winexplorer_1.1.0.qualifier.jar" id="org.eclipse.oomph.winexplorer" version="1.1.0.qualifier">
@@ -76,7 +76,6 @@
    <feature url="features/org.eclipse.oomph.setup.workbench_1.1.0.qualifier.jar" id="org.eclipse.oomph.setup.workbench" version="1.1.0.qualifier">
       <category name="org.eclipse.oomph.setup.category"/>
    </feature>
-   <plugin url="releng/org.eclipse.oomph.releng.helpcenter_1.1.0.qualifier.jar" id="org.eclipse.oomph.releng.helpcenter" version="1.1.0.qualifier"/>
    <category-def name="org.eclipse.oomph.setup.category" label="Oomph Setup"/>
    <category-def name="org.eclipse.oomph.tools.category" label="Oomph Tools"/>
 </site>

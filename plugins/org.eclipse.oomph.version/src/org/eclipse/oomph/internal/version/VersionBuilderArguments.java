@@ -136,6 +136,16 @@ public class VersionBuilderArguments extends HashMap<String, String>implements I
     setBoolean(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT, value);
   }
 
+  public boolean isIgnoreFeatureContentChanges()
+  {
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT));
+  }
+
+  public void setIgnoreFeatureContentChanges(boolean value)
+  {
+    setBoolean(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT, value);
+  }
+
   public boolean isIgnoreFeatureContentRedundancy()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT));
@@ -146,14 +156,14 @@ public class VersionBuilderArguments extends HashMap<String, String>implements I
     setBoolean(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT, value);
   }
 
-  public boolean isIgnoreFeatureContentChanges()
+  public boolean isCheckFeatureClosureCompleteness()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT));
   }
 
-  public void setIgnoreFeatureContentChanges(boolean value)
+  public void setCheckFeatureClosureCompleteness(boolean value)
   {
-    setBoolean(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT, value);
+    setBoolean(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT, value);
   }
 
   public void applyTo(IProject project) throws CoreException
