@@ -22,6 +22,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
@@ -122,6 +123,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.internal.p2.update.Configuration;
+import org.eclipse.equinox.internal.p2.update.Site;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
 import org.osgi.framework.Bundle;
@@ -2749,7 +2752,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void perform(IProgressMonitor monitor) throws Exception
   {
     boolean bootstrap = getTrigger() == Trigger.BOOTSTRAP;
-    monitor.beginTask("", (bootstrap ? 105 : 100) + (vmPath == null ? 0 : 1));
+    monitor.beginTask("", 100 + (bootstrap ? 6 + (vmPath != null ? 1 : 0) : 0));
 
     try
     {
@@ -2763,50 +2766,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (bootstrap)
       {
-        log("Performing post bootstrap tasks", false, Severity.INFO);
-        performEclipseIniTask(false, "--launcher.appendVmargs", null, new SubProgressMonitor(monitor, 1));
-
-        if (vmPath != null)
-        {
-          performEclipseIniTask(false, "-vm", vmPath, new SubProgressMonitor(monitor, 1));
-        }
-
-        performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))),
-            new SubProgressMonitor(monitor, 1));
-
-        performIndexRediction(SetupContext.INDEX_SETUP_URI, "", new SubProgressMonitor(monitor, 1));
-        performIndexRediction(SetupContext.INDEX_SETUP_LOCATION_URI, ".location", new SubProgressMonitor(monitor, 1));
-
-        if (OS.INSTANCE.isMac())
-        {
-          File file = new File(getProductConfigurationLocation(), "config.ini");
-          Map<String, String> configIni = PropertiesUtil.loadProperties(file);
-          configIni.put("osgi.configuration.cascaded", "false");
-          P2TaskImpl.saveConfigIni(file, configIni, SetupTaskPerformer.class);
-        }
-
-        if (REMOTE_DEBUG)
-        {
-          performEclipseIniTask(true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true", new NullProgressMonitor());
-          performEclipseIniTask(true, "-Xdebug", "", new NullProgressMonitor());
-          performEclipseIniTask(true, "-Xrunjdwp", ":transport=dt_socket,server=y,suspend=n,address=8123", new NullProgressMonitor());
-        }
-
-        String[] networkPreferences = new String[] { ".settings", "org.eclipse.core.net.prefs" };
-        URI sourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
-        if (getURIConverter().exists(sourceLocation, null))
-        {
-          URI targetURI = URI.createFileURI(getProductConfigurationLocation().toString()).appendSegments(networkPreferences);
-
-          ResourceCopyTask resourceCopyTask = SetupFactory.eINSTANCE.createResourceCopyTask();
-          resourceCopyTask.setSourceURL(sourceLocation.toString());
-          resourceCopyTask.setTargetURL(targetURI.toString());
-          performTask(resourceCopyTask, new SubProgressMonitor(monitor, 1));
-        }
-        else
-        {
-          monitor.worked(1);
-        }
+        performPostBootstrapTasks(monitor);
       }
     }
     finally
@@ -2816,6 +2776,86 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     hasSuccessfullyPerformed = true;
+  }
+
+  private void performPostBootstrapTasks(IProgressMonitor monitor) throws Exception
+  {
+    log("Performing post bootstrap tasks", false, Severity.INFO);
+    File productConfigurationLocation = getProductConfigurationLocation();
+
+    performEclipseIniTask(false, "--launcher.appendVmargs", null, new SubProgressMonitor(monitor, 1));
+
+    if (vmPath != null)
+    {
+      performEclipseIniTask(false, "-vm", vmPath, new SubProgressMonitor(monitor, 1));
+    }
+
+    performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))),
+        new SubProgressMonitor(monitor, 1));
+
+    performIndexRediction(SetupContext.INDEX_SETUP_URI, "", new SubProgressMonitor(monitor, 1));
+    performIndexRediction(SetupContext.INDEX_SETUP_LOCATION_URI, ".location", new SubProgressMonitor(monitor, 1));
+
+    if (REMOTE_DEBUG)
+    {
+      performEclipseIniTask(true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true", new NullProgressMonitor());
+      performEclipseIniTask(true, "-Xdebug", "", new NullProgressMonitor());
+      performEclipseIniTask(true, "-Xrunjdwp", ":transport=dt_socket,server=y,suspend=n,address=8123", new NullProgressMonitor());
+    }
+
+    if (OS.INSTANCE.isMac())
+    {
+      File file = new File(productConfigurationLocation, "config.ini");
+      log("Changing " + file + " (osgi.configuration.cascaded=false)", false, Severity.OK);
+
+      Map<String, String> configIni = PropertiesUtil.loadProperties(file);
+      configIni.put("osgi.configuration.cascaded", "false");
+      P2TaskImpl.saveConfigIni(file, configIni, SetupTaskPerformer.class);
+    }
+
+    Profile profile = getProfile();
+    File installFolder = profile.getInstallFolder();
+    File bundlePool = profile.getBundlePool().getLocation();
+    if (!installFolder.equals(bundlePool))
+    {
+      File platformXML = new File(productConfigurationLocation, "org.eclipse.update/platform.xml");
+      if (platformXML.isFile())
+      {
+        Configuration configuration = Configuration.load(platformXML, null);
+        for (Site site : configuration.getSites())
+        {
+          if (!Site.POLICY_MANAGED_ONLY.equals(site.getPolicy()))
+          {
+            File siteLocation = new File(URI.createURI(site.getUrl()).toFileString());
+            if (siteLocation.equals(bundlePool))
+            {
+              log("Changing " + platformXML + " (policy=" + Site.POLICY_MANAGED_ONLY + ")", false, Severity.OK);
+              site.setPolicy(Site.POLICY_MANAGED_ONLY);
+              configuration.save(platformXML, null);
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    monitor.worked(1);
+
+    String[] networkPreferences = new String[] { ".settings", "org.eclipse.core.net.prefs" };
+    URI sourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
+    if (getURIConverter().exists(sourceLocation, null))
+    {
+      URI targetURI = URI.createFileURI(productConfigurationLocation.toString()).appendSegments(networkPreferences);
+
+      ResourceCopyTask resourceCopyTask = SetupFactory.eINSTANCE.createResourceCopyTask();
+      resourceCopyTask.setSourceURL(sourceLocation.toString());
+      resourceCopyTask.setTargetURL(targetURI.toString());
+      performTask(resourceCopyTask, new SubProgressMonitor(monitor, 1));
+    }
+    else
+    {
+      monitor.worked(1);
+    }
   }
 
   private void performTriggeredSetupTasks(IProgressMonitor monitor) throws Exception

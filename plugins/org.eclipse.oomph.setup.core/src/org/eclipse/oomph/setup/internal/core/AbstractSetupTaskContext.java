@@ -16,6 +16,7 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -276,7 +277,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     String osgiWS = os.getOsgiWS();
     String osgiArch = os.getOsgiArch();
     String[] keys = new String[] { //
-    "folderName." + osgiOS + '.' + osgiWS + '.' + osgiArch, //
+        "folderName." + osgiOS + '.' + osgiWS + '.' + osgiArch, //
         "folderName." + osgiOS + '.' + osgiWS, //
         "folderName." + osgiOS, //
         "folderName", //
@@ -314,12 +315,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   {
     if (launcherName == null)
     {
-      IProfile profile = (IProfile)get(IProfile.class);
-      if (profile == null)
-      {
-        profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
-      }
-
+      IProfile profile = getProfile();
       launcherName = getLauncherName(profile);
     }
 
@@ -355,6 +351,17 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     SetupCorePlugin.INSTANCE.log("Could not determine the launcher name from " + profile.getProfileId(), IStatus.ERROR);
 
     return "eclipse";
+  }
+
+  public Profile getProfile()
+  {
+    Profile profile = (Profile)get(Profile.class);
+    if (profile == null)
+    {
+      profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+    }
+
+    return profile;
   }
 
   public Workspace getWorkspace()

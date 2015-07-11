@@ -715,7 +715,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
       else
       {
-        context.put(IProfile.class, profile);
+        context.put(Profile.class, profile);
       }
     }
     finally
