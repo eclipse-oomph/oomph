@@ -195,7 +195,7 @@ public class WorkingSetManager
       IWorkingSet workingSet = MANAGER.getWorkingSet(key);
       if (workingSet == null)
       {
-        if (value != null)
+        if (key != null && value != null)
         {
           workingSet = MANAGER.createWorkingSet(key, value.toArray(new IAdaptable[value.size()]));
           workingSet.setLabel(key);
