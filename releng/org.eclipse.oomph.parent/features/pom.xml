@@ -27,6 +27,7 @@ Eike Stepper - initial API and implementation
 
   <modules>
     <module>../../../features/org.eclipse.oomph.all-feature</module>
+    <module>../../../features/org.eclipse.oomph.tests-feature</module>
     <module>../../../features/org.eclipse.oomph.gitbash-feature</module>
     <module>../../../features/org.eclipse.oomph.launches-feature</module>
     <module>../../../features/org.eclipse.oomph.license-feature</module>
