@@ -22,6 +22,10 @@
 					<key>release.path</key>
 					<value>/org.eclipse.oomph.util/release.xml</value>
 				</dictionary>
+				<dictionary>
+					<key>check.maven.pom</key>
+					<value>true</value>
+				</dictionary>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
