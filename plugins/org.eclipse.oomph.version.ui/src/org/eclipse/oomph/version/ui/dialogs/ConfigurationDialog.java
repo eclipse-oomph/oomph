@@ -66,6 +66,8 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
 
   private Button checkFeatureClosureCompletenessButton;
 
+  private Button checkMavenPomButton;
+
   public ConfigurationDialog(Shell parentShell, VersionBuilderArguments defaults)
   {
     super(parentShell);
@@ -101,6 +103,14 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     {
       releasePathText.setText(releasePath);
     }
+
+    releasePathText.addModifyListener(new ModifyListener()
+    {
+      public void modifyText(ModifyEvent e)
+      {
+        validate();
+      }
+    });
 
     SelectionListener buttonListener = new SelectionAdapter()
     {
@@ -156,13 +166,10 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     checkFeatureClosureCompletenessButton.setSelection(values.isCheckFeatureClosureCompleteness());
     checkFeatureClosureCompletenessButton.addSelectionListener(buttonListener);
 
-    releasePathText.addModifyListener(new ModifyListener()
-    {
-      public void modifyText(ModifyEvent e)
-      {
-        validate();
-      }
-    });
+    checkMavenPomButton = new Button(composite, SWT.CHECK);
+    checkMavenPomButton.setText("Check Maven POM");
+    checkMavenPomButton.setSelection(values.isCheckMavenPom());
+    checkMavenPomButton.addSelectionListener(buttonListener);
 
     validate();
     return dialogArea;
@@ -200,6 +207,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     values.setIgnoreFeatureContentChanges(ignoreFeatureContentChangesButton.getSelection());
     values.setIgnoreFeatureContentRedundancy(ignoreFeatureContentRedundancyButton.getSelection());
     values.setCheckFeatureClosureCompleteness(checkFeatureClosureCompletenessButton.getSelection());
+    values.setCheckMavenPom(checkMavenPomButton.getSelection());
     super.okPressed();
   }
 
@@ -256,6 +264,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
   public boolean isCheckFeatureClosureCompleteness()
   {
     return values.isCheckFeatureClosureCompleteness();
+  }
+
+  public boolean isCheckMavenPom()
+  {
+    return values.isCheckMavenPom();
   }
 
   public void applyTo(IProject project) throws CoreException

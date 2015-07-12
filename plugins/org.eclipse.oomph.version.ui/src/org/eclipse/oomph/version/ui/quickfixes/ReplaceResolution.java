@@ -57,6 +57,23 @@ public class ReplaceResolution extends AbstractDocumentResolution
       return "Change the debug option";
     }
 
+    if (Markers.MAVEN_POM_PROBLEM.equals(problemType))
+    {
+      String message = Markers.getAttribute(marker, IMarker.MESSAGE);
+      if (message != null)
+      {
+        if (message.startsWith("Maven artifactId"))
+        {
+          return "Change the Maven artifactId";
+        }
+
+        if (message.startsWith("Maven version"))
+        {
+          return "Change the Maven version";
+        }
+      }
+    }
+
     return replacement == null ? "Remove the reference"
         : Markers.getQuickFixAlternativeReplacement(marker) == null ? "Change the version" : "Change to the extact version";
   }

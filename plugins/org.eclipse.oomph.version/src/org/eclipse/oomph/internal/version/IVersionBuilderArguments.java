@@ -44,6 +44,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
 
   public static final String CHECK_CLOSURE_COMPLETENESS_ARGUMENT = "check.feature.closure.completeness";
 
+  public static final String CHECK_MAVEN_POM_ARGUMENT = "check.maven.pom";
+
   public String getReleasePath();
 
   public String getValidatorClassName();
@@ -65,6 +67,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
   public boolean isIgnoreFeatureContentRedundancy();
 
   public boolean isCheckFeatureClosureCompleteness();
+
+  public boolean isCheckMavenPom();
 
   public void applyTo(IProject project) throws CoreException;
 }

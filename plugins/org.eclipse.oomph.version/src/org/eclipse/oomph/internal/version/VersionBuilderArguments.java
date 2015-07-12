@@ -166,6 +166,16 @@ public class VersionBuilderArguments extends HashMap<String, String>implements I
     setBoolean(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT, value);
   }
 
+  public boolean isCheckMavenPom()
+  {
+    return "true".equals(get(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT));
+  }
+
+  public void setCheckMavenPom(boolean value)
+  {
+    setBoolean(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT, value);
+  }
+
   public void applyTo(IProject project) throws CoreException
   {
     IProjectDescription description = project.getDescription();

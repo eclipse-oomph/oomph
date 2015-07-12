@@ -12,6 +12,7 @@ package org.eclipse.oomph.internal.version;
 
 import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.version.IElement;
 import org.eclipse.oomph.version.IElement.Type;
 import org.eclipse.oomph.version.IElementResolver;
@@ -50,7 +51,16 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
 
 import org.osgi.framework.Version;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,6 +86,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   private static final Path OPTIONS_PATH = new Path(".options");
 
+  private static final Path MAVEN_POM_PATH = new Path("pom.xml");
+
   private static final Path MANIFEST_PATH = new Path("META-INF/MANIFEST.MF");
 
   private static final Path FEATURE_PATH = new Path("feature.xml");
@@ -90,13 +102,15 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   private static final Pattern DEBUG_OPTION_PATTERN = Pattern.compile("^( *)([^/ \\n\\r]+)/([^ =]+)( *=.*)$", Pattern.MULTILINE);
 
-  private static IResourceChangeListener postBuildListener;
-
   private static final Set<String> releasePaths = new HashSet<String>();
 
   private static final Map<IElement, IElement> elementCache = new HashMap<IElement, IElement>();
 
   private static final Map<IElement, Set<IElement>> elementReferences = new HashMap<IElement, Set<IElement>>();
+
+  private static IResourceChangeListener postBuildListener;
+
+  private static SAXParserFactory parserFactory;
 
   private IRelease release;
 
@@ -440,6 +454,18 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       else if (!oldVersionBuilderArguments.isIgnoreMalformedVersions())
       {
         Markers.deleteAllMarkers(componentModelFile, Markers.MALFORMED_VERSION_PROBLEM);
+      }
+
+      if (arguments.isCheckMavenPom())
+      {
+        if (delta == null || delta.findMember(MAVEN_POM_PATH) != null)
+        {
+          checkMavenPom(componentModel, element);
+        }
+      }
+      else if (oldVersionBuilderArguments.isCheckMavenPom())
+      {
+        Markers.deleteAllMarkers(project.getFile(MAVEN_POM_PATH), Markers.MAVEN_POM_PROBLEM);
       }
 
       IElement releaseElement = release.getElements().get(element.trimVersion());
@@ -972,6 +998,155 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     }
 
     return ComponentReferenceType.UNCHANGED;
+  }
+
+  private SAXParser getParser() throws ParserConfigurationException, SAXException
+  {
+    if (parserFactory == null)
+    {
+      parserFactory = SAXParserFactory.newInstance();
+    }
+
+    return parserFactory.newSAXParser();
+  }
+
+  private void checkMavenPom(IModel componentModel, IElement element) throws CoreException
+  {
+    final IFile file = getProject().getFile(MAVEN_POM_PATH);
+    if (file.isAccessible())
+    {
+      Markers.deleteAllMarkers(file, Markers.MAVEN_POM_PROBLEM);
+
+      final String componentName = element.getName();
+      final String componentVersion = StringUtil.removeSuffix(element.getVersion().toString(), ".qualifier");
+
+      InputStream contents = null;
+
+      try
+      {
+        contents = file.getContents();
+
+        SAXParser parser = getParser();
+        parser.parse(new BufferedInputStream(contents), new DefaultHandler()
+        {
+          private Locator locator;
+
+          private int level;
+
+          private int lineNumber;
+
+          private int found;
+
+          private StringBuilder builder;
+
+          @Override
+          public void setDocumentLocator(Locator locator)
+          {
+            this.locator = locator;
+          }
+
+          @Override
+          public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
+          {
+            if (++level == 2)
+            {
+              if ("artifactId".equals(qName) || "version".equals(qName))
+              {
+                lineNumber = locator.getLineNumber();
+                builder = new StringBuilder();
+              }
+            }
+          }
+
+          @Override
+          public void characters(char[] ch, int start, int length) throws SAXException
+          {
+            if (builder != null)
+            {
+              builder.append(ch, start, length);
+            }
+          }
+
+          @Override
+          public void endElement(String uri, String localName, String qName) throws SAXException
+          {
+            --level;
+
+            if (builder != null)
+            {
+              String textContent = builder.toString().replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').trim();
+
+              if ("artifactId".equals(qName))
+              {
+                if (!textContent.equals(componentName))
+                {
+                  addMarker(file, "Maven artifactId '" + textContent + "' is different from plug-in name '" + componentName + "'", textContent, componentName);
+                }
+              }
+              else
+              {
+                String version = StringUtil.removeSuffix(textContent, "-SNAPSHOT");
+                if (!version.equals(componentVersion))
+                {
+                  addMarker(file, "Maven version '" + version + "' is different from plug-in version '" + componentVersion + "'", version, componentVersion);
+                }
+              }
+
+              if (++found == 2)
+              {
+                throw new SAXException("STOP-EARLY");
+              }
+            }
+
+            builder = null;
+          }
+
+          private void addMarker(IFile file, String message, String pomValue, String componentValue)
+          {
+            StringBuilder regexBuilder = new StringBuilder();
+            for (int i = 1; i < lineNumber; i++)
+            {
+              regexBuilder.append('$');
+            }
+
+            regexBuilder.append(".*(" + pomValue.replace(".", "\\.") + ")");
+            String regex = regexBuilder.toString();
+
+            try
+            {
+              IMarker marker = Markers.addMarker(file, message, IMarker.SEVERITY_ERROR, regex);
+              if (marker != null)
+              {
+                marker.setAttribute(Markers.PROBLEM_TYPE, Markers.MAVEN_POM_PROBLEM);
+                marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
+                marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, componentValue);
+                marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT);
+                marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_VALUE, "false");
+              }
+            }
+            catch (Exception ex)
+            {
+              Activator.log(ex);
+            }
+          }
+        });
+      }
+      catch (SAXException ex)
+      {
+        if (!"STOP-EARLY".equals(ex.getMessage()))
+        {
+          Activator.log(ex);
+        }
+      }
+      catch (Exception ex)
+      {
+        Activator.log(ex);
+      }
+      finally
+      {
+        IOUtil.closeSilent(contents);
+      }
+    }
   }
 
   private boolean addProblem(IElement element, int severity, ComponentReferenceType componentReferenceType, Version version, List<Problem> problems)

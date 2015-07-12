@@ -54,6 +54,8 @@ public final class Markers
 
   public static final String FEATURE_CLOSURE_PROBLEM = "feature.closure";
 
+  public static final String MAVEN_POM_PROBLEM = "maven.pom";
+
   public static final String COMPONENT_VERSION_PROBLEM = "component.version";
 
   public static final String VALIDATOR_CLASS_PROBLEM = "validator.class";
@@ -256,6 +258,11 @@ public final class Markers
 
   public static void deleteAllMarkers(IResource resource, String... problemTypes) throws CoreException
   {
+    if (!resource.exists())
+    {
+      return;
+    }
+
     if (problemTypes.length == 0)
     {
       resource.deleteMarkers(MARKER_TYPE, false, IResource.DEPTH_INFINITE);
