@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
@@ -38,6 +39,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -45,6 +47,7 @@ import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -68,6 +71,8 @@ public final class SetupEditorSupport
   public static final String EDITOR_ID = "org.eclipse.oomph.setup.presentation.SetupEditorID";
 
   public static final String TEXT_EDITOR_ID = "org.eclipse.ui.DefaultTextEditor";
+
+  public static final String PREF_TEXT_EDITOR_ID = "preferred.text.editor";
 
   public static IEditorPart getEditor(final IWorkbenchPage page, final URI uri, boolean force, LoadHandler... loadHandlers)
   {
@@ -164,22 +169,46 @@ public final class SetupEditorSupport
     return null;
   }
 
+  private static String getTextEditorID()
+  {
+    try
+    {
+      String editorID = SetupUIPlugin.INSTANCE.getPreferenceStore().getString(PREF_TEXT_EDITOR_ID);
+      if (!StringUtil.isEmpty(editorID))
+      {
+        IEditorDescriptor descriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor(editorID);
+        if (descriptor != null)
+        {
+          return editorID;
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
+    }
+
+    return TEXT_EDITOR_ID;
+  }
+
   public static IEditorPart getTextEditor(final IWorkbenchPage page, final URI uri)
   {
     try
     {
       URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
-      final URI normalizedURI = uriConverter.normalize(uri.trimFragment());
+      URI normalizedURI = uriConverter.normalize(uri.trimFragment());
+      IEditorInput editorInput = getTextEditorInput(normalizedURI);
 
-      final IEditorInput editorInput = getTextEditorInput(normalizedURI);
-      IEditorPart editor = findEditor(TEXT_EDITOR_ID, page, uriConverter, editorInput);
+      String editorID = getTextEditorID();
+
+      IEditorPart editor = findEditor(editorID, page, uriConverter, editorInput);
       if (editor != null)
       {
         page.activate(editor);
       }
       else
       {
-        editor = page.openEditor(editorInput, TEXT_EDITOR_ID, true, IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
+        editor = page.openEditor(editorInput, editorID, true, IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
       }
 
       return editor;

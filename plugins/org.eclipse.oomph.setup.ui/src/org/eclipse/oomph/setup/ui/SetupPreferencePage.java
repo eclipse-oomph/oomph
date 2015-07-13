@@ -14,6 +14,7 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferencePageContainer;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.StringButtonFieldEditor;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -21,8 +22,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.dialogs.EditorSelectionDialog;
 
 /**
  * @author Eike Stepper
@@ -49,18 +52,42 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
   @Override
   protected void createFieldEditors()
   {
-    Composite parent = getFieldEditorParent();
+    final Composite parent = getFieldEditorParent();
 
     BooleanFieldEditor skipAutomaticTaskExecution = new BooleanFieldEditor(SetupUIPlugin.PREF_SKIP_STARTUP_TASKS,
         "Skip automatic task execution at startup time", parent);
-    skipAutomaticTaskExecution.fillIntoGrid(parent, 2);
+    skipAutomaticTaskExecution.fillIntoGrid(parent, 3);
     addField(skipAutomaticTaskExecution);
     skipAutomaticTaskExecution.getDescriptionControl(parent).setToolTipText("Don't automatically perform setup tasks when a new workspace is opened");
 
     BooleanFieldEditor showToolBars = new BooleanFieldEditor(SetupPropertyTester.SHOW_TOOL_BAR_CONTRIBUTIONS, "Show tool bar contributions", parent);
-    showToolBars.fillIntoGrid(parent, 2);
+    showToolBars.fillIntoGrid(parent, 3);
     addField(showToolBars);
     showToolBars.getDescriptionControl(parent).setToolTipText("Show the 'Perform Setup Tasks' and 'Open Setups' tool bar contributions on the main tool bar");
+
+    final StringButtonFieldEditor preferredTextEditor = new StringButtonFieldEditor(SetupEditorSupport.PREF_TEXT_EDITOR_ID, "Preferred text editor for models",
+        parent)
+    {
+      @Override
+      protected String changePressed()
+      {
+        EditorSelectionDialog dialog = new EditorSelectionDialog(getControl().getShell());
+        dialog.setMessage("Choose the editor to open when 'Open in text editor' is selected in a model editor:");
+        if (dialog.open() == EditorSelectionDialog.OK)
+        {
+          IEditorDescriptor descriptor = dialog.getSelectedEditor();
+          if (descriptor != null)
+          {
+            return descriptor.getId();
+          }
+        }
+
+        return null;
+      }
+    };
+    addField(preferredTextEditor);
+    preferredTextEditor.fillIntoGrid(parent, 3);
+    preferredTextEditor.getLabelControl(parent).setToolTipText("The editor to open when 'Open in text editor' is selected in a model editor");
 
     if (Questionnaire.exists())
     {
