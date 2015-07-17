@@ -20,6 +20,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.editor.SetupTemplate;
+import org.eclipse.oomph.setup.internal.core.StringFilterRegistry;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.ui.LabelDecorator;
@@ -66,7 +67,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -569,29 +569,9 @@ public class GenericSetupTemplate extends SetupTemplate
     return result.toString();
   }
 
-  private String filter(VariableTask variable, String value, String filter)
+  private String filter(VariableTask variable, String value, String filterName)
   {
-    if (filter.equals("qualifiedName"))
-    {
-      return value.trim().replaceAll("[^\\p{Alnum}]+", ".").toLowerCase();
-    }
-
-    if (filter.equals("camel"))
-    {
-      Matcher matcher = Pattern.compile("(?:[^\\p{Alnum}]+|^)(\\p{Lower})?").matcher(value);
-      StringBuffer result = new StringBuffer();
-      while (matcher.find())
-      {
-        String group = matcher.group(1);
-        matcher.appendReplacement(result, group == null ? "" : group.toUpperCase());
-      }
-
-      matcher.appendTail(result);
-
-      return result.toString();
-    }
-
-    if (filter.equals("label"))
+    if (filterName.equals("label"))
     {
       for (VariableChoice choice : variable.getChoices())
       {
@@ -602,6 +582,6 @@ public class GenericSetupTemplate extends SetupTemplate
       }
     }
 
-    return value;
+    return StringFilterRegistry.INSTANCE.filter(value, filterName);
   }
 }

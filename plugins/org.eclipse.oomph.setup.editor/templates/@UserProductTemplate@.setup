@@ -119,7 +119,7 @@
       requiredJavaVersion="1.7">
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="${scope.product.label} (${scope.productversion.label})">
+        label="${scope.product.label} (${scope.product.version.label})">
       <requirement
           name="org.eclipse.platform.ide"/>
       <requirement
