@@ -131,6 +131,7 @@
       <repository
           url="http://download.eclipse.org/releases/${product.release.train|lower}"/>
     </setupTask>
+    <description>${product.label} for ${product.release.train}.</description>
   </version>
   <description>${product.description}</description>
 </setup:Product>
