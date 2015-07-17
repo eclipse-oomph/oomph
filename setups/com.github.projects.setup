@@ -74,7 +74,7 @@
       <choice
           value="None"
           label="None"/>
-      <description>Choose the compatibly level of the target platform</description>
+      <description>Choose the compatibility level of the target platform</description>
     </setupTask>
   </setupTask>
   <setupTask

@@ -15,11 +15,11 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
-import org.eclipse.oomph.setup.Project;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
-import org.eclipse.oomph.setup.editor.ProjectTemplate;
+import org.eclipse.oomph.setup.editor.SetupTemplate;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.ui.LabelDecorator;
@@ -71,14 +71,13 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-public class GenericProjectTemplate extends ProjectTemplate
+public class GenericSetupTemplate extends SetupTemplate
 {
-
   private final URI templateLocation;
 
   private Composite composite;
 
-  private Project eclipseProject;
+  private Scope setupScope;
 
   private Map<VariableTask, PropertyField> fields = new LinkedHashMap<VariableTask, PropertyField>();
 
@@ -94,7 +93,7 @@ public class GenericProjectTemplate extends ProjectTemplate
 
   private LabelDecorator decorator;
 
-  public GenericProjectTemplate(String label, URI templateLocation)
+  public GenericSetupTemplate(String label, URI templateLocation)
   {
     super(label);
     this.templateLocation = templateLocation;
@@ -143,7 +142,8 @@ public class GenericProjectTemplate extends ProjectTemplate
           {
             return ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);
           }
-          else if (element instanceof EStructuralFeature.Setting)
+
+          if (element instanceof EStructuralFeature.Setting)
           {
             EStructuralFeature.Setting setting = (Setting)element;
             Set<EStructuralFeature> eStructuralFeatures = focusUsages.get(setting.getEObject());
@@ -158,7 +158,7 @@ public class GenericProjectTemplate extends ProjectTemplate
             if (focusVariable != null)
             {
               String name = focusVariable.getName();
-              if ("project.location".equals(name) || "project.filename".equals(name))
+              if ("setup.location".equals(name) || "setup.filename".equals(name))
               {
                 return ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);
               }
@@ -171,7 +171,6 @@ public class GenericProjectTemplate extends ProjectTemplate
     }
 
     return decorator;
-
   }
 
   private VariableTask getFocusVariable()
@@ -217,7 +216,7 @@ public class GenericProjectTemplate extends ProjectTemplate
       if (focusUsages.isEmpty())
       {
         String name = variable.getName();
-        if ("project.location".equals(name) || "project.filename".equals(name))
+        if ("setup.location".equals(name) || "setup.filename".equals(name))
         {
           previewer.setSelection(new StructuredSelection(getResource()), true);
         }
@@ -236,12 +235,12 @@ public class GenericProjectTemplate extends ProjectTemplate
 
     Resource resource = getResource();
     ResourceSet resourceSet = resource.getResourceSet();
-    eclipseProject = (Project)resourceSet.getEObject(templateLocation, true);
+    setupScope = (Scope)resourceSet.getEObject(templateLocation, true);
 
     final Font normalFont = composite.getFont();
     final Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(normalFont, IItemFontProvider.BOLD_FONT);
 
-    CompoundTask compoundTask = (CompoundTask)eclipseProject.eResource().getEObject("template.variables");
+    CompoundTask compoundTask = (CompoundTask)setupScope.eResource().getEObject("template.variables");
     Control firstControl = null;
     VariableTask firstVariable = null;
     for (SetupTask setupTask : compoundTask.getSetupTasks())
@@ -258,6 +257,7 @@ public class GenericProjectTemplate extends ProjectTemplate
           modelChanged(variable);
         }
       });
+
       field.getControl().addFocusListener(new FocusAdapter()
       {
         @Override
@@ -280,6 +280,7 @@ public class GenericProjectTemplate extends ProjectTemplate
           }
         }
       });
+
       field.getLabel().setFont(boldFont);
 
       if (firstControl == null)
@@ -291,7 +292,7 @@ public class GenericProjectTemplate extends ProjectTemplate
       variables.put(variable.getName(), variable);
       fields.put(variable, field);
 
-      if ("project.location".equals(variable.getName()))
+      if ("setup.location".equals(variable.getName()))
       {
         field.setValue(getContainer().getDefaultLocation());
       }
@@ -334,7 +335,7 @@ public class GenericProjectTemplate extends ProjectTemplate
 
   private void modelChanged(final VariableTask triggerVariable)
   {
-    Project copy = EcoreUtil.copy(eclipseProject);
+    Scope copy = EcoreUtil.copy(setupScope);
 
     Set<PropertyField> originalDirtyPropertyFields = new HashSet<PropertyField>(dirtyFields);
     for (VariableTask variable : variables.values())
@@ -486,21 +487,22 @@ public class GenericProjectTemplate extends ProjectTemplate
     getContainer().validate();
   }
 
-  private void updateResource(Project project)
+  private void updateResource(Scope setup)
   {
     final Resource resource = getResource();
+
     EList<EObject> contents = resource.getContents();
     if (contents.isEmpty())
     {
-      contents.add(project);
+      contents.add(setup);
     }
     else
     {
-      contents.set(0, project);
+      contents.set(0, setup);
     }
 
-    String location = expandString("${project.location}", null);
-    String fileName = expandString("${project.filename}", null);
+    String location = expandString("${setup.location}", null);
+    String fileName = expandString("${setup.filename}", null);
     resource.setURI(URI.createURI("platform:/resource" + location + "/" + fileName));
   }
 
@@ -553,6 +555,7 @@ public class GenericProjectTemplate extends ProjectTemplate
                 value = filter(variable, value, filterName);
               }
             }
+
             result.append(value);
             result.append(suffix);
           }
@@ -572,7 +575,8 @@ public class GenericProjectTemplate extends ProjectTemplate
     {
       return value.trim().replaceAll("[^\\p{Alnum}]+", ".").toLowerCase();
     }
-    else if (filter.equals("camel"))
+
+    if (filter.equals("camel"))
     {
       Matcher matcher = Pattern.compile("(?:[^\\p{Alnum}]+|^)(\\p{Lower})?").matcher(value);
       StringBuffer result = new StringBuffer();
@@ -586,7 +590,8 @@ public class GenericProjectTemplate extends ProjectTemplate
 
       return result.toString();
     }
-    else if (filter.equals("label"))
+
+    if (filter.equals("label"))
     {
       for (VariableChoice choice : variable.getChoices())
       {

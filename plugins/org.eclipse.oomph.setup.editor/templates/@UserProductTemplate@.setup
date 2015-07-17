@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Product
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="${product.name}"
+    label="${product.label}">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+    <detail
+        key="folderName">
+      <value>eclipse</value>
+    </detail>
+    <detail
+        key="folderName.macosx">
+      <value>Eclipse</value>
+    </detail>
+  </annotation>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      id="template.variables"
+      name="@TemplateVariables@">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="product.label"
+        value="My Product"
+        label="Label">
+      <description>
+        The title case name of the product, including spaces.
+        This will be displayed in any tree view of this product.
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="product.name"
+        value="${product.label|qualifiedName}"
+        label="Name">
+      <description>
+        The lower case name of the product.
+        The product's qualified name will be prefixed by &quot;org.eclipse.'.
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="TEXT"
+        name="product.description"
+        value="${product.label} provides cool stuff."
+        label="Description">
+      <description>
+        An informative multi-line description of what the product does.
+        It will be displayed in the installer's hover for this product.
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="product.release.train"
+        value="Mars"
+        storageURI="scope://Workspace"
+        label="Eclipse release train">
+      <choice
+          value="Neon"
+          label="Eclipse Neon - 4.6"/>
+      <choice
+          value="Mars"
+          label="Eclipse Mars - 4.5"/>
+      <choice
+          value="Luna"
+          label="Eclipse Luna - 4.4"/>
+      <choice
+          value="Kepler"
+          label="Eclipse Kepler - 4.3"/>
+      <choice
+          value="Juno"
+          label="Eclipse Juno - 4.2"/>
+      <choice
+          value="Indigo"
+          label="Eclipse Indigo - 3.7"/>
+      <choice
+          value="Helios"
+          label="Eclipse Helios - 3.6"/>
+      <choice
+          value="Galileo"
+          label="Eclipse Galileo - 3.5"/>
+      <description>Choose the compatibility level of the product</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="product.requirement.id"
+        value="${product.name}.feature.group"
+        label="Installable unit ID">
+      <description>
+        The root installable unit for this product.
+        It's typically a feature that includes all or most of the product's other bundles and features.
+        Keep in mind that a feature's ID is suffixed with '.feature.group' when represented as a p2 installable unit.
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="CONTAINER"
+        name="setup.location"
+        label="Folder">
+      <description>The workspace folder of the new product setup model.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="setup.filename"
+        value="${product.label|camel}.setup"
+        label="Filename">
+      <description>The camel case filename of the new product setup model.</description>
+    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:InstallationTask"
+      id="installation"/>
+  <version name="${product.release.train|lower}"
+      label="${product.release.train}"
+      requiredJavaVersion="1.7">
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="${scope.product.label} (${scope.productversion.label})">
+      <requirement
+          name="org.eclipse.platform.ide"/>
+      <requirement
+          name="org.eclipse.platform.feature.group"/>
+      <requirement
+          name="org.eclipse.rcp.feature.group"/>
+      <requirement
+          name="${product.requirement.id}"/>
+      <repository
+          url="http://download.eclipse.org/releases/${product.release.train|lower}"/>
+    </setupTask>
+  </version>
+  <description>${product.description}</description>
+</setup:Product>

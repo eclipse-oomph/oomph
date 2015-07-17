@@ -42,7 +42,7 @@
         xsi:type="setup:VariableTask"
         type="TEXT"
         name="project.description"
-        value="${project.label} provides cool stuff"
+        value="${project.label} provides cool stuff."
         label="Description">
       <description>
         An informative multi-line description of what the project does.
@@ -112,13 +112,13 @@
     <setupTask
         xsi:type="setup:VariableTask"
         type="CONTAINER"
-        name="project.location"
+        name="setup.location"
         label="Folder">
       <description>The workspace folder of the new project setup model.</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
-        name="project.filename"
+        name="setup.filename"
         value="${project.label|camel}.setup"
         label="Filename">
       <description>The camel case filename of the new project setup model.</description>

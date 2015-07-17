@@ -24,10 +24,19 @@
       <wizard
             id="org.eclipse.oomph.setup.presentation.SetupModelWizardID"
             name="%_UI_SetupModelWizard_label"
-            class="org.eclipse.oomph.setup.presentation.SetupModelWizard"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewProjectWizard"
             category="org.eclipse.oomph"
             icon="icons/full/obj16/SetupModelFile.gif">
          <description>%_UI_SetupModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+      <wizard
+            id="org.eclipse.oomph.setup.presentation.SetupModelWizardID"
+            name="%_UI_SetupModelWizard_label2"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewProductWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/SetupModelFile.gif">
+         <description>%_UI_SetupModelWizard_description2</description>
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
    </extension>

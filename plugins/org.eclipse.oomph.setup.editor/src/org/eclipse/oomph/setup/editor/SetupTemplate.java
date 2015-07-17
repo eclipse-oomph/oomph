@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Control;
 /**
  * @author Eike Stepper
  */
-public abstract class ProjectTemplate
+public abstract class SetupTemplate
 {
   public static final String PRODUCT_GROUP = "org.eclipse.oomph.setup.projectTemplates";
 
@@ -38,12 +38,12 @@ public abstract class ProjectTemplate
 
   private Container container;
 
-  protected ProjectTemplate(String label)
+  protected SetupTemplate(String label)
   {
     this(label, null);
   }
 
-  protected ProjectTemplate(String label, String description)
+  protected SetupTemplate(String label, String description)
   {
     this.label = label;
     this.description = StringUtil.safe(description);

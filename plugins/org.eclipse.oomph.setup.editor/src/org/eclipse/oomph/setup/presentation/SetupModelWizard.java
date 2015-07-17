@@ -13,8 +13,8 @@ package org.eclipse.oomph.setup.presentation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
-import org.eclipse.oomph.setup.editor.ProjectTemplate;
-import org.eclipse.oomph.setup.presentation.templates.GenericProjectTemplate;
+import org.eclipse.oomph.setup.editor.SetupTemplate;
+import org.eclipse.oomph.setup.presentation.templates.GenericSetupTemplate;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.ui.DelegatingLabelDecorator;
@@ -98,7 +98,7 @@ import java.util.StringTokenizer;
  * <!-- end-user-doc -->
  * @generated NOT
  */
-public class SetupModelWizard extends Wizard implements INewWizard
+public abstract class SetupModelWizard extends Wizard implements INewWizard
 {
   /**
    * The supported extensions for created files.
@@ -192,10 +192,12 @@ public class SetupModelWizard extends Wizard implements INewWizard
   public void addPages()
   {
     templateUsagePage = new TemplateUsagePage("Whatever3");
-    templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label"));
-    templateUsagePage.setDescription(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description3"));
+    templateUsagePage.setDescription(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description"));
+    configureTemplateUsagePage(templateUsagePage);
     addPage(templateUsagePage);
   }
+
+  protected abstract void configureTemplateUsagePage(TemplateUsagePage templateUsagePage);
 
   public IContainer getDefaultContainer()
   {
@@ -586,11 +588,11 @@ public class SetupModelWizard extends Wizard implements INewWizard
   /**
    * @author Eike Stepper
    */
-  public class TemplateUsagePage extends WizardPage implements ProjectTemplate.Container
+  public class TemplateUsagePage extends WizardPage implements SetupTemplate.Container
   {
-    private final List<ProjectTemplate> templates = new ArrayList<ProjectTemplate>();
+    private final List<SetupTemplate> templates = new ArrayList<SetupTemplate>();
 
-    private final Map<ProjectTemplate, Control> templateControls = new HashMap<ProjectTemplate, Control>();
+    private final Map<SetupTemplate, Control> templateControls = new HashMap<SetupTemplate, Control>();
 
     private ComboViewer templatesViewer;
 
@@ -614,40 +616,27 @@ public class SetupModelWizard extends Wizard implements INewWizard
     {
       super(pageId);
       setPageComplete(false);
+    }
 
+    public void addTemplate(String label, String templateFileName)
+    {
       URI templateFolder = URI.createPlatformPluginURI(SetupEditorPlugin.PLUGIN_ID, false).appendSegment("templates");
+      URI templateFile = templateFolder.appendSegment(templateFileName).appendFragment("/");
 
-      {
-        ProjectTemplate projectTemplate = new GenericProjectTemplate("Eclipse Project", templateFolder.appendSegment("@EclipseProjectTemplate@.setup")
-            .appendFragment("/"));
-        projectTemplate.init(this);
-        templates.add(projectTemplate);
-      }
-
-      {
-        ProjectTemplate projectTemplate = new GenericProjectTemplate("Simple Project", templateFolder.appendSegment("@SimpleProjectTemplate@.setup")
-            .appendFragment("/"));
-        projectTemplate.init(this);
-        templates.add(projectTemplate);
-      }
-
-      {
-        ProjectTemplate projectTemplate = new GenericProjectTemplate("Github Project", templateFolder.appendSegment("@GithubProjectTemplate@.setup")
-            .appendFragment("/"));
-        projectTemplate.init(this);
-        templates.add(projectTemplate);
-      }
+      SetupTemplate template = new GenericSetupTemplate(label, templateFile);
+      template.init(this);
+      templates.add(template);
     }
 
     public Resource getResource()
     {
-      ProjectTemplate template = getSelectedTemplate();
+      SetupTemplate template = getSelectedTemplate();
       return template == null ? null : template.getResource();
     }
 
     public LabelDecorator getDecorator()
     {
-      ProjectTemplate template = getSelectedTemplate();
+      SetupTemplate template = getSelectedTemplate();
       return template == null ? null : template.getDecorator();
     }
 
@@ -763,7 +752,7 @@ public class SetupModelWizard extends Wizard implements INewWizard
             propertiesViewer.getDelegatingLabelDecorator().setLabelDecorator(getDecorator());
             sash.setWeights(new int[] { 2, 1 });
 
-            ProjectTemplate template = getSelectedTemplate();
+            SetupTemplate template = getSelectedTemplate();
             if (template != null)
             {
               updatePreviewer();
@@ -792,7 +781,7 @@ public class SetupModelWizard extends Wizard implements INewWizard
         }
       });
 
-      for (ProjectTemplate template : templates)
+      for (SetupTemplate template : templates)
       {
         Control control = template.createControl(templatesContainer);
         templateControls.put(template, control);
@@ -846,7 +835,7 @@ public class SetupModelWizard extends Wizard implements INewWizard
     {
       try
       {
-        ProjectTemplate template = getSelectedTemplate();
+        SetupTemplate template = getSelectedTemplate();
         if (template != null)
         {
           return template.isValid();
@@ -860,14 +849,14 @@ public class SetupModelWizard extends Wizard implements INewWizard
       return false;
     }
 
-    private ProjectTemplate getSelectedTemplate()
+    private SetupTemplate getSelectedTemplate()
     {
-      return (ProjectTemplate)((IStructuredSelection)templatesViewer.getSelection()).getFirstElement();
+      return (SetupTemplate)((IStructuredSelection)templatesViewer.getSelection()).getFirstElement();
     }
 
     private Control getSelectedTemplateControl()
     {
-      ProjectTemplate template = getSelectedTemplate();
+      SetupTemplate template = getSelectedTemplate();
       return templateControls.get(template);
     }
   }
@@ -898,6 +887,42 @@ public class SetupModelWizard extends Wizard implements INewWizard
     public Color getForeground(Object element)
     {
       return labelDecorator.decorateForeground(colorProvider.getForeground(element), element);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class NewProjectWizard extends SetupModelWizard
+  {
+    @Override
+    public void init(IWorkbench workbench, IStructuredSelection selection)
+    {
+      super.init(workbench, selection);
+      setWindowTitle(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_label"));
+      setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("full/wizban/NewSetup.png")));
+    }
+
+    @Override
+    protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
+    {
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label"));
+      templateUsagePage.addTemplate("Eclipse Project", "@EclipseProjectTemplate@.setup");
+      templateUsagePage.addTemplate("Simple Project", "@SimpleProjectTemplate@.setup");
+      templateUsagePage.addTemplate("Github Project", "@GithubProjectTemplate@.setup");
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class NewProductWizard extends SetupModelWizard
+  {
+    @Override
+    protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
+    {
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label2"));
+      templateUsagePage.addTemplate("Simple User Product", "@UserProductTemplate@.setup");
     }
   }
 }
