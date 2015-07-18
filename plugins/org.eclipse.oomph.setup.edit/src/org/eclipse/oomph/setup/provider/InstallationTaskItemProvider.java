@@ -56,6 +56,7 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
       super.getPropertyDescriptors(object);
 
       addLocationPropertyDescriptor(object);
+      addRelativeProductFolderPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -72,6 +73,20 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_InstallationTask_location_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_InstallationTask_location_feature", "_UI_InstallationTask_type"),
         SetupPackage.Literals.INSTALLATION_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Relative Product Folder feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addRelativeProductFolderPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_InstallationTask_relativeProductFolder_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_InstallationTask_relativeProductFolder_feature", "_UI_InstallationTask_type"),
+        SetupPackage.Literals.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -125,6 +140,7 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
     switch (notification.getFeatureID(InstallationTask.class))
     {
       case SetupPackage.INSTALLATION_TASK__LOCATION:
+      case SetupPackage.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

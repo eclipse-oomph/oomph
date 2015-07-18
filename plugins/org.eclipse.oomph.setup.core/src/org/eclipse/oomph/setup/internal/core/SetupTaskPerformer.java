@@ -609,6 +609,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                       populateImpliedVariable(setupTask, eAttribute, variableAnnotation, variable);
                       setupTask.eSet(eAttribute, variableReference);
                     }
+                    else if (eAttribute == SetupPackage.Literals.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER)
+                    {
+                      value = getRelativeProductFolder();
+                      variable.setValue(value);
+                    }
                   }
                   else
                   {
@@ -709,6 +714,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                       {
                         result.append((char)character);
                       }
+
                       reader.close();
                       value = PreferencesUtil.encrypt(result.toString());
                     }

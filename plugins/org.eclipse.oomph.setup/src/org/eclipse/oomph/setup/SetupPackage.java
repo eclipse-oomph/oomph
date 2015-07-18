@@ -1547,13 +1547,22 @@ public interface SetupPackage extends EPackage
   int INSTALLATION_TASK__LOCATION = SETUP_TASK_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Relative Product Folder</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER = SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Installation Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INSTALLATION_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 1;
+  int INSTALLATION_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -3570,6 +3579,17 @@ public interface SetupPackage extends EPackage
   EAttribute getInstallationTask_Location();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.InstallationTask#getRelativeProductFolder <em>Relative Product Folder</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Relative Product Folder</em>'.
+   * @see org.eclipse.oomph.setup.InstallationTask#getRelativeProductFolder()
+   * @see #getInstallationTask()
+   * @generated
+   */
+  EAttribute getInstallationTask_RelativeProductFolder();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.WorkspaceTask <em>Workspace Task</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4928,6 +4948,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute INSTALLATION_TASK__LOCATION = eINSTANCE.getInstallationTask_Location();
+
+    /**
+     * The meta object literal for the '<em><b>Relative Product Folder</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER = eINSTANCE.getInstallationTask_RelativeProductFolder();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.WorkspaceTaskImpl <em>Workspace Task</em>}' class.

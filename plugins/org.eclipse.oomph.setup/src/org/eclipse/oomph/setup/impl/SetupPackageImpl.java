@@ -761,6 +761,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getInstallationTask_RelativeProductFolder()
+  {
+    return (EAttribute)installationTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getWorkspaceTask()
   {
     return workspaceTaskEClass;
@@ -1838,6 +1848,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
 
     installationTaskEClass = createEClass(INSTALLATION_TASK);
     createEAttribute(installationTaskEClass, INSTALLATION_TASK__LOCATION);
+    createEAttribute(installationTaskEClass, INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER);
 
     workspaceEClass = createEClass(WORKSPACE);
     createEReference(workspaceEClass, WORKSPACE__STREAMS);
@@ -2150,6 +2161,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEClass(installationTaskEClass, InstallationTask.class, "InstallationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getInstallationTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, InstallationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInstallationTask_RelativeProductFolder(), ecorePackage.getEString(), "relativeProductFolder", "", 1, 1, InstallationTask.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(workspaceEClass, Workspace.class, "Workspace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getWorkspace_Streams(), getStream(), null, "streams", null, 0, -1, Workspace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,

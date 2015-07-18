@@ -262,6 +262,9 @@
         <details key="description" value="The name of the folder within the root install folder where the product is installed"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeProductFolder"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Workspace" eSuperTypes="#//Scope">
     <eStructuralFeatures xsi:type="ecore:EReference" name="streams" upperBound="-1"

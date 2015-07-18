@@ -36,6 +36,7 @@ import java.util.Map;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.InstallationTaskImpl#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.InstallationTaskImpl#getRelativeProductFolder <em>Relative Product Folder</em>}</li>
  * </ul>
  *
  * @generated
@@ -61,6 +62,26 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * @ordered
    */
   protected String location = LOCATION_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getRelativeProductFolder() <em>Relative Product Folder</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRelativeProductFolder()
+   * @generated
+   * @ordered
+   */
+  protected static final String RELATIVE_PRODUCT_FOLDER_EDEFAULT = "";
+
+  /**
+   * The cached value of the '{@link #getRelativeProductFolder() <em>Relative Product Folder</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRelativeProductFolder()
+   * @generated
+   * @ordered
+   */
+  protected String relativeProductFolder = RELATIVE_PRODUCT_FOLDER_EDEFAULT;
 
   public static final String CONFIGURATION_FOLDER_NAME = "configuration";
 
@@ -115,6 +136,32 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getRelativeProductFolder()
+  {
+    return relativeProductFolder;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRelativeProductFolder(String newRelativeProductFolder)
+  {
+    String oldRelativeProductFolder = relativeProductFolder;
+    relativeProductFolder = newRelativeProductFolder;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER, oldRelativeProductFolder,
+          relativeProductFolder));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
@@ -122,6 +169,8 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     {
       case SetupPackage.INSTALLATION_TASK__LOCATION:
         return getLocation();
+      case SetupPackage.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER:
+        return getRelativeProductFolder();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -138,6 +187,9 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     {
       case SetupPackage.INSTALLATION_TASK__LOCATION:
         setLocation((String)newValue);
+        return;
+      case SetupPackage.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER:
+        setRelativeProductFolder((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -156,6 +208,9 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
       case SetupPackage.INSTALLATION_TASK__LOCATION:
         setLocation(LOCATION_EDEFAULT);
         return;
+      case SetupPackage.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER:
+        setRelativeProductFolder(RELATIVE_PRODUCT_FOLDER_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -172,6 +227,8 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     {
       case SetupPackage.INSTALLATION_TASK__LOCATION:
         return LOCATION_EDEFAULT == null ? location != null : !LOCATION_EDEFAULT.equals(location);
+      case SetupPackage.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER:
+        return RELATIVE_PRODUCT_FOLDER_EDEFAULT == null ? relativeProductFolder != null : !RELATIVE_PRODUCT_FOLDER_EDEFAULT.equals(relativeProductFolder);
     }
     return super.eIsSet(featureID);
   }
@@ -192,6 +249,8 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (location: ");
     result.append(location);
+    result.append(", relativeProductFolder: ");
+    result.append(relativeProductFolder);
     result.append(')');
     return result.toString();
   }
@@ -215,6 +274,39 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     map.put(URI.createURI("configuration:/"),
         context.getTrigger() == Trigger.BOOTSTRAP ? URI.createFileURI(getLocation() + "/" + relativeProductFolder + "/" + CONFIGURATION_FOLDER_NAME + "/")
             : getStaticConfigurationLocation().appendSegment(""));
+
+    // context.put("installation.product.location", context.getProductLocation().getAbsolutePath());
+    // context.put("installation.product.configuration.location")
+    // context.put("installation.product.folder.name")
+    // context.put("installation.product.relative.folder")
+    //
+    // if ("installation.product.location".equals(key))
+    // {
+    // String value = getProductLocation().getAbsolutePath();
+    // put("installation.product.location", value);
+    // return value;
+    // }
+    //
+    // if ("installation.product.configuration.location".equals(key))
+    // {
+    // String value = getProductConfigurationLocation().getAbsolutePath();
+    // put("installation.product.configuration.location", value);
+    // return value;
+    // }
+    //
+    // if ("installation.product.folder.name".equals(key))
+    // {
+    // String value = getProductFolderName();
+    // put("installation.product.folder.name", value);
+    // return value;
+    // }
+    //
+    // if ("installation.product.relative.folder".equals(key))
+    // {
+    // String value = getRelativeProductFolder();
+    // put("installation.product.relative.folder", value);
+    // return value;
+    // }
 
     return false;
   }

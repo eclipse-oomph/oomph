@@ -20,6 +20,7 @@ package org.eclipse.oomph.setup;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.InstallationTask#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.InstallationTask#getRelativeProductFolder <em>Relative Product Folder</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getInstallationTask()
@@ -57,5 +58,32 @@ public interface InstallationTask extends SetupTask
    * @generated
    */
   void setLocation(String value);
+
+  /**
+   * Returns the value of the '<em><b>Relative Product Folder</b></em>' attribute.
+   * The default value is <code>""</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Relative Product Folder</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Relative Product Folder</em>' attribute.
+   * @see #setRelativeProductFolder(String)
+   * @see org.eclipse.oomph.setup.SetupPackage#getInstallationTask_RelativeProductFolder()
+   * @model default="" required="true"
+   * @generated
+   */
+  String getRelativeProductFolder();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.InstallationTask#getRelativeProductFolder <em>Relative Product Folder</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Relative Product Folder</em>' attribute.
+   * @see #getRelativeProductFolder()
+   * @generated
+   */
+  void setRelativeProductFolder(String value);
 
 } // InstallationTask
