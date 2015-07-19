@@ -22,13 +22,11 @@ import java.util.regex.Pattern;
  */
 public abstract class StringExpander
 {
-  public static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
+  public static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(([\\|/][^{}|/]*)*)}|\\$)");
 
   static final String[] CONTROL_CHARACTER_REPLACEMENTS = { "${0x0}", "${0x1}", "${0x2}", "${0x3}", "${0x4}", "${0x5}", "${0x6}", "${0x7}", "${0x8}", "${0x9}",
       "${0xA}", "${0xB}", "${0xC}", "${0xD}", "${0xE}", "${0xF}", "${0x10}", "${0x11}", "${0x12}", "${0x13}", "${0x14}", "${0x15}", "${0x16}", "${0x17}",
       "${0x18}", "${0x19}", "${0x1A}", "${0x1B}", "${0x1C}", "${0x1D}", "${0x1E}", "${0x1F}" };
-
-  private static boolean NEEDS_PATH_SEPARATOR_CONVERSION = File.separatorChar == '\\';
 
   protected static final Map<String, String> CONTROL_CHARACTER_VALUES = new HashMap<String, String>();
 
@@ -61,6 +59,11 @@ public abstract class StringExpander
 
   protected abstract String filter(String value, String filterName);
 
+  protected String getFileSeparator()
+  {
+    return File.separator;
+  }
+
   public String expandString(String string)
   {
     return expandString(string, null);
@@ -87,13 +90,8 @@ public abstract class StringExpander
       else
       {
         key = matcher.group(2);
-        String suffix = matcher.group(5);
-        if (NEEDS_PATH_SEPARATOR_CONVERSION)
-        {
-          suffix = suffix.replace('/', File.separatorChar);
-        }
-
         boolean isUnexpanded = isUnexpanded(key);
+
         String value = isUnexpanded ? null : resolve(key);
         if (value == null)
         {
@@ -113,29 +111,42 @@ public abstract class StringExpander
         }
         else
         {
-          String filters = matcher.group(4);
-          if (filters != null)
+          String extensions = matcher.group(3);
+          if (extensions != null)
           {
-            for (String filterName : filters.split("\\|"))
-            {
-              value = filter(value, filterName);
-              if (value == null)
-              {
-                if (keys != null)
-                {
-                  unresolved = true;
+            ExtensionParser parser = new ExtensionParser(extensions);
+            Extension extension;
 
-                  if (!isUnexpanded)
+            while ((extension = parser.parseNext()) != null)
+            {
+              if (extension.filter)
+              {
+                if (extension.name.length() != 0)
+                {
+                  value = filter(value, extension.name);
+                  if (value == null)
                   {
-                    keys.add(key);
+                    if (keys != null)
+                    {
+                      unresolved = true;
+
+                      if (!isUnexpanded)
+                      {
+                        keys.add(key);
+                      }
+                    }
+                    else if (!unresolved)
+                    {
+                      result.append(matcher.group());
+                    }
+
+                    continue;
                   }
                 }
-                else if (!unresolved)
-                {
-                  result.append(matcher.group());
-                }
-
-                continue;
+              }
+              else
+              {
+                value += getFileSeparator() + extension.name;
               }
             }
           }
@@ -143,7 +154,6 @@ public abstract class StringExpander
           if (!unresolved)
           {
             result.append(value);
-            result.append(suffix);
           }
         }
       }
@@ -160,4 +170,60 @@ public abstract class StringExpander
     return result.toString();
   }
 
+  /**
+   * @author Eike Stepper
+   */
+  private static final class Extension
+  {
+    public final boolean filter;
+
+    public final String name;
+
+    public Extension(boolean filter, String name)
+    {
+      this.filter = filter;
+      this.name = name;
+    }
+  }
+
+  private static final class ExtensionParser
+  {
+    private final String input;
+
+    private final int length;
+
+    private int next;
+
+    public ExtensionParser(String input)
+    {
+      this.input = input;
+      length = input.length();
+    }
+
+    public Extension parseNext()
+    {
+      if (next < input.length())
+      {
+        boolean filter = input.charAt(next) == '|';
+        StringBuilder name = new StringBuilder();
+
+        while (++next < length)
+        {
+          char c = input.charAt(next);
+          if (c == '/' || c == '|')
+          {
+            return new Extension(filter, name.toString());
+          }
+          else
+          {
+            name.append(c);
+          }
+        }
+
+        return new Extension(filter, name.toString());
+      }
+
+      return null;
+    }
+  }
 }
