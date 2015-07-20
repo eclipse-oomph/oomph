@@ -31,6 +31,8 @@ public interface Profile extends IProfile, AgentElement
 
   public static final String TYPE_INSTALLATION = "Installation";
 
+  public boolean isSelfHosting();
+
   public String getType();
 
   public File getInstallFolder();

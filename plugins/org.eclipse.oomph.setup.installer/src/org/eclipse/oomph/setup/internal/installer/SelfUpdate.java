@@ -43,8 +43,6 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.equinox.p2.engine.IProfile;
-import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
@@ -74,8 +72,8 @@ public class SelfUpdate
   {
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
 
-    IProfile profile = agent.getProfileRegistry().getProfile(IProfileRegistry.SELF);
-    if (profile == null || "SelfHostingProfile".equals(profile.getProfileId()))
+    Profile profile = agent.getCurrentProfile();
+    if (profile == null || profile.isSelfHosting())
     {
       return SELF_HOSTING;
     }

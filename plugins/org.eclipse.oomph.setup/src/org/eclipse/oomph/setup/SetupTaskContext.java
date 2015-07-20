@@ -35,6 +35,8 @@ public interface SetupTaskContext extends ProgressLog
 
   public void checkCancelation();
 
+  public boolean isSelfHosting();
+
   public boolean isPerforming();
 
   public boolean isOffline();

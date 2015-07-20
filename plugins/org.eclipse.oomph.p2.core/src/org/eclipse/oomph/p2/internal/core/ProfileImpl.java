@@ -149,6 +149,11 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     return id;
   }
 
+  public boolean isSelfHosting()
+  {
+    return "SelfHostingProfile".equals(id);
+  }
+
   public String getType()
   {
     return type;

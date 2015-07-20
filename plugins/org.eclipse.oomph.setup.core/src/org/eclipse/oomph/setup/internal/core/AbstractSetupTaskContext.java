@@ -15,6 +15,7 @@ package org.eclipse.oomph.setup.internal.core;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.setup.AnnotationConstants;
@@ -65,6 +66,8 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   private Trigger trigger;
 
   private SetupContext setupContext;
+
+  private Boolean selfHosting;
 
   private boolean performing;
 
@@ -169,6 +172,32 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   public void setMirrors(boolean mirrors)
   {
     this.mirrors = mirrors;
+  }
+
+  public boolean isSelfHosting()
+  {
+    if (selfHosting == null)
+    {
+      try
+      {
+        Agent agent = P2Util.getAgentManager().getCurrentAgent();
+        if (agent != null)
+        {
+          Profile profile = agent.getCurrentProfile();
+          selfHosting = profile == null || profile.isSelfHosting();
+        }
+        else
+        {
+          selfHosting = true;
+        }
+      }
+      catch (Throwable ex)
+      {
+        selfHosting = true;
+      }
+    }
+
+    return selfHosting;
   }
 
   public boolean isPerforming()

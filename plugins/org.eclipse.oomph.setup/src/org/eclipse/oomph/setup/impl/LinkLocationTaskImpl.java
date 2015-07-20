@@ -260,6 +260,11 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
+    if (context.isSelfHosting())
+    {
+      return false;
+    }
+
     File links = new File(context.getProductLocation(), "links");
     canonicalPath = new File(getPath()).getCanonicalFile();
 
