@@ -10,6 +10,8 @@
  *    Eike Stepper - initial API and implementation
  */
 
+import org.eclipse.oomph.util.StringUtil;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,7 +32,7 @@ public final class RepositoryComposer
   {
     public int compare(String n1, String n2)
     {
-      return n2.compareTo(n1);
+      return StringUtil.safe(n2).compareTo(StringUtil.safe(n1));
     }
   };
 

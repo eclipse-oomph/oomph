@@ -31,6 +31,7 @@ import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.XMLUtil;
 
 import org.eclipse.emf.common.util.ECollections;
@@ -424,8 +425,8 @@ public class ProductCatalogGenerator implements IApplication
           int result = getLatestTrain(id2) - getLatestTrain(id1);
           if (result == 0)
           {
-            String label1 = labels.get(id1);
-            String label2 = labels.get(id2);
+            String label1 = StringUtil.safe(labels.get(id1));
+            String label2 = StringUtil.safe(labels.get(id2));
             result = label1.compareTo(label2);
           }
 
@@ -574,7 +575,7 @@ public class ProductCatalogGenerator implements IApplication
     File agentLocation = File.createTempFile("test-", "-agent");
     agentLocation.delete();
     agentLocation.mkdirs();
-  
+
     Agent agent = new AgentImpl(null, agentLocation);
     IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
     return manager;

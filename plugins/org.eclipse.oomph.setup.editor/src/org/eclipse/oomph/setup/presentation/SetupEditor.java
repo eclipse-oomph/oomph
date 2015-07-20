@@ -2261,8 +2261,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
           for (int i = 0; i < length; ++i)
           {
-            String e1 = s1.segment(i);
-            String e2 = s2.segment(i);
+            String e1 = StringUtil.safe(s1.segment(i));
+            String e2 = StringUtil.safe(s2.segment(i));
 
             int result = comparator.compare(e1, e2);
             if (result != 0)

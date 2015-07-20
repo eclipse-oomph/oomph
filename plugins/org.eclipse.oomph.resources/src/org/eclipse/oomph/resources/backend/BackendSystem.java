@@ -14,6 +14,7 @@ import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.resources.ResourcesUtil.ImportResult;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.SynchronizedCounter;
 
 import org.eclipse.emf.common.util.URI;
@@ -164,7 +165,9 @@ public abstract class BackendSystem extends BackendContainer
         int result = t2 - t1;
         if (result == 0)
         {
-          result = r1.getName().compareTo(r2.getName());
+          String n1 = StringUtil.safe(r1.getName());
+          String n2 = StringUtil.safe(r2.getName());
+          result = n1.compareTo(n2);
         }
 
         return result;

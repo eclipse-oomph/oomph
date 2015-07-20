@@ -781,7 +781,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     {
       public int compare(Targlet o1, Targlet o2)
       {
-        return o1.getName().compareTo(o2.getName());
+        return StringUtil.safe(o1.getName()).compareTo(StringUtil.safe(o2.getName()));
       }
     });
 
@@ -803,7 +803,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     {
       public int compare(ImplicitDependency o1, ImplicitDependency o2)
       {
-        int result = o1.getID().compareTo(o2.getID());
+        int result = StringUtil.safe(o1.getID()).compareTo(StringUtil.safe(o2.getID()));
         if (result == 0)
         {
           Version v1 = o1.getVersion();

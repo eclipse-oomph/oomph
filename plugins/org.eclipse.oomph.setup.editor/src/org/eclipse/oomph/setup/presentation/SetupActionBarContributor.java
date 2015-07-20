@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetsPackage;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog;
@@ -119,7 +120,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   {
     public int compare(IAction a1, IAction a2)
     {
-      return a1.getText().compareTo(a2.getText());
+      return StringUtil.safe(a1.getText()).compareTo(StringUtil.safe(a2.getText()));
     }
   };
 

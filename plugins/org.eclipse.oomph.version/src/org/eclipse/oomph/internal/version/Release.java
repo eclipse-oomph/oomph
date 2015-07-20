@@ -11,6 +11,7 @@
 package org.eclipse.oomph.internal.version;
 
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.version.IElement;
 import org.eclipse.oomph.version.IRelease;
 import org.eclipse.oomph.version.Markers;
@@ -153,7 +154,7 @@ public class Release implements IRelease
         int result = o1.getType().compareTo(o2.getType());
         if (result == 0)
         {
-          result = o1.getName().compareTo(o2.getName());
+          result = StringUtil.safe(o1.getName()).compareTo(StringUtil.safe(o2.getName()));
         }
 
         if (result == 0)

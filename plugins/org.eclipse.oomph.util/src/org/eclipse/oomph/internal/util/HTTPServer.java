@@ -549,7 +549,7 @@ public final class HTTPServer
                 int result = t1 - t2;
                 if (result == 0)
                 {
-                  result = n1.toLowerCase().compareTo(n2.toLowerCase());
+                  result = StringUtil.safe(n1).toLowerCase().compareTo(StringUtil.safe(n2).toLowerCase());
                 }
 
                 return result;

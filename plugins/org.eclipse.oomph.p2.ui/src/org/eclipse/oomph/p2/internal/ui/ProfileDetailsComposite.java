@@ -20,6 +20,7 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
@@ -215,7 +216,7 @@ public class ProfileDetailsComposite extends Composite
         {
           public int compare(Requirement o1, Requirement o2)
           {
-            int result = o1.getName().compareTo(o2.getName());
+            int result = StringUtil.safe(o1.getName()).compareTo(StringUtil.safe(o2.getName()));
             if (result == 0)
             {
               result = o1.getVersionRange().getMinimum().compareTo(o2.getVersionRange().getMinimum());
