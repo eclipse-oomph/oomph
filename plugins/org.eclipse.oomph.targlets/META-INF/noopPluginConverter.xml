@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.oomph.targlets.impl.NOOPPluginConverter">
+   <implementation class="org.eclipse.oomph.targlets.impl.NOOPPluginConverter"/>
+   <service>
+      <provide interface="org.eclipse.osgi.service.pluginconversion.PluginConverter"/>
+   </service>
+   <property name="p2.agent.servicename" type="String" value="org.eclipse.osgi.service.pluginconversion.PluginConverter"/>
+   <property name="service.ranking" type="Integer" value="-10000"/>
+</scr:component>

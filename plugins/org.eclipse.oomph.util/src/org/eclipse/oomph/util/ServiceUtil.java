@@ -27,17 +27,34 @@ public final class ServiceUtil
   {
   }
 
-  public static <T> T getService(BundleContext bundleContext, Class<T> serviceClass)
+  public static <T> T getServiceOrNull(BundleContext bundleContext, Class<T> serviceClass)
+  {
+    try
+    {
+      return getService(bundleContext, serviceClass);
+    }
+    catch (MissingServiceException ex)
+    {
+      return null;
+    }
+  }
+
+  public static <T> T getService(BundleContext bundleContext, Class<T> serviceClass) throws MissingServiceException
   {
     String serviceName = serviceClass.getName();
     ServiceReference<?> serviceRef = bundleContext.getServiceReference(serviceName);
     if (serviceRef == null)
     {
-      throw new IllegalStateException("Missing OSGi service " + serviceName);
+      throw new MissingServiceException("Missing OSGi service " + serviceName);
     }
 
     @SuppressWarnings("unchecked")
     T service = (T)bundleContext.getService(serviceRef);
+    if (service == null)
+    {
+      throw new MissingServiceException("Missing OSGi service " + serviceName);
+    }
+
     services.put(service, serviceRef);
     return service;
   }
@@ -51,6 +68,19 @@ public final class ServiceUtil
       {
         bundleContext.ungetService(serviceRef);
       }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class MissingServiceException extends IllegalStateException
+  {
+    private static final long serialVersionUID = 1L;
+
+    public MissingServiceException(String s)
+    {
+      super(s);
     }
   }
 }

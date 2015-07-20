@@ -11,6 +11,7 @@
 package org.eclipse.oomph.util;
 
 import org.eclipse.oomph.internal.util.UtilPlugin;
+import org.eclipse.oomph.util.ServiceUtil.MissingServiceException;
 
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -137,7 +138,12 @@ public abstract class OomphPlugin extends EMFPlugin
     getEclipsePlugin().setDebugging(value);
   }
 
-  public final <T> T getService(Class<T> serviceClass)
+  public final <T> T getServiceOrNull(Class<T> serviceClass)
+  {
+    return ServiceUtil.getServiceOrNull(getBundleContext(), serviceClass);
+  }
+
+  public final <T> T getService(Class<T> serviceClass) throws MissingServiceException
   {
     return ServiceUtil.getService(getBundleContext(), serviceClass);
   }
