@@ -20,3 +20,4 @@ Export-Package: org.eclipse.oomph.internal.targlets;version="1.2.0";x-internal:=
  org.eclipse.oomph.targlets;version="1.2.0";x-internal:=true,
  org.eclipse.oomph.targlets.impl;version="1.2.0";x-internal:=true,
  org.eclipse.oomph.targlets.util;version="1.2.0";x-internal:=true
+Bundle-Activator: org.eclipse.oomph.internal.targlets.TargletsPlugin$Implementation
