@@ -108,13 +108,14 @@ public class StringFilterRegistry
         }
 
         File file = new File(value).getAbsoluteFile();
+
         try
         {
           return file.getCanonicalPath();
         }
         catch (IOException ex)
         {
-          return file.toString();
+          return file.getAbsolutePath();
         }
       }
     });

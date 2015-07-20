@@ -22,7 +22,6 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.editor.SetupTemplate;
 import org.eclipse.oomph.setup.internal.core.StringFilterRegistry;
 import org.eclipse.oomph.setup.ui.PropertyField;
-import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.ui.LabelDecorator;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
@@ -67,12 +66,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
  */
 public class GenericSetupTemplate extends SetupTemplate
 {
+  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
+
   private final URI templateLocation;
 
   private Composite composite;
@@ -515,7 +517,7 @@ public class GenericSetupTemplate extends SetupTemplate
 
     StringBuilder result = new StringBuilder();
     int previous = 0;
-    for (Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
+    for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
     {
       result.append(string.substring(previous, matcher.start()));
       String key = matcher.group(1);

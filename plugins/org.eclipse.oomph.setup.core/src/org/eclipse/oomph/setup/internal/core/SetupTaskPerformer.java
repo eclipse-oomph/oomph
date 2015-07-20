@@ -2043,7 +2043,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     Set<String> result = new LinkedHashSet<String>();
-    for (Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
+    for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
     {
       String key = matcher.group(1);
       if (!"$".equals(key))
