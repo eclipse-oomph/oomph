@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.projectcopy;
 
+import org.eclipse.oomph.internal.util.UtilPlugin;
 import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -25,7 +26,7 @@ public final class ProjectCopyPlugin extends OomphPlugin
 
   public ProjectCopyPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { UtilPlugin.INSTANCE });
   }
 
   @Override

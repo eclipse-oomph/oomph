@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.setup;
 
+import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -42,11 +43,11 @@ public final class SetupPlugin extends OomphPlugin
    * Create the instance.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public SetupPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { BasePlugin.INSTANCE });
   }
 
   /**

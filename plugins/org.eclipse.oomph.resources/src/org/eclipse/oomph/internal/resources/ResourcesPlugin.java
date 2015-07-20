@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.resources;
 
+import org.eclipse.oomph.internal.util.UtilPlugin;
 import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -42,11 +43,11 @@ public final class ResourcesPlugin extends OomphPlugin
    * Create the instance.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public ResourcesPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { UtilPlugin.INSTANCE });
   }
 
   /**

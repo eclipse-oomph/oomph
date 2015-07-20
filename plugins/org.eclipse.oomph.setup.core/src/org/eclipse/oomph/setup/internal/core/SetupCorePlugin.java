@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.core;
 
+import org.eclipse.oomph.base.provider.BaseEditPlugin;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -33,7 +34,7 @@ public final class SetupCorePlugin extends OomphPlugin
 
   public SetupCorePlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { BaseEditPlugin.INSTANCE });
   }
 
   @Override

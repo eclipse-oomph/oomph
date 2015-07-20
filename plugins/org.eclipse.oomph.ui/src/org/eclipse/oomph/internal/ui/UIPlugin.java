@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.oomph.base.provider.BaseEditPlugin;
 import org.eclipse.oomph.internal.util.UtilPlugin;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.ToggleCommandHandler;
@@ -56,7 +57,7 @@ public final class UIPlugin extends OomphUIPlugin
 
   public UIPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { BaseEditPlugin.INSTANCE });
   }
 
   @Override

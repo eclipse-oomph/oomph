@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.base.provider;
 
+import org.eclipse.oomph.internal.base.BasePlugin;
+
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -41,11 +43,11 @@ public final class BaseEditPlugin extends EMFPlugin
    * Create the instance.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public BaseEditPlugin()
   {
-    super(new ResourceLocator[] {});
+    super(new ResourceLocator[] { BasePlugin.INSTANCE });
   }
 
   /**

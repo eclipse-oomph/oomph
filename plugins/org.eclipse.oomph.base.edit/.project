@@ -26,7 +26,7 @@
 					<key>release.path</key>
 					<value>/org.eclipse.oomph.util/release.xml</value>
 				</dictionary>
-      </arguments>
+			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>

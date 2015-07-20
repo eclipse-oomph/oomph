@@ -3,9 +3,9 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.setup.targlets/src" creationIcons="false"
     editorDirectory="" modelPluginID="org.eclipse.oomph.setup.targlets" modelName="SetupTarglets"
     modelPluginClass="org.eclipse.oomph.setup.internal.targlets.SetupTargletsPlugin"
-    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.p2/model/P2.genmodel#//p2 ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup ../../org.eclipse.oomph.targlets/model/Targlets.genmodel#//targlets"
+    updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
+    copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.p2/model/P2.genmodel#//p2 ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup ../../org.eclipse.oomph.targlets/model/Targlets.genmodel#//targlets"
     importOrganizing="true" decoration="Live" cleanup="true">
   <foreignModel>SetupTarglets.ecore</foreignModel>
   <genPackages prefix="SetupTarglets" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
