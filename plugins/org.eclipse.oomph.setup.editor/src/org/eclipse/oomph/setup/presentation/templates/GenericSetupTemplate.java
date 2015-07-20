@@ -81,17 +81,17 @@ public class GenericSetupTemplate extends SetupTemplate
 
   private Scope setupScope;
 
-  private Map<VariableTask, PropertyField> fields = new LinkedHashMap<VariableTask, PropertyField>();
+  private final Map<VariableTask, PropertyField> fields = new LinkedHashMap<VariableTask, PropertyField>();
 
   private Set<PropertyField> dirtyFields = new HashSet<PropertyField>();
 
-  private Map<String, VariableTask> variables = new LinkedHashMap<String, VariableTask>();
+  private final Map<String, VariableTask> variables = new LinkedHashMap<String, VariableTask>();
 
   private Map<VariableTask, Set<EStructuralFeature.Setting>> usages;
 
   private PropertyField focusField;
 
-  private Map<EObject, Set<EStructuralFeature>> focusUsages = new HashMap<EObject, Set<EStructuralFeature>>();
+  private final Map<EObject, Set<EStructuralFeature>> focusUsages = new HashMap<EObject, Set<EStructuralFeature>>();
 
   private LabelDecorator decorator;
 
@@ -204,7 +204,7 @@ public class GenericSetupTemplate extends SetupTemplate
     if (previewer != null)
     {
       focusUsages.clear();
-      Set<Setting> settings = usages.get(variable);
+      Set<Setting> settings = usages == null ? null : usages.get(variable);
       if (settings != null)
       {
         for (Setting setting : settings)
