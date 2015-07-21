@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.setup.LinkLocationTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -260,7 +261,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    if (context.isSelfHosting())
+    if (context.isSelfHosting() && context.getTrigger() != Trigger.BOOTSTRAP)
     {
       return false;
     }

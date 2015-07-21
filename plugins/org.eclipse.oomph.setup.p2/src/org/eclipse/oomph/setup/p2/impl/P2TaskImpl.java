@@ -573,15 +573,15 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       return FORCE;
     }
 
-    if (context.isSelfHosting())
-    {
-      return false;
-    }
-
     Trigger trigger = context.getTrigger();
     if (trigger == Trigger.BOOTSTRAP)
     {
       return true;
+    }
+
+    if (context.isSelfHosting())
+    {
+      return false;
     }
 
     Agent agent = P2Util.getAgentManager().getCurrentAgent();

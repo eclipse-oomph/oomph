@@ -330,15 +330,15 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    if (context.isSelfHosting())
-    {
-      return false;
-    }
-
     // Return early for bootstrap because the launcher name can't be determined until after the p2 task has performed.
     if (context.getTrigger() == Trigger.BOOTSTRAP)
     {
       return true;
+    }
+
+    if (context.isSelfHosting())
+    {
+      return false;
     }
 
     file = new File(context.getProductLocation(), context.getLauncherName() + ".ini");
