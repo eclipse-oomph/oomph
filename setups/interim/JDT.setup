@@ -42,7 +42,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"
+      defaultValue="Neon"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="jdt:JRETask"
@@ -61,6 +61,11 @@
           name="org.eclipse.pde.feature.group"/>
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
+      <repositoryList
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
       <repositoryList
           name="Mars">
         <repository
@@ -116,6 +121,8 @@
         <sourceLocator
             rootFolder="${git.clone.jdt.location}"/>
         <repositoryList
+            name="Neon"/>
+        <repositoryList
             name="Mars"/>
         <repositoryList
             name="Luna"/>
@@ -140,7 +147,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The features of the JDT project</description>
@@ -178,6 +185,8 @@
             name="org.eclipse.jdt.apt.ui"/>
         <sourceLocator
             rootFolder="${git.clone.jdt.core.location}"/>
+        <repositoryList
+            name="Neon"/>
         <repositoryList
             name="Mars"/>
         <repositoryList
@@ -309,7 +318,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Mars"
+            value="Neon"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -319,7 +328,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The core parts of the JDT project</description>
@@ -355,6 +364,8 @@
           includeAllPlatforms="true">
         <sourceLocator
             rootFolder="${git.clone.jdt.debug.location}"/>
+        <repositoryList
+            name="Neon"/>
         <repositoryList
             name="Mars"/>
         <repositoryList
@@ -441,7 +452,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Mars"
+            value="Neon"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -451,7 +462,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The debug parts of the JDT project</description>
@@ -491,6 +502,8 @@
             name="org.eclipse.jdt.jeview.feature.feature.group"/>
         <sourceLocator
             rootFolder="${git.clone.jdt.ui.location}"/>
+        <repositoryList
+            name="Neon"/>
         <repositoryList
             name="Mars"/>
         <repositoryList
@@ -605,7 +618,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Mars"
+            value="Neon"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -651,7 +664,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Mars"
+            value="Neon"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -661,7 +674,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The UI parts of the JDT project</description>
@@ -700,6 +713,8 @@
         <sourceLocator
             rootFolder="${git.clone.jdt.binaries.location}"/>
         <repositoryList
+            name="Neon"/>
+        <repositoryList
             name="Mars"/>
         <repositoryList
             name="Luna"/>
@@ -724,7 +739,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The binaries for tests of the JDT project</description>

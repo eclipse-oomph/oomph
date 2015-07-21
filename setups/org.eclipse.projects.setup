@@ -314,7 +314,7 @@
       <repositoryList
           name="Neon">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.5"/>
+            url="http://download.eclipse.org/eclipse/updates/4.6-I-builds"/>
       </repositoryList>
       <repositoryList
           name="Mars">
