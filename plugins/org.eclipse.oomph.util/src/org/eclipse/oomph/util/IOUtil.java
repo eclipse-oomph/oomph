@@ -13,6 +13,8 @@ package org.eclipse.oomph.util;
 
 import org.eclipse.oomph.internal.util.UtilPlugin;
 
+import org.eclipse.core.runtime.IStatus;
+
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -441,7 +443,7 @@ public final class IOUtil
     }
     catch (Exception ex)
     {
-      UtilPlugin.INSTANCE.log(ex);
+      UtilPlugin.INSTANCE.log(ex, IStatus.WARNING);
       return ex;
     }
   }
@@ -459,7 +461,7 @@ public final class IOUtil
     }
     catch (Exception ex)
     {
-      UtilPlugin.INSTANCE.log(ex);
+      UtilPlugin.INSTANCE.log(ex, IStatus.WARNING);
       return ex;
     }
   }
@@ -477,7 +479,7 @@ public final class IOUtil
     }
     catch (Exception ex)
     {
-      UtilPlugin.INSTANCE.log(ex);
+      UtilPlugin.INSTANCE.log(ex, IStatus.WARNING);
       return ex;
     }
   }
