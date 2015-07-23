@@ -20,7 +20,6 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
@@ -55,7 +54,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
-import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -212,19 +210,7 @@ public class ProfileDetailsComposite extends Composite
           children.add(requirement);
         }
 
-        ECollections.sort(children, new Comparator<Requirement>()
-        {
-          public int compare(Requirement o1, Requirement o2)
-          {
-            int result = StringUtil.safe(o1.getName()).compareTo(StringUtil.safe(o2.getName()));
-            if (result == 0)
-            {
-              result = o1.getVersionRange().getMinimum().compareTo(o2.getVersionRange().getMinimum());
-            }
-
-            return result;
-          }
-        });
+        ECollections.sort(children, Requirement.COMPARATOR);
 
         ItemProvider input = new ItemProvider(adapterFactory, children);
         viewer.setInput(input);

@@ -11,11 +11,14 @@
 package org.eclipse.oomph.p2;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
+
+import java.util.Comparator;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,6 +45,37 @@ import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
  */
 public interface Requirement extends ModelElement
 {
+  Comparator<Requirement> COMPARATOR = new Comparator<Requirement>()
+  {
+    public int compare(Requirement o1, Requirement o2)
+    {
+      String ns1 = StringUtil.safe(o1.getNamespace());
+      String ns2 = StringUtil.safe(o2.getNamespace());
+
+      int result = ns1.compareTo(ns2);
+      if (result == 0)
+      {
+        String n1 = StringUtil.safe(o1.getName());
+        String n2 = StringUtil.safe(o2.getName());
+
+        result = n1.compareTo(n2);
+        if (result == 0)
+        {
+          VersionRange range1 = o1.getVersionRange();
+          VersionRange range2 = o2.getVersionRange();
+
+          result = range1.getMinimum().compareTo(range2.getMinimum());
+          if (result == 0)
+          {
+            result = range1.getMaximum().compareTo(range2.getMaximum());
+          }
+        }
+      }
+
+      return result;
+    }
+  };
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
