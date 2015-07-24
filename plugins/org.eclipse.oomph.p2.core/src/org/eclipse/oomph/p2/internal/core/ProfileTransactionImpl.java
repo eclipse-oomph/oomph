@@ -42,6 +42,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.ProgressMonitorWrapper;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
@@ -97,6 +98,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -484,7 +486,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
             IEngine engine = agent.getEngine();
             ensureSameBackupDevice(provisioningPlan);
 
-            IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext, monitor);
+            IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext,
+                new ExecutePlanMonitor(monitor, provisioningPlan));
 
             context.handleExecutionResult(status);
             P2CorePlugin.INSTANCE.coreException(status);
@@ -1174,6 +1177,81 @@ public class ProfileTransactionImpl implements ProfileTransaction
       {
         handler.handleRemoval(key);
       }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class ExecutePlanMonitor extends ProgressMonitorWrapper
+  {
+    private static final String INSTALLING_PREFIX = "Installing ";
+
+    private final Map<String, LinkedList<Version>> versions = new HashMap<String, LinkedList<Version>>();
+
+    private final IQueryable<IInstallableUnit> additions;
+
+    private ExecutePlanMonitor(IProgressMonitor monitor, IProvisioningPlan provisioningPlan)
+    {
+      super(monitor);
+      additions = provisioningPlan.getAdditions();
+    }
+
+    @Override
+    public void subTask(String name)
+    {
+      if (name.startsWith(INSTALLING_PREFIX))
+      {
+        String id = name.substring(INSTALLING_PREFIX.length());
+
+        Version version = getVersion(id);
+        if (version != null)
+        {
+          name += " [" + version + "]";
+        }
+      }
+
+      super.subTask(name);
+    }
+
+    private Version getVersion(String id)
+    {
+      LinkedList<Version> list = versions.get(id);
+      if (list != null)
+      {
+        if (list.isEmpty())
+        {
+          return null;
+        }
+
+        return list.remove(0);
+      }
+
+      Version firstVersion = null;
+
+      IQueryResult<IInstallableUnit> ius = additions.query(QueryUtil.createIUQuery(id), null);
+      if (!ius.isEmpty())
+      {
+        for (IInstallableUnit iu : ius)
+        {
+          if (firstVersion == null)
+          {
+            firstVersion = iu.getVersion();
+          }
+          else
+          {
+            if (list == null)
+            {
+              list = new LinkedList<Version>();
+              versions.put(id, list);
+            }
+
+            list.add(iu.getVersion());
+          }
+        }
+      }
+
+      return firstVersion;
     }
   }
 
