@@ -15,6 +15,9 @@ Eclipse Installer
 -data
 @none
       </programArgs>
+      <programArgsLin>--launcher.GTK_version
+2
+      </programArgsLin>
       <vmArgs>-Xms256M
 -Xmx1024M
       </vmArgs>
