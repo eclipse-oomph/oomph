@@ -13,6 +13,7 @@ package org.eclipse.oomph.internal.ui;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
@@ -115,10 +116,17 @@ public class UIPropertyTester extends PropertyTester
                   {
                     for (IWorkbenchWindow workbenchWindow : workbench.getWorkbenchWindows())
                     {
-                      Shell shell = workbenchWindow.getShell();
-                      if (shell != null)
+                      try
                       {
-                        shell.layout(true, true);
+                        Shell shell = workbenchWindow.getShell();
+                        if (shell != null)
+                        {
+                          shell.layout(true, true);
+                        }
+                      }
+                      catch (Exception ex)
+                      {
+                        UIPlugin.INSTANCE.log(ex, IStatus.WARNING);
                       }
                     }
                   }
