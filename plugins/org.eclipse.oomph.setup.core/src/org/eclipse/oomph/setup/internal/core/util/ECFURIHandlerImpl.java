@@ -86,6 +86,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   private static final boolean TEST_SLOW_NETWORK = false;
 
+  private static final String API_GITHUB_HOST = "api.github.com";
+
+  private static final String CONTENT_TAG = "\"content\":\"";
+
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
@@ -229,8 +233,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
           if (authorizatonHandler != null && transferListener.exception instanceof IncomingFileTransferException)
           {
+            // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
+            // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
             IncomingFileTransferException incomingFileTransferException = (IncomingFileTransferException)transferListener.exception;
-            if (incomingFileTransferException.getErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED)
+            int errorCode = incomingFileTransferException.getErrorCode();
+            if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
             {
               if (authorization == null)
               {
@@ -267,6 +274,37 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       }
 
       byte[] bytes = transferListener.out.toByteArray();
+
+      // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
+      if (API_GITHUB_HOST.equals(getHost(uri)))
+      {
+        // Find the start tag in the JSON value.
+        String value = new String(bytes, "UTF-8");
+        int start = value.indexOf(CONTENT_TAG);
+        if (start != -1)
+        {
+          // Find the ending quote of the encoded contents.
+          start += CONTENT_TAG.length();
+          int end = value.indexOf('"', start);
+          if (end != -1)
+          {
+            // The content is delimited by \n so split on that during the conversion.
+            String content = value.substring(start, end);
+            String[] split = content.split("\\\\n");
+
+            // Write the converted bytes to a new stream and process those bytes instead.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            for (String line : split)
+            {
+              byte[] binary = XMLTypeFactory.eINSTANCE.createBase64Binary(line);
+              out.write(binary);
+            }
+
+            out.close();
+            bytes = out.toByteArray();
+          }
+        }
+      }
 
       try
       {
