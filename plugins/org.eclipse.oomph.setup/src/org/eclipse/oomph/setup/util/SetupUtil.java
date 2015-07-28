@@ -33,7 +33,15 @@ public final class SetupUtil
     Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string);
     while (matcher.find())
     {
-      matcher.appendReplacement(result, "\\$$0");
+      String group1 = matcher.group(1);
+      if ("$".equals(group1))
+      {
+        matcher.appendReplacement(result, "\\$\\$\\$\\$");
+      }
+      else
+      {
+        matcher.appendReplacement(result, "\\$$0");
+      }
     }
 
     matcher.appendTail(result);

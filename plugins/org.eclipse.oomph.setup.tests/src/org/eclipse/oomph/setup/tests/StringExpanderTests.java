@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.tests;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.tests.AbstractTest;
 
@@ -176,17 +177,46 @@ public class StringExpanderTests extends AbstractTest
   @Test
   public void testDollar() throws Exception
   {
+    assertThat(expander.expandString("START$END"), is("START$END"));
     assertThat(expander.expandString("START$$END"), is("START$END"));
   }
 
   @Test
   public void testEscaped() throws Exception
   {
+    assertThat(expander.expandString("START$${windows.path}END"), is("START${windows.path}END"));
+  }
+
+  @Test
+  public void testEscaped_Bug473706() throws Exception
+  {
+    assertThat(expander.expandString("<timestamp>${maven.build.timestamp}</timestamp>"), is("<timestamp>${maven.build.timestamp}</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$${maven.build.timestamp}</timestamp>"), is("<timestamp>${maven.build.timestamp}</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$$${maven.build.timestamp}</timestamp>"), is("<timestamp>$${maven.build.timestamp}</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$$$${maven.build.timestamp}</timestamp>"), is("<timestamp>$${maven.build.timestamp}</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$$$$${maven.build.timestamp}</timestamp>"), is("<timestamp>$$${maven.build.timestamp}</timestamp>"));
+
+    assertThat(expander.expandString("<timestamp>${windows.path}</timestamp>"), is("<timestamp>C:\\develop\\java-latest</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$${windows.path}</timestamp>"), is("<timestamp>${windows.path}</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$$${windows.path}</timestamp>"), is("<timestamp>$C:\\develop\\java-latest</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$$$${windows.path}</timestamp>"), is("<timestamp>$${windows.path}</timestamp>"));
+    assertThat(expander.expandString("<timestamp>$$$$${windows.path}</timestamp>"), is("<timestamp>$$C:\\develop\\java-latest</timestamp>"));
+
+    assertThat(SetupUtil.escape("<timestamp>$</timestamp>"), is("<timestamp>$</timestamp>"));
+    assertThat(SetupUtil.escape("<timestamp>${}</timestamp>"), is("<timestamp>${}</timestamp>"));
+    assertThat(SetupUtil.escape("<timestamp>${maven.build.timestamp}</timestamp>"), is("<timestamp>$${maven.build.timestamp}</timestamp>"));
+    assertThat(SetupUtil.escape("<timestamp>$${maven.build.timestamp}</timestamp>"), is("<timestamp>$$$${maven.build.timestamp}</timestamp>"));
+    assertThat(SetupUtil.escape("<timestamp>$$${maven.build.timestamp}</timestamp>"), is("<timestamp>$$$$$${maven.build.timestamp}</timestamp>"));
+  }
+
+  @Test
+  public void testEscapedPathFilter() throws Exception
+  {
     assertThat(expander.expandString("START$${windows.path/ws|property}END"), is("START${windows.path/ws|property}END"));
   }
 
   @Test
-  public void testEscapedUnescaped() throws Exception
+  public void testEscapedPathFilterUnescaped() throws Exception
   {
     assertThat(expander.expandString("START$${windows.path/ws|property}${windows.path/ws|property}END"),
         is("START${windows.path/ws|property}C:\\\\develop\\\\java-latest\\\\wsEND"));
