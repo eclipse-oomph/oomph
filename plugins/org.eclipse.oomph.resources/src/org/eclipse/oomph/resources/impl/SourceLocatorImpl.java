@@ -13,10 +13,10 @@ package org.eclipse.oomph.resources.impl;
 import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.predicates.Predicate;
+import org.eclipse.oomph.predicates.PredicatesUtil;
 import org.eclipse.oomph.resources.ProjectFactory;
 import org.eclipse.oomph.resources.ProjectHandler;
 import org.eclipse.oomph.resources.ResourcesPackage;
-import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.resources.backend.BackendContainer;
 import org.eclipse.oomph.resources.backend.BackendException;
@@ -254,7 +254,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    */
   public boolean matches(IProject project)
   {
-    return ResourcesUtil.matchesPredicates(project, predicates);
+    return PredicatesUtil.matchesPredicates(project, predicates);
   }
 
   /**
@@ -542,7 +542,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
         }
 
         IProject project = loadProject(sourceLocator, defaultProjectFactories, rootContainer, container, monitor);
-        if (ResourcesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
+        if (PredicatesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
         {
           try
           {

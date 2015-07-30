@@ -10,9 +10,11 @@
  */
 package org.eclipse.oomph.setup.projects.impl;
 
+import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.projects.PathVariableTask;
+import org.eclipse.oomph.setup.projects.ProjectsBuildTask;
 import org.eclipse.oomph.setup.projects.ProjectsFactory;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
@@ -37,6 +39,13 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * @generated
    */
   private EClass projectsImportTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass projectsBuildTaskEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -140,6 +149,66 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getProjectsBuildTask()
+  {
+    return projectsBuildTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getProjectsBuildTask_Predicates()
+  {
+    return (EReference)projectsBuildTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getProjectsBuildTask_OnlyNewProjects()
+  {
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getProjectsBuildTask_Refresh()
+  {
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getProjectsBuildTask_Clean()
+  {
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getProjectsBuildTask_Build()
+  {
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getPathVariableTask()
   {
     return pathVariableTaskEClass;
@@ -198,12 +267,19 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     isCreated = true;
 
     // Create classes and their features
-    projectsImportTaskEClass = createEClass(PROJECTS_IMPORT_TASK);
-    createEReference(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__SOURCE_LOCATORS);
-
     pathVariableTaskEClass = createEClass(PATH_VARIABLE_TASK);
     createEAttribute(pathVariableTaskEClass, PATH_VARIABLE_TASK__NAME);
     createEAttribute(pathVariableTaskEClass, PATH_VARIABLE_TASK__URI);
+
+    projectsImportTaskEClass = createEClass(PROJECTS_IMPORT_TASK);
+    createEReference(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__SOURCE_LOCATORS);
+
+    projectsBuildTaskEClass = createEClass(PROJECTS_BUILD_TASK);
+    createEReference(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__PREDICATES);
+    createEAttribute(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS);
+    createEAttribute(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__REFRESH);
+    createEAttribute(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__CLEAN);
+    createEAttribute(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__BUILD);
   }
 
   /**
@@ -236,26 +312,40 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     // Obtain other dependent packages
     SetupPackage theSetupPackage = (SetupPackage)EPackage.Registry.INSTANCE.getEPackage(SetupPackage.eNS_URI);
     ResourcesPackage theResourcesPackage = (ResourcesPackage)EPackage.Registry.INSTANCE.getEPackage(ResourcesPackage.eNS_URI);
+    PredicatesPackage thePredicatesPackage = (PredicatesPackage)EPackage.Registry.INSTANCE.getEPackage(PredicatesPackage.eNS_URI);
 
     // Create type parameters
 
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    projectsImportTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
     pathVariableTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    projectsImportTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    projectsBuildTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(projectsImportTaskEClass, ProjectsImportTask.class, "ProjectsImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProjectsImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1,
-        ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
-        IS_ORDERED);
-
     initEClass(pathVariableTaskEClass, PathVariableTask.class, "PathVariableTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getPathVariableTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getPathVariableTask_URI(), ecorePackage.getEString(), "uRI", null, 0, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(projectsImportTaskEClass, ProjectsImportTask.class, "ProjectsImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getProjectsImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1,
+        ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
+        IS_ORDERED);
+
+    initEClass(projectsBuildTaskEClass, ProjectsBuildTask.class, "ProjectsBuildTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getProjectsBuildTask_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, ProjectsBuildTask.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProjectsBuildTask_OnlyNewProjects(), ecorePackage.getEBoolean(), "onlyNewProjects", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProjectsBuildTask_Refresh(), ecorePackage.getEBoolean(), "refresh", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProjectsBuildTask_Clean(), ecorePackage.getEBoolean(), "clean", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProjectsBuildTask_Build(), ecorePackage.getEBoolean(), "build", "true", 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore");
@@ -322,8 +412,9 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   protected void createValidTriggersAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(projectsImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
     addAnnotation(pathVariableTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    addAnnotation(projectsImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    addAnnotation(projectsBuildTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
   }
 
   /**
@@ -335,8 +426,9 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getProjectsImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
     addAnnotation(getPathVariableTask_URI(), source, new String[] { "kind", "attribute", "name", "uri" });
+    addAnnotation(getProjectsImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
+    addAnnotation(getProjectsBuildTask_Predicates(), source, new String[] { "name", "predicate" });
   }
 
   /**

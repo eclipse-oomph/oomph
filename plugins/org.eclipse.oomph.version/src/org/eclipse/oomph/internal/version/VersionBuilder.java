@@ -189,7 +189,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     IProject project = getProject();
 
     monitor.beginTask("", 1);
-    monitor.subTask("Cleaning versio validity problems of " + project.getName());
+    monitor.subTask("Cleaning version validity problems of " + project.getName());
 
     try
     {

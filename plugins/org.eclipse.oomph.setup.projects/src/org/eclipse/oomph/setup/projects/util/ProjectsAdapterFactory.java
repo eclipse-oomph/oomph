@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.projects.util;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.projects.PathVariableTask;
+import org.eclipse.oomph.setup.projects.ProjectsBuildTask;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 
@@ -84,15 +85,21 @@ public class ProjectsAdapterFactory extends AdapterFactoryImpl
   protected ProjectsSwitch<Adapter> modelSwitch = new ProjectsSwitch<Adapter>()
   {
     @Override
+    public Adapter casePathVariableTask(PathVariableTask object)
+    {
+      return createPathVariableTaskAdapter();
+    }
+
+    @Override
     public Adapter caseProjectsImportTask(ProjectsImportTask object)
     {
       return createProjectsImportTaskAdapter();
     }
 
     @Override
-    public Adapter casePathVariableTask(PathVariableTask object)
+    public Adapter caseProjectsBuildTask(ProjectsBuildTask object)
     {
-      return createPathVariableTaskAdapter();
+      return createProjectsBuildTaskAdapter();
     }
 
     @Override
@@ -139,6 +146,21 @@ public class ProjectsAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createProjectsImportTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask <em>Build Task</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.projects.ProjectsBuildTask
+   * @generated
+   */
+  public Adapter createProjectsBuildTaskAdapter()
   {
     return null;
   }

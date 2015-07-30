@@ -40,6 +40,15 @@ public interface ProjectsFactory extends EFactory
   ProjectsImportTask createProjectsImportTask();
 
   /**
+   * Returns a new object of class '<em>Build Task</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Build Task</em>'.
+   * @generated
+   */
+  ProjectsBuildTask createProjectsBuildTask();
+
+  /**
    * Returns a new object of class '<em>Path Variable Task</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

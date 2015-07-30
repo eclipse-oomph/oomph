@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.projects.util;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.projects.PathVariableTask;
+import org.eclipse.oomph.setup.projects.ProjectsBuildTask;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 
@@ -83,6 +84,24 @@ public class ProjectsSwitch<T> extends Switch<T>
   {
     switch (classifierID)
     {
+      case ProjectsPackage.PATH_VARIABLE_TASK:
+      {
+        PathVariableTask pathVariableTask = (PathVariableTask)theEObject;
+        T result = casePathVariableTask(pathVariableTask);
+        if (result == null)
+        {
+          result = caseSetupTask(pathVariableTask);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(pathVariableTask);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       case ProjectsPackage.PROJECTS_IMPORT_TASK:
       {
         ProjectsImportTask projectsImportTask = (ProjectsImportTask)theEObject;
@@ -101,17 +120,17 @@ public class ProjectsSwitch<T> extends Switch<T>
         }
         return result;
       }
-      case ProjectsPackage.PATH_VARIABLE_TASK:
+      case ProjectsPackage.PROJECTS_BUILD_TASK:
       {
-        PathVariableTask pathVariableTask = (PathVariableTask)theEObject;
-        T result = casePathVariableTask(pathVariableTask);
+        ProjectsBuildTask projectsBuildTask = (ProjectsBuildTask)theEObject;
+        T result = caseProjectsBuildTask(projectsBuildTask);
         if (result == null)
         {
-          result = caseSetupTask(pathVariableTask);
+          result = caseSetupTask(projectsBuildTask);
         }
         if (result == null)
         {
-          result = caseModelElement(pathVariableTask);
+          result = caseModelElement(projectsBuildTask);
         }
         if (result == null)
         {
@@ -136,6 +155,22 @@ public class ProjectsSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseProjectsImportTask(ProjectsImportTask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Build Task</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Build Task</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseProjectsBuildTask(ProjectsBuildTask object)
   {
     return null;
   }

@@ -13,6 +13,7 @@ package org.eclipse.oomph.resources;
 import org.eclipse.oomph.internal.resources.ExternalResource;
 import org.eclipse.oomph.internal.resources.ResourcesPlugin;
 import org.eclipse.oomph.predicates.Predicate;
+import org.eclipse.oomph.predicates.PredicatesUtil;
 import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.SubMonitor;
@@ -328,27 +329,13 @@ public final class ResourcesUtil
     return workspace.getRoot().findMarkers(markerType, false, IResource.DEPTH_INFINITE);
   }
 
+  /**
+   * @deprecated Use {@link PredicatesUtil#matchesPredicates(IResource, EList)}.
+   */
+  @Deprecated
   public static boolean matchesPredicates(IProject project, EList<Predicate> predicates)
   {
-    if (project == null)
-    {
-      return false;
-    }
-
-    if (predicates == null || predicates.isEmpty())
-    {
-      return true;
-    }
-
-    for (Predicate predicate : predicates)
-    {
-      if (predicate.matches(project))
-      {
-        return true;
-      }
-    }
-
-    return false;
+    return PredicatesUtil.matchesPredicates(project, predicates);
   }
 
   /**

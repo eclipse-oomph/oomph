@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.projects.impl;
 
 import org.eclipse.oomph.setup.projects.PathVariableTask;
+import org.eclipse.oomph.setup.projects.ProjectsBuildTask;
 import org.eclipse.oomph.setup.projects.ProjectsFactory;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
@@ -73,10 +74,12 @@ public class ProjectsFactoryImpl extends EFactoryImpl implements ProjectsFactory
   {
     switch (eClass.getClassifierID())
     {
-      case ProjectsPackage.PROJECTS_IMPORT_TASK:
-        return createProjectsImportTask();
       case ProjectsPackage.PATH_VARIABLE_TASK:
         return createPathVariableTask();
+      case ProjectsPackage.PROJECTS_IMPORT_TASK:
+        return createProjectsImportTask();
+      case ProjectsPackage.PROJECTS_BUILD_TASK:
+        return createProjectsBuildTask();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -91,6 +94,17 @@ public class ProjectsFactoryImpl extends EFactoryImpl implements ProjectsFactory
   {
     ProjectsImportTaskImpl projectsImportTask = new ProjectsImportTaskImpl();
     return projectsImportTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ProjectsBuildTask createProjectsBuildTask()
+  {
+    ProjectsBuildTaskImpl projectsBuildTask = new ProjectsBuildTaskImpl();
+    return projectsBuildTask;
   }
 
   /**

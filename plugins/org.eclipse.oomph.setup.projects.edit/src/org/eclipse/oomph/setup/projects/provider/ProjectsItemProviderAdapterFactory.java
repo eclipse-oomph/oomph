@@ -119,6 +119,31 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.projects.ProjectsBuildTask} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ProjectsBuildTaskItemProvider projectsBuildTaskItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.projects.ProjectsBuildTask}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createProjectsBuildTaskAdapter()
+  {
+    if (projectsBuildTaskItemProvider == null)
+    {
+      projectsBuildTaskItemProvider = new ProjectsBuildTaskItemProvider(this);
+    }
+
+    return projectsBuildTaskItemProvider;
+  }
+
+  /**
    * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.projects.PathVariableTask} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -254,13 +279,17 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
    */
   public void dispose()
   {
+    if (pathVariableTaskItemProvider != null)
+    {
+      pathVariableTaskItemProvider.dispose();
+    }
     if (projectsImportTaskItemProvider != null)
     {
       projectsImportTaskItemProvider.dispose();
     }
-    if (pathVariableTaskItemProvider != null)
+    if (projectsBuildTaskItemProvider != null)
     {
-      pathVariableTaskItemProvider.dispose();
+      projectsBuildTaskItemProvider.dispose();
     }
   }
 
@@ -316,9 +345,11 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
       @Override
       public Object caseAnnotation(Annotation object)
       {
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ProjectsFactory.eINSTANCE.createPathVariableTask()));
+
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ProjectsFactory.eINSTANCE.createProjectsImportTask()));
 
-        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ProjectsFactory.eINSTANCE.createPathVariableTask()));
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ProjectsFactory.eINSTANCE.createProjectsBuildTask()));
 
         return null;
       }
@@ -411,10 +442,13 @@ public class ProjectsItemProviderAdapterFactory extends ProjectsAdapterFactory i
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
         newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, ProjectsFactory.eINSTANCE.createPathVariableTask()));
+
+        newChildDescriptors
             .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, ProjectsFactory.eINSTANCE.createProjectsImportTask()));
 
         newChildDescriptors
-            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, ProjectsFactory.eINSTANCE.createPathVariableTask()));
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, ProjectsFactory.eINSTANCE.createProjectsBuildTask()));
 
         return null;
       }
