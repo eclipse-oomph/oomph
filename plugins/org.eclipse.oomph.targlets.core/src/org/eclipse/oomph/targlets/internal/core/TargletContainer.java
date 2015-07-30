@@ -81,6 +81,7 @@ import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.engine.spi.ProvisioningAction;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IInstallableUnitFragment;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
@@ -1182,8 +1183,21 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             return iu;
           }
 
-          // Create a description that clone the IU with the generalized filter replacements.
-          InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
+          // Create a description that clones the IU with the generalized filter replacements.
+          InstallableUnitDescription description;
+
+          if (iu instanceof IInstallableUnitFragment)
+          {
+            IInstallableUnitFragment installableUnitFragment = (IInstallableUnitFragment)iu;
+            MetadataFactory.InstallableUnitFragmentDescription fragmentDescription = new MetadataFactory.InstallableUnitFragmentDescription();
+            Collection<IRequirement> host = installableUnitFragment.getHost();
+            fragmentDescription.setHost(host.toArray(new IRequirement[host.size()]));
+            description = fragmentDescription;
+          }
+          else
+          {
+            description = new MetadataFactory.InstallableUnitDescription();
+          }
 
           description.setId(iu.getId());
 
