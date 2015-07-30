@@ -112,6 +112,15 @@ public interface TargletFactory extends EFactory
   BuckminsterGenerator createBuckminsterGenerator();
 
   /**
+   * Returns a new object of class '<em>Project Name Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Project Name Generator</em>'.
+   * @generated
+   */
+  ProjectNameGenerator createProjectNameGenerator();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

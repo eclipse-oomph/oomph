@@ -20,6 +20,7 @@ import org.eclipse.oomph.targlets.ComponentExtension;
 import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProjectNameGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
@@ -105,6 +106,8 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
         return createComponentGenerator();
       case TargletPackage.BUCKMINSTER_GENERATOR:
         return createBuckminsterGenerator();
+      case TargletPackage.PROJECT_NAME_GENERATOR:
+        return createProjectNameGenerator();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -281,6 +284,17 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
   {
     BuckminsterGeneratorImpl buckminsterGenerator = new BuckminsterGeneratorImpl();
     return buckminsterGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ProjectNameGenerator createProjectNameGenerator()
+  {
+    ProjectNameGeneratorImpl projectNameGenerator = new ProjectNameGeneratorImpl();
+    return projectNameGenerator;
   }
 
   /**

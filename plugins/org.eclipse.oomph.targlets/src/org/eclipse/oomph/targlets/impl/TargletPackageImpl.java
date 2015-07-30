@@ -21,6 +21,7 @@ import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProjectNameGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
@@ -108,6 +109,13 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * @generated
    */
   private EClass buckminsterGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass projectNameGeneratorEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -468,6 +476,16 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getProjectNameGenerator()
+  {
+    return projectNameGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getInstallableUnit()
   {
     return installableUnitEDataType;
@@ -552,6 +570,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     buckminsterGeneratorEClass = createEClass(BUCKMINSTER_GENERATOR);
     createEAttribute(buckminsterGeneratorEClass, BUCKMINSTER_GENERATOR__SAVE_AS_COMPONENT);
 
+    projectNameGeneratorEClass = createEClass(PROJECT_NAME_GENERATOR);
+
     // Create data types
     installableUnitEDataType = createEDataType(INSTALLABLE_UNIT);
     stringToVersionMapEDataType = createEDataType(STRING_TO_VERSION_MAP);
@@ -604,6 +624,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     pluginGeneratorEClass.getESuperTypes().add(getIUGenerator());
     componentGeneratorEClass.getESuperTypes().add(getIUGenerator());
     buckminsterGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    projectNameGeneratorEClass.getESuperTypes().add(getIUGenerator());
 
     // Initialize classes, features, and operations; add parameters
     initEClass(targletContainerEClass, TargletContainer.class, "TargletContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -668,6 +689,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     initEClass(buckminsterGeneratorEClass, BuckminsterGenerator.class, "BuckminsterGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getBuckminsterGenerator_SaveAsComponent(), ecorePackage.getEBoolean(), "saveAsComponent", null, 0, 1, BuckminsterGenerator.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(projectNameGeneratorEClass, ProjectNameGenerator.class, "ProjectNameGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     // Initialize data types
     initEDataType(installableUnitEDataType, IInstallableUnit.class, "InstallableUnit", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

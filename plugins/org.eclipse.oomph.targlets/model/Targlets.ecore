@@ -116,6 +116,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="BuckminsterGenerator" eSuperTypes="#//IUGenerator">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="saveAsComponent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectNameGenerator" eSuperTypes="#//IUGenerator"/>
   <eClassifiers xsi:type="ecore:EDataType" name="InstallableUnit" instanceClassName="org.eclipse.equinox.p2.metadata.IInstallableUnit"
       serializable="false"/>
   <eClassifiers xsi:type="ecore:EDataType" name="StringToVersionMap" instanceTypeName="java.util.Map&lt;java.lang.String, org.eclipse.equinox.p2.metadata.Version>"

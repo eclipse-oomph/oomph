@@ -18,6 +18,7 @@ import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProjectNameGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -235,6 +236,24 @@ public class TargletSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case TargletPackage.PROJECT_NAME_GENERATOR:
+      {
+        ProjectNameGenerator projectNameGenerator = (ProjectNameGenerator)theEObject;
+        T result = caseProjectNameGenerator(projectNameGenerator);
+        if (result == null)
+        {
+          result = caseIUGenerator(projectNameGenerator);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(projectNameGenerator);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -380,6 +399,22 @@ public class TargletSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseBuckminsterGenerator(BuckminsterGenerator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Project Name Generator</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Project Name Generator</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseProjectNameGenerator(ProjectNameGenerator object)
   {
     return null;
   }

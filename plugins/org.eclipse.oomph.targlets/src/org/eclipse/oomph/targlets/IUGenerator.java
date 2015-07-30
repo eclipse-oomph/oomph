@@ -34,7 +34,8 @@ import java.util.Map;
 public interface IUGenerator extends ModelElement
 {
   public static final EList<IUGenerator> DEFAULTS = ECollections.asEList(TargletFactory.eINSTANCE.createPluginGenerator(),
-      TargletFactory.eINSTANCE.createFeatureGenerator(), TargletFactory.eINSTANCE.createComponentGenerator());
+      TargletFactory.eINSTANCE.createFeatureGenerator(), TargletFactory.eINSTANCE.createComponentGenerator(),
+      TargletFactory.eINSTANCE.createProjectNameGenerator());
 
   /**
    * <!-- begin-user-doc -->

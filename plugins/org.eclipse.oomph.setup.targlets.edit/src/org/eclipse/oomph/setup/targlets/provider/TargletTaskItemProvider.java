@@ -11,18 +11,53 @@
 package org.eclipse.oomph.setup.targlets.provider;
 
 import org.eclipse.oomph.p2.Configuration;
+import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.RepositoryList;
+import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.VersionSegment;
+import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.resources.ResourcesFactory;
+import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.setup.Project;
+import org.eclipse.oomph.setup.ProjectCatalog;
+import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.VariableChoice;
+import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.setup.targlets.SetupTargletsFactory;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
+import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -30,18 +65,40 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.query.CollectionResult;
+import org.eclipse.equinox.p2.query.IQueryable;
+import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.pde.core.target.ITargetDefinition;
+import org.eclipse.pde.core.target.ITargetHandle;
+import org.eclipse.pde.core.target.ITargetLocation;
+import org.eclipse.pde.core.target.ITargetPlatformService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.oomph.setup.targlets.TargletTask} object.
@@ -51,6 +108,8 @@ import java.util.StringTokenizer;
  */
 public class TargletTaskItemProvider extends SetupTaskItemProvider
 {
+  private static final Pattern VERSION_PATTERN = Pattern.compile("([1-9]+\\.[0-9]+)");
+
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -391,6 +450,434 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
         createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__IMPLICIT_DEPENDENCIES, SetupTargletsFactory.eINSTANCE.createImplicitDependency()));
   }
 
+  @Override
+  public Command createCommand(Object object, final EditingDomain domain, Class<? extends Command> commandClass, final CommandParameter commandParameter)
+  {
+    if (commandClass == DragAndDropCommand.class)
+    {
+      Collection<?> collection = commandParameter.getCollection();
+      if (collection.size() == 1)
+      {
+        Object value = collection.iterator().next();
+        if (value instanceof URI)
+        {
+          final URI uri = (URI)value;
+          if ("target".equals(uri.fileExtension()) && uri.isPlatformResource())
+          {
+            final Path path = new Path(uri.toPlatformString(true));
+            try
+            {
+              Command result = TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Command>()
+              {
+                @SuppressWarnings("restriction")
+                public Command run(ITargetPlatformService service) throws CoreException
+                {
+                  for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))
+                  {
+                    if (targetHandle instanceof org.eclipse.pde.internal.core.target.WorkspaceFileTargetHandle)
+                    {
+                      org.eclipse.pde.internal.core.target.WorkspaceFileTargetHandle workspaceFileTargetHandle = (org.eclipse.pde.internal.core.target.WorkspaceFileTargetHandle)targetHandle;
+                      IFile targetFile = workspaceFileTargetHandle.getTargetFile();
+                      if (path.equals(targetFile.getFullPath()))
+                      {
+                        final Set<Requirement> requirements = new TreeSet<Requirement>(new Comparator<Requirement>()
+                        {
+                          public int compare(Requirement requirement1, Requirement requirement2)
+                          {
+                            String name1 = requirement1.getName();
+                            String name2 = requirement2.getName();
+                            return name1.compareTo(name2);
+                          }
+                        });
+                        final Set<Repository> repos = new TreeSet<Repository>(new Comparator<Repository>()
+                        {
+                          public int compare(Repository repository1, Repository repository2)
+                          {
+                            String url1 = repository1.getURL();
+                            String url2 = repository2.getURL();
+                            return url1.compareTo(url2);
+                          }
+                        });
+
+                        ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
+                        final String arch = targetDefinition.getArch();
+                        final String os = targetDefinition.getOS();
+                        final String ws = targetDefinition.getWS();
+                        final String nl = targetDefinition.getNL();
+                        final String programArguments = targetDefinition.getProgramArguments();
+                        final String vmArguments = targetDefinition.getVMArguments();
+
+                        for (ITargetLocation targetLocation : targetDefinition.getTargetLocations())
+                        {
+                          if (targetLocation instanceof org.eclipse.pde.internal.core.target.IUBundleContainer)
+                          {
+                            org.eclipse.pde.internal.core.target.IUBundleContainer iuBundleContainer = (org.eclipse.pde.internal.core.target.IUBundleContainer)targetLocation;
+
+                            java.net.URI[] repositories = iuBundleContainer.getRepositories();
+                            for (java.net.URI repo : repositories)
+                            {
+                              URI repoURI = URI.createURI(repo.toString());
+                              if (repoURI.hasTrailingPathSeparator())
+                              {
+                                repoURI = repoURI.trimSegments(1);
+                              }
+
+                              repos.add(P2Factory.eINSTANCE.createRepository(repoURI.toString()));
+                            }
+
+                            String[] ids = (String[])ReflectUtil.invokeMethod("getIds", iuBundleContainer);
+                            Version[] versions = (Version[])ReflectUtil.invokeMethod("getVersions", iuBundleContainer);
+
+                            for (int i = 0, length = ids.length; i < length; ++i)
+                            {
+                              VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(versions[i], VersionSegment.MICRO);
+
+                              requirements.add(P2Factory.eINSTANCE.createRequirement(ids[i], versionRange));
+                            }
+                          }
+                        }
+
+                        DragAndDropCommand.Detail detail = (DragAndDropCommand.Detail)commandParameter.getFeature();
+                        return new TargletDragAndDropCommand(domain, commandParameter.getOwner(), detail.location, detail.operations, detail.operation,
+                            commandParameter.getCollection())
+                        {
+                          @Override
+                          protected boolean prepareDropCopyOn()
+                          {
+                            dragCommand = IdentityCommand.INSTANCE;
+
+                            CompoundCommand compoundCommand = new CompoundCommand(0);
+                            dropCommand = compoundCommand;
+
+                            Targlet targlet = TargletFactory.eINSTANCE.createTarglet();
+                            targlet.setName(getTargletName(StringUtil.cap(uri.trimFileExtension().lastSegment())) + "Target Platform");
+
+                            targlet.setActiveRepositoryListName("${eclipse.target.platform}");
+                            targlet.getRequirements().addAll(requirements);
+                            EList<RepositoryList> repositoryLists = targlet.getRepositoryLists();
+                            RepositoryList repositoryList = P2Factory.eINSTANCE.createRepositoryList();
+                            repositoryList.setName(getRepositoryListName(StringUtil.cap(uri.trimFileExtension().lastSegment())));
+                            repositoryLists.add(repositoryList);
+                            repositoryList.getRepositories().addAll(repos);
+
+                            TargletTask targletTask = (TargletTask)owner;
+
+                            compoundCommand.append(new AddCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, targlet));
+
+                            if (StringUtil.isEmpty(targletTask.getArchitecture()) && !StringUtil.isEmpty(arch))
+                            {
+                              compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, arch));
+                            }
+
+                            if (StringUtil.isEmpty(targletTask.getOperatingSystem()) && !StringUtil.isEmpty(os))
+                            {
+                              compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, os));
+                            }
+
+                            if (StringUtil.isEmpty(targletTask.getWindowingSystem()) && !StringUtil.isEmpty(ws))
+                            {
+                              compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, ws));
+                            }
+
+                            if (StringUtil.isEmpty(targletTask.getLocale()) && !StringUtil.isEmpty(nl))
+                            {
+                              compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, nl));
+                            }
+
+                            if (!StringUtil.isEmpty(vmArguments))
+                            {
+                              String newVmArguments = targletTask.getVMArguments();
+                              if (StringUtil.isEmpty(newVmArguments))
+                              {
+                                newVmArguments = "";
+                              }
+                              else
+                              {
+                                newVmArguments += "\n";
+                              }
+
+                              newVmArguments += vmArguments;
+
+                              compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__VM_ARGUMENTS,
+                                  newVmArguments.replaceAll("[\n\r]+", "\n").trim()));
+                            }
+
+                            if (!StringUtil.isEmpty(programArguments))
+                            {
+                              String newProgramArguments = targletTask.getProgramArguments();
+                              if (StringUtil.isEmpty(newProgramArguments))
+                              {
+                                newProgramArguments = "";
+                              }
+                              else
+                              {
+                                newProgramArguments += "\n";
+                              }
+
+                              newProgramArguments += programArguments;
+
+                              compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__PROGRAM_ARGUMENTS,
+                                  newProgramArguments.replaceAll("[\n\r]+", "\n").trim()));
+                            }
+
+                            return dropCommand.canExecute();
+                          }
+
+                          private String getRepositoryListName(String defaultName)
+                          {
+                            String lowerCaseDefaultName = defaultName.toLowerCase();
+
+                            TargletTask targletTask = (TargletTask)owner;
+                            for (Scope scope = targletTask.getScope(); scope != null; scope = scope.getParentScope())
+                            {
+                              if (scope instanceof ProjectCatalog)
+                              {
+                                for (Iterator<EObject> it = EcoreUtil.getAllProperContents(scope, false); it.hasNext();)
+                                {
+                                  EObject child = it.next();
+                                  if (child instanceof VariableTask)
+                                  {
+                                    VariableTask variableTask = (VariableTask)child;
+                                    if ("eclipse.target.platform".equals(variableTask.getName()))
+                                    {
+                                      String candidate = null;
+                                      for (VariableChoice variableChoice : variableTask.getChoices())
+                                      {
+                                        String value = variableChoice.getValue();
+                                        if (lowerCaseDefaultName.contains(value.toLowerCase()))
+                                        {
+                                          return value;
+                                        }
+
+                                        String label = variableChoice.getLabel();
+                                        if (label != null)
+                                        {
+                                          Matcher matcher = VERSION_PATTERN.matcher(label);
+                                          if (matcher.find() && defaultName.indexOf(matcher.group(1)) != -1)
+                                          {
+                                            return value;
+                                          }
+                                        }
+
+                                        if (candidate == null)
+                                        {
+                                          candidate = value;
+                                        }
+                                      }
+
+                                      return candidate;
+                                    }
+                                  }
+                                }
+                                break;
+                              }
+                            }
+
+                            return defaultName;
+                          }
+                        };
+                      }
+                    }
+                  }
+
+                  return null;
+                }
+              });
+
+              if (result != null)
+              {
+                return result;
+              }
+            }
+            catch (CoreException ex)
+            {
+              // Ignore.
+            }
+          }
+        }
+      }
+
+      return super.createCommand(object, domain, commandClass, commandParameter);
+    }
+
+    return super.createCommand(object, domain, commandClass, commandParameter);
+  }
+
+  @SuppressWarnings("restriction")
+  @Override
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    final List<IPath> paths = new ArrayList<IPath>();
+    for (Object value : collection)
+    {
+      if ("org.eclipse.egit.ui.internal.repository.tree.RepositoryNode".equals(value.getClass().getName()))
+      {
+        paths.add((IPath)ReflectUtil.invokeMethod("getPath", value));
+      }
+    }
+
+    if (collection.size() == paths.size())
+    {
+      return new TargletDragAndDropCommand(domain, owner, location, operations, operation, collection)
+      {
+        @Override
+        protected boolean prepareDropCopyOn()
+        {
+          dragCommand = IdentityCommand.INSTANCE;
+
+          dropCommand = new CompoundCommand(CompoundCommand.MERGE_COMMAND_ALL)
+          {
+            @Override
+            public void execute()
+            {
+              Targlet targlet = TargletFactory.eINSTANCE.createTarglet();
+              targlet.getInstallableUnitGenerators();
+
+              IPath path = paths.get(0);
+
+              final SourceLocator sourceLocator = ResourcesFactory.eINSTANCE.createSourceLocator(path.toString(), true);
+              WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(null);
+              workspaceIUAnalyzer.analyze(sourceLocator, IUGenerator.DEFAULTS, new NullProgressMonitor());
+              Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
+
+              final TargletTask targletTask = (TargletTask)owner;
+
+              List<Requirement> requirements = new ArrayList<Requirement>();
+              final Set<Requirement> redundant = new HashSet<Requirement>();
+              for (Targlet otherTarglet : targletTask.getTarglets())
+              {
+                for (Requirement requirement : otherTarglet.getRequirements())
+                {
+                  requirements.add(requirement);
+                }
+              }
+
+              final Set<IInstallableUnit> ius = workspaceIUInfos.keySet();
+              HashSet<IInstallableUnit> ius2 = new HashSet<IInstallableUnit>(ius);
+              IQueryable<IInstallableUnit> queryable = new CollectionResult<IInstallableUnit>(ius2);
+              for (IInstallableUnit rootIU : ius2)
+              {
+                for (IRequirement requirement : rootIU.getRequirements())
+                {
+                  if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+                  {
+                    org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
+                    String namespace = requiredCapability.getNamespace();
+                    if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+                    {
+                      String name = requiredCapability.getName();
+                      for (Requirement requirement2 : requirements)
+                      {
+                        if (name.equals(requirement2.getName()))
+                        {
+                          redundant.add(requirement2);
+                        }
+                      }
+                    }
+
+                    for (IInstallableUnit iu : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
+                    {
+                      ius.remove(iu);
+                    }
+                  }
+                }
+              }
+
+              targlet.setName(getTargletName("Default"));
+              EList<Requirement> targletRequirements = targlet.getRequirements();
+              for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(ius))
+              {
+                targletRequirements.add(P2Factory.eINSTANCE.createRequirement(iu.getId()));
+              }
+
+              sourceLocator.setRootFolder(getSourceLocation(path));
+              targlet.getSourceLocators().add(sourceLocator);
+
+              appendAndExecute(new AddCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, targlet));
+              if (!redundant.isEmpty())
+              {
+                appendAndExecute(DeleteCommand.create(domain, redundant));
+              }
+            }
+
+            private String getSourceLocation(IPath path)
+            {
+              TargletTask targletTask = (TargletTask)owner;
+              Resource resource = targletTask.eResource();
+              if (resource != null)
+              {
+                String candidate = null;
+                for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
+                {
+                  EObject eObject = it.next();
+                  EClass eClass = eObject.eClass();
+                  if ("GitCloneTask".equals(eClass.getName()))
+                  {
+                    EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature("remoteURI");
+                    if (eStructuralFeature != null)
+                    {
+                      String remoteURI = (String)eObject.eGet(eStructuralFeature);
+                      try
+                      {
+                        URI uri = URI.createURI(remoteURI);
+                        if (!uri.isHierarchical())
+                        {
+                          uri = URI.createURI(uri.opaquePart());
+                        }
+
+                        if ("git".equals(uri.fileExtension()))
+                        {
+                          uri = uri.trimFileExtension();
+                        }
+
+                        String baseName = URI.decode(uri.lastSegment());
+                        if (path.toString().endsWith("/" + baseName))
+                        {
+                          String id = ((SetupTask)eObject).getID();
+                          if (id != null)
+                          {
+                            String result = "${" + id + ".location}";
+                            if (candidate != null)
+                            {
+                              candidate = result;
+                            }
+
+                            return result;
+                          }
+                        }
+                      }
+                      catch (Throwable throwable)
+                      {
+                        // Ignore.
+                      }
+                    }
+                  }
+                }
+
+                if (candidate != null)
+                {
+                  return candidate;
+                }
+              }
+
+              return path.toString();
+            }
+
+            @Override
+            protected boolean prepare()
+            {
+              return true;
+            }
+          };
+
+          return dropCommand.canExecute();
+        }
+      };
+    }
+
+    return super.createPrimaryDragAndDropCommand(domain, owner, location, operations, operation, collection);
+  }
+
   /**
    * Return the resource locator for this item provider's resources.
    * <!-- begin-user-doc -->
@@ -401,6 +888,37 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   public ResourceLocator getResourceLocator()
   {
     return SetupTargletsEditPlugin.INSTANCE;
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class TargletDragAndDropCommand extends DragAndDropCommand
+  {
+    public TargletDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+    {
+      super(domain, owner, location, operations, operation, collection, true);
+    }
+
+    protected String getTargletName(String defaultName)
+    {
+      TargletTask targletTask = (TargletTask)owner;
+      for (Scope scope = targletTask.getScope(); scope != null; scope = scope.getParentScope())
+      {
+        if (scope instanceof Project)
+        {
+          String label = scope.getLabel();
+          if (StringUtil.isEmpty(label))
+          {
+            label = StringUtil.cap(scope.getName());
+          }
+
+          return label;
+        }
+      }
+
+      return defaultName;
+    }
   }
 
   /**

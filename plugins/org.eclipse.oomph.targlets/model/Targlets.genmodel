@@ -54,5 +54,6 @@
     <genClasses ecoreClass="Targlets.ecore#//BuckminsterGenerator">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//BuckminsterGenerator/saveAsComponent"/>
     </genClasses>
+    <genClasses ecoreClass="Targlets.ecore#//ProjectNameGenerator"/>
   </genPackages>
 </genmodel:GenModel>

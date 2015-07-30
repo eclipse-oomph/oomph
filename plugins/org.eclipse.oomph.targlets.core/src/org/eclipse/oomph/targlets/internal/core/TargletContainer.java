@@ -71,6 +71,7 @@ import org.eclipse.equinox.internal.p2.engine.phases.Collect;
 import org.eclipse.equinox.internal.p2.engine.phases.Install;
 import org.eclipse.equinox.internal.p2.engine.phases.Property;
 import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
+import org.eclipse.equinox.internal.p2.metadata.ResolvedInstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
@@ -515,13 +516,19 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild(4));
       progress.childDone();
 
+      boolean isDisplayThread = isDisplayThread();
       Profile profile = descriptor.getWorkingProfile();
       if (profile == null || //
-          !descriptor.getWorkingDigest().equals(digest) && !isDisplayThread() && descriptor.getUpdateProblem() == null || //
+          !descriptor.getWorkingDigest().equals(digest) && !isDisplayThread && descriptor.getUpdateProblem() == null || //
           FORCE_UPDATE.get() == Boolean.TRUE)
       {
         try
         {
+          if (isDisplayThread)
+          {
+            throw new CoreException(Status.CANCEL_STATUS);
+          }
+
           Profile newProfile = updateProfile(environmentProperties, nlProperty, digest, progress.newChild(86));
           if (newProfile != null)
           {
@@ -1374,8 +1381,47 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       List<Phase> phases = new ArrayList<Phase>(4);
       phases.add(new Collect(100));
       phases.add(new Property(1));
-      phases.add(new Uninstall(50, true));
-      phases.add(new Install(50));
+      phases.add(new Uninstall(50, true)
+      {
+        @Override
+        protected java.util.List<ProvisioningAction> getActions(InstallableUnitOperand currentOperand)
+        {
+          // If a product IU is provisioned, it pulls in tooling fragments that try to work with the non-existing artifacts of our workspace-based IUs.
+          // So we'd remove them for the purpose of this phase.
+          IInstallableUnit first = currentOperand.first();
+          if (first != null)
+          {
+            if ("true".equals(first.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && first instanceof ResolvedInstallableUnit)
+            {
+              return super.getActions(new InstallableUnitOperand(
+                  new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)first).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)), null));
+            }
+          }
+
+          return super.getActions(currentOperand);
+        }
+      });
+      phases.add(new Install(50)
+      {
+        @Override
+        protected java.util.List<ProvisioningAction> getActions(InstallableUnitOperand currentOperand)
+        {
+          // If a product IU is provisioned, it pulls in tooling fragments that try to work with the non-existing artifacts of our workspace-based IUs.
+          // So we'd remove them for the purpose of this phase.
+          IInstallableUnit second = currentOperand.second();
+          if (second != null)
+          {
+            if ("true".equals(second.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && second instanceof ResolvedInstallableUnit)
+            {
+              return super.getActions(new InstallableUnitOperand(null,
+                  new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)second).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL))));
+            }
+          }
+
+          return super.getActions(currentOperand);
+        }
+      });
+
       phases.add(new CollectNativesPhase(profile.getBundlePool(), 100));
 
       return new PhaseSet(phases.toArray(new Phase[phases.size()]));

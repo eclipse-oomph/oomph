@@ -729,6 +729,70 @@ public interface TargletPackage extends EPackage
   int BUCKMINSTER_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.ProjectNameGeneratorImpl <em>Project Name Generator</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.ProjectNameGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getProjectNameGenerator()
+   * @generated
+   */
+  int PROJECT_NAME_GENERATOR = 9;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_NAME_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
+
+  /**
+   * The number of structural features of the '<em>Project Name Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_NAME_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_NAME_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Generate IUs</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_NAME_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
+
+  /**
+   * The operation id for the '<em>Modify IU</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_NAME_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP;
+
+  /**
+   * The number of operations of the '<em>Project Name Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_NAME_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
+
+  /**
    * The meta object id for the '<em>Installable Unit</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -736,7 +800,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getInstallableUnit()
    * @generated
    */
-  int INSTALLABLE_UNIT = 9;
+  int INSTALLABLE_UNIT = 10;
 
   /**
    * The meta object id for the '<em>String To Version Map</em>' data type.
@@ -746,7 +810,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getStringToVersionMap()
    * @generated
    */
-  int STRING_TO_VERSION_MAP = 10;
+  int STRING_TO_VERSION_MAP = 11;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.TargletContainer <em>Container</em>}'.
@@ -1035,6 +1099,16 @@ public interface TargletPackage extends EPackage
   EAttribute getBuckminsterGenerator_SaveAsComponent();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ProjectNameGenerator <em>Project Name Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Project Name Generator</em>'.
+   * @see org.eclipse.oomph.targlets.ProjectNameGenerator
+   * @generated
+   */
+  EClass getProjectNameGenerator();
+
+  /**
    * Returns the meta object for data type '{@link org.eclipse.equinox.p2.metadata.IInstallableUnit <em>Installable Unit</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1313,6 +1387,16 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EAttribute BUCKMINSTER_GENERATOR__SAVE_AS_COMPONENT = eINSTANCE.getBuckminsterGenerator_SaveAsComponent();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ProjectNameGeneratorImpl <em>Project Name Generator</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.ProjectNameGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getProjectNameGenerator()
+     * @generated
+     */
+    EClass PROJECT_NAME_GENERATOR = eINSTANCE.getProjectNameGenerator();
 
     /**
      * The meta object literal for the '<em>Installable Unit</em>' data type.

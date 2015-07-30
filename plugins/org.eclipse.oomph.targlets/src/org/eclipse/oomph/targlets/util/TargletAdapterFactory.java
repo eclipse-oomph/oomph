@@ -18,6 +18,7 @@ import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProjectNameGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -141,6 +142,12 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
     public Adapter caseBuckminsterGenerator(BuckminsterGenerator object)
     {
       return createBuckminsterGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseProjectNameGenerator(ProjectNameGenerator object)
+    {
+      return createProjectNameGeneratorAdapter();
     }
 
     @Override
@@ -301,6 +308,21 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createBuckminsterGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.ProjectNameGenerator <em>Project Name Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.ProjectNameGenerator
+   * @generated
+   */
+  public Adapter createProjectNameGeneratorAdapter()
   {
     return null;
   }

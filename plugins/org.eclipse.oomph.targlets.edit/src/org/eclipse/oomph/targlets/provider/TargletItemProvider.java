@@ -20,6 +20,7 @@ import org.eclipse.oomph.targlets.TargletPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
@@ -203,6 +204,22 @@ public class TargletItemProvider extends ModelElementItemProvider
     return label == null || label.length() == 0 ? getString("_UI_Targlet_type") : label;
   }
 
+  @Override
+  public void notifyChanged(Notification notification)
+  {
+    notifyChangedGen(notification);
+
+    // When the name changes, the label of the container might be changed too, i.e., for a Targlet Task.
+    if (notification.getFeatureID(Targlet.class) == TargletPackage.TARGLET__NAME)
+    {
+      EObject container = ((EObject)notification.getNotifier()).eContainer();
+      if (container != null)
+      {
+        fireNotifyChanged(new ViewerNotification(notification, container, false, true));
+      }
+    }
+  }
+
   /**
    * This handles model notifications by calling {@link #updateChildren} to update any cached
    * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
@@ -210,8 +227,7 @@ public class TargletItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void notifyChanged(Notification notification)
+  public void notifyChangedGen(Notification notification)
   {
     updateChildren(notification);
 
@@ -260,6 +276,9 @@ public class TargletItemProvider extends ModelElementItemProvider
 
     newChildDescriptors
         .add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS, TargletFactory.eINSTANCE.createBuckminsterGenerator()));
+
+    newChildDescriptors
+        .add(createChildParameter(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS, TargletFactory.eINSTANCE.createProjectNameGenerator()));
 
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__REPOSITORY_LISTS, P2Factory.eINSTANCE.createRepositoryList()));
   }
