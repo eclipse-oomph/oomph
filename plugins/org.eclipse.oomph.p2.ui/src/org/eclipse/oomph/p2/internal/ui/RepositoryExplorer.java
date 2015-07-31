@@ -145,9 +145,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final String SOURCE_SUFFIX = ".source";
 
-  private static final String FEATURE_SUFFIX = ".feature.group";
-
-  private static final String SOURCE_FEATURE_SUFFIX = SOURCE_SUFFIX + FEATURE_SUFFIX;
+  private static final String SOURCE_FEATURE_SUFFIX = SOURCE_SUFFIX + Requirement.FEATURE_SUFFIX;
 
   private static final Object[] NO_ELEMENTS = new Object[0];
 
@@ -761,7 +759,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static boolean isFeature(IInstallableUnit iu)
   {
-    return iu.getId().endsWith(FEATURE_SUFFIX);
+    return iu.getId().endsWith(Requirement.FEATURE_SUFFIX);
   }
 
   public static boolean explore(String repository)
@@ -1183,7 +1181,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
                       {
                         if (requiredID.endsWith(SOURCE_FEATURE_SUFFIX))
                         {
-                          String mainID = requiredID.substring(0, requiredID.length() - SOURCE_FEATURE_SUFFIX.length()) + FEATURE_SUFFIX;
+                          String mainID = requiredID.substring(0, requiredID.length() - SOURCE_FEATURE_SUFFIX.length()) + Requirement.FEATURE_SUFFIX;
                           String mainName = names.get(mainID);
 
                           if (ObjectUtil.equals(name, mainName))
@@ -1295,7 +1293,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         P2UIPlugin.checkCancelation(monitor);
         String id = iu.getId();
 
-        if (id.endsWith(FEATURE_SUFFIX) && !id.endsWith(SOURCE_FEATURE_SUFFIX))
+        if (id.endsWith(Requirement.FEATURE_SUFFIX) && !id.endsWith(SOURCE_FEATURE_SUFFIX))
         {
           String name = getName(iu);
           if (isFiltered(name))
@@ -2210,7 +2208,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
       if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
       {
-        if (getLabel().endsWith(FEATURE_SUFFIX))
+        if (getLabel().endsWith(Requirement.FEATURE_SUFFIX))
         {
           return FEATURE_IMAGE;
         }

@@ -12,13 +12,13 @@ package org.eclipse.oomph.targlets.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
 
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
@@ -85,10 +85,9 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public EList<IInstallableUnit> generateIUs(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions) throws Exception
+  public void generateIUs(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions, final EList<IInstallableUnit> result)
+      throws Exception
   {
-    final EList<IInstallableUnit> result = new BasicEList<IInstallableUnit>();
-
     ResourcesUtil.runWithFile(project, MANIFEST_PATH, new ResourcesUtil.RunnableWithFile()
     {
       public void run(File projectFolder, File file) throws Exception
@@ -97,18 +96,6 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
         action.generateIUs(projectFolder, qualifierReplacement, iuVersions, result);
       }
     });
-
-    return result;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated NOT
-   */
-  public void modifyIU(IInstallableUnit iu, IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception
-  {
-    // Do nothing
   }
 
   /**
@@ -122,19 +109,10 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
   {
     switch (operationID)
     {
-      case TargletPackage.FEATURE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP:
+      case TargletPackage.FEATURE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST:
         try
         {
-          return generateIUs((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2));
-        }
-        catch (Throwable throwable)
-        {
-          throw new InvocationTargetException(throwable);
-        }
-      case TargletPackage.FEATURE_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP:
-        try
-        {
-          modifyIU((IInstallableUnit)arguments.get(0), (IProject)arguments.get(1), (String)arguments.get(2), (Map<String, Version>)arguments.get(3));
+          generateIUs((IProject)arguments.get(0), (String)arguments.get(1), (Map<String, Version>)arguments.get(2), (EList<IInstallableUnit>)arguments.get(3));
           return null;
         }
         catch (Throwable throwable)
@@ -203,7 +181,7 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
         }
 
         String namespace = IInstallableUnit.NAMESPACE_IU_ID;
-        String name = licenseFeature + ".feature.group";
+        String name = licenseFeature + Requirement.FEATURE_SUFFIX;
         IRequirement requirement = MetadataFactory.createRequirement(namespace, name, osgiRange, null, true, false);
         newRequirements[size] = requirement;
 
@@ -362,7 +340,7 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
 
     private static String getTransformedId(String original, boolean isPlugin, boolean isGroup)
     {
-      return isPlugin ? original : original + (isGroup ? ".feature.group" : ".feature.jar"); //$NON-NLS-1$//$NON-NLS-2$
+      return isPlugin ? original : original + (isGroup ? Requirement.FEATURE_SUFFIX : ".feature.jar"); //$NON-NLS-1$
     }
 
     private static VersionRange adjustQualifier(VersionRange range)

@@ -15,7 +15,6 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
-import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.SourceLocator;
@@ -75,7 +74,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
-import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -530,9 +528,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
                             for (int i = 0, length = ids.length; i < length; ++i)
                             {
-                              VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(versions[i], VersionSegment.MICRO);
-
-                              requirements.add(P2Factory.eINSTANCE.createRequirement(ids[i], versionRange));
+                              requirements.add(P2Factory.eINSTANCE.createRequirement(ids[i], versions[i]));
                             }
                           }
                         }

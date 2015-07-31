@@ -11,14 +11,19 @@
 package org.eclipse.oomph.targlets.util;
 
 import org.eclipse.oomph.base.ModelElement;
-import org.eclipse.oomph.targlets.BuckminsterGenerator;
+import org.eclipse.oomph.targlets.CSpecGenerator;
+import org.eclipse.oomph.targlets.CSpexGenerator;
+import org.eclipse.oomph.targlets.CategoryGenerator;
+import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
+import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
-import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProductGenerator;
 import org.eclipse.oomph.targlets.ProjectNameGenerator;
+import org.eclipse.oomph.targlets.SiteGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -133,15 +138,45 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
-    public Adapter caseComponentGenerator(ComponentGenerator object)
+    public Adapter caseComponentDefGenerator(ComponentDefGenerator object)
     {
-      return createComponentGeneratorAdapter();
+      return createComponentDefGeneratorAdapter();
     }
 
     @Override
-    public Adapter caseBuckminsterGenerator(BuckminsterGenerator object)
+    public Adapter caseComponentExtGenerator(ComponentExtGenerator object)
     {
-      return createBuckminsterGeneratorAdapter();
+      return createComponentExtGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseCSpecGenerator(CSpecGenerator object)
+    {
+      return createCSpecGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseCSpexGenerator(CSpexGenerator object)
+    {
+      return createCSpexGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseSiteGenerator(SiteGenerator object)
+    {
+      return createSiteGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseCategoryGenerator(CategoryGenerator object)
+    {
+      return createCategoryGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseProductGenerator(ProductGenerator object)
+    {
+      return createProductGeneratorAdapter();
     }
 
     @Override
@@ -283,31 +318,106 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.ComponentGenerator <em>Component Generator</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.ComponentDefGenerator <em>Component Def Generator</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.oomph.targlets.ComponentGenerator
+   * @see org.eclipse.oomph.targlets.ComponentDefGenerator
    * @generated
    */
-  public Adapter createComponentGeneratorAdapter()
+  public Adapter createComponentDefGeneratorAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.BuckminsterGenerator <em>Buckminster Generator</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.ComponentExtGenerator <em>Component Ext Generator</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.oomph.targlets.BuckminsterGenerator
+   * @see org.eclipse.oomph.targlets.ComponentExtGenerator
    * @generated
    */
-  public Adapter createBuckminsterGeneratorAdapter()
+  public Adapter createComponentExtGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.CSpecGenerator <em>CSpec Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.CSpecGenerator
+   * @generated
+   */
+  public Adapter createCSpecGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.CSpexGenerator <em>CSpex Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.CSpexGenerator
+   * @generated
+   */
+  public Adapter createCSpexGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.SiteGenerator <em>Site Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.SiteGenerator
+   * @generated
+   */
+  public Adapter createSiteGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.CategoryGenerator <em>Category Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.CategoryGenerator
+   * @generated
+   */
+  public Adapter createCategoryGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.ProductGenerator <em>Product Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.ProductGenerator
+   * @generated
+   */
+  public Adapter createProductGeneratorAdapter()
   {
     return null;
   }

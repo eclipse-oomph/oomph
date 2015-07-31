@@ -96,24 +96,22 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IUGenerator" abstract="true" interface="true"
       eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
-    <eOperations name="generateIUs" upperBound="-1" eType="#//InstallableUnit" eExceptions="ecore:EDataType http://www.eclipse.org/oomph/base/1.0#//Exception">
+    <eOperations name="generateIUs" eExceptions="ecore:EDataType http://www.eclipse.org/oomph/base/1.0#//Exception">
       <eParameters name="project" eType="ecore:EDataType http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Project"/>
       <eParameters name="qualifierReplacement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eParameters name="iuVersions" eType="#//StringToVersionMap"/>
-    </eOperations>
-    <eOperations name="modifyIU" eExceptions="ecore:EDataType http://www.eclipse.org/oomph/base/1.0#//Exception">
-      <eParameters name="iu" eType="#//InstallableUnit"/>
-      <eParameters name="project" eType="ecore:EDataType http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Project"/>
-      <eParameters name="qualifierReplacement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="iuVersions" eType="#//StringToVersionMap"/>
+      <eParameters name="result" upperBound="-1" eType="#//InstallableUnit"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FeatureGenerator" eSuperTypes="#//IUGenerator"/>
   <eClassifiers xsi:type="ecore:EClass" name="PluginGenerator" eSuperTypes="#//IUGenerator"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ComponentGenerator" eSuperTypes="#//IUGenerator"/>
-  <eClassifiers xsi:type="ecore:EClass" name="BuckminsterGenerator" eSuperTypes="#//IUGenerator">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="saveAsComponent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentDefGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentExtGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CSpecGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CSpexGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SiteGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CategoryGenerator" eSuperTypes="#//SiteGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProductGenerator" eSuperTypes="#//IUGenerator"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProjectNameGenerator" eSuperTypes="#//IUGenerator"/>
   <eClassifiers xsi:type="ecore:EDataType" name="InstallableUnit" instanceClassName="org.eclipse.equinox.p2.metadata.IInstallableUnit"
       serializable="false"/>

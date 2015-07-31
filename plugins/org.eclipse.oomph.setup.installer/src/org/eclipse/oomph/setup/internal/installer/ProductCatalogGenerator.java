@@ -721,7 +721,7 @@ public class ProductCatalogGenerator implements IApplication
       {
         IRequiredCapability capability = (IRequiredCapability)requirement;
         String capabilityName = capability.getName();
-        if (capabilityName.endsWith(".feature.group"))
+        if (capabilityName.endsWith(Requirement.FEATURE_SUFFIX))
         {
           @SuppressWarnings("unchecked")
           IQueryable<IInstallableUnit> queriable = new CompoundQueryable<IInstallableUnit>(

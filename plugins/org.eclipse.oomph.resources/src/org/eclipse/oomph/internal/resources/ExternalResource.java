@@ -472,6 +472,28 @@ public abstract class ExternalResource extends PlatformObject implements IResour
     return this;
   }
 
+  @Override
+  public String toString()
+  {
+    return getTypeString() + getFullPath();
+  }
+
+  private String getTypeString()
+  {
+    switch (getType())
+    {
+      case FILE:
+        return "L"; //$NON-NLS-1$
+      case FOLDER:
+        return "F"; //$NON-NLS-1$
+      case PROJECT:
+        return "P"; //$NON-NLS-1$
+      case ROOT:
+        return "R"; //$NON-NLS-1$
+    }
+    return ""; //$NON-NLS-1$
+  }
+
   /**
    * @author Eike Stepper
    */

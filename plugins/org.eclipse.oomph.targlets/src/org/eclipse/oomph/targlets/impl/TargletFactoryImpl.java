@@ -14,13 +14,19 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.resources.SourceLocator;
-import org.eclipse.oomph.targlets.BuckminsterGenerator;
+import org.eclipse.oomph.targlets.CSpecGenerator;
+import org.eclipse.oomph.targlets.CSpexGenerator;
+import org.eclipse.oomph.targlets.CategoryGenerator;
+import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
+import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
-import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
+import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProductGenerator;
 import org.eclipse.oomph.targlets.ProjectNameGenerator;
+import org.eclipse.oomph.targlets.SiteGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
@@ -102,10 +108,20 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
         return createFeatureGenerator();
       case TargletPackage.PLUGIN_GENERATOR:
         return createPluginGenerator();
-      case TargletPackage.COMPONENT_GENERATOR:
-        return createComponentGenerator();
-      case TargletPackage.BUCKMINSTER_GENERATOR:
-        return createBuckminsterGenerator();
+      case TargletPackage.COMPONENT_DEF_GENERATOR:
+        return createComponentDefGenerator();
+      case TargletPackage.COMPONENT_EXT_GENERATOR:
+        return createComponentExtGenerator();
+      case TargletPackage.CSPEC_GENERATOR:
+        return createCSpecGenerator();
+      case TargletPackage.CSPEX_GENERATOR:
+        return createCSpexGenerator();
+      case TargletPackage.SITE_GENERATOR:
+        return createSiteGenerator();
+      case TargletPackage.CATEGORY_GENERATOR:
+        return createCategoryGenerator();
+      case TargletPackage.PRODUCT_GENERATOR:
+        return createProductGenerator();
       case TargletPackage.PROJECT_NAME_GENERATOR:
         return createProjectNameGenerator();
       default:
@@ -206,6 +222,11 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
       targlet.getRepositoryLists().add(EcoreUtil.copy(repositoryList));
     }
 
+    for (IUGenerator iuGenerator : source.getInstallableUnitGenerators())
+    {
+      targlet.getInstallableUnitGenerators().add(EcoreUtil.copy(iuGenerator));
+    }
+
     return targlet;
   }
 
@@ -269,10 +290,10 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public ComponentGenerator createComponentGenerator()
+  public ComponentDefGenerator createComponentDefGenerator()
   {
-    ComponentGeneratorImpl componentGenerator = new ComponentGeneratorImpl();
-    return componentGenerator;
+    ComponentDefGeneratorImpl componentDefGenerator = new ComponentDefGeneratorImpl();
+    return componentDefGenerator;
   }
 
   /**
@@ -280,10 +301,65 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public BuckminsterGenerator createBuckminsterGenerator()
+  public ComponentExtGenerator createComponentExtGenerator()
   {
-    BuckminsterGeneratorImpl buckminsterGenerator = new BuckminsterGeneratorImpl();
-    return buckminsterGenerator;
+    ComponentExtGeneratorImpl componentExtGenerator = new ComponentExtGeneratorImpl();
+    return componentExtGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CSpecGenerator createCSpecGenerator()
+  {
+    CSpecGeneratorImpl cSpecGenerator = new CSpecGeneratorImpl();
+    return cSpecGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CSpexGenerator createCSpexGenerator()
+  {
+    CSpexGeneratorImpl cSpexGenerator = new CSpexGeneratorImpl();
+    return cSpexGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SiteGenerator createSiteGenerator()
+  {
+    SiteGeneratorImpl siteGenerator = new SiteGeneratorImpl();
+    return siteGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CategoryGenerator createCategoryGenerator()
+  {
+    CategoryGeneratorImpl categoryGenerator = new CategoryGeneratorImpl();
+    return categoryGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ProductGenerator createProductGenerator()
+  {
+    ProductGeneratorImpl productGenerator = new ProductGeneratorImpl();
+    return productGenerator;
   }
 
   /**

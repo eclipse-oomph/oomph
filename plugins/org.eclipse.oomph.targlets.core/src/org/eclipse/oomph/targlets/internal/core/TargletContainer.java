@@ -155,8 +155,6 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   private static final String FOLLOW_ARTIFACT_REPOSITORY_REFERENCES = "org.eclipse.equinox.p2.director.followArtifactRepositoryReferences";
 
-  private static final String FEATURE_SUFFIX = ".feature.group";
-
   private static final byte[] BUFFER = new byte[8192];
 
   private static final String PROP_ARCH = "osgi.arch"; //$NON-NLS-1$
@@ -1327,10 +1325,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             idToIUMap.put(new IU(iu), iu);
 
             String suffix = "";
-            if (id.endsWith(FEATURE_SUFFIX))
+            if (id.endsWith(Requirement.FEATURE_SUFFIX))
             {
-              id = id.substring(0, id.length() - FEATURE_SUFFIX.length());
-              suffix = FEATURE_SUFFIX;
+              id = id.substring(0, id.length() - Requirement.FEATURE_SUFFIX.length());
+              suffix = Requirement.FEATURE_SUFFIX;
             }
 
             InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();

@@ -94,22 +94,67 @@ public interface TargletFactory extends EFactory
   PluginGenerator createPluginGenerator();
 
   /**
-   * Returns a new object of class '<em>Component Generator</em>'.
+   * Returns a new object of class '<em>Component Def Generator</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Component Generator</em>'.
+   * @return a new object of class '<em>Component Def Generator</em>'.
    * @generated
    */
-  ComponentGenerator createComponentGenerator();
+  ComponentDefGenerator createComponentDefGenerator();
 
   /**
-   * Returns a new object of class '<em>Buckminster Generator</em>'.
+   * Returns a new object of class '<em>Component Ext Generator</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Buckminster Generator</em>'.
+   * @return a new object of class '<em>Component Ext Generator</em>'.
    * @generated
    */
-  BuckminsterGenerator createBuckminsterGenerator();
+  ComponentExtGenerator createComponentExtGenerator();
+
+  /**
+   * Returns a new object of class '<em>CSpec Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>CSpec Generator</em>'.
+   * @generated
+   */
+  CSpecGenerator createCSpecGenerator();
+
+  /**
+   * Returns a new object of class '<em>CSpex Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>CSpex Generator</em>'.
+   * @generated
+   */
+  CSpexGenerator createCSpexGenerator();
+
+  /**
+   * Returns a new object of class '<em>Site Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Site Generator</em>'.
+   * @generated
+   */
+  SiteGenerator createSiteGenerator();
+
+  /**
+   * Returns a new object of class '<em>Category Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Category Generator</em>'.
+   * @generated
+   */
+  CategoryGenerator createCategoryGenerator();
+
+  /**
+   * Returns a new object of class '<em>Product Generator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Product Generator</em>'.
+   * @generated
+   */
+  ProductGenerator createProductGenerator();
 
   /**
    * Returns a new object of class '<em>Project Name Generator</em>'.

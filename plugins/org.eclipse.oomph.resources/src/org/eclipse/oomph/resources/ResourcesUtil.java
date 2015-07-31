@@ -23,6 +23,7 @@ import org.eclipse.oomph.util.XMLUtil.ElementHandler;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -120,6 +121,24 @@ public final class ResourcesUtil
     }
 
     return false;
+  }
+
+  public static void runWithFiles(IProject project, IPath path, org.eclipse.oomph.util.Predicate<IFile> filter, RunnableWithFile runnable) throws Exception
+  {
+    IFolder iFolder = project.getFolder(path);
+    if (iFolder.exists())
+    {
+      for (IResource iResource : iFolder.members())
+      {
+        if (iResource.exists() && iResource instanceof IFile)
+        {
+          if (filter.apply((IFile)iResource))
+          {
+            runWithFile(project, iResource.getProjectRelativePath(), runnable);
+          }
+        }
+      }
+    }
   }
 
   public static void runWithFile(IProject project, IPath path, RunnableWithFile runnable) throws Exception

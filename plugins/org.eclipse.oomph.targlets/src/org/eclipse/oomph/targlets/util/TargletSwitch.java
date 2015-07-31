@@ -11,14 +11,19 @@
 package org.eclipse.oomph.targlets.util;
 
 import org.eclipse.oomph.base.ModelElement;
-import org.eclipse.oomph.targlets.BuckminsterGenerator;
+import org.eclipse.oomph.targlets.CSpecGenerator;
+import org.eclipse.oomph.targlets.CSpexGenerator;
+import org.eclipse.oomph.targlets.CategoryGenerator;
+import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
+import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
-import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProductGenerator;
 import org.eclipse.oomph.targlets.ProjectNameGenerator;
+import org.eclipse.oomph.targlets.SiteGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -200,17 +205,17 @@ public class TargletSwitch<T> extends Switch<T>
         }
         return result;
       }
-      case TargletPackage.COMPONENT_GENERATOR:
+      case TargletPackage.COMPONENT_DEF_GENERATOR:
       {
-        ComponentGenerator componentGenerator = (ComponentGenerator)theEObject;
-        T result = caseComponentGenerator(componentGenerator);
+        ComponentDefGenerator componentDefGenerator = (ComponentDefGenerator)theEObject;
+        T result = caseComponentDefGenerator(componentDefGenerator);
         if (result == null)
         {
-          result = caseIUGenerator(componentGenerator);
+          result = caseIUGenerator(componentDefGenerator);
         }
         if (result == null)
         {
-          result = caseModelElement(componentGenerator);
+          result = caseModelElement(componentDefGenerator);
         }
         if (result == null)
         {
@@ -218,17 +223,111 @@ public class TargletSwitch<T> extends Switch<T>
         }
         return result;
       }
-      case TargletPackage.BUCKMINSTER_GENERATOR:
+      case TargletPackage.COMPONENT_EXT_GENERATOR:
       {
-        BuckminsterGenerator buckminsterGenerator = (BuckminsterGenerator)theEObject;
-        T result = caseBuckminsterGenerator(buckminsterGenerator);
+        ComponentExtGenerator componentExtGenerator = (ComponentExtGenerator)theEObject;
+        T result = caseComponentExtGenerator(componentExtGenerator);
         if (result == null)
         {
-          result = caseIUGenerator(buckminsterGenerator);
+          result = caseIUGenerator(componentExtGenerator);
         }
         if (result == null)
         {
-          result = caseModelElement(buckminsterGenerator);
+          result = caseModelElement(componentExtGenerator);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case TargletPackage.CSPEC_GENERATOR:
+      {
+        CSpecGenerator cSpecGenerator = (CSpecGenerator)theEObject;
+        T result = caseCSpecGenerator(cSpecGenerator);
+        if (result == null)
+        {
+          result = caseIUGenerator(cSpecGenerator);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(cSpecGenerator);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case TargletPackage.CSPEX_GENERATOR:
+      {
+        CSpexGenerator cSpexGenerator = (CSpexGenerator)theEObject;
+        T result = caseCSpexGenerator(cSpexGenerator);
+        if (result == null)
+        {
+          result = caseIUGenerator(cSpexGenerator);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(cSpexGenerator);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case TargletPackage.SITE_GENERATOR:
+      {
+        SiteGenerator siteGenerator = (SiteGenerator)theEObject;
+        T result = caseSiteGenerator(siteGenerator);
+        if (result == null)
+        {
+          result = caseIUGenerator(siteGenerator);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(siteGenerator);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case TargletPackage.CATEGORY_GENERATOR:
+      {
+        CategoryGenerator categoryGenerator = (CategoryGenerator)theEObject;
+        T result = caseCategoryGenerator(categoryGenerator);
+        if (result == null)
+        {
+          result = caseSiteGenerator(categoryGenerator);
+        }
+        if (result == null)
+        {
+          result = caseIUGenerator(categoryGenerator);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(categoryGenerator);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case TargletPackage.PRODUCT_GENERATOR:
+      {
+        ProductGenerator productGenerator = (ProductGenerator)theEObject;
+        T result = caseProductGenerator(productGenerator);
+        if (result == null)
+        {
+          result = caseIUGenerator(productGenerator);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(productGenerator);
         }
         if (result == null)
         {
@@ -372,33 +471,113 @@ public class TargletSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Component Generator</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Component Def Generator</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Component Generator</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Component Def Generator</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseComponentGenerator(ComponentGenerator object)
+  public T caseComponentDefGenerator(ComponentDefGenerator object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Buckminster Generator</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Component Ext Generator</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Buckminster Generator</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Component Ext Generator</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseBuckminsterGenerator(BuckminsterGenerator object)
+  public T caseComponentExtGenerator(ComponentExtGenerator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>CSpec Generator</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>CSpec Generator</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseCSpecGenerator(CSpecGenerator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>CSpex Generator</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>CSpex Generator</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseCSpexGenerator(CSpexGenerator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Site Generator</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Site Generator</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSiteGenerator(SiteGenerator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Category Generator</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Category Generator</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseCategoryGenerator(CategoryGenerator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Product Generator</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Product Generator</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseProductGenerator(ProductGenerator object)
   {
     return null;
   }

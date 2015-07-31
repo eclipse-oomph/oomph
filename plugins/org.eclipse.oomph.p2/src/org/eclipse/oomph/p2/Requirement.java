@@ -45,7 +45,11 @@ import java.util.Comparator;
  */
 public interface Requirement extends ModelElement
 {
-  Comparator<Requirement> COMPARATOR = new Comparator<Requirement>()
+  public static final String FEATURE_SUFFIX = ".feature.group";
+
+  public static final String PROJECT_SUFFIX = ".plain.project";
+
+  public static final Comparator<Requirement> COMPARATOR = new Comparator<Requirement>()
   {
     public int compare(Requirement o1, Requirement o2)
     {

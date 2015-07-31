@@ -296,53 +296,178 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory
   }
 
   /**
-   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.ComponentGenerator} instances.
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.ComponentDefGenerator} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ComponentGeneratorItemProvider componentGeneratorItemProvider;
+  protected ComponentDefGeneratorItemProvider componentDefGeneratorItemProvider;
 
   /**
-   * This creates an adapter for a {@link org.eclipse.oomph.targlets.ComponentGenerator}.
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.ComponentDefGenerator}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
   @Override
-  public Adapter createComponentGeneratorAdapter()
+  public Adapter createComponentDefGeneratorAdapter()
   {
-    if (componentGeneratorItemProvider == null)
+    if (componentDefGeneratorItemProvider == null)
     {
-      componentGeneratorItemProvider = new ComponentGeneratorItemProvider(this);
+      componentDefGeneratorItemProvider = new ComponentDefGeneratorItemProvider(this);
     }
 
-    return componentGeneratorItemProvider;
+    return componentDefGeneratorItemProvider;
   }
 
   /**
-   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.BuckminsterGenerator} instances.
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.ComponentExtGenerator} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected BuckminsterGeneratorItemProvider buckminsterGeneratorItemProvider;
+  protected ComponentExtGeneratorItemProvider componentExtGeneratorItemProvider;
 
   /**
-   * This creates an adapter for a {@link org.eclipse.oomph.targlets.BuckminsterGenerator}.
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.ComponentExtGenerator}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
   @Override
-  public Adapter createBuckminsterGeneratorAdapter()
+  public Adapter createComponentExtGeneratorAdapter()
   {
-    if (buckminsterGeneratorItemProvider == null)
+    if (componentExtGeneratorItemProvider == null)
     {
-      buckminsterGeneratorItemProvider = new BuckminsterGeneratorItemProvider(this);
+      componentExtGeneratorItemProvider = new ComponentExtGeneratorItemProvider(this);
     }
 
-    return buckminsterGeneratorItemProvider;
+    return componentExtGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.CSpecGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected CSpecGeneratorItemProvider cSpecGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.CSpecGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createCSpecGeneratorAdapter()
+  {
+    if (cSpecGeneratorItemProvider == null)
+    {
+      cSpecGeneratorItemProvider = new CSpecGeneratorItemProvider(this);
+    }
+
+    return cSpecGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.CSpexGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected CSpexGeneratorItemProvider cSpexGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.CSpexGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createCSpexGeneratorAdapter()
+  {
+    if (cSpexGeneratorItemProvider == null)
+    {
+      cSpexGeneratorItemProvider = new CSpexGeneratorItemProvider(this);
+    }
+
+    return cSpexGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.SiteGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected SiteGeneratorItemProvider siteGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.SiteGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createSiteGeneratorAdapter()
+  {
+    if (siteGeneratorItemProvider == null)
+    {
+      siteGeneratorItemProvider = new SiteGeneratorItemProvider(this);
+    }
+
+    return siteGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.CategoryGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected CategoryGeneratorItemProvider categoryGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.CategoryGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createCategoryGeneratorAdapter()
+  {
+    if (categoryGeneratorItemProvider == null)
+    {
+      categoryGeneratorItemProvider = new CategoryGeneratorItemProvider(this);
+    }
+
+    return categoryGeneratorItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.targlets.ProductGenerator} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ProductGeneratorItemProvider productGeneratorItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.targlets.ProductGenerator}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createProductGeneratorAdapter()
+  {
+    if (productGeneratorItemProvider == null)
+    {
+      productGeneratorItemProvider = new ProductGeneratorItemProvider(this);
+    }
+
+    return productGeneratorItemProvider;
   }
 
   /**
@@ -535,13 +660,33 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory
     {
       pluginGeneratorItemProvider.dispose();
     }
-    if (componentGeneratorItemProvider != null)
+    if (componentDefGeneratorItemProvider != null)
     {
-      componentGeneratorItemProvider.dispose();
+      componentDefGeneratorItemProvider.dispose();
     }
-    if (buckminsterGeneratorItemProvider != null)
+    if (componentExtGeneratorItemProvider != null)
     {
-      buckminsterGeneratorItemProvider.dispose();
+      componentExtGeneratorItemProvider.dispose();
+    }
+    if (cSpecGeneratorItemProvider != null)
+    {
+      cSpecGeneratorItemProvider.dispose();
+    }
+    if (cSpexGeneratorItemProvider != null)
+    {
+      cSpexGeneratorItemProvider.dispose();
+    }
+    if (siteGeneratorItemProvider != null)
+    {
+      siteGeneratorItemProvider.dispose();
+    }
+    if (categoryGeneratorItemProvider != null)
+    {
+      categoryGeneratorItemProvider.dispose();
+    }
+    if (productGeneratorItemProvider != null)
+    {
+      productGeneratorItemProvider.dispose();
     }
     if (projectNameGeneratorItemProvider != null)
     {
@@ -613,9 +758,19 @@ public class TargletItemProviderAdapterFactory extends TargletAdapterFactory
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createPluginGenerator()));
 
-        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createComponentGenerator()));
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createComponentDefGenerator()));
 
-        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createBuckminsterGenerator()));
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createComponentExtGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createCSpecGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createCSpexGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createSiteGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createCategoryGenerator()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createProductGenerator()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, TargletFactory.eINSTANCE.createProjectNameGenerator()));
 

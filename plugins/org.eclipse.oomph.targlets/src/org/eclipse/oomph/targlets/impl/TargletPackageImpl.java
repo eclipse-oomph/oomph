@@ -14,14 +14,19 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.oomph.resources.ResourcesPackage;
-import org.eclipse.oomph.targlets.BuckminsterGenerator;
+import org.eclipse.oomph.targlets.CSpecGenerator;
+import org.eclipse.oomph.targlets.CSpexGenerator;
+import org.eclipse.oomph.targlets.CategoryGenerator;
+import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
+import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
-import org.eclipse.oomph.targlets.ComponentGenerator;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
+import org.eclipse.oomph.targlets.ProductGenerator;
 import org.eclipse.oomph.targlets.ProjectNameGenerator;
+import org.eclipse.oomph.targlets.SiteGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.TargletFactory;
@@ -101,14 +106,49 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass componentGeneratorEClass = null;
+  private EClass componentDefGeneratorEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass buckminsterGeneratorEClass = null;
+  private EClass componentExtGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass cSpecGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass cSpexGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass siteGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass categoryGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass productGeneratorEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -406,19 +446,9 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getIUGenerator__GenerateIUs__IProject_String_Map()
+  public EOperation getIUGenerator__GenerateIUs__IProject_String_Map_EList()
   {
     return iuGeneratorEClass.getEOperations().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EOperation getIUGenerator__ModifyIU__IInstallableUnit_IProject_String_Map()
-  {
-    return iuGeneratorEClass.getEOperations().get(1);
   }
 
   /**
@@ -446,9 +476,9 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getComponentGenerator()
+  public EClass getComponentDefGenerator()
   {
-    return componentGeneratorEClass;
+    return componentDefGeneratorEClass;
   }
 
   /**
@@ -456,9 +486,9 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getBuckminsterGenerator()
+  public EClass getComponentExtGenerator()
   {
-    return buckminsterGeneratorEClass;
+    return componentExtGeneratorEClass;
   }
 
   /**
@@ -466,9 +496,49 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getBuckminsterGenerator_SaveAsComponent()
+  public EClass getCSpecGenerator()
   {
-    return (EAttribute)buckminsterGeneratorEClass.getEStructuralFeatures().get(0);
+    return cSpecGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getCSpexGenerator()
+  {
+    return cSpexGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSiteGenerator()
+  {
+    return siteGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getCategoryGenerator()
+  {
+    return categoryGeneratorEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getProductGenerator()
+  {
+    return productGeneratorEClass;
   }
 
   /**
@@ -558,17 +628,25 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEAttribute(componentDefinitionEClass, COMPONENT_DEFINITION__VERSION);
 
     iuGeneratorEClass = createEClass(IU_GENERATOR);
-    createEOperation(iuGeneratorEClass, IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP);
-    createEOperation(iuGeneratorEClass, IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP);
+    createEOperation(iuGeneratorEClass, IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST);
 
     featureGeneratorEClass = createEClass(FEATURE_GENERATOR);
 
     pluginGeneratorEClass = createEClass(PLUGIN_GENERATOR);
 
-    componentGeneratorEClass = createEClass(COMPONENT_GENERATOR);
+    componentDefGeneratorEClass = createEClass(COMPONENT_DEF_GENERATOR);
 
-    buckminsterGeneratorEClass = createEClass(BUCKMINSTER_GENERATOR);
-    createEAttribute(buckminsterGeneratorEClass, BUCKMINSTER_GENERATOR__SAVE_AS_COMPONENT);
+    componentExtGeneratorEClass = createEClass(COMPONENT_EXT_GENERATOR);
+
+    cSpecGeneratorEClass = createEClass(CSPEC_GENERATOR);
+
+    cSpexGeneratorEClass = createEClass(CSPEX_GENERATOR);
+
+    siteGeneratorEClass = createEClass(SITE_GENERATOR);
+
+    categoryGeneratorEClass = createEClass(CATEGORY_GENERATOR);
+
+    productGeneratorEClass = createEClass(PRODUCT_GENERATOR);
 
     projectNameGeneratorEClass = createEClass(PROJECT_NAME_GENERATOR);
 
@@ -622,8 +700,13 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     iuGeneratorEClass.getESuperTypes().add(theBasePackage.getModelElement());
     featureGeneratorEClass.getESuperTypes().add(getIUGenerator());
     pluginGeneratorEClass.getESuperTypes().add(getIUGenerator());
-    componentGeneratorEClass.getESuperTypes().add(getIUGenerator());
-    buckminsterGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    componentDefGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    componentExtGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    cSpecGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    cSpexGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    siteGeneratorEClass.getESuperTypes().add(getIUGenerator());
+    categoryGeneratorEClass.getESuperTypes().add(getSiteGenerator());
+    productGeneratorEClass.getESuperTypes().add(getIUGenerator());
     projectNameGeneratorEClass.getESuperTypes().add(getIUGenerator());
 
     // Initialize classes, features, and operations; add parameters
@@ -667,28 +750,30 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
 
     initEClass(iuGeneratorEClass, IUGenerator.class, "IUGenerator", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    EOperation op = initEOperation(getIUGenerator__GenerateIUs__IProject_String_Map(), getInstallableUnit(), "generateIUs", 0, -1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getIUGenerator__GenerateIUs__IProject_String_Map_EList(), null, "generateIUs", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, ecorePackage.getEString(), "qualifierReplacement", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getStringToVersionMap(), "iuVersions", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEException(op, theBasePackage.getException());
-
-    op = initEOperation(getIUGenerator__ModifyIU__IInstallableUnit_IProject_String_Map(), null, "modifyIU", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getInstallableUnit(), "iu", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "qualifierReplacement", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getStringToVersionMap(), "iuVersions", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getInstallableUnit(), "result", 0, -1, IS_UNIQUE, IS_ORDERED);
     addEException(op, theBasePackage.getException());
 
     initEClass(featureGeneratorEClass, FeatureGenerator.class, "FeatureGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(pluginGeneratorEClass, PluginGenerator.class, "PluginGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    initEClass(componentGeneratorEClass, ComponentGenerator.class, "ComponentGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(componentDefGeneratorEClass, ComponentDefGenerator.class, "ComponentDefGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    initEClass(buckminsterGeneratorEClass, BuckminsterGenerator.class, "BuckminsterGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getBuckminsterGenerator_SaveAsComponent(), ecorePackage.getEBoolean(), "saveAsComponent", null, 0, 1, BuckminsterGenerator.class,
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(componentExtGeneratorEClass, ComponentExtGenerator.class, "ComponentExtGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(cSpecGeneratorEClass, CSpecGenerator.class, "CSpecGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(cSpexGeneratorEClass, CSpexGenerator.class, "CSpexGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(siteGeneratorEClass, SiteGenerator.class, "SiteGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(categoryGeneratorEClass, CategoryGenerator.class, "CategoryGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(productGeneratorEClass, ProductGenerator.class, "ProductGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(projectNameGeneratorEClass, ProjectNameGenerator.class, "ProjectNameGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

@@ -443,16 +443,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
-
-  /**
-   * The operation id for the '<em>Modify IU</em>' operation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
+  int IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
   /**
    * The number of operations of the '<em>IU Generator</em>' class.
@@ -461,7 +452,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int IU_GENERATOR_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 2;
+  int IU_GENERATOR_OPERATION_COUNT = BasePackage.MODEL_ELEMENT_OPERATION_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.FeatureGeneratorImpl <em>Feature Generator</em>}' class.
@@ -507,16 +498,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FEATURE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
-
-  /**
-   * The operation id for the '<em>Modify IU</em>' operation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FEATURE_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP;
+  int FEATURE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
 
   /**
    * The number of operations of the '<em>Feature Generator</em>' class.
@@ -571,16 +553,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PLUGIN_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
-
-  /**
-   * The operation id for the '<em>Modify IU</em>' operation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PLUGIN_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP;
+  int PLUGIN_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
 
   /**
    * The number of operations of the '<em>Plugin Generator</em>' class.
@@ -592,14 +565,14 @@ public interface TargletPackage extends EPackage
   int PLUGIN_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
 
   /**
-   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.ComponentGeneratorImpl <em>Component Generator</em>}' class.
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.ComponentDefGeneratorImpl <em>Component Def Generator</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.targlets.impl.ComponentGeneratorImpl
-   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentGenerator()
+   * @see org.eclipse.oomph.targlets.impl.ComponentDefGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentDefGenerator()
    * @generated
    */
-  int COMPONENT_GENERATOR = 7;
+  int COMPONENT_DEF_GENERATOR = 7;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -608,16 +581,16 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMPONENT_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
+  int COMPONENT_DEF_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
 
   /**
-   * The number of structural features of the '<em>Component Generator</em>' class.
+   * The number of structural features of the '<em>Component Def Generator</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COMPONENT_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
+  int COMPONENT_DEF_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -626,7 +599,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMPONENT_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
+  int COMPONENT_DEF_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
 
   /**
    * The operation id for the '<em>Generate IUs</em>' operation.
@@ -635,35 +608,26 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMPONENT_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
+  int COMPONENT_DEF_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
 
   /**
-   * The operation id for the '<em>Modify IU</em>' operation.
+   * The number of operations of the '<em>Component Def Generator</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COMPONENT_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP;
+  int COMPONENT_DEF_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
 
   /**
-   * The number of operations of the '<em>Component Generator</em>' class.
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.ComponentExtGeneratorImpl <em>Component Ext Generator</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int COMPONENT_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.BuckminsterGeneratorImpl <em>Buckminster Generator</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.targlets.impl.BuckminsterGeneratorImpl
-   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getBuckminsterGenerator()
+   * @see org.eclipse.oomph.targlets.impl.ComponentExtGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentExtGenerator()
    * @generated
    */
-  int BUCKMINSTER_GENERATOR = 8;
+  int COMPONENT_EXT_GENERATOR = 8;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -672,25 +636,16 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BUCKMINSTER_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
+  int COMPONENT_EXT_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
 
   /**
-   * The feature id for the '<em><b>Save As Component</b></em>' attribute.
+   * The number of structural features of the '<em>Component Ext Generator</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BUCKMINSTER_GENERATOR__SAVE_AS_COMPONENT = IU_GENERATOR_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Buckminster Generator</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BUCKMINSTER_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 1;
+  int COMPONENT_EXT_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -699,7 +654,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BUCKMINSTER_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
+  int COMPONENT_EXT_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
 
   /**
    * The operation id for the '<em>Generate IUs</em>' operation.
@@ -708,25 +663,291 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BUCKMINSTER_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
+  int COMPONENT_EXT_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
 
   /**
-   * The operation id for the '<em>Modify IU</em>' operation.
+   * The number of operations of the '<em>Component Ext Generator</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BUCKMINSTER_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP;
+  int COMPONENT_EXT_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
 
   /**
-   * The number of operations of the '<em>Buckminster Generator</em>' class.
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.CSpecGeneratorImpl <em>CSpec Generator</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.CSpecGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getCSpecGenerator()
+   * @generated
+   */
+  int CSPEC_GENERATOR = 9;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BUCKMINSTER_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
+  int CSPEC_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
+
+  /**
+   * The number of structural features of the '<em>CSpec Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEC_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEC_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Generate IUs</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEC_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
+
+  /**
+   * The number of operations of the '<em>CSpec Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEC_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.CSpexGeneratorImpl <em>CSpex Generator</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.CSpexGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getCSpexGenerator()
+   * @generated
+   */
+  int CSPEX_GENERATOR = 10;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEX_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
+
+  /**
+   * The number of structural features of the '<em>CSpex Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEX_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEX_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Generate IUs</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEX_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
+
+  /**
+   * The number of operations of the '<em>CSpex Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CSPEX_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.SiteGeneratorImpl <em>Site Generator</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.SiteGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getSiteGenerator()
+   * @generated
+   */
+  int SITE_GENERATOR = 11;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SITE_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
+
+  /**
+   * The number of structural features of the '<em>Site Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SITE_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SITE_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Generate IUs</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SITE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
+
+  /**
+   * The number of operations of the '<em>Site Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SITE_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.CategoryGeneratorImpl <em>Category Generator</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.CategoryGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getCategoryGenerator()
+   * @generated
+   */
+  int CATEGORY_GENERATOR = 12;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORY_GENERATOR__ANNOTATIONS = SITE_GENERATOR__ANNOTATIONS;
+
+  /**
+   * The number of structural features of the '<em>Category Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORY_GENERATOR_FEATURE_COUNT = SITE_GENERATOR_FEATURE_COUNT + 0;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORY_GENERATOR___GET_ANNOTATION__STRING = SITE_GENERATOR___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Generate IUs</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORY_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = SITE_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
+
+  /**
+   * The number of operations of the '<em>Category Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CATEGORY_GENERATOR_OPERATION_COUNT = SITE_GENERATOR_OPERATION_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.ProductGeneratorImpl <em>Product Generator</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.ProductGeneratorImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getProductGenerator()
+   * @generated
+   */
+  int PRODUCT_GENERATOR = 13;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_GENERATOR__ANNOTATIONS = IU_GENERATOR__ANNOTATIONS;
+
+  /**
+   * The number of structural features of the '<em>Product Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_GENERATOR_FEATURE_COUNT = IU_GENERATOR_FEATURE_COUNT + 0;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_GENERATOR___GET_ANNOTATION__STRING = IU_GENERATOR___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Generate IUs</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
+
+  /**
+   * The number of operations of the '<em>Product Generator</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRODUCT_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.ProjectNameGeneratorImpl <em>Project Name Generator</em>}' class.
@@ -736,7 +957,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getProjectNameGenerator()
    * @generated
    */
-  int PROJECT_NAME_GENERATOR = 9;
+  int PROJECT_NAME_GENERATOR = 14;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -772,16 +993,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECT_NAME_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP;
-
-  /**
-   * The operation id for the '<em>Modify IU</em>' operation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROJECT_NAME_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP;
+  int PROJECT_NAME_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST;
 
   /**
    * The number of operations of the '<em>Project Name Generator</em>' class.
@@ -800,7 +1012,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getInstallableUnit()
    * @generated
    */
-  int INSTALLABLE_UNIT = 10;
+  int INSTALLABLE_UNIT = 15;
 
   /**
    * The meta object id for the '<em>String To Version Map</em>' data type.
@@ -810,7 +1022,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getStringToVersionMap()
    * @generated
    */
-  int STRING_TO_VERSION_MAP = 11;
+  int STRING_TO_VERSION_MAP = 16;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.TargletContainer <em>Container</em>}'.
@@ -1028,24 +1240,14 @@ public interface TargletPackage extends EPackage
   EClass getIUGenerator();
 
   /**
-   * Returns the meta object for the '{@link org.eclipse.oomph.targlets.IUGenerator#generateIUs(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map) <em>Generate IUs</em>}' operation.
+   * Returns the meta object for the '{@link org.eclipse.oomph.targlets.IUGenerator#generateIUs(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map, org.eclipse.emf.common.util.EList) <em>Generate IUs</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the '<em>Generate IUs</em>' operation.
-   * @see org.eclipse.oomph.targlets.IUGenerator#generateIUs(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map)
+   * @see org.eclipse.oomph.targlets.IUGenerator#generateIUs(org.eclipse.core.resources.IProject, java.lang.String, java.util.Map, org.eclipse.emf.common.util.EList)
    * @generated
    */
-  EOperation getIUGenerator__GenerateIUs__IProject_String_Map();
-
-  /**
-   * Returns the meta object for the '{@link org.eclipse.oomph.targlets.IUGenerator#modifyIU(org.eclipse.equinox.p2.metadata.IInstallableUnit, org.eclipse.core.resources.IProject, java.lang.String, java.util.Map) <em>Modify IU</em>}' operation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the '<em>Modify IU</em>' operation.
-   * @see org.eclipse.oomph.targlets.IUGenerator#modifyIU(org.eclipse.equinox.p2.metadata.IInstallableUnit, org.eclipse.core.resources.IProject, java.lang.String, java.util.Map)
-   * @generated
-   */
-  EOperation getIUGenerator__ModifyIU__IInstallableUnit_IProject_String_Map();
+  EOperation getIUGenerator__GenerateIUs__IProject_String_Map_EList();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.FeatureGenerator <em>Feature Generator</em>}'.
@@ -1068,35 +1270,74 @@ public interface TargletPackage extends EPackage
   EClass getPluginGenerator();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ComponentGenerator <em>Component Generator</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ComponentDefGenerator <em>Component Def Generator</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Component Generator</em>'.
-   * @see org.eclipse.oomph.targlets.ComponentGenerator
+   * @return the meta object for class '<em>Component Def Generator</em>'.
+   * @see org.eclipse.oomph.targlets.ComponentDefGenerator
    * @generated
    */
-  EClass getComponentGenerator();
+  EClass getComponentDefGenerator();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.BuckminsterGenerator <em>Buckminster Generator</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ComponentExtGenerator <em>Component Ext Generator</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Buckminster Generator</em>'.
-   * @see org.eclipse.oomph.targlets.BuckminsterGenerator
+   * @return the meta object for class '<em>Component Ext Generator</em>'.
+   * @see org.eclipse.oomph.targlets.ComponentExtGenerator
    * @generated
    */
-  EClass getBuckminsterGenerator();
+  EClass getComponentExtGenerator();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.BuckminsterGenerator#isSaveAsComponent <em>Save As Component</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.CSpecGenerator <em>CSpec Generator</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Save As Component</em>'.
-   * @see org.eclipse.oomph.targlets.BuckminsterGenerator#isSaveAsComponent()
-   * @see #getBuckminsterGenerator()
+   * @return the meta object for class '<em>CSpec Generator</em>'.
+   * @see org.eclipse.oomph.targlets.CSpecGenerator
    * @generated
    */
-  EAttribute getBuckminsterGenerator_SaveAsComponent();
+  EClass getCSpecGenerator();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.CSpexGenerator <em>CSpex Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>CSpex Generator</em>'.
+   * @see org.eclipse.oomph.targlets.CSpexGenerator
+   * @generated
+   */
+  EClass getCSpexGenerator();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.SiteGenerator <em>Site Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Site Generator</em>'.
+   * @see org.eclipse.oomph.targlets.SiteGenerator
+   * @generated
+   */
+  EClass getSiteGenerator();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.CategoryGenerator <em>Category Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Category Generator</em>'.
+   * @see org.eclipse.oomph.targlets.CategoryGenerator
+   * @generated
+   */
+  EClass getCategoryGenerator();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ProductGenerator <em>Product Generator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Product Generator</em>'.
+   * @see org.eclipse.oomph.targlets.ProductGenerator
+   * @generated
+   */
+  EClass getProductGenerator();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ProjectNameGenerator <em>Project Name Generator</em>}'.
@@ -1330,15 +1571,7 @@ public interface TargletPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EOperation IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP = eINSTANCE.getIUGenerator__GenerateIUs__IProject_String_Map();
-
-    /**
-     * The meta object literal for the '<em><b>Modify IU</b></em>' operation.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EOperation IU_GENERATOR___MODIFY_IU__IINSTALLABLEUNIT_IPROJECT_STRING_MAP = eINSTANCE.getIUGenerator__ModifyIU__IInstallableUnit_IProject_String_Map();
+    EOperation IU_GENERATOR___GENERATE_IUS__IPROJECT_STRING_MAP_ELIST = eINSTANCE.getIUGenerator__GenerateIUs__IProject_String_Map_EList();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.FeatureGeneratorImpl <em>Feature Generator</em>}' class.
@@ -1361,32 +1594,74 @@ public interface TargletPackage extends EPackage
     EClass PLUGIN_GENERATOR = eINSTANCE.getPluginGenerator();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ComponentGeneratorImpl <em>Component Generator</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ComponentDefGeneratorImpl <em>Component Def Generator</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.targlets.impl.ComponentGeneratorImpl
-     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentGenerator()
+     * @see org.eclipse.oomph.targlets.impl.ComponentDefGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentDefGenerator()
      * @generated
      */
-    EClass COMPONENT_GENERATOR = eINSTANCE.getComponentGenerator();
+    EClass COMPONENT_DEF_GENERATOR = eINSTANCE.getComponentDefGenerator();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.BuckminsterGeneratorImpl <em>Buckminster Generator</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ComponentExtGeneratorImpl <em>Component Ext Generator</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.targlets.impl.BuckminsterGeneratorImpl
-     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getBuckminsterGenerator()
+     * @see org.eclipse.oomph.targlets.impl.ComponentExtGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getComponentExtGenerator()
      * @generated
      */
-    EClass BUCKMINSTER_GENERATOR = eINSTANCE.getBuckminsterGenerator();
+    EClass COMPONENT_EXT_GENERATOR = eINSTANCE.getComponentExtGenerator();
 
     /**
-     * The meta object literal for the '<em><b>Save As Component</b></em>' attribute feature.
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.CSpecGeneratorImpl <em>CSpec Generator</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.CSpecGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getCSpecGenerator()
      * @generated
      */
-    EAttribute BUCKMINSTER_GENERATOR__SAVE_AS_COMPONENT = eINSTANCE.getBuckminsterGenerator_SaveAsComponent();
+    EClass CSPEC_GENERATOR = eINSTANCE.getCSpecGenerator();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.CSpexGeneratorImpl <em>CSpex Generator</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.CSpexGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getCSpexGenerator()
+     * @generated
+     */
+    EClass CSPEX_GENERATOR = eINSTANCE.getCSpexGenerator();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.SiteGeneratorImpl <em>Site Generator</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.SiteGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getSiteGenerator()
+     * @generated
+     */
+    EClass SITE_GENERATOR = eINSTANCE.getSiteGenerator();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.CategoryGeneratorImpl <em>Category Generator</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.CategoryGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getCategoryGenerator()
+     * @generated
+     */
+    EClass CATEGORY_GENERATOR = eINSTANCE.getCategoryGenerator();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ProductGeneratorImpl <em>Product Generator</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.ProductGeneratorImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getProductGenerator()
+     * @generated
+     */
+    EClass PRODUCT_GENERATOR = eINSTANCE.getProductGenerator();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ProjectNameGeneratorImpl <em>Project Name Generator</em>}' class.

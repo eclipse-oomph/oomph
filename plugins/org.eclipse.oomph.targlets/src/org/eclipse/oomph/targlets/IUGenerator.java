@@ -33,24 +33,25 @@ import java.util.Map;
  */
 public interface IUGenerator extends ModelElement
 {
-  public static final EList<IUGenerator> DEFAULTS = ECollections.asEList(TargletFactory.eINSTANCE.createPluginGenerator(),
-      TargletFactory.eINSTANCE.createFeatureGenerator(), TargletFactory.eINSTANCE.createComponentGenerator(),
-      TargletFactory.eINSTANCE.createProjectNameGenerator());
+  public static final EList<IUGenerator> DEFAULTS = ECollections.asEList(//
+      TargletFactory.eINSTANCE.createPluginGenerator(), //
+      TargletFactory.eINSTANCE.createFeatureGenerator(), //
+      TargletFactory.eINSTANCE.createCategoryGenerator(), //
+      TargletFactory.eINSTANCE.createSiteGenerator(), //
+      TargletFactory.eINSTANCE.createProductGenerator(), //
+      TargletFactory.eINSTANCE.createComponentDefGenerator(), //
+      TargletFactory.eINSTANCE.createCSpecGenerator(), //
+      TargletFactory.eINSTANCE.createProjectNameGenerator(), //
+      TargletFactory.eINSTANCE.createComponentExtGenerator(), //
+      TargletFactory.eINSTANCE.createCSpexGenerator() //
+  );
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model dataType="org.eclipse.oomph.targlets.InstallableUnit" exceptions="org.eclipse.oomph.base.Exception" projectDataType="org.eclipse.oomph.predicates.Project" iuVersionsDataType="org.eclipse.oomph.targlets.StringToVersionMap"
+   * @model exceptions="org.eclipse.oomph.base.Exception" projectDataType="org.eclipse.oomph.predicates.Project" iuVersionsDataType="org.eclipse.oomph.targlets.StringToVersionMap" resultDataType="org.eclipse.oomph.targlets.InstallableUnit" resultMany="true"
    * @generated
    */
-  EList<IInstallableUnit> generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @model exceptions="org.eclipse.oomph.base.Exception" iuDataType="org.eclipse.oomph.targlets.InstallableUnit" projectDataType="org.eclipse.oomph.predicates.Project" iuVersionsDataType="org.eclipse.oomph.targlets.StringToVersionMap"
-   * @generated
-   */
-  void modifyIU(IInstallableUnit iu, IProject project, String qualifierReplacement, Map<String, Version> iuVersions) throws Exception;
+  void generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions, EList<IInstallableUnit> result) throws Exception;
 
 } // InstallableUnitGenerator

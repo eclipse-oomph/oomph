@@ -335,7 +335,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
   public boolean isFeature()
   {
     String id = getName();
-    return id != null && id.endsWith(".feature.group");
+    return id != null && id.endsWith(FEATURE_SUFFIX);
   }
 
   /**
@@ -525,7 +525,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         String id = getName();
         if (id != null)
         {
-          setName(id + ".feature.group");
+          setName(id + FEATURE_SUFFIX);
           remove = true;
         }
       }

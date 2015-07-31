@@ -1,12 +1,4 @@
-/*
- * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *    Eike Stepper - initial API and implementation
+/**
  */
 package org.eclipse.oomph.targlets.provider;
 
@@ -20,12 +12,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.oomph.targlets.ComponentGenerator} object.
+ * This is the item provider adapter for a {@link org.eclipse.oomph.targlets.ComponentExtGenerator} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ComponentGeneratorItemProvider extends ModelElementItemProvider
+public class ComponentExtGeneratorItemProvider extends ModelElementItemProvider
 {
   /**
    * This constructs an instance from a factory and a notifier.
@@ -33,7 +25,7 @@ public class ComponentGeneratorItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  public ComponentGeneratorItemProvider(AdapterFactory adapterFactory)
+  public ComponentExtGeneratorItemProvider(AdapterFactory adapterFactory)
   {
     super(adapterFactory);
   }
@@ -56,7 +48,7 @@ public class ComponentGeneratorItemProvider extends ModelElementItemProvider
   }
 
   /**
-   * This returns ComponentGenerator.gif.
+   * This returns ComponentExtGenerator.gif.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -64,7 +56,7 @@ public class ComponentGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ComponentGenerator"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ComponentExtGenerator"));
   }
 
   /**
@@ -87,7 +79,7 @@ public class ComponentGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_ComponentGenerator_type");
+    return getString("_UI_ComponentExtGenerator_type");
   }
 
   /**

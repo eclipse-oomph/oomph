@@ -44,8 +44,6 @@ public class RequirementItemProvider extends ModelElementItemProvider
 {
   public static final String NAMESPACE_PACKAGE_ID = "java.package";
 
-  private static final String FEATURE_SUFFIX = ".feature.group";
-
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -281,9 +279,9 @@ public class RequirementItemProvider extends ModelElementItemProvider
     }
     else
     {
-      if (label.endsWith(FEATURE_SUFFIX))
+      if (label.endsWith(Requirement.FEATURE_SUFFIX))
       {
-        label = label.substring(0, label.length() - FEATURE_SUFFIX.length());
+        label = label.substring(0, label.length() - Requirement.FEATURE_SUFFIX.length());
       }
     }
 

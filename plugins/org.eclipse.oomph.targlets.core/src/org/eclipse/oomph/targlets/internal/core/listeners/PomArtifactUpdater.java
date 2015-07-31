@@ -12,6 +12,7 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
@@ -106,9 +107,9 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
               if (!skipArtifactIDs)
               {
                 String newID = iu.getId();
-                if (newID.endsWith(".feature.group"))
+                if (newID.endsWith(Requirement.FEATURE_SUFFIX))
                 {
-                  newID = newID.substring(0, newID.length() - ".feature.group".length());
+                  newID = newID.substring(0, newID.length() - Requirement.FEATURE_SUFFIX.length());
                 }
 
                 ElementUpdater artifactIDUpdater = new ElementUpdater(rootElement, "artifactId");

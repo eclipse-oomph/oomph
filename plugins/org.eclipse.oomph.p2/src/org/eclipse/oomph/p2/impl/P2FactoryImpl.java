@@ -198,6 +198,24 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return requirement;
   }
 
+  public Requirement createRequirement(String id, Version version)
+  {
+    if (version == null)
+    {
+      version = Version.emptyVersion;
+    }
+
+    VersionRange versionRange = createVersionRange(version, VersionSegment.MICRO);
+    return createRequirement(id, versionRange);
+  }
+
+  public Requirement createRequirement(String id, Version version, boolean optional)
+  {
+    Requirement requirement = createRequirement(id, version);
+    requirement.setOptional(optional);
+    return requirement;
+  }
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -304,7 +322,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
 
   public VersionRange createVersionRange(Version version, VersionSegment segment, boolean compatible)
   {
-    if (version.equals(Version.emptyVersion))
+    if (version == null || version.equals(Version.emptyVersion))
     {
       return VersionRange.emptyRange;
     }

@@ -66,6 +66,10 @@ public interface P2Factory extends EFactory
 
   Requirement createRequirement(String id, VersionRange versionRange, boolean optional);
 
+  Requirement createRequirement(String id, Version version);
+
+  Requirement createRequirement(String id, Version version, boolean optional);
+
   /**
    * Returns a new object of class '<em>Repository List</em>'.
    * <!-- begin-user-doc -->

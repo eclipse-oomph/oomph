@@ -20,7 +20,7 @@ import java.util.Dictionary;
  * This is a NOOP implementation of {@link PluginConverter} that's registered as a service with very low ranking.
  * <p>
  * The purpose is to prevent errors from being logged in BundlesAction.convertPluginManifest() if no PluginConverter service is registered.
- * That method is indirectly called from {@link PluginGeneratorImpl#generateIUs(org.eclipse.core.resources.IProject, String, java.util.Map) PluginGeneratorImpl#generateIUs()}
+ * That method is indirectly called from {@link PluginGeneratorImpl#generateIUs(org.eclipse.core.resources.IProject, String, java.util.Map, org.eclipse.emf.common.util.EList) PluginGeneratorImpl#generateIUs()}
  * if a project contains a JAR manifest that is <b>not</b> an OSGi bundle manifest.
  *
  * @author Eike Stepper

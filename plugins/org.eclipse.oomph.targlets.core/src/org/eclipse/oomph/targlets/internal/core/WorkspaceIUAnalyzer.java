@@ -22,6 +22,7 @@ import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.core.resources.IProject;
@@ -96,7 +97,7 @@ public class WorkspaceIUAnalyzer
     return status;
   }
 
-  public void analyze(SourceLocator sourceLocator, final EList<IUGenerator> iuGenerators, IProgressMonitor monitor)
+  public void analyze(SourceLocator sourceLocator, final EList<IUGenerator> generators, IProgressMonitor monitor)
   {
     sourceLocator.handleProjects(EclipseProjectFactory.LIST, new ProjectHandler()
     {
@@ -104,20 +105,13 @@ public class WorkspaceIUAnalyzer
       {
         try
         {
-          EList<IInstallableUnit> installableUnits = null;
-          IUGenerator generator = null;
+          EList<IInstallableUnit> ius = new BasicEList<IInstallableUnit>();
 
-          for (IUGenerator iuGenerator : iuGenerators)
+          for (IUGenerator generator : generators)
           {
             try
             {
-              EList<IInstallableUnit> ius = iuGenerator.generateIUs(project, qualifierReplacement, iuVersions);
-              if (ius != null && !ius.isEmpty())
-              {
-                installableUnits = ius;
-                generator = iuGenerator;
-                break;
-              }
+              generator.generateIUs(project, qualifierReplacement, iuVersions, ius);
             }
             catch (Exception ex)
             {
@@ -125,47 +119,25 @@ public class WorkspaceIUAnalyzer
             }
           }
 
-          if (installableUnits != null)
+          boolean main = true;
+          for (IInstallableUnit iu : ius)
           {
-            for (IInstallableUnit installableUnit : installableUnits)
+            if (iu instanceof InstallableUnit)
             {
-              if (installableUnit instanceof InstallableUnit)
-              {
-                ((InstallableUnit)installableUnit).setProperty(IU_PROPERTY_WORKSPACE, Boolean.TRUE.toString());
-              }
+              ((InstallableUnit)iu).setProperty(IU_PROPERTY_WORKSPACE, Boolean.TRUE.toString());
             }
 
-            for (IUGenerator iuModifier : iuGenerators)
+            adjustOmniRootRequirements(iu);
+
+            WorkspaceIUInfo info = null;
+            if (main)
             {
-              if (iuModifier != generator)
-              {
-                try
-                {
-                  IInstallableUnit mainIU = installableUnits.get(0);
-                  iuModifier.modifyIU(mainIU, project, qualifierReplacement, iuVersions);
-                }
-                catch (Exception ex)
-                {
-                  log(project, ex);
-                }
-              }
+              String projectName = project.getName();
+              info = new WorkspaceIUInfo(backendContainer, projectName);
+              main = false;
             }
 
-            boolean main = true;
-            for (IInstallableUnit installableUnit : installableUnits)
-            {
-              adjustOmniRootRequirements(installableUnit);
-
-              WorkspaceIUInfo info = null;
-              if (main)
-              {
-                String projectName = project.getName();
-                info = new WorkspaceIUInfo(backendContainer, projectName);
-                main = false;
-              }
-
-              workspaceIUInfos.put(installableUnit, info);
-            }
+            workspaceIUInfos.put(iu, info);
           }
         }
         catch (Exception ex)
