@@ -111,6 +111,10 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
                 {
                   newID = newID.substring(0, newID.length() - Requirement.FEATURE_SUFFIX.length());
                 }
+                else if (newID.endsWith(Requirement.PROJECT_SUFFIX))
+                {
+                  newID = newID.substring(0, newID.length() - Requirement.PROJECT_SUFFIX.length());
+                }
 
                 ElementUpdater artifactIDUpdater = new ElementUpdater(rootElement, "artifactId");
                 newContents = artifactIDUpdater.update(newContents, newID);
