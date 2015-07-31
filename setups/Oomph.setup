@@ -243,31 +243,17 @@
           </detail>
         </annotation>
         <requirement
-            name="org.eclipse.oomph.all.feature.group"/>
-        <requirement
-            name="org.eclipse.oomph.license.feature.group"/>
-        <requirement
-            name="org.eclipse.oomph.setup.installer.feature.group"/>
+            name="org.eclipse.oomph.site"/>
         <requirement
             name="org.eclipse.oomph.setup.installer.product"/>
         <requirement
-            name="org.eclipse.oomph.setup.tests"/>
-        <requirement
-            name="org.eclipse.oomph.p2.tests"/>
-        <requirement
-            name="org.eclipse.oomph.targlets.tests"/>
-        <requirement
-            name="org.eclipse.oomph.version.tests"/>
-        <requirement
-            name="org.eclipse.oomph.parent"/>
-        <requirement
-            name="org.eclipse.oomph.releng"/>
-        <requirement
             name="org.eclipse.oomph.releng.helpcenter"/>
         <requirement
-            name="org.eclipse.oomph.site"/>
+            name="org.eclipse.oomph.releng.plain.project"/>
         <requirement
-            name="setups"/>
+            name="org.eclipse.oomph.parent.plain.project"/>
+        <requirement
+            name="setups.plain.project"/>
         <sourceLocator
             rootFolder="${git.clone.oomph.location}">
           <projectFactory
