@@ -33,8 +33,8 @@ import java.util.Comparator;
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getNamespace <em>Namespace</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isOptional <em>Optional</em>}</li>
- *   <li>{@link org.eclipse.oomph.p2.Requirement#isFeature <em>Feature</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getFilter <em>Filter</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#getType <em>Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.p2.P2Package#getRequirement()
@@ -187,21 +187,6 @@ public interface Requirement extends ModelElement
   void setOptional(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Feature</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Feature</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Feature</em>' attribute.
-   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Feature()
-   * @model transient="true" changeable="false" volatile="true" derived="true"
-   * @generated
-   */
-  boolean isFeature();
-
-  /**
    * Returns the value of the '<em><b>Filter</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
@@ -226,6 +211,23 @@ public interface Requirement extends ModelElement
    * @generated
    */
   void setFilter(String value);
+
+  /**
+   * Returns the value of the '<em><b>Type</b></em>' attribute.
+   * The literals are from the enumeration {@link org.eclipse.oomph.p2.RequirementType}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Type</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Type</em>' attribute.
+   * @see org.eclipse.oomph.p2.RequirementType
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Type()
+   * @model transient="true" changeable="false" volatile="true" derived="true"
+   * @generated
+   */
+  RequirementType getType();
 
   IMatchExpression<IInstallableUnit> getMatchExpression();
 

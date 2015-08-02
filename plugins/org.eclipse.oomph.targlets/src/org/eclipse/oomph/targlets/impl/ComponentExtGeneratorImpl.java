@@ -6,6 +6,7 @@ import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.RequirementType;
 import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -136,7 +137,7 @@ public class ComponentExtGeneratorImpl extends ModelElementImpl implements Compo
         VersionRange versionRange = requirement.getVersionRange();
 
         String namespace;
-        if (requirement.isFeature())
+        if (requirement.getType() != RequirementType.NONE)
         {
           namespace = IInstallableUnit.NAMESPACE_IU_ID;
         }

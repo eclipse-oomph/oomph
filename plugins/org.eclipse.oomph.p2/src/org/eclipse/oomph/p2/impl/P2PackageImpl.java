@@ -19,6 +19,7 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.RepositoryType;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.RequirementType;
 import org.eclipse.oomph.p2.VersionSegment;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -89,6 +90,13 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * @generated
    */
   private EEnum versionSegmentEEnum = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EEnum requirementTypeEEnum = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -338,7 +346,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRequirement_Feature()
+  public EAttribute getRequirement_Filter()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(5);
   }
@@ -348,7 +356,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRequirement_Filter()
+  public EAttribute getRequirement_Type()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(6);
   }
@@ -448,6 +456,16 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  public EEnum getRequirementType()
+  {
+    return requirementTypeEEnum;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getVersion()
   {
     return versionEDataType;
@@ -514,8 +532,8 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     createEAttribute(requirementEClass, REQUIREMENT__NAMESPACE);
     createEAttribute(requirementEClass, REQUIREMENT__VERSION_RANGE);
     createEAttribute(requirementEClass, REQUIREMENT__OPTIONAL);
-    createEAttribute(requirementEClass, REQUIREMENT__FEATURE);
     createEAttribute(requirementEClass, REQUIREMENT__FILTER);
+    createEAttribute(requirementEClass, REQUIREMENT__TYPE);
     createEOperation(requirementEClass, REQUIREMENT___SET_VERSION_RANGE__VERSION_VERSIONSEGMENT);
 
     repositoryListEClass = createEClass(REPOSITORY_LIST);
@@ -529,6 +547,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     // Create enums
     repositoryTypeEEnum = createEEnum(REPOSITORY_TYPE);
     versionSegmentEEnum = createEEnum(VERSION_SEGMENT);
+    requirementTypeEEnum = createEEnum(REQUIREMENT_TYPE);
 
     // Create data types
     versionEDataType = createEDataType(VERSION);
@@ -610,10 +629,10 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRequirement_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Feature(), ecorePackage.getEBoolean(), "feature", null, 0, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getRequirement_Filter(), ecorePackage.getEString(), "filter", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRequirement_Type(), getRequirementType(), "type", null, 0, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     op = initEOperation(getRequirement__SetVersionRange__Version_VersionSegment(), null, "setVersionRange", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getVersion(), "version", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -642,6 +661,11 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     addEEnumLiteral(versionSegmentEEnum, VersionSegment.MINOR);
     addEEnumLiteral(versionSegmentEEnum, VersionSegment.MICRO);
     addEEnumLiteral(versionSegmentEEnum, VersionSegment.QUALIFIER);
+
+    initEEnum(requirementTypeEEnum, RequirementType.class, "RequirementType");
+    addEEnumLiteral(requirementTypeEEnum, RequirementType.NONE);
+    addEEnumLiteral(requirementTypeEEnum, RequirementType.FEATURE);
+    addEEnumLiteral(requirementTypeEEnum, RequirementType.PROJECT);
 
     // Initialize data types
     initEDataType(versionEDataType, Version.class, "Version", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

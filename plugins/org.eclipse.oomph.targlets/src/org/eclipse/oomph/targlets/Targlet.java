@@ -37,6 +37,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getActiveRepositories <em>Active Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet()
@@ -250,5 +251,32 @@ public interface Targlet extends ModelElement
    * @generated
    */
   void setIncludeAllPlatforms(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Include All Requirements</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Include All Requirements</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Include All Requirements</em>' attribute.
+   * @see #setIncludeAllRequirements(boolean)
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_IncludeAllRequirements()
+   * @model default="true"
+   * @generated
+   */
+  boolean isIncludeAllRequirements();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements <em>Include All Requirements</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Include All Requirements</em>' attribute.
+   * @see #isIncludeAllRequirements()
+   * @generated
+   */
+  void setIncludeAllRequirements(boolean value);
 
 } // Targlet

@@ -15,6 +15,7 @@ import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.targlets.PluginGenerator;
 import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -25,16 +26,20 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.publisher.PublisherInfo;
 import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.JarFile;
 
@@ -146,7 +151,30 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
       IInstallableUnit iu = createBundleIU(description, null, info);
       if (iu instanceof InstallableUnit)
       {
-        ((InstallableUnit)iu).setArtifacts(new IArtifactKey[0]);
+        InstallableUnit installableUnit = (InstallableUnit)iu;
+        installableUnit.setArtifacts(new IArtifactKey[0]);
+
+        File buildPropertiesFile = new File(projectFolder, "build.properties");
+        if (buildPropertiesFile.exists())
+        {
+          Map<String, String> properties = PropertiesUtil.loadProperties(buildPropertiesFile);
+          String additionalBundles = properties.get("additional.bundles");
+          if (additionalBundles != null)
+          {
+            List<IRequirement> additionalRequirements = new ArrayList<IRequirement>();
+            for (String bundle : additionalBundles.trim().split("\\s*,\\s*"))
+            {
+              additionalRequirements
+                  .add(MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, bundle, VersionRange.emptyRange, null, false, false, true));
+            }
+
+            if (!additionalRequirements.isEmpty())
+            {
+              additionalRequirements.addAll(0, installableUnit.getRequirements());
+              installableUnit.setRequiredCapabilities(additionalRequirements.toArray(new IRequirement[additionalRequirements.size()]));
+            }
+          }
+        }
       }
 
       result.add(iu);

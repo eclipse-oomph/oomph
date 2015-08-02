@@ -130,6 +130,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -408,6 +409,19 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
 
     return false;
+  }
+
+  public boolean isIncludeAllRequirements()
+  {
+    for (Targlet targlet : targlets)
+    {
+      if (!targlet.isIncludeAllRequirements())
+      {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   public String getEnvironmentProperties()
@@ -762,7 +776,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       WorkspaceIUAnalyzer workspaceIUAnalyzer = analyzeWorkspaceIUs(rootRequirements, progress);
 
-      TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms());
+      TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms(), isIncludeAllRequirements());
       transaction.commit(commitContext, progress.newChild());
 
       Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
@@ -1002,11 +1016,14 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private boolean isIncludeAllPlatforms;
 
-    public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer, boolean isIncludeAllPlatforms)
+    private boolean isIncludeAllRequirements;
+
+    public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer, boolean isIncludeAllPlatforms, boolean isIncludeAllRequirements)
     {
       this.profile = profile;
       this.workspaceIUAnalyzer = workspaceIUAnalyzer;
       this.isIncludeAllPlatforms = isIncludeAllPlatforms;
+      this.isIncludeAllRequirements = isIncludeAllRequirements;
     }
 
     public IProvisioningPlan getProvisioningPlan()
@@ -1043,6 +1060,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
             Map<IU, IInstallableUnit> idToIUMap = new HashMap<IU, IInstallableUnit>();
             generateWorkspaceSourceIUs(ius, workspaceIUVersions, idToIUMap, monitor);
+
+            for (ListIterator<IInstallableUnit> it = ius.listIterator(); it.hasNext();)
+            {
+              it.set(createGeneralizedIU(it.next()));
+            }
 
             ius.add(createPDETargetPlatformIU());
 
@@ -1144,14 +1166,14 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         private IInstallableUnit createGeneralizedIU(IInstallableUnit iu)
         {
           // If we're not including all platform, no generalization is needed.
-          if (!isIncludeAllPlatforms)
+          if (!isIncludeAllPlatforms && isIncludeAllRequirements)
           {
             return iu;
           }
 
           // Determine the generalized IU filter.
           IMatchExpression<IInstallableUnit> filter = iu.getFilter();
-          IMatchExpression<IInstallableUnit> generalizedFilter = generalize(filter);
+          IMatchExpression<IInstallableUnit> generalizedFilter = isIncludeAllPlatforms ? generalize(filter) : filter;
           boolean needsGeneralization = filter != generalizedFilter;
 
           // Determine the generalized requirement filters.
@@ -1161,10 +1183,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           {
             IRequirement requirement = generalizedRequirements[i];
             IMatchExpression<IInstallableUnit> requirementFilter = requirement.getFilter();
-            IMatchExpression<IInstallableUnit> generalizedRequirementFilter = generalize(requirementFilter);
+            IMatchExpression<IInstallableUnit> generalizedRequirementFilter = isIncludeAllPlatforms ? generalize(requirementFilter) : filter;
 
             // If the filter needs generalization, create a clone of the requirement, with the generalized filter replacement.
-            if (requirementFilter != filter)
+            if (requirementFilter != filter || !isIncludeAllRequirements && requirement.getMin() != 0)
             {
               needsGeneralization = true;
               // IRequirement generalizedRequirement = MetadataFactory.createRequirement(requirement.getMatches(), generalizedRequirementFilter,
@@ -1175,13 +1197,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             }
           }
 
-          // If none of the filters need generalization, the original IU can be used.
+          // If none of the filters or slicer-mode lower bounds need generalization, the original IU can be used.
           if (!needsGeneralization)
           {
             return iu;
           }
 
-          // Create a description that clones the IU with the generalized filter replacements.
+          // Create a description that clones the IU with the generalized filter and slicer-mode lower bound replacements.
           InstallableUnitDescription description;
 
           if (iu instanceof IInstallableUnitFragment)

@@ -453,6 +453,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   {
     if (commandClass == DragAndDropCommand.class)
     {
+      // Determine if we've dragged a *.target file from the workspace.
       Collection<?> collection = commandParameter.getCollection();
       if (collection.size() == 1)
       {
@@ -465,19 +466,24 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
             final Path path = new Path(uri.toPlatformString(true));
             try
             {
+              // Use PDE to analyze the syntactic contents of this *.target file.
               Command result = TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Command>()
               {
                 @SuppressWarnings("restriction")
                 public Command run(ITargetPlatformService service) throws CoreException
                 {
+                  // Consider all the target handles available to PDE.
                   for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))
                   {
+                    // If it has a workspace handle...
                     if (targetHandle instanceof org.eclipse.pde.internal.core.target.WorkspaceFileTargetHandle)
                     {
+                      // And that workspace handle is the one for the file that's been dragged...
                       org.eclipse.pde.internal.core.target.WorkspaceFileTargetHandle workspaceFileTargetHandle = (org.eclipse.pde.internal.core.target.WorkspaceFileTargetHandle)targetHandle;
                       IFile targetFile = workspaceFileTargetHandle.getTargetFile();
                       if (path.equals(targetFile.getFullPath()))
                       {
+                        // Maintain the requirements in a sorted list.
                         final Set<Requirement> requirements = new TreeSet<Requirement>(new Comparator<Requirement>()
                         {
                           public int compare(Requirement requirement1, Requirement requirement2)
@@ -487,6 +493,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                             return name1.compareTo(name2);
                           }
                         });
+
+                        // Maintain the repositories in a sorted list.
                         final Set<Repository> repos = new TreeSet<Repository>(new Comparator<Repository>()
                         {
                           public int compare(Repository repository1, Repository repository2)
@@ -497,6 +505,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                           }
                         });
 
+                        // Get the target definition as its important attributes.
                         ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
                         final String arch = targetDefinition.getArch();
                         final String os = targetDefinition.getOS();
@@ -505,12 +514,14 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                         final String programArguments = targetDefinition.getProgramArguments();
                         final String vmArguments = targetDefinition.getVMArguments();
 
+                        // Consider each target location, and an IU bundle container.
                         for (ITargetLocation targetLocation : targetDefinition.getTargetLocations())
                         {
                           if (targetLocation instanceof org.eclipse.pde.internal.core.target.IUBundleContainer)
                           {
                             org.eclipse.pde.internal.core.target.IUBundleContainer iuBundleContainer = (org.eclipse.pde.internal.core.target.IUBundleContainer)targetLocation;
 
+                            // Create a repository for each repository of that container.
                             java.net.URI[] repositories = iuBundleContainer.getRepositories();
                             for (java.net.URI repo : repositories)
                             {
@@ -523,6 +534,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                               repos.add(P2Factory.eINSTANCE.createRepository(repoURI.toString()));
                             }
 
+                            // Reflectively get the underlying IDs and Versions.
                             String[] ids = (String[])ReflectUtil.invokeMethod("getIds", iuBundleContainer);
                             Version[] versions = (Version[])ReflectUtil.invokeMethod("getVersions", iuBundleContainer);
 
@@ -533,6 +545,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                           }
                         }
 
+                        // Create a drag and drop command for this information.
                         DragAndDropCommand.Detail detail = (DragAndDropCommand.Detail)commandParameter.getFeature();
                         return new TargletDragAndDropCommand(domain, commandParameter.getOwner(), detail.location, detail.operations, detail.operation,
                             commandParameter.getCollection())
@@ -545,11 +558,17 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                             CompoundCommand compoundCommand = new CompoundCommand(0);
                             dropCommand = compoundCommand;
 
+                            // Always create a new targlet, but name it to reflect that it represents a target platform.
                             Targlet targlet = TargletFactory.eINSTANCE.createTarglet();
                             targlet.setName(getTargletName(StringUtil.cap(uri.trimFileExtension().lastSegment())) + "Target Platform");
 
+                            // Use the standard variable to refer to the active repository.
                             targlet.setActiveRepositoryListName("${eclipse.target.platform}");
+
+                            // Add all the requirements to the new targlet.
                             targlet.getRequirements().addAll(requirements);
+
+                            // Create a new repository list, try to determine standard name for it, and all the the repos to it.
                             EList<RepositoryList> repositoryLists = targlet.getRepositoryLists();
                             RepositoryList repositoryList = P2Factory.eINSTANCE.createRepositoryList();
                             repositoryList.setName(getRepositoryListName(StringUtil.cap(uri.trimFileExtension().lastSegment())));
@@ -558,28 +577,34 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
                             TargletTask targletTask = (TargletTask)owner;
 
+                            // Create a command to add the new targlet.
                             compoundCommand.append(new AddCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, targlet));
 
+                            // Set the architecture if there is one.
                             if (StringUtil.isEmpty(targletTask.getArchitecture()) && !StringUtil.isEmpty(arch))
                             {
                               compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, arch));
                             }
 
+                            // Set the operating system if there is one.
                             if (StringUtil.isEmpty(targletTask.getOperatingSystem()) && !StringUtil.isEmpty(os))
                             {
                               compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, os));
                             }
 
+                            // Set the windowing system if there is one.
                             if (StringUtil.isEmpty(targletTask.getWindowingSystem()) && !StringUtil.isEmpty(ws))
                             {
                               compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, ws));
                             }
 
+                            // Set the locale if there is one.
                             if (StringUtil.isEmpty(targletTask.getLocale()) && !StringUtil.isEmpty(nl))
                             {
                               compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, nl));
                             }
 
+                            // Compose the VM arguments if the are any.
                             if (!StringUtil.isEmpty(vmArguments))
                             {
                               String newVmArguments = targletTask.getVMArguments();
@@ -598,6 +623,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                                   newVmArguments.replaceAll("[\n\r]+", "\n").trim()));
                             }
 
+                            // Compose the program arguments if the are any.
                             if (!StringUtil.isEmpty(programArguments))
                             {
                               String newProgramArguments = targletTask.getProgramArguments();
@@ -621,13 +647,16 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
                           private String getRepositoryListName(String defaultName)
                           {
+                            // Compute a repository list name using this given one, the name of the *.target file, only as a default.
                             String lowerCaseDefaultName = defaultName.toLowerCase();
 
+                            // Find the logical containing project catalog.
                             TargletTask targletTask = (TargletTask)owner;
                             for (Scope scope = targletTask.getScope(); scope != null; scope = scope.getParentScope())
                             {
                               if (scope instanceof ProjectCatalog)
                               {
+                                // Look for the standard target platform variable.
                                 for (Iterator<EObject> it = EcoreUtil.getAllProperContents(scope, false); it.hasNext();)
                                 {
                                   EObject child = it.next();
@@ -636,18 +665,22 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                                     VariableTask variableTask = (VariableTask)child;
                                     if ("eclipse.target.platform".equals(variableTask.getName()))
                                     {
+                                      // Consider all the choices it provides.
                                       String candidate = null;
                                       for (VariableChoice variableChoice : variableTask.getChoices())
                                       {
+                                        // If the name contains the variable choice's value, e.g., mars, use this choice.
                                         String value = variableChoice.getValue();
                                         if (lowerCaseDefaultName.contains(value.toLowerCase()))
                                         {
                                           return value;
                                         }
 
+                                        // Determine the version number of this choice.
                                         String label = variableChoice.getLabel();
                                         if (label != null)
                                         {
+                                          // If the name contains the version number of this choice, use this choice.
                                           Matcher matcher = VERSION_PATTERN.matcher(label);
                                           if (matcher.find() && defaultName.indexOf(matcher.group(1)) != -1)
                                           {
@@ -655,12 +688,14 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                                           }
                                         }
 
+                                        // Use the first choice baring a better match.
                                         if (candidate == null)
                                         {
                                           candidate = value;
                                         }
                                       }
 
+                                      // Use the first candidate, if a better match hasn't been found.
                                       return candidate;
                                     }
                                   }
@@ -669,6 +704,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                               }
                             }
 
+                            // Failing all that, just use the default name.
                             return defaultName;
                           }
                         };
@@ -676,10 +712,12 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                     }
                   }
 
+                  // We can't create a command at all.
                   return null;
                 }
               });
 
+              // If we can create a command return it.
               if (result != null)
               {
                 return result;
@@ -692,10 +730,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
           }
         }
       }
-
-      return super.createCommand(object, domain, commandClass, commandParameter);
     }
 
+    // Just do the default thing.
     return super.createCommand(object, domain, commandClass, commandParameter);
   }
 
@@ -703,6 +740,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   @Override
   protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
   {
+    // Reflectively gather the paths associated with the EGit repository nodes.
     final List<IPath> paths = new ArrayList<IPath>();
     for (Object value : collection)
     {
@@ -712,6 +750,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       }
     }
 
+    // If there are such paths, we can create a specialized drag and drop command.
     if (collection.size() == paths.size())
     {
       return new TargletDragAndDropCommand(domain, owner, location, operations, operation, collection)
@@ -726,20 +765,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
             @Override
             public void execute()
             {
-              Targlet targlet = TargletFactory.eINSTANCE.createTarglet();
-              targlet.getInstallableUnitGenerators();
-
-              IPath path = paths.get(0);
-
-              final SourceLocator sourceLocator = ResourcesFactory.eINSTANCE.createSourceLocator(path.toString(), true);
-              WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(null);
-              workspaceIUAnalyzer.analyze(sourceLocator, IUGenerator.DEFAULTS, new NullProgressMonitor());
-              Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
-
+              // Keep track of the requirements of any existing targlets.
               final TargletTask targletTask = (TargletTask)owner;
-
               List<Requirement> requirements = new ArrayList<Requirement>();
-              final Set<Requirement> redundant = new HashSet<Requirement>();
               for (Targlet otherTarglet : targletTask.getTarglets())
               {
                 for (Requirement requirement : otherTarglet.getRequirements())
@@ -748,56 +776,99 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 }
               }
 
-              final Set<IInstallableUnit> ius = workspaceIUInfos.keySet();
-              HashSet<IInstallableUnit> ius2 = new HashSet<IInstallableUnit>(ius);
-              IQueryable<IInstallableUnit> queryable = new CollectionResult<IInstallableUnit>(ius2);
-              for (IInstallableUnit rootIU : ius2)
+              for (IPath path : paths)
               {
-                for (IRequirement requirement : rootIU.getRequirements())
-                {
-                  if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
-                  {
-                    org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
-                    String namespace = requiredCapability.getNamespace();
-                    if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
-                    {
-                      String name = requiredCapability.getName();
-                      for (Requirement requirement2 : requirements)
-                      {
-                        if (name.equals(requirement2.getName()))
-                        {
-                          redundant.add(requirement2);
-                        }
-                      }
-                    }
+                // Always create a new targlet for each path.
+                Targlet targlet = TargletFactory.eINSTANCE.createTarglet();
 
-                    for (IInstallableUnit iu : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
+                // Use the path to create a new source locator.
+                // Later we hope to change the path to be a variable reference, but for analysis purposes, we need the current physical path.
+                // Then analyze the Git clone for IUs.
+                final SourceLocator sourceLocator = ResourcesFactory.eINSTANCE.createSourceLocator(path.toString(), true);
+                WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(null);
+                workspaceIUAnalyzer.analyze(sourceLocator, IUGenerator.DEFAULTS, new NullProgressMonitor());
+                Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
+
+                // Filter out any plain project IU for which there is another IU for the same physical project available.
+                final Set<IInstallableUnit> ius = workspaceIUInfos.keySet();
+                for (Iterator<Map.Entry<IInstallableUnit, WorkspaceIUInfo>> it = workspaceIUInfos.entrySet().iterator(); it.hasNext();)
+                {
+                  Map.Entry<IInstallableUnit, WorkspaceIUInfo> entry = it.next();
+                  String id = entry.getKey().getId();
+                  if (id.endsWith(Requirement.PROJECT_SUFFIX))
+                  {
+                    WorkspaceIUInfo value = entry.getValue();
+                    for (Iterator<Map.Entry<IInstallableUnit, WorkspaceIUInfo>> it2 = workspaceIUInfos.entrySet().iterator(); it2.hasNext();)
                     {
-                      ius.remove(iu);
+                      Map.Entry<IInstallableUnit, WorkspaceIUInfo> otherEntry = it2.next();
+                      if (otherEntry != entry && otherEntry.getValue().equals(value))
+                      {
+                        it.remove();
+                        break;
+                      }
                     }
                   }
                 }
-              }
 
-              targlet.setName(getTargletName("Default"));
-              EList<Requirement> targletRequirements = targlet.getRequirements();
-              for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(ius))
-              {
-                targletRequirements.add(P2Factory.eINSTANCE.createRequirement(iu.getId()));
-              }
+                // Filter out any IU that's matched by a requirement of another IU, i.e., compute root IUs.
+                HashSet<IInstallableUnit> allIUs = new HashSet<IInstallableUnit>(ius);
+                final Set<Requirement> redundant = new HashSet<Requirement>();
+                IQueryable<IInstallableUnit> queryable = new CollectionResult<IInstallableUnit>(allIUs);
+                for (IInstallableUnit rootIU : allIUs)
+                {
+                  for (IRequirement requirement : rootIU.getRequirements())
+                  {
+                    if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+                    {
+                      // Any IU requirement that matches the name of an existing requirement makes that existing requirement redundant.
+                      org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
+                      String namespace = requiredCapability.getNamespace();
+                      if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+                      {
+                        String name = requiredCapability.getName();
+                        for (Requirement otherRequirement : requirements)
+                        {
+                          if (name.equals(otherRequirement.getName()))
+                          {
+                            redundant.add(otherRequirement);
+                          }
+                        }
+                      }
 
-              sourceLocator.setRootFolder(getSourceLocation(path));
-              targlet.getSourceLocators().add(sourceLocator);
+                      // Filter out the non-root IU.
+                      for (IInstallableUnit iu : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
+                      {
+                        ius.remove(iu);
+                      }
+                    }
+                  }
+                }
 
-              appendAndExecute(new AddCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, targlet));
-              if (!redundant.isEmpty())
-              {
-                appendAndExecute(DeleteCommand.create(domain, redundant));
+                // Compute a nice name for the targlet and create requirements for all the root IUs.
+                targlet.setName(getTargletName("Default"));
+                EList<Requirement> targletRequirements = targlet.getRequirements();
+                for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(ius))
+                {
+                  targletRequirements.add(P2Factory.eINSTANCE.createRequirement(iu.getId()));
+                }
+
+                // Determine, if possible a variable to use to refer to the path needed by the source locator,
+                // i.e., whenever possible the location variable of a Git clone task.
+                sourceLocator.setRootFolder(getSourceLocation(path));
+                targlet.getSourceLocators().add(sourceLocator);
+
+                // Add the new targlet and remove any redundant requirements from other targlets.
+                appendAndExecute(new AddCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, targlet));
+                if (!redundant.isEmpty())
+                {
+                  appendAndExecute(DeleteCommand.create(domain, redundant));
+                }
               }
             }
 
             private String getSourceLocation(IPath path)
             {
+              // Walk all the objects in the containing resource.
               TargletTask targletTask = (TargletTask)owner;
               Resource resource = targletTask.eResource();
               if (resource != null)
@@ -805,57 +876,68 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 String candidate = null;
                 for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
                 {
+                  // If it's a Git clone task.
                   EObject eObject = it.next();
                   EClass eClass = eObject.eClass();
-                  if ("GitCloneTask".equals(eClass.getName()))
+                  if ("GitCloneTask".equals(eClass.getName()) && eObject instanceof SetupTask)
                   {
-                    EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature("remoteURI");
-                    if (eStructuralFeature != null)
+                    // If that task has an ID.
+                    SetupTask setupTask = (SetupTask)eObject;
+                    String id = setupTask.getID();
+                    if (!StringUtil.isEmpty(id))
                     {
-                      String remoteURI = (String)eObject.eGet(eStructuralFeature);
-                      try
+
+                      // Get the value of the remoteURI feature; it should have that feature.
+                      EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature("remoteURI");
+                      if (eStructuralFeature != null)
                       {
-                        URI uri = URI.createURI(remoteURI);
-                        if (!uri.isHierarchical())
+                        // This is the variable reference for this task's location.
+                        String result = "${" + id + ".location}";
+                        if (candidate != null)
                         {
-                          uri = URI.createURI(uri.opaquePart());
+                          candidate = result;
                         }
 
-                        if ("git".equals(uri.fileExtension()))
+                        String remoteURI = (String)eObject.eGet(eStructuralFeature);
+                        try
                         {
-                          uri = uri.trimFileExtension();
-                        }
-
-                        String baseName = URI.decode(uri.lastSegment());
-                        if (path.toString().endsWith("/" + baseName))
-                        {
-                          String id = ((SetupTask)eObject).getID();
-                          if (id != null)
+                          // Convert it to a URI and try to determine the name of the git clone that will be produced from it.
+                          URI uri = URI.createURI(remoteURI);
+                          if (!uri.isHierarchical())
                           {
-                            String result = "${" + id + ".location}";
-                            if (candidate != null)
-                            {
-                              candidate = result;
-                            }
+                            uri = URI.createURI(uri.opaquePart());
+                          }
 
-                            return result;
+                          if ("git".equals(uri.fileExtension()))
+                          {
+                            uri = uri.trimFileExtension();
+                          }
+
+                          // If the path looks exactly like the location for this clone.
+                          String baseName = URI.decode(uri.lastSegment());
+                          if (path.toString().endsWith("/" + baseName))
+                          {
+                            // Use the variable for this task.
+                            break;
                           }
                         }
-                      }
-                      catch (Throwable throwable)
-                      {
-                        // Ignore.
+                        catch (Throwable throwable)
+                        {
+                          // Ignore.
+                        }
                       }
                     }
                   }
                 }
 
+                // If there is any satisfactory Git clone task, use the first one's variable reference.
                 if (candidate != null)
                 {
                   return candidate;
                 }
               }
 
+              // If all else fails, simply use the path.
               return path.toString();
             }
 
@@ -898,6 +980,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
     protected String getTargletName(String defaultName)
     {
+      // Compute the targlet name from the name of the containing project scope.
       TargletTask targletTask = (TargletTask)owner;
       for (Scope scope = targletTask.getScope(); scope != null; scope = scope.getParentScope())
       {

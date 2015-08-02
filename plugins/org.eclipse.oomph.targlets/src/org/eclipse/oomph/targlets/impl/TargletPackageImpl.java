@@ -386,6 +386,16 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTarglet_IncludeAllRequirements()
+  {
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(10);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getComponentExtension()
   {
     return componentExtensionEClass;
@@ -619,6 +629,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEReference(targletEClass, TARGLET__ACTIVE_REPOSITORIES);
     createEAttribute(targletEClass, TARGLET__INCLUDE_SOURCES);
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_PLATFORMS);
+    createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_REQUIREMENTS);
 
     componentExtensionEClass = createEClass(COMPONENT_EXTENSION);
     createEReference(componentExtensionEClass, COMPONENT_EXTENSION__REQUIREMENTS);
@@ -737,6 +748,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTarglet_IncludeAllPlatforms(), ecorePackage.getEBoolean(), "includeAllPlatforms", null, 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTarglet_IncludeAllRequirements(), ecorePackage.getEBoolean(), "includeAllRequirements", "true", 0, 1, Targlet.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(componentExtensionEClass, ComponentExtension.class, "ComponentExtension", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getComponentExtension_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, ComponentExtension.class,

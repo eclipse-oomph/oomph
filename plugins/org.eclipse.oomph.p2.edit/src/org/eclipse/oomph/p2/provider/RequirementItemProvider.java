@@ -14,13 +14,17 @@ import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.RequirementType;
 import org.eclipse.oomph.p2.VersionSegment;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -32,6 +36,7 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -72,8 +77,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
       addNamespacePropertyDescriptor(object);
       addVersionRangePropertyDescriptor(object);
       addOptionalPropertyDescriptor(object);
-      addFeaturePropertyDescriptor(object);
       addFilterPropertyDescriptor(object);
+      addTypePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -134,20 +139,6 @@ public class RequirementItemProvider extends ModelElementItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Feature feature.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected void addFeaturePropertyDescriptor(Object object)
-  {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_feature_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_feature_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__FEATURE,
-        false, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
-  }
-
-  /**
    * This adds a property descriptor for the Filter feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -158,6 +149,91 @@ public class RequirementItemProvider extends ModelElementItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Requirement_filter_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_filter_feature", "_UI_Requirement_type"),
         P2Package.Literals.REQUIREMENT__FILTER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Type feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addTypePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Requirement_type_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_type_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+    {
+      @Override
+      public void setPropertyValue(Object object, Object value)
+      {
+        EditingDomain domain = getEditingDomain(object);
+        Requirement requirement = (Requirement)object;
+        RequirementType type = requirement.getType();
+        RequirementType newType = (RequirementType)value;
+        if (type != newType)
+        {
+          String name = requirement.getName();
+          switch (type)
+          {
+            case NONE:
+            {
+              break;
+            }
+            case FEATURE:
+            {
+              name = name.substring(0, name.length() - Requirement.FEATURE_SUFFIX.length());
+              break;
+            }
+            case PROJECT:
+            {
+              name = name.substring(0, name.length() - Requirement.PROJECT_SUFFIX.length());
+              break;
+            }
+          }
+
+          switch (newType)
+          {
+            case NONE:
+            {
+              break;
+            }
+            case FEATURE:
+            {
+              // .feature.group
+              name += Requirement.FEATURE_SUFFIX;
+              break;
+            }
+            case PROJECT:
+            {
+              name += Requirement.PROJECT_SUFFIX;
+              break;
+            }
+          }
+
+          if (domain == null)
+          {
+            requirement.setName(name);
+          }
+          else
+          {
+            domain.getCommandStack().execute(SetCommand.create(domain, object, P2Package.Literals.REQUIREMENT__NAME, name));
+          }
+        }
+      }
+
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        Requirement requirement = (Requirement)object;
+        String name = requirement.getName();
+        if (StringUtil.isEmpty(name))
+        {
+          return Collections.singleton(RequirementType.NONE);
+        }
+
+        return RequirementType.VALUES;
+      }
+    });
   }
 
   @Override
@@ -229,13 +305,23 @@ public class RequirementItemProvider extends ModelElementItemProvider
     String namespace = requirement.getNamespace();
     if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
     {
-      if (requirement.isFeature())
+      switch (requirement.getType())
       {
-        key += "_Feature";
-      }
-      else
-      {
-        key += "_Plugin";
+        case NONE:
+        {
+          key += "_Plugin";
+          break;
+        }
+        case FEATURE:
+        {
+          key += "_Feature";
+          break;
+        }
+        case PROJECT:
+        {
+          key += "_Project";
+          break;
+        }
       }
     }
     else if (NAMESPACE_PACKAGE_ID.equals(namespace))
@@ -243,12 +329,17 @@ public class RequirementItemProvider extends ModelElementItemProvider
       key += "_Package";
     }
 
+    Object result = overlayImage(object, getResourceLocator().getImage(key));
+
     if (requirement.isOptional())
     {
-      key += "_Optional";
+      List<Object> images = new ArrayList<Object>(2);
+      images.add(result);
+      images.add(getResourceLocator().getImage("full/ovr16/optional"));
+      result = new OptionalImage(images);
     }
 
-    return overlayImage(object, getResourceLocator().getImage(key));
+    return result;
   }
 
   /**
@@ -272,21 +363,34 @@ public class RequirementItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     Requirement requirement = (Requirement)object;
-    String label = requirement.getName();
-    if (label == null || label.length() == 0)
+    String name = requirement.getName();
+    if (name == null || name.length() == 0)
     {
-      label = getString("_UI_Requirement_type");
+      name = getString("_UI_Requirement_type");
     }
     else
     {
-      if (label.endsWith(Requirement.FEATURE_SUFFIX))
+      switch (requirement.getType())
       {
-        label = label.substring(0, label.length() - Requirement.FEATURE_SUFFIX.length());
+        case NONE:
+        {
+          break;
+        }
+        case FEATURE:
+        {
+          name = name.substring(0, name.length() - Requirement.FEATURE_SUFFIX.length());
+          break;
+        }
+        case PROJECT:
+        {
+          name = name.substring(0, name.length() - Requirement.PROJECT_SUFFIX.length());
+          break;
+        }
       }
     }
 
     VersionRange versionRange = requirement.getVersionRange();
-    return label + (versionRange == null || VersionRange.emptyRange.equals(versionRange) ? "" : " " + versionRange.toString());
+    return name + (versionRange == null || VersionRange.emptyRange.equals(versionRange) ? "" : " " + versionRange.toString());
   }
 
   /**
@@ -308,8 +412,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
       case P2Package.REQUIREMENT__NAMESPACE:
       case P2Package.REQUIREMENT__VERSION_RANGE:
       case P2Package.REQUIREMENT__OPTIONAL:
-      case P2Package.REQUIREMENT__FEATURE:
       case P2Package.REQUIREMENT__FILTER:
+      case P2Package.REQUIREMENT__TYPE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
@@ -329,4 +433,22 @@ public class RequirementItemProvider extends ModelElementItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
   }
 
+  /**
+   * @author Ed Merks
+   */
+  private final class OptionalImage extends ComposedImage
+  {
+    private OptionalImage(Collection<?> images)
+    {
+      super(images);
+    }
+
+    @Override
+    public List<Point> getDrawPoints(Size size)
+    {
+      Point point = new Point();
+      point.x = size.width - 5;
+      return Arrays.asList(new Point[] { new Point(), point });
+    }
+  }
 }

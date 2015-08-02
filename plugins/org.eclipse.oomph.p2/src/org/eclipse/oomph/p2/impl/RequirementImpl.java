@@ -16,6 +16,7 @@ import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.RequirementType;
 import org.eclipse.oomph.p2.VersionSegment;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -45,8 +46,8 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getNamespace <em>Namespace</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isOptional <em>Optional</em>}</li>
- *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isFeature <em>Feature</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getFilter <em>Filter</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -147,16 +148,6 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
   protected boolean optional = OPTIONAL_EDEFAULT;
 
   /**
-   * The default value of the '{@link #isFeature() <em>Feature</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isFeature()
-   * @generated
-   * @ordered
-   */
-  protected static final boolean FEATURE_EDEFAULT = false;
-
-  /**
    * The default value of the '{@link #getFilter() <em>Filter</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -175,6 +166,16 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @ordered
    */
   protected String filter = FILTER_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected static final RequirementType TYPE_EDEFAULT = RequirementType.NONE;
 
   /**
    * <!-- begin-user-doc -->
@@ -363,6 +364,31 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     }
   }
 
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public RequirementType getType()
+  {
+    String name = getName();
+    if (name != null)
+    {
+      if (name.endsWith(FEATURE_SUFFIX))
+      {
+        return RequirementType.FEATURE;
+
+      }
+
+      if (name.endsWith(PROJECT_SUFFIX))
+      {
+        return RequirementType.PROJECT;
+      }
+    }
+
+    return RequirementType.NONE;
+  }
+
   public IMatchExpression<IInstallableUnit> getMatchExpression()
   {
     String filter = getFilter();
@@ -395,10 +421,10 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return getVersionRange();
       case P2Package.REQUIREMENT__OPTIONAL:
         return isOptional();
-      case P2Package.REQUIREMENT__FEATURE:
-        return isFeature();
       case P2Package.REQUIREMENT__FILTER:
         return getFilter();
+      case P2Package.REQUIREMENT__TYPE:
+        return getType();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -487,10 +513,10 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return VERSION_RANGE_EDEFAULT == null ? versionRange != null : !VERSION_RANGE_EDEFAULT.equals(versionRange);
       case P2Package.REQUIREMENT__OPTIONAL:
         return optional != OPTIONAL_EDEFAULT;
-      case P2Package.REQUIREMENT__FEATURE:
-        return isFeature() != FEATURE_EDEFAULT;
       case P2Package.REQUIREMENT__FILTER:
         return FILTER_EDEFAULT == null ? filter != null : !FILTER_EDEFAULT.equals(filter);
+      case P2Package.REQUIREMENT__TYPE:
+        return getType() != TYPE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }

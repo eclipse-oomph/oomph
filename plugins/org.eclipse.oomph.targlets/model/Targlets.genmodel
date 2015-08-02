@@ -27,6 +27,8 @@
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/activeRepositories"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeSources"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllPlatforms"/>
+      <genFeatures createChild="false" propertyDescription="Whether all transitive requirements must be satisfied for target platform resolution to succeed"
+          ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllRequirements"/>
     </genClasses>
     <genClasses ecoreClass="Targlets.ecore#//ComponentExtension">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//ComponentExtension/requirements"/>

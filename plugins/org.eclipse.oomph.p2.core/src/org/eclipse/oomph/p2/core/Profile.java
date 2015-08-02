@@ -31,6 +31,8 @@ public interface Profile extends IProfile, AgentElement
 
   public static final String TYPE_INSTALLATION = "Installation";
 
+  public static final String TYPE_TARGLET = "Targlet";
+
   public boolean isSelfHosting();
 
   public String getType();

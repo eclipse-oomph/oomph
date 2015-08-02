@@ -19,6 +19,7 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.RepositoryType;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.RequirementType;
 import org.eclipse.oomph.p2.VersionSegment;
 
 import org.eclipse.emf.ecore.EClass;
@@ -112,6 +113,8 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
         return createRepositoryTypeFromString(eDataType, initialValue);
       case P2Package.VERSION_SEGMENT:
         return createVersionSegmentFromString(eDataType, initialValue);
+      case P2Package.REQUIREMENT_TYPE:
+        return createRequirementTypeFromString(eDataType, initialValue);
       case P2Package.VERSION:
         return createVersionFromString(eDataType, initialValue);
       case P2Package.VERSION_RANGE:
@@ -135,6 +138,8 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
         return convertRepositoryTypeToString(eDataType, instanceValue);
       case P2Package.VERSION_SEGMENT:
         return convertVersionSegmentToString(eDataType, instanceValue);
+      case P2Package.REQUIREMENT_TYPE:
+        return convertRequirementTypeToString(eDataType, instanceValue);
       case P2Package.VERSION:
         return convertVersionToString(eDataType, instanceValue);
       case P2Package.VERSION_RANGE:
@@ -291,6 +296,31 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
    * @generated
    */
   public String convertVersionSegmentToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public RequirementType createRequirementTypeFromString(EDataType eDataType, String initialValue)
+  {
+    RequirementType result = RequirementType.get(initialValue);
+    if (result == null)
+    {
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    }
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertRequirementTypeToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }

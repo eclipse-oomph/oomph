@@ -66,6 +66,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       addActiveRepositoryListNamePropertyDescriptor(object);
       addIncludeSourcesPropertyDescriptor(object);
       addIncludeAllPlatformsPropertyDescriptor(object);
+      addIncludeAllRequirementsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -123,6 +124,19 @@ public class TargletItemProvider extends ModelElementItemProvider
         getString("_UI_Targlet_includeAllPlatforms_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeAllPlatforms_feature", "_UI_Targlet_type"),
         TargletPackage.Literals.TARGLET__INCLUDE_ALL_PLATFORMS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Include All Requirements feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addIncludeAllRequirementsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Targlet_includeAllRequirements_feature"), getString("_UI_Targlet_includeAllRequirements_description"),
+        TargletPackage.Literals.TARGLET__INCLUDE_ALL_REQUIREMENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   @Override
@@ -236,6 +250,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       case TargletPackage.TARGLET__ACTIVE_REPOSITORY_LIST_NAME:
       case TargletPackage.TARGLET__INCLUDE_SOURCES:
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
+      case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case TargletPackage.TARGLET__REQUIREMENTS:

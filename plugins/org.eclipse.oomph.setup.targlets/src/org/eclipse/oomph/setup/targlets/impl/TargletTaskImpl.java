@@ -942,7 +942,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             targletContainer = getTargletContainer();
           }
 
-          EList<Targlet> targlets;
+          EList<Targlet> targlets = copyTarglets;
           if (targletContainer == null)
           {
             targletContainer = new TargletContainer(TARGLET_CONTAINER_ID);
@@ -961,24 +961,6 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             }
 
             targetDefinition.setTargetLocations(newLocations);
-
-            targlets = copyTarglets;
-          }
-          else
-          {
-            targlets = targletContainer.getTarglets();
-            for (Targlet targlet : copyTarglets)
-            {
-              int index = targletContainer.getTargletIndex(targlet.getName());
-              if (index != -1)
-              {
-                targlets.set(index, targlet);
-              }
-              else
-              {
-                targlets.add(targlet);
-              }
-            }
           }
 
           boolean mirrors = context.isMirrors();

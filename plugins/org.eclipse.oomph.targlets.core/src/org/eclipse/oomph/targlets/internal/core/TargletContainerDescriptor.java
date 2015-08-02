@@ -337,7 +337,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
 
     if (profile == null)
     {
-      ProfileCreator creator = bundlePool.addProfile(profileID, "Targlet");
+      ProfileCreator creator = bundlePool.addProfile(profileID, Profile.TYPE_TARGLET);
       creator.set(PROP_TARGLET_CONTAINER_WORKSPACE, TargletContainerDescriptorManager.WORKSPACE_LOCATION);
       creator.set(PROP_TARGLET_CONTAINER_ID, id);
       creator.set(PROP_TARGLET_CONTAINER_DIGEST, digest);

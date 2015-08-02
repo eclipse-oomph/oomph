@@ -65,9 +65,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionRange" eType="#//VersionRange"
         defaultValueLiteral="0.0.0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="feature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        changeable="false" volatile="true" transient="true" derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//RequirementType"
+        changeable="false" volatile="true" transient="true" derived="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RepositoryList" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
@@ -101,5 +101,10 @@
     <eLiterals name="Minor"/>
     <eLiterals name="Micro"/>
     <eLiterals name="Qualifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RequirementType">
+    <eLiterals name="NONE" literal="None"/>
+    <eLiterals name="FEATURE" value="1" literal="Feature"/>
+    <eLiterals name="PROJECT" value="2" literal="Project"/>
   </eClassifiers>
 </ecore:EPackage>

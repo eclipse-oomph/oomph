@@ -245,13 +245,22 @@ public interface TargletPackage extends EPackage
   int TARGLET__INCLUDE_ALL_PLATFORMS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 9;
 
   /**
+   * The feature id for the '<em><b>Include All Requirements</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET__INCLUDE_ALL_REQUIREMENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 10;
+
+  /**
    * The number of structural features of the '<em>Targlet</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 10;
+  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 11;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -1177,6 +1186,17 @@ public interface TargletPackage extends EPackage
   EAttribute getTarglet_IncludeAllPlatforms();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements <em>Include All Requirements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Include All Requirements</em>'.
+   * @see org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements()
+   * @see #getTarglet()
+   * @generated
+   */
+  EAttribute getTarglet_IncludeAllRequirements();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ComponentExtension <em>Component Extension</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1510,6 +1530,14 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EAttribute TARGLET__INCLUDE_ALL_PLATFORMS = eINSTANCE.getTarglet_IncludeAllPlatforms();
+
+    /**
+     * The meta object literal for the '<em><b>Include All Requirements</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET__INCLUDE_ALL_REQUIREMENTS = eINSTANCE.getTarglet_IncludeAllRequirements();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ComponentExtensionImpl <em>Component Extension</em>}' class.

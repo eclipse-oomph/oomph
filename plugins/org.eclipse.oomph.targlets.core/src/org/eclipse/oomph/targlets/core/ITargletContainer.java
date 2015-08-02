@@ -65,6 +65,8 @@ public interface ITargletContainer extends ITargetLocation
 
   public boolean isIncludeAllPlatforms();
 
+  public boolean isIncludeAllRequirements();
+
   public String getEnvironmentProperties();
 
   public String getNLProperty();

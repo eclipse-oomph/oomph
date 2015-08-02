@@ -49,6 +49,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getActiveRepositories <em>Active Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
  * </ul>
  *
  * @generated
@@ -174,6 +175,26 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * @ordered
    */
   protected boolean includeAllPlatforms = INCLUDE_ALL_PLATFORMS_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isIncludeAllRequirements() <em>Include All Requirements</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeAllRequirements()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean INCLUDE_ALL_REQUIREMENTS_EDEFAULT = true;
+
+  /**
+   * The cached value of the '{@link #isIncludeAllRequirements() <em>Include All Requirements</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeAllRequirements()
+   * @generated
+   * @ordered
+   */
+  protected boolean includeAllRequirements = INCLUDE_ALL_REQUIREMENTS_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -404,6 +425,32 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isIncludeAllRequirements()
+  {
+    return includeAllRequirements;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIncludeAllRequirements(boolean newIncludeAllRequirements)
+  {
+    boolean oldIncludeAllRequirements = includeAllRequirements;
+    includeAllRequirements = newIncludeAllRequirements;
+    if (eNotificationRequired())
+    {
+      eNotify(
+          new ENotificationImpl(this, Notification.SET, TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS, oldIncludeAllRequirements, includeAllRequirements));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -451,6 +498,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return isIncludeSources();
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
         return isIncludeAllPlatforms();
+      case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
+        return isIncludeAllRequirements();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -494,6 +543,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
         setIncludeAllPlatforms((Boolean)newValue);
         return;
+      case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
+        setIncludeAllRequirements((Boolean)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -532,6 +584,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
         setIncludeAllPlatforms(INCLUDE_ALL_PLATFORMS_EDEFAULT);
         return;
+      case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
+        setIncludeAllRequirements(INCLUDE_ALL_REQUIREMENTS_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -567,6 +622,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return includeSources != INCLUDE_SOURCES_EDEFAULT;
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
         return includeAllPlatforms != INCLUDE_ALL_PLATFORMS_EDEFAULT;
+      case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
+        return includeAllRequirements != INCLUDE_ALL_REQUIREMENTS_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -593,6 +650,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     result.append(includeSources);
     result.append(", includeAllPlatforms: ");
     result.append(includeAllPlatforms);
+    result.append(", includeAllRequirements: ");
+    result.append(includeAllRequirements);
     result.append(')');
     return result.toString();
   }

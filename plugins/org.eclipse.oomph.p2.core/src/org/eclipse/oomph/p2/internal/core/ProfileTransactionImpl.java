@@ -46,6 +46,7 @@ import org.eclipse.core.runtime.ProgressMonitorWrapper;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
+import org.eclipse.equinox.internal.p2.director.ProfileChangeRequest;
 import org.eclipse.equinox.internal.p2.director.SimplePlanner;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitPropertyOperand;
@@ -370,12 +371,41 @@ public class ProfileTransactionImpl implements ProfileTransaction
       final long timestamp = delegate.getTimestamp();
 
       IPlanner planner = agent.getPlanner();
-      IProfileChangeRequest profileChangeRequest = planner.createChangeRequest(delegate);
+
+      // In org.eclipse.equinox.internal.p2.director.SimplePlanner.getSolutionFor(ProfileChangeRequest, ProvisioningContext, IProgressMonitor)
+      // The removals will be add the removed IUs to the slicer,
+      // but we don'ts want to do that for targlets.
+      boolean isTarglet = Profile.TYPE_TARGLET.equals(profile.getType());
+      IProfileChangeRequest profileChangeRequest = isTarglet ? new ProfileChangeRequest(delegate)
+      {
+        @Override
+        public Collection<IInstallableUnit> getRemovals()
+        {
+          // This inspects the stack to see if this method is being called by getSolutionFor,
+          // In which case we want to return nothing so these removals aren't considered by the slicer.
+          StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+          if ("getSolutionFor".equals(stackTrace[2].getMethodName()))
+          {
+            return Collections.emptyList();
+          }
+
+          return super.getRemovals();
+        }
+      } : planner.createChangeRequest(delegate);
+
       final IInstallableUnit rootIU = adjustProfileChangeRequest(profileChangeRequest, new SubProgressMonitor(monitor, 5));
 
       final ProvisioningContext provisioningContext = context.createProvisioningContext(this, profileChangeRequest);
       provisioningContext.setMetadataRepositories(metadataURIs);
       provisioningContext.setArtifactRepositories(artifactURIs.toArray(new URI[artifactURIs.size()]));
+
+      // In org.eclipse.equinox.internal.p2.director.SimplePlanner.getSolutionFor(ProfileChangeRequest, ProvisioningContext, IProgressMonitor)
+      // it will add all the profile's IUs to the slicer.
+      // We don't want to do that for targlets, because we want to compute a new target platform without consider what existed before.
+      if (isTarglet)
+      {
+        provisioningContext.setProperty("org.eclipse.equinox.p2.internal.profileius", Boolean.FALSE.toString());
+      }
 
       IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(new SubProgressMonitor(monitor, 5));
 

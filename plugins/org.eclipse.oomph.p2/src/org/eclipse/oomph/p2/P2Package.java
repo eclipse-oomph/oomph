@@ -300,22 +300,22 @@ public interface P2Package extends EPackage
   int REQUIREMENT__OPTIONAL = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
-   * The feature id for the '<em><b>Feature</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REQUIREMENT__FEATURE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
-
-  /**
    * The feature id for the '<em><b>Filter</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REQUIREMENT__FILTER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
+  int REQUIREMENT__FILTER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
+
+  /**
+   * The feature id for the '<em><b>Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__TYPE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The number of structural features of the '<em>Requirement</em>' class.
@@ -502,6 +502,16 @@ public interface P2Package extends EPackage
   int VERSION_SEGMENT = 6;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.p2.RequirementType <em>Requirement Type</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.p2.RequirementType
+   * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getRequirementType()
+   * @generated
+   */
+  int REQUIREMENT_TYPE = 7;
+
+  /**
    * The meta object id for the '<em>Version</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -509,7 +519,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getVersion()
    * @generated
    */
-  int VERSION = 7;
+  int VERSION = 8;
 
   /**
    * The meta object id for the '<em>Version Range</em>' data type.
@@ -519,7 +529,7 @@ public interface P2Package extends EPackage
    * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getVersionRange()
    * @generated
    */
-  int VERSION_RANGE = 8;
+  int VERSION_RANGE = 9;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.p2.ProfileDefinition <em>Profile Definition</em>}'.
@@ -693,17 +703,6 @@ public interface P2Package extends EPackage
   EAttribute getRequirement_Optional();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#isFeature <em>Feature</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Feature</em>'.
-   * @see org.eclipse.oomph.p2.Requirement#isFeature()
-   * @see #getRequirement()
-   * @generated
-   */
-  EAttribute getRequirement_Feature();
-
-  /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getFilter <em>Filter</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -713,6 +712,17 @@ public interface P2Package extends EPackage
    * @generated
    */
   EAttribute getRequirement_Filter();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Type</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#getType()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Type();
 
   /**
    * Returns the meta object for the '{@link org.eclipse.oomph.p2.Requirement#setVersionRange(org.eclipse.equinox.p2.metadata.Version, org.eclipse.oomph.p2.VersionSegment) <em>Set Version Range</em>}' operation.
@@ -807,6 +817,16 @@ public interface P2Package extends EPackage
    * @generated
    */
   EEnum getVersionSegment();
+
+  /**
+   * Returns the meta object for enum '{@link org.eclipse.oomph.p2.RequirementType <em>Requirement Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>Requirement Type</em>'.
+   * @see org.eclipse.oomph.p2.RequirementType
+   * @generated
+   */
+  EEnum getRequirementType();
 
   /**
    * Returns the meta object for data type '{@link org.eclipse.equinox.p2.metadata.Version <em>Version</em>}'.
@@ -989,20 +1009,20 @@ public interface P2Package extends EPackage
     EAttribute REQUIREMENT__OPTIONAL = eINSTANCE.getRequirement_Optional();
 
     /**
-     * The meta object literal for the '<em><b>Feature</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute REQUIREMENT__FEATURE = eINSTANCE.getRequirement_Feature();
-
-    /**
      * The meta object literal for the '<em><b>Filter</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EAttribute REQUIREMENT__FILTER = eINSTANCE.getRequirement_Filter();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__TYPE = eINSTANCE.getRequirement_Type();
 
     /**
      * The meta object literal for the '<em><b>Set Version Range</b></em>' operation.
@@ -1083,6 +1103,16 @@ public interface P2Package extends EPackage
      * @generated
      */
     EEnum VERSION_SEGMENT = eINSTANCE.getVersionSegment();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.p2.RequirementType <em>Requirement Type</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.p2.RequirementType
+     * @see org.eclipse.oomph.p2.impl.P2PackageImpl#getRequirementType()
+     * @generated
+     */
+    EEnum REQUIREMENT_TYPE = eINSTANCE.getRequirementType();
 
     /**
      * The meta object literal for the '<em>Version</em>' data type.

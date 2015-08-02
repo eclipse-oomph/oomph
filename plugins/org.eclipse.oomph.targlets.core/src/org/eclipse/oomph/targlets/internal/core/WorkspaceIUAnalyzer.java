@@ -119,7 +119,6 @@ public class WorkspaceIUAnalyzer
             }
           }
 
-          boolean main = true;
           for (IInstallableUnit iu : ius)
           {
             if (iu instanceof InstallableUnit)
@@ -130,12 +129,8 @@ public class WorkspaceIUAnalyzer
             adjustOmniRootRequirements(iu);
 
             WorkspaceIUInfo info = null;
-            if (main)
-            {
-              String projectName = project.getName();
-              info = new WorkspaceIUInfo(backendContainer, projectName);
-              main = false;
-            }
+            String projectName = project.getName();
+            info = new WorkspaceIUInfo(backendContainer, projectName);
 
             workspaceIUInfos.put(iu, info);
           }

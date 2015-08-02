@@ -201,6 +201,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     targlet.setActiveRepositoryListName(activeRepositoryList);
     targlet.setIncludeSources(source.isIncludeSources());
     targlet.setIncludeAllPlatforms(source.isIncludeAllPlatforms());
+    targlet.setIncludeAllRequirements(source.isIncludeAllRequirements());
 
     for (Annotation annotation : source.getAnnotations())
     {
