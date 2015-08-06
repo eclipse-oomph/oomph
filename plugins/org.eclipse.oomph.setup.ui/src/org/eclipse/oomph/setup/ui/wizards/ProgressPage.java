@@ -350,8 +350,8 @@ public class ProgressPage extends SetupWizardPage
     }
     else
     {
-      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks",
-          false, "restartIfNeeded");
+      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks", false,
+          "restartIfNeeded");
     }
 
     launchAutomatically = launchButton.getSelection();
@@ -844,8 +844,7 @@ public class ProgressPage extends SetupWizardPage
                     {
                       if (restart)
                       {
-                        setMessage(
-                            "Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
+                        setMessage("Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
                             IMessageProvider.WARNING);
                         setButtonState(IDialogConstants.CANCEL_ID, true);
 
@@ -860,8 +859,8 @@ public class ProgressPage extends SetupWizardPage
                           setButtonState(IDialogConstants.CANCEL_ID, false);
                         }
 
-                        shell.setData(PROGRESS_STATUS, new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(),
-                            "Task execution has successfully completed"));
+                        shell.setData(PROGRESS_STATUS,
+                            new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(), "Task execution has successfully completed"));
                       }
                     }
                     else
@@ -1109,7 +1108,7 @@ public class ProgressPage extends SetupWizardPage
         }
       });
 
-      setTaskName(name);
+      logTaskName(name);
 
       if (progressMonitor != null)
       {
@@ -1144,16 +1143,22 @@ public class ProgressPage extends SetupWizardPage
 
     public void setTaskName(String name)
     {
-      SetupTaskPerformer performer = getPerformer();
-      if (performer != null)
+      logTaskName(name);
+
+      if (progressMonitor != null)
       {
-        performer.log(name);
+        progressMonitor.setTaskName(name);
       }
     }
 
     public void subTask(String name)
     {
-      setTaskName(name);
+      logTaskName(name);
+
+      if (progressMonitor != null)
+      {
+        progressMonitor.subTask(name);
+      }
     }
 
     public void worked(final int work)
@@ -1383,6 +1388,15 @@ public class ProgressPage extends SetupWizardPage
         {
           SetupUIPlugin.INSTANCE.log(ex);
         }
+      }
+    }
+
+    private void logTaskName(String name)
+    {
+      SetupTaskPerformer performer = getPerformer();
+      if (performer != null)
+      {
+        performer.log(name);
       }
     }
   }
