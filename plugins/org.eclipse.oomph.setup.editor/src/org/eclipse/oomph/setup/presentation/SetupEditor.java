@@ -176,11 +176,9 @@ import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetSorter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -2525,17 +2523,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     PropertySheetPage propertySheetPage = new OomphPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, dialogSettings)
     {
-      {
-        setSorter(new PropertySheetSorter()
-        {
-          @Override
-          public void sort(IPropertySheetEntry[] entries)
-          {
-            // Intentionally left empty
-          }
-        });
-      }
-
       @Override
       public void setSelectionToViewer(List<?> selection)
       {
@@ -2550,6 +2537,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         getActionBarContributor().shareGlobalActions(this, actionBars);
       }
     };
+
     propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
     propertySheetPages.add(propertySheetPage);
 
