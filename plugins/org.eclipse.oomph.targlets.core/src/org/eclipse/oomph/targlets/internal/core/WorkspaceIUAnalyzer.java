@@ -23,6 +23,7 @@ import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.util.VersionGenerator;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.core.resources.IProject;
@@ -34,6 +35,7 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +47,8 @@ public class WorkspaceIUAnalyzer
 {
   public static final String IU_PROPERTY_WORKSPACE = "org.eclipse.oomph.targlet.workspace";
 
+  public static final String IU_PROPERTY_WORKSPACE_MAIN = "org.eclipse.oomph.targlet.workspace.main";
+
   private final MultiStatus status = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0, "Workspace IU Analysis", null);
 
   private final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = Collections.synchronizedMap(new HashMap<IInstallableUnit, WorkspaceIUInfo>());
@@ -53,28 +57,14 @@ public class WorkspaceIUAnalyzer
 
   private final String qualifierReplacement;
 
-  private Map<String, Requirement> omniRootRequirements;
-
-  public WorkspaceIUAnalyzer(EList<Requirement> rootRequirements)
+  public WorkspaceIUAnalyzer()
   {
-    this(rootRequirements, VersionGenerator.generateQualifierReplacement());
+    this(VersionGenerator.generateQualifierReplacement());
   }
 
-  public WorkspaceIUAnalyzer(EList<Requirement> rootRequirements, String qualifierReplacement)
+  public WorkspaceIUAnalyzer(String qualifierReplacement)
   {
     this.qualifierReplacement = qualifierReplacement;
-
-    if (qualifierReplacement != null && rootRequirements != null)
-    {
-      omniRootRequirements = new HashMap<String, Requirement>();
-      for (Requirement requirement : rootRequirements)
-      {
-        if (VersionRange.emptyRange.equals(requirement.getVersionRange()))
-        {
-          omniRootRequirements.put(requirement.getName(), requirement);
-        }
-      }
-    }
   }
 
   public Map<IInstallableUnit, WorkspaceIUInfo> getWorkspaceIUInfos()
@@ -97,8 +87,10 @@ public class WorkspaceIUAnalyzer
     return status;
   }
 
-  public void analyze(SourceLocator sourceLocator, final EList<IUGenerator> generators, IProgressMonitor monitor)
+  public EList<IInstallableUnit> analyze(SourceLocator sourceLocator, final EList<IUGenerator> generators, IProgressMonitor monitor)
   {
+    final EList<IInstallableUnit> allIUs = ECollections.asEList(Collections.synchronizedList(new ArrayList<IInstallableUnit>()));
+
     sourceLocator.handleProjects(EclipseProjectFactory.LIST, new ProjectHandler()
     {
       public void handleProject(IProject project, BackendContainer backendContainer)
@@ -119,21 +111,25 @@ public class WorkspaceIUAnalyzer
             }
           }
 
+          WorkspaceIUInfo info = new WorkspaceIUInfo(backendContainer, project.getName());
+          boolean isMain = true;
           for (IInstallableUnit iu : ius)
           {
             if (iu instanceof InstallableUnit)
             {
-              ((InstallableUnit)iu).setProperty(IU_PROPERTY_WORKSPACE, Boolean.TRUE.toString());
+              InstallableUnit installableUnit = (InstallableUnit)iu;
+              installableUnit.setProperty(IU_PROPERTY_WORKSPACE, Boolean.TRUE.toString());
+              if (isMain)
+              {
+                isMain = false;
+                installableUnit.setProperty(IU_PROPERTY_WORKSPACE_MAIN, Boolean.TRUE.toString());
+              }
             }
-
-            adjustOmniRootRequirements(iu);
-
-            WorkspaceIUInfo info = null;
-            String projectName = project.getName();
-            info = new WorkspaceIUInfo(backendContainer, projectName);
 
             workspaceIUInfos.put(iu, info);
           }
+
+          allIUs.addAll(ius);
         }
         catch (Exception ex)
         {
@@ -141,20 +137,39 @@ public class WorkspaceIUAnalyzer
         }
       }
     }, status, monitor);
+
+    return allIUs;
   }
 
-  private void adjustOmniRootRequirements(IInstallableUnit iu)
+  public void adjustOmniRootRequirements(EList<Requirement> rootRequirements)
   {
-    if (omniRootRequirements != null)
-    {
-      Requirement requirement = omniRootRequirements.remove(iu.getId());
-      if (requirement != null)
-      {
-        requirement.setVersionRange(P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), VersionSegment.MICRO));
+    Map<String, Requirement> omniRootRequirements;
 
-        if (omniRootRequirements.isEmpty())
+    if (qualifierReplacement != null)
+    {
+      omniRootRequirements = new HashMap<String, Requirement>();
+      for (Requirement requirement : rootRequirements)
+      {
+        if (VersionRange.emptyRange.equals(requirement.getVersionRange()))
         {
-          omniRootRequirements = null;
+          omniRootRequirements.put(requirement.getName(), requirement);
+        }
+      }
+
+      for (IInstallableUnit iu : workspaceIUInfos.keySet())
+      {
+        if (!iu.isSingleton())
+        {
+          Requirement requirement = omniRootRequirements.remove(iu.getId());
+          if (requirement != null)
+          {
+            requirement.setVersionRange(P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), VersionSegment.MICRO));
+
+            if (omniRootRequirements.isEmpty())
+            {
+              return;
+            }
+          }
         }
       }
     }

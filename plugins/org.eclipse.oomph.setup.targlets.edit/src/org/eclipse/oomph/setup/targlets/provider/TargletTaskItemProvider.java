@@ -785,7 +785,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 // Later we hope to change the path to be a variable reference, but for analysis purposes, we need the current physical path.
                 // Then analyze the Git clone for IUs.
                 final SourceLocator sourceLocator = ResourcesFactory.eINSTANCE.createSourceLocator(path.toString(), true);
-                WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(null);
+                WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer();
                 workspaceIUAnalyzer.analyze(sourceLocator, IUGenerator.DEFAULTS, new NullProgressMonitor());
                 Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
 

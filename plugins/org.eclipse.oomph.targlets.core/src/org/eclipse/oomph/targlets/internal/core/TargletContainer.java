@@ -71,6 +71,7 @@ import org.eclipse.equinox.internal.p2.engine.phases.Collect;
 import org.eclipse.equinox.internal.p2.engine.phases.Install;
 import org.eclipse.equinox.internal.p2.engine.phases.Property;
 import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
+import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.ResolvedInstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -95,6 +96,7 @@ import org.eclipse.equinox.p2.metadata.expression.IExpression;
 import org.eclipse.equinox.p2.metadata.expression.IFilterExpression;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
+import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -103,6 +105,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
+import org.eclipse.equinox.spi.p2.publisher.PublisherHelper;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetLocationFactory;
@@ -735,46 +738,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       final EList<Requirement> rootRequirements = profileDefinition.getRequirements();
       rootRequirements.clear();
 
-      for (Targlet targlet : targlets)
-      {
-        rootRequirements.addAll(EcoreUtil.copyAll(targlet.getRequirements()));
-      }
+      EList<Repository> repositories = profileDefinition.getRepositories();
+      repositories.clear();
 
-      // Filter out any ill-formed requirements.
-      for (Iterator<Requirement> it = rootRequirements.iterator(); it.hasNext();)
-      {
-        Requirement requirement = it.next();
-        if (StringUtil.isEmpty(requirement.getName()) || StringUtil.isEmpty(requirement.getName()) || requirement.getVersionRange() == null)
-        {
-          it.remove();
-        }
-      }
+      WorkspaceIUAnalyzer workspaceIUAnalyzer = analyzeWorkspaceIUs(rootRequirements, repositories, progress);
 
       if (rootRequirements.isEmpty())
       {
         descriptor.rollbackUpdateTransaction(null, new NullProgressMonitor());
         return null;
       }
-
-      EList<Repository> repositories = profileDefinition.getRepositories();
-      repositories.clear();
-
-      for (Targlet targlet : targlets)
-      {
-        repositories.addAll(EcoreUtil.copyAll(targlet.getActiveRepositories()));
-      }
-
-      // Filter out any bogus repositories.
-      for (Iterator<Repository> it = repositories.iterator(); it.hasNext();)
-      {
-        Repository repository = it.next();
-        if (StringUtil.isEmpty(repository.getURL()))
-        {
-          it.remove();
-        }
-      }
-
-      WorkspaceIUAnalyzer workspaceIUAnalyzer = analyzeWorkspaceIUs(rootRequirements, progress);
 
       TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms(), isIncludeAllRequirements());
       transaction.commit(commitContext, progress.newChild());
@@ -813,19 +786,58 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return profile;
   }
 
-  private WorkspaceIUAnalyzer analyzeWorkspaceIUs(final EList<Requirement> rootRequirements, SubMonitor progress) throws CoreException
+  private WorkspaceIUAnalyzer analyzeWorkspaceIUs(final EList<Requirement> rootRequirements, EList<Repository> repositories, SubMonitor progress)
+      throws CoreException
   {
-    WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer(rootRequirements);
+    WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer();
 
     for (Targlet targlet : targlets)
     {
       EList<IUGenerator> effectiveIUGenerators = effectiveIUGenerators(targlet);
 
+      EList<IInstallableUnit> ius = new BasicEList<IInstallableUnit>();
       for (SourceLocator sourceLocator : targlet.getSourceLocators())
       {
-        workspaceIUAnalyzer.analyze(sourceLocator, effectiveIUGenerators, progress.newChild());
+        ius.addAll(workspaceIUAnalyzer.analyze(sourceLocator, effectiveIUGenerators, progress.newChild()));
+      }
+
+      for (Requirement requirement : EcoreUtil.copyAll(targlet.getRequirements()))
+      {
+        String namespace = requirement.getNamespace();
+        String name = requirement.getName();
+        if (StringUtil.isEmpty(namespace) || StringUtil.isEmpty(name) || requirement.getVersionRange() == null)
+        {
+          continue;
+        }
+
+        if ("*".equals(name) && IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+        {
+          for (IInstallableUnit iu : ius)
+          {
+            if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.category")))
+            {
+              continue;
+            }
+
+            rootRequirements.add(P2Factory.eINSTANCE.createRequirement(iu.getId(), requirement.getVersionRange(), requirement.isOptional()));
+          }
+
+          continue;
+        }
+
+        rootRequirements.add(requirement);
+      }
+
+      for (Repository repository : EcoreUtil.copyAll(targlet.getActiveRepositories()))
+      {
+        if (!StringUtil.isEmpty(repository.getURL()))
+        {
+          repositories.add(repository);
+        }
       }
     }
+
+    workspaceIUAnalyzer.adjustOmniRootRequirements(rootRequirements);
 
     IStatus status = workspaceIUAnalyzer.getStatus();
     TargletsCorePlugin.INSTANCE.coreException(status);
@@ -977,6 +989,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   private static Map<IInstallableUnit, WorkspaceIUInfo> getRequiredProjects(IProfile profile, Map<IInstallableUnit, WorkspaceIUInfo> allProjects,
       IProgressMonitor monitor)
   {
+    Map<WorkspaceIUInfo, IInstallableUnit> mainIUs = new HashMap<WorkspaceIUInfo, IInstallableUnit>();
+    for (Map.Entry<IInstallableUnit, WorkspaceIUInfo> entry : allProjects.entrySet())
+    {
+      IInstallableUnit iu = entry.getKey();
+      if ("true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE_MAIN)))
+      {
+        mainIUs.put(entry.getValue(), iu);
+      }
+    }
+
     Map<IInstallableUnit, WorkspaceIUInfo> result = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
@@ -986,9 +1008,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
 
       WorkspaceIUInfo info = allProjects.get(iu);
-      if (info != null) // Extra IUs from p2.inf files have no separate workspace project
+      if (info != null)
       {
-        result.put(iu, info);
+        IInstallableUnit mainIU = mainIUs.get(info);
+        if (mainIU != null)
+        {
+          result.put(mainIU, info);
+        }
       }
     }
 
@@ -1091,17 +1117,50 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               {
                 // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
                 WorkspaceIUInfo info = workspaceIUInfos.get(workspaceIU);
-                if (info != null) // Extra IUs from p2.inf files have no separate workspace project
-                {
-                  workspaceIUInfos.put(iu, info);
-                }
+                workspaceIUInfos.put(iu, info);
 
-                // And that binary IU is in the qualifier range of the synthetic IU.
-                if (P2Factory.eINSTANCE.createVersionRange(workspaceIU.getVersion(), VersionSegment.MICRO).isIncluded(iu.getVersion()))
+                // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
+                ius.remove(workspaceIU);
+
+                // If the workspaceIU has any requirements not in the binary IU, then include those.
+                LOOP: for (IRequirement workspaceRequirement : workspaceIU.getRequirements())
                 {
-                  // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
-                  ius.remove(workspaceIU);
-                  workspaceRequirements.addAll(workspaceIU.getRequirements());
+                  if (workspaceRequirement instanceof IRequiredCapability)
+                  {
+                    IRequiredCapability workspaceRequiredCapability = (IRequiredCapability)workspaceRequirement;
+                    String namespace = workspaceRequiredCapability.getNamespace();
+                    String name = workspaceRequiredCapability.getName();
+                    for (IRequirement requirement : iu.getRequirements())
+                    {
+                      if (requirement instanceof IRequiredCapability)
+                      {
+                        IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+                        if (namespace.equals(requiredCapability.getNamespace()) && name.equals(requiredCapability.getName()))
+                        {
+                          // It's already included, perhaps with a different version range, but we'll ignore it.
+                          continue LOOP;
+                        }
+                      }
+                    }
+
+                    // If it's an IU or bundle requirement...
+                    if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace) || BundlesAction.CAPABILITY_NS_OSGI_BUNDLE.equals(namespace))
+                    {
+                      // If it resolves to a workspace IU that's a singleton, generalize the requirement to include any version of that IU, because resolving to
+                      // any version will result in the import of the project.
+                      IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(iu.getId(), Version.emptyVersion));
+                      if (requiredWorkspaceIU != null && requiredWorkspaceIU.isSingleton())
+                      {
+                        workspaceRequirements
+                            .add(MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange, workspaceRequiredCapability.getFilter(),
+                                workspaceRequiredCapability.getMin(), workspaceRequiredCapability.getMin(), workspaceRequiredCapability.isGreedy()));
+                        continue LOOP;
+                      }
+                    }
+                  }
+
+                  // Otherwise add the requirement as is.
+                  workspaceRequirements.add(workspaceRequirement);
                 }
 
                 // If there this workspace IU has a license...
@@ -1364,16 +1423,20 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               TargletsCorePlugin.checkCancelation(monitor);
 
               String key = property.getKey();
-              String value = property.getValue();
-
-              if ("org.eclipse.equinox.p2.name".equals(key))
+              if (!WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE_MAIN.equals(key))
               {
-                value = "Source for " + value;
-              }
+                String value = property.getValue();
 
-              description.setProperty(key, value);
+                if ("org.eclipse.equinox.p2.name".equals(key))
+                {
+                  value = "Source for " + value;
+                }
+
+                description.setProperty(key, value);
+              }
             }
 
+            description.setTouchpointType(PublisherHelper.TOUCHPOINT_OSGI);
             description.setProperty(IU_PROPERTY_SOURCE, Boolean.TRUE.toString());
             description.addProvidedCapabilities(Collections
                 .singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, description.getId(), description.getVersion())));
@@ -1384,10 +1447,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
             idToIUMap.put(new IU(workspaceSourceIU), workspaceSourceIU);
             WorkspaceIUInfo info = workspaceIUInfos.get(iu);
-            if (info != null) // Extra IUs from p2.inf files have no separate workspace project
-            {
-              workspaceSourceIUInfos.put(workspaceSourceIU, info);
-            }
+            workspaceSourceIUInfos.put(workspaceSourceIU, info);
           }
 
           // Include all source IUs in the map.

@@ -305,22 +305,29 @@ public class RequirementItemProvider extends ModelElementItemProvider
     String namespace = requirement.getNamespace();
     if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
     {
-      switch (requirement.getType())
+      if ("*".equals(requirement.getName()))
       {
-        case NONE:
+        key += "_AllSources";
+      }
+      else
+      {
+        switch (requirement.getType())
         {
-          key += "_Plugin";
-          break;
-        }
-        case FEATURE:
-        {
-          key += "_Feature";
-          break;
-        }
-        case PROJECT:
-        {
-          key += "_Project";
-          break;
+          case NONE:
+          {
+            key += "_Plugin";
+            break;
+          }
+          case FEATURE:
+          {
+            key += "_Feature";
+            break;
+          }
+          case PROJECT:
+          {
+            key += "_Project";
+            break;
+          }
         }
       }
     }
