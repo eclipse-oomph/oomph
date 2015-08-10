@@ -143,9 +143,7 @@ public final class SetupCoreUtil
     uriHandlers.add(4, new UserURIHandlerImpl());
     uriHandlers.add(5, new SelfProductCatalogURIHandlerImpl());
     uriHandlers.add(6, new PreferencesURIHandlerImpl());
-    uriHandlers.add(7, new ECFURIHandlerImpl());
-
-    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_AUTHORIZATION_HANDLER, AUTHORIZATION_HANDLER);
+    uriHandlers.add(7, new ECFURIHandlerImpl(AUTHORIZATION_HANDLER));
 
     class ModelResourceSet extends ResourceSetImpl
     {

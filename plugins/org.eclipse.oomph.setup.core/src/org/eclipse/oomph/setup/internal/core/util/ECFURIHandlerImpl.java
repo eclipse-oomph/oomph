@@ -90,6 +90,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   private static final String CONTENT_TAG = "\"content\":\"";
 
+  private AuthorizationHandler defaultAuthorizationHandler;
+
+  public ECFURIHandlerImpl(AuthorizationHandler defaultAuthorizationHandler)
+  {
+    this.defaultAuthorizationHandler = defaultAuthorizationHandler;
+  }
+
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
@@ -110,7 +117,21 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   @Override
   public boolean exists(URI uri, Map<?, ?> options)
   {
-    return super.exists(uri, options);
+    InputStream inputStream = null;
+    try
+    {
+      // Use this approach to ensure that proxies and authorization are handled.
+      inputStream = createInputStream(uri, options);
+      return true;
+    }
+    catch (IOException ex)
+    {
+      return false;
+    }
+    finally
+    {
+      IOUtil.closeSilent(inputStream);
+    }
   }
 
   @Override
@@ -431,6 +452,16 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
   }
 
+  private AuthorizationHandler getAuthorizatonHandler(Map<?, ?> options)
+  {
+    if (options.containsKey(OPTION_AUTHORIZATION_HANDLER))
+    {
+      return (AuthorizationHandler)options.get(OPTION_AUTHORIZATION_HANDLER);
+    }
+
+    return defaultAuthorizationHandler;
+  }
+
   private static String getHost(URI uri)
   {
     String authority = uri.authority();
@@ -488,11 +519,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
 
     return cacheHandling;
-  }
-
-  private static AuthorizationHandler getAuthorizatonHandler(Map<?, ?> options)
-  {
-    return (AuthorizationHandler)options.get(OPTION_AUTHORIZATION_HANDLER);
   }
 
   private static Authorization getAuthorizaton(Map<?, ?> options)
