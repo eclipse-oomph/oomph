@@ -11,6 +11,7 @@
 package org.eclipse.oomph.internal.version;
 
 import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.version.IElement;
 import org.eclipse.oomph.version.IElement.Type;
 import org.eclipse.oomph.version.IRelease;
@@ -196,7 +197,8 @@ public class ReleaseManager implements IReleaseManager
     org.eclipse.pde.internal.core.ifeature.IFeature feature = featureModel.getFeature();
 
     String name = feature.getId();
-    Version version = new Version(feature.getVersion());
+    String versionValue = feature.getVersion();
+    Version version = new Version(StringUtil.isEmpty(versionValue) ? "1.0.0.qualifier" : versionValue);
     IElement element = new Element(Type.FEATURE, name, version);
 
     if (withContent)
