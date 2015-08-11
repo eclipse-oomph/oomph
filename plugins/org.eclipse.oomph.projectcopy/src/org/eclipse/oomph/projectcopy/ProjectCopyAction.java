@@ -86,19 +86,26 @@ public class ProjectCopyAction implements IObjectActionDelegate
       {
         public String isValid(String newName)
         {
-          IProject newProject = ROOT.getProject(newName);
-          if (newProject.exists())
+          try
           {
-            return "Project " + newName + " already exists.";
-          }
+            IProject newProject = ROOT.getProject(newName);
+            if (newProject.exists())
+            {
+              return "Project " + newName + " already exists.";
+            }
 
-          File newFolder = new File(parentFolder, newName);
-          if (newFolder.exists())
+            File newFolder = new File(parentFolder, newName);
+            if (newFolder.exists())
+            {
+              return "Location " + newFolder.getAbsolutePath() + " already exists.";
+            }
+
+            return null;
+          }
+          catch (Exception exception)
           {
-            return "Location " + newFolder.getAbsolutePath() + " already exists.";
+            return exception.getLocalizedMessage();
           }
-
-          return null;
         }
       });
 
