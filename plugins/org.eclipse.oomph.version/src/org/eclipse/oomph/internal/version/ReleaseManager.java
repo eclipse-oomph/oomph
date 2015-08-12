@@ -274,9 +274,14 @@ public class ReleaseManager implements IReleaseManager
     {
       featureModels = manager.getExternalModels();
       featureModel = getFeatureModel(name, featureModels);
+
+      if (featureModel == null)
+      {
+        return null;
+      }
     }
 
-    if (name.endsWith(".source") && featureModel != null && featureModel.getUnderlyingResource() == null)
+    if (name.endsWith(".source") && featureModel.getUnderlyingResource() == null)
     {
       return null;
     }
