@@ -321,7 +321,8 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
           IEditorDescriptor editor = registry.findEditor(editorID);
           if (editor instanceof EditorDescriptor)
           {
-            fileEditorMapping.addEditor((EditorDescriptor)editor);
+            EditorDescriptor descriptor = (EditorDescriptor)editor;
+            fileEditorMapping.addEditor(descriptor);
           }
         }
       }
@@ -332,7 +333,8 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
         IEditorDescriptor defaultEditor = registry.findEditor(defaultEditorID);
         if (defaultEditor instanceof EditorDescriptor)
         {
-          fileEditorMapping.setDefaultEditor((EditorDescriptor)defaultEditor);
+          EditorDescriptor descriptor = (EditorDescriptor)defaultEditor;
+          fileEditorMapping.setDefaultEditor(descriptor);
         }
       }
     }
