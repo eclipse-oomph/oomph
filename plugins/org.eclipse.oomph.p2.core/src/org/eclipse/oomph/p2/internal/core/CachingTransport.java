@@ -154,7 +154,10 @@ public class CachingTransport extends Transport
 
           DownloadStatus downloadStatus = (DownloadStatus)status;
           long lastModified = downloadStatus.getLastModified();
-          cacheFile.setLastModified(lastModified);
+          if (lastModified >= 0)
+          {
+            cacheFile.setLastModified(lastModified);
+          }
         }
         else
         {
