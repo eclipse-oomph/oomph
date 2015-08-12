@@ -61,25 +61,27 @@ public class CleanBuildHandler extends AbstractHandler
               for (int i = 0; i < array.length; i++)
               {
                 IProject project = (IProject)array[i];
-
-                try
+                if (project.isAccessible())
                 {
-                  IMarker[] markers = project.findMarkers(null, true, IResource.DEPTH_INFINITE);
-                  for (IMarker marker : markers)
+                  try
                   {
-                    try
+                    IMarker[] markers = project.findMarkers(null, true, IResource.DEPTH_INFINITE);
+                    for (IMarker marker : markers)
                     {
-                      marker.delete();
-                    }
-                    catch (CoreException ex)
-                    {
-                      log(ex);
+                      try
+                      {
+                        marker.delete();
+                      }
+                      catch (CoreException ex)
+                      {
+                        log(ex);
+                      }
                     }
                   }
-                }
-                catch (CoreException ex)
-                {
-                  log(ex);
+                  catch (CoreException ex)
+                  {
+                    log(ex);
+                  }
                 }
               }
             }
