@@ -55,8 +55,17 @@ public final class BaseUtil
     }
     catch (Throwable ex)
     {
+      // This method is always expected to return a non-null result.
+      BaseResource resource = (BaseResource)resourceSet.getResource(uri, false);
+      if (resource == null)
+      {
+        // Failure to even create a resource in the first place will cause null pointer exceptions in downstream clients.
+        // Throwing this exception will make it easier to track down why a resource cannot be created.
+        throw new IORuntimeException(ex);
+      }
+
       BasePlugin.INSTANCE.log(ex, IStatus.WARNING);
-      return (BaseResource)resourceSet.getResource(uri, false);
+      return resource;
     }
   }
 
