@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
@@ -439,7 +440,6 @@ public abstract class ExternalResource extends PlatformObject implements IResour
   @Deprecated
   public void setReadOnly(boolean readOnly)
   {
-    throw new ReadOnlyException();
   }
 
   public void setResourceAttributes(ResourceAttributes attributes) throws CoreException
@@ -484,21 +484,30 @@ public abstract class ExternalResource extends PlatformObject implements IResour
     {
       case FILE:
         return "L"; //$NON-NLS-1$
+
       case FOLDER:
         return "F"; //$NON-NLS-1$
+
       case PROJECT:
         return "P"; //$NON-NLS-1$
+
       case ROOT:
         return "R"; //$NON-NLS-1$
     }
+
     return ""; //$NON-NLS-1$
   }
 
   /**
    * @author Eike Stepper
    */
-  public static class ReadOnlyException extends RuntimeException
+  public static class ReadOnlyException extends CoreException
   {
     private static final long serialVersionUID = 1L;
+
+    public ReadOnlyException()
+    {
+      super(Status.CANCEL_STATUS);
+    }
   }
 }

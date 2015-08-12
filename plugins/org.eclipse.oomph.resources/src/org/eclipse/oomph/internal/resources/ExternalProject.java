@@ -355,62 +355,51 @@ public final class ExternalProject extends ExternalContainer implements IProject
 
     public ICommand newCommand()
     {
-      throw new ReadOnlyException();
+      return new BuildCommand(null);
     }
 
     public void setActiveBuildConfig(String configName)
     {
-      throw new ReadOnlyException();
     }
 
     public void setBuildConfigs(String[] configNames)
     {
-      throw new ReadOnlyException();
     }
 
     public void setBuildConfigReferences(String configName, IBuildConfiguration[] references)
     {
-      throw new ReadOnlyException();
     }
 
     public void setBuildSpec(ICommand[] buildSpec)
     {
-      throw new ReadOnlyException();
     }
 
     public void setComment(String comment)
     {
-      throw new ReadOnlyException();
     }
 
     public void setDynamicReferences(IProject[] projects)
     {
-      throw new ReadOnlyException();
     }
 
     public void setLocation(IPath location)
     {
-      throw new ReadOnlyException();
     }
 
     public void setLocationURI(URI location)
     {
-      throw new ReadOnlyException();
     }
 
     public void setName(String projectName)
     {
-      throw new ReadOnlyException();
     }
 
     public void setNatureIds(String[] natures)
     {
-      throw new ReadOnlyException();
     }
 
     public void setReferencedProjects(IProject[] projects)
     {
-      throw new ReadOnlyException();
     }
 
     public void internalSetName(String name)
@@ -495,17 +484,14 @@ public final class ExternalProject extends ExternalContainer implements IProject
 
       public void setArguments(Map<String, String> args)
       {
-        throw new ReadOnlyException();
       }
 
       public void setBuilderName(String builderName)
       {
-        throw new ReadOnlyException();
       }
 
       public void setBuilding(int kind, boolean value)
       {
-        throw new ReadOnlyException();
       }
     }
   }
