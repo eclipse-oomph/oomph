@@ -458,9 +458,9 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
       if (arguments.isCheckMavenPom())
       {
-        if (delta == null || delta.findMember(MAVEN_POM_PATH) != null)
+        if (delta == null || delta.findMember(MAVEN_POM_PATH) != null || delta.findMember(componentModelPath) != null)
         {
-          checkMavenPom(componentModel, element);
+          checkMavenPom(element);
         }
       }
       else if (oldVersionBuilderArguments.isCheckMavenPom())
@@ -1010,7 +1010,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     return parserFactory.newSAXParser();
   }
 
-  private void checkMavenPom(IModel componentModel, IElement element) throws CoreException
+  private void checkMavenPom(IElement element) throws CoreException
   {
     final IFile file = getProject().getFile(MAVEN_POM_PATH);
     if (file.isAccessible())
