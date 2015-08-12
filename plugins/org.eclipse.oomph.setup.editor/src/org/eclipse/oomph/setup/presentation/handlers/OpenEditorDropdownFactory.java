@@ -186,16 +186,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          Runnable runnable = new Runnable()
-          {
-            public void run()
-            {
-              OpenEditorDropdownHandler.openEditor(object);
-            }
-          };
-
-          // OpenEditorDropdownHandler.setAction(OpenEditorDropdownHandler.COMMAND_ID, imageDescriptor, text, runnable);
-          runnable.run();
+          OpenEditorDropdownHandler.openEditor(object);
         }
       });
 

@@ -145,6 +145,9 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
   {
     URI uri = EcoreUtil.getURI(object);
     IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-    SetupEditorSupport.getEditor(page, uri, true);
+    if (page != null)
+    {
+      SetupEditorSupport.getEditor(page, uri, true);
+    }
   }
 }
