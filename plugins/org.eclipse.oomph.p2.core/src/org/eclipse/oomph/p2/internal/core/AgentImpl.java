@@ -534,7 +534,8 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       return false;
     }
 
-    return true;
+    // We can only cache if we can delegate to an existing transport.
+    return transport != null;
   }
 
   private static File getFile(String path)
