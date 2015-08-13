@@ -354,7 +354,7 @@ public abstract class PersistentMap<E>
       }
       catch (IOException ex)
       {
-        if (System.currentTimeMillis() - start >= 1000L)
+        if (System.currentTimeMillis() - start >= 10000L)
         {
           throw new RuntimeException("Acquisition of lock file " + lockFile + " timed out", ex);
         }
