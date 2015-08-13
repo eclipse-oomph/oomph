@@ -33,6 +33,186 @@ public final class StringUtil
   {
   }
 
+  public static String escape(String str)
+  {
+    if (str == null)
+    {
+      return null;
+    }
+
+    int len = str.length();
+    StringBuilder builder = new StringBuilder(len);
+
+    for (int i = 0; i < len; i++)
+    {
+      char c = str.charAt(i);
+
+      if (c > 0xfff)
+      {
+        builder.append("\\u" + HexUtil.charToHex(c));
+      }
+      else if (c > 0xff)
+      {
+        builder.append("\\u0" + HexUtil.charToHex(c));
+      }
+      else if (c > 0x7f)
+      {
+        builder.append("\\u00" + HexUtil.charToHex(c));
+      }
+      else if (c < 32)
+      {
+        switch (c)
+        {
+          case '\r':
+            builder.append('\\');
+            builder.append('r');
+            break;
+
+          case '\n':
+            builder.append('\\');
+            builder.append('n');
+            break;
+
+          case '\t':
+            builder.append('\\');
+            builder.append('t');
+            break;
+
+          case '\f':
+            builder.append('\\');
+            builder.append('f');
+            break;
+
+          case '\b':
+            builder.append('\\');
+            builder.append('b');
+            break;
+
+          default:
+            if (c > 0xf)
+            {
+              builder.append("\\u00" + HexUtil.charToHex(c));
+            }
+            else
+            {
+              builder.append("\\u000" + HexUtil.charToHex(c));
+            }
+        }
+      }
+      else if (c == '\\')
+      {
+        builder.append('\\');
+        builder.append('\\');
+      }
+      else
+      {
+        builder.append(c);
+      }
+    }
+
+    return builder.toString();
+  }
+
+  public static String unescape(String str)
+  {
+    if (str == null)
+    {
+      return null;
+    }
+
+    int len = str.length();
+    StringBuilder builder = new StringBuilder(len);
+
+    StringBuilder unicodeBuilder = new StringBuilder(4);
+    boolean unicode = false;
+    boolean slash = false;
+
+    for (int i = 0; i < len; i++)
+    {
+      char c = str.charAt(i);
+      if (unicode)
+      {
+        unicodeBuilder.append(c);
+        if (unicodeBuilder.length() == 4)
+        {
+          try
+          {
+            char value = HexUtil.hexToChar(unicodeBuilder.toString());
+            builder.append(value);
+            unicodeBuilder.setLength(0);
+            unicode = false;
+            slash = false;
+          }
+          catch (NumberFormatException ex)
+          {
+            builder.append('\\');
+            builder.append('u');
+            builder.append(unicodeBuilder);
+          }
+        }
+
+        continue;
+      }
+
+      if (slash)
+      {
+        slash = false;
+
+        switch (c)
+        {
+          case '\\':
+            builder.append('\\');
+            break;
+
+          case 'r':
+            builder.append('\r');
+            break;
+
+          case 'n':
+            builder.append('\n');
+            break;
+
+          case 't':
+            builder.append('\t');
+            break;
+
+          case 'f':
+            builder.append('\f');
+            break;
+
+          case 'b':
+            builder.append('\b');
+            break;
+
+          case 'u':
+          {
+            unicode = true;
+            break;
+          }
+
+          default:
+            builder.append(c);
+        }
+
+        continue;
+      }
+      else if (c == '\\')
+      {
+        slash = true;
+        continue;
+      }
+
+      builder.append(c);
+    }
+
+    if (slash)
+    {
+      builder.append('\\');
+    }
+
+    return builder.toString();
+  }
+
   public static boolean isEmpty(String str)
   {
     return str == null || str.length() == 0;

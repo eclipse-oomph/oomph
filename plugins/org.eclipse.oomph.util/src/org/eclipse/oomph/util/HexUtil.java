@@ -11,6 +11,7 @@
 package org.eclipse.oomph.util;
 
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Provides static methods that convert to and from hexadecimal string formats.
@@ -137,5 +138,15 @@ public final class HexUtil
 
       out[off + i / 2] = (byte)(b1 << 4 | b2);
     }
+  }
+
+  public static String charToHex(char ch)
+  {
+    return Integer.toHexString(ch).toUpperCase(Locale.ENGLISH);
+  }
+
+  public static char hexToChar(String s)
+  {
+    return (char)Integer.parseInt(s, 16);
   }
 }

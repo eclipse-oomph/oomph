@@ -40,7 +40,9 @@ import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleView
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.Pair;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
@@ -64,6 +66,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -87,6 +90,7 @@ import org.eclipse.emf.edit.provider.DelegatingWrapperItemProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -99,6 +103,8 @@ import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
+import org.eclipse.emf.edit.ui.provider.PropertyDescriptor;
+import org.eclipse.emf.edit.ui.provider.PropertySource;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
@@ -130,9 +136,12 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -145,17 +154,26 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -176,7 +194,9 @@ import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
@@ -184,7 +204,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -2538,9 +2560,193 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     };
 
-    propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
-    propertySheetPages.add(propertySheetPage);
+    propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory)
+    {
+      @Override
+      protected IPropertySource createPropertySource(Object object, IItemPropertySource itemPropertySource)
+      {
+        return new PropertySource(object, itemPropertySource)
+        {
+          @Override
+          protected IPropertyDescriptor createPropertyDescriptor(IItemPropertyDescriptor itemPropertyDescriptor)
+          {
+            return new PropertyDescriptor(object, itemPropertyDescriptor)
+            {
+              @Override
+              protected CellEditor createEDataTypeCellEditor(EDataType eDataType, Composite composite)
+              {
+                if (itemPropertyDescriptor.isMultiLine(object))
+                {
+                  return new EDataTypeCellEditor(eDataType, composite)
+                  {
+                    private Text text;
 
+                    private Button button;
+
+                    private boolean doEscape;
+
+                    @Override
+                    public Object doGetValue()
+                    {
+                      String str = (String)super.doGetValue();
+
+                      if (doEscape)
+                      {
+                        str = StringUtil.unescape(str);
+                      }
+
+                      return str;
+                    }
+
+                    @Override
+                    public void doSetValue(Object value)
+                    {
+                      String str = (String)value;
+                      if (str != null)
+                      {
+                        doEscape = str.contains("\n");
+                        if (doEscape)
+                        {
+                          str = StringUtil.escape(str);
+                        }
+                      }
+
+                      super.doSetValue(str);
+                    }
+
+                    @Override
+                    protected Control createControl(Composite parent)
+                    {
+                      GridLayout layout = new GridLayout(2, false);
+                      layout.marginWidth = 0;
+                      layout.marginHeight = 0;
+                      layout.horizontalSpacing = 0;
+
+                      final Composite composite = new Composite(parent, SWT.NONE);
+                      composite.setLayout(layout);
+                      composite.setFont(parent.getFont());
+                      composite.setBackground(parent.getBackground());
+
+                      text = (Text)super.createControl(composite);
+                      text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+                      button = new Button(composite, SWT.PUSH);
+                      button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
+                      button.setText("...");
+                      button.addSelectionListener(new SelectionAdapter()
+                      {
+                        @Override
+                        public void widgetSelected(SelectionEvent e)
+                        {
+                          final String className = "org.eclipse.emf.edit.ui.provider.PropertyDescriptor$MultiLineInputDialog";
+                          Dialog dialog;
+
+                          try
+                          {
+                            Class<?> c = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", className);
+                            if (c == null)
+                            {
+                              throw new Exception("Could not find class " + className);
+                            }
+
+                            Constructor<?> constructor = c.getConstructor(Shell.class, String.class, String.class, String.class, IInputValidator.class);
+                            if (constructor == null)
+                            {
+                              throw new Exception("Could not find constructor of " + className);
+                            }
+
+                            constructor.setAccessible(true);
+
+                            dialog = (Dialog)constructor.newInstance(composite.getShell(),
+                                EMFEditUIPlugin.INSTANCE.getString("_UI_FeatureEditorDialog_title",
+                                    new Object[] { getDisplayName(), getEditLabelProvider().getText(object) }),
+                                EMFEditUIPlugin.INSTANCE.getString("_UI_MultiLineInputDialog_message"), valueHandler.toString(getValue()), valueHandler);
+
+                            if (dialog == null)
+                            {
+                              throw new Exception("Could not open dialog " + className);
+                            }
+                          }
+                          catch (Throwable ex)
+                          {
+                            SetupEditorPlugin.INSTANCE.log(ex);
+                            return;
+                          }
+
+                          if (dialog.open() == Window.OK)
+                          {
+                            String value = (String)ReflectUtil.invokeMethod("getValue", dialog);
+
+                            Object newValue = valueHandler.toValue(value);
+                            if (newValue != null)
+                            {
+                              boolean newValidState = isCorrect(newValue);
+                              if (newValidState)
+                              {
+                                markDirty();
+                                doSetValue(newValue);
+                              }
+                              else
+                              {
+                                // try to insert the current value into the error message.
+                                setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { newValue.toString() }));
+                              }
+
+                              fireApplyEditorValue();
+                            }
+                          }
+                        }
+                      });
+
+                      return composite;
+                    }
+
+                    @Override
+                    protected void focusLost()
+                    {
+                      if (isActivated())
+                      {
+                        UIUtil.asyncExec(new Runnable()
+                        {
+                          public void run()
+                          {
+                            try
+                            {
+                              if (button.isFocusControl())
+                              {
+                                return;
+                              }
+                            }
+                            catch (Exception ex)
+                            {
+                              //$FALL-THROUGH$
+                            }
+
+                            try
+                            {
+                              fireApplyEditorValue();
+                              deactivate();
+                            }
+                            catch (Exception ex)
+                            {
+                              //$FALL-THROUGH$
+                            }
+                          }
+                        });
+                      }
+                    }
+                  };
+                }
+
+                return super.createEDataTypeCellEditor(eDataType, composite);
+              }
+            };
+          }
+        };
+      }
+    });
+
+    propertySheetPages.add(propertySheetPage);
     return propertySheetPage;
   }
 
