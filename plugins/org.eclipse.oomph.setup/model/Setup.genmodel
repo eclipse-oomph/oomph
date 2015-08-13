@@ -213,7 +213,7 @@
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//PreferenceTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//PreferenceTask/key"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//PreferenceTask/value"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//PreferenceTask/value"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//ResourceCopyTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCopyTask/sourceURL"/>

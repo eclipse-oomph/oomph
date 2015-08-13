@@ -151,33 +151,9 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
-  public String createEscapedString(String literal)
-  {
-    return (String)super.createFromString(PreferencesPackage.Literals.ESCAPED_STRING, literal);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String createEscapedStringFromString(EDataType eDataType, String initialValue)
-  {
-    return createEscapedString(initialValue);
-  }
-
-  private static final String[] ESCAPES = { "\\000", "\\001", "\\002", "\\003", "\\004", "\\005", "\\006", "\\007", "\\010", "\\t", "\\n", "\\013", "\\014",
-      "\\r", "\\016", "\\017", "\\020", "\\021", "\\022", "\\023", "\\024", "\\025", "\\026", "\\027", "\\030", "\\031", "\\032", "\\033", "\\034", "\\035",
-      "\\036", "\\037" };
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated NOT
    */
-  public String createEscapedStringFromString(String literal)
+  public String createEscapedString(String literal)
   {
     if (literal == null)
     {
@@ -224,8 +200,23 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
       }
       result.append(c);
     }
+
     return result.toString();
   }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String createEscapedStringFromString(EDataType eDataType, String initialValue)
+  {
+    return createEscapedString(initialValue);
+  }
+
+  private static final String[] ESCAPES = { "\\000", "\\001", "\\002", "\\003", "\\004", "\\005", "\\006", "\\007", "\\010", "\\t", "\\n", "\\013", "\\014",
+      "\\r", "\\016", "\\017", "\\020", "\\021", "\\022", "\\023", "\\024", "\\025", "\\026", "\\027", "\\030", "\\031", "\\032", "\\033", "\\034", "\\035",
+      "\\036", "\\037" };
 
   /**
    * <!-- begin-user-doc -->
@@ -260,6 +251,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
         result.append(c);
       }
     }
+
     return result.toString();
   }
 

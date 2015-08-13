@@ -86,7 +86,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_PreferenceTask_value_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_PreferenceTask_value_feature", "_UI_PreferenceTask_type"),
-        SetupPackage.Literals.PREFERENCE_TASK__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        SetupPackage.Literals.PREFERENCE_TASK__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -132,7 +132,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
     String label = "" + key;
     if (value != null)
     {
-      label += " = " + value;
+      label += " = " + crop(value);
     }
 
     return label;
