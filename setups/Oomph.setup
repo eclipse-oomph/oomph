@@ -323,8 +323,14 @@
       <workingSet
           name="Oomph Setup">
         <predicate
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.setup(\.(util|core|doc|edit|editor|ui|ui\.ide|ui\.questionnaire|tests|installer|installer\.product|installer\.tests|sdk))?(-feature)?"/>
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:NamePredicate"
+              pattern="org\.eclipse\.oomph\.setup.*"/>
+          <operand
+              xsi:type="workingsets:ExclusionPredicate"
+              excludedWorkingSet="//@streams[name='master']/@setupTasks.3/@workingSets.1"/>
+        </predicate>
       </workingSet>
       <workingSet
           name="Oomph Setup Extensions">
@@ -334,8 +340,9 @@
               xsi:type="predicates:NamePredicate"
               pattern="org\.eclipse\.oomph\.setup.*"/>
           <operand
-              xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@streams[name='master']/@setupTasks.3/@workingSets.0"/>
+              xsi:type="predicates:FilePredicate"
+              filePattern="build.properties"
+              contentPattern="oomph\.setup\.extension=true"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -507,5 +514,5 @@
   </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.projects.setup#/"/>
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
 </setup:Project>
