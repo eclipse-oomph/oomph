@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.workbench.FileEditor;
 import org.eclipse.oomph.setup.workbench.FileMapping;
 import org.eclipse.oomph.setup.workbench.WorkbenchPackage;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -35,6 +36,7 @@ import org.eclipse.ui.internal.registry.EditorRegistry;
 import org.eclipse.ui.internal.registry.FileEditorMapping;
 import org.eclipse.ui.internal.util.PrefUtil;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -331,10 +333,22 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
       if (!StringUtil.isEmpty(defaultEditorID))
       {
         IEditorDescriptor defaultEditor = registry.findEditor(defaultEditorID);
-        if (defaultEditor instanceof EditorDescriptor)
+        if (defaultEditor != null)
         {
-          EditorDescriptor descriptor = (EditorDescriptor)defaultEditor;
-          fileEditorMapping.setDefaultEditor(descriptor);
+          try
+          {
+            fileEditorMapping.setDefaultEditor(defaultEditor);
+          }
+          catch (NoSuchMethodError ex)
+          {
+            // Before Neon the setDefaultEditor() method took an EditorDescriptor-typed argument.
+            if (defaultEditor instanceof EditorDescriptor)
+            {
+              EditorDescriptor descriptor = (EditorDescriptor)defaultEditor;
+              Method method = ReflectUtil.getMethod(FileEditorMapping.class, "setDefaultEditor", EditorDescriptor.class);
+              ReflectUtil.invokeMethod(method, fileEditorMapping, descriptor);
+            }
+          }
         }
       }
     }
