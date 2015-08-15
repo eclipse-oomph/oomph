@@ -348,6 +348,10 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
               Method method = ReflectUtil.getMethod(FileEditorMapping.class, "setDefaultEditor", EditorDescriptor.class);
               ReflectUtil.invokeMethod(method, fileEditorMapping, descriptor);
             }
+            else
+            {
+              throw ex;
+            }
           }
         }
       }
