@@ -25,6 +25,8 @@ import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
+import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
+import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
@@ -72,7 +74,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -229,6 +230,10 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
   private final PreferenceRecorderToolbarAction recordPreferencesAction = new PreferenceRecorderToolbarAction(true);
 
+  private final PreferenceCaptureToolbarAction capturePreferencesAction = new PreferenceCaptureToolbarAction(false);
+
+  private final PreferenceCaptureToolbarAction importPreferencesAction = new PreferenceCaptureToolbarAction(true);
+
   private final CommandTableAction commandTableAction = new CommandTableAction();
 
   private final EditorTableAction editorTableAction = new EditorTableAction();
@@ -289,6 +294,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   {
     toolBarManager.add(new Separator("setup-settings"));
     toolBarManager.add(recordPreferencesAction);
+    toolBarManager.add(capturePreferencesAction);
+    toolBarManager.add(importPreferencesAction);
     toolBarManager.add(commandTableAction);
     toolBarManager.add(editorTableAction);
     // toolBarManager.add(testInstallAction);
@@ -357,6 +364,8 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
     revertAction.setActiveWorkbenchPart(part);
     openInSetupEditorAction.setActiveWorkbenchPart(part);
     openInTextEditorAction.setActiveWorkbenchPart(part);
+    capturePreferencesAction.setActiveWorkbenchPart(part);
+    importPreferencesAction.setActiveWorkbenchPart(part);
 
     // Switch to the new selection provider.
     //
@@ -1077,29 +1086,67 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
   {
     public PreferenceRecorderToolbarAction(boolean withDialog)
     {
-      super("Record", SetupEditorPlugin.INSTANCE.getImageDescriptor("recorder"));
+      super("Record Preferences", SetupEditorPlugin.INSTANCE.getImageDescriptor("preference_recorder"));
     }
 
     @Override
     public void run()
     {
-      MessageDialog.openInformation(activeEditorPart.getSite().getShell(), "Heads Up!",
-          "The workflow for the recording of preference tasks has been simplified:\n\n" + "You don't need to open the editor for the user tasks anymore.\n"
-              + "Just open the Preferences dialog and your user tasks will be updated automatically.");
+      RecorderManager.INSTANCE.record(getActiveEditor());
     }
   }
 
-  // /**
-  // * @author Eike Stepper
-  // */
-  // private static class PreferenceRecorderToolbarAction extends PreferenceRecorderAction
-  // {
-  // public PreferenceRecorderToolbarAction(boolean withDialog)
-  // {
-  // super(withDialog);
-  // setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("recorder"));
-  // }
-  // }
+  /**
+   * @author Ed Merks
+   */
+  private class PreferenceCaptureToolbarAction extends Action
+  {
+    private SetupEditor setupEditor;
+
+    private boolean fromEclipsePreferenceFile;
+
+    public PreferenceCaptureToolbarAction(boolean useEclipsePreferenceFile)
+    {
+      super(useEclipsePreferenceFile ? "Import Preferences" : "Capture Preferences",
+          SetupEditorPlugin.INSTANCE.getImageDescriptor(useEclipsePreferenceFile ? "preference_importer" : "preference_picker"));
+      this.fromEclipsePreferenceFile = useEclipsePreferenceFile;
+    }
+
+    @Override
+    public void run()
+    {
+      PreferenceCaptureDialog preferenceCaptureDialog = new PreferenceCaptureDialog(null, setupEditor.getAdapterFactory(), fromEclipsePreferenceFile);
+      if (preferenceCaptureDialog.open() == Dialog.OK)
+      {
+        final RecorderTransaction transaction = RecorderTransaction.open(setupEditor);
+
+        try
+        {
+          transaction.setPreferences(preferenceCaptureDialog.getResult());
+          transaction.commit();
+        }
+        finally
+        {
+          transaction.close();
+        }
+      }
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)workbenchPart;
+        setEnabled(true);
+        setChecked(setupEditor.selectionViewer.getInput() instanceof ResourceSet);
+      }
+      else
+      {
+        setEnabled(false);
+        setupEditor = null;
+      }
+    }
+  }
 
   /**
    * @author Eike Stepper

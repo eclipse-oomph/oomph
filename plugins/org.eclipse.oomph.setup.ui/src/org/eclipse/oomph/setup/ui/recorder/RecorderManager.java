@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -40,6 +41,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -62,8 +65,28 @@ public final class RecorderManager
 
   private PreferencesRecorder recorder;
 
+  private IEditorPart editor;
+
   private RecorderManager()
   {
+  }
+
+  public void record(IEditorPart editor)
+  {
+    this.editor = editor;
+
+    PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, null, null, null);
+    boolean recorderEnabled = isRecorderEnabled();
+    setRecorderEnabled(true);
+    try
+    {
+      dialog.open();
+    }
+    finally
+    {
+      this.editor = null;
+      setRecorderEnabled(recorderEnabled);
+    }
   }
 
   public boolean isRecorderEnabled()
@@ -126,9 +149,9 @@ public final class RecorderManager
     }
   }
 
-  private void handleRecording(final Shell shell, final Map<URI, String> values)
+  private void handleRecording(IEditorPart editorPart, final Shell shell, final Map<URI, String> values)
   {
-    final RecorderTransaction transaction = RecorderTransaction.open();
+    final RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(editorPart);
 
     try
     {
@@ -334,48 +357,42 @@ public final class RecorderManager
                 return;
               }
 
-              UIUtil.asyncExec(new Runnable()
+              final Map<URI, String> values = recorder.done();
+              recorder = null;
+              for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
               {
-                public void run()
+                URI uri = it.next();
+                String pluginID = uri.segment(0);
+
+                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID) && SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(uri.lastSegment()))
                 {
-                  final Map<URI, String> values = recorder.done();
-                  recorder = null;
-                  for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
-                  {
-                    URI uri = it.next();
-                    String pluginID = uri.segment(0);
-
-                    if (SetupUIPlugin.PLUGIN_ID.equals(pluginID) && SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(uri.lastSegment()))
-                    {
-                      it.remove();
-                    }
-                  }
-                  if (values.isEmpty())
-                  {
-                    RecorderTransaction transaction = RecorderTransaction.getInstance();
-                    if (transaction != null)
-                    {
-                      // Close a transaction that has been opened by the RecorderPreferencePage.
-                      transaction.close();
-                    }
-                  }
-                  else
-                  {
-                    Job job = new Job("Store preferences")
-                    {
-                      @Override
-                      protected IStatus run(IProgressMonitor monitor)
-                      {
-                        handleRecording(shell, values);
-                        return Status.OK_STATUS;
-                      }
-                    };
-
-                    job.setSystem(true);
-                    job.schedule();
-                  }
+                  it.remove();
                 }
-              });
+              }
+              if (values.isEmpty())
+              {
+                RecorderTransaction transaction = RecorderTransaction.getInstance();
+                if (transaction != null)
+                {
+                  // Close a transaction that has been opened by the RecorderPreferencePage.
+                  transaction.close();
+                }
+              }
+              else
+              {
+                Job job = new Job("Store preferences")
+                {
+                  @Override
+                  protected IStatus run(IProgressMonitor monitor)
+                  {
+                    handleRecording(editor, shell, values);
+                    return Status.OK_STATUS;
+                  }
+                };
+
+                job.setSystem(true);
+                job.schedule();
+              }
             }
           });
         }
