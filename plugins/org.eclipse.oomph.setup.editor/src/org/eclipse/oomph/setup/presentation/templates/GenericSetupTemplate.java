@@ -35,12 +35,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -117,17 +122,73 @@ public class GenericSetupTemplate extends SetupTemplate
   }
 
   @Override
-  public boolean isValid()
+  public String getMessage()
   {
     for (PropertyField field : fields.values())
     {
       if (StringUtil.isEmpty(field.getValue()))
       {
-        return false;
+        return "";
       }
     }
 
-    return true;
+    String location = expandString("${setup.location}", null);
+    Path path = new Path(location);
+    String[] segments = path.segments();
+
+    if (segments.length == 0 || path.getDevice() != null)
+    {
+      return "The location '" + location + "' specified by the folder path is not a valid project path";
+    }
+
+    String projectName = segments[0];
+    if (!path.isValidSegment(projectName))
+    {
+      return "The project '" + projectName + "' specified by the folder path is not a valid project name";
+    }
+
+    IProject project = EcorePlugin.getWorkspaceRoot().getProject(projectName);
+    if (!project.isAccessible())
+    {
+      return "The project '" + projectName + "' specified by the folder path is not accessible";
+    }
+
+    IContainer container = project;
+    for (int i = 1; i < segments.length; ++i)
+    {
+      String folderName = segments[i];
+      if (!path.isValidSegment(folderName))
+      {
+        return "The folder segment '" + folderName + "' specified by the folder path is not a valid folder name";
+      }
+
+      IFile file = container.getFile(new Path(folderName));
+      if (file.exists())
+      {
+        return "A file exists at '" + file.getFullPath() + "' specified by the folder path";
+      }
+
+      container = container.getFolder(new Path(folderName));
+    }
+
+    String filename = expandString("${setup.filename}", null);
+    if (!path.isValidSegment(filename))
+    {
+      return "The filename '" + filename + "' is not a valid filename";
+    }
+
+    if (!filename.endsWith(".setup"))
+    {
+      return "The filename '" + filename + "' must use the file extension '.setup'";
+    }
+
+    IFile file = container.getFile(new Path(filename));
+    if (file.exists())
+    {
+      return "The file '" + file.getFullPath() + "' already exists";
+    }
+
+    return null;
   }
 
   @Override
@@ -505,7 +566,7 @@ public class GenericSetupTemplate extends SetupTemplate
 
     String location = expandString("${setup.location}", null);
     String fileName = expandString("${setup.filename}", null);
-    resource.setURI(URI.createURI("platform:/resource" + location + "/" + fileName));
+    resource.setURI(URI.createURI("platform:/resource" + new Path(location).makeAbsolute() + "/" + fileName));
   }
 
   private String expandString(String string, Set<VariableTask> usedVariables)

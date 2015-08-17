@@ -51,7 +51,7 @@ public abstract class SetupTemplate
 
   public abstract Control createControl(Composite parent);
 
-  public abstract boolean isValid();
+  public abstract String getMessage();
 
   protected void init()
   {

@@ -21,6 +21,7 @@ import org.eclipse.oomph.ui.DelegatingLabelDecorator;
 import org.eclipse.oomph.ui.LabelDecorator;
 import org.eclipse.oomph.ui.PropertiesViewer;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -820,8 +821,10 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
 
     public void validate()
     {
-      boolean pageValid = isPageValid();
-      setPageComplete(pageValid);
+      String message = getValidationMessage();
+      setErrorMessage(StringUtil.isEmpty(message) ? null : message);
+
+      setPageComplete(message == null);
       getContainer().updateButtons();
     }
 
@@ -831,14 +834,20 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       return (SetupModelWizard)super.getWizard();
     }
 
-    protected boolean isPageValid()
+    @Override
+    public boolean isPageComplete()
+    {
+      return getMessage() == null;
+    }
+
+    public String getValidationMessage()
     {
       try
       {
         SetupTemplate template = getSelectedTemplate();
         if (template != null)
         {
-          return template.isValid();
+          return template.getMessage();
         }
       }
       catch (Exception ex)
@@ -846,7 +855,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
         SetupEditorPlugin.getPlugin().log(ex);
       }
 
-      return false;
+      return "No template selected";
     }
 
     private SetupTemplate getSelectedTemplate()
