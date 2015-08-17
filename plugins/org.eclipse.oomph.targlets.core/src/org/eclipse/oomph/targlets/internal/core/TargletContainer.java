@@ -1153,7 +1153,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                       {
                         workspaceRequirements
                             .add(MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange, workspaceRequiredCapability.getFilter(),
-                                workspaceRequiredCapability.getMin(), workspaceRequiredCapability.getMin(), workspaceRequiredCapability.isGreedy()));
+                                workspaceRequiredCapability.getMin(), workspaceRequiredCapability.getMax(), workspaceRequiredCapability.isGreedy()));
                         continue LOOP;
                       }
                     }
