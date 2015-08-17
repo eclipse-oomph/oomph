@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.XMLUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
@@ -24,6 +25,15 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+
+import java.io.StringReader;
 
 /**
  * <!-- begin-user-doc -->
@@ -285,6 +295,32 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     if (ObjectUtil.equals(getValue(), oldValue))
     {
       return false;
+    }
+
+    // If the old value is an XML blob...
+    if (oldValue != null && oldValue.startsWith("<?xml "))
+    {
+      try
+      {
+        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+        Document document = documentBuilder.parse(new InputSource(new StringReader(oldValue)));
+        NodeList childNodes = document.getDocumentElement().getChildNodes();
+        for (int i = 0, length = childNodes.getLength(); i < length; ++i)
+        {
+          Node item = childNodes.item(i);
+          String nodeValue = item.getNodeValue();
+
+          // If there are any children that aren't simply whitespace content, don't overwrite the existing XML blob.
+          if (nodeValue == null || nodeValue.trim().length() != 0)
+          {
+            return false;
+          }
+        }
+      }
+      catch (Throwable throwable)
+      {
+        //$FALL-THROUGH$
+      }
     }
 
     return true;
