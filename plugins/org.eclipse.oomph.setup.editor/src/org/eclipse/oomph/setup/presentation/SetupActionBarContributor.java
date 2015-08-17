@@ -1105,11 +1105,11 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
 
     private boolean fromEclipsePreferenceFile;
 
-    public PreferenceCaptureToolbarAction(boolean useEclipsePreferenceFile)
+    public PreferenceCaptureToolbarAction(boolean fromEclipsePreferenceFile)
     {
-      super(useEclipsePreferenceFile ? "Import Preferences" : "Capture Preferences",
-          SetupEditorPlugin.INSTANCE.getImageDescriptor(useEclipsePreferenceFile ? "preference_importer" : "preference_picker"));
-      this.fromEclipsePreferenceFile = useEclipsePreferenceFile;
+      super(fromEclipsePreferenceFile ? "Import Preferences" : "Capture Preferences",
+          SetupEditorPlugin.INSTANCE.getImageDescriptor(fromEclipsePreferenceFile ? "preference_importer" : "preference_picker"));
+      this.fromEclipsePreferenceFile = fromEclipsePreferenceFile;
     }
 
     @Override
@@ -1138,7 +1138,6 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       {
         setupEditor = (SetupEditor)workbenchPart;
         setEnabled(true);
-        setChecked(setupEditor.selectionViewer.getInput() instanceof ResourceSet);
       }
       else
       {
