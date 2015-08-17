@@ -39,7 +39,7 @@ public class ToggleApiBuilderAction implements IWorkbenchWindowActionDelegate
     }
     catch (Throwable ex)
     {
-      Activator.log(ex);
+      //$FALL-THROUGH$
     }
   }
 
