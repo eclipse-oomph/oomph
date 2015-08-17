@@ -110,6 +110,23 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         return new SAXXMIHandler(resource, helper, options)
         {
           @Override
+          protected String getLocation()
+          {
+            String result = super.getLocation();
+            URI uri = getURI();
+            if (uri != null)
+            {
+              String normalizedURI = getURIConverter().normalize(uri).toString();
+              if (!result.equals(normalizedURI))
+              {
+                result += " -> " + normalizedURI;
+              }
+            }
+
+            return result;
+          }
+
+          @Override
           public InputSource resolveEntity(String publicId, String systemId) throws SAXException
           {
             URI uri = getURI();
