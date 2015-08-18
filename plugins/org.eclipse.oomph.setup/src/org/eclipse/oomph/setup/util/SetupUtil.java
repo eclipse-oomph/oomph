@@ -49,7 +49,7 @@ public final class SetupUtil
     for (int i = 0, length = result.length(); i < length; ++i)
     {
       char c = result.charAt(i);
-      if (c < StringExpander.CONTROL_CHARACTER_REPLACEMENTS.length)
+      if (c < StringExpander.CONTROL_CHARACTER_REPLACEMENTS.length && c != '\n' && c != '\r' && c != '\t')
       {
         String replacement = StringExpander.CONTROL_CHARACTER_REPLACEMENTS[c];
         result.replace(i, i + 1, replacement);
