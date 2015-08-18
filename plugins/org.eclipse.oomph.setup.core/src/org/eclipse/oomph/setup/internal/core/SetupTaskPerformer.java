@@ -1344,6 +1344,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       scopes.add(user);
 
       String qualifier = null;
+      Scope rootProject = null;
 
       for (Scope scope : scopes)
       {
@@ -1390,6 +1391,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           case PROJECT:
           {
             generateScopeVariables(result, "project", qualifier, name, label, description);
+
+            if (rootProject == null && scope.eResource() == stream.eResource())
+            {
+              rootProject = scope;
+              generateScopeVariables(result, "project.root", qualifier, name, label, description);
+            }
+
             qualifier += "." + name;
             break;
           }
@@ -1960,16 +1968,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
 
       String installationID;
-      String projectName = lookup("scope.project.name.qualified");
+      String projectName = lookup("scope.project.root.name");
       if (StringUtil.isEmpty(projectName))
       {
         installationID = SegmentSequence.create(".", lookup("scope.product.name")).lastSegment() + "-" + lookup("scope.product.version.name").replace('.', '-');
       }
       else
       {
-        String projectCatalogName = lookup("scope.project.catalog.name");
         String streamName = lookup("scope.project.stream.name");
-        installationID = escape(projectCatalogName, projectName, streamName);
+        installationID = escape(projectName, streamName);
       }
 
       String uniqueInstallationID = installationID;
@@ -1991,10 +1998,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         return null;
       }
 
-      String projectName = lookup("scope.project.name.qualified");
-      String projectCatalogName = lookup("scope.project.catalog.name");
+      String projectName = lookup("scope.project.root.name");
       String streamName = lookup("scope.project.stream.name");
-      String workspaceID = escape(projectCatalogName, projectName, streamName) + "-ws";
+      String workspaceID = escape(projectName, streamName) + "-ws";
 
       String uniqueWorkspaceID = workspaceID;
 
@@ -2009,12 +2015,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return super.filter(value, filterName);
   }
 
-  private String escape(String projectCatalogName, String projectName, String streamName)
+  private String escape(String projectName, String streamName)
   {
-    SegmentSequence qualifiedProjectName = SegmentSequence.create(".", projectName.substring(projectCatalogName.length() + 1));
-    String baseName = qualifiedProjectName.segmentCount() > 2 && "user".equals(qualifiedProjectName.firstSegment())
-        && "project".equals(qualifiedProjectName.segment(1)) ? qualifiedProjectName.segment(2) : qualifiedProjectName.firstSegment();
-    return baseName + "-" + streamName.replace('.', '-').replace('/', '-').replace('\\', '-');
+    return (projectName + "-" + streamName).replace('.', '-').replace('/', '-').replace('\\', '-');
   }
 
   @Override
