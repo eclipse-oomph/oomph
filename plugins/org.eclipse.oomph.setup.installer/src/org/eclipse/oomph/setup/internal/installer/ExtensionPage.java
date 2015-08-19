@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.EnablementComposite;
 import org.eclipse.oomph.setup.ui.EnablementComposite.InstallHandler;
 import org.eclipse.oomph.setup.ui.EnablementComposite.InstallOperation;
+import org.eclipse.oomph.setup.ui.EnablementDialog;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
 import org.eclipse.oomph.ui.ErrorDialog;
 
@@ -42,7 +43,7 @@ public class ExtensionPage extends SetupWizardPage
   {
     super("ExtensionPage");
     setTitle("Extensions");
-    setDescription("This setup requires the installer to be updated to include extended task implementations. Press Finish to update the installer.");
+    setDescription(EnablementDialog.getDescription("the installer", "Finish"));
   }
 
   @Override

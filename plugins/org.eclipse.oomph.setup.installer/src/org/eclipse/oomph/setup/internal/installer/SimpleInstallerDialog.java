@@ -27,6 +27,7 @@ import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.ControlRelocator;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ExceptionHandler;
@@ -99,6 +100,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private final Installer installer;
 
+  private final boolean restarted;
+
   private final CatalogManager catalogManager;
 
   private final Stack<SimpleInstallerPage> pageStack = new Stack<SimpleInstallerPage>();
@@ -131,11 +134,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private ToggleSwitchButton bundlePoolSwitch;
 
-  public SimpleInstallerDialog(Display display, final Installer installer)
+  public SimpleInstallerDialog(Display display, final Installer installer, boolean restarted)
   {
     super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.NO_TRIM, getDefaultSize(display).x, getDefaultSize(display).y);
     setMinimumSize(385, 75);
     this.installer = installer;
+    this.restarted = restarted;
     catalogManager = installer.getCatalogManager();
   }
 
@@ -178,8 +182,9 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     stack.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
     stack.setLayout(stackLayout);
 
-    productPage = new SimpleProductPage(stack, this);
-    variablePage = new SimpleVariablePage(stack, this);
+    SelectionMemento selectionMemento = installer.getSelectionMemento();
+    productPage = new SimpleProductPage(stack, this, selectionMemento);
+    variablePage = new SimpleVariablePage(stack, this, selectionMemento);
 
     if (UIUtil.isBrowserAvailable())
     {
@@ -193,8 +198,11 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     Display display = getDisplay();
 
-    Thread updateSearcher = new UpdateSearcher(display);
-    updateSearcher.start();
+    if (!restarted)
+    {
+      Thread updateSearcher = new UpdateSearcher(display);
+      updateSearcher.start();
+    }
 
     display.timerExec(500, new Runnable()
     {
@@ -330,8 +338,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         {
           public void run()
           {
-            setReturnCode(RETURN_RESTART);
-            exitSelected();
+            restart();
           }
         };
 
@@ -557,6 +564,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   public void switchToAdvancedMode()
   {
     setReturnCode(RETURN_ADVANCED);
+    exitSelected();
+  }
+
+  public void restart()
+  {
+    setReturnCode(RETURN_RESTART);
     exitSelected();
   }
 

@@ -45,7 +45,9 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -163,36 +165,48 @@ public class EnablementComposite extends Composite
 
   public final InputData setInput(EList<SetupTask> tasks)
   {
+    return setInput(getEnablementTasks(tasks));
+  }
+
+  public final InputData setInput(Map<EClass, EList<SetupTask>> enablementTasks)
+  {
+    if (enablementTasks.isEmpty())
+    {
+      treeViewer.setInput(null);
+      inputData = null;
+      return null;
+    }
+
     inputData = new InputData();
 
     final Map<EClass, ClassItemProvider> classItemProviders = new HashMap<EClass, ClassItemProvider>();
     ItemProvider root = new ItemProvider(adapterFactory);
     EList<Object> children = root.getChildren();
 
-    for (SetupTask task : tasks)
+    for (Map.Entry<EClass, EList<SetupTask>> entry : enablementTasks.entrySet())
     {
-      if (task instanceof DynamicSetupTaskImpl)
+      EClass eClass = entry.getKey();
+      EList<SetupTask> list = entry.getValue();
+
+      inputData.enablementTasks.addAll(list);
+
+      String typeText = EAnnotations.getText(eClass);
+      if (typeText == null)
       {
-        EClass eClass = task.eClass();
-        if (!classItemProviders.containsKey(eClass))
+        try
         {
-          EList<SetupTask> enablementTasks = SetupTaskPerformer.createEnablementTasks(eClass, true);
-          if (enablementTasks != null)
-          {
-            inputData.enablementTasks.addAll(enablementTasks);
-
-            String typeText = EAnnotations.getText(eClass);
-            if (typeText == null)
-            {
-              typeText = iconItemProvider.getTypeText(task);
-            }
-
-            ClassItemProvider classItemProvider = new ClassItemProvider(adapterFactory, eClass, typeText, enablementTasks);
-            children.add(classItemProvider);
-            classItemProviders.put(eClass, classItemProvider);
-          }
+          EObject dynamicSetupTask = EcoreUtil.create(eClass);
+          typeText = iconItemProvider.getTypeText(dynamicSetupTask);
+        }
+        catch (Throwable ex)
+        {
+          typeText = eClass.getName();
         }
       }
+
+      ClassItemProvider classItemProvider = new ClassItemProvider(adapterFactory, eClass, typeText, list);
+      children.add(classItemProvider);
+      classItemProviders.put(eClass, classItemProvider);
     }
 
     if (inputData.enablementTasks.isEmpty())
@@ -368,15 +382,38 @@ public class EnablementComposite extends Composite
     return installOperation;
   }
 
+  protected IDialogSettings getDialogSettings()
+  {
+    return SetupUIPlugin.INSTANCE.getDialogSettings(EnablementComposite.class.getSimpleName());
+  }
+
   private void enableButtons(boolean enabled)
   {
     offlineButton.setEnabled(enabled);
     mirrorsButton.setEnabled(enabled);
   }
 
-  protected IDialogSettings getDialogSettings()
+  public static Map<EClass, EList<SetupTask>> getEnablementTasks(EList<SetupTask> tasks)
   {
-    return SetupUIPlugin.INSTANCE.getDialogSettings(EnablementComposite.class.getSimpleName());
+    Map<EClass, EList<SetupTask>> result = new HashMap<EClass, EList<SetupTask>>();
+  
+    for (SetupTask task : tasks)
+    {
+      if (task instanceof DynamicSetupTaskImpl)
+      {
+        EClass eClass = task.eClass();
+        if (!result.containsKey(eClass))
+        {
+          EList<SetupTask> enablementTasks = SetupTaskPerformer.createEnablementTasks(eClass, true);
+          if (enablementTasks != null && !enablementTasks.isEmpty())
+          {
+            result.put(eClass, enablementTasks);
+          }
+        }
+      }
+    }
+  
+    return result;
   }
 
   /**

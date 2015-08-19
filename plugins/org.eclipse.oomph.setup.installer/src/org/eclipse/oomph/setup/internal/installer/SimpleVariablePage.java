@@ -46,11 +46,14 @@ import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductComposite;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.setup.ui.EnablementComposite;
+import org.eclipse.oomph.setup.ui.EnablementDialog;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
 import org.eclipse.oomph.setup.ui.LicensePrePrompter;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
@@ -63,8 +66,10 @@ import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -138,6 +143,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private static final String MESSAGE_FAILURE = "Installation failed with an error.";
 
   protected static final boolean JRE_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_JRE_CHOICE, "true"));
+
+  private final SelectionMemento selectionMemento;
 
   private final Map<String, ProductVersion> productVersions = new HashMap<String, ProductVersion>();
 
@@ -215,9 +222,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private SimpleCheckbox createDesktopShortcutButton;
 
-  public SimpleVariablePage(final Composite parent, final SimpleInstallerDialog dialog)
+  public SimpleVariablePage(final Composite parent, final SimpleInstallerDialog dialog, SelectionMemento selectionMemento)
   {
     super(parent, dialog, true);
+    this.selectionMemento = selectionMemento;
   }
 
   @Override
@@ -1066,6 +1074,28 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       SimplePrompter prompter = new SimplePrompter();
       performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
+
+      EList<SetupTask> triggeredSetupTasks = performer.getTriggeredSetupTasks();
+      final Map<EClass, EList<SetupTask>> enablementTasks = EnablementComposite.getEnablementTasks(triggeredSetupTasks);
+      if (!enablementTasks.isEmpty())
+      {
+        UIUtil.syncExec(getDisplay(), new Runnable()
+        {
+          public void run()
+          {
+            EnablementDialog enablementDialog = new EnablementDialog(getShell(), "the installer", enablementTasks);
+            if (enablementDialog.open() == EnablementDialog.OK)
+            {
+              selectionMemento.setProductVersion(EcoreUtil.getURI(selectedProductVersion));
+              dialog.restart();
+            }
+
+            installCancel();
+          }
+        });
+
+        throw new OperationCanceledException();
+      }
 
       final List<VariableTask> unresolvedVariables = prompter.getUnresolvedVariables();
       if (!unresolvedVariables.isEmpty())

@@ -192,7 +192,7 @@ public class InstallerApplication implements IApplication
       }
       else
       {
-        SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer);
+        SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer, restarted);
         installer.setSimpleShell(dialog);
         installerDialog[0] = dialog;
       }

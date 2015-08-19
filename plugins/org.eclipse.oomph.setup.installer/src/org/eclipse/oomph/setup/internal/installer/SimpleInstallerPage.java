@@ -21,6 +21,8 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.ecore.resource.ResourceSet;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -113,6 +115,11 @@ public abstract class SimpleInstallerPage extends Composite
     {
       backButton = null;
     }
+  }
+
+  public ResourceSet getResourceSet()
+  {
+    return installer.getResourceSet();
   }
 
   @Override

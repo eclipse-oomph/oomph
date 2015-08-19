@@ -14,6 +14,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
+import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
@@ -22,6 +23,7 @@ import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductList.
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.SpriteAnimator;
 import org.eclipse.oomph.ui.StackComposite;
@@ -32,6 +34,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -71,6 +74,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Eike Stepper
@@ -80,6 +84,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   private static final int MAX_DESCRIPTION_LENGTH = 120;
 
   private static final String PRODUCT_PREFIX = "product://";
+
+  private final SelectionMemento selectionMemento;
 
   private SimpleSearchField searchField;
 
@@ -93,13 +99,14 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   private ProductList productList;
 
-  public SimpleProductPage(final Composite parent, final SimpleInstallerDialog dialog)
+  public SimpleProductPage(final Composite parent, final SimpleInstallerDialog dialog, SelectionMemento selectionMemento)
   {
     super(parent, dialog, false);
+    this.selectionMemento = selectionMemento;
   }
 
   @Override
-  protected void createContent(Composite container)
+  protected void createContent(final Composite container)
   {
     GridLayout searchLayout = UIUtil.createGridLayout(2);
     searchLayout.horizontalSpacing = 0;
@@ -118,8 +125,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     };
 
     Point defaultSearchFieldSize = searchField.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-    searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).hint(SWT.DEFAULT, defaultSearchFieldSize.y + 10)
-        .create());
+    searchField
+        .setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).hint(SWT.DEFAULT, defaultSearchFieldSize.y + 10).create());
 
     buttonBar = new ToolBar(searchComposite, SWT.FLAT | SWT.RIGHT);
     buttonBar.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).exclude(true).create());
@@ -148,9 +155,25 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     installer.setIndexLoader(indexLoader);
     installer.setIndexLoadedAction(new Runnable()
     {
+      private final AtomicBoolean selectionMementoTried = new AtomicBoolean();
+
       public void run()
       {
         handleFilter("");
+
+        UIUtil.asyncExec(container, new Runnable()
+        {
+          public void run()
+          {
+            if (!selectionMementoTried.getAndSet(true))
+            {
+              if (applySelectionMemento())
+              {
+                return;
+              }
+            }
+          }
+        });
       }
     });
   }
@@ -193,8 +216,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         {
           for (Product product : productCatalog.getProducts())
           {
-            if (isIncluded(product)
-                && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter) || isFiltered(product.getDescription(), filter)))
+            if (isIncluded(product) && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter)
+                || isFiltered(product.getDescription(), filter)))
             {
               products.add(product);
             }
@@ -204,6 +227,26 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     }
 
     productList.setInput(products);
+  }
+
+  private boolean applySelectionMemento()
+  {
+    URI uri = selectionMemento.getProductVersion();
+    if (uri != null)
+    {
+      ResourceSet resourceSet = getResourceSet();
+
+      EObject object = resourceSet.getEObject(uri, true);
+      if (object instanceof ProductVersion)
+      {
+        ProductVersion productVersion = (ProductVersion)object;
+        Product product = productVersion.getProduct();
+        productSelected(product);
+        return true;
+      }
+    }
+
+    return false;
   }
 
   protected final void productSelected(Product product)
