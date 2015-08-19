@@ -376,6 +376,7 @@
   <project href="interim/Platform.setup#/"/>
   <project href="http://git.eclipse.org/c/mmt/org.eclipse.qvtd.git/plain/releng/org.eclipse.qvtd.oomph/setups/qvtd.setup#/"/>
   <project href="http://git.eclipse.org/c/mmt/org.eclipse.qvto.git/plain/releng/org.eclipse.qvto.oomph/setups/qvto.setup#/"/>
+  <project href="http://git.eclipse.org/c/rmf/org.eclipse.rmf.git/plain/org.eclipse.rmf.releng/oomph/RMF.setup#/"/>
   <project href="interim/SimultaneousReleaseTrain.setup#/"/>
   <project href="http://git.eclipse.org/c/sirius/org.eclipse.sirius.git/plain/releng/org.eclipse.sirius.settings/Sirius.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/smarthome/master/targetplatform/EclipseSmartHome.setup#/"/>
