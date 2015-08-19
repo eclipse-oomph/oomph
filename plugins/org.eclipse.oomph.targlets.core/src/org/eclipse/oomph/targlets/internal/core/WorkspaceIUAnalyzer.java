@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
@@ -158,7 +159,7 @@ public class WorkspaceIUAnalyzer
 
       for (IInstallableUnit iu : workspaceIUInfos.keySet())
       {
-        if (!iu.isSingleton())
+        if (!iu.isSingleton() && !"true".equals(iu.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
         {
           Requirement requirement = omniRootRequirements.remove(iu.getId());
           if (requirement != null)

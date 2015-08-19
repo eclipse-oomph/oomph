@@ -1148,8 +1148,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                     {
                       // If it resolves to a workspace IU that's a singleton, generalize the requirement to include any version of that IU, because resolving to
                       // any version will result in the import of the project.
-                      IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(iu.getId(), Version.emptyVersion));
-                      if (requiredWorkspaceIU != null && requiredWorkspaceIU.isSingleton())
+                      IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(name, Version.emptyVersion));
+                      if (requiredWorkspaceIU != null
+                          && (requiredWorkspaceIU.isSingleton() || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))))
                       {
                         workspaceRequirements
                             .add(MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange, workspaceRequiredCapability.getFilter(),
