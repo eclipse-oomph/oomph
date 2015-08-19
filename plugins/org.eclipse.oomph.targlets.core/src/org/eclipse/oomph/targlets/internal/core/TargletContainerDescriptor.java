@@ -312,7 +312,13 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
       return null;
     }
 
-    return getBundlePool().getProfile(profileID);
+    BundlePool bundlePool = getBundlePool();
+    if (bundlePool == null)
+    {
+      return null;
+    }
+
+    return bundlePool.getProfile(profileID);
   }
 
   private Profile getOrCreateProfile(String id, File poolLocation, String environmentProperties, String nlProperty, String digest, IProgressMonitor monitor)
