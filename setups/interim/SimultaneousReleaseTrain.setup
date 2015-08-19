@@ -129,16 +129,26 @@
       userID="${bugzilla.id}"
       password="${eclipse.user.password}">
     <buildPlan
-        name="simrel.mars.runaggregator.BUILD"/>
+        name="simrel.${simrel.train.name}.runaggregator.BUILD"/>
     <buildPlan
-        name="simrel.mars.runaggregator.CLEAN_BUILD"/>
+        name="simrel.${simrel.train.name}.runaggregator.CLEAN_BUILD"/>
     <buildPlan
-        name="simrel.mars.runaggregator.VALIDATE"/>
+        name="simrel.${simrel.train.name}.runaggregator.VALIDATE"/>
     <buildPlan
-        name="simrel.mars.runaggregator.VALIDATE.gerrit"/>
+        name="simrel.${simrel.train.name}.runaggregator.VALIDATE.gerrit"/>
   </setupTask>
-  <stream name="master"/>
-  <stream name="Mars_maintenance"/>
+  <stream name="master">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="simrel.train.name"
+        value="neon"/>
+  </stream>
+  <stream name="Mars_maintenance">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="simrel.train.name"
+        value="mars"/>
+  </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
