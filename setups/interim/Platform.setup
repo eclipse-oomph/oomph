@@ -17,6 +17,12 @@
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
+        name="org.eclipse.platform.feature.group"/>
+    <requirement
+        name="org.eclipse.jdt.feature.group"/>
+    <requirement
+        name="org.eclipse.pde.feature.group"/>
+    <requirement
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
   </setupTask>
   <setupTask
@@ -65,8 +71,8 @@
       encoding="UTF-8"/>
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-1.7"
-      location="${jre.location-1.7}"/>
+      version="JavaSE-1.8"
+      location="${jre.location-1.8}"/>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
@@ -81,13 +87,20 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
-          name="Mars">
+          name="Neon">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
         <repository
             url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.5-N-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.6-N-builds"/>
+      </repositoryList>
+      <repositoryList
+          name="Mars">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
       </repositoryList>
       <repositoryList
           name="Luna">
@@ -158,33 +171,13 @@
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
-          name="Platform Base"
+          name="Platform Base, Update, and Ant"
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.sdk"/>
+            name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.location/platform}"/>
-      </targlet>
-      <targlet
-          name="Platform Ant"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
-        <requirement
-            name="org.eclipse.ant.tests.core"/>
-        <requirement
-            name="org.eclipse.ant.tests.ui"/>
-        <sourceLocator
-            rootFolder="${git.clone.platform.location/ant}"/>
-      </targlet>
-      <targlet
-          name="Platform Update"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
-        <requirement
-            name="org.eclipse.update.core"/>
-        <sourceLocator
-            rootFolder="${git.clone.platform.location/update}"/>
+            rootFolder="${git.clone.platform.location}"/>
       </targlet>
     </setupTask>
     <setupTask
@@ -247,7 +240,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
   </project>
@@ -281,15 +274,7 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.jdt.doc.isv"/>
-        <requirement
-            name="org.eclipse.jdt.doc.user"/>
-        <requirement
-            name="org.eclipse.pde.doc.user"/>
-        <requirement
-            name="org.eclipse.platform.doc.isv"/>
-        <requirement
-            name="org.eclipse.platform.doc.user"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.common.location}"/>
       </targlet>
@@ -309,7 +294,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform documentation</description>
@@ -344,15 +329,7 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.debug.tests"/>
-        <requirement
-            name="org.eclipse.debug.examples.core"/>
-        <requirement
-            name="org.eclipse.debug.examples.memory"/>
-        <requirement
-            name="org.eclipse.debug.examples.mixedmode"/>
-        <requirement
-            name="org.eclipse.debug.examples.ui"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.debug.location}"/>
       </targlet>
@@ -402,7 +379,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform Debug support</description>
@@ -445,29 +422,25 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.core.filesystem.solaris.sparcv9"/>
-        <requirement
-            name="org.eclipse.core.filesystem.win32.ia64"/>
-        <requirement
-            name="org.eclipse.core.resources.win32.ia64"/>
-        <requirement
-            name="org.eclipse.core.tests.resources"/>
-        <requirement
-            name="org.eclipse.core.tests.resources.saveparticipant"/>
-        <requirement
-            name="org.eclipse.core.tests.resources.saveparticipant1"/>
-        <requirement
-            name="org.eclipse.core.tests.resources.saveparticipant2"/>
-        <requirement
-            name="org.eclipse.core.tests.resources.saveparticipant3"/>
-        <requirement
-            name="org.eclipse.core.resources.spysupport"/>
-        <requirement
-            name="org.eclipse.core.tools.resources"
-            optional="true"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.resources.location}"
-            locateNestedProjects="true"/>
+            locateNestedProjects="true">
+          <predicate
+              xsi:type="predicates:NotPredicate">
+            <operand
+                xsi:type="predicates:NamePredicate"
+                pattern="org\.eclipse\.core\.tools\.resources">
+              <annotation
+                  source="http://www.eclipse.org/oomph/base/Warning">
+                <detail
+                    key="diagnostic">
+                  <value>This bundle appears to be very old and no longer supported.</value>
+                </detail>
+              </annotation>
+            </operand>
+          </predicate>
+        </sourceLocator>
       </targlet>
     </setupTask>
     <setupTask
@@ -515,7 +488,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform Resources support</description>
@@ -563,18 +536,25 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.core.runtime.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.core.tools.feature.group"/>
-        <requirement
-            name="org.eclipse.core.tests.runtime"/>
-        <requirement
-            name="org.eclipse.core.expressions.tests"/>
-        <requirement
-            name="org.eclipse.e4.core.tests"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.runtime.location}"
-            locateNestedProjects="true"/>
+            locateNestedProjects="true">
+          <predicate
+              xsi:type="predicates:NotPredicate">
+            <operand
+                xsi:type="predicates:NamePredicate"
+                pattern="org\.eclipse\.core\.tools.*">
+              <annotation
+                  source="http://www.eclipse.org/oomph/base/Warning">
+                <detail
+                    key="diagnostic">
+                  <value>This bundle appears to be very old and no longer supported.</value>
+                </detail>
+              </annotation>
+            </operand>
+          </predicate>
+        </sourceLocator>
       </targlet>
     </setupTask>
     <setupTask
@@ -610,7 +590,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform Runtime support</description>
@@ -651,24 +631,39 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.swt.tools.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.swt.tests"/>
-        <requirement
-            name="org.eclipse.swt.examples"/>
-        <requirement
-            name="org.eclipse.swt.examples.browser.demos"/>
-        <requirement
-            name="org.eclipse.swt.examples.launcher"/>
-        <requirement
-            name="org.eclipse.swt.examples.ole.win32"/>
-        <requirement
-            name="org.eclipse.swt.examples.views"/>
-        <requirement
-            name="org.eclipse.swt.examples.watchdog"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.swt.location}"
-            locateNestedProjects="true"/>
+            locateNestedProjects="true">
+          <predicate
+              xsi:type="predicates:NotPredicate">
+            <operand
+                xsi:type="predicates:OrPredicate">
+              <operand
+                  xsi:type="predicates:NamePredicate"
+                  pattern="org\.eclipse\.swt\.opengl\.examples">
+                <annotation
+                    source="http://www.eclipse.org/oomph/base/Warning">
+                  <detail
+                      key="diagnostic">
+                    <value>This bundle has dependencies that I don't know how to satisfy</value>
+                  </detail>
+                </annotation>
+              </operand>
+              <operand
+                  xsi:type="predicates:NamePredicate"
+                  pattern="org\.eclipse\.swt\.snippets">
+                <annotation
+                    source="http://www.eclipse.org/oomph/base/Warning">
+                  <detail
+                      key="diagnostic">
+                    <value>This bundle has dependencies that I don't know how to satisfy</value>
+                  </detail>
+                </annotation>
+              </operand>
+            </operand>
+          </predicate>
+        </sourceLocator>
       </targlet>
     </setupTask>
     <setupTask
@@ -728,7 +723,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform SWT support</description>
@@ -816,25 +811,7 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.cvs.feature.group"/>
-        <requirement
-            name="org.eclipse.team.cvs.ssh2"/>
-        <requirement
-            name="org.eclipse.compare.examples"/>
-        <requirement
-            name="org.eclipse.compare.examples.xml"/>
-        <requirement
-            name="org.eclipse.team.examples.filesystem"/>
-        <requirement
-            name="org.eclipse.compare.tests"/>
-        <requirement
-            name="org.eclipse.core.tests.net"/>
-        <requirement
-            name="org.eclipse.jsch.tests"/>
-        <requirement
-            name="org.eclipse.team.tests.core"/>
-        <requirement
-            name="org.eclipse.team.tests.cvs.core"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.team.location}"
             locateNestedProjects="true"/>
@@ -885,7 +862,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform Team support</description>
@@ -973,19 +950,7 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.core.filebuffers.tests"/>
-        <requirement
-            name="org.eclipse.jface.text.tests"/>
-        <requirement
-            name="org.eclipse.search.tests"/>
-        <requirement
-            name="org.eclipse.text.tests"/>
-        <requirement
-            name="org.eclipse.ui.editors.tests"/>
-        <requirement
-            name="org.eclipse.ui.workbench.texteditor.tests"/>
-        <requirement
-            name="org.eclipse.ui.examples.javaeditor"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.text.location}"
             locateNestedProjects="true"/>
@@ -1036,7 +1001,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform Text support</description>
@@ -1072,11 +1037,7 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.help.webapp"/>
-        <requirement
-            name="org.eclipse.ua.tests"/>
-        <requirement
-            name="org.eclipse.ua.tests.doc"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.ua.location}"
             locateNestedProjects="true"/>
@@ -1116,7 +1077,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform UA support</description>
@@ -1152,141 +1113,61 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.e4.rcp.feature.group"/>
-        <requirement
-            name="org.eclipse.e4.ui.progress.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.e4.emf.xpath"/>
-        <requirement
-            name="org.eclipse.e4.ui.dialogs"/>
-        <requirement
-            name="org.eclipse.ui.images"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.ui.location}"
             locateNestedProjects="true">
           <predicate
-              xsi:type="predicates:OrPredicate">
+              xsi:type="predicates:AndPredicate">
             <operand
-                xsi:type="predicates:NotPredicate">
+                xsi:type="predicates:OrPredicate">
+              <operand
+                  xsi:type="predicates:NotPredicate">
+                <operand
+                    xsi:type="predicates:FilePredicate"
+                    filePattern="META-INF/MANIFEST.MF"
+                    contentPattern="(?m)^Eclipse-PlatformFilter: "/>
+              </operand>
               <operand
                   xsi:type="predicates:FilePredicate"
                   filePattern="META-INF/MANIFEST.MF"
-                  contentPattern="(?m)^Eclipse-PlatformFilter: "/>
+                  contentPattern="(?m)^Eclipse-PlatformFilter: *\(osgi.ws=${osgi.ws}\)"/>
             </operand>
             <operand
-                xsi:type="predicates:FilePredicate"
-                filePattern="META-INF/MANIFEST.MF"
-                contentPattern="(?m)^Eclipse-PlatformFilter: *\(osgi.ws=${osgi.ws}\)"/>
+                xsi:type="predicates:NotPredicate">
+              <operand
+                  xsi:type="predicates:NamePredicate"
+                  pattern="org\.eclipse\.ui\.dynamicCode"/>
+            </operand>
+            <operand
+                xsi:type="predicates:NotPredicate">
+              <operand
+                  xsi:type="predicates:NamePredicate"
+                  pattern="org\.eclipse\.ui\.images\.renderer"/>
+            </operand>
+            <operand
+                xsi:type="predicates:NotPredicate">
+              <operand
+                  xsi:type="predicates:NamePredicate"
+                  pattern="eclipse\.platform\.ui"/>
+            </operand>
           </predicate>
         </sourceLocator>
-      </targlet>
-      <targlet
-          name="Platform UI Tests"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
-        <requirement
-            name="org.eclipse.e4.core.commands.tests"/>
-        <requirement
-            name="org.eclipse.e4.emf.xpath.test"/>
-        <requirement
-            name="org.eclipse.e4.ui.bindings.tests"/>
-        <requirement
-            name="org.eclipse.e4.ui.menu.tests"/>
-        <requirement
-            name="org.eclipse.e4.ui.menu.tests.debug"/>
-        <requirement
-            name="org.eclipse.e4.ui.menu.tests.p1"/>
-        <requirement
-            name="org.eclipse.e4.ui.menu.tests.p2"/>
-        <requirement
-            name="org.eclipse.e4.ui.menu.tests.p3"/>
-        <requirement
-            name="org.eclipse.e4.ui.menu.tests.p4"/>
-        <requirement
-            name="org.eclipse.e4.ui.tests"/>
-        <requirement
-            name="org.eclipse.e4.ui.tests.css.core"/>
-        <requirement
-            name="org.eclipse.e4.ui.tests.css.swt"/>
-        <requirement
-            name="org.eclipse.jface.tests.databinding"/>
-        <requirement
-            name="org.eclipse.jface.tests.databinding.conformance"/>
-        <requirement
-            name="org.eclipse.ui.monitoring.tests"/>
-        <requirement
-            name="org.eclipse.ui.tests"/>
-        <requirement
-            name="org.eclipse.ui.tests.browser"/>
-        <requirement
-            name="org.eclipse.ui.tests.forms"/>
-        <requirement
-            name="org.eclipse.ui.tests.harness"/>
-        <requirement
-            name="org.eclipse.ui.tests.navigator"/>
-        <requirement
-            name="org.eclipse.ui.tests.performance"/>
-        <requirement
-            name="org.eclipse.ui.tests.rcp"/>
-        <requirement
-            name="org.eclipse.ui.tests.views.properties.tabbed"/>
-      </targlet>
-      <targlet
-          name="Platform UI Examples"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
-        <requirement
-            name="org.eclipse.e4.demo.contacts"/>
-        <requirement
-            name="org.eclipse.e4.demo.contacts.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.e4.demo.cssbridge"/>
-        <requirement
-            name="org.eclipse.e4.demo.e4photo"/>
-        <requirement
-            name="org.eclipse.e4.ui.examples.css.rcp"/>
-        <requirement
-            name="org.eclipse.e4.ui.examples.job"/>
-        <requirement
-            name="org.eclipse.jface.examples.databinding"/>
-        <requirement
-            name="org.eclipse.jface.snippets"/>
-        <requirement
-            name="org.eclipse.ui.examples.adapterservice"/>
-        <requirement
-            name="org.eclipse.ui.examples.contributions"/>
-        <requirement
-            name="org.eclipse.ui.examples.fieldassist"/>
-        <requirement
-            name="org.eclipse.ui.examples.job"/>
-        <requirement
-            name="org.eclipse.ui.examples.multipageeditor"/>
-        <requirement
-            name="org.eclipse.ui.examples.navigator"/>
-        <requirement
-            name="org.eclipse.ui.examples.propertysheet"/>
-        <requirement
-            name="org.eclipse.ui.examples.rcp.browser"/>
-        <requirement
-            name="org.eclipse.ui.examples.rcp.mail"/>
-        <requirement
-            name="org.eclipse.ui.examples.readmetool"/>
-        <requirement
-            name="org.eclipse.ui.examples.undo"/>
-        <requirement
-            name="org.eclipse.ui.examples.views.properties.tabbed.article"/>
-        <requirement
-            name="org.eclipse.ui.examples.views.properties.tabbed.hockeyleague"/>
-        <requirement
-            name="org.eclipse.ui.examples.views.properties.tabbed.logic"/>
-        <requirement
-            name="org.eclipse.ui.forms.examples"/>
+        <repositoryList
+            name="Neon">
+          <repository
+              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
+          <repository
+              url="http://download.eclipse.org/tools/gef/updates/releases"/>
+        </repositoryList>
         <repositoryList
             name="Mars">
           <repository
               url="http://download.eclipse.org/technology/nebula/snapshot"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones/core"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
           <repository
               url="http://download.eclipse.org/tools/gef/updates/releases"/>
         </repositoryList>
@@ -1364,7 +1245,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform UI support</description>
@@ -1400,10 +1281,9 @@
           activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <requirement
-            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+            name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.ui.tools.location}"
-            locateNestedProjects="true"/>
+            rootFolder="${git.clone.platform.ui.tools.location}"/>
       </targlet>
     </setupTask>
     <setupTask
@@ -1424,7 +1304,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform UI Tools support</description>

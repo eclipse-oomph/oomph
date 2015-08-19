@@ -16,7 +16,21 @@
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
+        name="org.eclipse.platform.feature.group"/>
+    <requirement
+        name="org.eclipse.jdt.feature.group"/>
+    <requirement
+        name="org.eclipse.pde.feature.group"/>
+    <requirement
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="org.eclipse.jdt.core">
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.problem.forbiddenReference"
+        value="warning"/>
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
@@ -68,6 +82,11 @@
           name="org.eclipse.pde.feature.group"/>
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
+      <repositoryList
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
       <repositoryList
           name="Mars">
         <repository
@@ -139,7 +158,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The PDE Feature</description>
@@ -230,7 +249,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The PDE UI</description>
@@ -379,7 +398,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The PDE Build</description>

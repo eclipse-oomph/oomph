@@ -69,6 +69,11 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
+      <repositoryList
           name="Mars">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
@@ -182,7 +187,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox P2 support</description>
@@ -239,7 +244,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox Framework support</description>
@@ -300,6 +305,11 @@
         <sourceLocator
             rootFolder="${git.clone.equinox.bundles.location}"/>
         <repositoryList
+            name="Neon">
+          <repository
+              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
+        </repositoryList>
+        <repositoryList
             name="Mars">
           <repository
               url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
@@ -336,7 +346,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox Bundles support</description>
