@@ -34,15 +34,15 @@ import org.eclipse.swt.widgets.Shell;
  */
 public abstract class AbstractSimpleDialog extends Shell
 {
-  private Composite titleComposite;
-
-  private int returnCode = Window.OK;
-
   public static final Color COLOR_WHITE = UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE);
 
   public static final Color COLOR_LIGHTEST_GRAY = SetupInstallerPlugin.getColor(245, 245, 245);
 
   public static final Color COLOR_LABEL_FOREGROUND = SetupInstallerPlugin.getColor(85, 85, 85);
+
+  private Composite titleComposite;
+
+  private int returnCode = Window.OK;
 
   public AbstractSimpleDialog(Display display, int style, int width, int height)
   {

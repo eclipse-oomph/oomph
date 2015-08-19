@@ -38,6 +38,8 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.util.FileUtil;
+import org.eclipse.oomph.ui.BackgroundProgressPart;
+import org.eclipse.oomph.ui.ButtonBar;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.Confirmer;
@@ -316,9 +318,9 @@ public class ProgressPage extends SetupWizardPage
   }
 
   @Override
-  protected void createCheckButtons()
+  protected void createCheckButtons(ButtonBar buttonBar)
   {
-    scrollLockButton = addCheckButton("Scroll lock", "Keep the log from scrolling to the end when new messages are added", false, null);
+    scrollLockButton = buttonBar.addCheckButton("Scroll lock", "Keep the log from scrolling to the end when new messages are added", false, null);
     scrollLock = scrollLockButton.getSelection();
     scrollLockButton.addSelectionListener(new SelectionAdapter()
     {
@@ -330,7 +332,7 @@ public class ProgressPage extends SetupWizardPage
     });
     AccessUtil.setKey(scrollLockButton, "lock");
 
-    dismissButton = addCheckButton("Dismiss automatically", "Dismiss this wizard when all setup tasks have performed successfully", false,
+    dismissButton = buttonBar.addCheckButton("Dismiss automatically", "Dismiss this wizard when all setup tasks have performed successfully", false,
         "dismissAutomatically");
     dismissAutomatically = dismissButton.getSelection();
     dismissButton.addSelectionListener(new SelectionAdapter()
@@ -345,13 +347,13 @@ public class ProgressPage extends SetupWizardPage
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
-      launchButton = addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
+      launchButton = buttonBar.addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
           "launchAutomatically");
     }
     else
     {
-      launchButton = addCheckButton("Restart automatically if needed", "Restart the current product if the installation has been changed by setup tasks", false,
-          "restartIfNeeded");
+      launchButton = buttonBar.addCheckButton("Restart automatically if needed",
+          "Restart the current product if the installation has been changed by setup tasks", false, "restartIfNeeded");
     }
 
     launchAutomatically = launchButton.getSelection();
@@ -369,7 +371,7 @@ public class ProgressPage extends SetupWizardPage
   @Override
   protected void createFooter(Composite parent)
   {
-    progressMonitorPart = new ProgressMonitorPart(parent, null, true)
+    progressMonitorPart = new BackgroundProgressPart(parent, null, true)
     {
       @Override
       protected void initialize(Layout layout, int progressIndicatorHeight)
@@ -410,11 +412,17 @@ public class ProgressPage extends SetupWizardPage
       @Override
       public void done()
       {
-        fProgressIndicator.sendRemainingWork();
-        fProgressIndicator.done();
-        removeFromCancelComponent(null);
-        progressMonitorPart.setLayoutData(new GridData(0, 0));
-        progressMonitorPart.getParent().layout();
+        UIUtil.syncExec(new Runnable()
+        {
+          public void run()
+          {
+            fProgressIndicator.sendRemainingWork();
+            fProgressIndicator.done();
+            removeFromCancelComponent(null);
+            progressMonitorPart.setLayoutData(new GridData(0, 0));
+            progressMonitorPart.getParent().layout();
+          }
+        });
       }
     };
 
@@ -1083,14 +1091,7 @@ public class ProgressPage extends SetupWizardPage
     public void done()
     {
       done = true;
-
-      UIUtil.syncExec(new Runnable()
-      {
-        public void run()
-        {
-          progressMonitorPart.done();
-        }
-      });
+      progressMonitorPart.done();
 
       if (progressMonitor != null)
       {
@@ -1100,14 +1101,7 @@ public class ProgressPage extends SetupWizardPage
 
     public void beginTask(final String name, final int totalWork)
     {
-      UIUtil.syncExec(new Runnable()
-      {
-        public void run()
-        {
-          progressMonitorPart.beginTask(name, totalWork);
-        }
-      });
-
+      progressMonitorPart.beginTask(name, totalWork);
       logTaskName(name);
 
       if (progressMonitor != null)
@@ -1118,14 +1112,7 @@ public class ProgressPage extends SetupWizardPage
 
     public void internalWorked(final double work)
     {
-      UIUtil.syncExec(new Runnable()
-      {
-        public void run()
-        {
-          progressMonitorPart.internalWorked(work);
-        }
-      });
-
+      progressMonitorPart.internalWorked(work);
       if (progressMonitor != null)
       {
         progressMonitor.internalWorked(work);
@@ -1163,14 +1150,7 @@ public class ProgressPage extends SetupWizardPage
 
     public void worked(final int work)
     {
-      UIUtil.syncExec(new Runnable()
-      {
-        public void run()
-        {
-          progressMonitorPart.worked(work);
-        }
-      });
-
+      progressMonitorPart.worked(work);
       if (progressMonitor != null)
       {
         progressMonitor.internalWorked(work);

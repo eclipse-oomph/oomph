@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.core.runtime.Platform;
@@ -96,7 +97,7 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Installer version: " + version + "\n" + SelfUpdate.INSTALLER_UPDATE_URL;
+    return "Installer version: " + version + "\n" + SetupUtil.INSTALLER_UPDATE_URL;
   }
 
   @Override

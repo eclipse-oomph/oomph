@@ -17,10 +17,10 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -62,12 +62,12 @@ public class InstallerApplication implements IApplication
   protected Integer run(final IApplicationContext context) throws Exception
   {
     // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
-    P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
+    P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, Installer.SERVICE_UI);
 
     @SuppressWarnings("restriction")
     IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper
         .getService(org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
-    agent.registerService(UIServices.SERVICE_NAME, SetupWizard.Installer.SERVICE_UI);
+    agent.registerService(UIServices.SERVICE_NAME, Installer.SERVICE_UI);
 
     final InstallerUI[] installerDialog = { null };
 
@@ -114,26 +114,145 @@ public class InstallerApplication implements IApplication
 
     boolean restarted = false;
     File restarting = new File(SetupContext.CONFIGURATION_STATE_LOCATION_URI.appendSegment("restarting").toFileString());
+    SelectionMemento selectionMemento = null;
 
-    try
+    if (restarting.exists())
     {
-      if (restarting.exists())
+      try
       {
         restarted = true;
-        if (!restarting.delete())
+        selectionMemento = (SelectionMemento)IOUtil.readObject(restarting, getClass().getClassLoader());
+      }
+      catch (Throwable ex)
+      {
+        //$FALL-THROUGH$
+      }
+      finally
+      {
+        try
         {
-          restarting.deleteOnExit();
+          restarting.delete();
+        }
+        catch (Throwable ex)
+        {
+          //$FALL-THROUGH$
         }
       }
-    }
-    catch (Throwable ex)
-    {
-      //$FALL-THROUGH$
     }
 
     final Display display = Display.getDefault();
     Display.setAppName(AbstractSetupDialog.SHELL_TEXT);
+    handleCocoaMenu(display, installerDialog);
 
+    if (context != null)
+    {
+      display.asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          // End the splash screen once the dialog is up.
+          context.applicationRunning();
+        }
+      });
+    }
+
+    String modeName = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MODE);
+    if (modeName == null)
+    {
+      modeName = PREF_MODE.get(Mode.SIMPLE.name());
+    }
+
+    mode = Mode.valueOf(modeName.toUpperCase());
+
+    for (;;)
+    {
+      if (selectionMemento == null)
+      {
+        selectionMemento = new SelectionMemento();
+      }
+
+      Installer installer = new Installer(selectionMemento);
+
+      if (mode == Mode.ADVANCED)
+      {
+        if (KeepInstallerUtil.canKeepInstaller())
+        {
+          Shell shell = new Shell(display);
+          if (MessageDialog.openQuestion(shell, AbstractSetupDialog.SHELL_TEXT,
+              "As an advanced user, do you want to keep the installer in a permanent location?"))
+          {
+            if (new KeepInstallerDialog(shell, true).open() == KeepInstallerDialog.OK)
+            {
+              return EXIT_OK;
+            }
+          }
+        }
+
+        installerDialog[0] = new InstallerDialog(null, installer, restarted);
+      }
+      else
+      {
+        SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer);
+        installer.setSimpleShell(dialog);
+        installerDialog[0] = dialog;
+      }
+
+      final int retcode = installerDialog[0].show();
+      if (retcode == InstallerUI.RETURN_SIMPLE)
+      {
+        setMode(Mode.SIMPLE);
+        selectionMemento = null;
+        continue;
+      }
+
+      if (retcode == InstallerUI.RETURN_ADVANCED)
+      {
+        setMode(Mode.ADVANCED);
+        selectionMemento = null;
+        continue;
+      }
+
+      if (retcode == InstallerUI.RETURN_RESTART)
+      {
+        try
+        {
+          IOUtil.writeObject(restarting, selectionMemento);
+        }
+        catch (Throwable ex)
+        {
+          //$FALL-THROUGH$
+        }
+
+        String launcher = getLauncher();
+        if (launcher != null)
+        {
+          try
+          {
+            // EXIT_RESTART often makes the new process come up behind other windows, so try a fresh native process first.
+            Runtime.getRuntime().exec(launcher);
+            return EXIT_OK;
+          }
+          catch (Throwable ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+
+        return EXIT_RESTART;
+      }
+
+      return EXIT_OK;
+    }
+  }
+
+  private void setMode(Mode mode)
+  {
+    this.mode = mode;
+    PREF_MODE.set(mode.name());
+  }
+
+  private void handleCocoaMenu(final Display display, final InstallerUI[] installerDialog)
+  {
     if (!SKIP_COCOA_MENU && Platform.WS_COCOA.equals(Platform.getWS()))
     {
       Runnable about = new Runnable()
@@ -172,105 +291,6 @@ public class InstallerApplication implements IApplication
 
       CocoaUtil.register(display, about, preferences, quit);
     }
-
-    if (context != null)
-    {
-      display.asyncExec(new Runnable()
-      {
-        public void run()
-        {
-          // End the splash screen once the dialog is up.
-          context.applicationRunning();
-        }
-      });
-    }
-
-    String modeName = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MODE);
-    if (modeName == null)
-    {
-      modeName = PREF_MODE.get(Mode.SIMPLE.name());
-    }
-
-    mode = Mode.valueOf(modeName.toUpperCase());
-
-    for (;;)
-    {
-      Installer installer = new Installer();
-
-      if (mode == Mode.ADVANCED)
-      {
-        if (KeepInstallerUtil.canKeepInstaller())
-        {
-          Shell shell = new Shell(display);
-          if (MessageDialog.openQuestion(shell, AbstractSetupDialog.SHELL_TEXT,
-              "As an advanced user, do you want to keep the installer in a permanent location?"))
-          {
-            if (new KeepInstallerDialog(shell, true).open() == KeepInstallerDialog.OK)
-            {
-              return EXIT_OK;
-            }
-          }
-        }
-
-        installerDialog[0] = new InstallerDialog(null, installer, restarted);
-      }
-      else
-      {
-        SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer);
-        installer.setSimpleShell(dialog);
-        installerDialog[0] = dialog;
-      }
-
-      final int retcode = installerDialog[0].show();
-      if (retcode == InstallerUI.RETURN_SIMPLE)
-      {
-        setMode(Mode.SIMPLE);
-        continue;
-      }
-
-      if (retcode == InstallerUI.RETURN_ADVANCED)
-      {
-        setMode(Mode.ADVANCED);
-        continue;
-      }
-
-      if (retcode == InstallerUI.RETURN_RESTART)
-      {
-        try
-        {
-          restarting.createNewFile();
-        }
-        catch (Throwable ex)
-        {
-          //$FALL-THROUGH$
-        }
-
-        String launcher = getLauncher();
-        if (launcher != null)
-        {
-          try
-          {
-            // EXIT_RESTART often makes the new process come up behind other windows, so try a fresh native process first.
-            Runtime.getRuntime().exec(launcher);
-            return EXIT_OK;
-          }
-          catch (Throwable ex)
-          {
-            //$FALL-THROUGH$
-          }
-        }
-
-        return EXIT_RESTART;
-      }
-
-      return EXIT_OK;
-    }
-  }
-
-  private void setMode(Mode mode)
-  {
-    this.mode = mode;
-    PREF_MODE.set(mode.name());
   }
 
   public Object start(IApplicationContext context) throws Exception

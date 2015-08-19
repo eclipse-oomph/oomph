@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.setup.util;
 
+import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.util.PropertiesUtil;
+
 import java.util.regex.Matcher;
 
 /**
@@ -17,6 +20,12 @@ import java.util.regex.Matcher;
  */
 public final class SetupUtil
 {
+  private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
+
+  public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL)
+      .replace('\\', '/');
+
+  public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
   private SetupUtil()
   {

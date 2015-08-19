@@ -8,9 +8,8 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.wizards;
+package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.util.BaseResource;
 import org.eclipse.oomph.base.util.BaseUtil;
@@ -26,7 +25,6 @@ import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.p2.internal.ui.P2ContentProvider;
 import org.eclipse.oomph.p2.internal.ui.P2LabelProvider;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
-import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -46,6 +44,11 @@ import org.eclipse.oomph.setup.provider.ProductItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
+import org.eclipse.oomph.setup.ui.wizards.FilteredTreeWithoutWorkbench;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
 import org.eclipse.oomph.ui.ToolButton;
@@ -59,13 +62,12 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
-import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -80,12 +82,7 @@ import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -104,8 +101,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -150,6 +145,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -165,6 +161,8 @@ public class ProductPage extends SetupWizardPage
   private static final Product NO_PRODUCT = createNoProduct();
 
   private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*");
+
+  private final SelectionMemento selectionMemento;
 
   private ComposedAdapterFactory adapterFactory;
 
@@ -202,9 +200,10 @@ public class ProductPage extends SetupWizardPage
 
   private boolean currentBundlePoolChanging;
 
-  public ProductPage()
+  public ProductPage(SelectionMemento selectionMemento)
   {
     super(PAGE_NAME);
+    this.selectionMemento = selectionMemento;
     setTitle("Product");
     setDescription("Select the product and choose the version you want to install.");
   }
@@ -451,6 +450,7 @@ public class ProductPage extends SetupWizardPage
       AccessUtil.setKey(managePoolsButton, "managePools");
     }
 
+    final CatalogManager catalogManager = catalogSelector.getCatalogManager();
     versionComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
       public void selectionChanged(SelectionChangedEvent event)
@@ -461,7 +461,7 @@ public class ProductPage extends SetupWizardPage
           String requiredJavaVersion = version.getRequiredJavaVersion();
           javaController.setJavaVersion(requiredJavaVersion);
 
-          saveProductVersionSelection(catalogSelector.getCatalogManager(), version);
+          saveProductVersionSelection(catalogManager, version);
         }
 
         versionCombo.setToolTipText(getToolTipText(version));
@@ -562,6 +562,32 @@ public class ProductPage extends SetupWizardPage
     productViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
     productViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
     {
+      private final AtomicBoolean selectionMementoTried = new AtomicBoolean();
+
+      private boolean applySelectionMemento()
+      {
+        URI uri = selectionMemento.getProductVersion();
+        if (uri != null)
+        {
+          ResourceSet resourceSet = getResourceSet();
+
+          EObject object = resourceSet.getEObject(uri, true);
+          if (object instanceof ProductVersion)
+          {
+            ProductVersion productVersion = (ProductVersion)object;
+            Product product = productVersion.getProduct();
+            productViewer.expandToLevel(product, 1);
+            productViewer.setSelection(new StructuredSelection(product));
+            versionComboViewer.setSelection(new StructuredSelection(productVersion));
+            updateDetails(false);
+            gotoNextPage();
+            return true;
+          }
+        }
+
+        return false;
+      }
+
       @Override
       public void notifyChanged(Notification notification)
       {
@@ -584,9 +610,17 @@ public class ProductPage extends SetupWizardPage
               // Ignore.
             }
 
+            if (!selectionMementoTried.getAndSet(true))
+            {
+              if (applySelectionMemento())
+              {
+                return;
+              }
+            }
+
             if (productViewer.getExpandedElements().length == 0)
             {
-              final Object[] elements = getElements(productViewer.getInput());
+              Object[] elements = getElements(productViewer.getInput());
               if (elements.length > 0)
               {
                 productViewer.expandToLevel(elements[0], 1);
@@ -596,7 +630,7 @@ public class ProductPage extends SetupWizardPage
                   if (!defaultProductVersions.isEmpty())
                   {
                     Product defaultProduct = defaultProductVersions.get(0).getKey();
-                    viewer.setSelection(new StructuredSelection(defaultProduct), true);
+                    productViewer.setSelection(new StructuredSelection(defaultProduct), true);
                   }
                 }
               }
@@ -701,7 +735,7 @@ public class ProductPage extends SetupWizardPage
         {
           if (isPageComplete())
           {
-            advanceToNextPage();
+            gotoNextPage();
           }
 
           return;
@@ -769,6 +803,7 @@ public class ProductPage extends SetupWizardPage
     if (forward)
     {
       ProductVersion productVersion = getSelectedProductVersion();
+      selectionMemento.setProductVersion(EcoreUtil.getURI(productVersion));
       getWizard().setSetupContext(SetupContext.create(getResourceSet(), productVersion));
     }
   }
@@ -839,7 +874,7 @@ public class ProductPage extends SetupWizardPage
     {
       String html = safe(productSelected ? product.getDescription() : null);
       String plain = StringUtil.isEmpty(html) ? "No description available." : UIUtil.stripHTML(html);
-      descriptionViewer.update(getImage(product), SetupCoreUtil.getLabel(product), plain);
+      descriptionViewer.update(SetupWizard.getImage(product), SetupCoreUtil.getLabel(product), plain);
     }
 
     versionLabel.setEnabled(productSelected);
@@ -909,7 +944,7 @@ public class ProductPage extends SetupWizardPage
 
   private String getDescriptionHTML(Product product)
   {
-    String imageURI = getImageURI(product);
+    String imageURI = SetupWizard.getImageURI(product);
 
     String description = product.getDescription();
     String label = product.getLabel();
@@ -1153,72 +1188,6 @@ public class ProductPage extends SetupWizardPage
     return new File(jre.getJavaHome(), "bin").toString();
   }
 
-  public static URI getProductImageURI(Product product)
-  {
-    URI imageURI = null;
-
-    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-    if (annotation != null)
-    {
-      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
-      if (detail != null)
-      {
-        imageURI = URI.createURI(detail);
-      }
-    }
-
-    if (imageURI == null)
-    {
-      imageURI = getDefaultProductImageURI();
-    }
-
-    return imageURI;
-  }
-
-  private static String getImageURI(URI imageURI)
-  {
-    Image remoteImage = getImage(imageURI);
-    return ImageURIRegistry.INSTANCE.getImageURI(remoteImage).toString();
-  }
-
-  public static String getImageURI(Product product)
-  {
-    try
-    {
-      URI imageURI = getProductImageURI(product);
-      return getImageURI(imageURI);
-    }
-    catch (Exception ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
-
-    URI imageURI = getDefaultProductImageURI();
-    return getImageURI(imageURI);
-  }
-
-  private static Image getImage(URI imageURI)
-  {
-    Object image = BaseEditUtil.getImage(imageURI);
-    return ExtendedImageRegistry.INSTANCE.getImage(image);
-  }
-
-  public static Image getImage(Product product)
-  {
-    try
-    {
-      URI imageURI = getProductImageURI(product);
-      return getImage(imageURI);
-    }
-    catch (Exception ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
-
-    URI imageURI = getDefaultProductImageURI();
-    return getImage(imageURI);
-  }
-
   public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter)
   {
     List<ProductVersion> versions = new ArrayList<ProductVersion>(product.getVersions());
@@ -1250,11 +1219,6 @@ public class ProductPage extends SetupWizardPage
     }
 
     return versions;
-  }
-
-  public static URI getDefaultProductImageURI()
-  {
-    return URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
   }
 
   /**
@@ -1714,63 +1678,6 @@ public class ProductPage extends SetupWizardPage
           }
 
           uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
-        }
-      });
-    }
-
-    @Override
-    protected void prepareBrowseWorkspaceButton(Button browseWorkspaceButton)
-    {
-      browseWorkspaceButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent event)
-        {
-          StringBuffer uris = new StringBuffer();
-
-          IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
-              Collections.<ViewerFilter> singletonList(new ViewerFilter()
-          {
-            @Override
-            public boolean select(Viewer viewer, Object parentElement, Object element)
-            {
-              if (element instanceof IFile)
-              {
-                IFile file = (IFile)element;
-                return "setup".equals(file.getFileExtension());
-              }
-
-              return true;
-            }
-          }));
-
-          for (int i = 0, len = files.length; i < len; i++)
-          {
-            uris.append(URI.createURI(files[i].getLocationURI().toString(), true));
-            uris.append("  ");
-          }
-
-          uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
-        }
-
-        private String getContextPath()
-        {
-          return context != null && context.isPlatformResource() ? URI.createURI(".").resolve(context).path().substring(9) : null;
-        }
-
-        private Object[] getContextSelection()
-        {
-          String path = getContextPath();
-          if (path != null)
-          {
-            IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-            IResource resource = root.findMember(path);
-            if (resource != null && resource.isAccessible())
-            {
-              return new Object[] { resource };
-            }
-          }
-          return null;
         }
       });
     }

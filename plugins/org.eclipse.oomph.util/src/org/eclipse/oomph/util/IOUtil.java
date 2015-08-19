@@ -792,6 +792,67 @@ public final class IOUtil
     }
   }
 
+  public static Object readObject(File file) throws Exception
+  {
+    return readObject(file, (ClassResolver)null);
+  }
+
+  public static Object readObject(File file, ClassLoader classLoader) throws Exception
+  {
+    return readObject(file, new ClassLoaderClassResolver(classLoader));
+  }
+
+  public static Object readObject(File file, final ClassResolver classResolver) throws Exception
+  {
+    InputStream inputStream = new FileInputStream(file);
+
+    try
+    {
+      ObjectInputStream ois = new ObjectInputStream(inputStream)
+      {
+        @Override
+        protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException
+        {
+          if (classResolver != null)
+          {
+            Class<?> c = classResolver.resolveClass(desc);
+            if (c != null)
+            {
+              return c;
+            }
+          }
+
+          return super.resolveClass(desc);
+        }
+      };
+
+      return ois.readObject();
+    }
+    finally
+    {
+      close(inputStream);
+    }
+  }
+
+  public static void writeObject(File file, Object object) throws Exception
+  {
+    mkdirs(file.getParentFile());
+
+    OutputStream outputStream = new FileOutputStream(file);
+
+    try
+    {
+      @SuppressWarnings("resource")
+      ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+      oos.writeObject(object);
+      oos.flush();
+    }
+    finally
+    {
+      close(outputStream);
+    }
+  }
+
   public static String readXML(InputStream inputStream) throws Exception
   {
     try
@@ -916,6 +977,48 @@ public final class IOUtil
     {
       files.add(file);
       return true;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface ClassResolver
+  {
+    public Class<?> resolveClass(ObjectStreamClass v) throws ClassNotFoundException;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class ClassLoaderClassResolver implements ClassResolver
+  {
+    private static final String STACK_TRACE_ELEMENT = StackTraceElement[].class.getName();
+
+    private final ClassLoader classLoader;
+
+    public ClassLoaderClassResolver(ClassLoader classLoader)
+    {
+      this.classLoader = classLoader;
+    }
+
+    public Class<?> resolveClass(ObjectStreamClass v) throws ClassNotFoundException
+    {
+      String className = v.getName();
+
+      try
+      {
+        return classLoader.loadClass(className);
+      }
+      catch (ClassNotFoundException ex)
+      {
+        if (!STACK_TRACE_ELEMENT.equals(className))
+        {
+          UtilPlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
+      }
+
+      return null;
     }
   }
 }

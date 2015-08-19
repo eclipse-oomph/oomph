@@ -17,8 +17,6 @@ import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.internal.core.util.SelfProductCatalogURIHandlerImpl;
-import org.eclipse.oomph.setup.ui.wizards.ProductPage;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;

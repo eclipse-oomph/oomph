@@ -807,8 +807,9 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
           public void run()
           {
             final Queue<EnablementAction> queue = new ConcurrentLinkedQueue<EnablementAction>(additionalTasks);
+            int jobs = Math.max(queue.size(), 10);
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < jobs; i++)
             {
               Job iconLoader = new Job("IconLoader-" + i)
               {

@@ -27,9 +27,11 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.CacheHandling;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.provider.SetupP2EditPlugin;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
@@ -77,8 +79,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PLUGIN_ID = INSTANCE.getSymbolicName();
 
-  public static final String PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
-
   public static final String PREF_HEADLESS = "headless.startup";
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
@@ -101,7 +101,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public SetupUIPlugin()
   {
-    super(new ResourceLocator[] { JREInfoUIPlugin.INSTANCE, SetupEditPlugin.INSTANCE, SetupCorePlugin.INSTANCE, P2UIPlugin.INSTANCE });
+    super(new ResourceLocator[] { JREInfoUIPlugin.INSTANCE, SetupEditPlugin.INSTANCE, SetupCorePlugin.INSTANCE, SetupP2EditPlugin.INSTANCE,
+        P2UIPlugin.INSTANCE });
   }
 
   @Override
@@ -113,7 +114,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
   public static boolean isInstallerProduct()
   {
     String productID = PropertiesUtil.getProperty("eclipse.product");
-    return PRODUCT_ID.equals(productID);
+    return SetupUtil.INSTALLER_PRODUCT_ID.equals(productID);
   }
 
   public static void initialStart(File ws, boolean offline, boolean mirrors)

@@ -27,7 +27,6 @@ import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.ControlRelocator;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ExceptionHandler;

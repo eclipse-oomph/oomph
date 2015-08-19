@@ -34,6 +34,7 @@ import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
 
@@ -50,6 +51,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -146,6 +148,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Eike Stepper
@@ -156,6 +159,8 @@ public class ProjectPage extends SetupWizardPage
    * Cannot be removed from {@link #streamViewer}.
    */
   private final Set<URI> existingStreams = new HashSet<URI>();
+
+  private final SelectionMemento selectionMemento;
 
   private ComposedAdapterFactory adapterFactory;
 
@@ -173,9 +178,10 @@ public class ProjectPage extends SetupWizardPage
 
   private boolean inactive;
 
-  public ProjectPage()
+  public ProjectPage(SelectionMemento selectionMemento)
   {
     super("ProjectPage");
+    this.selectionMemento = selectionMemento;
     setTitle("Projects");
     setDescription("Double click the projects you want to provision, and for each choose its stream in the table column.");
   }
@@ -353,6 +359,38 @@ public class ProjectPage extends SetupWizardPage
     projectViewer.setLabelProvider(labelProvider);
     projectViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
     {
+      private final AtomicBoolean selectionMementoTried = new AtomicBoolean();
+
+      private boolean applySelectionMemento()
+      {
+        List<URI> uris = selectionMemento.getStreams();
+        if (uris != null)
+        {
+          List<Project> projects = new ArrayList<Project>();
+          ResourceSet resourceSet = getResourceSet();
+
+          for (URI uri : uris)
+          {
+            EObject object = resourceSet.getEObject(uri, true);
+            if (object instanceof Stream)
+            {
+              Stream stream = (Stream)object;
+              projects.add(stream.getProject());
+            }
+          }
+
+          if (!projects.isEmpty())
+          {
+            projectViewer.setSelection(new StructuredSelection(projects), true);
+            addSelectedProjects();
+            gotoNextPage();
+            return true;
+          }
+        }
+
+        return false;
+      }
+
       @Override
       public void notifyChanged(Notification notification)
       {
@@ -377,9 +415,17 @@ public class ProjectPage extends SetupWizardPage
                 // Ignore.
               }
 
+              if (!selectionMementoTried.getAndSet(true))
+              {
+                if (applySelectionMemento())
+                {
+                  return;
+                }
+              }
+
               if (projectViewer.getExpandedElements().length == 0)
               {
-                final Object[] elements = getElements(projectViewer.getInput());
+                Object[] elements = getElements(projectViewer.getInput());
                 if (elements.length > 0)
                 {
                   projectViewer.setExpandedState(elements[0], true);
@@ -734,8 +780,9 @@ public class ProjectPage extends SetupWizardPage
 
   protected void checkPageComplete()
   {
+    // If we are in the Importer (i.e., no page before the ProjectPage) there must be at least one stream.
     Workspace workspace = getWorkspace();
-    setPageComplete(getPreviousPage() instanceof ProductPage || workspace != null && workspace.getStreams().size() > existingStreams.size());
+    setPageComplete(getPreviousPage() != null || workspace != null && workspace.getStreams().size() > existingStreams.size());
   }
 
   @Override
@@ -768,6 +815,26 @@ public class ProjectPage extends SetupWizardPage
         }
 
         projectViewer.setSelection(new StructuredSelection(projects), true);
+      }
+    }
+  }
+
+  @Override
+  public void leavePage(boolean forward)
+  {
+    if (forward)
+    {
+      Workspace workspace = getWorkspace();
+      if (workspace != null)
+      {
+        List<URI> uris = new ArrayList<URI>();
+        for (Stream stream : workspace.getStreams())
+        {
+          URI uri = EcoreUtil.getURI(stream);
+          uris.add(uri);
+        }
+
+        selectionMemento.setStreams(uris);
       }
     }
   }
@@ -935,7 +1002,8 @@ public class ProjectPage extends SetupWizardPage
       Workspace workspace = getWorkspace();
       if (workspace == null)
       {
-        getWizard().setSetupContext(SetupContext.create(getInstallation(), addedStreams, getUser()));
+        SetupWizard wizard = getWizard();
+        wizard.setSetupContext(SetupContext.create(getInstallation(), addedStreams, getUser()));
         workspace = getWorkspace();
         streamViewer.setInput(workspace);
       }
@@ -1142,8 +1210,8 @@ public class ProjectPage extends SetupWizardPage
           ProjectCatalog projectCatalog = (ProjectCatalog)owner;
           for (Project project : projectCatalog.getProjects())
           {
-            Command command = itemDelegator.createCommand(project, domain, DragAndDropCommand.class, new CommandParameter(project,
-                new DragAndDropCommand.Detail(location, operations, operation), collection));
+            Command command = itemDelegator.createCommand(project, domain, DragAndDropCommand.class,
+                new CommandParameter(project, new DragAndDropCommand.Detail(location, operations, operation), collection));
 
             if (command.canExecute())
             {
@@ -1620,19 +1688,19 @@ public class ProjectPage extends SetupWizardPage
 
           IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
               Collections.<ViewerFilter> singletonList(new ViewerFilter()
+          {
+            @Override
+            public boolean select(Viewer viewer, Object parentElement, Object element)
+            {
+              if (element instanceof IFile)
               {
-                @Override
-                public boolean select(Viewer viewer, Object parentElement, Object element)
-                {
-                  if (element instanceof IFile)
-                  {
-                    IFile file = (IFile)element;
-                    return "setup".equals(file.getFileExtension());
-                  }
+                IFile file = (IFile)element;
+                return "setup".equals(file.getFileExtension());
+              }
 
-                  return true;
-                }
-              }));
+              return true;
+            }
+          }));
 
           for (int i = 0, len = files.length; i < len; i++)
           {

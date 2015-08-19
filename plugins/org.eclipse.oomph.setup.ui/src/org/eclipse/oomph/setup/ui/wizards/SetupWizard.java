@@ -10,12 +10,13 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
-import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
@@ -31,10 +32,12 @@ import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage.WizardFinisher;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.OS;
 
+import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -45,12 +48,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -68,6 +71,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -80,11 +84,17 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.IWizardDescriptor;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -405,6 +415,68 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
   }
 
+  public IWizardPage getCurrentPage()
+  {
+    IWizardContainer container = getContainer();
+    if (container != null)
+    {
+      return container.getCurrentPage();
+    }
+
+    return null;
+  }
+
+  @Override
+  public boolean canFinish()
+  {
+    SetupWizardPage currentPage = (SetupWizardPage)getCurrentPage();
+    WizardFinisher wizardFinisher = currentPage.getWizardFinisher();
+    if (wizardFinisher != null)
+    {
+      return true;
+    }
+
+    for (IWizardPage page : getPages())
+    {
+      if (!page.isPageComplete())
+      {
+        if (page instanceof ProgressPage && currentPage instanceof ConfirmationPage)
+        {
+          break;
+        }
+
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean performFinish()
+  {
+    SetupWizardPage currentPage = (SetupWizardPage)getCurrentPage();
+    WizardFinisher wizardFinisher = currentPage.getWizardFinisher();
+    if (wizardFinisher != null)
+    {
+      return wizardFinisher.performFinish();
+    }
+
+    if (currentPage instanceof ProgressPage)
+    {
+      clearStartupProperties();
+      if (finishAction != null)
+      {
+        UIUtil.syncExec(finishAction);
+      }
+
+      return true;
+    }
+
+    currentPage.gotoNextPage();
+    return false;
+  }
+
   @Override
   public boolean performCancel()
   {
@@ -424,43 +496,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     clearStartupProperties();
 
     return true;
-  }
-
-  @Override
-  public boolean canFinish()
-  {
-    for (IWizardPage page : getPages())
-    {
-      if (!page.isPageComplete())
-      {
-        if (page instanceof ProgressPage && lastPage instanceof ConfirmationPage)
-        {
-          break;
-        }
-
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  @Override
-  public boolean performFinish()
-  {
-    if (lastPage instanceof ProgressPage)
-    {
-      clearStartupProperties();
-      if (finishAction != null)
-      {
-        UIUtil.syncExec(finishAction);
-      }
-
-      return true;
-    }
-
-    ((SetupWizardPage)lastPage).advanceToNextPage();
-    return false;
   }
 
   public void sendStats(boolean success)
@@ -620,6 +655,77 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       adapterFactory.dispose();
       adapterFactory = null;
     }
+  }
+
+  public static URI getProductImageURI(Product product)
+  {
+    URI imageURI = null;
+
+    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    if (annotation != null)
+    {
+      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+      if (detail != null)
+      {
+        imageURI = URI.createURI(detail);
+      }
+    }
+
+    if (imageURI == null)
+    {
+      imageURI = getDefaultProductImageURI();
+    }
+
+    return imageURI;
+  }
+
+  private static String getImageURI(URI imageURI)
+  {
+    Image remoteImage = getImage(imageURI);
+    return ImageURIRegistry.INSTANCE.getImageURI(remoteImage).toString();
+  }
+
+  public static String getImageURI(Product product)
+  {
+    try
+    {
+      URI imageURI = getProductImageURI(product);
+      return getImageURI(imageURI);
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
+
+    URI imageURI = getDefaultProductImageURI();
+    return getImageURI(imageURI);
+  }
+
+  private static Image getImage(URI imageURI)
+  {
+    Object image = BaseEditUtil.getImage(imageURI);
+    return ExtendedImageRegistry.INSTANCE.getImage(image);
+  }
+
+  public static Image getImage(Product product)
+  {
+    try
+    {
+      URI imageURI = getProductImageURI(product);
+      return getImage(imageURI);
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
+
+    URI imageURI = getDefaultProductImageURI();
+    return getImage(imageURI);
+  }
+
+  public static URI getDefaultProductImageURI()
+  {
+    return URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
   }
 
   /**
@@ -937,7 +1043,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         if (eObject instanceof Product)
         {
           Product product = (Product)eObject;
-          URI uri = ProductPage.getProductImageURI(product);
+          URI uri = getProductImageURI(product);
           if (uri != null)
           {
             if (getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().containsKey(uri.fileExtension()))
@@ -987,62 +1093,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   /**
    * @author Eike Stepper
    */
-  public static class Installer extends SetupWizard
-  {
-    public static final P2ServiceUI SERVICE_UI = new P2ServiceUI();
-
-    public Installer()
-    {
-      setTrigger(Trigger.BOOTSTRAP);
-      getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
-      setSetupContext(SetupContext.createUserOnly(getResourceSet()));
-      setWindowTitle("Eclipse Installer");
-    }
-
-    @Override
-    public String getHelpPath()
-    {
-      return HELP_FOLDER + "DocInstallWizard.html";
-    }
-
-    @Override
-    public void addPages()
-    {
-      addPage(new ProductPage());
-      addPage(new ProjectPage());
-      super.addPages();
-
-      getShell().getDisplay().asyncExec(new Runnable()
-      {
-        public void run()
-        {
-          loadIndex();
-        }
-      });
-    }
-
-    @Override
-    protected void indexLoaded(Index index)
-    {
-      super.indexLoaded(index);
-      getCatalogManager().indexLoaded(index);
-    }
-
-    @Override
-    public void setPerformer(SetupTaskPerformer performer)
-    {
-      super.setPerformer(performer);
-
-      if (performer != null)
-      {
-        performer.put(UIServices.class, SERVICE_UI);
-      }
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
   public static class Importer extends SetupWizard implements IImportWizard
   {
     public static final String WIZARD_ID = "org.eclipse.oomph.setup.ui.ImportWizard";
@@ -1075,7 +1125,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         return;
       }
 
-      addPage(new ProjectPage());
+      addPage(new ProjectPage(new SelectionMemento()));
       super.addPages();
 
       UIUtil.getDisplay().timerExec(500, new Runnable()
@@ -1237,6 +1287,85 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
 
       return super.openDialog(parentShell);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class SelectionMemento implements Externalizable
+  {
+    private URI productVersion;
+
+    private List<URI> streams;
+
+    public SelectionMemento()
+    {
+    }
+
+    public URI getProductVersion()
+    {
+      return productVersion;
+    }
+
+    public void setProductVersion(URI productVersion)
+    {
+      this.productVersion = productVersion;
+    }
+
+    public List<URI> getStreams()
+    {
+      return streams;
+    }
+
+    public void setStreams(List<URI> streams)
+    {
+      this.streams = streams;
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+      if (productVersion != null)
+      {
+        out.writeBoolean(true);
+        out.writeUTF(productVersion.toString());
+      }
+      else
+      {
+        out.writeBoolean(false);
+      }
+
+      if (streams != null)
+      {
+        out.writeInt(streams.size());
+        for (URI stream : streams)
+        {
+          out.writeUTF(stream.toString());
+        }
+      }
+      else
+      {
+        out.writeInt(-1);
+      }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+      if (in.readBoolean())
+      {
+        productVersion = URI.createURI(in.readUTF());
+      }
+
+      int size = in.readInt();
+      if (size != -1)
+      {
+        streams = new ArrayList<URI>();
+        for (int i = 0; i < size; i++)
+        {
+          URI stream = URI.createURI(in.readUTF());
+          streams.add(stream);
+        }
+      }
     }
   }
 }

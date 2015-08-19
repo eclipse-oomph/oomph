@@ -46,4 +46,6 @@ public interface SetupProperties
   public static final String PROP_SETUP_PRODUCT_VERSION_FILTER = "oomph.setup.product.version.filter";
 
   public static final String PROP_SETUP_JRE_CHOICE = "oomph.setup.jre.choice";
+
+  public static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url";
 }

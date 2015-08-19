@@ -10,25 +10,31 @@
  */
 package org.eclipse.oomph.setup.ui.wizards;
 
+import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
+import org.eclipse.oomph.ui.ButtonBar;
 import org.eclipse.oomph.ui.HelpSupport.HelpProvider;
 import org.eclipse.oomph.ui.OomphWizardDialog;
-import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
-import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -46,10 +52,6 @@ import java.lang.reflect.Method;
  */
 public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 {
-  private static final String TOGGLE_COMMAND_PREFIX = "toggleCommand:";
-
-  private Composite checkComposite;
-
   public SetupWizardPage(String pageName)
   {
     super(pageName);
@@ -126,6 +128,30 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     getWizard().setPerformer(performer);
   }
 
+  protected final SetupTaskPerformer createPerformer(SetupPrompter prompter, boolean fullPrompt) throws Exception
+  {
+    User originalUser = getUser();
+    URI uri = originalUser.eResource().getURI();
+
+    final User user = EcoreUtil.copy(originalUser);
+    Resource userResource = Resource.Factory.Registry.INSTANCE.getFactory(uri).createResource(uri);
+    userResource.getContents().add(user);
+
+    Trigger trigger = getTrigger();
+    Installation installation = getInstallation();
+    Workspace workspace = getWorkspace();
+
+    URIConverter uriConverter = getResourceSet().getURIConverter();
+    SetupContext context = SetupContext.create(installation, workspace, user);
+
+    return SetupTaskPerformer.create(uriConverter, prompter, trigger, context, fullPrompt);
+  }
+
+  public WizardFinisher getWizardFinisher()
+  {
+    return null;
+  }
+
   public boolean performCancel()
   {
     return true;
@@ -147,10 +173,37 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   {
   }
 
-  public final void advanceToNextPage()
+  public final void gotoNextPage()
   {
-    IWizardPage nextPage = getNextPage();
-    getContainer().showPage(nextPage);
+    IWizardPage page = getNextPage();
+    gotoPage("nextPressed", page);
+  }
+
+  public final void gotoPreviousPage()
+  {
+    // Going back via WizardDialog.showPage() does not work because it screws up the previousPage of the current page!
+    // See how isMovingToPreviousPage is (not!) used there...
+    IWizardPage page = getPreviousPage();
+    gotoPage("backPressed", page);
+  }
+
+  private void gotoPage(String methodName, IWizardPage page)
+  {
+    IWizardContainer container = getContainer();
+    if (container instanceof WizardDialog)
+    {
+      try
+      {
+        ReflectUtil.invokeMethod(methodName, container);
+        return;
+      }
+      catch (Throwable ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    container.showPage(page);
   }
 
   public final void createControl(Composite parent)
@@ -176,7 +229,16 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     Control ui = createUI(uiContainer);
     ui.setLayoutData(layoutData);
 
-    createCheckButtons();
+    ButtonBar buttonBar = new ButtonBar(pageControl)
+    {
+      @Override
+      protected IDialogSettings getDialogSettings()
+      {
+        return SetupWizardPage.this.getDialogSettings();
+      }
+    };
+
+    createCheckButtons(buttonBar);
     createFooter(pageControl);
     parent.layout(true, true);
   }
@@ -185,65 +247,8 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   {
   }
 
-  protected void createCheckButtons()
+  protected void createCheckButtons(ButtonBar buttonBar)
   {
-  }
-
-  protected final Button addCheckButton(String text, String toolTip, boolean defaultSelection, String persistenceKey)
-  {
-    if (checkComposite == null)
-    {
-      checkComposite = new Composite((Composite)getControl(), SWT.NONE);
-      checkComposite.setLayout(UIUtil.createGridLayout(1));
-      checkComposite.setLayoutData(new GridData());
-    }
-    else
-    {
-      GridLayout checkLayout = (GridLayout)checkComposite.getLayout();
-      ++checkLayout.numColumns;
-    }
-
-    Button button;
-    if (persistenceKey != null)
-    {
-      boolean toggleCommand = false;
-      if (persistenceKey.startsWith(TOGGLE_COMMAND_PREFIX))
-      {
-        persistenceKey = persistenceKey.substring(TOGGLE_COMMAND_PREFIX.length());
-        toggleCommand = UIUtil.WORKBENCH != null;
-      }
-
-      PersistentButton.Persistence persistence;
-      if (toggleCommand)
-      {
-        persistence = new PersistentButton.ToggleCommandPersistence(persistenceKey);
-      }
-      else
-      {
-        persistence = new PersistentButton.DialogSettingsPersistence(getDialogSettings(), persistenceKey);
-      }
-
-      button = new PersistentButton(checkComposite, SWT.CHECK, defaultSelection, persistence);
-    }
-    else
-    {
-      button = new Button(checkComposite, SWT.CHECK);
-      button.setSelection(defaultSelection);
-    }
-
-    button.setLayoutData(new GridData());
-    button.setText(text);
-    if (!StringUtil.isEmpty(toolTip))
-    {
-      button.setToolTipText(toolTip);
-    }
-
-    return button;
-  }
-
-  protected final Composite getCheckComposite()
-  {
-    return checkComposite;
   }
 
   @Override
@@ -283,5 +288,13 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     {
       // Ignore
     }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface WizardFinisher
+  {
+    public boolean performFinish();
   }
 }

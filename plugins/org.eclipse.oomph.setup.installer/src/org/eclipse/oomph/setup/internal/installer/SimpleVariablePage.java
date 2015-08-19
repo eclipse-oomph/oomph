@@ -50,7 +50,6 @@ import org.eclipse.oomph.setup.ui.JREDownloadHandler;
 import org.eclipse.oomph.setup.ui.LicensePrePrompter;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
-import org.eclipse.oomph.setup.ui.wizards.ProductPage;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.ui.StackComposite;
 import org.eclipse.oomph.ui.UIUtil;

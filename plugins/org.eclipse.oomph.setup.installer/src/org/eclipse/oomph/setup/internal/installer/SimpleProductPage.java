@@ -20,7 +20,7 @@ import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductList.BrowserProductList;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductList.CompositeProductList;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
-import org.eclipse.oomph.setup.ui.wizards.ProductPage;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.SpriteAnimator;
@@ -258,7 +258,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   public static String renderProduct(Product product, boolean large)
   {
-    String imageURI = ProductPage.getImageURI(product);
+    String imageURI = SetupWizard.getImageURI(product);
 
     String label = product.getLabel();
     if (StringUtil.isEmpty(label))
@@ -624,7 +624,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       this.product = product;
       if (product != null)
       {
-        Image image = ProductPage.getImage(product);
+        Image image = SetupWizard.getImage(product);
         logo.setImage(image);
         title.setText(product.getLabel());
 

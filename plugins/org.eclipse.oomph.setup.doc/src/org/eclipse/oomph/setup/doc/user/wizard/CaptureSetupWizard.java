@@ -81,7 +81,7 @@ public abstract class CaptureSetupWizard extends Capture.Window<WizardDialog>
 
   protected void advanceToNextPage(WizardDialog wizardDialog)
   {
-    ((SetupWizardPage)wizardDialog.getCurrentPage()).advanceToNextPage();
+    ((SetupWizardPage)wizardDialog.getCurrentPage()).gotoNextPage();
   }
 
   protected void regressToPreviousPage(WizardDialog wizardDialog)

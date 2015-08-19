@@ -16,9 +16,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
-import org.eclipse.oomph.setup.ui.wizards.ProductPage;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard.Installer;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
 import org.eclipse.oomph.util.ExceptionHandler;
 
@@ -64,9 +62,12 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
   private Link versionLink;
 
+  /**
+   * Used only in the generated documentation.
+   */
   public InstallerDialog(Shell parentShell, boolean restarted)
   {
-    this(parentShell, new SetupWizard.Installer(), restarted);
+    this(parentShell, new Installer(new SelectionMemento()), restarted);
   }
 
   public InstallerDialog(Shell parentShell, Installer installer, boolean restarted)
@@ -252,8 +253,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
       {
         public void run()
         {
-          close();
-          setReturnCode(RETURN_RESTART);
+          restart();
         }
       };
 
@@ -376,6 +376,12 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   public void showAbout()
   {
     new AboutDialog(getShell(), version).open();
+  }
+
+  public void restart()
+  {
+    close();
+    setReturnCode(RETURN_RESTART);
   }
 
   /**

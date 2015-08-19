@@ -20,7 +20,6 @@ import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
@@ -35,6 +34,7 @@ import org.eclipse.oomph.setup.ui.PropertyField.ValueListener;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.setup.util.StringExpander;
+import org.eclipse.oomph.ui.ButtonBar;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
@@ -47,7 +47,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -125,7 +124,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
   };
 
-  protected VariablePage()
+  public VariablePage()
   {
     super("VariablePage");
     setTitle("Variables");
@@ -171,9 +170,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   }
 
   @Override
-  protected void createCheckButtons()
+  protected void createCheckButtons(ButtonBar buttonBar)
   {
-    final Button fullPromptButton = addCheckButton("Show all variables", "", false, "fullPrompt");
+    final Button fullPromptButton = buttonBar.addCheckButton("Show all variables", "", false, "fullPrompt");
     fullPrompt = fullPromptButton.getSelection();
     fullPromptButton.addSelectionListener(new SelectionAdapter()
     {
@@ -440,20 +439,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         incompletePerformers.clear();
         allPromptedPerfomers.clear();
 
-        User originalUser = getUser();
-        URI uri = originalUser.eResource().getURI();
-        final User user = EcoreUtil.copy(originalUser);
-        Resource userResource = Resource.Factory.Registry.INSTANCE.getFactory(uri).createResource(uri);
-        userResource.getContents().add(user);
-
-        Trigger trigger = getTrigger();
-        Installation installation = getInstallation();
-        Workspace workspace = getWorkspace();
-
-        URIConverter uriConverter = getResourceSet().getURIConverter();
-        SetupContext context = SetupContext.create(installation, workspace, user);
-
-        performer = SetupTaskPerformer.create(uriConverter, this, trigger, context, fullPrompt);
+        performer = createPerformer(this, fullPrompt);
       }
       catch (OperationCanceledException ex)
       {
@@ -485,7 +471,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         if (!prompted)
         {
           prompted = true;
-          advanceToNextPage();
+          gotoNextPage();
         }
       }
     }
@@ -527,7 +513,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       performer.setPrompter(this);
       setPageComplete(true);
-      advanceToNextPage();
+      gotoNextPage();
     }
     else
     {
@@ -553,7 +539,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           {
             if (isPageComplete())
             {
-              advanceToNextPage();
+              gotoNextPage();
             }
           }
         });

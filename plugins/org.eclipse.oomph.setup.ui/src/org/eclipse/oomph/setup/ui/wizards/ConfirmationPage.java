@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.ui.ButtonBar;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.PropertiesViewer;
 import org.eclipse.oomph.ui.UIUtil;
@@ -165,9 +166,9 @@ public class ConfirmationPage extends SetupWizardPage
   }
 
   @Override
-  protected void createCheckButtons()
+  protected void createCheckButtons(ButtonBar buttonBar)
   {
-    showAllButton = addCheckButton("Show all triggered tasks", "Show unneeded tasks in addition to the needed tasks", false, "showAll");
+    showAllButton = buttonBar.addCheckButton("Show all triggered tasks", "Show unneeded tasks in addition to the needed tasks", false, "showAll");
     showAllButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -181,7 +182,7 @@ public class ConfirmationPage extends SetupWizardPage
     offlineProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
     if (offlineProperty == null)
     {
-      offlineButton = addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false,
+      offlineButton = buttonBar.addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false,
           "toggleCommand:org.eclipse.oomph.ui.ToggleOfflineMode");
       AccessUtil.setKey(offlineButton, "offline");
     }
@@ -189,13 +190,13 @@ public class ConfirmationPage extends SetupWizardPage
     mirrorsProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);
     if (mirrorsProperty == null)
     {
-      mirrorsButton = addCheckButton("Mirrors", "Make use of p2 mirrors during the installation process", true, "mirrors");
+      mirrorsButton = buttonBar.addCheckButton("Mirrors", "Make use of p2 mirrors during the installation process", true, "mirrors");
       AccessUtil.setKey(mirrorsButton, "mirrors");
     }
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
-      overwriteButton = addCheckButton("Overwrite", "Rename the existing configuration folder during the installation process", false, null);
+      overwriteButton = buttonBar.addCheckButton("Overwrite", "Rename the existing configuration folder during the installation process", false, null);
       overwriteButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -208,7 +209,7 @@ public class ConfirmationPage extends SetupWizardPage
     }
     else if (getWorkspace() != null)
     {
-      switchWorkspaceButton = addCheckButton("Switch workspace", "Switch to a different workspace", false, null);
+      switchWorkspaceButton = buttonBar.addCheckButton("Switch workspace", "Switch to a different workspace", false, null);
       switchWorkspaceButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -252,7 +253,7 @@ public class ConfirmationPage extends SetupWizardPage
 
       if (getTrigger() == Trigger.STARTUP || performer.isSkipConfirmation())
       {
-        advanceToNextPage();
+        gotoNextPage();
       }
     }
     else
@@ -775,31 +776,35 @@ public class ConfirmationPage extends SetupWizardPage
 
   private boolean isOffline()
   {
-    if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP))
-    {
-      return true;
-    }
-
-    if (offlineProperty != null)
-    {
-      return offlineProperty;
-    }
-
-    return offlineButton.getSelection();
+    return getProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP, offlineProperty, offlineButton);
   }
 
   private boolean isMirrors()
   {
-    if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP))
+    return getProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP, mirrorsProperty, mirrorsButton);
+  }
+
+  public static boolean getProperty(String propertyKey, Boolean property, final Button button)
+  {
+    if (PropertiesUtil.isProperty(propertyKey))
     {
       return true;
     }
 
-    if (mirrorsProperty != null)
+    if (property != null)
     {
-      return mirrorsProperty;
+      return property;
     }
 
-    return mirrorsButton.getSelection();
+    final boolean[] result = { false };
+    UIUtil.syncExec(new Runnable()
+    {
+      public void run()
+      {
+        result[0] = button.getSelection();
+      }
+    });
+
+    return result[0];
   }
 }

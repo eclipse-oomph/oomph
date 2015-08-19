@@ -25,14 +25,18 @@ public class PersistentButton extends Button
   {
     super(parent, style);
     this.persistence = persistence;
-    super.setSelection(persistence.load(defaultSelection));
+    super.setSelection(persistence != null ? persistence.load(defaultSelection) : defaultSelection);
   }
 
   @Override
   public void setSelection(boolean selection)
   {
     super.setSelection(selection);
-    persistence.save(selection);
+
+    if (persistence != null)
+    {
+      persistence.save(selection);
+    }
   }
 
   @Override
