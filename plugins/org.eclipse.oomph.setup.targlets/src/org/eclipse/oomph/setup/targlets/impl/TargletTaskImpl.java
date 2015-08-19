@@ -1051,8 +1051,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     Set<NameVersionDescriptor> result = new LinkedHashSet<NameVersionDescriptor>();
     for (ImplicitDependency implicitDependency : implicitDependencies)
     {
-      Version version = implicitDependency.getVersion();
-      result.add(new NameVersionDescriptor(implicitDependency.getID(), version == null ? null : version.toString()));
+      String id = implicitDependency.getID();
+      if (!StringUtil.isEmpty(id))
+      {
+        Version version = implicitDependency.getVersion();
+        result.add(new NameVersionDescriptor(id, version == null ? null : version.toString()));
+      }
     }
 
     return result;
