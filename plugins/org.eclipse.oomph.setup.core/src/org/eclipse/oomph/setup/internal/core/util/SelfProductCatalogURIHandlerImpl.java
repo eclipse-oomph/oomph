@@ -141,7 +141,10 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
 
       Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
       annotation.setSource(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      annotation.getDetails().put("folderName", SetupContext.PRODUCT_LOCATION.segment(SetupContext.PRODUCT_ROOT_LOCATION.segmentCount()));
+
+      String folderName = SetupContext.PRODUCT_LOCATION.segmentCount() == 0 ? ""
+          : URI.decode(SetupContext.PRODUCT_LOCATION.segment(SetupContext.PRODUCT_ROOT_LOCATION.segmentCount()));
+      annotation.getDetails().put("folderName", folderName);
       selfProductVersion.getAnnotations().add(annotation);
 
       P2Task selfP2Task = SetupP2Factory.eINSTANCE.createP2Task();
