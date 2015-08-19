@@ -55,6 +55,7 @@ import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.ui.MarkerHelper;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
@@ -1975,6 +1976,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private Map<Object, Set<Object>> inverseCopyMap = new HashMap<Object, Set<Object>>();
 
+    private List<Notifier> notifiers = new ArrayList<Notifier>();
+
     private Map<Object, Object> parents = new HashMap<Object, Object>();
 
     private AdapterFactoryEditingDomain.EditingDomainProvider editingDomainProvider = new AdapterFactoryEditingDomain.EditingDomainProvider(editingDomain);
@@ -2186,6 +2189,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       if (labelProvider != null)
       {
         copyMap.clear();
+        inverseCopyMap.clear();
+
+        for (Notifier notifier : notifiers)
+        {
+          notifier.eAdapters().clear();
+        }
+
+        notifiers.clear();
 
         try
         {
@@ -2369,10 +2380,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           {
             for (EObject eObject : setupTaskPerformer.getCopyMap().values())
             {
+              notifiers.add(eObject);
+
               Resource resource = ((InternalEObject)eObject).eDirectResource();
               if (resource != null && !resource.eAdapters().contains(editingDomainProvider))
               {
                 resource.eAdapters().add(editingDomainProvider);
+                notifiers.add(resource);
               }
             }
 
