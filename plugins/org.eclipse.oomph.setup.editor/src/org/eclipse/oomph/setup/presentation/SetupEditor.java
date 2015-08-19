@@ -1323,20 +1323,23 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   public void setSelectionToViewer(Collection<?> collection)
   {
-    // If we're trying to select a resource in the selection viewer, make sure resources are visible there.
-    if (currentViewer == selectionViewer)
+    if (selectionViewer != null && !selectionViewer.getTree().isDisposed())
     {
-      for (Object object : collection)
+      // If we're trying to select a resource in the selection viewer, make sure resources are visible there.
+      if (currentViewer == selectionViewer)
       {
-        if (object instanceof Resource)
+        for (Object object : collection)
         {
-          toggleInput(true);
-          break;
+          if (object instanceof Resource)
+          {
+            toggleInput(true);
+            break;
+          }
         }
       }
-    }
 
-    setSelectionToViewerGen(collection);
+      setSelectionToViewerGen(collection);
+    }
   }
 
   /**
