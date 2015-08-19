@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStrea
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
@@ -349,7 +350,7 @@ public final class TargletContainerDescriptorManager
             }
             catch (Exception ex)
             {
-              TargletsCorePlugin.INSTANCE.log(ex);
+              TargletsCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
             }
           }
 
