@@ -12,6 +12,7 @@ package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.ui.HelpSupport.HelpProvider;
+import org.eclipse.oomph.util.PropertyFile;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.jface.dialogs.DialogTray;
@@ -20,6 +21,7 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -36,16 +38,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Date;
 
 /**
  * @author Eike Stepper
  */
 public abstract class OomphDialog extends TitleAreaDialog implements HelpProvider
 {
+  private static final PropertyFile HISTORY = new PropertyFile(UIPlugin.INSTANCE.getUserLocation().append("dialog-help-shown.properties").toFile());
+
   private static final String SETTING_DIALOG_WIDTH = "dialogWidth";
 
   private static final String SETTING_DIALOG_HEIGHT = "dialogHeight";
@@ -292,6 +299,75 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
   protected abstract void createUI(Composite parent);
 
+  public static boolean showFirstTimeHelp(final TrayDialog dialog)
+  {
+    try
+    {
+      if (dialog.isHelpAvailable())
+      {
+        String key = dialog.getClass().getName();
+        String value = new Date().toString();
+
+        if (HISTORY.compareAndSetProperty(key, value))
+        {
+          UIUtil.asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              try
+              {
+                Method method = ReflectUtil.getMethod(TrayDialog.class, "helpPressed");
+                ReflectUtil.invokeMethod(method, dialog);
+              }
+              catch (Throwable ex)
+              {
+                UIPlugin.INSTANCE.log(ex);
+              }
+            }
+          });
+
+          return true;
+        }
+      }
+    }
+    catch (Throwable ex)
+    {
+      UIPlugin.INSTANCE.log(ex);
+    }
+
+    return false;
+  }
+
+  public static void hookTray(final TrayDialog dialog) throws IllegalStateException, UnsupportedOperationException
+  {
+    final Control trayControl = getFieldValue(dialog, "trayControl");
+    final Label rightSeparator = getFieldValue(dialog, "rightSeparator");
+    final Sash sash = getFieldValue(dialog, "sash");
+    if (trayControl == null || rightSeparator == null || sash == null)
+    {
+      return;
+    }
+
+    final GridData data = (GridData)trayControl.getLayoutData();
+    sash.addListener(SWT.Selection, new Listener()
+    {
+      public void handleEvent(Event event)
+      {
+        if (event.detail == SWT.DRAG)
+        {
+          Shell shell = dialog.getShell();
+          Rectangle clientArea = shell.getClientArea();
+          int newWidth = clientArea.width - event.x - (sash.getSize().x + rightSeparator.getSize().x);
+          if (newWidth != data.widthHint)
+          {
+            data.widthHint = newWidth;
+            shell.layout();
+          }
+        }
+      }
+    });
+  }
+
   public static void fixTitleImageLayout(TitleAreaDialog dialog)
   {
     try
@@ -324,34 +400,71 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     }
   }
 
-  public static void hookTray(final TrayDialog dialog) throws IllegalStateException, UnsupportedOperationException
+  /**
+   * This is a prototype, maybe worth showing to people later...
+   */
+  @SuppressWarnings("unused")
+  private static void animateMessage(TitleAreaDialog dialog)
   {
-    final Control trayControl = getFieldValue(dialog, "trayControl");
-    final Label rightSeparator = getFieldValue(dialog, "rightSeparator");
-    final Sash sash = getFieldValue(dialog, "sash");
-    if (trayControl == null || rightSeparator == null || sash == null)
+    try
     {
-      return;
-    }
+      final Text messageLabel = ReflectUtil.getValue("messageLabel", dialog);
+      final Display display = messageLabel.getDisplay();
 
-    final GridData data = (GridData)trayControl.getLayoutData();
-    sash.addListener(SWT.Selection, new Listener()
-    {
-      public void handleEvent(Event event)
+      final Color[] colors = new Color[8];
+      for (int color = 0; color < colors.length; color++)
       {
-        if (event.detail == SWT.DRAG)
-        {
-          Shell shell = dialog.getShell();
-          Rectangle clientArea = shell.getClientArea();
-          int newWidth = clientArea.width - event.x - (sash.getSize().x + rightSeparator.getSize().x);
-          if (newWidth != data.widthHint)
-          {
-            data.widthHint = newWidth;
-            shell.layout();
-          }
-        }
+        colors[color] = new Color(display, 0, color * 32, 0);
       }
-    });
+
+      display.asyncExec(new Runnable()
+      {
+        private int loop;
+
+        private int color;
+
+        private boolean reverse;
+
+        public void run()
+        {
+          // System.out.println(loop + ", " + color);
+          messageLabel.setForeground(colors[color]);
+
+          if (reverse)
+          {
+            if (--color == -1)
+            {
+              if (++loop == 5)
+              {
+                for (int i = 0; i < colors.length; i++)
+                {
+                  colors[i].dispose();
+                }
+
+                return;
+              }
+
+              color = 1;
+              reverse = false;
+            }
+          }
+          else
+          {
+            if (++color == colors.length)
+            {
+              color = colors.length - 2;
+              reverse = true;
+            }
+          }
+
+          display.timerExec(80, this);
+        }
+      });
+    }
+    catch (Throwable ex)
+    {
+      ex.printStackTrace();
+    }
   }
 
   private static <T> T getFieldValue(TrayDialog dialog, String name)

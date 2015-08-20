@@ -38,8 +38,35 @@ public class PropertyFile
   public void setProperty(String key, String value)
   {
     Map<String, String> properties = loadProperties();
-    properties.put(key, value.toString());
-    saveProperties(properties);
+    addAndSaveProperty(properties, key, value);
+  }
+
+  public boolean compareAndSetProperty(String key, String value, String... expectedValues)
+  {
+    Map<String, String> properties = loadProperties();
+    String existingValue = properties.get(key);
+
+    if (expectedValues.length == 0)
+    {
+      if (ObjectUtil.equals(existingValue, null))
+      {
+        addAndSaveProperty(properties, key, value);
+        return true;
+      }
+    }
+    else
+    {
+      for (String expectedValue : expectedValues)
+      {
+        if (ObjectUtil.equals(existingValue, expectedValue))
+        {
+          addAndSaveProperty(properties, key, value);
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   public void removeProperty(String key)
@@ -78,5 +105,11 @@ public class PropertyFile
     {
       UtilPlugin.INSTANCE.log(ex);
     }
+  }
+
+  private void addAndSaveProperty(Map<String, String> properties, String key, String value)
+  {
+    properties.put(key, value.toString());
+    saveProperties(properties);
   }
 }

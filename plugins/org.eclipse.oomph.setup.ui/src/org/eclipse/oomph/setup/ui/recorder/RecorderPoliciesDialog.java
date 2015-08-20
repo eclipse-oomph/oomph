@@ -134,6 +134,8 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
     Dialog.applyDialogFont(sashForm);
 
     updateValue(recorderPoliciesComposite.getSelection());
+
+    showFirstTimeHelp(this);
   }
 
   @Override
