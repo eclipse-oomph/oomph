@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -71,6 +72,19 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
       }
     });
 
+    viewer.setCheckStateProvider(new ICheckStateProvider()
+    {
+      public boolean isGrayed(Object element)
+      {
+        return false;
+      }
+
+      public boolean isChecked(Object element)
+      {
+        return Boolean.TRUE.equals(RecorderPoliciesComposite.this.transaction.getPolicy(element.toString()));
+      }
+    });
+
     TableColumn column = new TableColumn(viewer.getTable(), SWT.LEFT);
     tableLayout.setColumnData(column, new ColumnWeightData(100));
 
@@ -90,14 +104,6 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     Arrays.sort(sortedKeys);
 
     viewer.setInput(sortedKeys);
-
-    for (Map.Entry<String, Boolean> entry : policies.entrySet())
-    {
-      if (Boolean.TRUE.equals(entry.getValue()))
-      {
-        viewer.setChecked(entry.getKey(), true);
-      }
-    }
   }
 
   public final void setFilter(ViewerFilter filter)

@@ -159,10 +159,6 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
             {
               public void checkStateChanged(CheckStateChangedEvent event)
               {
-                String key = (String)event.getElement();
-                boolean policy = event.getChecked();
-                transaction.setPolicy(key, policy);
-
                 updateEnablement();
               }
             });
