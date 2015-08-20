@@ -1773,7 +1773,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   protected void doLoad()
   {
-    final Display display = getSite().getShell().getDisplay();
     final Tree tree = selectionViewer.getTree();
     Job job = new Job("Loading Model")
     {
@@ -1802,7 +1801,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         resourceMirror.begin(monitor);
 
-        display.asyncExec(new Runnable()
+        UIUtil.asyncExec(tree, new Runnable()
         {
           public void run()
           {
