@@ -148,6 +148,14 @@
   <stream name="master"
       label="Master">
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.target.platform"
+        value="Neon"
+        storageURI="scope://Workspace"
+        label="Target Platform">
+      <description>Choose the compatibility level of the target platform</description>
+    </setupTask>
+    <setupTask
         xsi:type="jdt:JRETask"
         version="J2SE-1.5"
         location="${jre.location-1.5}"/>
@@ -178,6 +186,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Oomph"
+          activeRepositoryList="${eclipse.target.platform}"
           includeAllPlatforms="true">
         <annotation
             source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
@@ -305,7 +314,7 @@
               pattern="org\.eclipse\.oomph\.setup.*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@streams[name='master']/@setupTasks.3/@workingSets.1"/>
+              excludedWorkingSet="//@streams[name='master']/@setupTasks.4/@workingSets.1"/>
         </predicate>
       </workingSet>
       <workingSet
