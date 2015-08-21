@@ -19,6 +19,8 @@ import java.io.File;
  */
 public class PromptHandler extends AbstractLocationHandler
 {
+  private static final String[] LINUX_TERMINALS = { "gnome-terminal", "xterm" };
+
   public PromptHandler()
   {
   }
@@ -30,9 +32,27 @@ public class PromptHandler extends AbstractLocationHandler
     {
       Runtime.getRuntime().exec("cmd /c cd \"" + location + "\" && start cmd.exe");
     }
-    else
+    else if (OS.INSTANCE.isMac())
     {
-      Runtime.getRuntime().exec("bash \"" + location + "\"");
+      ProcessBuilder builder = new ProcessBuilder(new String[] { "/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal", location.toString() });
+      builder.start();
+    }
+    else if (OS.INSTANCE.isLinux())
+    {
+      for (String terminal : LINUX_TERMINALS)
+      {
+        try
+        {
+          ProcessBuilder builder = new ProcessBuilder(terminal);
+          builder.directory(location);
+          builder.start();
+          return;
+        }
+        catch (Exception ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
     }
   }
 }
