@@ -213,7 +213,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private String[] getTrains()
   {
-    return new String[] { "juno", "kepler", "luna", "mars" };
+    return new String[] { "juno", "kepler", "luna", "mars", "neon" };
   }
 
   private String[] getRootIUs()
@@ -224,7 +224,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean isLatestReleased()
   {
-    return true;
+    return false;
   }
 
   private boolean testNewUnreleasedProduct()

@@ -35,14 +35,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java Developers (Mars)">
+          label="Eclipse IDE for Java Developers (Neon)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -53,9 +53,9 @@
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -81,6 +81,31 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Neon)">
+        <requirement
+            name="epp.package.java"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -200,14 +225,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Mars)">
+          label="Eclipse IDE for Java EE Developers (Neon)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -221,9 +246,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -252,6 +277,34 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Neon)">
+        <requirement
+            name="epp.package.jee"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -383,14 +436,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Mars)">
+          label="Eclipse IDE for C/C++ Developers (Neon)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -398,9 +451,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -423,6 +476,28 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Neon)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -530,14 +605,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (Mars)">
+          label="Eclipse IDE for PHP Developers (Neon)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -545,9 +620,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -570,6 +645,28 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Neon)">
+        <requirement
+            name="epp.package.php"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -622,14 +719,14 @@
       label="Eclipse IDE for Eclipse Committers">
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Eclipse Committers (Mars)">
+          label="Eclipse IDE for Eclipse Committers (Neon)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -643,9 +740,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -674,6 +771,34 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Eclipse Committers (Neon)">
+        <requirement
+            name="epp.package.committers"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -722,14 +847,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Mars)">
+          label="Eclipse DSL Tools (Neon)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -743,9 +868,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -774,6 +899,34 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Neon)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -905,14 +1058,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java and Report Developers (Mars)">
+          label="Eclipse IDE for Java and Report Developers (Neon)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -926,9 +1079,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -957,6 +1110,34 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Neon)">
+        <requirement
+            name="epp.package.reporting"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1088,14 +1269,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (Mars)">
+          label="Eclipse Modeling Tools (Neon)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1109,9 +1290,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1140,6 +1321,34 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Neon)">
+        <requirement
+            name="epp.package.modeling"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1275,14 +1484,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for RCP and RAP Developers (Mars)">
+          label="Eclipse for RCP and RAP Developers (Neon)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1296,9 +1505,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1327,6 +1536,34 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Neon)">
+        <requirement
+            name="epp.package.rcp"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1458,14 +1695,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Testers (Mars)">
+          label="Eclipse for Testers (Neon)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1473,9 +1710,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1498,6 +1735,28 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Neon)">
+        <requirement
+            name="epp.package.testing"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1605,14 +1864,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Mars)">
+          label="Eclipse for Parallel Application Developers (Neon)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1620,9 +1879,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1645,6 +1904,28 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Neon)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1752,14 +2033,14 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Automotive Software Developers (Mars)">
+          label="Eclipse IDE for Automotive Software Developers (Neon)">
         <requirement
             name="epp.package.automotive"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -1773,9 +2054,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.11.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1804,6 +2085,34 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Automotive Software Developers (Neon)">
+        <requirement
+            name="epp.package.automotive"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.11.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -1998,19 +2307,19 @@
           label="Eclipse for Scout Developers (Mars)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,3.13.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
@@ -2111,14 +2420,14 @@
       label="Eclipse Platform">
     <version
         name="latest"
-        label="Latest (Mars)"
+        label="Latest (Neon)"
         requiredJavaVersion="1.7">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Platform (Mars)">
+          label="Eclipse Platform (Neon)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
@@ -2126,9 +2435,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201506241002"/>
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -2151,6 +2460,28 @@
             url="http://download.eclipse.org/technology/epp/packages/mars/R"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201506241002"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Platform (Neon)">
+        <requirement
+            name="org.eclipse.platform.ide"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.5.0,4.7.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
       </setupTask>
     </version>
     <version
@@ -2244,6 +2575,41 @@
     </version>
     <description>This package contains the absolute minimal IDE, suitable only as a base for installing other tools.</description>
   </product>
+  <product name="org.eclipse.epp.logging.aeri.ide"
+      label="Eclipse Aeri">
+    <version
+        name="latest"
+        label="Latest (Neon)"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Aeri (Neon)">
+        <requirement
+            name="org.eclipse.epp.logging.aeri.ide"
+            versionRange="[1.0.0,2.0.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
+      </setupTask>
+    </version>
+    <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.7">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Aeri (Neon)">
+        <requirement
+            name="org.eclipse.epp.logging.aeri.ide"
+            versionRange="[1.0.0,1.1.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201508211000"/>
+      </setupTask>
+    </version>
+  </product>
   <product name="epp.package.standard"
       label="Eclipse Standard">
     <version
@@ -2311,19 +2677,19 @@
           label="Eclipse Standard (Luna)">
         <requirement
             name="epp.package.standard"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,4.6.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,4.6.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,4.6.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,3.12.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,3.12.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
