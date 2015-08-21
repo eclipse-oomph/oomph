@@ -13,6 +13,7 @@ package org.eclipse.oomph.ostools;
 import org.eclipse.oomph.util.OS;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Eike Stepper
@@ -53,6 +54,8 @@ public class PromptHandler extends AbstractLocationHandler
           //$FALL-THROUGH$
         }
       }
+
+      throw new IOException("Could not start any termial: " + LINUX_TERMINALS);
     }
   }
 }
