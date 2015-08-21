@@ -106,7 +106,7 @@ Eike Stepper - initial API and implementation
     <module>../../../plugins/org.eclipse.oomph.version.digest</module>
     <module>../../../plugins/org.eclipse.oomph.version.tests</module>
     <module>../../../plugins/org.eclipse.oomph.version.ui</module>
-    <module>../../../plugins/org.eclipse.oomph.winexplorer</module>
+    <module>../../../plugins/org.eclipse.oomph.ostools</module>
     <module>../../../plugins/org.eclipse.oomph.workingsets</module>
     <module>../../../plugins/org.eclipse.oomph.workingsets.edit</module>
     <module>../../../plugins/org.eclipse.oomph.workingsets.editor</module>

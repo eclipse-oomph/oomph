@@ -10,7 +10,7 @@
     Eike Stepper - initial API and implementation
 -->
 <feature
-      id="org.eclipse.oomph.winexplorer"
+      id="org.eclipse.oomph.ostools"
       label="%featureName"
       version="1.1.100.qualifier"
       provider-name="%providerName"
@@ -35,7 +35,7 @@
    </url>
 
    <plugin
-         id="org.eclipse.oomph.winexplorer"
+         id="org.eclipse.oomph.ostools"
          download-size="0"
          install-size="0"
          version="0.0.0"

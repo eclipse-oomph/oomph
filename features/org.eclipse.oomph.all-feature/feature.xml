@@ -71,7 +71,7 @@
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.oomph.winexplorer"
+         id="org.eclipse.oomph.ostools"
          version="0.0.0"/>
 
    <includes

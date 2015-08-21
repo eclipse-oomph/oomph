@@ -427,7 +427,7 @@
             pattern="org\.eclipse\.oomph\.projectcopy.*"/>
         <predicate
             xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.oomph\.winexplorer.*"/>
+            pattern="org\.eclipse\.oomph\.ostools.*"/>
       </workingSet>
       <workingSet
           name="Oomph Releng">

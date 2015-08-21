@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.winexplorer;
+package org.eclipse.oomph.ostools;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin
 {
-  public static final String PLUGIN_ID = "org.eclipse.oomph.winexplorer";
+  public static final String PLUGIN_ID = "org.eclipse.oomph.ostools";
 
   private static Activator plugin;
 

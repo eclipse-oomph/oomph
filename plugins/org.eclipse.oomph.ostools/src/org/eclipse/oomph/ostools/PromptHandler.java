@@ -8,7 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.winexplorer;
+package org.eclipse.oomph.ostools;
+
+import org.eclipse.oomph.util.OS;
 
 import java.io.File;
 
@@ -24,6 +26,13 @@ public class PromptHandler extends AbstractLocationHandler
   @Override
   protected void execute(File location) throws Exception
   {
-    Runtime.getRuntime().exec("cmd /c cd \"" + location + "\" && start cmd.exe");
+    if (OS.INSTANCE.isWin())
+    {
+      Runtime.getRuntime().exec("cmd /c cd \"" + location + "\" && start cmd.exe");
+    }
+    else
+    {
+      Runtime.getRuntime().exec("bash \"" + location + "\"");
+    }
   }
 }

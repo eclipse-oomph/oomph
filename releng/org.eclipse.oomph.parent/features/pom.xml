@@ -56,7 +56,7 @@ Eike Stepper - initial API and implementation
     <module>../../../features/org.eclipse.oomph.util-feature</module>
     <module>../../../features/org.eclipse.oomph.version-feature</module>
     <module>../../../features/org.eclipse.oomph.version.headless-feature</module>
-    <module>../../../features/org.eclipse.oomph.winexplorer-feature</module>
+    <module>../../../features/org.eclipse.oomph.ostools-feature</module>
     <module>../../../features/org.eclipse.oomph.workingsets-feature</module>
   </modules>
 

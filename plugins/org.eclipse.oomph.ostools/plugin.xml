@@ -16,7 +16,7 @@
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="org.eclipse.oomph.winexplorer.folderProvider">
+            id="org.eclipse.oomph.ostools.folderProvider">
          <or>
             <adapt
                   type="org.eclipse.core.resources.IResource">
@@ -37,13 +37,13 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="org.eclipse.oomph.winexplorer.ExplorerHandler"
-            id="org.eclipse.oomph.winexplorer.commands.Explorer"
-            name="Windows Explorer">
+            defaultHandler="org.eclipse.oomph.ostools.ExplorerHandler"
+            id="org.eclipse.oomph.ostools.commands.Explorer"
+            name="System Explorer">
       </command>
       <command
-            defaultHandler="org.eclipse.oomph.winexplorer.PromptHandler"
-            id="org.eclipse.oomph.winexplorer.commands.Prompt"
+            defaultHandler="org.eclipse.oomph.ostools.PromptHandler"
+            id="org.eclipse.oomph.ostools.commands.Prompt"
             name="Command Prompt">
       </command>
    </extension>
@@ -54,11 +54,11 @@
             allPopups="false"
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
-               commandId="org.eclipse.oomph.winexplorer.commands.Explorer"
+               commandId="org.eclipse.oomph.ostools.commands.Explorer"
                icon="icons/explorer.gif"
-               label="Windows Explorer"
+               label="System Explorer"
                style="push"
-               tooltip="Open Windows Explorer">
+               tooltip="Open System Explorer">
             <visibleWhen
                   checkEnabled="false">
                <with
@@ -68,14 +68,14 @@
                   </count>
                   <iterate>
                      <reference
-                           definitionId="org.eclipse.oomph.winexplorer.folderProvider">
+                           definitionId="org.eclipse.oomph.ostools.folderProvider">
                      </reference>
                   </iterate>
                </with>
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.oomph.winexplorer.commands.Prompt"
+               commandId="org.eclipse.oomph.ostools.commands.Prompt"
                icon="icons/prompt.gif"
                label="Command Prompt"
                style="push"
@@ -89,7 +89,7 @@
                   </count>
                   <iterate>
                      <reference
-                           definitionId="org.eclipse.oomph.winexplorer.folderProvider">
+                           definitionId="org.eclipse.oomph.ostools.folderProvider">
                      </reference>
                   </iterate>
                </with>
@@ -97,7 +97,5 @@
          </command>
       </menuContribution>
    </extension>
-
-
 
 </plugin>

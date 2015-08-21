@@ -8,7 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.winexplorer;
+package org.eclipse.oomph.ostools;
+
+import org.eclipse.oomph.util.OS;
 
 import java.io.File;
 
@@ -24,6 +26,6 @@ public class ExplorerHandler extends AbstractLocationHandler
   @Override
   protected void execute(File location) throws Exception
   {
-    Runtime.getRuntime().exec("explorer.exe \"" + location + "\"");
+    OS.INSTANCE.openSystemBrowser(location.toURI().toString());
   }
 }

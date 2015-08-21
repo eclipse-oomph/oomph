@@ -57,7 +57,7 @@
    <feature id="org.eclipse.oomph.version.headless" version="0.0.0">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
-   <feature id="org.eclipse.oomph.winexplorer" version="0.0.0">
+   <feature id="org.eclipse.oomph.ostools" version="0.0.0">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
    <feature id="org.eclipse.oomph.workingsets" version="0.0.0">
