@@ -11,16 +11,30 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.setup.Index;
+import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.Project;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.Stream;
+import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.provider.ComposedImage;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+
+import java.net.URL;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -51,6 +65,13 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
     return super.getForeground(object);
   }
 
+  @Override
+  public Font getFont(Object object)
+  {
+    Font font = super.getFont(object);
+    return font == null ? getDefaultFont() : font;
+  }
+
   public static boolean isDisabled(Object object)
   {
     if (object instanceof EObject)
@@ -75,10 +96,56 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
     return false;
   }
 
-  @Override
-  public Font getFont(Object object)
+  public static ImageDescriptor getImageDescriptor(ItemProviderAdapter itemProvider, EObject object)
   {
-    Font font = super.getFont(object);
-    return font == null ? getDefaultFont() : font;
+    Object key = itemProvider.getImage(object);
+    if (key instanceof ComposedImage)
+    {
+      ComposedImage composedImage = (ComposedImage)key;
+      List<Object> images = composedImage.getImages();
+      key = images.get(0);
+    }
+
+    return ImageDescriptor.createFromURL((URL)key);
+  }
+
+  public static String getText(ItemProviderAdapter itemProvider, EObject object)
+  {
+    EClass eClass = object.eClass();
+    if (eClass == SetupPackage.Literals.USER || eClass == SetupPackage.Literals.INSTALLATION || eClass == SetupPackage.Literals.WORKSPACE)
+    {
+      return SetupEditPlugin.getPlugin().getString("_UI_" + eClass.getName() + "_type");
+    }
+
+    if (object instanceof Index)
+    {
+      return "Catalog " + itemProvider.getText(object);
+    }
+
+    if (object instanceof Product)
+    {
+      Product product = (Product)object;
+      return getText(itemProvider, product.getProductCatalog()) + " - " + itemProvider.getText(product);
+    }
+
+    if (object instanceof ProductVersion)
+    {
+      ProductVersion version = (ProductVersion)object;
+      return getText(itemProvider, version.getProduct()) + " - " + itemProvider.getText(version);
+    }
+
+    if (object instanceof Project)
+    {
+      Project project = (Project)object;
+      return getText(itemProvider, project.getProjectContainer()) + " - " + itemProvider.getText(project);
+    }
+
+    if (object instanceof Stream)
+    {
+      Stream stream = (Stream)object;
+      return getText(itemProvider, stream.getProject()) + " - " + itemProvider.getText(stream);
+    }
+
+    return itemProvider.getText(object);
   }
 }

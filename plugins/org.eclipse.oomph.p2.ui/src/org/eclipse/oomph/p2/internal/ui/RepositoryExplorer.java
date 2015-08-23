@@ -741,17 +741,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     return flavorIDs;
   }
 
-  private static String getName(IInstallableUnit iu)
-  {
-    String name = iu.getProperty(IInstallableUnit.PROP_NAME, null);
-    if (StringUtil.isEmpty(name))
-    {
-      return iu.getId();
-    }
-
-    return name;
-  }
-
   private static boolean isCategory(IInstallableUnit iu)
   {
     return "true".equalsIgnoreCase(iu.getProperty(QueryUtil.PROP_TYPE_CATEGORY));
@@ -1078,7 +1067,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         P2UIPlugin.checkCancelation(monitor);
         String id = iu.getId();
 
-        names.put(id, getName(iu));
+        names.put(id, P2Util.getName(iu));
         CollectionUtil.add(ius, id, iu);
 
         if (isCategory(iu))
@@ -1295,7 +1284,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
         if (id.endsWith(Requirement.FEATURE_SUFFIX) && !id.endsWith(SOURCE_FEATURE_SUFFIX))
         {
-          String name = getName(iu);
+          String name = P2Util.getName(iu);
           if (isFiltered(name))
           {
             names.put(id, name);

@@ -27,6 +27,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -34,6 +35,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 
+import org.eclipse.core.runtime.IProduct;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
@@ -44,6 +47,8 @@ import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+
+import org.osgi.framework.Bundle;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -63,6 +68,8 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
   public static final String SELF_PRODUCT_CATALOG_NAME = "self";
 
   private static final URI SELF_PRODUCT_CATALOG_URI = URI.createURI("catalog:/self-product-catalog.setup");
+
+  private static final String UNKNOWN_VERSION = "0.0.0";
 
   private static final Date NOW = new Date();
 
@@ -114,7 +121,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
   {
     ProductCatalog productCatalog = SetupFactory.eINSTANCE.createProductCatalog();
     productCatalog.setName(SELF_PRODUCT_CATALOG_NAME);
-    productCatalog.setLabel("Self Products");
+    productCatalog.setLabel("<Self Products>");
     productCatalog.setDescription("The product catalog for the self product and the empty product");
 
     InstallationTask installationTask = SetupFactory.eINSTANCE.createInstallationTask();
@@ -124,7 +131,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
     {
       Product selfProduct = SetupFactory.eINSTANCE.createProduct();
       selfProduct.setName("product");
-      selfProduct.setLabel("Self Product");
+      selfProduct.setLabel("Self");
       selfProduct.setDescription("The self product");
       productCatalog.getProducts().add(selfProduct);
 
@@ -135,9 +142,32 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
 
       ProductVersion selfProductVersion = SetupFactory.eINSTANCE.createProductVersion();
       selfProductVersion.setName("version");
-      selfProductVersion.setLabel("Self Product Version");
+      selfProductVersion.setLabel(UNKNOWN_VERSION);
       selfProductVersion.setDescription("The self product version");
       selfProduct.getVersions().add(selfProductVersion);
+
+      try
+      {
+        IProduct product = Platform.getProduct();
+        if (product != null)
+        {
+          String name = product.getName();
+          if (!StringUtil.isEmpty(name))
+          {
+            selfProduct.setLabel(name);
+          }
+
+          Bundle bundle = product.getDefiningBundle();
+          if (bundle != null)
+          {
+            selfProductVersion.setLabel(bundle.getVersion().toString());
+          }
+        }
+      }
+      catch (Throwable ex)
+      {
+        //$FALL-THROUGH$
+      }
 
       Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
       annotation.setSource(AnnotationConstants.ANNOTATION_BRANDING_INFO);
@@ -155,15 +185,15 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
       IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
       if (profile != null)
       {
-        // TODO Use AgentManager
-
         EList<Requirement> requirements = selfP2Task.getRequirements();
+
         IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
         for (IInstallableUnit iu : P2Util.asIterable(query))
         {
           if ("true".equals(profile.getInstallableUnitProperty(iu, IProfile.PROP_PROFILE_ROOT_IU)))
           {
             Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+
             Version version = iu.getVersion();
             if (version.isOSGiCompatible())
             {
@@ -197,13 +227,13 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
     {
       Product emptyProduct = SetupFactory.eINSTANCE.createProduct();
       emptyProduct.setName("empty.product");
-      emptyProduct.setLabel("Empty Product");
+      emptyProduct.setLabel("Empty");
       emptyProduct.setDescription("The empty product");
       productCatalog.getProducts().add(emptyProduct);
 
       ProductVersion emptyProductVersion = SetupFactory.eINSTANCE.createProductVersion();
       emptyProductVersion.setName("version");
-      emptyProductVersion.setLabel("Empty Product Version");
+      emptyProductVersion.setLabel(UNKNOWN_VERSION);
       emptyProductVersion.setDescription("The empty product version");
       emptyProduct.getVersions().add(emptyProductVersion);
     }

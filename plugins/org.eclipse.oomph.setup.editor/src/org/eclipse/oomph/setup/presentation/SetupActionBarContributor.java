@@ -1119,7 +1119,7 @@ public class SetupActionBarContributor extends EditingDomainActionBarContributor
       PreferenceCaptureDialog preferenceCaptureDialog = new PreferenceCaptureDialog(null, setupEditor.getAdapterFactory(), fromEclipsePreferenceFile);
       if (preferenceCaptureDialog.open() == Dialog.OK)
       {
-        final RecorderTransaction transaction = RecorderTransaction.open(setupEditor);
+        final RecorderTransaction transaction = RecorderTransaction.open(false, setupEditor);
 
         try
         {

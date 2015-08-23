@@ -85,6 +85,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder";
 
+  public static final String PREF_PREFERENCE_RECORDER_TARGET = "preference.recorder.target";
+
   public static final boolean QUESTIONNAIRE_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_QUESTIONNAIRE_SKIP);
 
   private static final String RESTARTING_FILE_NAME = "restarting";

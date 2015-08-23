@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -67,6 +68,8 @@ public final class RecorderManager
 
   private IEditorPart editor;
 
+  private boolean user = true;
+
   private RecorderManager()
   {
   }
@@ -75,18 +78,29 @@ public final class RecorderManager
   {
     this.editor = editor;
 
-    PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, null, null, null);
-    boolean recorderEnabled = isRecorderEnabled();
+    boolean wasEnabled = isRecorderEnabled();
     setRecorderEnabled(true);
+
+    boolean wasUser = user;
+    user = false;
+
+    PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, null, null, null);
+
     try
     {
       dialog.open();
     }
     finally
     {
+      user = wasUser;
       this.editor = null;
-      setRecorderEnabled(recorderEnabled);
+      setRecorderEnabled(wasEnabled);
     }
+  }
+
+  public boolean isUser()
+  {
+    return user;
   }
 
   public boolean isRecorderEnabled()
@@ -149,9 +163,42 @@ public final class RecorderManager
     }
   }
 
+  public URI getRecorderTarget()
+  {
+    String value = SETUP_UI_PREFERENCES.getString(SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET);
+    if (StringUtil.isEmpty(value))
+    {
+      return SetupContext.USER_SETUP_URI;
+    }
+
+    return URI.createURI(value);
+  }
+
+  public URI setRecorderTarget(URI uri)
+  {
+    URI oldURI = getRecorderTarget();
+    if (!ObjectUtil.equals(oldURI, uri))
+    {
+      SETUP_UI_PREFERENCES.setValue(SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET, uri.toString());
+
+      try
+      {
+        SETUP_UI_PREFERENCES.save();
+      }
+      catch (IOException ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex);
+      }
+
+      return oldURI;
+    }
+
+    return null;
+  }
+
   private void handleRecording(IEditorPart editorPart, final Shell shell, final Map<URI, String> values)
   {
-    final RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(editorPart);
+    final RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(user, editorPart);
 
     try
     {
@@ -364,11 +411,16 @@ public final class RecorderManager
                 URI uri = it.next();
                 String pluginID = uri.segment(0);
 
-                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID) && SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(uri.lastSegment()))
+                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID))
                 {
-                  it.remove();
+                  String lastSegment = uri.lastSegment();
+                  if (SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(lastSegment) || SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET.equals(lastSegment))
+                  {
+                    it.remove();
+                  }
                 }
               }
+
               if (values.isEmpty())
               {
                 RecorderTransaction transaction = RecorderTransaction.getInstance();

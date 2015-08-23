@@ -37,20 +37,19 @@ import java.util.Map;
  */
 public class RecorderPoliciesComposite extends Composite implements ISelectionProvider
 {
-  private final RecorderTransaction transaction;
-
   private final boolean clean;
 
   private final CheckboxTableViewer viewer;
 
   private ViewerFilter filter;
 
+  private RecorderTransaction transaction;
+
   private String[] sortedKeys;
 
-  public RecorderPoliciesComposite(Composite parent, int style, RecorderTransaction transaction, boolean clean)
+  public RecorderPoliciesComposite(Composite parent, int style, boolean clean)
   {
     super(parent, SWT.NONE);
-    this.transaction = transaction;
     this.clean = clean;
 
     setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -68,7 +67,7 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
       {
         String path = (String)event.getElement();
         boolean policy = event.getChecked();
-        RecorderPoliciesComposite.this.transaction.setPolicy(path, policy);
+        transaction.setPolicy(path, policy);
       }
     });
 
@@ -81,29 +80,28 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
 
       public boolean isChecked(Object element)
       {
-        return Boolean.TRUE.equals(RecorderPoliciesComposite.this.transaction.getPolicy(element.toString()));
+        return Boolean.TRUE.equals(transaction.getPolicy(element.toString()));
       }
     });
 
     TableColumn column = new TableColumn(viewer.getTable(), SWT.LEFT);
     tableLayout.setColumnData(column, new ColumnWeightData(100));
-
-    refresh();
-
-    if (sortedKeys.length != 0)
-    {
-      viewer.setSelection(new StructuredSelection(sortedKeys[0]));
-    }
   }
 
-  public final void refresh()
+  public final void setRecorderTransaction(RecorderTransaction transaction)
   {
+    this.transaction = transaction;
     Map<String, Boolean> policies = transaction.getPolicies(clean);
 
     sortedKeys = policies.keySet().toArray(new String[policies.size()]);
     Arrays.sort(sortedKeys);
 
     viewer.setInput(sortedKeys);
+
+    if (sortedKeys.length != 0)
+    {
+      viewer.setSelection(new StructuredSelection(sortedKeys[0]));
+    }
   }
 
   public final void setFilter(ViewerFilter filter)

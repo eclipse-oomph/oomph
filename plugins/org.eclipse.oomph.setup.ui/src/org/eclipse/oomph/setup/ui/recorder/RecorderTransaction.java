@@ -21,7 +21,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.User;
-import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.util.SetupUtil;
@@ -109,17 +109,20 @@ public abstract class RecorderTransaction
 
   private Annotation recorderAnnotation;
 
+  private final boolean user;
+
   private SetupTaskContainer rootObject;
 
   private boolean forceDirty;
 
-  RecorderTransaction(SetupTaskContainer rootObject)
+  RecorderTransaction(boolean user, SetupTaskContainer rootObject)
   {
+    this.user = user;
     this.rootObject = rootObject;
     resource = rootObject.eResource();
 
     rootObject = (SetupTaskContainer)resource.getContents().get(0);
-    if (rootObject instanceof User)
+    if (user)
     {
       findRecorderAnnotation(rootObject);
 
@@ -140,6 +143,16 @@ public abstract class RecorderTransaction
         }
       }
     }
+  }
+
+  public boolean isUser()
+  {
+    return user;
+  }
+
+  public IEditorPart getEditor()
+  {
+    return null;
   }
 
   public void close()
@@ -195,6 +208,15 @@ public abstract class RecorderTransaction
     }
 
     return policies;
+  }
+
+  public void setPolicies(Map<String, Boolean> policies)
+  {
+    resetPolicies();
+    if (policies != null)
+    {
+      this.policies.putAll(policies);
+    }
   }
 
   public void resetPolicies()
@@ -267,7 +289,7 @@ public abstract class RecorderTransaction
   {
     List<Object> recorderObjects = new ArrayList<Object>();
 
-    if (rootObject instanceof User)
+    if (user)
     {
       if (recorderAnnotation == null)
       {
@@ -618,6 +640,17 @@ public abstract class RecorderTransaction
     }
   }
 
+  private static SetupTaskContainer getRootObject(Resource resource, final String fragment)
+  {
+    EObject eObject = resource.getEObject(fragment);
+    if (eObject instanceof SetupTaskContainer)
+    {
+      return (SetupTaskContainer)eObject;
+    }
+
+    return (SetupTaskContainer)resource.getContents().get(0);
+  }
+
   private static void record(Map<URI, String> preferences, EList<SetupTask> setupTasks, List<Object> recorderObjects)
   {
     for (Map.Entry<URI, String> entry : preferences.entrySet())
@@ -672,6 +705,10 @@ public abstract class RecorderTransaction
   {
     if (instance == null)
     {
+      URI targetURI = RecorderManager.INSTANCE.getRecorderTarget();
+      final String targetFragment = targetURI.fragment();
+      final URI targetResourceURI = targetURI.trimFragment();
+
       final IEditorPart[] editor = { null };
       final CountDownLatch editorLoadedLatch = new CountDownLatch(1);
 
@@ -705,12 +742,14 @@ public abstract class RecorderTransaction
           {
             public void run()
             {
-              editor[0] = SetupEditorSupport.getEditor(page, SetupContext.USER_SETUP_URI, false, new SetupEditorSupport.LoadHandler()
+              editor[0] = SetupEditorSupport.getEditor(page, targetResourceURI, false, new SetupEditorSupport.LoadHandler()
               {
                 @Override
                 protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
                 {
-                  instance = new RecorderTransaction.EditorTransaction(editor, domain, resource);
+                  SetupTaskContainer rootObject = getRootObject(resource, targetFragment);
+
+                  instance = new RecorderTransaction.EditorTransaction(true, editor, domain, rootObject);
                   editorLoadedLatch.countDown();
                 }
               });
@@ -733,16 +772,18 @@ public abstract class RecorderTransaction
       }
       else
       {
-        ResourceSet resourceSet = org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil.createResourceSet();
-        Resource resource = resourceSet.getResource(SetupContext.USER_SETUP_URI, true);
-        instance = new ResourceTransaction(resource);
+        ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+        Resource resource = resourceSet.getResource(targetResourceURI, true);
+
+        SetupTaskContainer rootObject = getRootObject(resource, targetFragment);
+        instance = new ResourceTransaction(rootObject);
       }
     }
 
     return instance;
   }
 
-  public static RecorderTransaction open(IEditorPart editor)
+  public static RecorderTransaction open(boolean user, IEditorPart editor)
   {
     if (instance != null)
     {
@@ -750,7 +791,7 @@ public abstract class RecorderTransaction
     }
 
     EditingDomain domain = ((IEditingDomainProvider)editor).getEditingDomain();
-    instance = new RecorderTransaction.EditorTransaction(editor, domain, domain.getResourceSet().getResources().get(0));
+    instance = new RecorderTransaction.EditorTransaction(user, editor, domain, domain.getResourceSet().getResources().get(0));
 
     return instance;
   }
@@ -771,57 +812,40 @@ public abstract class RecorderTransaction
 
     private final boolean editorWasClean;
 
-    private final boolean isUser;
-
-    private EditorTransaction(IEditorPart editor, EditingDomain domain, Resource resource)
+    private EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, Resource resource)
     {
-      super(getRootObject(editor, resource));
+      this(user, editor, domain, getRootObject(editor, resource));
+    }
+
+    private EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, SetupTaskContainer rootObject)
+    {
+      super(user, rootObject);
       this.editor = editor;
       this.domain = domain;
       editorWasClean = !editor.isDirty();
 
       // Only add policies to the user.
-      isUser = getRootObject() instanceof User;
-      if (isUser)
+      if (user)
       {
         initializePolicies();
       }
     }
 
-    private static SetupTaskContainer getRootObject(IEditorPart editor, Resource resource)
+    @Override
+    public IEditorPart getEditor()
     {
-      SetupTaskContainer rootObject = (SetupTaskContainer)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.SCOPE);
-      if (!(rootObject instanceof User))
-      {
-        ISelection selection = ((ISelectionProvider)editor).getSelection();
-        if (selection instanceof IStructuredSelection)
-        {
-          IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-          Object element = structuredSelection.getFirstElement();
-          if (element instanceof EObject)
-          {
-            EObject eObject = (EObject)element;
-            if (EcoreUtil.isAncestor(rootObject, eObject))
-            {
-              for (EObject eContainer = eObject; eContainer != null; eContainer = eContainer.eContainer())
-              {
-                if (eContainer instanceof SetupTaskContainer)
-                {
-                  return (SetupTaskContainer)eContainer;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      return rootObject;
+      return editor;
     }
 
     @Override
     public Boolean getPolicy(String key)
     {
-      return isUser ? super.getPolicy(key) : Boolean.TRUE;
+      if (isUser())
+      {
+        return super.getPolicy(key);
+      }
+
+      return Boolean.TRUE;
     }
 
     @Override
@@ -882,12 +906,42 @@ public abstract class RecorderTransaction
         {
           CommandStack commandStack = domain.getCommandStack();
           commandStack.execute(command);
-          if (isUser && editorWasClean && editor.isDirty())
+          if (isUser() && editorWasClean && editor.isDirty())
           {
             editor.doSave(new NullProgressMonitor());
           }
         }
       });
+    }
+
+    private static SetupTaskContainer getRootObject(IEditorPart editor, Resource resource)
+    {
+      SetupTaskContainer rootObject = (SetupTaskContainer)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.SCOPE);
+      if (!(rootObject instanceof User))
+      {
+        ISelection selection = ((ISelectionProvider)editor).getSelection();
+        if (selection instanceof IStructuredSelection)
+        {
+          IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+          Object element = structuredSelection.getFirstElement();
+          if (element instanceof EObject)
+          {
+            EObject eObject = (EObject)element;
+            if (EcoreUtil.isAncestor(rootObject, eObject))
+            {
+              for (EObject eContainer = eObject; eContainer != null; eContainer = eContainer.eContainer())
+              {
+                if (eContainer instanceof SetupTaskContainer)
+                {
+                  return (SetupTaskContainer)eContainer;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return rootObject;
     }
   }
 
@@ -896,9 +950,9 @@ public abstract class RecorderTransaction
    */
   public static final class ResourceTransaction extends RecorderTransaction
   {
-    private ResourceTransaction(Resource resource)
+    private ResourceTransaction(SetupTaskContainer rootObject)
     {
-      super((User)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.USER));
+      super(true, rootObject);
       initializePolicies();
     }
 

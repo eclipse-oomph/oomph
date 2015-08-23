@@ -12,6 +12,7 @@ package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.p2.core.IAgentLocation;
@@ -98,6 +99,17 @@ public final class P2Util
         return queryResult.iterator();
       }
     };
+  }
+
+  public static String getName(IInstallableUnit iu)
+  {
+    String name = iu.getProperty(IInstallableUnit.PROP_NAME, null);
+    if (StringUtil.isEmpty(name))
+    {
+      return iu.getId();
+    }
+  
+    return name;
   }
 
   @SuppressWarnings("unused")

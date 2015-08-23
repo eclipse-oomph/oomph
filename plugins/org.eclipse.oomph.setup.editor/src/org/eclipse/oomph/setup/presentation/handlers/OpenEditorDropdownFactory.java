@@ -15,11 +15,13 @@ import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
+import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -77,7 +79,6 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
         final Set<EObject> parents = new LinkedHashSet<EObject>();
 
         final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
-
         SetupContext setupContext = SetupContext.getSelf();
 
         User user = setupContext.getUser();
@@ -121,6 +122,8 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
           }
         }
 
+        adapterFactory.dispose();
+
         parents.removeAll(eObjects);
         if (!parents.isEmpty())
         {
@@ -139,10 +142,47 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
                 items[i].dispose();
               }
 
+              ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
+
+              int lastCategory = 0;
               for (EObject eObject : parents)
               {
+                int category = getCategory(eObject);
+                if (category != lastCategory)
+                {
+                  new MenuItem(subMenu, SWT.SEPARATOR);
+                  lastCategory = category;
+                }
+
                 createMenuItem(subMenu, adapterFactory, eObject);
               }
+
+              adapterFactory.dispose();
+            }
+
+            private int getCategory(EObject eObject)
+            {
+              if (eObject instanceof Scope)
+              {
+                Scope scope = (Scope)eObject;
+                ScopeType type = scope.getType();
+                if (type != null)
+                {
+                  switch (type)
+                  {
+                    case PRODUCT_CATALOG:
+                    case PRODUCT:
+                    case PRODUCT_VERSION:
+                      return 1;
+
+                    case PROJECT_CATALOG:
+                    case PROJECT:
+                    case STREAM:
+                      return 2;
+                  }
+                }
+              }
+              return 0;
             }
           });
 
@@ -175,7 +215,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
     {
       ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(object, IItemLabelProvider.class);
 
-      final ImageDescriptor imageDescriptor = OpenEditorDropdownHandler.getLabelImage(itemProvider, object);
+      final ImageDescriptor imageDescriptor = SetupLabelProvider.getImageDescriptor(itemProvider, object);
       final String text = OpenEditorDropdownHandler.getLabelText(itemProvider, object);
 
       MenuItem item = new MenuItem(menu, SWT.PUSH);
