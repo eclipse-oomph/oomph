@@ -39,48 +39,11 @@
          id="org.eclipse.oomph.setup"
          version="0.0.0"/>
 
-   <includes
-         id="org.eclipse.oomph.setup.git"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.jdt"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.launching"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.maven"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.mylyn"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.pde"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.projects"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.projectset"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.targlets"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.workbench"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.oomph.setup.workingsets"
-         version="0.0.0"/>
+   <plugin
+         id="org.eclipse.oomph.setup.ui.ide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
