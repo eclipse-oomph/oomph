@@ -640,12 +640,15 @@ public abstract class RecorderTransaction
     }
   }
 
-  private static SetupTaskContainer getRootObject(Resource resource, final String fragment)
+  private static SetupTaskContainer getRootObject(Resource resource, String fragment)
   {
-    EObject eObject = resource.getEObject(fragment);
-    if (eObject instanceof SetupTaskContainer)
+    if (!StringUtil.isEmpty(fragment))
     {
-      return (SetupTaskContainer)eObject;
+      EObject eObject = resource.getEObject(fragment);
+      if (eObject instanceof SetupTaskContainer)
+      {
+        return (SetupTaskContainer)eObject;
+      }
     }
 
     return (SetupTaskContainer)resource.getContents().get(0);
