@@ -23,6 +23,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -37,6 +38,7 @@ import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.IQuery;
@@ -51,6 +53,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,10 +66,33 @@ import java.util.Map;
 @SuppressWarnings("restriction")
 public class ProfileImpl extends AgentManagerElementImpl implements Profile, PersistentMap.ExtraInfoProvider
 {
+  private static final Method INTERNAL_GET_PROFILE_METHOD;
+
   private static final Map<Object, Object> XML_OPTIONS;
 
   static
   {
+    Method method = null;
+
+    try
+    {
+      method = ReflectUtil.getMethod(SimpleProfileRegistry.class, "internalGetProfile", String.class);
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    if (method != null)
+    {
+      INTERNAL_GET_PROFILE_METHOD = method;
+      INTERNAL_GET_PROFILE_METHOD.setAccessible(true);
+    }
+    else
+    {
+      INTERNAL_GET_PROFILE_METHOD = null;
+    }
+
     Map<Object, Object> options = new HashMap<Object, Object>();
     options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
     options.put(XMLResource.OPTION_EXTENDED_META_DATA, new BasicExtendedMetaData()
@@ -94,6 +120,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
         return false;
       }
     });
+
     XML_OPTIONS = Collections.unmodifiableMap(options);
   }
 
@@ -193,19 +220,66 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
   public synchronized IProfile getDelegate(boolean loadOnDemand)
   {
+    IProfileRegistry profileRegistry = null;
+
     if (delegate == null)
     {
       if (loadOnDemand)
       {
-        delegate = getAgent().getProfileRegistry().getProfile(id);
-        if (delegate == null)
+        profileRegistry = getAgent().getProfileRegistry();
+        doSetDelegate(profileRegistry);
+      }
+    }
+
+    if (delegate != null)
+    {
+      if (profileRegistry == null)
+      {
+        profileRegistry = getAgent().getProfileRegistry();
+      }
+
+      IProfile internalProfile = null;
+      if (INTERNAL_GET_PROFILE_METHOD != null)
+      {
+        try
         {
-          throw new P2Exception("Profile does not exist: " + id);
+          internalProfile = (IProfile)INTERNAL_GET_PROFILE_METHOD.invoke(profileRegistry, id);
         }
+        catch (Throwable ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      if (internalProfile == null)
+      {
+        internalProfile = getProfileSafe(profileRegistry);
+      }
+
+      if (delegate.getTimestamp() != internalProfile.getTimestamp())
+      {
+        doSetDelegate(profileRegistry);
       }
     }
 
     return delegate;
+  }
+
+  private void doSetDelegate(IProfileRegistry profileRegistry)
+  {
+    // Create a new snapshot from the internally registered profile.
+    delegate = getProfileSafe(profileRegistry);
+  }
+
+  private IProfile getProfileSafe(IProfileRegistry profileRegistry)
+  {
+    IProfile profile = profileRegistry.getProfile(id);
+    if (profile == null)
+    {
+      throw new P2Exception("Profile does not exist: " + id);
+    }
+
+    return profile;
   }
 
   public void setDelegate(IProfile delegate)

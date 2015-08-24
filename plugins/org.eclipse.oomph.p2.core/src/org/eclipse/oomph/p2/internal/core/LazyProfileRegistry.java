@@ -48,6 +48,18 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
   private static final String PROFILE_GZ_EXT = ".profile.gz"; //$NON-NLS-1$
 
+  private final Class<?> parserClass;
+
+  private final Constructor<?> parserConstructor;
+
+  private final Method parseMethod;
+
+  private final Method addProfilePlaceHolderMethod;
+
+  private final Method getProfileMapMethod;
+
+  private final Method updateSelfProfileMethod;
+
   private final IProvisioningAgent provisioningAgent;
 
   private final File store;
@@ -61,7 +73,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
   private Map<String, org.eclipse.equinox.internal.p2.engine.Profile> profileMap;
 
   @SuppressWarnings("unchecked")
-  public LazyProfileRegistry(IProvisioningAgent provisioningAgent, File store)
+  public LazyProfileRegistry(IProvisioningAgent provisioningAgent, File store) throws Exception
   {
     super(provisioningAgent, store);
     this.provisioningAgent = provisioningAgent;
@@ -75,6 +87,21 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     Field profileLocksField = ReflectUtil.getField(SimpleProfileRegistry.class, "profileLocks");
     profileLocks = (Map<String, ProfileLock>)ReflectUtil.getValue(profileLocksField, this);
+
+    try
+    {
+      parserClass = CommonPlugin.loadClass(EngineActivator.ID, "org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry$Parser");
+      parserConstructor = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, BundleContext.class, String.class);
+      parseMethod = ReflectUtil.getMethod(parserClass, "parse", File.class);
+      addProfilePlaceHolderMethod = ReflectUtil.getMethod(parserClass, "addProfilePlaceHolder", String.class);
+      getProfileMapMethod = ReflectUtil.getMethod(parserClass, "getProfileMap");
+
+      updateSelfProfileMethod = ReflectUtil.getMethod(SimpleProfileRegistry.class, "updateSelfProfile", Map.class);
+    }
+    catch (Throwable ex)
+    {
+      throw new Exception("The internals of p2 have changed", ex);
+    }
   }
 
   public IProvisioningAgent getProvisioningAgent()
@@ -210,7 +237,6 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     if (updateSelfProfile)
     {
-      Method updateSelfProfileMethod = ReflectUtil.getMethod(SimpleProfileRegistry.class, "updateSelfProfile", Map.class);
       ReflectUtil.invokeMethod(updateSelfProfileMethod, this, profileMap);
       updateSelfProfile = false;
     }
@@ -227,14 +253,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     try
     {
-      // TODO Ask p2 to expose what's needed here
-      Class<?> parserClass = CommonPlugin.loadClass(EngineActivator.ID, "org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry$Parser");
-      Constructor<?> constructor = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, BundleContext.class, String.class);
-      Method parseMethod = ReflectUtil.getMethod(parserClass, "parse", File.class);
-      Method getProfileMapMethod = ReflectUtil.getMethod(parserClass, "getProfileMap");
-      Method addProfilePlaceHolderMethod = ReflectUtil.getMethod(parserClass, "addProfilePlaceHolder", String.class);
-
-      Object parser = ReflectUtil.newInstance(constructor, this, EngineActivator.getContext(), EngineActivator.ID);
+      Object parser = ReflectUtil.newInstance(parserConstructor, this, EngineActivator.getContext(), EngineActivator.ID);
 
       ProfileLock lock = profileLocks.get(profileId);
       if (lock == null)

@@ -25,6 +25,8 @@ import java.io.IOException;
 
 /**
  * Instantiates default instances of {@link IProfileRegistry}.
+ *
+ * @author Eike Stepper
  */
 @SuppressWarnings("restriction")
 public class LazyProfileRegistryComponent implements IAgentServiceFactory
@@ -36,14 +38,22 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
     IAgentLocation location = (IAgentLocation)agent.getService(IAgentLocation.SERVICE_NAME);
     File directory = LazyProfileRegistry.getDefaultRegistryDirectory(location);
 
-    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty(PROP_LAZY_PROFILE_REGISTRY)) && OsgiHelper.canWrite(directory);
+    SimpleProfileRegistry registry = null;
 
-    SimpleProfileRegistry registry;
+    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty(PROP_LAZY_PROFILE_REGISTRY)) && OsgiHelper.canWrite(directory);
     if (isLazySupported)
     {
-      registry = new LazyProfileRegistry(agent, directory);
+      try
+      {
+        registry = new LazyProfileRegistry(agent, directory);
+      }
+      catch (Throwable ex)
+      {
+        P2CorePlugin.INSTANCE.log(ex);
+      }
     }
-    else
+
+    if (registry == null)
     {
       registry = new SimpleProfileRegistry(agent, directory);
     }
@@ -52,6 +62,9 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
     return registry;
   }
 
+  /**
+   * @author Ed Merks
+   */
   private static class OsgiHelper
   {
     public static boolean canWrite(File installDir)
@@ -68,6 +81,7 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
         }
 
         File fileTest = null;
+
         try
         {
           fileTest = File.createTempFile("test", ".dll", installDir);
