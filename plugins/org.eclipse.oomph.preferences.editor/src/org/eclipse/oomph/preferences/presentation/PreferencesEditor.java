@@ -11,6 +11,9 @@
 package org.eclipse.oomph.preferences.presentation;
 
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
+import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
+import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
+import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.PreferencesPackage;
@@ -71,6 +74,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -1114,6 +1118,8 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
   {
     createPagesGen();
 
+    selectionViewer.setContentProvider(new OomphAdapterFactoryContentProvider(adapterFactory));
+
     EList<Resource> resources = editingDomain.getResourceSet().getResources();
     if (!resources.isEmpty())
     {
@@ -1259,8 +1265,7 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
    * @generated
    */
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  @Override
-  public Object getAdapter(Class key)
+  public Object getAdapterGen(Class key)
   {
     if (key.equals(IContentOutlinePage.class))
     {
@@ -1280,7 +1285,20 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
     }
   }
 
-  public static abstract class OutlinePage extends ContentOutlinePage
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T getAdapter(Class<T> adapter)
+  {
+    Object result = FindAndReplaceTarget.getAdapter(adapter, this);
+    if (result != null)
+    {
+      return (T)result;
+    }
+
+    return (T)getAdapterGen(adapter);
+  }
+
+  public static abstract class OutlinePage extends ContentOutlinePage implements IAdaptable
   {
     private static final Object PREFERENCE_NODE_IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/PreferenceNode");
 
@@ -1305,6 +1323,11 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
     protected abstract void createContextMenuFor(StructuredViewer viewer);
 
     protected abstract void setSelection(IStructuredSelection selection);
+
+    public <T> T getAdapter(Class<T> adapter)
+    {
+      return null;
+    }
 
     @Override
     public void createControl(Composite parent)
@@ -1567,6 +1590,14 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
       contentOutlinePage = new OutlinePage(editingDomain, selectionViewer)
       {
         @Override
+        public void createControl(Composite parent)
+        {
+          super.createControl(parent);
+
+          contentOutlineViewer = getTreeViewer();
+        }
+
+        @Override
         protected void createContextMenuFor(StructuredViewer viewer)
         {
           PreferencesEditor.this.createContextMenuFor(viewer);
@@ -1600,6 +1631,12 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
           getTreeViewer().setSelection(selection);
           selectionViewer = oldSelectionViewer;
         }
+
+        @Override
+        public <T> T getAdapter(Class<T> adapter)
+        {
+          return PreferencesEditor.this.getAdapter(adapter);
+        }
       };
     }
 
@@ -1610,11 +1647,11 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
    * This accesses a cached version of the property sheet.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public IPropertySheetPage getPropertySheetPage()
   {
-    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE,
+    PropertySheetPage propertySheetPage = new OomphPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE,
         PreferencesEditorPlugin.getPlugin().getDialogSettings())
     {
       @Override

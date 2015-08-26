@@ -111,6 +111,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
@@ -1513,6 +1514,14 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
     {
       contentOutlinePage = new PreferencesEditor.OutlinePage(editingDomain, selectionViewer)
       {
+        @Override
+        public void createControl(Composite parent)
+        {
+          super.createControl(parent);
+
+          contentOutlineViewer = getTreeViewer();
+        }
+
         @Override
         protected void createContextMenuFor(StructuredViewer viewer)
         {

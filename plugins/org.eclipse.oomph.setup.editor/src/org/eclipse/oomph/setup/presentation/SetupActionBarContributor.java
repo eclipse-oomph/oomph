@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.presentation;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.util.EAnnotations;
+import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Project;
@@ -49,7 +50,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
-import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.emf.edit.ui.action.LoadResourceAction;
 import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
@@ -111,9 +111,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * This is the action bar contributor for the Setup model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @generated
+ * @generated not
  */
-public class SetupActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener
+public class SetupActionBarContributor extends OomphEditingDomainActionBarContributor implements ISelectionChangedListener
 {
   private static final String ENABLEMENT_ITEM_PREFIX = EnablementAction.class.getName() + "-";
 

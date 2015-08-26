@@ -10,13 +10,14 @@
  */
 package org.eclipse.oomph.preferences.presentation;
 
+import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
+
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
 import org.eclipse.emf.edit.ui.action.CreateChildAction;
 import org.eclipse.emf.edit.ui.action.CreateSiblingAction;
-import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.emf.edit.ui.action.LoadResourceAction;
 import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
@@ -50,9 +51,9 @@ import java.util.Collection;
  * This is the action bar contributor for the Preferences model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @generated
+ * @generated not
  */
-public class PreferencesActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener
+public class PreferencesActionBarContributor extends OomphEditingDomainActionBarContributor implements ISelectionChangedListener
 {
   /**
    * This keeps track of the active editor.
