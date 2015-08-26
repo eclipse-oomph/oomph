@@ -590,7 +590,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         }
       }
 
-      if (microVersionProperlyIncreased)
+      if (microVersionProperlyIncreased || elementVersion.getMajor() > nextMicroVersion.getMajor() || elementVersion.getMinor() > nextMicroVersion.getMinor())
       {
         return;
       }
