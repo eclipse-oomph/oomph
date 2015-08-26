@@ -1052,20 +1052,19 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                           Matcher matcher = selectedItemPattern.matcher(text);
                           if (matchStart < text.length() && matcher.find(matchStart))
                           {
-                            // Compute the offset of the start of the matching, taking into account the width of the image, the padding, and the
-                            // preceding text...
+                            // Compute the offset of the start of the matching, relative to the start of the text.
                             int start = matcher.start();
-                            int x = event.gc.textExtent(text.substring(0, start)).x + item.getImage(1).getBounds().width + 5;
+                            int x = event.gc.textExtent(text.substring(0, start)).x + item.getTextBounds(1).x - treeItem.getBounds(1).x;
 
                             // Compute the offset at the end of the match, taking into account the width of the matching text.
                             int width = event.gc.textExtent(matcher.group()).x;
-                            event.gc.drawRectangle(event.x + x, event.y + 1, width, event.height - 2);
+                            event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
                           }
                           else if (text.endsWith("..."))
                           {
-                            int x = event.gc.textExtent(text.substring(0, text.length() - 3)).x + item.getImage(1).getBounds().width + 5;
+                            int x = event.gc.textExtent(text.substring(0, text.length() - 3)).x + treeItem.getTextBounds(1).x - treeItem.getBounds(1).x;
                             int width = event.gc.textExtent("...").x;
-                            event.gc.drawRectangle(event.x + x, event.y + 1, width, event.height - 2);
+                            event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
                           }
                         }
 
