@@ -1986,7 +1986,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
         }
       }
 
-      return LABEL;
+      return LABEL_AND_ATTRIBUTE;
     }
 
     public static String[] getLabels()
