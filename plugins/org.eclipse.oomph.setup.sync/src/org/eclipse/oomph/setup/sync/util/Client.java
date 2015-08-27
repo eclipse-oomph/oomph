@@ -38,7 +38,9 @@ import java.net.URI;
  */
 public class Client
 {
-  private static final boolean DEBUG = PropertiesUtil.isProperty("org.eclipse.oomph.setup.sync.client.debug");
+  private static final String USER_AGENT_ID = PropertiesUtil.getProperty("oomph.setup.sync.user_agent_id", "oomph/sync");
+
+  private static final boolean DEBUG = PropertiesUtil.isProperty("oomph.setup.sync.debug");
 
   private static final String HEADER_LAST_MODIFIED = "X-Last-Modified";
 
@@ -47,6 +49,8 @@ public class Client
   private static final int STATUS_NOT_MODIFIED = 304;
 
   private static final int STATUS_BAD_REQUEST = 400;
+
+  private static final int STATUS_FORBIDDEN = 403;
 
   private static final int STATUS_CONFLICT = 409;
 
@@ -117,7 +121,8 @@ public class Client
         .connectTimeout(3000) //
         .staleConnectionCheck(true) //
         .socketTimeout(10000) //
-        .addHeader(HEADER_LAST_MODIFIED, Long.toString(timeStamp));
+        .addHeader(HEADER_LAST_MODIFIED, Long.toString(timeStamp)) //
+        .addHeader("User-Agent", USER_AGENT_ID);
   }
 
   private HttpResponse sendRequest(Request request) throws IOException
@@ -137,7 +142,7 @@ public class Client
     return response;
   }
 
-  private int getStatus(HttpResponse response) throws BadResponseException, BadRequestException
+  private int getStatus(HttpResponse response) throws IOException
   {
     StatusLine statusLine = response.getStatusLine();
     if (statusLine == null)
@@ -149,6 +154,11 @@ public class Client
     if (status == STATUS_BAD_REQUEST)
     {
       throw new BadRequestException(uri);
+    }
+
+    if (status == STATUS_FORBIDDEN)
+    {
+      throw new ForbiddenException(uri);
     }
 
     return status;
@@ -207,6 +217,19 @@ public class Client
     public BadRequestException(URI uri)
     {
       super("Bad request: " + uri);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class ForbiddenException extends IOException
+  {
+    private static final long serialVersionUID = 1L;
+
+    public ForbiddenException(URI uri)
+    {
+      super("Forbidden: " + uri);
     }
   }
 
