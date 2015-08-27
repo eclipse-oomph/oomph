@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sync" nsURI="http://www.eclipse.org/oomph/setup/sync/1.0" nsPrefix="sync">
+  <eClassifiers xsi:type="ecore:EClass" name="SyncState">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localTimeStamp" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localSnapshot" lowerBound="1"
+        eType="#//SyncSnapshot"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteTimeStamp" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remoteSnapshot" lowerBound="1"
+        eType="#//SyncSnapshot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SyncSnapshot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//SyncItem" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SyncItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//SyncItemType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RemoteSyncItem" eSuperTypes="#//SyncItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="policy" eType="#//SyncItemPolicy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SyncItemType">
+    <eLiterals name="Preference"/>
+    <eLiterals name="Variable" value="1"/>
+    <eLiterals name="Other" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SyncItemPolicy">
+    <eLiterals name="Exclude" literal="Exclude"/>
+    <eLiterals name="Include" value="1" literal="Include"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SyncAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localDelta" eType="#//SyncDelta"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remotedelta" eType="#//SyncDelta"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="suggestedType" lowerBound="1"
+        eType="#//SyncActionType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolvedType" eType="#//SyncActionType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SyncDelta">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oldItem" eType="#//SyncItem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newItem" eType="#//SyncItem"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//SyncDeltaType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SyncDeltaType">
+    <eLiterals name="Unchanged"/>
+    <eLiterals name="Changed" value="1"/>
+    <eLiterals name="Removed" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SyncActionType">
+    <eLiterals name="None"/>
+    <eLiterals name="SetLocal" value="1" literal="SetLocal"/>
+    <eLiterals name="SetRemote" value="2" literal="SetRemote"/>
+    <eLiterals name="Remove" value="3"/>
+    <eLiterals name="Conflict" value="4"/>
+    <eLiterals name="Exclude" value="5"/>
+  </eClassifiers>
+</ecore:EPackage>

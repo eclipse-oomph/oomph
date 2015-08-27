@@ -247,7 +247,15 @@
         <requirement
             name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.oomph.location}"/>
+            rootFolder="${git.clone.oomph.location}">
+          <predicate
+              xsi:type="predicates:NotPredicate">
+            <operand
+                xsi:type="predicates:FilePredicate"
+                filePattern="build\.properties"
+                contentPattern="prototype[ \t]*=[ \t]*true"/>
+          </predicate>
+        </sourceLocator>
         <repositoryList
             name="Neon">
           <repository
