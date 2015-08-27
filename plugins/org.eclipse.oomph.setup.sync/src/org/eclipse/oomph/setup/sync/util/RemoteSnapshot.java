@@ -39,7 +39,7 @@ public class RemoteSnapshot
     long timeStamp = originalFile.lastModified();
     if (timeStamp == 0 || forceRefresh)
     {
-      long lastModified = client.download(timeStamp, workingCopy);
+      long lastModified = client.get(timeStamp, workingCopy);
       if (lastModified != 0)
       {
         IOUtil.copyFile(workingCopy, originalFile);
@@ -65,7 +65,7 @@ public class RemoteSnapshot
 
         try
         {
-          client.upload(timeStamp, workingCopy);
+          client.post(timeStamp, workingCopy);
         }
         catch (ConflictException ex)
         {

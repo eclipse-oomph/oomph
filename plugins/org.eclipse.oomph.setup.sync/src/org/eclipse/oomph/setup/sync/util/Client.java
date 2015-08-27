@@ -64,7 +64,7 @@ public class Client
     executor = Executor.newInstance().auth(credentials);
   }
 
-  public long download(long timeStamp, File file) throws IOException
+  public long get(long timeStamp, File file) throws IOException
   {
     Request request = configureRequest(timeStamp, Request.Get(uri));
 
@@ -81,19 +81,19 @@ public class Client
     if (status == STATUS_OK)
     {
       saveContent(responseEntity, file);
-      return getLastModified(response, true);
+      return getLastModified(response);
     }
 
     throw new BadResponseException(uri);
   }
 
-  public void upload(long timeStamp, File file) throws IOException, ConflictException
+  public void post(long timeStamp, File file) throws IOException, ConflictException
   {
     HttpEntity requestEntity = MultipartEntityBuilder.create().addPart("userfile", new FileBody(file)).build();
     Request request = configureRequest(timeStamp, Request.Post(uri)).body(requestEntity);
 
     HttpResponse response = sendRequest(request);
-    long lastModified = getLastModified(response, true);
+    long lastModified = getLastModified(response);
 
     int status = getStatus(response);
     if (status == STATUS_CONFLICT)
@@ -164,17 +164,12 @@ public class Client
     return status;
   }
 
-  private long getLastModified(HttpResponse response, boolean required) throws IOException
+  private long getLastModified(HttpResponse response) throws IOException
   {
     Header[] headers = response.getHeaders(HEADER_LAST_MODIFIED);
     if (headers == null || headers.length == 0)
     {
-      if (required)
-      {
-        throw new BadResponseException(uri);
-      }
-
-      return 0;
+      throw new BadResponseException(uri);
     }
 
     try
