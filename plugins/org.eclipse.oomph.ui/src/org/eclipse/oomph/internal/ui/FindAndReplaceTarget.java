@@ -979,142 +979,131 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
               // Walk the tree items.
               for (final TreeItem treeItem : tree.getItems())
               {
-                // If it has a property sheet entries associated with it...
-                Object data = treeItem.getData();
-                if (data instanceof PropertySheetEntry)
+                // If there is an EMF property descriptor with a feature for the selected item...
+                PropertyDescriptor propertyDescriptor = getPropertyDescriptor(treeItem);
+                if (propertyDescriptor != null && propertyDescriptor.getFeature() == selectedItem.getFeature())
                 {
-                  // Pull out the descriptor and check that's indeed and EMF property descriptor.
-                  PropertySheetEntry propertySheetEntry = (PropertySheetEntry)data;
-                  Object descriptor = ReflectUtil.invokeMethod("getDescriptor", propertySheetEntry);
-                  if (descriptor instanceof PropertyDescriptor)
+                  // Consider the label shown in the tree verses the value of the selected item...
+                  String treeItemText = treeItem.getText(1);
+                  String itemValue = selectedItem.value;
+
+                  // We might need to replace the tree item's text with a special representation...
+                  specialStart = -1;
+
+                  // If they are're identical....
+                  if (!treeItemText.equals(itemValue))
                   {
-                    // If its feature is the one for the selected item...
-                    PropertyDescriptor propertyDescriptor = (PropertyDescriptor)descriptor;
-                    if (propertyDescriptor.getFeature() == selectedItem.getFeature())
+                    // Find the match, which really must be there, do we can determine the length of the match.
+                    Matcher matcher = selectedItemPattern.matcher(itemValue);
+                    if (matcher.find(selectedItemStart))
                     {
-                      // Consider the label shown in the tree verses the value of the selected item...
-                      String treeItemText = treeItem.getText(1);
-                      String itemValue = selectedItem.value;
+                      // Remember this special item, because we'll want to update it after we do a replace to show the replaced text.
+                      specialTreeItem = treeItem;
 
-                      // We might need to replace the tree item's text with a special representation...
-                      specialStart = -1;
-
-                      // If they are're identical....
-                      if (!treeItemText.equals(itemValue))
+                      // If the end of the match is after the end of the tree item's text, or the strings up until the end of the match are not
+                      // identical...
+                      int end = matcher.end();
+                      if (treeItemText.length() < end || !treeItemText.substring(0, end).equals(itemValue.substring(0, end)))
                       {
-                        // Find the match, which really must be there, do we can determine the length of the match.
-                        Matcher matcher = selectedItemPattern.matcher(itemValue);
-                        if (matcher.find(selectedItemStart))
+                        // Consider the starting point of the match, and work our way backward for 20 characters or until the preceding control
+                        // character.
+                        int begin = matcher.start();
+                        specialStart = 2;
+                        while (begin >= 0 && specialStart < 20 && !Character.isISOControl(itemValue.charAt(begin)))
                         {
-                          // Remember this special item, because we'll want to update it after we do a replace to show the replaced text.
-                          specialTreeItem = treeItem;
-
-                          // If the end of the match is after the end of the tree item's text, or the strings up until the end of the match are not
-                          // identical...
-                          int end = matcher.end();
-                          if (treeItemText.length() < end || !treeItemText.substring(0, end).equals(itemValue.substring(0, end)))
-                          {
-                            // Consider the starting point of the match, and work our way backward for 20 characters or until the preceding control
-                            // character.
-                            int begin = matcher.start();
-                            specialStart = 2;
-                            while (begin >= 0 && specialStart < 20 && !Character.isISOControl(itemValue.charAt(begin)))
-                            {
-                              ++specialStart;
-                              --begin;
-                            }
-
-                            // Work our way forward until the end of the string or until we hit a control character.
-                            int itemValueLength = itemValue.length();
-                            while (end < itemValueLength && !Character.isISOControl(itemValue.charAt(end)))
-                            {
-                              ++end;
-                            }
-
-                            // Create a special string with ellipses at both ends.
-                            String specialText = "..." + itemValue.substring(begin + 1, end) + "...";
-
-                            // But that back into the item.
-                            treeItem.setText(1, specialText);
-
-                            // Get the tree to redraw itself.
-                            tree.redraw();
-                          }
+                          ++specialStart;
+                          --begin;
                         }
+
+                        // Work our way forward until the end of the string or until we hit a control character.
+                        int itemValueLength = itemValue.length();
+                        while (end < itemValueLength && !Character.isISOControl(itemValue.charAt(end)))
+                        {
+                          ++end;
+                        }
+
+                        // Create a special string with ellipses at both ends.
+                        String specialText = "..." + itemValue.substring(begin + 1, end) + "...";
+
+                        // But that back into the item.
+                        treeItem.setText(1, specialText);
+
+                        // Get the tree to redraw itself.
+                        tree.redraw();
                       }
-
-                      // Create a paint listener to select the match.
-                      final Listener paintItemListener = new Listener()
-                      {
-                        private void paintItem(Event event, TreeItem item, int matchStart)
-                        {
-                          String text = item.getText(1);
-                          Matcher matcher = selectedItemPattern.matcher(text);
-                          if (matchStart < text.length() && matcher.find(matchStart))
-                          {
-                            // Compute the offset of the start of the matching, relative to the start of the text.
-                            int start = matcher.start();
-                            int x = event.gc.textExtent(text.substring(0, start)).x + item.getTextBounds(1).x - treeItem.getBounds(1).x;
-
-                            // Compute the offset at the end of the match, taking into account the width of the matching text.
-                            int width = event.gc.textExtent(matcher.group()).x;
-                            event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
-                          }
-                          else if (text.endsWith("..."))
-                          {
-                            int x = event.gc.textExtent(text.substring(0, text.length() - 3)).x + treeItem.getTextBounds(1).x - treeItem.getBounds(1).x;
-                            int width = event.gc.textExtent("...").x;
-                            event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
-                          }
-                        }
-
-                        public void handleEvent(Event event)
-                        {
-                          // If we're painting or special item...
-                          TreeItem item = (TreeItem)event.item;
-                          if (item == treeItem && event.index == 1)
-                          {
-                            paintItem(event, item, specialStart == -1 ? start : specialStart);
-                          }
-                        }
-                      };
-
-                      // Add the listener.
-                      tree.addListener(SWT.PaintItem, paintItemListener);
-
-                      // Set up the runnable to clean up what we've done here.
-                      final PropertySheetPage propertySheetPage = (PropertySheetPage)currentPage;
-                      final Action finalFilterAction = filterAction;
-                      propertiesCleanup = new Runnable()
-                      {
-                        public void run()
-                        {
-                          // Remove the listener.
-                          tree.removeListener(SWT.PaintItem, paintItemListener);
-
-                          // If there is a filter action we toggled...
-                          if (finalFilterAction != null)
-                          {
-                            // Toggle it back, which will refresh the view.
-                            finalFilterAction.setChecked(false);
-                            finalFilterAction.run();
-                          }
-                          else
-                          {
-                            // Otherwise refresh the view.
-                            propertySheetPage.refresh();
-                          }
-                        }
-                      };
-
-                      // Select the item, and force a repaint.
-                      tree.setSelection(treeItem);
-                      tree.redraw();
-
-                      // We're done.
-                      return;
                     }
                   }
+
+                  // Create a paint listener to select the match.
+                  final Listener paintItemListener = new Listener()
+                  {
+                    private void paintItem(Event event, TreeItem item, int matchStart)
+                    {
+                      String text = item.getText(1);
+                      Matcher matcher = selectedItemPattern.matcher(text);
+                      if (matchStart < text.length() && matcher.find(matchStart))
+                      {
+                        // Compute the offset of the start of the matching, relative to the start of the text.
+                        int start = matcher.start();
+                        int x = event.gc.textExtent(text.substring(0, start)).x + item.getTextBounds(1).x - treeItem.getBounds(1).x;
+
+                        // Compute the offset at the end of the match, taking into account the width of the matching text.
+                        int width = event.gc.textExtent(matcher.group()).x;
+                        event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
+                      }
+                      else if (text.endsWith("..."))
+                      {
+                        int x = event.gc.textExtent(text.substring(0, text.length() - 3)).x + treeItem.getTextBounds(1).x - treeItem.getBounds(1).x;
+                        int width = event.gc.textExtent("...").x;
+                        event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
+                      }
+                    }
+
+                    public void handleEvent(Event event)
+                    {
+                      // If we're painting or special item...
+                      TreeItem item = (TreeItem)event.item;
+                      if (item == treeItem && event.index == 1)
+                      {
+                        paintItem(event, item, specialStart == -1 ? start : specialStart);
+                      }
+                    }
+                  };
+
+                  // Add the listener.
+                  tree.addListener(SWT.PaintItem, paintItemListener);
+
+                  // Set up the runnable to clean up what we've done here.
+                  final PropertySheetPage propertySheetPage = (PropertySheetPage)currentPage;
+                  final Action finalFilterAction = filterAction;
+                  propertiesCleanup = new Runnable()
+                  {
+                    public void run()
+                    {
+                      // Remove the listener.
+                      tree.removeListener(SWT.PaintItem, paintItemListener);
+
+                      // If there is a filter action we toggled...
+                      if (finalFilterAction != null)
+                      {
+                        // Toggle it back, which will refresh the view.
+                        finalFilterAction.setChecked(false);
+                        finalFilterAction.run();
+                      }
+                      else
+                      {
+                        // Otherwise refresh the view.
+                        propertySheetPage.refresh();
+                      }
+                    }
+                  };
+
+                  // Select the item, and force a repaint.
+                  tree.setSelection(treeItem);
+                  tree.redraw();
+
+                  // We're done.
+                  return;
                 }
               }
             }
@@ -1699,7 +1688,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
    */
   protected static Object getFeature(PropertyDescriptor propertyDescriptor)
   {
-    Object object = ReflectUtil.getValue("object", propertyDescriptor);
+    Object object = getObject(propertyDescriptor);
     IItemPropertyDescriptor itemPropertyDescriptor = ReflectUtil.getValue("itemPropertyDescriptor", propertyDescriptor);
     return itemPropertyDescriptor.getFeature(object);
   }

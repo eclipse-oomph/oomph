@@ -14,6 +14,7 @@ import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.PreferencesPackage;
 import org.eclipse.oomph.preferences.Property;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -155,53 +156,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    */
   public String createEscapedString(String literal)
   {
-    if (literal == null)
-    {
-      return null;
-    }
-
-    StringBuilder result = new StringBuilder();
-    for (int i = 0, length = literal.length(); i < length; ++i)
-    {
-      char c = literal.charAt(i);
-      if (c == '\\')
-      {
-        if (++i < length)
-        {
-          c = literal.charAt(i);
-          if (c == 't')
-          {
-            result.append('\t');
-            continue;
-          }
-          else if (c == 'r')
-          {
-            result.append('\r');
-            continue;
-          }
-          else if (c == 'n')
-          {
-            result.append('\n');
-            continue;
-          }
-          else if (c == '\\')
-          {
-            result.append('\\');
-            continue;
-          }
-          else if (i + 2 < length && c >= '0' && c <= '7' && literal.charAt(i + 1) >= '0' && literal.charAt(i + 1) <= '7' && literal.charAt(i + 2) >= '0'
-              && literal.charAt(i + 2) <= '7')
-          {
-            result.append((char)Integer.parseInt(literal.substring(i, i + 3), 8));
-            i += 2;
-            continue;
-          }
-        }
-      }
-      result.append(c);
-    }
-
-    return result.toString();
+    return StringUtil.unescape(literal);
   }
 
   /**
@@ -214,9 +169,9 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
     return createEscapedString(initialValue);
   }
 
-  private static final String[] ESCAPES = { "\\000", "\\001", "\\002", "\\003", "\\004", "\\005", "\\006", "\\007", "\\010", "\\t", "\\n", "\\013", "\\014",
-      "\\r", "\\016", "\\017", "\\020", "\\021", "\\022", "\\023", "\\024", "\\025", "\\026", "\\027", "\\030", "\\031", "\\032", "\\033", "\\034", "\\035",
-      "\\036", "\\037" };
+  private static final String[] ESCAPES = { "\\000", "\\001", "\\002", "\\003", "\\004", "\\005", "\\006", "\\007", "\\010", "\t", "\n", "\\013", "\\014", "\r",
+      "\\016", "\\017", "\\020", "\\021", "\\022", "\\023", "\\024", "\\025", "\\026", "\\027", "\\030", "\\031", "\\032", "\\033", "\\034", "\\035", "\\036",
+      "\\037" };
 
   /**
    * <!-- begin-user-doc -->

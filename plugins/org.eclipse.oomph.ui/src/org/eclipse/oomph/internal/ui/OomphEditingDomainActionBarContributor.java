@@ -10,14 +10,19 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.edit.ui.action.DeleteAction;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.text.IFindReplaceTarget;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
@@ -33,6 +38,8 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
 {
   protected FindAction findAction;
 
+  protected CollapseAllAction collapseAllAction;
+
   public OomphEditingDomainActionBarContributor()
   {
     super();
@@ -46,15 +53,22 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   @Override
   public void init(IActionBars actionBars)
   {
-    super.init(actionBars);
-
     findAction = createFindAction();
     actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), findAction);
+
+    collapseAllAction = createCollapseAllAction();
+
+    super.init(actionBars);
   }
 
   protected FindAction createFindAction()
   {
     return new FindAction();
+  }
+
+  private CollapseAllAction createCollapseAllAction()
+  {
+    return new CollapseAllAction();
   }
 
   @Override
@@ -64,6 +78,17 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
     DeleteAction deleteAction = super.createDeleteAction();
     deleteAction.setId("delete");
     return deleteAction;
+  }
+
+  @Override
+  public void contributeToToolBar(IToolBarManager toolBarManager)
+  {
+    super.contributeToToolBar(toolBarManager);
+
+    if (collapseAllAction != null)
+    {
+      toolBarManager.add(collapseAllAction);
+    }
   }
 
   @Override
@@ -80,6 +105,11 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
     super.deactivate();
 
     findAction.setActiveWorkbenchPart(null);
+
+    if (collapseAllAction != null)
+    {
+      collapseAllAction.setActiveWorkbenchPart(null);
+    }
   }
 
   @Override
@@ -88,6 +118,11 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
     super.activate();
 
     findAction.setActiveWorkbenchPart(activeEditor);
+
+    if (collapseAllAction != null)
+    {
+      collapseAllAction.setActiveWorkbenchPart(activeEditor);
+    }
   }
 
   @Override
@@ -134,6 +169,43 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
       if (workbenchPart != null)
       {
         setEnabled(workbenchPart.getAdapter(IFindReplaceTarget.class) != null);
+      }
+    }
+  }
+
+  public static final class CollapseAllAction extends Action
+  {
+    private IViewerProvider viewerProvider;
+
+    public CollapseAllAction()
+    {
+      super("Collapse All", IAction.AS_PUSH_BUTTON);
+      setImageDescriptor(UIPlugin.INSTANCE.getImageDescriptor("collapse-all"));
+      setToolTipText("Collapse all expanded elements");
+    }
+
+    @Override
+    public void run()
+    {
+      Viewer viewer = viewerProvider.getViewer();
+      if (viewer instanceof TreeViewer)
+      {
+        TreeViewer treeViewer = (TreeViewer)viewer;
+        treeViewer.collapseAll();
+      }
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof IViewerProvider)
+      {
+        viewerProvider = (IViewerProvider)workbenchPart;
+        setEnabled(true);
+      }
+      else
+      {
+        setEnabled(false);
+        viewerProvider = null;
       }
     }
   }

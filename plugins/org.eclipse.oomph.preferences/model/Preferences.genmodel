@@ -42,7 +42,7 @@
     </genClasses>
     <genClasses ecoreClass="Preferences.ecore#//Property">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Preferences.ecore#//Property/parent"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/value"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/value"/>
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/nonDefault"/>
       <genFeatures createChild="false" propertyCategory="" propertyDescription="Whether this is a secure property.  Setting this to false will show the property value.  Ensure that it's set back to true after editing the value."
           ecoreFeature="ecore:EAttribute Preferences.ecore#//Property/secure">

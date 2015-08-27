@@ -16,6 +16,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
@@ -101,10 +102,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
   @Override
   public void setRootEntry(IPropertySheetEntry entry)
   {
-    Shell shell = getControl().getShell();
-    clipboard = new Clipboard(shell.getDisplay());
-    copyPropertyValueAction = new CopyValuePropertyAction(clipboard);
-
+    getCopyPropertyValueAction();
     super.setRootEntry(entry);
   }
 
@@ -116,7 +114,19 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
 
     Menu menu = getControl().getMenu();
     IMenuManager menuManager = (IMenuManager)menu.getData("org.eclipse.jface.action.MenuManager.managerKey");
-    menuManager.insertAfter("copy", copyPropertyValueAction);
+    menuManager.insertAfter("copy", getCopyPropertyValueAction());
+  }
+
+  private Action getCopyPropertyValueAction()
+  {
+    if (copyPropertyValueAction == null)
+    {
+      Shell shell = getControl().getShell();
+      clipboard = new Clipboard(shell.getDisplay());
+      copyPropertyValueAction = new CopyValuePropertyAction(clipboard);
+    }
+
+    return copyPropertyValueAction;
   }
 
   private void addColumnResizer()
@@ -286,6 +296,8 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
    */
   public static class OomphPropertyDescriptor extends PropertyDescriptor
   {
+    private static final EDataTypeValueHandler NO_OP_VALUE_HANDLER = new EDataTypeValueHandler(EcorePackage.Literals.ESTRING);
+
     public OomphPropertyDescriptor(Object object, IItemPropertyDescriptor itemPropertyDescriptor)
     {
       super(object, itemPropertyDescriptor);
@@ -320,17 +332,30 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
           @Override
           public void doSetValue(Object value)
           {
-            String str = (String)value;
+            String str = valueHandler.toString(value);
             if (str != null)
             {
-              doEscape = str.contains("\n");
-              if (doEscape)
+              for (char c : str.toCharArray())
               {
-                str = StringUtil.escape(str);
+                if (Character.isISOControl(c))
+                {
+                  doEscape = true;
+                  str = StringUtil.escape(str);
+                  break;
+                }
               }
             }
 
-            super.doSetValue(str);
+            EDataTypeValueHandler oldValueHandler = valueHandler;
+            try
+            {
+              valueHandler = NO_OP_VALUE_HANDLER;
+              super.doSetValue(str);
+            }
+            finally
+            {
+              valueHandler = oldValueHandler;
+            }
           }
 
           @Override

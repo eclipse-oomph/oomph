@@ -185,13 +185,25 @@ public final class StringUtil
             break;
 
           case 'u':
-          {
             unicode = true;
             break;
-          }
 
+          case '0':
+          case '1':
+          case '2':
+          case '3':
+            if (i + 2 < len && str.charAt(i + 1) >= '0' && str.charAt(i + 1) <= '7' && str.charAt(i + 2) >= '0' && str.charAt(i + 2) <= '7')
+            {
+              builder.append((char)Integer.parseInt(str.substring(i, i + 3), 8));
+              i += 2;
+              continue;
+            }
+
+            //$FALL-THROUGH$
           default:
+          {
             builder.append(c);
+          }
         }
 
         continue;

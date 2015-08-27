@@ -272,10 +272,10 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   @Override
   public void init(IActionBars actionBars)
   {
-    super.init(actionBars);
-
     revertAction = new RevertAction();
     actionBars.setGlobalActionHandler(ActionFactory.REVERT.getId(), revertAction);
+
+    super.init(actionBars);
   }
 
   public void scheduleValidation()
@@ -300,6 +300,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     toolBarManager.add(editorTableAction);
     // toolBarManager.add(testInstallAction);
     toolBarManager.add(toggleViewerInputAction);
+    super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("setup-additions"));
   }
 

@@ -72,7 +72,7 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Property_value_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Property_value_feature", "_UI_Property_type"),
-        PreferencesPackage.Literals.PROPERTY__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        PreferencesPackage.Literals.PROPERTY__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
