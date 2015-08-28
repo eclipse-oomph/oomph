@@ -252,7 +252,7 @@
               xsi:type="predicates:NotPredicate">
             <operand
                 xsi:type="predicates:FilePredicate"
-                filePattern="build\.properties"
+                filePattern="build.properties"
                 contentPattern="prototype[ \t]*=[ \t]*true"/>
           </predicate>
         </sourceLocator>
