@@ -20,16 +20,6 @@ import java.util.List;
 public enum SyncPolicy implements Enumerator
 {
   /**
-   * The '<em><b>Exclude</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #EXCLUDE_VALUE
-   * @generated
-   * @ordered
-   */
-  EXCLUDE(0, "Exclude", "Exclude"),
-
-  /**
    * The '<em><b>Include</b></em>' literal object.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -37,22 +27,15 @@ public enum SyncPolicy implements Enumerator
    * @generated
    * @ordered
    */
-  INCLUDE(1, "Include", "Include");
-
-  /**
-   * The '<em><b>Exclude</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Exclude</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @see #EXCLUDE
-   * @model name="Exclude"
-   * @generated
-   * @ordered
-   */
-  public static final int EXCLUDE_VALUE = 0;
+  INCLUDE(0, "Include", "Include"), /**
+                                    * The '<em><b>Exclude</b></em>' literal object.
+                                    * <!-- begin-user-doc -->
+                                    * <!-- end-user-doc -->
+                                    * @see #EXCLUDE_VALUE
+                                    * @generated
+                                    * @ordered
+                                    */
+  EXCLUDE(1, "Exclude", "Exclude");
 
   /**
    * The '<em><b>Include</b></em>' literal value.
@@ -67,7 +50,22 @@ public enum SyncPolicy implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int INCLUDE_VALUE = 1;
+  public static final int INCLUDE_VALUE = 0;
+
+  /**
+   * The '<em><b>Exclude</b></em>' literal value.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of '<em><b>Exclude</b></em>' literal object isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @see #EXCLUDE
+   * @model name="Exclude"
+   * @generated
+   * @ordered
+   */
+  public static final int EXCLUDE_VALUE = 1;
 
   /**
    * An array of all the '<em><b>Policy</b></em>' enumerators.
@@ -75,7 +73,7 @@ public enum SyncPolicy implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
-  private static final SyncPolicy[] VALUES_ARRAY = new SyncPolicy[] { EXCLUDE, INCLUDE, };
+  private static final SyncPolicy[] VALUES_ARRAY = new SyncPolicy[] { INCLUDE, EXCLUDE, };
 
   /**
    * A public read-only list of all the '<em><b>Policy</b></em>' enumerators.
@@ -139,10 +137,10 @@ public enum SyncPolicy implements Enumerator
   {
     switch (value)
     {
-      case EXCLUDE_VALUE:
-        return EXCLUDE;
       case INCLUDE_VALUE:
         return INCLUDE;
+      case EXCLUDE_VALUE:
+        return EXCLUDE;
     }
     return null;
   }

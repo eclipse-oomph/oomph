@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.sync;
+package org.eclipse.oomph.setup.internal.sync;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,16 +17,26 @@ import java.net.URI;
 /**
  * @author Eike Stepper
  */
-public interface SyncState
+public interface DataProvider
 {
-  public File getWorkingCopy(boolean forceRefresh) throws IOException;
+  public Location getLocation();
 
-  public boolean commit() throws IOException, ConflictException;
+  public long get(long timeStamp, File file) throws IOException;
+
+  public void post(long timeStamp, File file) throws IOException, ConflictException;
 
   /**
    * @author Eike Stepper
    */
-  public static class ConflictException extends IOException
+  public enum Location
+  {
+    LOCAL, REMOTE
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  class ConflictException extends IOException
   {
     private static final long serialVersionUID = 1L;
 

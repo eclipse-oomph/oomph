@@ -2,6 +2,8 @@
  */
 package org.eclipse.oomph.setup.sync;
 
+import org.eclipse.oomph.setup.SetupTask;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -13,7 +15,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.sync.SyncDelta#getOldTask <em>Old Task</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.SyncDelta#getNewTask <em>New Task</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.SyncDelta#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.SyncDelta#getID <em>ID</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncDelta()
@@ -22,6 +27,36 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface SyncDelta extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Old Task</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Old Task</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Old Task</em>' reference.
+   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncDelta_OldTask()
+   * @model suppressedSetVisibility="true"
+   * @generated
+   */
+  SetupTask getOldTask();
+
+  /**
+   * Returns the value of the '<em><b>New Task</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>New Task</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>New Task</em>' reference.
+   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncDelta_NewTask()
+   * @model suppressedSetVisibility="true"
+   * @generated
+   */
+  SetupTask getNewTask();
+
   /**
    * Returns the value of the '<em><b>Type</b></em>' attribute.
    * The literals are from the enumeration {@link org.eclipse.oomph.setup.sync.SyncDeltaType}.
@@ -33,22 +68,25 @@ public interface SyncDelta extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' attribute.
    * @see org.eclipse.oomph.setup.sync.SyncDeltaType
-   * @see #setType(SyncDeltaType)
    * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncDelta_Type()
-   * @model
+   * @model suppressedSetVisibility="true"
    * @generated
    */
   SyncDeltaType getType();
 
   /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.sync.SyncDelta#getType <em>Type</em>}' attribute.
+   * Returns the value of the '<em><b>ID</b></em>' attribute.
    * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>ID</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Type</em>' attribute.
-   * @see org.eclipse.oomph.setup.sync.SyncDeltaType
-   * @see #getType()
+   * @return the value of the '<em>ID</em>' attribute.
+   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncDelta_ID()
+   * @model id="true" required="true" transient="true" changeable="false" volatile="true" derived="true" suppressedSetVisibility="true"
    * @generated
    */
-  void setType(SyncDeltaType value);
+  String getID();
 
 } // SyncDelta

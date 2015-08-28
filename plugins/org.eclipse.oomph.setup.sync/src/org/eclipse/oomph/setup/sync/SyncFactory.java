@@ -2,6 +2,8 @@
  */
 package org.eclipse.oomph.setup.sync;
 
+import org.eclipse.oomph.setup.SetupTask;
+
 import org.eclipse.emf.ecore.EFactory;
 
 /**
@@ -23,13 +25,13 @@ public interface SyncFactory extends EFactory
   SyncFactory eINSTANCE = org.eclipse.oomph.setup.sync.impl.SyncFactoryImpl.init();
 
   /**
-   * Returns a new object of class '<em>Remote Snapshot</em>'.
+   * Returns a new object of class '<em>Remote Data</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Remote Snapshot</em>'.
+   * @return a new object of class '<em>Remote Data</em>'.
    * @generated
    */
-  RemoteSnapshot createRemoteSnapshot();
+  RemoteData createRemoteData();
 
   /**
    * Returns a new object of class '<em>Delta</em>'.
@@ -40,6 +42,8 @@ public interface SyncFactory extends EFactory
    */
   SyncDelta createSyncDelta();
 
+  SyncDelta createSyncDelta(SetupTask oldTask, SetupTask newTask, SyncDeltaType removed);
+
   /**
    * Returns a new object of class '<em>Action</em>'.
    * <!-- begin-user-doc -->
@@ -48,6 +52,8 @@ public interface SyncFactory extends EFactory
    * @generated
    */
   SyncAction createSyncAction();
+
+  SyncAction createSyncAction(SyncDelta localDelta, SyncDelta remoteDelta, SyncActionType actionType);
 
   /**
    * Returns the package supported by this factory.

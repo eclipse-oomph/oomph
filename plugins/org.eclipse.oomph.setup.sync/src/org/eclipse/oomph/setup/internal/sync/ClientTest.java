@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
-import org.eclipse.oomph.setup.sync.SyncState;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.apache.http.auth.Credentials;
@@ -22,7 +21,7 @@ import java.net.URI;
 /**
  * @author Eike Stepper
  */
-class Test
+class ClientTest
 {
   private static final File SYNC_FOLDER = new File(PropertiesUtil.getUserHome(), ".eclipse/org.eclipse.oomph.setup.sync");
 
@@ -31,10 +30,10 @@ class Test
     URI serviceURI = new URI("http://localhost:8765/protected/service.php");
     Credentials credentials = new UsernamePasswordCredentials("stepper", "123");
 
-    Client client = new Client(serviceURI, credentials);
-    SyncState remoteSnapshot = new SyncStateImpl(client, SYNC_FOLDER);
+    RemoteDataProvider dataProvider = new RemoteDataProvider(serviceURI, credentials);
+    Snapshot remoteSnapshot = new Snapshot(dataProvider, SYNC_FOLDER);
 
-    File workingCopy = remoteSnapshot.getWorkingCopy(true);
+    File workingCopy = remoteSnapshot.getNewFile();
     edit(workingCopy);
 
     boolean committed = remoteSnapshot.commit();

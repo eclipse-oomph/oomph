@@ -4,7 +4,7 @@ package org.eclipse.oomph.setup.sync.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTaskContainer;
-import org.eclipse.oomph.setup.sync.RemoteSnapshot;
+import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncPackage;
@@ -79,17 +79,17 @@ public class SyncSwitch<T> extends Switch<T>
   {
     switch (classifierID)
     {
-      case SyncPackage.REMOTE_SNAPSHOT:
+      case SyncPackage.REMOTE_DATA:
       {
-        RemoteSnapshot remoteSnapshot = (RemoteSnapshot)theEObject;
-        T result = caseRemoteSnapshot(remoteSnapshot);
+        RemoteData remoteData = (RemoteData)theEObject;
+        T result = caseRemoteData(remoteData);
         if (result == null)
         {
-          result = caseSetupTaskContainer(remoteSnapshot);
+          result = caseSetupTaskContainer(remoteData);
         }
         if (result == null)
         {
-          result = caseModelElement(remoteSnapshot);
+          result = caseModelElement(remoteData);
         }
         if (result == null)
         {
@@ -134,17 +134,17 @@ public class SyncSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Remote Snapshot</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Remote Data</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Remote Snapshot</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Remote Data</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseRemoteSnapshot(RemoteSnapshot object)
+  public T caseRemoteData(RemoteData object)
   {
     return null;
   }

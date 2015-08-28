@@ -2,7 +2,8 @@
  */
 package org.eclipse.oomph.setup.sync.impl;
 
-import org.eclipse.oomph.setup.sync.RemoteSnapshot;
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
@@ -72,8 +73,8 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
   {
     switch (eClass.getClassifierID())
     {
-      case SyncPackage.REMOTE_SNAPSHOT:
-        return createRemoteSnapshot();
+      case SyncPackage.REMOTE_DATA:
+        return createRemoteData();
       case SyncPackage.STRING_TO_SYNC_POLICY_MAP_ENTRY:
         return (EObject)createStringToSyncPolicyMapEntry();
       case SyncPackage.SYNC_DELTA:
@@ -132,10 +133,10 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public RemoteSnapshot createRemoteSnapshot()
+  public RemoteData createRemoteData()
   {
-    RemoteSnapshotImpl remoteSnapshot = new RemoteSnapshotImpl();
-    return remoteSnapshot;
+    RemoteDataImpl remoteData = new RemoteDataImpl();
+    return remoteData;
   }
 
   /**
@@ -160,6 +161,15 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
     return syncDelta;
   }
 
+  public SyncDelta createSyncDelta(SetupTask oldTask, SetupTask newTask, SyncDeltaType type)
+  {
+    SyncDeltaImpl syncDelta = new SyncDeltaImpl();
+    syncDelta.setOldTask(oldTask);
+    syncDelta.setNewTask(newTask);
+    syncDelta.setType(type);
+    return syncDelta;
+  }
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -168,6 +178,15 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
   public SyncAction createSyncAction()
   {
     SyncActionImpl syncAction = new SyncActionImpl();
+    return syncAction;
+  }
+
+  public SyncAction createSyncAction(SyncDelta localDelta, SyncDelta remoteDelta, SyncActionType computedType)
+  {
+    SyncActionImpl syncAction = new SyncActionImpl();
+    syncAction.setLocalDelta(localDelta);
+    syncAction.setRemoteDelta(remoteDelta);
+    syncAction.setComputedType(computedType);
     return syncAction;
   }
 

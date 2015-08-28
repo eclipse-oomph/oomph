@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/org.eclipse.oomph.setup.sync/src/org/eclipse/oomph/setup/internal/sync/Test.java"/>
+<listEntry value="/org.eclipse.oomph.setup.sync/src/org/eclipse/oomph/setup/internal/sync/ClientTest.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.oomph.setup.internal.sync.Test"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.oomph.setup.internal.sync.ClientTest"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.oomph.setup.sync"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Doomph.setup.sync.debug=true"/>
 </launchConfiguration>

@@ -2,12 +2,14 @@
  */
 package org.eclipse.oomph.setup.sync.impl;
 
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncDeltaType;
 import org.eclipse.oomph.setup.sync.SyncPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
@@ -19,13 +21,36 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getOldTask <em>Old Task</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getNewTask <em>New Task</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getID <em>ID</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncDelta
 {
+  /**
+   * The cached value of the '{@link #getOldTask() <em>Old Task</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOldTask()
+   * @generated
+   * @ordered
+   */
+  protected SetupTask oldTask;
+
+  /**
+   * The cached value of the '{@link #getNewTask() <em>New Task</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNewTask()
+   * @generated
+   * @ordered
+   */
+  protected SetupTask newTask;
+
   /**
    * The default value of the '{@link #getType() <em>Type</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -47,6 +72,16 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   protected SyncDeltaType type = TYPE_EDEFAULT;
 
   /**
+   * The default value of the '{@link #getID() <em>ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getID()
+   * @generated
+   * @ordered
+   */
+  protected static final String ID_EDEFAULT = null;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -65,6 +100,100 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   protected EClass eStaticClass()
   {
     return SyncPackage.Literals.SYNC_DELTA;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SetupTask getOldTask()
+  {
+    if (oldTask != null && oldTask.eIsProxy())
+    {
+      InternalEObject oldOldTask = (InternalEObject)oldTask;
+      oldTask = (SetupTask)eResolveProxy(oldOldTask);
+      if (oldTask != oldOldTask)
+      {
+        if (eNotificationRequired())
+        {
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SyncPackage.SYNC_DELTA__OLD_TASK, oldOldTask, oldTask));
+        }
+      }
+    }
+    return oldTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SetupTask basicGetOldTask()
+  {
+    return oldTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOldTask(SetupTask newOldTask)
+  {
+    SetupTask oldOldTask = oldTask;
+    oldTask = newOldTask;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__OLD_TASK, oldOldTask, oldTask));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SetupTask getNewTask()
+  {
+    if (newTask != null && newTask.eIsProxy())
+    {
+      InternalEObject oldNewTask = (InternalEObject)newTask;
+      newTask = (SetupTask)eResolveProxy(oldNewTask);
+      if (newTask != oldNewTask)
+      {
+        if (eNotificationRequired())
+        {
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SyncPackage.SYNC_DELTA__NEW_TASK, oldNewTask, newTask));
+        }
+      }
+    }
+    return newTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SetupTask basicGetNewTask()
+  {
+    return newTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setNewTask(SetupTask newNewTask)
+  {
+    SetupTask oldNewTask = newTask;
+    newTask = newNewTask;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__NEW_TASK, oldNewTask, newTask));
+    }
   }
 
   /**
@@ -95,6 +224,26 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String getID()
+  {
+    if (oldTask != null)
+    {
+      return oldTask.getID();
+    }
+
+    if (newTask != null)
+    {
+      return newTask.getID();
+    }
+
+    return null;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -102,8 +251,22 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__OLD_TASK:
+        if (resolve)
+        {
+          return getOldTask();
+        }
+        return basicGetOldTask();
+      case SyncPackage.SYNC_DELTA__NEW_TASK:
+        if (resolve)
+        {
+          return getNewTask();
+        }
+        return basicGetNewTask();
       case SyncPackage.SYNC_DELTA__TYPE:
         return getType();
+      case SyncPackage.SYNC_DELTA__ID:
+        return getID();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -118,6 +281,12 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__OLD_TASK:
+        setOldTask((SetupTask)newValue);
+        return;
+      case SyncPackage.SYNC_DELTA__NEW_TASK:
+        setNewTask((SetupTask)newValue);
+        return;
       case SyncPackage.SYNC_DELTA__TYPE:
         setType((SyncDeltaType)newValue);
         return;
@@ -135,6 +304,12 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__OLD_TASK:
+        setOldTask((SetupTask)null);
+        return;
+      case SyncPackage.SYNC_DELTA__NEW_TASK:
+        setNewTask((SetupTask)null);
+        return;
       case SyncPackage.SYNC_DELTA__TYPE:
         setType(TYPE_EDEFAULT);
         return;
@@ -152,8 +327,14 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__OLD_TASK:
+        return oldTask != null;
+      case SyncPackage.SYNC_DELTA__NEW_TASK:
+        return newTask != null;
       case SyncPackage.SYNC_DELTA__TYPE:
         return type != TYPE_EDEFAULT;
+      case SyncPackage.SYNC_DELTA__ID:
+        return ID_EDEFAULT == null ? getID() != null : !ID_EDEFAULT.equals(getID());
     }
     return super.eIsSet(featureID);
   }

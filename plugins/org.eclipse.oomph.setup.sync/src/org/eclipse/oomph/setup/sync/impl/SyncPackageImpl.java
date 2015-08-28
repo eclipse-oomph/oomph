@@ -3,7 +3,7 @@
 package org.eclipse.oomph.setup.sync.impl;
 
 import org.eclipse.oomph.setup.SetupPackage;
-import org.eclipse.oomph.setup.sync.RemoteSnapshot;
+import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
@@ -34,7 +34,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass remoteSnapshotEClass = null;
+  private EClass remoteDataEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -152,9 +152,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getRemoteSnapshot()
+  public EClass getRemoteData()
   {
-    return remoteSnapshotEClass;
+    return remoteDataEClass;
   }
 
   /**
@@ -162,9 +162,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getRemoteSnapshot_Policies()
+  public EReference getRemoteData_Policies()
   {
-    return (EReference)remoteSnapshotEClass.getEStructuralFeatures().get(0);
+    return (EReference)remoteDataEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -212,9 +212,39 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getSyncDelta_OldTask()
+  {
+    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSyncDelta_NewTask()
+  {
+    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getSyncDelta_Type()
   {
-    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSyncDelta_ID()
+  {
+    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -242,7 +272,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSyncAction_Remotedelta()
+  public EReference getSyncAction_RemoteDelta()
   {
     return (EReference)syncActionEClass.getEStructuralFeatures().get(1);
   }
@@ -252,7 +282,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSyncAction_SuggestedType()
+  public EAttribute getSyncAction_ComputedType()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(2);
   }
@@ -265,6 +295,16 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
   public EAttribute getSyncAction_ResolvedType()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSyncAction_EffectiveType()
+  {
+    return (EAttribute)syncActionEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -330,21 +370,25 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     isCreated = true;
 
     // Create classes and their features
-    remoteSnapshotEClass = createEClass(REMOTE_SNAPSHOT);
-    createEReference(remoteSnapshotEClass, REMOTE_SNAPSHOT__POLICIES);
+    remoteDataEClass = createEClass(REMOTE_DATA);
+    createEReference(remoteDataEClass, REMOTE_DATA__POLICIES);
 
     stringToSyncPolicyMapEntryEClass = createEClass(STRING_TO_SYNC_POLICY_MAP_ENTRY);
     createEAttribute(stringToSyncPolicyMapEntryEClass, STRING_TO_SYNC_POLICY_MAP_ENTRY__KEY);
     createEAttribute(stringToSyncPolicyMapEntryEClass, STRING_TO_SYNC_POLICY_MAP_ENTRY__VALUE);
 
     syncDeltaEClass = createEClass(SYNC_DELTA);
+    createEReference(syncDeltaEClass, SYNC_DELTA__OLD_TASK);
+    createEReference(syncDeltaEClass, SYNC_DELTA__NEW_TASK);
     createEAttribute(syncDeltaEClass, SYNC_DELTA__TYPE);
+    createEAttribute(syncDeltaEClass, SYNC_DELTA__ID);
 
     syncActionEClass = createEClass(SYNC_ACTION);
     createEReference(syncActionEClass, SYNC_ACTION__LOCAL_DELTA);
-    createEReference(syncActionEClass, SYNC_ACTION__REMOTEDELTA);
-    createEAttribute(syncActionEClass, SYNC_ACTION__SUGGESTED_TYPE);
+    createEReference(syncActionEClass, SYNC_ACTION__REMOTE_DELTA);
+    createEAttribute(syncActionEClass, SYNC_ACTION__COMPUTED_TYPE);
     createEAttribute(syncActionEClass, SYNC_ACTION__RESOLVED_TYPE);
+    createEAttribute(syncActionEClass, SYNC_ACTION__EFFECTIVE_TYPE);
 
     // Create enums
     syncPolicyEEnum = createEEnum(SYNC_POLICY);
@@ -387,12 +431,12 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    remoteSnapshotEClass.getESuperTypes().add(theSetupPackage.getSetupTaskContainer());
+    remoteDataEClass.getESuperTypes().add(theSetupPackage.getSetupTaskContainer());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(remoteSnapshotEClass, RemoteSnapshot.class, "RemoteSnapshot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getRemoteSnapshot_Policies(), getStringToSyncPolicyMapEntry(), null, "policies", null, 0, -1, RemoteSnapshot.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(remoteDataEClass, RemoteData.class, "RemoteData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRemoteData_Policies(), getStringToSyncPolicyMapEntry(), null, "policies", null, 0, -1, RemoteData.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stringToSyncPolicyMapEntryEClass, Map.Entry.class, "StringToSyncPolicyMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getStringToSyncPolicyMapEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -401,23 +445,31 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(syncDeltaEClass, SyncDelta.class, "SyncDelta", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSyncDelta_OldTask(), theSetupPackage.getSetupTask(), null, "oldTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSyncDelta_NewTask(), theSetupPackage.getSetupTask(), null, "newTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSyncDelta_Type(), getSyncDeltaType(), "type", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSyncDelta_ID(), ecorePackage.getEString(), "iD", null, 1, 1, SyncDelta.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE,
+        IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     initEClass(syncActionEClass, SyncAction.class, "SyncAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSyncAction_LocalDelta(), getSyncDelta(), null, "localDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncAction_Remotedelta(), getSyncDelta(), null, "remotedelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getSyncAction_RemoteDelta(), getSyncDelta(), null, "remoteDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncAction_SuggestedType(), getSyncActionType(), "suggestedType", null, 1, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSyncAction_ComputedType(), getSyncActionType(), "computedType", null, 1, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSyncAction_ResolvedType(), getSyncActionType(), "resolvedType", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSyncAction_EffectiveType(), getSyncActionType(), "effectiveType", "None", 1, 1, SyncAction.class, !IS_TRANSIENT, IS_VOLATILE,
+        !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(syncPolicyEEnum, SyncPolicy.class, "SyncPolicy");
-    addEEnumLiteral(syncPolicyEEnum, SyncPolicy.EXCLUDE);
     addEEnumLiteral(syncPolicyEEnum, SyncPolicy.INCLUDE);
+    addEEnumLiteral(syncPolicyEEnum, SyncPolicy.EXCLUDE);
 
     initEEnum(syncDeltaTypeEEnum, SyncDeltaType.class, "SyncDeltaType");
     addEEnumLiteral(syncDeltaTypeEEnum, SyncDeltaType.UNCHANGED);

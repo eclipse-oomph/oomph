@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sync" nsURI="http://www.eclipse.org/oomph/setup/sync/1.0" nsPrefix="sync">
-  <eClassifiers xsi:type="ecore:EClass" name="RemoteSnapshot" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTaskContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="RemoteData" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTaskContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="policies" upperBound="-1"
         eType="#//StringToSyncPolicyMapEntry" containment="true"/>
   </eClassifiers>
@@ -14,7 +14,27 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="#//SyncPolicy"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SyncDelta">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//SyncDeltaType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oldTask" eType="ecore:EClass ../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newTask" eType="ecore:EClass ../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//SyncDeltaType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true" iD="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SyncDeltaType">
     <eLiterals name="Unchanged"/>
@@ -22,11 +42,26 @@
     <eLiterals name="Removed" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SyncAction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="localDelta" eType="#//SyncDelta"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="remotedelta" eType="#//SyncDelta"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="suggestedType" lowerBound="1"
-        eType="#//SyncActionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localDelta" eType="#//SyncDelta">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remoteDelta" eType="#//SyncDelta">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="computedType" lowerBound="1"
+        eType="#//SyncActionType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolvedType" eType="#//SyncActionType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="effectiveType" lowerBound="1"
+        eType="#//SyncActionType" changeable="false" volatile="true" defaultValueLiteral="None"
+        derived="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SyncActionType">
     <eLiterals name="None"/>

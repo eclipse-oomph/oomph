@@ -57,7 +57,7 @@ public class StringToSyncPolicyMapEntryImpl extends MinimalEObjectImpl.Container
    * @generated
    * @ordered
    */
-  protected static final SyncPolicy VALUE_EDEFAULT = SyncPolicy.EXCLUDE;
+  protected static final SyncPolicy VALUE_EDEFAULT = SyncPolicy.INCLUDE;
 
   /**
    * The cached value of the '{@link #getTypedValue() <em>Value</em>}' attribute.

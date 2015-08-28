@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
-import org.eclipse.oomph.setup.sync.SyncState.ConflictException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -37,7 +36,7 @@ import java.net.URI;
 /**
  * @author Eike Stepper
  */
-public class Client
+public class RemoteDataProvider implements DataProvider
 {
   private static final String USER_AGENT_ID = PropertiesUtil.getProperty("oomph.setup.sync.user_agent_id", "oomph/sync");
 
@@ -59,10 +58,15 @@ public class Client
 
   private final Executor executor;
 
-  public Client(URI serviceURI, Credentials credentials)
+  public RemoteDataProvider(URI serviceURI, Credentials credentials)
   {
     uri = serviceURI;
     executor = Executor.newInstance().auth(credentials);
+  }
+
+  public Location getLocation()
+  {
+    return Location.REMOTE;
   }
 
   public long get(long timeStamp, File file) throws IOException
@@ -273,6 +277,19 @@ public class Client
     public BadResponseException(URI uri)
     {
       super("Bad Response: " + uri);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class ConflictException extends IOException
+  {
+    private static final long serialVersionUID = 1L;
+
+    public ConflictException(URI uri)
+    {
+      super("Conflict: " + uri);
     }
   }
 }

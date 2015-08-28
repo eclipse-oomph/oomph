@@ -15,14 +15,14 @@ import org.eclipse.emf.common.util.EMap;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.oomph.setup.sync.RemoteSnapshot#getPolicies <em>Policies</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.RemoteData#getPolicies <em>Policies</em>}</li>
  * </ul>
  *
- * @see org.eclipse.oomph.setup.sync.SyncPackage#getRemoteSnapshot()
+ * @see org.eclipse.oomph.setup.sync.SyncPackage#getRemoteData()
  * @model
  * @generated
  */
-public interface RemoteSnapshot extends SetupTaskContainer
+public interface RemoteData extends SetupTaskContainer
 {
   /**
    * Returns the value of the '<em><b>Policies</b></em>' map.
@@ -35,7 +35,7 @@ public interface RemoteSnapshot extends SetupTaskContainer
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Policies</em>' map.
-   * @see org.eclipse.oomph.setup.sync.SyncPackage#getRemoteSnapshot_Policies()
+   * @see org.eclipse.oomph.setup.sync.SyncPackage#getRemoteData_Policies()
    * @model mapType="org.eclipse.oomph.setup.sync.StringToSyncPolicyMapEntry<org.eclipse.emf.ecore.EString, org.eclipse.oomph.setup.sync.SyncPolicy>"
    * @generated
    */

@@ -22,9 +22,10 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getLocalDelta <em>Local Delta</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getRemotedelta <em>Remotedelta</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getSuggestedType <em>Suggested Type</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getRemoteDelta <em>Remote Delta</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getComputedType <em>Computed Type</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getResolvedType <em>Resolved Type</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getEffectiveType <em>Effective Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -42,34 +43,34 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
   protected SyncDelta localDelta;
 
   /**
-   * The cached value of the '{@link #getRemotedelta() <em>Remotedelta</em>}' reference.
+   * The cached value of the '{@link #getRemoteDelta() <em>Remote Delta</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getRemotedelta()
+   * @see #getRemoteDelta()
    * @generated
    * @ordered
    */
-  protected SyncDelta remotedelta;
+  protected SyncDelta remoteDelta;
 
   /**
-   * The default value of the '{@link #getSuggestedType() <em>Suggested Type</em>}' attribute.
+   * The default value of the '{@link #getComputedType() <em>Computed Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getSuggestedType()
+   * @see #getComputedType()
    * @generated
    * @ordered
    */
-  protected static final SyncActionType SUGGESTED_TYPE_EDEFAULT = SyncActionType.NONE;
+  protected static final SyncActionType COMPUTED_TYPE_EDEFAULT = SyncActionType.NONE;
 
   /**
-   * The cached value of the '{@link #getSuggestedType() <em>Suggested Type</em>}' attribute.
+   * The cached value of the '{@link #getComputedType() <em>Computed Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getSuggestedType()
+   * @see #getComputedType()
    * @generated
    * @ordered
    */
-  protected SyncActionType suggestedType = SUGGESTED_TYPE_EDEFAULT;
+  protected SyncActionType computedType = COMPUTED_TYPE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getResolvedType() <em>Resolved Type</em>}' attribute.
@@ -90,6 +91,16 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * @ordered
    */
   protected SyncActionType resolvedType = RESOLVED_TYPE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getEffectiveType() <em>Effective Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getEffectiveType()
+   * @generated
+   * @ordered
+   */
+  protected static final SyncActionType EFFECTIVE_TYPE_EDEFAULT = SyncActionType.NONE;
 
   /**
    * <!-- begin-user-doc -->
@@ -164,21 +175,21 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
-  public SyncDelta getRemotedelta()
+  public SyncDelta getRemoteDelta()
   {
-    if (remotedelta != null && remotedelta.eIsProxy())
+    if (remoteDelta != null && remoteDelta.eIsProxy())
     {
-      InternalEObject oldRemotedelta = (InternalEObject)remotedelta;
-      remotedelta = (SyncDelta)eResolveProxy(oldRemotedelta);
-      if (remotedelta != oldRemotedelta)
+      InternalEObject oldRemoteDelta = (InternalEObject)remoteDelta;
+      remoteDelta = (SyncDelta)eResolveProxy(oldRemoteDelta);
+      if (remoteDelta != oldRemoteDelta)
       {
         if (eNotificationRequired())
         {
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SyncPackage.SYNC_ACTION__REMOTEDELTA, oldRemotedelta, remotedelta));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SyncPackage.SYNC_ACTION__REMOTE_DELTA, oldRemoteDelta, remoteDelta));
         }
       }
     }
-    return remotedelta;
+    return remoteDelta;
   }
 
   /**
@@ -186,9 +197,9 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
-  public SyncDelta basicGetRemotedelta()
+  public SyncDelta basicGetRemoteDelta()
   {
-    return remotedelta;
+    return remoteDelta;
   }
 
   /**
@@ -196,13 +207,13 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setRemotedelta(SyncDelta newRemotedelta)
+  public void setRemoteDelta(SyncDelta newRemoteDelta)
   {
-    SyncDelta oldRemotedelta = remotedelta;
-    remotedelta = newRemotedelta;
+    SyncDelta oldRemoteDelta = remoteDelta;
+    remoteDelta = newRemoteDelta;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_ACTION__REMOTEDELTA, oldRemotedelta, remotedelta));
+      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_ACTION__REMOTE_DELTA, oldRemoteDelta, remoteDelta));
     }
   }
 
@@ -211,9 +222,9 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
-  public SyncActionType getSuggestedType()
+  public SyncActionType getComputedType()
   {
-    return suggestedType;
+    return computedType;
   }
 
   /**
@@ -221,13 +232,13 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSuggestedType(SyncActionType newSuggestedType)
+  public void setComputedType(SyncActionType newComputedType)
   {
-    SyncActionType oldSuggestedType = suggestedType;
-    suggestedType = newSuggestedType == null ? SUGGESTED_TYPE_EDEFAULT : newSuggestedType;
+    SyncActionType oldComputedType = computedType;
+    computedType = newComputedType == null ? COMPUTED_TYPE_EDEFAULT : newComputedType;
     if (eNotificationRequired())
     {
-      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_ACTION__SUGGESTED_TYPE, oldSuggestedType, suggestedType));
+      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_ACTION__COMPUTED_TYPE, oldComputedType, computedType));
     }
   }
 
@@ -259,6 +270,21 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public SyncActionType getEffectiveType()
+  {
+    if (resolvedType != null)
+    {
+      return resolvedType;
+    }
+
+    return computedType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -272,16 +298,18 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
           return getLocalDelta();
         }
         return basicGetLocalDelta();
-      case SyncPackage.SYNC_ACTION__REMOTEDELTA:
+      case SyncPackage.SYNC_ACTION__REMOTE_DELTA:
         if (resolve)
         {
-          return getRemotedelta();
+          return getRemoteDelta();
         }
-        return basicGetRemotedelta();
-      case SyncPackage.SYNC_ACTION__SUGGESTED_TYPE:
-        return getSuggestedType();
+        return basicGetRemoteDelta();
+      case SyncPackage.SYNC_ACTION__COMPUTED_TYPE:
+        return getComputedType();
       case SyncPackage.SYNC_ACTION__RESOLVED_TYPE:
         return getResolvedType();
+      case SyncPackage.SYNC_ACTION__EFFECTIVE_TYPE:
+        return getEffectiveType();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -299,11 +327,11 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
       case SyncPackage.SYNC_ACTION__LOCAL_DELTA:
         setLocalDelta((SyncDelta)newValue);
         return;
-      case SyncPackage.SYNC_ACTION__REMOTEDELTA:
-        setRemotedelta((SyncDelta)newValue);
+      case SyncPackage.SYNC_ACTION__REMOTE_DELTA:
+        setRemoteDelta((SyncDelta)newValue);
         return;
-      case SyncPackage.SYNC_ACTION__SUGGESTED_TYPE:
-        setSuggestedType((SyncActionType)newValue);
+      case SyncPackage.SYNC_ACTION__COMPUTED_TYPE:
+        setComputedType((SyncActionType)newValue);
         return;
       case SyncPackage.SYNC_ACTION__RESOLVED_TYPE:
         setResolvedType((SyncActionType)newValue);
@@ -325,11 +353,11 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
       case SyncPackage.SYNC_ACTION__LOCAL_DELTA:
         setLocalDelta((SyncDelta)null);
         return;
-      case SyncPackage.SYNC_ACTION__REMOTEDELTA:
-        setRemotedelta((SyncDelta)null);
+      case SyncPackage.SYNC_ACTION__REMOTE_DELTA:
+        setRemoteDelta((SyncDelta)null);
         return;
-      case SyncPackage.SYNC_ACTION__SUGGESTED_TYPE:
-        setSuggestedType(SUGGESTED_TYPE_EDEFAULT);
+      case SyncPackage.SYNC_ACTION__COMPUTED_TYPE:
+        setComputedType(COMPUTED_TYPE_EDEFAULT);
         return;
       case SyncPackage.SYNC_ACTION__RESOLVED_TYPE:
         setResolvedType(RESOLVED_TYPE_EDEFAULT);
@@ -350,12 +378,14 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
     {
       case SyncPackage.SYNC_ACTION__LOCAL_DELTA:
         return localDelta != null;
-      case SyncPackage.SYNC_ACTION__REMOTEDELTA:
-        return remotedelta != null;
-      case SyncPackage.SYNC_ACTION__SUGGESTED_TYPE:
-        return suggestedType != SUGGESTED_TYPE_EDEFAULT;
+      case SyncPackage.SYNC_ACTION__REMOTE_DELTA:
+        return remoteDelta != null;
+      case SyncPackage.SYNC_ACTION__COMPUTED_TYPE:
+        return computedType != COMPUTED_TYPE_EDEFAULT;
       case SyncPackage.SYNC_ACTION__RESOLVED_TYPE:
         return resolvedType != RESOLVED_TYPE_EDEFAULT;
+      case SyncPackage.SYNC_ACTION__EFFECTIVE_TYPE:
+        return getEffectiveType() != EFFECTIVE_TYPE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -374,8 +404,8 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (suggestedType: ");
-    result.append(suggestedType);
+    result.append(" (computedType: ");
+    result.append(computedType);
     result.append(", resolvedType: ");
     result.append(resolvedType);
     result.append(')');

@@ -3,7 +3,7 @@
 package org.eclipse.oomph.setup.sync.impl;
 
 import org.eclipse.oomph.setup.impl.SetupTaskContainerImpl;
-import org.eclipse.oomph.setup.sync.RemoteSnapshot;
+import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncPackage;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
 
@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.oomph.setup.sync.impl.RemoteSnapshotImpl#getPolicies <em>Policies</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.RemoteDataImpl#getPolicies <em>Policies</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements RemoteSnapshot
+public class RemoteDataImpl extends SetupTaskContainerImpl implements RemoteData
 {
   /**
    * The cached value of the '{@link #getPolicies() <em>Policies</em>}' map.
@@ -45,7 +45,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
    * <!-- end-user-doc -->
    * @generated
    */
-  protected RemoteSnapshotImpl()
+  protected RemoteDataImpl()
   {
     super();
   }
@@ -58,7 +58,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
   @Override
   protected EClass eStaticClass()
   {
-    return SyncPackage.Literals.REMOTE_SNAPSHOT;
+    return SyncPackage.Literals.REMOTE_DATA;
   }
 
   /**
@@ -71,7 +71,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
     if (policies == null)
     {
       policies = new EcoreEMap<String, SyncPolicy>(SyncPackage.Literals.STRING_TO_SYNC_POLICY_MAP_ENTRY, StringToSyncPolicyMapEntryImpl.class, this,
-          SyncPackage.REMOTE_SNAPSHOT__POLICIES);
+          SyncPackage.REMOTE_DATA__POLICIES);
     }
     return policies;
   }
@@ -86,7 +86,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
   {
     switch (featureID)
     {
-      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+      case SyncPackage.REMOTE_DATA__POLICIES:
         return ((InternalEList<?>)getPolicies()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -102,7 +102,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
   {
     switch (featureID)
     {
-      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+      case SyncPackage.REMOTE_DATA__POLICIES:
         if (coreType)
         {
           return getPolicies();
@@ -125,7 +125,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
   {
     switch (featureID)
     {
-      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+      case SyncPackage.REMOTE_DATA__POLICIES:
         ((EStructuralFeature.Setting)getPolicies()).set(newValue);
         return;
     }
@@ -142,7 +142,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
   {
     switch (featureID)
     {
-      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+      case SyncPackage.REMOTE_DATA__POLICIES:
         getPolicies().clear();
         return;
     }
@@ -159,7 +159,7 @@ public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements Remote
   {
     switch (featureID)
     {
-      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+      case SyncPackage.REMOTE_DATA__POLICIES:
         return policies != null && !policies.isEmpty();
     }
     return super.eIsSet(featureID);

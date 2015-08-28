@@ -4,7 +4,7 @@ package org.eclipse.oomph.setup.sync.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTaskContainer;
-import org.eclipse.oomph.setup.sync.RemoteSnapshot;
+import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncPackage;
@@ -80,9 +80,9 @@ public class SyncAdapterFactory extends AdapterFactoryImpl
   protected SyncSwitch<Adapter> modelSwitch = new SyncSwitch<Adapter>()
   {
     @Override
-    public Adapter caseRemoteSnapshot(RemoteSnapshot object)
+    public Adapter caseRemoteData(RemoteData object)
     {
-      return createRemoteSnapshotAdapter();
+      return createRemoteDataAdapter();
     }
 
     @Override
@@ -137,16 +137,16 @@ public class SyncAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.RemoteSnapshot <em>Remote Snapshot</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.RemoteData <em>Remote Data</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.oomph.setup.sync.RemoteSnapshot
+   * @see org.eclipse.oomph.setup.sync.RemoteData
    * @generated
    */
-  public Adapter createRemoteSnapshotAdapter()
+  public Adapter createRemoteDataAdapter()
   {
     return null;
   }
