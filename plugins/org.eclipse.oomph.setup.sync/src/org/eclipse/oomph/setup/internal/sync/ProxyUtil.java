@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal;
+package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.core.internal.net.ProxyManager;
 import org.eclipse.core.net.proxy.IProxyData;

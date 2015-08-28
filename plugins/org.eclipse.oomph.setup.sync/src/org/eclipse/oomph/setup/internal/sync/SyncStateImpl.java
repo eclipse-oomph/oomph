@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal;
+package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.oomph.setup.sync.SyncState;
 import org.eclipse.oomph.util.IOUtil;

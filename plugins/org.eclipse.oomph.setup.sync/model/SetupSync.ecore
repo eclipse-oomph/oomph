@@ -6,8 +6,8 @@
         eType="#//StringToSyncPolicyMapEntry" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SyncPolicy">
-    <eLiterals name="Exclude" literal="Exclude"/>
-    <eLiterals name="Include" value="1" literal="Include"/>
+    <eLiterals name="Include" literal="Include"/>
+    <eLiterals name="Exclude" value="1" literal="Exclude"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StringToSyncPolicyMapEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
