@@ -23,49 +23,13 @@ public interface SyncFactory extends EFactory
   SyncFactory eINSTANCE = org.eclipse.oomph.setup.sync.impl.SyncFactoryImpl.init();
 
   /**
-   * Returns a new object of class '<em>State</em>'.
+   * Returns a new object of class '<em>Remote Snapshot</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>State</em>'.
+   * @return a new object of class '<em>Remote Snapshot</em>'.
    * @generated
    */
-  SyncState createSyncState();
-
-  /**
-   * Returns a new object of class '<em>Snapshot</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Snapshot</em>'.
-   * @generated
-   */
-  SyncSnapshot createSyncSnapshot();
-
-  /**
-   * Returns a new object of class '<em>Item</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Item</em>'.
-   * @generated
-   */
-  SyncItem createSyncItem();
-
-  /**
-   * Returns a new object of class '<em>Remote Sync Item</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Remote Sync Item</em>'.
-   * @generated
-   */
-  RemoteSyncItem createRemoteSyncItem();
-
-  /**
-   * Returns a new object of class '<em>Action</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Action</em>'.
-   * @generated
-   */
-  SyncAction createSyncAction();
+  RemoteSnapshot createRemoteSnapshot();
 
   /**
    * Returns a new object of class '<em>Delta</em>'.
@@ -75,6 +39,15 @@ public interface SyncFactory extends EFactory
    * @generated
    */
   SyncDelta createSyncDelta();
+
+  /**
+   * Returns a new object of class '<em>Action</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Action</em>'.
+   * @generated
+   */
+  SyncAction createSyncAction();
 
   /**
    * Returns the package supported by this factory.

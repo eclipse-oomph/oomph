@@ -2,51 +2,50 @@
  */
 package org.eclipse.oomph.setup.sync.impl;
 
-import org.eclipse.oomph.setup.sync.SyncItem;
+import org.eclipse.oomph.setup.impl.SetupTaskContainerImpl;
+import org.eclipse.oomph.setup.sync.RemoteSnapshot;
 import org.eclipse.oomph.setup.sync.SyncPackage;
-import org.eclipse.oomph.setup.sync.SyncSnapshot;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Snapshot</b></em>'.
+ * An implementation of the model object '<em><b>Remote Snapshot</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncSnapshotImpl#getItems <em>Items</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.RemoteSnapshotImpl#getPolicies <em>Policies</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements SyncSnapshot
+public class RemoteSnapshotImpl extends SetupTaskContainerImpl implements RemoteSnapshot
 {
   /**
-   * The cached value of the '{@link #getItems() <em>Items</em>}' containment reference list.
+   * The cached value of the '{@link #getPolicies() <em>Policies</em>}' map.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getItems()
+   * @see #getPolicies()
    * @generated
    * @ordered
    */
-  protected EList<SyncItem> items;
+  protected EMap<String, SyncPolicy> policies;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SyncSnapshotImpl()
+  protected RemoteSnapshotImpl()
   {
     super();
   }
@@ -59,7 +58,7 @@ public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements Sy
   @Override
   protected EClass eStaticClass()
   {
-    return SyncPackage.Literals.SYNC_SNAPSHOT;
+    return SyncPackage.Literals.REMOTE_SNAPSHOT;
   }
 
   /**
@@ -67,13 +66,14 @@ public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements Sy
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<SyncItem> getItems()
+  public EMap<String, SyncPolicy> getPolicies()
   {
-    if (items == null)
+    if (policies == null)
     {
-      items = new EObjectContainmentEList<SyncItem>(SyncItem.class, this, SyncPackage.SYNC_SNAPSHOT__ITEMS);
+      policies = new EcoreEMap<String, SyncPolicy>(SyncPackage.Literals.STRING_TO_SYNC_POLICY_MAP_ENTRY, StringToSyncPolicyMapEntryImpl.class, this,
+          SyncPackage.REMOTE_SNAPSHOT__POLICIES);
     }
-    return items;
+    return policies;
   }
 
   /**
@@ -86,8 +86,8 @@ public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements Sy
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_SNAPSHOT__ITEMS:
-        return ((InternalEList<?>)getItems()).basicRemove(otherEnd, msgs);
+      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+        return ((InternalEList<?>)getPolicies()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -102,8 +102,15 @@ public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements Sy
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_SNAPSHOT__ITEMS:
-        return getItems();
+      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+        if (coreType)
+        {
+          return getPolicies();
+        }
+        else
+        {
+          return getPolicies().map();
+        }
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -113,15 +120,13 @@ public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements Sy
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_SNAPSHOT__ITEMS:
-        getItems().clear();
-        getItems().addAll((Collection<? extends SyncItem>)newValue);
+      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+        ((EStructuralFeature.Setting)getPolicies()).set(newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -137,8 +142,8 @@ public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements Sy
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_SNAPSHOT__ITEMS:
-        getItems().clear();
+      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+        getPolicies().clear();
         return;
     }
     super.eUnset(featureID);
@@ -154,10 +159,10 @@ public class SyncSnapshotImpl extends MinimalEObjectImpl.Container implements Sy
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_SNAPSHOT__ITEMS:
-        return items != null && !items.isEmpty();
+      case SyncPackage.REMOTE_SNAPSHOT__POLICIES:
+        return policies != null && !policies.isEmpty();
     }
     return super.eIsSet(featureID);
   }
 
-} // SyncSnapshotImpl
+} // RemoteSnapshotImpl

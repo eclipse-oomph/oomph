@@ -8,10 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.sync;
+package org.eclipse.oomph.setup.sync.client;
 
-import org.eclipse.oomph.setup.sync.util.Client;
-import org.eclipse.oomph.setup.sync.util.RemoteSnapshot;
+import org.eclipse.oomph.setup.sync.SyncState;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.apache.http.auth.Credentials;
@@ -33,7 +32,7 @@ class Test
     Credentials credentials = new UsernamePasswordCredentials("stepper", "123");
 
     Client client = new Client(serviceURI, credentials);
-    RemoteSnapshot remoteSnapshot = new RemoteSnapshot(client, SYNC_FOLDER);
+    SyncState remoteSnapshot = new SyncState(client, SYNC_FOLDER);
 
     File workingCopy = remoteSnapshot.getWorkingCopy(true);
     edit(workingCopy);

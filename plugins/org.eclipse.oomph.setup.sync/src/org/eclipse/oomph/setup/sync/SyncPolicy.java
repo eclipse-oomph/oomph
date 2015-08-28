@@ -10,119 +10,94 @@ import java.util.List;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the literals of the enumeration '<em><b>Item Type</b></em>',
+ * A representation of the literals of the enumeration '<em><b>Policy</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncItemType()
+ * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncPolicy()
  * @model
  * @generated
  */
-public enum SyncItemType implements Enumerator
+public enum SyncPolicy implements Enumerator
 {
   /**
-   * The '<em><b>Preference</b></em>' literal object.
+   * The '<em><b>Exclude</b></em>' literal object.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #PREFERENCE_VALUE
+   * @see #EXCLUDE_VALUE
    * @generated
    * @ordered
    */
-  PREFERENCE(0, "Preference", "Preference"),
+  EXCLUDE(0, "Exclude", "Exclude"),
 
   /**
-   * The '<em><b>Variable</b></em>' literal object.
+   * The '<em><b>Include</b></em>' literal object.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #VARIABLE_VALUE
+   * @see #INCLUDE_VALUE
    * @generated
    * @ordered
    */
-  VARIABLE(1, "Variable", "Variable"),
+  INCLUDE(1, "Include", "Include");
 
   /**
-   * The '<em><b>Other</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #OTHER_VALUE
-   * @generated
-   * @ordered
-   */
-  OTHER(2, "Other", "Other");
-
-  /**
-   * The '<em><b>Preference</b></em>' literal value.
+   * The '<em><b>Exclude</b></em>' literal value.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of '<em><b>Preference</b></em>' literal object isn't clear,
+   * If the meaning of '<em><b>Exclude</b></em>' literal object isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @see #PREFERENCE
-   * @model name="Preference"
+   * @see #EXCLUDE
+   * @model name="Exclude"
    * @generated
    * @ordered
    */
-  public static final int PREFERENCE_VALUE = 0;
+  public static final int EXCLUDE_VALUE = 0;
 
   /**
-   * The '<em><b>Variable</b></em>' literal value.
+   * The '<em><b>Include</b></em>' literal value.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of '<em><b>Variable</b></em>' literal object isn't clear,
+   * If the meaning of '<em><b>Include</b></em>' literal object isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @see #VARIABLE
-   * @model name="Variable"
+   * @see #INCLUDE
+   * @model name="Include"
    * @generated
    * @ordered
    */
-  public static final int VARIABLE_VALUE = 1;
+  public static final int INCLUDE_VALUE = 1;
 
   /**
-   * The '<em><b>Other</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Other</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @see #OTHER
-   * @model name="Other"
-   * @generated
-   * @ordered
-   */
-  public static final int OTHER_VALUE = 2;
-
-  /**
-   * An array of all the '<em><b>Item Type</b></em>' enumerators.
+   * An array of all the '<em><b>Policy</b></em>' enumerators.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private static final SyncItemType[] VALUES_ARRAY = new SyncItemType[] { PREFERENCE, VARIABLE, OTHER, };
+  private static final SyncPolicy[] VALUES_ARRAY = new SyncPolicy[] { EXCLUDE, INCLUDE, };
 
   /**
-   * A public read-only list of all the '<em><b>Item Type</b></em>' enumerators.
+   * A public read-only list of all the '<em><b>Policy</b></em>' enumerators.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final List<SyncItemType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+  public static final List<SyncPolicy> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
   /**
-   * Returns the '<em><b>Item Type</b></em>' literal with the specified literal value.
+   * Returns the '<em><b>Policy</b></em>' literal with the specified literal value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param literal the literal.
    * @return the matching enumerator or <code>null</code>.
    * @generated
    */
-  public static SyncItemType get(String literal)
+  public static SyncPolicy get(String literal)
   {
     for (int i = 0; i < VALUES_ARRAY.length; ++i)
     {
-      SyncItemType result = VALUES_ARRAY[i];
+      SyncPolicy result = VALUES_ARRAY[i];
       if (result.toString().equals(literal))
       {
         return result;
@@ -132,18 +107,18 @@ public enum SyncItemType implements Enumerator
   }
 
   /**
-   * Returns the '<em><b>Item Type</b></em>' literal with the specified name.
+   * Returns the '<em><b>Policy</b></em>' literal with the specified name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param name the name.
    * @return the matching enumerator or <code>null</code>.
    * @generated
    */
-  public static SyncItemType getByName(String name)
+  public static SyncPolicy getByName(String name)
   {
     for (int i = 0; i < VALUES_ARRAY.length; ++i)
     {
-      SyncItemType result = VALUES_ARRAY[i];
+      SyncPolicy result = VALUES_ARRAY[i];
       if (result.getName().equals(name))
       {
         return result;
@@ -153,23 +128,21 @@ public enum SyncItemType implements Enumerator
   }
 
   /**
-   * Returns the '<em><b>Item Type</b></em>' literal with the specified integer value.
+   * Returns the '<em><b>Policy</b></em>' literal with the specified integer value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the integer value.
    * @return the matching enumerator or <code>null</code>.
    * @generated
    */
-  public static SyncItemType get(int value)
+  public static SyncPolicy get(int value)
   {
     switch (value)
     {
-      case PREFERENCE_VALUE:
-        return PREFERENCE;
-      case VARIABLE_VALUE:
-        return VARIABLE;
-      case OTHER_VALUE:
-        return OTHER;
+      case EXCLUDE_VALUE:
+        return EXCLUDE;
+      case INCLUDE_VALUE:
+        return INCLUDE;
     }
     return null;
   }
@@ -201,7 +174,7 @@ public enum SyncItemType implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
-  private SyncItemType(int value, String name, String literal)
+  private SyncPolicy(int value, String name, String literal)
   {
     this.value = value;
     this.name = name;
@@ -250,4 +223,4 @@ public enum SyncItemType implements Enumerator
     return literal;
   }
 
-} // SyncItemType
+} // SyncPolicy

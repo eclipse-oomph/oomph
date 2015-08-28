@@ -1,132 +1,90 @@
-/**
+/*
+ * Copyright (c) 2015 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
  */
 package org.eclipse.oomph.setup.sync;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.oomph.setup.sync.client.Client;
+import org.eclipse.oomph.setup.sync.client.Client.ConflictException;
+import org.eclipse.oomph.util.IOUtil;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>State</b></em>'.
- * <!-- end-user-doc -->
- *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.oomph.setup.sync.SyncState#getLocalTimeStamp <em>Local Time Stamp</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.sync.SyncState#getLocalSnapshot <em>Local Snapshot</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.sync.SyncState#getRemoteTimeStamp <em>Remote Time Stamp</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.sync.SyncState#getRemoteSnapshot <em>Remote Snapshot</em>}</li>
- * </ul>
- *
- * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncState()
- * @model
- * @generated
+ * @author Eike Stepper
  */
-public interface SyncState extends EObject
+public class SyncState
 {
-  /**
-   * Returns the value of the '<em><b>Local Time Stamp</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Local Time Stamp</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Local Time Stamp</em>' attribute.
-   * @see #setLocalTimeStamp(long)
-   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncState_LocalTimeStamp()
-   * @model required="true"
-   * @generated
-   */
-  long getLocalTimeStamp();
+  private final Client client;
 
-  /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.sync.SyncState#getLocalTimeStamp <em>Local Time Stamp</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Local Time Stamp</em>' attribute.
-   * @see #getLocalTimeStamp()
-   * @generated
-   */
-  void setLocalTimeStamp(long value);
+  private final File originalFile;
 
-  /**
-   * Returns the value of the '<em><b>Local Snapshot</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Local Snapshot</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Local Snapshot</em>' reference.
-   * @see #setLocalSnapshot(SyncSnapshot)
-   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncState_LocalSnapshot()
-   * @model required="true"
-   * @generated
-   */
-  SyncSnapshot getLocalSnapshot();
+  private final File workingCopy;
 
-  /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.sync.SyncState#getLocalSnapshot <em>Local Snapshot</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Local Snapshot</em>' reference.
-   * @see #getLocalSnapshot()
-   * @generated
-   */
-  void setLocalSnapshot(SyncSnapshot value);
+  public SyncState(Client client, File syncFolder)
+  {
+    this.client = client;
+    originalFile = new File(syncFolder, "remote.xml");
+    workingCopy = new File(syncFolder, "remote.tmp");
+  }
 
-  /**
-   * Returns the value of the '<em><b>Remote Time Stamp</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Remote Time Stamp</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Remote Time Stamp</em>' attribute.
-   * @see #setRemoteTimeStamp(long)
-   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncState_RemoteTimeStamp()
-   * @model required="true"
-   * @generated
-   */
-  long getRemoteTimeStamp();
+  public File getWorkingCopy(boolean forceRefresh) throws IOException
+  {
+    long timeStamp = originalFile.lastModified();
+    if (timeStamp == 0 || forceRefresh)
+    {
+      long lastModified = client.get(timeStamp, workingCopy);
+      if (lastModified != 0)
+      {
+        IOUtil.copyFile(workingCopy, originalFile);
+        originalFile.setLastModified(lastModified);
+      }
+      else
+      {
+        IOUtil.copyFile(originalFile, workingCopy);
+      }
+    }
 
-  /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.sync.SyncState#getRemoteTimeStamp <em>Remote Time Stamp</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Remote Time Stamp</em>' attribute.
-   * @see #getRemoteTimeStamp()
-   * @generated
-   */
-  void setRemoteTimeStamp(long value);
+    return workingCopy;
+  }
 
-  /**
-   * Returns the value of the '<em><b>Remote Snapshot</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Remote Snapshot</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Remote Snapshot</em>' reference.
-   * @see #setRemoteSnapshot(SyncSnapshot)
-   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncState_RemoteSnapshot()
-   * @model required="true"
-   * @generated
-   */
-  SyncSnapshot getRemoteSnapshot();
+  public boolean commit() throws IOException, ConflictException
+  {
+    if (workingCopy.isFile())
+    {
+      long timeStamp = originalFile.lastModified();
+      if (timeStamp != 0)
+      {
+        ConflictException conflictException = null;
 
-  /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.sync.SyncState#getRemoteSnapshot <em>Remote Snapshot</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Remote Snapshot</em>' reference.
-   * @see #getRemoteSnapshot()
-   * @generated
-   */
-  void setRemoteSnapshot(SyncSnapshot value);
+        try
+        {
+          client.post(timeStamp, workingCopy);
+        }
+        catch (ConflictException ex)
+        {
+          conflictException = ex;
+        }
 
-} // SyncState
+        IOUtil.deleteBestEffort(originalFile);
+        workingCopy.renameTo(originalFile);
+
+        if (conflictException != null)
+        {
+          throw conflictException;
+        }
+
+        return true;
+      }
+    }
+
+    return false;
+  }
+}

@@ -4,12 +4,10 @@ package org.eclipse.oomph.setup.sync.impl;
 
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncDeltaType;
-import org.eclipse.oomph.setup.sync.SyncItem;
 import org.eclipse.oomph.setup.sync.SyncPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
@@ -21,8 +19,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getOldItem <em>Old Item</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getNewItem <em>New Item</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getType <em>Type</em>}</li>
  * </ul>
  *
@@ -30,26 +26,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncDelta
 {
-  /**
-   * The cached value of the '{@link #getOldItem() <em>Old Item</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOldItem()
-   * @generated
-   * @ordered
-   */
-  protected SyncItem oldItem;
-
-  /**
-   * The cached value of the '{@link #getNewItem() <em>New Item</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getNewItem()
-   * @generated
-   * @ordered
-   */
-  protected SyncItem newItem;
-
   /**
    * The default value of the '{@link #getType() <em>Type</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -96,100 +72,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
    * <!-- end-user-doc -->
    * @generated
    */
-  public SyncItem getOldItem()
-  {
-    if (oldItem != null && oldItem.eIsProxy())
-    {
-      InternalEObject oldOldItem = (InternalEObject)oldItem;
-      oldItem = (SyncItem)eResolveProxy(oldOldItem);
-      if (oldItem != oldOldItem)
-      {
-        if (eNotificationRequired())
-        {
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SyncPackage.SYNC_DELTA__OLD_ITEM, oldOldItem, oldItem));
-        }
-      }
-    }
-    return oldItem;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SyncItem basicGetOldItem()
-  {
-    return oldItem;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOldItem(SyncItem newOldItem)
-  {
-    SyncItem oldOldItem = oldItem;
-    oldItem = newOldItem;
-    if (eNotificationRequired())
-    {
-      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__OLD_ITEM, oldOldItem, oldItem));
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SyncItem getNewItem()
-  {
-    if (newItem != null && newItem.eIsProxy())
-    {
-      InternalEObject oldNewItem = (InternalEObject)newItem;
-      newItem = (SyncItem)eResolveProxy(oldNewItem);
-      if (newItem != oldNewItem)
-      {
-        if (eNotificationRequired())
-        {
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, SyncPackage.SYNC_DELTA__NEW_ITEM, oldNewItem, newItem));
-        }
-      }
-    }
-    return newItem;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SyncItem basicGetNewItem()
-  {
-    return newItem;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setNewItem(SyncItem newNewItem)
-  {
-    SyncItem oldNewItem = newItem;
-    newItem = newNewItem;
-    if (eNotificationRequired())
-    {
-      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__NEW_ITEM, oldNewItem, newItem));
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public SyncDeltaType getType()
   {
     return type;
@@ -220,18 +102,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_DELTA__OLD_ITEM:
-        if (resolve)
-        {
-          return getOldItem();
-        }
-        return basicGetOldItem();
-      case SyncPackage.SYNC_DELTA__NEW_ITEM:
-        if (resolve)
-        {
-          return getNewItem();
-        }
-        return basicGetNewItem();
       case SyncPackage.SYNC_DELTA__TYPE:
         return getType();
     }
@@ -248,12 +118,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_DELTA__OLD_ITEM:
-        setOldItem((SyncItem)newValue);
-        return;
-      case SyncPackage.SYNC_DELTA__NEW_ITEM:
-        setNewItem((SyncItem)newValue);
-        return;
       case SyncPackage.SYNC_DELTA__TYPE:
         setType((SyncDeltaType)newValue);
         return;
@@ -271,12 +135,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_DELTA__OLD_ITEM:
-        setOldItem((SyncItem)null);
-        return;
-      case SyncPackage.SYNC_DELTA__NEW_ITEM:
-        setNewItem((SyncItem)null);
-        return;
       case SyncPackage.SYNC_DELTA__TYPE:
         setType(TYPE_EDEFAULT);
         return;
@@ -294,10 +152,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
-      case SyncPackage.SYNC_DELTA__OLD_ITEM:
-        return oldItem != null;
-      case SyncPackage.SYNC_DELTA__NEW_ITEM:
-        return newItem != null;
       case SyncPackage.SYNC_DELTA__TYPE:
         return type != TYPE_EDEFAULT;
     }

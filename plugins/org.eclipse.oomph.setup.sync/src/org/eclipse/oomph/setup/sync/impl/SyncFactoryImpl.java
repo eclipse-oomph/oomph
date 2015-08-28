@@ -2,18 +2,14 @@
  */
 package org.eclipse.oomph.setup.sync.impl;
 
-import org.eclipse.oomph.setup.sync.RemoteSyncItem;
+import org.eclipse.oomph.setup.sync.RemoteSnapshot;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncDeltaType;
 import org.eclipse.oomph.setup.sync.SyncFactory;
-import org.eclipse.oomph.setup.sync.SyncItem;
-import org.eclipse.oomph.setup.sync.SyncItemPolicy;
-import org.eclipse.oomph.setup.sync.SyncItemType;
 import org.eclipse.oomph.setup.sync.SyncPackage;
-import org.eclipse.oomph.setup.sync.SyncSnapshot;
-import org.eclipse.oomph.setup.sync.SyncState;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -21,6 +17,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -74,18 +72,14 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
   {
     switch (eClass.getClassifierID())
     {
-      case SyncPackage.SYNC_STATE:
-        return createSyncState();
-      case SyncPackage.SYNC_SNAPSHOT:
-        return createSyncSnapshot();
-      case SyncPackage.SYNC_ITEM:
-        return createSyncItem();
-      case SyncPackage.REMOTE_SYNC_ITEM:
-        return createRemoteSyncItem();
-      case SyncPackage.SYNC_ACTION:
-        return createSyncAction();
+      case SyncPackage.REMOTE_SNAPSHOT:
+        return createRemoteSnapshot();
+      case SyncPackage.STRING_TO_SYNC_POLICY_MAP_ENTRY:
+        return (EObject)createStringToSyncPolicyMapEntry();
       case SyncPackage.SYNC_DELTA:
         return createSyncDelta();
+      case SyncPackage.SYNC_ACTION:
+        return createSyncAction();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -101,10 +95,8 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
   {
     switch (eDataType.getClassifierID())
     {
-      case SyncPackage.SYNC_ITEM_TYPE:
-        return createSyncItemTypeFromString(eDataType, initialValue);
-      case SyncPackage.SYNC_ITEM_POLICY:
-        return createSyncItemPolicyFromString(eDataType, initialValue);
+      case SyncPackage.SYNC_POLICY:
+        return createSyncPolicyFromString(eDataType, initialValue);
       case SyncPackage.SYNC_DELTA_TYPE:
         return createSyncDeltaTypeFromString(eDataType, initialValue);
       case SyncPackage.SYNC_ACTION_TYPE:
@@ -124,10 +116,8 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
   {
     switch (eDataType.getClassifierID())
     {
-      case SyncPackage.SYNC_ITEM_TYPE:
-        return convertSyncItemTypeToString(eDataType, instanceValue);
-      case SyncPackage.SYNC_ITEM_POLICY:
-        return convertSyncItemPolicyToString(eDataType, instanceValue);
+      case SyncPackage.SYNC_POLICY:
+        return convertSyncPolicyToString(eDataType, instanceValue);
       case SyncPackage.SYNC_DELTA_TYPE:
         return convertSyncDeltaTypeToString(eDataType, instanceValue);
       case SyncPackage.SYNC_ACTION_TYPE:
@@ -142,10 +132,10 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public SyncState createSyncState()
+  public RemoteSnapshot createRemoteSnapshot()
   {
-    SyncStateImpl syncState = new SyncStateImpl();
-    return syncState;
+    RemoteSnapshotImpl remoteSnapshot = new RemoteSnapshotImpl();
+    return remoteSnapshot;
   }
 
   /**
@@ -153,43 +143,10 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public SyncSnapshot createSyncSnapshot()
+  public Map.Entry<String, SyncPolicy> createStringToSyncPolicyMapEntry()
   {
-    SyncSnapshotImpl syncSnapshot = new SyncSnapshotImpl();
-    return syncSnapshot;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SyncItem createSyncItem()
-  {
-    SyncItemImpl syncItem = new SyncItemImpl();
-    return syncItem;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public RemoteSyncItem createRemoteSyncItem()
-  {
-    RemoteSyncItemImpl remoteSyncItem = new RemoteSyncItemImpl();
-    return remoteSyncItem;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SyncAction createSyncAction()
-  {
-    SyncActionImpl syncAction = new SyncActionImpl();
-    return syncAction;
+    StringToSyncPolicyMapEntryImpl stringToSyncPolicyMapEntry = new StringToSyncPolicyMapEntryImpl();
+    return stringToSyncPolicyMapEntry;
   }
 
   /**
@@ -208,9 +165,20 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public SyncItemType createSyncItemTypeFromString(EDataType eDataType, String initialValue)
+  public SyncAction createSyncAction()
   {
-    SyncItemType result = SyncItemType.get(initialValue);
+    SyncActionImpl syncAction = new SyncActionImpl();
+    return syncAction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SyncPolicy createSyncPolicyFromString(EDataType eDataType, String initialValue)
+  {
+    SyncPolicy result = SyncPolicy.get(initialValue);
     if (result == null)
     {
       throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -223,32 +191,7 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public String convertSyncItemTypeToString(EDataType eDataType, Object instanceValue)
-  {
-    return instanceValue == null ? null : instanceValue.toString();
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SyncItemPolicy createSyncItemPolicyFromString(EDataType eDataType, String initialValue)
-  {
-    SyncItemPolicy result = SyncItemPolicy.get(initialValue);
-    if (result == null)
-    {
-      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-    }
-    return result;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertSyncItemPolicyToString(EDataType eDataType, Object instanceValue)
+  public String convertSyncPolicyToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }

@@ -4,20 +4,15 @@
     editDirectory="" editorDirectory="" modelPluginID="org.eclipse.oomph.setup.sync"
     modelName="SetupSync" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
-    copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" decoration="Live"
-    cleanup="true">
+    copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
+    decoration="Live" cleanup="true">
   <foreignModel>SetupSync.ecore</foreignModel>
   <genPackages prefix="Sync" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       multipleEditorPages="false" generateModelWizard="false" fileExtensions="xml"
       ecorePackage="SetupSync.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="SetupSync.ecore#//SyncItemType">
-      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncItemType/Preference"/>
-      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncItemType/Variable"/>
-      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncItemType/Other"/>
-    </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="SetupSync.ecore#//SyncItemPolicy">
-      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncItemPolicy/Exclude"/>
-      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncItemPolicy/Include"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="SetupSync.ecore#//SyncPolicy">
+      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncPolicy/Exclude"/>
+      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncPolicy/Include"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="SetupSync.ecore#//SyncDeltaType">
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncDeltaType/Unchanged"/>
@@ -32,33 +27,21 @@
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/Conflict"/>
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/Exclude"/>
     </genEnums>
-    <genClasses ecoreClass="SetupSync.ecore#//SyncState">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncState/localTimeStamp"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncState/localSnapshot"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncState/remoteTimeStamp"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncState/remoteSnapshot"/>
+    <genClasses ecoreClass="SetupSync.ecore#//RemoteSnapshot">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupSync.ecore#//RemoteSnapshot/policies"/>
     </genClasses>
-    <genClasses ecoreClass="SetupSync.ecore#//SyncSnapshot">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncSnapshot/items"/>
+    <genClasses ecoreClass="SetupSync.ecore#//StringToSyncPolicyMapEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//StringToSyncPolicyMapEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//StringToSyncPolicyMapEntry/value"/>
     </genClasses>
-    <genClasses ecoreClass="SetupSync.ecore#//SyncItem">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncItem/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncItem/key"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncItem/value"/>
-    </genClasses>
-    <genClasses ecoreClass="SetupSync.ecore#//RemoteSyncItem">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//RemoteSyncItem/policy"/>
+    <genClasses ecoreClass="SetupSync.ecore#//SyncDelta">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncDelta/type"/>
     </genClasses>
     <genClasses ecoreClass="SetupSync.ecore#//SyncAction">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncAction/localDelta"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncAction/remotedelta"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncAction/suggestedType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncAction/resolvedType"/>
-    </genClasses>
-    <genClasses ecoreClass="SetupSync.ecore#//SyncDelta">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncDelta/oldItem"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncDelta/newItem"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncDelta/type"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

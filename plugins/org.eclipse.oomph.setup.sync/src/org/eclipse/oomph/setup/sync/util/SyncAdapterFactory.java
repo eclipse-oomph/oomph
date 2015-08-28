@@ -2,18 +2,20 @@
  */
 package org.eclipse.oomph.setup.sync.util;
 
-import org.eclipse.oomph.setup.sync.RemoteSyncItem;
+import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.setup.SetupTaskContainer;
+import org.eclipse.oomph.setup.sync.RemoteSnapshot;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncDelta;
-import org.eclipse.oomph.setup.sync.SyncItem;
 import org.eclipse.oomph.setup.sync.SyncPackage;
-import org.eclipse.oomph.setup.sync.SyncSnapshot;
-import org.eclipse.oomph.setup.sync.SyncState;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -78,27 +80,21 @@ public class SyncAdapterFactory extends AdapterFactoryImpl
   protected SyncSwitch<Adapter> modelSwitch = new SyncSwitch<Adapter>()
   {
     @Override
-    public Adapter caseSyncState(SyncState object)
+    public Adapter caseRemoteSnapshot(RemoteSnapshot object)
     {
-      return createSyncStateAdapter();
+      return createRemoteSnapshotAdapter();
     }
 
     @Override
-    public Adapter caseSyncSnapshot(SyncSnapshot object)
+    public Adapter caseStringToSyncPolicyMapEntry(Map.Entry<String, SyncPolicy> object)
     {
-      return createSyncSnapshotAdapter();
+      return createStringToSyncPolicyMapEntryAdapter();
     }
 
     @Override
-    public Adapter caseSyncItem(SyncItem object)
+    public Adapter caseSyncDelta(SyncDelta object)
     {
-      return createSyncItemAdapter();
-    }
-
-    @Override
-    public Adapter caseRemoteSyncItem(RemoteSyncItem object)
-    {
-      return createRemoteSyncItemAdapter();
+      return createSyncDeltaAdapter();
     }
 
     @Override
@@ -108,9 +104,15 @@ public class SyncAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
-    public Adapter caseSyncDelta(SyncDelta object)
+    public Adapter caseModelElement(ModelElement object)
     {
-      return createSyncDeltaAdapter();
+      return createModelElementAdapter();
+    }
+
+    @Override
+    public Adapter caseSetupTaskContainer(SetupTaskContainer object)
+    {
+      return createSetupTaskContainerAdapter();
     }
 
     @Override
@@ -135,61 +137,46 @@ public class SyncAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.SyncState <em>State</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.RemoteSnapshot <em>Remote Snapshot</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.oomph.setup.sync.SyncState
+   * @see org.eclipse.oomph.setup.sync.RemoteSnapshot
    * @generated
    */
-  public Adapter createSyncStateAdapter()
+  public Adapter createRemoteSnapshotAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.SyncSnapshot <em>Snapshot</em>}'.
+   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>String To Sync Policy Map Entry</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.oomph.setup.sync.SyncSnapshot
+   * @see java.util.Map.Entry
    * @generated
    */
-  public Adapter createSyncSnapshotAdapter()
+  public Adapter createStringToSyncPolicyMapEntryAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.SyncItem <em>Item</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.SyncDelta <em>Delta</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.oomph.setup.sync.SyncItem
+   * @see org.eclipse.oomph.setup.sync.SyncDelta
    * @generated
    */
-  public Adapter createSyncItemAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.RemoteSyncItem <em>Remote Sync Item</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.oomph.setup.sync.RemoteSyncItem
-   * @generated
-   */
-  public Adapter createRemoteSyncItemAdapter()
+  public Adapter createSyncDeltaAdapter()
   {
     return null;
   }
@@ -210,16 +197,31 @@ public class SyncAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.sync.SyncDelta <em>Delta</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.base.ModelElement <em>Model Element</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.oomph.setup.sync.SyncDelta
+   * @see org.eclipse.oomph.base.ModelElement
    * @generated
    */
-  public Adapter createSyncDeltaAdapter()
+  public Adapter createModelElementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.SetupTaskContainer <em>Task Container</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.SetupTaskContainer
+   * @generated
+   */
+  public Adapter createSetupTaskContainerAdapter()
   {
     return null;
   }

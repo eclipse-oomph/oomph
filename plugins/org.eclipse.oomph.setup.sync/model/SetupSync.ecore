@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sync" nsURI="http://www.eclipse.org/oomph/setup/sync/1.0" nsPrefix="sync">
-  <eClassifiers xsi:type="ecore:EClass" name="SyncState">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localTimeStamp" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="localSnapshot" lowerBound="1"
-        eType="#//SyncSnapshot"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteTimeStamp" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="remoteSnapshot" lowerBound="1"
-        eType="#//SyncSnapshot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RemoteSnapshot" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTaskContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="policies" upperBound="-1"
+        eType="#//StringToSyncPolicyMapEntry" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SyncSnapshot">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
-        eType="#//SyncItem" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SyncItem">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//SyncItemType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RemoteSyncItem" eSuperTypes="#//SyncItem">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="policy" eType="#//SyncItemPolicy"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="SyncItemType">
-    <eLiterals name="Preference"/>
-    <eLiterals name="Variable" value="1"/>
-    <eLiterals name="Other" value="2"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="SyncItemPolicy">
+  <eClassifiers xsi:type="ecore:EEnum" name="SyncPolicy">
     <eLiterals name="Exclude" literal="Exclude"/>
     <eLiterals name="Include" value="1" literal="Include"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToSyncPolicyMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="#//SyncPolicy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SyncDelta">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//SyncDeltaType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SyncDeltaType">
+    <eLiterals name="Unchanged"/>
+    <eLiterals name="Changed" value="1"/>
+    <eLiterals name="Removed" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SyncAction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="localDelta" eType="#//SyncDelta"/>
@@ -38,16 +27,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="suggestedType" lowerBound="1"
         eType="#//SyncActionType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolvedType" eType="#//SyncActionType"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SyncDelta">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="oldItem" eType="#//SyncItem"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newItem" eType="#//SyncItem"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//SyncDeltaType"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="SyncDeltaType">
-    <eLiterals name="Unchanged"/>
-    <eLiterals name="Changed" value="1"/>
-    <eLiterals name="Removed" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SyncActionType">
     <eLiterals name="None"/>

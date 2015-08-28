@@ -2,17 +2,19 @@
  */
 package org.eclipse.oomph.setup.sync.util;
 
-import org.eclipse.oomph.setup.sync.RemoteSyncItem;
+import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.setup.SetupTaskContainer;
+import org.eclipse.oomph.setup.sync.RemoteSnapshot;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncDelta;
-import org.eclipse.oomph.setup.sync.SyncItem;
 import org.eclipse.oomph.setup.sync.SyncPackage;
-import org.eclipse.oomph.setup.sync.SyncSnapshot;
-import org.eclipse.oomph.setup.sync.SyncState;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -77,43 +79,17 @@ public class SyncSwitch<T> extends Switch<T>
   {
     switch (classifierID)
     {
-      case SyncPackage.SYNC_STATE:
+      case SyncPackage.REMOTE_SNAPSHOT:
       {
-        SyncState syncState = (SyncState)theEObject;
-        T result = caseSyncState(syncState);
+        RemoteSnapshot remoteSnapshot = (RemoteSnapshot)theEObject;
+        T result = caseRemoteSnapshot(remoteSnapshot);
         if (result == null)
         {
-          result = defaultCase(theEObject);
+          result = caseSetupTaskContainer(remoteSnapshot);
         }
-        return result;
-      }
-      case SyncPackage.SYNC_SNAPSHOT:
-      {
-        SyncSnapshot syncSnapshot = (SyncSnapshot)theEObject;
-        T result = caseSyncSnapshot(syncSnapshot);
         if (result == null)
         {
-          result = defaultCase(theEObject);
-        }
-        return result;
-      }
-      case SyncPackage.SYNC_ITEM:
-      {
-        SyncItem syncItem = (SyncItem)theEObject;
-        T result = caseSyncItem(syncItem);
-        if (result == null)
-        {
-          result = defaultCase(theEObject);
-        }
-        return result;
-      }
-      case SyncPackage.REMOTE_SYNC_ITEM:
-      {
-        RemoteSyncItem remoteSyncItem = (RemoteSyncItem)theEObject;
-        T result = caseRemoteSyncItem(remoteSyncItem);
-        if (result == null)
-        {
-          result = caseSyncItem(remoteSyncItem);
+          result = caseModelElement(remoteSnapshot);
         }
         if (result == null)
         {
@@ -121,10 +97,11 @@ public class SyncSwitch<T> extends Switch<T>
         }
         return result;
       }
-      case SyncPackage.SYNC_ACTION:
+      case SyncPackage.STRING_TO_SYNC_POLICY_MAP_ENTRY:
       {
-        SyncAction syncAction = (SyncAction)theEObject;
-        T result = caseSyncAction(syncAction);
+        @SuppressWarnings("unchecked")
+        Map.Entry<String, SyncPolicy> stringToSyncPolicyMapEntry = (Map.Entry<String, SyncPolicy>)theEObject;
+        T result = caseStringToSyncPolicyMapEntry(stringToSyncPolicyMapEntry);
         if (result == null)
         {
           result = defaultCase(theEObject);
@@ -141,71 +118,65 @@ public class SyncSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case SyncPackage.SYNC_ACTION:
+      {
+        SyncAction syncAction = (SyncAction)theEObject;
+        T result = caseSyncAction(syncAction);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>State</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Remote Snapshot</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>State</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Remote Snapshot</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSyncState(SyncState object)
+  public T caseRemoteSnapshot(RemoteSnapshot object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Snapshot</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>String To Sync Policy Map Entry</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Snapshot</em>'.
+   * @return the result of interpreting the object as an instance of '<em>String To Sync Policy Map Entry</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSyncSnapshot(SyncSnapshot object)
+  public T caseStringToSyncPolicyMapEntry(Map.Entry<String, SyncPolicy> object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Item</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Delta</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Item</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Delta</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSyncItem(SyncItem object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Remote Sync Item</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Remote Sync Item</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseRemoteSyncItem(RemoteSyncItem object)
+  public T caseSyncDelta(SyncDelta object)
   {
     return null;
   }
@@ -227,17 +198,33 @@ public class SyncSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Delta</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Model Element</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Delta</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Model Element</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSyncDelta(SyncDelta object)
+  public T caseModelElement(ModelElement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Task Container</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Task Container</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSetupTaskContainer(SetupTaskContainer object)
   {
     return null;
   }

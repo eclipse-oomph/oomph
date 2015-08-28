@@ -2,18 +2,15 @@
  */
 package org.eclipse.oomph.setup.sync.impl;
 
-import org.eclipse.oomph.setup.sync.RemoteSyncItem;
+import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.sync.RemoteSnapshot;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncDeltaType;
 import org.eclipse.oomph.setup.sync.SyncFactory;
-import org.eclipse.oomph.setup.sync.SyncItem;
-import org.eclipse.oomph.setup.sync.SyncItemPolicy;
-import org.eclipse.oomph.setup.sync.SyncItemType;
 import org.eclipse.oomph.setup.sync.SyncPackage;
-import org.eclipse.oomph.setup.sync.SyncSnapshot;
-import org.eclipse.oomph.setup.sync.SyncState;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -21,6 +18,8 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,35 +34,14 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass syncStateEClass = null;
+  private EClass remoteSnapshotEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass syncSnapshotEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass syncItemEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass remoteSyncItemEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass syncActionEClass = null;
+  private EClass stringToSyncPolicyMapEntryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -77,14 +55,14 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EEnum syncItemTypeEEnum = null;
+  private EClass syncActionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EEnum syncItemPolicyEEnum = null;
+  private EEnum syncPolicyEEnum = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -152,6 +130,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
 
     isInited = true;
 
+    // Initialize simple dependencies
+    SetupPackage.eINSTANCE.eClass();
+
     // Create package meta-data objects
     theSyncPackage.createPackageContents();
 
@@ -171,9 +152,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getSyncState()
+  public EClass getRemoteSnapshot()
   {
-    return syncStateEClass;
+    return remoteSnapshotEClass;
   }
 
   /**
@@ -181,9 +162,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSyncState_LocalTimeStamp()
+  public EReference getRemoteSnapshot_Policies()
   {
-    return (EAttribute)syncStateEClass.getEStructuralFeatures().get(0);
+    return (EReference)remoteSnapshotEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -191,9 +172,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSyncState_LocalSnapshot()
+  public EClass getStringToSyncPolicyMapEntry()
   {
-    return (EReference)syncStateEClass.getEStructuralFeatures().get(1);
+    return stringToSyncPolicyMapEntryEClass;
   }
 
   /**
@@ -201,9 +182,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSyncState_RemoteTimeStamp()
+  public EAttribute getStringToSyncPolicyMapEntry_Key()
   {
-    return (EAttribute)syncStateEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)stringToSyncPolicyMapEntryEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -211,9 +192,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSyncState_RemoteSnapshot()
+  public EAttribute getStringToSyncPolicyMapEntry_Value()
   {
-    return (EReference)syncStateEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)stringToSyncPolicyMapEntryEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -221,9 +202,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getSyncSnapshot()
+  public EClass getSyncDelta()
   {
-    return syncSnapshotEClass;
+    return syncDeltaEClass;
   }
 
   /**
@@ -231,69 +212,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSyncSnapshot_Items()
+  public EAttribute getSyncDelta_Type()
   {
-    return (EReference)syncSnapshotEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getSyncItem()
-  {
-    return syncItemEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getSyncItem_Type()
-  {
-    return (EAttribute)syncItemEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getSyncItem_Key()
-  {
-    return (EAttribute)syncItemEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getSyncItem_Value()
-  {
-    return (EAttribute)syncItemEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getRemoteSyncItem()
-  {
-    return remoteSyncItemEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getRemoteSyncItem_Policy()
-  {
-    return (EAttribute)remoteSyncItemEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -351,59 +272,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getSyncDelta()
+  public EEnum getSyncPolicy()
   {
-    return syncDeltaEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getSyncDelta_OldItem()
-  {
-    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getSyncDelta_NewItem()
-  {
-    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getSyncDelta_Type()
-  {
-    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EEnum getSyncItemType()
-  {
-    return syncItemTypeEEnum;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EEnum getSyncItemPolicy()
-  {
-    return syncItemPolicyEEnum;
+    return syncPolicyEEnum;
   }
 
   /**
@@ -459,22 +330,15 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     isCreated = true;
 
     // Create classes and their features
-    syncStateEClass = createEClass(SYNC_STATE);
-    createEAttribute(syncStateEClass, SYNC_STATE__LOCAL_TIME_STAMP);
-    createEReference(syncStateEClass, SYNC_STATE__LOCAL_SNAPSHOT);
-    createEAttribute(syncStateEClass, SYNC_STATE__REMOTE_TIME_STAMP);
-    createEReference(syncStateEClass, SYNC_STATE__REMOTE_SNAPSHOT);
+    remoteSnapshotEClass = createEClass(REMOTE_SNAPSHOT);
+    createEReference(remoteSnapshotEClass, REMOTE_SNAPSHOT__POLICIES);
 
-    syncSnapshotEClass = createEClass(SYNC_SNAPSHOT);
-    createEReference(syncSnapshotEClass, SYNC_SNAPSHOT__ITEMS);
+    stringToSyncPolicyMapEntryEClass = createEClass(STRING_TO_SYNC_POLICY_MAP_ENTRY);
+    createEAttribute(stringToSyncPolicyMapEntryEClass, STRING_TO_SYNC_POLICY_MAP_ENTRY__KEY);
+    createEAttribute(stringToSyncPolicyMapEntryEClass, STRING_TO_SYNC_POLICY_MAP_ENTRY__VALUE);
 
-    syncItemEClass = createEClass(SYNC_ITEM);
-    createEAttribute(syncItemEClass, SYNC_ITEM__TYPE);
-    createEAttribute(syncItemEClass, SYNC_ITEM__KEY);
-    createEAttribute(syncItemEClass, SYNC_ITEM__VALUE);
-
-    remoteSyncItemEClass = createEClass(REMOTE_SYNC_ITEM);
-    createEAttribute(remoteSyncItemEClass, REMOTE_SYNC_ITEM__POLICY);
+    syncDeltaEClass = createEClass(SYNC_DELTA);
+    createEAttribute(syncDeltaEClass, SYNC_DELTA__TYPE);
 
     syncActionEClass = createEClass(SYNC_ACTION);
     createEReference(syncActionEClass, SYNC_ACTION__LOCAL_DELTA);
@@ -482,14 +346,8 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     createEAttribute(syncActionEClass, SYNC_ACTION__SUGGESTED_TYPE);
     createEAttribute(syncActionEClass, SYNC_ACTION__RESOLVED_TYPE);
 
-    syncDeltaEClass = createEClass(SYNC_DELTA);
-    createEReference(syncDeltaEClass, SYNC_DELTA__OLD_ITEM);
-    createEReference(syncDeltaEClass, SYNC_DELTA__NEW_ITEM);
-    createEAttribute(syncDeltaEClass, SYNC_DELTA__TYPE);
-
     // Create enums
-    syncItemTypeEEnum = createEEnum(SYNC_ITEM_TYPE);
-    syncItemPolicyEEnum = createEEnum(SYNC_ITEM_POLICY);
+    syncPolicyEEnum = createEEnum(SYNC_POLICY);
     syncDeltaTypeEEnum = createEEnum(SYNC_DELTA_TYPE);
     syncActionTypeEEnum = createEEnum(SYNC_ACTION_TYPE);
   }
@@ -521,39 +379,30 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     setNsPrefix(eNS_PREFIX);
     setNsURI(eNS_URI);
 
+    // Obtain other dependent packages
+    SetupPackage theSetupPackage = (SetupPackage)EPackage.Registry.INSTANCE.getEPackage(SetupPackage.eNS_URI);
+
     // Create type parameters
 
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    remoteSyncItemEClass.getESuperTypes().add(getSyncItem());
+    remoteSnapshotEClass.getESuperTypes().add(theSetupPackage.getSetupTaskContainer());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(syncStateEClass, SyncState.class, "SyncState", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSyncState_LocalTimeStamp(), ecorePackage.getELong(), "localTimeStamp", null, 1, 1, SyncState.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncState_LocalSnapshot(), getSyncSnapshot(), null, "localSnapshot", null, 1, 1, SyncState.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncState_RemoteTimeStamp(), ecorePackage.getELong(), "remoteTimeStamp", null, 1, 1, SyncState.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncState_RemoteSnapshot(), getSyncSnapshot(), null, "remoteSnapshot", null, 1, 1, SyncState.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(remoteSnapshotEClass, RemoteSnapshot.class, "RemoteSnapshot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRemoteSnapshot_Policies(), getStringToSyncPolicyMapEntry(), null, "policies", null, 0, -1, RemoteSnapshot.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(syncSnapshotEClass, SyncSnapshot.class, "SyncSnapshot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSyncSnapshot_Items(), getSyncItem(), null, "items", null, 0, -1, SyncSnapshot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(syncItemEClass, SyncItem.class, "SyncItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSyncItem_Type(), getSyncItemType(), "type", null, 1, 1, SyncItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
-        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncItem_Key(), ecorePackage.getEString(), "key", null, 1, 1, SyncItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
-        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncItem_Value(), ecorePackage.getEString(), "value", null, 0, 1, SyncItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(stringToSyncPolicyMapEntryEClass, Map.Entry.class, "StringToSyncPolicyMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getStringToSyncPolicyMapEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getStringToSyncPolicyMapEntry_Value(), getSyncPolicy(), "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(remoteSyncItemEClass, RemoteSyncItem.class, "RemoteSyncItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getRemoteSyncItem_Policy(), getSyncItemPolicy(), "policy", null, 0, 1, RemoteSyncItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(syncDeltaEClass, SyncDelta.class, "SyncDelta", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSyncDelta_Type(), getSyncDeltaType(), "type", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(syncActionEClass, SyncAction.class, "SyncAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSyncAction_LocalDelta(), getSyncDelta(), null, "localDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
@@ -565,23 +414,10 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     initEAttribute(getSyncAction_ResolvedType(), getSyncActionType(), "resolvedType", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(syncDeltaEClass, SyncDelta.class, "SyncDelta", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSyncDelta_OldItem(), getSyncItem(), null, "oldItem", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncDelta_NewItem(), getSyncItem(), null, "newItem", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncDelta_Type(), getSyncDeltaType(), "type", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
-        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
     // Initialize enums and add enum literals
-    initEEnum(syncItemTypeEEnum, SyncItemType.class, "SyncItemType");
-    addEEnumLiteral(syncItemTypeEEnum, SyncItemType.PREFERENCE);
-    addEEnumLiteral(syncItemTypeEEnum, SyncItemType.VARIABLE);
-    addEEnumLiteral(syncItemTypeEEnum, SyncItemType.OTHER);
-
-    initEEnum(syncItemPolicyEEnum, SyncItemPolicy.class, "SyncItemPolicy");
-    addEEnumLiteral(syncItemPolicyEEnum, SyncItemPolicy.EXCLUDE);
-    addEEnumLiteral(syncItemPolicyEEnum, SyncItemPolicy.INCLUDE);
+    initEEnum(syncPolicyEEnum, SyncPolicy.class, "SyncPolicy");
+    addEEnumLiteral(syncPolicyEEnum, SyncPolicy.EXCLUDE);
+    addEEnumLiteral(syncPolicyEEnum, SyncPolicy.INCLUDE);
 
     initEEnum(syncDeltaTypeEEnum, SyncDeltaType.class, "SyncDeltaType");
     addEEnumLiteral(syncDeltaTypeEEnum, SyncDeltaType.UNCHANGED);

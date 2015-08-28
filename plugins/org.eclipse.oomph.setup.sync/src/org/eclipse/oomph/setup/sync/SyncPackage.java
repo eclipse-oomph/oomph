@@ -2,6 +2,8 @@
  */
 package org.eclipse.oomph.setup.sync;
 
+import org.eclipse.oomph.setup.SetupPackage;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -58,106 +60,60 @@ public interface SyncPackage extends EPackage
   SyncPackage eINSTANCE = org.eclipse.oomph.setup.sync.impl.SyncPackageImpl.init();
 
   /**
-   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.SyncStateImpl <em>State</em>}' class.
+   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.RemoteSnapshotImpl <em>Remote Snapshot</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.setup.sync.impl.SyncStateImpl
-   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncState()
+   * @see org.eclipse.oomph.setup.sync.impl.RemoteSnapshotImpl
+   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getRemoteSnapshot()
    * @generated
    */
-  int SYNC_STATE = 0;
+  int REMOTE_SNAPSHOT = 0;
 
   /**
-   * The feature id for the '<em><b>Local Time Stamp</b></em>' attribute.
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SYNC_STATE__LOCAL_TIME_STAMP = 0;
+  int REMOTE_SNAPSHOT__ANNOTATIONS = SetupPackage.SETUP_TASK_CONTAINER__ANNOTATIONS;
 
   /**
-   * The feature id for the '<em><b>Local Snapshot</b></em>' reference.
+   * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SYNC_STATE__LOCAL_SNAPSHOT = 1;
+  int REMOTE_SNAPSHOT__SETUP_TASKS = SetupPackage.SETUP_TASK_CONTAINER__SETUP_TASKS;
 
   /**
-   * The feature id for the '<em><b>Remote Time Stamp</b></em>' attribute.
+   * The feature id for the '<em><b>Policies</b></em>' map.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SYNC_STATE__REMOTE_TIME_STAMP = 2;
+  int REMOTE_SNAPSHOT__POLICIES = SetupPackage.SETUP_TASK_CONTAINER_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Remote Snapshot</b></em>' reference.
+   * The number of structural features of the '<em>Remote Snapshot</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SYNC_STATE__REMOTE_SNAPSHOT = 3;
+  int REMOTE_SNAPSHOT_FEATURE_COUNT = SetupPackage.SETUP_TASK_CONTAINER_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>State</em>' class.
+   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.StringToSyncPolicyMapEntryImpl <em>String To Sync Policy Map Entry</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_STATE_FEATURE_COUNT = 4;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.SyncSnapshotImpl <em>Snapshot</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.setup.sync.impl.SyncSnapshotImpl
-   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncSnapshot()
+   * @see org.eclipse.oomph.setup.sync.impl.StringToSyncPolicyMapEntryImpl
+   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getStringToSyncPolicyMapEntry()
    * @generated
    */
-  int SYNC_SNAPSHOT = 1;
-
-  /**
-   * The feature id for the '<em><b>Items</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_SNAPSHOT__ITEMS = 0;
-
-  /**
-   * The number of structural features of the '<em>Snapshot</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_SNAPSHOT_FEATURE_COUNT = 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.SyncItemImpl <em>Item</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.setup.sync.impl.SyncItemImpl
-   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncItem()
-   * @generated
-   */
-  int SYNC_ITEM = 2;
-
-  /**
-   * The feature id for the '<em><b>Type</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_ITEM__TYPE = 0;
+  int STRING_TO_SYNC_POLICY_MAP_ENTRY = 1;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -166,7 +122,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_ITEM__KEY = 1;
+  int STRING_TO_SYNC_POLICY_MAP_ENTRY__KEY = 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -175,26 +131,26 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_ITEM__VALUE = 2;
+  int STRING_TO_SYNC_POLICY_MAP_ENTRY__VALUE = 1;
 
   /**
-   * The number of structural features of the '<em>Item</em>' class.
+   * The number of structural features of the '<em>String To Sync Policy Map Entry</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SYNC_ITEM_FEATURE_COUNT = 3;
+  int STRING_TO_SYNC_POLICY_MAP_ENTRY_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.RemoteSyncItemImpl <em>Remote Sync Item</em>}' class.
+   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl <em>Delta</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.setup.sync.impl.RemoteSyncItemImpl
-   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getRemoteSyncItem()
+   * @see org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl
+   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncDelta()
    * @generated
    */
-  int REMOTE_SYNC_ITEM = 3;
+  int SYNC_DELTA = 2;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -203,43 +159,16 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int REMOTE_SYNC_ITEM__TYPE = SYNC_ITEM__TYPE;
+  int SYNC_DELTA__TYPE = 0;
 
   /**
-   * The feature id for the '<em><b>Key</b></em>' attribute.
+   * The number of structural features of the '<em>Delta</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REMOTE_SYNC_ITEM__KEY = SYNC_ITEM__KEY;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REMOTE_SYNC_ITEM__VALUE = SYNC_ITEM__VALUE;
-
-  /**
-   * The feature id for the '<em><b>Policy</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REMOTE_SYNC_ITEM__POLICY = SYNC_ITEM_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Remote Sync Item</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REMOTE_SYNC_ITEM_FEATURE_COUNT = SYNC_ITEM_FEATURE_COUNT + 1;
+  int SYNC_DELTA_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl <em>Action</em>}' class.
@@ -249,7 +178,7 @@ public interface SyncPackage extends EPackage
    * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncAction()
    * @generated
    */
-  int SYNC_ACTION = 4;
+  int SYNC_ACTION = 3;
 
   /**
    * The feature id for the '<em><b>Local Delta</b></em>' reference.
@@ -297,70 +226,14 @@ public interface SyncPackage extends EPackage
   int SYNC_ACTION_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl <em>Delta</em>}' class.
+   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.SyncPolicy <em>Policy</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl
-   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncDelta()
+   * @see org.eclipse.oomph.setup.sync.SyncPolicy
+   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncPolicy()
    * @generated
    */
-  int SYNC_DELTA = 5;
-
-  /**
-   * The feature id for the '<em><b>Old Item</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_DELTA__OLD_ITEM = 0;
-
-  /**
-   * The feature id for the '<em><b>New Item</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_DELTA__NEW_ITEM = 1;
-
-  /**
-   * The feature id for the '<em><b>Type</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_DELTA__TYPE = 2;
-
-  /**
-   * The number of structural features of the '<em>Delta</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_DELTA_FEATURE_COUNT = 3;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.SyncItemType <em>Item Type</em>}' enum.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.setup.sync.SyncItemType
-   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncItemType()
-   * @generated
-   */
-  int SYNC_ITEM_TYPE = 6;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.oomph.setup.sync.SyncItemPolicy <em>Item Policy</em>}' enum.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.oomph.setup.sync.SyncItemPolicy
-   * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncItemPolicy()
-   * @generated
-   */
-  int SYNC_ITEM_POLICY = 7;
+  int SYNC_POLICY = 4;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.sync.SyncDeltaType <em>Delta Type</em>}' enum.
@@ -370,7 +243,7 @@ public interface SyncPackage extends EPackage
    * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncDeltaType()
    * @generated
    */
-  int SYNC_DELTA_TYPE = 8;
+  int SYNC_DELTA_TYPE = 5;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.sync.SyncActionType <em>Action Type</em>}' enum.
@@ -380,146 +253,83 @@ public interface SyncPackage extends EPackage
    * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncActionType()
    * @generated
    */
-  int SYNC_ACTION_TYPE = 9;
+  int SYNC_ACTION_TYPE = 6;
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.SyncState <em>State</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.RemoteSnapshot <em>Remote Snapshot</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>State</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncState
+   * @return the meta object for class '<em>Remote Snapshot</em>'.
+   * @see org.eclipse.oomph.setup.sync.RemoteSnapshot
    * @generated
    */
-  EClass getSyncState();
+  EClass getRemoteSnapshot();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncState#getLocalTimeStamp <em>Local Time Stamp</em>}'.
+   * Returns the meta object for the map '{@link org.eclipse.oomph.setup.sync.RemoteSnapshot#getPolicies <em>Policies</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Local Time Stamp</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncState#getLocalTimeStamp()
-   * @see #getSyncState()
+   * @return the meta object for the map '<em>Policies</em>'.
+   * @see org.eclipse.oomph.setup.sync.RemoteSnapshot#getPolicies()
+   * @see #getRemoteSnapshot()
    * @generated
    */
-  EAttribute getSyncState_LocalTimeStamp();
+  EReference getRemoteSnapshot_Policies();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.sync.SyncState#getLocalSnapshot <em>Local Snapshot</em>}'.
+   * Returns the meta object for class '{@link java.util.Map.Entry <em>String To Sync Policy Map Entry</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Local Snapshot</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncState#getLocalSnapshot()
-   * @see #getSyncState()
+   * @return the meta object for class '<em>String To Sync Policy Map Entry</em>'.
+   * @see java.util.Map.Entry
+   * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+   *        valueDataType="org.eclipse.oomph.setup.sync.SyncPolicy" valueRequired="true"
    * @generated
    */
-  EReference getSyncState_LocalSnapshot();
+  EClass getStringToSyncPolicyMapEntry();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncState#getRemoteTimeStamp <em>Remote Time Stamp</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Remote Time Stamp</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncState#getRemoteTimeStamp()
-   * @see #getSyncState()
-   * @generated
-   */
-  EAttribute getSyncState_RemoteTimeStamp();
-
-  /**
-   * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.sync.SyncState#getRemoteSnapshot <em>Remote Snapshot</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Remote Snapshot</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncState#getRemoteSnapshot()
-   * @see #getSyncState()
-   * @generated
-   */
-  EReference getSyncState_RemoteSnapshot();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.SyncSnapshot <em>Snapshot</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Snapshot</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncSnapshot
-   * @generated
-   */
-  EClass getSyncSnapshot();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.sync.SyncSnapshot#getItems <em>Items</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Items</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncSnapshot#getItems()
-   * @see #getSyncSnapshot()
-   * @generated
-   */
-  EReference getSyncSnapshot_Items();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.SyncItem <em>Item</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Item</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncItem
-   * @generated
-   */
-  EClass getSyncItem();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncItem#getType <em>Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Type</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncItem#getType()
-   * @see #getSyncItem()
-   * @generated
-   */
-  EAttribute getSyncItem_Type();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncItem#getKey <em>Key</em>}'.
+   * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Key</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncItem#getKey()
-   * @see #getSyncItem()
+   * @see java.util.Map.Entry
+   * @see #getStringToSyncPolicyMapEntry()
    * @generated
    */
-  EAttribute getSyncItem_Key();
+  EAttribute getStringToSyncPolicyMapEntry_Key();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncItem#getValue <em>Value</em>}'.
+   * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncItem#getValue()
-   * @see #getSyncItem()
+   * @see java.util.Map.Entry
+   * @see #getStringToSyncPolicyMapEntry()
    * @generated
    */
-  EAttribute getSyncItem_Value();
+  EAttribute getStringToSyncPolicyMapEntry_Value();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.RemoteSyncItem <em>Remote Sync Item</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.SyncDelta <em>Delta</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Remote Sync Item</em>'.
-   * @see org.eclipse.oomph.setup.sync.RemoteSyncItem
+   * @return the meta object for class '<em>Delta</em>'.
+   * @see org.eclipse.oomph.setup.sync.SyncDelta
    * @generated
    */
-  EClass getRemoteSyncItem();
+  EClass getSyncDelta();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.RemoteSyncItem#getPolicy <em>Policy</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncDelta#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Policy</em>'.
-   * @see org.eclipse.oomph.setup.sync.RemoteSyncItem#getPolicy()
-   * @see #getRemoteSyncItem()
+   * @return the meta object for the attribute '<em>Type</em>'.
+   * @see org.eclipse.oomph.setup.sync.SyncDelta#getType()
+   * @see #getSyncDelta()
    * @generated
    */
-  EAttribute getRemoteSyncItem_Policy();
+  EAttribute getSyncDelta_Type();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.SyncAction <em>Action</em>}'.
@@ -576,67 +386,14 @@ public interface SyncPackage extends EPackage
   EAttribute getSyncAction_ResolvedType();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.oomph.setup.sync.SyncDelta <em>Delta</em>}'.
+   * Returns the meta object for enum '{@link org.eclipse.oomph.setup.sync.SyncPolicy <em>Policy</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Delta</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncDelta
+   * @return the meta object for enum '<em>Policy</em>'.
+   * @see org.eclipse.oomph.setup.sync.SyncPolicy
    * @generated
    */
-  EClass getSyncDelta();
-
-  /**
-   * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.sync.SyncDelta#getOldItem <em>Old Item</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Old Item</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncDelta#getOldItem()
-   * @see #getSyncDelta()
-   * @generated
-   */
-  EReference getSyncDelta_OldItem();
-
-  /**
-   * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.sync.SyncDelta#getNewItem <em>New Item</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>New Item</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncDelta#getNewItem()
-   * @see #getSyncDelta()
-   * @generated
-   */
-  EReference getSyncDelta_NewItem();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncDelta#getType <em>Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Type</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncDelta#getType()
-   * @see #getSyncDelta()
-   * @generated
-   */
-  EAttribute getSyncDelta_Type();
-
-  /**
-   * Returns the meta object for enum '{@link org.eclipse.oomph.setup.sync.SyncItemType <em>Item Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for enum '<em>Item Type</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncItemType
-   * @generated
-   */
-  EEnum getSyncItemType();
-
-  /**
-   * Returns the meta object for enum '{@link org.eclipse.oomph.setup.sync.SyncItemPolicy <em>Item Policy</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for enum '<em>Item Policy</em>'.
-   * @see org.eclipse.oomph.setup.sync.SyncItemPolicy
-   * @generated
-   */
-  EEnum getSyncItemPolicy();
+  EEnum getSyncPolicy();
 
   /**
    * Returns the meta object for enum '{@link org.eclipse.oomph.setup.sync.SyncDeltaType <em>Delta Type</em>}'.
@@ -682,82 +439,32 @@ public interface SyncPackage extends EPackage
   interface Literals
   {
     /**
-     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.SyncStateImpl <em>State</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.RemoteSnapshotImpl <em>Remote Snapshot</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.setup.sync.impl.SyncStateImpl
-     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncState()
+     * @see org.eclipse.oomph.setup.sync.impl.RemoteSnapshotImpl
+     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getRemoteSnapshot()
      * @generated
      */
-    EClass SYNC_STATE = eINSTANCE.getSyncState();
+    EClass REMOTE_SNAPSHOT = eINSTANCE.getRemoteSnapshot();
 
     /**
-     * The meta object literal for the '<em><b>Local Time Stamp</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Policies</b></em>' map feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute SYNC_STATE__LOCAL_TIME_STAMP = eINSTANCE.getSyncState_LocalTimeStamp();
+    EReference REMOTE_SNAPSHOT__POLICIES = eINSTANCE.getRemoteSnapshot_Policies();
 
     /**
-     * The meta object literal for the '<em><b>Local Snapshot</b></em>' reference feature.
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.StringToSyncPolicyMapEntryImpl <em>String To Sync Policy Map Entry</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.sync.impl.StringToSyncPolicyMapEntryImpl
+     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getStringToSyncPolicyMapEntry()
      * @generated
      */
-    EReference SYNC_STATE__LOCAL_SNAPSHOT = eINSTANCE.getSyncState_LocalSnapshot();
-
-    /**
-     * The meta object literal for the '<em><b>Remote Time Stamp</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SYNC_STATE__REMOTE_TIME_STAMP = eINSTANCE.getSyncState_RemoteTimeStamp();
-
-    /**
-     * The meta object literal for the '<em><b>Remote Snapshot</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SYNC_STATE__REMOTE_SNAPSHOT = eINSTANCE.getSyncState_RemoteSnapshot();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.SyncSnapshotImpl <em>Snapshot</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.setup.sync.impl.SyncSnapshotImpl
-     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncSnapshot()
-     * @generated
-     */
-    EClass SYNC_SNAPSHOT = eINSTANCE.getSyncSnapshot();
-
-    /**
-     * The meta object literal for the '<em><b>Items</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SYNC_SNAPSHOT__ITEMS = eINSTANCE.getSyncSnapshot_Items();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.SyncItemImpl <em>Item</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.setup.sync.impl.SyncItemImpl
-     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncItem()
-     * @generated
-     */
-    EClass SYNC_ITEM = eINSTANCE.getSyncItem();
-
-    /**
-     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SYNC_ITEM__TYPE = eINSTANCE.getSyncItem_Type();
+    EClass STRING_TO_SYNC_POLICY_MAP_ENTRY = eINSTANCE.getStringToSyncPolicyMapEntry();
 
     /**
      * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
@@ -765,7 +472,7 @@ public interface SyncPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute SYNC_ITEM__KEY = eINSTANCE.getSyncItem_Key();
+    EAttribute STRING_TO_SYNC_POLICY_MAP_ENTRY__KEY = eINSTANCE.getStringToSyncPolicyMapEntry_Key();
 
     /**
      * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
@@ -773,25 +480,25 @@ public interface SyncPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute SYNC_ITEM__VALUE = eINSTANCE.getSyncItem_Value();
+    EAttribute STRING_TO_SYNC_POLICY_MAP_ENTRY__VALUE = eINSTANCE.getStringToSyncPolicyMapEntry_Value();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.RemoteSyncItemImpl <em>Remote Sync Item</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl <em>Delta</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.setup.sync.impl.RemoteSyncItemImpl
-     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getRemoteSyncItem()
+     * @see org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl
+     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncDelta()
      * @generated
      */
-    EClass REMOTE_SYNC_ITEM = eINSTANCE.getRemoteSyncItem();
+    EClass SYNC_DELTA = eINSTANCE.getSyncDelta();
 
     /**
-     * The meta object literal for the '<em><b>Policy</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute REMOTE_SYNC_ITEM__POLICY = eINSTANCE.getRemoteSyncItem_Policy();
+    EAttribute SYNC_DELTA__TYPE = eINSTANCE.getSyncDelta_Type();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl <em>Action</em>}' class.
@@ -836,58 +543,14 @@ public interface SyncPackage extends EPackage
     EAttribute SYNC_ACTION__RESOLVED_TYPE = eINSTANCE.getSyncAction_ResolvedType();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl <em>Delta</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.SyncPolicy <em>Policy</em>}' enum.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl
-     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncDelta()
+     * @see org.eclipse.oomph.setup.sync.SyncPolicy
+     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncPolicy()
      * @generated
      */
-    EClass SYNC_DELTA = eINSTANCE.getSyncDelta();
-
-    /**
-     * The meta object literal for the '<em><b>Old Item</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SYNC_DELTA__OLD_ITEM = eINSTANCE.getSyncDelta_OldItem();
-
-    /**
-     * The meta object literal for the '<em><b>New Item</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SYNC_DELTA__NEW_ITEM = eINSTANCE.getSyncDelta_NewItem();
-
-    /**
-     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SYNC_DELTA__TYPE = eINSTANCE.getSyncDelta_Type();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.SyncItemType <em>Item Type</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.setup.sync.SyncItemType
-     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncItemType()
-     * @generated
-     */
-    EEnum SYNC_ITEM_TYPE = eINSTANCE.getSyncItemType();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.SyncItemPolicy <em>Item Policy</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.oomph.setup.sync.SyncItemPolicy
-     * @see org.eclipse.oomph.setup.sync.impl.SyncPackageImpl#getSyncItemPolicy()
-     * @generated
-     */
-    EEnum SYNC_ITEM_POLICY = eINSTANCE.getSyncItemPolicy();
+    EEnum SYNC_POLICY = eINSTANCE.getSyncPolicy();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.sync.SyncDeltaType <em>Delta Type</em>}' enum.
