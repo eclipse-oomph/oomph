@@ -66,52 +66,86 @@ public class Client
 
   public long get(long timeStamp, File file) throws IOException
   {
-    Request request = configureRequest(timeStamp, Request.Get(uri));
+    HttpEntity responseEntity = null;
 
-    HttpResponse response = sendRequest(request);
-    HttpEntity responseEntity = response.getEntity();
-
-    int status = getStatus(response);
-    if (status == STATUS_NOT_MODIFIED)
+    try
     {
-      EntityUtils.consume(responseEntity);
-      return 0;
-    }
+      Request request = configureRequest(timeStamp, Request.Get(uri));
 
-    if (status == STATUS_OK)
+      HttpResponse response = sendRequest(request);
+      responseEntity = response.getEntity();
+
+      int status = getStatus(response);
+      if (status == STATUS_NOT_MODIFIED)
+      {
+        EntityUtils.consume(responseEntity);
+        return 0;
+      }
+
+      if (status == STATUS_OK)
+      {
+        saveContent(responseEntity, file);
+        return getLastModified(response);
+      }
+
+      throw new BadResponseException(uri);
+    }
+    catch (IOException ex)
     {
-      saveContent(responseEntity, file);
-      return getLastModified(response);
-    }
+      if (DEBUG && responseEntity != null)
+      {
+        responseEntity.writeTo(System.out);
+      }
 
-    throw new BadResponseException(uri);
+      throw ex;
+    }
   }
 
   public void post(long timeStamp, File file) throws IOException, ConflictException
   {
-    HttpEntity requestEntity = MultipartEntityBuilder.create().addPart("userfile", new FileBody(file)).build();
-    Request request = configureRequest(timeStamp, Request.Post(uri)).body(requestEntity);
+    HttpEntity responseEntity = null;
 
-    HttpResponse response = sendRequest(request);
-    long lastModified = getLastModified(response);
-
-    int status = getStatus(response);
-    if (status == STATUS_CONFLICT)
+    try
     {
-      HttpEntity responseEntity = response.getEntity();
-      saveContent(responseEntity, file);
+      // @SuppressWarnings("deprecation")
+      // HttpEntity requestEntity = MultipartEntityBuilder.create().addPart("userfile", new FileBody(file, "text/xml", "UTF-8")).build();
 
-      file.setLastModified(lastModified);
-      throw new ConflictException(uri);
+      HttpEntity requestEntity = MultipartEntityBuilder.create().addPart("userfile", new FileBody(file)).build();
+      Request request = configureRequest(timeStamp, Request.Post(uri)).body(requestEntity);
+
+      // Request request = configureRequest(timeStamp, Request.Post(uri)).addHeader("Content-Type", "text/xml").body(requestEntity);
+
+      HttpResponse response = sendRequest(request);
+      responseEntity = response.getEntity();
+      int status = getStatus(response);
+
+      if (status == STATUS_CONFLICT)
+      {
+        saveContent(responseEntity, file);
+
+        long lastModified = getLastModified(response);
+        file.setLastModified(lastModified);
+        throw new ConflictException(uri);
+      }
+
+      if (status == STATUS_OK)
+      {
+        long lastModified = getLastModified(response);
+        file.setLastModified(lastModified);
+        return;
+      }
+
+      throw new BadResponseException(uri);
     }
-
-    if (status == STATUS_OK)
+    catch (IOException ex)
     {
-      file.setLastModified(lastModified);
-      return;
-    }
+      if (DEBUG && responseEntity != null)
+      {
+        responseEntity.writeTo(System.out);
+      }
 
-    throw new BadResponseException(uri);
+      throw ex;
+    }
   }
 
   private Request configureRequest(long timeStamp, Request request)
