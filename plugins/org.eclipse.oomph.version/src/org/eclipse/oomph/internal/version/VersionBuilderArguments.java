@@ -126,6 +126,16 @@ public class VersionBuilderArguments extends HashMap<String, String>implements I
     setBoolean(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT, value);
   }
 
+  public boolean isIgnoreLaxLowerBoundDependencyVersions()
+  {
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT));
+  }
+
+  public void setIgnoreLaxLowerBoundDependencyVersions(boolean value)
+  {
+    setBoolean(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT, value);
+  }
+
   public boolean isIgnoreMissingExportVersions()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT));

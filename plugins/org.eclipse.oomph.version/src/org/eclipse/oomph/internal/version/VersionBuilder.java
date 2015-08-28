@@ -39,10 +39,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.osgi.service.resolver.BaseDescription;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.BundleSpecification;
 import org.eclipse.osgi.service.resolver.ExportPackageDescription;
 import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
+import org.eclipse.osgi.service.resolver.VersionConstraint;
 import org.eclipse.osgi.service.resolver.VersionRange;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IPluginBase;
@@ -406,7 +408,19 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         }
         else if (!oldVersionBuilderArguments.isIgnoreMissingDependencyRanges())
         {
-          Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.DEPENDENCY_RANGE_PROBLEM);
+          Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.LOWER_BOUND_VERSION_PROBLEM);
+        }
+
+        if (!arguments.isIgnoreLaxLowerBoundDependencyVersions())
+        {
+          if (checkComponentModel)
+          {
+            checkLowerBoundVersions((IPluginModelBase)componentModel);
+          }
+        }
+        else if (!oldVersionBuilderArguments.isIgnoreLaxLowerBoundDependencyVersions())
+        {
+          Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.LOWER_BOUND_VERSION_PROBLEM);
         }
 
         if (!arguments.isIgnoreMissingExportVersions())
@@ -1312,6 +1326,73 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     }
   }
 
+  private void checkLowerBoundVersions(IPluginModelBase pluginModel) throws CoreException, IOException
+  {
+    BundleDescription description = pluginModel.getBundleDescription();
+    if (description == null)
+    {
+      return;
+    }
+
+    IFile file = getProject().getFile(MANIFEST_PATH);
+    Markers.deleteAllMarkers(file, Markers.LOWER_BOUND_VERSION_PROBLEM);
+
+    String releasePath = arguments.getReleasePath();
+    for (BundleSpecification requiredBundle : description.getRequiredBundles())
+    {
+      checkLowerBoundVersions(file, releasePath, requiredBundle, "bundle-version");
+    }
+
+    for (ImportPackageSpecification importPackage : description.getImportPackages())
+    {
+      checkLowerBoundVersions(file, releasePath, importPackage, "version");
+    }
+  }
+
+  void checkLowerBoundVersions(IFile file, String releasePath, VersionConstraint versionConstraint, String versionAttribute)
+  {
+    VersionRange requiredVersionRange = versionConstraint.getVersionRange();
+    if (!requiredVersionRange.isEmpty())
+    {
+      BaseDescription supplier = versionConstraint.getSupplier();
+      if (supplier != null)
+      {
+        Version version = supplier.getVersion();
+        version = new Version(version.getMajor(), version.getMinor(), version.getMicro());
+        Version minimumRequiredVersion = requiredVersionRange.getMinimum();
+        if (!minimumRequiredVersion.equals(version))
+        {
+          BundleDescription supplierBundle = supplier.getSupplier();
+          if (supplierBundle != null)
+          {
+            IElement element = resolveElement(new Element(Type.PLUGIN, supplierBundle.getName()));
+            if (element != null)
+            {
+              IModel componentModel = ReleaseManager.INSTANCE.getComponentModel(element);
+              if (componentModel != null)
+              {
+                IResource underlyingResource = componentModel.getUnderlyingResource();
+                if (underlyingResource != null && underlyingResource.isAccessible())
+                {
+                  IProject project = underlyingResource.getProject();
+                  VersionBuilderArguments versionBuilderArguments = new VersionBuilderArguments(project);
+                  String elementReleasePath = versionBuilderArguments.getReleasePath();
+                  if (releasePath.equals(elementReleasePath))
+                  {
+                    String name = versionConstraint.getName();
+                    VersionRange expectedVersionRange = new VersionRange(element.getVersion(), true, requiredVersionRange.getRight(),
+                        requiredVersionRange.getIncludeMaximum());
+                    addLaxLowerBoundMarker(file, name, "dependency range minimum must be " + version, expectedVersionRange, versionAttribute);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   @SuppressWarnings("deprecation")
   private Version getMaximum(VersionRange range)
   {
@@ -1510,6 +1591,27 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       {
         marker.setAttribute(Markers.PROBLEM_TYPE, Markers.DEPENDENCY_RANGE_PROBLEM);
         marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT);
+      }
+    }
+    catch (Exception ex)
+    {
+      Activator.log(ex);
+    }
+  }
+
+  private void addLaxLowerBoundMarker(IFile file, String name, String message, VersionRange versionRange, String versionAttribute)
+  {
+    try
+    {
+      String regex = name.replace(".", "\\.") + ";" + versionAttribute + "=\"([^\\\"]*)\"";
+
+      IMarker marker = Markers.addMarker(file, "'" + name + "' " + message, IMarker.SEVERITY_ERROR, regex);
+      if (marker != null)
+      {
+        marker.setAttribute(Markers.PROBLEM_TYPE, Markers.LOWER_BOUND_VERSION_PROBLEM);
+        marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
+        marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, versionRange.toString());
+        marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT);
       }
     }
     catch (Exception ex)

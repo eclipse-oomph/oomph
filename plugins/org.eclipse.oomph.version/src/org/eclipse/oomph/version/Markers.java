@@ -48,6 +48,8 @@ public final class Markers
 
   public static final String DEPENDENCY_RANGE_PROBLEM = "dependency.range";
 
+  public static final String LOWER_BOUND_VERSION_PROBLEM = "lower.bound.version";
+
   public static final String EXPORT_VERSION_PROBLEM = "export.version";
 
   public static final String UNREFERENCED_ELEMENT_PROBLEM = "unreferenced.element";

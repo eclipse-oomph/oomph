@@ -36,6 +36,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
 
   public static final String IGNORE_DEPENDENCY_RANGES_ARGUMENT = "ignore.missing.dependency.ranges";
 
+  public static final String IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT = "ignore.lower.bound.dependency.ranges";
+
   public static final String IGNORE_EXPORT_VERSIONS_ARGUMENT = "ignore.missing.export.versions";
 
   public static final String IGNORE_CONTENT_CHANGES_ARGUMENT = "ignore.feature.content.changes";
@@ -59,6 +61,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
   public boolean isIgnoreDebugOptions();
 
   public boolean isIgnoreMissingDependencyRanges();
+
+  public boolean isIgnoreLaxLowerBoundDependencyVersions();
 
   public boolean isIgnoreMissingExportVersions();
 

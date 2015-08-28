@@ -58,6 +58,8 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
 
   private Button ignoreMissingDependencyRangesButton;
 
+  private Button ignoreLaxLowerBoundDependencyButton;
+
   private Button ignoreMissingExportVersionsButton;
 
   private Button ignoreFeatureContentChangesButton;
@@ -146,6 +148,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     ignoreMissingDependencyRangesButton.setSelection(values.isIgnoreMissingDependencyRanges());
     ignoreMissingDependencyRangesButton.addSelectionListener(buttonListener);
 
+    ignoreLaxLowerBoundDependencyButton = new Button(composite, SWT.CHECK);
+    ignoreLaxLowerBoundDependencyButton.setText("Ignore lax lower bound dependency versions");
+    ignoreLaxLowerBoundDependencyButton.setSelection(values.isIgnoreLaxLowerBoundDependencyVersions());
+    ignoreLaxLowerBoundDependencyButton.addSelectionListener(buttonListener);
+
     ignoreMissingExportVersionsButton = new Button(composite, SWT.CHECK);
     ignoreMissingExportVersionsButton.setText("Ignore missing package export versions");
     ignoreMissingExportVersionsButton.setSelection(values.isIgnoreMissingExportVersions());
@@ -203,6 +210,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     values.setIgnoreSchemaBuilder(ignoreSchemaBuilderButton.getSelection());
     values.setIgnoreDebugOptions(ignoreDebugOptionsButton.getSelection());
     values.setIgnoreMissingDependencyRanges(ignoreMissingDependencyRangesButton.getSelection());
+    values.setIgnoreLaxLowerBoundDependencyVersions(ignoreLaxLowerBoundDependencyButton.getSelection());
     values.setIgnoreMissingExportVersions(ignoreMissingExportVersionsButton.getSelection());
     values.setIgnoreFeatureContentChanges(ignoreFeatureContentChangesButton.getSelection());
     values.setIgnoreFeatureContentRedundancy(ignoreFeatureContentRedundancyButton.getSelection());
@@ -244,6 +252,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
   public boolean isIgnoreMissingDependencyRanges()
   {
     return values.isIgnoreMissingDependencyRanges();
+  }
+
+  public boolean isIgnoreLaxLowerBoundDependencyVersions()
+  {
+    return values.isIgnoreLaxLowerBoundDependencyVersions();
   }
 
   public boolean isIgnoreMissingExportVersions()
