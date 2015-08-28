@@ -965,7 +965,13 @@ public abstract class PropertyField
         public String getText(Object element)
         {
           VariableChoice choice = (VariableChoice)element;
-          return choice.getLabel();
+          String label = choice.getLabel();
+          if (StringUtil.isEmpty(label))
+          {
+            return StringUtil.safe(choice.getValue());
+          }
+
+          return label;
         }
       };
       comboViewer.setLabelProvider(labelProvider);
