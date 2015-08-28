@@ -65,4 +65,9 @@ public class StructuredViewerTreeIterator extends AbstractTreeIterator<Object>
 
     return Collections.emptyList().iterator();
   }
+
+  public interface Provider
+  {
+    public StructuredViewerTreeIterator create();
+  }
 }

@@ -48,6 +48,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -81,6 +82,8 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -98,7 +101,17 @@ import java.util.regex.Pattern;
  */
 public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTargetExtension, IFindReplaceTargetExtension3
 {
-  private static Map<IWorkbenchPart, FindAndReplaceTarget> FIND_AND_REPLACE_TARGETS = new WeakHashMap<IWorkbenchPart, FindAndReplaceTarget>();
+  private static final Map<IWorkbenchPart, FindAndReplaceTarget> FIND_AND_REPLACE_TARGETS = new WeakHashMap<IWorkbenchPart, FindAndReplaceTarget>();
+
+  private static final Field FILTER_ACTION_FIELD = ReflectUtil.getField(PropertySheetPage.class, "filterAction");
+
+  private static final Method GET_DESCRIPTOR_METHOD = ReflectUtil.getMethod(PropertySheetEntry.class, "getDescriptor");
+
+  private static final Field OBJECT_FIELD = ReflectUtil.getField(PropertyDescriptor.class, "object");
+
+  private static final Field ITEM_PROPERTY_DESCRIPTOR_FIELD = ReflectUtil.getField(PropertyDescriptor.class, "itemPropertyDescriptor");
+
+  private static final Field ITEM_PROPERTY_SOURCE_FIELD = ReflectUtil.getField(PropertySource.class, "itemPropertySource");
 
   private static final Styler MATCH_STYLER = new Styler()
   {
@@ -763,7 +776,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     // Iterate over the induced text, keeping track of a candidates for the case of backward searching.
     Data.Item candidate = null;
     int candidateStart = -1;
-    for (FindAndReplaceTarget.Data data : new TextData(viewer))
+    LOOP: for (FindAndReplaceTarget.Data data : new TextData(viewer))
     {
       // If we have no restricted scope or the we and the object is in that scope...
       if (selectionScopeObjects == null || selectionScopeObjects.contains(data.object))
@@ -829,10 +842,10 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
             }
           }
           // If we're searching backward and we've gone as far as we need to go...
-          else if (!searchForward && item.index <= offset)
+          else if (!searchForward && item.index > offset)
           {
             // Break from the loop.
-            break;
+            break LOOP;
           }
         }
       }
@@ -885,7 +898,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     if (replaceAllCommand == null)
     {
       // Select the item in the viewer, unless we're preserving the selection, i.e., during the initial feedback.
-      StructuredSelection selection = new StructuredSelection(item.data.object);
+      StructuredSelection selection = new StructuredSelection(new TreePath(item.data.getPath()));
       if (!preserve)
       {
         viewer.setSelection(selection, true);
@@ -963,8 +976,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                   // If the filter is one for expert property...
                   if ("org.eclipse.ui.views.properties.expert".equals(filterFlag))
                   {
-                    // If the view is not showing advanced properties...
-                    Action action = ReflectUtil.getValue("filterAction", currentPage);
+                    Action action = ReflectUtil.getValue(FILTER_ACTION_FIELD, currentPage);
                     if (!action.isChecked())
                     {
                       // Run the action to show advanced properties, and remember that.
@@ -981,11 +993,11 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
               {
                 // If there is an EMF property descriptor with a feature for the selected item...
                 PropertyDescriptor propertyDescriptor = getPropertyDescriptor(treeItem);
-                if (propertyDescriptor != null && propertyDescriptor.getFeature() == selectedItem.getFeature())
+                if (propertyDescriptor != null && propertyDescriptor.getFeature() == item.getFeature())
                 {
                   // Consider the label shown in the tree verses the value of the selected item...
                   String treeItemText = treeItem.getText(1);
-                  String itemValue = selectedItem.value;
+                  String itemValue = item.value;
 
                   // We might need to replace the tree item's text with a special representation...
                   specialStart = -1;
@@ -994,8 +1006,8 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                   if (!treeItemText.equals(itemValue))
                   {
                     // Find the match, which really must be there, do we can determine the length of the match.
-                    Matcher matcher = selectedItemPattern.matcher(itemValue);
-                    if (matcher.find(selectedItemStart))
+                    Matcher matcher = pattern.matcher(itemValue);
+                    if (matcher.find(start))
                     {
                       // Remember this special item, because we'll want to update it after we do a replace to show the replaced text.
                       specialTreeItem = treeItem;
@@ -1663,7 +1675,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     if (data instanceof PropertySheetEntry)
     {
       PropertySheetEntry propertySheetEntry = (PropertySheetEntry)data;
-      Object descriptor = ReflectUtil.invokeMethod("getDescriptor", propertySheetEntry);
+      Object descriptor = ReflectUtil.invokeMethod(GET_DESCRIPTOR_METHOD, propertySheetEntry);
       if (descriptor instanceof PropertyDescriptor)
       {
         PropertyDescriptor propertyDescriptor = (PropertyDescriptor)descriptor;
@@ -1679,7 +1691,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
    */
   protected static Object getObject(PropertyDescriptor propertyDescriptor)
   {
-    Object object = ReflectUtil.getValue("object", propertyDescriptor);
+    Object object = ReflectUtil.getValue(OBJECT_FIELD, propertyDescriptor);
     return object;
   }
 
@@ -1689,7 +1701,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
   protected static Object getFeature(PropertyDescriptor propertyDescriptor)
   {
     Object object = getObject(propertyDescriptor);
-    IItemPropertyDescriptor itemPropertyDescriptor = ReflectUtil.getValue("itemPropertyDescriptor", propertyDescriptor);
+    IItemPropertyDescriptor itemPropertyDescriptor = ReflectUtil.getValue(ITEM_PROPERTY_DESCRIPTOR_FIELD, propertyDescriptor);
     return itemPropertyDescriptor.getFeature(object);
   }
 
@@ -1712,6 +1724,11 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     public int depth;
 
     /**
+     * The parent data in the tree.
+     */
+    public Data parent;
+
+    /**
      * The items associated with the object.
      */
     public List<Data.Item> items;
@@ -1721,6 +1738,17 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       this.depth = depth;
       this.object = object;
       this.items = items;
+    }
+
+    public Object[] getPath()
+    {
+      List<Object> path = new ArrayList<Object>();
+      for (Data data = this; data != null; data = data.parent)
+      {
+        path.add(0, data.object);
+      }
+
+      return path.toArray();
     }
 
     /**
@@ -1804,10 +1832,21 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
 
     public Iterator<FindAndReplaceTarget.Data> iterator()
     {
+      final StructuredViewerTreeIterator structuredViewerTreeIterator;
+      IContentProvider contentProvider = viewer.getContentProvider();
+      if (contentProvider instanceof StructuredViewerTreeIterator.Provider)
+      {
+        structuredViewerTreeIterator = ((StructuredViewerTreeIterator.Provider)contentProvider).create();
+      }
+      else
+      {
+        structuredViewerTreeIterator = new StructuredViewerTreeIterator(viewer);
+      }
+
       // This is an iterator that delegates to an iterator that walks the structure of the viewer.
       return new Iterator<FindAndReplaceTarget.Data>()
       {
-        private final StructuredViewerTreeIterator structuredViewerTreeIterator = new StructuredViewerTreeIterator(viewer);
+        private List<Data> parents = new ArrayList<Data>();
 
         // This keeps track of the textual index as we iterate.
         private int index;
@@ -1827,6 +1866,20 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           List<Data.Item> items = new ArrayList<Data.Item>();
           FindAndReplaceTarget.Data data = new Data(depth - 1, object, items);
 
+          if (parents.size() < depth)
+          {
+            parents.add(data);
+          }
+          else
+          {
+            parents.set(depth - 1, data);
+          }
+
+          if (depth > 1)
+          {
+            data.parent = parents.get(depth - 2);
+          }
+
           // Add an item for the label.
           String label = labelProvider.getText(object);
           items.add(new Data.Item(data, index, null, 0, label));
@@ -1841,7 +1894,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
             {
               // Extract the EMF property source so we can iterate directly over the EMF property descriptors.
               PropertySource emfPropertySource = (PropertySource)propertySource;
-              IItemPropertySource itemPropertySource = ReflectUtil.getValue("itemPropertySource", emfPropertySource);
+              IItemPropertySource itemPropertySource = ReflectUtil.getValue(ITEM_PROPERTY_SOURCE_FIELD, emfPropertySource);
               for (IItemPropertyDescriptor itemPropertyDescriptor : itemPropertySource.getPropertyDescriptors(object))
               {
                 // Extract the textual values of the property, if there are any.
