@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.sync.client;
+package org.eclipse.oomph.setup.internal;
 
 import org.eclipse.oomph.setup.sync.SyncState;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -32,7 +32,7 @@ class Test
     Credentials credentials = new UsernamePasswordCredentials("stepper", "123");
 
     Client client = new Client(serviceURI, credentials);
-    SyncState remoteSnapshot = new SyncState(client, SYNC_FOLDER);
+    SyncState remoteSnapshot = new SyncStateImpl(client, SYNC_FOLDER);
 
     File workingCopy = remoteSnapshot.getWorkingCopy(true);
     edit(workingCopy);

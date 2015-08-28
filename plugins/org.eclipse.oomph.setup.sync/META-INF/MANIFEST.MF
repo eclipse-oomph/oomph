@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.apache.commons.codec;bundle-version="[1.6.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.oomph.setup.sync;version="1.2.0";x-internal:=true,
- org.eclipse.oomph.setup.sync.client;version="1.2.0";x-internal:=true,
+Export-Package: org.eclipse.oomph.setup.internal;version="1.2.0";x-internal:=true,
+ org.eclipse.oomph.setup.sync;version="1.2.0";x-internal:=true,
  org.eclipse.oomph.setup.sync.impl;version="1.2.0";x-internal:=true,
  org.eclipse.oomph.setup.sync.util;version="1.2.0";x-internal:=true

@@ -8,8 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.sync.client;
+package org.eclipse.oomph.setup.internal;
 
+import org.eclipse.oomph.setup.sync.SyncState.ConflictException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -272,19 +273,6 @@ public class Client
     public BadResponseException(URI uri)
     {
       super("Bad Response: " + uri);
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class ConflictException extends IOException
-  {
-    private static final long serialVersionUID = 1L;
-
-    public ConflictException(URI uri)
-    {
-      super("Conflict: " + uri);
     }
   }
 }
