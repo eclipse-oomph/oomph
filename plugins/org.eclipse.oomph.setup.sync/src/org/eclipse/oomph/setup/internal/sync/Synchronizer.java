@@ -237,13 +237,6 @@ public class Synchronizer
     throw new IllegalArgumentException();
   }
 
-  private <T extends EObject> T loadObject(File file, EClassifier classifier)
-  {
-    URI uri = URI.createFileURI(file.getAbsolutePath());
-    Resource resource = BaseUtil.loadResourceSafely(resourceSet, uri);
-    return BaseUtil.getObjectByType(resource.getContents(), classifier);
-  }
-
   private Map<String, SyncDelta> compareTasks(SetupTaskContainer oldTaskContainer, SetupTaskContainer newTaskContainer)
   {
     Map<String, SyncDelta> deltas = new HashMap<String, SyncDelta>();
@@ -340,6 +333,13 @@ public class Synchronizer
         }
       }
     }
+  }
+
+  private <T extends EObject> T loadObject(File file, EClassifier classifier)
+  {
+    URI uri = URI.createFileURI(file.getAbsolutePath());
+    Resource resource = BaseUtil.loadResourceSafely(resourceSet, uri);
+    return BaseUtil.getObjectByType(resource.getContents(), classifier);
   }
 
   /**

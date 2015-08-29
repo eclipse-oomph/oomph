@@ -43,7 +43,7 @@ if ($method == "GET")
   }
   else
   {
-    http_response_code(NOT_MODIFIED);
+    status(NOT_MODIFIED);
   }
 
   exit;
@@ -69,7 +69,7 @@ if ($method == "POST")
   {
     header("X-Last-Modified: $userXMLTime", true);
     readfile($userXML);
-    http_response_code(CONFLICT);
+    status(CONFLICT);
   }
   else
   {
@@ -86,10 +86,26 @@ if ($method == "POST")
 
 error(BAD_REQUEST, "Wrong method");
 
-function error($status, $cause = "")
+function status($code, $cause = NULL)
 {
-  http_response_code($status);
-  if ($cause != "") header("X-ERROR: $cause");
+  if (function_exists('http_response_code'))
+  {
+    http_response_code($code);
+  }
+  else
+  {
+    header("X-Status-Code: $code", true, $code);
+  }
+
+  if ($cause != NULL)
+  {
+    header("X-Status-Cause: $cause");
+  }
+}
+
+function error($code, $cause = "")
+{
+  status($code);
   exit;
 }
 
