@@ -32,6 +32,7 @@ import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -1332,6 +1333,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         scopes.add(stream);
       }
 
+      scopes.add(user);
+
       configurableItems.add(installation);
       scopes.add(installation);
 
@@ -1340,8 +1343,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         configurableItems.add(workspace);
         scopes.add(workspace);
       }
-
-      scopes.add(user);
 
       String qualifier = null;
       Scope rootProject = null;
@@ -2952,6 +2953,20 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         try
         {
+          // We need special case support for setting the auto building preference, because we save and restore this value during the perform process.
+          // In the case of false, we don't want to set it back to true.
+          // In the case of true, we don't want to set it to true until after all the tasks have performed.
+          if (neededTask instanceof PreferenceTask)
+          {
+            PreferenceTask preferenceTask = (PreferenceTask)neededTask;
+            if ("/instance/org.eclipse.core.resources/description.autobuilding".equals(preferenceTask.getKey()))
+            {
+              autoBuilding = Boolean.valueOf(preferenceTask.getValue());
+              neededTask.dispose();
+              continue;
+            }
+          }
+
           neededTask.perform(this);
           neededTask.dispose();
         }

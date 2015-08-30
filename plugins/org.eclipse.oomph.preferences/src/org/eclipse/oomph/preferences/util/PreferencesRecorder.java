@@ -11,8 +11,10 @@
 package org.eclipse.oomph.preferences.util;
 
 import org.eclipse.oomph.preferences.PreferenceNode;
+import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.PreferencesPackage;
 import org.eclipse.oomph.preferences.Property;
+import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
@@ -106,7 +108,15 @@ public class PreferencesRecorder extends EContentAdapter
           if (notification.getFeature() == PreferencesPackage.Literals.PREFERENCE_NODE__PROPERTIES)
           {
             Property property = (Property)notification.getOldValue();
-            notifyChanged(property, null);
+
+            // Record the effective value of this property, which may be non-null because it's specified with a default value in the default or bundle-defaults
+            // scope.
+            URI uri = paths.get(property);
+            String path = PreferencesFactory.eINSTANCE.convertURI(uri);
+            PreferenceProperty preferenceProperty = new PreferencesUtil.PreferenceProperty(path);
+            String value = preferenceProperty.getEffectiveProperty().get(null);
+
+            notifyChanged(property, value);
           }
           break;
       }

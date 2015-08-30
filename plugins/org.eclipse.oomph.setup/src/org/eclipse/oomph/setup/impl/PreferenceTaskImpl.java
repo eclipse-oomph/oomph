@@ -291,7 +291,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   {
     preferenceProperty = new PreferencesUtil.PreferenceProperty(key);
 
-    String oldValue = preferenceProperty.get(null);
+    String oldValue = preferenceProperty.getEffectiveProperty().get(null);
     if (ObjectUtil.equals(getValue(), oldValue))
     {
       return false;

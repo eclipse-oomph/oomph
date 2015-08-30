@@ -87,8 +87,8 @@ public final class PreferencesUtil
 
   public static final String SECURE_NODE = "secure";
 
-  public static final Set<String> ALL_CHILD_NODES = Collections.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList(new String[] { SECURE_NODE,
-      BUNDLE_DEFAULTS_NODE, DEFAULT_NODE, CONFIRGURATION_NODE, INSTANCE_NODE, PROJECT_NODE })));
+  public static final Set<String> ALL_CHILD_NODES = Collections.unmodifiableSet(new LinkedHashSet<String>(
+      Arrays.asList(new String[] { SECURE_NODE, BUNDLE_DEFAULTS_NODE, DEFAULT_NODE, CONFIRGURATION_NODE, INSTANCE_NODE, PROJECT_NODE })));
 
   private static final IEclipsePreferences ROOT = Platform.getPreferencesService().getRootNode();
 
@@ -498,6 +498,12 @@ public final class PreferencesUtil
       }
     }
 
+    private PreferenceProperty(Preferences node, String property)
+    {
+      this.node = node;
+      this.property = property;
+    }
+
     public Preferences getNode()
     {
       return node;
@@ -506,6 +512,57 @@ public final class PreferencesUtil
     public String getProperty()
     {
       return property;
+    }
+
+    public PreferenceProperty getEffectiveProperty()
+    {
+      try
+      {
+        for (String key : node.keys())
+        {
+          if (key.equals(property))
+          {
+            return this;
+          }
+        }
+      }
+      catch (BackingStoreException ex1)
+      {
+        //$FALL-THROUGH$
+      }
+
+      Preferences rootNode = Platform.getPreferencesService().getRootNode();
+      for (String path = nextScope(node.absolutePath()); path != null; path = nextScope(path))
+      {
+        try
+        {
+          if (rootNode.nodeExists(path))
+          {
+            return new PreferenceProperty(rootNode.node(path), property).getEffectiveProperty();
+          }
+        }
+        catch (BackingStoreException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      return this;
+    }
+
+    private String nextScope(String path)
+    {
+      if (path.startsWith("/instance/"))
+      {
+        return "/default/" + path.substring("/instance/".length());
+      }
+
+      if (path.startsWith("/default/"))
+      {
+        return "/bundle-defaults/" + path.substring("/default/".length());
+      }
+
+      return null;
     }
 
     public void set(String value)
