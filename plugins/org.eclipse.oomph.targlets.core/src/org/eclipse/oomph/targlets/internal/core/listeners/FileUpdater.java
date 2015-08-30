@@ -69,6 +69,11 @@ public abstract class FileUpdater
     URI uri = getURI(file);
     Map<String, ?> description = getDescription(uri);
     String nl = (String)description.get(ContentHandler.LINE_DELIMITER_PROPERTY);
+    if (nl == null)
+    {
+      nl = System.getProperty("line.separator");
+    }
+
     String encoding = (String)description.get(ContentHandler.CHARSET_PROPERTY);
     if (encoding == null)
     {
