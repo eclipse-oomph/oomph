@@ -17,6 +17,7 @@ import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,7 +30,7 @@ import java.io.PrintStream;
 /**
  * @author Eike Stepper
  */
-public abstract class AbstractTest
+public abstract class AbstractTest extends CoreMatchers
 {
   private static final PrintStream LOG = System.out;
 

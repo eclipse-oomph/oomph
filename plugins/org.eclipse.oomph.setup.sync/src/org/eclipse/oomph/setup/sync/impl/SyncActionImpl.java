@@ -1,4 +1,12 @@
-/**
+/*
+ * Copyright (c) 2015 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
  */
 package org.eclipse.oomph.setup.sync.impl;
 
@@ -77,10 +85,10 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getResolvedType()
-   * @generated
+   * @generated NOT
    * @ordered
    */
-  protected static final SyncActionType RESOLVED_TYPE_EDEFAULT = SyncActionType.NONE;
+  protected static final SyncActionType RESOLVED_TYPE_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getResolvedType() <em>Resolved Type</em>}' attribute.

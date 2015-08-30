@@ -11,6 +11,8 @@
 package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +22,11 @@ import java.io.IOException;
  */
 public class LocalDataProvider implements DataProvider
 {
-  private final File locaFile;
+  private final File localFile;
 
   public LocalDataProvider(File locaFile)
   {
-    this.locaFile = locaFile;
+    localFile = locaFile;
   }
 
   public Location getLocation()
@@ -32,31 +34,48 @@ public class LocalDataProvider implements DataProvider
     return Location.LOCAL;
   }
 
-  public long get(long timeStamp, File file) throws IOException
+  public boolean update(File file) throws IOException, NotFoundException
   {
-    long lastModified = locaFile.lastModified();
-    if (lastModified == timeStamp)
+    String localVersion = SyncUtil.getDigest(localFile);
+    if (StringUtil.isEmpty(localVersion))
     {
-      return 0;
+      throw new NotFoundException(localFile.toURI());
     }
 
-    IOUtil.copyFile(locaFile, file);
-    return lastModified;
+    String version = SyncUtil.getDigest(file);
+    if (!ObjectUtil.equals(version, localVersion))
+    {
+      IOUtil.copyFile(localFile, file);
+      return true;
+    }
+
+    return false;
   }
 
-  public void post(long timeStamp, File file) throws IOException, ConflictException
+  public void post(File file, String baseVersion) throws IOException, ConflictException
   {
-    long lastModified = locaFile.lastModified();
-    if (lastModified == timeStamp)
+    String localVersion = SyncUtil.getDigest(localFile);
+    if (StringUtil.isEmpty(localVersion) || ObjectUtil.equals(localVersion, baseVersion))
     {
-      IOUtil.copyFile(file, locaFile);
-      lastModified = locaFile.lastModified();
+      // OK.
+      IOUtil.copyFile(file, localFile);
     }
     else
     {
-      IOUtil.copyFile(locaFile, file);
-      file.setLastModified(lastModified);
-      throw new ConflictException(locaFile.toURI());
+      // Conflict.
+      IOUtil.copyFile(localFile, file);
+      throw new ConflictException(localFile.toURI());
     }
+  }
+
+  public boolean delete() throws IOException
+  {
+    if (!localFile.exists())
+    {
+      return false;
+    }
+
+    SyncUtil.deleteFile(localFile);
+    return true;
   }
 }

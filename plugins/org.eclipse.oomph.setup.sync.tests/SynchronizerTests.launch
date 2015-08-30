@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.junit.launchconfig">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/org.eclipse.oomph.setup.sync.tests/src/org/eclipse/oomph/setup/sync/tests/SynchronizerTests.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
+<booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+<stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.oomph.setup.sync.tests.SynchronizerTests"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.oomph.setup.sync.tests"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DXX:+UnlockCommercialFeatures&#13;&#10;-DXX:+FlightRecorder&#13;&#10;-DXX:StartFlightRecording=name=default,settings=default&#13;&#10;-DXX:FlightRecorderOptions=dumponexit=true,dumponexitpath=C:\develop\jmc\dump-${current_date}.jfr,defaultrecording=true,disk=true,repository=C:\develop\jmc\repository\"/>
+</launchConfiguration>

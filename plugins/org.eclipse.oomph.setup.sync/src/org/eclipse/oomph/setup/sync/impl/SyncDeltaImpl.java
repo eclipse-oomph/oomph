@@ -1,4 +1,12 @@
-/**
+/*
+ * Copyright (c) 2015 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
  */
 package org.eclipse.oomph.setup.sync.impl;
 
@@ -21,16 +29,36 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getOldTask <em>Old Task</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getNewTask <em>New Task</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncDeltaImpl#getID <em>ID</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncDelta
 {
+  /**
+   * The default value of the '{@link #getID() <em>ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getID()
+   * @generated
+   * @ordered
+   */
+  protected static final String ID_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getID() <em>ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getID()
+   * @generated
+   * @ordered
+   */
+  protected String iD = ID_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getOldTask() <em>Old Task</em>}' reference.
    * <!-- begin-user-doc -->
@@ -70,16 +98,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
    * @ordered
    */
   protected SyncDeltaType type = TYPE_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getID() <em>ID</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getID()
-   * @generated
-   * @ordered
-   */
-  protected static final String ID_EDEFAULT = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -224,21 +242,26 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   public String getID()
   {
-    if (oldTask != null)
-    {
-      return oldTask.getID();
-    }
+    return iD;
+  }
 
-    if (newTask != null)
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setID(String newID)
+  {
+    String oldID = iD;
+    iD = newID;
+    if (eNotificationRequired())
     {
-      return newTask.getID();
+      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__ID, oldID, iD));
     }
-
-    return null;
   }
 
   /**
@@ -251,6 +274,8 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__ID:
+        return getID();
       case SyncPackage.SYNC_DELTA__OLD_TASK:
         if (resolve)
         {
@@ -265,8 +290,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
         return basicGetNewTask();
       case SyncPackage.SYNC_DELTA__TYPE:
         return getType();
-      case SyncPackage.SYNC_DELTA__ID:
-        return getID();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -281,6 +304,9 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__ID:
+        setID((String)newValue);
+        return;
       case SyncPackage.SYNC_DELTA__OLD_TASK:
         setOldTask((SetupTask)newValue);
         return;
@@ -304,6 +330,9 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__ID:
+        setID(ID_EDEFAULT);
+        return;
       case SyncPackage.SYNC_DELTA__OLD_TASK:
         setOldTask((SetupTask)null);
         return;
@@ -327,14 +356,14 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_DELTA__ID:
+        return ID_EDEFAULT == null ? iD != null : !ID_EDEFAULT.equals(iD);
       case SyncPackage.SYNC_DELTA__OLD_TASK:
         return oldTask != null;
       case SyncPackage.SYNC_DELTA__NEW_TASK:
         return newTask != null;
       case SyncPackage.SYNC_DELTA__TYPE:
         return type != TYPE_EDEFAULT;
-      case SyncPackage.SYNC_DELTA__ID:
-        return ID_EDEFAULT == null ? getID() != null : !ID_EDEFAULT.equals(getID());
     }
     return super.eIsSet(featureID);
   }
@@ -353,7 +382,9 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (type: ");
+    result.append(" (iD: ");
+    result.append(iD);
+    result.append(", type: ");
     result.append(type);
     result.append(')');
     return result.toString();

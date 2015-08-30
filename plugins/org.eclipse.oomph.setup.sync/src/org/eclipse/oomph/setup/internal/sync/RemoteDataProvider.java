@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -42,26 +43,35 @@ public class RemoteDataProvider implements DataProvider
 
   private static final boolean DEBUG = PropertiesUtil.isProperty("oomph.setup.sync.debug");
 
-  private static final String HEADER_LAST_MODIFIED = "X-Last-Modified";
+  private static final String BASE_VERSION_HEADER = "X-Base-Version";
 
-  private static final int STATUS_OK = 200;
+  private static final String VERSION_HEADER = "X-Version";
 
-  private static final int STATUS_NOT_MODIFIED = 304;
+  private static final int OK = 200;
 
-  private static final int STATUS_BAD_REQUEST = 400;
+  private static final int NOT_MODIFIED = 304;
 
-  private static final int STATUS_FORBIDDEN = 403;
+  private static final int BAD_REQUEST = 400;
 
-  private static final int STATUS_CONFLICT = 409;
+  private static final int FORBIDDEN = 403;
+
+  private static final int NOT_FOUND = 404;
+
+  private static final int CONFLICT = 409;
 
   private final URI uri;
 
   private final Executor executor;
 
-  public RemoteDataProvider(URI serviceURI, Credentials credentials)
+  public RemoteDataProvider(URI serviceURI, Executor executor)
   {
     uri = serviceURI;
-    executor = Executor.newInstance().auth(credentials);
+    this.executor = executor;
+  }
+
+  public RemoteDataProvider(URI serviceURI, Credentials credentials)
+  {
+    this(serviceURI, Executor.newInstance().auth(credentials));
   }
 
   public Location getLocation()
@@ -69,31 +79,40 @@ public class RemoteDataProvider implements DataProvider
     return Location.REMOTE;
   }
 
-  public long get(long timeStamp, File file) throws IOException
+  public boolean update(File file) throws IOException, NotFoundException
   {
     HttpEntity responseEntity = null;
 
     try
     {
-      Request request = configureRequest(timeStamp, Request.Get(uri));
+      String baseVersion = SyncUtil.getDigest(file);
+      Request request = configureRequest(Request.Get(uri), baseVersion);
 
       HttpResponse response = sendRequest(request);
       responseEntity = response.getEntity();
 
       int status = getStatus(response);
-      if (status == STATUS_NOT_MODIFIED)
+      if (status == NOT_FOUND)
       {
-        EntityUtils.consume(responseEntity);
-        return 0;
+        throw new NotFoundException(uri);
       }
 
-      if (status == STATUS_OK)
+      if (status == NOT_MODIFIED)
+      {
+        return false;
+      }
+
+      if (status == OK)
       {
         saveContent(responseEntity, file);
-        return getLastModified(response);
+        return true;
       }
 
       throw new BadResponseException(uri);
+    }
+    catch (NotFoundException ex)
+    {
+      throw ex;
     }
     catch (IOException ex)
     {
@@ -104,39 +123,38 @@ public class RemoteDataProvider implements DataProvider
 
       throw ex;
     }
+    finally
+    {
+      if (responseEntity != null)
+      {
+        EntityUtils.consume(responseEntity);
+      }
+    }
   }
 
-  public void post(long timeStamp, File file) throws IOException, ConflictException
+  public void post(File file, String baseVersion) throws IOException, ConflictException
   {
     HttpEntity responseEntity = null;
 
     try
     {
-      // @SuppressWarnings("deprecation")
-      // HttpEntity requestEntity = MultipartEntityBuilder.create().addPart("userfile", new FileBody(file, "text/xml", "UTF-8")).build();
+      String version = SyncUtil.getDigest(file);
 
       HttpEntity requestEntity = MultipartEntityBuilder.create().addPart("userfile", new FileBody(file)).build();
-      Request request = configureRequest(timeStamp, Request.Post(uri)).body(requestEntity);
-
-      // Request request = configureRequest(timeStamp, Request.Post(uri)).addHeader("Content-Type", "text/xml").body(requestEntity);
+      Request request = configureRequest(Request.Post(uri), baseVersion).addHeader(VERSION_HEADER, version).body(requestEntity);
 
       HttpResponse response = sendRequest(request);
       responseEntity = response.getEntity();
       int status = getStatus(response);
 
-      if (status == STATUS_CONFLICT)
+      if (status == CONFLICT)
       {
         saveContent(responseEntity, file);
-
-        long lastModified = getLastModified(response);
-        file.setLastModified(lastModified);
         throw new ConflictException(uri);
       }
 
-      if (status == STATUS_OK)
+      if (status == OK)
       {
-        long lastModified = getLastModified(response);
-        file.setLastModified(lastModified);
         return;
       }
 
@@ -153,20 +171,34 @@ public class RemoteDataProvider implements DataProvider
     }
   }
 
-  private Request configureRequest(long timeStamp, Request request)
+  public boolean delete() throws IOException
+  {
+    Request request = configureRequest(Request.Delete(uri), null);
+    HttpResponse response = sendRequest(request);
+
+    int status = getStatus(response);
+    if (status == NOT_FOUND)
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  private Request configureRequest(Request request, String baseVersion)
   {
     return request //
-        .viaProxy(ProxyUtil.getProxyHost(uri)) //
+        .viaProxy(SyncUtil.getProxyHost(uri)) //
         .connectTimeout(3000) //
         .staleConnectionCheck(true) //
         .socketTimeout(10000) //
-        .addHeader(HEADER_LAST_MODIFIED, Long.toString(timeStamp)) //
+        .addHeader(BASE_VERSION_HEADER, StringUtil.safe(baseVersion)) //
         .addHeader("User-Agent", USER_AGENT_ID);
   }
 
   private HttpResponse sendRequest(Request request) throws IOException
   {
-    Response result = ProxyUtil.proxyAuthentication(executor, uri).execute(request);
+    Response result = SyncUtil.proxyAuthentication(executor, uri).execute(request);
     HttpResponse response = result.returnResponse();
 
     if (DEBUG)
@@ -190,36 +222,17 @@ public class RemoteDataProvider implements DataProvider
     }
 
     int status = statusLine.getStatusCode();
-    if (status == STATUS_BAD_REQUEST)
+    if (status == BAD_REQUEST)
     {
       throw new BadRequestException(uri);
     }
 
-    if (status == STATUS_FORBIDDEN)
+    if (status == FORBIDDEN)
     {
       throw new ForbiddenException(uri);
     }
 
     return status;
-  }
-
-  private long getLastModified(HttpResponse response) throws IOException
-  {
-    Header[] headers = response.getHeaders(HEADER_LAST_MODIFIED);
-    if (headers == null || headers.length == 0)
-    {
-      throw new BadResponseException(uri);
-    }
-
-    try
-    {
-      String header = headers[0].getValue();
-      return Long.parseLong(header);
-    }
-    catch (Exception ex)
-    {
-      throw new BadResponseException(uri);
-    }
   }
 
   private static void saveContent(HttpEntity entity, File file) throws IOException
@@ -276,7 +289,7 @@ public class RemoteDataProvider implements DataProvider
 
     public BadResponseException(URI uri)
     {
-      super("Bad Response: " + uri);
+      super("Bad response: " + uri);
     }
   }
 

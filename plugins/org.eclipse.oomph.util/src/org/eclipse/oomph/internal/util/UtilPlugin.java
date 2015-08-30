@@ -12,6 +12,7 @@ package org.eclipse.oomph.internal.util;
 
 import org.eclipse.oomph.util.OomphPlugin;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.core.runtime.Platform;
@@ -26,7 +27,7 @@ public final class UtilPlugin extends OomphPlugin
 
   private static Implementation plugin;
 
-  public static final ToggleStateAccessor DEFAULT_TOGGLE_STATE_ACCESSOR = new ToggleStateAccessor()
+  public static final ToggleStateAccessor DEFAULT_TOGGLE_STATE_ACCESSOR = CommonPlugin.IS_ECLIPSE_RUNNING ? new ToggleStateAccessor()
   {
     private final IEclipsePreferences preferences = Platform.getPreferencesService().getRootNode();
 
@@ -44,7 +45,7 @@ public final class UtilPlugin extends OomphPlugin
     {
       return preferences.getBoolean(getPreferenceKey(id), false);
     }
-  };
+  } : null;
 
   private static ToggleStateAccessor toggleStateAccessor = DEFAULT_TOGGLE_STATE_ACCESSOR;
 

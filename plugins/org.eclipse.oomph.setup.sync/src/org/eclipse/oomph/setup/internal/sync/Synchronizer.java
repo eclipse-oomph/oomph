@@ -10,27 +10,28 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
-import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
-import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.ConflictException;
-import org.eclipse.oomph.setup.sync.RemoteData;
+import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncDeltaType;
 import org.eclipse.oomph.setup.sync.SyncFactory;
 import org.eclipse.oomph.setup.sync.SyncPackage;
+import org.eclipse.oomph.util.ConcurrentArray;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -39,90 +40,78 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
  */
 public class Synchronizer
 {
-  private final DataProvider localDataProvider;
+  private static final EClass USER_TYPE = SetupPackage.Literals.USER;
 
-  private final DataProvider remoteDataProvider;
+  private static final EClass REMOTE_DATA_TYPE = SyncPackage.Literals.REMOTE_DATA;
 
-  private final File syncFolder;
+  private static final LocalLock LOCAL_LOCK = new LocalLock();
 
-  private final ResourceSet resourceSet;
+  private final Snapshot localSnapshot;
+
+  private final Snapshot remoteSnapshot;
+
+  private final ResourceSet resourceSet = SyncUtil.createResourceSet();
+
+  private final Set<String> ids = new HashSet<String>();
+
+  private int lastID;
 
   public Synchronizer(DataProvider localDataProvider, DataProvider remoteDataProvider, File syncFolder)
   {
-    this.localDataProvider = localDataProvider;
-    this.remoteDataProvider = remoteDataProvider;
-    this.syncFolder = syncFolder;
-
-    resourceSet = SetupCoreUtil.createResourceSet();
-    Resource.Factory factory = new BaseResourceFactoryImpl();
-
-    Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
-    extensionToFactoryMap.put("xml", factory);
-    extensionToFactoryMap.put("tmp", factory);
+    localSnapshot = new Snapshot(localDataProvider, syncFolder);
+    remoteSnapshot = new Snapshot(remoteDataProvider, syncFolder);
   }
 
   public Synchronization synchronize() throws IOException
   {
-    LocalLock lock = acquireLocalLock();
+    LOCAL_LOCK.acquire();
 
-    try
+    WorkingCopy localWorkingCopy = localSnapshot.createWorkingCopy();
+    WorkingCopy remoteWorkingCopy = remoteSnapshot.createWorkingCopy();
+
+    // Compute remote deltas first to make sure that new local tasks don't pick remotely existing IDs.
+    Map<String, SyncDelta> remoteDeltas = computeDeltas(remoteWorkingCopy, REMOTE_DATA_TYPE);
+    Map<String, SyncDelta> localDeltas = computeDeltas(localWorkingCopy, USER_TYPE);
+
+    Map<String, SyncAction> actions = computeSyncActions(localDeltas, remoteDeltas);
+    return new Synchronization(localWorkingCopy, remoteWorkingCopy, actions);
+  }
+
+  private Map<String, SyncDelta> computeDeltas(WorkingCopy workingCopy, EClass eClass)
+  {
+    Snapshot snapshot = workingCopy.getSnapshot();
+
+    File oldFile = snapshot.getOldFile();
+    if (!oldFile.exists())
     {
-      Snapshot localSnapshot = acquireLocalData();
-      Snapshot remoteSnapshot = acquireRemoteData();
-
-      Map<String, SyncDelta> localDeltas = computeLocalDeltas(localSnapshot);
-      Map<String, SyncDelta> remoteDeltas = computeRemoteDeltas(remoteSnapshot);
-
-      Map<String, SyncAction> actions = computeSyncActions(localDeltas, remoteDeltas);
-
-      return new Synchronization(localSnapshot, remoteSnapshot, actions);
+      SyncUtil.inititalizeFile(oldFile, eClass, resourceSet);
     }
-    finally
+
+    File tmpFile = workingCopy.getTmpFile();
+    if (!tmpFile.exists())
     {
-      lock.release();
+      File newFile = snapshot.getNewFile();
+      if (!newFile.exists())
+      {
+        SyncUtil.inititalizeFile(tmpFile, eClass, resourceSet);
+      }
+      else
+      {
+        IOUtil.copyFile(newFile, tmpFile);
+      }
     }
-  }
 
-  private LocalLock acquireLocalLock()
-  {
-    return new LocalLock();
-  }
-
-  private Snapshot acquireLocalData() throws IOException
-  {
-    return new Snapshot(localDataProvider, syncFolder);
-  }
-
-  private Snapshot acquireRemoteData() throws IOException
-  {
-    return new Snapshot(remoteDataProvider, syncFolder);
-  }
-
-  private Map<String, SyncDelta> computeLocalDeltas(Snapshot localSnapshot)
-  {
-    File oldFile = localSnapshot.getOldFile();
-    File newFile = localSnapshot.getNewFile();
-
-    RemoteData oldData = loadObject(oldFile, SetupPackage.Literals.USER);
-    RemoteData newData = loadObject(newFile, SetupPackage.Literals.USER);
-
-    return compareTasks(oldData, newData);
-  }
-
-  private Map<String, SyncDelta> computeRemoteDeltas(Snapshot remoteSnapshot) throws IOException
-  {
-    File oldFile = remoteSnapshot.getOldFile();
-    File newFile = remoteSnapshot.getNewFile();
-
-    RemoteData oldData = loadObject(oldFile, SyncPackage.Literals.REMOTE_DATA);
-    RemoteData newData = loadObject(newFile, SyncPackage.Literals.REMOTE_DATA);
+    SetupTaskContainer oldData = loadObject(oldFile, eClass);
+    SetupTaskContainer newData = loadObject(tmpFile, eClass);
 
     return compareTasks(oldData, newData);
   }
@@ -251,24 +240,26 @@ public class Synchronizer
       SetupTask oldTask = oldEntry.getValue();
       SetupTask newTask = newTasks.remove(id);
 
-      SyncDelta delta = compareTasks(oldTask, newTask);
+      SyncDelta delta = compareTasks(id, oldTask, newTask);
       if (delta != null)
       {
         deltas.put(id, delta);
       }
     }
 
-    for (SetupTask newTask : newTasks.values())
+    for (Map.Entry<String, SetupTask> newEntry : newTasks.entrySet())
     {
-      String id = newTask.getID();
-      SyncDelta delta = compareTasks(null, newTask);
+      String id = newEntry.getKey();
+      SetupTask newTask = newEntry.getValue();
+
+      SyncDelta delta = compareTasks(id, null, newTask);
       deltas.put(id, delta);
     }
 
     return deltas;
   }
 
-  private SyncDelta compareTasks(SetupTask oldTask, SetupTask newTask)
+  private SyncDelta compareTasks(String id, SetupTask oldTask, SetupTask newTask)
   {
     if (oldTask == null)
     {
@@ -277,12 +268,12 @@ public class Synchronizer
         return null;
       }
 
-      return SyncFactory.eINSTANCE.createSyncDelta(oldTask, newTask, SyncDeltaType.CHANGED);
+      return SyncFactory.eINSTANCE.createSyncDelta(id, oldTask, newTask, SyncDeltaType.CHANGED);
     }
 
     if (newTask == null)
     {
-      return SyncFactory.eINSTANCE.createSyncDelta(oldTask, newTask, SyncDeltaType.REMOVED);
+      return SyncFactory.eINSTANCE.createSyncDelta(id, oldTask, newTask, SyncDeltaType.REMOVED);
     }
 
     PreferenceTask oldPreference = (PreferenceTask)oldTask;
@@ -300,7 +291,7 @@ public class Synchronizer
       return null;
     }
 
-    return SyncFactory.eINSTANCE.createSyncDelta(oldPreference, newPreference, SyncDeltaType.CHANGED);
+    return SyncFactory.eINSTANCE.createSyncDelta(id, oldPreference, newPreference, SyncDeltaType.CHANGED);
   }
 
   private Map<String, SetupTask> collectTasks(SetupTaskContainer taskContainer)
@@ -314,32 +305,59 @@ public class Synchronizer
   {
     for (SetupTask task : tasks)
     {
-      if (task.getRestrictions().isEmpty())
+      String id = task.getID();
+      if (!StringUtil.isEmpty(id))
       {
-        if (task instanceof PreferenceTask)
-        {
-          PreferenceTask preferenceTask = (PreferenceTask)task;
-          String id = preferenceTask.getID();
+        // Make sure existing IDs are not reused.
+        ids.add(id);
+      }
 
-          if (result.put(id, task) != null)
-          {
-            throw new DuplicateIDException(id);
-          }
-        }
-        else if (task instanceof CompoundTask)
+      if (isSychronizable(task))
+      {
+        if (StringUtil.isEmpty(id))
         {
-          CompoundTask compoundTask = (CompoundTask)task;
-          collectTasks(compoundTask.getSetupTasks(), result);
+          id = createID();
+          task.setID(id);
         }
+
+        if (result.put(id, task) != null)
+        {
+          throw new DuplicateIDException(id);
+        }
+      }
+      else if (task instanceof CompoundTask)
+      {
+        CompoundTask compoundTask = (CompoundTask)task;
+        collectTasks(compoundTask.getSetupTasks(), result);
       }
     }
   }
 
-  private <T extends EObject> T loadObject(File file, EClassifier classifier)
+  private boolean isSychronizable(SetupTask task)
+  {
+    return task instanceof PreferenceTask;
+  }
+
+  private String createID()
+  {
+    for (int i = lastID + 1; i < Integer.MAX_VALUE; i++)
+    {
+      String id = "sync" + i;
+      if (ids.add(id))
+      {
+        lastID = i;
+        return id;
+      }
+    }
+
+    throw new IllegalStateException("Too many IDs");
+  }
+
+  private <T extends EObject> T loadObject(File file, EClass eClass)
   {
     URI uri = URI.createFileURI(file.getAbsolutePath());
-    Resource resource = BaseUtil.loadResourceSafely(resourceSet, uri);
-    return BaseUtil.getObjectByType(resource.getContents(), classifier);
+    Resource resource = resourceSet.getResource(uri, true);
+    return BaseUtil.getObjectByType(resource.getContents(), eClass);
   }
 
   /**
@@ -392,6 +410,10 @@ public class Synchronizer
     {
     }
 
+    public void acquire()
+    {
+    }
+
     public void release()
     {
     }
@@ -402,19 +424,45 @@ public class Synchronizer
    */
   public final class Synchronization
   {
-    private final Snapshot localSnapshot;
+    private final ConcurrentArray<CommitListener> listeners = new ConcurrentArray<CommitListener>()
+    {
+      @Override
+      protected CommitListener[] newArray(int length)
+      {
+        return new CommitListener[length];
+      }
+    };
 
-    private final Snapshot remoteSnapshot;
+    private final WorkingCopy localWorkingCopy;
+
+    private final WorkingCopy remoteWorkingCopy;
 
     private final Map<String, SyncAction> actions;
 
-    private boolean done;
+    private boolean committed;
 
-    public Synchronization(Snapshot localSnapshot, Snapshot remoteSnapshot, Map<String, SyncAction> actions)
+    private boolean disposed;
+
+    private Synchronization(WorkingCopy localWorkingCopy, WorkingCopy remoteWorkingCopy, Map<String, SyncAction> actions)
     {
-      this.localSnapshot = localSnapshot;
-      this.remoteSnapshot = remoteSnapshot;
+      this.localWorkingCopy = localWorkingCopy;
+      this.remoteWorkingCopy = remoteWorkingCopy;
       this.actions = actions;
+    }
+
+    public Synchronizer getSynchronizer()
+    {
+      return Synchronizer.this;
+    }
+
+    public void addCommitListener(CommitListener listener)
+    {
+      listeners.add(listener);
+    }
+
+    public void removeCommitListener(CommitListener listener)
+    {
+      listeners.remove(listener);
     }
 
     public Map<String, SyncAction> getActions()
@@ -422,34 +470,72 @@ public class Synchronizer
       return actions;
     }
 
-    public boolean isDone()
-    {
-      return done;
-    }
-
     public void commit() throws IOException, ConflictException
     {
-      if (!done)
+      if (!committed && !disposed)
       {
+        committed = true;
+
         try
         {
-          applyActions(remoteSnapshot, SyncPackage.Literals.REMOTE_DATA);
-          remoteSnapshot.commit();
+          applyActions(remoteWorkingCopy, REMOTE_DATA_TYPE);
+          remoteWorkingCopy.commit();
 
-          applyActions(localSnapshot, SetupPackage.Literals.USER);
-          localSnapshot.commit();
+          applyActions(localWorkingCopy, USER_TYPE);
+          localWorkingCopy.commit();
+
+          notifyCommitListeners(null);
         }
-        finally
+        catch (IOException ex)
         {
-          cleanup();
+          notifyCommitListeners(ex);
+          throw ex;
+        }
+        catch (RuntimeException ex)
+        {
+          notifyCommitListeners(ex);
+          throw ex;
+        }
+        catch (Error ex)
+        {
+          notifyCommitListeners(ex);
+          throw ex;
         }
       }
     }
 
-    private void applyActions(Snapshot snapshot, EClassifier classifier)
+    public void dispose()
     {
-      File file = snapshot.getNewFile();
-      SetupTaskContainer taskContainer = loadObject(file, classifier);
+      if (!disposed)
+      {
+        disposed = true;
+        LOCAL_LOCK.release();
+
+        try
+        {
+          localWorkingCopy.dispose();
+        }
+        catch (Throwable ex)
+        {
+          SetupSyncPlugin.INSTANCE.log(ex);
+        }
+
+        try
+        {
+          remoteWorkingCopy.dispose();
+        }
+        catch (Throwable ex)
+        {
+          SetupSyncPlugin.INSTANCE.log(ex);
+        }
+      }
+    }
+
+    private void applyActions(WorkingCopy workingCopy, EClass eClass)
+    {
+      File file = workingCopy.getTmpFile();
+
+      SetupTaskContainer taskContainer = loadObject(file, eClass);
       Map<String, SetupTask> tasks = collectTasks(taskContainer);
 
       for (Map.Entry<String, SyncAction> entry : actions.entrySet())
@@ -481,6 +567,8 @@ public class Synchronizer
             break;
         }
       }
+
+      BaseUtil.saveEObject(taskContainer);
     }
 
     private void applySetAction(SetupTaskContainer taskContainer, Map<String, SetupTask> tasks, String id, SyncDelta delta)
@@ -491,6 +579,7 @@ public class Synchronizer
         if (newTask != null)
         {
           newTask = EcoreUtil.copy(newTask);
+          newTask.setID(id);
           newTask.getRestrictions().clear();
           newTask.getPredecessors().clear();
           newTask.getSuccessors().clear();
@@ -520,14 +609,27 @@ public class Synchronizer
       }
     }
 
-    private void cleanup()
+    private void notifyCommitListeners(Throwable exception)
     {
-      if (!done)
+      for (CommitListener commitListener : listeners.get())
       {
-        localSnapshot.dispose();
-        remoteSnapshot.dispose();
-        done = true;
+        try
+        {
+          commitListener.synchronizationCommitted(this, exception);
+        }
+        catch (Throwable ex)
+        {
+          SetupSyncPlugin.INSTANCE.log(ex);
+        }
       }
     }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface CommitListener
+  {
+    public void synchronizationCommitted(Synchronization synchronization, Throwable t);
   }
 }

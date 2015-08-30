@@ -24,6 +24,8 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandlerImpl;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -85,7 +87,7 @@ public final class SetupCoreUtil
 
   private static final URI STATS_URI_PREFIX = URI.createURI("http://download.eclipse.org/stats/oomph");
 
-  private static final ECFURIHandlerImpl.AuthorizationHandlerImpl AUTHORIZATION_HANDLER;
+  private static final AuthorizationHandler AUTHORIZATION_HANDLER;
 
   static
   {
@@ -96,7 +98,7 @@ public final class SetupCoreUtil
     ISecurePreferences root = PreferencesUtil.getSecurePreferences();
     ISecurePreferences securePreferences = root.node(OOMPH_NAMESPACE).node("hosts");
 
-    AUTHORIZATION_HANDLER = new ECFURIHandlerImpl.AuthorizationHandlerImpl(uiServices, securePreferences);
+    AUTHORIZATION_HANDLER = new AuthorizationHandlerImpl(uiServices, securePreferences);
   }
 
   private SetupCoreUtil()

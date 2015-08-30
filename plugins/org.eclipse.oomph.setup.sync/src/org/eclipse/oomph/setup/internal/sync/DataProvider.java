@@ -21,9 +21,11 @@ public interface DataProvider
 {
   public Location getLocation();
 
-  public long get(long timeStamp, File file) throws IOException;
+  public boolean update(File file) throws IOException, NotFoundException;
 
-  public void post(long timeStamp, File file) throws IOException, ConflictException;
+  public void post(File file, String baseVersion) throws IOException, ConflictException;
+
+  public boolean delete() throws IOException;
 
   /**
    * @author Eike Stepper
@@ -36,7 +38,20 @@ public interface DataProvider
   /**
    * @author Eike Stepper
    */
-  class ConflictException extends IOException
+  public static class NotFoundException extends IOException
+  {
+    private static final long serialVersionUID = 1L;
+
+    public NotFoundException(URI uri)
+    {
+      super("Not found: " + uri);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class ConflictException extends IOException
   {
     private static final long serialVersionUID = 1L;
 

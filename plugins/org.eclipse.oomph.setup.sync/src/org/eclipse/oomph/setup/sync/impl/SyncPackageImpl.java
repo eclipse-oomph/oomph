@@ -1,4 +1,12 @@
-/**
+/*
+ * Copyright (c) 2015 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
  */
 package org.eclipse.oomph.setup.sync.impl;
 
@@ -214,7 +222,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    */
   public EReference getSyncDelta_OldTask()
   {
-    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(0);
+    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -224,7 +232,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    */
   public EReference getSyncDelta_NewTask()
   {
-    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(1);
+    return (EReference)syncDeltaEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -234,7 +242,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    */
   public EAttribute getSyncDelta_Type()
   {
-    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -244,7 +252,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    */
   public EAttribute getSyncDelta_ID()
   {
-    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -378,10 +386,10 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     createEAttribute(stringToSyncPolicyMapEntryEClass, STRING_TO_SYNC_POLICY_MAP_ENTRY__VALUE);
 
     syncDeltaEClass = createEClass(SYNC_DELTA);
+    createEAttribute(syncDeltaEClass, SYNC_DELTA__ID);
     createEReference(syncDeltaEClass, SYNC_DELTA__OLD_TASK);
     createEReference(syncDeltaEClass, SYNC_DELTA__NEW_TASK);
     createEAttribute(syncDeltaEClass, SYNC_DELTA__TYPE);
-    createEAttribute(syncDeltaEClass, SYNC_DELTA__ID);
 
     syncActionEClass = createEClass(SYNC_ACTION);
     createEReference(syncActionEClass, SYNC_ACTION__LOCAL_DELTA);
@@ -445,14 +453,14 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(syncDeltaEClass, SyncDelta.class, "SyncDelta", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSyncDelta_ID(), ecorePackage.getEString(), "iD", null, 1, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+        IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSyncDelta_OldTask(), theSetupPackage.getSetupTask(), null, "oldTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSyncDelta_NewTask(), theSetupPackage.getSetupTask(), null, "newTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSyncDelta_Type(), getSyncDeltaType(), "type", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncDelta_ID(), ecorePackage.getEString(), "iD", null, 1, 1, SyncDelta.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE,
-        IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     initEClass(syncActionEClass, SyncAction.class, "SyncAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSyncAction_LocalDelta(), getSyncDelta(), null, "localDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,

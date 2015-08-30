@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.targlets.tests;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.eclipse.oomph.p2.P2Factory;

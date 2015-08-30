@@ -10,10 +10,13 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.NotFoundException;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.ConflictException;
 import org.eclipse.oomph.util.IOUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -27,26 +30,21 @@ public class Snapshot
 
   private final File newFile;
 
-  public Snapshot(DataProvider dataProvider, File syncFolder) throws IOException
+  private final File tmpFile;
+
+  public Snapshot(DataProvider dataProvider, File folder)
   {
     this.dataProvider = dataProvider;
 
     String prefix = dataProvider.getLocation().toString().toLowerCase();
-    oldFile = new File(syncFolder, prefix + ".xml");
-    newFile = new File(syncFolder, prefix + ".tmp");
+    oldFile = new File(folder, prefix + "-old.xml");
+    newFile = new File(folder, prefix + "-new.xml");
+    tmpFile = new File(folder, prefix + "-tmp.xml");
+  }
 
-    long timeStamp = oldFile.lastModified();
-
-    long lastModified = dataProvider.get(timeStamp, newFile);
-    if (lastModified != 0)
-    {
-      IOUtil.copyFile(newFile, oldFile);
-      oldFile.setLastModified(lastModified);
-    }
-    else
-    {
-      IOUtil.copyFile(oldFile, newFile);
-    }
+  public DataProvider getDataProvider()
+  {
+    return dataProvider;
   }
 
   public File getOldFile()
@@ -59,41 +57,107 @@ public class Snapshot
     return newFile;
   }
 
-  public boolean commit() throws IOException, ConflictException
+  public WorkingCopy createWorkingCopy() throws IOException
   {
-    if (newFile.isFile())
+    try
     {
-      long timeStamp = oldFile.lastModified();
-      if (timeStamp != 0)
+      dataProvider.update(newFile);
+    }
+    catch (NotFoundException ex)
+    {
+      SyncUtil.deleteFile(newFile);
+    }
+
+    return new WorkingCopy(this);
+  }
+
+  private void doCommit() throws IOException, ConflictException
+  {
+    if (!tmpFile.isFile())
+    {
+      throw new FileNotFoundException(tmpFile.getAbsolutePath());
+    }
+
+    try
+    {
+      String baseVersion = SyncUtil.getDigest(newFile);
+
+      dataProvider.post(tmpFile, baseVersion);
+      moveTmpFileTo(oldFile);
+
+      IOUtil.copyFile(oldFile, newFile);
+    }
+    catch (ConflictException ex)
+    {
+      moveTmpFileTo(newFile);
+      throw ex;
+    }
+  }
+
+  private void moveTmpFileTo(File target) throws IOException
+  {
+    SyncUtil.deleteFile(target);
+    if (!tmpFile.renameTo(target))
+    {
+      throw new IOException("Could not rename " + tmpFile + " to " + target);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class WorkingCopy
+  {
+    private final Snapshot snapshot;
+
+    private boolean committed;
+
+    private boolean disposed;
+
+    private WorkingCopy(Snapshot snapshot)
+    {
+      this.snapshot = snapshot;
+    }
+
+    public Snapshot getSnapshot()
+    {
+      return snapshot;
+    }
+
+    public boolean isLocal()
+    {
+      return snapshot.getDataProvider().getLocation() == Location.LOCAL;
+    }
+
+    public File getTmpFile()
+    {
+      return snapshot.tmpFile;
+    }
+
+    public void commit() throws IOException, ConflictException
+    {
+      if (!committed && !disposed)
       {
-        ConflictException conflictException = null;
-
-        try
-        {
-          dataProvider.post(timeStamp, newFile);
-        }
-        catch (ConflictException ex)
-        {
-          conflictException = ex;
-        }
-
-        IOUtil.deleteBestEffort(oldFile);
-        newFile.renameTo(oldFile);
-
-        if (conflictException != null)
-        {
-          throw conflictException;
-        }
-
-        return true;
+        committed = true;
+        snapshot.doCommit();
       }
     }
 
-    return false;
-  }
+    public void dispose()
+    {
+      if (!disposed)
+      {
+        disposed = true;
 
-  public void dispose()
-  {
-    IOUtil.deleteBestEffort(newFile);
+        try
+        {
+          SyncUtil.deleteFile(snapshot.tmpFile);
+        }
+        catch (Throwable ex)
+        {
+          SetupSyncPlugin.INSTANCE.log(ex);
+        }
+      }
+    }
   }
 }

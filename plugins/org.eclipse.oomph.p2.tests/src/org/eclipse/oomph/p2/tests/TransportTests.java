@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.p2.tests;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.eclipse.oomph.internal.util.HTTPServer;

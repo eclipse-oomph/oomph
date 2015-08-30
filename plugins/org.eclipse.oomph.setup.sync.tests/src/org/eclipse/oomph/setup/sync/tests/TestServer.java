@@ -8,9 +8,12 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal.sync;
+package org.eclipse.oomph.setup.sync.tests;
 
+import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -36,44 +39,50 @@ import java.net.URI;
 /**
  * @author Eike Stepper
  */
-class ClientTest
+public class TestServer
 {
-  private static final boolean LOCAL_SERVER = true;
+  private static final boolean LOCALHOST = true;
 
-  private static final File SYNC_FOLDER = new File(PropertiesUtil.getUserHome(), ".eclipse/org.eclipse.oomph.setup.sync");
+  private static RemoteDataProvider remoteDataProvider;
 
-  public static void main(String[] args) throws Exception
+  public static synchronized RemoteDataProvider getRemoteDataProvider() throws Exception
   {
-    RemoteDataProvider dataProvider = createRemoteDataProvider();
-    Snapshot remoteSnapshot = new Snapshot(dataProvider, SYNC_FOLDER);
+    if (remoteDataProvider == null)
+    {
+      remoteDataProvider = createRemoteDataProvider();
+    }
 
-    File workingCopy = remoteSnapshot.getNewFile();
-    edit(workingCopy);
-
-    boolean committed = remoteSnapshot.commit();
-    System.out.println(committed);
+    return remoteDataProvider;
   }
 
   private static RemoteDataProvider createRemoteDataProvider() throws Exception
   {
-    if (LOCAL_SERVER)
+    if (LOCALHOST)
     {
-      Credentials credentials = new UsernamePasswordCredentials("stepper", "123");
-      return new RemoteDataProvider(new URI("http://localhost:8765/protected/service.php"), credentials);
+      return new RemoteDataProvider(new URI("http://localhost:8765/protected/"), new UsernamePasswordCredentials("stepper", "123"));
     }
 
-    Credentials credentials = new LoginDialog().getCredentials();
-    if (credentials == null)
+    Credentials credentials;
+
+    File file = new File(PropertiesUtil.getUserHome(), "oomph.test.credentials");
+    if (file.exists())
     {
-      System.exit(0);
+      System.out.println("Reading credentials from file " + file);
+      credentials = (Credentials)IOUtil.readObject(file, UsernamePasswordCredentials.class.getClassLoader());
+    }
+    else
+    {
+      credentials = new LoginDialog().getCredentials();
+      if (credentials == null)
+      {
+        System.exit(0);
+      }
+
+      System.out.println("Storing credentials in file " + file);
+      IOUtil.writeObject(file, credentials);
     }
 
     return new RemoteDataProvider(new URI("https://dev.eclipse.org/oomph/"), credentials);
-  }
-
-  private static void edit(File file)
-  {
-    file.setLastModified(System.currentTimeMillis());
   }
 
   /**
@@ -105,8 +114,14 @@ class ClientTest
       {
         public void actionPerformed(ActionEvent e)
         {
-          credentials = new UsernamePasswordCredentials(userField.getText(), new String(passwordField.getPassword()));
-          setVisible(false);
+          String username = userField.getText();
+          String password = new String(passwordField.getPassword());
+          if (!StringUtil.isEmpty(username) && !StringUtil.isEmpty(password))
+          {
+            credentials = new UsernamePasswordCredentials(username, password);
+          }
+
+          close();
         }
       });
 
@@ -115,12 +130,14 @@ class ClientTest
       {
         public void actionPerformed(ActionEvent e)
         {
-          setVisible(false);
+          close();
         }
       });
 
       contentPane.add(okButton);
       contentPane.add(cancelButton);
+
+      userField.setText("stepper@esc-net.de");
 
       pack();
       setCenterLocation();
@@ -151,6 +168,12 @@ class ClientTest
       {
         //$FALL-THROUGH$
       }
+    }
+
+    private void close()
+    {
+      setVisible(false);
+      dispose();
     }
   }
 }

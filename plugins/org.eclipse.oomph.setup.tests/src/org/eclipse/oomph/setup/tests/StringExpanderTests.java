@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.setup.tests;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.eclipse.oomph.setup.util.SetupUtil;

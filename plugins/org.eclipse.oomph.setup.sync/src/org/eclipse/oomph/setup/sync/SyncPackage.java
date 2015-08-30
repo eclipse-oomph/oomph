@@ -1,4 +1,12 @@
-/**
+/*
+ * Copyright (c) 2015 Eike Stepper (Berlin, Germany) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eike Stepper - initial API and implementation
  */
 package org.eclipse.oomph.setup.sync;
 
@@ -153,13 +161,22 @@ public interface SyncPackage extends EPackage
   int SYNC_DELTA = 2;
 
   /**
+   * The feature id for the '<em><b>ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYNC_DELTA__ID = 0;
+
+  /**
    * The feature id for the '<em><b>Old Task</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SYNC_DELTA__OLD_TASK = 0;
+  int SYNC_DELTA__OLD_TASK = 1;
 
   /**
    * The feature id for the '<em><b>New Task</b></em>' reference.
@@ -168,7 +185,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_DELTA__NEW_TASK = 1;
+  int SYNC_DELTA__NEW_TASK = 2;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -177,16 +194,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_DELTA__TYPE = 2;
-
-  /**
-   * The feature id for the '<em><b>ID</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SYNC_DELTA__ID = 3;
+  int SYNC_DELTA__TYPE = 3;
 
   /**
    * The number of structural features of the '<em>Delta</em>' class.
