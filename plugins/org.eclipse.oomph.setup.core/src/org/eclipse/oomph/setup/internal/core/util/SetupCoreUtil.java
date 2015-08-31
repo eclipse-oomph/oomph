@@ -101,6 +101,10 @@ public final class SetupCoreUtil
     AUTHORIZATION_HANDLER = new AuthorizationHandlerImpl(uiServices, securePreferences);
   }
 
+  private static volatile Map<URI, URI> archiveRedirections;
+
+  private static volatile String archiveExpectedETag;
+
   private SetupCoreUtil()
   {
   }
@@ -313,7 +317,12 @@ public final class SetupCoreUtil
         if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
         {
           String[] mapping = ((String)entry.getValue()).split("->");
-          if (mapping.length == 2)
+          if (mapping.length == 1)
+          {
+            URI sourceURI = URI.createURI(mapping[0]);
+            uriMap.remove(sourceURI);
+          }
+          else if (mapping.length == 2)
           {
             URI sourceURI = URI.createURI(mapping[0]);
             URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
@@ -352,49 +361,59 @@ public final class SetupCoreUtil
 
   private static void handleArchiveRedirection(URIConverter uriConverter)
   {
-    // long start = System.currentTimeMillis();
-
-    Map<Object, Object> options = new HashMap<Object, Object>();
-    options.put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
-    InputStream inputStream = null;
-    ZipInputStream zipInputStream = null;
-    try
+    if (archiveExpectedETag == null || !archiveExpectedETag.equals(ECFURIHandlerImpl.getExpectedETag(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI)))
     {
-      inputStream = uriConverter.createInputStream(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, options);
-      zipInputStream = new ZipInputStream(inputStream);
-      for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry())
-      {
-        String name = zipEntry.getName();
-        URI path = URI.createURI(name);
-        int segmentCount = path.segmentCount();
-        if (segmentCount > 2)
-        {
-          URI uri = URI.createURI(path.segment(0) + ":" + "//" + path.segment(1));
-          for (int i = 2, length = path.segmentCount(); i < length; ++i)
-          {
-            uri = uri.appendSegment(path.segment(i));
-          }
+      // long start = System.currentTimeMillis();
 
-          if (uri.equals(uriConverter.normalize(uri)))
+      Map<Object, Object> options = new HashMap<Object, Object>();
+      options.put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
+      InputStream inputStream = null;
+      ZipInputStream zipInputStream = null;
+
+      Map<URI, URI> redirections = new HashMap<URI, URI>();
+      try
+      {
+        inputStream = uriConverter.createInputStream(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, options);
+        zipInputStream = new ZipInputStream(inputStream);
+        for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry())
+        {
+          String name = zipEntry.getName();
+          URI path = URI.createURI(name);
+          int segmentCount = path.segmentCount();
+          if (segmentCount > 2)
           {
-            URI archiveEntry = URI.createURI("archive:" + SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!/" + path);
-            uriConverter.getURIMap().put(uri, archiveEntry);
+            URI uri = URI.createURI(path.segment(0) + "://" + path.segment(1));
+            for (int i = 2, length = path.segmentCount(); i < length; ++i)
+            {
+              uri = uri.appendSegment(path.segment(i));
+            }
+
+            if (uri.equals(uriConverter.normalize(uri)))
+            {
+              URI archiveEntry = URI.createURI("archive:" + SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!/" + path);
+              redirections.put(uri, archiveEntry);
+            }
           }
         }
       }
-    }
-    catch (IOException ex)
-    {
-      SetupCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
-    finally
-    {
-      IOUtil.closeSilent(inputStream);
-      IOUtil.closeSilent(zipInputStream);
+      catch (IOException ex)
+      {
+        SetupCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+      }
+      finally
+      {
+        IOUtil.closeSilent(inputStream);
+        IOUtil.closeSilent(zipInputStream);
+      }
+
+      archiveRedirections = redirections;
+      archiveExpectedETag = ECFURIHandlerImpl.getExpectedETag(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI);
+
+      // long finish = System.currentTimeMillis();
+      // System.err.println("processing mirror archive " + (finish - start) / 1000.0);
     }
 
-    // long finish = System.currentTimeMillis();
-    // System.err.println("processing mirror archive " + (finish - start) / 1000.0);
+    uriConverter.getURIMap().putAll(archiveRedirections);
   }
 
   public static <T> void reorder(EList<T> values, DependencyProvider<T> dependencyProvider)

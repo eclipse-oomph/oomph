@@ -287,7 +287,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             && (!(transferListener.exception instanceof IncomingFileTransferException)
                 || ((IncomingFileTransferException)transferListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND))
         {
-          setExpectedETag(uri, transferListener.eTag);
+          setExpectedETag(uri, transferListener.eTag == null ? eTag : transferListener.eTag);
           return uriConverter.createInputStream(cacheURI, options);
         }
 
@@ -490,7 +490,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     return null;
   }
 
-  private static String getExpectedETag(URI uri)
+  static String getExpectedETag(URI uri)
   {
     synchronized (EXPECTED_ETAGS)
     {
