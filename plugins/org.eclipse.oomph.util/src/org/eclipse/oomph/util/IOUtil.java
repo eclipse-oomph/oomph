@@ -682,20 +682,11 @@ public final class IOUtil
     if (file.exists())
     {
       InputStream in = null;
-      Reader reader = null;
-      BufferedReader bufferedReader = null;
 
       try
       {
         in = new FileInputStream(file);
-        reader = charsetName == null ? new InputStreamReader(in) : new InputStreamReader(in, charsetName);
-        bufferedReader = new BufferedReader(reader);
-
-        String line;
-        while ((line = bufferedReader.readLine()) != null)
-        {
-          lines.add(line);
-        }
+        return readLines(in, charsetName);
       }
       catch (IOException ex)
       {
@@ -703,10 +694,39 @@ public final class IOUtil
       }
       finally
       {
-        closeSilent(bufferedReader);
-        closeSilent(reader);
         closeSilent(in);
       }
+    }
+
+    return lines;
+  }
+
+  public static List<String> readLines(InputStream in, String charsetName)
+  {
+    List<String> lines = new ArrayList<String>();
+
+    Reader reader = null;
+    BufferedReader bufferedReader = null;
+
+    try
+    {
+      reader = charsetName == null ? new InputStreamReader(in) : new InputStreamReader(in, charsetName);
+      bufferedReader = new BufferedReader(reader);
+
+      String line;
+      while ((line = bufferedReader.readLine()) != null)
+      {
+        lines.add(line);
+      }
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
+    finally
+    {
+      closeSilent(bufferedReader);
+      closeSilent(reader);
     }
 
     return lines;
@@ -716,6 +736,7 @@ public final class IOUtil
   {
     mkdirs(file.getParentFile());
     OutputStream out = null;
+
     try
     {
       out = new FileOutputStream(file);

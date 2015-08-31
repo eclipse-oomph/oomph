@@ -46,6 +46,7 @@ public interface SyncAction extends EObject
    * @return the value of the '<em>ID</em>' attribute.
    * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncAction_ID()
    * @model id="true" transient="true" changeable="false" volatile="true" derived="true"
+   *        extendedMetaData="kind='attribute' name='id'"
    * @generated
    */
   String getID();

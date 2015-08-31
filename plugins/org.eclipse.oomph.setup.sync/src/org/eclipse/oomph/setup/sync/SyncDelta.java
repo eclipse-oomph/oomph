@@ -46,6 +46,7 @@ public interface SyncDelta extends EObject
    * @return the value of the '<em>ID</em>' attribute.
    * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncDelta_ID()
    * @model id="true" required="true" suppressedSetVisibility="true"
+   *        extendedMetaData="kind='attribute' name='id'"
    * @generated
    */
   String getID();

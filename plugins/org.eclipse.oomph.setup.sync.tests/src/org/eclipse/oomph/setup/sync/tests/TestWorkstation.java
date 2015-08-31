@@ -28,14 +28,17 @@ import org.eclipse.oomph.setup.internal.sync.SnychronizerListener;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
+import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.tests.AbstractTest;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -50,6 +53,7 @@ import org.junit.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,26 +68,33 @@ public final class TestWorkstation
 
   private final ResourceSet resourceSet = SyncUtil.createResourceSet();
 
+  private final Map<Integer, TestWorkstation> workstations;
+
   private final int id;
 
   private final File userHome;
 
   private final File userSetup;
 
-  private User user;
-
   private final TestSynchronizer synchronizer;
 
-  public TestWorkstation(int id) throws Exception
+  private File remoteFile;
+
+  private User user;
+
+  public TestWorkstation(Map<Integer, TestWorkstation> workstations, int id) throws Exception
   {
     this.id = id;
+    this.workstations = workstations;
+
     userHome = createUserHome();
     userSetup = new File(userHome, "user.setup");
-    log("Create workstation " + userHome);
 
     DataProvider localDataProvider = new LocalDataProvider(userSetup);
     DataProvider remoteDataProvider = TestServer.getRemoteDataProvider();
     synchronizer = new TestSynchronizer(localDataProvider, remoteDataProvider, userHome);
+
+    log("Create workstation " + userHome);
   }
 
   public File getUserHome()
@@ -152,19 +163,16 @@ public final class TestWorkstation
 
   public TestWorkstation remove(String key)
   {
-    if (user != null)
+    log("Remove " + key);
+    for (SetupTask task : getUser().getSetupTasks())
     {
-      log("Remove " + key);
-      for (SetupTask task : user.getSetupTasks())
+      if (task instanceof PreferenceTask)
       {
-        if (task instanceof PreferenceTask)
+        PreferenceTask preferenceTask = (PreferenceTask)task;
+        if (key.equals(preferenceTask.getKey()))
         {
-          PreferenceTask preferenceTask = (PreferenceTask)task;
-          if (key.equals(preferenceTask.getKey()))
-          {
-            EcoreUtil.remove(preferenceTask);
-            return this;
-          }
+          EcoreUtil.remove(preferenceTask);
+          return this;
         }
       }
     }
@@ -214,6 +222,80 @@ public final class TestWorkstation
   {
     assertThat(get(key), IsNull.nullValue());
     return this;
+  }
+
+  public TestWorkstation assertIncluded(String key) throws IOException
+  {
+    Map<String, SyncPolicy> preferencePolicies = getPreferencePolicies();
+    assertThat(preferencePolicies.get(key), CoreMatchers.is(SyncPolicy.INCLUDE));
+    return this;
+  }
+
+  public TestWorkstation assertExcluded(String key) throws IOException
+  {
+    Map<String, SyncPolicy> preferencePolicies = getPreferencePolicies();
+    assertThat(preferencePolicies.get(key), CoreMatchers.is(SyncPolicy.EXCLUDE));
+    return this;
+  }
+
+  public TestWorkstation assertNoPolicy(String key) throws IOException
+  {
+    Map<String, SyncPolicy> preferencePolicies = getPreferencePolicies();
+    assertThat(preferencePolicies.get(key), IsNull.nullValue());
+    return this;
+  }
+
+  public Map<String, SyncPolicy> getPreferencePolicies() throws IOException
+  {
+    RemoteData remoteData = getRemoteData();
+    EMap<String, SyncPolicy> policies = remoteData.getPolicies();
+
+    Map<String, SyncPolicy> preferencePolicies = new HashMap<String, SyncPolicy>();
+
+    // Make sure that even policies of remotely removed tasks can be found by preference key.
+    for (TestWorkstation workstation : workstations.values())
+    {
+      if (workstation != this)
+      {
+        collectPreferencePolicies(preferencePolicies, policies, workstation.getPreferenceTasks());
+      }
+    }
+
+    collectPreferencePolicies(preferencePolicies, policies, getPreferenceTasks());
+    collectPreferencePolicies(preferencePolicies, policies, remoteData.getSetupTasks());
+    return preferencePolicies;
+  }
+
+  private void collectPreferencePolicies(Map<String, SyncPolicy> preferencePolicies, EMap<String, SyncPolicy> policies, List<? extends SetupTask> tasks)
+  {
+    for (SetupTask task : tasks)
+    {
+      if (task instanceof PreferenceTask)
+      {
+        PreferenceTask preferenceTask = (PreferenceTask)task;
+        String id = preferenceTask.getID();
+        SyncPolicy policy = policies.get(id);
+        if (policy != null)
+        {
+          String key = preferenceTask.getKey();
+          preferencePolicies.put(key, policy);
+        }
+      }
+    }
+  }
+
+  public RemoteData getRemoteData() throws IOException
+  {
+    if (remoteFile == null)
+    {
+      remoteFile = File.createTempFile("remote-data-", ".tmp");
+      remoteFile.deleteOnExit();
+
+      DataProvider dataProvider = synchronizer.getRemoteSnapshot().getDataProvider();
+      dataProvider.update(remoteFile);
+    }
+
+    return loadObject(URI.createFileURI(remoteFile.getAbsolutePath()), Synchronization.REMOTE_DATA_TYPE);
   }
 
   public TestWorkstation log(Object msg)
@@ -358,6 +440,14 @@ public final class TestWorkstation
         {
           log(t.getMessage());
         }
+        else
+        {
+          if (remoteFile != null)
+          {
+            remoteFile.delete();
+            remoteFile = null;
+          }
+        }
 
         user = null;
         URI uri = URI.createFileURI(userSetup.getAbsolutePath());
@@ -497,6 +587,65 @@ public final class TestWorkstation
       }
 
       return this;
+    }
+
+    public TestSynchronization exclude(String key)
+    {
+      SyncAction action = getPreferenceAction(key);
+      if (action != null)
+      {
+        String id = getID(action);
+        if (id != null)
+        {
+          resolve(id, SyncActionType.EXCLUDE);
+        }
+      }
+
+      return this;
+    }
+
+    public TestSynchronization pickLocal(String key)
+    {
+      SyncAction action = getPreferenceAction(key);
+      if (action != null)
+      {
+        SyncDelta delta = action.getLocalDelta();
+        SyncActionType location = SyncActionType.SET_LOCAL;
+
+        pick(action, delta, location);
+      }
+
+      return this;
+    }
+
+    public TestSynchronization pickRemote(String key)
+    {
+      SyncAction action = getPreferenceAction(key);
+      if (action != null)
+      {
+        SyncDelta delta = action.getRemoteDelta();
+        SyncActionType location = SyncActionType.SET_REMOTE;
+
+        pick(action, delta, location);
+      }
+
+      return this;
+    }
+
+    private void pick(SyncAction action, SyncDelta delta, SyncActionType location)
+    {
+      String id = getID(action);
+      if (id != null)
+      {
+        if (delta.getNewTask() == null)
+        {
+          resolve(id, SyncActionType.REMOVE);
+        }
+        else
+        {
+          resolve(id, location);
+        }
+      }
     }
 
     public TestWorkstation commitAnd() throws IOException, NotCurrentException

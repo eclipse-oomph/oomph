@@ -237,6 +237,8 @@ public class RemoteDataProvider implements DataProvider
 
   private static void saveContent(HttpEntity entity, File file) throws IOException
   {
+    file.getParentFile().mkdirs();
+
     InputStream content = null;
     OutputStream out = null;
 

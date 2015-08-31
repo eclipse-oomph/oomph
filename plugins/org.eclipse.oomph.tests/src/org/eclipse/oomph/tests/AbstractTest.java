@@ -14,6 +14,7 @@ import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -22,16 +23,36 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Eike Stepper
  */
 public abstract class AbstractTest extends CoreMatchers
 {
+  private static final String[] FILTERS = { //
+      "org.eclipse.jdt.internal.junit.runner.", //
+      "org.eclipse.jdt.internal.junit.ui.", //
+      "org.eclipse.jdt.internal.junit4.runner.", //
+      "org.junit.", //
+      "sun.reflect.", //
+      "java.lang.reflect.Method.invoke(", //
+      "junit.framework.Assert", //
+      "junit.framework.TestCase", //
+      "junit.framework.TestResult", //
+      "junit.framework.TestResult$1", //
+      "junit.framework.TestSuite", //
+  };
+
   private static final PrintStream LOG = System.out;
 
   public static final IProgressMonitor LOGGER = new IProgressMonitor()
@@ -91,7 +112,10 @@ public abstract class AbstractTest extends CoreMatchers
   };
 
   @Rule
-  public TestName testName = new TestName();
+  public final TestWatcher failurePrinter = new FailurePrinter();
+
+  @Rule
+  public final TestName testName = new TestName();
 
   private File userHome;
 
@@ -108,21 +132,6 @@ public abstract class AbstractTest extends CoreMatchers
   {
     log();
     LOGGER.setTaskName(null);
-  }
-
-  public static File createTempFolder()
-  {
-    try
-    {
-      File folder = File.createTempFile("test-", "");
-      folder.delete();
-      folder.mkdirs();
-      return folder;
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
   }
 
   public File getUserHome()
@@ -166,6 +175,21 @@ public abstract class AbstractTest extends CoreMatchers
     }
   }
 
+  public static File createTempFolder()
+  {
+    try
+    {
+      File folder = File.createTempFile("test-", "");
+      folder.delete();
+      folder.mkdirs();
+      return folder;
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
+  }
+
   public static void log()
   {
     LOG.println();
@@ -173,11 +197,54 @@ public abstract class AbstractTest extends CoreMatchers
 
   public static void log(Object object)
   {
-    LOG.println(object);
+    if (object instanceof Throwable)
+    {
+      Throwable ex = (Throwable)object;
+      printStackTrace(ex);
+    }
+    else
+    {
+      LOG.println(object);
+    }
+  }
+
+  public static void printStackTrace(Throwable ex)
+  {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ex.printStackTrace(new PrintStream(baos));
+
+    List<String> lines = IOUtil.readLines(new ByteArrayInputStream(baos.toByteArray()), "UTF-8");
+    for (Iterator<String> it = lines.iterator(); it.hasNext();)
+    {
+      String line = it.next().trim();
+      for (int i = 0; i < FILTERS.length; i++)
+      {
+        String filter = FILTERS[i];
+        if (line.startsWith("at " + filter))
+        {
+          it.remove();
+          continue;
+        }
+      }
+    }
+
+    System.err.println(StringUtil.implode(lines, '\n'));
   }
 
   public static org.hamcrest.Matcher<java.lang.Object> isNull()
   {
     return org.hamcrest.core.IsNull.nullValue();
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class FailurePrinter extends TestWatcher
+  {
+    @Override
+    protected void failed(Throwable ex, Description description)
+    {
+      printStackTrace(ex);
+    }
   }
 }

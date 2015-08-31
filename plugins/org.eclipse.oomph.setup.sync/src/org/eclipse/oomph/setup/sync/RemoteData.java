@@ -45,6 +45,7 @@ public interface RemoteData extends SetupTaskContainer
    * @return the value of the '<em>Policies</em>' map.
    * @see org.eclipse.oomph.setup.sync.SyncPackage#getRemoteData_Policies()
    * @model mapType="org.eclipse.oomph.setup.sync.StringToSyncPolicyMapEntry<org.eclipse.emf.ecore.EString, org.eclipse.oomph.setup.sync.SyncPolicy>"
+   *        extendedMetaData="name='policy'"
    * @generated
    */
   EMap<String, SyncPolicy> getPolicies();

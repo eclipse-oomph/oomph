@@ -507,6 +507,24 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
 
     // Create resource
     createResource(eNS_URI);
+
+    // Create annotations
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getRemoteData_Policies(), source, new String[] { "name", "policy" });
+    addAnnotation(getSyncDelta_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    addAnnotation(getSyncAction_ID(), source, new String[] { "kind", "attribute", "name", "id" });
   }
 
 } // SyncPackageImpl

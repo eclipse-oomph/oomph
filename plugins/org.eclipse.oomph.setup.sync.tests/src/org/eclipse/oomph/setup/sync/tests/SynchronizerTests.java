@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.sync.tests;
 
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.Synchronization.ConflictException;
-import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler.Expect;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.TestSynchronization;
@@ -38,7 +37,7 @@ public class SynchronizerTests extends AbstractTest
     TestWorkstation workstation = workstations.get(id);
     if (workstation == null)
     {
-      workstation = new TestWorkstation(id);
+      workstation = new TestWorkstation(workstations, id);
       workstations.put(id, workstation);
     }
 
@@ -55,7 +54,7 @@ public class SynchronizerTests extends AbstractTest
   @Test
   public void test000() throws Exception
   {
-    WS(1).synchronize().commitAnd().assertCount(0);
+    WS(1).commit().assertCount(0);
   }
 
   @Test
@@ -103,27 +102,27 @@ public class SynchronizerTests extends AbstractTest
   @Test
   public void test006_SameKey_SameValue() throws Exception
   {
-    TestSynchronization sync1 = WS(1).set("line.numbers", "true").save().synchronize();
+    TestSynchronization sync1 = WS(1).set("property", "value").save().synchronize();
 
-    WS(2).set("line.numbers", "true").save().commit().assertCount(1).assertSet("line.numbers", "true");
+    WS(2).set("property", "value").save().commit().assertCount(1).assertSet("property", "value");
 
     sync1.commitFail(new FailureHandler()
     {
       public void handleFailure(Exception t) throws Exception
       {
-        WS(1).commit().assertCount(1).assertSet("line.numbers", "true");
+        WS(1).commit().assertCount(1).assertSet("property", "value");
       }
     });
 
-    WS(2).commit().assertCount(1).assertSet("line.numbers", "true");
+    WS(2).commit().assertCount(1).assertSet("property", "value");
   }
 
   @Test
   public void test007_SameKey_ConflictException() throws Exception
   {
-    TestSynchronization sync1 = WS(1).set("line.numbers", "true").save().synchronize();
+    TestSynchronization sync1 = WS(1).set("property", "value1").save().synchronize();
 
-    WS(2).set("line.numbers", "false").save().commit().assertCount(1).assertSet("line.numbers", "false");
+    WS(2).set("property", "value2").save().commit().assertCount(1).assertSet("property", "value2");
 
     sync1.commitFail(new Expect(NotCurrentException.class)
     {
@@ -138,24 +137,78 @@ public class SynchronizerTests extends AbstractTest
   @Test
   public void test008_SameKey_ConflictPick1() throws Exception
   {
-    WS(1).set("line.numbers", "true").save();
+    WS(1).set("property", "value1").save();
 
-    WS(2).set("line.numbers", "false").save().commit().assertCount(1).assertSet("line.numbers", "false");
+    WS(2).set("property", "value2").save().commit().assertCount(1).assertSet("property", "value2");
 
-    WS(1).synchronize().resolvePreference("line.numbers", SyncActionType.SET_LOCAL).commitAnd().assertCount(1).assertSet("line.numbers", "true");
+    WS(1).synchronize().pickLocal("property").commitAnd().assertCount(1).assertSet("property", "value1");
 
-    WS(2).commit().assertCount(1).assertSet("line.numbers", "true");
+    WS(2).commit().assertCount(1).assertSet("property", "value1");
   }
 
   @Test
   public void test009_SameKey_ConflictPick2() throws Exception
   {
-    WS(1).set("line.numbers", "true").save();
+    WS(1).set("property", "value1").save();
 
-    WS(2).set("line.numbers", "false").save().commit().assertCount(1).assertSet("line.numbers", "false");
+    WS(2).set("property", "value2").save().commit().assertCount(1).assertSet("property", "value2");
 
-    WS(1).synchronize().resolvePreference("line.numbers", SyncActionType.SET_REMOTE).commitAnd().assertCount(1).assertSet("line.numbers", "false");
+    WS(1).synchronize().pickRemote("property").commitAnd().assertCount(1).assertSet("property", "value2");
 
-    WS(2).commit().assertCount(1).assertSet("line.numbers", "false");
+    WS(2).commit().assertCount(1).assertSet("property", "value2");
+  }
+
+  @Test
+  public void test010_Remove1_Sync1() throws Exception
+  {
+    WS(1).set("line.numbers", "true").set("refresh.resources", "true").save().commit() //
+        .assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true");
+
+    WS(1).remove("line.numbers").save().commit().assertCount(1).assertSet("refresh.resources", "true");
+    WS(1).remove("refresh.resources").save().commit().assertCount(0);
+  }
+
+  @Test
+  public void test011_Remove1_Sync1_Sync2() throws Exception
+  {
+    WS(1).set("line.numbers", "true").set("refresh.resources", "true").save().commit();
+
+    WS(2).commit().assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true");
+
+    WS(1).remove("line.numbers").save().commit().assertCount(1).assertSet("refresh.resources", "true");
+
+    WS(2).commit().assertCount(1).assertSet("refresh.resources", "true");
+
+    WS(1).remove("refresh.resources").save().commit().assertCount(0);
+
+    WS(2).commit().assertCount(0);
+  }
+
+  @Test
+  public void test012_Remove1_Remove2_Sync1_Sync2() throws Exception
+  {
+    WS(1).set("line.numbers", "true").set("refresh.resources", "true").save().commit();
+
+    WS(2).commit().assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true");
+
+    WS(1).remove("line.numbers").save().commit().assertCount(1).assertSet("refresh.resources", "true");
+
+    WS(2).remove("line.numbers").save().commit().assertCount(1).assertSet("refresh.resources", "true");
+  }
+
+  @Test
+  public void test013_Exclude() throws Exception
+  {
+    WS(1).set("line.numbers", "true").save().commit();
+
+    WS(2).commit().assertCount(1);
+    WS(2).set("refresh.resources", "true").save().synchronize().exclude("refresh.resources").commitAnd() //
+        .assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true") //
+        .assertExcluded("refresh.resources");
+
+    WS(1).commit().assertCount(1).assertSet("line.numbers", "true").assertExcluded("refresh.resources");
+    WS(1).set("refresh.resources", "true").save().commit() //
+        .assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true") //
+        .assertExcluded("refresh.resources");
   }
 }
