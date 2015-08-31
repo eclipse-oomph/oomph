@@ -216,13 +216,22 @@ public interface SyncPackage extends EPackage
   int SYNC_ACTION = 3;
 
   /**
+   * The feature id for the '<em><b>ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SYNC_ACTION__ID = 0;
+
+  /**
    * The feature id for the '<em><b>Local Delta</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SYNC_ACTION__LOCAL_DELTA = 0;
+  int SYNC_ACTION__LOCAL_DELTA = 1;
 
   /**
    * The feature id for the '<em><b>Remote Delta</b></em>' reference.
@@ -231,7 +240,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_ACTION__REMOTE_DELTA = 1;
+  int SYNC_ACTION__REMOTE_DELTA = 2;
 
   /**
    * The feature id for the '<em><b>Computed Type</b></em>' attribute.
@@ -240,7 +249,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_ACTION__COMPUTED_TYPE = 2;
+  int SYNC_ACTION__COMPUTED_TYPE = 3;
 
   /**
    * The feature id for the '<em><b>Resolved Type</b></em>' attribute.
@@ -249,7 +258,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_ACTION__RESOLVED_TYPE = 3;
+  int SYNC_ACTION__RESOLVED_TYPE = 4;
 
   /**
    * The feature id for the '<em><b>Effective Type</b></em>' attribute.
@@ -258,7 +267,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_ACTION__EFFECTIVE_TYPE = 4;
+  int SYNC_ACTION__EFFECTIVE_TYPE = 5;
 
   /**
    * The number of structural features of the '<em>Action</em>' class.
@@ -267,7 +276,7 @@ public interface SyncPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SYNC_ACTION_FEATURE_COUNT = 5;
+  int SYNC_ACTION_FEATURE_COUNT = 6;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.sync.SyncPolicy <em>Policy</em>}' enum.
@@ -417,6 +426,17 @@ public interface SyncPackage extends EPackage
    * @generated
    */
   EClass getSyncAction();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.sync.SyncAction#getID <em>ID</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>ID</em>'.
+   * @see org.eclipse.oomph.setup.sync.SyncAction#getID()
+   * @see #getSyncAction()
+   * @generated
+   */
+  EAttribute getSyncAction_ID();
 
   /**
    * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.sync.SyncAction#getLocalDelta <em>Local Delta</em>}'.
@@ -621,6 +641,14 @@ public interface SyncPackage extends EPackage
      * @generated
      */
     EClass SYNC_ACTION = eINSTANCE.getSyncAction();
+
+    /**
+     * The meta object literal for the '<em><b>ID</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SYNC_ACTION__ID = eINSTANCE.getSyncAction_ID();
 
     /**
      * The meta object literal for the '<em><b>Local Delta</b></em>' reference feature.

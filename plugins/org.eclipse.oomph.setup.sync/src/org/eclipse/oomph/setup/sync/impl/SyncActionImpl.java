@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getLocalDelta <em>Local Delta</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getRemoteDelta <em>Remote Delta</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.impl.SyncActionImpl#getComputedType <em>Computed Type</em>}</li>
@@ -40,6 +41,16 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class SyncActionImpl extends MinimalEObjectImpl.Container implements SyncAction
 {
+  /**
+   * The default value of the '{@link #getID() <em>ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getID()
+   * @generated
+   * @ordered
+   */
+  protected static final String ID_EDEFAULT = null;
+
   /**
    * The cached value of the '{@link #getLocalDelta() <em>Local Delta</em>}' reference.
    * <!-- begin-user-doc -->
@@ -129,6 +140,34 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
   protected EClass eStaticClass()
   {
     return SyncPackage.Literals.SYNC_ACTION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String getID()
+  {
+    if (localDelta != null)
+    {
+      String id = localDelta.getID();
+      if (id != null)
+      {
+        return id;
+      }
+    }
+
+    if (remoteDelta != null)
+    {
+      String id = remoteDelta.getID();
+      if (id != null)
+      {
+        return id;
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -300,6 +339,8 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_ACTION__ID:
+        return getID();
       case SyncPackage.SYNC_ACTION__LOCAL_DELTA:
         if (resolve)
         {
@@ -384,6 +425,8 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
   {
     switch (featureID)
     {
+      case SyncPackage.SYNC_ACTION__ID:
+        return ID_EDEFAULT == null ? getID() != null : !ID_EDEFAULT.equals(getID());
       case SyncPackage.SYNC_ACTION__LOCAL_DELTA:
         return localDelta != null;
       case SyncPackage.SYNC_ACTION__REMOTE_DELTA:
@@ -401,7 +444,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String toString()
@@ -412,7 +455,9 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (computedType: ");
+    result.append(" (id: ");
+    result.append(getID());
+    result.append(", computedType: ");
     result.append(computedType);
     result.append(", resolvedType: ");
     result.append(resolvedType);

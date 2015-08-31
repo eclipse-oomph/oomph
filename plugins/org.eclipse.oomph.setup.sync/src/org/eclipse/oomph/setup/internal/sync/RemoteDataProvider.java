@@ -132,7 +132,7 @@ public class RemoteDataProvider implements DataProvider
     }
   }
 
-  public void post(File file, String baseVersion) throws IOException, ConflictException
+  public void post(File file, String baseVersion) throws IOException, NotCurrentException
   {
     HttpEntity responseEntity = null;
 
@@ -150,7 +150,7 @@ public class RemoteDataProvider implements DataProvider
       if (status == CONFLICT)
       {
         saveContent(responseEntity, file);
-        throw new ConflictException(uri);
+        throw new NotCurrentException(uri);
       }
 
       if (status == OK)
@@ -290,19 +290,6 @@ public class RemoteDataProvider implements DataProvider
     public BadResponseException(URI uri)
     {
       super("Bad response: " + uri);
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class ConflictException extends IOException
-  {
-    private static final long serialVersionUID = 1L;
-
-    public ConflictException(URI uri)
-    {
-      super("Conflict: " + uri);
     }
   }
 }

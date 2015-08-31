@@ -125,6 +125,31 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getID()
+  {
+    return iD;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setID(String newID)
+  {
+    String oldID = iD;
+    iD = newID;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__ID, oldID, iD));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public SetupTask getOldTask()
   {
     if (oldTask != null && oldTask.eIsProxy())
@@ -236,31 +261,6 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
     if (eNotificationRequired())
     {
       eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__TYPE, oldType, type));
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getID()
-  {
-    return iD;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setID(String newID)
-  {
-    String oldID = iD;
-    iD = newID;
-    if (eNotificationRequired())
-    {
-      eNotify(new ENotificationImpl(this, Notification.SET, SyncPackage.SYNC_DELTA__ID, oldID, iD));
     }
   }
 

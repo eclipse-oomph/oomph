@@ -270,9 +270,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSyncAction_LocalDelta()
+  public EAttribute getSyncAction_ID()
   {
-    return (EReference)syncActionEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)syncActionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -280,7 +280,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSyncAction_RemoteDelta()
+  public EReference getSyncAction_LocalDelta()
   {
     return (EReference)syncActionEClass.getEStructuralFeatures().get(1);
   }
@@ -290,9 +290,9 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSyncAction_ComputedType()
+  public EReference getSyncAction_RemoteDelta()
   {
-    return (EAttribute)syncActionEClass.getEStructuralFeatures().get(2);
+    return (EReference)syncActionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -300,7 +300,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSyncAction_ResolvedType()
+  public EAttribute getSyncAction_ComputedType()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(3);
   }
@@ -310,9 +310,19 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSyncAction_EffectiveType()
+  public EAttribute getSyncAction_ResolvedType()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSyncAction_EffectiveType()
+  {
+    return (EAttribute)syncActionEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -392,6 +402,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     createEAttribute(syncDeltaEClass, SYNC_DELTA__TYPE);
 
     syncActionEClass = createEClass(SYNC_ACTION);
+    createEAttribute(syncActionEClass, SYNC_ACTION__ID);
     createEReference(syncActionEClass, SYNC_ACTION__LOCAL_DELTA);
     createEReference(syncActionEClass, SYNC_ACTION__REMOTE_DELTA);
     createEAttribute(syncActionEClass, SYNC_ACTION__COMPUTED_TYPE);
@@ -463,6 +474,8 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(syncActionEClass, SyncAction.class, "SyncAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSyncAction_ID(), ecorePackage.getEString(), "iD", null, 0, 1, SyncAction.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE,
+        IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEReference(getSyncAction_LocalDelta(), getSyncDelta(), null, "localDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSyncAction_RemoteDelta(), getSyncDelta(), null, "remoteDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,

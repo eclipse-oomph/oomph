@@ -52,7 +52,7 @@ public class LocalDataProvider implements DataProvider
     return false;
   }
 
-  public void post(File file, String baseVersion) throws IOException, ConflictException
+  public void post(File file, String baseVersion) throws IOException, NotCurrentException
   {
     String localVersion = SyncUtil.getDigest(localFile);
     if (StringUtil.isEmpty(localVersion) || ObjectUtil.equals(localVersion, baseVersion))
@@ -64,7 +64,7 @@ public class LocalDataProvider implements DataProvider
     {
       // Conflict.
       IOUtil.copyFile(localFile, file);
-      throw new ConflictException(localFile.toURI());
+      throw new NotCurrentException(localFile.toURI());
     }
   }
 

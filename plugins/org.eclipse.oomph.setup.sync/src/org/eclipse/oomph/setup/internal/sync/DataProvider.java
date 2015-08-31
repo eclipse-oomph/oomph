@@ -23,7 +23,7 @@ public interface DataProvider
 
   public boolean update(File file) throws IOException, NotFoundException;
 
-  public void post(File file, String baseVersion) throws IOException, ConflictException;
+  public void post(File file, String baseVersion) throws IOException, NotCurrentException;
 
   public boolean delete() throws IOException;
 
@@ -51,13 +51,13 @@ public interface DataProvider
   /**
    * @author Eike Stepper
    */
-  public static class ConflictException extends IOException
+  public static class NotCurrentException extends IOException
   {
     private static final long serialVersionUID = 1L;
 
-    public ConflictException(URI uri)
+    public NotCurrentException(URI uri)
     {
-      super("Conflict: " + uri);
+      super("Not current: " + uri);
     }
   }
 }

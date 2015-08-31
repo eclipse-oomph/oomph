@@ -10,9 +10,9 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotFoundException;
-import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.ConflictException;
 import org.eclipse.oomph.util.IOUtil;
 
 import java.io.File;
@@ -71,7 +71,7 @@ public class Snapshot
     return new WorkingCopy(this);
   }
 
-  private void doCommit() throws IOException, ConflictException
+  private void doCommit() throws IOException, NotCurrentException
   {
     if (!tmpFile.isFile())
     {
@@ -87,7 +87,7 @@ public class Snapshot
 
       IOUtil.copyFile(oldFile, newFile);
     }
-    catch (ConflictException ex)
+    catch (NotCurrentException ex)
     {
       moveTmpFileTo(newFile);
       throw ex;
@@ -134,7 +134,7 @@ public class Snapshot
       return snapshot.tmpFile;
     }
 
-    public void commit() throws IOException, ConflictException
+    public void commit() throws IOException, NotCurrentException
     {
       if (!committed && !disposed)
       {

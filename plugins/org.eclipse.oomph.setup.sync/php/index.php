@@ -23,7 +23,7 @@ if (!isset($headers['User-Agent']) || $headers['User-Agent'] != "oomph/sync")
 
 $method = $_SERVER['REQUEST_METHOD'];
 $userID = $_SERVER['PHP_AUTH_USER'];
-$dataFile = "$uploadFolder/$userID.dat";
+$dataFile = "$uploadFolder/$userID.$fileExtension";
 $versionFile = "$dataFile,v";
 
 $baseVersion = !isset($headers['X-Base-Version']) ? "" : htmlspecialchars($headers['X-Base-Version']);

@@ -10,12 +10,13 @@
  */
 package org.eclipse.oomph.setup.sync.tests;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.eclipse.oomph.setup.internal.sync.SyncUtil;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
+import org.eclipse.oomph.setup.internal.sync.Synchronization.ConflictException;
+import org.eclipse.oomph.setup.sync.SyncActionType;
+import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler;
+import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler.Expect;
+import org.eclipse.oomph.setup.sync.tests.TestWorkstation.TestSynchronization;
 import org.eclipse.oomph.tests.AbstractTest;
-
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -30,11 +31,9 @@ import java.util.Map;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SynchronizerTests extends AbstractTest
 {
-  public static final ResourceSet RESOURCE_SET = SyncUtil.createResourceSet();
-
   private final Map<Integer, TestWorkstation> workstations = new HashMap<Integer, TestWorkstation>();
 
-  private TestWorkstation getWorkstation(int id)
+  private TestWorkstation WS(int id) throws Exception
   {
     TestWorkstation workstation = workstations.get(id);
     if (workstation == null)
@@ -50,82 +49,113 @@ public class SynchronizerTests extends AbstractTest
   public void setUp() throws Exception
   {
     super.setUp();
-    RESOURCE_SET.getResources().clear();
     TestServer.getRemoteDataProvider().delete();
   }
 
   @Test
   public void test000() throws Exception
   {
-    TestWorkstation workstation1 = getWorkstation(1);
-    workstation1.synchronize().commit();
-    assertThat(workstation1.getPreferenceTasks().size(), is(0));
+    WS(1).synchronize().commitAnd().assertCount(0);
   }
 
   @Test
   public void test001_Set1_Sync1() throws Exception
   {
-    TestWorkstation workstation1 = getWorkstation(1);
-    workstation1.setPreference("line.numbers", "true");
-    workstation1.saveUser();
-    workstation1.synchronize().commit();
-    assertThat(workstation1.getPreferenceTasks().size(), is(1));
-    assertThat(workstation1.getPreference("line.numbers"), is("true"));
+    WS(1).set("line.numbers", "true").save().commit().assertCount(1).assertSet("line.numbers", "true");
   }
 
   @Test
   public void test002_Set1_Sync1_Sync2() throws Exception
   {
-    test001_Set1_Sync1();
+    WS(1).set("line.numbers", "true").save().commit();
 
-    TestWorkstation workstation2 = getWorkstation(2);
-    workstation2.synchronize().commit();
-    assertThat(workstation2.getPreferenceTasks().size(), is(1));
-    assertThat(workstation2.getPreference("line.numbers"), is("true"));
-
-    TestWorkstation workstation1 = getWorkstation(1);
-    assertThat(workstation1.getPreferenceTasks().size(), is(1));
-    assertThat(workstation1.getPreference("line.numbers"), is("true"));
+    WS(2).commit().assertCount(1).assertSet("line.numbers", "true");
   }
 
   @Test
-  public void test002_Set1_Sync1_Sync2_Sync1() throws Exception
+  public void test003_Set1_Sync1_Sync2_Sync1() throws Exception
   {
-    test002_Set1_Sync1_Sync2();
+    WS(1).set("line.numbers", "true").save().commit();
 
-    TestWorkstation workstation1 = getWorkstation(1);
-    workstation1.synchronize().commit();
-    assertThat(workstation1.getPreferenceTasks().size(), is(1));
-    assertThat(workstation1.getPreference("line.numbers"), is("true"));
+    WS(2).commit().assertCount(1).assertSet("line.numbers", "true");
+
+    WS(1).commit().assertCount(1).assertSet("line.numbers", "true");
   }
 
   @Test
-  public void test003_Set1_Sync1_Set2_Sync2() throws Exception
+  public void test004_Set1_Sync1_Set2_Sync2() throws Exception
   {
-    test001_Set1_Sync1();
+    WS(1).set("line.numbers", "true").save().commit();
 
-    TestWorkstation workstation2 = getWorkstation(2);
-    workstation2.setPreference("refresh.resources", "true");
-    workstation2.saveUser();
-    workstation2.synchronize().commit();
-    assertThat(workstation2.getPreferenceTasks().size(), is(2));
-    assertThat(workstation2.getPreference("line.numbers"), is("true"));
-    assertThat(workstation2.getPreference("refresh.resources"), is("true"));
-
-    TestWorkstation workstation1 = getWorkstation(1);
-    assertThat(workstation1.getPreferenceTasks().size(), is(1));
-    assertThat(workstation1.getPreference("line.numbers"), is("true"));
+    WS(2).set("refresh.resources", "true").save().commit().assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true");
   }
 
   @Test
-  public void test003_Set1_Sync1_Set2_Sync2_Sync1() throws Exception
+  public void test005_Set1_Sync1_Set2_Sync2_Sync1() throws Exception
   {
-    test003_Set1_Sync1_Set2_Sync2();
+    WS(1).set("line.numbers", "true").save().commit();
 
-    TestWorkstation workstation1 = getWorkstation(1);
-    workstation1.synchronize().commit();
-    assertThat(workstation1.getPreferenceTasks().size(), is(2));
-    assertThat(workstation1.getPreference("line.numbers"), is("true"));
-    assertThat(workstation1.getPreference("refresh.resources"), is("true"));
+    WS(2).set("refresh.resources", "true").save().commit().assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true");
+
+    WS(1).commit().assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true");
+  }
+
+  @Test
+  public void test006_SameKey_SameValue() throws Exception
+  {
+    TestSynchronization sync1 = WS(1).set("line.numbers", "true").save().synchronize();
+
+    WS(2).set("line.numbers", "true").save().commit().assertCount(1).assertSet("line.numbers", "true");
+
+    sync1.commitFail(new FailureHandler()
+    {
+      public void handleFailure(Exception t) throws Exception
+      {
+        WS(1).commit().assertCount(1).assertSet("line.numbers", "true");
+      }
+    });
+
+    WS(2).commit().assertCount(1).assertSet("line.numbers", "true");
+  }
+
+  @Test
+  public void test007_SameKey_ConflictException() throws Exception
+  {
+    TestSynchronization sync1 = WS(1).set("line.numbers", "true").save().synchronize();
+
+    WS(2).set("line.numbers", "false").save().commit().assertCount(1).assertSet("line.numbers", "false");
+
+    sync1.commitFail(new Expect(NotCurrentException.class)
+    {
+      @Override
+      protected void handleFailure() throws Exception
+      {
+        WS(1).commitFail(new Expect(ConflictException.class));
+      }
+    });
+  }
+
+  @Test
+  public void test008_SameKey_ConflictPick1() throws Exception
+  {
+    WS(1).set("line.numbers", "true").save();
+
+    WS(2).set("line.numbers", "false").save().commit().assertCount(1).assertSet("line.numbers", "false");
+
+    WS(1).synchronize().resolvePreference("line.numbers", SyncActionType.SET_LOCAL).commitAnd().assertCount(1).assertSet("line.numbers", "true");
+
+    WS(2).commit().assertCount(1).assertSet("line.numbers", "true");
+  }
+
+  @Test
+  public void test009_SameKey_ConflictPick2() throws Exception
+  {
+    WS(1).set("line.numbers", "true").save();
+
+    WS(2).set("line.numbers", "false").save().commit().assertCount(1).assertSet("line.numbers", "false");
+
+    WS(1).synchronize().resolvePreference("line.numbers", SyncActionType.SET_REMOTE).commitAnd().assertCount(1).assertSet("line.numbers", "false");
+
+    WS(2).commit().assertCount(1).assertSet("line.numbers", "false");
   }
 }

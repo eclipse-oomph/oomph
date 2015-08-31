@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.sync.SyncAction#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.SyncAction#getLocalDelta <em>Local Delta</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.SyncAction#getRemoteDelta <em>Remote Delta</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.sync.SyncAction#getComputedType <em>Computed Type</em>}</li>
@@ -34,6 +35,21 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface SyncAction extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>ID</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>ID</em>' attribute.
+   * @see org.eclipse.oomph.setup.sync.SyncPackage#getSyncAction_ID()
+   * @model id="true" transient="true" changeable="false" volatile="true" derived="true"
+   * @generated
+   */
+  String getID();
+
   /**
    * Returns the value of the '<em><b>Local Delta</b></em>' reference.
    * <!-- begin-user-doc -->
