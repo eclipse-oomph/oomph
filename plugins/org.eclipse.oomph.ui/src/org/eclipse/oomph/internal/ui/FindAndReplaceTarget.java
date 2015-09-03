@@ -923,7 +923,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       {
         // Ignore scope changes while showing the properties view.
         suspendScopeChanges = true;
-        if (selectedItem.itemPropertyDescriptor != null)
+        if (item.itemPropertyDescriptor != null)
         {
           viewPart = page.showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE);
           if (viewPart == null)
