@@ -2575,41 +2575,6 @@
     </version>
     <description>This package contains the absolute minimal IDE, suitable only as a base for installing other tools.</description>
   </product>
-  <product name="org.eclipse.epp.logging.aeri.ide"
-      label="Eclipse Aeri">
-    <version
-        name="latest"
-        label="Latest (Neon)"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse Aeri (Neon)">
-        <requirement
-            name="org.eclipse.epp.logging.aeri.ide"
-            versionRange="[1.0.0,2.0.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
-        <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
-      </setupTask>
-    </version>
-    <version
-        name="neon"
-        label="Neon"
-        requiredJavaVersion="1.7">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse Aeri (Neon)">
-        <requirement
-            name="org.eclipse.epp.logging.aeri.ide"
-            versionRange="[1.0.0,1.1.0)"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
-        <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
-      </setupTask>
-    </version>
-  </product>
   <product name="epp.package.standard"
       label="Eclipse Standard">
     <version

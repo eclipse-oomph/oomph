@@ -322,6 +322,8 @@ public class ProductCatalogGenerator implements IApplication
         releaseURI = trimEmptyTrailingSegment(releaseMetaDataRepository.getLocation());
         System.out.println(" -> " + releaseURI);
 
+        Set<String> requirements = new HashSet<String>();
+
         for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createLatestIUQuery(), null)))
         {
           String fragment = iu.getProperty("org.eclipse.equinox.p2.type.fragment");
@@ -333,7 +335,9 @@ public class ProductCatalogGenerator implements IApplication
           String label = iu.getProperty("org.eclipse.equinox.p2.name");
           if (label == null || label.startsWith("%") || label.equals("Uncategorized"))
           {
-            continue;
+            // Ensure that this is removed later,
+            // but that the requirements are still processed for filtering roots.
+            requirements.add(iu.getId());
           }
 
           String id = iu.getId();
@@ -350,7 +354,6 @@ public class ProductCatalogGenerator implements IApplication
           }
         }
 
-        Set<String> requirements = new HashSet<String>();
         for (IInstallableUnit iu : ius.values())
         {
           for (IRequirement requirement : iu.getRequirements())
@@ -366,10 +369,7 @@ public class ProductCatalogGenerator implements IApplication
           }
         }
 
-        for (String requirement : requirements)
-        {
-          ius.remove(requirement);
-        }
+        ius.keySet().removeAll(requirements);
 
         for (IInstallableUnit iu : P2Util
             .asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery("org.eclipse.platform.ide")), null)))
