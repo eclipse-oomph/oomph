@@ -12,12 +12,16 @@
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.jar.JarOutputStream;
+import java.util.zip.ZipEntry;
 
 /**
  * @author Stepper
@@ -184,24 +188,33 @@ public final class RepositoryComposer
 
   private static void writeRepository(File compositeFolder, boolean metadata, String name, long timestamp, List<File> drops) throws IOException
   {
+    String entryName;
     String fileName;
     String processingInstruction;
     String type;
     if (metadata)
     {
-      fileName = "compositeContent.xml";
+      entryName = "compositeContent.xml";
+      fileName = "compositeContent.jar";
       processingInstruction = "compositeMetadataRepository";
       type = "org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository";
     }
     else
     {
-      fileName = "compositeArtifacts.xml";
+      entryName = "compositeArtifacts.xml";
+      fileName = "compositeArtifacts.jar";
       processingInstruction = "compositeArtifactRepository";
       type = "org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository";
     }
 
     compositeFolder.mkdirs();
-    BufferedWriter writer = new BufferedWriter(new FileWriter(new File(compositeFolder, fileName)));
+    File file = new File(compositeFolder, fileName);
+    FileOutputStream fileOutputStream = new FileOutputStream(file);
+    JarOutputStream jarOutputStream = new JarOutputStream(fileOutputStream);
+    jarOutputStream.putNextEntry(new ZipEntry(entryName));
+
+    Writer out = new OutputStreamWriter(jarOutputStream, "UTF-8");
+    BufferedWriter writer = new BufferedWriter(out);
 
     writeLine(writer, "<?xml version='1.0' encoding='UTF-8'?>");
     writeLine(writer, "<?" + processingInstruction + " version='1.0.0'?>");
@@ -214,10 +227,14 @@ public final class RepositoryComposer
 
     for (File drop : drops)
     {
-      String relativePath = drop.getPath();
-      if (relativePath.startsWith("/"))
+      String relativePath;
+      if (drop.isAbsolute())
       {
         relativePath = getRelativePath(compositeFolder, drop);
+      }
+      else
+      {
+        relativePath = drop.getPath().replace(File.separatorChar, '/');
       }
 
       writeLine(writer, "    <child location='" + relativePath + "'/>");
@@ -225,7 +242,10 @@ public final class RepositoryComposer
 
     writeLine(writer, "  </children>");
     writeLine(writer, "</repository>");
-    writer.close();
+    writer.flush();
+
+    jarOutputStream.closeEntry();
+    jarOutputStream.close();
   }
 
   private static void writeLine(BufferedWriter writer, String line) throws IOException
@@ -244,7 +264,7 @@ public final class RepositoryComposer
       String sourcePath = source.getAbsolutePath();
       if (targetPath.startsWith(sourcePath))
       {
-        return builder.toString() + targetPath.substring(sourcePath.length() + 1);
+        return builder.toString() + targetPath.substring(sourcePath.length() + 1).replace(File.separatorChar, '/');
       }
 
       builder.append("../");
