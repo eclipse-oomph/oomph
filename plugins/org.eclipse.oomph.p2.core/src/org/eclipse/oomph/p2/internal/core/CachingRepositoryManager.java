@@ -386,6 +386,33 @@ public class CachingRepositoryManager<T>
     {
       return loader.loadRepository(location, monitor, type, flags);
     }
+
+    @Override
+    public URI[] getKnownRepositories(int flags)
+    {
+      return filter(super.getKnownRepositories(flags));
+    }
+
+    static URI[] filter(URI[] uris)
+    {
+      List<URI> result = new ArrayList<URI>(uris.length);
+      for (URI uri : uris)
+      {
+        try
+        {
+          if (!"file".equalsIgnoreCase(uri.getScheme()) || new File(uri).isDirectory())
+          {
+            result.add(uri);
+          }
+        }
+        catch (IllegalArgumentException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      return result.toArray(new URI[result.size()]);
+    }
   }
 
   /**
@@ -405,6 +432,12 @@ public class CachingRepositoryManager<T>
     protected IRepository<IArtifactKey> loadRepository(URI location, IProgressMonitor monitor, String type, int flags) throws ProvisionException
     {
       return loader.loadRepository(location, monitor, type, flags);
+    }
+
+    @Override
+    public URI[] getKnownRepositories(int flags)
+    {
+      return Metadata.filter(super.getKnownRepositories(flags));
     }
   }
 }

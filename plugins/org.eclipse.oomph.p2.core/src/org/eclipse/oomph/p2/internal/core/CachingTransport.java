@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OfflineMode;
@@ -35,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -157,6 +159,17 @@ public class CachingTransport extends Transport
           if (lastModified >= 0)
           {
             cacheFile.setLastModified(lastModified);
+          }
+
+          // Remove the other form that might be cached.
+          String path = cacheFile.getPath();
+          if (path.endsWith(".xml"))
+          {
+            new File(path.substring(0, path.length() - 4) + ".jar").delete();
+          }
+          else if (path.endsWith(".jar"))
+          {
+            new File(path.substring(0, path.length() - 4) + ".xml").delete();
           }
         }
         else
@@ -283,16 +296,25 @@ public class CachingTransport extends Transport
         return cacheFile.lastModified();
       }
 
+      if (uri.toString().endsWith(".jar"))
+      {
+        // When p2 tries to load a content.xml, it still first tries a content.jar.
+        // If there is a socket timeout exception, it has special case code that doesn't try to load the content.xml.
+        // But an overloaded server might return socket timeout exceptions, even for files that doesn't exist.
+        // So it's better if p2 tries the *.xml variant as well.
+        IStatus status = exception.getStatus();
+        Throwable statusException = status.getException();
+        if (statusException instanceof SocketTimeoutException)
+        {
+          IOException wrappedException = new IOExceptionWithCause(statusException);
+          ReflectUtil.setValue("exception", status, wrappedException);
+        }
+      }
+
       throw exception;
     }
     catch (FileNotFoundException exception)
     {
-      File cacheFile = getCacheFile(uri);
-      if (cacheFile.length() > 0 && confirmCacheUsage(uri, cacheFile))
-      {
-        return cacheFile.lastModified();
-      }
-
       throw exception;
     }
     catch (AuthenticationFailedException exception)
