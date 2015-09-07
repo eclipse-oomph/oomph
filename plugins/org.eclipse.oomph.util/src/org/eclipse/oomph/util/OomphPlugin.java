@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.osgi.service.datalocation.Location;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -89,6 +90,32 @@ public abstract class OomphPlugin extends EMFPlugin
   {
     Bundle bundle = getBundle();
     return getClassPath(bundle);
+  }
+
+  public final IPath getConfigurationLocation() throws IllegalStateException
+  {
+    Location location = Platform.getConfigurationLocation();
+    if (location != null)
+    {
+      try
+      {
+        URL dataArea = location.getDataArea(getSymbolicName());
+        if (dataArea != null)
+        {
+          URL fileURL = FileLocator.toFileURL(dataArea);
+          if (fileURL != null)
+          {
+            return new Path(fileURL.getFile());
+          }
+        }
+      }
+      catch (IOException ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    throw new IllegalStateException("The configuration location is unavailable");
   }
 
   public final IPath getStateLocation() throws IllegalStateException

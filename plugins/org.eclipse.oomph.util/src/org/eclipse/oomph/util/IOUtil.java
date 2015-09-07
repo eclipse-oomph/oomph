@@ -46,6 +46,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -405,6 +407,19 @@ public final class IOUtil
     return imageURI;
   }
 
+  public static URI newURI(String uri) throws IORuntimeException
+  {
+    try
+    {
+      return new URI(uri);
+    }
+    catch (URISyntaxException ex)
+    {
+      // Should not happen.
+      throw new IORuntimeException(ex);
+    }
+  }
+
   public static FileInputStream openInputStream(File file) throws IORuntimeException
   {
     try
@@ -507,6 +522,21 @@ public final class IOUtil
       {
         throw new IORuntimeException("Unable to create directory " + folder.getAbsolutePath()); //$NON-NLS-1$
       }
+    }
+  }
+
+  public static File createTempFolder(String prefix, boolean deleteOnExit) throws IORuntimeException
+  {
+    try
+    {
+      File folder = File.createTempFile(prefix, "");
+      deleteBestEffort(folder, deleteOnExit);
+      mkdirs(folder);
+      return folder;
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
     }
   }
 

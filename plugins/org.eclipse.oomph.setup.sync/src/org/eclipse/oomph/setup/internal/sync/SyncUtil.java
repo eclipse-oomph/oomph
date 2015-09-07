@@ -125,7 +125,7 @@ public final class SyncUtil
     {
       return new HttpHost(proxy.getHost(), proxy.getPort());
     }
-  
+
     return null;
   }
 
@@ -146,7 +146,7 @@ public final class SyncUtil
             .auth(new AuthScope(proxyHost, AuthScope.ANY_REALM, AuthScope.ANY_SCHEME), new UsernamePasswordCredentials(userID, password));
       }
     }
-  
+
     return executor;
   }
 
@@ -201,8 +201,6 @@ public final class SyncUtil
 
     return userName;
   }
-
-  
 
   // public static String getProxyUser(URI uri)
   // {

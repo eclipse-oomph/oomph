@@ -65,13 +65,15 @@ public class Synchronization
 
   private final Synchronizer synchronizer;
 
-  private final WorkingCopy localWorkingCopy;
-
   private final WorkingCopy remoteWorkingCopy;
 
-  private final EMap<String, SyncPolicy> policies;
+  private final EMap<String, SyncPolicy> remotePolicies;
 
-  private final Map<String, SyncAction> actions;
+  private final Map<String, SyncDelta> remoteDeltas;
+
+  private WorkingCopy localWorkingCopy;
+
+  private Map<String, SyncAction> actions;
 
   private Map<String, SyncAction> unresolvedActions;
 
@@ -81,29 +83,23 @@ public class Synchronization
 
   private int lastID;
 
-  public Synchronization(Synchronizer synchronizer) throws IOException
+  public Synchronization(Synchronizer synchronizer, boolean deferLocal) throws IOException
   {
     this.synchronizer = synchronizer;
+    synchronizer.syncStarted();
 
     remoteWorkingCopy = createRemoteWorkingCopy();
-    localWorkingCopy = createLocalWorkingCopy();
+    synchronizer.workingCopyCreated(remoteWorkingCopy);
 
-    policies = getPolicies(remoteWorkingCopy);
+    remotePolicies = getPolicies(remoteWorkingCopy);
 
     // Compute remote deltas first to make sure that new local tasks don't pick remotely existing IDs.
-    Map<String, SyncDelta> remoteDeltas = computeRemoteDeltas(remoteWorkingCopy);
-    Map<String, SyncDelta> localDeltas = computeLocalDeltas(localWorkingCopy);
+    remoteDeltas = computeRemoteDeltas(remoteWorkingCopy);
 
-    actions = computeSyncActions(localDeltas, remoteDeltas);
-
-    for (Map.Entry<String, SyncAction> entry : actions.entrySet())
+    if (!deferLocal)
     {
-      String id = entry.getKey();
-      SyncAction action = entry.getValue();
-      new ActionAdapter(action, id);
+      synchronizeLocal();
     }
-
-    synchronizer.syncStarted();
   }
 
   public Synchronizer getSynchronizer()
@@ -113,7 +109,27 @@ public class Synchronization
 
   public EMap<String, SyncPolicy> getRemotePolicies()
   {
-    return policies;
+    return remotePolicies;
+  }
+
+  public Map<String, SyncAction> synchronizeLocal() throws IOException
+  {
+    if (localWorkingCopy != null)
+    {
+      localWorkingCopy.dispose();
+    }
+
+    // Compute local deltas.
+    localWorkingCopy = createLocalWorkingCopy();
+    synchronizer.workingCopyCreated(localWorkingCopy);
+
+    Map<String, SyncDelta> localDeltas = computeLocalDeltas(localWorkingCopy);
+
+    // Compute sync actions.
+    actions = computeSyncActions(localDeltas, remoteDeltas);
+    synchronizer.actionsComputed(actions);
+
+    return actions;
   }
 
   private WorkingCopy createRemoteWorkingCopy() throws IOException
@@ -164,7 +180,7 @@ public class Synchronization
 
   private boolean isIncluded(String id)
   {
-    return SyncPolicy.EXCLUDE != policies.get(id);
+    return SyncPolicy.EXCLUDE != remotePolicies.get(id);
   }
 
   private Map<String, SyncDelta> computeRemoteDeltas(WorkingCopy remoteWorkingCopy)
@@ -213,6 +229,13 @@ public class Synchronization
       String id = remoteDelta.getID();
       SyncAction action = compareDeltas(null, remoteDelta);
       actions.put(id, action);
+    }
+
+    for (Map.Entry<String, SyncAction> entry : actions.entrySet())
+    {
+      String id = entry.getKey();
+      SyncAction action = entry.getValue();
+      new ActionAdapter(action, id);
     }
 
     return actions;
@@ -681,12 +704,12 @@ public class Synchronization
 
   private void include(String id)
   {
-    policies.put(id, SyncPolicy.INCLUDE);
+    remotePolicies.put(id, SyncPolicy.INCLUDE);
   }
 
   private void exclude(String id)
   {
-    policies.put(id, SyncPolicy.EXCLUDE);
+    remotePolicies.put(id, SyncPolicy.EXCLUDE);
   }
 
   public void dispose()
@@ -763,7 +786,7 @@ public class Synchronization
   /**
    * @author Eike Stepper
    */
-  public static class DuplicateIDException extends SnychronizerException
+  public static class DuplicateIDException extends SynchronizerException
   {
     private static final long serialVersionUID = 1L;
 
@@ -776,7 +799,7 @@ public class Synchronization
   /**
    * @author Eike Stepper
    */
-  public static class ConflictException extends SnychronizerException
+  public static class ConflictException extends SynchronizerException
   {
     private static final long serialVersionUID = 1L;
 

@@ -15,6 +15,7 @@ import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.ui.OomphPreferencePage;
 import org.eclipse.oomph.internal.ui.TaskItemDecorator;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
@@ -30,6 +31,8 @@ import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.provider.SetupP2EditPlugin;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerPreferencePage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.OomphUIPlugin;
@@ -56,6 +59,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -189,6 +193,12 @@ public final class SetupUIPlugin extends OomphUIPlugin
             }
             else
             {
+              if (!SynchronizerManager.ENABLED)
+              {
+                PreferenceManager preferenceManager = workbench.getPreferenceManager();
+                preferenceManager.remove("/" + OomphPreferencePage.ID + "/" + SetupPreferencePage.ID + "/" + SynchronizerPreferencePage.ID);
+              }
+
               if (SetupTaskPerformer.REMOTE_DEBUG)
               {
                 MessageDialog.openInformation(UIUtil.getShell(), "Remote Debug Pause", "The setup tasks are paused to allow you to attach a remote debugger");

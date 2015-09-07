@@ -22,6 +22,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  */
 public class OomphPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
 {
+  public static final String ID = "org.eclipse.oomph.ui.preferences.OomphPreferencePage";
+
   public OomphPreferencePage()
   {
     setDescription("Expand the tree to edit preferences for a specific feature.");

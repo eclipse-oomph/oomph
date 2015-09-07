@@ -22,12 +22,12 @@ import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
 import org.eclipse.oomph.ui.SearchField;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ObjectUtil;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -133,16 +133,21 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        boolean recorderEnabled = enableButton.getSelection();
-        RecorderManager.INSTANCE.setRecorderEnabled(recorderEnabled);
+        boolean enableRecorder = enableButton.getSelection();
+        RecorderManager.INSTANCE.setRecorderEnabled(enableRecorder);
 
-        if (!recorderEnabled)
+        if (!enableRecorder)
         {
           policiesFilter.getFilterControl().setText("");
         }
 
         updateEnablement();
         RecorderManager.updateRecorderCheckboxState();
+
+        if (enableRecorder)
+        {
+          SynchronizerManager.INSTANCE.offerFirstTimeConnect(getShell());
+        }
       }
     });
 
@@ -189,24 +194,24 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
     SetupContext setupContext = SetupContext.getSelf();
     Set<Scope> targets = new HashSet<Scope>();
 
-    addTarget(targetCombo, adapterFactory, targets, setupContext.getUser());
+    addTarget(adapterFactory, targets, setupContext.getUser());
 
     Installation installation = setupContext.getInstallation();
-    addTarget(targetCombo, adapterFactory, targets, installation);
+    addTarget(adapterFactory, targets, installation);
 
     Workspace workspace = setupContext.getWorkspace();
-    addTarget(targetCombo, adapterFactory, targets, workspace);
+    addTarget(adapterFactory, targets, workspace);
 
     if (installation != null)
     {
-      addTarget(targetCombo, adapterFactory, targets, installation.getProductVersion());
+      addTarget(adapterFactory, targets, installation.getProductVersion());
     }
 
     if (workspace != null)
     {
       for (Stream stream : workspace.getStreams())
       {
-        addTarget(targetCombo, adapterFactory, targets, stream);
+        addTarget(adapterFactory, targets, stream);
       }
     }
 
@@ -351,22 +356,9 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
     return transaction != null && transaction.isDirty();
   }
 
-  private URI normalize(URI uri)
-  {
-    uri = uriConverter.normalize(uri);
-    uri = SetupContext.resolveUser(uri);
-
-    if (StringUtil.isEmpty(uri.fragment()))
-    {
-      uri = uri.appendFragment("/");
-    }
-
-    return uri;
-  }
-
   private void selectRecorderTarget(URI uri)
   {
-    uri = normalize(uri);
+    uri = RecorderManager.normalize(uriConverter, uri);
 
     int i = 0;
     for (TableItem item : targetCombo.getTable().getItems())
@@ -382,14 +374,14 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
     }
   }
 
-  private boolean addTarget(TableCombo targetTable, ComposedAdapterFactory adapterFactory, Set<Scope> targets, Scope target)
+  private boolean addTarget(ComposedAdapterFactory adapterFactory, Set<Scope> targets, Scope target)
   {
     if (target != null && targets.add(target))
     {
       URI uri = EcoreUtil.getURI(target);
       if (uri != null)
       {
-        uri = normalize(uri);
+        uri = RecorderManager.normalize(uriConverter, uri);
 
         Map<?, ?> options = Collections.singletonMap(URIConverter.OPTION_REQUESTED_ATTRIBUTES, Collections.singleton(URIConverter.ATTRIBUTE_READ_ONLY));
         Map<String, ?> attributes = uriConverter.getAttributes(uri, options);
@@ -400,13 +392,13 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
           Scope parentScope = target.getParentScope();
           if (parentScope instanceof Product || parentScope instanceof Project)
           {
-            addTarget(targetTable, adapterFactory, targets, parentScope);
+            addTarget(adapterFactory, targets, parentScope);
           }
 
           String location = uri.trimFragment().toString();
           ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(target, IItemLabelProvider.class);
 
-          TableItem item = new TableItem(targetTable.getTable(), SWT.NONE);
+          TableItem item = new TableItem(targetCombo.getTable(), SWT.NONE);
           item.setData(uri);
           item.setImage(0, SetupUIPlugin.INSTANCE.getSWTImage(SetupLabelProvider.getImageDescriptor(itemProvider, target)));
           item.setText(0, SetupLabelProvider.getText(itemProvider, target));

@@ -10,14 +10,21 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
+
+import java.util.Map;
 
 /**
  * @author Eike Stepper
  */
-public interface SnychronizerListener
+public interface SynchronizerListener
 {
   public void syncStarted(Synchronization synchronization);
+
+  public void workingCopyCreated(Synchronization synchronization, WorkingCopy workingCopy);
+
+  public void actionsComputed(Synchronization synchronization, Map<String, SyncAction> actions);
 
   public void actionResolved(Synchronization synchronization, SyncAction action, String id);
 
@@ -26,4 +33,5 @@ public interface SnychronizerListener
   public void commitFinished(Synchronization synchronization, Throwable t);
 
   public void lockReleased(Synchronization synchronization);
+
 }

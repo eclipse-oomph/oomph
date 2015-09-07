@@ -32,10 +32,16 @@
             name="Setup Tasks">
       </page>
       <page
-            category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
-            id="org.eclipse.oomph.setup.PreferenceRecorderPreferencePage"
+            category="org.eclipse.oomph.setup.SetupPreferencePage"
+            id="org.eclipse.oomph.setup.RecorderPreferencePage"
             class="org.eclipse.oomph.setup.ui.recorder.RecorderPreferencePage"
             name="Preference Recorder">
+      </page>
+      <page
+            category="org.eclipse.oomph.setup.SetupPreferencePage"
+            id="org.eclipse.oomph.setup.SynchronizerPreferencePage"
+            class="org.eclipse.oomph.setup.ui.synchronizer.SynchronizerPreferencePage"
+            name="Preference Synchronizer">
       </page>
    </extension>
 
@@ -80,5 +86,24 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
+   
+   <!--
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.eclipse.oomph.setup.ui.actionSet1"
+            label="Synchronizer"
+            visible="true">
+         <action
+               class="org.eclipse.oomph.setup.ui.synchronizer.SynchronizerAction"
+               icon="icons/sync/Remote.gif"
+               id="org.eclipse.oomph.setup.ui.action1"
+               label="Synchronize"
+               style="push"
+               toolbarPath="oomphSynchronizer">
+         </action>
+      </actionSet>
+   </extension>
+   -->
 
 </plugin>

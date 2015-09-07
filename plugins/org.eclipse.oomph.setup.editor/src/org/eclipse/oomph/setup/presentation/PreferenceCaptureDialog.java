@@ -122,8 +122,7 @@ public class PreferenceCaptureDialog extends Dialog
       traverse(preferences, preferenceNode);
     }
 
-    List<SetupTask> result = RecorderTransaction.record(preferences);
-    return result;
+    return RecorderTransaction.record(preferences);
   }
 
   protected void traverse(Map<URI, String> preferences, PreferenceNode preferenceNode)
@@ -154,6 +153,7 @@ public class PreferenceCaptureDialog extends Dialog
     contentsGridData.verticalAlignment = SWT.FILL;
 
     Text preferenceFileText = null;
+
     if (fromEclipsePreferenceFile)
     {
       Group preferenceFileGroup = new Group(contents, SWT.NONE);
@@ -332,6 +332,7 @@ public class PreferenceCaptureDialog extends Dialog
           included.clear();
           EList<Object> children = input.getChildren();
           children.clear();
+
           try
           {
             Map<URI, String> preferences = new HashMap<URI, String>();
@@ -358,6 +359,7 @@ public class PreferenceCaptureDialog extends Dialog
         }
       });
     }
+
     return contents;
   }
 
@@ -407,6 +409,7 @@ public class PreferenceCaptureDialog extends Dialog
     {
       IStructuredSelection selection = (IStructuredSelection)(add ? availablePreferencesTreeViewer : selectedPreferencesTreeViewer).getSelection();
       List<Object> newSelection = new ArrayList<Object>();
+
       for (Object object : selection.toArray())
       {
         Object[] children = (add ? availablePreferencesContentProvider : selectedPreferencesContentProvider).getChildren(object);
@@ -424,6 +427,7 @@ public class PreferenceCaptureDialog extends Dialog
       Set<Object> nonCandidates = new HashSet<Object>(newSelection);
       Object candidate = null;
       Object bestCandidate = null;
+
       for (TreeIterator<Object> it = (add ? availablePreferencesContentProvider : selectedPreferencesContentProvider).getAllContents(input, false); it
           .hasNext();)
       {
@@ -522,6 +526,7 @@ public class PreferenceCaptureDialog extends Dialog
     {
       List<Object> elements = ((ItemProvider)object).getChildren();
       List<Object> result = new ArrayList<Object>();
+
       for (Object element : elements)
       {
         if (include)
@@ -553,6 +558,7 @@ public class PreferenceCaptureDialog extends Dialog
     {
       Object[] children = super.getChildren(object);
       List<Object> result = new ArrayList<Object>();
+
       for (Object child : children)
       {
         if (included.contains(child) == include)

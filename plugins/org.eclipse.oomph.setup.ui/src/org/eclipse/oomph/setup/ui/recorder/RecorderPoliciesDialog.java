@@ -11,8 +11,8 @@
 package org.eclipse.oomph.setup.ui.recorder;
 
 import org.eclipse.oomph.preferences.PreferencesFactory;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -39,14 +39,14 @@ import java.util.Map;
 
 /**
  * @author Eike Stepper
+ * @deprecated As of 1.2 replaced by {@link SynchronizerDialog}.
  */
-public class RecorderPoliciesDialog extends AbstractSetupDialog
+@Deprecated
+public class RecorderPoliciesDialog extends AbstractRecorderDialog
 {
   private final RecorderTransaction transaction;
 
   private final Map<URI, String> preferences;
-
-  private boolean enablePreferenceRecorder = true;
 
   private RecorderPoliciesComposite recorderPoliciesComposite;
 
@@ -54,19 +54,9 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
 
   public RecorderPoliciesDialog(Shell parentShell, RecorderTransaction transaction, Map<URI, String> preferences)
   {
-    super(parentShell, "Preference Recorder", 600, 400, SetupUIPlugin.INSTANCE, true);
+    super(parentShell, "Preference Recorder", 600, 400);
     this.transaction = transaction;
     this.preferences = preferences;
-  }
-
-  public boolean isEnablePreferenceRecorder()
-  {
-    return enablePreferenceRecorder;
-  }
-
-  public void setEnablePreferenceRecorder(boolean enablePreferenceRecorder)
-  {
-    this.enablePreferenceRecorder = enablePreferenceRecorder;
   }
 
   @Override
@@ -144,15 +134,17 @@ public class RecorderPoliciesDialog extends AbstractSetupDialog
   {
     final Button enableButton = createCheckbox(parent, "Recorder enabled");
     enableButton.setToolTipText("The enablement can be changed later on the preference page Oomph | Setup | Preference Recorder");
-    enableButton.setSelection(enablePreferenceRecorder);
+    enableButton.setSelection(isEnableRecorder());
     enableButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        enablePreferenceRecorder = enableButton.getSelection();
-        recorderPoliciesComposite.setEnabled(enablePreferenceRecorder);
-        valueText.setVisible(enablePreferenceRecorder);
+        boolean enableRecorder = enableButton.getSelection();
+        setEnableRecorder(enableRecorder);
+
+        recorderPoliciesComposite.setEnabled(enableRecorder);
+        valueText.setVisible(enableRecorder);
       }
     });
 

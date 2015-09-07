@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.tests;
 
-import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
@@ -29,7 +28,6 @@ import org.junit.runner.Description;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
@@ -177,17 +175,7 @@ public abstract class AbstractTest extends CoreMatchers
 
   public static File createTempFolder()
   {
-    try
-    {
-      File folder = File.createTempFile("test-", "");
-      folder.delete();
-      folder.mkdirs();
-      return folder;
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
+    return IOUtil.createTempFolder("test-", false);
   }
 
   public static void log()

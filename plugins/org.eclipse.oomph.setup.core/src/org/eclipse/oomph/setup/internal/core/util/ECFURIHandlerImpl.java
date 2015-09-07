@@ -58,7 +58,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -214,7 +213,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
       try
       {
-        FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), new java.net.URI(uriString));
+        FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), IOUtil.newURI(uriString));
         Map<Object, Object> requestOptions = new HashMap<Object, Object>();
         requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, 10000);
         requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, 10000);
@@ -225,15 +224,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
         fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
       }
-      catch (URISyntaxException ex)
-      {
-        throw new IOExceptionWithCause(ex);
-      }
       catch (IncomingFileTransferException ex)
       {
         throw new IOExceptionWithCause(ex);
       }
-
       try
       {
         transferListener.receiveLatch.await();

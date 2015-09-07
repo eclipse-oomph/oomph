@@ -10,11 +10,13 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.util.ConcurrentArray;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -23,12 +25,12 @@ public class Synchronizer
 {
   private static final LocalLock LOCAL_LOCK = new LocalLock();
 
-  private final ConcurrentArray<SnychronizerListener> listeners = new ConcurrentArray<SnychronizerListener>()
+  private final ConcurrentArray<SynchronizerListener> listeners = new ConcurrentArray<SynchronizerListener>()
   {
     @Override
-    protected SnychronizerListener[] newArray(int length)
+    protected SynchronizerListener[] newArray(int length)
     {
-      return new SnychronizerListener[length];
+      return new SynchronizerListener[length];
     }
   };
 
@@ -38,10 +40,15 @@ public class Synchronizer
 
   private Synchronization synchronization;
 
+  public Synchronizer(Snapshot localSnapshot, Snapshot remoteSnapshot)
+  {
+    this.localSnapshot = localSnapshot;
+    this.remoteSnapshot = remoteSnapshot;
+  }
+
   public Synchronizer(DataProvider localDataProvider, DataProvider remoteDataProvider, File syncFolder)
   {
-    localSnapshot = new Snapshot(localDataProvider, syncFolder);
-    remoteSnapshot = new Snapshot(remoteDataProvider, syncFolder);
+    this(new Snapshot(localDataProvider, syncFolder), new Snapshot(remoteDataProvider, syncFolder));
   }
 
   public Snapshot getLocalSnapshot()
@@ -54,7 +61,12 @@ public class Synchronizer
     return remoteSnapshot;
   }
 
-  public synchronized Synchronization synchronize() throws IOException, SnychronizerException
+  public Synchronization synchronize() throws IOException, SynchronizerException
+  {
+    return synchronize(false);
+  }
+
+  public synchronized Synchronization synchronize(boolean deferLocal) throws IOException, SynchronizerException
   {
     if (synchronization != null)
     {
@@ -62,28 +74,28 @@ public class Synchronizer
     }
 
     LOCAL_LOCK.acquire();
-    synchronization = createSynchronization();
+    synchronization = createSynchronization(deferLocal);
     return synchronization;
   }
 
-  protected Synchronization createSynchronization() throws IOException
+  protected Synchronization createSynchronization(boolean deferLocal) throws IOException
   {
-    return new Synchronization(this);
+    return new Synchronization(this, deferLocal);
   }
 
-  public void addListener(SnychronizerListener listener)
+  public void addListener(SynchronizerListener listener)
   {
     listeners.add(listener);
   }
 
-  public void removeListener(SnychronizerListener listener)
+  public void removeListener(SynchronizerListener listener)
   {
     listeners.remove(listener);
   }
 
   protected void syncStarted()
   {
-    for (SnychronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners.get())
     {
       try
       {
@@ -96,9 +108,39 @@ public class Synchronizer
     }
   }
 
+  protected void workingCopyCreated(WorkingCopy workingCopy)
+  {
+    for (SynchronizerListener listener : listeners.get())
+    {
+      try
+      {
+        listener.workingCopyCreated(synchronization, workingCopy);
+      }
+      catch (Throwable ex)
+      {
+        SetupSyncPlugin.INSTANCE.log(ex);
+      }
+    }
+  }
+
+  protected void actionsComputed(Map<String, SyncAction> actions)
+  {
+    for (SynchronizerListener listener : listeners.get())
+    {
+      try
+      {
+        listener.actionsComputed(synchronization, actions);
+      }
+      catch (Throwable ex)
+      {
+        SetupSyncPlugin.INSTANCE.log(ex);
+      }
+    }
+  }
+
   protected void actionResolved(SyncAction action, String id)
   {
-    for (SnychronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners.get())
     {
       try
       {
@@ -113,7 +155,7 @@ public class Synchronizer
 
   protected void commitStarted()
   {
-    for (SnychronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners.get())
     {
       try
       {
@@ -128,7 +170,7 @@ public class Synchronizer
 
   protected void commitFinished(Throwable exception)
   {
-    for (SnychronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners.get())
     {
       try
       {
@@ -150,7 +192,7 @@ public class Synchronizer
 
       LOCAL_LOCK.release();
 
-      for (SnychronizerListener listener : listeners.get())
+      for (SynchronizerListener listener : listeners.get())
       {
         try
         {

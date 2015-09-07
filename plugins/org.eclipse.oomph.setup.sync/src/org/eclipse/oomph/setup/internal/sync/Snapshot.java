@@ -10,8 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
-import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotFoundException;
 import org.eclipse.oomph.util.IOUtil;
 
@@ -45,6 +45,11 @@ public class Snapshot
   public DataProvider getDataProvider()
   {
     return dataProvider;
+  }
+
+  public File getFolder()
+  {
+    return tmpFile.getParentFile();
   }
 
   public File getOldFile()

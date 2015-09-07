@@ -13,25 +13,25 @@ package org.eclipse.oomph.setup.internal.sync;
 /**
  * @author Eike Stepper
  */
-public class SnychronizerException extends RuntimeException
+public class SynchronizerException extends RuntimeException
 {
   private static final long serialVersionUID = 1L;
 
-  public SnychronizerException()
+  public SynchronizerException()
   {
   }
 
-  public SnychronizerException(String message, Throwable cause)
+  public SynchronizerException(String message, Throwable cause)
   {
     super(message, cause);
   }
 
-  public SnychronizerException(String message)
+  public SynchronizerException(String message)
   {
     super(message);
   }
 
-  public SnychronizerException(Throwable cause)
+  public SynchronizerException(Throwable cause)
   {
     super(cause);
   }

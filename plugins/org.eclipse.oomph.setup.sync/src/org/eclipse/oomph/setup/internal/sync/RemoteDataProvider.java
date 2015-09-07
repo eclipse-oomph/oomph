@@ -53,6 +53,8 @@ public class RemoteDataProvider implements DataProvider
 
   private static final int BAD_REQUEST = 400;
 
+  private static final int AUTHORIZATION_REQUIRED = 401;
+
   private static final int FORBIDDEN = 403;
 
   private static final int NOT_FOUND = 404;
@@ -232,6 +234,11 @@ public class RemoteDataProvider implements DataProvider
       throw new ForbiddenException(uri);
     }
 
+    if (status == AUTHORIZATION_REQUIRED)
+    {
+      throw new AuthorizationRequiredException(uri);
+    }
+
     return status;
   }
 
@@ -277,6 +284,19 @@ public class RemoteDataProvider implements DataProvider
     private static final long serialVersionUID = 1L;
 
     public ForbiddenException(URI uri)
+    {
+      super("Forbidden: " + uri);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class AuthorizationRequiredException extends IOException
+  {
+    private static final long serialVersionUID = 1L;
+
+    public AuthorizationRequiredException(URI uri)
     {
       super("Forbidden: " + uri);
     }

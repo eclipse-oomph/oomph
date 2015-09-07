@@ -75,25 +75,32 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     this.title = title;
     this.plugin = plugin;
 
-    IDialogSettings settings = getDialogSettings();
+    width = defaultWidth;
+    height = defaultHeight;
 
-    try
+    if (true)
     {
-      int dialogWidth = settings.getInt(SETTING_DIALOG_WIDTH);
-      width = dialogWidth;
-    }
-    catch (NumberFormatException ex)
-    {
-      width = defaultWidth;
-    }
-    try
-    {
-      int dialogHeight = settings.getInt(SETTING_DIALOG_HEIGHT);
-      height = dialogHeight;
-    }
-    catch (NumberFormatException ex)
-    {
-      height = defaultHeight;
+      IDialogSettings settings = getDialogSettings();
+
+      try
+      {
+        int dialogWidth = settings.getInt(SETTING_DIALOG_WIDTH);
+        width = dialogWidth;
+      }
+      catch (NumberFormatException ex)
+      {
+        //$FALL-THROUGH$
+      }
+
+      try
+      {
+        int dialogHeight = settings.getInt(SETTING_DIALOG_HEIGHT);
+        height = dialogHeight;
+      }
+      catch (NumberFormatException ex)
+      {
+        //$FALL-THROUGH$
+      }
     }
 
     if (helpAvailable)
@@ -107,6 +114,12 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
         }
       };
     }
+  }
+
+  @Override
+  public boolean isHelpAvailable()
+  {
+    return helpSupport != null;
   }
 
   public final HelpSupport getHelpSupport()

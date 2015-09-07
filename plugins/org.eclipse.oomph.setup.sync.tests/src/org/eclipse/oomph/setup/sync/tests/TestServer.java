@@ -41,7 +41,7 @@ import java.net.URI;
  */
 public class TestServer
 {
-  private static final boolean LOCALHOST = true;
+  private static final boolean LOCALHOST = false;
 
   private static RemoteDataProvider remoteDataProvider;
 

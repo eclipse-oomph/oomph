@@ -32,6 +32,8 @@ import org.eclipse.ui.dialogs.EditorSelectionDialog;
  */
 public class SetupPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
+  public static final String ID = "org.eclipse.oomph.setup.SetupPreferencePage";
+
   private IWorkbench workbench;
 
   public SetupPreferencePage()

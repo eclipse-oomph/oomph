@@ -10,11 +10,14 @@
  */
 package org.eclipse.oomph.setup.provider;
 
+import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -31,6 +34,10 @@ import java.util.List;
  */
 public class PreferenceTaskItemProvider extends SetupTaskItemProvider
 {
+  private static final String INSTANCE_SCOPE = "/instance/";
+
+  private static final String CONFIGURATION_SCOPE = "/configuration/";
+
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -93,12 +100,25 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
    * This returns PreferenceTask.gif.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/PreferenceTask"));
+    String imageKey = "full/obj16/PreferenceTask";
+
+    PreferenceTask preferenceTask = (PreferenceTask)object;
+    String key = preferenceTask.getKey();
+    if (!StringUtil.isEmpty(key))
+    {
+      String scope = getScope(key);
+      if (scope == CONFIGURATION_SCOPE)
+      {
+        imageKey += "Configuration";
+      }
+    }
+
+    return overlayImage(object, getResourceLocator().getImage(imageKey));
   }
 
   /**
@@ -121,21 +141,53 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    String key = ((PreferenceTask)object).getKey();
-    String value = ((PreferenceTask)object).getValue();
+    PreferenceTask preferenceTask = (PreferenceTask)object;
+    String key = preferenceTask.getKey();
+    String value = preferenceTask.getValue();
 
-    if ((key == null || key.length() == 0) && (value == null || value.length() == 0))
+    if (StringUtil.isEmpty(key))
     {
-      return getString("_UI_PreferenceTask_type");
+      if (StringUtil.isEmpty(value))
+      {
+        return getString("_UI_PreferenceTask_type");
+      }
+    }
+    else
+    {
+      String scope = getScope(key);
+      if (scope != null)
+      {
+        EObject container = preferenceTask.eContainer();
+        if (container instanceof CompoundTask)
+        {
+          CompoundTask compoundTask = (CompoundTask)container;
+          String compoundName = compoundTask.getName();
+
+          String prefix = scope + compoundName + "/";
+          String prefixLong = prefix + compoundName + ".";
+
+          if (key.startsWith(prefixLong))
+          {
+            key = key.substring(prefixLong.length());
+          }
+          else if (key.startsWith(prefix))
+          {
+            key = key.substring(prefix.length());
+          }
+        }
+      }
     }
 
-    String label = "" + key;
+    StringBuilder builder = new StringBuilder();
+    builder.append(key);
+
     if (value != null)
     {
-      label += " = " + crop(value);
+      builder.append(" = ");
+      builder.append(crop(value));
     }
 
-    return label;
+    return builder.toString();
   }
 
   /**
@@ -171,6 +223,21 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+  }
+
+  private static String getScope(String key)
+  {
+    if (key.startsWith(INSTANCE_SCOPE))
+    {
+      return INSTANCE_SCOPE;
+    }
+
+    if (key.startsWith(CONFIGURATION_SCOPE))
+    {
+      return CONFIGURATION_SCOPE;
+    }
+
+    return null;
   }
 
 }

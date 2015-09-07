@@ -34,6 +34,11 @@ public class LocalDataProvider implements DataProvider
     return Location.LOCAL;
   }
 
+  public File getLocalFile()
+  {
+    return localFile;
+  }
+
   public boolean update(File file) throws IOException, NotFoundException
   {
     String localVersion = SyncUtil.getDigest(localFile);

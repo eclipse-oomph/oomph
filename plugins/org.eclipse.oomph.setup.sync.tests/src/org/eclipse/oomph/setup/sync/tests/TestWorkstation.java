@@ -23,11 +23,12 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.sync.DataProvider;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
-import org.eclipse.oomph.setup.internal.sync.SnychronizerException;
-import org.eclipse.oomph.setup.internal.sync.SnychronizerListener;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
+import org.eclipse.oomph.setup.internal.sync.SynchronizerAdapter;
+import org.eclipse.oomph.setup.internal.sync.SynchronizerException;
+import org.eclipse.oomph.setup.internal.sync.SynchronizerListener;
 import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
@@ -417,23 +418,27 @@ public final class TestWorkstation
    */
   public final class TestSynchronizer extends Synchronizer
   {
-    private final SnychronizerListener listener = new SnychronizerListener()
+    private final SynchronizerListener listener = new SynchronizerAdapter()
     {
+      @Override
       public void syncStarted(Synchronization synchronization)
       {
         log("Synchronize");
       }
 
+      @Override
       public void actionResolved(Synchronization synchronization, SyncAction action, String id)
       {
         log("Resolve " + id + " from " + action.getComputedType() + " to " + action.getResolvedType());
       }
 
+      @Override
       public void commitStarted(Synchronization synchronization)
       {
         log("Commit");
       }
 
+      @Override
       public void commitFinished(Synchronization synchronization, Throwable t)
       {
         if (t != null)
@@ -457,10 +462,6 @@ public final class TestWorkstation
           resourceSet.getResources().remove(resource);
         }
       }
-
-      public void lockReleased(Synchronization synchronization)
-      {
-      }
     };
 
     public TestSynchronizer(DataProvider localDataProvider, DataProvider remoteDataProvider, File syncFolder)
@@ -475,13 +476,13 @@ public final class TestWorkstation
     }
 
     @Override
-    protected TestSynchronization createSynchronization() throws IOException
+    protected TestSynchronization createSynchronization(boolean deferLocal) throws IOException
     {
-      return new TestSynchronization(this);
+      return new TestSynchronization(this, deferLocal);
     }
 
     @Override
-    public synchronized TestSynchronization synchronize() throws IOException, SnychronizerException
+    public synchronized TestSynchronization synchronize() throws IOException, SynchronizerException
     {
       return (TestSynchronization)super.synchronize();
     }
@@ -492,9 +493,9 @@ public final class TestWorkstation
    */
   public final class TestSynchronization extends Synchronization
   {
-    public TestSynchronization(TestSynchronizer synchronizer) throws IOException
+    public TestSynchronization(Synchronizer synchronizer, boolean deferLocal) throws IOException
     {
-      super(synchronizer);
+      super(synchronizer, deferLocal);
     }
 
     @Override

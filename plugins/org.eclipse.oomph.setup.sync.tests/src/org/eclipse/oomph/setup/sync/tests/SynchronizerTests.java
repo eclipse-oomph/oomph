@@ -118,7 +118,7 @@ public class SynchronizerTests extends AbstractTest
   }
 
   @Test
-  public void test007_SameKey_ConflictException() throws Exception
+  public void test007_SameKey_Conflict_Sync() throws Exception
   {
     TestSynchronization sync1 = WS(1).set("property", "value1").save().synchronize();
 
@@ -135,7 +135,7 @@ public class SynchronizerTests extends AbstractTest
   }
 
   @Test
-  public void test008_SameKey_ConflictPick1() throws Exception
+  public void test008_SameKey_Conflict_Pick1() throws Exception
   {
     WS(1).set("property", "value1").save();
 
@@ -147,7 +147,7 @@ public class SynchronizerTests extends AbstractTest
   }
 
   @Test
-  public void test009_SameKey_ConflictPick2() throws Exception
+  public void test009_SameKey_Conflict_Pick2() throws Exception
   {
     WS(1).set("property", "value1").save();
 

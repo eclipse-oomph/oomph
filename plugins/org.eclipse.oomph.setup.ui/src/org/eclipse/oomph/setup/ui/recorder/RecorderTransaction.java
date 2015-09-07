@@ -265,6 +265,11 @@ public abstract class RecorderTransaction
     return false;
   }
 
+  public void removePolicy(String key)
+  {
+    policies.remove(key);
+  }
+
   public void setPreferences(Map<URI, String> preferences)
   {
     this.preferences = preferences;
@@ -807,7 +812,7 @@ public abstract class RecorderTransaction
   /**
    * @author Eike Stepper
    */
-  public static final class EditorTransaction extends RecorderTransaction
+  private static final class EditorTransaction extends RecorderTransaction
   {
     private final IEditorPart editor;
 
@@ -815,12 +820,12 @@ public abstract class RecorderTransaction
 
     private final boolean editorWasClean;
 
-    private EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, Resource resource)
+    public EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, Resource resource)
     {
       this(user, editor, domain, getRootObject(editor, resource));
     }
 
-    private EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, SetupTaskContainer rootObject)
+    public EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, SetupTaskContainer rootObject)
     {
       super(user, rootObject);
       this.editor = editor;
@@ -951,9 +956,9 @@ public abstract class RecorderTransaction
   /**
    * @author Eike Stepper
    */
-  public static final class ResourceTransaction extends RecorderTransaction
+  private static final class ResourceTransaction extends RecorderTransaction
   {
-    private ResourceTransaction(SetupTaskContainer rootObject)
+    public ResourceTransaction(SetupTaskContainer rootObject)
     {
       super(true, rootObject);
       initializePolicies();
