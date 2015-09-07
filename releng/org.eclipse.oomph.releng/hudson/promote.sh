@@ -193,6 +193,20 @@ $BASH $SCRIPTS/composeRepositories.sh \
   "$BUILD_KEY" \
   "$BUILD_LABEL"
 
+$BASH $SCRIPTS/composeRepositories.sh \
+  "$DOWNLOADS" \
+  "milestone" \
+  "S20150903-064807" \
+  "1.2.0-M1b"
+    
+$BASH $SCRIPTS/composeRepositories.sh \
+  "$DOWNLOADS" \
+  "release" \
+  "1.1.0" \
+  ""
+  
+for i in $(find $UPDATES.tmp -name "*.xml"); do echo rm $i; done
+
 mkdir -p $UPDATES.tmp/$BUILD_TYPE/latest
 cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/$BUILD_TYPE/latest
 
