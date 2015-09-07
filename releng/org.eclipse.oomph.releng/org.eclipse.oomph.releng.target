@@ -41,10 +41,19 @@
       <unit id="javax.xml.bind" version="0.0.0"/>
       <unit id="org.apache.commons.io" version="0.0.0"/>
       <unit id="org.hamcrest.library" version="0.0.0"/>
+      <unit id="org.apache.commons.codec" version="0.0.0"/>
+      <unit id="org.apache.commons.codec.source" version="0.0.0"/>
+      <unit id="org.apache.commons.logging" version="0.0.0"/>
+      <unit id="org.apache.commons.logging.source" version="0.0.0"/>
+      <unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
+      <unit id="org.apache.httpcomponents.httpclient.source" version="0.0.0"/>
+      <unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
+      <unit id="org.apache.httpcomponents.httpcore.source" version="0.0.0"/>
       <repository location="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.nebula.widgets.tablecombo.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
+      <unit id="org.eclipse.nebula.widgets.tablecombo.source" version="0.0.0"/>
       <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
     </location>
   </locations>
