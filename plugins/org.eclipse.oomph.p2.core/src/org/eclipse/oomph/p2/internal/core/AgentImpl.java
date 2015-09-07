@@ -113,10 +113,12 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       protected Profile createElement(String profileID, String extraInfo)
       {
         List<String> tokens = StringUtil.explode(extraInfo, "|");
-        String type = tokens.get(0);
-        BundlePool bundlePool = getBundlePool(tokens.get(1));
-        File installFolder = AgentImpl.getFile(tokens.get(2));
-        File referencer = AgentImpl.getFile(tokens.get(3));
+        int size = tokens.size();
+
+        String type = size <= 0 ? tokens.get(0) : "";
+        BundlePool bundlePool = size <= 1 ? getBundlePool(tokens.get(1)) : null;
+        File installFolder = size <= 2 ? AgentImpl.getFile(tokens.get(2)) : null;
+        File referencer = size <= 3 ? AgentImpl.getFile(tokens.get(3)) : null;
 
         return new ProfileImpl(AgentImpl.this, bundlePool, profileID, type, installFolder, referencer);
       }
