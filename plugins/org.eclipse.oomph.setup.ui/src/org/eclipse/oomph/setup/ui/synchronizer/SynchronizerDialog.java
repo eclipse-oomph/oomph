@@ -13,11 +13,13 @@ package org.eclipse.oomph.setup.ui.synchronizer;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.sync.Snapshot;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
@@ -201,17 +203,27 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       case RECORD:
         if (recorderTarget instanceof User)
         {
-          return "Select what to record for reuse across all local workspaces.";
+          return "Select what to record for reuse across all workspaces.";
         }
 
-        return "Select what to record into the local " + recorderTargetText + ".";
+        if (recorderTarget instanceof Installation)
+        {
+          return "Select what to record for reuse across all workspaces of the current installation.";
+        }
+
+        if (recorderTarget instanceof Workspace)
+        {
+          return "Select what to record for the use of just this workspace.";
+        }
+
+        return "Select what to record into " + recorderTargetText + ".";
 
       case SYNC:
-        return "Select what to synchronize with " + SynchronizerManager.INSTANCE.getService().getLabel() + " for reuse across all local machines.";
+        return "Select what to synchronize with " + SynchronizerManager.INSTANCE.getService().getLabel() + " for reuse across all machines.";
 
       case RECORD_AND_SYNC:
-        return "Select what to record for reuse across all local workspaces and what to synchronize with "
-            + SynchronizerManager.INSTANCE.getService().getLabel() + " for reuse across all local machines.";
+        return "Select what to record for reuse across all workspaces on this machine and what to synchronize with "
+            + SynchronizerManager.INSTANCE.getService().getLabel() + " for reuse across all your other machines.";
 
       default:
         return null;

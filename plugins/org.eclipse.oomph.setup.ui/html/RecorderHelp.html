@@ -23,9 +23,29 @@ function windowTitle()
 <p>
   The preference recorder detects all preferences that were changed while the Preferences dialog was open.
   It provides the ability to selectively record each changed preference.
-  A recorded preference has global impact, i.e., it applies to all local workspaces, not just the current workspace.
+  The impact of a recorded preference depends on where it's recorded:
+</p>
+
+<ul>
+<li>
+If it's recorded into the <em>user setup</em>,
+it has global impact, i.e., it applies to all workspaces of all installations, not just the current workspace.
+</li>
+<li>
+If it's recorded into the <em>installation setup</em>,
+it has more restricted impact, i.e., it applies to all workspaces of the current installation, not just the current workspace.
+</li>
+<li>
+If it's recorded into the <em>workspace setup</em>,
+it has even more restricted impact, i.e., it applies only to the current workspace.
+This might not seem useful, because that's the default behavior of Eclipse's preferences,
+but it's useful if you would like the current workspace's preference to be different from the preferences you've recorded in the broader impacting resources mentioned above.
+</li>
+</ul>
+
+<p>
   All recorded preferences are automatically applied on startup.
-  They can be manually applied via <span class="selectstep">Help &rarr; Perform Setup Tasks&hellip;</span> to an already-running IDE.
+  They can be manually applied to an already-running IDE via <span class="selectstep">Help &rarr; Perform Setup Tasks&hellip;</span> 
 </p>
 
 <h2>Preference Selection and Local Policies</h2>
@@ -48,19 +68,19 @@ function windowTitle()
   <tr>
     <td width="45" valign="top"><img src="../icons/sync/Skip.gif"></img>&nbsp;<img src="../icons/sync/UserDisabled.gif"></img></td>
     <td>Each preference with a <span style="border:1px solid gray; background:#eeeeee;"><b>&nbsp;Skip&nbsp;this&nbsp;time&nbsp;</b></span>&nbsp; policy will not be recorded.
-      In the future, any change to that preference will lead to new prompting.</td>
+      In the future, any change to that preference will lead to further prompting.</td>
   </tr>
 </table>
 
 <p>
 In other words, not only are preferences selectively recorded, but also preference handling policies are maintained.
 As such, this dialog will appear less often as you train it to either record or ignore each specific preference.
-Use <span class="selectstep">Window &rarr; Oomph &rarr; Setup &rarr; Preference Recorder</span> to view or modify these policies.
+Use <span class="selectstep">Window &rarr; Oomph &rarr; Setup Tasks &rarr; Preference Recorder</span> to view or modify these policies.
 </p>
 
 <p>
-Recorded preferences, as well as the associated policies, are maintained in your <em>user setup</em>,
-which you can view or modify using <span class="selectstep">Navigate &rarr; Open Setup &rarr; Open User</span>.
+Recorded preferences, as well as the associated policies, are maintained in your <em>setups</em>,
+which you can view or modify using, for example, <span class="selectstep">Navigate &rarr; Open Setup &rarr; Open User</span>.
 </p>
 
 <h2>How to Proceed</h2>
@@ -74,7 +94,7 @@ The preference recorder dialog prompts you to take the following actions:
 Press Cancel to record nothing and to leave the policies unchanged.  In this case, the preference selections have no impact on other workspaces.
 </li>
 <li>
-Select the preferences you always want recorded and deselect the preferences you don't ever want recorded.
+Choose the policy for the handling of each preference, i.e., always record, never record, decide later.
 </li>
 <li>
 Press OK, to selectively record the preferences and to update the policies.
