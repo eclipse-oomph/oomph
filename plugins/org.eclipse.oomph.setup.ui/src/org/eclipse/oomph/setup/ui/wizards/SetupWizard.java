@@ -429,11 +429,14 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public boolean canFinish()
   {
-    SetupWizardPage currentPage = (SetupWizardPage)getCurrentPage();
-    WizardFinisher wizardFinisher = currentPage.getWizardFinisher();
-    if (wizardFinisher != null)
+    IWizardPage currentPage = getCurrentPage();
+    if (currentPage instanceof SetupWizardPage)
     {
-      return true;
+      WizardFinisher wizardFinisher = ((SetupWizardPage)currentPage).getWizardFinisher();
+      if (wizardFinisher != null)
+      {
+        return true;
+      }
     }
 
     for (IWizardPage page : getPages())
@@ -455,11 +458,14 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   @Override
   public boolean performFinish()
   {
-    SetupWizardPage currentPage = (SetupWizardPage)getCurrentPage();
-    WizardFinisher wizardFinisher = currentPage.getWizardFinisher();
-    if (wizardFinisher != null)
+    IWizardPage currentPage = getCurrentPage();
+    if (currentPage instanceof SetupWizardPage)
     {
-      return wizardFinisher.performFinish();
+      WizardFinisher wizardFinisher = ((SetupWizardPage)currentPage).getWizardFinisher();
+      if (wizardFinisher != null)
+      {
+        return wizardFinisher.performFinish();
+      }
     }
 
     if (currentPage instanceof ProgressPage)
@@ -473,7 +479,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       return true;
     }
 
-    currentPage.gotoNextPage();
+    if (currentPage instanceof SetupWizardPage)
+    {
+      ((SetupWizardPage)currentPage).gotoNextPage();
+    }
+
     return false;
   }
 
