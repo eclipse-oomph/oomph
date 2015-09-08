@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerService;
+import org.eclipse.oomph.setup.provider.PreferenceTaskItemProvider;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.AbstractRecorderDialog;
@@ -146,6 +147,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
   public SynchronizerDialog(Shell parentShell, RecorderTransaction transaction, Map<URI, String> preferences, Synchronization sync)
   {
     super(parentShell, getTitle(transaction), 800, 600);
+    PreferenceTaskItemProvider.setShortenLabelText(adapterFactory);
 
     if (transaction != null)
     {

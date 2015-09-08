@@ -12,15 +12,19 @@ package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.PreferenceTask;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
@@ -38,6 +42,8 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
 
   private static final String CONFIGURATION_SCOPE = "/configuration/";
 
+  private boolean shortenLabelText;
+
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -47,6 +53,16 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
   public PreferenceTaskItemProvider(AdapterFactory adapterFactory)
   {
     super(adapterFactory);
+  }
+
+  public boolean isShortenLabelText()
+  {
+    return shortenLabelText;
+  }
+
+  public void setShortenLabelText(boolean shortenLabelText)
+  {
+    this.shortenLabelText = shortenLabelText;
   }
 
   /**
@@ -152,19 +168,16 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
         return getString("_UI_PreferenceTask_type");
       }
     }
-    else
+    else if (shortenLabelText)
     {
       String scope = getScope(key);
       if (scope != null)
       {
-        EObject container = preferenceTask.eContainer();
-        if (container instanceof CompoundTask)
+        String parentLabel = getParentLabel(preferenceTask);
+        if (parentLabel != null)
         {
-          CompoundTask compoundTask = (CompoundTask)container;
-          String compoundName = compoundTask.getName();
-
-          String prefix = scope + compoundName + "/";
-          String prefixLong = prefix + compoundName + ".";
+          String prefix = scope + parentLabel + "/";
+          String prefixLong = prefix + parentLabel + ".";
 
           if (key.startsWith(prefixLong))
           {
@@ -225,6 +238,28 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
   }
 
+  private String getParentLabel(PreferenceTask preferenceTask)
+  {
+    Object parent = getParent(preferenceTask);
+    if (parent != null)
+    {
+      ItemProviderAdapter itemProvider = (ItemProviderAdapter)getAdapterFactory().adapt(parent, IItemLabelProvider.class);
+      if (itemProvider != null)
+      {
+        return itemProvider.getText(parent);
+      }
+    }
+
+    EObject container = preferenceTask.eContainer();
+    if (container instanceof CompoundTask)
+    {
+      CompoundTask compoundTask = (CompoundTask)container;
+      return compoundTask.getName();
+    }
+
+    return null;
+  }
+
   private static String getScope(String key)
   {
     if (key.startsWith(INSTANCE_SCOPE))
@@ -240,4 +275,30 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
     return null;
   }
 
+  private static PreferenceTaskItemProvider getItemProvider(AdapterFactory adapterFactory)
+  {
+    PreferenceTask preferenceTask = SetupFactory.eINSTANCE.createPreferenceTask();
+    Adapter adapter = adapterFactory.adapt(preferenceTask, IItemLabelProvider.class);
+    if (adapter instanceof PreferenceTaskItemProvider)
+    {
+      return (PreferenceTaskItemProvider)adapter;
+    }
+
+    return null;
+  }
+
+  public static boolean isShortenLabelText(AdapterFactory adapterFactory)
+  {
+    PreferenceTaskItemProvider itemProvider = getItemProvider(adapterFactory);
+    return itemProvider != null ? itemProvider.isShortenLabelText() : false;
+  }
+
+  public static void setShortenLabelText(AdapterFactory adapterFactory)
+  {
+    PreferenceTaskItemProvider itemProvider = getItemProvider(adapterFactory);
+    if (itemProvider != null)
+    {
+      itemProvider.setShortenLabelText(true);
+    }
+  }
 }

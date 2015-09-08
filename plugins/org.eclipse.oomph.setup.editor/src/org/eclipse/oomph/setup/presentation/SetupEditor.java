@@ -38,6 +38,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleViewerInputAction;
+import org.eclipse.oomph.setup.provider.PreferenceTaskItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
@@ -1167,6 +1168,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     });
 
     reflectiveItemProvider = BaseEditUtil.replaceReflectiveItemProvider(adapterFactory);
+    PreferenceTaskItemProvider.setShortenLabelText(adapterFactory);
 
     // Create the editing domain with a special command stack.
     //
