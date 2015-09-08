@@ -278,6 +278,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
   private static PreferenceTaskItemProvider getItemProvider(AdapterFactory adapterFactory)
   {
     PreferenceTask preferenceTask = SetupFactory.eINSTANCE.createPreferenceTask();
+
     Adapter adapter = adapterFactory.adapt(preferenceTask, IItemLabelProvider.class);
     if (adapter instanceof PreferenceTaskItemProvider)
     {
