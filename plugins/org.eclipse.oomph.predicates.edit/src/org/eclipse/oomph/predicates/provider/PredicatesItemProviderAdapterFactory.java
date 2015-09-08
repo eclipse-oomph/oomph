@@ -347,6 +347,31 @@ public class PredicatesItemProviderAdapterFactory extends PredicatesAdapterFacto
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.predicates.ImportedPredicate} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ImportedPredicateItemProvider importedPredicateItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.predicates.ImportedPredicate}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createImportedPredicateAdapter()
+  {
+    if (importedPredicateItemProvider == null)
+    {
+      importedPredicateItemProvider = new ImportedPredicateItemProvider(this);
+    }
+
+    return importedPredicateItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -526,6 +551,10 @@ public class PredicatesItemProviderAdapterFactory extends PredicatesAdapterFacto
     if (filePredicateItemProvider != null)
     {
       filePredicateItemProvider.dispose();
+    }
+    if (importedPredicateItemProvider != null)
+    {
+      importedPredicateItemProvider.dispose();
     }
   }
 

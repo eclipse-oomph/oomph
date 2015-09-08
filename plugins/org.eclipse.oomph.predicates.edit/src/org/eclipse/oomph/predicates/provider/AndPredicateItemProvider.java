@@ -179,6 +179,8 @@ public class AndPredicateItemProvider extends PredicateItemProvider
     newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS, PredicatesFactory.eINSTANCE.createBuilderPredicate()));
 
     newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS, PredicatesFactory.eINSTANCE.createFilePredicate()));
+
+    newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.AND_PREDICATE__OPERANDS, PredicatesFactory.eINSTANCE.createImportedPredicate()));
   }
 
 }

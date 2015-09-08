@@ -523,6 +523,9 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
 
     newChildDescriptors
         .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createFilePredicate()));
+
+    newChildDescriptors
+        .add(createChildParameter(ProjectConfigPackage.Literals.PREFERENCE_PROFILE__PREDICATES, PredicatesFactory.eINSTANCE.createImportedPredicate()));
   }
 
   /**

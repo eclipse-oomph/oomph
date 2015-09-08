@@ -17,6 +17,7 @@ import org.eclipse.oomph.predicates.AndPredicate;
 import org.eclipse.oomph.predicates.BuilderPredicate;
 import org.eclipse.oomph.predicates.CommentPredicate;
 import org.eclipse.oomph.predicates.FilePredicate;
+import org.eclipse.oomph.predicates.ImportedPredicate;
 import org.eclipse.oomph.predicates.LocationPredicate;
 import org.eclipse.oomph.predicates.NamePredicate;
 import org.eclipse.oomph.predicates.NaturePredicate;
@@ -123,6 +124,13 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * @generated
    */
   private EClass filePredicateEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass importedPredicateEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -442,6 +450,26 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getImportedPredicate()
+  {
+    return importedPredicateEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getImportedPredicate_Accessible()
+  {
+    return (EAttribute)importedPredicateEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getProject()
   {
     return projectEDataType;
@@ -524,6 +552,9 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     createEAttribute(filePredicateEClass, FILE_PREDICATE__FILE_PATTERN);
     createEAttribute(filePredicateEClass, FILE_PREDICATE__CONTENT_PATTERN);
 
+    importedPredicateEClass = createEClass(IMPORTED_PREDICATE);
+    createEAttribute(importedPredicateEClass, IMPORTED_PREDICATE__ACCESSIBLE);
+
     // Create data types
     projectEDataType = createEDataType(PROJECT);
     resourceEDataType = createEDataType(RESOURCE);
@@ -575,6 +606,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     naturePredicateEClass.getESuperTypes().add(getPredicate());
     builderPredicateEClass.getESuperTypes().add(getPredicate());
     filePredicateEClass.getESuperTypes().add(getPredicate());
+    importedPredicateEClass.getESuperTypes().add(getPredicate());
 
     // Initialize classes, features, and operations; add parameters
     initEClass(predicateEClass, Predicate.class, "Predicate", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -623,6 +655,10 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFilePredicate_ContentPattern(), ecorePackage.getEString(), "contentPattern", null, 0, 1, FilePredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(importedPredicateEClass, ImportedPredicate.class, "ImportedPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getImportedPredicate_Accessible(), ecorePackage.getEBoolean(), "accessible", "true", 0, 1, ImportedPredicate.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
     initEDataType(projectEDataType, IProject.class, "Project", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -15,6 +15,7 @@ import org.eclipse.oomph.predicates.AndPredicate;
 import org.eclipse.oomph.predicates.BuilderPredicate;
 import org.eclipse.oomph.predicates.CommentPredicate;
 import org.eclipse.oomph.predicates.FilePredicate;
+import org.eclipse.oomph.predicates.ImportedPredicate;
 import org.eclipse.oomph.predicates.LocationPredicate;
 import org.eclipse.oomph.predicates.NamePredicate;
 import org.eclipse.oomph.predicates.NaturePredicate;
@@ -155,6 +156,12 @@ public class PredicatesAdapterFactory extends AdapterFactoryImpl
     public Adapter caseFilePredicate(FilePredicate object)
     {
       return createFilePredicateAdapter();
+    }
+
+    @Override
+    public Adapter caseImportedPredicate(ImportedPredicate object)
+    {
+      return createImportedPredicateAdapter();
     }
 
     @Override
@@ -345,6 +352,21 @@ public class PredicatesAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFilePredicateAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.predicates.ImportedPredicate <em>Imported Predicate</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.predicates.ImportedPredicate
+   * @generated
+   */
+  public Adapter createImportedPredicateAdapter()
   {
     return null;
   }

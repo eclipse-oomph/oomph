@@ -136,6 +136,15 @@ public interface PredicatesFactory extends EFactory
    */
   FilePredicate createFilePredicate();
 
+  /**
+   * Returns a new object of class '<em>Imported Predicate</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Imported Predicate</em>'.
+   * @generated
+   */
+  ImportedPredicate createImportedPredicate();
+
   FilePredicate createFilePredicate(String filePattern);
 
   FilePredicate createFilePredicate(String filePattern, String contentPattern);

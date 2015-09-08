@@ -14,6 +14,7 @@ import org.eclipse.oomph.predicates.AndPredicate;
 import org.eclipse.oomph.predicates.BuilderPredicate;
 import org.eclipse.oomph.predicates.CommentPredicate;
 import org.eclipse.oomph.predicates.FilePredicate;
+import org.eclipse.oomph.predicates.ImportedPredicate;
 import org.eclipse.oomph.predicates.LocationPredicate;
 import org.eclipse.oomph.predicates.NamePredicate;
 import org.eclipse.oomph.predicates.NaturePredicate;
@@ -128,6 +129,8 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
         return createBuilderPredicate();
       case PredicatesPackage.FILE_PREDICATE:
         return createFilePredicate();
+      case PredicatesPackage.IMPORTED_PREDICATE:
+        return createImportedPredicate();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -328,6 +331,17 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
   {
     FilePredicateImpl filePredicate = new FilePredicateImpl();
     return filePredicate;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ImportedPredicate createImportedPredicate()
+  {
+    ImportedPredicateImpl importedPredicate = new ImportedPredicateImpl();
+    return importedPredicate;
   }
 
   public FilePredicate createFilePredicate(String filePattern)

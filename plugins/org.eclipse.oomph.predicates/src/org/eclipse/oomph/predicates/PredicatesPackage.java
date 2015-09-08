@@ -776,6 +776,70 @@ public interface PredicatesPackage extends EPackage
   int FILE_PREDICATE_OPERATION_COUNT = PREDICATE_OPERATION_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.predicates.impl.ImportedPredicateImpl <em>Imported Predicate</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.predicates.impl.ImportedPredicateImpl
+   * @see org.eclipse.oomph.predicates.impl.PredicatesPackageImpl#getImportedPredicate()
+   * @generated
+   */
+  int IMPORTED_PREDICATE = 11;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_PREDICATE__ANNOTATIONS = PREDICATE__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>Accessible</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_PREDICATE__ACCESSIBLE = PREDICATE_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Imported Predicate</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_PREDICATE_FEATURE_COUNT = PREDICATE_FEATURE_COUNT + 1;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_PREDICATE___GET_ANNOTATION__STRING = PREDICATE___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Matches</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_PREDICATE___MATCHES__IRESOURCE = PREDICATE___MATCHES__IRESOURCE;
+
+  /**
+   * The number of operations of the '<em>Imported Predicate</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORTED_PREDICATE_OPERATION_COUNT = PREDICATE_OPERATION_COUNT + 0;
+
+  /**
    * The meta object id for the '<em>Project</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -783,7 +847,7 @@ public interface PredicatesPackage extends EPackage
    * @see org.eclipse.oomph.predicates.impl.PredicatesPackageImpl#getProject()
    * @generated
    */
-  int PROJECT = 11;
+  int PROJECT = 12;
 
   /**
    * The meta object id for the '<em>Resource</em>' data type.
@@ -793,7 +857,7 @@ public interface PredicatesPackage extends EPackage
    * @see org.eclipse.oomph.predicates.impl.PredicatesPackageImpl#getResource()
    * @generated
    */
-  int RESOURCE = 12;
+  int RESOURCE = 13;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.predicates.Predicate <em>Predicate</em>}'.
@@ -1035,6 +1099,27 @@ public interface PredicatesPackage extends EPackage
    * @generated
    */
   EAttribute getFilePredicate_ContentPattern();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.predicates.ImportedPredicate <em>Imported Predicate</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Imported Predicate</em>'.
+   * @see org.eclipse.oomph.predicates.ImportedPredicate
+   * @generated
+   */
+  EClass getImportedPredicate();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.predicates.ImportedPredicate#isAccessible <em>Accessible</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Accessible</em>'.
+   * @see org.eclipse.oomph.predicates.ImportedPredicate#isAccessible()
+   * @see #getImportedPredicate()
+   * @generated
+   */
+  EAttribute getImportedPredicate_Accessible();
 
   /**
    * Returns the meta object for data type '{@link org.eclipse.core.resources.IProject <em>Project</em>}'.
@@ -1287,6 +1372,24 @@ public interface PredicatesPackage extends EPackage
      * @generated
      */
     EAttribute FILE_PREDICATE__CONTENT_PATTERN = eINSTANCE.getFilePredicate_ContentPattern();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.predicates.impl.ImportedPredicateImpl <em>Imported Predicate</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.predicates.impl.ImportedPredicateImpl
+     * @see org.eclipse.oomph.predicates.impl.PredicatesPackageImpl#getImportedPredicate()
+     * @generated
+     */
+    EClass IMPORTED_PREDICATE = eINSTANCE.getImportedPredicate();
+
+    /**
+     * The meta object literal for the '<em><b>Accessible</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPORTED_PREDICATE__ACCESSIBLE = eINSTANCE.getImportedPredicate_Accessible();
 
     /**
      * The meta object literal for the '<em>Project</em>' data type.

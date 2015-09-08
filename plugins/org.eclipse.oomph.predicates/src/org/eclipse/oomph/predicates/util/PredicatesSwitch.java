@@ -15,6 +15,7 @@ import org.eclipse.oomph.predicates.AndPredicate;
 import org.eclipse.oomph.predicates.BuilderPredicate;
 import org.eclipse.oomph.predicates.CommentPredicate;
 import org.eclipse.oomph.predicates.FilePredicate;
+import org.eclipse.oomph.predicates.ImportedPredicate;
 import org.eclipse.oomph.predicates.LocationPredicate;
 import org.eclipse.oomph.predicates.NamePredicate;
 import org.eclipse.oomph.predicates.NaturePredicate;
@@ -285,6 +286,24 @@ public class PredicatesSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case PredicatesPackage.IMPORTED_PREDICATE:
+      {
+        ImportedPredicate importedPredicate = (ImportedPredicate)theEObject;
+        T result = caseImportedPredicate(importedPredicate);
+        if (result == null)
+        {
+          result = casePredicate(importedPredicate);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(importedPredicate);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -462,6 +481,22 @@ public class PredicatesSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFilePredicate(FilePredicate object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Imported Predicate</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Imported Predicate</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseImportedPredicate(ImportedPredicate object)
   {
     return null;
   }

@@ -179,6 +179,8 @@ public class NotPredicateItemProvider extends PredicateItemProvider
     newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.NOT_PREDICATE__OPERAND, PredicatesFactory.eINSTANCE.createBuilderPredicate()));
 
     newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.NOT_PREDICATE__OPERAND, PredicatesFactory.eINSTANCE.createFilePredicate()));
+
+    newChildDescriptors.add(createChildParameter(PredicatesPackage.Literals.NOT_PREDICATE__OPERAND, PredicatesFactory.eINSTANCE.createImportedPredicate()));
   }
 
 }

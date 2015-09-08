@@ -255,6 +255,9 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
         .add(createChildParameter(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__PREDICATES, PredicatesFactory.eINSTANCE.createBuilderPredicate()));
 
     newChildDescriptors.add(createChildParameter(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__PREDICATES, PredicatesFactory.eINSTANCE.createFilePredicate()));
+
+    newChildDescriptors
+        .add(createChildParameter(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__PREDICATES, PredicatesFactory.eINSTANCE.createImportedPredicate()));
   }
 
   /**

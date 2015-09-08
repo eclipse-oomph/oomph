@@ -248,6 +248,8 @@ public class WorkingSetItemProvider extends ModelElementItemProvider
     newChildDescriptors.add(createChildParameter(WorkingSetsPackage.Literals.WORKING_SET__PREDICATES, PredicatesFactory.eINSTANCE.createBuilderPredicate()));
 
     newChildDescriptors.add(createChildParameter(WorkingSetsPackage.Literals.WORKING_SET__PREDICATES, PredicatesFactory.eINSTANCE.createFilePredicate()));
+
+    newChildDescriptors.add(createChildParameter(WorkingSetsPackage.Literals.WORKING_SET__PREDICATES, PredicatesFactory.eINSTANCE.createImportedPredicate()));
   }
 
   /**
