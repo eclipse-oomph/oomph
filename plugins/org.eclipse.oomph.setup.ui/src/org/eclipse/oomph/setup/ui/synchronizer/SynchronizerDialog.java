@@ -517,34 +517,39 @@ public class SynchronizerDialog extends AbstractRecorderDialog
     if (mode.isRecord())
     {
       Map<String, CompoundTask> compounds = new HashMap<String, CompoundTask>();
+      Map<String, Boolean> policies = recorderTransaction.getPolicies(false);
 
       for (Map.Entry<URI, String> entry : recorderValues.entrySet())
       {
         URI uri = entry.getKey();
-        String pluginID = uri.segment(0);
-
         String key = PreferencesFactory.eINSTANCE.convertURI(uri);
-        String value = entry.getValue();
 
-        PreferenceTask task = SetupFactory.eINSTANCE.createPreferenceTask();
-        task.setKey(key);
-        task.setValue(value);
-
-        CollectionUtil.add(tasks, pluginID, task);
-
-        // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
-        CompoundTask compound = compounds.get(pluginID);
-        if (compound == null)
+        // Only offer preferences with *new* policies for review.
+        if (policies.containsKey(key))
         {
-          compound = SetupFactory.eINSTANCE.createCompoundTask(pluginID);
+          String pluginID = uri.segment(0);
+          String value = entry.getValue();
+
+          PreferenceTask task = SetupFactory.eINSTANCE.createPreferenceTask();
+          task.setKey(key);
+          task.setValue(value);
+
+          CollectionUtil.add(tasks, pluginID, task);
+
+          // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
+          CompoundTask compound = compounds.get(pluginID);
+          if (compound == null)
+          {
+            compound = SetupFactory.eINSTANCE.createCompoundTask(pluginID);
+          }
+
+          compound.getSetupTasks().add(task);
+
+          // Remember task label.
+          ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(task, IItemLabelProvider.class);
+          labels.put(task, SetupLabelProvider.getText(itemProvider, task));
+          images.put(task, SetupUIPlugin.INSTANCE.getSWTImage(SetupLabelProvider.getImageDescriptor(itemProvider, task)));
         }
-
-        compound.getSetupTasks().add(task);
-
-        // Remember task label.
-        ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(task, IItemLabelProvider.class);
-        labels.put(task, SetupLabelProvider.getText(itemProvider, task));
-        images.put(task, SetupUIPlugin.INSTANCE.getSWTImage(SetupLabelProvider.getImageDescriptor(itemProvider, task)));
       }
 
       if (mode.isSync())
