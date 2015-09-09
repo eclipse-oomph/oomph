@@ -723,9 +723,13 @@ public final class RecorderManager
 
   /**
    * @author Eike Stepper
+   * @deprecated This opt-in mechanism won't be used for Mars.1
    */
+  @Deprecated
   private static final class Mars1
   {
+    private static final boolean ENABLED = PropertiesUtil.isProperty("oomph.setup.mars1.optin");
+
     private static final URI PROPERTIES_URI = URI.createURI("http://download.eclipse.org/oomph/epp/mars/mars1.sync.properties");
 
     private static final File PROPERTIES = SetupUIPlugin.INSTANCE.getConfigurationLocation().append("mars1.sync.properties").toFile();
@@ -742,7 +746,7 @@ public final class RecorderManager
 
     public static void checkAvailability()
     {
-      if (checked || available)
+      if (!ENABLED || checked || available)
       {
         return;
       }
@@ -798,7 +802,7 @@ public final class RecorderManager
 
     public static void offerSynchronizer()
     {
-      if (!available)
+      if (!ENABLED || !available)
       {
         return;
       }
