@@ -2961,7 +2961,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             PreferenceTask preferenceTask = (PreferenceTask)neededTask;
             if ("/instance/org.eclipse.core.resources/description.autobuilding".equals(preferenceTask.getKey()))
             {
-              autoBuilding = Boolean.valueOf(preferenceTask.getValue());
+              String value = preferenceTask.getValue();
+              autoBuilding = value == null ? Boolean.TRUE : Boolean.valueOf(value);
               neededTask.dispose();
               continue;
             }
