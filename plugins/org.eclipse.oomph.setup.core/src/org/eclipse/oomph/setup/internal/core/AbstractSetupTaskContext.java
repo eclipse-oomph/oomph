@@ -301,11 +301,12 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     String osgiOS = os.getOsgiOS();
     String osgiWS = os.getOsgiWS();
     String osgiArch = os.getOsgiArch();
+
     String[] keys = new String[] { //
-        "folderName." + osgiOS + '.' + osgiWS + '.' + osgiArch, //
-        "folderName." + osgiOS + '.' + osgiWS, //
-        "folderName." + osgiOS, //
-        "folderName", //
+        AnnotationConstants.KEY_FOLDER_NAME + '.' + osgiOS + '.' + osgiWS + '.' + osgiArch, //
+        AnnotationConstants.KEY_FOLDER_NAME + '.' + osgiOS + '.' + osgiWS, //
+        AnnotationConstants.KEY_FOLDER_NAME + '.' + osgiOS, //
+        AnnotationConstants.KEY_FOLDER_NAME, //
     };
 
     return getProductFolderName(productVersion, keys);

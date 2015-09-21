@@ -1230,7 +1230,9 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       if (createStartMenuEntryButton != null || createDesktopShortcutButton != null)
       {
-        File executable = ProgressPage.getExecutable(performer);
+        File executable = ProgressPage.getExecutable(performer)[1];
+
+        // TODO The entire naming of the shortcuts should be revisited and made more flexible with BrandingInfo annotations.
 
         ProductCatalog productCatalog = product.getProductCatalog();
         String catalogName = "user.products".equals(productCatalog.getName()) ? "" : productCatalog.getLabel();
@@ -1245,6 +1247,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         {
           productName = productName.substring("epp.package.".length());
         }
+
         productName = productName.replace('.', ' ');
 
         String qualifiedProductName = productName + " " + selectedProductVersion.getName().replace('.', ' ');
@@ -1533,7 +1536,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

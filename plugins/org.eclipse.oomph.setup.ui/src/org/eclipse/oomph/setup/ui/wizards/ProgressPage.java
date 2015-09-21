@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
@@ -584,6 +585,23 @@ public class ProgressPage extends SetupWizardPage
     return progressPageLog == null || progressPageLog.isDone() || progressPageLog.isCanceled();
   }
 
+  @Override
+  protected void setButtonState(int buttonID, boolean enabled)
+  {
+    super.setButtonState(buttonID, enabled);
+
+    if (buttonID == IDialogConstants.CANCEL_ID && getPerformer().hasSuccessfullyPerformed())
+    {
+      scrollLockButton.setEnabled(enabled);
+      dismissButton.setEnabled(enabled);
+
+      if (launchButton != null)
+      {
+        launchButton.setEnabled(!hasLaunched);
+      }
+    }
+  }
+
   private ILabelProvider createLabelProvider()
   {
     return new ToolTipLabelProvider(getAdapterFactory())
@@ -927,59 +945,6 @@ public class ProgressPage extends SetupWizardPage
     }
   }
 
-  public static File getExecutable(SetupTaskPerformer performer)
-  {
-    OS os = performer.getOS();
-    String relativeProductFolder = performer.getRelativeProductFolder();
-    String relativeExecutableFolder = os.getRelativeExecutableFolder();
-    String executableName = os.getExecutableName(performer.getLauncherName());
-    File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
-    File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
-    return new File(executableFolder, executableName);
-  }
-
-  public static boolean launchProduct(SetupTaskPerformer performer) throws Exception
-  {
-    OS os = performer.getOS();
-    if (os.isCurrentOS())
-    {
-      performer.log("Launching the installed product...");
-
-      String relativeProductFolder = performer.getRelativeProductFolder();
-      String relativeExecutableFolder = os.getRelativeExecutableFolder();
-      String executableName = os.getExecutableName(performer.getLauncherName());
-      File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
-      File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
-      String executable = new File(executableFolder, executableName).getAbsolutePath();
-
-      List<String> command = new ArrayList<String>();
-      command.add(executable);
-
-      File ws = performer.getWorkspaceLocation();
-      if (ws != null)
-      {
-        SetupUIPlugin.initialStart(ws, performer.isOffline(), performer.isMirrors());
-
-        command.add("-data");
-        command.add(ws.toString());
-      }
-
-      command.add("-vmargs");
-      command.add("-Duser.dir=" + eclipseLocation);
-
-      ProcessBuilder builder = new ProcessBuilder(command);
-      Process process = builder.start();
-      process.getInputStream().close();
-      process.getOutputStream().close();
-      process.getErrorStream().close();
-
-      return true;
-    }
-
-    performer.log("Launching the installed product is not possible for cross-platform installs. Skipping.");
-    return false;
-  }
-
   private void saveLocalFiles(SetupTaskPerformer performer)
   {
     User performerUser = performer.getUser();
@@ -1014,21 +979,96 @@ public class ProgressPage extends SetupWizardPage
     SetupContext.associate(installation, workspace);
   }
 
-  @Override
-  protected void setButtonState(int buttonID, boolean enabled)
+  private static boolean needsConsole(SetupTaskPerformer performer)
   {
-    super.setButtonState(buttonID, enabled);
-
-    if (buttonID == IDialogConstants.CANCEL_ID && getPerformer().hasSuccessfullyPerformed())
+    for (SetupTask task : performer.getTriggeredSetupTasks())
     {
-      scrollLockButton.setEnabled(enabled);
-      dismissButton.setEnabled(enabled);
-
-      if (launchButton != null)
+      if (task instanceof EclipseIniTask)
       {
-        launchButton.setEnabled(!hasLaunched);
+        EclipseIniTask iniTask = (EclipseIniTask)task;
+        if (!iniTask.isVm() && "-console".equals(iniTask.getOption()))
+        {
+          return true;
+        }
       }
     }
+
+    return false;
+  }
+
+  /**
+   * @return a two-element array with [0] being the eclipseLocation and [1] being the executable.
+   */
+  public static File[] getExecutable(SetupTaskPerformer performer)
+  {
+    OS os = performer.getOS();
+
+    String relativeProductFolder = performer.getRelativeProductFolder();
+    String relativeExecutableFolder = os.getRelativeExecutableFolder();
+    String executableName = os.getExecutableName(performer.getLauncherName());
+
+    File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
+    File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
+    File executable = new File(executableFolder, executableName);
+
+    if (os.isWin() && needsConsole(performer))
+    {
+      String consoleExecutableName = executableName.substring(0, executableName.length() - ".exe".length()) + "c.exe";
+      File consoleExectuable = new File(executableFolder, consoleExecutableName);
+      if (consoleExectuable.isFile())
+      {
+        executable = consoleExectuable;
+      }
+    }
+
+    return new File[] { eclipseLocation, executable };
+  }
+
+  public static boolean launchProduct(SetupTaskPerformer performer) throws Exception
+  {
+    OS os = performer.getOS();
+    if (os.isCurrentOS())
+    {
+      performer.log("Launching the installed product...");
+
+      File[] array = getExecutable(performer);
+      File eclipseLocation = array[0];
+      String executable = array[1].getAbsolutePath();
+
+      List<String> command = new ArrayList<String>();
+
+      if (os.isWin() && needsConsole(performer))
+      {
+        command.add("cmd");
+        command.add("/C");
+        command.add("start");
+      }
+
+      command.add(executable);
+
+      File ws = performer.getWorkspaceLocation();
+      if (ws != null)
+      {
+        SetupUIPlugin.initialStart(ws, performer.isOffline(), performer.isMirrors());
+
+        command.add("-data");
+        command.add(ws.toString());
+      }
+
+      command.add("-vmargs");
+      command.add("-Duser.dir=" + eclipseLocation);
+
+      ProcessBuilder builder = new ProcessBuilder(command);
+      Process process = builder.start();
+      process.getInputStream().close();
+      process.getOutputStream().close();
+      process.getErrorStream().close();
+
+      return true;
+    }
+
+    performer.log("Launching the installed product is not possible for cross-platform installs. Skipping.");
+    return false;
   }
 
   /**
