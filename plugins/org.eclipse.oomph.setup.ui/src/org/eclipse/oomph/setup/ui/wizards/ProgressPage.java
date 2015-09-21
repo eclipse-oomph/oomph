@@ -1037,11 +1037,20 @@ public class ProgressPage extends SetupWizardPage
 
       List<String> command = new ArrayList<String>();
 
-      if (os.isWin() && needsConsole(performer))
+      boolean needsConsole = needsConsole(performer);
+      if (needsConsole)
       {
-        command.add("cmd");
-        command.add("/C");
-        command.add("start");
+        if (os.isWin())
+        {
+          command.add("cmd");
+          command.add("/C");
+          command.add("start");
+        }
+        else if (os.isLinux())
+        {
+          command.add("xterm");
+          command.add("-e");
+        }
       }
 
       command.add(executable);
@@ -1058,8 +1067,42 @@ public class ProgressPage extends SetupWizardPage
       command.add("-vmargs");
       command.add("-Duser.dir=" + eclipseLocation);
 
-      ProcessBuilder builder = new ProcessBuilder(command);
-      Process process = builder.start();
+      if (needsConsole && os.isMac())
+      {
+        StringBuilder line = new StringBuilder();
+        for (String token : command)
+        {
+          if (line.length() != 0)
+          {
+            line.append(' ');
+          }
+
+          line.append('"');
+          line.append(token);
+          line.append('"');
+        }
+
+        File script = new File(eclipseLocation, ".eclipsec");
+        IOUtil.writeUTF8(script, line.toString());
+
+        command.clear();
+        command.add("chmod");
+        command.add("a+x");
+        command.add(script.toString());
+
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        Process process = processBuilder.start();
+        process.waitFor();
+
+        command.clear();
+        command.add("open");
+        command.add("-b");
+        command.add("com.apple.terminal");
+        command.add(script.toString());
+      }
+
+      ProcessBuilder processBuilder = new ProcessBuilder(command);
+      Process process = processBuilder.start();
       process.getInputStream().close();
       process.getOutputStream().close();
       process.getErrorStream().close();

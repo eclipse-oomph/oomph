@@ -55,7 +55,7 @@ public class PromptHandler extends AbstractLocationHandler
         }
       }
 
-      throw new IOException("Could not start any termial: " + LINUX_TERMINALS);
+      throw new IOException("Could not start any terminal: " + LINUX_TERMINALS);
     }
   }
 }
