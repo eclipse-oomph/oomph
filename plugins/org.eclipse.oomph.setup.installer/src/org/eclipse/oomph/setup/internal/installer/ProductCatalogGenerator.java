@@ -242,7 +242,7 @@ public class ProductCatalogGenerator implements IApplication
     {
       ProductCatalog productCatalog = SetupFactory.eINSTANCE.createProductCatalog();
       productCatalog.setName("org.eclipse.products");
-      productCatalog.setLabel("Eclipse Package Products");
+      productCatalog.setLabel("Eclipse.org");
 
       Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
       annotation.getDetails().put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
