@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Product
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="papyrus.cdo"
+    label="Papyrus with CDO">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+    <detail
+        key="folderName">
+      <value>eclipse</value>
+    </detail>
+    <detail
+        key="folderName.macosx">
+      <value>Eclipse</value>
+    </detail>
+  </annotation>
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      label="${scope.product.label}">
+    <requirement
+        name="org.eclipse.platform.ide"/>
+    <requirement
+        name="org.eclipse.platform.feature.group"/>
+    <requirement
+        name="org.eclipse.rcp.feature.group"/>
+    <requirement
+        name="org.eclipse.oomph.setup.feature.group"/>
+    <requirement
+        name="org.eclipse.papyrus.sdk.feature.feature.group"/>
+    <requirement
+        name="org.eclipse.papyrus.extra.cdo.feature.feature.group"/>
+    <requirement
+        name="org.eclipse.emf.cdo.feature.group"/>
+    <requirement
+        name="org.eclipse.emf.cdo.compare.feature.group"/>
+    <requirement
+        name="org.eclipse.net4j.feature.group"/>
+    <requirement
+        name="org.eclipse.net4j.db.h2.feature.group"/>
+    <repository
+        url="http://download.eclipse.org/oomph/updates/latest"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      id="plugin.customization.ini"
+      excludedTriggers="STARTUP MANUAL"
+      content="org.eclipse.ui/defaultPerspectiveId=org.eclipse.papyrus.infra.core.perspective&#xD;&#xA;"
+      targetURL="${installation.location|uri}/${installation.relativeProductFolder}/plugin_customization.ini"/>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      excludedTriggers="STARTUP MANUAL"
+      option="-pluginCustomization"
+      value="${plugin.customization.ini.targetURL|file}"/>
+  <version name="neon"
+      label="Neon"
+      requiredJavaVersion="1.7">
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <repository
+          url="http://download.eclipse.org/releases/mars"/>
+      <repository
+          url="http://download.eclipse.org/modeling/mdt/papyrus/updates/nightly/neon"/>
+      <repository
+          url="http://download.eclipse.org/modeling/emf/cdo/updates/integration"/>
+    </setupTask>
+  </version>
+  <version name="mars"
+      label="Mars"
+      requiredJavaVersion="1.7">
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <repository
+          url="http://download.eclipse.org/releases/mars"/>
+      <repository
+          url="http://download.eclipse.org/modeling/mdt/papyrus/updates/nightly/mars"/>
+      <repository
+          url="http://download.eclipse.org/modeling/emf/cdo/updates/maintenance"/>
+    </setupTask>
+  </version>
+  <description>Papyrus IDE with CDO Model Repository extension.</description>
+</setup:Product>

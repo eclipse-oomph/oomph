@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:ProductCatalog
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name="org.eclipse.applications"
+    label="Eclipse Application Products">
+  <setupTask
+      xsi:type="setup:InstallationTask"
+      id="installation"/>
+  <product href="http://git.eclipse.org/c/cdo/cdo.git/plain/plugins/org.eclipse.emf.cdo.server.product/CDOServer.setup#/"/>
+  <product href="interim/products/PapyrusWithCDO.setup#/"/>
+</setup:ProductCatalog>
