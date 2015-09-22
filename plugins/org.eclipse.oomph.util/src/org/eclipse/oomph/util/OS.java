@@ -172,6 +172,24 @@ public abstract class OS
     return process;
   }
 
+  protected String getCommandLine(List<String> command)
+  {
+    StringBuilder builder = new StringBuilder();
+    for (String token : command)
+    {
+      if (builder.length() != 0)
+      {
+        builder.append(' ');
+      }
+
+      builder.append('"');
+      builder.append(token);
+      builder.append('"');
+    }
+
+    return builder.toString();
+  }
+
   public String getRelativeProductFolder(String folderName)
   {
     if (StringUtil.isEmpty(folderName))
@@ -422,24 +440,12 @@ public abstract class OS
     {
       if (terminal)
       {
-        StringBuilder line = new StringBuilder();
-        for (String token : command)
-        {
-          if (line.length() != 0)
-          {
-            line.append(' ');
-          }
-
-          line.append('"');
-          line.append(token);
-          line.append('"');
-        }
-
         File commandFile = File.createTempFile("cmd-", "");
         commandFile.deleteOnExit();
 
         String commandPath = commandFile.toString();
-        IOUtil.writeUTF8(commandFile, line.toString());
+        String commandLine = getCommandLine(command);
+        IOUtil.writeUTF8(commandFile, commandLine);
 
         List<String> chmodCommand = new ArrayList<String>();
         chmodCommand.add("chmod");
@@ -543,6 +549,8 @@ public abstract class OS
     {
       if (terminal)
       {
+        String commandLine = getCommandLine(command);
+
         for (String xterm : TERMINAL_COMMANDS)
         {
           try
@@ -550,7 +558,7 @@ public abstract class OS
             List<String> terminalCommand = new ArrayList<String>();
             terminalCommand.add(xterm);
             terminalCommand.add("-e");
-            terminalCommand.addAll(command);
+            terminalCommand.add("'" + commandLine + "'");
             return super.execute(terminalCommand, true);
           }
           catch (Exception ex)
