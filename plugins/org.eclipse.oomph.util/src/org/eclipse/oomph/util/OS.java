@@ -558,7 +558,7 @@ public abstract class OS
             List<String> terminalCommand = new ArrayList<String>();
             terminalCommand.add(xterm);
             terminalCommand.add("-e");
-            terminalCommand.add("'" + commandLine + "'");
+            terminalCommand.add(commandLine);
             return super.execute(terminalCommand, true);
           }
           catch (Exception ex)
