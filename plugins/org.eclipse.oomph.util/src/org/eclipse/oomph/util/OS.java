@@ -18,9 +18,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -159,6 +162,16 @@ public abstract class OS
     return false;
   }
 
+  public Process execute(List<String> command, boolean terminal) throws Exception
+  {
+    ProcessBuilder processBuilder = new ProcessBuilder(command);
+    Process process = processBuilder.start();
+    process.getInputStream().close();
+    process.getOutputStream().close();
+    process.getErrorStream().close();
+    return process;
+  }
+
   public String getRelativeProductFolder(String folderName)
   {
     if (StringUtil.isEmpty(folderName))
@@ -289,6 +302,22 @@ public abstract class OS
     }
 
     @Override
+    public Process execute(List<String> command, boolean terminal) throws Exception
+    {
+      if (terminal)
+      {
+        List<String> terminalCommand = new ArrayList<String>();
+        terminalCommand.add("cmd");
+        terminalCommand.add("/C");
+        terminalCommand.add("start");
+        terminalCommand.addAll(command);
+        command = terminalCommand;
+      }
+
+      return super.execute(command, terminal);
+    }
+
+    @Override
     protected String[] getOpenCommands()
     {
       return OPEN_COMMANDS;
@@ -389,6 +418,50 @@ public abstract class OS
     }
 
     @Override
+    public Process execute(List<String> command, boolean terminal) throws Exception
+    {
+      if (terminal)
+      {
+        StringBuilder line = new StringBuilder();
+        for (String token : command)
+        {
+          if (line.length() != 0)
+          {
+            line.append(' ');
+          }
+
+          line.append('"');
+          line.append(token);
+          line.append('"');
+        }
+
+        File commandFile = File.createTempFile("cmd-", "");
+        commandFile.deleteOnExit();
+
+        String commandPath = commandFile.toString();
+        IOUtil.writeUTF8(commandFile, line.toString());
+
+        List<String> chmodCommand = new ArrayList<String>();
+        chmodCommand.add("chmod");
+        chmodCommand.add("a+x");
+        chmodCommand.add(commandPath);
+
+        ProcessBuilder chmodProcessBuilder = new ProcessBuilder(chmodCommand);
+        Process chmodProcess = chmodProcessBuilder.start();
+        chmodProcess.waitFor();
+
+        List<String> terminalCommand = new ArrayList<String>();
+        terminalCommand.add("open");
+        terminalCommand.add("-b");
+        terminalCommand.add("com.apple.terminal");
+        terminalCommand.add(commandPath);
+        command = terminalCommand;
+      }
+
+      return super.execute(command, terminal);
+    }
+
+    @Override
     protected String[] getOpenCommands()
     {
       return OPEN_COMMANDS;
@@ -401,6 +474,8 @@ public abstract class OS
   private static final class Linux extends OS
   {
     private static final String[] OPEN_COMMANDS = { "kde-open", "gnome-open", "xdg-open", "sensible-browser" };
+
+    private static final String[] TERMINAL_COMMANDS = { "gnome-terminal", "xterm" };
 
     public Linux(String osgiWS, String osgiArch)
     {
@@ -463,15 +538,42 @@ public abstract class OS
       return this;
     }
 
-    private Linux createLinux(String arch)
+    @Override
+    public Process execute(List<String> command, boolean terminal) throws Exception
     {
-      return new Linux(getOsgiWS(), arch);
+      if (terminal)
+      {
+        for (String xterm : TERMINAL_COMMANDS)
+        {
+          try
+          {
+            List<String> terminalCommand = new ArrayList<String>();
+            terminalCommand.add(xterm);
+            terminalCommand.add("-e");
+            terminalCommand.addAll(command);
+            return super.execute(terminalCommand, true);
+          }
+          catch (Exception ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+
+        throw new IOException("Could not start any terminal: " + TERMINAL_COMMANDS);
+      }
+
+      return super.execute(command, false);
     }
 
     @Override
     protected String[] getOpenCommands()
     {
       return OPEN_COMMANDS;
+    }
+
+    private Linux createLinux(String arch)
+    {
+      return new Linux(getOsgiWS(), arch);
     }
   }
 }

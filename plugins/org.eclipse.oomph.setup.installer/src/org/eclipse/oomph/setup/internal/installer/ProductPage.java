@@ -1161,8 +1161,8 @@ public class ProductPage extends SetupWizardPage
     product.setLabel(product.getName());
 
     ProductVersion version = SetupFactory.eINSTANCE.createProductVersion();
-    version.setName("<no product version selected");
-    version.setName(version.getName());
+    version.setName("<no product version selected>");
+    version.setLabel(version.getName());
 
     product.getVersions().add(version);
     return product;

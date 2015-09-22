@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
-import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
@@ -23,6 +22,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer.ExecutableInfo;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
 import org.eclipse.oomph.setup.log.ProgressLog.Severity;
@@ -938,11 +938,15 @@ public class ProgressPage extends SetupWizardPage
 
       UIUtil.asyncExec(jobRunnable);
     }
-    catch (Throwable ex)
+    catch (
+
+    Throwable ex)
+
     {
       SetupUIPlugin.INSTANCE.log(ex);
       ErrorDialog.open(ex);
     }
+
   }
 
   private void saveLocalFiles(SetupTaskPerformer performer)
@@ -979,81 +983,16 @@ public class ProgressPage extends SetupWizardPage
     SetupContext.associate(installation, workspace);
   }
 
-  private static boolean needsConsole(SetupTaskPerformer performer)
-  {
-    for (SetupTask task : performer.getTriggeredSetupTasks())
-    {
-      if (task instanceof EclipseIniTask)
-      {
-        EclipseIniTask iniTask = (EclipseIniTask)task;
-        if (!iniTask.isVm() && "-console".equals(iniTask.getOption()))
-        {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * @return a two-element array with [0] being the eclipseLocation and [1] being the executable.
-   */
-  public static File[] getExecutable(SetupTaskPerformer performer)
-  {
-    OS os = performer.getOS();
-
-    String relativeProductFolder = performer.getRelativeProductFolder();
-    String relativeExecutableFolder = os.getRelativeExecutableFolder();
-    String executableName = os.getExecutableName(performer.getLauncherName());
-
-    File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
-    File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
-    File executable = new File(executableFolder, executableName);
-
-    if (os.isWin() && needsConsole(performer))
-    {
-      String consoleExecutableName = executableName.substring(0, executableName.length() - ".exe".length()) + "c.exe";
-      File consoleExectuable = new File(executableFolder, consoleExecutableName);
-      if (consoleExectuable.isFile())
-      {
-        executable = consoleExectuable;
-      }
-    }
-
-    return new File[] { eclipseLocation, executable };
-  }
-
   public static boolean launchProduct(SetupTaskPerformer performer) throws Exception
   {
     OS os = performer.getOS();
     if (os.isCurrentOS())
     {
       performer.log("Launching the installed product...");
-
-      File[] array = getExecutable(performer);
-      File eclipseLocation = array[0];
-      String executable = array[1].getAbsolutePath();
+      ExecutableInfo info = performer.getExecutableInfo();
 
       List<String> command = new ArrayList<String>();
-
-      boolean needsConsole = needsConsole(performer);
-      if (needsConsole)
-      {
-        if (os.isWin())
-        {
-          command.add("cmd");
-          command.add("/C");
-          command.add("start");
-        }
-        else if (os.isLinux())
-        {
-          command.add("xterm");
-          command.add("-e");
-        }
-      }
-
-      command.add(executable);
+      command.add(info.getExecutable().toString());
 
       File ws = performer.getWorkspaceLocation();
       if (ws != null)
@@ -1065,48 +1004,9 @@ public class ProgressPage extends SetupWizardPage
       }
 
       command.add("-vmargs");
-      command.add("-Duser.dir=" + eclipseLocation);
+      command.add("-Duser.dir=" + info.getEclipseLocation());
 
-      if (needsConsole && os.isMac())
-      {
-        StringBuilder line = new StringBuilder();
-        for (String token : command)
-        {
-          if (line.length() != 0)
-          {
-            line.append(' ');
-          }
-
-          line.append('"');
-          line.append(token);
-          line.append('"');
-        }
-
-        File script = new File(eclipseLocation, ".eclipsec");
-        IOUtil.writeUTF8(script, line.toString());
-
-        command.clear();
-        command.add("chmod");
-        command.add("a+x");
-        command.add(script.toString());
-
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        Process process = processBuilder.start();
-        process.waitFor();
-
-        command.clear();
-        command.add("open");
-        command.add("-b");
-        command.add("com.apple.terminal");
-        command.add(script.toString());
-      }
-
-      ProcessBuilder processBuilder = new ProcessBuilder(command);
-      Process process = processBuilder.start();
-      process.getInputStream().close();
-      process.getOutputStream().close();
-      process.getErrorStream().close();
-
+      os.execute(command, info.needsConsole());
       return true;
     }
 

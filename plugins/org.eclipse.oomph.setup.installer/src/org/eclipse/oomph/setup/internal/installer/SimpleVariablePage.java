@@ -1230,7 +1230,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       if (createStartMenuEntryButton != null || createDesktopShortcutButton != null)
       {
-        File executable = ProgressPage.getExecutable(performer)[1];
+        File executable = performer.getExecutableInfo().getExecutable();
 
         // TODO The entire naming of the shortcuts should be revisited and made more flexible with BrandingInfo annotations.
 

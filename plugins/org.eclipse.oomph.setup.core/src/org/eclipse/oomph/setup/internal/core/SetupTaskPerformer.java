@@ -1245,6 +1245,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return triggeredSetupTasks;
   }
 
+  public ExecutableInfo getExecutableInfo()
+  {
+    return new ExecutableInfo(this);
+  }
+
   public File getInstallationLocation()
   {
     for (SetupTask setupTask : triggeredSetupTasks)
@@ -3907,6 +3912,77 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     return "${" + variableName + "}";
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class ExecutableInfo
+  {
+    private final File eclipseLocation;
+
+    private final File executable;
+
+    private final boolean needsConsole;
+
+    private ExecutableInfo(SetupTaskPerformer performer)
+    {
+      OS os = performer.getOS();
+
+      String relativeProductFolder = performer.getRelativeProductFolder();
+      String relativeExecutableFolder = os.getRelativeExecutableFolder();
+      String executableName = os.getExecutableName(performer.getLauncherName());
+
+      File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
+      File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
+      File executable = new File(executableFolder, executableName);
+
+      needsConsole = computeNeedsConsole(performer);
+      if (needsConsole && os.isWin())
+      {
+        String consoleExecutableName = executableName.substring(0, executableName.length() - ".exe".length()) + "c.exe";
+        File consoleExectuable = new File(executableFolder, consoleExecutableName);
+        if (consoleExectuable.isFile())
+        {
+          executable = consoleExectuable;
+        }
+      }
+
+      this.eclipseLocation = eclipseLocation;
+      this.executable = executable;
+    }
+
+    public File getEclipseLocation()
+    {
+      return eclipseLocation;
+    }
+
+    public File getExecutable()
+    {
+      return executable;
+    }
+
+    public boolean needsConsole()
+    {
+      return needsConsole;
+    }
+
+    private static boolean computeNeedsConsole(SetupTaskPerformer performer)
+    {
+      for (SetupTask task : performer.getTriggeredSetupTasks())
+      {
+        if (task instanceof EclipseIniTask)
+        {
+          EclipseIniTask iniTask = (EclipseIniTask)task;
+          if (!iniTask.isVm() && "-console".equals(iniTask.getOption()))
+          {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
   }
 
   protected static class ValueConverter
