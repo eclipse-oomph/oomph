@@ -72,6 +72,7 @@ import org.eclipse.equinox.internal.p2.engine.phases.Install;
 import org.eclipse.equinox.internal.p2.engine.phases.Property;
 import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
+import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.ResolvedInstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -132,8 +133,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -1083,14 +1084,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
             Map<String, Version> workspaceIUVersions = workspaceIUAnalyzer.getIUVersions();
 
-            List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
+            Set<IInstallableUnit> originalWorkspaceIUs = new HashSet<IInstallableUnit>(workspaceIUInfos.keySet());
+
+            Set<IInstallableUnit> ius = new LinkedHashSet<IInstallableUnit>();
             Map<IU, IInstallableUnit> idToIUMap = new HashMap<IU, IInstallableUnit>();
             generateWorkspaceSourceIUs(ius, workspaceIUVersions, idToIUMap, monitor);
-
-            for (ListIterator<IInstallableUnit> it = ius.listIterator(); it.hasNext();)
-            {
-              it.set(createGeneralizedIU(it.next()));
-            }
 
             ius.add(createPDETargetPlatformIU());
 
@@ -1120,7 +1118,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                 workspaceIUInfos.put(iu, info);
 
                 // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
-                ius.remove(workspaceIU);
+                // That's only necessary if the IU is a singleton.
+                if (workspaceIU.isSingleton())
+                {
+                  ius.remove(workspaceIU);
+                }
 
                 // If the workspaceIU has any requirements not in the binary IU, then include those.
                 LOOP: for (IRequirement workspaceRequirement : workspaceIU.getRequirements())
@@ -1215,6 +1217,48 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               ius.add(workspaceRequirementsIU);
 
               profileChangeRequest.add(workspaceRequirementsIU);
+            }
+
+            Set<IInstallableUnit> remainingWorkspaceIUs = new HashSet<IInstallableUnit>(ius);
+            remainingWorkspaceIUs.retainAll(originalWorkspaceIUs);
+
+            for (IInstallableUnit iu : remainingWorkspaceIUs)
+            {
+              Collection<IRequirement> requirements = iu.getRequirements();
+              int size = requirements.size();
+              IRequirement[] generalizedRequirements = requirements.toArray(new IRequirement[size]);
+              boolean needsGeneralization = false;
+              for (int i = 0; i < size; ++i)
+              {
+                IRequirement workspaceRequirement = generalizedRequirements[i];
+                if (workspaceRequirement instanceof IRequiredCapability)
+                {
+                  IRequiredCapability workspaceRequiredCapability = (IRequiredCapability)workspaceRequirement;
+                  VersionRange versionRange = workspaceRequiredCapability.getRange();
+                  if (!VersionRange.emptyRange.equals(versionRange))
+                  {
+                    String namespace = workspaceRequiredCapability.getNamespace();
+                    String name = workspaceRequiredCapability.getName();
+                    if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace) || BundlesAction.CAPABILITY_NS_OSGI_BUNDLE.equals(namespace))
+                    {
+                      IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(name, Version.emptyVersion));
+                      if (requiredWorkspaceIU != null && !ius.contains(requiredWorkspaceIU)
+                          && (requiredWorkspaceIU.isSingleton() || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))))
+                      {
+                        needsGeneralization = true;
+                        generalizedRequirements[i] = MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange,
+                            workspaceRequiredCapability.getFilter(), workspaceRequiredCapability.getMin(), workspaceRequiredCapability.getMax(),
+                            workspaceRequiredCapability.isGreedy());
+                      }
+                    }
+                  }
+                }
+              }
+
+              if (needsGeneralization)
+              {
+                ((InstallableUnit)iu).setRequiredCapabilities(generalizedRequirements);
+              }
             }
 
             metadata = new CollectionResult<IInstallableUnit>(ius);
@@ -1392,7 +1436,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           return filter;
         }
 
-        private void generateWorkspaceSourceIUs(List<IInstallableUnit> ius, Map<String, Version> ids, Map<IU, IInstallableUnit> idToIUMap,
+        private void generateWorkspaceSourceIUs(Set<IInstallableUnit> ius, Map<String, Version> ids, Map<IU, IInstallableUnit> idToIUMap,
             IProgressMonitor monitor)
         {
           Map<IInstallableUnit, WorkspaceIUInfo> workspaceSourceIUInfos = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
@@ -1405,6 +1449,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             String id = iu.getId();
             ius.add(createGeneralizedIU(iu));
             idToIUMap.put(new IU(iu), iu);
+
+            if (id.endsWith(Requirement.PROJECT_SUFFIX))
+            {
+              continue;
+            }
 
             String suffix = "";
             if (id.endsWith(Requirement.FEATURE_SUFFIX))
