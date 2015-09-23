@@ -1,0 +1,16 @@
+After a release:
+
+1) Delete release.xml and release.digest (wait for their regenration)
+2) Fix all version error markers
+3) Fix Installer.product version
+4) Fix package export versions in edit and editor plugins
+
+
+
+For a Java version change:
+
+1) Check all BREEs
+2) Adjust the Platform repo in org.eclipse.oomph.releng.target
+3) Adjust the descriptor-??.txt files in /org.eclipse.oomph.extractor/Concat
+4) Adjust Installer.p2.inf
+

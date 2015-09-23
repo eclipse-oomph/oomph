@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.internal.setup.pde;
+package org.eclipse.oomph.setup.internal.pde;
 
 import org.eclipse.oomph.util.ServiceUtil;
 
