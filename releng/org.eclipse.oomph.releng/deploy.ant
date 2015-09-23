@@ -39,7 +39,7 @@
 	</target>
 
 	<target name="clean" depends="init">
-		<delete verbose="false" failonerror="false">
+		<delete verbose="false" failonerror="false" includeemptydirs="true">
 			<fileset dir="${target}" defaultexcludes="false">
 				<include name="**/*" />
 			</fileset>

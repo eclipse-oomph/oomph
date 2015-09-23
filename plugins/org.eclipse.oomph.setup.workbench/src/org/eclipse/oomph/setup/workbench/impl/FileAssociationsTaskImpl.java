@@ -61,6 +61,8 @@ import java.util.Set;
 @SuppressWarnings("restriction")
 public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssociationsTask
 {
+  private static final Method SET_DEFAULT_EDITOR_METHOD = determineSetDefaultEditorMethod();
+
   /**
    * The cached value of the '{@link #getMappings() <em>Mappings</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -329,28 +331,21 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
         }
       }
 
-      String defaultEditorID = mapping.getDefaultEditorID();
-      if (!StringUtil.isEmpty(defaultEditorID))
+      if (SET_DEFAULT_EDITOR_METHOD != null)
       {
-        IEditorDescriptor defaultEditor = registry.findEditor(defaultEditorID);
-        if (defaultEditor != null)
+        String defaultEditorID = mapping.getDefaultEditorID();
+        if (!StringUtil.isEmpty(defaultEditorID))
         {
-          try
+          IEditorDescriptor defaultEditor = registry.findEditor(defaultEditorID);
+          if (defaultEditor != null)
           {
-            fileEditorMapping.setDefaultEditor(defaultEditor);
-          }
-          catch (NoSuchMethodError ex)
-          {
-            // Before Neon the setDefaultEditor() method took an EditorDescriptor-typed argument.
-            if (defaultEditor instanceof EditorDescriptor)
+            try
             {
-              EditorDescriptor descriptor = (EditorDescriptor)defaultEditor;
-              Method method = ReflectUtil.getMethod(FileEditorMapping.class, "setDefaultEditor", EditorDescriptor.class);
-              ReflectUtil.invokeMethod(method, fileEditorMapping, descriptor);
+              ReflectUtil.invokeMethod(SET_DEFAULT_EDITOR_METHOD, fileEditorMapping, defaultEditor);
             }
-            else
+            catch (Throwable ex)
             {
-              throw ex;
+              context.log(ex.getMessage());
             }
           }
         }
@@ -367,6 +362,31 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
         PrefUtil.savePrefs();
       }
     });
+  }
+
+  private static Method determineSetDefaultEditorMethod()
+  {
+    // Starting with Neon the setDefaultEditor() method takes an IEditorDescriptor-typed argument.
+    Method method = determineSetDefaultEditorMethod(IEditorDescriptor.class);
+    if (method == null)
+    {
+      // Before Neon the setDefaultEditor() method took an EditorDescriptor-typed argument.
+      method = determineSetDefaultEditorMethod(EditorDescriptor.class);
+    }
+
+    return method;
+  }
+
+  private static Method determineSetDefaultEditorMethod(Class<?> type)
+  {
+    try
+    {
+      return ReflectUtil.getMethod(FileEditorMapping.class, "setDefaultEditor", type);
+    }
+    catch (Throwable ex)
+    {
+      return null;
+    }
   }
 
   private static Map<String, FileEditorMapping> getFileEditorMappings()
