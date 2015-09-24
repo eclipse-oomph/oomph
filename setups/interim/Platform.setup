@@ -91,7 +91,7 @@
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
         <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
+            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         <repository
             url="http://download.eclipse.org/eclipse/updates/4.6-N-builds"/>
       </repositoryList>
