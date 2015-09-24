@@ -80,9 +80,10 @@ public final class SetupEditorSupport
     {
       URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
       final String fragment = uri.fragment();
-      final URI normalizedURI = uriConverter.normalize(uri.trimFragment());
+      URI trimmedURI = uri.trimFragment();
+      final URI normalizedURI = uriConverter.normalize(trimmedURI);
 
-      final IEditorInput editorInput = getEditorInput(normalizedURI);
+      final IEditorInput editorInput = getEditorInput(normalizedURI, trimmedURI);
       IEditorPart editor = findEditor(EDITOR_ID, page, uriConverter, editorInput);
       if (editor != null)
       {
@@ -196,8 +197,9 @@ public final class SetupEditorSupport
     try
     {
       URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
-      URI normalizedURI = uriConverter.normalize(uri.trimFragment());
-      IEditorInput editorInput = getTextEditorInput(normalizedURI);
+      URI trimmedURI = uri.trimFragment();
+      URI normalizedURI = uriConverter.normalize(trimmedURI);
+      IEditorInput editorInput = getTextEditorInput(normalizedURI, trimmedURI);
 
       String editorID = getTextEditorID();
 
@@ -232,7 +234,7 @@ public final class SetupEditorSupport
         try
         {
           IEditorInput editorInput = editorReference.getEditorInput();
-          URI editorResourceURI = EditUIUtil.getURI(editorInput);
+          URI editorResourceURI = getURI(editorInput, uriConverter);
           if (editorResourceURI != null)
           {
             editorResourceURI = uriConverter.normalize(editorResourceURI).trimFragment();
@@ -252,9 +254,9 @@ public final class SetupEditorSupport
     return null;
   }
 
-  private static IEditorInput getTextEditorInput(final URI normalizedURI)
+  private static IEditorInput getTextEditorInput(final URI normalizedURI, URI originalURI)
   {
-    IEditorInput editorInput = getEditorInput(normalizedURI);
+    IEditorInput editorInput = getEditorInput(normalizedURI, originalURI);
     if (editorInput instanceof URIEditorInput)
     {
       URIEditorInput uriEditorInput = (URIEditorInput)editorInput;
@@ -342,7 +344,7 @@ public final class SetupEditorSupport
     return editorInput;
   }
 
-  private static IEditorInput getEditorInput(URI normalizedURI)
+  private static IEditorInput getEditorInput(URI normalizedURI, URI originalURI)
   {
     normalizedURI = SetupContext.resolveUser(normalizedURI);
 
@@ -364,7 +366,7 @@ public final class SetupEditorSupport
       }
     }
 
-    return new URIEditorInput(normalizedURI, normalizedURI.lastSegment());
+    return new URIEditorInput(originalURI, originalURI.lastSegment());
   }
 
   private static FileEditorInput getFileEditorInput(URI uri)
@@ -416,6 +418,18 @@ public final class SetupEditorSupport
 
     protected void loaded(IEditorPart editor, EditingDomain domain, Resource resource)
     {
+    }
+  }
+
+  public static URI getURI(IEditorInput editorInput, URIConverter uriConverter)
+  {
+    try
+    {
+      return EditUIUtil.getURI(editorInput, uriConverter);
+    }
+    catch (NoSuchMethodError ex)
+    {
+      return EditUIUtil.getURI(editorInput);
     }
   }
 }

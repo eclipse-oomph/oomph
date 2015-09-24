@@ -105,7 +105,6 @@ import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
-import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 
 import org.eclipse.core.resources.IContainer;
@@ -1179,7 +1178,17 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       @Override
       public Boolean get(Object key)
       {
-        return editingDomain.getResourceSet().getResources().indexOf(key) != 0;
+        Boolean result = super.get(key);
+        if (result == null)
+        {
+          EList<Resource> resources = editingDomain.getResourceSet().getResources();
+          if (resources.indexOf(key) != 0)
+          {
+            return Boolean.FALSE;
+          }
+        }
+
+        return result;
       }
     };
 
@@ -1219,20 +1228,26 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           {
             for (IContainer container : EcorePlugin.getWorkspaceRoot().findContainersForLocationURI(locationURI))
             {
-              // If there is, redirect the file system folder to the workspace folder.
-              URI redirectedWorkspaceURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
-              workspaceMappings.put(uri, redirectedWorkspaceURI);
-              break;
+              if (container.isAccessible())
+              {
+                // If there is, redirect the file system folder to the workspace folder.
+                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
+                workspaceMappings.put(uri, redirectedWorkspaceURI);
+                break;
+              }
             }
           }
           else
           {
             for (IFile file : EcorePlugin.getWorkspaceRoot().findFilesForLocationURI(locationURI))
             {
-              // If there is, redirect the file system folder to the workspace folder.
-              URI redirectedWorkspaceURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-              workspaceMappings.put(uri, redirectedWorkspaceURI);
-              break;
+              if (file.isAccessible())
+              {
+                // If there is, redirect the file system folder to the workspace folder.
+                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+                workspaceMappings.put(uri, redirectedWorkspaceURI);
+                break;
+              }
             }
           }
         }
@@ -1494,8 +1509,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   public void createModel()
   {
-    URI resourceURI = EditUIUtil.getURI(getEditorInput());
     final ResourceSet resourceSet = editingDomain.getResourceSet();
+    URI resourceURI = SetupEditorSupport.getURI(getEditorInput(), resourceSet.getURIConverter());
 
     resourceMirror.perform(resourceURI);
 
