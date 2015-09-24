@@ -58,6 +58,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -823,8 +824,17 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             return;
           }
 
-          boolean setCookie = responseHeaders.get("Set-Cookie") != null;
-          if (setCookie)
+          boolean isHTTPS;
+          try
+          {
+            isHTTPS = "https".equals(receiveStartEvent.getFileID().getURI().getScheme());
+          }
+          catch (URISyntaxException ex)
+          {
+            isHTTPS = false;
+          }
+
+          if (isHTTPS && responseHeaders.get("Set-Cookie") != null)
           {
             IncomingFileTransferException incomingFileTransferException = new IncomingFileTransferException(HttpURLConnection.HTTP_UNAUTHORIZED);
             incomingFileTransferException.fillInStackTrace();
