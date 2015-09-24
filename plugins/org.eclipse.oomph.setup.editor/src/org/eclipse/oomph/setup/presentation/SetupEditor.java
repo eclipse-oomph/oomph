@@ -1184,7 +1184,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           EList<Resource> resources = editingDomain.getResourceSet().getResources();
           if (resources.indexOf(key) != 0)
           {
-            return Boolean.FALSE;
+            return Boolean.TRUE;
           }
         }
 
