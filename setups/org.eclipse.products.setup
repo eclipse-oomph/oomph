@@ -36,7 +36,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Neon)">
@@ -45,17 +45,17 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -86,7 +86,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Neon)">
@@ -95,17 +95,17 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -226,7 +226,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Neon)">
@@ -235,20 +235,20 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -282,7 +282,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Neon)">
@@ -291,20 +291,20 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -437,7 +437,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Neon)">
@@ -446,14 +446,14 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -481,7 +481,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Neon)">
@@ -490,14 +490,14 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -606,7 +606,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (Neon)">
@@ -615,14 +615,14 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -650,7 +650,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (Neon)">
@@ -659,14 +659,14 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -720,7 +720,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (Neon)">
@@ -729,20 +729,20 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -776,7 +776,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (Neon)">
@@ -785,20 +785,20 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -848,7 +848,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Neon)">
@@ -857,20 +857,20 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -904,7 +904,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Neon)">
@@ -913,20 +913,20 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1059,7 +1059,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Neon)">
@@ -1068,20 +1068,20 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1115,7 +1115,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Neon)">
@@ -1124,20 +1124,20 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1270,7 +1270,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Neon)">
@@ -1279,20 +1279,20 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1326,7 +1326,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Neon)">
@@ -1335,20 +1335,20 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1485,7 +1485,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Neon)">
@@ -1494,20 +1494,20 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1541,7 +1541,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Neon)">
@@ -1550,20 +1550,20 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1696,7 +1696,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Neon)">
@@ -1705,14 +1705,14 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1740,7 +1740,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Neon)">
@@ -1749,14 +1749,14 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1865,7 +1865,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Neon)">
@@ -1874,14 +1874,14 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -1909,7 +1909,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Neon)">
@@ -1918,14 +1918,14 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -2034,7 +2034,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Neon)">
@@ -2043,20 +2043,20 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -2090,7 +2090,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Neon)">
@@ -2099,20 +2099,20 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
@@ -2421,7 +2421,7 @@
     <version
         name="latest"
         label="Latest (Neon)"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Neon)">
@@ -2430,20 +2430,19 @@
             versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Mars)"
-        requiredJavaVersion="1.7">
+        label="Latest Release (Mars)">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Mars)">
@@ -2465,7 +2464,7 @@
     <version
         name="neon"
         label="Neon"
-        requiredJavaVersion="1.7">
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Neon)">
@@ -2474,20 +2473,19 @@
             versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201508211000"/>
+            url="http://download.eclipse.org/releases/neon/201510021100"/>
       </setupTask>
     </version>
     <version
         name="mars"
-        label="Mars"
-        requiredJavaVersion="1.7">
+        label="Mars">
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Mars)">

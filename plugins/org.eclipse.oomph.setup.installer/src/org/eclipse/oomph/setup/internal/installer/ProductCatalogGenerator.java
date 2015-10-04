@@ -585,13 +585,6 @@ public class ProductCatalogGenerator implements IApplication
       throws URISyntaxException, ProvisionException
   {
     IMetadataRepository result = repository;
-    URI location = repository.getLocation();
-    if (location.getPath().endsWith("mars"))
-    {
-      IMetadataRepository childRepository = manager.loadRepository(new URI(location + "/R"), null);
-      return childRepository;
-    }
-
     if (!isLatestReleased() && repository instanceof ICompositeRepository<?>)
     {
       ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)repository;
@@ -798,9 +791,9 @@ public class ProductCatalogGenerator implements IApplication
     String idPrefix = "tooling" + productName + ".ini.";
 
     Version maxJavaVersion = null;
-    if (train.compareTo("mars") >= 0)
+    if (train.compareTo("neon") >= 0)
     {
-      maxJavaVersion = Version.create("1.7.0");
+      maxJavaVersion = Version.create("1.8.0");
     }
 
     IMetadataRepository eppMetaDataRepository = eppMetaDataRepositories.get(train);
