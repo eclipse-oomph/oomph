@@ -834,12 +834,6 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       return (SetupModelWizard)super.getWizard();
     }
 
-    @Override
-    public boolean isPageComplete()
-    {
-      return getMessage() == null;
-    }
-
     public String getValidationMessage()
     {
       try
