@@ -74,6 +74,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -562,7 +563,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        installCancel();
+        if (progress != null)
+        {
+          progress.setCanceled(true);
+        }
       }
     });
 
@@ -977,11 +981,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
         catch (InterruptedException ex)
         {
-          progress.setCanceled(true);
+          installCancel();
         }
         catch (OperationCanceledException ex)
         {
-          progress.setCanceled(true);
+          installCancel();
         }
         catch (UnloggedException ex)
         {
@@ -1140,6 +1144,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
 
       performer.getUnresolvedVariables().clear();
+      performer.put(UIServices.class, Installer.SERVICE_UI);
       performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
       performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
       performer.put(OS.class, OS.INSTANCE.getForBitness(javaController.getBitness()));
@@ -1175,13 +1180,19 @@ public class SimpleVariablePage extends SimpleInstallerPage
       installThread.interrupt();
     }
 
-    dialog.setButtonsEnabled(true);
-    setEnabled(true);
+    UIUtil.syncExec(getDisplay(), new Runnable()
+    {
+      public void run()
+      {
+        dialog.setButtonsEnabled(true);
+        setEnabled(true);
 
-    installButton.setCurrentState(State.INSTALL);
-    installStack.setVisible(false);
+        installButton.setCurrentState(State.INSTALL);
+        installStack.setVisible(false);
 
-    dialog.clearMessage();
+        dialog.clearMessage();
+      }
+    });
   }
 
   private void installFinished()
