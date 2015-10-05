@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.jreinfo.ui;
 
+import org.eclipse.oomph.jreinfo.JREFilter;
 import org.eclipse.oomph.util.Request;
 
 import org.eclipse.jface.preference.PreferencePage;
@@ -37,6 +38,8 @@ public class JREPreferencePage extends PreferencePage implements IWorkbenchPrefe
   @Override
   protected Control createContents(Composite parent)
   {
-    return new JREComposite(parent, SWT.NONE, Request.Handler.SYSTEM_BROWSER, null, null);
+    JREComposite jreComposite = new JREComposite(parent, SWT.NONE, Request.Handler.SYSTEM_BROWSER, null, null);
+    jreComposite.setJREFilter(new JREFilter(null, null, (Integer)null));
+    return jreComposite;
   }
 }
