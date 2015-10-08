@@ -12,18 +12,90 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="github.user.id"
+        defaultValue="anonymous"
         label="Github user ID"
-        documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID."/>
+        documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID.">
+      <description>The user ID of the Github account</description>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="github.author.name"
         label="Github author name"
-        documentation="The Eclipse author name for Git/Gerrit commits.  Use 'Anonymous' if you're not a registered Eclipse Git author or don't plan to commit to Git."/>
+        documentation="The Eclipse author name for Git/Gerrit commits.  Use 'Anonymous' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+      <description>The author name used for Github commits</description>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="github.author.email"
         label="Github author email"
-        documentation="The Eclipse author email for Git/Gerrit commits.  Use 'anonymous@example.com' if you're not a registered Eclipse Git author or don't plan to commit to Git."/>
+        documentation="The Eclipse author email for Git/Gerrit commits.  Use 'anonymous@example.com' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+      <description>The email address associated with Github commits</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="PASSWORD"
+        name="github.user.password"
+        label="Github password for issues">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/PasswordVerificationDisabled">
+        <detail
+            key="type">
+          <value>form</value>
+        </detail>
+        <detail
+            key="form.url">
+          <value>https://github.com/session</value>
+        </detail>
+        <detail
+            key="form.cookie">
+          <value>PHPSESSID</value>
+        </detail>
+        <detail
+            key="form.parameters">
+          <value>login password authenticity_token utf8 commit</value>
+        </detail>
+        <detail
+            key="form.secure.parameters">
+          <value>password</value>
+        </detail>
+        <detail
+            key="form.filter">
+          <value>login=anonymous\&amp;.*</value>
+        </detail>
+        <detail
+            key="form.parameter.login">
+          <value>$${github.user.id}</value>
+        </detail>
+        <detail
+            key="form.parameter.password">
+          <value>$${value}</value>
+        </detail>
+        <detail
+            key="form.parameter.utf8">
+          <value>✓</value>
+        </detail>
+        <detail
+            key="form.parameter.commit">
+          <value>Sign in</value>
+        </detail>
+        <detail
+            key="form.ok">
+          <value>Valid password for $${form.parameter.login} at $${form.url}.</value>
+        </detail>
+        <detail
+            key="form.info">
+          <value>Validate the password for $${form.parameter.login} at $${form.url}.</value>
+        </detail>
+        <detail
+            key="form.warning">
+          <value>Unable to validate the password for $${form.parameter.login} because $${form.url} is unreachable.</value>
+        </detail>
+        <detail
+            key="form.error">
+          <value>Invalid password for $${form.parameter.login} at $${form.url}.</value>
+        </detail>
+      </annotation>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="github.remoteURIs"
@@ -100,5 +172,6 @@
   <project href="https://raw.githubusercontent.com/openhab/openhab2/master/targetplatform/openHAB2.setup#/"/>
   <project href="https://raw.githubusercontent.com/ctron/package-drone/master/de.dentrassi.pm.oomph/PackageDrone.setup#/"/>
   <project href="https://github.com/meysholdt/Xpect/raw/master/org.xpect.releng/Xpect.setup#/"/>
+  <project href="https://raw.githubusercontent.com/LorenzoBettini/xsemantics/master/devtools/it.xsemantics.workspace/Xsemantics.setup#/"/>
   <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>
