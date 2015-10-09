@@ -62,6 +62,11 @@ public class SynchronizerJob extends Job
     this.service = service;
   }
 
+  public Throwable getException()
+  {
+    return exception;
+  }
+
   public Synchronization getSynchronization()
   {
     return synchronization;
@@ -76,7 +81,7 @@ public class SynchronizerJob extends Job
     {
       try
       {
-        if (done.await(Math.max(timeout, 100), TimeUnit.MILLISECONDS))
+        if (done.await(Math.min(timeout, 100), TimeUnit.MILLISECONDS))
         {
           return synchronization;
         }
@@ -102,7 +107,12 @@ public class SynchronizerJob extends Job
   {
     try
     {
-      synchronization = synchronizer.synchronize(deferLocal);
+      Synchronization result = synchronizer.synchronize(deferLocal);
+
+      // int xxx;
+      // Thread.sleep(15000);
+
+      synchronization = result;
       done.countDown();
     }
     catch (Throwable ex)
@@ -111,10 +121,5 @@ public class SynchronizerJob extends Job
     }
 
     return Status.OK_STATUS;
-  }
-
-  public Throwable getException()
-  {
-    return exception;
   }
 }

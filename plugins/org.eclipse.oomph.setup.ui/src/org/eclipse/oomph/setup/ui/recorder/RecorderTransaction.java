@@ -270,6 +270,11 @@ public abstract class RecorderTransaction
     policies.remove(key);
   }
 
+  public Map<URI, String> getPreferences()
+  {
+    return preferences;
+  }
+
   public void setPreferences(Map<URI, String> preferences)
   {
     this.preferences = preferences;
@@ -804,6 +809,12 @@ public abstract class RecorderTransaction
     return instance;
   }
 
+  public static RecorderTransaction openTmp(Resource resource)
+  {
+    SetupTaskContainer rootObject = getRootObject(resource, null);
+    return new TmpTransaction(rootObject);
+  }
+
   static RecorderTransaction getInstance()
   {
     return instance;
@@ -956,7 +967,7 @@ public abstract class RecorderTransaction
   /**
    * @author Eike Stepper
    */
-  private static final class ResourceTransaction extends RecorderTransaction
+  private static class ResourceTransaction extends RecorderTransaction
   {
     public ResourceTransaction(SetupTaskContainer rootObject)
     {
@@ -979,6 +990,23 @@ public abstract class RecorderTransaction
           SetupUIPlugin.INSTANCE.log(ex);
         }
       }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class TmpTransaction extends ResourceTransaction
+  {
+    public TmpTransaction(SetupTaskContainer rootObject)
+    {
+      super(rootObject);
+    }
+
+    @Override
+    public void close()
+    {
+      // Do nothing.
     }
   }
 }

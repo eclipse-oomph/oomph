@@ -83,4 +83,10 @@ public class LocalDataProvider implements DataProvider
     SyncUtil.deleteFile(localFile);
     return true;
   }
+
+  @Override
+  public String toString()
+  {
+    return getClass().getSimpleName() + "[" + getLocalFile() + "]";
+  }
 }

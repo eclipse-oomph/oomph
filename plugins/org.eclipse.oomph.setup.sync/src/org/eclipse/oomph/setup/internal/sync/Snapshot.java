@@ -26,6 +26,8 @@ public class Snapshot
 {
   private final DataProvider dataProvider;
 
+  private final String info;
+
   private final File oldFile;
 
   private final File newFile;
@@ -37,6 +39,8 @@ public class Snapshot
     this.dataProvider = dataProvider;
 
     String prefix = dataProvider.getLocation().toString().toLowerCase();
+    info = new File(folder, prefix + "-???.xml").toString();
+
     oldFile = new File(folder, prefix + "-old.xml");
     newFile = new File(folder, prefix + "-new.xml");
     tmpFile = new File(folder, prefix + "-tmp.xml");
@@ -62,6 +66,18 @@ public class Snapshot
     return newFile;
   }
 
+  public void copyFilesTo(File target) throws IOException
+  {
+    IOUtil.copyFile(oldFile, new File(target, oldFile.getName()));
+    IOUtil.copyFile(newFile, new File(target, newFile.getName()));
+  }
+
+  public void copyFilesFrom(File source) throws IOException
+  {
+    IOUtil.copyFile(new File(source, oldFile.getName()), oldFile);
+    IOUtil.copyFile(new File(source, newFile.getName()), newFile);
+  }
+
   public WorkingCopy createWorkingCopy() throws IOException
   {
     try
@@ -74,6 +90,12 @@ public class Snapshot
     }
 
     return new WorkingCopy(this);
+  }
+
+  @Override
+  public String toString()
+  {
+    return getClass().getSimpleName() + "[" + dataProvider + " --> " + info + "]";
   }
 
   private void doCommit() throws IOException, NotCurrentException

@@ -81,6 +81,11 @@ public class RemoteDataProvider implements DataProvider
     return Location.REMOTE;
   }
 
+  public URI getURI()
+  {
+    return uri;
+  }
+
   public boolean update(File file) throws IOException, NotFoundException
   {
     HttpEntity responseEntity = null;
@@ -110,7 +115,7 @@ public class RemoteDataProvider implements DataProvider
         return true;
       }
 
-      throw new BadResponseException(uri);
+      throw BadResponseException.create(uri, response.getStatusLine());
     }
     catch (NotFoundException ex)
     {
@@ -160,7 +165,7 @@ public class RemoteDataProvider implements DataProvider
         return;
       }
 
-      throw new BadResponseException(uri);
+      throw BadResponseException.create(uri, response.getStatusLine());
     }
     catch (IOException ex)
     {
@@ -185,6 +190,12 @@ public class RemoteDataProvider implements DataProvider
     }
 
     return true;
+  }
+
+  @Override
+  public String toString()
+  {
+    return getClass().getSimpleName() + "[" + getURI() + "]";
   }
 
   private Request configureRequest(Request request, String baseVersion)
@@ -220,7 +231,7 @@ public class RemoteDataProvider implements DataProvider
     StatusLine statusLine = response.getStatusLine();
     if (statusLine == null)
     {
-      throw new BadResponseException(uri);
+      throw new BadResponseException(uri, "No status returned");
     }
 
     int status = statusLine.getStatusCode();
@@ -309,9 +320,14 @@ public class RemoteDataProvider implements DataProvider
   {
     private static final long serialVersionUID = 1L;
 
-    public BadResponseException(URI uri)
+    public BadResponseException(URI uri, String statusLine)
     {
-      super("Bad response: " + uri);
+      super("Bad response: " + uri + (StringUtil.isEmpty(statusLine) ? "" : " --> " + statusLine));
+    }
+
+    private static BadResponseException create(URI uri, StatusLine statusLine)
+    {
+      return new BadResponseException(uri, statusLine == null ? null : statusLine.toString());
     }
   }
 }

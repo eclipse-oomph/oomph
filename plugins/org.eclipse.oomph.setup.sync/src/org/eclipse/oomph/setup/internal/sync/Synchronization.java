@@ -441,6 +441,11 @@ public class Synchronization
     }
   }
 
+  private boolean isSychronizable(SetupTask task)
+  {
+    return task instanceof PreferenceTask;
+  }
+
   private String rememberID(SetupTask task)
   {
     String id = task.getID();
@@ -487,18 +492,6 @@ public class Synchronization
     }
 
     return null;
-  }
-
-  private <T extends EObject> T loadObject(File file, EClass eClass)
-  {
-    URI uri = URI.createFileURI(file.getAbsolutePath());
-    Resource resource = resourceSet.getResource(uri, true);
-    return BaseUtil.getObjectByType(resource.getContents(), eClass);
-  }
-
-  private boolean isSychronizable(SetupTask task)
-  {
-    return task instanceof PreferenceTask;
   }
 
   private String createID()
@@ -750,6 +743,13 @@ public class Synchronization
     {
       SetupSyncPlugin.INSTANCE.log(ex);
     }
+  }
+
+  private <T extends EObject> T loadObject(File file, EClass eClass)
+  {
+    URI uri = URI.createFileURI(file.getAbsolutePath());
+    Resource resource = resourceSet.getResource(uri, true);
+    return BaseUtil.getObjectByType(resource.getContents(), eClass);
   }
 
   /**

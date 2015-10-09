@@ -358,8 +358,6 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
 
   private void selectRecorderTarget(URI uri)
   {
-    uri = RecorderManager.normalize(uriConverter, uri);
-
     int i = 0;
     for (TableItem item : targetCombo.getTable().getItems())
     {
@@ -381,8 +379,6 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
       URI uri = EcoreUtil.getURI(target);
       if (uri != null)
       {
-        uri = RecorderManager.normalize(uriConverter, uri);
-
         Map<?, ?> options = Collections.singletonMap(URIConverter.OPTION_REQUESTED_ATTRIBUTES, Collections.singleton(URIConverter.ATTRIBUTE_READ_ONLY));
         Map<String, ?> attributes = uriConverter.getAttributes(uri, options);
         boolean writable = !Boolean.TRUE.equals(attributes.get(URIConverter.ATTRIBUTE_READ_ONLY));

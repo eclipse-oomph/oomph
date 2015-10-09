@@ -214,7 +214,7 @@ public final class SynchronizerService
     public static final Registry INSTANCE = new Registry();
 
     public static final SynchronizerService ECLIPSE_SERVICE = new SynchronizerService("Eclipse.org" //
-        , IOUtil.newURI("https://dev.eclipse.org/oomph") //
+        , IOUtil.newURI("https://dev.eclipse.org/oomph/") //
         , IOUtil.newURI("https://dev.eclipse.org/site_login"));
 
     private static final SynchronizerService[] SERVICES = { ECLIPSE_SERVICE };

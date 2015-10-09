@@ -47,7 +47,13 @@ public final class SynchronizerManager
 
   private static final String SYNC_ENABLED = "sync.enabled";
 
-  private static final boolean DEBUG = false;
+  /**
+   * If set to <code>true</code> the {@link #CONNECTION_OFFERED} property is cleared before each access,
+   * which makes it easier to test/debug the opt-in workflow.
+   * <p>
+   * <b>Should never be committed with a <code>true</code> value!</b>
+   */
+  private static final boolean DEBUG_CONNECTION_OFFERED = false;
 
   private Boolean connectionOffered;
 
@@ -90,7 +96,7 @@ public final class SynchronizerManager
       return;
     }
 
-    if (DEBUG)
+    if (DEBUG_CONNECTION_OFFERED)
     {
       connectionOffered = null;
       CONFIG.removeProperty(CONNECTION_OFFERED);

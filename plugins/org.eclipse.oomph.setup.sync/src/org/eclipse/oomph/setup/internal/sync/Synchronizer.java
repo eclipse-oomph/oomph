@@ -83,6 +83,32 @@ public class Synchronizer
     return new Synchronization(this, deferLocal);
   }
 
+  public void copyFilesTo(File target) throws IOException
+  {
+    if (localSnapshot != null)
+    {
+      localSnapshot.copyFilesTo(target);
+    }
+
+    if (remoteSnapshot != null)
+    {
+      remoteSnapshot.copyFilesTo(target);
+    }
+  }
+
+  public void copyFilesFrom(File source) throws IOException
+  {
+    if (localSnapshot != null)
+    {
+      localSnapshot.copyFilesFrom(source);
+    }
+
+    if (remoteSnapshot != null)
+    {
+      remoteSnapshot.copyFilesFrom(source);
+    }
+  }
+
   public void addListener(SynchronizerListener listener)
   {
     listeners.add(listener);
@@ -91,6 +117,12 @@ public class Synchronizer
   public void removeListener(SynchronizerListener listener)
   {
     listeners.remove(listener);
+  }
+
+  @Override
+  public String toString()
+  {
+    return getClass().getSimpleName() + "[" + localSnapshot + " <--> " + remoteSnapshot + "]";
   }
 
   protected void syncStarted()
