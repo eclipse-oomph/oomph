@@ -170,7 +170,7 @@
   <project href="user:/com.github.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Github.com project catalog'#/"/>
   <project href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup#/"/>
   <project href="https://raw.githubusercontent.com/openhab/openhab2/master/targetplatform/openHAB2.setup#/"/>
-  <project href="https://raw.githubusercontent.com/ctron/package-drone/master/de.dentrassi.pm.oomph/PackageDrone.setup#/"/>
+  <project href="https://raw.githubusercontent.com/ctron/package-drone/master/setups/org.eclipse.packagedrone.oomph/PackageDrone.setup#/"/>
   <project href="https://github.com/meysholdt/Xpect/raw/master/org.xpect.releng/Xpect.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/xsemantics/master/devtools/it.xsemantics.workspace/Xsemantics.setup#/"/>
   <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
