@@ -13,6 +13,9 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.internal.ui.OomphDragAdapter;
+import org.eclipse.oomph.internal.ui.OomphEditingDomain;
+import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
@@ -32,12 +35,14 @@ import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IItemColorProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -46,6 +51,9 @@ import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -53,16 +61,24 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -72,6 +88,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
@@ -80,6 +97,7 @@ import org.eclipse.ui.PlatformUI;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -128,6 +146,8 @@ public class ConfirmationPage extends SetupWizardPage
 
   private AdapterFactoryLabelProvider.ColorProvider labelProvider;
 
+  private EditingDomain domain;
+
   public ConfirmationPage()
   {
     super("ConfirmationPage");
@@ -153,6 +173,7 @@ public class ConfirmationPage extends SetupWizardPage
     fillChildrenPane(verticalSash);
 
     propertiesViewer = new PropertiesViewer(verticalSash, SWT.BORDER);
+    createContextMenu(propertiesViewer);
     addHelpCallout(propertiesViewer.getTable(), 3);
 
     connectMasterDetail(viewer, childrenViewer);
@@ -458,6 +479,7 @@ public class ConfirmationPage extends SetupWizardPage
   private void fillCheckPane(Composite parent)
   {
     viewer = new CheckboxTreeViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+    createContextMenu(viewer);
 
     final Tree tree = viewer.getTree();
     tree.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -588,9 +610,96 @@ public class ConfirmationPage extends SetupWizardPage
     });
   }
 
+  private void createContextMenu(final StructuredViewer viewer)
+  {
+    if (domain == null)
+    {
+      domain = new OomphEditingDomain(getAdapterFactory(), new BasicCommandStack(), new HashMap<Resource, Boolean>(), OomphTransferDelegate.DELEGATES);
+    }
+
+    final ISelectionProvider selectionProvider = new ISelectionProvider()
+    {
+      public ISelection getSelection()
+      {
+        Object[] selection = ((IStructuredSelection)viewer.getSelection()).toArray();
+        for (int i = 0; i < selection.length; ++i)
+        {
+          Object object = selection[i];
+          if (object instanceof Object[])
+          {
+            selection[i] = ((Object[])object)[1];
+          }
+        }
+        return new StructuredSelection(selection);
+      }
+
+      public void setSelection(ISelection selection)
+      {
+      }
+
+      public void removeSelectionChangedListener(ISelectionChangedListener listener)
+      {
+        // Ignore
+      }
+
+      public void addSelectionChangedListener(ISelectionChangedListener listener)
+      {
+      }
+    };
+
+    MenuManager contextMenu = new MenuManager("#PopUp");
+    contextMenu.addMenuListener(new IMenuListener()
+    {
+      public void menuAboutToShow(IMenuManager manager)
+      {
+        final IStructuredSelection selection = (IStructuredSelection)selectionProvider.getSelection();
+        Action copy = new Action("Copy")
+        {
+          @SuppressWarnings("unchecked")
+          @Override
+          public void run()
+          {
+            domain.setClipboard(selection.toList());
+          }
+        };
+        copy.setEnabled(!selection.isEmpty());
+        copy.setAccelerator((OS.INSTANCE.isMac() ? SWT.COMMAND : SWT.CTRL) | 'C');
+        manager.add(copy);
+      }
+    });
+    contextMenu.setRemoveAllWhenShown(true);
+    Control control = viewer.getControl();
+    control.addKeyListener(new KeyAdapter()
+    {
+      @SuppressWarnings("unchecked")
+      @Override
+      public void keyReleased(KeyEvent e)
+      {
+        if (e.keyCode == 'c' && (e.stateMask & SWT.MODIFIER_MASK & (OS.INSTANCE.isMac() ? SWT.COMMAND : SWT.CTRL)) != 0)
+        {
+          final IStructuredSelection selection = (IStructuredSelection)selectionProvider.getSelection();
+          if (!selection.isEmpty())
+          {
+            domain.setClipboard(selection.toList());
+          }
+
+          e.doit = false;
+        }
+      }
+    });
+    Menu menu = contextMenu.createContextMenu(control);
+    control.setMenu(menu);
+
+    int dndOperations = DND.DROP_COPY;
+    List<? extends Transfer> transfersList = OomphTransferDelegate.asTransfers(OomphTransferDelegate.DELEGATES);
+    Transfer[] transfers = transfersList.toArray(new Transfer[transfersList.size()]);
+    viewer.addDragSupport(dndOperations, transfers, new OomphDragAdapter(domain, selectionProvider, OomphTransferDelegate.DELEGATES));
+  }
+
   private void fillChildrenPane(SashForm verticalSash)
   {
     childrenViewer = new TreeViewer(verticalSash, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+    createContextMenu(childrenViewer);
     AdapterFactory adapterFactory = getAdapterFactory();
     childrenViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
     childrenViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)

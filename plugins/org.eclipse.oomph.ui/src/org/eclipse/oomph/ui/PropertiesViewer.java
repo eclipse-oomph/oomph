@@ -63,7 +63,7 @@ public class PropertiesViewer extends TableViewer
 
   public PropertiesViewer(Composite parent, int style)
   {
-    super(parent, style | SWT.H_SCROLL | SWT.V_SCROLL);
+    super(parent, style | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
     final Table table = getTable();
     UIUtil.applyGridData(table).heightHint = 64;

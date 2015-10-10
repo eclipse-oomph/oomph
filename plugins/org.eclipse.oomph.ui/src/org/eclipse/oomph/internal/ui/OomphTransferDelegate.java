@@ -568,6 +568,11 @@ public abstract class OomphTransferDelegate
         EObject eObject = (EObject)unwrappedObject;
         eObjects.add(eObject);
       }
+      else if (unwrappedObject instanceof Resource)
+      {
+        Resource resource = (Resource)unwrappedObject;
+        eObjects.addAll(resource.getContents());
+      }
     }
 
     @Override
@@ -836,16 +841,7 @@ public abstract class OomphTransferDelegate
     protected void gather(EditingDomain domain, Object object)
     {
       Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
-      if (unwrappedObject instanceof EObject)
-      {
-        EObject eObject = (EObject)unwrappedObject;
-        Resource resource = eObject.eResource();
-        if (resource != null)
-        {
-          gather(domain, resource.getURI());
-        }
-      }
-      else if (unwrappedObject instanceof Resource)
+      if (unwrappedObject instanceof Resource)
       {
         Resource resource = (Resource)unwrappedObject;
         gather(domain, resource.getURI());
@@ -939,16 +935,7 @@ public abstract class OomphTransferDelegate
     protected void gather(EditingDomain domain, Object object)
     {
       Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
-      if (unwrappedObject instanceof EObject)
-      {
-        EObject eObject = (EObject)unwrappedObject;
-        Resource resource = eObject.eResource();
-        if (resource != null)
-        {
-          gather(domain, resource.getURI());
-        }
-      }
-      else if (unwrappedObject instanceof Resource)
+      if (unwrappedObject instanceof Resource)
       {
         Resource resource = (Resource)unwrappedObject;
         gather(domain, resource.getURI());
@@ -985,6 +972,8 @@ public abstract class OomphTransferDelegate
     protected final TextTransfer textTransfer = TextTransfer.getInstance();
 
     protected Set<EObject> eObjects;
+
+    protected List<String> text;
 
     @Override
     public Transfer getTransfer()
@@ -1062,6 +1051,7 @@ public abstract class OomphTransferDelegate
     public boolean setSelection(EditingDomain domain, ISelection selection)
     {
       eObjects = new LinkedHashSet<EObject>();
+      text = new ArrayList<String>();
       if (!selection.isEmpty() && selection instanceof IStructuredSelection)
       {
         for (Object object : ((IStructuredSelection)selection).toArray())
@@ -1070,7 +1060,7 @@ public abstract class OomphTransferDelegate
         }
       }
 
-      return !eObjects.isEmpty();
+      return !eObjects.isEmpty() || !text.isEmpty();
     }
 
     protected void gather(EditingDomain domain, Object object)
@@ -1081,27 +1071,54 @@ public abstract class OomphTransferDelegate
         EObject eObject = (EObject)unwrappedObject;
         eObjects.add(eObject);
       }
+      else if (unwrappedObject instanceof Resource)
+      {
+        Resource resource = (Resource)unwrappedObject;
+        eObjects.addAll(resource.getContents());
+      }
+      else if (unwrappedObject instanceof String)
+      {
+        text.add((String)unwrappedObject);
+      }
     }
 
     @Override
     public Object getData()
     {
-      XMLResource resource = (XMLResource)RESOURCE_FACTORY.createResource(URI.createURI("dummy:/*.xmi"));
-
-      Copier copier = new EcoreUtil.Copier(true, false);
-      Collection<EObject> eObjectCopies = copier.copyAll(eObjects);
-      resource.getContents().addAll(eObjectCopies);
-
-      StringWriter writer = new StringWriter();
-      try
+      if (!eObjects.isEmpty())
       {
-        resource.save(writer, null);
-        writer.flush();
-        return writer.toString();
+        XMLResource resource = (XMLResource)RESOURCE_FACTORY.createResource(URI.createURI("dummy:/*.xmi"));
+
+        Copier copier = new EcoreUtil.Copier(true, false);
+        Collection<EObject> eObjectCopies = copier.copyAll(eObjects);
+        resource.getContents().addAll(eObjectCopies);
+
+        StringWriter writer = new StringWriter();
+        try
+        {
+          resource.save(writer, null);
+          writer.flush();
+          return writer.toString();
+        }
+        catch (IOException ex)
+        {
+          // Ignore.
+        }
       }
-      catch (IOException ex)
+      else if (!text.isEmpty())
       {
-        // Ignore.
+        StringBuilder result = new StringBuilder();
+        for (String value : text)
+        {
+          if (result.length() > 0)
+          {
+            result.append(System.getProperty("line.separator"));
+          }
+
+          result.append(value);
+        }
+
+        return result.toString();
       }
 
       return null;
@@ -1111,6 +1128,7 @@ public abstract class OomphTransferDelegate
     public void clear()
     {
       eObjects = null;
+      text = null;
     }
   }
 
