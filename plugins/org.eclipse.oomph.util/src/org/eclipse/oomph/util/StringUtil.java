@@ -568,4 +568,64 @@ public final class StringUtil
 
     return string;
   }
+
+  public static String trimLeft(String str)
+  {
+    int len = str.length();
+    int st = 0;
+
+    while (st < len && str.charAt(st) <= ' ')
+    {
+      st++;
+    }
+
+    if (st == 0)
+    {
+      return str;
+    }
+
+    return str.substring(st, len);
+  }
+
+  public static String trimRight(String str)
+  {
+    int len = str.length();
+    int end = len;
+
+    while (0 < end && str.charAt(end - 1) <= ' ')
+    {
+      end--;
+    }
+
+    if (end == len)
+    {
+      return str;
+    }
+
+    return str.substring(0, end);
+  }
+
+  public static String trimTrailingSlashes(String str)
+  {
+    int len = str.length();
+    int end = len;
+
+    while (end > 0)
+    {
+      char c = str.charAt(end - 1);
+      if (c != '/' && c != '\\')
+      {
+        break;
+      }
+
+      --end;
+    }
+
+    if (end == len)
+    {
+      return str;
+    }
+
+    return str.substring(0, end);
+  }
 }

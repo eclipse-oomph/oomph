@@ -128,6 +128,46 @@ public class StringFilterRegistry
       }
     });
 
+    registerFilter("length", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return Integer.toString(value.length());
+      }
+    });
+
+    registerFilter("trim", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return value.trim();
+      }
+    });
+
+    registerFilter("trimLeft", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return StringUtil.trimLeft(value);
+      }
+    });
+
+    registerFilter("trimRight", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return StringUtil.trimRight(value);
+      }
+    });
+
+    registerFilter("trimTrailingSlashes", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        return StringUtil.trimTrailingSlashes(value);
+      }
+    });
+
     registerFilter("upper", new StringFilter()
     {
       public String filter(String value)
