@@ -10,13 +10,13 @@
  */
 package org.eclipse.oomph.manifests;
 
+import org.eclipse.oomph.util.ObjectUtil;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
@@ -47,39 +47,51 @@ public abstract class AbstractProjectHandler extends AbstractHandler
     IProject project = getProject(page);
     if (project != null)
     {
-      execute(page, project);
+      if (executeWithProject(page, project))
+      {
+        return null;
+      }
+    }
+
+    try
+    {
+      Object element = getSelectedElement(page);
+      executeWithElement(page, element);
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
     }
 
     return null;
   }
 
-  private IProject getProject(IWorkbenchPage page)
+  protected abstract boolean executeWithProject(IWorkbenchPage page, IProject project);
+
+  protected void executeWithElement(IWorkbenchPage page, Object element) throws Exception
   {
-    IResource resource = null;
+  }
+
+  private static Object getSelectedElement(IWorkbenchPage page)
+  {
     ISelection selection = page.getSelection();
     if (selection instanceof IStructuredSelection)
     {
       IStructuredSelection ssel = (IStructuredSelection)selection;
       if (ssel.size() == 1)
       {
-        Object element = ssel.getFirstElement();
-        if (element instanceof IResource)
-        {
-          resource = (IResource)element;
-        }
-
-        if (resource == null && element instanceof IAdaptable)
-        {
-          resource = ((IAdaptable)element).getAdapter(IResource.class);
-        }
-
-        if (resource == null)
-        {
-          resource = Platform.getAdapterManager().getAdapter(element, IResource.class);
-        }
+        return ssel.getFirstElement();
       }
     }
 
+    return null;
+  }
+
+  private static IProject getProject(IWorkbenchPage page)
+  {
+    Object element = getSelectedElement(page);
+
+    IResource resource = ObjectUtil.adapt(element, IResource.class);
     if (resource == null)
     {
       IEditorPart editor = page.getActiveEditor();
@@ -100,6 +112,4 @@ public abstract class AbstractProjectHandler extends AbstractHandler
 
     return resource.getProject();
   }
-
-  protected abstract void execute(IWorkbenchPage page, IProject project);
 }

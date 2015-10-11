@@ -28,7 +28,7 @@ public class OpenPropertiesHandler extends AbstractProjectHandler
   }
 
   @Override
-  protected void execute(IWorkbenchPage page, final IProject project)
+  protected boolean executeWithProject(IWorkbenchPage page, final IProject project)
   {
     PropertyDialogAction action = new PropertyDialogAction(page.getWorkbenchWindow(), new ISelectionProvider()
     {
@@ -58,5 +58,7 @@ public class OpenPropertiesHandler extends AbstractProjectHandler
     {
       action.dispose();
     }
+
+    return true;
   }
 }
