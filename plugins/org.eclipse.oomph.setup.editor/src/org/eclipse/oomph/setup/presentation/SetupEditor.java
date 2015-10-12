@@ -67,7 +67,6 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -2049,42 +2048,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               if (o instanceof EObject)
               {
                 EObject eObject = (EObject)o;
-                if (eObject.eResource() == resource)
+                if (eObject.eResource() == resource && setupTaskPerformer.isVariableUsed(name, eObject, false))
                 {
-                  for (EAttribute attribute : eObject.eClass().getEAllAttributes())
-                  {
-                    if (attribute.isChangeable() && attribute.getEAttributeType().getInstanceClassName() == "java.lang.String"
-                        && attribute != SetupPackage.Literals.VARIABLE_TASK__NAME)
-                    {
-                      if (attribute.isMany())
-                      {
-                        @SuppressWarnings("unchecked")
-                        List<String> values = (List<String>)eObject.eGet(attribute);
-                        for (String value : values)
-                        {
-                          Set<String> variables = setupTaskPerformer.getVariables(value);
-                          if (variables.contains(name))
-                          {
-                            variableUsages.add(eObject);
-                            break;
-                          }
-                        }
-                      }
-                      else
-                      {
-                        String value = (String)eObject.eGet(attribute);
-                        if (value != null)
-                        {
-                          Set<String> variables = setupTaskPerformer.getVariables(value);
-                          if (variables.contains(name))
-                          {
-                            variableUsages.add(eObject);
-                            break;
-                          }
-                        }
-                      }
-                    }
-                  }
+                  variableUsages.add(eObject);
                 }
               }
             }

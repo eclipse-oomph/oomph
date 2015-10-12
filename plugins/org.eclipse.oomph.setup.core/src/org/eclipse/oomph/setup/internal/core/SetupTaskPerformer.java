@@ -2066,6 +2066,55 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return result;
   }
 
+  public boolean isVariableUsed(String name, EObject eObject, boolean recursive)
+  {
+    for (EAttribute attribute : eObject.eClass().getEAllAttributes())
+    {
+      if (attribute.isChangeable() && attribute.getEAttributeType().getInstanceClassName() == "java.lang.String"
+          && attribute != SetupPackage.Literals.VARIABLE_TASK__NAME)
+      {
+        if (attribute.isMany())
+        {
+          @SuppressWarnings("unchecked")
+          List<String> values = (List<String>)eObject.eGet(attribute);
+          for (String value : values)
+          {
+            Set<String> variables = getVariables(value);
+            if (variables.contains(name))
+            {
+              return true;
+            }
+          }
+        }
+        else
+        {
+          String value = (String)eObject.eGet(attribute);
+          if (value != null)
+          {
+            Set<String> variables = getVariables(value);
+            if (variables.contains(name))
+            {
+              return true;
+            }
+          }
+        }
+      }
+
+      if (recursive)
+      {
+        for (EObject child : eObject.eContents())
+        {
+          if (isVariableUsed(name, child, recursive))
+          {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
   private void propagateRestrictionsPredecessorsAndSuccessors(EList<SetupTask> setupTasks)
   {
     for (SetupTask setupTask : setupTasks)
@@ -3522,6 +3571,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             variable.setName(variableName);
             variable.setLabel(variableName + " (undeclared)");
             variable.setStorageURI(null);
+            variable.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_UNDECLARED_VARIABLE));
             unresolvedVariables.add(variable);
             demandCreatedUnresolvedVariables.add(variable);
           }

@@ -19,7 +19,9 @@ import org.eclipse.oomph.internal.ui.WorkUnit;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
@@ -96,6 +98,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   private ScrolledComposite scrolledComposite;
 
   private final FieldHolderManager manager = new FieldHolderManager();
+
+  private final Set<String> unusedVariables = new HashSet<String>();
 
   private boolean prompted;
 
@@ -195,6 +199,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private void updateFields()
   {
+    unusedVariables.clear();
+
     for (FieldHolder fieldHolder : manager)
     {
       fieldHolder.clear();
@@ -209,6 +215,27 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         VariableTask ruleVariable = setupTaskPerformer.getRuleVariable(variable);
         if (ruleVariable == null)
         {
+          if (variable.getAnnotation(AnnotationConstants.ANNOTATION_UNDECLARED_VARIABLE) != null)
+          {
+            String name = variable.getName();
+            Trigger trigger = getTrigger();
+            boolean isUsedInActualTriggeredTask = false;
+            for (SetupTask setupTask : setupTaskPerformer.getTriggeredSetupTasks())
+            {
+              if (setupTask.getTriggers().contains(trigger) && setupTaskPerformer.isVariableUsed(name, setupTask, true))
+              {
+                isUsedInActualTriggeredTask = true;
+                break;
+              }
+            }
+
+            if (!isUsedInActualTriggeredTask)
+            {
+              unusedVariables.add(name);
+              continue;
+            }
+          }
+
           manager.getFieldHolder(variable, true, false);
         }
         else
@@ -675,6 +702,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           {
             resolvedAll = false;
           }
+        }
+        else if (unusedVariables.contains(variable.getName()))
+        {
+          variable.setValue(" ");
         }
         else
         {
