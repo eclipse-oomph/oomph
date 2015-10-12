@@ -11,7 +11,6 @@
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
-import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.mylyn.MylynPackage;
@@ -156,7 +155,9 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    */
   protected EList<Query> queries;
 
-  private transient MylynHelper mylynHelper;
+  private TaskRepository repository;
+
+  private Map<Query, RepositoryQuery> repositoryQueries = new HashMap<Query, RepositoryQuery>();
 
   /**
    * <!-- begin-user-doc -->
@@ -462,196 +463,164 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    mylynHelper = MylynHelperImpl.create();
-    return mylynHelper.isNeeded(context, this);
+    EList<Query> queries = getQueries();
+    if (queries.isEmpty())
+    {
+      return false;
+    }
+
+    String connectorKind = getConnectorKind();
+    String repositoryURL = getRepositoryURL();
+    repository = TasksUi.getRepositoryManager().getRepository(connectorKind, repositoryURL);
+
+    for (Query query : queries)
+    {
+      context.checkCancelation();
+
+      RepositoryQuery repositoryQuery = getRepositoryQuery(query);
+      if (repositoryQuery == null || isQueryDifferent(query, repositoryQuery))
+      {
+        repositoryQueries.put(query, repositoryQuery);
+      }
+    }
+
+    if (repository == null)
+    {
+      return true;
+    }
+
+    if (!repositoryQueries.isEmpty())
+    {
+      return true;
+    }
+
+    return false;
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    mylynHelper.perform(context, this);
+    String connectorKind = getConnectorKind();
+    String repositoryURL = getRepositoryURL();
+
+    if (repository == null)
+    {
+      context.log("Adding " + connectorKind + " repository: " + repositoryURL);
+      repository = new TaskRepository(connectorKind, repositoryURL);
+      repository.setCredentials(AuthenticationType.PROXY, null, true);
+    }
+
+    String userID = getUserID();
+    if (isAuthenticate())
+    {
+      AuthenticationCredentials credentials = new AuthenticationCredentials(userID, password);
+      repository.setCredentials(AuthenticationType.REPOSITORY, credentials, true);
+    }
+
+    TasksUi.getRepositoryManager().addRepository(repository);
+
+    for (Map.Entry<Query, RepositoryQuery> entry : repositoryQueries.entrySet())
+    {
+      Query query = entry.getKey();
+      RepositoryQuery repositoryQuery = entry.getValue();
+
+      String summary = query.getSummary();
+
+      if (repositoryQuery == null)
+      {
+        context.log("Adding " + connectorKind + " query: " + summary);
+        String handle = TasksUiPlugin.getTaskList().getUniqueHandleIdentifier();
+        repositoryQuery = new RepositoryQuery(connectorKind, handle);
+        repositoryQuery.setSummary(summary);
+        entry.setValue(repositoryQuery);
+
+        repositoryQuery.setRepositoryUrl(repositoryURL);
+        configureQuery(context, query, repositoryQuery);
+
+        TasksUiPlugin.getTaskList().addQuery(repositoryQuery);
+      }
+      else
+      {
+        context.log("Changing " + connectorKind + " query: " + summary);
+
+        repositoryQuery.setRepositoryUrl(repositoryURL);
+        configureQuery(context, query, repositoryQuery);
+      }
+    }
+
+    Set<RepositoryQuery> queries = new HashSet<RepositoryQuery>(repositoryQueries.values());
+    TasksUiPlugin.getTaskList().notifyElementsChanged(queries);
+
+    AbstractRepositoryConnector connector = TasksUi.getRepositoryManager().getRepositoryConnector(connectorKind);
+    TasksUiInternal.synchronizeQueries(connector, repository, queries, null, true);
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  protected interface MylynHelper
+  private RepositoryQuery getRepositoryQuery(Query query) throws Exception
   {
-    public boolean isNeeded(SetupTaskContext context, MylynQueriesTask task) throws Exception;
+    for (RepositoryQuery repositoryQuery : TasksUiPlugin.getTaskList().getQueries())
+    {
+      if (ObjectUtil.equals(repositoryQuery.getSummary(), query.getSummary()))
+      {
+        return repositoryQuery;
+      }
+    }
 
-    public void perform(SetupTaskContext context, MylynQueriesTask task) throws Exception;
+    return null;
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  private static class MylynHelperImpl implements MylynHelper
+  private boolean isQueryDifferent(Query query, RepositoryQuery repositoryQuery) throws Exception
   {
-    private TaskRepository repository;
-
-    private Map<Query, RepositoryQuery> repositoryQueries = new HashMap<Query, RepositoryQuery>();
-
-    public boolean isNeeded(SetupTaskContext context, MylynQueriesTask task) throws Exception
+    String url = StringUtil.safe(query.getURL());
+    if (!ObjectUtil.equals(repositoryQuery.getUrl(), url))
     {
-      EList<Query> queries = task.getQueries();
-      if (queries.isEmpty())
-      {
-        return false;
-      }
-
-      String connectorKind = task.getConnectorKind();
-      String repositoryURL = task.getRepositoryURL();
-      repository = TasksUi.getRepositoryManager().getRepository(connectorKind, repositoryURL);
-
-      for (Query query : queries)
-      {
-        context.checkCancelation();
-
-        RepositoryQuery repositoryQuery = getRepositoryQuery(query);
-        if (repositoryQuery == null || isQueryDifferent(query, repositoryQuery))
-        {
-          repositoryQueries.put(query, repositoryQuery);
-        }
-      }
-
-      if (repository == null)
-      {
-        return true;
-      }
-
-      if (!repositoryQueries.isEmpty())
-      {
-        return true;
-      }
-
-      return false;
+      return true;
     }
 
-    public void perform(SetupTaskContext context, MylynQueriesTask task) throws Exception
+    Map<String, String> attributes = query.getAttributes().map();
+    if (!ObjectUtil.equals(repositoryQuery.getAttributes(), attributes))
     {
-      String connectorKind = task.getConnectorKind();
-      String repositoryURL = task.getRepositoryURL();
-
-      if (repository == null)
-      {
-        context.log("Adding " + connectorKind + " repository: " + repositoryURL);
-        repository = new TaskRepository(connectorKind, repositoryURL);
-        repository.setCredentials(AuthenticationType.PROXY, null, true);
-      }
-
-      String userID = task.getUserID();
-      String password = PreferencesUtil.decrypt(task.getPassword());
-      if (!StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password))
-      {
-        AuthenticationCredentials credentials = new AuthenticationCredentials(userID, password);
-        repository.setCredentials(AuthenticationType.REPOSITORY, credentials, true);
-      }
-
-      TasksUi.getRepositoryManager().addRepository(repository);
-
-      for (Map.Entry<Query, RepositoryQuery> entry : repositoryQueries.entrySet())
-      {
-        Query query = entry.getKey();
-        RepositoryQuery repositoryQuery = entry.getValue();
-
-        String summary = query.getSummary();
-
-        if (repositoryQuery == null)
-        {
-          context.log("Adding " + connectorKind + " query: " + summary);
-          String handle = TasksUiPlugin.getTaskList().getUniqueHandleIdentifier();
-          repositoryQuery = new RepositoryQuery(connectorKind, handle);
-          repositoryQuery.setSummary(summary);
-          entry.setValue(repositoryQuery);
-
-          repositoryQuery.setRepositoryUrl(repositoryURL);
-          configureQuery(context, query, repositoryQuery);
-
-          TasksUiPlugin.getTaskList().addQuery(repositoryQuery);
-        }
-        else
-        {
-          context.log("Changing " + connectorKind + " query: " + summary);
-
-          repositoryQuery.setRepositoryUrl(repositoryURL);
-          configureQuery(context, query, repositoryQuery);
-        }
-      }
-
-      Set<RepositoryQuery> queries = new HashSet<RepositoryQuery>(repositoryQueries.values());
-      TasksUiPlugin.getTaskList().notifyElementsChanged(queries);
-
-      AbstractRepositoryConnector connector = TasksUi.getRepositoryManager().getRepositoryConnector(connectorKind);
-      TasksUiInternal.synchronizeQueries(connector, repository, queries, null, true);
+      return true;
     }
 
-    private RepositoryQuery getRepositoryQuery(Query query) throws Exception
-    {
-      for (RepositoryQuery repositoryQuery : TasksUiPlugin.getTaskList().getQueries())
-      {
-        if (ObjectUtil.equals(repositoryQuery.getSummary(), query.getSummary()))
-        {
-          return repositoryQuery;
-        }
-      }
+    return false;
+  }
 
-      return null;
+  private void configureQuery(SetupTaskContext context, Query query, RepositoryQuery repositoryQuery)
+  {
+    String url = StringUtil.safe(query.getURL());
+    if (!ObjectUtil.equals(url, repositoryQuery.getUrl()))
+    {
+      context.log("Setting query URL = " + url);
+      repositoryQuery.setUrl(url);
     }
 
-    private boolean isQueryDifferent(Query query, RepositoryQuery repositoryQuery) throws Exception
+    Map<String, String> repositoryAttributes = repositoryQuery.getAttributes();
+    Map<String, String> attributes = query.getAttributes().map();
+
+    for (Entry<String, String> entry : attributes.entrySet())
     {
-      String url = StringUtil.safe(query.getURL());
-      if (!ObjectUtil.equals(repositoryQuery.getUrl(), url))
+      String key = entry.getKey();
+      String value = entry.getValue();
+
+      String repositoryValue = repositoryAttributes.get(key);
+      if (!ObjectUtil.equals(value, repositoryValue))
       {
-        return true;
-      }
-
-      Map<String, String> attributes = query.getAttributes().map();
-      if (!ObjectUtil.equals(repositoryQuery.getAttributes(), attributes))
-      {
-        return true;
-      }
-
-      return false;
-    }
-
-    private void configureQuery(SetupTaskContext context, Query query, RepositoryQuery repositoryQuery)
-    {
-      String url = StringUtil.safe(query.getURL());
-      if (!ObjectUtil.equals(url, repositoryQuery.getUrl()))
-      {
-        context.log("Setting query URL = " + url);
-        repositoryQuery.setUrl(url);
-      }
-
-      Map<String, String> repositoryAttributes = repositoryQuery.getAttributes();
-      Map<String, String> attributes = query.getAttributes().map();
-
-      for (Entry<String, String> entry : attributes.entrySet())
-      {
-        String key = entry.getKey();
-        String value = entry.getValue();
-
-        String repositoryValue = repositoryAttributes.get(key);
-        if (!ObjectUtil.equals(value, repositoryValue))
-        {
-          context.log("Setting query attribute " + key + " = " + value);
-          repositoryQuery.setAttribute(key, value);
-        }
-      }
-
-      for (String key : new ArrayList<String>(repositoryAttributes.keySet()))
-      {
-        if (!attributes.containsKey(key))
-        {
-          context.log("Removing query attribute " + key);
-          repositoryQuery.setAttribute(key, null);
-        }
+        context.log("Setting query attribute " + key + " = " + value);
+        repositoryQuery.setAttribute(key, value);
       }
     }
 
-    public static MylynHelper create()
+    for (String key : new ArrayList<String>(repositoryAttributes.keySet()))
     {
-      return new MylynHelperImpl();
+      if (!attributes.containsKey(key))
+      {
+        context.log("Removing query attribute " + key);
+        repositoryQuery.setAttribute(key, null);
+      }
     }
+  }
+
+  private boolean isAuthenticate()
+  {
+    return !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password);
   }
 } // MylynQueriesTaskImpl

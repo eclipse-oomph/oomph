@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.mylyn.builds.core.IBuildPlan;
 import org.eclipse.mylyn.builds.core.IBuildServer;
 import org.eclipse.mylyn.builds.internal.core.BuildFactory;
+import org.eclipse.mylyn.builds.internal.core.BuildModel;
 import org.eclipse.mylyn.builds.ui.BuildsUi;
 import org.eclipse.mylyn.commons.repositories.core.RepositoryLocation;
 import org.eclipse.mylyn.commons.repositories.core.auth.AuthenticationType;
@@ -41,7 +42,7 @@ import org.eclipse.mylyn.internal.builds.ui.BuildsUiInternal;
 import org.eclipse.mylyn.internal.builds.ui.BuildsUiPlugin;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -153,8 +154,6 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * @ordered
    */
   protected EList<BuildPlan> buildPlans;
-
-  private transient MylynHelper mylynHelper;
 
   /**
    * <!-- begin-user-doc -->
@@ -443,145 +442,139 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    mylynHelper = MylynHelperImpl.create();
-    return mylynHelper.isNeeded(context, this);
-  }
-
-  public void perform(SetupTaskContext context) throws Exception
-  {
-    mylynHelper.perform(context, this);
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  protected interface MylynHelper
-  {
-    public boolean isNeeded(SetupTaskContext context, MylynBuildsTask task) throws Exception;
-
-    public void perform(SetupTaskContext context, MylynBuildsTask task) throws Exception;
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static class MylynHelperImpl implements MylynHelper
-  {
-    private IBuildServer server;
-
-    private Set<String> buildPlanNames = new HashSet<String>();
-
-    public boolean isNeeded(SetupTaskContext context, MylynBuildsTask task) throws Exception
+    IBuildServer server = getServer();
+    if (server == null)
     {
-      String serverURL = task.getServerURL();
-      server = getServer(serverURL);
+      return true;
+    }
 
-      for (BuildPlan buildPlan : task.getBuildPlans())
-      {
-        buildPlanNames.add(buildPlan.getName());
-      }
-
-      for (IBuildPlan buildPlan : BuildsUi.getModel().getPlans())
-      {
-        if (buildPlan.getServer() == server)
-        {
-          buildPlanNames.remove(buildPlan.getName());
-        }
-      }
-
-      if (server == null)
+    if (isAuthenticate())
+    {
+      UserCredentials credentials = server.getLocation().getCredentials(AuthenticationType.REPOSITORY);
+      if (credentials == null || !ObjectUtil.equals(credentials.getPassword(), getPassword()))
       {
         return true;
       }
-
-      if (!buildPlanNames.isEmpty())
-      {
-        return true;
-      }
-
-      return false;
     }
 
-    public void perform(final SetupTaskContext context, final MylynBuildsTask task) throws Exception
+    return !getMissingBuildPlans(server).isEmpty();
+  }
+
+  public void perform(final SetupTaskContext context) throws Exception
+  {
+    UserCallback callback = context.getPrompter().getUserCallback();
+    callback.execInUI(false, new Runnable()
     {
-      UserCallback callback = context.getPrompter().getUserCallback();
-      callback.execInUI(false, new Runnable()
+      public void run()
       {
-        public void run()
+        BuildModel buildModel = BuildsUiInternal.getModel();
+        String connectorKind = getConnectorKind();
+
+        IBuildServer server = getServer();
+        if (server != null)
         {
-          String connectorKind = task.getConnectorKind();
-
-          if (server == null)
+          if (isAuthenticate())
           {
-            String serverURL = task.getServerURL();
-            String userID = task.getUserID();
-            String password = PreferencesUtil.decrypt(task.getPassword());
-
-            context.log("Adding " + connectorKind + " server: " + serverURL);
-
-            server = BuildsUi.createServer(connectorKind);
-            server.setUrl(serverURL);
-            server.getAttributes().put("id", serverURL);
-            server.getAttributes().put("url", serverURL);
-
-            boolean authenticate = !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password);
-            if (authenticate)
-            {
-              server.getAttributes().put("org.eclipse.mylyn.tasklist.repositories.enabled", "true");
-              server.getAttributes().put("org.eclipse.mylyn.repositories.username", userID);
-            }
-
-            // Add credentials to the repository
-            RepositoryLocation repositoryLocation = new RepositoryLocation(server.getAttributes());
-            repositoryLocation.setUrl(serverURL);
-            if (authenticate)
-            {
-              UserCredentials credentials = new UserCredentials(userID, password, true);
-              repositoryLocation.setCredentials(AuthenticationType.REPOSITORY, credentials);
-            }
-
-            repositoryLocation.setProxy(null);
-
-            server.setLocation(repositoryLocation);
-
-            BuildsUiInternal.getModel().getServers().add(server);
+            UserCredentials credentials = new UserCredentials(userID, password, true);
+            server.getLocation().setCredentials(AuthenticationType.REPOSITORY, credentials);
           }
-
-          for (String buildPlanName : buildPlanNames)
-          {
-            context.log("Adding " + connectorKind + " build plan: " + buildPlanName);
-
-            IBuildPlan buildPlan = BuildFactory.eINSTANCE.createBuildPlan();
-            buildPlan.setId(buildPlanName);
-            buildPlan.setName(buildPlanName);
-            buildPlan.setServer(server);
-            buildPlan.setSelected(true);
-
-            BuildsUiInternal.getModel().getPlans().add(buildPlan);
-          }
-
-          BuildsUiPlugin.getDefault().refreshBuilds();
         }
-      });
+        else
+        {
+          String serverURL = getServerURL();
+          String userID = getUserID();
+          String password = PreferencesUtil.decrypt(getPassword());
+
+          context.log("Adding " + connectorKind + " server: " + serverURL);
+
+          server = BuildsUi.createServer(connectorKind);
+          server.setUrl(serverURL);
+          server.getAttributes().put("id", serverURL);
+          server.getAttributes().put("url", serverURL);
+
+          boolean authenticate = isAuthenticate();
+          if (authenticate)
+          {
+            server.getAttributes().put("org.eclipse.mylyn.tasklist.repositories.enabled", "true");
+            server.getAttributes().put("org.eclipse.mylyn.repositories.username", userID);
+          }
+
+          // Add credentials to the repository
+          RepositoryLocation repositoryLocation = new RepositoryLocation(server.getAttributes());
+          repositoryLocation.setUrl(serverURL);
+          if (authenticate)
+          {
+            UserCredentials credentials = new UserCredentials(userID, password, true);
+            repositoryLocation.setCredentials(AuthenticationType.REPOSITORY, credentials);
+          }
+
+          repositoryLocation.setProxy(null);
+
+          server.setLocation(repositoryLocation);
+
+          buildModel.getServers().add(server);
+        }
+
+        Set<String> buildPlanNames = getMissingBuildPlans(server);
+        for (String buildPlanName : buildPlanNames)
+        {
+          context.log("Adding " + connectorKind + " build plan: " + buildPlanName);
+
+          IBuildPlan buildPlan = BuildFactory.eINSTANCE.createBuildPlan();
+          buildPlan.setId(buildPlanName);
+          buildPlan.setName(buildPlanName);
+          buildPlan.setServer(server);
+          buildPlan.setSelected(true);
+
+          buildModel.getPlans().add(buildPlan);
+        }
+
+        BuildsUiPlugin.getDefault().refreshBuilds();
+      }
+    });
+  }
+
+  private boolean isAuthenticate()
+  {
+    return !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password);
+  }
+
+  private Set<String> getMissingBuildPlans(IBuildServer server)
+  {
+    Set<String> buildPlanNames = new LinkedHashSet<String>();
+    for (BuildPlan buildPlan : getBuildPlans())
+    {
+      buildPlanNames.add(buildPlan.getName());
     }
 
-    private IBuildServer getServer(String serverURL)
+    for (IBuildPlan buildPlan : BuildsUi.getModel().getPlans())
     {
-      for (IBuildServer server : BuildsUi.getModel().getServers())
+      if (buildPlan.getServer() == server)
       {
-        if (ObjectUtil.equals(server.getUrl(), serverURL))
+        buildPlanNames.remove(buildPlan.getName());
+      }
+    }
+
+    return buildPlanNames;
+  }
+
+  private IBuildServer getServer()
+  {
+    String serverURL = getServerURL();
+    String userID = getUserID();
+    String connectorKind = getConnectorKind();
+    for (IBuildServer server : BuildsUi.getModel().getServers())
+    {
+      if (ObjectUtil.equals(server.getUrl(), serverURL) && ObjectUtil.equals(server.getConnectorKind(), connectorKind))
+      {
+        if (!isAuthenticate() || userID.equals(server.getAttributes().get("org.eclipse.mylyn.repositories.username")))
         {
           return server;
         }
       }
-
-      return null;
     }
 
-    public static MylynHelper create()
-    {
-      return new MylynHelperImpl();
-    }
+    return null;
   }
 
 } // MylynBuildsTaskImpl
