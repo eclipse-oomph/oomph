@@ -25,6 +25,8 @@ public final class AnnotationConstants
 
   public static final String KEY_FOLDER_NAME = "folderName";
 
+  public static final String ANNOTATION_STATS_SENDING = "http://www.eclipse.org/oomph/setup/StatsSending";
+
   public static final String ANNOTATION_USER_PREFERENCES = "http://www.eclipse.org/oomph/setup/UserPreferences";
 
   public static final String ANNOTATION_INHERITED_CHOICES = "http://www.eclipse.org/oomph/setup/InheritedChoices";

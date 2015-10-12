@@ -6,6 +6,13 @@
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     name="com.github"
     label="Github Projects">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/StatsSending">
+    <detail
+        key="uri">
+      <value>http://download.eclipse.org/stats/oomph</value>
+    </detail>
+  </annotation>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="Global Variables">

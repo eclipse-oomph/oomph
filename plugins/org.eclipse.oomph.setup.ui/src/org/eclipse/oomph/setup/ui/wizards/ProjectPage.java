@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
+import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
@@ -842,6 +843,11 @@ public class ProjectPage extends SetupWizardPage
   @Override
   public void sendStats(boolean success)
   {
+    if (getTrigger() == Trigger.BOOTSTRAP)
+    {
+      return;
+    }
+
     super.sendStats(success);
 
     // If we've failed but there are streams involved, they can be the cause of the failure so don't blame the product.

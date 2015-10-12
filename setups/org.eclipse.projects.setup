@@ -8,6 +8,13 @@
     xsi:schemaLocation="http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"
     name="org.eclipse"
     label="Eclipse Projects">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/StatsSending">
+    <detail
+        key="uri">
+      <value>http://download.eclipse.org/stats/oomph</value>
+    </detail>
+  </annotation>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="Global Variables">

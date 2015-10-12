@@ -20,8 +20,8 @@ import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Scope;
-import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler;
@@ -85,7 +85,7 @@ public final class SetupCoreUtil
 {
   public static final String OOMPH_NAMESPACE = "org.eclipse.oomph";
 
-  private static final URI STATS_URI_PREFIX = URI.createURI("http://download.eclipse.org/stats/oomph");
+  public static final String STATS_URI = "http://download.eclipse.org/stats/oomph";
 
   private static final AuthorizationHandler AUTHORIZATION_HANDLER;
 
@@ -467,18 +467,17 @@ public final class SetupCoreUtil
         ResourceSet resourceSet = resource.getResourceSet();
         if (resourceSet != null)
         {
-          URI statusURI = STATS_URI_PREFIX;
-          ScopeType type = scope.getType();
-          switch (type)
+          String prefix;
+          switch (scope.getType())
           {
             case PRODUCT_VERSION:
             {
-              statusURI = statusURI.appendSegment("product");
+              prefix = "product";
               break;
             }
             case STREAM:
             {
-              statusURI = statusURI.appendSegment("project");
+              prefix = "project";
               break;
             }
             default:
@@ -487,19 +486,45 @@ public final class SetupCoreUtil
             }
           }
 
-          statusURI = statusURI.appendSegment(success ? "success" : "failure");
+          URI statusURI = null;
+
           List<String> names = new ArrayList<String>();
           for (Scope x = scope; x != null; x = x.getParentScope())
           {
+            if (SetupContext.isUserScheme(EcoreUtil.getURI(x).scheme()))
+            {
+              return;
+            }
+
+            if (statusURI == null)
+            {
+              Annotation annotation = x.getAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
+              if (annotation != null)
+              {
+                String uri = annotation.getDetails().get(AnnotationConstants.KEY_URI);
+                if (StringUtil.isEmpty(uri))
+                {
+                  return;
+                }
+
+                statusURI = URI.createURI(uri);
+              }
+            }
+
             names.add(0, URI.encodeSegment(x.getName(), false));
           }
 
-          for (String name : names)
+          if (statusURI != null)
           {
-            statusURI = statusURI.appendSegment(name);
-          }
+            statusURI = statusURI.appendSegment(prefix).appendSegment(success ? "success" : "failure");
 
-          resourceSet.getURIConverter().exists(statusURI, null);
+            for (String name : names)
+            {
+              statusURI = statusURI.appendSegment(name);
+            }
+
+            resourceSet.getURIConverter().exists(statusURI, null);
+          }
         }
       }
     }

@@ -27,6 +27,7 @@ import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupFactory;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.CollectionUtil;
@@ -244,9 +245,13 @@ public class ProductCatalogGenerator implements IApplication
       productCatalog.setName("org.eclipse.products");
       productCatalog.setLabel("Eclipse.org");
 
-      Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      annotation.getDetails().put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
-      productCatalog.getAnnotations().add(annotation);
+      Annotation brandingInfo = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      brandingInfo.getDetails().put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
+      productCatalog.getAnnotations().add(brandingInfo);
+
+      Annotation statsSending = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
+      statsSending.getDetails().put(AnnotationConstants.KEY_URI, SetupCoreUtil.STATS_URI);
+      productCatalog.getAnnotations().add(statsSending);
 
       InstallationTask installationTask = SetupFactory.eINSTANCE.createInstallationTask();
       installationTask.setID("installation");
