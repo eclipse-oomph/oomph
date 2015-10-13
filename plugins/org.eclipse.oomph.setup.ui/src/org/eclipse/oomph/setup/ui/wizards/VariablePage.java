@@ -47,6 +47,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -118,6 +119,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   private SetupContext originalContext;
 
   private boolean save = true;
+
+  private boolean defaultsSet;
 
   private FocusListener focusListener = new FocusAdapter()
   {
@@ -446,6 +449,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
     }
 
+    if (setDefault)
+    {
+      defaultsSet = true;
+    }
+
     if (!isPageComplete() && (firstEmptyField == null || setDefault))
     {
       // If the page isn't complete but there are no empty fields, then the last change introduced a new field.
@@ -564,7 +572,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         {
           public void run()
           {
-            if (isPageComplete())
+            if (isPageComplete() && !defaultsSet)
             {
               gotoNextPage();
             }
@@ -1158,7 +1166,25 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         return URI.createURI("#" + name);
       }
 
-      URI uri = variable.eResource() == null ? URI.createURI("#") : EcoreUtil.getURI(variable);
+      Resource resource = variable.eResource();
+      URI uri;
+      if (resource == null)
+      {
+        uri = URI.createURI("#");
+      }
+      else
+      {
+        EObject eObject = resource.getContents().get(0);
+        if (eObject instanceof Installation || eObject instanceof Workspace)
+        {
+          uri = URI.createURI(resource.getURI().lastSegment()).appendFragment(resource.getURIFragment(variable));
+        }
+        else
+        {
+          uri = EcoreUtil.getURI(variable);
+        }
+      }
+
       uri = uri.appendFragment(uri.fragment() + "~" + name);
       return uri;
     }

@@ -484,7 +484,7 @@ public abstract class PropertyField
    */
   public static class CheckboxField extends PropertyField
   {
-    private TristateCheckbox button;
+    private Button button;
 
     public CheckboxField()
     {
@@ -511,18 +511,7 @@ public abstract class PropertyField
     @Override
     protected String getControlValue()
     {
-      if (button == null)
-      {
-        return "";
-      }
-
-      Boolean selection = button.getTristateSelection();
-      if (selection == null)
-      {
-        return "";
-      }
-
-      return selection ? "true" : "false";
+      return Boolean.toString(button != null && button.getSelection());
     }
 
     @Override
@@ -530,20 +519,14 @@ public abstract class PropertyField
     {
       if (button != null)
       {
-        Boolean selection = null;
-        if (!StringUtil.isEmpty(value))
-        {
-          selection = "true".equalsIgnoreCase(value);
-        }
-
-        button.setTristateSelection(selection);
+        button.setSelection(Boolean.valueOf(value));
       }
     }
 
     @Override
     protected Control createControl(Composite parent)
     {
-      button = new TristateCheckbox(parent);
+      button = new Button(parent, SWT.CHECK);
       button.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -569,71 +552,6 @@ public abstract class PropertyField
     protected String computeLinkedValue(String thisValue, String linkValue)
     {
       return linkValue;
-    }
-
-    /**
-     * @author Eike Stepper
-     */
-    private static final class TristateCheckbox extends Button
-    {
-      private Boolean tristateSelection;
-
-      public TristateCheckbox(Composite parent)
-      {
-        super(parent, SWT.CHECK);
-        setTristateSelection(null);
-
-        addSelectionListener(new SelectionAdapter()
-        {
-          @Override
-          public void widgetSelected(SelectionEvent e)
-          {
-            if (tristateSelection == null)
-            {
-              tristateSelection = true;
-            }
-            else if (tristateSelection)
-            {
-              tristateSelection = false;
-            }
-            else
-            {
-              tristateSelection = null;
-            }
-
-            updateTristateSelection();
-          }
-        });
-      }
-
-      @Override
-      protected void checkSubclass()
-      {
-        // Don't check.
-      }
-
-      @Override
-      public void setSelection(boolean selection)
-      {
-        // Do nothing
-      }
-
-      public Boolean getTristateSelection()
-      {
-        return tristateSelection;
-      }
-
-      public void setTristateSelection(Boolean selection)
-      {
-        tristateSelection = selection;
-        updateTristateSelection();
-      }
-
-      private void updateTristateSelection()
-      {
-        setGrayed(tristateSelection == null);
-        super.setSelection(!Boolean.FALSE.equals(tristateSelection));
-      }
     }
   }
 
