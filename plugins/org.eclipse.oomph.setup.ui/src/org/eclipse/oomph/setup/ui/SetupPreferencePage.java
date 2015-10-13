@@ -56,16 +56,23 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
   {
     final Composite parent = getFieldEditorParent();
 
-    BooleanFieldEditor skipAutomaticTaskExecution = new BooleanFieldEditor(SetupUIPlugin.PREF_SKIP_STARTUP_TASKS,
-        "Skip automatic task execution at startup time", parent);
-    skipAutomaticTaskExecution.fillIntoGrid(parent, 3);
-    addField(skipAutomaticTaskExecution);
-    skipAutomaticTaskExecution.getDescriptionControl(parent).setToolTipText("Don't automatically perform setup tasks when a new workspace is opened");
+    addBooleanField(parent, //
+        SetupUIPlugin.PREF_SKIP_STARTUP_TASKS, //
+        "Skip automatic task execution at startup time", //
+        "Don't automatically perform setup tasks when a new workspace is opened");
 
-    BooleanFieldEditor showToolBars = new BooleanFieldEditor(SetupPropertyTester.SHOW_TOOL_BAR_CONTRIBUTIONS, "Show tool bar contributions", parent);
-    showToolBars.fillIntoGrid(parent, 3);
-    addField(showToolBars);
-    showToolBars.getDescriptionControl(parent).setToolTipText("Show the 'Perform Setup Tasks' and 'Open Setups' tool bar contributions on the main tool bar");
+    addBooleanField(parent, //
+        SetupPropertyTester.SHOW_TOOL_BAR_CONTRIBUTIONS, //
+        "Show tool bar contributions", //
+        "Show the 'Perform Setup Tasks' and 'Open Setups' tool bar contributions on the main tool bar");
+
+    addBooleanField(parent, //
+        SetupPropertyTester.SHOW_PROGRESS_IN_WIZARD, //
+        "Show progress in setup wizard", //
+        "Don't automatically minimize the setup wizard when it starts performing.\n" //
+            + "If this setting is enabled the wizard can be manually minimized.\n" //
+            + "A minimized wizard can be restored by clicking the animated perform\n" //
+            + "button in the status bar in front of the progress indicator.");
 
     final StringButtonFieldEditor preferredTextEditor = new StringButtonFieldEditor(SetupEditorSupport.PREF_TEXT_EDITOR_ID, "Preferred text editor for models",
         parent)
@@ -122,5 +129,13 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
         }
       });
     }
+  }
+
+  private void addBooleanField(final Composite parent, String preferenceName, String label, String toolTip)
+  {
+    BooleanFieldEditor fieldEditor = new BooleanFieldEditor(preferenceName, label, parent);
+    fieldEditor.fillIntoGrid(parent, 3);
+    addField(fieldEditor);
+    fieldEditor.getDescriptionControl(parent).setToolTipText(toolTip);
   }
 }

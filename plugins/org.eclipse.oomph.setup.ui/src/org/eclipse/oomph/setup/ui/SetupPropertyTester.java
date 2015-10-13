@@ -28,6 +28,8 @@ public class SetupPropertyTester extends PropertyTester
 {
   public static final String SHOW_TOOL_BAR_CONTRIBUTIONS = "showToolBarContributions";
 
+  public static final String SHOW_PROGRESS_IN_WIZARD = "showProgressInWizard";
+
   private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
 
   // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
@@ -148,11 +150,6 @@ public class SetupPropertyTester extends PropertyTester
     UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.starting", false);
   }
 
-  public static Shell getPerformingShell()
-  {
-    return performingShell;
-  }
-
   public static IStatus getPerformingStatus()
   {
     return performingStatus;
@@ -163,13 +160,17 @@ public class SetupPropertyTester extends PropertyTester
     SetupPropertyTester.performingStatus = performingStatus;
   }
 
+  public static Shell getPerformingShell()
+  {
+    return performingShell;
+  }
+
   public static void setPerformingShell(Shell shell)
   {
     SetupPropertyTester.performingShell = shell;
 
     if (shell != null)
     {
-      shell.setVisible(false);
       shell.addDisposeListener(new DisposeListener()
       {
         public void widgetDisposed(DisposeEvent e)
@@ -203,5 +204,10 @@ public class SetupPropertyTester extends PropertyTester
     }
 
     UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.handling", false);
+  }
+
+  public static boolean isShowProgressInWizard()
+  {
+    return PREFERENCES.getBoolean(SHOW_PROGRESS_IN_WIZARD, false);
   }
 }

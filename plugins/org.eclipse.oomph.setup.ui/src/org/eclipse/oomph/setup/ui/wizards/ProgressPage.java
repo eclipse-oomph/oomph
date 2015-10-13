@@ -631,7 +631,7 @@ public class ProgressPage extends SetupWizardPage
         public void run()
         {
           final SetupWizard wizard = getWizard();
-          final Shell shell = getWizard().getShell();
+          final Shell shell = wizard.getShell();
 
           setButtonState(IDialogConstants.CANCEL_ID, false);
           setButtonState(IDialogConstants.BACK_ID, false);
@@ -927,8 +927,14 @@ public class ProgressPage extends SetupWizardPage
 
               job.schedule();
 
-              if (wizard.getTrigger() != Trigger.BOOTSTRAP)
+              Trigger trigger = wizard.getTrigger();
+              if (trigger != Trigger.BOOTSTRAP)
               {
+                if (trigger == Trigger.STARTUP || !SetupPropertyTester.isShowProgressInWizard())
+                {
+                  shell.setVisible(false);
+                }
+
                 SetupPropertyTester.setPerformingShell(shell);
               }
             }
