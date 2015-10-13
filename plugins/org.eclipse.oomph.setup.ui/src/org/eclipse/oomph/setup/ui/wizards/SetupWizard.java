@@ -1274,11 +1274,13 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       super(performer);
       openInBackground = true;
+      setWindowTitle("Eclipse Updater");
     }
 
     public Updater(SetupContext setupContext)
     {
       super(setupContext);
+      setWindowTitle("Eclipse Updater");
     }
 
     @Override
