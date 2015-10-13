@@ -152,6 +152,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Font;
@@ -2008,6 +2010,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     public void createControl(Composite parent)
     {
       super.createControl(parent);
+
+      parent.addDisposeListener(new DisposeListener()
+      {
+        public void widgetDisposed(DisposeEvent e)
+        {
+          contentOutlinePage = null;
+        }
+      });
+
       contentOutlineViewer = getTreeViewer();
       contentOutlineViewer.addSelectionChangedListener(this);
 
@@ -2106,7 +2117,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         public void selectionChanged(SelectionChangedEvent event)
         {
           IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-          if (selectionViewer != null && !selection.isEmpty())
+          if (selectionViewer != null && !selection.isEmpty() && contentOutlinePage != null)
           {
             ArrayList<Object> selectionList = new ArrayList<Object>();
             for (Object object : selection.toArray())
@@ -2485,7 +2496,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           public void run()
           {
             OutlinePreviewPage.this.trigger = trigger;
-            super.run();
             update(2);
           }
         });
@@ -2514,6 +2524,17 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       // The content outline is just a tree.
       //
       contentOutlinePage = new OutlinePreviewPage();
+
+      getSite().getShell().getDisplay().asyncExec(new Runnable()
+      {
+        public void run()
+        {
+          if (contentOutlinePage != null && resourceMirror == null)
+          {
+            contentOutlinePage.update(2);
+          }
+        }
+      });
 
       // Listen to selection so that we can handle it is a special way.
       //
