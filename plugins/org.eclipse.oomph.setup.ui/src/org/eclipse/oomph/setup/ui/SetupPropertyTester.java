@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.internal.ui.UIPropertyTester;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.runtime.IStatus;
@@ -31,9 +32,6 @@ public class SetupPropertyTester extends PropertyTester
   public static final String SHOW_PROGRESS_IN_WIZARD = "showProgressInWizard";
 
   private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
-
-  // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
-  private static boolean initialized;
 
   private static boolean starting;
 
@@ -57,26 +55,13 @@ public class SetupPropertyTester extends PropertyTester
     });
 
     // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
-    if (!initialized)
+    UIUtil.timerExec(2000, new Runnable()
     {
-      new Thread()
+      public void run()
       {
-        @Override
-        public void run()
-        {
-          try
-          {
-            sleep(2000);
-            initialized = true;
-            UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui." + SHOW_TOOL_BAR_CONTRIBUTIONS, true);
-          }
-          catch (Throwable ex)
-          {
-            ex.printStackTrace();
-          }
-        }
-      }.start();
-    }
+        UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui." + SHOW_TOOL_BAR_CONTRIBUTIONS, true);
+      }
+    });
   }
 
   public SetupPropertyTester()
@@ -107,7 +92,7 @@ public class SetupPropertyTester extends PropertyTester
         expectedValue = Boolean.TRUE;
       }
 
-      boolean value = initialized ? PREFERENCES.getBoolean(SHOW_TOOL_BAR_CONTRIBUTIONS, false) : false;
+      boolean value = PREFERENCES.getBoolean(SHOW_TOOL_BAR_CONTRIBUTIONS, false);
       return expectedValue.equals(value);
     }
 

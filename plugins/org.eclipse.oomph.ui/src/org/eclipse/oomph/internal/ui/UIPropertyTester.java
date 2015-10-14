@@ -33,9 +33,6 @@ public class UIPropertyTester extends PropertyTester
 
   private static final Preferences PREFERENCES = UIPlugin.INSTANCE.getInstancePreferences();
 
-  // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
-  private static boolean initialized;
-
   static
   {
     ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
@@ -50,26 +47,13 @@ public class UIPropertyTester extends PropertyTester
     });
 
     // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
-    if (!initialized)
+    UIUtil.timerExec(2000, new Runnable()
     {
-      new Thread()
+      public void run()
       {
-        @Override
-        public void run()
-        {
-          try
-          {
-            sleep(2000);
-            initialized = true;
-            UIPropertyTester.requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, true);
-          }
-          catch (Throwable ex)
-          {
-            ex.printStackTrace();
-          }
-        }
-      }.start();
-    }
+        UIPropertyTester.requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, true);
+      }
+    });
   }
 
   public UIPropertyTester()
@@ -85,7 +69,7 @@ public class UIPropertyTester extends PropertyTester
 
     if (SHOW_OFFLINE.equals(property))
     {
-      boolean value = initialized ? PREFERENCES.getBoolean(SHOW_OFFLINE, false) : false;
+      boolean value = PREFERENCES.getBoolean(SHOW_OFFLINE, false);
       return expectedValue.equals(value);
     }
 
