@@ -729,7 +729,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   protected void handleActivate()
   {
-    if (!isHandlingActivate && resourceMirror == null)
+    if (!getContainer().isDisposed() && !isHandlingActivate && resourceMirror == null)
     {
       isHandlingActivate = true;
 
