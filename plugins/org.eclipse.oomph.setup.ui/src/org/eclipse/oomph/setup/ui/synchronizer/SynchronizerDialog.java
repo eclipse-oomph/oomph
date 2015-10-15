@@ -45,6 +45,8 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.preference.JFacePreferences;
+import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -53,6 +55,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -70,6 +73,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.PlatformUI;
 
 import java.io.File;
 import java.io.IOException;
@@ -1234,11 +1238,11 @@ public class SynchronizerDialog extends AbstractRecorderDialog
    */
   private static abstract class ColumnManager
   {
-    protected static final Image CHEVRON_IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Chevron");
+    private static final ColorRegistry COLOR_REGISTRY = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getColorRegistry();
 
-    protected static final Image CHEVRON_IMAGE_DISABLED = new Image(CHEVRON_IMAGE.getDevice(), CHEVRON_IMAGE, SWT.IMAGE_DISABLE);
+    private static final Color CHEVRON_COLOR = COLOR_REGISTRY.get(JFacePreferences.CONTENT_ASSIST_FOREGROUND_COLOR);
 
-    private static final int CHEVRON_WIDTH = CHEVRON_IMAGE.getBounds().width;
+    private static final int CHEVRON_WIDTH = 9;
 
     private static final int WIDTH = H_INDENT + ICON + SPACE + ICON + SPACE + CHEVRON_WIDTH + H_INDENT;
 
@@ -1293,7 +1297,21 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
         boolean enabled = taskItem.getParent().isEnabled();
         gc.drawImage(enabled && choice.hasTarget() ? targetImage : targetImageDisabled, x, y);
-        gc.drawImage(enabled ? CHEVRON_IMAGE : CHEVRON_IMAGE_DISABLED, x + ICON + SPACE, y);
+
+        x += ICON + SPACE;
+        int[] chevronPoints = { x + 1, y + 4, x + 4, y + 8, x + 8, y + 4 };
+
+        if (CHEVRON_COLOR != null)
+        {
+          Color oldBackground = gc.getBackground();
+          gc.setBackground(CHEVRON_COLOR);
+          gc.fillPolygon(chevronPoints);
+          gc.setBackground(oldBackground);
+        }
+        else
+        {
+          gc.fillPolygon(chevronPoints);
+        }
       }
     }
 
