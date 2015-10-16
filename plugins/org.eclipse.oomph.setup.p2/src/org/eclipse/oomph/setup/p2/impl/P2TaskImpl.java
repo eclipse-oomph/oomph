@@ -52,6 +52,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -917,7 +918,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       Confirmation confirmation = licenseConfirmer.confirm(false, licensesToIUs);
       if (!confirmation.isConfirmed())
       {
-        throw new UnsupportedOperationException("Licenses have been declined");
+        throw new OperationCanceledException("Licenses have been declined");
       }
 
       if (user != null && confirmation.isRemember())

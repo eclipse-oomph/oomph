@@ -3038,6 +3038,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
     catch (OperationCanceledException ex)
     {
+      monitor.setCanceled(true);
       throw ex;
     }
     catch (InterruptedException ex)

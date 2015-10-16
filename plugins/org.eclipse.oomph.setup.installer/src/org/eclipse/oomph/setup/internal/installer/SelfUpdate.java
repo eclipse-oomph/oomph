@@ -28,6 +28,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -157,6 +158,10 @@ public class SelfUpdate
               }
             }
           });
+        }
+        catch (OperationCanceledException ex)
+        {
+          // Ignore.
         }
         catch (final CoreException ex)
         {
