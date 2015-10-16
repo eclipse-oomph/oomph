@@ -61,4 +61,13 @@
       	</product>
    	</extension>
 
+    <extension
+          id="DefaultPasswordProvider"
+          point="org.eclipse.equinox.security.secureStorage">
+       <provider
+             class="org.eclipse.oomph.setup.internal.installer.DefaultPasswordProvider"
+             priority="3">
+       </provider>
+    </extension>
+
 </plugin>

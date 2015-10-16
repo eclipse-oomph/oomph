@@ -87,7 +87,7 @@ public final class SetupCoreUtil
 
   public static final String STATS_URI = "http://download.eclipse.org/stats/oomph";
 
-  private static final AuthorizationHandler AUTHORIZATION_HANDLER;
+  public static final AuthorizationHandler AUTHORIZATION_HANDLER;
 
   static
   {

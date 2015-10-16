@@ -16,6 +16,7 @@ import org.eclipse.oomph.preferences.Property;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -37,7 +38,6 @@ import org.eclipse.core.runtime.preferences.IPreferenceNodeVisitor;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
-import org.eclipse.equinox.security.storage.provider.IProviderHints;
 
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
@@ -92,21 +92,68 @@ public final class PreferencesUtil
 
   private static final IEclipsePreferences ROOT = Platform.getPreferencesService().getRootNode();
 
+  private static final Map<ISecurePreferences, ISecurePreferences> WRAPPERS = new HashMap<ISecurePreferences, ISecurePreferences>();
+
+  @SuppressWarnings("restriction")
   public static ISecurePreferences getSecurePreferences()
   {
-    Map<Object, Object> options = new HashMap<Object, Object>();
-    options.put(IProviderHints.PROMPT_USER, Boolean.FALSE);
-
-    try
+    ISecurePreferences defaultSecurePreferences = SecurePreferencesFactory.getDefault();
+    if (defaultSecurePreferences instanceof org.eclipse.equinox.internal.security.storage.SecurePreferencesWrapper)
     {
-      return SecurePreferencesFactory.open(null, options);
-    }
-    catch (IOException ex)
-    {
-      // log(ex);
+      synchronized (WRAPPERS)
+      {
+        // We create our own wrapper for the secure preferences; one that will reload the storage when it's changed by another process.
+        ISecurePreferences securePreferences = WRAPPERS.get(defaultSecurePreferences);
+        if (securePreferences == null)
+        {
+          try
+          {
+            // Extract the node and container of the existing wrapper
+            org.eclipse.equinox.internal.security.storage.SecurePreferences node = ReflectUtil.getValue("node", defaultSecurePreferences);
+            org.eclipse.equinox.internal.security.storage.SecurePreferencesContainer container = ReflectUtil.getValue("container", defaultSecurePreferences);
+
+            // Extract the options and root of the existing container.
+            Map<Object, Object> options = ReflectUtil.getValue("options", container);
+            org.eclipse.equinox.internal.security.storage.SecurePreferencesRoot root = ReflectUtil.getValue("root", container);
+
+            // Create a container that creates our specialized wrappers instead of the basic ones.
+            container = new org.eclipse.equinox.internal.security.storage.SecurePreferencesContainer(root, options)
+            {
+              final Map<org.eclipse.equinox.internal.security.storage.SecurePreferences, ISecurePreferences> myWrappers = ReflectUtil.getValue("wrappers",
+                  this);
+
+              @Override
+              public ISecurePreferences wrapper(org.eclipse.equinox.internal.security.storage.SecurePreferences node)
+              {
+                synchronized (myWrappers)
+                {
+                  ISecurePreferences wrapper = myWrappers.get(node);
+                  if (wrapper == null)
+                  {
+                    wrapper = new AutoRefreshSecurePreferencesWrapper(node, this);
+                    myWrappers.put(node, wrapper);
+                  }
+
+                  return wrapper;
+                }
+              }
+            };
+
+            securePreferences = new AutoRefreshSecurePreferencesWrapper(node, container);
+          }
+          catch (RuntimeException ex)
+          {
+            return defaultSecurePreferences;
+          }
+
+          WRAPPERS.put(defaultSecurePreferences, securePreferences);
+        }
+
+        defaultSecurePreferences = securePreferences;
+      }
     }
 
-    return null;
+    return defaultSecurePreferences;
   }
 
   public static PreferenceNode getRootPreferenceNode()
@@ -444,6 +491,220 @@ public final class PreferencesUtil
   public static String decrypt(String value)
   {
     return CIPHER.decrypt(value);
+  }
+
+  /**
+   * A specialized secure preferences wrapper that auto refreshes, i.e., the reloads the secure store what it has changed in the file system, presumably because another process has changed it.
+   * @author Ed Merks
+   */
+  @SuppressWarnings("restriction")
+  private static final class AutoRefreshSecurePreferencesWrapper extends org.eclipse.equinox.internal.security.storage.SecurePreferencesWrapper
+  {
+    private AutoRefreshSecurePreferencesWrapper(org.eclipse.equinox.internal.security.storage.SecurePreferences node,
+        org.eclipse.equinox.internal.security.storage.SecurePreferencesContainer container)
+    {
+      super(node, container);
+    }
+
+    @Override
+    public String absolutePath()
+    {
+      refresh();
+      return super.absolutePath();
+    }
+
+    @Override
+    public String[] childrenNames()
+    {
+      refresh();
+      return super.childrenNames();
+    }
+
+    @Override
+    public void clear()
+    {
+      refresh();
+      super.clear();
+    }
+
+    @Override
+    public String[] keys()
+    {
+      refresh();
+      return super.keys();
+    }
+
+    @Override
+    public void remove(String key)
+    {
+      refresh();
+      super.remove(key);
+    }
+
+    @Override
+    public ISecurePreferences node(String pathName)
+    {
+      refresh();
+      return super.node(pathName);
+    }
+
+    @Override
+    public ISecurePreferences parent()
+    {
+      refresh();
+      return super.parent();
+    }
+
+    @Override
+    public boolean nodeExists(String pathName)
+    {
+      refresh();
+      return super.nodeExists(pathName);
+    }
+
+    @Override
+    public void removeNode()
+    {
+      refresh();
+      super.removeNode();
+    }
+
+    @Override
+    public String get(String key, String def) throws StorageException
+    {
+      refresh();
+      return super.get(key, def);
+    }
+
+    @Override
+    public void put(String key, String value, boolean encrypt) throws StorageException
+    {
+      refresh();
+      super.put(key, value, encrypt);
+    }
+
+    @Override
+    public boolean getBoolean(String key, boolean def) throws StorageException
+    {
+      refresh();
+      return super.getBoolean(key, def);
+    }
+
+    @Override
+    public void putBoolean(String key, boolean value, boolean encrypt) throws StorageException
+    {
+      refresh();
+      super.putBoolean(key, value, encrypt);
+    }
+
+    @Override
+    public int getInt(String key, int def) throws StorageException
+    {
+      refresh();
+      return super.getInt(key, def);
+    }
+
+    @Override
+    public void putInt(String key, int value, boolean encrypt) throws StorageException
+    {
+      refresh();
+      super.putInt(key, value, encrypt);
+    }
+
+    @Override
+    public float getFloat(String key, float def) throws StorageException
+    {
+      refresh();
+      return super.getFloat(key, def);
+    }
+
+    @Override
+    public void putFloat(String key, float value, boolean encrypt) throws StorageException
+    {
+      refresh();
+      super.putFloat(key, value, encrypt);
+    }
+
+    @Override
+    public long getLong(String key, long def) throws StorageException
+    {
+      refresh();
+      return super.getLong(key, def);
+    }
+
+    @Override
+    public void putLong(String key, long value, boolean encrypt) throws StorageException
+    {
+      refresh();
+      super.putLong(key, value, encrypt);
+    }
+
+    @Override
+    public double getDouble(String key, double def) throws StorageException
+    {
+      refresh();
+      return super.getDouble(key, def);
+    }
+
+    @Override
+    public void putDouble(String key, double value, boolean encrypt) throws StorageException
+    {
+      refresh();
+      super.putDouble(key, value, encrypt);
+    }
+
+    @Override
+    public byte[] getByteArray(String key, byte[] def) throws StorageException
+    {
+      refresh();
+      return super.getByteArray(key, def);
+    }
+
+    @Override
+    public void putByteArray(String key, byte[] value, boolean encrypt) throws StorageException
+    {
+      refresh();
+      super.putByteArray(key, value, encrypt);
+    }
+
+    @Override
+    public boolean isEncrypted(String key) throws StorageException
+    {
+      refresh();
+      return super.isEncrypted(key);
+    }
+
+    @Override
+    public String getModule(String key)
+    {
+      refresh();
+      return super.getModule(key);
+    }
+
+    @Override
+    public boolean passwordChanging(String moduleID)
+    {
+      refresh();
+      return super.passwordChanging(moduleID);
+    }
+
+    private void refresh()
+    {
+      // Fetch the root node and check if it has been modified, i.e., whether it is dirty from unsaved changes.
+      Object root = ReflectUtil.invokeMethod("getRoot", node);
+      boolean modified = (Boolean)ReflectUtil.invokeMethod("isModified", root);
+      if (!modified)
+      {
+        // If it's not dirty, check if the expected time stamp is different from the timestamp on disk.
+        long lastModified = (Long)ReflectUtil.invokeMethod("getLastModified", root);
+        long timestamp = ReflectUtil.getValue("timestamp", root);
+        if (lastModified != timestamp)
+        {
+          // If so, reload the secure storage from disk.
+          ReflectUtil.invokeMethod("load", root);
+        }
+      }
+    }
   }
 
   /**
