@@ -717,7 +717,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     {
       if (overriddenValue != null)
       {
-        eSet(attribute, overriddenValue + "\n" + overridingValue);
+        eSet(attribute, overriddenValue + StringUtil.NL + overridingValue);
       }
       else
       {
@@ -733,14 +733,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       return null;
     }
 
-    arguments = arguments.trim();
-
-    while (arguments.endsWith("\n") || arguments.endsWith("\r"))
-    {
-      arguments = arguments.substring(0, arguments.length() - 1).trim();
-    }
-
-    return arguments;
+    return arguments.trim().replaceAll("(\n\r?|\r\n?)", StringUtil.NL);
   }
 
   @Override
@@ -824,6 +817,9 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return result;
       }
     });
+
+    setProgramArguments(sanitizeArguments(getProgramArguments()));
+    setVMArguments(sanitizeArguments(getVMArguments()));
   }
 
   @Override
