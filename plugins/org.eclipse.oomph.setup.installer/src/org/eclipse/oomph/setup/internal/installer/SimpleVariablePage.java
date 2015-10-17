@@ -137,6 +137,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private static final String TEXT_README = "show readme file";
 
+  private static final String TEXT_SYSTEM_EXPLOROR = "open in system explorer";
+
   private static final String TEXT_KEEP = "keep installer";
 
   private static final String MESSAGE_SUCCESS = "Installation completed successfully.";
@@ -208,6 +210,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private SimpleProgress progress;
 
   private FlatButton cancelButton;
+
+  private FlatButton openInSystemExplorerButton;
 
   private FlatButton showReadmeButton;
 
@@ -413,7 +417,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     javaTrailingSpacer = spacer(variablesComposite);
 
     // Row 5
-    createLabel(variablesComposite, "Installation Folder");
+    final Label installFolderLabel = createLabel(variablesComposite, "Installation Folder");
 
     spacer(variablesComposite);
 
@@ -425,8 +429,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
         final FocusSelectionAdapter focusSelectionAdapter = (FocusSelectionAdapter)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
         focusSelectionAdapter.setNextSelectionRange(folderText.getSelection());
 
-        // At least under Ubuntu it is necessary to use async execs
-        // to ensure proper focus transfer to the folder text field
         UIUtil.getDisplay().asyncExec(new Runnable()
         {
           public void run()
@@ -435,15 +437,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
           }
         });
 
-        UIUtil.getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            folderText.setFocus();
-          }
-        });
-
+        installFolder = folderText.getText();
         folderText.setToolTipText(installFolder);
+
+        String productInstallFolder = getProductInstallFolder().toString();
+        installFolderLabel.setToolTipText("Install into the folder '" + productInstallFolder + "'");
+        installButton.setToolTipText("Start installing the product into '" + productInstallFolder + "'");
       }
     });
 
@@ -481,6 +480,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
         {
           validatePage();
           setFolderText(dir);
+
+          UIUtil.getDisplay().asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              folderText.setFocus();
+            }
+          });
         }
       }
     });
@@ -591,6 +598,17 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
     showReadmeButton.setToolTipText("Show the readme file of the installed product");
+
+    openInSystemExplorerButton = createButton(afterInstallComposite, TEXT_SYSTEM_EXPLOROR, null, null);
+    openInSystemExplorerButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        String launchLocation = getProductInstallFolder().toURI().toString();
+        OS.INSTANCE.openSystemBrowser(launchLocation);
+      }
+    });
 
     keepInstallerButton = createButton(afterInstallComposite, TEXT_KEEP, null, null);
     keepInstallerButton.addSelectionListener(new SelectionAdapter()
@@ -728,11 +746,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       ProductPage.saveProductVersionSelection(installer.getCatalogManager(), selectedProductVersion);
 
-      versionCombo.setToolTipText(ProductPage.getToolTipText(selectedProductVersion));
+      String toolTipText = ProductPage.getToolTipText(selectedProductVersion);
+      versionLabel.setToolTipText(toolTipText);
+      versionCombo.setToolTipText(toolTipText);
     }
 
-    installFolder = getDefaultInstallationFolder();
-    setFolderText(installFolder);
+    setFolderText(getDefaultInstallationFolder());
   }
 
   @Override
@@ -887,6 +906,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
 
     return false;
+  }
+
+  private File getProductInstallFolder()
+  {
+    String productFolderName = SetupTaskPerformer.getProductFolderName(selectedProductVersion, OS.INSTANCE);
+    String relativeProductFolderName = OS.INSTANCE.getRelativeProductFolder(productFolderName);
+    File result = new File(installFolder, relativeProductFolderName);
+    return result;
   }
 
   private String getDefaultInstallationFolder()
@@ -1217,7 +1244,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
       installed = true;
 
       installButton.setCurrentState(State.LAUNCH);
-      installButton.setToolTipText("Launch");
+      File launchLocation = performer.getExecutableInfo().getLaunchLocation();
+      installButton.setToolTipText("Launch '" + launchLocation + "'");
 
       keepInstallerButton.setVisible(KeepInstallerUtil.canKeepInstaller());
 
@@ -1238,6 +1266,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
 
       showReadmeButton.setVisible(readmePath != null);
+
+      openInSystemExplorerButton.setToolTipText("Open the folder '" + getProductInstallFolder() + "' in the system explorer");
 
       if (createStartMenuEntryButton != null || createDesktopShortcutButton != null)
       {
@@ -1352,7 +1382,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private void setFolderText(String dir)
   {
     folderText.setText(dir);
-    folderText.setToolTipText(dir);
   }
 
   private void validatePage()
@@ -1363,7 +1392,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     if (errorMessage == null)
     {
-      errorMessage = validateFolderText(folderText.getText());
+      errorMessage = validateInstallFolder();
     }
 
     if (isTop())
@@ -1400,10 +1429,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     return null;
   }
 
-  private String validateFolderText(String dir)
+  private String validateInstallFolder()
   {
-    installFolder = dir;
-
     // TODO validate dir and set an appropriate error message
     String errorMessage = null;
 
@@ -1422,7 +1449,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         String name = folder.getName();
         if (StringUtil.isEmpty(name))
         {
-          name = dir;
+          name = installFolder.toString();
         }
 
         return "Folder " + name + " cannot be created.";
@@ -1547,7 +1574,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

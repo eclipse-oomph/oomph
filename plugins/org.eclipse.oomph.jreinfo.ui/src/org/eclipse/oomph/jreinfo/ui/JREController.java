@@ -98,10 +98,12 @@ public abstract class JREController implements ISelectionChangedListener
         String text = "Java";
         if (!StringUtil.isEmpty(javaVersion))
         {
-          text += " " + javaVersion;
+          text += " " + javaVersion + "+";
+
+          label.setToolTipText("Choose a Java Virtual Machine. The selected product version requires Java " + javaVersion + " or higher");
         }
 
-        text += "+ VM";
+        text += " VM";
         setLabel(text);
       }
     }

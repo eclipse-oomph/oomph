@@ -3976,9 +3976,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     private final boolean needsConsole;
 
+    private final OS os;
+
     private ExecutableInfo(SetupTaskPerformer performer)
     {
-      OS os = performer.getOS();
+      os = performer.getOS();
 
       String relativeProductFolder = performer.getRelativeProductFolder();
       String relativeExecutableFolder = os.getRelativeExecutableFolder();
@@ -4011,6 +4013,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     public File getExecutable()
     {
       return executable;
+    }
+
+    public File getLaunchLocation()
+    {
+      return os.isMac() ? executable.getParentFile().getParentFile().getParentFile() : executable;
     }
 
     public boolean needsConsole()

@@ -298,6 +298,11 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     ProductVersion productVersion = installation.getProductVersion();
 
     OS os = getOS();
+    return getProductFolderName(productVersion, os);
+  }
+
+  public static String getProductFolderName(ProductVersion productVersion, OS os)
+  {
     String osgiOS = os.getOsgiOS();
     String osgiWS = os.getOsgiWS();
     String osgiArch = os.getOsgiArch();
@@ -312,7 +317,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return getProductFolderName(productVersion, keys);
   }
 
-  private String getProductFolderName(Scope scope, String[] keys)
+  private static String getProductFolderName(Scope scope, String[] keys)
   {
     if (scope == null)
     {
