@@ -15,6 +15,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -216,13 +217,142 @@ public interface GitPackage extends EPackage
   int GIT_CLONE_TASK__RECURSIVE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
+   * The feature id for the '<em><b>Config Sections</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CLONE_TASK__CONFIG_SECTIONS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+
+  /**
    * The number of structural features of the '<em>Clone Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSubsectionImpl <em>Config Subsection</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.git.impl.ConfigSubsectionImpl
+   * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigSubsection()
+   * @generated
+   */
+  int CONFIG_SUBSECTION = 2;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_SUBSECTION__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_SUBSECTION__PROPERTIES = 1;
+
+  /**
+   * The number of structural features of the '<em>Config Subsection</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_SUBSECTION_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSectionImpl <em>Config Section</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.git.impl.ConfigSectionImpl
+   * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigSection()
+   * @generated
+   */
+  int CONFIG_SECTION = 1;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_SECTION__NAME = CONFIG_SUBSECTION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_SECTION__PROPERTIES = CONFIG_SUBSECTION__PROPERTIES;
+
+  /**
+   * The feature id for the '<em><b>Subsections</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_SECTION__SUBSECTIONS = CONFIG_SUBSECTION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Config Section</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_SECTION_FEATURE_COUNT = CONFIG_SUBSECTION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.ConfigPropertyImpl <em>Config Property</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.git.impl.ConfigPropertyImpl
+   * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigProperty()
+   * @generated
+   */
+  int CONFIG_PROPERTY = 3;
+
+  /**
+   * The feature id for the '<em><b>Key</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_PROPERTY__KEY = 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_PROPERTY__VALUE = 1;
+
+  /**
+   * The number of structural features of the '<em>Config Property</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_PROPERTY_FEATURE_COUNT = 2;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.GitCloneTask <em>Clone Task</em>}'.
@@ -299,6 +429,102 @@ public interface GitPackage extends EPackage
    * @generated
    */
   EAttribute getGitCloneTask_Recursive();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.git.GitCloneTask#getConfigSections <em>Config Sections</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Config Sections</em>'.
+   * @see org.eclipse.oomph.setup.git.GitCloneTask#getConfigSections()
+   * @see #getGitCloneTask()
+   * @generated
+   */
+  EReference getGitCloneTask_ConfigSections();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.ConfigSection <em>Config Section</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Config Section</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigSection
+   * @generated
+   */
+  EClass getConfigSection();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.git.ConfigSection#getSubsections <em>Subsections</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Subsections</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigSection#getSubsections()
+   * @see #getConfigSection()
+   * @generated
+   */
+  EReference getConfigSection_Subsections();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.ConfigSubsection <em>Config Subsection</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Config Subsection</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigSubsection
+   * @generated
+   */
+  EClass getConfigSubsection();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.ConfigSubsection#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigSubsection#getName()
+   * @see #getConfigSubsection()
+   * @generated
+   */
+  EAttribute getConfigSubsection_Name();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.git.ConfigSubsection#getProperties <em>Properties</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Properties</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigSubsection#getProperties()
+   * @see #getConfigSubsection()
+   * @generated
+   */
+  EReference getConfigSubsection_Properties();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.ConfigProperty <em>Config Property</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Config Property</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigProperty
+   * @generated
+   */
+  EClass getConfigProperty();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.ConfigProperty#getKey <em>Key</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Key</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigProperty#getKey()
+   * @see #getConfigProperty()
+   * @generated
+   */
+  EAttribute getConfigProperty_Key();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.ConfigProperty#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigProperty#getValue()
+   * @see #getConfigProperty()
+   * @generated
+   */
+  EAttribute getConfigProperty_Value();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -381,6 +607,84 @@ public interface GitPackage extends EPackage
      * @generated
      */
     EAttribute GIT_CLONE_TASK__RECURSIVE = eINSTANCE.getGitCloneTask_Recursive();
+
+    /**
+     * The meta object literal for the '<em><b>Config Sections</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference GIT_CLONE_TASK__CONFIG_SECTIONS = eINSTANCE.getGitCloneTask_ConfigSections();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSectionImpl <em>Config Section</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.git.impl.ConfigSectionImpl
+     * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigSection()
+     * @generated
+     */
+    EClass CONFIG_SECTION = eINSTANCE.getConfigSection();
+
+    /**
+     * The meta object literal for the '<em><b>Subsections</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONFIG_SECTION__SUBSECTIONS = eINSTANCE.getConfigSection_Subsections();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSubsectionImpl <em>Config Subsection</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.git.impl.ConfigSubsectionImpl
+     * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigSubsection()
+     * @generated
+     */
+    EClass CONFIG_SUBSECTION = eINSTANCE.getConfigSubsection();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIG_SUBSECTION__NAME = eINSTANCE.getConfigSubsection_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONFIG_SUBSECTION__PROPERTIES = eINSTANCE.getConfigSubsection_Properties();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.git.impl.ConfigPropertyImpl <em>Config Property</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.git.impl.ConfigPropertyImpl
+     * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigProperty()
+     * @generated
+     */
+    EClass CONFIG_PROPERTY = eINSTANCE.getConfigProperty();
+
+    /**
+     * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIG_PROPERTY__KEY = eINSTANCE.getConfigProperty_Key();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIG_PROPERTY__VALUE = eINSTANCE.getConfigProperty_Value();
 
   }
 

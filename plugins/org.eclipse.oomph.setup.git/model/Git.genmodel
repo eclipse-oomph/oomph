@@ -16,6 +16,19 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/pushURI"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/checkoutBranch"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/recursive"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Git.ecore#//GitCloneTask/configSections"/>
+    </genClasses>
+    <genClasses ecoreClass="Git.ecore#//ConfigSection">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Git.ecore#//ConfigSection/subsections"/>
+    </genClasses>
+    <genClasses ecoreClass="Git.ecore#//ConfigSubsection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//ConfigSubsection/name"/>
+      <genFeatures property="None" children="true" createChild="true" propertySortChoices="true"
+          ecoreFeature="ecore:EReference Git.ecore#//ConfigSubsection/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="Git.ecore#//ConfigProperty">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//ConfigProperty/key"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Git.ecore#//ConfigProperty/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

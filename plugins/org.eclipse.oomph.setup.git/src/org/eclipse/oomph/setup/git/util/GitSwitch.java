@@ -12,6 +12,9 @@ package org.eclipse.oomph.setup.git.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.git.ConfigProperty;
+import org.eclipse.oomph.setup.git.ConfigSection;
+import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
 import org.eclipse.oomph.setup.git.GitPackage;
 
@@ -100,6 +103,40 @@ public class GitSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case GitPackage.CONFIG_SECTION:
+      {
+        ConfigSection configSection = (ConfigSection)theEObject;
+        T result = caseConfigSection(configSection);
+        if (result == null)
+        {
+          result = caseConfigSubsection(configSection);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case GitPackage.CONFIG_SUBSECTION:
+      {
+        ConfigSubsection configSubsection = (ConfigSubsection)theEObject;
+        T result = caseConfigSubsection(configSubsection);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case GitPackage.CONFIG_PROPERTY:
+      {
+        ConfigProperty configProperty = (ConfigProperty)theEObject;
+        T result = caseConfigProperty(configProperty);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -117,6 +154,54 @@ public class GitSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseGitCloneTask(GitCloneTask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Config Section</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Config Section</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseConfigSection(ConfigSection object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Config Subsection</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Config Subsection</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseConfigSubsection(ConfigSubsection object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Config Property</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Config Property</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseConfigProperty(ConfigProperty object)
   {
     return null;
   }

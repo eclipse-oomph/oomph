@@ -40,6 +40,33 @@ public interface GitFactory extends EFactory
   GitCloneTask createGitCloneTask();
 
   /**
+   * Returns a new object of class '<em>Config Section</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Config Section</em>'.
+   * @generated
+   */
+  ConfigSection createConfigSection();
+
+  /**
+   * Returns a new object of class '<em>Config Subsection</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Config Subsection</em>'.
+   * @generated
+   */
+  ConfigSubsection createConfigSubsection();
+
+  /**
+   * Returns a new object of class '<em>Config Property</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Config Property</em>'.
+   * @generated
+   */
+  ConfigProperty createConfigProperty();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

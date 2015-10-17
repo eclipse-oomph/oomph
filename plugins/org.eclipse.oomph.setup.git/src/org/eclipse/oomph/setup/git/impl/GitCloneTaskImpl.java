@@ -16,6 +16,9 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.git.ConfigProperty;
+import org.eclipse.oomph.setup.git.ConfigSection;
+import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
 import org.eclipse.oomph.setup.git.GitPackage;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
@@ -27,9 +30,14 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -60,10 +68,14 @@ import org.eclipse.jgit.transport.URIish;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -80,6 +92,7 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getPushURI <em>Push URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getCheckoutBranch <em>Checkout Branch</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#isRecursive <em>Recursive</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getConfigSections <em>Config Sections</em>}</li>
  * </ul>
  *
  * @generated
@@ -205,6 +218,16 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @ordered
    */
   protected boolean recursive = RECURSIVE_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getConfigSections() <em>Config Sections</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getConfigSections()
+   * @generated
+   * @ordered
+   */
+  protected EList<ConfigSection> configSections;
 
   private boolean workDirExisted;
 
@@ -371,6 +394,36 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<ConfigSection> getConfigSections()
+  {
+    if (configSections == null)
+    {
+      configSections = new EObjectContainmentEList<ConfigSection>(ConfigSection.class, this, GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS);
+    }
+    return configSections;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS:
+        return ((InternalEList<?>)getConfigSections()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getPushURI()
   {
     return pushURI;
@@ -413,6 +466,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         return getCheckoutBranch();
       case GitPackage.GIT_CLONE_TASK__RECURSIVE:
         return isRecursive();
+      case GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS:
+        return getConfigSections();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -422,6 +477,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -444,6 +500,10 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         return;
       case GitPackage.GIT_CLONE_TASK__RECURSIVE:
         setRecursive((Boolean)newValue);
+        return;
+      case GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS:
+        getConfigSections().clear();
+        getConfigSections().addAll((Collection<? extends ConfigSection>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -477,6 +537,9 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       case GitPackage.GIT_CLONE_TASK__RECURSIVE:
         setRecursive(RECURSIVE_EDEFAULT);
         return;
+      case GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS:
+        getConfigSections().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -503,6 +566,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         return CHECKOUT_BRANCH_EDEFAULT == null ? checkoutBranch != null : !CHECKOUT_BRANCH_EDEFAULT.equals(checkoutBranch);
       case GitPackage.GIT_CLONE_TASK__RECURSIVE:
         return recursive != RECURSIVE_EDEFAULT;
+      case GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS:
+        return configSections != null && !configSections.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -629,7 +694,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String remoteName = getRemoteName();
       String remoteURI = getRemoteURI();
       String pushURI = getPushURI();
-      configureRepository(context, repository, checkoutBranch, remoteName, remoteURI, pushURI);
+      configureRepository(context, repository, checkoutBranch, remoteName, remoteURI, pushURI, getConfigSections());
 
       hasCheckout = repository.getAllRefs().containsKey("refs/heads/" + checkoutBranch);
       if (!hasCheckout)
@@ -684,7 +749,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
             if (!URI.createURI(remoteURI).isFile())
             {
               String pushURI = getPushURI();
-              configureRepository(context, cachedRepository, checkoutBranch, remoteName, remoteURI, pushURI);
+              configureRepository(context, cachedRepository, checkoutBranch, remoteName, remoteURI, pushURI, getConfigSections());
             }
 
             monitor.worked(1);
@@ -813,13 +878,73 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   }
 
   private static void configureRepository(SetupTaskContext context, Repository repository, String checkoutBranch, String remoteName, String remoteURI,
-      String pushURI) throws Exception, IOException
+      String pushURI, List<? extends ConfigSection> configSections) throws Exception, IOException
   {
     StoredConfig config = repository.getConfig();
 
+    Map<String, Map<String, Map<String, List<String>>>> properties = new LinkedHashMap<String, Map<String, Map<String, List<String>>>>();
+
+    for (ConfigSection section : configSections)
+    {
+      String sectionName = section.getName();
+      if (!StringUtil.isEmpty(sectionName))
+      {
+        for (ConfigProperty property : section.getProperties())
+        {
+          handleProperty(properties, sectionName, null, property);
+        }
+
+        for (ConfigSubsection subsection : section.getSubsections())
+        {
+          String subsectionName = subsection.getName();
+          if (subsectionName != null)
+          {
+            for (ConfigProperty property : subsection.getProperties())
+            {
+              handleProperty(properties, sectionName, subsectionName, property);
+            }
+          }
+        }
+      }
+    }
+
     boolean changed = false;
-    changed |= configureLineEndingConversion(context, config);
-    URI uri = URI.createURI(remoteURI);
+    boolean hasAutoCRLFProperty = false;
+
+    for (Map.Entry<String, Map<String, Map<String, List<String>>>> sectionEntry : properties.entrySet())
+    {
+      String sectionName = sectionEntry.getKey();
+      for (Map.Entry<String, Map<String, List<String>>> subsectionEntry : sectionEntry.getValue().entrySet())
+      {
+        String subsectionName = subsectionEntry.getKey();
+        for (Map.Entry<String, List<String>> propertyEntry : subsectionEntry.getValue().entrySet())
+        {
+          String key = propertyEntry.getKey();
+          if ("core".equals(sectionName) && subsectionName == null && "autocrlf".equals(key))
+          {
+            hasAutoCRLFProperty = true;
+          }
+
+          List<String> value = propertyEntry.getValue();
+          String[] oldValue = config.getStringList(sectionName, subsectionName, key);
+          if (value.isEmpty())
+          {
+            config.unset(sectionName, subsectionName, key);
+            changed |= oldValue.length != 0;
+          }
+          else
+          {
+            config.setStringList(sectionName, subsectionName, key, value);
+            changed |= !Arrays.asList(oldValue).equals(value);
+          }
+        }
+      }
+    }
+
+    if (!hasAutoCRLFProperty)
+    {
+      changed |= configureLineEndingConversion(context, config);
+    }
 
     Set<String> gerritPatterns = new HashSet<String>();
     for (Object key : context.keySet())
@@ -839,6 +964,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
     if (!gerritPatterns.isEmpty())
     {
+      URI uri = URI.createURI(remoteURI);
       String uriString = uri.toString();
       for (String gerritPattern : gerritPatterns)
       {
@@ -855,6 +981,46 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     if (changed)
     {
       config.save();
+    }
+  }
+
+  private static void handleProperty(Map<String, Map<String, Map<String, List<String>>>> properties, String sectionName, String subsectionName,
+      ConfigProperty property)
+  {
+    String key = property.getKey();
+    if (!StringUtil.isEmpty(key))
+    {
+      String value = property.getValue();
+      if (StringUtil.isEmpty(value))
+      {
+        value = null;
+      }
+
+      Map<String, Map<String, List<String>>> subsections = properties.get(sectionName);
+      if (subsections == null)
+      {
+        subsections = new LinkedHashMap<String, Map<String, List<String>>>();
+        properties.put(sectionName, subsections);
+      }
+
+      Map<String, List<String>> sectionProperties = subsections.get(subsectionName);
+      if (sectionProperties == null)
+      {
+        sectionProperties = new LinkedHashMap<String, List<String>>();
+        subsections.put(subsectionName, sectionProperties);
+      }
+
+      List<String> list = sectionProperties.get(key);
+      if (list == null)
+      {
+        list = new ArrayList<String>();
+        sectionProperties.put(key, list);
+      }
+
+      if (value != null)
+      {
+        list.add(value);
+      }
     }
   }
 

@@ -11,6 +11,9 @@
 package org.eclipse.oomph.setup.git.impl;
 
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.git.ConfigProperty;
+import org.eclipse.oomph.setup.git.ConfigSection;
+import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
 import org.eclipse.oomph.setup.git.GitFactory;
 import org.eclipse.oomph.setup.git.GitPackage;
@@ -18,6 +21,7 @@ import org.eclipse.oomph.setup.git.GitPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -34,6 +38,27 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * @generated
    */
   private EClass gitCloneTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass configSectionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass configSubsectionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass configPropertyEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -179,6 +204,96 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getGitCloneTask_ConfigSections()
+  {
+    return (EReference)gitCloneTaskEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getConfigSection()
+  {
+    return configSectionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getConfigSection_Subsections()
+  {
+    return (EReference)configSectionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getConfigSubsection()
+  {
+    return configSubsectionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getConfigSubsection_Name()
+  {
+    return (EAttribute)configSubsectionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getConfigSubsection_Properties()
+  {
+    return (EReference)configSubsectionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getConfigProperty()
+  {
+    return configPropertyEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getConfigProperty_Key()
+  {
+    return (EAttribute)configPropertyEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getConfigProperty_Value()
+  {
+    return (EAttribute)configPropertyEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public GitFactory getGitFactory()
   {
     return (GitFactory)getEFactoryInstance();
@@ -214,6 +329,18 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__PUSH_URI);
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__CHECKOUT_BRANCH);
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__RECURSIVE);
+    createEReference(gitCloneTaskEClass, GIT_CLONE_TASK__CONFIG_SECTIONS);
+
+    configSectionEClass = createEClass(CONFIG_SECTION);
+    createEReference(configSectionEClass, CONFIG_SECTION__SUBSECTIONS);
+
+    configSubsectionEClass = createEClass(CONFIG_SUBSECTION);
+    createEAttribute(configSubsectionEClass, CONFIG_SUBSECTION__NAME);
+    createEReference(configSubsectionEClass, CONFIG_SUBSECTION__PROPERTIES);
+
+    configPropertyEClass = createEClass(CONFIG_PROPERTY);
+    createEAttribute(configPropertyEClass, CONFIG_PROPERTY__KEY);
+    createEAttribute(configPropertyEClass, CONFIG_PROPERTY__VALUE);
   }
 
   /**
@@ -252,6 +379,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
 
     // Add supertypes to classes
     gitCloneTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    configSectionEClass.getESuperTypes().add(getConfigSubsection());
 
     // Initialize classes and features; add operations and parameters
     initEClass(gitCloneTaskEClass, GitCloneTask.class, "GitCloneTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -267,6 +395,24 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getGitCloneTask_Recursive(), ecorePackage.getEBoolean(), "recursive", "false", 0, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getGitCloneTask_ConfigSections(), getConfigSection(), null, "configSections", null, 0, -1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(configSectionEClass, ConfigSection.class, "ConfigSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getConfigSection_Subsections(), getConfigSubsection(), null, "subsections", null, 0, -1, ConfigSection.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(configSubsectionEClass, ConfigSubsection.class, "ConfigSubsection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getConfigSubsection_Name(), ecorePackage.getEString(), "name", null, 1, 1, ConfigSubsection.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConfigSubsection_Properties(), getConfigProperty(), null, "properties", null, 0, -1, ConfigSubsection.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(configPropertyEClass, ConfigProperty.class, "ConfigProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getConfigProperty_Key(), ecorePackage.getEString(), "key", null, 1, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getConfigProperty_Value(), ecorePackage.getEString(), "value", null, 0, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore");

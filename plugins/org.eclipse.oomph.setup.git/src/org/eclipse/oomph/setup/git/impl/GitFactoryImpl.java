@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.setup.git.impl;
 
+import org.eclipse.oomph.setup.git.ConfigProperty;
+import org.eclipse.oomph.setup.git.ConfigSection;
+import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
 import org.eclipse.oomph.setup.git.GitFactory;
 import org.eclipse.oomph.setup.git.GitPackage;
@@ -74,6 +77,12 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
     {
       case GitPackage.GIT_CLONE_TASK:
         return createGitCloneTask();
+      case GitPackage.CONFIG_SECTION:
+        return createConfigSection();
+      case GitPackage.CONFIG_SUBSECTION:
+        return createConfigSubsection();
+      case GitPackage.CONFIG_PROPERTY:
+        return createConfigProperty();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -88,6 +97,39 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
   {
     GitCloneTaskImpl gitCloneTask = new GitCloneTaskImpl();
     return gitCloneTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ConfigSection createConfigSection()
+  {
+    ConfigSectionImpl configSection = new ConfigSectionImpl();
+    return configSection;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ConfigSubsection createConfigSubsection()
+  {
+    ConfigSubsectionImpl configSubsection = new ConfigSubsectionImpl();
+    return configSubsection;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ConfigProperty createConfigProperty()
+  {
+    ConfigPropertyImpl configProperty = new ConfigPropertyImpl();
+    return configProperty;
   }
 
   /**

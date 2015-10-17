@@ -12,6 +12,9 @@ package org.eclipse.oomph.setup.git.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.git.ConfigProperty;
+import org.eclipse.oomph.setup.git.ConfigSection;
+import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
 import org.eclipse.oomph.setup.git.GitPackage;
 
@@ -89,6 +92,24 @@ public class GitAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseConfigSection(ConfigSection object)
+    {
+      return createConfigSectionAdapter();
+    }
+
+    @Override
+    public Adapter caseConfigSubsection(ConfigSubsection object)
+    {
+      return createConfigSubsectionAdapter();
+    }
+
+    @Override
+    public Adapter caseConfigProperty(ConfigProperty object)
+    {
+      return createConfigPropertyAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -132,6 +153,51 @@ public class GitAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createGitCloneTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.git.ConfigSection <em>Config Section</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.git.ConfigSection
+   * @generated
+   */
+  public Adapter createConfigSectionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.git.ConfigSubsection <em>Config Subsection</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.git.ConfigSubsection
+   * @generated
+   */
+  public Adapter createConfigSubsectionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.git.ConfigProperty <em>Config Property</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.git.ConfigProperty
+   * @generated
+   */
+  public Adapter createConfigPropertyAdapter()
   {
     return null;
   }

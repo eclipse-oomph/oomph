@@ -119,6 +119,81 @@ public class GitItemProviderAdapterFactory extends GitAdapterFactory implements 
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.git.ConfigSection} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ConfigSectionItemProvider configSectionItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.git.ConfigSection}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createConfigSectionAdapter()
+  {
+    if (configSectionItemProvider == null)
+    {
+      configSectionItemProvider = new ConfigSectionItemProvider(this);
+    }
+
+    return configSectionItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.git.ConfigSubsection} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ConfigSubsectionItemProvider configSubsectionItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.git.ConfigSubsection}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createConfigSubsectionAdapter()
+  {
+    if (configSubsectionItemProvider == null)
+    {
+      configSubsectionItemProvider = new ConfigSubsectionItemProvider(this);
+    }
+
+    return configSubsectionItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.git.ConfigProperty} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ConfigPropertyItemProvider configPropertyItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.git.ConfigProperty}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createConfigPropertyAdapter()
+  {
+    if (configPropertyItemProvider == null)
+    {
+      configPropertyItemProvider = new ConfigPropertyItemProvider(this);
+    }
+
+    return configPropertyItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -233,6 +308,18 @@ public class GitItemProviderAdapterFactory extends GitAdapterFactory implements 
     {
       gitCloneTaskItemProvider.dispose();
     }
+    if (configSectionItemProvider != null)
+    {
+      configSectionItemProvider.dispose();
+    }
+    if (configSubsectionItemProvider != null)
+    {
+      configSubsectionItemProvider.dispose();
+    }
+    if (configPropertyItemProvider != null)
+    {
+      configPropertyItemProvider.dispose();
+    }
   }
 
   /**
@@ -288,6 +375,12 @@ public class GitItemProviderAdapterFactory extends GitAdapterFactory implements 
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, GitFactory.eINSTANCE.createGitCloneTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, GitFactory.eINSTANCE.createConfigSubsection()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, GitFactory.eINSTANCE.createConfigSection()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, GitFactory.eINSTANCE.createConfigProperty()));
 
         return null;
       }

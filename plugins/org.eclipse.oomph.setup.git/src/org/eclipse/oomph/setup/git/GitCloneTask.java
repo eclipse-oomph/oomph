@@ -12,6 +12,8 @@ package org.eclipse.oomph.setup.git;
 
 import org.eclipse.oomph.setup.SetupTask;
 
+import org.eclipse.emf.common.util.EList;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Clone Task</b></em>'.
@@ -27,6 +29,7 @@ import org.eclipse.oomph.setup.SetupTask;
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getPushURI <em>Push URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getCheckoutBranch <em>Checkout Branch</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#isRecursive <em>Recursive</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getConfigSections <em>Config Sections</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask()
@@ -197,5 +200,21 @@ public interface GitCloneTask extends SetupTask
    * @generated
    */
   void setRecursive(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Config Sections</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.oomph.setup.git.ConfigSection}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Config Sections</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Config Sections</em>' containment reference list.
+   * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_ConfigSections()
+   * @model containment="true"
+   * @generated
+   */
+  EList<ConfigSection> getConfigSections();
 
 } // GitCloneTask
