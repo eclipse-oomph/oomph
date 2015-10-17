@@ -25,7 +25,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.content.IContentType;
 
+import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -355,6 +358,17 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       }
     });
 
-    preferenceProperty.getNode().flush();
+    Preferences node = preferenceProperty.getNode();
+    String absolutePath = node.absolutePath();
+    if (absolutePath.startsWith("/instance/org.eclipse.core.runtime/content-types/") && "charset".equals(preferenceProperty.getProperty()))
+    {
+      IContentType contentType = Platform.getContentTypeManager().getContentType(node.name());
+      if (contentType != null)
+      {
+        contentType.setDefaultCharset(value);
+      }
+    }
+
+    node.flush();
   }
 } // PreferenceTaskImpl
