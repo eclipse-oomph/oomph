@@ -69,6 +69,7 @@ public class ProfileDetailsComposite extends Composite
   {
     super(parent, style);
     this.profile = profile;
+    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
     GridLayout gridLayout = new GridLayout(3, false);
     gridLayout.marginHeight = 0;
     gridLayout.marginWidth = 0;
@@ -104,12 +105,6 @@ public class ProfileDetailsComposite extends Composite
   {
     adapterFactory.dispose();
     super.dispose();
-  }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Disable the check that prevents subclassing of SWT components
   }
 
   private Text addHeaderRow(String name, final File location, String value)
@@ -195,7 +190,7 @@ public class ProfileDetailsComposite extends Composite
     TableColumn idColumn = new TableColumn(table, SWT.LEFT);
     layout.setColumnData(idColumn, new ColumnWeightData(100));
 
-    UIUtil.asyncExec(new Runnable()
+    UIUtil.asyncExec(viewer.getControl(), new Runnable()
     {
       public void run()
       {

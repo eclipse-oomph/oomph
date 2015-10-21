@@ -97,7 +97,7 @@ public class ButtonBar
         }
       }
 
-      button = new PersistentButton(composite, SWT.CHECK, defaultSelection, persistence);
+      button = PersistentButton.create(composite, SWT.CHECK, defaultSelection, persistence);
     }
     else
     {

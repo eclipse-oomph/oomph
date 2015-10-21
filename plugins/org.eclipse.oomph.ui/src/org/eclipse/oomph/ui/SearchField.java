@@ -80,6 +80,9 @@ public class SearchField extends Composite
               public void run()
               {
                 patternFilter.filter(treeViewer, (Object)null, null);
+
+                String text = getFilterString();
+                updateToolbar(text != null && text.length() > 0 && !(initialText != null && initialText.equals(text)));
               }
             });
 
@@ -169,12 +172,6 @@ public class SearchField extends Composite
   public boolean setFocus()
   {
     return getFilterControl().setFocus();
-  }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Do nothing.
   }
 
   /**

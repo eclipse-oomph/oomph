@@ -537,8 +537,9 @@ public class ConfirmationPage extends SetupWizardPage
       }
     });
 
-    final Color normalForeground = viewer.getControl().getForeground();
-    Color normalBackground = viewer.getControl().getBackground();
+    final Control viewerControl = viewer.getControl();
+    final Color normalForeground = viewerControl.getForeground();
+    Color normalBackground = viewerControl.getBackground();
     final Color disabledForeground = ExtendedColorRegistry.INSTANCE.getColor(normalForeground, normalBackground, IItemColorProvider.GRAYED_OUT_COLOR);
     AdapterFactory adapterFactory = getAdapterFactory();
     labelProvider = new AdapterFactoryLabelProvider.ColorProvider(adapterFactory, normalForeground, normalBackground)
@@ -571,7 +572,7 @@ public class ConfirmationPage extends SetupWizardPage
       @Override
       public Color getForeground(Object object)
       {
-        return !(object instanceof SetupTask) || getPerformer().getNeededTasks().contains(object) ? normalForeground : disabledForeground;
+        return !(object instanceof SetupTask) || getPerformer().getNeededTasks().contains(object) ? viewerControl.getForeground() : disabledForeground;
       }
     };
     viewer.setLabelProvider(labelProvider);

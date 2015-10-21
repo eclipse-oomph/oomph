@@ -102,6 +102,9 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.FormColors;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
 import java.io.File;
@@ -149,8 +152,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final Object[] NO_ELEMENTS = new Object[0];
 
-  private static final Color WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-
   private final LoadJob loadJob = new LoadJob();
 
   private final AnalyzeJob analyzeJob = new AnalyzeJob();
@@ -168,8 +169,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   private final VersionProvider versionProvider = new VersionProvider();
 
   private final CollapseAllAction collapseAllAction = new CollapseAllAction();
-
-  private Color gray;
 
   private Composite container;
 
@@ -203,6 +202,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private String filter;
 
+  private FormToolkit formToolkit;
+
   public RepositoryExplorer()
   {
     currentNamespace = SETTINGS.get(CURRENT_NAMESPACE_KEY);
@@ -229,8 +230,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   @Override
   public void dispose()
   {
-    gray.dispose();
-    gray = null;
+    if (formToolkit != null)
+    {
+      formToolkit.dispose();
+    }
 
     disposeRepositoryProvider();
     super.dispose();
@@ -335,10 +338,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   public void createPartControl(Composite parent)
   {
     final Display display = parent.getDisplay();
-    gray = new Color(display, 75, 75, 75);
 
-    container = new Composite(parent, SWT.NONE);
-    container.setBackground(WHITE);
+    formToolkit = new FormToolkit(display);
+    FormColors colors = formToolkit.getColors();
+    colors.createColor("initial_repository", FormColors.blend(colors.getForeground().getRGB(), colors.getBackground().getRGB(), 75));
+
+    Form form = formToolkit.createForm(parent);
+    container = form.getBody();
     container.setLayout(new GridLayout(1, false));
 
     createRepositoriesArea(container);
@@ -425,8 +431,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     containerLayout.marginWidth = 0;
     containerLayout.marginHeight = 0;
 
-    Composite container = new Composite(parent, SWT.NONE);
-    container.setBackground(WHITE);
+    Composite container = formToolkit.createComposite(parent, SWT.NONE);
     container.setLayout(containerLayout);
     container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -460,20 +465,17 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-    selectorComposite = new Composite(container, SWT.NONE);
+    selectorComposite = formToolkit.createComposite(container, SWT.NONE);
     selectorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    selectorComposite.setBackground(WHITE);
 
-    itemsComposite = new Composite(container, SWT.NONE);
-    itemsComposite.setBackground(WHITE);
+    itemsComposite = formToolkit.createComposite(container, SWT.NONE);
     itemsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
     itemsComposite.setLayout(new FillLayout());
   }
 
   private void createVersionsArea(Composite container)
   {
-    Composite versionsComposite = new Composite(container, SWT.NONE);
-    versionsComposite.setBackground(WHITE);
+    Composite versionsComposite = formToolkit.createComposite(container, SWT.NONE);
     GridLayout gl_versionsComposite = new GridLayout(2, false);
     gl_versionsComposite.marginWidth = 0;
     gl_versionsComposite.marginHeight = 0;
@@ -486,8 +488,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     versionsViewer.setLabelProvider(versionProvider);
     addDragSupport(versionsViewer);
 
-    Composite versionsGroup = new Composite(versionsComposite, SWT.NONE);
-    versionsGroup.setBackground(WHITE);
+    formToolkit.adapt(versionsViewer.getControl(), false, false);
+
+    Composite versionsGroup = formToolkit.createComposite(versionsComposite, SWT.NONE);
     versionsGroup.setLayout(new GridLayout(1, false));
     versionsGroup.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
@@ -1520,7 +1523,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         originalForeground = repositoryCombo.getForeground();
         repositoryCombo.setText("type repository url, drag and drop, or pick from list");
-        repositoryCombo.setForeground(gray);
+        Color color = formToolkit.getColors().getColor("initial_repository");
+        repositoryCombo.setForeground(color);
       }
       else
       {

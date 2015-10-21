@@ -131,6 +131,8 @@ public class AgentAnalyzerComposite extends Composite
     super(parent, style);
     this.agent = agent;
 
+    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
+
     GridLayout gridLayout = new GridLayout();
     gridLayout.marginWidth = margin;
     gridLayout.marginHeight = margin;
@@ -506,12 +508,6 @@ public class AgentAnalyzerComposite extends Composite
     });
 
     profileContentProvider.setInput(profileViewer, null); // trigger resizeColumns
-  }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Disable the check that prevents subclassing of SWT components
   }
 
   private void initAnalyzer() throws InvocationTargetException, InterruptedException

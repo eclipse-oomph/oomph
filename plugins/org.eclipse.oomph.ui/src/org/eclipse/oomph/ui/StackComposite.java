@@ -40,10 +40,4 @@ public class StackComposite extends Composite
       layout();
     }
   }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Do nothing.
-  }
 }

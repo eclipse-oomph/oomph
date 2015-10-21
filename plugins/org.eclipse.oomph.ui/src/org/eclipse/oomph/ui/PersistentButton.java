@@ -11,37 +11,38 @@
 package org.eclipse.oomph.ui;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 /**
  * @author Eike Stepper
  */
-public class PersistentButton extends Button
+public class PersistentButton
 {
-  private final Persistence persistence;
+  private final Button button;
 
-  public PersistentButton(Composite parent, int style, boolean defaultSelection, Persistence persistence)
+  private PersistentButton(Composite parent, int style, boolean defaultSelection, final Persistence persistence)
   {
-    super(parent, style);
-    this.persistence = persistence;
-    super.setSelection(persistence != null ? persistence.load(defaultSelection) : defaultSelection);
-  }
-
-  @Override
-  public void setSelection(boolean selection)
-  {
-    super.setSelection(selection);
-
-    if (persistence != null)
+    button = new Button(parent, style);
+    button.setSelection(persistence != null ? persistence.load(defaultSelection) : defaultSelection);
+    button.addSelectionListener(new SelectionAdapter()
     {
-      persistence.save(selection);
-    }
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        if (persistence != null)
+        {
+          persistence.save(button.getSelection());
+        }
+      }
+    });
   }
 
-  @Override
-  protected void checkSubclass()
+  public static Button create(Composite parent, int style, boolean defaultSelection, final Persistence persistence)
   {
+    return new PersistentButton(parent, style, defaultSelection, persistence).button;
   }
 
   /**

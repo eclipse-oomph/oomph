@@ -68,8 +68,7 @@ public class PropertiesViewer extends TableViewer
     final Table table = getTable();
     UIUtil.applyGridData(table).heightHint = 64;
 
-    setLabelProvider(
-        new DecoratingPropertiesLabelProvider(new PropertiesLabelProvider(), labelDecorator, table.getFont(), table.getBackground(), table.getForeground()));
+    setLabelProvider(new DecoratingPropertiesLabelProvider(new PropertiesLabelProvider(), labelDecorator, table));
     setContentProvider(new PropertiesContentProvider());
 
     propertyColumn = new TableColumn(table, SWT.NONE);
@@ -243,21 +242,14 @@ public class PropertiesViewer extends TableViewer
 
     private LabelDecorator labelDecorator;
 
-    private Font font;
+    private Control control;
 
-    private Color background;
-
-    private Color foreground;
-
-    public DecoratingPropertiesLabelProvider(PropertiesLabelProvider labelProvider, LabelDecorator labelDecorator, Font font, Color background,
-        Color foreground)
+    public DecoratingPropertiesLabelProvider(PropertiesLabelProvider labelProvider, LabelDecorator labelDecorator, Control control)
     {
       super(labelProvider, labelDecorator);
       propertiesLabelProvider = labelProvider;
       this.labelDecorator = labelDecorator;
-      this.font = font;
-      this.background = background;
-      this.foreground = foreground;
+      this.control = control;
     }
 
     public Image getColumnImage(Object element, int columnIndex)
@@ -272,17 +264,17 @@ public class PropertiesViewer extends TableViewer
 
     public Font getFont(Object element, int columnIndex)
     {
-      return labelDecorator.decorateFont(font, ((Object[])element)[4]);
+      return labelDecorator.decorateFont(control.getFont(), ((Object[])element)[4]);
     }
 
     public Color getForeground(Object element, int columnIndex)
     {
-      return labelDecorator.decorateForeground(foreground, ((Object[])element)[4]);
+      return labelDecorator.decorateForeground(control.getForeground(), ((Object[])element)[4]);
     }
 
     public Color getBackground(Object element, int columnIndex)
     {
-      return labelDecorator.decorateBackground(background, ((Object[])element)[4]);
+      return labelDecorator.decorateBackground(control.getBackground(), ((Object[])element)[4]);
     }
   }
 

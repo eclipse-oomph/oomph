@@ -103,6 +103,7 @@ public class TargletContainerComposite extends Composite
   public TargletContainerComposite(Composite parent, int style, String targletContainerID)
   {
     super(parent, style);
+    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
     setLayout(new FillLayout());
 
     SashForm sashForm = new SashForm(this, SWT.SMOOTH | SWT.VERTICAL);
@@ -140,12 +141,6 @@ public class TargletContainerComposite extends Composite
   {
     editor.dispose();
     super.dispose();
-  }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Disable the check that prevents subclassing of SWT components
   }
 
   /**

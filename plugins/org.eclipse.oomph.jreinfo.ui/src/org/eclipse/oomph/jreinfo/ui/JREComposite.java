@@ -111,6 +111,7 @@ public class JREComposite extends Composite
     this.filter = filter;
     selectedElement = selection;
 
+    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
     setLayout(UIUtil.createGridLayout(2));
     TreeColumnLayout treeLayout = new TreeColumnLayout();
 
@@ -314,12 +315,6 @@ public class JREComposite extends Composite
         elementChanged(selectedElement);
       }
     });
-  }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Disable the check that prevents subclassing of SWT components.
   }
 
   protected void elementChanged(Object element)

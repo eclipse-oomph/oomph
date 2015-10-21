@@ -79,6 +79,7 @@ public class AgentManagerComposite extends Composite
   public AgentManagerComposite(Composite parent, int style, final Object selection)
   {
     super(parent, style);
+    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
     setLayout(UIUtil.createGridLayout(2));
 
     final P2ContentProvider contentProvider = new P2ContentProvider();
@@ -317,12 +318,6 @@ public class AgentManagerComposite extends Composite
     elementChanged(selectedElement);
 
     super.setEnabled(enabled);
-  }
-
-  @Override
-  protected void checkSubclass()
-  {
-    // Disable the check that prevents subclassing of SWT components
   }
 
   private void deletePressed()
