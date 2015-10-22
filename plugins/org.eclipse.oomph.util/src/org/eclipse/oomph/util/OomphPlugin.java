@@ -232,8 +232,6 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public final String log(Throwable t)
   {
-    t.printStackTrace();
-
     IStatus status = getStatus(t);
     log(status);
     return status.getMessage();
