@@ -409,6 +409,11 @@ public final class IOUtil
 
   public static URI newURI(String uri) throws IORuntimeException
   {
+    if (StringUtil.isEmpty(uri))
+    {
+      return null;
+    }
+
     try
     {
       return new URI(uri);

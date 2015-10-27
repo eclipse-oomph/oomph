@@ -37,9 +37,11 @@ import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.util.CollectionUtil;
 
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
@@ -125,8 +127,6 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
   private final RecorderTransaction recorderTransaction;
 
-  private final Map<URI, String> recorderValues;
-
   private final Set<URI> recorderValuesToRemove = new HashSet<URI>();
 
   private final Scope recorderTarget;
@@ -159,10 +159,10 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
   public SynchronizerDialog(Shell parentShell)
   {
-    this(parentShell, null, null, null);
+    this(parentShell, null, null);
   }
 
-  public SynchronizerDialog(Shell parentShell, RecorderTransaction transaction, Map<URI, String> preferences, Synchronization sync)
+  public SynchronizerDialog(Shell parentShell, RecorderTransaction transaction, Synchronization sync)
   {
     super(parentShell, getTitle(transaction), 800, 600);
     PreferenceTaskItemProvider.setShortenLabelText(adapterFactory);
@@ -179,14 +179,12 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       {
         mode = Mode.RECORD_AND_SYNC;
         recorderTransaction = transaction;
-        recorderValues = preferences;
         synchronization = sync;
       }
       else
       {
         mode = Mode.RECORD;
         recorderTransaction = transaction;
-        recorderValues = preferences;
         synchronization = null;
       }
     }
@@ -194,7 +192,6 @@ public class SynchronizerDialog extends AbstractRecorderDialog
     {
       mode = Mode.SYNC;
       recorderTransaction = null;
-      recorderValues = null;
       recorderTarget = null;
       recorderTargetImage = null;
       recorderTargetText = null;
@@ -364,7 +361,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
   @Override
   protected void okPressed()
   {
-    recorderValues.keySet().removeAll(recorderValuesToRemove);
+    recorderTransaction.getPreferences().keySet().removeAll(recorderValuesToRemove);
     super.okPressed();
   }
 
@@ -536,22 +533,42 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       Map<String, CompoundTask> compounds = new HashMap<String, CompoundTask>();
       Map<String, Boolean> policies = recorderTransaction.getPolicies(false);
 
-      for (Map.Entry<URI, String> entry : recorderValues.entrySet())
+      for (Map.Entry<URI, String> entry : recorderTransaction.getPreferences().entrySet())
       {
         URI uri = entry.getKey();
+        String pluginID = uri.segment(0);
 
         String key = PreferencesFactory.eINSTANCE.convertURI(uri);
+        String value = entry.getValue();
+
+        PreferenceTask task = SetupFactory.eINSTANCE.createPreferenceTask();
+        task.setKey(key);
+        task.setValue(value);
+
+        boolean conflict = false;
+        if (mode.isSync())
+        {
+          Map<String, String> preferenceIDs = synchronization.getPreferenceIDs();
+          String syncID = preferenceIDs.get(key);
+          if (syncID != null)
+          {
+            task.setID(syncID);
+
+            SyncAction syncAction = synchronization.getActions().get(syncID);
+            if (syncAction != null)
+            {
+              if (syncAction.getComputedType() == SyncActionType.CONFLICT)
+              {
+                task.eAdapters().add(new ConflictAdapter());
+                conflict = true;
+              }
+            }
+          }
+        }
 
         // Only offer preferences with *new* policies for review.
-        if (policies.containsKey(key))
+        if (policies.containsKey(key) || conflict)
         {
-          String pluginID = uri.segment(0);
-          String value = entry.getValue();
-
-          PreferenceTask task = SetupFactory.eINSTANCE.createPreferenceTask();
-          task.setKey(key);
-          task.setValue(value);
-
           CollectionUtil.add(tasks, pluginID, task);
 
           // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
@@ -572,7 +589,6 @@ public class SynchronizerDialog extends AbstractRecorderDialog
     }
 
     populateTree(tasks, labels, images);
-    synchronizeLocal(false);
   }
 
   private void populateTree(final Map<String, Set<SetupTask>> tasks, final Map<SetupTask, String> labels, final Map<SetupTask, Image> images)
@@ -599,9 +615,11 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
       for (SetupTask task : list)
       {
+        boolean conflict = EcoreUtil.getAdapter(task.eAdapters(), ConflictAdapter.class) != null;
         Image image = images.get(task);
         String text = labels.get(task);
-        TaskItem taskItem = new TaskItem(nodeItem, task, false, image, text);
+
+        TaskItem taskItem = new TaskItem(nodeItem, task, conflict, image, text);
         taskItems.put(task, taskItem);
 
         if (task instanceof PreferenceTask)
@@ -625,6 +643,8 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
       nodeItem.setExpanded(true);
     }
+
+    synchronizeLocal(false);
   }
 
   private void synchronizeLocal(boolean resynchronize)
@@ -633,18 +653,41 @@ public class SynchronizerDialog extends AbstractRecorderDialog
     {
       if (mode.isSync())
       {
-        Snapshot localSnapshot = synchronization.getSynchronizer().getLocalSnapshot();
-
         if (resynchronize)
         {
+          Snapshot localSnapshot = synchronization.getSynchronizer().getLocalSnapshot();
           SyncUtil.deleteFile(localSnapshot.getNewFile());
           RecorderManager.copyRecorderTarget(recorderTarget, localSnapshot.getFolder());
         }
 
-        Set<String> preferenceKeys = adjustLocalSnapshot(localSnapshot);
+        Set<String> preferenceKeys = null;
+        if (mode.isRecord())
+        {
+          Map<String, PolicyAndValue> preferenceChanges = new HashMap<String, PolicyAndValue>();
+          for (TaskItem taskItem : taskItems.values())
+          {
+            SetupTask task = taskItem.getTask();
+            if (task instanceof PreferenceTask)
+            {
+              PreferenceTask preferenceTask = (PreferenceTask)task;
+              String key = preferenceTask.getKey();
+
+              Choice localChoice = taskItem.getLocalChoice();
+              if (localChoice instanceof Choice.RecordAlways)
+              {
+                preferenceChanges.put(key, new PolicyAndValue(preferenceTask.getValue()));
+              }
+              else if (localChoice instanceof Choice.RecordNever || localChoice instanceof Choice.RecordSkip)
+              {
+                preferenceChanges.put(key, new PolicyAndValue());
+              }
+            }
+          }
+
+          preferenceKeys = adjustLocalSnapshot(synchronization, preferenceChanges);
+        }
 
         synchronization.synchronizeLocal();
-
         adjustSyncActions(preferenceKeys);
       }
     }
@@ -652,68 +695,6 @@ public class SynchronizerDialog extends AbstractRecorderDialog
     {
       SetupUIPlugin.INSTANCE.log(ex);
     }
-  }
-
-  /**
-   * Creates, configures and commits a temporary recorder transaction in preparation for the synchronization.
-   * The original recorder transaction is modified via {@link LocalColumnManager#setChoice(TaskItem, Choice)}.
-   */
-  private Set<String> adjustLocalSnapshot(Snapshot localSnapshot)
-  {
-    Set<String> preferenceKeys = null;
-    if (mode.isRecord())
-    {
-      // Transfer the selected recordings into the temporary user.setup in preparation for the synchronization
-      LocalDataProvider localDataProvider = (LocalDataProvider)localSnapshot.getDataProvider();
-      File target = localDataProvider.getLocalFile();
-
-      URI targetURI = URI.createFileURI(target.getAbsolutePath());
-      Resource resource = resourceSet.getResource(targetURI, true);
-
-      preferenceKeys = new HashSet<String>();
-      Map<URI, String> preferenceMap = new HashMap<URI, String>();
-
-      RecorderTransaction tmpTransaction = RecorderTransaction.openTmp(resource);
-      tmpTransaction.setPreferences(preferenceMap);
-
-      for (TaskItem taskItem : taskItems.values())
-      {
-        SetupTask task = taskItem.getTask();
-        if (task instanceof PreferenceTask)
-        {
-          PreferenceTask preferenceTask = (PreferenceTask)task;
-          String key = preferenceTask.getKey();
-
-          Choice localChoice = taskItem.getLocalChoice();
-          if (localChoice instanceof Choice.RecordAlways)
-          {
-            tmpTransaction.setPolicy(key, true);
-            preferenceMap.put(PreferencesFactory.eINSTANCE.createURI(key), preferenceTask.getValue());
-            preferenceKeys.add(key);
-          }
-          else if (localChoice instanceof Choice.RecordNever)
-          {
-            tmpTransaction.setPolicy(key, false);
-          }
-          else if (localChoice instanceof Choice.RecordSkip)
-          {
-            tmpTransaction.setPolicy(key, false);
-          }
-        }
-      }
-
-      try
-      {
-        tmpTransaction.commit();
-      }
-      finally
-      {
-        tmpTransaction.close();
-        resource.unload();
-      }
-    }
-
-    return preferenceKeys;
   }
 
   private void adjustSyncActions(Set<String> preferenceKeys)
@@ -765,6 +746,107 @@ public class SynchronizerDialog extends AbstractRecorderDialog
   private static String getTitle(RecorderTransaction recorderTransaction)
   {
     return recorderTransaction != null ? "Preference Recorder" : "Preference Synchronizer";
+  }
+
+  /**
+   * Creates, configures and commits a temporary recorder transaction in preparation for the synchronization.
+   * The original recorder transaction is modified via {@link LocalColumnManager#setChoice(TaskItem, Choice)}.
+   */
+  public static Set<String> adjustLocalSnapshot(Synchronization synchronization, Map<String, PolicyAndValue> preferenceChanges)
+  {
+    Snapshot localSnapshot = synchronization.getSynchronizer().getLocalSnapshot();
+
+    // Transfer the selected recordings into the temporary user.setup in preparation for the synchronization
+    LocalDataProvider localDataProvider = (LocalDataProvider)localSnapshot.getDataProvider();
+    File target = localDataProvider.getLocalFile();
+
+    URI targetURI = URI.createFileURI(target.getAbsolutePath());
+    Resource resource = synchronization.getResourceSet().getResource(targetURI, true);
+
+    Set<String> preferenceKeys = new HashSet<String>();
+    Map<URI, String> preferenceMap = new HashMap<URI, String>();
+
+    RecorderTransaction tmpTransaction = RecorderTransaction.openTmp(resource);
+    tmpTransaction.setPreferences(preferenceMap);
+
+    for (Map.Entry<String, PolicyAndValue> entry : preferenceChanges.entrySet())
+    {
+      String key = entry.getKey();
+      PolicyAndValue policyAndValue = entry.getValue();
+      if (policyAndValue.isRecord())
+      {
+        tmpTransaction.setPolicy(key, true);
+        String value = policyAndValue.getValue();
+        preferenceMap.put(PreferencesFactory.eINSTANCE.createURI(key), value);
+        preferenceKeys.add(key);
+      }
+      else
+      {
+        tmpTransaction.setPolicy(key, false);
+      }
+    }
+
+    try
+    {
+      tmpTransaction.commit();
+    }
+    finally
+    {
+      tmpTransaction.close();
+      resource.unload();
+    }
+
+    return preferenceKeys;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class PolicyAndValue
+  {
+    private final boolean record;
+
+    private final String value;
+
+    public PolicyAndValue()
+    {
+      record = false;
+      value = null;
+    }
+
+    public PolicyAndValue(String value)
+    {
+      record = true;
+      this.value = value;
+    }
+
+    public boolean isRecord()
+    {
+      return record;
+    }
+
+    public String getValue()
+    {
+      return value;
+    }
+
+    @Override
+    public String toString()
+    {
+      return record ? "record (" + value + ")" : "ignore";
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class ConflictAdapter extends AdapterImpl
+  {
+    @Override
+    public boolean isAdapterForType(Object type)
+    {
+      return type == ConflictAdapter.class;
+    }
   }
 
   /**
@@ -1027,12 +1109,12 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       // Do nothing.
     }
 
-    protected final void applyTo(SyncAction syncAction, SyncDelta delta, SyncActionType setActionType)
+    protected final void applyTo(SyncAction syncAction, SyncDelta delta, SyncActionType setActionType, SyncActionType removeActionType)
     {
       SetupTask newTask = delta.getNewTask();
       if (newTask == null)
       {
-        syncAction.setResolvedType(SyncActionType.REMOVE);
+        syncAction.setResolvedType(removeActionType);
       }
       else
       {
@@ -1131,7 +1213,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       @Override
       public void applyTo(SyncAction syncAction)
       {
-        applyTo(syncAction, syncAction.getLocalDelta(), SyncActionType.SET_LOCAL);
+        applyTo(syncAction, syncAction.getLocalDelta(), SyncActionType.SET_LOCAL, SyncActionType.REMOVE_LOCAL);
       }
     }
 
@@ -1156,7 +1238,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       @Override
       public void applyTo(SyncAction syncAction)
       {
-        applyTo(syncAction, syncAction.getRemoteDelta(), SyncActionType.SET_REMOTE);
+        applyTo(syncAction, syncAction.getRemoteDelta(), SyncActionType.SET_REMOTE, SyncActionType.REMOVE_REMOTE);
       }
     }
 
@@ -1185,11 +1267,15 @@ public class SynchronizerDialog extends AbstractRecorderDialog
         SyncDelta remoteDelta = syncAction.getRemoteDelta();
         if (remoteDelta != null)
         {
-          applyTo(syncAction, remoteDelta, SyncActionType.SET_REMOTE);
+          applyTo(syncAction, remoteDelta, SyncActionType.SET_REMOTE, SyncActionType.REMOVE_REMOTE);
+          return;
         }
-        else
+
+        SyncDelta localDelta = syncAction.getLocalDelta();
+        if (localDelta != null)
         {
-          applyTo(syncAction, syncAction.getLocalDelta(), SyncActionType.SET_LOCAL);
+          applyTo(syncAction, localDelta, SyncActionType.SET_LOCAL, SyncActionType.REMOVE_LOCAL);
+          return;
         }
       }
     }

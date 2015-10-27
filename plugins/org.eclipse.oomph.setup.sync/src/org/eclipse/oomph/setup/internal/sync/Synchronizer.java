@@ -73,7 +73,9 @@ public class Synchronizer
       return null;
     }
 
+    // TODO Implement the user lock.
     LOCAL_LOCK.acquire();
+
     synchronization = createSynchronization(deferLocal);
     return synchronization;
   }

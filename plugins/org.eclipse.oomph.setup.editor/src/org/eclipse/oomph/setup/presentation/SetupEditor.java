@@ -745,6 +745,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           {
             URI uri = resource.getURI();
             URI normalizedURI = uriConverter.normalize(uri);
+            normalizedURI = SetupContext.resolveUser(normalizedURI);
 
             if (normalizedURI.isPlatformResource())
             {

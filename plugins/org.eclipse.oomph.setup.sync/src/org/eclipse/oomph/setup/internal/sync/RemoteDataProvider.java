@@ -32,7 +32,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.URI;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -211,15 +213,77 @@ public class RemoteDataProvider implements DataProvider
 
   private HttpResponse sendRequest(Request request) throws IOException
   {
+    long start = 0;
+    if (DEBUG)
+    {
+      try
+      {
+        start = System.currentTimeMillis();
+        StringBuilder builder = new StringBuilder();
+        builder.append(request);
+        builder.append('\n');
+
+        Field f1 = Request.class.getDeclaredField("request");
+        f1.setAccessible(true);
+        Object o1 = f1.get(request);
+
+        Field f2 = Class.forName("org.apache.http.message.AbstractHttpMessage").getDeclaredField("headergroup");
+        f2.setAccessible(true);
+        Object o2 = f2.get(o1);
+
+        Field f3 = o2.getClass().getDeclaredField("headers");
+        f3.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<Header> o3 = (List<Header>)f3.get(o2);
+
+        for (Header header : o3)
+        {
+          builder.append("   ");
+          builder.append(header);
+          builder.append('\n');
+        }
+
+        System.out.print(builder);
+      }
+      catch (Throwable ex)
+      {
+        ex.printStackTrace();
+      }
+    }
+
     Response result = SyncUtil.proxyAuthentication(executor, uri).execute(request);
     HttpResponse response = result.returnResponse();
 
     if (DEBUG)
     {
-      System.out.println(response.getStatusLine());
-      for (Header header : response.getAllHeaders())
+      try
       {
-        System.out.println("   " + header);
+        StringBuilder builder = new StringBuilder();
+        builder.append(response.getStatusLine());
+        builder.append('\n');
+
+        for (Header header : response.getAllHeaders())
+        {
+          builder.append("   ");
+          builder.append(header);
+          builder.append('\n');
+        }
+
+        if (start != 0)
+        {
+          long millis = System.currentTimeMillis() - start;
+          builder.append("Took: ");
+          builder.append(millis);
+          builder.append(" millis");
+          builder.append('\n');
+        }
+
+        builder.append('\n');
+        System.out.print(builder);
+      }
+      catch (Throwable ex)
+      {
+        ex.printStackTrace();
       }
     }
 

@@ -10,15 +10,23 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
+import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.PreferenceTaskImpl.PreferenceHandler.Factory;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.UserCallback;
 import org.eclipse.oomph.util.XMLUtil;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -27,9 +35,13 @@ import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
@@ -42,8 +54,10 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -363,6 +377,211 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     Preferences node = preferenceProperty.getNode();
     node.flush();
+  }
+
+  public boolean execute(final UserCallback callback) throws Exception
+  {
+    SetupTaskContext context = new SetupTaskContext()
+    {
+      public boolean isCanceled()
+      {
+        return false;
+      }
+
+      public void log(String line)
+      {
+        // Do nothing.
+      }
+
+      public void log(String line, Severity severity)
+      {
+        // Do nothing.
+      }
+
+      public void log(String line, boolean filter)
+      {
+        // Do nothing.
+      }
+
+      public void log(String line, boolean filter, Severity severity)
+      {
+        // Do nothing.
+      }
+
+      public void log(IStatus status)
+      {
+        // Do nothing.
+      }
+
+      public void log(Throwable t)
+      {
+        // Do nothing.
+      }
+
+      public void task(SetupTask setupTask)
+      {
+        // Do nothing.
+      }
+
+      public void setTerminating()
+      {
+        // Do nothing.
+      }
+
+      public IProgressMonitor getProgressMonitor(boolean working)
+      {
+        return new NullProgressMonitor();
+      }
+
+      public SetupPrompter getPrompter()
+      {
+        return new SetupPrompter()
+        {
+          public UserCallback getUserCallback()
+          {
+            return callback;
+          }
+
+          public String getValue(VariableTask variable)
+          {
+            throw new UnsupportedOperationException();
+          }
+
+          public boolean promptVariables(List<? extends SetupTaskContext> performers)
+          {
+            throw new UnsupportedOperationException();
+          }
+        };
+      }
+
+      public Trigger getTrigger()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public void checkCancelation()
+      {
+        // Do nothing.
+      }
+
+      public boolean isSelfHosting()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public boolean isPerforming()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public boolean isOffline()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public boolean isMirrors()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public boolean isRestartNeeded()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public void setRestartNeeded(String reason)
+      {
+        // Do nothing.
+      }
+
+      public User getUser()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public Workspace getWorkspace()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public Installation getInstallation()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public File getInstallationLocation()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public File getProductLocation()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public File getProductConfigurationLocation()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public File getWorkspaceLocation()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public String getRelativeProductFolder()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public OS getOS()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public URIConverter getURIConverter()
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public URI redirect(URI uri)
+      {
+        return uri;
+      }
+
+      public String redirect(String uri)
+      {
+        return uri;
+      }
+
+      public Object get(Object key)
+      {
+        return null;
+      }
+
+      public Object put(Object key, Object value)
+      {
+        throw new UnsupportedOperationException();
+      }
+
+      public Set<Object> keySet()
+      {
+        return Collections.emptySet();
+      }
+
+      public String getLauncherName()
+      {
+        throw new UnsupportedOperationException();
+      }
+    };
+
+    if (isNeeded(context))
+    {
+      perform(context);
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -882,7 +1101,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   /**
    * @author Ed Merks
    */
-  public static class PreferenceHandlerFactoryRegistry extends BasicEMap<URI, PreferenceHandler.Factory>implements PreferenceHandler.Factory.Registry
+  public static class PreferenceHandlerFactoryRegistry extends BasicEMap<URI, PreferenceHandler.Factory> implements PreferenceHandler.Factory.Registry
   {
     private static final URI ROOT_PREFIX = URI.createURI("//");
 

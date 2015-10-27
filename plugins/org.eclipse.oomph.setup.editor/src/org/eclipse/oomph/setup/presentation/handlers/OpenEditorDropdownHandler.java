@@ -47,7 +47,7 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
     final User user = SetupFactory.eINSTANCE.createUser();
     ((InternalEObject)user).eSetProxyURI(SetupContext.USER_SETUP_URI.appendFragment("/"));
 
-    // No need to dispose the adapter factory explicitely because the single adapted object is short-lived.
+    // No need to dispose the adapter factory explicitly because the single adapted object is short-lived.
     ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
     ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(user, IItemLabelProvider.class);
 

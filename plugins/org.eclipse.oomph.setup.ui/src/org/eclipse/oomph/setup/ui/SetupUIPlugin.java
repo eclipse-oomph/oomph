@@ -28,10 +28,12 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.CacheHandling;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.p2.provider.SetupP2EditPlugin;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.SynchronizationController;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerPreferencePage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.util.SetupUtil;
@@ -284,12 +286,14 @@ public final class SetupUIPlugin extends OomphUIPlugin
         perform(uris);
       }
     };
+
     resourceMirror.begin(new SubProgressMonitor(monitor, work));
   }
 
   private static Set<? extends EObject> checkCrossReferences(ResourceSet resourceSet, URI uri)
   {
     Set<EObject> result = new HashSet<EObject>();
+
     Resource resource = resourceSet.getResource(uri, false);
     if (resource != null)
     {
@@ -382,8 +386,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
 
     monitor.setTaskName("Creating a setup task performer");
+
     try
     {
+      SynchronizationController synchronizationController = SynchronizerManager.INSTANCE.startSynchronization();
+
       // Ensure that the demand created resources for the installation, workspace, and user are loaded and created.
       // Load the resource set quickly without doing ETag checking.
       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
@@ -411,6 +418,19 @@ public final class SetupUIPlugin extends OomphUIPlugin
           }
         }
       }
+      else
+      {
+        monitor.worked(75);
+      }
+
+      if (synchronizationController != null)
+      {
+        Synchronization synchronization = synchronizationController.await();
+        if (synchronization != null)
+        {
+          // TODO Implement startup synchronization.
+        }
+      }
 
       // Create the performer with a fully populated resource set.
       performer = SetupTaskPerformer.createForIDE(resourceSet, SetupPrompter.CANCEL, trigger);
@@ -434,10 +454,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
     if (performer != null)
     {
       monitor.setTaskName("Initializing the setup task performer");
+
       try
       {
         // At this point we know that no prompt was needed.
-        EList<SetupTask> neededTasks = performer.initNeededSetupTasks(monitor);
+        EList<SetupTask> neededTasks = performer.initNeededSetupTasks(new SubProgressMonitor(monitor, 2));
         if (restarting)
         {
           for (Iterator<SetupTask> it = neededTasks.iterator(); it.hasNext();)
@@ -463,6 +484,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
         INSTANCE.log(ex);
         return;
       }
+    }
+    else
+    {
+      monitor.worked(2);
     }
 
     monitor.worked(1);

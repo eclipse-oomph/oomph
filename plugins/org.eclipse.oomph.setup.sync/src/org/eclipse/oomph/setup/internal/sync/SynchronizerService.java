@@ -12,9 +12,11 @@ package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.NotFoundException;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.AuthorizationRequiredException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -25,6 +27,8 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -43,6 +47,11 @@ public final class SynchronizerService
 
   public SynchronizerService(String label, URI serviceURI, URI signupURI)
   {
+    if (serviceURI == null)
+    {
+      throw new IllegalArgumentException("Service URI is null");
+    }
+
     this.label = label;
     this.serviceURI = serviceURI;
     this.signupURI = signupURI;
@@ -50,6 +59,11 @@ public final class SynchronizerService
 
   public String getLabel()
   {
+    if (StringUtil.isEmpty(label))
+    {
+      return getServiceURI().toString();
+    }
+
     return label;
   }
 
@@ -98,8 +112,9 @@ public final class SynchronizerService
       {
         securePreferences.put(USERNAME_KEY, credentials.getUsername(), true);
         securePreferences.put(PASSWORD_KEY, credentials.getPassword(), true);
-        securePreferences.flush();
       }
+
+      securePreferences.flush();
     }
     catch (Exception ex)
     {
@@ -128,6 +143,10 @@ public final class SynchronizerService
     {
       return false;
     }
+    catch (NotFoundException ex)
+    {
+      //$FALL-THROUGH$
+    }
     catch (IOException ex)
     {
       ex.printStackTrace();
@@ -137,9 +156,19 @@ public final class SynchronizerService
     return true;
   }
 
-  public RemoteDataProvider createDataProvider()
+  /**
+   * Returns a {@link RemoteDataProvider} configured to use this synchronizer service.
+   *
+   * @throws AuthorizationRequiredException
+   */
+  public RemoteDataProvider createDataProvider(CredentialsProvider credentialsProvider) throws AuthorizationRequiredException
   {
-    SynchronizerCredentials credentials = getCredentials();
+    SynchronizerCredentials credentials = getCredentials(credentialsProvider);
+    if (credentials == null)
+    {
+      throw new AuthorizationRequiredException(serviceURI);
+    }
+
     Credentials usernamePasswordCredentials = new UsernamePasswordCredentials(credentials.getUsername(), credentials.getPassword());
     return new RemoteDataProvider(serviceURI, usernamePasswordCredentials);
   }
@@ -181,7 +210,7 @@ public final class SynchronizerService
   @Override
   public String toString()
   {
-    return label;
+    return getLabel();
   }
 
   private ISecurePreferences getPreferences()
@@ -206,6 +235,32 @@ public final class SynchronizerService
     return IOUtil.encodeFileName(serviceURI.toString());
   }
 
+  private SynchronizerCredentials getCredentials(CredentialsProvider credentialsProvider)
+  {
+    SynchronizerCredentials credentials = getCredentials();
+    if (credentials == null)
+    {
+      if (credentialsProvider != null)
+      {
+        credentials = credentialsProvider.provideCredentials(this);
+        if (credentials != null)
+        {
+          setCredentials(credentials);
+        }
+      }
+    }
+
+    return credentials;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface CredentialsProvider
+  {
+    public SynchronizerCredentials provideCredentials(SynchronizerService service);
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -213,11 +268,9 @@ public final class SynchronizerService
   {
     public static final Registry INSTANCE = new Registry();
 
-    public static final SynchronizerService ECLIPSE_SERVICE = new SynchronizerService("Eclipse.org" //
-        , IOUtil.newURI("https://dev.eclipse.org/oomph/") //
-        , IOUtil.newURI("https://dev.eclipse.org/site_login"));
+    public static final URI ECLIPSE_SERVICE_URI = IOUtil.newURI("https://dev.eclipse.org/oomph/");
 
-    private static final SynchronizerService[] SERVICES = { ECLIPSE_SERVICE };
+    private final Map<URI, SynchronizerService> services = new HashMap<URI, SynchronizerService>();
 
     private Registry()
     {
@@ -225,21 +278,35 @@ public final class SynchronizerService
 
     public SynchronizerService[] getServices()
     {
-      return SERVICES;
+      synchronized (services)
+      {
+        return services.values().toArray(new SynchronizerService[services.size()]);
+      }
     }
 
     public SynchronizerService getService(URI serviceURI)
     {
-      for (int i = 0; i < SERVICES.length; i++)
-      {
-        SynchronizerService service = SERVICES[i];
-        if (ObjectUtil.equals(service.getServiceURI(), serviceURI))
-        {
-          return service;
-        }
-      }
+      return services.get(serviceURI);
+    }
 
-      return null;
+    public void addService(SynchronizerService service)
+    {
+      URI serviceURI = service.getServiceURI();
+
+      synchronized (services)
+      {
+        services.put(serviceURI, service);
+      }
+    }
+
+    public void removeService(SynchronizerService service)
+    {
+      URI serviceURI = service.getServiceURI();
+
+      synchronized (services)
+      {
+        services.remove(serviceURI);
+      }
     }
   }
 }

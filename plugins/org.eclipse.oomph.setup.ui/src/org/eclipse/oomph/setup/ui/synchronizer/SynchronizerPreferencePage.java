@@ -96,7 +96,8 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
             if (e.item instanceof TableItem)
             {
               TableItem item = (TableItem)e.item;
-              currentService = (SynchronizerService)item.getData();
+              SynchronizerService service = (SynchronizerService)item.getData();
+              selectService(service);
             }
           }
         });

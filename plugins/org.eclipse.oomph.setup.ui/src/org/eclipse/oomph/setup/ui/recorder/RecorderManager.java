@@ -12,28 +12,41 @@ package org.eclipse.oomph.setup.ui.recorder;
 
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.util.PreferencesRecorder;
+import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.impl.PreferenceTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.sync.DataProvider;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
+import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.AuthorizationRequiredException;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerJob;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerService;
+import org.eclipse.oomph.setup.sync.SyncAction;
+import org.eclipse.oomph.setup.sync.SyncActionType;
+import org.eclipse.oomph.setup.sync.SyncDelta;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction.CommitHandler;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog.PolicyAndValue;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.UICredentialsProvider;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.UserCallback;
 
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -67,8 +80,10 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -80,6 +95,15 @@ public final class RecorderManager
   public static final RecorderManager INSTANCE = new RecorderManager();
 
   private static final IPersistentPreferenceStore SETUP_UI_PREFERENCES = (IPersistentPreferenceStore)SetupUIPlugin.INSTANCE.getPreferenceStore();
+
+  private static final UserCallback USER_CALLBACK = new UserCallback()
+  {
+    @Override
+    public void execInUI(boolean async, Runnable runnable)
+    {
+      UIUtil.syncExec(runnable);
+    }
+  };
 
   private static final URI USER_URI = SetupContext.USER_SETUP_URI.appendFragment("/");
 
@@ -170,7 +194,7 @@ public final class RecorderManager
             recorder = new PreferencesRecorder();
           }
 
-          earlySynchronization.start();
+          earlySynchronization.start(false);
         }
         else
         {
@@ -197,6 +221,18 @@ public final class RecorderManager
     catch (IOException ex)
     {
       SetupUIPlugin.INSTANCE.log(ex);
+    }
+  }
+
+  private Map<String, PreferenceTask> commitTransaction(RecorderTransaction transaction)
+  {
+    try
+    {
+      return transaction.commit();
+    }
+    finally
+    {
+      closeTransaction(transaction);
     }
   }
 
@@ -260,109 +296,242 @@ public final class RecorderManager
     return null;
   }
 
-  private void handleRecording(IEditorPart editorPart, final Map<URI, String> values)
+  private void handleRecording(IEditorPart editorPart, Map<URI, String> values)
   {
-    final RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(user, editorPart);
-    final SyncInfo[] syncInfo = { null };
+    RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(user, editorPart);
+    transaction.setPreferences(values);
+
+    // In some cases (such as changing the recorder target in the current recorder transaction or missing credentials)
+    // early synchronization has not been started, yet. We want to be safe and try to start it now (has no effect if already started).
+    boolean started = earlySynchronization.start(true);
+
+    SyncInfo syncInfo = started ? awaitEarlySynchronization() : null;
+    Synchronization synchronization = syncInfo == null ? null : syncInfo.getSynchronization();
 
     try
     {
-      for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
+      boolean dialogNeeded = false;
+      Set<URI> preferenceURIs = transaction.getPreferences().keySet();
+
+      for (Iterator<URI> it = preferenceURIs.iterator(); it.hasNext();)
       {
         URI uri = it.next();
+        String key = PreferencesFactory.eINSTANCE.convertURI(uri);
 
-        String path = PreferencesFactory.eINSTANCE.convertURI(uri);
-        Boolean policy = transaction.getPolicy(path);
-        if (policy == null)
+        if (synchronization != null)
         {
-          transaction.setPolicy(path, true);
+          String syncID = synchronization.getPreferenceIDs().get(key);
+          SyncPolicy remotePolicy = synchronization.getRemotePolicies().get(syncID);
+          if (remotePolicy == SyncPolicy.INCLUDE)
+          {
+            transaction.setPolicy(key, true); // Default to "record".
+          }
         }
-        else if (!policy)
+
+        Boolean localPolicy = transaction.getPolicy(key);
+        if (localPolicy == null)
         {
-          // There's an ignore policy; remove the preference change from the values map.
-          it.remove();
+          // Local policy is missing.
+          transaction.setPolicy(key, true); // Default to "record".
+          dialogNeeded = true; // And prompt below...
+        }
+        else if (!localPolicy)
+        {
+          // Local policy is "ignore".
+          it.remove(); // Remove the preference change from the transaction.
         }
       }
 
-      // In some cases (such as changing the recorder target in the current recorder transaction) early synchronization has not been started, yet.
-      // We want to be safe and try to start it now (has no effect if already started).
-      earlySynchronization.start();
-
-      if (transaction.isDirty())
+      if (synchronization != null)
       {
-        syncInfo[0] = awaitEarlySynchronization();
-        final boolean[] exitEarly = { false };
-        UIUtil.syncExec(display, new Runnable()
+        try
         {
-          public void run()
+          Map<String, PolicyAndValue> preferenceChanges = new HashMap<String, PolicyAndValue>();
+          for (URI uri : preferenceURIs)
           {
-            Shell shell = UIUtil.getShell();
-            Synchronization synchronization = syncInfo[0] != null ? syncInfo[0].getSynchronization() : null;
-
-            AbstractRecorderDialog dialog = new SynchronizerDialog(shell, transaction, values, synchronization);
-            int result = dialog.open();
-
-            if (!dialog.isEnableRecorder())
+            String key = PreferencesFactory.eINSTANCE.convertURI(uri);
+            if (transaction.getPolicy(key))
             {
-              setRecorderEnabled(false);
-              exitEarly[0] = true;
+              String value = transaction.getPreferences().get(uri);
+              preferenceChanges.put(key, new PolicyAndValue(value));
             }
-            else if (result != AbstractRecorderDialog.OK)
+            else
             {
-              exitEarly[0] = true;
+              preferenceChanges.put(key, new PolicyAndValue());
             }
           }
-        });
 
-        if (exitEarly[0])
+          Set<String> preferenceKeys = SynchronizerDialog.adjustLocalSnapshot(synchronization, preferenceChanges);
+
+          Map<String, SyncAction> syncActions = synchronization.synchronizeLocal();
+          for (SyncAction syncAction : syncActions.values())
+          {
+            if (syncAction.getComputedType() == SyncActionType.CONFLICT)
+            {
+              Map.Entry<String, String> preference = syncAction.getPreference();
+              if (preference != null && preferenceKeys.contains(preference.getKey()))
+              {
+                dialogNeeded = true;
+                break;
+              }
+            }
+          }
+        }
+        catch (IOException ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
+      }
+
+      if (dialogNeeded)
+      {
+        if (!openSynchronizerDialog(transaction, synchronization))
         {
           return;
         }
       }
 
-      transaction.setPreferences(values);
-      transaction.commit();
-    }
-    finally
-    {
-      try
+      if (synchronization != null)
       {
-        if (syncInfo[0] != null)
+        // Ensure that the syncIDs are committed to the recorder target.
+        final Map<String, String> preferenceIDs = synchronization.getPreferenceIDs();
+
+        transaction.setCommitHandler(new CommitHandler()
         {
-          File tmpFolder = syncInfo[0].getTmpFolder();
-          File syncFolder = syncInfo[0].getSyncFolder();
-          Synchronization synchronization = syncInfo[0].getSynchronization();
+          public void handlePreferenceTask(PreferenceTask preferenceTask)
+          {
+            String key = preferenceTask.getKey();
 
-          try
-          {
-            synchronization.commit();
-
-            Synchronizer synchronizer = synchronization.getSynchronizer();
-            synchronizer.copyFilesTo(syncFolder);
-          }
-          catch (NotCurrentException ex)
-          {
-            ErrorDialog.open(ex);
-          }
-          catch (IOException ex)
-          {
-            SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-            ErrorDialog.open(ex);
-          }
-          finally
-          {
-            if (!SYNC_FOLDER_KEEP)
+            String syncID = preferenceIDs.get(key);
+            if (syncID != null)
             {
-              IOUtil.deleteBestEffort(tmpFolder, SYNC_FOLDER_RANDOM);
+              preferenceTask.setID(syncID);
             }
+          }
+        });
+      }
 
-            synchronization.dispose();
+      Map<String, PreferenceTask> preferenceTasks = commitTransaction(transaction);
+
+      if (synchronization != null)
+      {
+        Scope recorderTarget = syncInfo.getRecorderTarget();
+        File syncFolder = syncInfo.getSyncFolder();
+        File tmpFolder = syncInfo.getTmpFolder();
+
+        if (!dialogNeeded)
+        {
+          EMap<String, SyncPolicy> remotePolicies = synchronization.getRemotePolicies();
+          boolean remotePoliciesMissing = false;
+
+          for (PreferenceTask preferenceTask : preferenceTasks.values())
+          {
+            String taskID = preferenceTask.getID();
+            if (taskID != null)
+            {
+              SyncPolicy remotePolicy = remotePolicies.get(taskID);
+              if (remotePolicy == null)
+              {
+                // Remote policy is missing.
+                remotePoliciesMissing = true; // Prompt below...
+                break;
+              }
+            }
+          }
+
+          // Copy the committed recorder target to the temporary sync folder.
+          RecorderManager.copyRecorderTarget(recorderTarget, tmpFolder);
+
+          if (remotePoliciesMissing)
+          {
+            if (!openSynchronizerDialog(null, synchronization)) // Requires the copyRecorderTarget() call above.
+            {
+              return;
+            }
+          }
+          else
+          {
+            try
+            {
+              Map<String, SyncAction> syncActions = synchronization.synchronizeLocal(); // Requires the copyRecorderTarget() call above.
+              Map<String, String> preferenceIDs = synchronization.getPreferenceIDs();
+
+              for (Iterator<Map.Entry<String, SyncAction>> it = syncActions.entrySet().iterator(); it.hasNext();)
+              {
+                Map.Entry<String, SyncAction> entry = it.next();
+                String syncID = entry.getKey();
+                SyncAction syncAction = entry.getValue();
+
+                SyncPolicy remotePolicy = remotePolicies.get(syncID);
+                if (remotePolicy == SyncPolicy.EXCLUDE)
+                {
+                  it.remove();
+                  continue;
+                }
+
+                SyncActionType type = syncAction.getComputedType();
+                switch (type)
+                {
+                  case SET_REMOTE: // Ignore REMOTE -> LOCAL actions.
+                  case REMOVE_REMOTE: // Ignore REMOTE -> LOCAL actions.
+                  case CONFLICT: // Ignore interactive actions.
+                  case EXCLUDE: // Should not occur.
+                  case NONE: // Should not occur.
+                    it.remove();
+                    continue;
+                }
+
+                Map.Entry<String, String> preference = syncAction.getPreference();
+                if (preference == null || !preferenceIDs.containsKey(preference.getKey()))
+                {
+                  it.remove();
+                  continue;
+                }
+              }
+            }
+            catch (IOException ex)
+            {
+              SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+              ErrorDialog.open(ex);
+              return;
+            }
+          }
+        }
+
+        try
+        {
+          applyRemotePreferenceChanges(synchronization);
+
+          synchronization.commit();
+
+          Synchronizer synchronizer = synchronization.getSynchronizer();
+          synchronizer.copyFilesTo(syncFolder);
+
+          copyRecorderTargetBack(recorderTarget, tmpFolder);
+        }
+        catch (NotCurrentException ex)
+        {
+          ErrorDialog.open(ex);
+        }
+        catch (IOException ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+          ErrorDialog.open(ex);
+        }
+        finally
+        {
+          if (!SYNC_FOLDER_KEEP)
+          {
+            IOUtil.deleteBestEffort(tmpFolder, SYNC_FOLDER_RANDOM);
           }
         }
       }
-      finally
+    }
+    finally
+    {
+      if (synchronization != null)
       {
-        closeTransaction(transaction);
+        synchronization.dispose();
       }
     }
   }
@@ -370,7 +539,6 @@ public final class RecorderManager
   private SyncInfo awaitEarlySynchronization()
   {
     SyncInfo syncInfo = earlySynchronization.await();
-
     if (syncInfo != null)
     {
       // Check if the recorder target is still the User scope (it could have been changed meanwhile).
@@ -382,6 +550,62 @@ public final class RecorderManager
     }
 
     return null;
+  }
+
+  private boolean openSynchronizerDialog(final RecorderTransaction transaction, final Synchronization synchronization)
+  {
+    final boolean[] ok = { true };
+    UIUtil.syncExec(display, new Runnable()
+    {
+      public void run()
+      {
+        Shell shell = UIUtil.getShell();
+
+        AbstractRecorderDialog dialog = new SynchronizerDialog(shell, transaction, synchronization);
+        int result = dialog.open();
+
+        if (!dialog.isEnableRecorder())
+        {
+          setRecorderEnabled(false);
+          ok[0] = false;
+        }
+        else if (result != AbstractRecorderDialog.OK)
+        {
+          ok[0] = false;
+        }
+      }
+    });
+
+    return ok[0];
+  }
+
+  private void applyRemotePreferenceChanges(Synchronization synchronization)
+  {
+    Map<String, SyncAction> syncActions = synchronization.getActions();
+    if (syncActions != null)
+    {
+      for (SyncAction syncAction : syncActions.values())
+      {
+        if (syncAction.getEffectiveType() == SyncActionType.SET_REMOTE)
+        {
+          SyncDelta remoteDelta = syncAction.getRemoteDelta();
+          SetupTask newTask = remoteDelta.getNewTask();
+          if (newTask instanceof PreferenceTask)
+          {
+            PreferenceTask preferenceTask = (PreferenceTask)newTask;
+
+            try
+            {
+              executePreferenceTask(preferenceTask);
+            }
+            catch (Exception ex)
+            {
+              SetupUIPlugin.INSTANCE.log(ex);
+            }
+          }
+        }
+      }
+    }
   }
 
   private static URI convertURI(URI uri)
@@ -478,7 +702,34 @@ public final class RecorderManager
     }
   }
 
+  public static boolean executePreferenceTask(PreferenceTask task) throws Exception
+  {
+    return ((PreferenceTaskImpl)task).execute(USER_CALLBACK);
+  }
+
   public static File copyRecorderTarget(Scope recorderTarget, File targetFolder)
+  {
+    URI uri = resolveRecorderTargetURI(recorderTarget);
+
+    File source = new File(uri.toFileString());
+    File target = new File(targetFolder, uri.lastSegment());
+
+    IOUtil.copyFile(source, target);
+    return target;
+  }
+
+  private static File copyRecorderTargetBack(Scope recorderTarget, File targetFolder)
+  {
+    URI uri = resolveRecorderTargetURI(recorderTarget);
+
+    File source = new File(uri.toFileString());
+    File target = new File(targetFolder, uri.lastSegment());
+
+    IOUtil.copyFile(target, source);
+    return target;
+  }
+
+  private static URI resolveRecorderTargetURI(Scope recorderTarget)
   {
     Resource resource = recorderTarget.eResource();
     URIConverter uriConverter = resource.getResourceSet().getURIConverter();
@@ -486,12 +737,7 @@ public final class RecorderManager
     URI uri = resource.getURI();
     uri = uriConverter.normalize(uri);
     uri = SetupContext.resolveUser(uri);
-
-    File source = new File(uri.toFileString());
-    File target = new File(targetFolder, uri.lastSegment());
-
-    IOUtil.copyFile(source, target);
-    return target;
+    return uri;
   }
 
   /**
@@ -560,7 +806,7 @@ public final class RecorderManager
           if (isRecorderEnabled())
           {
             recorder = new PreferencesRecorder();
-            earlySynchronization.start();
+            earlySynchronization.start(false);
           }
 
           shell.addDisposeListener(new DisposeListener()
@@ -633,11 +879,17 @@ public final class RecorderManager
 
     private SynchronizerJob synchronizerJob;
 
-    public void start()
+    private long startTime;
+
+    public EarlySynchronization()
+    {
+    }
+
+    public boolean start(boolean force)
     {
       if (!SynchronizerManager.ENABLED)
       {
-        return;
+        return false;
       }
 
       if (synchronizerJob == null && SynchronizerManager.INSTANCE.isSyncEnabled())
@@ -688,16 +940,30 @@ public final class RecorderManager
           }
 
           File target = RecorderManager.copyRecorderTarget(recorderTarget, tmpFolder);
-
           DataProvider local = new LocalDataProvider(target);
-          DataProvider remote = service.createDataProvider();
-          Synchronizer synchronizer = new Synchronizer(local, remote, tmpFolder);
 
-          synchronizerJob = new SynchronizerJob(synchronizer, true);
-          synchronizerJob.setService(service);
-          synchronizerJob.schedule();
+          try
+          {
+            DataProvider remote = service.createDataProvider(force ? UICredentialsProvider.INSTANCE : null);
+            Synchronizer synchronizer = new Synchronizer(local, remote, tmpFolder);
+
+            synchronizerJob = new SynchronizerJob(synchronizer, true);
+            synchronizerJob.setService(service);
+            synchronizerJob.schedule();
+
+            startTime = System.currentTimeMillis();
+          }
+          catch (AuthorizationRequiredException ex)
+          {
+            if (force)
+            {
+              SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+            }
+          }
         }
       }
+
+      return synchronizerJob != null;
     }
 
     public void stop()
@@ -748,21 +1014,10 @@ public final class RecorderManager
                   {
                     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                     {
-                      result.synchronization = await(serviceLabel, 10000, monitor);
+                      long timeout = SynchronizerManager.TIMEOUT - (System.currentTimeMillis() - startTime);
+                      result.synchronization = await(serviceLabel, timeout, monitor);
                     }
                   });
-
-                  // if (synchronization.get() == null)
-                  // {
-                  // ProgressMonitorDialog dialog = new ProgressMonitorDialog(UIUtil.getShell());
-                  // dialog.run(true, true, new IRunnableWithProgress()
-                  // {
-                  // public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-                  // {
-                  // synchronization.set(await(serviceLabel, 8000, monitor));
-                  // }
-                  // });
-                  // }
                 }
                 catch (InvocationTargetException ex)
                 {
@@ -790,6 +1045,10 @@ public final class RecorderManager
           {
             SetupUIPlugin.INSTANCE.log(ex);
           }
+          finally
+          {
+            synchronizerJob = null;
+          }
         }
 
         return result;
@@ -798,7 +1057,7 @@ public final class RecorderManager
       return null;
     }
 
-    private Synchronization await(String serviceLabel, int timeout, IProgressMonitor monitor)
+    private Synchronization await(String serviceLabel, long timeout, IProgressMonitor monitor)
     {
       monitor.beginTask("Requesting data from " + serviceLabel + "...", IProgressMonitor.UNKNOWN);
 
@@ -816,7 +1075,7 @@ public final class RecorderManager
   /**
    * @author Eike Stepper
    */
-  public static final class SyncInfo
+  private static final class SyncInfo
   {
     private Scope recorderTarget;
 

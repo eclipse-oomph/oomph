@@ -610,10 +610,7 @@ public final class TestWorkstation
       SyncAction action = getPreferenceAction(key);
       if (action != null)
       {
-        SyncDelta delta = action.getLocalDelta();
-        SyncActionType location = SyncActionType.SET_LOCAL;
-
-        pick(action, delta, location);
+        pick(action, action.getLocalDelta(), SyncActionType.SET_LOCAL, SyncActionType.REMOVE_LOCAL);
       }
 
       return this;
@@ -624,27 +621,24 @@ public final class TestWorkstation
       SyncAction action = getPreferenceAction(key);
       if (action != null)
       {
-        SyncDelta delta = action.getRemoteDelta();
-        SyncActionType location = SyncActionType.SET_REMOTE;
-
-        pick(action, delta, location);
+        pick(action, action.getRemoteDelta(), SyncActionType.SET_REMOTE, SyncActionType.REMOVE_REMOTE);
       }
 
       return this;
     }
 
-    private void pick(SyncAction action, SyncDelta delta, SyncActionType location)
+    private void pick(SyncAction action, SyncDelta delta, SyncActionType setActionType, SyncActionType removeActionType)
     {
       String id = getID(action);
       if (id != null)
       {
         if (delta.getNewTask() == null)
         {
-          resolve(id, SyncActionType.REMOVE);
+          resolve(id, removeActionType);
         }
         else
         {
-          resolve(id, location);
+          resolve(id, setActionType);
         }
       }
     }

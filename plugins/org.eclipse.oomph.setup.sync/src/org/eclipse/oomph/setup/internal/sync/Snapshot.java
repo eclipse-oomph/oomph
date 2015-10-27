@@ -98,7 +98,7 @@ public class Snapshot
     return getClass().getSimpleName() + "[" + dataProvider + " --> " + info + "]";
   }
 
-  private void doCommit() throws IOException, NotCurrentException
+  private void doCommit(boolean post) throws IOException, NotCurrentException
   {
     if (!tmpFile.isFile())
     {
@@ -107,9 +107,12 @@ public class Snapshot
 
     try
     {
-      String baseVersion = SyncUtil.getDigest(newFile);
+      if (post)
+      {
+        String baseVersion = SyncUtil.getDigest(newFile);
+        dataProvider.post(tmpFile, baseVersion);
+      }
 
-      dataProvider.post(tmpFile, baseVersion);
       moveTmpFileTo(oldFile);
 
       IOUtil.copyFile(oldFile, newFile);
@@ -161,12 +164,12 @@ public class Snapshot
       return snapshot.tmpFile;
     }
 
-    public void commit() throws IOException, NotCurrentException
+    public void commit(boolean post) throws IOException, NotCurrentException
     {
       if (!committed && !disposed)
       {
         committed = true;
-        snapshot.doCommit();
+        snapshot.doCommit(post);
       }
     }
 

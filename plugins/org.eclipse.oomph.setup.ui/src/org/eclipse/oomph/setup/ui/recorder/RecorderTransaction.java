@@ -93,8 +93,6 @@ public abstract class RecorderTransaction
 
   private static RecorderTransaction instance;
 
-  private static boolean policiesInitialized;
-
   private final Resource resource;
 
   private final Map<String, Boolean> cleanPolicies = new HashMap<String, Boolean>();
@@ -115,16 +113,18 @@ public abstract class RecorderTransaction
 
   private boolean forceDirty;
 
+  private CommitHandler commitHandler;
+
   RecorderTransaction(boolean user, SetupTaskContainer rootObject)
   {
     this.user = user;
     this.rootObject = rootObject;
     resource = rootObject.eResource();
 
-    rootObject = (SetupTaskContainer)resource.getContents().get(0);
     if (user)
     {
-      findRecorderAnnotation(rootObject);
+      SetupTaskContainer resourceRoot = (SetupTaskContainer)resource.getContents().get(0);
+      findRecorderAnnotation(resourceRoot);
 
       if (recorderAnnotation != null)
       {
@@ -285,17 +285,31 @@ public abstract class RecorderTransaction
     preferencesToRemove.addAll(keys);
   }
 
-  public void commit()
+  public CommitHandler getCommitHandler()
   {
-    if (isDirty())
-    {
-      doCommit();
-    }
+    return commitHandler;
   }
 
-  protected abstract void doCommit();
+  public void setCommitHandler(CommitHandler commitHandler)
+  {
+    this.commitHandler = commitHandler;
+  }
 
-  protected final List<? extends Object> applyChanges()
+  public Map<String, PreferenceTask> commit()
+  {
+    Map<String, PreferenceTask> preferenceTasks = new HashMap<String, PreferenceTask>();
+
+    if (isDirty())
+    {
+      doCommit(preferenceTasks);
+    }
+
+    return preferenceTasks;
+  }
+
+  protected abstract void doCommit(Map<String, PreferenceTask> preferenceTasks);
+
+  protected final List<? extends Object> applyChanges(Map<String, PreferenceTask> preferenceTasks)
   {
     List<Object> recorderObjects = new ArrayList<Object>();
 
@@ -309,9 +323,9 @@ public abstract class RecorderTransaction
 
         recorderAnnotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_USER_PREFERENCES);
         preferenceContainer.getAnnotations().add(recorderAnnotation);
-
-        migrateOldTasks();
       }
+
+      migrateOldTasks();
 
       if (!policies.isEmpty())
       {
@@ -387,8 +401,16 @@ public abstract class RecorderTransaction
 
     if (preferences != null)
     {
-      record(preferences, preferenceContainer.getSetupTasks(), recorderObjects);
+      record(preferences, preferenceContainer.getSetupTasks(), recorderObjects, preferenceTasks);
       preferences = null;
+
+      if (commitHandler != null)
+      {
+        for (PreferenceTask preferenceTask : preferenceTasks.values())
+        {
+          commitHandler.handlePreferenceTask(preferenceTask);
+        }
+      }
     }
 
     preferencesToRemove.clear();
@@ -397,34 +419,29 @@ public abstract class RecorderTransaction
 
   protected void initializePolicies()
   {
-    if (!policiesInitialized)
+    boolean changed = false;
+
+    try
     {
-      boolean changed = false;
+      changed |= initializePoliciesFromProperties();
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
 
-      try
-      {
-        changed |= initializePoliciesFromProperties();
-      }
-      catch (Exception ex)
-      {
-        SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-      }
+    try
+    {
+      changed |= initializePoliciesFromExtensions();
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
 
-      try
-      {
-        changed |= initializePoliciesFromExtensions();
-      }
-      catch (Exception ex)
-      {
-        SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-      }
-
-      if (changed)
-      {
-        commit();
-      }
-
-      policiesInitialized = true;
+    if (changed)
+    {
+      commit();
     }
   }
 
@@ -566,35 +583,39 @@ public abstract class RecorderTransaction
       return;
     }
 
-    for (Object object : container.getSetupTasks().toArray())
+    EList<SetupTask> setupTasks = container.getSetupTasks();
+    for (SetupTask task : setupTasks.toArray(new SetupTask[setupTasks.size()]))
     {
-      if (object instanceof PreferenceTask)
+      if (task.getRestrictions().isEmpty())
       {
-        PreferenceTask preferenceTask = (PreferenceTask)object;
-        EObject eContainer = preferenceTask.eContainer();
-
-        String pluginID = URI.createURI(preferenceTask.getKey()).segment(1).toString();
-        CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(preferenceContainer.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME, pluginID,
-            true);
-        pluginCompound.getSetupTasks().add(preferenceTask);
-
-        while (eContainer instanceof CompoundTask)
+        if (task instanceof PreferenceTask)
         {
-          CompoundTask oldCompound = (CompoundTask)eContainer;
-          if (oldCompound.getSetupTasks().isEmpty())
+          PreferenceTask preferenceTask = (PreferenceTask)task;
+          EObject eContainer = preferenceTask.eContainer();
+
+          String pluginID = URI.createURI(preferenceTask.getKey()).segment(1).toString();
+          CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(preferenceContainer.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME,
+              pluginID, true);
+          pluginCompound.getSetupTasks().add(preferenceTask);
+
+          while (eContainer instanceof CompoundTask)
           {
-            eContainer = oldCompound.eContainer();
-            EcoreUtil.remove(oldCompound);
-          }
-          else
-          {
-            break;
+            CompoundTask oldCompound = (CompoundTask)eContainer;
+            if (oldCompound.getSetupTasks().isEmpty())
+            {
+              eContainer = oldCompound.eContainer();
+              EcoreUtil.remove(oldCompound);
+            }
+            else
+            {
+              break;
+            }
           }
         }
-      }
-      else if (object instanceof SetupTaskContainer)
-      {
-        migrateOldTasksRecursively((SetupTaskContainer)object);
+        else if (task instanceof SetupTaskContainer)
+        {
+          migrateOldTasksRecursively((SetupTaskContainer)task);
+        }
       }
     }
   }
@@ -664,7 +685,8 @@ public abstract class RecorderTransaction
     return (SetupTaskContainer)resource.getContents().get(0);
   }
 
-  private static void record(Map<URI, String> preferences, EList<SetupTask> setupTasks, List<Object> recorderObjects)
+  private static void record(Map<URI, String> preferences, EList<SetupTask> setupTasks, List<Object> recorderObjects,
+      Map<String, PreferenceTask> preferenceTasks)
   {
     for (Map.Entry<URI, String> entry : preferences.entrySet())
     {
@@ -701,6 +723,11 @@ public abstract class RecorderTransaction
             preferenceTask.setValue(SetupUtil.escape(value));
             recorderObjects.add(preferenceTask);
           }
+
+          if (preferenceTasks != null)
+          {
+            preferenceTasks.put(path, preferenceTask);
+          }
         }
       }
     }
@@ -710,7 +737,7 @@ public abstract class RecorderTransaction
   {
     EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
     List<Object> recorderObjects = new ArrayList<Object>();
-    record(preferences, setupTasks, recorderObjects);
+    record(preferences, setupTasks, recorderObjects, null);
     return setupTasks;
   }
 
@@ -823,6 +850,14 @@ public abstract class RecorderTransaction
   /**
    * @author Eike Stepper
    */
+  public interface CommitHandler
+  {
+    public void handlePreferenceTask(PreferenceTask preferenceTask);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
   private static final class EditorTransaction extends RecorderTransaction
   {
     private final IEditorPart editor;
@@ -868,7 +903,7 @@ public abstract class RecorderTransaction
     }
 
     @Override
-    protected void doCommit()
+    protected void doCommit(final Map<String, PreferenceTask> preferenceTasks)
     {
       ISelection selection = ((ISelectionProvider)editor).getSelection();
       final List<?> oldSelection = selection instanceof IStructuredSelection ? ((IStructuredSelection)selection).toList() : Collections.emptyList();
@@ -900,7 +935,7 @@ public abstract class RecorderTransaction
         @Override
         protected void doExecute()
         {
-          recorderObjects = applyChanges();
+          recorderObjects = applyChanges(preferenceTasks);
           affectedObjects = recorderObjects;
         }
 
@@ -976,9 +1011,9 @@ public abstract class RecorderTransaction
     }
 
     @Override
-    protected void doCommit()
+    protected void doCommit(Map<String, PreferenceTask> preferenceTasks)
     {
-      List<? extends Object> recorderObjects = applyChanges();
+      List<? extends Object> recorderObjects = applyChanges(preferenceTasks);
       if (recorderObjects != null)
       {
         try

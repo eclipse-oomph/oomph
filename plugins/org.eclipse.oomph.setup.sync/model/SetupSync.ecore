@@ -82,8 +82,9 @@
     <eLiterals name="None"/>
     <eLiterals name="SetLocal" value="1" literal="SetLocal"/>
     <eLiterals name="SetRemote" value="2" literal="SetRemote"/>
-    <eLiterals name="Remove" value="3"/>
-    <eLiterals name="Conflict" value="4"/>
-    <eLiterals name="Exclude" value="5"/>
+    <eLiterals name="RemoveLocal" value="3"/>
+    <eLiterals name="RemoveRemote" value="4"/>
+    <eLiterals name="Conflict" value="5"/>
+    <eLiterals name="Exclude" value="6"/>
   </eClassifiers>
 </ecore:EPackage>

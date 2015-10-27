@@ -501,7 +501,8 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.NONE);
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.SET_LOCAL);
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.SET_REMOTE);
-    addEEnumLiteral(syncActionTypeEEnum, SyncActionType.REMOVE);
+    addEEnumLiteral(syncActionTypeEEnum, SyncActionType.REMOVE_LOCAL);
+    addEEnumLiteral(syncActionTypeEEnum, SyncActionType.REMOVE_REMOTE);
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.CONFLICT);
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.EXCLUDE);
 

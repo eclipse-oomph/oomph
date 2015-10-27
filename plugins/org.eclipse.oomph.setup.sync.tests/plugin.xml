@@ -13,14 +13,12 @@
 
 <plugin>
 
-   <extension-point id="services" name="Synchronization Services" schema="schema/services.exsd"/>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated SetupSync -->
-      <package
-            uri="http://www.eclipse.org/oomph/setup/sync/1.0"
-            class="org.eclipse.oomph.setup.sync.SyncPackage"
-            genModel="model/SetupSync.genmodel"/>
+   <extension
+         point="org.eclipse.oomph.setup.sync.services">
+      <Service
+            label="Local Test Service"
+            serviceURI="http://localhost:8765/protected/">
+      </Service>
    </extension>
 
 </plugin>

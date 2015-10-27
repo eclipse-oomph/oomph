@@ -58,24 +58,32 @@ public enum SyncActionType implements Enumerator
   SET_REMOTE(2, "SetRemote", "SetRemote"),
 
   /**
-   * The '<em><b>Remove</b></em>' literal object.
+   * The '<em><b>Remove Local</b></em>' literal object.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #REMOVE_VALUE
+   * @see #REMOVE_LOCAL_VALUE
    * @generated
    * @ordered
    */
-  REMOVE(3, "Remove", "Remove"),
-
+  REMOVE_LOCAL(3, "RemoveLocal", "RemoveLocal"),
   /**
-   * The '<em><b>Conflict</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #CONFLICT_VALUE
-   * @generated
-   * @ordered
-   */
-  CONFLICT(4, "Conflict", "Conflict"),
+  * The '<em><b>Remove Remote</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #REMOVE_REMOTE_VALUE
+  * @generated
+  * @ordered
+  */
+  REMOVE_REMOTE(4, "RemoveRemote", "RemoveRemote"),
+  /**
+  * The '<em><b>Conflict</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #CONFLICT_VALUE
+  * @generated
+  * @ordered
+  */
+  CONFLICT(5, "Conflict", "Conflict"),
 
   /**
    * The '<em><b>Exclude</b></em>' literal object.
@@ -85,7 +93,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  EXCLUDE(5, "Exclude", "Exclude");
+  EXCLUDE(6, "Exclude", "Exclude");
 
   /**
    * The '<em><b>None</b></em>' literal value.
@@ -133,19 +141,34 @@ public enum SyncActionType implements Enumerator
   public static final int SET_REMOTE_VALUE = 2;
 
   /**
-   * The '<em><b>Remove</b></em>' literal value.
+   * The '<em><b>Remove Local</b></em>' literal value.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of '<em><b>Remove</b></em>' literal object isn't clear,
+   * If the meaning of '<em><b>Remove Local</b></em>' literal object isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @see #REMOVE
-   * @model name="Remove"
+   * @see #REMOVE_LOCAL
+   * @model name="RemoveLocal"
    * @generated
    * @ordered
    */
-  public static final int REMOVE_VALUE = 3;
+  public static final int REMOVE_LOCAL_VALUE = 3;
+
+  /**
+   * The '<em><b>Remove Remote</b></em>' literal value.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of '<em><b>Remove Remote</b></em>' literal object isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @see #REMOVE_REMOTE
+   * @model name="RemoveRemote"
+   * @generated
+   * @ordered
+   */
+  public static final int REMOVE_REMOTE_VALUE = 4;
 
   /**
    * The '<em><b>Conflict</b></em>' literal value.
@@ -160,7 +183,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int CONFLICT_VALUE = 4;
+  public static final int CONFLICT_VALUE = 5;
 
   /**
    * The '<em><b>Exclude</b></em>' literal value.
@@ -175,7 +198,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int EXCLUDE_VALUE = 5;
+  public static final int EXCLUDE_VALUE = 6;
 
   /**
    * An array of all the '<em><b>Action Type</b></em>' enumerators.
@@ -183,7 +206,7 @@ public enum SyncActionType implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
-  private static final SyncActionType[] VALUES_ARRAY = new SyncActionType[] { NONE, SET_LOCAL, SET_REMOTE, REMOVE, CONFLICT, EXCLUDE, };
+  private static final SyncActionType[] VALUES_ARRAY = new SyncActionType[] { NONE, SET_LOCAL, SET_REMOTE, REMOVE_LOCAL, REMOVE_REMOTE, CONFLICT, EXCLUDE, };
 
   /**
    * A public read-only list of all the '<em><b>Action Type</b></em>' enumerators.
@@ -253,8 +276,10 @@ public enum SyncActionType implements Enumerator
         return SET_LOCAL;
       case SET_REMOTE_VALUE:
         return SET_REMOTE;
-      case REMOVE_VALUE:
-        return REMOVE;
+      case REMOVE_LOCAL_VALUE:
+        return REMOVE_LOCAL;
+      case REMOVE_REMOTE_VALUE:
+        return REMOVE_REMOTE;
       case CONFLICT_VALUE:
         return CONFLICT;
       case EXCLUDE_VALUE:

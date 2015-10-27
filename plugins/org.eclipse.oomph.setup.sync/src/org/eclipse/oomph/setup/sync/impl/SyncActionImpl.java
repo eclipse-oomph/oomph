@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.sync.impl;
 
+import org.eclipse.oomph.setup.PreferenceTask;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
@@ -20,6 +22,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -164,6 +168,51 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
       if (id != null)
       {
         return id;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * @ADDED
+   */
+  public Map.Entry<String, String> getPreference()
+  {
+    SyncDelta delta = getLocalDelta();
+    if (delta == null)
+    {
+      delta = getRemoteDelta();
+    }
+
+    if (delta != null)
+    {
+      SetupTask task = delta.getNewTask();
+      if (task == null)
+      {
+        task = delta.getOldTask();
+      }
+
+      if (task instanceof PreferenceTask)
+      {
+        final PreferenceTask preferenceTask = (PreferenceTask)task;
+        return new Map.Entry<String, String>()
+        {
+          public String getKey()
+          {
+            return preferenceTask.getKey();
+          }
+
+          public String getValue()
+          {
+            return preferenceTask.getValue();
+          }
+
+          public String setValue(String value)
+          {
+            throw new UnsupportedOperationException();
+          }
+        };
       }
     }
 
@@ -461,6 +510,16 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
     result.append(computedType);
     result.append(", resolvedType: ");
     result.append(resolvedType);
+
+    Map.Entry<String, String> preference = getPreference();
+    if (preference != null)
+    {
+      result.append(", ");
+      result.append(preference.getKey());
+      result.append(": ");
+      result.append(preference.getValue());
+    }
+
     result.append(')');
     return result.toString();
   }

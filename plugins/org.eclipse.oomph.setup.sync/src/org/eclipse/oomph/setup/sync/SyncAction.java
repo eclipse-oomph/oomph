@@ -12,6 +12,8 @@ package org.eclipse.oomph.setup.sync;
 
 import org.eclipse.emf.ecore.EObject;
 
+import java.util.Map;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Action</b></em>'.
@@ -50,6 +52,11 @@ public interface SyncAction extends EObject
    * @generated
    */
   String getID();
+
+  /**
+   * @ADDED
+   */
+  public Map.Entry<String, String> getPreference();
 
   /**
    * Returns the value of the '<em><b>Local Delta</b></em>' reference.

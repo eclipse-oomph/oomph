@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,6 +73,8 @@ public class Synchronization
   private final Map<String, SyncDelta> remoteDeltas;
 
   private WorkingCopy localWorkingCopy;
+
+  private Map<String, SyncDelta> localDeltas;
 
   private Map<String, SyncAction> actions;
 
@@ -107,9 +110,22 @@ public class Synchronization
     return synchronizer;
   }
 
+  public ResourceSet getResourceSet()
+  {
+    return resourceSet;
+  }
+
   public EMap<String, SyncPolicy> getRemotePolicies()
   {
     return remotePolicies;
+  }
+
+  /**
+   * Returns the mappings from preference keys to sync IDs.
+   */
+  public Map<String, String> getPreferenceIDs()
+  {
+    return preferenceIDs;
   }
 
   public Map<String, SyncAction> synchronizeLocal() throws IOException
@@ -123,10 +139,10 @@ public class Synchronization
     localWorkingCopy = createLocalWorkingCopy();
     synchronizer.workingCopyCreated(localWorkingCopy);
 
-    Map<String, SyncDelta> localDeltas = computeLocalDeltas(localWorkingCopy);
+    localDeltas = computeLocalDeltas(localWorkingCopy);
 
     // Compute sync actions.
-    actions = computeSyncActions(localDeltas, remoteDeltas);
+    actions = computeSyncActions();
     synchronizer.actionsComputed(actions);
 
     return actions;
@@ -206,16 +222,17 @@ public class Synchronization
     return compareTasks(oldData, newData);
   }
 
-  private Map<String, SyncAction> computeSyncActions(Map<String, SyncDelta> localDeltas, Map<String, SyncDelta> remoteDeltas)
+  private Map<String, SyncAction> computeSyncActions()
   {
     Map<String, SyncAction> actions = new HashMap<String, SyncAction>();
+    Map<String, SyncDelta> tmpRemoteDeltas = new HashMap<String, SyncDelta>(remoteDeltas);
 
     for (Map.Entry<String, SyncDelta> localEntry : localDeltas.entrySet())
     {
       String id = localEntry.getKey();
 
       SyncDelta localDelta = localEntry.getValue();
-      SyncDelta remoteDelta = remoteDeltas.remove(id);
+      SyncDelta remoteDelta = tmpRemoteDeltas.remove(id);
 
       SyncAction action = compareDeltas(localDelta, remoteDelta);
       if (action != null)
@@ -224,7 +241,7 @@ public class Synchronization
       }
     }
 
-    for (SyncDelta remoteDelta : remoteDeltas.values())
+    for (SyncDelta remoteDelta : tmpRemoteDeltas.values())
     {
       String id = remoteDelta.getID();
       SyncAction action = compareDeltas(null, remoteDelta);
@@ -286,7 +303,7 @@ public class Synchronization
             return SyncActionType.SET_REMOTE;
 
           case REMOVED:
-            return SyncActionType.REMOVE;
+            return SyncActionType.REMOVE_REMOTE;
         }
         break;
 
@@ -309,7 +326,7 @@ public class Synchronization
         switch (remoteDeltaType)
         {
           case UNCHANGED:
-            return SyncActionType.REMOVE;
+            return SyncActionType.REMOVE_LOCAL;
 
           case CHANGED:
             return SyncActionType.CONFLICT;
@@ -446,6 +463,21 @@ public class Synchronization
     return task instanceof PreferenceTask;
   }
 
+  private void rememberIDs(Resource resource)
+  {
+    for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
+    {
+      EObject object = it.next();
+
+      String id = EcoreUtil.getID(object);
+      if (!StringUtil.isEmpty(id))
+      {
+        // Make sure existing IDs are not reused.
+        ids.add(id);
+      }
+    }
+  }
+
   private String rememberID(SetupTask task)
   {
     String id = task.getID();
@@ -578,11 +610,11 @@ public class Synchronization
 
     try
     {
-      applyActions(remoteWorkingCopy, REMOTE_DATA_TYPE);
-      remoteWorkingCopy.commit();
+      boolean changedRemote = applyActions(remoteWorkingCopy, REMOTE_DATA_TYPE);
+      remoteWorkingCopy.commit(changedRemote);
 
-      applyActions(localWorkingCopy, USER_TYPE);
-      localWorkingCopy.commit();
+      boolean changedLocal = applyActions(localWorkingCopy, USER_TYPE);
+      localWorkingCopy.commit(changedLocal);
 
       synchronizer.commitFinished(null);
     }
@@ -607,12 +639,14 @@ public class Synchronization
     }
   }
 
-  private void applyActions(WorkingCopy workingCopy, EClass eClass)
+  private boolean applyActions(WorkingCopy workingCopy, EClass eClass)
   {
     File file = workingCopy.getTmpFile();
 
     SetupTaskContainer taskContainer = loadObject(file, eClass);
     Map<String, SetupTask> tasks = collectTasks(taskContainer);
+
+    boolean changed = false;
 
     for (Map.Entry<String, SyncAction> entry : actions.entrySet())
     {
@@ -626,24 +660,34 @@ public class Synchronization
           throw new ConflictException(action);
 
         case SET_LOCAL:
-          include(id);
-          applySetAction(taskContainer, tasks, id, action.getLocalDelta());
+          changed |= include(id);
+          changed |= applySetAction(taskContainer, tasks, id, action.getLocalDelta());
           break;
 
         case SET_REMOTE:
-          include(id);
-          applySetAction(taskContainer, tasks, id, action.getRemoteDelta());
+          if (eClass != REMOTE_DATA_TYPE) // Don't modify remote unnecessarily
+          {
+            changed |= include(id);
+            changed |= applySetAction(taskContainer, tasks, id, action.getRemoteDelta());
+          }
           break;
 
-        case REMOVE:
-          include(id);
-          applyRemoveAction(taskContainer, tasks, action.getLocalDelta());
-          applyRemoveAction(taskContainer, tasks, action.getRemoteDelta());
+        case REMOVE_LOCAL:
+          changed |= include(id);
+          changed |= applyRemoveAction(taskContainer, tasks, action.getLocalDelta());
+          break;
+
+        case REMOVE_REMOTE:
+          if (eClass != REMOTE_DATA_TYPE) // Don't modify remote unnecessarily
+          {
+            changed |= include(id);
+            changed |= applyRemoveAction(taskContainer, tasks, action.getRemoteDelta());
+          }
           break;
 
         case EXCLUDE:
-          exclude(id);
-          applyRemoveAction(taskContainer, tasks, action.getRemoteDelta());
+          changed |= exclude(id);
+          changed |= applyRemoveAction(taskContainer, tasks, action.getRemoteDelta());
           break;
 
         default:
@@ -652,10 +696,16 @@ public class Synchronization
       }
     }
 
-    BaseUtil.saveEObject(taskContainer);
+    if (changed)
+    {
+      BaseUtil.saveEObject(taskContainer);
+    }
+
+    return changed;
+
   }
 
-  private void applySetAction(SetupTaskContainer taskContainer, Map<String, SetupTask> tasks, String id, SyncDelta delta)
+  private boolean applySetAction(SetupTaskContainer taskContainer, Map<String, SetupTask> tasks, String id, SyncDelta delta)
   {
     if (delta != null)
     {
@@ -677,11 +727,15 @@ public class Synchronization
         {
           taskContainer.getSetupTasks().add(newTask);
         }
+
+        return true;
       }
     }
+
+    return false;
   }
 
-  private void applyRemoveAction(SetupTaskContainer taskContainer, Map<String, SetupTask> tasks, SyncDelta delta)
+  private boolean applyRemoveAction(SetupTaskContainer taskContainer, Map<String, SetupTask> tasks, SyncDelta delta)
   {
     if (delta != null)
     {
@@ -691,18 +745,21 @@ public class Synchronization
       if (oldTask != null)
       {
         EcoreUtil.remove(oldTask);
+        return true;
       }
     }
+
+    return false;
   }
 
-  private void include(String id)
+  private boolean include(String id)
   {
-    remotePolicies.put(id, SyncPolicy.INCLUDE);
+    return remotePolicies.put(id, SyncPolicy.INCLUDE) != SyncPolicy.INCLUDE;
   }
 
-  private void exclude(String id)
+  private boolean exclude(String id)
   {
-    remotePolicies.put(id, SyncPolicy.EXCLUDE);
+    return remotePolicies.put(id, SyncPolicy.EXCLUDE) != SyncPolicy.EXCLUDE;
   }
 
   public void dispose()
@@ -749,6 +806,8 @@ public class Synchronization
   {
     URI uri = URI.createFileURI(file.getAbsolutePath());
     Resource resource = resourceSet.getResource(uri, true);
+    rememberIDs(resource);
+
     return BaseUtil.getObjectByType(resource.getContents(), eClass);
   }
 

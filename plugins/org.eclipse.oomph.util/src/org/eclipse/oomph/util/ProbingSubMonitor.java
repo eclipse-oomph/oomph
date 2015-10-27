@@ -40,14 +40,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * It is normally very challenging to find out how much time a program really spends in the different parts of the monitored methods or how often these
  * parts get executed. Stepping through the program with a debugger obviously leads to distortion that renders the observations meaningless and adding
- * extra code to measure a runtime scenario realisticly is not nice from a maintenance point of view.
+ * extra code to measure a runtime scenario realistically is not nice from a maintenance point of view.
  * <p>
  * As a solution to this problem this class offers the possibility to transparently instrument {@link SubMonitor} instances such that they automatically
  * collect and report all kinds of statistics that may help to enhance the user experience. Sometimes it would even indicate to remove some progress monitoring
  * because it turns out that almost no time is being spent in a particular part of the program. Another typical result from the analysis is the understanding of
  * <i>one time effects</i> that might need special consideration.
  * <p>
- * Instances of this class can be created explicitely with the {@link SubMonitor#convert(IProgressMonitor, SubMonitor.ProbingMode) Progress.progress()} factory methods
+ * Instances of this class can be created explicitly with the {@link SubMonitor#convert(IProgressMonitor, SubMonitor.ProbingMode) Progress.progress()} factory methods
  * that take a {@link SubMonitor.ProbingMode} argument. Implicit (automatic) instrumentation can be controlled with the "<code>submonitor.probing</code>"
  * {@link System#setProperty(String, String) system property} as follows:
  * <dl>
@@ -78,7 +78,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <img src="doc-files/full.png">
  * <p>
  * The tables in the two examples above have smooth borders that can only be displayed correctly in consoles with UTF-8 encoding. The console encoding
- * can be configured on the <i>Common</i> tab of the launch configuration dialog. In addition the rendering of smooth table borders must be explicitely enabled
+ * can be configured on the <i>Common</i> tab of the launch configuration dialog. In addition the rendering of smooth table borders must be explicitly enabled
  * by setting the "<code>submonitor.probing.borders</code>" {@link System#setProperty(String, String) system property} to the value "<code>smooth</code>".
  * Without this setting tables are rendered with "-", "+" and "|" characters that display correctly regardless of the console encoding.
  * <p>
