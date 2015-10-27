@@ -648,6 +648,23 @@ public class ProgressPage extends SetupWizardPage
               boolean success = false;
               Set<String> restartReasons = null;
 
+              UIUtil.syncExec(new Runnable()
+              {
+                public void run()
+                {
+                  shell.setData(PROGRESS_STATUS, null);
+                  if (trigger != Trigger.BOOTSTRAP)
+                  {
+                    if (trigger == Trigger.STARTUP || !SetupPropertyTester.isShowProgressInWizard())
+                    {
+                      shell.setVisible(false);
+                    }
+
+                    SetupPropertyTester.setPerformingShell(shell);
+                  }
+                }
+              });
+
               try
               {
                 restartReasons = runnable.run(progressLog);
@@ -919,26 +936,8 @@ public class ProgressPage extends SetupWizardPage
             }
           };
 
-          UIUtil.asyncExec(new Runnable()
-          {
-            public void run()
-            {
-              shell.setData(PROGRESS_STATUS, null);
+          job.schedule();
 
-              job.schedule();
-
-              Trigger trigger = wizard.getTrigger();
-              if (trigger != Trigger.BOOTSTRAP)
-              {
-                if (trigger == Trigger.STARTUP || !SetupPropertyTester.isShowProgressInWizard())
-                {
-                  shell.setVisible(false);
-                }
-
-                SetupPropertyTester.setPerformingShell(shell);
-              }
-            }
-          });
         }
       };
 
