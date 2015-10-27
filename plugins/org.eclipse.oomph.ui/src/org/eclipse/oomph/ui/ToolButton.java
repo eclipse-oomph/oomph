@@ -28,8 +28,6 @@ public class ToolButton extends ToolBar
   {
     super(parent, SWT.FLAT);
 
-    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
-
     if (secondary)
     {
       toolItem = new SecondaryToolItem(this, style, image);

@@ -11,6 +11,7 @@
 package org.eclipse.oomph.preferences.presentation;
 
 import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -40,6 +41,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
@@ -156,6 +158,8 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
    */
   protected IMenuManager createSiblingMenuManager;
 
+  protected SynchronizedAction synchronizedAction = new SynchronizedAction();
+
   /**
    * This creates an instance of the contributor.
    * <!-- begin-user-doc -->
@@ -189,6 +193,8 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
     super.contributeToToolBar(toolBarManager);
 
     contributeToToolBarGen(toolBarManager);
+
+    toolBarManager.add(synchronizedAction);
   }
 
   /**
@@ -268,6 +274,20 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
         selectionChanged(new SelectionChangedEvent(selectionProvider, selectionProvider.getSelection()));
       }
     }
+  }
+
+  @Override
+  public void activate()
+  {
+    super.activate();
+    synchronizedAction.setActiveWorkbenchPart(activeEditor);
+  }
+
+  @Override
+  public void deactivate()
+  {
+    super.deactivate();
+    synchronizedAction.setActiveWorkbenchPart(null);
   }
 
   /**
@@ -486,4 +506,40 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
     return true;
   }
 
+  /**
+   * @author Ed Merks
+   */
+  public static final class SynchronizedAction extends Action
+  {
+    private PreferencesEditor preferencesEditor;
+
+    public SynchronizedAction()
+    {
+      super("Synchronized", IAction.AS_CHECK_BOX);
+      setImageDescriptor(PreferencesEditorPlugin.INSTANCE.getImageDescriptor("synchronized"));
+      setToolTipText("Keep the editor synchronized with changes to the underlying preference store");
+    }
+
+    @Override
+    public void run()
+    {
+      preferencesEditor.getEditingDomain().getResourceSet().getLoadOptions().put(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES, isChecked());
+      preferencesEditor.doRevert();
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof PreferencesEditor)
+      {
+        preferencesEditor = (PreferencesEditor)workbenchPart;
+        setEnabled(true);
+        setChecked(
+            Boolean.TRUE.equals(preferencesEditor.getEditingDomain().getResourceSet().getLoadOptions().get(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES)));
+      }
+      else
+      {
+        setEnabled(false);
+      }
+    }
+  }
 }

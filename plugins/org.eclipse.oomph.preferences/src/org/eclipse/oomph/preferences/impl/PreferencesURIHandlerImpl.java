@@ -266,14 +266,14 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
           }
           catch (Throwable ex)
           {
-            IOException ioException = new IOException();
+            IOException ioException = new IOException(ex.getMessage());
             ioException.initCause(ex);
             throw ioException;
           }
 
           if (throwable != null)
           {
-            IOException ioException = new IOException();
+            IOException ioException = new IOException(throwable.getMessage());
             ioException.initCause(throwable);
             throw ioException;
           }

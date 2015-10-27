@@ -421,6 +421,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                 {
                   String value = (String)ReflectUtil.invokeMethod("getValue", dialog);
 
+                  value = value.replaceAll("\r\n", "\n");
                   Object newValue = valueHandler.toValue(value);
                   if (newValue != null)
                   {

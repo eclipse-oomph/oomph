@@ -21,7 +21,6 @@ import org.eclipse.oomph.preferences.Property;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.provider.PreferencesEditPlugin;
 import org.eclipse.oomph.preferences.provider.PreferencesItemProviderAdapterFactory;
-import org.eclipse.oomph.preferences.util.PreferencesUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -522,6 +521,8 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
     }
   };
 
+  private SelectChangesListener selectChangesListener;
+
   /**
    * Handles activation of the editor or it's associated views.
    * <!-- begin-user-doc -->
@@ -998,6 +999,11 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
           selection.addAll((List<?>)notification.getNewValue());
           break;
         }
+        case Notification.REMOVING_ADAPTER:
+        {
+          // Do nothing.
+          break;
+        }
         default:
         {
           selection.add(notification.getNotifier());
@@ -1043,15 +1049,7 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
 
   public void createModel()
   {
-    editingDomain.getResourceSet().getLoadOptions().put(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES, Boolean.TRUE);
-
     createModelGen();
-
-    URI resourceURI = EditUIUtil.getURI(getEditorInput());
-    if (resourceURI.segmentCount() == 1)
-    {
-      editingDomain.getResourceSet().eAdapters().add(new SelectChangesListener());
-    }
   }
 
   /**
@@ -1873,6 +1871,50 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
     IProgressMonitor progressMonitor = getActionBars().getStatusLineManager() != null ? getActionBars().getStatusLineManager().getProgressMonitor()
         : new NullProgressMonitor();
     doSave(progressMonitor);
+  }
+
+  public void doRevert()
+  {
+    URI resourceURI = EditUIUtil.getURI(getEditorInput());
+    if (resourceURI.segmentCount() == 1)
+    {
+      adapterFactory.dispose();
+
+      if (selectChangesListener != null)
+      {
+        editingDomain.getResourceSet().eAdapters().remove(selectChangesListener);
+      }
+
+      ResourceSet resourceSet = editingDomain.getResourceSet();
+      Resource resource = resourceSet.getResources().get(0);
+      try
+      {
+        resource.unload();
+        resource.load(resourceSet.getLoadOptions());
+        selectionViewer.setInput(resource.getContents().get(0));
+      }
+      catch (IOException ex)
+      {
+        PreferencesEditorPlugin.INSTANCE.log(ex);
+      }
+
+      editingDomain.getCommandStack().flush();
+
+      if (selectChangesListener == null)
+      {
+        selectChangesListener = new SelectChangesListener();
+        editingDomain.getResourceSet().eAdapters().add(selectChangesListener);
+      }
+      else
+      {
+        selectChangesListener = null;
+      }
+
+      if (contentOutlinePage != null)
+      {
+        contentOutlinePage.update();
+      }
+    }
   }
 
   /**
