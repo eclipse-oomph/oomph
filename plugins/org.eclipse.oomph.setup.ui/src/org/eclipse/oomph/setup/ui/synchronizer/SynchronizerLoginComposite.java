@@ -132,6 +132,17 @@ public class SynchronizerLoginComposite extends Composite
     signupLink.setEnabled(enabled);
   }
 
+  @Override
+  public boolean setFocus()
+  {
+    if (usernameText != null && usernameText.setFocus())
+    {
+      return true;
+    }
+
+    return super.setFocus();
+  }
+
   protected void createUI(Composite parent, int columns)
   {
     usernameLabel = new Label(parent, SWT.NONE);
@@ -140,7 +151,6 @@ public class SynchronizerLoginComposite extends Composite
     usernameText = new Text(parent, SWT.BORDER);
     usernameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, columns - 1, 1));
     usernameText.addModifyListener(listener);
-    usernameText.setFocus();
 
     passwordLabel = new Label(parent, SWT.NONE);
     passwordLabel.setText("Password:");

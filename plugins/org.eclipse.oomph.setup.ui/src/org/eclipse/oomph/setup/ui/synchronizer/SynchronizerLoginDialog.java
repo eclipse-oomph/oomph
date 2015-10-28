@@ -91,6 +91,7 @@ public class SynchronizerLoginDialog extends AbstractSetupDialog implements Modi
     };
 
     loginComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    loginComposite.setFocus();
     loginComposite.setService(service);
     Dialog.applyDialogFont(loginComposite);
   }
