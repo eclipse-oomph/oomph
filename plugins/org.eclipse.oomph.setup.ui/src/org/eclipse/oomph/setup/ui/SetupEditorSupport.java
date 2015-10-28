@@ -238,7 +238,7 @@ public final class SetupEditorSupport
           if (editorResourceURI != null)
           {
             editorResourceURI = uriConverter.normalize(editorResourceURI).trimFragment();
-            if (editorResourceURI.equals(resourceURI))
+            if (editorResourceURI.equals(uriConverter.normalize(resourceURI)))
             {
               return editorReference.getEditor(true);
             }

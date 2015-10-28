@@ -114,7 +114,7 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
   @Override
   protected Control createContents(Composite parent)
   {
-    if (!RecorderManager.INSTANCE.isUser())
+    if (RecorderManager.INSTANCE.hasTemporaryRecorderTarget())
     {
       Label label = new Label(parent, SWT.NONE);
       label.setText("The preference recorder settings are unavailable while recording into the selected file.");

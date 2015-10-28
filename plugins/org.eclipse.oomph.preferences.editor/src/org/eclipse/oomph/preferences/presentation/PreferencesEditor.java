@@ -12,6 +12,7 @@ package org.eclipse.oomph.preferences.presentation;
 
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
+import org.eclipse.oomph.internal.ui.IRevertablePart;
 import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
 import org.eclipse.oomph.preferences.PreferenceNode;
@@ -21,6 +22,7 @@ import org.eclipse.oomph.preferences.Property;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.provider.PreferencesEditPlugin;
 import org.eclipse.oomph.preferences.provider.PreferencesItemProviderAdapterFactory;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -143,9 +145,10 @@ import java.util.Map;
  * This is an example of a Preferences model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @generated
+ * @generated not
  */
-public class PreferencesEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker
+public class PreferencesEditor extends MultiPageEditorPart
+    implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker, IRevertablePart
 {
   /**
    * This keeps track of the editing domain that is used to track all changes to the model.
@@ -1875,45 +1878,51 @@ public class PreferencesEditor extends MultiPageEditorPart implements IEditingDo
 
   public void doRevert()
   {
-    URI resourceURI = EditUIUtil.getURI(getEditorInput());
-    if (resourceURI.segmentCount() == 1)
+    adapterFactory.dispose();
+
+    if (selectChangesListener != null)
     {
-      adapterFactory.dispose();
+      editingDomain.getResourceSet().eAdapters().remove(selectChangesListener);
+    }
 
-      if (selectChangesListener != null)
+    ResourceSet resourceSet = editingDomain.getResourceSet();
+    Resource resource = resourceSet.getResources().get(0);
+    synchronized (resource)
+    {
+      synchronized (resourceSet)
       {
-        editingDomain.getResourceSet().eAdapters().remove(selectChangesListener);
-      }
+        try
+        {
+          resource.unload();
+          resource.load(resourceSet.getLoadOptions());
+          selectionViewer.setInput(resource.getContents().get(0));
+        }
+        catch (IOException ex)
+        {
+          PreferencesEditorPlugin.INSTANCE.log(ex);
+        }
 
-      ResourceSet resourceSet = editingDomain.getResourceSet();
-      Resource resource = resourceSet.getResources().get(0);
-      try
-      {
-        resource.unload();
-        resource.load(resourceSet.getLoadOptions());
-        selectionViewer.setInput(resource.getContents().get(0));
-      }
-      catch (IOException ex)
-      {
-        PreferencesEditorPlugin.INSTANCE.log(ex);
-      }
+        if (Boolean.TRUE.equals(resourceSet.getLoadOptions().get(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES)))
+        {
+          if (selectChangesListener == null)
+          {
+            selectChangesListener = new SelectChangesListener();
+          }
 
-      editingDomain.getCommandStack().flush();
+          editingDomain.getResourceSet().eAdapters().add(selectChangesListener);
+        }
+        else
+        {
+          selectChangesListener = null;
+        }
+      }
+    }
 
-      if (selectChangesListener == null)
-      {
-        selectChangesListener = new SelectChangesListener();
-        editingDomain.getResourceSet().eAdapters().add(selectChangesListener);
-      }
-      else
-      {
-        selectChangesListener = null;
-      }
+    editingDomain.getCommandStack().flush();
 
-      if (contentOutlinePage != null)
-      {
-        contentOutlinePage.update();
-      }
+    if (contentOutlinePage != null)
+    {
+      contentOutlinePage.update();
     }
   }
 

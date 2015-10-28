@@ -81,13 +81,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.keys.IBindingService;
 
@@ -245,8 +243,6 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   private final OpenInTextEditorAction openInTextEditorAction = new OpenInTextEditorAction();
 
-  private RevertAction revertAction;
-
   private int lastSubMenuID;
 
   /**
@@ -267,15 +263,6 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   public final ToggleViewerInputAction getToggleViewerInputAction()
   {
     return toggleViewerInputAction;
-  }
-
-  @Override
-  public void init(IActionBars actionBars)
-  {
-    revertAction = new RevertAction();
-    actionBars.setGlobalActionHandler(ActionFactory.REVERT.getId(), revertAction);
-
-    super.init(actionBars);
   }
 
   public void scheduleValidation()
@@ -362,7 +349,6 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     toggleViewerInputAction.setActiveWorkbenchPart(part);
     commandTableAction.setActivePart(part);
     editorTableAction.setActivePart(part);
-    revertAction.setActiveWorkbenchPart(part);
     openInSetupEditorAction.setActiveWorkbenchPart(part);
     openInTextEditorAction.setActiveWorkbenchPart(part);
     capturePreferencesAction.setActiveWorkbenchPart(part);
@@ -1094,8 +1080,37 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     @Override
     public void run()
     {
+      RecorderManager.INSTANCE.setTemporaryRecorderTarget(EcoreUtil.getURI(getScope()));
       RecorderManager.INSTANCE.record(getActiveEditor());
     }
+  }
+
+  private EObject getScope()
+  {
+    SetupEditor editor = (SetupEditor)getActiveEditor();
+    EObject rootObject = editor.getEditingDomain().getResourceSet().getResources().get(0).getContents().get(0);
+    ISelection selection = ((ISelectionProvider)editor).getSelection();
+    if (selection instanceof IStructuredSelection)
+    {
+      IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+      Object element = structuredSelection.getFirstElement();
+      if (element instanceof EObject)
+      {
+        EObject eObject = (EObject)element;
+        if (EcoreUtil.isAncestor(rootObject, eObject))
+        {
+          for (EObject eContainer = eObject; eContainer != null; eContainer = eContainer.eContainer())
+          {
+            if (eContainer instanceof Scope)
+            {
+              return eContainer;
+            }
+          }
+        }
+      }
+    }
+
+    return rootObject;
   }
 
   /**
@@ -1120,7 +1135,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       PreferenceCaptureDialog preferenceCaptureDialog = new PreferenceCaptureDialog(null, setupEditor.getAdapterFactory(), fromEclipsePreferenceFile);
       if (preferenceCaptureDialog.open() == Dialog.OK)
       {
-        final RecorderTransaction transaction = RecorderTransaction.open(false, setupEditor);
+        RecorderManager.INSTANCE.setTemporaryRecorderTarget(EcoreUtil.getURI(getScope()));
+        final RecorderTransaction transaction = RecorderTransaction.open(setupEditor);
 
         try
         {
@@ -1379,32 +1395,6 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     public void run()
     {
       setupEditor.toggleInput();
-    }
-
-    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
-    {
-      if (workbenchPart instanceof SetupEditor)
-      {
-        setupEditor = (SetupEditor)workbenchPart;
-        setEnabled(true);
-        setChecked(setupEditor.selectionViewer.getInput() instanceof ResourceSet);
-      }
-      else
-      {
-        setEnabled(false);
-        setupEditor = null;
-      }
-    }
-  }
-
-  private static final class RevertAction extends Action
-  {
-    private SetupEditor setupEditor;
-
-    @Override
-    public void run()
-    {
-      setupEditor.doRevert();
     }
 
     public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)

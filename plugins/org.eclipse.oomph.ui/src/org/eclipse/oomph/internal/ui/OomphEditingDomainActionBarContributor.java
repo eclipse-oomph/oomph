@@ -40,6 +40,8 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
 
   protected CollapseAllAction collapseAllAction;
 
+  private RevertAction revertAction;
+
   public OomphEditingDomainActionBarContributor()
   {
     super();
@@ -54,9 +56,18 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   public void init(IActionBars actionBars)
   {
     findAction = createFindAction();
-    actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), findAction);
+    if (findAction != null)
+    {
+      actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), findAction);
+    }
 
     collapseAllAction = createCollapseAllAction();
+
+    revertAction = createRevertAction();
+    if (revertAction != null)
+    {
+      actionBars.setGlobalActionHandler(ActionFactory.REVERT.getId(), revertAction);
+    }
 
     super.init(actionBars);
   }
@@ -69,6 +80,11 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   private CollapseAllAction createCollapseAllAction()
   {
     return new CollapseAllAction();
+  }
+
+  private RevertAction createRevertAction()
+  {
+    return new RevertAction();
   }
 
   @Override
@@ -96,7 +112,10 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   {
     super.shareGlobalActions(page, actionBars);
 
-    actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), findAction);
+    if (findAction != null)
+    {
+      actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), findAction);
+    }
   }
 
   @Override
@@ -104,11 +123,19 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   {
     super.deactivate();
 
-    findAction.setActiveWorkbenchPart(null);
+    if (findAction != null)
+    {
+      findAction.setActiveWorkbenchPart(null);
+    }
 
     if (collapseAllAction != null)
     {
       collapseAllAction.setActiveWorkbenchPart(null);
+    }
+
+    if (revertAction != null)
+    {
+      revertAction.setActiveWorkbenchPart(null);
     }
   }
 
@@ -117,11 +144,19 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   {
     super.activate();
 
-    findAction.setActiveWorkbenchPart(activeEditor);
+    if (findAction != null)
+    {
+      findAction.setActiveWorkbenchPart(activeEditor);
+    }
 
     if (collapseAllAction != null)
     {
       collapseAllAction.setActiveWorkbenchPart(activeEditor);
+    }
+
+    if (revertAction != null)
+    {
+      revertAction.setActiveWorkbenchPart(activeEditor);
     }
   }
 
@@ -206,6 +241,31 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
       {
         setEnabled(false);
         viewerProvider = null;
+      }
+    }
+  }
+
+  private static final class RevertAction extends Action
+  {
+    private IRevertablePart revertableEditor;
+
+    @Override
+    public void run()
+    {
+      revertableEditor.doRevert();
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof IRevertablePart)
+      {
+        revertableEditor = (IRevertablePart)workbenchPart;
+        setEnabled(true);
+      }
+      else
+      {
+        setEnabled(false);
+        revertableEditor = null;
       }
     }
   }

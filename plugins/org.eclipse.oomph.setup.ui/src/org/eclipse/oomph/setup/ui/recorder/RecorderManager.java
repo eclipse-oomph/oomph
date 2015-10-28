@@ -125,7 +125,9 @@ public final class RecorderManager
 
   private IEditorPart editor;
 
-  private boolean user = true;
+  private URI temporaryRecorderTarget;
+
+  private Runnable reset;
 
   private RecorderManager()
   {
@@ -135,29 +137,31 @@ public final class RecorderManager
   {
     this.editor = editor;
 
-    boolean wasEnabled = isRecorderEnabled();
+    final boolean wasEnabled = isRecorderEnabled();
     setRecorderEnabled(true);
 
-    boolean wasUser = user;
-    user = false;
+    // Defer this until the transaction has been processed.
+    reset = new Runnable()
+    {
+      public void run()
+      {
+        RecorderManager.this.editor = null;
+        setRecorderEnabled(wasEnabled);
+        reset = null;
+      }
+    };
 
     PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, null, null, null);
-
-    try
-    {
-      dialog.open();
-    }
-    finally
-    {
-      user = wasUser;
-      this.editor = null;
-      setRecorderEnabled(wasEnabled);
-    }
+    dialog.open();
   }
 
-  public boolean isUser()
+  public void done()
   {
-    return user;
+    setTemporaryRecorderTarget(null);
+    if (reset != null)
+    {
+      reset.run();
+    }
   }
 
   public boolean isRecorderEnabled()
@@ -262,6 +266,11 @@ public final class RecorderManager
 
   public URI getRecorderTarget()
   {
+    if (temporaryRecorderTarget != null)
+    {
+      return temporaryRecorderTarget;
+    }
+
     String value = SETUP_UI_PREFERENCES.getString(SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET);
     if (StringUtil.isEmpty(value))
     {
@@ -296,9 +305,19 @@ public final class RecorderManager
     return null;
   }
 
+  public void setTemporaryRecorderTarget(URI temporaryRecorderTarget)
+  {
+    this.temporaryRecorderTarget = temporaryRecorderTarget;
+  }
+
+  public boolean hasTemporaryRecorderTarget()
+  {
+    return temporaryRecorderTarget != null;
+  }
+
   private void handleRecording(IEditorPart editorPart, Map<URI, String> values)
   {
-    RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(user, editorPart);
+    RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(editorPart);
     transaction.setPreferences(values);
 
     // In some cases (such as changing the recorder target in the current recorder transaction or missing credentials)
@@ -387,6 +406,7 @@ public final class RecorderManager
       {
         if (!openSynchronizerDialog(transaction, synchronization))
         {
+          closeTransaction(transaction);
           return;
         }
       }
@@ -818,47 +838,54 @@ public final class RecorderManager
                 return;
               }
 
-              final Map<URI, String> values = recorder.done();
-              recorder = null;
-              for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
+              UIUtil.asyncExec(new Runnable()
               {
-                URI uri = it.next();
-                String pluginID = uri.segment(0);
-
-                if (SetupUIPlugin.PLUGIN_ID.equals(pluginID))
+                public void run()
                 {
-                  String lastSegment = uri.lastSegment();
-                  if (SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(lastSegment) || SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET.equals(lastSegment))
+                  final Map<URI, String> values = recorder.done();
+                  recorder = null;
+                  for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
                   {
-                    it.remove();
+                    URI uri = it.next();
+                    String pluginID = uri.segment(0);
+
+                    if (SetupUIPlugin.PLUGIN_ID.equals(pluginID))
+                    {
+                      String lastSegment = uri.lastSegment();
+                      if (SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(lastSegment)
+                          || SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET.equals(lastSegment))
+                      {
+                        it.remove();
+                      }
+                    }
+                  }
+
+                  if (values.isEmpty())
+                  {
+                    RecorderTransaction transaction = RecorderTransaction.getInstance();
+                    if (transaction != null)
+                    {
+                      // Close a transaction that has been opened by the RecorderPreferencePage.
+                      closeTransaction(transaction);
+                    }
+                  }
+                  else
+                  {
+                    Job job = new Job("Store preferences")
+                    {
+                      @Override
+                      protected IStatus run(IProgressMonitor monitor)
+                      {
+                        handleRecording(editor, values);
+                        return Status.OK_STATUS;
+                      }
+                    };
+
+                    job.setSystem(true);
+                    job.schedule();
                   }
                 }
-              }
-
-              if (values.isEmpty())
-              {
-                RecorderTransaction transaction = RecorderTransaction.getInstance();
-                if (transaction != null)
-                {
-                  // Close a transaction that has been opened by the RecorderPreferencePage.
-                  closeTransaction(transaction);
-                }
-              }
-              else
-              {
-                Job job = new Job("Store preferences")
-                {
-                  @Override
-                  protected IStatus run(IProgressMonitor monitor)
-                  {
-                    handleRecording(editor, values);
-                    return Status.OK_STATUS;
-                  }
-                };
-
-                job.setSystem(true);
-                job.schedule();
-              }
+              });
             }
           });
         }

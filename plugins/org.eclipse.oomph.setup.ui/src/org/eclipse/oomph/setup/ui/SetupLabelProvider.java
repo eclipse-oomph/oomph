@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
@@ -111,6 +112,11 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
 
   public static String getText(ItemProviderAdapter itemProvider, EObject object)
   {
+    if (object == null)
+    {
+      return "";
+    }
+
     EClass eClass = object.eClass();
     if (eClass == SetupPackage.Literals.USER || eClass == SetupPackage.Literals.INSTALLATION || eClass == SetupPackage.Literals.WORKSPACE)
     {
@@ -125,27 +131,37 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
     if (object instanceof Product)
     {
       Product product = (Product)object;
-      return getText(itemProvider, product.getProductCatalog()) + " - " + itemProvider.getText(product);
+      return compose(getText(itemProvider, product.getProductCatalog()), itemProvider.getText(product));
     }
 
     if (object instanceof ProductVersion)
     {
       ProductVersion version = (ProductVersion)object;
-      return getText(itemProvider, version.getProduct()) + " - " + itemProvider.getText(version);
+      return compose(getText(itemProvider, version.getProduct()), itemProvider.getText(version));
     }
 
     if (object instanceof Project)
     {
       Project project = (Project)object;
-      return getText(itemProvider, project.getProjectContainer()) + " - " + itemProvider.getText(project);
+      return compose(getText(itemProvider, project.getProjectContainer()), itemProvider.getText(project));
     }
 
     if (object instanceof Stream)
     {
       Stream stream = (Stream)object;
-      return getText(itemProvider, stream.getProject()) + " - " + itemProvider.getText(stream);
+      return compose(getText(itemProvider, stream.getProject()), itemProvider.getText(stream));
     }
 
     return itemProvider.getText(object);
+  }
+
+  private static String compose(String prefix, String suffix)
+  {
+    if (StringUtil.isEmpty(prefix))
+    {
+      return suffix;
+    }
+
+    return prefix + " - " + suffix;
   }
 }

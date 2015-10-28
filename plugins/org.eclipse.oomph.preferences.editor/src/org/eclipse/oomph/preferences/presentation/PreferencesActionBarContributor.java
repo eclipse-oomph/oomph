@@ -14,6 +14,9 @@ import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
@@ -532,9 +535,11 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
       if (workbenchPart instanceof PreferencesEditor)
       {
         preferencesEditor = (PreferencesEditor)workbenchPart;
-        setEnabled(true);
-        setChecked(
-            Boolean.TRUE.equals(preferencesEditor.getEditingDomain().getResourceSet().getLoadOptions().get(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES)));
+        ResourceSet resourceSet = preferencesEditor.getEditingDomain().getResourceSet();
+        EList<Resource> resources = resourceSet.getResources();
+        boolean enabled = resources.size() >= 1 && resources.get(0).getURI().segmentCount() == 1;
+        setEnabled(enabled);
+        setChecked(enabled && Boolean.TRUE.equals(resourceSet.getLoadOptions().get(PreferencesUtil.OPTION_SYNCHRONIZED_PREFERENCES)));
       }
       else
       {

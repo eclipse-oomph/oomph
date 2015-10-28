@@ -16,6 +16,7 @@ import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
+import org.eclipse.oomph.internal.ui.IRevertablePart;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
@@ -209,9 +210,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * This is an example of a Setup model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @generated
+ * @generated not
  */
-public class SetupEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker
+public class SetupEditor extends MultiPageEditorPart
+    implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker, IRevertablePart
 {
   private static final URI LEGACY_MODELS = URI.createURI("platform:/plugin/" + BasePlugin.INSTANCE.getSymbolicName() + "/model/legacy");
 
@@ -2626,7 +2628,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     return ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
   }
 
-  protected void doRevert()
+  public void doRevert()
   {
     Object input = selectionViewer.getInput();
     selectionViewer.setInput(input instanceof Resource ? loadingResourceInput : loadingResourceSetInput);

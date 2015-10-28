@@ -16,11 +16,11 @@ import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.PreferenceTask;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
-import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
@@ -107,47 +107,43 @@ public abstract class RecorderTransaction
 
   private Annotation recorderAnnotation;
 
-  private final boolean user;
-
   private SetupTaskContainer rootObject;
 
   private boolean forceDirty;
 
   private CommitHandler commitHandler;
 
-  RecorderTransaction(boolean user, SetupTaskContainer rootObject)
+  RecorderTransaction(SetupTaskContainer rootObject)
   {
-    this.user = user;
     this.rootObject = rootObject;
     resource = rootObject.eResource();
 
-    if (user)
+    for (EObject eObject = rootObject; eObject != null; eObject = eObject.eContainer())
     {
-      SetupTaskContainer resourceRoot = (SetupTaskContainer)resource.getContents().get(0);
-      findRecorderAnnotation(resourceRoot);
-
-      if (recorderAnnotation != null)
+      if (eObject instanceof Scope)
       {
-        EMap<String, String> details = recorderAnnotation.getDetails();
-        for (Map.Entry<String, String> entry : details)
+        findRecorderAnnotation((Scope)eObject);
+
+        if (recorderAnnotation != null)
         {
-          String value = entry.getValue();
-          if (POLICY_RECORD.equals(value))
+          EMap<String, String> details = recorderAnnotation.getDetails();
+          for (Map.Entry<String, String> entry : details)
           {
-            cleanPolicies.put(entry.getKey(), true);
-          }
-          else if (POLICY_IGNORE.equals(value))
-          {
-            cleanPolicies.put(entry.getKey(), false);
+            String value = entry.getValue();
+            if (POLICY_RECORD.equals(value))
+            {
+              cleanPolicies.put(entry.getKey(), true);
+            }
+            else if (POLICY_IGNORE.equals(value))
+            {
+              cleanPolicies.put(entry.getKey(), false);
+            }
           }
         }
+
+        break;
       }
     }
-  }
-
-  public boolean isUser()
-  {
-    return user;
   }
 
   public IEditorPart getEditor()
@@ -157,6 +153,7 @@ public abstract class RecorderTransaction
 
   public void close()
   {
+    RecorderManager.INSTANCE.done();
     instance = null;
   }
 
@@ -313,77 +310,70 @@ public abstract class RecorderTransaction
   {
     List<Object> recorderObjects = new ArrayList<Object>();
 
-    if (user)
+    if (recorderAnnotation == null)
     {
-      if (recorderAnnotation == null)
+      CompoundTask preferenceCompound = SetupFactory.eINSTANCE.createCompoundTask("User Preferences");
+      preferenceContainer = preferenceCompound;
+      rootObject.getSetupTasks().add(0, preferenceCompound);
+
+      recorderAnnotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_USER_PREFERENCES);
+      preferenceContainer.getAnnotations().add(recorderAnnotation);
+    }
+
+    migrateOldTasks();
+
+    if (!policies.isEmpty())
+    {
+      recorderObjects.add(recorderAnnotation);
+      EMap<String, String> details = recorderAnnotation.getDetails();
+
+      Map<String, String> workspacePolicies = null;
+      boolean workspacePoliciesChanged = false;
+      IFile workspacePoliciesFile = getWorkspacePropertiesFile();
+
+      for (Map.Entry<String, Boolean> entry : policies.entrySet())
       {
-        CompoundTask preferenceCompound = SetupFactory.eINSTANCE.createCompoundTask("User Preferences");
-        preferenceContainer = preferenceCompound;
-        rootObject.getSetupTasks().add(0, preferenceCompound);
+        String path = entry.getKey();
+        boolean policy = entry.getValue();
 
-        recorderAnnotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_USER_PREFERENCES);
-        preferenceContainer.getAnnotations().add(recorderAnnotation);
-      }
+        details.put(path, policy ? POLICY_RECORD : POLICY_IGNORE);
+        cleanPolicies.put(path, policy);
 
-      migrateOldTasks();
-
-      if (!policies.isEmpty())
-      {
-        recorderObjects.add(recorderAnnotation);
-        EMap<String, String> details = recorderAnnotation.getDetails();
-
-        Map<String, String> workspacePolicies = null;
-        boolean workspacePoliciesChanged = false;
-        IFile workspacePoliciesFile = getWorkspacePropertiesFile();
-
-        for (Map.Entry<String, Boolean> entry : policies.entrySet())
+        if (!policy)
         {
-          String path = entry.getKey();
-          boolean policy = entry.getValue();
+          URI key = PreferencesFactory.eINSTANCE.createURI(path);
+          preferencesToRemove.add(key);
 
-          details.put(path, policy ? POLICY_RECORD : POLICY_IGNORE);
-          cleanPolicies.put(path, policy);
-
-          if (!policy)
+          if (workspacePoliciesFile != null)
           {
-            URI key = PreferencesFactory.eINSTANCE.createURI(path);
-            preferencesToRemove.add(key);
-
-            if (workspacePoliciesFile != null)
+            if (workspacePolicies == null && workspacePoliciesFile.isAccessible())
             {
-              if (workspacePolicies == null && workspacePoliciesFile.isAccessible())
-              {
-                workspacePolicies = PropertiesUtil.loadProperties(workspacePoliciesFile.getLocation().toFile());
-              }
+              workspacePolicies = PropertiesUtil.loadProperties(workspacePoliciesFile.getLocation().toFile());
+            }
 
-              if (workspacePolicies != null && !POLICY_IGNORE.equals(workspacePolicies.get(path)))
-              {
-                workspacePolicies.put(path, POLICY_IGNORE);
-                workspacePoliciesChanged = true;
-              }
+            if (workspacePolicies != null && !POLICY_IGNORE.equals(workspacePolicies.get(path)))
+            {
+              workspacePolicies.put(path, POLICY_IGNORE);
+              workspacePoliciesChanged = true;
             }
           }
         }
-
-        if (workspacePoliciesChanged)
-        {
-          try
-          {
-            PropertiesUtil.saveProperties(workspacePoliciesFile.getLocation().toFile(), workspacePolicies, true);
-            workspacePoliciesFile.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
-          }
-          catch (Exception ex)
-          {
-            SetupUIPlugin.INSTANCE.log(ex);
-          }
-        }
-
-        policies.clear();
       }
-    }
-    else
-    {
-      preferenceContainer = rootObject;
+
+      if (workspacePoliciesChanged)
+      {
+        try
+        {
+          PropertiesUtil.saveProperties(workspacePoliciesFile.getLocation().toFile(), workspacePolicies, true);
+          workspacePoliciesFile.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
+        }
+        catch (Exception ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex);
+        }
+      }
+
+      policies.clear();
     }
 
     if (!preferencesToRemove.isEmpty())
@@ -789,7 +779,7 @@ public abstract class RecorderTransaction
                 {
                   SetupTaskContainer rootObject = getRootObject(resource, targetFragment);
 
-                  instance = new RecorderTransaction.EditorTransaction(true, editor, domain, rootObject);
+                  instance = new RecorderTransaction.EditorTransaction(editor, domain, rootObject);
                   editorLoadedLatch.countDown();
                 }
               });
@@ -823,7 +813,7 @@ public abstract class RecorderTransaction
     return instance;
   }
 
-  public static RecorderTransaction open(boolean user, IEditorPart editor)
+  public static RecorderTransaction open(IEditorPart editor)
   {
     if (instance != null)
     {
@@ -831,7 +821,7 @@ public abstract class RecorderTransaction
     }
 
     EditingDomain domain = ((IEditingDomainProvider)editor).getEditingDomain();
-    instance = new RecorderTransaction.EditorTransaction(user, editor, domain, domain.getResourceSet().getResources().get(0));
+    instance = new RecorderTransaction.EditorTransaction(editor, domain, domain.getResourceSet().getResources().get(0));
 
     return instance;
   }
@@ -866,40 +856,25 @@ public abstract class RecorderTransaction
 
     private final boolean editorWasClean;
 
-    public EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, Resource resource)
+    public EditorTransaction(IEditorPart editor, EditingDomain domain, Resource resource)
     {
-      this(user, editor, domain, getRootObject(editor, resource));
+      this(editor, domain, RecorderManager.INSTANCE.getRecorderTargetObject(resource.getResourceSet()));
     }
 
-    public EditorTransaction(boolean user, IEditorPart editor, EditingDomain domain, SetupTaskContainer rootObject)
+    public EditorTransaction(IEditorPart editor, EditingDomain domain, SetupTaskContainer rootObject)
     {
-      super(user, rootObject);
+      super(rootObject);
       this.editor = editor;
       this.domain = domain;
       editorWasClean = !editor.isDirty();
 
-      // Only add policies to the user.
-      if (user)
-      {
-        initializePolicies();
-      }
+      initializePolicies();
     }
 
     @Override
     public IEditorPart getEditor()
     {
       return editor;
-    }
-
-    @Override
-    public Boolean getPolicy(String key)
-    {
-      if (isUser())
-      {
-        return super.getPolicy(key);
-      }
-
-      return Boolean.TRUE;
     }
 
     @Override
@@ -960,42 +935,12 @@ public abstract class RecorderTransaction
         {
           CommandStack commandStack = domain.getCommandStack();
           commandStack.execute(command);
-          if (isUser() && editorWasClean && editor.isDirty())
+          if (editorWasClean && editor.isDirty())
           {
             editor.doSave(new NullProgressMonitor());
           }
         }
       });
-    }
-
-    private static SetupTaskContainer getRootObject(IEditorPart editor, Resource resource)
-    {
-      SetupTaskContainer rootObject = (SetupTaskContainer)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.SCOPE);
-      if (!(rootObject instanceof User))
-      {
-        ISelection selection = ((ISelectionProvider)editor).getSelection();
-        if (selection instanceof IStructuredSelection)
-        {
-          IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-          Object element = structuredSelection.getFirstElement();
-          if (element instanceof EObject)
-          {
-            EObject eObject = (EObject)element;
-            if (EcoreUtil.isAncestor(rootObject, eObject))
-            {
-              for (EObject eContainer = eObject; eContainer != null; eContainer = eContainer.eContainer())
-              {
-                if (eContainer instanceof SetupTaskContainer)
-                {
-                  return (SetupTaskContainer)eContainer;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      return rootObject;
     }
   }
 
@@ -1006,7 +951,7 @@ public abstract class RecorderTransaction
   {
     public ResourceTransaction(SetupTaskContainer rootObject)
     {
-      super(true, rootObject);
+      super(rootObject);
       initializePolicies();
     }
 
