@@ -36,6 +36,7 @@ import org.eclipse.oomph.setup.ui.recorder.AbstractRecorderDialog;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
@@ -296,6 +297,27 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
     valueText = new Text(sashForm, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL);
     valueText.setBackground(getShell().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+    tree.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent event)
+      {
+        String value = "";
+        if (event.item instanceof TaskItem)
+        {
+          TaskItem taskItem = (TaskItem)event.item;
+          SetupTask task = taskItem.getTask();
+          if (task instanceof PreferenceTask)
+          {
+            PreferenceTask preferenceTask = (PreferenceTask)task;
+            value = preferenceTask.getValue();
+          }
+        }
+
+        valueText.setText(StringUtil.safe(value));
+      }
+    });
 
     Listener scrollBarListener = new Listener()
     {
