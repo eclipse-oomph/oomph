@@ -385,7 +385,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
     if (isVm())
     {
-      String line = option + value;
+      String line = option + (value == null ? "" : value);
       if (vmargsIndex != -1)
       {
         for (int i = vmargsIndex + 1; i < contents.size(); i++)
