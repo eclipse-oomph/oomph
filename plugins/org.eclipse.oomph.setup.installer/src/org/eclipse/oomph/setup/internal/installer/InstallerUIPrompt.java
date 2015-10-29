@@ -26,10 +26,13 @@ import javax.crypto.spec.PBEKeySpec;
 import java.net.URL;
 
 /**
+ * The provider brings up a secure storage login dialog in the Eclipse Installer for the user to input the 'master' password.
+ * This provider does not persist the 'master' password in any way but relies on the user to input it.
+ *
  * @author Ed Merks
  */
 @SuppressWarnings("restriction")
-public class DefaultPasswordProvider extends PasswordProvider
+public class InstallerUIPrompt extends PasswordProvider
 {
   @Override
   public PBEKeySpec getPassword(IPreferencesContainer container, int passwordType)
