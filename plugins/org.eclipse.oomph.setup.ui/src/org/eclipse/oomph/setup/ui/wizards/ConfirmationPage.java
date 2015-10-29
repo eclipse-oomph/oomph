@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
 import org.eclipse.oomph.internal.ui.OomphDragAdapter;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
@@ -44,7 +45,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IItemColorProvider;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
@@ -703,7 +703,7 @@ public class ConfirmationPage extends SetupWizardPage
     createContextMenu(childrenViewer);
     AdapterFactory adapterFactory = getAdapterFactory();
     childrenViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
-    childrenViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+    childrenViewer.setContentProvider(new OomphAdapterFactoryContentProvider(adapterFactory)
     {
       @Override
       public Object[] getElements(Object object)

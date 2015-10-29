@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
+import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
@@ -273,7 +274,7 @@ public class ProgressPage extends SetupWizardPage
     ILabelProvider labelProvider = createLabelProvider();
     treeViewer.setLabelProvider(labelProvider);
 
-    final AdapterFactoryContentProvider contentProvider = new AdapterFactoryContentProvider(getAdapterFactory());
+    final AdapterFactoryContentProvider contentProvider = new OomphAdapterFactoryContentProvider(getAdapterFactory());
     treeViewer.setContentProvider(contentProvider);
     treeViewer.addSelectionChangedListener(treeViewerSelectionChangedListener);
 

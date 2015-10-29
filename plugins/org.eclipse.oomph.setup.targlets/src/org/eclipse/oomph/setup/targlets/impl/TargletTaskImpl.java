@@ -30,6 +30,7 @@ import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.targlets.internal.core.WorkspaceIUImporter;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.SuppressHint;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
@@ -755,17 +756,23 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       else if (targlet.getRequirements().isEmpty() && targlet.getSourceLocators().isEmpty())
       {
         // Eliminate targlets that are effectively empty, i.e., no requirements, no source locators, and the active repository list is empty.
-        String activeRepositoryList = targlet.getActiveRepositoryListName();
-        for (RepositoryList repositoryList : targlet.getRepositoryLists())
+        RepositoryList activeRepositoryList = targlet.getActiveRepositoryList();
+        if (activeRepositoryList == null || activeRepositoryList.getRepositories().isEmpty())
         {
-          if (ObjectUtil.equals(activeRepositoryList, repositoryList.getName()))
-          {
-            if (repositoryList.getRepositories().isEmpty())
-            {
-              it.remove();
-              continue LOOP;
-            }
-          }
+          it.remove();
+          continue LOOP;
+        }
+      }
+    }
+
+    for (Targlet targlet : targlets)
+    {
+      RepositoryList activeRepositoryList = targlet.getActiveRepositoryList();
+      for (RepositoryList repositoryList : targlet.getRepositoryLists())
+      {
+        if (repositoryList != activeRepositoryList)
+        {
+          SuppressHint.setSuppressed(repositoryList, true);
         }
       }
     }
