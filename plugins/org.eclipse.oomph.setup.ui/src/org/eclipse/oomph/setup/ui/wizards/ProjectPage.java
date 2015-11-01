@@ -39,6 +39,7 @@ import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.UnexecutableCommand;
@@ -79,9 +80,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -148,6 +151,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -441,44 +445,7 @@ public class ProjectPage extends SetupWizardPage
     int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
     Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance(),
         URLTransfer.getInstance() };
-    projectViewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, projectViewer)
-    {
-      @Override
-      protected Collection<?> getDragSource(DropTargetEvent event)
-      {
-        // Check whether the current data type can be transfered locally.
-        //
-        URLTransfer urlTransfer = URLTransfer.getInstance();
-        if (urlTransfer.isSupportedType(event.currentDataType))
-        {
-          // Motif kludge: we would get something random instead of null.
-          //
-          if (IS_MOTIF)
-          {
-            return null;
-          }
-
-          // Transfer the data and, if non-null, extract it.
-          //
-          Object object = urlTransfer.nativeToJava(event.currentDataType);
-          return object == null ? null : extractDragSource(object);
-        }
-
-        return super.getDragSource(event);
-      }
-
-      @Override
-      protected Collection<?> extractDragSource(Object object)
-      {
-        if (object instanceof String)
-        {
-          return Collections.singleton(URI.createURI((String)object));
-        }
-
-        return super.extractDragSource(object);
-      }
-    });
-
+    projectViewer.addDropSupport(dndOperations, transfers, new URIDropAdapter(editingDomain, projectViewer));
     new ColumnViewerInformationControlToolTipSupport(projectViewer, new LocationListener()
     {
       public void changing(LocationEvent event)
@@ -1886,6 +1853,92 @@ public class ProjectPage extends SetupWizardPage
       IStructuredSelection selection = (IStructuredSelection)catalogViewer.getSelection();
       ProjectCatalog selectedCatalog = (ProjectCatalog)selection.getFirstElement();
       return selectedCatalog;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class URIDropAdapter extends EditingDomainViewerDropAdapter
+  {
+    public URIDropAdapter(EditingDomain domain, Viewer viewer)
+    {
+      super(domain, viewer);
+    }
+
+    @Override
+    protected Collection<?> getDragSource(DropTargetEvent event)
+    {
+      // Check whether the current data type can be transfered locally.
+      //
+      URLTransfer urlTransfer = URLTransfer.getInstance();
+      if (urlTransfer.isSupportedType(event.currentDataType))
+      {
+        // Motif kludge: we would get something random instead of null.
+        //
+        if (IS_MOTIF)
+        {
+          return null;
+        }
+
+        // Transfer the data and, if non-null, extract it.
+        //
+        Object object = urlTransfer.nativeToJava(event.currentDataType);
+        return object == null ? null : extractDragSource(object);
+      }
+
+      return super.getDragSource(event);
+    }
+
+    @Override
+    protected Collection<?> extractDragSource(Object object)
+    {
+      if (object instanceof String)
+      {
+        return convertPlatformResourceURIs(Collections.singleton(URI.createURI((String)object)));
+      }
+
+      return convertPlatformResourceURIs(super.extractDragSource(object));
+    }
+
+    protected Collection<?> convertPlatformResourceURIs(Collection<?> uris)
+    {
+      List<Object> result = new ArrayList<Object>(uris);
+      for (ListIterator<Object> it = result.listIterator(); it.hasNext();)
+      {
+        Object object = it.next();
+        if (object instanceof URI)
+        {
+          URI uri = (URI)object;
+          if (uri.isPlatformResource())
+          {
+            if (CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE)
+            {
+              it.set(ResourceHelper.convert(uri));
+            }
+          }
+        }
+      }
+
+      return result;
+    }
+
+    private static class ResourceHelper
+    {
+      public static URI convert(URI uri)
+      {
+        IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
+        if (file.isAccessible())
+        {
+          IPath location = file.getLocation();
+          if (location != null)
+          {
+            return URI.createFileURI(location.toOSString());
+          }
+        }
+
+        return uri;
+      }
     }
   }
 }

@@ -46,6 +46,7 @@ import org.eclipse.oomph.setup.ui.JREDownloadHandler;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.FilteredTreeWithoutWorkbench;
+import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
@@ -78,7 +79,6 @@ import org.eclipse.emf.edit.command.DragAndDropFeedback;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -109,7 +109,6 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.URLTransfer;
@@ -643,43 +642,7 @@ public class ProductPage extends SetupWizardPage
     int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
     Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance(),
         URLTransfer.getInstance() };
-    productViewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, productViewer)
-    {
-      @Override
-      protected Collection<?> getDragSource(DropTargetEvent event)
-      {
-        // Check whether the current data type can be transfered locally.
-        //
-        URLTransfer urlTransfer = URLTransfer.getInstance();
-        if (urlTransfer.isSupportedType(event.currentDataType))
-        {
-          // Motif kludge: we would get something random instead of null.
-          //
-          if (IS_MOTIF)
-          {
-            return null;
-          }
-
-          // Transfer the data and, if non-null, extract it.
-          //
-          Object object = urlTransfer.nativeToJava(event.currentDataType);
-          return object == null ? null : extractDragSource(object);
-        }
-
-        return super.getDragSource(event);
-      }
-
-      @Override
-      protected Collection<?> extractDragSource(Object object)
-      {
-        if (object instanceof String)
-        {
-          return Collections.singleton(URI.createURI((String)object));
-        }
-
-        return super.extractDragSource(object);
-      }
-    });
+    productViewer.addDropSupport(dndOperations, transfers, new ProjectPage.URIDropAdapter(editingDomain, productViewer));
 
     final Tree productTree = productViewer.getTree();
     productTree.setLayoutData(new GridData(GridData.FILL_BOTH));
