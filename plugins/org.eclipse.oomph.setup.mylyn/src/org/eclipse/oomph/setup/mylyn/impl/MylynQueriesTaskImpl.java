@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.mylyn.impl;
 
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.mylyn.MylynPackage;
@@ -512,7 +513,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     String userID = getUserID();
     if (isAuthenticate())
     {
-      AuthenticationCredentials credentials = new AuthenticationCredentials(userID, password);
+      AuthenticationCredentials credentials = new AuthenticationCredentials(userID, PreferencesUtil.decrypt(getPassword()));
       repository.setCredentials(AuthenticationType.REPOSITORY, credentials, true);
     }
 
