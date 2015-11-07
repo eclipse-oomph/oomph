@@ -15,6 +15,7 @@ import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.Listener;
 import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.Page;
 import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.PreferencePage;
 import org.eclipse.oomph.setup.ui.questionnaire.GearAnimator.SummaryPage;
+import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.emf.common.util.URI;
 
@@ -31,7 +32,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class GearShell extends AnimatedShell<Map<URI, String>>implements Listener
+public class GearShell extends AnimatedShell<Map<URI, Pair<String, String>>>implements Listener
 {
   private static final boolean TEST_OVERLAYS = false;
 
@@ -56,7 +57,7 @@ public class GearShell extends AnimatedShell<Map<URI, String>>implements Listene
   {
     if (page instanceof SummaryPage)
     {
-      HashMap<URI, String> preferences = new HashMap<URI, String>();
+      HashMap<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
 
       Page[] pages = animator.getPages();
       for (Page p : pages)
@@ -69,7 +70,7 @@ public class GearShell extends AnimatedShell<Map<URI, String>>implements Listene
           {
             URI key = preferencePage.getPreferenceKey();
             String value = choice == 0 ? preferencePage.getYesValue() : preferencePage.getNoValue();
-            preferences.put(key, value);
+            preferences.put(key, new Pair<String, String>(null, value));
           }
         }
       }

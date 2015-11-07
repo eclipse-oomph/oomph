@@ -93,6 +93,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PREF_PREFERENCE_RECORDER_TARGET = "preference.recorder.target";
 
+  public static final String PREF_INITIALIZED_PREFERENCE_PAGES = "initialized.preference.pages";
+
+  public static final String PREF_IGNORED_PREFERENCE_PAGES = "ingored.preference.pages";
+
   public static final boolean QUESTIONNAIRE_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_QUESTIONNAIRE_SKIP);
 
   private static final String RESTARTING_FILE_NAME = "restarting";

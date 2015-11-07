@@ -132,9 +132,17 @@ public abstract class ButtonAnimator implements Runnable
     images = new Image[1 + additionalImages];
     images[0] = button.getImage();
 
+    String prefix = imagePrefix;
+    String suffix = "";
+    if (imagePrefix.endsWith(".png"))
+    {
+      prefix = prefix.substring(0, prefix.length() - 4);
+      suffix = ".png";
+    }
+
     for (int i = 0; i < images.length - 1; i++)
     {
-      images[i + 1] = plugin.getSWTImage(imagePrefix + i);
+      images[i + 1] = plugin.getSWTImage(prefix + i + suffix);
     }
   }
 }

@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.ui.Questionnaire;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.emf.common.util.URI;
 
@@ -56,13 +57,13 @@ public class QuestionnaireImpl extends Questionnaire
         User user = (User)rootObject;
         if (user.getQuestionnaireDate() == null || force)
         {
-          final Map<URI, String> preferences = new HashMap<URI, String>();
+          final Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
           UIUtil.syncExec(new Runnable()
           {
             public void run()
             {
               GearShell shell = new GearShell(parentShell);
-              Map<URI, String> result = shell.openModal();
+              Map<URI, Pair<String, String>> result = shell.openModal();
               if (result != null)
               {
                 preferences.putAll(result);
@@ -73,14 +74,14 @@ public class QuestionnaireImpl extends Questionnaire
           URI uri = PreferencesFactory.eINSTANCE.createURI(GearAnimator.RECORDER_PREFERENCE_KEY);
           if (preferences.containsKey(uri))
           {
-            boolean enabled = Boolean.parseBoolean(preferences.remove(uri));
+            boolean enabled = Boolean.parseBoolean(preferences.remove(uri).getElement2());
             user.setPreferenceRecorderDefault(enabled);
           }
 
           if (!preferences.isEmpty())
           {
             boolean inIDE = !SetupUIPlugin.isInstallerProduct();
-            for (final Entry<URI, String> entry : preferences.entrySet())
+            for (final Entry<URI, Pair<String, String>> entry : preferences.entrySet())
             {
               final String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
               transaction.setPolicy(path, true);
@@ -92,7 +93,7 @@ public class QuestionnaireImpl extends Questionnaire
                   public void run()
                   {
                     PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);
-                    property.set(entry.getValue());
+                    property.set(entry.getValue().getElement2());
                   }
                 });
               }

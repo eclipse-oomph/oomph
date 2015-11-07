@@ -36,6 +36,7 @@ import org.eclipse.oomph.setup.ui.recorder.AbstractRecorderDialog;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -555,13 +556,13 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       Map<String, CompoundTask> compounds = new HashMap<String, CompoundTask>();
       Map<String, Boolean> policies = recorderTransaction.getPolicies(false);
 
-      for (Map.Entry<URI, String> entry : recorderTransaction.getPreferences().entrySet())
+      for (Map.Entry<URI, Pair<String, String>> entry : recorderTransaction.getPreferences().entrySet())
       {
         URI uri = entry.getKey();
         String pluginID = uri.segment(0);
 
         String key = PreferencesFactory.eINSTANCE.convertURI(uri);
-        String value = entry.getValue();
+        String value = entry.getValue().getElement2();
 
         PreferenceTask task = SetupFactory.eINSTANCE.createPreferenceTask();
         task.setKey(key);
@@ -786,7 +787,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
     Resource resource = synchronization.getResourceSet().getResource(targetURI, true);
 
     Set<String> preferenceKeys = new HashSet<String>();
-    Map<URI, String> preferenceMap = new HashMap<URI, String>();
+    Map<URI, Pair<String, String>> preferenceMap = new HashMap<URI, Pair<String, String>>();
 
     RecorderTransaction tmpTransaction = RecorderTransaction.openTmp(resource);
     tmpTransaction.setPreferences(preferenceMap);
@@ -799,7 +800,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       {
         tmpTransaction.setPolicy(key, true);
         String value = policyAndValue.getValue();
-        preferenceMap.put(PreferencesFactory.eINSTANCE.createURI(key), value);
+        preferenceMap.put(PreferencesFactory.eINSTANCE.createURI(key), new Pair<String, String>(null, value));
         preferenceKeys.add(key);
       }
       else

@@ -10,6 +10,14 @@
  */
 package org.eclipse.oomph.setup.ui.recorder;
 
+import org.eclipse.oomph.preferences.PreferenceNode;
+import org.eclipse.oomph.preferences.PreferencesFactory;
+import org.eclipse.oomph.preferences.Property;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.setup.impl.PreferenceTaskImpl;
+
+import org.eclipse.emf.common.util.URI;
+
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -30,6 +38,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 /**
@@ -93,6 +103,11 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     this.transaction = transaction;
     Map<String, Boolean> policies = transaction.getPolicies(clean);
 
+    PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.unmodifiableSet(new LinkedHashSet<String>(
+        Arrays.asList(new String[] { PreferencesUtil.BUNDLE_DEFAULTS_NODE, PreferencesUtil.DEFAULT_NODE, PreferencesUtil.INSTANCE_NODE }))), false);
+
+    collectPolicies(policies, rootPreferenceNode);
+
     sortedKeys = policies.keySet().toArray(new String[policies.size()]);
     Arrays.sort(sortedKeys);
 
@@ -101,6 +116,26 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     if (sortedKeys.length != 0)
     {
       viewer.setSelection(new StructuredSelection(sortedKeys[0]));
+    }
+  }
+
+  private void collectPolicies(Map<String, Boolean> policies, PreferenceNode node)
+  {
+    for (PreferenceNode child : node.getChildren())
+    {
+      collectPolicies(policies, child);
+    }
+
+    for (Property property : node.getProperties())
+    {
+      URI relativePath = property.getRelativePath();
+      // System.err.println("##" + relativePath);
+      URI instance = URI.createURI("//instance");
+      URI resolve = instance.appendSegments(relativePath.segments());
+      if (PreferenceTaskImpl.PreferenceHandler.getHandler(resolve).isIgnored())
+      {
+        policies.put(PreferencesFactory.eINSTANCE.convertURI(resolve), false);
+      }
     }
   }
 

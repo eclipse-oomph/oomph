@@ -38,9 +38,14 @@ public final class SetupUtil
       return null;
     }
 
-    StringBuffer result = new StringBuffer();
     Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string);
-    while (matcher.find())
+    if (!matcher.find())
+    {
+      return string;
+    }
+
+    StringBuffer result = new StringBuffer();
+    do
     {
       String group1 = matcher.group(1);
       if ("$".equals(group1))
@@ -51,7 +56,7 @@ public final class SetupUtil
       {
         matcher.appendReplacement(result, "\\$$0");
       }
-    }
+    } while (matcher.find());
 
     matcher.appendTail(result);
 

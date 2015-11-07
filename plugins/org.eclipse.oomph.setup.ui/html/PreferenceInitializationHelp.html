@@ -1,0 +1,50 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Preference Recording</title>
+
+<link rel="stylesheet" href="book.css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Preference Initialization";
+    }
+}
+</script>
+</head>
+<body bgcolor="white" onload="windowTitle();">
+
+<h1>Preference Initialization Dialog</h1>
+
+<p>
+  The preference recorder detects all preferences that are changed while the Preferences dialog is open.
+  Unfortunately, most preference pages initialize preferences the first time the page is displayed.
+  All such initialized defaults are indistinguishable from the preferences that you actually change on those pages.
+  To avoid recording initialized defaults,
+  it is recommended to visit each preference page once before changing any preferences.
+  This dialog automatically does that tedious job for you.
+</p>
+
+<p>
+  You may choose not to visit some or all of the pages by unselecting them in the tree view.
+  This selection will be remembered, so you won't be alerted for these pages again.
+  If at a later time you wish to initialize the pages you've deselected now,
+  you can bring up this dialog again via the <span style="border:1px solid gray; background:#eeeeee;"><b>&nbsp;Initialize...&nbsp;</b></span> button on the
+  <span class="selectstep">Window &rarr; Preferences&hellip; &rarr; Oomph &rarr; Setup Tasks &rarr; Preference Recorder</span> preference page.
+</p>
+
+<p>
+  Visiting every page takes a significant amount of time. 
+  Each page must be created and to accomplish that, the plug-in that contributes the preference page must be activated.
+  But you'll only need to do that just this one time for each page
+  because the pages that have been initialized are remembered.
+  You will only be alerted when there are new pages,
+  that is, when you install new plug-ins that contribute additional preference pages.
+</p>
+
+</body>
+</html>

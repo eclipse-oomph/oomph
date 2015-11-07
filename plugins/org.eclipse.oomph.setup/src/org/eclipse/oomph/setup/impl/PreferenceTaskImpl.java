@@ -600,6 +600,25 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
+      registry.put(URI.createURI("//instance/org.eclipse.ui.workbench/"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          String lastSegment = key.lastSegment();
+          if ("editors".equals(lastSegment))
+          {
+            return new IgnoredPreferenceHandler(key);
+          }
+
+          if ("resourcetypes".equals(lastSegment))
+          {
+            return new ListPreferenceHandler(key, "(?s)(<<info .*?</<info >)", "extension=\"([^\"]+)\"[^>]+name=\"([^\"]+)\"", "\n");
+          }
+
+          return new PreferenceHandler(key);
+        }
+      });
+
       registry.put(URI.createURI("//instance/org.eclipse.core.runtime/content-types/"), new Factory()
       {
         public PreferenceHandler create(URI key)
@@ -615,6 +634,41 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
             {
               return new ContentTypeCharsetPreferenceHandler(key);
             }
+          }
+
+          return new PreferenceHandler(key);
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.core/"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          String lastSegment = key.lastSegment();
+          if (lastSegment.startsWith("org.eclipse.jdt.core.formatter."))
+          {
+            return new IgnoredPreferenceHandler(key);
+          }
+
+          return new PreferenceHandler(key);
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          String lastSegment = key.lastSegment();
+          if (lastSegment.startsWith("cleanup."))
+          {
+            return new PreferenceHandler(key)
+            {
+              @Override
+              public boolean isIgnored()
+              {
+                return true;
+              }
+            };
           }
 
           return new PreferenceHandler(key);
@@ -697,18 +751,28 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     public static PreferenceHandler getHandler(String key)
     {
       URI keyURI = PreferencesFactory.eINSTANCE.createURI(key);
-      Factory factory = Factory.Registry.INSTANCE.getFactory(keyURI);
+      return getHandler(keyURI);
+    }
+
+    public static PreferenceHandler getHandler(URI key)
+    {
+      Factory factory = Factory.Registry.INSTANCE.getFactory(key);
       if (factory == null)
       {
-        return new PreferenceHandler(keyURI);
+        return new PreferenceHandler(key);
       }
 
-      return factory.create(keyURI);
+      return factory.create(key);
     }
 
     public PreferenceHandler(URI key)
     {
       this.key = key;
+    }
+
+    public boolean isIgnored()
+    {
+      return false;
     }
 
     public final boolean isNeeded(String oldValue, String newValue)
@@ -761,6 +825,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     }
 
     public String merge()
+    {
+      return newValue;
+    }
+
+    public String delta()
     {
       return newValue;
     }
@@ -829,6 +898,20 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
         public Factory getFactory(URI key);
       }
+    }
+  }
+
+  public static class IgnoredPreferenceHandler extends PreferenceHandler
+  {
+    public IgnoredPreferenceHandler(URI key)
+    {
+      super(key);
+    }
+
+    @Override
+    public boolean isIgnored()
+    {
+      return true;
     }
   }
 
@@ -916,6 +999,33 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       }
 
       result.append(oldItemValues.get(oldItemValues.size() - 1).getTail());
+
+      return result.toString();
+    }
+
+    @Override
+    public String delta()
+    {
+      merge();
+
+      if (oldItems.isEmpty())
+      {
+        return newValue;
+      }
+
+      List<Item> itemValues = new ArrayList<Item>(oldItems.values());
+      StringBuilder result = new StringBuilder(itemValues.get(0).getHead());
+      for (Iterator<String> it = changedItems.iterator(); it.hasNext();)
+      {
+        Item item = mergedItems.get(it.next());
+        result.append(item.getValue());
+        if (it.hasNext())
+        {
+          result.append(separator);
+        }
+      }
+
+      result.append(itemValues.get(itemValues.size() - 1).getTail());
 
       return result.toString();
     }
@@ -1101,7 +1211,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   /**
    * @author Ed Merks
    */
-  public static class PreferenceHandlerFactoryRegistry extends BasicEMap<URI, PreferenceHandler.Factory> implements PreferenceHandler.Factory.Registry
+  public static class PreferenceHandlerFactoryRegistry extends BasicEMap<URI, PreferenceHandler.Factory>implements PreferenceHandler.Factory.Registry
   {
     private static final URI ROOT_PREFIX = URI.createURI("//");
 

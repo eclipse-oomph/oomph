@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.impl.PreferenceTaskImpl;
+import org.eclipse.oomph.setup.impl.PreferenceTaskImpl.PreferenceHandler;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.sync.DataProvider;
@@ -38,10 +39,12 @@ import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog.PolicyAndValue;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.UICredentialsProvider;
+import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
@@ -59,7 +62,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
+import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -82,6 +87,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
@@ -115,7 +122,9 @@ public final class RecorderManager
 
   private final EarlySynchronization earlySynchronization = new EarlySynchronization();
 
-  private static ToolItem toolItem;
+  private static ToolItem recordItem;
+
+  private static ToolItem initializeItem;
 
   private final DisplayListener displayListener = new DisplayListener();
 
@@ -202,16 +211,81 @@ public final class RecorderManager
         }
         else
         {
-          if (recorder != null)
-          {
-            recorder.done();
-            recorder = null;
-          }
-
-          earlySynchronization.stop();
+          cancelRecording();
         }
       }
     }
+  }
+
+  public Set<String> getInitializedPreferencePages()
+  {
+    return getIDs(SetupUIPlugin.PREF_INITIALIZED_PREFERENCE_PAGES);
+  }
+
+  public void setInitializedPreferencePages(Set<String> ids)
+  {
+    setIDs(SetupUIPlugin.PREF_INITIALIZED_PREFERENCE_PAGES, ids);
+  }
+
+  public Set<String> getIgnoredPreferencePages()
+  {
+    return getIDs(SetupUIPlugin.PREF_IGNORED_PREFERENCE_PAGES);
+  }
+
+  public void setIgnoredPreferencePages(Set<String> ids)
+  {
+    setIDs(SetupUIPlugin.PREF_IGNORED_PREFERENCE_PAGES, ids);
+  }
+
+  private Set<String> getIDs(String key)
+  {
+    Set<String> result = new LinkedHashSet<String>();
+    String value = SETUP_UI_PREFERENCES.getString(key);
+    if (!StringUtil.isEmpty(value))
+    {
+      for (String id : value.split(" "))
+      {
+        result.add(id);
+      }
+    }
+
+    return result;
+  }
+
+  private void setIDs(String key, Set<String> ids)
+  {
+    StringBuilder result = new StringBuilder();
+    for (String id : ids)
+    {
+      if (result.length() != 0)
+      {
+        result.append(' ');
+      }
+
+      result.append(id);
+    }
+
+    SETUP_UI_PREFERENCES.setValue(key, result.toString());
+
+    try
+    {
+      SETUP_UI_PREFERENCES.save();
+    }
+    catch (IOException ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
+    }
+  }
+
+  public void cancelRecording()
+  {
+    if (recorder != null)
+    {
+      recorder.done();
+      recorder = null;
+    }
+
+    earlySynchronization.stop();
   }
 
   private void doSetRecorderEnabled(boolean enabled)
@@ -315,7 +389,7 @@ public final class RecorderManager
     return temporaryRecorderTarget != null;
   }
 
-  private void handleRecording(IEditorPart editorPart, Map<URI, String> values)
+  private void handleRecording(IEditorPart editorPart, Map<URI, Pair<String, String>> values)
   {
     RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(editorPart);
     transaction.setPreferences(values);
@@ -350,9 +424,18 @@ public final class RecorderManager
         Boolean localPolicy = transaction.getPolicy(key);
         if (localPolicy == null)
         {
-          // Local policy is missing.
-          transaction.setPolicy(key, true); // Default to "record".
-          dialogNeeded = true; // And prompt below...
+          PreferenceHandler handler = PreferenceTaskImpl.PreferenceHandler.getHandler(key);
+          if (!handler.isIgnored())
+          {
+            // Local policy is missing.
+            transaction.setPolicy(key, true); // Default to "record".
+            dialogNeeded = true; // And prompt below...
+          }
+          else
+          {
+            // That handler policy is "ignore".
+            it.remove(); // Remove the preference change from the transaction.
+          }
         }
         else if (!localPolicy)
         {
@@ -371,7 +454,7 @@ public final class RecorderManager
             String key = PreferencesFactory.eINSTANCE.convertURI(uri);
             if (transaction.getPolicy(key))
             {
-              String value = transaction.getPreferences().get(uri);
+              String value = transaction.getPreferences().get(uri).getElement2();
               preferenceChanges.put(key, new PolicyAndValue(value));
             }
             else
@@ -653,26 +736,27 @@ public final class RecorderManager
   }
 
   @SuppressWarnings("restriction")
-  private static void hookRecorderCheckbox(final Shell shell)
+  private void hookRecorderCheckbox(final Shell shell)
   {
     try
     {
-      org.eclipse.ui.internal.dialogs.WorkbenchPreferenceDialog dialog = (org.eclipse.ui.internal.dialogs.WorkbenchPreferenceDialog)shell.getData();
+      final org.eclipse.ui.internal.dialogs.WorkbenchPreferenceDialog dialog = (org.eclipse.ui.internal.dialogs.WorkbenchPreferenceDialog)shell.getData();
       if (dialog.buttonBar instanceof Composite)
       {
-        Composite buttonBar = (Composite)dialog.buttonBar;
+        final Composite buttonBar = (Composite)dialog.buttonBar;
         Control[] children = buttonBar.getChildren();
         if (children.length != 0)
         {
           Control child = children[0];
           if (child instanceof ToolBar)
           {
-            ToolBar toolBar = (ToolBar)child;
+            final ToolBar toolBar = (ToolBar)child;
 
-            toolItem = new ToolItem(toolBar, SWT.PUSH);
+            recordItem = new ToolItem(toolBar, SWT.PUSH);
             updateRecorderCheckboxState();
 
-            toolItem.addSelectionListener(new SelectionAdapter()
+            final PreferenceManager preferenceManager = dialog.getPreferenceManager();
+            recordItem.addSelectionListener(new SelectionAdapter()
             {
               @Override
               public void widgetSelected(SelectionEvent e)
@@ -686,17 +770,21 @@ public final class RecorderManager
                 if (enableRecorder)
                 {
                   SynchronizerManager.INSTANCE.offerFirstTimeConnect(shell);
+                  createInitializeItem(shell, toolBar, dialog, preferenceManager);
+                  buttonBar.layout();
                 }
               }
             });
 
-            toolItem.addDisposeListener(new DisposeListener()
+            recordItem.addDisposeListener(new DisposeListener()
             {
               public void widgetDisposed(DisposeEvent e)
               {
-                toolItem = null;
+                recordItem = null;
               }
             });
+
+            createInitializeItem(shell, toolBar, dialog, preferenceManager);
 
             buttonBar.layout();
           }
@@ -709,16 +797,92 @@ public final class RecorderManager
     }
   }
 
+  static void disposeInitializeItem()
+  {
+    if (initializeItem != null)
+    {
+      initializeItem.dispose();
+    }
+  }
+
+  @SuppressWarnings("restriction")
+  private void createInitializeItem(final Shell shell, ToolBar toolBar, final org.eclipse.ui.internal.dialogs.WorkbenchPreferenceDialog dialog,
+      final PreferenceManager preferenceManager)
+  {
+    if (hasPreferencePagesToInitialize(preferenceManager))
+    {
+      initializeItem = new ToolItem(toolBar, SWT.PUSH);
+
+      final class Animator extends ButtonAnimator
+      {
+        public Animator(ToolItem toolItem)
+        {
+          super(SetupUIPlugin.INSTANCE, toolItem, "bulb.png", 8);
+        }
+
+        @Override
+        public Shell getShell()
+        {
+          return shell;
+        }
+
+        @Override
+        protected boolean doAnimate()
+        {
+          return true;
+        }
+      }
+
+      initializeItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("bulb0.png"));
+
+      new Animator(initializeItem).run();
+
+      initializeItem.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          new PreferenceInitializationDialog(dialog, preferenceManager).open();
+        }
+      });
+
+      initializeItem.addDisposeListener(new DisposeListener()
+      {
+        public void widgetDisposed(DisposeEvent e)
+        {
+          initializeItem = null;
+        }
+      });
+    }
+  }
+
+  private boolean hasPreferencePagesToInitialize(PreferenceManager preferenceManager)
+  {
+    Set<String> preferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
+    preferencePages.addAll(RecorderManager.INSTANCE.getIgnoredPreferencePages());
+    List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
+    for (IPreferenceNode element : preferenceNodes)
+    {
+      String id = element.getId();
+      if (!preferencePages.contains(id))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   static void updateRecorderCheckboxState()
   {
-    if (toolItem != null)
+    if (recordItem != null)
     {
       boolean recorderEnabled = INSTANCE.isRecorderEnabled();
       String state = recorderEnabled ? "enabled" : "disabled";
       String verb = !recorderEnabled ? "enable" : "disable";
 
-      toolItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("recorder_" + state));
-      toolItem.setToolTipText("Oomph preference recorder " + state + " - Push to " + verb);
+      recordItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("recorder_" + state));
+      recordItem.setToolTipText("Oomph preference recorder " + state + " - Push to " + verb);
     }
   }
 
@@ -813,7 +977,7 @@ public final class RecorderManager
       if (event.widget instanceof Shell)
       {
         final Shell shell = (Shell)event.widget;
-        if (isPreferenceDialog(shell) && toolItem == null)
+        if (isPreferenceDialog(shell) && recordItem == null)
         {
           UIUtil.asyncExec(display, new Runnable()
           {
@@ -842,7 +1006,7 @@ public final class RecorderManager
               {
                 public void run()
                 {
-                  final Map<URI, String> values = recorder.done();
+                  final Map<URI, Pair<String, String>> values = recorder.done();
                   recorder = null;
                   for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
                   {
@@ -852,8 +1016,9 @@ public final class RecorderManager
                     if (SetupUIPlugin.PLUGIN_ID.equals(pluginID))
                     {
                       String lastSegment = uri.lastSegment();
-                      if (SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(lastSegment)
-                          || SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET.equals(lastSegment))
+                      if (SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(lastSegment) || SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET.equals(lastSegment)
+                          || SetupUIPlugin.PREF_IGNORED_PREFERENCE_PAGES.equals(lastSegment)
+                          || SetupUIPlugin.PREF_INITIALIZED_PREFERENCE_PAGES.equals(lastSegment))
                       {
                         it.remove();
                       }

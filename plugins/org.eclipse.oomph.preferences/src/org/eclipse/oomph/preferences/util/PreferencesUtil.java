@@ -811,6 +811,27 @@ public final class PreferencesUtil
       return this;
     }
 
+    public PreferenceProperty getEffectiveDefaultProperty()
+    {
+      Preferences rootNode = Platform.getPreferencesService().getRootNode();
+      for (String path = nextScope(node.absolutePath()); path != null; path = nextScope(path))
+      {
+        try
+        {
+          if (rootNode.nodeExists(path))
+          {
+            return new PreferenceProperty(rootNode.node(path), property).getEffectiveProperty();
+          }
+        }
+        catch (BackingStoreException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      return null;
+    }
+
     private String nextScope(String path)
     {
       if (path.startsWith("/instance/"))
@@ -1381,6 +1402,30 @@ public final class PreferencesUtil
 
     public void preferenceChange(PreferenceChangeEvent event)
     {
+      for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace())
+      {
+        String methodName = stackTraceElement.getMethodName();
+        if ("initializeDefaultPreferences".equals(methodName))
+        {
+          // Ignore preferences created during initialization.
+          return;
+        }
+        else if ("start".equals(methodName) && "org.eclipse.osgi.internal.framework.BundleContextImpl".equals(stackTraceElement.getClassName()))
+        {
+          // Ignore preferences created by bundle start.
+          return;
+        }
+        else if ("createExecutableExtension".equals(methodName)
+            && "org.eclipse.core.internal.registry.ConfigurationElementHandle".equals(stackTraceElement.getClassName()))
+        {
+          return;
+        }
+        else if ("showPage".equals(methodName) && "org.eclipse.ui.internal.dialogs.FilteredPreferenceDialog".equals(stackTraceElement.getClassName()))
+        {
+          return;
+        }
+      }
+
       PreferenceNode preferenceNode = (PreferenceNode)target;
       Resource resource = preferenceNode.eResource();
       if (resource == null)
@@ -1404,6 +1449,7 @@ public final class PreferencesUtil
     {
       String name = event.getKey();
       Object value = event.getNewValue();
+
       EList<Property> properties = preferenceNode.getProperties();
       for (int i = 0, size = properties.size(); i < size; ++i)
       {
@@ -1436,10 +1482,13 @@ public final class PreferencesUtil
         }
       }
 
-      Property property = PreferencesFactory.eINSTANCE.createProperty();
-      property.setName(name);
-      property.setValue(value.toString());
-      properties.add(property);
+      if (value != null)
+      {
+        Property property = PreferencesFactory.eINSTANCE.createProperty();
+        property.setName(name);
+        property.setValue(value.toString());
+        properties.add(property);
+      }
     }
 
     public void added(NodeChangeEvent event)

@@ -20,6 +20,7 @@ import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -116,7 +117,7 @@ public class PreferenceCaptureDialog extends Dialog
     PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.unmodifiableSet(new LinkedHashSet<String>(
         Arrays.asList(new String[] { PreferencesUtil.BUNDLE_DEFAULTS_NODE, PreferencesUtil.DEFAULT_NODE, PreferencesUtil.INSTANCE_NODE }))), false);
 
-    Map<URI, String> preferences = new HashMap<URI, String>();
+    Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
     for (PreferenceNode preferenceNode : rootPreferenceNode.getChildren())
     {
       traverse(preferences, preferenceNode);
@@ -125,7 +126,7 @@ public class PreferenceCaptureDialog extends Dialog
     return RecorderTransaction.record(preferences);
   }
 
-  protected void traverse(Map<URI, String> preferences, PreferenceNode preferenceNode)
+  protected void traverse(Map<URI, Pair<String, String>> preferences, PreferenceNode preferenceNode)
   {
     for (PreferenceNode childPreferenceNode : preferenceNode.getChildren())
     {
@@ -134,7 +135,7 @@ public class PreferenceCaptureDialog extends Dialog
 
     for (Property property : preferenceNode.getProperties())
     {
-      preferences.put(INSTANCE_URI.appendSegments(property.getRelativePath().segments()), property.getValue());
+      preferences.put(INSTANCE_URI.appendSegments(property.getRelativePath().segments()), new Pair<String, String>(null, property.getValue()));
     }
   }
 
@@ -335,14 +336,14 @@ public class PreferenceCaptureDialog extends Dialog
 
           try
           {
-            Map<URI, String> preferences = new HashMap<URI, String>();
+            Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
             Map<String, String> loadProperties = PropertiesUtil.loadProperties(new File(((Text)e.widget).getText()));
             for (Map.Entry<String, String> entry : loadProperties.entrySet())
             {
               String key = entry.getKey();
               if (key.startsWith("/"))
               {
-                preferences.put(PreferencesFactory.eINSTANCE.createURI(key), entry.getValue());
+                preferences.put(PreferencesFactory.eINSTANCE.createURI(key), new Pair<String, String>(null, entry.getValue()));
               }
             }
 
@@ -371,13 +372,13 @@ public class PreferenceCaptureDialog extends Dialog
     return super.close();
   }
 
-  public Map<URI, String> getResult()
+  public Map<URI, Pair<String, String>> getResult()
   {
-    Map<URI, String> result = new HashMap<URI, String>();
+    Map<URI, Pair<String, String>> result = new HashMap<URI, Pair<String, String>>();
     for (Object object : included)
     {
       PreferenceTask preferenceTask = (PreferenceTask)object;
-      result.put(PreferencesFactory.eINSTANCE.createURI(preferenceTask.getKey()), preferenceTask.getValue());
+      result.put(PreferencesFactory.eINSTANCE.createURI(preferenceTask.getKey()), new Pair<String, String>(null, preferenceTask.getValue()));
     }
 
     return result;

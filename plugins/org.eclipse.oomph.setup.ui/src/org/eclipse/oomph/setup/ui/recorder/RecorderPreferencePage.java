@@ -40,7 +40,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceNode;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -50,7 +55,9 @@ import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -62,6 +69,7 @@ import org.eclipse.ui.PlatformUI;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -87,6 +95,8 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
   private SearchField policiesFilter;
 
   private RecorderPoliciesComposite policiesComposite;
+
+  private Button initializePreferencesButton;
 
   public RecorderPreferencePage()
   {
@@ -298,6 +308,53 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
     return composite;
   }
 
+  @Override
+  public void createControl(Composite parent)
+  {
+    super.createControl(parent);
+    ((GridLayout)initializePreferencesButton.getParent().getLayout()).numColumns += 1;
+  }
+
+  @Override
+  protected void contributeButtons(Composite parent)
+  {
+    // Button uninitializedPageAltert = new Button(parent, SWT.CHECK);
+    // uninitializedPageAltert.setText("Show uninitialized page alert");
+    // uninitializedPageAltert.setSelection(true);
+
+    initializePreferencesButton = new Button(parent, SWT.PUSH);
+    initializePreferencesButton.setText("Initialize...");
+
+    int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
+    Dialog.applyDialogFont(initializePreferencesButton);
+    Point minButtonSize = initializePreferencesButton.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+    GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+    data.widthHint = Math.max(widthHint, minButtonSize.x);
+    initializePreferencesButton.setLayoutData(data);
+
+    final PreferenceManager preferenceManager = PlatformUI.getWorkbench().getPreferenceManager();
+    initializePreferencesButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        new PreferenceInitializationDialog((PreferenceDialog)getContainer(), preferenceManager).open();
+      }
+    });
+
+    Set<String> preferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
+    List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
+    for (IPreferenceNode element : preferenceNodes)
+    {
+      String id = element.getId();
+      if (preferencePages.contains(id))
+      {
+        initializePreferencesButton.setEnabled(false);
+        break;
+      }
+    }
+  }
+
   private void openRecorderTransaction(final Map<String, Boolean> policies)
   {
     Job job = new Job("Open recorder transaction")
@@ -427,6 +484,12 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
       {
         boolean needsApply = instance.needsApply();
         applyButton.setEnabled(needsApply);
+      }
+
+      Button defaultsButton = instance.getDefaultsButton();
+      if (defaultsButton != null)
+      {
+        defaultsButton.setEnabled(recorderEnabled);
       }
     }
   }

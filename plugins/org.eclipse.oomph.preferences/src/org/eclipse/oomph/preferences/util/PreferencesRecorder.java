@@ -15,6 +15,8 @@ import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.PreferencesPackage;
 import org.eclipse.oomph.preferences.Property;
 import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
+import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
@@ -35,7 +37,7 @@ public class PreferencesRecorder extends EContentAdapter
 
   private final Map<Property, URI> paths = new HashMap<Property, URI>();
 
-  private final Map<URI, String> values = new HashMap<URI, String>();
+  private final Map<URI, Pair<String, String>> values = new HashMap<URI, Pair<String, String>>();
 
   private PreferenceNode rootPreferenceNode;
 
@@ -45,7 +47,7 @@ public class PreferencesRecorder extends EContentAdapter
     rootPreferenceNode.eAdapters().add(this);
   }
 
-  public Map<URI, String> done()
+  public Map<URI, Pair<String, String>> done()
   {
     for (Iterator<EObject> it = rootPreferenceNode.eResource().getAllContents(); it.hasNext();)
     {
@@ -55,6 +57,15 @@ public class PreferencesRecorder extends EContentAdapter
     rootPreferenceNode = null;
 
     paths.clear();
+    for (Iterator<Pair<String, String>> it = values.values().iterator(); it.hasNext();)
+    {
+      Pair<String, String> pair = it.next();
+      if (ObjectUtil.equals(pair.getElement1(), pair.getElement2()))
+      {
+        it.remove();
+      }
+    }
+
     return values;
   }
 
@@ -92,7 +103,8 @@ public class PreferencesRecorder extends EContentAdapter
           if (notification.getFeature() == PreferencesPackage.Literals.PROPERTY__VALUE)
           {
             Property property = (Property)notification.getNotifier();
-            notifyChanged(property, property.getValue());
+            String oldValue = notification.getOldStringValue();
+            notifyChanged(property, oldValue, property.getValue());
           }
           break;
 
@@ -100,7 +112,8 @@ public class PreferencesRecorder extends EContentAdapter
           if (notification.getFeature() == PreferencesPackage.Literals.PREFERENCE_NODE__PROPERTIES)
           {
             Property property = (Property)notification.getNewValue();
-            notifyChanged(property, property.getValue());
+            String value = property.getValue();
+            notifyChanged(property, null, value);
           }
           break;
 
@@ -114,26 +127,33 @@ public class PreferencesRecorder extends EContentAdapter
             URI uri = paths.get(property);
             String path = PreferencesFactory.eINSTANCE.convertURI(uri);
             PreferenceProperty preferenceProperty = new PreferencesUtil.PreferenceProperty(path);
-            String value = preferenceProperty.getEffectiveProperty().get(null);
-
-            notifyChanged(property, value);
+            String effectiveValue = preferenceProperty.getEffectiveProperty().get(null);
+            notifyChanged(property, property.getValue(), effectiveValue);
           }
           break;
       }
     }
   }
 
-  protected void notifyChanged(Property property, String value)
+  protected void notifyChanged(Property property, String oldValue, String newValue)
   {
     URI absolutePath = paths.get(property);
     if (absolutePath != null)
     {
-      notifyChanged(absolutePath, value);
+      notifyChanged(absolutePath, oldValue, newValue);
     }
   }
 
-  protected void notifyChanged(URI absolutePath, String value)
+  protected void notifyChanged(URI absolutePath, String oldValue, String newValue)
   {
-    values.put(absolutePath, value);
+    Pair<String, String> pair = values.get(absolutePath);
+    if (pair == null)
+    {
+      values.put(absolutePath, new Pair<String, String>(oldValue, newValue));
+    }
+    else
+    {
+      pair.setElement2(newValue);
+    }
   }
 }

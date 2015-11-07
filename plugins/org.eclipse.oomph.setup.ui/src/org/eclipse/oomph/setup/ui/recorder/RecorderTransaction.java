@@ -21,12 +21,15 @@ import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
+import org.eclipse.oomph.setup.impl.PreferenceTaskImpl;
+import org.eclipse.oomph.setup.impl.PreferenceTaskImpl.PreferenceHandler;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -71,16 +74,21 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
  */
 public abstract class RecorderTransaction
 {
+  private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\r\n?|\n\r?");
+
   private static final String POLICIES_FILE_NAME = "policies.properties";
 
   private static final String POLICIES_EXT_POINT = "org.eclipse.oomph.setup.ui.preferencePolicies";
@@ -93,6 +101,10 @@ public abstract class RecorderTransaction
 
   private static RecorderTransaction instance;
 
+  private static final Map<String, String> DEFAULT_POLICIES_LOCAL = getDefaultPolicies();
+
+  public static final Map<String, String> DEFAULT_POLICIES = Collections.unmodifiableMap(DEFAULT_POLICIES_LOCAL);
+
   private final Resource resource;
 
   private final Map<String, Boolean> cleanPolicies = new HashMap<String, Boolean>();
@@ -101,7 +113,7 @@ public abstract class RecorderTransaction
 
   private final Set<URI> preferencesToRemove = new HashSet<URI>();
 
-  private Map<URI, String> preferences;
+  private Map<URI, Pair<String, String>> preferences;
 
   private SetupTaskContainer preferenceContainer;
 
@@ -267,12 +279,12 @@ public abstract class RecorderTransaction
     policies.remove(key);
   }
 
-  public Map<URI, String> getPreferences()
+  public Map<URI, Pair<String, String>> getPreferences()
   {
     return preferences;
   }
 
-  public void setPreferences(Map<URI, String> preferences)
+  public void setPreferences(Map<URI, Pair<String, String>> preferences)
   {
     this.preferences = preferences;
   }
@@ -322,6 +334,19 @@ public abstract class RecorderTransaction
 
     migrateOldTasks();
 
+    for (Iterator<Map.Entry<String, Boolean>> it = policies.entrySet().iterator(); it.hasNext();)
+    {
+      Map.Entry<String, Boolean> entry = it.next();
+      String key = entry.getKey();
+      boolean value = entry.getValue();
+      String defaultValue = DEFAULT_POLICIES.get(key);
+      if ((value ? POLICY_RECORD : POLICY_IGNORE).equals(defaultValue))
+      {
+        it.remove();
+        cleanPolicies.put(key, value);
+      }
+    }
+
     if (!policies.isEmpty())
     {
       recorderObjects.add(recorderAnnotation);
@@ -354,6 +379,7 @@ public abstract class RecorderTransaction
             if (workspacePolicies != null && !POLICY_IGNORE.equals(workspacePolicies.get(path)))
             {
               workspacePolicies.put(path, POLICY_IGNORE);
+              DEFAULT_POLICIES_LOCAL.put(path, POLICY_IGNORE);
               workspacePoliciesChanged = true;
             }
           }
@@ -380,12 +406,12 @@ public abstract class RecorderTransaction
     {
       if (preferences == null)
       {
-        preferences = new HashMap<URI, String>();
+        preferences = new HashMap<URI, Pair<String, String>>();
       }
 
       for (URI key : preferencesToRemove)
       {
-        preferences.put(key, REMOVE_PREFERENCE_MARKER);
+        preferences.put(key, new Pair<String, String>(null, REMOVE_PREFERENCE_MARKER));
       }
     }
 
@@ -411,22 +437,20 @@ public abstract class RecorderTransaction
   {
     boolean changed = false;
 
-    try
+    for (Map.Entry<String, String> entry : DEFAULT_POLICIES.entrySet())
     {
-      changed |= initializePoliciesFromProperties();
-    }
-    catch (Exception ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
-
-    try
-    {
-      changed |= initializePoliciesFromExtensions();
-    }
-    catch (Exception ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+      try
+      {
+        String key = entry.getKey();
+        if (!cleanPolicies.containsKey(key))
+        {
+          changed |= setPolicy(key, entry.getValue());
+        }
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+      }
     }
 
     if (changed)
@@ -435,15 +459,14 @@ public abstract class RecorderTransaction
     }
   }
 
-  private boolean initializePoliciesFromProperties()
+  private static Map<String, String> getPoliciesFromProperties()
   {
-    boolean changed = false;
-
+    Map<String, String> policies = new LinkedHashMap<String, String>();
     BundleFile policiesFile = SetupUIPlugin.INSTANCE.getRootFile().getChild(POLICIES_FILE_NAME);
     if (policiesFile != null)
     {
       String contents = policiesFile.getContentsString();
-      String[] lines = contents.split("[\n\r]");
+      String[] lines = LINE_SEPARATOR_PATTERN.split(contents);
       for (int i = 0; i < lines.length; i++)
       {
         try
@@ -455,11 +478,8 @@ public abstract class RecorderTransaction
             if (pos != -1)
             {
               String key = line.substring(0, pos).trim();
-              if (!cleanPolicies.containsKey(key))
-              {
-                String value = line.substring(pos + 1).trim();
-                changed |= setPolicy(key, value);
-              }
+              String value = line.substring(pos + 1).trim();
+              policies.put(key, value);
             }
           }
         }
@@ -470,13 +490,12 @@ public abstract class RecorderTransaction
       }
     }
 
-    return changed;
+    return policies;
   }
 
-  private boolean initializePoliciesFromExtensions()
+  private static Map<String, String> getPoliciesFromExtensions()
   {
-    boolean changed = false;
-
+    Map<String, String> policies = new LinkedHashMap<String, String>();
     IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
     for (IConfigurationElement configurationElement : extensionRegistry.getConfigurationElementsFor(POLICIES_EXT_POINT))
     {
@@ -499,7 +518,7 @@ public abstract class RecorderTransaction
         String contributorName = contributor.getName();
 
         String key = "/instance/" + contributorName + "/" + pluginRelativePath;
-        changed |= setPolicy(key, policy);
+        policies.put(key, policy);
       }
       catch (Exception ex)
       {
@@ -507,7 +526,14 @@ public abstract class RecorderTransaction
       }
     }
 
-    return changed;
+    return policies;
+  }
+
+  private static Map<String, String> getDefaultPolicies()
+  {
+    Map<String, String> policies = getPoliciesFromProperties();
+    policies.putAll(getPoliciesFromExtensions());
+    return policies;
   }
 
   private void findRecorderAnnotation(SetupTaskContainer container)
@@ -675,18 +701,25 @@ public abstract class RecorderTransaction
     return (SetupTaskContainer)resource.getContents().get(0);
   }
 
-  private static void record(Map<URI, String> preferences, EList<SetupTask> setupTasks, List<Object> recorderObjects,
+  private static void record(Map<URI, Pair<String, String>> preferences, EList<SetupTask> setupTasks, List<Object> recorderObjects,
       Map<String, PreferenceTask> preferenceTasks)
   {
-    for (Map.Entry<URI, String> entry : preferences.entrySet())
+    for (Map.Entry<URI, Pair<String, String>> entry : preferences.entrySet())
     {
       URI key = entry.getKey();
-      String value = entry.getValue();
+      String oldValue = SetupUtil.escape(entry.getValue().getElement1());
+      String newValue = SetupUtil.escape(entry.getValue().getElement2());
+
+      PreferenceHandler handler = PreferenceTaskImpl.PreferenceHandler.getHandler(key);
+      if (handler.isNeeded(oldValue, newValue))
+      {
+        newValue = handler.delta();
+      }
 
       String pluginID = key.segment(0).toString();
       String path = PreferencesFactory.eINSTANCE.convertURI(key);
 
-      boolean remove = value == REMOVE_PREFERENCE_MARKER;
+      boolean remove = newValue == REMOVE_PREFERENCE_MARKER;
 
       CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(setupTasks, SetupPackage.Literals.COMPOUND_TASK__NAME, pluginID, !remove);
       if (pluginCompound != null)
@@ -710,7 +743,13 @@ public abstract class RecorderTransaction
           }
           else
           {
-            preferenceTask.setValue(SetupUtil.escape(value));
+            String value = preferenceTask.getValue();
+            if (handler.isNeeded(value, newValue))
+            {
+              newValue = handler.merge();
+            }
+
+            preferenceTask.setValue(newValue);
             recorderObjects.add(preferenceTask);
           }
 
@@ -723,7 +762,7 @@ public abstract class RecorderTransaction
     }
   }
 
-  public static List<SetupTask> record(Map<URI, String> preferences)
+  public static List<SetupTask> record(Map<URI, Pair<String, String>> preferences)
   {
     EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
     List<Object> recorderObjects = new ArrayList<Object>();

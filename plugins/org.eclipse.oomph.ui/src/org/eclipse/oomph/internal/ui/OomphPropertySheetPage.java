@@ -43,8 +43,15 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -316,10 +323,48 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
 
           private boolean doEscape;
 
+          private String value;
+
+          private MouseListener mouseListener = new MouseAdapter()
+          {
+            @Override
+            public void mouseUp(MouseEvent e)
+            {
+              showDialog();
+            }
+
+            @Override
+            public void mouseDoubleClick(MouseEvent e)
+            {
+              showDialog();
+            }
+          };
+
+          private VerifyListener verifyListener = new VerifyListener()
+          {
+            public void verifyText(VerifyEvent e)
+            {
+              e.doit = false;
+              showDialog();
+            }
+          };
+
+          private void showDialog()
+          {
+            button.setFocus();
+            UIUtil.asyncExec(new Runnable()
+            {
+              public void run()
+              {
+                button.notifyListeners(SWT.Selection, null);
+              }
+            });
+          }
+
           @Override
           public Object doGetValue()
           {
-            String str = (String)super.doGetValue();
+            String str = value != null ? value : (String)super.doGetValue();
 
             if (doEscape)
             {
@@ -332,6 +377,9 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
           @Override
           public void doSetValue(Object value)
           {
+            text.removeMouseListener(mouseListener);
+            text.removeVerifyListener(verifyListener);
+
             String str = valueHandler.toString(value);
             if (str != null)
             {
@@ -349,8 +397,25 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
             EDataTypeValueHandler oldValueHandler = valueHandler;
             try
             {
+              boolean isVeryLong = str.length() > 2000;
+              if (isVeryLong)
+              {
+                this.value = str;
+                str = str.substring(0, 2000);
+              }
+              else
+              {
+                this.value = null;
+              }
+
               valueHandler = NO_OP_VALUE_HANDLER;
               super.doSetValue(str);
+
+              if (isVeryLong)
+              {
+                text.addMouseListener(mouseListener);
+                text.addVerifyListener(verifyListener);
+              }
             }
             finally
             {
@@ -430,15 +495,30 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                     {
                       markDirty();
                       doSetValue(newValue);
+                      fireApplyEditorValue();
                     }
                     else
                     {
                       // try to insert the current value into the error message.
                       setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { newValue.toString() }));
                     }
-
-                    fireApplyEditorValue();
                   }
+                }
+                else
+                {
+                  fireCancelEditor();
+                }
+              }
+            });
+
+            button.addKeyListener(new KeyAdapter()
+            {
+              @Override
+              public void keyReleased(KeyEvent e)
+              {
+                if (e.character == '\u001b')
+                {
+                  fireCancelEditor();
                 }
               }
             });
